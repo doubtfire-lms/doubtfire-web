@@ -1,0 +1,18 @@
+{
+  "name": "wangular-grunt",
+  "version": "0.0.1",
+  "devDependencies": {},
+  "dependencies": {
+    "angular": "~1.2.0",
+    "angular-cookies": "~1.2.0",
+    "angular-mocks": "~1.2.0",
+    "angular-resource": "~1.2.0",
+    "bootstrap": "~3.0.3",
+    "angular-bootstrap": "~0.9.0",
+    "angular-ui-router": "0.2.7",
+    "jquery": "latest",
+    "momentjs": "~2.1.0",
+    "lodash": "latest",
+    "underscore.string": "latest"
+  }
+}

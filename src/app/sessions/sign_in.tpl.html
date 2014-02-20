@@ -1,0 +1,12 @@
+<div class="header large">
+  <div class="logo-container">
+  </div>
+</div>
+<flash-alerts pre-process="processFlashAlert(alert)"></flash-alerts>
+<div class="sign-in-container">
+  <form class="form" name="form" ng-submit="signIn()">
+    <input id="email" name="email" type="email" placeholder="{{'_Email_' | i18n }}" ng-model="session.email" auto-fill-sync required />
+    <input id="password" name="password" type="password" placeholder="{{'_Password_' | i18n }}" ng-model="session.password" password-validate auto-fill-sync required />
+    <input class="sign-in-button" type="submit" value="{{'_Sign In_' | i18n }}" />
+  </form>
+</div>

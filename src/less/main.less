@@ -1,0 +1,33 @@
+/**
+ * This is the main application stylesheet. It should include or import all
+ * stylesheets used throughout the application as this is the only stylesheet in
+ * the Grunt configuration that is automatically processed.
+ */
+
+
+/**
+ * First, we include the Twitter Bootstrap LESS files. Only the ones used in the
+ * project should be imported as the rest are just wasting space.
+ */
+
+@import '../../vendor/bootstrap/less/forms.less';
+@import '../../vendor/bootstrap/less/mixins.less';
+@import '../../vendor/bootstrap/less/utilities.less';
+@import '../../vendor/bootstrap/less/grid.less';
+@import '../../vendor/bootstrap/less/scaffolding.less';
+@import '../../vendor/bootstrap/less/type.less';
+@import '../../vendor/bootstrap/less/navs.less';
+@import '../../vendor/bootstrap/less/navbar.less';
+@import '../../vendor/bootstrap/less/buttons.less';
+@import '../../vendor/bootstrap/less/button-groups.less';
+@import '../../vendor/bootstrap/less/dropdowns.less';
+@import '../../vendor/bootstrap/less/variables.less';
+@icon-font-path: "./fonts/"; /* Tell Bootstrap where to find fonts (for glyphicons) */
+@import '../../vendor/bootstrap/less/glyphicons.less';
+@import '../../vendor/bootstrap/less/modals.less';
+@import '../../vendor/bootstrap/less/tooltip.less';
+@import '../../vendor/bootstrap/less/alerts.less';
+@import '../../vendor/bootstrap/less/close.less';
+@import '../../vendor/bootstrap/less/popovers.less';
+
+@import 'functions.less';
