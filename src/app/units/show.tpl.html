@@ -1,1 +1,9 @@
-<h2>{{unit.name}}</h2>
+<ul class="breadcrumbs">
+    <li><a href="#/home">Units</a></li>
+    <li>{{unitRole.unit.name}}</li>
+</ul>
+
+<div ng-switch on="unitRole.role.name">
+	<tutor-unit-context ng-switch-when="Tutor"></tutor-unit-context>
+	<student-unit-context ng-switch-when="Student"></student-unit-context>
+</div>
