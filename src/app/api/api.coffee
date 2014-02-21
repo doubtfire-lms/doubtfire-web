@@ -27,39 +27,9 @@ angular.module("doubtfire.api", [
     return resource
 
 )
-
-# Example API definitions
-
-# .factory("JobOpportunity", (resourcePlus) ->
-
-#   jobOpportunity = resourcePlus "/job_opportunities/:id/:action", { id: "@id" }, {
-#     "publish": { params: { action: "publish" }, method: "PUT" },
-#     "revoke": { params: { action: "revoke" }, method: "PUT" },
-#     "apply": { params: { action: "apply" }, method: "PUT" },
-#     "reject": { params: { action: "reject" }, method: "PUT" },
-#     "allocate": { params: { action: "allocate" }, method: "PUT" },
-#     "deallocate": { params: { action: "deallocate" }, method: "PUT" },
-#     "reallocate": { params: { action: "reallocate" }, method: "PUT" },
-#     "remove": { params: { action: "remove" }, method: "PUT" },
-#   }
-
-#   jobOpportunity
-
-# )
-# .factory("AgencyRecruitmentContract", (resourcePlus) ->
-
-#   resourcePlus "/agencies/:agencyId/recruitment_contracts/:id", { agencyId: "@agencyId", id: "@id" }
-
-# ).factory("Shift", (resourcePlus) ->
-
-#   resourcePlus "/shifts/:id", { id: "@id" }
-
-#   shift = resourcePlus  "/shifts/:id/:action", { id: "@id" }, {
-#     "duplicate":  { params: { action: "duplicate" }, method: "POST" },
-#     "close":      { params: { action: "close" }, method: "PUT" },
-#     "dismissStaff": { params: { action: "dismiss_staff" }, method: "PUT" }
-#     "removeMultiple": { params: { action: "remove_multiple" }, method: "PUT", isArray: true }
-#   }
-
-#   shift
-# )
+.factory("Unit", (resourcePlus) ->
+  resourcePlus "/units/:id", { id: "@id" }
+)
+.factory("UnitRole", (resourcePlus) ->
+  resourcePlus "/unit_roles/:id", { id: "@id" }
+)

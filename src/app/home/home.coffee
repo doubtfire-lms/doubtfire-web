@@ -10,7 +10,8 @@ angular.module("doubtfire.home", [
         templateUrl: "home/index.tpl.html"
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'admin']
+      roleWhitelist: ['basic', 'admin', 'anon']
   )
-).controller("HomeCtrl", ($scope, $state, api) ->
+).controller("HomeCtrl", ($scope, $state, UnitRole) ->
+  $scope.unitRoles = UnitRole.query()
 )

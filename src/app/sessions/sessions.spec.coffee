@@ -32,7 +32,7 @@ describe "Sessions module", ->
       user:
         id: 1
         role_classification: "superuser"
-        authentication_token: "a_fake_token"
+        auth_token: "a_fake_token"
         profile:
           name: "Test User"
 
@@ -63,7 +63,7 @@ describe "Sessions module", ->
       user:
         id: 1
         role_classification: "a_role_that_is_not_supported"
-        authentication_token: "a_fake_token"
+        auth_token: "a_fake_token"
         profile:
           name: "Test User"
 
@@ -135,7 +135,7 @@ describe "Sessions module", ->
       user:
         id: 1
         role_classification: "superuser"
-        authentication_token: "xyz"
+        auth_token: "xyz"
         profile:
           name: "Test User"
 
@@ -144,7 +144,7 @@ describe "Sessions module", ->
     httpBackend.flush()
 
     # After sign in: the current user's auth token should be present in API request params.
-    httpBackend.expectPOST(authorisedApiUrl + "?authentication_token=" + currentUser.authenticationToken).respond(200)
+    httpBackend.expectPOST(authorisedApiUrl + "?auth_token=" + currentUser.authenticationToken).respond(200)
     http.post(authorisedApiUrl)
     httpBackend.flush()
 

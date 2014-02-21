@@ -49,7 +49,7 @@ angular.module("doubtfire.sessions", [
       # Intercept API requests and inject the auth token.
       if _.string.startsWith(config.url, api) and currentUser.authenticationToken?
         config.params = {} if not _.has config, "params"
-        config.params.authentication_token = currentUser.authenticationToken
+        config.params.auth_token = currentUser.authenticationToken
       config or $q.when config
 
     responseError: (response) ->
