@@ -1,7 +1,5 @@
-angular.module("doubtfire.home", [
-]
-).config(($stateProvider) ->
-
+angular.module("doubtfire.home", [])
+.config(($stateProvider) ->
   $stateProvider.state("home",
     url: "/home"
     views:
@@ -10,7 +8,7 @@ angular.module("doubtfire.home", [
         templateUrl: "home/index.tpl.html"
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'admin', 'anon']
+      roleWhitelist: ['basic', 'admin']
   )
 ).controller("HomeCtrl", ($scope, $state, UnitRole) ->
   $scope.unitRoles = UnitRole.query()
