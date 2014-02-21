@@ -128,8 +128,6 @@ angular.module("doubtfire.sessions", [
       #     , 150)
 
 ).controller "SignOutCtrl", ($state, $timeout, auth) ->
-  console.log "Attempting to sign out"
   if auth.signOut()
-    console.log "Signed out"
     $timeout (-> $state.go "sign_in"), 750
   return this
