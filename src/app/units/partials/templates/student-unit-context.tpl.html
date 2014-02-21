@@ -1,1 +1,8 @@
-<h2>{{unit.name}}</h2>
+<div>
+	<h2>{{unit.name}}</h2>
+	<ul>
+		<li ng-repeat="task in tasks | orderBy:'-id'">
+			{{task.task_definition.name}}
+		</li>
+	</ul>
+</div>

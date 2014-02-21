@@ -27,6 +27,9 @@ angular.module("doubtfire.api", [
     return resource
 
 )
+.factory("Project", (resourcePlus) ->
+  resourcePlus "/projects/:id", { id: "@id" }
+)
 .factory("Unit", (resourcePlus) ->
   resourcePlus "/units/:id", { id: "@id" }
 )

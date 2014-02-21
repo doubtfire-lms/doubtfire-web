@@ -3,7 +3,10 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/student-unit-context.tpl.html'
-  controller: ($scope) ->
+  controller: ($scope, Project) ->
+    Project.query { unit_role_id: $scope.unitRole.id }, (projects) ->
+      $scope.project  = projects[0]
+      $scope.tasks    = $scope.project.tasks
 )
 .directive('tutorUnitContext', ->
   replace: true
