@@ -12,6 +12,7 @@ angular.module("doubtfire", [
   "doubtfire.sessions"
 
   "doubtfire.home"
+  "doubtfire.units"
 ])
 .config(($urlRouterProvider, $httpProvider) ->
 
