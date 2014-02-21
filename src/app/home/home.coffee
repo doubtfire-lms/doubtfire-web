@@ -1,4 +1,4 @@
-angular.module("wangular-grunt.home", [
+angular.module("doubtfire.home", [
 ]
 ).config(($stateProvider) ->
 
@@ -10,6 +10,7 @@ angular.module("wangular-grunt.home", [
         templateUrl: "home/index.tpl.html"
     data:
       pageTitle: "_Home_"
+      roleWhitelist: ['basic', 'admin']
   )
 ).controller("HomeCtrl", ($scope, $state, api) ->
 )

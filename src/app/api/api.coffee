@@ -1,4 +1,4 @@
-angular.module("wangular-grunt.api", [
+angular.module("doubtfire.api", [
   "ngResource"
 ])
 

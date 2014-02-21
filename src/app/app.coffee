@@ -1,4 +1,4 @@
-angular.module("wangular-grunt", [
+angular.module("doubtfire", [
   "ngCookies"
   "templates-app"
   "templates-common"
@@ -7,9 +7,11 @@ angular.module("wangular-grunt", [
   "ui.router"
   "ui.bootstrap"
 
-  "wangular-grunt.api"
+  "doubtfire.api"
+  "doubtfire.errors"
+  "doubtfire.sessions"
 
-  "wangular-grunt.home"
+  "doubtfire.home"
 ])
 .config(($urlRouterProvider, $httpProvider) ->
 
@@ -21,7 +23,23 @@ angular.module("wangular-grunt", [
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 
-).run(($rootScope, $state, $filter) ->
+).run(($rootScope, $state, $filter, auth) ->
+
+  handleUnauthorised = ->
+    if auth.isAuthenticated()
+      $state.go "unauthorised"
+    else if $state.current.name isnt "sign_in"
+      $state.go "sign_in"
+
+  # Don't let the user see pages not intended for their role
+  $rootScope.$on "$stateChangeStart", (evt, toState) ->
+    unless auth.isAuthorised toState.data.roleWhitelist
+      evt.preventDefault()
+      handleUnauthorised()
+
+  # Redirect the user if they make an unauthorised API request
+  $rootScope.$on "unauthorisedRequestIntercepted", handleUnauthorised
+
   _.mixin(_.string.exports())
 ).controller "AppCtrl", ($rootScope, $state, $document, $filter) ->
 
@@ -31,6 +49,6 @@ angular.module("wangular-grunt", [
   setPageTitle = (state) ->
     $document.prop "title", $filter("i18n")(state.data.pageTitle) + " | " + suffix
 
-  $rootScope.$on "i18nReady", ->
-    setPageTitle $state.current
-    $rootScope.$on "$stateChangeSuccess", (evt, toState) -> setPageTitle toState
+  # $rootScope.$on "i18nReady", ->
+  #   setPageTitle $state.current
+  #   $rootScope.$on "$stateChangeSuccess", (evt, toState) -> setPageTitle toState

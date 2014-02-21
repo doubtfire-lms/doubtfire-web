@@ -12,7 +12,7 @@ describe "Sessions module", ->
   http = null
   rootScope = null
 
-  beforeEach module "wangular-grunt.sessions"
+  beforeEach module "doubtfire.sessions"
 
   beforeEach inject (_auth_, _currentUser_, _api_, _$httpBackend_, _$http_, _$rootScope_) ->
     auth = _auth_

@@ -1,8 +1,8 @@
 {
   "author": "Allan Jones",
-  "name": "wangular-grunt",
+  "name": "doubtfire",
   "version": "0.0.1",
-  "homepage": "http://wangular-grunt.net",
+  "homepage": "http://doubtfire.ict.swin.edu.au",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

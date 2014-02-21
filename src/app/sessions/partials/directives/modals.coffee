@@ -1,1 +1,1 @@
-angular.module("wangular-grunt.sessions.partials.modals", [])
+angular.module("doubtfire.sessions.partials.modals", [])

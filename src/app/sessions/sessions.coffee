@@ -1,17 +1,11 @@
-angular.module("wangular-grunt.sessions", [
+angular.module("doubtfire.sessions", [
   "ngCookies"
   "ui.router"
-  "wangular-grunt.api"
+  "doubtfire.api"
 ]).constant("authRoles", [
-
-  "anon" # i.e. not logged in yet
-  "superuser"
-  "humanResourcesAdmin"
-  "humanResourcesCoordinator"
-  "shiftSupervisor"
-  "generalStaff"
-  "client"
-
+  "anon"
+  "basic"
+  "admin"
 ]).constant("currentUser",
 
   id: 0
@@ -19,7 +13,7 @@ angular.module("wangular-grunt.sessions", [
   profile:
     name: "Anonymous"
 
-).constant("userCookieName", "wangular-grunt_user"
+).constant("userCookieName", "doubtfire_user"
 
 ).directive("ifRole", (auth) ->
 
@@ -96,15 +90,13 @@ angular.module("wangular-grunt.sessions", [
     error ?= ->
 
     $http.post(authenticationUrl,
-      user: userCredentials
+      userCredentials
     ).success((response) ->
       # Extract relevant data from response and construct user object to store in cache.
       user =
         id: response.user.id
-        profile: response.user.profile
-        authenticationToken: response.user.authentication_token
-        role: _.string.camelize(response.user.role_classification)
-        affiliation: response.user.affiliation
+        authenticationToken: response.auth_token
+        role: _.string.camelize(response.user.system_role)
 
       if tryChangeUser user
         success()
@@ -114,12 +106,11 @@ angular.module("wangular-grunt.sessions", [
 
   signOut: -> tryChangeUser defaultAnonymousUser
 
-).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api, flash) ->
+).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api) ->
 
-  stateAfterSignIn = "requests#index" # TODO: Make this a constant
+  stateAfterSignIn = "home" # TODO: Make this a constant
 
   if auth.isAuthenticated()
-    flash.set "error", "_You are already signed in._"
     $state.go stateAfterSignIn
   else
     $scope.signIn = ->
@@ -128,21 +119,17 @@ angular.module("wangular-grunt.sessions", [
         password: $scope.session.password
       , ->
         $state.go stateAfterSignIn
-      , ->
-        # If error alert already showing, delay before showing the new sign-in error. Looks better.
-        if flash.now.has "error"
-          flash.now.remove "error"
-          $timeout(->
-            flash.now.set "error", "_Failed to sign in. Your username and/or password may be incorrect._"
-          , 150)
+      # , ->
+      #   # If error alert already showing, delay before showing the new sign-in error. Looks better.
+      #   if flash.now.has "error"
+      #     flash.now.remove "error"
+      #     $timeout(->
+      #       flash.now.set "error", "_Failed to sign in. Your username and/or password may be incorrect._"
+      #     , 150)
 
-    $scope.showSignupModal = ->
-      modal = $modal.open
-        templateUrl: "sessions/partials/templates/signup-modal.tpl.html"
-        controller: 'SignupModalCtrl'
-
-).controller "SignOutCtrl", ($state, $timeout, auth, flash) ->
-
+).controller "SignOutCtrl", ($state, $timeout, auth) ->
+  console.log "Attempting to sign out"
   if auth.signOut()
-    flash.set "success", "_You signed out successfully._"
+    console.log "Signed out"
     $timeout (-> $state.go "sign_in"), 750
+  return this

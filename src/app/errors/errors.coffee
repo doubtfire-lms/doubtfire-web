@@ -1,4 +1,4 @@
-angular.module("wangular-grunt.errors", [
+angular.module("doubtfire.errors", [
   "ui.router"
 ]).config(($stateProvider) ->
 
