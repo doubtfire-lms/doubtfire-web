@@ -2,4 +2,8 @@
 	<div ng-repeat="unitRole in unitRoles">
 		<a href="#/units/{{unitRole.unit.id}}">{{unitRole.unit.name}}</a>
 	</div>
+
+	<div>
+		<a href="#/admin/units" if-role="admin">Manage Units</a>
+	</div>
 </div>
