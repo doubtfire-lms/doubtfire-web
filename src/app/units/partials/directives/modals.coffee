@@ -1,7 +1,7 @@
 angular.module('doubtfire.units.partials.modals', [])
 
-.controller('UnitModalCtrl', ($scope, $modalInstance, convenors) ->
-  $scope.unit = { convenors: [] }
+.controller('UnitModalCtrl', ($scope, $modalInstance, Unit, convenors, unit) ->
+  $scope.unit = unit
   $scope.modalState = {}
   $scope.availableConvenors = angular.copy(convenors)
 
@@ -18,4 +18,7 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.removeConvenor = (convenor) ->
     $scope.unit.convenors = _.without $scope.unit.convenors, convenor
     $scope.availableConvenors.push(convenor)
+
+  $scope.saveUnit = ->
+    Unit.create { unit: $scope.unit }
 )

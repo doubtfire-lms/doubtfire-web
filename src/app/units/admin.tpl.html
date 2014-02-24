@@ -1,9 +1,11 @@
 <div>
 	<div ng-repeat="unit in units">
-		<h3>{{unit.name}}</h3>
+		<h3>
+			<a href ng-click="showUnitModal(unit)">{{unit.name}}</a>
+		</h3>
 	</div>
 
 	<div>
-		<a href ng-click="addNewUnit()">Add New Unit</a>
+		<a href ng-click="showUnitModal()">Add New Unit</a>
 	</div>
 </div>

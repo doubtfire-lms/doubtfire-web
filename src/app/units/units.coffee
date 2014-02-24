@@ -34,10 +34,16 @@ angular.module("doubtfire.units", [
   $scope.units = Unit.query()
   $scope.convenors = Convenor.query()
 
-  $scope.addNewUnit = ->
+  $scope.showUnitModal = (unit) ->
+    unitToShow = if unit?
+      unit
+    else
+      new Unit { convenors: [] }
+
     $modal.open
       templateUrl: 'units/partials/templates/unit-modal.tpl.html'
       controller: 'UnitModalCtrl'
       resolve:
+        unit: -> unitToShow
         convenors: -> $scope.convenors
 )
