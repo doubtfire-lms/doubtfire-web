@@ -1,8 +1,8 @@
 <div>
-	<h2>{{unit.name}}</h2>
-	<ul>
-		<li ng-repeat="task in tasks | orderBy:'-id'">
-			{{task.task_definition.name}}
-		</li>
-	</ul>
+    <h2>{{unit.name}}</h2>
+    <ul class="project-task-bar">
+        <li ng-repeat="task in tasks | orderBy:'-id'">
+            <a class="btn btn-default" href ng-click="showAssessTaskModal(task)">{{task.task_definition.abbreviation}}</a>
+        </li>
+    </ul>
 </div>

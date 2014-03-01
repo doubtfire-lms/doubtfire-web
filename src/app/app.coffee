@@ -13,6 +13,7 @@ angular.module("doubtfire", [
 
   "doubtfire.home"
   "doubtfire.units"
+  "doubtfire.tasks"
 ])
 .config(($urlRouterProvider, $httpProvider) ->
 

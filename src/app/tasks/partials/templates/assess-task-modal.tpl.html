@@ -1,0 +1,32 @@
+<form>
+    <div class="modal-header">
+        <h3>
+            Assess Task
+        </h3>
+        <h4>{{task.task_definition.name}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="task-engagement-dropdown btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle task-status {{taskClass}}" data-toggle="dropdown">
+                {{taskStatusLabel}} <span class="caret"></span>
+            </button>
+            <ul class="task-engagement-options dropdown-menu" role="menu">
+                <li ng-repeat="assessOption in taskEngagementConfig.readyToAssess">
+                    <a href ng-click="engageWithTask(assessOption.status)">
+                        {{assessOption.label}}
+                        <i class="{{assessOption.iconClass}}"></i>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li ng-repeat="engagementOption in taskEngagementConfig.engagement">
+                    <a href ng-click="engageWithTask(engagementOption.status)">
+                        {{engagementOption.label}}
+                        <i class="{{engagementOption.iconClass}}"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</form>

@@ -1,0 +1,22 @@
+.task-engagement-dropdown
+{
+  button.task-status
+  {
+    width: 200px;
+    text-align: left;
+
+    &.ready-to-mark     { background-color: #0079D8; color: white; }
+    &.not-ready-to-mark { background-color: #CCCCCC; color: white; }
+    &.working-on-it     { background-color: #EB8F06; color: white; }
+    &.need-help         { background-color: #FFA1A1; color: white; }
+
+    span.caret { float: right; margin-top: 8px; }
+  }
+
+  .task-engagement-options
+  {
+    li { min-width: 200px; }
+    li > a { display: block; clear: both; }
+    li > a > i { float: right; margin-top: 3px; }
+  }
+}
