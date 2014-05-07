@@ -1,6 +1,6 @@
 <div>
 	<div ng-repeat="unitRole in unitRoles">
-		<a href="#/units/{{unitRole.id}}">{{unitRole.unit.name}}</a> {{unitRole.role.name}}
+		<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit.name}}</a> {{unitRole.role.name}}
 	</div>
 
 	<div>
