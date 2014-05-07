@@ -4,7 +4,7 @@ angular.module("doubtfire.units", [
 ).config(($stateProvider) ->
 
   $stateProvider.state("units#show",
-    url: "/units/:id"
+    url: "/units/:id?unitRole"
     views:
       main:
         controller: "UnitsShowCtrl"
@@ -27,11 +27,21 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['admin']
   )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole) ->
-  UnitRole.query { unit_id: $state.id }, (unitRoles) ->
-    # TODO: Handle possible multiple unit roles (e.g. convenor and tutor)
-    $scope.unitRole = unitRoles[0] # one role per unit, for now
-    $scope.unit = $scope.unitRole.unit # one role per unit, for now
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService) ->
+  UnitRole.get { id: $state.params.id }, (unitRole) ->
+    # The user selects the unit role to view - allows multiple roles per unit
+    $scope.unitRole = unitRole # the selected unit role
+    $scope.unit = $scope.unitRole.unit # the unit related to the role
+
+    # Set the roles in the header
+    links = []
+    if unitRole
+      links.push { class: "active", url: "#/units/" + unitRole.id, name: unitRole.role.name }
+      
+      for other_role in unitRole.other_roles
+        links.push { class: "", url: "#/units/" + other_role.id, name: other_role.role }
+
+    headerService.setLinks( links )
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $modal, Unit, Convenor) ->
   $scope.units = Unit.query()
