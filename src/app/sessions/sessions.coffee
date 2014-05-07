@@ -12,6 +12,7 @@ angular.module("doubtfire.sessions", [
   role: "anon"
   profile:
     name: "Anonymous"
+    nickname: "anon"
 
 ).constant("userCookieName", "doubtfire_user"
 
@@ -97,6 +98,9 @@ angular.module("doubtfire.sessions", [
         id: response.user.id
         authenticationToken: response.auth_token
         role: _.string.camelize(response.user.system_role)
+        profile:
+          name: response.user.first_name + " " + response.user.last_name
+          nickname: response.user.nickname
 
       if tryChangeUser user
         success()

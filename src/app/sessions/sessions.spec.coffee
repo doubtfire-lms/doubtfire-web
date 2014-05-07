@@ -29,19 +29,20 @@ describe "Sessions module", ->
 
     signInResponse =
       success: true
+      auth_token: "a_fake_token"
       user:
         id: 1
-        role_classification: "superuser"
-        auth_token: "a_fake_token"
-        profile:
-          name: "Test User"
+        system_role: "admin"
+        first_name: "Test"
+        last_name: "User"
+        nickname: "anon"
 
     # Pre-sign in.
     expect(currentUser).toEqual defaultAnonymousUser
 
     # Sign in.
     httpBackend.expectPOST(authenticationUrl, { user: userCredentials }).respond(signInResponse)
-    auth.signIn authenticationUrl, userCredentials
+    auth.signIn authenticationUrl, { user: userCredentials }
     httpBackend.flush()
     expect(currentUser).not.toEqual defaultAnonymousUser
     expect(currentUser.id).toEqual signInResponse.user.id
@@ -60,12 +61,13 @@ describe "Sessions module", ->
   it "should not allow a user to sign in with an unsupported role", ->
     signInResponse =
       success: true
+      auth_token: "a_fake_token"
       user:
         id: 1
-        role_classification: "a_role_that_is_not_supported"
-        auth_token: "a_fake_token"
-        profile:
-          name: "Test User"
+        system_role: "unsupported role"
+        first_name: "Test"
+        last_name: "User"
+        nickname: "anon"
 
     expect(currentUser).toEqual defaultAnonymousUser
     httpBackend.expectPOST(authenticationUrl).respond(signInResponse)
@@ -74,27 +76,27 @@ describe "Sessions module", ->
     expect(currentUser).toEqual defaultAnonymousUser # user should not change
 
   it "should authorise user roles correctly", ->
-    roleWhitelist = [ "generalStaff", "superuser" ]
+    roleWhitelist = [ "basic", "admin" ]
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "generalStaff")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "superuser")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
 
-    roleWhitelist = [ "superuser" ]
+    roleWhitelist = [ "admin" ]
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "generalStaff")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "superuser")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
 
     # An empty whitelist should not authorise anyone.
     roleWhitelist = []
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "generalStaff")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "superuser")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(false)
 
     # If no whitelist is specified, anyone should be authorised.
     roleWhitelist = undefined
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "generalStaff")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "superuser")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
 
   it "should automatically intercept unauthorised API responses", ->
     intercepted = false
@@ -132,12 +134,13 @@ describe "Sessions module", ->
     # Sign in.
     signInResponse =
       success: true
+      auth_token: "a_fake_token"
       user:
         id: 1
-        role_classification: "superuser"
-        auth_token: "xyz"
-        profile:
-          name: "Test User"
+        system_role: "admin"
+        first_name: "Test"
+        last_name: "User"
+        nickname: "anon"
 
     httpBackend.expectPOST(authenticationUrl).respond(signInResponse)
     auth.signIn authenticationUrl, { email: "user@localhost", password: "abc123" }
