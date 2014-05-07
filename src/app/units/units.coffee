@@ -9,6 +9,9 @@ angular.module("doubtfire.units", [
       main:
         controller: "UnitsShowCtrl"
         templateUrl: "units/show.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['basic', 'admin']

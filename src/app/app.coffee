@@ -10,6 +10,7 @@ angular.module("doubtfire", [
   "doubtfire.api"
   "doubtfire.errors"
   "doubtfire.sessions"
+  "doubtfire.header"
 
   "doubtfire.home"
   "doubtfire.units"
