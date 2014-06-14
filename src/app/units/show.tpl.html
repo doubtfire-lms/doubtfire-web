@@ -1,9 +1,16 @@
-<ul class="breadcrumb">
-    <li><a href="#/home">Units</a></li>
-    <li class="active">{{unitRole.unit.name}} {{unitRole.role.name}}</li>
-</ul>
+<div  class="col-md-9" ng-switch on="unitRole.role">
+	<ul class="breadcrumb">
+    	<li><a href="#/home">Units</a></li>
+    	<li class="active">{{unitRole.unit_name}} {{unitRole.role.name}}</li>
+	</ul>
 
-<div ng-switch on="unitRole.role.name">
-	<tutor-unit-context ng-switch-when="Tutor"></tutor-unit-context>
-	<student-unit-context ng-switch-when="Student"></student-unit-context>
+	<div ng-switch on="unitRole.role">
+		<tutor-unit-context ng-switch-when="Tutor"></tutor-unit-context>
+		<student-unit-context student-project-id="unitRole.project_id" task-def="taskDef" unit="unit" ng-switch-when="Student"></student-unit-context>
+	</div>
+
+	<div class="alert-top">
+  		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">{{ alert.msg }}</alert>
+	</div>
+
 </div>

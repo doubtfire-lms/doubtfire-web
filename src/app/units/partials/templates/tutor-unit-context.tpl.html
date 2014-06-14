@@ -1,1 +1,43 @@
-<h2>{{unit.name}}</h2>
+<div>
+    <h2>{{unit.name}}</h2>
+
+    <p ng-if="filteredStudents.length < students.length">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
+
+	<div class="table-responsive">
+		Any: <input ng-model="search.$">
+	    <table class="table table-condensed table-hover">
+	    	<thead>
+	    		<tr>
+		    		<th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+		    		<th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+		    		<th>Stats</th>
+		    		<th><a href="" ng-click="sortOrder='tutorial.meeting_day'; reverse=!reverse">Tutorial</a></th>
+		    	</tr>
+	    	</thead>
+	    	<tbody>
+		    	<tr ng-repeat="student in filteredStudents = (students | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+			    	<td><a href="#/units?unitRole={{student.unit_role_id}}">{{student.student_id}}</a></td>
+			    	<td>{{student.name}}</td>
+			    	<td class="task-progress-bar">
+			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = true">
+	    					<accordion-group>
+	    						<accordion-heading>
+	    							<progress class="task-progress" max="100" animate="false">
+	    								<bar ng-repeat="bar in student.task_stats  track by $index | filter:barLargerZero" value="bar.value" type="{{bar.type}}">
+	    								</bar>
+	    							</progress>
+	    						</accordion-heading>
+	    						<div ng-style="{ 'min-height': '{{accordionHeight}}px' }" >
+      								<student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" task-def="taskDef" unit="unit"></student-unit-tasks>
+	      						</div>
+	    					</accordion-group>
+						</accordion>
+					</td>
+			    	<td>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.tutor.name}})</td>
+			    </tr>
+		    </tbody>
+		</table>
+
+		<pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+	</div>
+</div>

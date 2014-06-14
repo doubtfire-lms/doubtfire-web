@@ -6,9 +6,10 @@
     text-align: left;
 
     &.ready-to-mark     { background-color: #0079D8; color: white; }
-    &.not-ready-to-mark { background-color: #CCCCCC; color: white; }
+    &.not-submitted { background-color: #CCCCCC; color: white; }
     &.working-on-it     { background-color: #EB8F06; color: white; }
     &.need-help         { background-color: #FFA1A1; color: white; }
+    &.complete          { background-color: #5BB75B; background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); color: white; }
 
     span.caret { float: right; margin-top: 8px; }
   }
@@ -20,3 +21,41 @@
     li > a > i { float: right; margin-top: 3px; }
   }
 }
+
+a.task-status
+{
+  &.ready-to-mark     { background-color: #0079D8; color: white; }
+  &.not-submitted     { background-color: #CCCCCC; color: white; }
+  &.working-on-it     { background-color: #EB8F06; color: white; }
+  &.need-help         { background-color: #FFA1A1; color: white; }
+  &.complete  { 
+    background-color: #5BB75B; 
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
+    color: white; 
+  } 
+}
+
+a.task-status.btn
+{
+  padding: 5px;
+  width: 4em;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+.task-status
+{
+  background-color: #F8F8F8;
+
+  .ready-to-mark.active  { background-color: #0079D8; color: white; }
+  .not-submitted.active  { background-color: #CCCCCC; color: white; }
+  .working-on-it.active  { background-color: #EB8F06; color: white; }
+  .need-help.active      { background-color: #FFA1A1; color: white; } 
+  .complete.active  { 
+    background-color: #5BB75B; 
+    background-image: 
+    linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
+    color: white; 
+  } 
+}
+

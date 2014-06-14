@@ -9,6 +9,9 @@ angular.module("doubtfire.home", [])
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
+      sidebar:
+        controller: "BasicSidebarCtrl"
+        templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['basic', 'admin']
@@ -18,4 +21,14 @@ angular.module("doubtfire.home", [])
 .controller("HomeCtrl", ($scope, $state, UnitRole, headerService) ->
   $scope.unitRoles = UnitRole.query()
   headerService.clearLinks()
+
+  #
+  # Filter functions to separate units in repeater
+  #
+  $scope.isTutor = (unitRole) ->
+    unitRole.role == "Tutor"
+  $scope.isConvenor = (unitRole) ->
+    unitRole.role == "Convenor"
+  $scope.isStudent = (unitRole) ->
+    unitRole.role == "Student"
 )

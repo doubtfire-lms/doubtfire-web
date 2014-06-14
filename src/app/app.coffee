@@ -1,3 +1,44 @@
+#
+# Globals
+#
+
+statusKeys = [
+  'not_submitted',
+  'fix_and_include',
+  'redo',
+  'need_help',
+  'working_on_it',
+  'fix_and_resubmit',
+  'ready_to_mark',
+  'discuss',
+  'complete'
+]
+
+statusLabels = {
+  'ready_to_mark':      'Ready to Mark',
+  'not_submitted':      'Not Started',
+  'working_on_it':      'Working On It',
+  'need_help':          'Need Help',
+  'redo':               'Redo',
+  'fix_and_include':    'Fix and Include',
+  'fix_and_resubmit':   'Resubmit',
+  'discuss':            'Discuss',
+  'complete':           'Complete'
+}
+
+statusIcons = {
+  'ready_to_mark':      'fa fa-thumbs-o-up',
+  'not_submitted':      'fa fa-times',
+  'working_on_it':      'fa fa-bolt',
+  'need_help':          'fa fa-question-circle',
+  'redo':               'fa fa-refresh',
+  'fix_and_include':    'fa fa-stop',
+  'fix_and_resubmit':   'fa fa-wrench',
+  'discuss':            'fa fa-comment',
+  'complete':           'fa fa-check-circle-o'
+}
+
+
 angular.module("doubtfire", [
   "ngCookies"
   "templates-app"
@@ -6,6 +47,7 @@ angular.module("doubtfire", [
   
   "ui.router"
   "ui.bootstrap"
+  # "mgcrea.ngStrap"
 
   "doubtfire.api"
   "doubtfire.errors"

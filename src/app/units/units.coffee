@@ -1,3 +1,4 @@
+
 angular.module("doubtfire.units", [
   'doubtfire.units.partials'
 ]
@@ -12,6 +13,10 @@ angular.module("doubtfire.units", [
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
+      sidebar:
+        controller: "BasicSidebarCtrl"
+        templateUrl: "common/sidebar.tpl.html"
+
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['basic', 'admin']
@@ -27,21 +32,45 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['admin']
   )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService) ->
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
+  $scope.unitLoaded = false
+
+
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
     # The user selects the unit role to view - allows multiple roles per unit
     $scope.unitRole = unitRole # the selected unit role
-    $scope.unit = $scope.unitRole.unit # the unit related to the role
 
     # Set the roles in the header
     links = []
     if unitRole
-      links.push { class: "active", url: "#/units?unitRole=" + unitRole.id, name: unitRole.role.name }
+      links.push { class: "active", url: "#/units?unitRole=" + unitRole.id, name: unitRole.role }
       
       for other_role in unitRole.other_roles
         links.push { class: "", url: "#/units?unitRole=" + other_role.id, name: other_role.role }
 
     headerService.setLinks( links )
+
+    if unitRole
+      Unit.get { id: unitRole.unit_id }, (unit) ->
+        $scope.unit = unit # the unit related to the role
+        $scope.unitLoaded = true
+  # end get unit role
+
+    
+  #
+  # Allow the caller to fetch a task definition from the unit based on its id
+  #
+  $scope.taskDef = (taskDefId) ->
+    _.where $scope.unit.task_definitions, {id: taskDefId}
+
+  #
+  # Allow the caller to fetch a tutorial from the unit based on its id
+  #
+  $scope.tutorialFromId = (tuteId) ->
+    _.where $scope.unit.tutorials, { id: tuteId }
+
+  $scope.taskCount = () ->
+    $scope.unit.task_definitions.length
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $modal, Unit, Convenor) ->
   $scope.units = Unit.query()

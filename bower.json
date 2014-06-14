@@ -8,7 +8,7 @@
     "angular-mocks": "~1.2.0",
     "angular-resource": "~1.2.0",
     "bootstrap": "~3.0.3",
-    "angular-bootstrap": "~0.9.0",
+    "angular-bootstrap": "~0.11.0",
     "angular-ui-router": "0.2.7",
     "jquery": "latest",
     "momentjs": "~2.1.0",

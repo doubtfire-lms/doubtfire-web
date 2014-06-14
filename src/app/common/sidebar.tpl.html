@@ -1,4 +1,4 @@
-<div  class="col-md-9">
+<div class="col-sm-3 well nav nav-stacked" id="sidebar">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
 	    <h4 class="panel-title">Units You Teach</h4>
@@ -19,10 +19,11 @@
 	  </div>
 	  <div class="panel-body">
 		<div ng-repeat="unitRole in unitRoles | filter:isStudent">
-			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a> {{unitRole.role}}
+			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
 		</div>
 	  </div>
 	</div>
+
 
 	<div class="panel panel-default" if-role="admin">
 	  <div class="panel-heading">
