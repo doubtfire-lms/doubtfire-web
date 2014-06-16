@@ -44,6 +44,7 @@ angular.module('doubtfire.units.partials.contexts', [])
     studentProjectId: "=studentProjectId",
     taskDef: "=taskDef",
     unit: "=unit",
+    unitRole: "=unitRole"
   }
 
   controller: ($scope, $modal, Project) ->
@@ -74,9 +75,11 @@ angular.module('doubtfire.units.partials.contexts', [])
       $modal.open
         controller: 'AssessTaskModalCtrl'
         templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
-        resolve:
-          task: -> task
-          student: -> $scope.student
+        resolve: {
+          task: -> task,
+          student: -> $scope.student,
+          unitRole: -> $scope.unitRole
+        }
 )
 
 .directive('studentUnitContext', ->
