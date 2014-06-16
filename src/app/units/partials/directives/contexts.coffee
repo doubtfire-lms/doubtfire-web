@@ -44,7 +44,6 @@ angular.module('doubtfire.units.partials.contexts', [])
     studentProjectId: "=studentProjectId",
     taskDef: "=taskDef",
     unit: "=unit",
-    unitRole: "=unitRole"
   }
 
   controller: ($scope, $modal, Project) ->
@@ -78,7 +77,7 @@ angular.module('doubtfire.units.partials.contexts', [])
         resolve: {
           task: -> task,
           student: -> $scope.student,
-          unitRole: -> $scope.unitRole
+          assessingUnitRole: -> $scope.assessingUnitRole
         }
 )
 
@@ -86,16 +85,21 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/student-unit-context.tpl.html'
-  controller: ($scope) ->
-    #do nothing
-    $scope
+  controller: ($scope, $rootScope, UnitRole) ->
+    #CHECK: rootScope use here?
+    if $rootScope.assessingUnitRole? && $rootScope.assessingUnitRole.unit_id == $scope.unitRole.unit_id
+      $scope.assessingUnitRole = $rootScope.assessingUnitRole
+      $scope.showBack = true
+    else
+      $scope.assessingUnitRole = $scope.unitRole
+      $scope.showBack = false
 )
 
 .directive('tutorUnitContext', ->
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, Project, Students, filterFilter) ->
+  controller: ($scope, $rootScope, Project, Students, filterFilter) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
@@ -150,6 +154,10 @@ angular.module('doubtfire.units.partials.contexts', [])
         ]
         update_task_stats(student.task_stats, student.stats)
         student
+
+    #CHECK: rootScope use here?
+    # The assessingUnitRole is accessed in student views loaded from this view
+    $rootScope.assessingUnitRole = $scope.unitRole
 
     # Project.query { unit_role_id: $scope.unitRole.id }, (projects) ->
     #   $scope.projects  = projects.map (project) ->

@@ -1,5 +1,5 @@
 angular.module('doubtfire.tasks.partials.modals', [])
-.controller('AssessTaskModalCtrl', ($scope, $modalInstance, task, student, unitRole, Task, alertService) ->
+.controller('AssessTaskModalCtrl', ($scope, $modalInstance, task, student, assessingUnitRole, Task, alertService) ->
   # statusLabels global
   # statusLabels = {
   #   'ready_to_mark':      'Ready to Mark',
@@ -38,7 +38,9 @@ angular.module('doubtfire.tasks.partials.modals', [])
       (value) ->
         $scope.task.status = value.status
         $modalInstance.close(status)
-        update_task_stats(student.task_stats, value.new_stats)
+        
+        if student? && student.task_stats?
+          update_task_stats(student.task_stats, value.new_stats)
         
         if value.status == status
           alertService.add("success", "Status saved.", 2000)
@@ -51,7 +53,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
   $scope.orderedStatuses       = ['not_submitted', 'need_help', 'working_on_it', 'ready_to_mark']
   $scope.tutorStatuses         = ['fix_and_include', 'redo', 'fix_and_resubmit', 'discuss' ]
 
-  $scope.role = unitRole.role
+  $scope.role = assessingUnitRole.role
 
   $scope.activeClass = (status) ->
     if status == $scope.task.status
