@@ -1,10 +1,12 @@
 <div>
     <h2>{{unit.name}}</h2>
+	
+	Any: <input ng-model="search.$" typeahead="student.name for student in students | filter:$viewValue | limitTo:8">
 
-    <p ng-if="filteredStudents.length < students.length">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
+    <p ng-show="filteredStudents.length < students.length">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
+
 
 	<div class="table-responsive">
-		Any: <input ng-model="search.$">
 	    <table class="table table-condensed table-hover">
 	    	<thead>
 	    		<tr>
