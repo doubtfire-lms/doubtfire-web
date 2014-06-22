@@ -1,5 +1,10 @@
 angular.module('doubtfire.tasks.partials.modals', [])
-.controller('AssessTaskModalCtrl', ($scope, $modalInstance, task, student, assessingUnitRole, Task, alertService) ->
+
+#
+# task = the task to update
+# student = passed through from tutor view to allow update of task stats
+#
+.controller('AssessTaskModalCtrl', ($scope, $modalInstance, task, student, project, onChange, assessingUnitRole, Task, alertService) ->
   # statusLabels global
   # statusLabels = {
   #   'ready_to_mark':      'Ready to Mark',
@@ -34,26 +39,32 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.triggerTransition = (status) ->
     $scope.task.status = status
-    Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
+    p1 = Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
       (value) ->
         $scope.task.status = value.status
         $modalInstance.close(status)
-        
+
         if student? && student.task_stats?
           update_task_stats(student.task_stats, value.new_stats)
         
         if value.status == status
           alertService.add("success", "Status saved.", 2000)
+          if onChange
+            onChange()
         else
           alertService.add("danger", "Status change was not changed.", 2000)
     )
+
 
   $scope.readyToAssessStatuses = ['ready_to_mark', 'not_submitted']
   $scope.engagementStatuses    = ['working_on_it', 'need_help']
   $scope.orderedStatuses       = ['not_submitted', 'need_help', 'working_on_it', 'ready_to_mark']
   $scope.tutorStatuses         = ['fix_and_include', 'redo', 'fix_and_resubmit', 'discuss' ]
 
-  $scope.role = assessingUnitRole.role
+  if assessingUnitRole?
+    $scope.role = assessingUnitRole.role
+  else
+    $scope.role = "Student"
 
   $scope.activeClass = (status) ->
     if status == $scope.task.status

@@ -73,11 +73,16 @@ module.exports = {
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
+      'vendor/d3/d3.js',
+      'vendor/angular-charts/dist/angular-charts.js',
       'vendor/flashular/bin/flashular.js',
       'vendor/ngprogress/ngProgress.js',
       'vendor/lodash/dist/lodash.js',
       'vendor/underscore.string/dist/underscore.string.min.js',
       'vendor/momentjs/moment.js',
+      'vendor/d3/d3.js',
+      'vendor/nvd3/nv.d3.js',
+      'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js'
     ],
     css: [
     ]

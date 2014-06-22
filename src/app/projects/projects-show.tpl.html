@@ -1,0 +1,41 @@
+<div  class="col-md-9">
+	<ul class="breadcrumb">
+    	<li><a href="#/home">Home</a></li>
+    	<li class="active">{{unit.name}}</li>
+	</ul>
+
+	<div ng-if="unitLoaded">
+	    <h2>{{unit.name}}</h2>
+
+	    <div id="burndownChart" ng-if="projectLoaded">
+			<nvd3-line-chart
+				data="burndownData"
+				id="burndownId"
+				width="550"
+				height="350"
+				showXAxis="true"
+				showYAxis="true"
+				showLegend="true"
+				tooltips="true"
+				useInteractiveGuideline="true"
+				margin="{left:80,top:50,bottom:50,right:10}"
+				xAxisTickFormat="xAxisTickFormat_Date_Format()"
+				yAxisLabel="Tasks Remaining"
+				yAxisTickFormat="yAxisTickFormat_Percent_Format()"
+				color="colorFunction()"
+				legendColor="colorFunction()">
+				<svg></svg>
+			</nvd3-line-chart>
+		</div>
+
+	    <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole"></student-unit-tasks>
+
+<!-- 	    <div ng-show="showBack">
+	    	<a href="#/units?unitRole={{assessingUnitRole.id}}">Back</a>
+	    </div>
+ -->	</div>
+
+	<div class="alert-top">
+  		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+	</div>
+</div>

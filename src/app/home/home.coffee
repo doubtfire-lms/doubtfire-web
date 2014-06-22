@@ -18,8 +18,9 @@ angular.module("doubtfire.home", [])
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, UnitRole, headerService) ->
+.controller("HomeCtrl", ($scope, $state, UnitRole, Project, headerService) ->
   $scope.unitRoles = UnitRole.query()
+  $scope.projects = Project.query()
   headerService.clearLinks()
 
   #
@@ -29,6 +30,4 @@ angular.module("doubtfire.home", [])
     unitRole.role == "Tutor"
   $scope.isConvenor = (unitRole) ->
     unitRole.role == "Convenor"
-  $scope.isStudent = (unitRole) ->
-    unitRole.role == "Student"
 )

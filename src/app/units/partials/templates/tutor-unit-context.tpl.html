@@ -18,7 +18,7 @@
 	    	</thead>
 	    	<tbody>
 		    	<tr ng-repeat="student in filteredStudents = (students | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-			    	<td><a href="#/units?unitRole={{student.unit_role_id}}">{{student.student_id}}</a></td>
+			    	<td><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
 			    	<td>{{student.name}}</td>
 			    	<td class="task-progress-bar">
 			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = true">

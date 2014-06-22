@@ -1,14 +1,20 @@
 <div  class="col-md-9">
-	<div class="panel panel-default">
+	<div class="panel panel-default" ng-show="unitRoles.length > 0">
 	  <div class="panel-heading">
 	    <h4 class="panel-title">Units You Teach</h4>
 	  </div>
 	  <div class="panel-body">
-		<div ng-repeat="unitRole in unitRoles | filter:isConvenor">
-			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a> {{unitRole.role}}
+	  	<div ng-show="convenorRoles.length > 0">
+	  		<h5>Convenor for</h5>
+			<div ng-repeat="unitRole in convenorRoles = unitRoles | filter:isConvenor">
+				<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
+			</div>
 		</div>
-		<div ng-repeat="unitRole in unitRoles | filter:isTutor">
-			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a> {{unitRole.role}}
+		<div ng-show="tutorRoles.length > 0">
+			<h5>Tutor for</h5>
+			<div ng-repeat="unitRole in tutorRoles = unitRoles | filter:isTutor">
+				<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
+			</div>
 		</div>
 	  </div>
 	</div>
@@ -18,8 +24,8 @@
 	    <h4 class="panel-title">Units You Study</h4>
 	  </div>
 	  <div class="panel-body">
-		<div ng-repeat="unitRole in unitRoles | filter:isStudent">
-			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a> {{unitRole.role}}
+		<div ng-repeat="project in projects">
+			<a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
 		</div>
 	  </div>
 	</div>

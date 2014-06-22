@@ -48,6 +48,7 @@ angular.module("doubtfire", [
   "ui.router"
   "ui.bootstrap"
   # "mgcrea.ngStrap"
+  "nvd3ChartDirectives"
 
   "doubtfire.api"
   "doubtfire.errors"
@@ -57,6 +58,7 @@ angular.module("doubtfire", [
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"
+  "doubtfire.projects"
 ])
 .config(($urlRouterProvider, $httpProvider) ->
 

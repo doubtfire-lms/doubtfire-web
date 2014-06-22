@@ -12,24 +12,6 @@ angular.module('doubtfire.units.partials.contexts', [])
     else
       input
 )
-
-.directive('myLazyLoad', ->
-  transclude: 'element',
-  priority: 1200, # changed needed for 1.2
-  terminal: true,
-  restrict: 'A',
-  compile: (element, attr, linker) ->
-    (scope, iterStartElement, attr) ->
-      hasBeenShown = false
-      unwatchFn = scope.$watch(attr.myLazyLoad, (value) ->
-        if ( value && !hasBeenShown )
-          hasBeenShown = true
-          linker(scope, (clone) ->
-            iterStartElement.after(clone)
-          )
-          unwatchFn()
-      )
-)
 #
 # Student Unit Tasks
 # - display the tasks associated with a student in a unit
@@ -39,19 +21,24 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: false
   restrict: 'E'
   templateUrl: 'units/partials/templates/student-unit-tasks.tpl.html'
-  scope: {
-    student: "=student",
-    studentProjectId: "=studentProjectId",
-    taskDef: "=taskDef",
-    unit: "=unit",
-  }
+  scope:
+    student: "=student"
+    project: "=project"
+    onChange: "=onChange"
+    studentProjectId: "=studentProjectId"
+    taskDef: "=taskDef"
+    unit: "=unit"
+    assessingUnitRole: "=assessingUnitRole"
 
   controller: ($scope, $modal, Project) ->
-    # $scope.accordionHeight = 150
+    # This function gets the status CSS class for the indicated status
+    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
+    
+    # This function gets the status text for the indicated status
+    $scope.statusText = (status) -> statusLabels[status]
 
-    # Get the Project associated with the student's project id
-    Project.get { id: $scope.studentProjectId }, (project) ->
-      $scope.project  = project
+    # Prepare the scope with the passed in project - either from resource or from passed in scope
+    showProject = () ->
       # Extend the tasks with the task definitions
       # - add in task abbreviation, description, name, and status
       $scope.tasks    = $scope.project.tasks.map (task) ->
@@ -62,12 +49,15 @@ angular.module('doubtfire.units.partials.contexts', [])
         task.status_txt = statusLabels[task.status]
         task
 
-      # $scope.accordionHeight = $scope.tasks.count / 6 * 32
-
-      # This function gets the status CSS class for the indicated status
-      $scope.statusClass = (status) -> _.trim(_.dasherize(status))
-      # This function gets the status text for the indicated status
-      $scope.statusText = (status) -> statusLabels[status]
+    updateChart = false
+    # Get the Project associated with the student's project id
+    if $scope.project
+      showProject()
+      updateChart = true
+    else
+      Project.get { id: $scope.studentProjectId }, (project) ->
+        $scope.project  = project
+        showProject()
 
     # Show the status update dialog for the indicated task
     $scope.showAssessTaskModal = (task) ->
@@ -77,7 +67,9 @@ angular.module('doubtfire.units.partials.contexts', [])
         resolve: {
           task: -> task,
           student: -> $scope.student,
+          project: -> $scope.project,
           assessingUnitRole: -> $scope.assessingUnitRole
+          onChange: -> $scope.onChange
         }
 )
 
@@ -157,7 +149,7 @@ angular.module('doubtfire.units.partials.contexts', [])
 
     #CHECK: rootScope use here?
     # The assessingUnitRole is accessed in student views loaded from this view
-    $rootScope.assessingUnitRole = $scope.unitRole
+    $scope.assessingUnitRole = $scope.unitRole
 
     # Project.query { unit_role_id: $scope.unitRole.id }, (projects) ->
     #   $scope.projects  = projects.map (project) ->

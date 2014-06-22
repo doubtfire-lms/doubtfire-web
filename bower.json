@@ -7,6 +7,9 @@
     "angular-cookies": "~1.2.0",
     "angular-mocks": "~1.2.0",
     "angular-resource": "~1.2.0",
+    "d3": "~3.4.1",
+    "nvd3": "latest",
+    "angularjs-nvd3-directives": "latest",
     "bootstrap": "~3.0.3",
     "angular-bootstrap": "~0.11.0",
     "angular-ui-router": "0.2.7",
@@ -14,5 +17,8 @@
     "momentjs": "~2.1.0",
     "lodash": "latest",
     "underscore.string": "latest"
+  },
+  "resolutions": {
+    "d3": "~3.4.1"
   }
 }

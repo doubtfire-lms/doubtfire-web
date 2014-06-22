@@ -43,14 +43,12 @@ angular.module("doubtfire.header", [  ])
   $scope.links = headerService.links()
 )
 
-.controller("BasicSidebarCtrl", ($scope, $state, currentUser, headerService, UnitRole) ->
+.controller("BasicSidebarCtrl", ($scope, $state, currentUser, headerService, UnitRole, Project) ->
   $scope.unitRoles = UnitRole.query()
+  $scope.projects = Project.query()
 
   $scope.isTutor = (userRole) ->
     userRole.role == "Tutor"
   $scope.isConvenor = (userRole) ->
     userRole.role == "Convenor"
-  $scope.isStudent = (userRole) ->
-    userRole.role == "Student"
-
 )
