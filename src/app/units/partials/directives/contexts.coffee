@@ -147,6 +147,12 @@ angular.module('doubtfire.units.partials.contexts', [])
         update_task_stats(student.task_stats, student.stats)
         student
 
+    $scope.transitionWeekEnd = (student) ->
+      Project.update({ id: student.project_id, trigger: "trigger_week_end" }).$promise.then (
+        (project) ->
+          update_task_stats(student.task_stats, project.stats)
+      )
+
     #CHECK: rootScope use here?
     # The assessingUnitRole is accessed in student views loaded from this view
     $scope.assessingUnitRole = $scope.unitRole

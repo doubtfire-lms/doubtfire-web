@@ -39,7 +39,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.triggerTransition = (status) ->
     $scope.task.status = status
-    p1 = Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
+    Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
       (value) ->
         $scope.task.status = value.status
         $modalInstance.close(status)
