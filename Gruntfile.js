@@ -12,6 +12,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-coffeelint');
@@ -547,6 +548,25 @@ module.exports = function ( grunt ) {
           livereload: false
         }
       }
+    }, // end delta
+
+    connect: {
+      devserver: {
+        options: {
+          port: 8000,
+          base: '<%= build_dir %>',
+          keepalive: true,
+          debug: true
+        }
+      },
+      watchserver: {
+        options: {
+          port: 8000,
+          base: '<%= build_dir %>',
+          livereload: true
+        }
+      }
+
     }
   };
 
@@ -561,6 +581,7 @@ module.exports = function ( grunt ) {
    */
   grunt.renameTask( 'watch', 'delta' );
   grunt.registerTask( 'watch', [ 'env:development', 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watchsvr', [ 'env:development', 'build', 'karma:unit', 'connect:watchserver', 'delta' ] );
 
   /**
    * The default task is to build and compile.
