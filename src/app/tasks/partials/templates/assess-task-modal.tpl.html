@@ -16,16 +16,35 @@
 				ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
 			</label>
 		</div>
-		<div ng-show="role=='Tutor'" >
+		<div>
 			<br />
-			<div class="btn-group btn-group-justified task-status">
-				<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
-					class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
-					ng-model="task.status" 
-					btn-radio="action.status" 
-					ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
-				</label>
+			<div ng-switch="role">
+				<div ng-switch-when="Tutor" class="btn-group btn-group-justified task-status">
+					<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
+						class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+						ng-model="task.status" 
+						btn-radio="action.status" 
+						ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
+					</label>
+				</div>
+				<div ng-switch-when="Student" class="btn-group btn-group-justified task-status">
+					<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
+						class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+						ng-model="task.status" 
+						btn-radio="action.status"
+						disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
+					</label>
+				</div>
 			</div>
+		</div>
+		<br />
+		<div class="btn-group btn-group-justified task-status">
+			<label ng-repeat="action in taskEngagementConfig.complete"
+				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+				ng-model="task.status" 
+				btn-radio="action.status" 
+				disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
+			</label>
 		</div>
 
 

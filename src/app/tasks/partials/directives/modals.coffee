@@ -60,6 +60,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
   $scope.engagementStatuses    = ['working_on_it', 'need_help']
   $scope.orderedStatuses       = ['not_submitted', 'need_help', 'working_on_it', 'ready_to_mark']
   $scope.tutorStatuses         = ['fix_and_include', 'redo', 'fix_and_resubmit', 'discuss' ]
+  $scope.completeStatuses      = ['complete']
 
   if assessingUnitRole?
     $scope.role = assessingUnitRole.role
@@ -80,6 +81,8 @@ angular.module('doubtfire.tasks.partials.modals', [])
     all: $scope.orderedStatuses.map (status) ->
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
     tutorTriggers: $scope.tutorStatuses.map (status) ->
+      { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+    complete: $scope.completeStatuses.map (status) ->
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
   }
 )
