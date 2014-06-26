@@ -91,7 +91,7 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, $rootScope, Project, Students, filterFilter) ->
+  controller: ($scope, $rootScope, Project, Students, filterFilter, alertService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
@@ -147,10 +147,17 @@ angular.module('doubtfire.units.partials.contexts', [])
         update_task_stats(student.task_stats, student.stats)
         student
 
+    update_project_details = (student, project) ->
+      update_task_stats(student.task_stats, project.stats)
+      if student.project
+        _.each student.project.tasks, (task) =>
+          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
+      alertService.add("success", "Status updated.", 2000)
+
     $scope.transitionWeekEnd = (student) ->
       Project.update({ id: student.project_id, trigger: "trigger_week_end" }).$promise.then (
         (project) ->
-          update_task_stats(student.task_stats, project.stats)
+          update_project_details(student, project)
       )
 
     #CHECK: rootScope use here?
