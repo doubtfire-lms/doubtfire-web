@@ -14,6 +14,7 @@
 		    		<th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
 		    		<th>Stats</th>
 		    		<th><a href="" ng-click="sortOrder='tutorial.meeting_day'; reverse=!reverse">Tutorial</a></th>
+		    		<th>Actions</th>
 		    	</tr>
 	    	</thead>
 	    	<tbody>
@@ -30,12 +31,13 @@
 	    							</progress>
 	    						</accordion-heading>
 	    						<div ng-style="{ 'min-height': '{{accordionHeight}}px' }" >
-      								<student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole"></student-unit-tasks>
+      								<student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" project="student.project"></student-unit-tasks>
 	      						</div>
 	    					</accordion-group>
 						</accordion>
 					</td>
-			    	<td ng-click="student.open = !student.open">{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.tutor.name}})</td>
+			    	<td ng-click="student.open = !student.open">{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.meeting_location}})</td>
+			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)">Discussed</button></td>
 			    </tr>
 		    </tbody>
 		</table>

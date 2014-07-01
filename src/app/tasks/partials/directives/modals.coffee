@@ -39,7 +39,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.triggerTransition = (status) ->
     $scope.task.status = status
-    p1 = Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
+    Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
       (value) ->
         $scope.task.status = value.status
         $modalInstance.close(status)
@@ -60,6 +60,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
   $scope.engagementStatuses    = ['working_on_it', 'need_help']
   $scope.orderedStatuses       = ['not_submitted', 'need_help', 'working_on_it', 'ready_to_mark']
   $scope.tutorStatuses         = ['fix_and_include', 'redo', 'fix_and_resubmit', 'discuss' ]
+  $scope.completeStatuses      = ['complete']
 
   if assessingUnitRole?
     $scope.role = assessingUnitRole.role
@@ -80,6 +81,8 @@ angular.module('doubtfire.tasks.partials.modals', [])
     all: $scope.orderedStatuses.map (status) ->
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
     tutorTriggers: $scope.tutorStatuses.map (status) ->
+      { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+    complete: $scope.completeStatuses.map (status) ->
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
   }
 )
