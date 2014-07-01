@@ -13,3 +13,16 @@ Setting up the development environment.
 7. Use `grunt watchsvr` to compile, watch and create a webserver or
 8. Use `grunt watch` to compile, and watch then run server with `grunt connect:devserver` in separate terminal
 7. Open web browser and connect to http://localhost:8000
+
+# Useful resources
+
+* Angular UI Router
+    * http://angular-ui.github.io/ui-router/site/#/api/ui.router
+    * https://github.com/angular-ui/ui-router
+* UI Bootstrap
+    * http://angular-ui.github.io/bootstrap/
+    * Also Bootstrap: http://getbootstrap.com
+* NVD3 charts 
+    * Angular component https://cmaurer.github.io/angularjs-nvd3-directives/
+    * Other examples https://github.com/cmaurer/angularjs-nvd3-directives/tree/master/examples
+    * also D3 and NVD3
