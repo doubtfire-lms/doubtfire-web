@@ -20,7 +20,7 @@
 	    	<tbody>
 		    	<tr ng-repeat="student in filteredStudents = (students | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
 			    	<td ng-click="student.open = !student.open"><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
-            <td ng-click="student.open = !student.open">{{student.name}}</td>
+            		<td ng-click="student.open = !student.open">{{student.name}}</td>
 			    	<td ng-click="student.open = !student.open" class="task-progress-bar">
 			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
 	    					<accordion-group is-open="student.open">
@@ -36,7 +36,7 @@
 	    					</accordion-group>
 						</accordion>
 					</td>
-			    	<td ng-click="student.open = !student.open">{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.meeting_location}})</td>
+			    	<td ng-click="student.open = !student.open"> <span tooltip="{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.meeting_location}})"> {{student.tutorial.abbreviation}} </span></td>
 			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)">Discussed</button></td>
 			    </tr>
 		    </tbody>
