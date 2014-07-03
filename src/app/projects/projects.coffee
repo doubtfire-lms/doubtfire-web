@@ -135,6 +135,12 @@ angular.module("doubtfire.projects", [
       $scope.burndownData = project.burndown_chart_data
   
   #
+  # Finds max end range for chart defined as 2 weeks (12096e5 ms) after unit's end date
+  #
+  $scope.lateEndDate = () ->
+    return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
+  
+  #
   # Allow the caller to fetch a task definition from the unit based on its id
   #
   $scope.taskDef = (taskDefId) ->
