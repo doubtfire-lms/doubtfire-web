@@ -14,7 +14,7 @@ angular.module("doubtfire.home", [])
         templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'admin']
+      roleWhitelist: ['basic', 'convenor', 'admin']
   )
 )
 

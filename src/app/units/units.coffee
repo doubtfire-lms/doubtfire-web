@@ -19,7 +19,7 @@ angular.module("doubtfire.units", [
 
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'admin']
+      roleWhitelist: ['basic', 'convenor', 'admin']
   )
   .state("admin/units#index",
     url: "/admin/units"
