@@ -1,11 +1,13 @@
-<div>
-	<div ng-repeat="unit in units">
-		<h3>
-			<a href ng-click="showUnitModal(unit)">{{unit.name}}</a>
-		</h3>
-	</div>
-
-	<div>
-		<a href ng-click="showUnitModal()">Add New Unit</a>
-	</div>
+<div class="col-md-9">
+	<div class="panel panel-default" ng-show="units.length > 0">
+    <div class="panel-heading">
+      <h4 class="panel-title">Units</h4>
+    </div>
+    <div class="panel-body">
+  <ul class="list-group">
+    <li class="list-group-item"  ng-repeat="unit in units"><a
+      ng-click="showUnitModal(unit)">{{unit.name}}</a></li>
+    <li class="list-group-item"><a href ng-click="showUnitModal()">Add New Unit</a></li>
+  </ul>
+  </div></div>
 </div>

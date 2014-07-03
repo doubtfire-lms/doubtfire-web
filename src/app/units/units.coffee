@@ -24,6 +24,12 @@ angular.module("doubtfire.units", [
       main:
         controller: "AdminUnitsCtrl"
         templateUrl: "units/admin.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
+      sidebar:
+        controller: "BasicSidebarCtrl"
+        templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin']
