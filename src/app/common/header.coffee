@@ -2,14 +2,14 @@ angular.module("doubtfire.header", [  ])
 
 .factory("headerService", ($rootScope) ->
 
-  $rootScope.links_data = [ ]
-
-  links: () -> $rootScope.links_data
-  clearLinks: ->
-    $rootScope.links_data.length = 0
-  setLinks: (new_links) ->
-    $rootScope.links_data.length = 0
-    $rootScope.links_data.push link for link in new_links
+  $rootScope.header_menu_data = [ ]
+  menus: () -> $rootScope.header_menu_data
+  clearMenus: ->
+    $rootScope.header_menu_data.length = 0
+  setMenus: (new_menus) ->
+    $rootScope.header_menu_data.length = 0
+    $rootScope.header_menu_data.push menu for menu in new_menus
+    
 )
 
 .factory("alertService", ($rootScope, $timeout) ->
@@ -36,11 +36,11 @@ angular.module("doubtfire.header", [  ])
 ) # end factory
 
 
-.controller("BasicHeaderCtrl", ($scope, $state, currentUser, headerService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, currentUser, headerService, Project) ->
   $scope.name = currentUser.profile.name
   $scope.nickname = currentUser.profile.nickname
 
-  $scope.links = headerService.links()
+  $scope.menus = headerService.menus()
 )
 
 .controller("BasicSidebarCtrl", ($scope, $state, currentUser, headerService, UnitRole, Project) ->

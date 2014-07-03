@@ -9,9 +9,7 @@ angular.module("doubtfire.home", [])
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
-      sidebar:
-        controller: "BasicSidebarCtrl"
-        templateUrl: "common/sidebar.tpl.html"
+        
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['basic', 'admin']
@@ -21,7 +19,7 @@ angular.module("doubtfire.home", [])
 .controller("HomeCtrl", ($scope, $state, UnitRole, Project, headerService) ->
   $scope.unitRoles = UnitRole.query()
   $scope.projects = Project.query()
-  headerService.clearLinks()
+  headerService.clearMenus()
 
   #
   # Filter functions to separate units in repeater
