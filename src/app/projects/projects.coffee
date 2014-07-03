@@ -15,7 +15,7 @@ angular.module("doubtfire.projects", [
 
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'admin']
+      roleWhitelist: ['basic', 'convenor', 'admin']
   )
 )
 .controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->

@@ -5,6 +5,7 @@ angular.module("doubtfire.sessions", [
 ]).constant("authRoles", [
   "anon"
   "basic"
+  "convenor"
   "admin"
 ]).constant("currentUser",
 
