@@ -29,36 +29,35 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['admin']
   )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
   $scope.unitLoaded = false
 
-
+  #
+  # Unit Role header menu
+  #
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
     # The user selects the unit role to view - allows multiple roles per unit
     $scope.unitRole = unitRole # the selected unit role
-
-    # Header menus
-    menus = [ ]
+    headerService.clearMenus()
     
     # Set menu header for links
     if unitRole
-      rolesMenu = { name: 'Roles', links: [ ], icon: 'globe' }
-      rolesMenu.links.push { class: "active", url: "#/units?unitRole=" + unitRole.id, name: unitRole.role }
-      
-      for other_role in unitRole.other_roles
-        rolesMenu.links.push { class: "", url: "#/units?unitRole=" + other_role.id, name: other_role.role }
-
-      menus.push( rolesMenu )
-      
-    # Push the roles menu to the header
-    headerService.setMenus( menus )
+      # Only add 'Roles' menu if there are > 1 roles for the unit
+      if unitRole.other_roles.length > 0
+        rolesMenu = { name: "#{unitRole.role} View", links: [ ], icon: 'globe' }
+        rolesMenu.links.push { class: "active", url: "#/units?unitRole=" + unitRole.id, name: unitRole.role }
+        
+        for other_role in unitRole.other_roles
+          rolesMenu.links.push { class: "", url: "#/units?unitRole=" + other_role.id, name: other_role.role }
+        
+        # Push the roles menu to the header (remove old roles)
+        headerService.setMenus( [rolesMenu] )
 
     if unitRole
       Unit.get { id: unitRole.unit_id }, (unit) ->
         $scope.unit = unit # the unit related to the role
         $scope.unitLoaded = true
   # end get unit role
-
     
   #
   # Allow the caller to fetch a task definition from the unit based on its id

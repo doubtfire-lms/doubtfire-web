@@ -23,6 +23,28 @@
         </ul>
       </li>
 
+      <li class="dropdown" ng-hide="projects.length == 0 && unitRoles.length == 0">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Units <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li class="dropdown-header" ng-hide="{{unitRoles.length}}">Units You Teach</li>
+    				<li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
+              <a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
+            </li>
+            <li class="divider"></li>
+            <li class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
+    				<li ng-repeat="project in projects">
+    				  <a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
+    				</li>
+        </ul>
+      </li>
+
+      <li class="dropdown" if-role="admin">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Administration <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#/admin/units" if-role="admin">Manage Units</a></li>
+        </ul>
+      </li>
+
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{name}} ({{nickname}}) <b class="caret"></b></a>
         <ul class="dropdown-menu">

@@ -69,6 +69,10 @@ angular.module("doubtfire.projects", [
   $scope.projectLoaded = false
 
   Project.get { id: $scope.studentProjectId }, (project) ->
+    
+    # Clear any page-specific menus
+    headerService.clearMenus()
+    
     # Provide access to the Project's details
     $scope.project = project # the selected unit role
 
