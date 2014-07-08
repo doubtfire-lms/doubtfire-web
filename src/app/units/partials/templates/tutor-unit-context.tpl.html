@@ -1,11 +1,12 @@
 <div>
-    <h2>{{unit.name}}</h2>
-	
-	Any: <input ng-model="search.$" typeahead="student.name for student in students | filter:$viewValue | limitTo:8">
-
-    <p ng-show="filteredStudents.length < students.length">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
-
-
+  <h2 class="pull-left">{{unit.name}}</h2>
+    
+  <form role="search" class="pull-right form-horizontal">
+      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search.$" typeahead="student.name for student in students | filter:$viewValue | limitTo:8" />
+      <p class="help-block" ng-show="filteredStudents.length < students.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
+      <p class="help-block" ng-show="filteredStudents.length < students.length && filteredStudents.length == 0">No students found.</p>
+  </form>
+    
 	<div class="table-responsive">
 	    <table class="table table-condensed table-hover">
 	    	<thead>
@@ -36,7 +37,7 @@
 	    					</accordion-group>
 						</accordion>
 					</td>
-			    	<td ng-click="student.open = !student.open"> <span tooltip="{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}} ({{student.tutorial.meeting_location}})"> {{student.tutorial.abbreviation}} </span></td>
+			    	<td ng-click="student.open = !student.open"> <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor.name}}"> {{student.tutorial.abbreviation}} </span></td>
 			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)">Discussed</button></td>
 			    </tr>
 		    </tbody>
