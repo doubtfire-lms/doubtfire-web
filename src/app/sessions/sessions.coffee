@@ -110,12 +110,7 @@ angular.module("doubtfire.sessions", [
 
   signOut: -> tryChangeUser defaultAnonymousUser
 
-).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api) ->
-
-  $scope.alerts = []
-  $scope.closeAlert = (index) ->
-    $scope.alerts.splice(index, 1)
-
+).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api, alertService) ->
   stateAfterSignIn = "home" # TODO: Make this a constant
 
   if auth.isAuthenticated()
@@ -127,9 +122,10 @@ angular.module("doubtfire.sessions", [
         password: $scope.session.password
       , ->
         $state.go stateAfterSignIn
-      , ->
-        $scope.alerts = []
-        $scope.alerts.push {type: "danger", msg:"Login Failed"}
+      , (response) ->
+        $scope.session.password = ''
+        alertService.add("danger", "Login failed: " + response.error, 2000)
+        #$scope.alerts.push {type: "danger", msg: "Login failed: " + response.error}
       # , ->
       #   # If error alert already showing, delay before showing the new sign-in error. Looks better.
       #   if flash.now.has "error"
