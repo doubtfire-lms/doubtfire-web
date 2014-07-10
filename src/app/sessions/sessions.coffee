@@ -4,9 +4,10 @@ angular.module("doubtfire.sessions", [
   "doubtfire.api"
 ]).constant("authRoles", [
   "anon"
-  "basic"
-  "convenor"
-  "admin"
+  "Student"
+  "Tutor"
+  "Convenor"
+  "Admin"
 ]).constant("currentUser",
 
   id: 0

@@ -12,7 +12,7 @@ angular.module("doubtfire.home", [])
         
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'convenor', 'admin']
+      roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
 )
 

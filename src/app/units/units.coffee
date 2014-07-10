@@ -16,7 +16,7 @@ angular.module("doubtfire.units", [
 
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['basic', 'convenor', 'admin']
+      roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
   .state("admin/units#index",
     url: "/admin/units"
@@ -26,7 +26,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/admin.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
-      roleWhitelist: ['admin']
+      roleWhitelist: ['Admin']
   )
 )
 .controller("UnitsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
