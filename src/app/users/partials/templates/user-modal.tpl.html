@@ -16,28 +16,25 @@
         <label class="col-sm-3 control-label">Email</label>
         <input type="email" class="form-control col-sm-7" placeholder="fred@doubtfire.org" ng-model="user.email">
       </div>
-      <div class="form-group" if-role="Admin">
-        <label class="col-sm-3 control-label">Username</label>
-        <input type="input" class="form-control col-sm-7" placeholder="fderf94" ng-model="user.username">
-      </div>
       <div class="form-group">
         <label class="col-sm-3 control-label">Nickname</label>
         <input type="input" class="form-control col-sm-7" placeholder="Freddy McDerfson" ng-model="user.nickname">
       </div>
-      <div class="form-group" required>
+      <div class="form-group" if-role="Admin Convenor" required>
         <label class="col-sm-3 control-label">System Role</label>
-        <label class="radio-inline">
-          <input type="radio" name="sysRole" if-role="Admin" ng-model="user.system_role" value="Admin">Administrator
+        <label class="radio-inline" if-role="Admin">
+          <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin" ng-model="user.system_role" value="Admin">Administrator
         </label>
         <label class="radio-inline">
-          <input type="radio" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Convenor">Convenor
+          <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Convenor">Convenor
         </label>
         <label class="radio-inline">
-          <input type="radio" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Tutor">Tutor
+          <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Tutor">Tutor
         </label>
         <label class="radio-inline">
-          <input type="radio" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Student">Student
+          <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Student">Student
         </label>
+        <p ng-show="user.id == currentUser.id" class="help-block text-center">You cannot modify your own permissions</p>
       </div>
   	</div>
 		<div class="modal-footer text-right">

@@ -17,7 +17,7 @@
     	</tr>
   	</thead>
   	<tbody>
-  	  <tr ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)" ng-click="showUserModal(user)">
+  	  <tr ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
   	    <td>{{user.id}}</td>
   	    <td>{{user.first_name}}</td>
   	    <td>{{user.last_name}}</td>
