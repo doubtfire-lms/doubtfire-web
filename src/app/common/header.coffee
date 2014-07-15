@@ -45,7 +45,9 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
 
 
 .controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
-  $scope.currentUser = User.get(id: currentUser.id)
+  $scope.currentUser = {}
+  $scope.currentUser.nickname = currentUser.profile.nickname
+  $scope.currentUser.name = currentUser.profile.name
   $scope.menus = headerService.menus()
 
   # Global Units Menu
@@ -62,7 +64,8 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
       templateUrl: 'users/partials/templates/user-modal.tpl.html'
       controller: 'UserModalCtrl'
       resolve:
-        user: -> $scope.currentUser
+        # Actually load in all current user info when we request the user settings
+        user: ->  $scope.currentUser = User.get(id: currentUser.id)
         isNew: -> false
         users: -> false
 )
