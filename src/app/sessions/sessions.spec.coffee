@@ -25,14 +25,14 @@ describe "Sessions module", ->
     rootScope = _$rootScope_
 
   it "should change user when signing in and out", ->
-    userCredentials = { email: "user@localhost", password: "abc123" }
+    userCredentials = { username: "user", password: "abc123" }
 
     signInResponse =
       success: true
       auth_token: "a_fake_token"
       user:
         id: 1
-        system_role: "admin"
+        system_role: "Admin"
         first_name: "Test"
         last_name: "User"
         nickname: "anon"
@@ -54,7 +54,7 @@ describe "Sessions module", ->
   it "should not change user when signing in fails", ->
     expect(currentUser).toEqual defaultAnonymousUser
     httpBackend.expectPOST(authenticationUrl).respond(401) # simulate unauthorised 401 request
-    auth.signIn authenticationUrl, { email: "user@localhost", password: "abc123" }
+    auth.signIn authenticationUrl, { username: "user@localhost", password: "abc123" }
     httpBackend.flush()
     expect(currentUser).toEqual defaultAnonymousUser # user should not change
 
@@ -71,32 +71,32 @@ describe "Sessions module", ->
 
     expect(currentUser).toEqual defaultAnonymousUser
     httpBackend.expectPOST(authenticationUrl).respond(signInResponse)
-    auth.signIn authenticationUrl, { email: "user@localhost", password: "abc123" }
+    auth.signIn authenticationUrl, { username: "user@localhost", password: "abc123" }
     httpBackend.flush()
     expect(currentUser).toEqual defaultAnonymousUser # user should not change
 
   it "should authorise user roles correctly", ->
-    roleWhitelist = [ "basic", "admin" ]
+    roleWhitelist = [ "Student", "Admin" ]
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "Student")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "Admin")).toBe(true)
 
-    roleWhitelist = [ "admin" ]
+    roleWhitelist = [ "Admin" ]
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "Student")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "Admin")).toBe(true)
 
     # An empty whitelist should not authorise anyone.
     roleWhitelist = []
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(false)
-    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "Student")).toBe(false)
+    expect(auth.isAuthorised(roleWhitelist, "Admin")).toBe(false)
 
     # If no whitelist is specified, anyone should be authorised.
     roleWhitelist = undefined
     expect(auth.isAuthorised(roleWhitelist, "anon")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "basic")).toBe(true)
-    expect(auth.isAuthorised(roleWhitelist, "admin")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "Student")).toBe(true)
+    expect(auth.isAuthorised(roleWhitelist, "Admin")).toBe(true)
 
   it "should automatically intercept unauthorised API responses", ->
     intercepted = false
@@ -137,13 +137,13 @@ describe "Sessions module", ->
       auth_token: "a_fake_token"
       user:
         id: 1
-        system_role: "admin"
+        system_role: "Admin"
         first_name: "Test"
         last_name: "User"
         nickname: "anon"
 
     httpBackend.expectPOST(authenticationUrl).respond(signInResponse)
-    auth.signIn authenticationUrl, { email: "user@localhost", password: "abc123" }
+    auth.signIn authenticationUrl, { username: "user", password: "abc123" }
     httpBackend.flush()
 
     # After sign in: the current user's auth token should be present in API request params.
