@@ -34,8 +34,49 @@ angular.module("doubtfire.units", [
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin']
   )
+  .state("admin/units#edit",
+    url: "/admin/units/edit"
+    views:
+      main:
+        controller: "UnitCtrl"
+        templateUrl: "units/unit.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
+      sidebar:
+        controller: "BasicSidebarCtrl"
+        templateUrl: "common/sidebar.tpl.html"
+    data:
+      pageTitle: "_Unit Administration_"
+      roleWhitelist: ['admin']
+   )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
+.service('unitService', () ->
+  unit = { id: -1 }
+  staff = []
+  tutors = []
+
+  this.getUnit = ->
+    return unit
+
+  this.getStaff = ->
+    return staff
+
+  this.getTutors = ->
+    return tutors
+
+  this.setUnit = (theUnit) ->
+    unit = theUnit
+
+  this.setStaff = (theStaff) ->
+    staff = theStaff
+
+  this.setTutors = (theTutors) ->
+    tutors = theTutors
+
+  return this
+)
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService, unitService) ->
   $scope.unitLoaded = false
 
   #
@@ -80,20 +121,28 @@ angular.module("doubtfire.units", [
   $scope.taskCount = () ->
     $scope.unit.task_definitions.length
 )
-.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $modal, Unit, Convenor) ->
+.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor,unitService) ->
   $scope.units = Unit.query()
   $scope.convenors = Convenor.query()
+  tutors = _.map(Tutor.query(), (tutor) ->
+    return { id: tutor.user_id, user_name: tutor.user_name }
+  )
+  $scope.tutors = _.uniq(tutors, (item) ->
+    return item.id
+  )
 
-  $scope.showUnitModal = (unit) ->
+  $scope.showUnit = (unit) ->
     unitToShow = if unit?
       unit
     else
-      new Unit { convenors: [] }
+      new Unit { id: -1, convenors: [] }
+    unitService.setUnit(unitToShow)
+    unitService.setStaff($scope.convenors)
+    unitService.setTutors($scope.tutors)
+    $location.path('/admin/units/edit')
+)
+.controller('UnitCtrl', ($scope, $state, $stateParams,  $location, Unit, UnitRole,  headerService, alertService, unitService) ->
 
-    $modal.open
-      templateUrl: 'units/partials/templates/unit-modal.tpl.html'
-      controller: 'UnitModalCtrl'
-      resolve:
-        unit: -> unitToShow
-        convenors: -> $scope.convenors
+  unit = unitService.getUnit()
+  staff = unitService.getStaff()
 )
