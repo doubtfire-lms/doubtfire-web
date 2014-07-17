@@ -82,7 +82,10 @@ module.exports = {
       'vendor/momentjs/moment.js',
       'vendor/d3/d3.js',
       'vendor/nvd3/nv.d3.js',
-      'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js'
+      'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js',
+      'vendor/angular-file-upload/angular-file-upload.js',
+      'vendor/es5-shim/es5-shim.js',
+      'vendor/es5-shim/es5-shim.map'
     ],
     css: [
     ]

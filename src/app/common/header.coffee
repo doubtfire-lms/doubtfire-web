@@ -61,7 +61,7 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
     
   $scope.openUserSettings = () ->
     $modal.open
-      templateUrl: 'users/partials/templates/user-modal.tpl.html'
+      templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
       controller: 'UserModalCtrl'
       resolve:
         # Actually load in all current user info when we request the user settings

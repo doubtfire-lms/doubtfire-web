@@ -1,13 +1,14 @@
 <div if-role="Admin">
-  <form class="form-horizontal pull-left col-md-5" ng-submit="requestImport()">
+  <form class="form-horizontal pull-left col-md-5" ng-submit="submitUpload()">
     <h3 class="text-center">Upload Users</h3>
     <div class="form-group">
-      <input type="file" name="file" accept="text/csv" ng-model="fileToUpload" required />
-      <p class="help-block">1. Select a CSV file to import</p>
+      <input type="file" name="file" accept="text/csv" required ng-file-select />
     </div>
     <div class="form-group">
       <input type="submit" class="btn btn-primary form-control" value="Import" />
-      <p class="help-block">2. Import the CSV above into Doubtfire</p>
+    </div>
+    <div class="progress" ng-show="fileUploader.isUploading">
+      <div class=​"progress-bar" role=​"progressbar" ng-style=​"{ 'width':​ fileUploader.progress + '%' }​" style=​"width:​ 100%;​">​</div>​
     </div>
   </form>
   <form class="form-horizontal pull-right col-md-5" ng-submit="requestExport()">
@@ -17,4 +18,7 @@
       <p class="help-block">1. Export current Doubtfire users into a CSV</p>
     </div>
   </form>
+  <div class="alert-top">
+  	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+  </div>
 </div>

@@ -51,12 +51,31 @@ angular.module("doubtfire.api", [
 .factory("User", (resourcePlus) ->
   resourcePlus "/users/:id", { id: "@id" }
 )
-.factory("UserCSV", (resourcePlus, api, $window, currentUser) ->
-  ret = resourcePlus "/csv/users"
-  angular.extend ret.prototype, ret.prototype,
-    #TODO: This could be neatened up
-    downloadFile: ->
-      $window.open "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}", "_blank"
+.service("UserCSV", (api, $window, $fileUploader, currentUser, alertService) ->
+  csvUrl = "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
+  
+  fileUploader = null
+
+  this.fileUploader = (scope) ->
+    # singleton per scope
+    if !fileUploader? && scope
+      fileUploader = $fileUploader.create {
+        scope: scope,
+        url: csvUrl,
+        method: "POST"
+      }
+      fileUploader.bind 'success', (evt, xhr, item, response) ->
+        alertService.add("success", "Added #{response.length} users.", 2000)
+        fileUploader.clearQueue()
+        
+      fileUploader.bind 'error', (evt, xhr, item, response) ->
+        alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+    fileUploader
+        
+  this.downloadFile =  ->
+    $window.open csvUrl, "_blank"
+    
+  return this
 )
 
 

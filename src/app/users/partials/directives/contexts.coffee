@@ -28,13 +28,13 @@ angular.module('doubtfire.users.partials.contexts', [])
   restrict: 'E'
   templateUrl: 'users/partials/templates/import-export-context.tpl.html'
   controller: ($scope, $modal, UserCSV) ->
-    $scope.fileToUpload = "N/A"
+    $scope.fileUploader =
+      UserCSV.fileUploader $scope
+
+    $scope.submitUpload = () ->
+      $scope.fileUploader.uploadAll()
     
     $scope.requestExport = () ->
       UserCSV.downloadFile()
-    $scope.requestImport = () ->
-      UserCSV.create( file: $scope.fileToUpload ).$promise.then (
-        (data) ->
-          alert "Success! #{data}"
-      )
+    
 )
