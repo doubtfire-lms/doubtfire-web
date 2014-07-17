@@ -1,0 +1,50 @@
+<div>
+  <div style="margin: 20px;">
+
+    <div class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="code">Code:</label>
+        <input id="code" class="form-control" type="text" placeholder="Enter unit code" ng-model="unit.code">
+      </div>
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input id="name" type="text" class="form-control" ng-model="unit.name">
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" class="form-control" ng-model="unit.description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="startdate">Start Date:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="startdate"
+          datepicker-popup="{{format}}" ng-model="unit.start_date"
+          is-open="startOpened" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="open($event,'start')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="enddate">End Date:</label>
+        <div class="input-group">
+          <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date"
+          is-open="endOpened"ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button ng-show="unit.id == -1" ng-click="saveUnit()" class="btn btn-primary">
+      Create Unit
+    </button>
+    <button ng-hide="unit.id == -1" ng-click="saveUnit()" class="btn btn-primary">
+      Update Unit
+    </button>
+  </div>
+</div>
