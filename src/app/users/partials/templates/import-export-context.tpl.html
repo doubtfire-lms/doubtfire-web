@@ -1,21 +1,26 @@
-<div if-role="Admin">
-  <form class="form-horizontal pull-left col-md-5" ng-submit="submitUpload()">
-    <h3 class="text-center">Upload Users</h3>
+<div ng-file-drop if-role="Admin">
+  <form class="form-horizontal" ng-submit="submitUpload()">
     <div class="form-group">
-      <input type="file" name="file" accept="text/csv" required ng-file-select />
+      <label class="col-sm-3 control-label">Upload</label>
+      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" required ng-file-select />
+      <div   ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" ng-file-over>
+        Drop CSV here
+      </div>
+	    <p ng-show="fileUploader.queue.length == 1"class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
     </div>
     <div class="form-group">
-      <input type="submit" class="btn btn-primary form-control" value="Import" />
+      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
+      <div class="col-sm-offset-3 col-sm-6" ng-show="fileUploader.isUploading">
+        <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
+        <p class="help-block text-center" ng-show="fileUploader.progress == 100">
+          Please wait for the server to insert the users...
+        </p>
+      </div>
     </div>
-    <div class="progress" ng-show="fileUploader.isUploading">
-      <div class=​"progress-bar" role=​"progressbar" ng-style=​"{ 'width':​ fileUploader.progress + '%' }​" style=​"width:​ 100%;​">​</div>​
-    </div>
-  </form>
-  <form class="form-horizontal pull-right col-md-5" ng-submit="requestExport()">
-    <h3 class="text-center">Download Users</h3>
+  <form class="form-horizontal" ng-submit="requestExport()">
     <div class="form-group">
-      <input type="submit" class="btn btn-primary form-control" value="Export" />
-      <p class="help-block">1. Export current Doubtfire users into a CSV</p>
+      <label class="col-sm-3 control-label">Download</label>
+      <input type="submit" class="btn btn-primary form-control col-sm-2" value="Export" />
     </div>
   </form>
   <div class="alert-top">

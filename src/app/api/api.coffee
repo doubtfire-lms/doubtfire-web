@@ -62,14 +62,21 @@ angular.module("doubtfire.api", [
       fileUploader = $fileUploader.create {
         scope: scope,
         url: csvUrl,
-        method: "POST"
+        method: "POST",
+        queueLimit: 1
       }
       fileUploader.bind 'success', (evt, xhr, item, response) ->
-        alertService.add("success", "Added #{response.length} users.", 2000)
+        if response.length != 0
+          alertService.add("success", "Added #{response.length} users.", 2000)
+          fileUploader.scope.users.concat(response)
+        else
+          alertService.add("info", "No users need to be added.", 2000)
         fileUploader.clearQueue()
         
       fileUploader.bind 'error', (evt, xhr, item, response) ->
         alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+        fileUploader.clearQueue()
+        
     fileUploader
         
   this.downloadFile =  ->

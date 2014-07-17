@@ -10,29 +10,25 @@ angular.module('doubtfire.users.partials.modals', [])
   
   $scope.saveUser = ->
     if $scope.isNew
-      # Todo - Alert Service not working... using alerts for now
+      $scope.user.username = $scope.user.first_name
       User.create( user: $scope.user ).$promise.then (
         (response) ->
           $modalInstance.close(response)
-          alertService.add("success", "User saved.", 2000)
           $scope.users.push(response)
       ),
       (
         (response) ->
           if response.data.error?
-            alert response.data.error
             alertService.add("danger", "Error: " + response.data.error, 2000)
       )
     else
       User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
-          alertService.add("success", "User saved.", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alert response.data.error
             alertService.add("danger", "Error: " + response.data.error, 2000)
       )
 )
