@@ -3,11 +3,33 @@
     <div class="panel-heading">
       <h4 class="panel-title">Units</h4>
     </div>
-    <div class="panel-body">
-  <ul class="list-group">
-    <li class="list-group-item"  ng-repeat="unit in units"><a
-      ng-click="showUnitModal(unit)">{{unit.name}}</a></li>
-    <li class="list-group-item"><a href ng-click="showUnitModal()">Add New Unit</a></li>
-  </ul>
-  </div></div>
+   <table class="table table-condensed table-hover">
+     <thead>
+       <tr> 
+         <th>Code</th>
+         <th>Name</th>
+         <th>Start Date</th>
+         <th>End Date</th>
+         <th>Active</th>
+       </tr>
+     </thead>
+     <tbody>
+     <tr ng-repeat="unit in units" ng-click="showUnit(unit)" >
+       <td>{{unit.code}}</td>
+       <td>{{unit.name}}</td>
+       <td>{{unit.start_date | date: short }}</td>
+       <td>{{unit.end_date | date: short }}</td>
+       <td>
+         <span ng-show="unit.active" class="glyphicon glyphicon-ok text-success"></span>
+         <span ng-hide="unit.active"class="glyphicon glyphicon-remove
+           text-danger" ></span>
+
+       </td>
+     </tr>
+     </tbody>
+   </table>
+
+  
+  </div>
+   <button class="btn btn-primary" ng-click="showUnit()">Create Unit</button>
 </div>
