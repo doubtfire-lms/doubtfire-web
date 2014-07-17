@@ -1,8 +1,8 @@
 <div if-role="Admin">
-  <form class="form-horizontal pull-left col-md-5">
+  <form class="form-horizontal pull-left col-md-5" ng-submit="requestImport()">
     <h3 class="text-center">Upload Users</h3>
     <div class="form-group">
-      <input type="file" value="Import" accept="text/csv" required />
+      <input type="file" name="file" accept="text/csv" ng-model="fileToUpload" required />
       <p class="help-block">1. Select a CSV file to import</p>
     </div>
     <div class="form-group">
@@ -10,7 +10,7 @@
       <p class="help-block">2. Import the CSV above into Doubtfire</p>
     </div>
   </form>
-  <form class="form-horizontal pull-right col-md-5">
+  <form class="form-horizontal pull-right col-md-5" ng-submit="requestExport()">
     <h3 class="text-center">Download Users</h3>
     <div class="form-group">
       <input type="submit" class="btn btn-primary form-control" value="Export" />

@@ -51,7 +51,13 @@ angular.module("doubtfire.api", [
 .factory("User", (resourcePlus) ->
   resourcePlus "/users/:id", { id: "@id" }
 )
-
+.factory("UserCSV", (resourcePlus, api, $window, currentUser) ->
+  ret = resourcePlus "/csv/users"
+  angular.extend ret.prototype, ret.prototype,
+    #TODO: This could be neatened up
+    downloadFile: ->
+      $window.open "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}", "_blank"
+)
 
 
 

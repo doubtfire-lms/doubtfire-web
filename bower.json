@@ -16,7 +16,9 @@
     "jquery": "latest",
     "momentjs": "~2.1.0",
     "lodash": "latest",
-    "underscore.string": "latest"
+    "underscore.string": "latest",
+    "angular-file-upload": "latest",
+    "ng-file-upload-shim": "latest"
   },
   "resolutions": {
     "d3": "~3.4.1"

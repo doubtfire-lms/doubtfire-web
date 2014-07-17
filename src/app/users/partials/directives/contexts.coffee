@@ -1,7 +1,7 @@
 angular.module('doubtfire.users.partials.contexts', [])
-.directive('userList', ->
+.directive('userListContext', ->
   restrict: 'E'
-  templateUrl: 'users/partials/templates/user-list.tpl.html'
+  templateUrl: 'users/partials/templates/user-list-context.tpl.html'
   controller: ($scope, $modal, User) ->
     $scope.users = User.query()
     # Table sort details
@@ -17,16 +17,24 @@ angular.module('doubtfire.users.partials.contexts', [])
         new User { }
 
       $modal.open
-        templateUrl: 'users/partials/templates/user-modal.tpl.html'
+        templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
         controller: 'UserModalCtrl'
         resolve:
           user: -> userToShow
           isNew: -> !user?
           users: -> $scope.users
 )
-.directive('importExport', ->
+.directive('importExportContext', ->
   restrict: 'E'
-  templateUrl: 'users/partials/templates/import-export.tpl.html'
-  controller: ($scope, $modal, User) ->
-    # todo write...
+  templateUrl: 'users/partials/templates/import-export-context.tpl.html'
+  controller: ($scope, $modal, UserCSV) ->
+    $scope.fileToUpload = "N/A"
+    
+    $scope.requestExport = () ->
+      UserCSV.downloadFile()
+    $scope.requestImport = () ->
+      UserCSV.create( file: $scope.fileToUpload ).$promise.then (
+        (data) ->
+          alert "Success! #{data}"
+      )
 )
