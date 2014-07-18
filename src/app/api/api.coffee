@@ -51,7 +51,39 @@ angular.module("doubtfire.api", [
 .factory("User", (resourcePlus) ->
   resourcePlus "/users/:id", { id: "@id" }
 )
+.service("UserCSV", (api, $window, $fileUploader, currentUser, alertService) ->
+  csvUrl = "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
+  
+  fileUploader = null
 
+  this.fileUploader = (scope) ->
+    # singleton per scope
+    if !fileUploader? && scope
+      fileUploader = $fileUploader.create {
+        scope: scope,
+        url: csvUrl,
+        method: "POST",
+        queueLimit: 1
+      }
+      fileUploader.bind 'success', (evt, xhr, item, response) ->
+        if response.length != 0
+          alertService.add("success", "Added #{response.length} users.", 2000)
+          fileUploader.scope.users.concat(response)
+        else
+          alertService.add("info", "No users need to be added.", 2000)
+        fileUploader.clearQueue()
+        
+      fileUploader.bind 'error', (evt, xhr, item, response) ->
+        alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+        fileUploader.clearQueue()
+        
+    fileUploader
+        
+  this.downloadFile =  ->
+    $window.open csvUrl, "_blank"
+    
+  return this
+)
 
 
 

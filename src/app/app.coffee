@@ -50,6 +50,8 @@ angular.module("doubtfire", [
   # "mgcrea.ngStrap"
   "nvd3ChartDirectives"
 
+  "angularFileUpload"
+
   "doubtfire.api"
   "doubtfire.errors"
   "doubtfire.sessions"

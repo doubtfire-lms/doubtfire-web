@@ -1,4 +1,4 @@
-angular.module("doubtfire.header", [ ])
+angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
 
 .factory("headerService", ($rootScope) ->
   
@@ -44,9 +44,10 @@ angular.module("doubtfire.header", [ ])
 ) # end factory
 
 
-.controller("BasicHeaderCtrl", ($scope, $state, currentUser, headerService, UnitRole, Project) ->
-  $scope.name = currentUser.profile.name
-  $scope.nickname = currentUser.profile.nickname
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
+  $scope.currentUser = {}
+  $scope.currentUser.nickname = currentUser.profile.nickname
+  $scope.currentUser.name = currentUser.profile.name
   $scope.menus = headerService.menus()
 
   # Global Units Menu
@@ -57,6 +58,16 @@ angular.module("doubtfire.header", [ ])
     units = (item for item in $scope.unitRoles when item.unit_id is unit.unit_id)
     # teaching userRoles will default to tutor role if both convenor and tutor
     units.length == 1 || unit.role == "Tutor"
+    
+  $scope.openUserSettings = () ->
+    $modal.open
+      templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
+      controller: 'UserModalCtrl'
+      resolve:
+        # Actually load in all current user info when we request the user settings
+        user: ->  $scope.currentUser = User.get(id: currentUser.id)
+        isNew: -> false
+        users: -> false
 )
 
 .controller("BasicSidebarCtrl", ($scope, $state, currentUser, headerService, UnitRole, Project) ->
