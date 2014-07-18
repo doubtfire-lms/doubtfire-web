@@ -61,6 +61,7 @@ angular.module("doubtfire", [
   "doubtfire.units"
   "doubtfire.tasks"
   "doubtfire.projects"
+  "doubtfire.users"
 ])
 .config(($urlRouterProvider, $httpProvider) ->
 
