@@ -19,9 +19,16 @@
     <ul class="list-group" ng-show="currentStaff.length > 0">
       <li class="list-group-item" ng-repeat="staff in currentStaff">
       <a ng-click="removeStaff(staff)"> 
-        {{staff.user_name}} 
-        <i class="glyphicon glyphicon-remove text-danger"></i>
+        <span class="col-md-4">
+          {{staff.user_name}} 
+          <i class="glyphicon glyphicon-remove text-danger"></i>
+        </span>
       </a>
+      <label name="staffRole" class="radio-inline" for="radio-tutor">Tutor</label>
+      <input type="radio" id="radio-tutor" value="Tutor" ng-model="staff.role">
+      <label name="staffRole" class="radio-inline" for="radio-convenor">Convenor</label>
+      <input type="radio" id="radio-convenor" value="Convenor" ng-model="staff.role">
+
       </li>
     </ul>
   </div>
