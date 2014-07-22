@@ -1,0 +1,17 @@
+<div>
+  <div class="alert-top">
+  	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+  </div>
+  	<div class="modal-header">
+  		<h3>Enrol Student</h3>
+  	</div>
+  	<div class="modal-body">
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Student ID</label>
+        <input type="input" class="form-control col-sm-7" placeholder="000000" ng-model="student_id">
+      </div>
+    </div>
+		<div class="modal-footer text-right">
+			<input type="button" ng-click="enrolStudent(student_id)" class="btn btn-primary" value="Save" />
+		</div>
+</div>

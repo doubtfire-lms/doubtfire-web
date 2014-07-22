@@ -29,7 +29,7 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin']
   )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
+.controller("UnitsShowCtrl", ($scope, $state, $modal, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
   $scope.unitLoaded = false
 
   #
@@ -73,6 +73,13 @@ angular.module("doubtfire.units", [
 
   $scope.taskCount = () ->
     $scope.unit.task_definitions.length
+
+  $scope.showEnrolModal = (unit) ->
+    $modal.open
+      templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
+      controller: 'EnrolStudentModalCtrl'
+      resolve:
+        unit: -> unit
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $modal, Unit, Convenor) ->
   $scope.units = Unit.query()
