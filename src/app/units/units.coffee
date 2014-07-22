@@ -67,7 +67,6 @@ angular.module("doubtfire.units", [
   this.setStaff = (theStaff) ->
     staff = theStaff
 
-
   return this
 )
 .controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService, unitService) ->
