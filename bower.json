@@ -10,7 +10,7 @@
     "d3": "~3.4.1",
     "nvd3": "latest",
     "angularjs-nvd3-directives": "latest",
-    "bootstrap": "~3.0.3",
+    "bootstrap": "latest",
     "angular-bootstrap": "~0.11.0",
     "angular-ui-router": "0.2.7",
     "jquery": "latest",

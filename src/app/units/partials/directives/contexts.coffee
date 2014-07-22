@@ -178,3 +178,139 @@ angular.module('doubtfire.units.partials.contexts', [])
 
 
 )
+.directive('convenorAdminUnitContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/convenor-admin-context.tpl.html'
+  controller: ($scope, $rootScope, unitService, Unit, UnitRole) ->
+    $scope.unit = unitService.getUnit()
+    $scope.staff = unitService.getStaff()
+    $scope.availableStaff = angular.copy($scope.staff)
+    temp = []
+    users = []
+    for staff in $scope.unit.convenors
+      users.push(staff.user_id)
+    for staff in $scope.availableStaff
+      temp.push(staff) unless staff.id in users
+    $scope.availableStaff = temp
+
+    $scope.addSelectedStaff = ->
+      staff = $scope.selectedStaff
+      $scope.selectedStaff = null
+      # Add the convenor to the list and remove it
+      # from the list of available convenors
+      $scope.unit.convenors = [] unless $scope.unit.convenors
+      $scope.availableStaff = _.without $scope.availableStaff, staff
+      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Convenor' }
+      $scope.unit.convenors.push(convenorRole)
+      unitService.setUnit($scope.unit)
+
+    $scope.findStaffUser = (id) ->
+      for convenor in $scope.convenors
+        return convenor if convenor.id == id
+
+
+    $scope.removeStaff = (staff) ->
+      $scope.unit.convenors = _.without $scope.unit.convenors, staff
+      UnitRole.delete { id: staff.id }
+
+      convenorUser = $scope.findStaffUser(staff.user_id)
+      $scope.availableStaff.push(convenorUser)
+
+)
+.directive('tutorAdminUnitContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/tutor-admin-context.tpl.html'
+  controller: ($scope, $rootScope, unitService, Unit, UnitRole, Tutor) ->
+    $scope.unit = unitService.getUnit()
+    $scope.tutors = Tutor.query()
+    tutors = _.map(Tutor.query(), (tutor) ->
+      return { id: tutor.user_id, user_name: tutor.user_name }
+    )
+    $scope.staff = _.uniq(tutors, (item) ->
+      return item.id
+    )
+    #$scope.staff = unitService.getTutors()
+    $scope.availableStaff = angular.copy($scope.staff)
+    temp = []
+    users = []
+    for tutor in $scope.tutors
+      users.push(tutor.user_id)
+    for staff in $scope.availableStaff
+      temp.push(staff) unless staff.id in users
+    $scope.availableStaff = temp
+
+    $scope.addSelectedStaff = ->
+      staff = $scope.selectedStaff
+      $scope.selectedStaff = null
+      # Add the convenor to the list and remove it
+      # from the list of available convenors
+      $scope.unit.convenors = [] unless $scope.unit.convenors
+      $scope.availableStaff = _.without $scope.availableStaff, staff
+      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Convenor' }
+      $scope.unit.convenors.push(convenorRole)
+      unitService.setUnit($scope.unit)
+
+    $scope.findStaffUser = (id) ->
+      for convenor in $scope.convenors
+        return convenor if convenor.id == id
+
+
+    $scope.removeStaff = (staff) ->
+      $scope.unit.convenors = _.without $scope.unit.convenors, staff
+      UnitRole.delete { id: staff.id }
+
+      convenorUser = $scope.findStaffUser(staff.user_id)
+      $scope.availableStaff.push(convenorUser)
+
+)
+.directive('adminUnitContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
+  controller: ($scope, $rootScope, unitService, Unit) ->
+    $scope.unit = unitService.getUnit()
+    $scope.format = 'yyyy-MM-dd'
+    $scope.initDate = new Date('2016-04-20')
+    $scope.startOpened = $scope.endOpened = $scope.opened = false
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    }
+
+    $scope.saveUnit = ->
+      delete $scope.unit[convenors]
+      Unit.create { id: $scope.unit.id, unit: $scope.unit } if $scope.unit.id == -1
+      Unit.update { id: $scope.unit.id, unit: $scope.unit} if $scope.unit.id != -1
+      $location.path('/admin/units')
+
+    $scope.open = ($event,which) ->
+      $event.preventDefault()
+      $event.stopPropagation()
+      $scope.opened = !$scope.opened
+      $scope.startOpened = !$scope.startOpened if which == 'start'
+      $scope.endOpened = !$scope.endOpened if which == 'end'
+)
+.directive('tutorialUnitContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
+  controller: ($scope, $modal, $rootScope, unitService, Unit, UnitRole) ->
+    $scope.editTutorial = (tutorial) ->
+      alert(JSON.stringify tutorial)
+      $modal.open
+        controller: 'TutorialModalCtrl'
+        templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
+        resolve: {
+          tutorial: -> tutorial
+        }
+    $scope.createTutorial = ->
+      $modal.open
+        controller: 'TutorialModalCtrl'
+        templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
+        resolve: {
+          tutorial: -> null
+        }
+
+)
