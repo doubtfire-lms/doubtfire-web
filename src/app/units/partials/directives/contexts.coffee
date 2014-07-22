@@ -186,32 +186,31 @@ angular.module('doubtfire.units.partials.contexts', [])
     $scope.unit = unitService.getUnit()
     $scope.staff = unitService.getStaff()
     $scope.availableStaff = angular.copy($scope.staff)
-    $scope.currentStaff = $scope.unit.convenors
+    $scope.currentStaff = $scope.unit.staff
     temp = []
     users = []
 
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
       $scope.selectedStaff = null
-      # Add the convenor to the list and remove it
-      # from the list of available convenors
-      $scope.unit.convenors = [] unless $scope.unit.convenors
+      $scope.unit.staff = [] unless $scope.unit.staff
       $scope.availableStaff = _.without $scope.availableStaff, staff
-      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
-      $scope.unit.convenors.push(convenorRole)
+      tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
+      $scope.unit.staff.push(tutorRole)
       unitService.setUnit($scope.unit)
 
     $scope.findStaffUser = (id) ->
-      for convenor in $scope.convenors
-        return convenor if convenor.id == id
+      for staff in $scope.staff
+        return staff if staff.id == id
 
 
     $scope.removeStaff = (staff) ->
-      $scope.unit.convenors = _.without $scope.unit.convenors, staff
+      alert(JSON.stringify(staff))
+      $scope.unit.staff = _.without $scope.unit.staff, staff
       UnitRole.delete { id: staff.id }
 
-      convenorUser = $scope.findStaffUser(staff.user_id)
-      $scope.availableStaff.push(convenorUser)
+      staffUser = $scope.findStaffUser(staff.user_id)
+      $scope.availableStaff.push(staffUser)
 
 )
 .directive('taskAdminUnitContext', ->

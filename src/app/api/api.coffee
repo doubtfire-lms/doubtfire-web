@@ -40,10 +40,10 @@ angular.module("doubtfire.api", [
   resourcePlus "/user_roles/:id", { id: "@id" }
 )
 .factory("Convenor", (resourcePlus) ->
-  resourcePlus "/convenors"
+  resourcePlus "/users/convenors"
 )
 .factory("Tutor", (resourcePlus) ->
-  resourcePlus "/tutors"
+  resourcePlus "/users/tutors"
 )
 .factory("Task", (resourcePlus) ->
   resourcePlus "/tasks/:id", { id: "@id" }
