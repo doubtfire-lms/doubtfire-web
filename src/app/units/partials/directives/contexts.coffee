@@ -190,6 +190,13 @@ angular.module('doubtfire.units.partials.contexts', [])
     temp = []
     users = []
 
+
+    
+    $scope.changeRole = (unitRole, role_id) ->
+      unitRole.role_id = role_id
+      unitRole.unit_id = $scope.unit.id
+      UnitRole.update { id: unitRole.id, unit_role: unitRole }
+
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
       $scope.selectedStaff = null

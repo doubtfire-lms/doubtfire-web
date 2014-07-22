@@ -48,7 +48,7 @@ angular.module("doubtfire.units", [
         templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
-      roleWhitelist: ['admin']
+      roleWhitelist: ['Admin']
    )
 )
 .service('unitService', () ->
@@ -126,18 +126,13 @@ angular.module("doubtfire.units", [
       new Unit { id: -1, convenors: [] }
     unitService.setUnit(unitToShow)
 
-    convenors = _.map(convenors, (convenor) ->
+    staff = _.union(convenors,tutors)
+    staff = _.map(staff, (convenor) ->
       return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
     )
-    
-    tutors = _.map(tutors, (tutor) ->
-      return { id: tutor.user_id, full_name: tutor.user_name }
-    )
-    staff = _.union(convenors,tutors)
     staff = _.uniq(staff, (item) ->
       return item.id
     )
-
     unitService.setStaff(staff)
 
     $location.path('/admin/units/edit')
