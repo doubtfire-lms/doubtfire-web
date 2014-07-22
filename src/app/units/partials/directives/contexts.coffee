@@ -178,21 +178,17 @@ angular.module('doubtfire.units.partials.contexts', [])
 
 
 )
-.directive('convenorAdminUnitContext', ->
+.directive('staffAdminUnitContext', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/convenor-admin-context.tpl.html'
+  templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
   controller: ($scope, $rootScope, unitService, Unit, UnitRole) ->
     $scope.unit = unitService.getUnit()
     $scope.staff = unitService.getStaff()
     $scope.availableStaff = angular.copy($scope.staff)
+    $scope.currentStaff = $scope.unit.convenors
     temp = []
     users = []
-    for staff in $scope.unit.convenors
-      users.push(staff.user_id)
-    for staff in $scope.availableStaff
-      temp.push(staff) unless staff.id in users
-    $scope.availableStaff = temp
 
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
@@ -201,7 +197,7 @@ angular.module('doubtfire.units.partials.contexts', [])
       # from the list of available convenors
       $scope.unit.convenors = [] unless $scope.unit.convenors
       $scope.availableStaff = _.without $scope.availableStaff, staff
-      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Convenor' }
+      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
       $scope.unit.convenors.push(convenorRole)
       unitService.setUnit($scope.unit)
 
@@ -218,51 +214,11 @@ angular.module('doubtfire.units.partials.contexts', [])
       $scope.availableStaff.push(convenorUser)
 
 )
-.directive('tutorAdminUnitContext', ->
+.directive('taskAdminUnitContext', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-admin-context.tpl.html'
+  templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
   controller: ($scope, $rootScope, unitService, Unit, UnitRole, Tutor) ->
-    $scope.unit = unitService.getUnit()
-    $scope.tutors = Tutor.query()
-    tutors = _.map(Tutor.query(), (tutor) ->
-      return { id: tutor.user_id, user_name: tutor.user_name }
-    )
-    $scope.staff = _.uniq(tutors, (item) ->
-      return item.id
-    )
-    #$scope.staff = unitService.getTutors()
-    $scope.availableStaff = angular.copy($scope.staff)
-    temp = []
-    users = []
-    for tutor in $scope.tutors
-      users.push(tutor.user_id)
-    for staff in $scope.availableStaff
-      temp.push(staff) unless staff.id in users
-    $scope.availableStaff = temp
-
-    $scope.addSelectedStaff = ->
-      staff = $scope.selectedStaff
-      $scope.selectedStaff = null
-      # Add the convenor to the list and remove it
-      # from the list of available convenors
-      $scope.unit.convenors = [] unless $scope.unit.convenors
-      $scope.availableStaff = _.without $scope.availableStaff, staff
-      convenorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Convenor' }
-      $scope.unit.convenors.push(convenorRole)
-      unitService.setUnit($scope.unit)
-
-    $scope.findStaffUser = (id) ->
-      for convenor in $scope.convenors
-        return convenor if convenor.id == id
-
-
-    $scope.removeStaff = (staff) ->
-      $scope.unit.convenors = _.without $scope.unit.convenors, staff
-      UnitRole.delete { id: staff.id }
-
-      convenorUser = $scope.findStaffUser(staff.user_id)
-      $scope.availableStaff.push(convenorUser)
 
 )
 .directive('adminUnitContext', ->

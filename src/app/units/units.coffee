@@ -57,7 +57,6 @@ angular.module("doubtfire.units", [
 .service('unitService', () ->
   unit = { id: -1 }
   staff = []
-  tutors = []
 
   this.getUnit = ->
     return unit
@@ -65,17 +64,12 @@ angular.module("doubtfire.units", [
   this.getStaff = ->
     return staff
 
-  this.getTutors = ->
-    return tutors
-
   this.setUnit = (theUnit) ->
     unit = theUnit
 
   this.setStaff = (theStaff) ->
     staff = theStaff
 
-  this.setTutors = (theTutors) ->
-    tutors = theTutors
 
   return this
 )
@@ -121,13 +115,8 @@ angular.module("doubtfire.units", [
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor,unitService) ->
   $scope.units = Unit.query()
-  $scope.convenors = Convenor.query()
-  tutors = _.map(Tutor.query(), (tutor) ->
-    return { id: tutor.user_id, user_name: tutor.user_name }
-  )
-  $scope.tutors = _.uniq(tutors, (item) ->
-    return item.id
-  )
+  convenors = Convenor.query()
+  tutors = Tutor.query()
 
   $scope.showUnit = (unit) ->
     unitToShow = if unit?
@@ -135,8 +124,21 @@ angular.module("doubtfire.units", [
     else
       new Unit { id: -1, convenors: [] }
     unitService.setUnit(unitToShow)
-    unitService.setStaff($scope.convenors)
-    unitService.setTutors($scope.tutors)
+
+    convenors = _.map(convenors, (convenor) ->
+      return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
+    )
+    
+    tutors = _.map(tutors, (tutor) ->
+      return { id: tutor.user_id, full_name: tutor.user_name }
+    )
+    staff = _.union(convenors,tutors)
+    staff = _.uniq(staff, (item) ->
+      return item.id
+    )
+
+    unitService.setStaff(staff)
+
     $location.path('/admin/units/edit')
 )
 .controller('UnitCtrl', ($scope, $state, $stateParams,  $location, Unit, UnitRole,  headerService, alertService, unitService) ->
