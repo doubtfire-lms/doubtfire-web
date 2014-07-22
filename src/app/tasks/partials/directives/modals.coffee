@@ -38,8 +38,9 @@ angular.module('doubtfire.tasks.partials.modals', [])
     $scope.taskStatusLabel = statusLabels[$scope.task.status]
 
   $scope.triggerTransition = (status) ->
-    $scope.task.status = status
+    oldStatus = $scope.task.status
     Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
+      # Success
       (value) ->
         $scope.task.status = value.status
         $modalInstance.close(status)
@@ -53,7 +54,12 @@ angular.module('doubtfire.tasks.partials.modals', [])
             onChange()
         else
           alertService.add("danger", "Status change was not changed.", 2000)
-    )
+      ),
+      # Fail
+      (value) ->
+        $modalInstance.close(value.data.error)
+        $scope.task.status = oldStatus
+        alertService.add("danger", value.data.error, 4000)
 
 
   $scope.readyToAssessStatuses = ['ready_to_mark', 'not_submitted']
