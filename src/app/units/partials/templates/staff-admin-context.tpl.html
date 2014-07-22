@@ -1,0 +1,29 @@
+<div>
+  <div class="form-group">
+    <label for="convenors">Add Staff:</label>
+    <div class="input-group">
+      <input class="form-control" id="convenors" placeholder="Staff
+      name" ng-model="selectedStaff" typeahead="staff as
+      staff.full_name for staff in availableStaff | filter: $viewValue "> 
+      <span class="input-group-btn">
+        <button class="btn btn-default"
+          ng-click="addSelectedStaff()">
+          <i class="glyphicon glyphicon-plus text-success"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="currentConvenors" >Current Staff: </label>
+    <ul class="list-group" ng-show="currentStaff.length > 0">
+      <li class="list-group-item" ng-repeat="staff in currentStaff">
+      <a ng-click="removeStaff(staff)"> 
+        {{staff.user_name}} 
+        <i class="glyphicon glyphicon-remove text-danger"></i>
+      </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
