@@ -48,7 +48,7 @@ angular.module("doubtfire.units", [
         templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
-      roleWhitelist: ['admin']
+      roleWhitelist: ['Admin']
    )
 )
 .service('unitService', () ->
