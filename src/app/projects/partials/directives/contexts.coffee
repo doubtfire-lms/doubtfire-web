@@ -144,12 +144,18 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskList', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-list.tpl.html'
-  controller: ($scope, $modal, Users) ->
-    # Todo, write...
+  controller: ($scope, $modal, User, Unit) ->
+    # Todo, dup. code from unit/context...refactor
+    # $scope.task_defs = $scope.unit.task_definitions
 )
 .directive('labList', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/lab-list.tpl.html'
-  controller: ($scope, $modal, Users) ->
+  controller: ($scope, $modal, User, Project) ->
     # Todo, write...
+    $scope.setTutorial = (id) ->
+      Project.update({ id: $scope.project.project_id, tutorial_id: id }).$promise.then (
+        (project) ->
+          $scope.project.tutor_id = project.tutor_id
+      )
 )
