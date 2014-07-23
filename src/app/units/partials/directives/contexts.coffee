@@ -46,6 +46,7 @@ angular.module('doubtfire.units.partials.contexts', [])
         task.task_abbr = td.abbr
         task.task_desc = td.desc
         task.task_name = td.name
+        task.task_upload_requirements = td.upload_requirements
         task.status_txt = statusLabels[task.status]
         task
 

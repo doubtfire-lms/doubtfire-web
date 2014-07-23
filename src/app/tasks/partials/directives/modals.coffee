@@ -4,7 +4,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
 # task = the task to update
 # student = passed through from tutor view to allow update of task stats
 #
-.controller('AssessTaskModalCtrl', ($scope, $modalInstance, task, student, project, onChange, assessingUnitRole, Task, alertService) ->
+.controller('AssessTaskModalCtrl', ($scope, $modalInstance, $modal, task, student, project, onChange, assessingUnitRole, Task, alertService) ->
   # statusLabels global
   # statusLabels = {
   #   'ready_to_mark':      'Ready to Mark',
@@ -39,27 +39,45 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.triggerTransition = (status) ->
     oldStatus = $scope.task.status
-    Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
-      # Success
-      (value) ->
-        $scope.task.status = value.status
-        $modalInstance.close(status)
-
-        if student? && student.task_stats?
-          update_task_stats(student.task_stats, value.new_stats)
-        
-        if value.status == status
-          alertService.add("success", "Status saved.", 2000)
-          if onChange
-            onChange()
-        else
-          alertService.add("danger", "Status change was not changed.", 2000)
-      ),
-      # Fail
-      (value) ->
-        $modalInstance.close(value.data.error)
-        $scope.task.status = oldStatus
-        alertService.add("danger", value.data.error, 4000)
+    # If we have a task with upload requirements and we're changing state to ready to mark
+    # then open the next modal and close this one...
+    if status == 'ready_to_mark' and $scope.task.task_upload_requirements.length > 0
+      $modalInstance.close(oldStatus)
+      $modal.open(
+        controller: 'SubmitTaskModalCtrl'
+        templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
+        resolve: {
+          task: -> $scope.task,
+        }
+      ).result.then(
+        (val) -> ,
+        # They cancelled the upload...
+        () ->
+          $scope.task.status = oldStatus
+          alertService.add("info", "Upload cancelled: status was reverted.", 2000)
+      )
+    else
+      Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
+        # Success
+        (value) ->
+          $scope.task.status = value.status
+          $modalInstance.close(status)
+  
+          if student? && student.task_stats?
+            update_task_stats(student.task_stats, value.new_stats)
+          
+          if value.status == status
+            alertService.add("success", "Status saved.", 2000)
+            if onChange
+              onChange()
+          else
+            alertService.add("danger", "Status change was not changed.", 2000)
+        ),
+        # Fail
+        (value) ->
+          $modalInstance.close(value.data.error)
+          $scope.task.status = oldStatus
+          alertService.add("danger", value.data.error, 4000)
 
 
   $scope.readyToAssessStatuses = ['ready_to_mark', 'not_submitted']
@@ -92,8 +110,13 @@ angular.module('doubtfire.tasks.partials.modals', [])
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
   }
 )
-
-
+.controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, task, alertService) ->
+  $scope.task = task
+  $scope.uploadRequirements = task.task_upload_requirements
+  $scope.fileUploader = TaskSubmission.fileUploader($scope, task)
+  $scope.submitUpload = () ->
+    $scope.fileUploader.uploadAll()
+)
 
 
 

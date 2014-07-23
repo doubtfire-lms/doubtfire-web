@@ -51,7 +51,7 @@ angular.module("doubtfire.api", [
 .factory("User", (resourcePlus) ->
   resourcePlus "/users/:id", { id: "@id" }
 )
-.service("UserCSV", (api, $window, $fileUploader, currentUser, alertService) ->
+.service("UserCSV", (api, $window, FileUploader, currentUser, alertService) ->
   csvUrl = "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
   
   fileUploader = null
@@ -59,13 +59,13 @@ angular.module("doubtfire.api", [
   this.fileUploader = (scope) ->
     # singleton per scope
     if !fileUploader? && scope
-      fileUploader = $fileUploader.create {
+      fileUploader = new FileUploader {
         scope: scope,
         url: csvUrl,
         method: "POST",
         queueLimit: 1
       }
-      fileUploader.bind 'success', (evt, xhr, item, response) ->
+      fileUploader.onSuccessItem = (item, response, status, headers)  ->
         if response.length != 0
           alertService.add("success", "Added #{response.length} users.", 2000)
           fileUploader.scope.users.concat(response)
@@ -73,7 +73,7 @@ angular.module("doubtfire.api", [
           alertService.add("info", "No users need to be added.", 2000)
         fileUploader.clearQueue()
         
-      fileUploader.bind 'error', (evt, xhr, item, response) ->
+      fileUploader.onErrorItem = (item, response, status, headers) ->
         alertService.add("danger", "File Upload Failed: " + response.error, 2000)
         fileUploader.clearQueue()
         
@@ -81,6 +81,54 @@ angular.module("doubtfire.api", [
         
   this.downloadFile =  ->
     $window.open csvUrl, "_blank"
+    
+  return this
+)
+.service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService) ->
+
+  this.fileUploader = (scope, task) ->
+    # per scope or task
+    uploadUrl = "#{api}/submission/task/#{task.id}.json?auth_token=#{currentUser.authenticationToken}"
+    fileUploader = new FileUploader {
+      scope: scope,
+      url: uploadUrl
+      method: "POST",
+      queueLimit: task.task_upload_requirements.length
+    }
+    
+    extWhitelist = (name, exts) ->
+      # no extension
+      parts = name.split('.')
+      return false if parts.length == 0
+      ext = parts.pop()
+      ext in exts
+        
+    fileUploader.filters.push {
+      name: 'is_code'
+      fn: (item) ->
+        extWhitelist item.name, ['pas', 'cpp', 'c', 'h', 'java']
+    }
+    fileUploader.filters.push {
+      name: 'is_document'
+      fn: (item) ->
+        extWhitelist item.name, ['doc', 'docx', 'pdf']
+    }
+    fileUploader.filters.push {
+      name: 'is_image'
+      fn: (item) ->
+        extWhitelist item.name, ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+    }
+    
+    fileUploader.onSuccessItem = (item, response, status, headers)  ->
+      # Open the response in a new window
+      data = 'data:application/pdf;base64,' + encodeURIComponent response
+      $window.open data, "_blank"
+      fileUploader.clearQueue()
+      
+    fileUploader.onErrorItem = (item, response, status, headers) ->
+      alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+      fileUploader.clearQueue()
+    fileUploader
     
   return this
 )
