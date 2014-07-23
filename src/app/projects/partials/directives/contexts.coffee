@@ -141,12 +141,11 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
 )
+.directive('taskList', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/task-list.tpl.html'
+  controller: ($scope, $modal, User, Unit) ->
     # TODO
-    # Removed for irrelevancy - re-work?
-#.directive('taskList', ->
- # restrict: 'E'
-  #templateUrl: 'projects/partials/templates/task-list.tpl.html'
-  #controller: ($scope, $modal, User, Unit) ->
 )
 .directive('labList', ->
   restrict: 'E'
