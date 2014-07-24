@@ -101,26 +101,35 @@ angular.module("doubtfire.api", [
       return false if parts.length == 0
       ext = parts.pop()
       ext in exts
-        
+
     fileUploader.filters.push {
       name: 'is_code'
       fn: (item) ->
-        extWhitelist item.name, ['pas', 'cpp', 'c', 'h', 'java']
+        valid = extWhitelist item.name, ['pas', 'cpp', 'c', 'h', 'java']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid code file", 2000)
+        valid
     }
     fileUploader.filters.push {
       name: 'is_document'
       fn: (item) ->
-        extWhitelist item.name, ['doc', 'docx', 'pdf']
+        valid = extWhitelist item.name, ['doc', 'docx', 'pdf']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid document file", 2000)
+        valid
     }
     fileUploader.filters.push {
       name: 'is_image'
       fn: (item) ->
-        extWhitelist item.name, ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+        valid = extWhitelist item.name, ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid image file", 2000)
+        valid
     }
     
     fileUploader.onSuccessItem = (item, response, status, headers)  ->
       # Open the response in a new window
-      data = 'data:application/pdf;base64,' + btoa("foo")
+      data = 'data:application/pdf;base64,' + response
       $window.open data, "_blank"
       fileUploader.clearQueue()
       

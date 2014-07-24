@@ -2,7 +2,7 @@
   <form class="form-horizontal" ng-submit="submitUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label">Upload</label>
-      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" uploader="fileUploader" accept="text/csv" required nv-file-select />
+      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" uploader="fileUploader" accept="text/csv" ng-required="!fileUploader.isHTML5" nv-file-select />
       <div nv-file-drop uploader="fileUploader">
         <div nv-file-over ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" uploader="fileUploader" over-class="file-over-hover" class="drop well col-sm-7" >
         <p class="fa fa-file-excel-o fa-3x"></p>
