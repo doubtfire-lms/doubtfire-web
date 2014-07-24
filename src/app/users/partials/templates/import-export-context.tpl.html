@@ -21,10 +21,10 @@
         </p>
       </div>
     </div>
-  <form class="form-horizontal" ng-submit="requestExport()">
+  <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Download</label>
-      <input type="submit" class="btn btn-primary form-control col-sm-2" value="Export" />
+      <input ng-click="requestExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Export" />
     </div>
   </form>
   <div class="alert-top">
