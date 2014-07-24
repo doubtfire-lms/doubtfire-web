@@ -76,7 +76,6 @@ angular.module("doubtfire.api", [
       fileUploader.onErrorItem = (item, response, status, headers) ->
         alertService.add("danger", "File Upload Failed: " + response.error, 2000)
         fileUploader.clearQueue()
-        
     fileUploader
         
   this.downloadFile =  ->
@@ -121,7 +120,7 @@ angular.module("doubtfire.api", [
     
     fileUploader.onSuccessItem = (item, response, status, headers)  ->
       # Open the response in a new window
-      data = 'data:application/pdf;base64,' + encodeURIComponent response
+      data = 'data:application/pdf;base64,' + btoa("foo")
       $window.open data, "_blank"
       fileUploader.clearQueue()
       
