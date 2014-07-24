@@ -266,19 +266,21 @@ angular.module('doubtfire.units.partials.contexts', [])
   templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
   controller: ($scope, $modal, $rootScope, Unit, UnitRole) ->
     $scope.editTutorial = (tutorial) ->
-      alert(JSON.stringify tutorial)
       $modal.open
         controller: 'TutorialModalCtrl'
         templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
         resolve: {
           tutorial: -> tutorial
+          isNew: -> false
         }
     $scope.createTutorial = ->
+      tutorial = { create: true }
       $modal.open
         controller: 'TutorialModalCtrl'
         templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
         resolve: {
           tutorial: -> null
+          isNew: -> true
         }
 
 )
