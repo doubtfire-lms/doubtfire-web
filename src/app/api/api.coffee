@@ -127,15 +127,44 @@ angular.module("doubtfire.api", [
         valid
     }
     
-    fileUploader.onSuccessItem = (item, response, status, headers)  ->
+    fileUploader.onUploadSuccess = (response)  ->
+      #alert response
       # Open the response in a new window
       data = 'data:application/pdf;base64,' + response
       $window.open data, "_blank"
       fileUploader.clearQueue()
       
-    fileUploader.onErrorItem = (item, response, status, headers) ->
-      alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+    fileUploader.onUploadFailure = (response) ->
+      fileUploader.scope.close(response.error)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 2000)
       fileUploader.clearQueue()
+      
+    fileUploader.uploadEnqueuedFiles = () ->
+      queue = fileUploader.queue
+      xhr = new XMLHttpRequest()
+      form = new FormData()
+      this.isUploading = true
+
+      # Setup progress
+      xhr.upload.onprogress = (event) ->
+        fileUploader.progress = Math.round (if event.lengthComputable then event.loaded * 100 / event.total else 0)
+        fileUploader._render()
+      xhr.onreadystatechange = () ->
+        if xhr.readyState == 4
+          fileUploader.isUploading = false
+          # Success
+          if xhr.status == 200
+            fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
+          # Fail
+          else
+            fileUploader.onUploadFailure(JSON.parse(xhr.responseText))
+            
+      # Append each file in the queue to the form
+      form.append item.alias, item._file for item in queue
+      
+      xhr.open(fileUploader.method, fileUploader.url, true)
+      xhr.send(form)
+        
     fileUploader
     
   return this

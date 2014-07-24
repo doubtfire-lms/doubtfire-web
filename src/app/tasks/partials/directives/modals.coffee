@@ -115,7 +115,11 @@ angular.module('doubtfire.tasks.partials.modals', [])
   $scope.uploadRequirements = task.task_upload_requirements
   $scope.fileUploader = TaskSubmission.fileUploader($scope, task)
   $scope.submitUpload = () ->
-    $scope.fileUploader.uploadAll()
+    $scope.fileUploader.uploadEnqueuedFiles()
+  $scope.clearUploads = () ->
+    $scope.fileUploader.clearQueue()
+  $scope.close = () ->
+    $modalInstance.close()
 )
 
 
