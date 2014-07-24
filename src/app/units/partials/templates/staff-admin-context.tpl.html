@@ -16,8 +16,8 @@
 
   <div class="form-group">
     <label for="currentConvenors" >Current Staff: </label>
-    <ul class="list-group" ng-show="currentStaff.length > 0">
-      <li class="list-group-item" ng-repeat="staff in currentStaff">
+    <ul class="list-group" ng-show="unit.staff.length > 0">
+      <li class="list-group-item" ng-repeat="staff in unit.staff">
       <a ng-click="removeStaff(staff)"> 
         <span class="col-md-4">
           {{staff.user_name}} 
@@ -25,9 +25,11 @@
         </span>
       </a>
       <label name="staffRole" class="radio-inline" for="radio-tutor">Tutor</label>
-      <input type="radio" id="radio-tutor" value="Tutor" ng-model="staff.role">
+      <input type="radio" id="radio-tutor" value="Tutor"
+      ng-model="staff.role" ng-click="changeRole(staff,2)"></input>
       <label name="staffRole" class="radio-inline" for="radio-convenor">Convenor</label>
-      <input type="radio" id="radio-convenor" value="Convenor" ng-model="staff.role">
+      <input type="radio" id="radio-convenor" value="Convenor"
+      ng-model="staff.role" ng-click="changeRole(staff,3)"></input>
 
       </li>
     </ul>
