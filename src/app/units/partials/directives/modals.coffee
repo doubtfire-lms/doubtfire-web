@@ -22,10 +22,19 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.saveUnit = ->
     Unit.create { unit: $scope.unit }
 )
-.controller('EnrolStudentModalCtrl', ($scope, $modalInstance, UnitRole, unit) ->
-  $scope.enrolStudent = (student_id) ->
-    
+.controller('EnrolStudentModalCtrl', ($scope, $modalInstance, Project, unit, projects) ->
+  $scope.unit = unit
+
+  $scope.enrolStudent = (student_id, tutorial) ->
+    # get tutorial_id from tutorial_name
+    Project.create {unit_id: unit.id, student_num: student_id, tutorial_id: if tutorial then tutorial.id else null }, (project) ->
+      projects.push project
+      $modalInstance.close()
+      #TODO: success and error alerts
+
+
 )
+
 .controller('TutorialModalCtrl', ($scope, $modalInstance,  tutorial, unitService) ->
   
 )

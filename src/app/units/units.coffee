@@ -77,7 +77,7 @@ angular.module("doubtfire.units", [
   return this
 )
 
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, $modal, Project, Unit, UnitRole, headerService, alertService, unitService) ->
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, unitService) ->
   $scope.unitLoaded = false
 
   #
@@ -122,12 +122,7 @@ angular.module("doubtfire.units", [
   $scope.taskCount = () ->
     $scope.unit.task_definitions.length
 
-  $scope.showEnrolModal = (unit) ->
-    $modal.open
-      templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
-      controller: 'EnrolStudentModalCtrl'
-      resolve:
-        unit: -> unit
+
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor,unitService) ->
   $scope.units = Unit.query()
