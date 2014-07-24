@@ -224,8 +224,15 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $rootScope, unitService, Unit, UnitRole, Tutor) ->
+  controller: ($scope, $rootScope, TaskCSV, unitService) ->
+    $scope.fileUploader =
+      TaskCSV.fileUploader $scope, unitService.getUnit()
 
+    $scope.submitUpload = () ->
+      $scope.fileUploader.uploadAll()
+    
+    $scope.requestExport = () ->
+      TaskCSV.downloadFile()
 )
 .directive('adminUnitContext', ->
   replace: true
