@@ -152,6 +152,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
   templateUrl: 'projects/partials/templates/lab-list.tpl.html'
   controller: ($scope, $modal, User, Project) ->
     # Todo, write...
+    $scope.sortOrder = 'abbreviation'
     $scope.setTutorial = (id) ->
       Project.update({ id: $scope.project.project_id, tutorial_id: id }).$promise.then (
         (project) ->

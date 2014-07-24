@@ -5,6 +5,7 @@
       <thead>
         <tr>
           <th>Lab Code</th>
+          <th><a href="" ng-click="sortOrder='meeting_day'; reverse=!reverse">Day</a></th>
           <th>Time</th>
           <th>Room</th>
           <th>Tutor</th>
@@ -12,9 +13,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tutorial in unit.tutorials">
+        <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse">
           <td>{{tutorial.abbreviation}}</td>
           <td>{{tutorial.meeting_day}}</td>
+          <td>{{tutorial.meeting_time}}</td>
           <td>{{tutorial.meeting_location}}</td>
           <td>{{tutorial.tutor.name}}</td>
           <td ng-if="project.tutor_id == tutorial.tutor.id"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> </button>
@@ -25,6 +27,7 @@
       </tbody>
       <tfoot if-role="Tutor Convenor Admin">
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
