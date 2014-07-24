@@ -35,7 +35,7 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin']
   )
   .state("admin/units#edit",
-    url: "/admin/units/edit"
+    url: "/admin/units/edit/:unitId"
     views:
       main:
         controller: "UnitCtrl"
@@ -51,25 +51,25 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin']
    )
 )
-.service('unitService', () ->
-  unit = { id: -1 }
-  staff = []
-
-  this.getUnit = ->
-    return unit
-
-  this.getStaff = ->
-    return staff
-
-  this.setUnit = (theUnit) ->
-    unit = theUnit
-
-  this.setStaff = (theStaff) ->
-    staff = theStaff
-
-  return this
-)
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService, unitService) ->
+# .service('unitService', () ->
+#   unit = ""
+#   staff = []
+#
+#   this.getUnit = ->
+#     return unit
+#
+#   this.getStaff = ->
+#     return staff
+#
+#   this.setUnit = (theUnit) ->
+#     unit = theUnit
+#
+#   this.setStaff = (theStaff) ->
+#     staff = theStaff
+#
+#   return this
+# )
+.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
   $scope.unitLoaded = false
 
   #
@@ -114,7 +114,7 @@ angular.module("doubtfire.units", [
   $scope.taskCount = () ->
     $scope.unit.task_definitions.length
 )
-.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor,unitService) ->
+.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor) ->
   $scope.units = Unit.query()
   convenors = Convenor.query()
   tutors = Tutor.query()
@@ -124,7 +124,7 @@ angular.module("doubtfire.units", [
       unit
     else
       new Unit { id: -1, convenors: [] }
-    unitService.setUnit(unitToShow)
+#     unitService.setUnit(unitToShow)
 
     staff = _.union(convenors,tutors)
     staff = _.map(staff, (convenor) ->
@@ -133,12 +133,16 @@ angular.module("doubtfire.units", [
     staff = _.uniq(staff, (item) ->
       return item.id
     )
-    unitService.setStaff(staff)
-
-    $location.path('/admin/units/edit')
+    $scope.staff = staff
+#     unitService.setStaff(staff)
 )
-.controller('UnitCtrl', ($scope, $state, $stateParams,  $location, Unit, UnitRole,  headerService, alertService, unitService) ->
 
-  unit = unitService.getUnit()
-  staff = unitService.getStaff()
+.controller('UnitCtrl', ($scope, $state, $stateParams,  $location, Unit, UnitRole,  headerService, alertService) ->
+  
+  Unit.get  { id: $state.params.unitId }, (unit) ->
+    $scope.unit = unit
+    $scope.stuff = "here"
+    $scope.currentStaff = $scope.unit.staff
+#     unitService.unit = unit
+#     unitService.staff = unitService.getStaff()
 )

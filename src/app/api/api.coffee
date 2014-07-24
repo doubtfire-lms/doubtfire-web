@@ -88,15 +88,14 @@ angular.module("doubtfire.api", [
   return this
 )
 .service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
-
+  this.csvUrl = ""
   fileUploader = null
 
   this.fileUploader = (scope, unit) ->
-    # singleton per scope and unit
-    csvUrl = "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+#     this.csvUrl = "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
     fileUploader = new FileUploader {
       scope: scope,
-      url: csvUrl,
+      url: this.csvUrl,
       method: "POST",
       queueLimit: 1
     }
@@ -115,7 +114,7 @@ angular.module("doubtfire.api", [
     fileUploader
         
   this.downloadFile =  ->
-    $window.open csvUrl, "_blank"
+    $window.open this.csvUrl, "_blank"
     
   return this
 )

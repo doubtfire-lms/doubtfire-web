@@ -182,11 +182,11 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
-  controller: ($scope, $rootScope, unitService, Unit, UnitRole) ->
-    $scope.unit = unitService.getUnit()
-    $scope.staff = unitService.getStaff()
+  controller: ($scope, $rootScope, Unit, UnitRole) ->
+#     $scope.unit = unitService.getUnit()
+#     $scope.staff = unitService.getStaff()
     $scope.availableStaff = angular.copy($scope.staff)
-    $scope.currentStaff = $scope.unit.staff
+    # $scope.currentStaff = $scope.unit.staff
     temp = []
     users = []
 
@@ -204,7 +204,7 @@ angular.module('doubtfire.units.partials.contexts', [])
       $scope.availableStaff = _.without $scope.availableStaff, staff
       tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
       $scope.unit.staff.push(tutorRole)
-      unitService.setUnit($scope.unit)
+      # unitService.setUnit($scope.unit)
 
     $scope.findStaffUser = (id) ->
       for staff in $scope.staff
@@ -224,9 +224,9 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $rootScope, TaskCSV, unitService) ->
-    $scope.fileUploader =
-      TaskCSV.fileUploader $scope, unitService.getUnit()
+  controller: ($scope, $rootScope, TaskCSV, Unit) ->
+#     $scope.unit = unitService.getUnit()
+    $scope.fileUploader = TaskCSV.fileUploader $scope, $scope.unit
 
     $scope.submitUpload = () ->
       $scope.fileUploader.uploadAll()
@@ -238,8 +238,7 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
-  controller: ($scope, $rootScope, unitService, Unit) ->
-    $scope.unit = unitService.getUnit()
+  controller: ($scope, $rootScope, Unit) ->
     $scope.format = 'yyyy-MM-dd'
     $scope.initDate = new Date('2016-04-20')
     $scope.startOpened = $scope.endOpened = $scope.opened = false
@@ -265,7 +264,7 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, unitService, Unit, UnitRole) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole) ->
     $scope.editTutorial = (tutorial) ->
       alert(JSON.stringify tutorial)
       $modal.open

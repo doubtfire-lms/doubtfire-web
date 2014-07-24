@@ -1,9 +1,9 @@
-<div nv-file-drop if-role="Admin Convenor">
+<div>
   <form class="form-horizontal" ng-submit="submitUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label">Upload</label>
-      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" required nv-file-select />
-      <div   ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over>
+      <input uploader="fileUploader" ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!fileUploader.isHTML5" nv-file-select />
+      <div uploader="fileUploader"  ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
         Drop CSV here
       </div>
 	    <p ng-show="fileUploader.queue.length == 1"class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
@@ -17,10 +17,10 @@
         </p>
       </div>
     </div>
-  <form class="form-horizontal" ng-submit="requestExport()">
+  <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Download</label>
-      <input type="submit" class="btn btn-primary form-control col-sm-2" value="Export" />
+      <button ng-click="requestExport()" class="btn btn-primary form-control col-sm-2">Export</button>
     </div>
   </form>
   <div class="alert-top">
