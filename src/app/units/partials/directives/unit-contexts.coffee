@@ -1,8 +1,9 @@
+
 update_task_stats = (stats_array, new_stats_str) ->
   for i, value of new_stats_str.split("|")
     stats_array[i].value = 100 * value
 
-angular.module('doubtfire.units.partials.contexts', [])
+angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
 .filter('startFrom', ->
   (input, start) ->
@@ -91,7 +92,7 @@ angular.module('doubtfire.units.partials.contexts', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, $rootScope, Project, Students, filterFilter, alertService) ->
+  controller: ($scope, $rootScope, $modal, Project, Students, filterFilter, alertService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
@@ -175,6 +176,14 @@ angular.module('doubtfire.units.partials.contexts', [])
     #       task.status_txt = statusLabels[task.status]
     #       task
     #     project
+
+    $scope.showEnrolModal = () ->
+      $modal.open
+        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
+        controller: 'EnrolStudentModalCtrl'
+        resolve:
+          unit: -> $scope.unit
+          projects: -> $scope.students
 
 
 )

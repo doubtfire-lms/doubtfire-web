@@ -51,24 +51,6 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin']
    )
 )
-# .service('unitService', () ->
-#   unit = ""
-#   staff = []
-#
-#   this.getUnit = ->
-#     return unit
-#
-#   this.getStaff = ->
-#     return staff
-#
-#   this.setUnit = (theUnit) ->
-#     unit = theUnit
-#
-#   this.setStaff = (theStaff) ->
-#     staff = theStaff
-#
-#   return this
-# )
 .controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
   $scope.unitLoaded = false
 
@@ -113,6 +95,8 @@ angular.module("doubtfire.units", [
 
   $scope.taskCount = () ->
     $scope.unit.task_definitions.length
+
+
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor) ->
   $scope.units = Unit.query()
