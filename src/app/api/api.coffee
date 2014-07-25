@@ -88,36 +88,37 @@ angular.module("doubtfire.api", [
   return this
 )
 .service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
-  this.csvUrl = ""
-  fileUploader = null
 
   this.fileUploader = (scope) ->
     fileUploader = new FileUploader {
       scope: scope,
-      url: this.csvUrl,
       method: "POST",
+      url: "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=0"
       queueLimit: 1
     }
+    fileUploader.onBeforeUploadItem = (item) ->
+      # ensure this item will be uploading for this unit it...
+      item.url = fileUploader.url.replace(/unit_id=\d+/, "unit_id=#{fileUploader.unit.id}")
+      
     fileUploader.uploadTaskCSV = (unit) ->
-      this.csvUrl = "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+      fileUploader.unit = unit
       fileUploader.uploadAll()
       
     fileUploader.onSuccessItem = (evt, xhr, item, response) ->
-      if response.length != 0
-        alertService.add("success", "Added #{response.length} tasks.", 2000)
-        fileUploader.scope.users.concat(response)
-      else
-        alertService.add("info", "No tasks need to be added.", 2000)
+      newTasks = xhr
+      diff = newTasks.length - fileUploader.unit.task_definitions.length
+      alertService.add("success", "Added #{diff} tasks.", 2000)
+      fileUploader.scope.unit.task_definitions = xhr
       fileUploader.clearQueue()
       
     fileUploader.onErrorItem = (evt, xhr, item, response) ->
-      alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+      alertService.add("danger", "File Upload Failed: #{xhr.error}", 2000)
       fileUploader.clearQueue()
         
     fileUploader
         
-  this.downloadFile =  ->
-    $window.open this.csvUrl, "_blank"
+  this.downloadFile = (unit) ->
+    $window.open "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}", "_blank"
     
   return this
 )
