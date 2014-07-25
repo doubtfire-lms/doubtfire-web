@@ -35,10 +35,10 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin']
   )
   .state("admin/units#edit",
-    url: "/admin/units/edit/:unitId"
+    url: "/admin/units/:unitId"
     views:
       main:
-        controller: "UnitCtrl"
+        controller: "EditUnitCtrl"
         templateUrl: "units/unit.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
@@ -98,35 +98,32 @@ angular.module("doubtfire.units", [
 
 
 )
-.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, $location, Unit, Convenor, Tutor) ->
+.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, Unit) ->
   $scope.units = Unit.query()
-  convenors = Convenor.query()
-  tutors = Tutor.query()
 
   $scope.showUnit = (unit) ->
     unitToShow = if unit?
-      unit
+      $state.transitionTo "admin/units#edit", {unitId: unit.id}
     else
       new Unit { id: -1, convenors: [] }
-#     unitService.setUnit(unitToShow)
-
-    staff = _.union(convenors,tutors)
-    staff = _.map(staff, (convenor) ->
-      return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
-    )
-    staff = _.uniq(staff, (item) ->
-      return item.id
-    )
-    $scope.staff = staff
-#     unitService.setStaff(staff)
 )
 
-.controller('UnitCtrl', ($scope, $state, $stateParams,  $location, Unit, UnitRole,  headerService, alertService) ->
-  
+.controller('EditUnitCtrl', ($scope, $state, $stateParams, Unit, UnitRole,  headerService, alertService, Convenor, Tutor) ->
+  Convenor.query().$promise.then( (convenors) ->
+    Tutor.query().$promise.then( (tutors) ->
+      staff = _.union(convenors,tutors)
+      staff = _.map(staff, (convenor) ->
+        return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
+      )
+      staff = _.uniq(staff, (item) ->
+        return item.id
+      )
+      $scope.staff = staff
+      $scope.availableStaff = angular.copy($scope.staff)
+    )
+  )
+
   Unit.get  { id: $state.params.unitId }, (unit) ->
     $scope.unit = unit
-    $scope.stuff = "here"
     $scope.currentStaff = $scope.unit.staff
-#     unitService.unit = unit
-#     unitService.staff = unitService.getStaff()
 )

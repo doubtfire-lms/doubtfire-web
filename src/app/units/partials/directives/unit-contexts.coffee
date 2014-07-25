@@ -192,15 +192,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   restrict: 'E'
   templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
   controller: ($scope, $rootScope, Unit, UnitRole) ->
-#     $scope.unit = unitService.getUnit()
-#     $scope.staff = unitService.getStaff()
-    $scope.availableStaff = angular.copy($scope.staff)
-    # $scope.currentStaff = $scope.unit.staff
     temp = []
     users = []
 
-
-    
     $scope.changeRole = (unitRole, role_id) ->
       unitRole.role_id = role_id
       unitRole.unit_id = $scope.unit.id
@@ -210,24 +204,21 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       staff = $scope.selectedStaff
       $scope.selectedStaff = null
       $scope.unit.staff = [] unless $scope.unit.staff
-      $scope.availableStaff = _.without $scope.availableStaff, staff
       tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
       $scope.unit.staff.push(tutorRole)
-      # unitService.setUnit($scope.unit)
 
     $scope.findStaffUser = (id) ->
       for staff in $scope.staff
         return staff if staff.id == id
 
+    # Used in the typeahead to filter staff already in unit
+    $scope.filterStaff = (staff) ->
+      not _.find($scope.unit.staff, (listStaff) -> staff.id == listStaff.user_id)
 
     $scope.removeStaff = (staff) ->
-      alert(JSON.stringify(staff))
       $scope.unit.staff = _.without $scope.unit.staff, staff
       UnitRole.delete { id: staff.id }
-
       staffUser = $scope.findStaffUser(staff.user_id)
-      $scope.availableStaff.push(staffUser)
-
 )
 .directive('taskAdminUnitContext', ->
   replace: true
@@ -247,7 +238,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
-  controller: ($scope, $rootScope, Unit) ->
+  controller: ($scope, $state, $rootScope, Unit) ->
     $scope.format = 'yyyy-MM-dd'
     $scope.initDate = new Date('2016-04-20')
     $scope.startOpened = $scope.endOpened = $scope.opened = false
@@ -260,7 +251,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       delete $scope.unit[convenors]
       Unit.create { id: $scope.unit.id, unit: $scope.unit } if $scope.unit.id == -1
       Unit.update { id: $scope.unit.id, unit: $scope.unit} if $scope.unit.id != -1
-      $location.path('/admin/units')
+      $state.transitionTo('admin/units#index')
 
     $scope.open = ($event,which) ->
       $event.preventDefault()

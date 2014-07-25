@@ -4,7 +4,7 @@
     <div class="input-group">
       <input class="form-control" id="convenors" placeholder="Staff
       name" ng-model="selectedStaff" typeahead="staff as
-      staff.full_name for staff in availableStaff | filter: $viewValue "> 
+      staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"> 
       <span class="input-group-btn">
         <button class="btn btn-default"
           ng-click="addSelectedStaff()">
