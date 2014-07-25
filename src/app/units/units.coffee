@@ -27,9 +27,6 @@ angular.module("doubtfire.units", [
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
-      sidebar:
-        controller: "BasicSidebarCtrl"
-        templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin']
@@ -43,9 +40,6 @@ angular.module("doubtfire.units", [
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
-      sidebar:
-        controller: "BasicSidebarCtrl"
-        templateUrl: "common/sidebar.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin']
@@ -98,14 +92,20 @@ angular.module("doubtfire.units", [
 
 
 )
-.controller("AdminUnitsCtrl", ($scope, $state, $stateParams, Unit) ->
-  $scope.units = Unit.query()
+.controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit) ->
+  $scope.units = Unit.query {  }
 
   $scope.showUnit = (unit) ->
     unitToShow = if unit?
       $state.transitionTo "admin/units#edit", {unitId: unit.id}
-    else
-      new Unit { id: -1, convenors: [] }
+
+  $scope.createUnit = () ->
+    $modal.open
+      templateUrl: 'units/partials/templates/unit-create-modal.tpl.html'
+      controller: 'AddUnitCtrl'
+      resolve: {
+        units: -> $scope.units
+      }
 )
 
 .controller('EditUnitCtrl', ($scope, $state, $stateParams, Unit, UnitRole,  headerService, alertService, Convenor, Tutor, Students) ->
@@ -119,7 +119,6 @@ angular.module("doubtfire.units", [
         return item.id
       )
       $scope.staff = staff
-      $scope.availableStaff = angular.copy($scope.staff)
     )
   )
 
@@ -138,3 +137,12 @@ angular.module("doubtfire.units", [
         student.username = student.student_id
         student
 )
+
+.controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units) ->
+  $scope.unit = new Unit { id: -1, code: "COS????", convenors: [] }
+  $scope.saveSuccess = (unit) ->
+    alertService.add("success", "Unit created.", 2000)
+    $modalInstance.close()
+    units.push(unit)
+)
+

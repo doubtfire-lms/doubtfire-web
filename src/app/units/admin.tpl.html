@@ -21,15 +21,16 @@
        <td>{{unit.end_date | date: short }}</td>
        <td>
          <span ng-show="unit.active" class="glyphicon glyphicon-ok text-success"></span>
-         <span ng-hide="unit.active"class="glyphicon glyphicon-remove
+         <span ng-hide="unit.active" class="glyphicon glyphicon-remove
            text-danger" ></span>
-
        </td>
      </tr>
      </tbody>
    </table>
-
-  
   </div>
-   <button class="btn btn-primary" ng-click="showUnit()">Create Unit</button>
+  <button class="btn btn-primary" ng-click="createUnit()">Create Unit</button>
+  <div class="alert-top">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}
+    </alert>
+  </div>
 </div>
