@@ -119,7 +119,6 @@ angular.module("doubtfire.units", [
         return item.id
       )
       $scope.staff = staff
-      $scope.availableStaff = angular.copy($scope.staff)
     )
   )
 
