@@ -1,0 +1,61 @@
+<div>
+  <h4>Batch Import / Export</h4>
+  <form class="form-horizontal" ng-submit="submitSEUpload()">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Upload</label>
+      <input uploader="seFileUploader" ng-hide="seFileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!seFileUploader.isHTML5" nv-file-select />
+      <div uploader="seFileUploader"  ng-show="seFileUploader.isHTML5 && seFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
+        Drop CSV here
+      </div>
+	    <p ng-show="seFileUploader.queue.length == 1"class="form-control-static">{{seFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+    </div>
+    <div class="form-group">
+      <input ng-hide="seFileUploader.isUploading || seFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
+      <div class="col-sm-offset-3 col-sm-6" ng-show="seFileUploader.isUploading">
+        <progressbar class="progress-striped active" value="seFileUploader.progress"></progressbar>
+        <p class="help-block text-center" ng-show="seFileUploader.progress == 100">
+          Please wait for the server to insert the students...
+        </p>
+      </div>
+    </div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Download</label>
+      <button ng-click="requestSEExport()" class="btn btn-primary form-control col-sm-2">Export</button>
+    </div>
+  </form><!--/batch-io-->
+
+  <h4>All Enrolled Students</h4>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Tutorial</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="student in unit.students | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+        <td>{{student.username}}</td>
+        <td>{{student.first_name}}</td>
+        <td>{{student.last_name}}</td>
+        <td><a href="mailto:{{student.email}}">{{student.email}}</a></td>
+        <td>{{student.tutorial}}</td>
+        <td>
+          <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.upload_requirements.length == 0">
+            <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
+          </ol>
+          <span ng-show="task.upload_requirements.length == 0">No Files To Upload</span>
+        </td>
+      </tr>
+    </tbody>
+  </table><!--/task-table-->
+
+  <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+
+  <div class="alert-top">
+  	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+  </div>
+</div>

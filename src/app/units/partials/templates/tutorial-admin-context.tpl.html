@@ -1,5 +1,6 @@
 <div>
   <table class="table table-condensed table-hover">
+  {{unit.tutorials}}
     <thead>
       <tr> 
         <th>Abbr</th>
@@ -10,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="tutorial in tutorials" ng-click="editTutorial(tutorial)">
+      <tr ng-repeat="tutorial in unit.tutorials" ng-click="editTutorial(tutorial)">
         <td>{{tutorial.abbreviation}}</td>
         <td>{{tutorial.meeting_location}}</td>
         <td>{{tutorial.meeting_day}}</td>
@@ -19,7 +20,5 @@
       </tr>
     </tbody>
   </table>
-  <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="createTutorial()">Create Tutorial</button>
-  </div>
+  <button class="btn btn-primary pull-right" ng-click="createTutorial()">Create Tutorial</button>
 </div>

@@ -1,5 +1,5 @@
 angular.module('doubtfire.units.partials.modals', [])
-.controller('TutorialModalCtrl', ($scope, $modalInstance,  tutorial, isNew, unitService, Tutor) ->
+.controller('TutorialModalCtrl', ($scope, $modalInstance,  tutorial, isNew, Tutor) ->
   $scope.tutorial = tutorial
   $scope.isNew = isNew
   $scope.tutors = Tutor.query()

@@ -3,7 +3,6 @@
   <div class="alert-top">
   	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
   </div>
-  {{tutorial}}
 	<form class="form-horizontal" ng-submit="saveTutorial()" role="form">
   	<div class="modal-header">
   		<h3>{{isNew ? "Create Tutorial" : "Edit Tutorial"}}</h3>
@@ -21,7 +20,7 @@
       </div>
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Day</label>
-        <select id="day" ng-model="tutorial.meeting_day" name="day">
+        <select id="day" class="form-control col-sm-7" ng-model="tutorial.meeting_day" name="day">
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
           <option value="Wednesday">Wednesday</option>
@@ -36,9 +35,7 @@
       </div>
       <div class="form-group">
         <label class="col-sm-3 control-label">Tutor</label>
-        <input type="text" class="form-control col-sm-7"
-        ng-model="tutorial.tutor" typeahead="tutor as tutor.name for tutor
-        in tutors | filter: $viewValue">
+        <input type="text" class="form-control col-sm-7" ng-model="tutorial.tutor" typeahead="tutor as tutor.name for tutor in tutors | filter: $viewValue">
       </div>
   	</div>
 		<div class="modal-footer text-right">
