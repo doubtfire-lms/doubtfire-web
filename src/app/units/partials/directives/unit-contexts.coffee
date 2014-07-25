@@ -252,7 +252,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     }
 
     $scope.saveUnit = ->
-      if $scope.unit.convenors then delete $scope.unit[convenors]
+      if $scope.unit.convenors then delete $scope.unit.convenors
 
       if $scope.unit.id == -1
         Unit.create { unit: $scope.unit }, (unit) ->
@@ -261,13 +261,6 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         Unit.update { id: $scope.unit.id, unit: $scope.unit}, (unit) ->
           alertService.add("success", "Unit updated.", 2000)
           $state.transitionTo('admin/units#index')
-
-    $scope.open = ($event,which) ->
-      $event.preventDefault()
-      $event.stopPropagation()
-      $scope.opened = !$scope.opened
-      $scope.startOpened = !$scope.startOpened if which == 'start'
-      $scope.endOpened = !$scope.endOpened if which == 'end'
 )
 .directive('tutorialUnitContext', ->
   replace: true

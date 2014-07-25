@@ -4,17 +4,8 @@
 	    <h4 class="panel-title">Units You Teach</h4>
 	  </div>
 	  <div class="panel-body">
-	  	<div ng-show="convenorRoles.length > 0">
-	  		<h5>Convenor for</h5>
-			<div ng-repeat="unitRole in convenorRoles = unitRoles | filter:isConvenor">
-				<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
-			</div>
-		</div>
-		<div ng-show="tutorRoles.length > 0">
-			<h5>Tutor for</h5>
-			<div ng-repeat="unitRole in tutorRoles = unitRoles | filter:isTutor">
-				<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
-			</div>
+		<div ng-repeat="unitRole in convenorRoles = unitRoles">
+			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
 		</div>
 	  </div>
 	</div>
@@ -35,7 +26,17 @@
 	    <h4 class="panel-title">Administration</h4>
 	  </div>
 	  <div class="panel-body">
-			<a href="#/admin/units" if-role="Admin">Manage Units</a>
-		</div>
+		<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
+		<div><a href="#/admin/users" if-role="Admin">Manage Users</a></div>
+	  </div>
+	</div>
+
+	<div class="panel panel-default" if-role="Convenor">
+	  <div class="panel-heading">
+	    <h4 class="panel-title">Administration</h4>
+	  </div>
+	  <div class="panel-body">
+			<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
+	  </div>
 	</div>
 </div>
