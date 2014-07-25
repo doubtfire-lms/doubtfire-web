@@ -1,9 +1,9 @@
-<div nv-file-drop if-role="Admin">
+<div if-role="Admin">
   <form class="form-horizontal" ng-submit="submitUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label">Upload</label>
-      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" required nv-file-select />
-      <div   ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over>
+      <input ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
+      <div nv-file-drop ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over uploader="fileUploader">
         Drop CSV here
       </div>
 	    <p ng-show="fileUploader.queue.length == 1"class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>

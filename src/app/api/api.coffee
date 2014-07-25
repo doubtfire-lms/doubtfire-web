@@ -71,7 +71,7 @@ angular.module("doubtfire.api", [
       fileUploader.onSuccessItem = (evt, xhr, item, response) ->
         if response.length != 0
           alertService.add("success", "Added #{response.length} users.", 2000)
-          fileUploader.scope.users.concat(response)
+          fileUploader.scope.users = fileUploader.scope.users.concat(response)
         else
           alertService.add("info", "No users need to be added.", 2000)
         fileUploader.clearQueue()
@@ -143,7 +143,7 @@ angular.module("doubtfire.api", [
       # at least one student?
       if xhr.length != 0
         alertService.add("success", "Enrolled #{xhr.length} students.", 2000)
-        fileUploader.scope.unit.students.concat(xhr)
+        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(xhr)
       else
         alertService.add("info", "No students need to be enrolled.", 2000)
       fileUploader.clearQueue()
