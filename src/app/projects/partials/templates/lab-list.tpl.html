@@ -16,7 +16,7 @@
         <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse">
           <td>{{tutorial.abbreviation}}</td>
           <td>{{tutorial.meeting_day}}</td>
-          <td>{{tutorial.meeting_time}}</td>
+          <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
           <td>{{tutorial.meeting_location}}</td>
           <td>{{tutorial.tutor.name}}</td>
           <td ng-if="project.tutor_id == tutorial.tutor.id"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> </button>
