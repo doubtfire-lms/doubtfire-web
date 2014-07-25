@@ -225,13 +225,18 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
   controller: ($scope, $rootScope, TaskCSV, Unit) ->
-    $scope.fileUploader = TaskCSV.fileUploader $scope
+    $scope.tasksFileUploader = TaskCSV.fileUploader $scope
 
-    $scope.submitUpload = () ->
-      $scope.fileUploader.uploadTaskCSV($scope.unit)
+    $scope.submitTasksUpload = () ->
+      $scope.tasksFileUploader.uploadTaskCSV($scope.unit)
     
-    $scope.requestExport = () ->
+    $scope.requestTasksExport = () ->
       TaskCSV.downloadFile($scope.unit)
+    
+    # Pagination details
+    $scope.currentPage = 1
+    $scope.maxSize = 5
+    $scope.pageSize = 15
 )
 .directive('adminUnitContext', ->
   replace: true
@@ -282,4 +287,24 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           isNew: -> true
         }
 
+)
+.directive('enrolStudentsContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
+  controller: ($scope, StudentEnrolmentCSV) ->
+    # TODO: limit scope for duplicate method names (i.e., $scope.requestExport
+    # in this scope vs. $scope.requestExport in Task Admin Unit Context)
+    $scope.seFileUploader = StudentEnrolmentCSV.fileUploader $scope
+
+    $scope.submitSEUpload = () ->
+      $scope.seFileUploader.uploadStudentEnrolmentCSV($scope.unit)
+    
+    $scope.requestSEExport = () ->
+      StudentEnrolmentCSV.downloadFile($scope.unit)
+      
+    # Pagination details
+    $scope.currentPage = 1
+    $scope.maxSize = 5
+    $scope.pageSize = 15
 )

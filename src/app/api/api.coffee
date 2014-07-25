@@ -122,3 +122,40 @@ angular.module("doubtfire.api", [
     
   return this
 )
+.service("StudentEnrolmentCSV", (api, $window, FileUploader, currentUser, alertService) ->
+
+  this.fileUploader = (scope) ->
+    fileUploader = new FileUploader {
+      scope: scope,
+      method: "POST",
+      url: "#{api}/csv/units/0.json?auth_token=#{currentUser.authenticationToken}"
+      queueLimit: 1
+    }
+    fileUploader.onBeforeUploadItem = (item) ->
+      # ensure this item will be uploading for this unit it...
+      item.url = fileUploader.url.replace(/\d+.json/, "#{fileUploader.unit.id}.json")
+      
+    fileUploader.uploadStudentEnrolmentCSV = (unit) ->
+      fileUploader.unit = unit
+      fileUploader.uploadAll()
+      
+    fileUploader.onSuccessItem = (evt, xhr, item, response) ->
+      # at least one student?
+      if xhr.length != 0
+        alertService.add("success", "Enrolled #{xhr.length} students.", 2000)
+        fileUploader.scope.unit.students.concat(xhr)
+      else
+        alertService.add("info", "No students need to be enrolled.", 2000)
+      fileUploader.clearQueue()
+      
+    fileUploader.onErrorItem = (evt, xhr, item, response) ->
+      alertService.add("danger", "File Upload Failed: #{xhr.error}", 2000)
+      fileUploader.clearQueue()
+        
+    fileUploader
+        
+  this.downloadFile = (unit) ->
+    $window.open "#{api}/csv/units/#{unit.id}.json?auth_token=#{currentUser.authenticationToken}", "_blank"
+    
+  return this
+)

@@ -25,12 +25,12 @@
         <strong>{{staff.user_name}}</strong>
         <br/>
       
-        <label name="staffRole" class="radio-inline" for="radio-tutor">
-          <input type="radio" id="radio-tutor" value="Tutor" ng-model="staff.role" ng-click="changeRole(staff,2)"/>Tutor
+        <label name="staffRole" class="radio-inline" for="radio-tutor-{{staff.id}}">
+          <input type="radio" id="radio-tutor-{{staff.id}}" value="Tutor" ng-model="staff.role" ng-click="changeRole(staff,2)"/>Tutor
         </label>
         
-        <label name="staffRole" class="radio-inline" for="radio-convenor">
-          <input type="radio" id="radio-convenor" value="Convenor" ng-model="staff.role" ng-click="changeRole(staff,3)" />Convenor      
+        <label name="staffRole" class="radio-inline" for="radio-convenor-{{staff.id}}">
+          <input type="radio" id="radio-convenor-{{staff.id}}" value="Convenor" ng-model="staff.role" ng-click="changeRole(staff,3)" />Convenor      
         </label>
       
       </li>

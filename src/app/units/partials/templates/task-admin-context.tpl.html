@@ -1,19 +1,19 @@
 <div>
   <h4>Batch Import / Export</h4>
-  <form class="form-horizontal" ng-submit="submitUpload()">
+  <form class="form-horizontal" ng-submit="submitTasksUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label">Upload</label>
-      <input uploader="fileUploader" ng-hide="fileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!fileUploader.isHTML5" nv-file-select />
-      <div uploader="fileUploader"  ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
+      <input uploader="tasksFileUploader" ng-hide="tasksFileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!tasksFileUploader.isHTML5" nv-file-select />
+      <div uploader="tasksFileUploader"  ng-show="tasksFileUploader.isHTML5 && tasksFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
         Drop CSV here
       </div>
-	    <p ng-show="fileUploader.queue.length == 1"class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+	    <p ng-show="tasksFileUploader.queue.length == 1"class="form-control-static">{{tasksFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
     </div>
     <div class="form-group">
-      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
-      <div class="col-sm-offset-3 col-sm-6" ng-show="fileUploader.isUploading">
-        <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
-        <p class="help-block text-center" ng-show="fileUploader.progress == 100">
+      <input ng-hide="tasksFileUploader.isUploading || tasksFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
+      <div class="col-sm-offset-3 col-sm-6" ng-show="tasksFileUploader.isUploading">
+        <progressbar class="progress-striped active" value="tasksFileUploader.progress"></progressbar>
+        <p class="help-block text-center" ng-show="tasksFileUploader.progress == 100">
           Please wait for the server to insert the tasks...
         </p>
       </div>
@@ -21,7 +21,7 @@
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Download</label>
-      <button ng-click="requestExport()" class="btn btn-primary form-control col-sm-2">Export</button>
+      <button ng-click="requestTasksExport()" class="btn btn-primary form-control col-sm-2">Export</button>
     </div>
   </form><!--/csv-batch-->
 
@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="task in unit.task_definitions">
+      <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
         <td>{{task.abbr}}</td>
         <td>{{task.name}}</td>
         <td style="max-width:150px">{{task.desc}}</td>
@@ -55,6 +55,8 @@
       </tr>
     </tbody>
   </table><!--/task-table-->
+
+  <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
 
   <div class="alert-top">
   	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>

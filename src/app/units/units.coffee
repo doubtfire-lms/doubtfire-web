@@ -108,7 +108,7 @@ angular.module("doubtfire.units", [
       new Unit { id: -1, convenors: [] }
 )
 
-.controller('EditUnitCtrl', ($scope, $state, $stateParams, Unit, UnitRole,  headerService, alertService, Convenor, Tutor) ->
+.controller('EditUnitCtrl', ($scope, $state, $stateParams, Unit, UnitRole,  headerService, alertService, Convenor, Tutor, Students) ->
   Convenor.query().$promise.then( (convenors) ->
     Tutor.query().$promise.then( (tutors) ->
       staff = _.union(convenors,tutors)
@@ -126,4 +126,15 @@ angular.module("doubtfire.units", [
   Unit.get  { id: $state.params.unitId }, (unit) ->
     $scope.unit = unit
     $scope.currentStaff = $scope.unit.staff
+    $scope.tutorialFromId = (tuteId) ->
+      _.where($scope.unit.tutorials, { id: tuteId })
+        
+    Students.query { unit_id: $scope.unit.id }, (students) ->
+      $scope.unit.students = students.map (student) ->
+        student.tutorial = $scope.tutorialFromId( student.tute )[0].abbreviation
+        student.first_name = student.name.split(' ')[0]
+        student.last_name = student.name.split(' ').pop()
+        student.email = student.student_email
+        student.username = student.student_id
+        student
 )
