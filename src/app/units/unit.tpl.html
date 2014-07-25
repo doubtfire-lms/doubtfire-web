@@ -1,22 +1,22 @@
 <div class="col-md-offset-2 col-md-8">
   <div ng-hide="unit.id == -1">
-    <h3>Edit Unit</h3>
+    <h3>Edit {{unit.name}}</h3>
   </div>
   <div ng-show="unit.id == -1">
     <h3>Create Unit</h3>
   </div>
   <tabset>
-  <tab heading="Unit">
-    <admin-unit-context unit="unit"></admin-unit-context>
-  </tab>
-  <tab heading="Staff">
-    <staff-admin-unit-context></convenor-admin-unit-context>
-  </tab>
-  <tab heading="Tutorials"> 
-    <tutorial-unit-context></tutorial-unit-context>
-  </tab>
-  <tab heading="Tasks">
-    <task-admin-unit-context></task-admin-unit-context>
-  </tab>
+    <tab heading="Unit">
+      <admin-unit-context unit="unit"></admin-unit-context>
+    </tab>
+    <tab heading="Staff">
+      <staff-admin-unit-context></convenor-admin-unit-context>
+    </tab>
+    <tab heading="Tutorials"> 
+      <tutorial-unit-context></tutorial-unit-context>
+    </tab>
+    <tab heading="Tasks">
+      <task-admin-unit-context></task-admin-unit-context>
+    </tab>
   </tabset>
 </div>

@@ -91,14 +91,17 @@ angular.module("doubtfire.api", [
   this.csvUrl = ""
   fileUploader = null
 
-  this.fileUploader = (scope, unit) ->
-#     this.csvUrl = "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+  this.fileUploader = (scope) ->
     fileUploader = new FileUploader {
       scope: scope,
       url: this.csvUrl,
       method: "POST",
       queueLimit: 1
     }
+    fileUploader.uploadTaskCSV = (unit) ->
+      this.csvUrl = "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+      fileUploader.uploadAll()
+      
     fileUploader.onSuccessItem = (evt, xhr, item, response) ->
       if response.length != 0
         alertService.add("success", "Added #{response.length} tasks.", 2000)

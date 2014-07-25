@@ -225,11 +225,10 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
   controller: ($scope, $rootScope, TaskCSV, Unit) ->
-#     $scope.unit = unitService.getUnit()
     $scope.fileUploader = TaskCSV.fileUploader $scope, $scope.unit
 
     $scope.submitUpload = () ->
-      $scope.fileUploader.uploadAll()
+      $scope.fileUploader.uploadTaskCSV($scope.unit)
     
     $scope.requestExport = () ->
       TaskCSV.downloadFile()

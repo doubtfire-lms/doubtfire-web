@@ -1,38 +1,40 @@
-<div>
+<form class="form-horizontal">
   <div class="form-group">
-    <label for="convenors">Add Staff:</label>
-    <div class="input-group">
-      <input class="form-control" id="convenors" placeholder="Staff
-      name" ng-model="selectedStaff" typeahead="staff as
+    <label class="col-sm-2 control-label" for="convenors">Add Staff</label>
+    <div class="col-md-10 input-group">
+      <input class="form-control" id="convenors" placeholder="Name" ng-model="selectedStaff" typeahead="staff as
       staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"> 
+      
       <span class="input-group-btn">
-        <button class="btn btn-default"
-          ng-click="addSelectedStaff()">
-          <i class="glyphicon glyphicon-plus text-success"></i>
+        <button class="btn btn-default" ng-click="addSelectedStaff()">
+          <i class="glyphicon glyphicon-plus"></i>
         </button>
       </span>
     </div>
   </div>
 
   <div class="form-group">
-    <label for="currentConvenors" >Current Staff: </label>
-    <ul class="list-group" ng-show="unit.staff.length > 0">
+    <label class="col-sm-2 control-label" for="currentConvenors" >Current Staff</label>
+    <ul class="col-md-10 input-group" ng-show="unit.staff.length > 0">
       <li class="list-group-item" ng-repeat="staff in unit.staff">
-      <a ng-click="removeStaff(staff)"> 
-        <span class="col-md-4">
-          {{staff.user_name}} 
-          <i class="glyphicon glyphicon-remove text-danger"></i>
+        
+        <span class="badge btn btn-default" ng-click="removeStaff(staff)">
+            <i class="glyphicon glyphicon-remove"></i>
         </span>
-      </a>
-      <label name="staffRole" class="radio-inline" for="radio-tutor">Tutor</label>
-      <input type="radio" id="radio-tutor" value="Tutor"
-      ng-model="staff.role" ng-click="changeRole(staff,2)"></input>
-      <label name="staffRole" class="radio-inline" for="radio-convenor">Convenor</label>
-      <input type="radio" id="radio-convenor" value="Convenor"
-      ng-model="staff.role" ng-click="changeRole(staff,3)"></input>
-
+        
+        <strong>{{staff.user_name}}</strong>
+        <br/>
+      
+        <label name="staffRole" class="radio-inline" for="radio-tutor">
+          <input type="radio" id="radio-tutor" value="Tutor" ng-model="staff.role" ng-click="changeRole(staff,2)"/>Tutor
+        </label>
+        
+        <label name="staffRole" class="radio-inline" for="radio-convenor">
+          <input type="radio" id="radio-convenor" value="Convenor" ng-model="staff.role" ng-click="changeRole(staff,3)" />Convenor      
+        </label>
+      
       </li>
     </ul>
   </div>
-</div>
+</form>
 

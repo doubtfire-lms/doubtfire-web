@@ -1,4 +1,35 @@
 <div>
+  <h4>All Tasks</h4>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th>Abbr</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Target Date</th>
+        <th>Weighting</th>
+        <th>Required</th>
+        <th>File Upload Requirements</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="task in unit.task_definitions">
+        <td>{{task.abbr}}</td>
+        <td>{{task.name}}</td>
+        <td>{{task.desc}}</td>
+        <td>{{task.target_date | date:'d MMM yyyy'}}</td>
+        <td>{{task.weight}}</td>
+        <td>{{task.required}}</td>
+        <td>
+          <ol ng-hide="task.upload_requirements.length == 0">
+            <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
+          </ol>
+          <span ng-show="task.upload_requirements.length == 0">N/A</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Batch Import / Export</h4>
   <form class="form-horizontal" ng-submit="submitUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label">Upload</label>
