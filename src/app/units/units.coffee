@@ -29,7 +29,7 @@ angular.module("doubtfire.units", [
         templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
-      roleWhitelist: ['Admin']
+      roleWhitelist: ['Admin', 'Convenor']
   )
   .state("admin/units#edit",
     url: "/admin/units/:unitId"
@@ -42,7 +42,7 @@ angular.module("doubtfire.units", [
         templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
-      roleWhitelist: ['Admin']
+      roleWhitelist: ['Admin', 'Convenor']
    )
 )
 .controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
@@ -138,8 +138,8 @@ angular.module("doubtfire.units", [
         student
 )
 
-.controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units) ->
-  $scope.unit = new Unit { id: -1, code: "COS????", convenors: [] }
+.controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit) ->
+  $scope.unit = new Unit { id: -1, active: true, code: "COS????" }
   $scope.saveSuccess = (unit) ->
     alertService.add("success", "Unit created.", 2000)
     $modalInstance.close()
