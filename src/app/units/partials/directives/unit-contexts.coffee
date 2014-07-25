@@ -237,7 +237,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
-  controller: ($scope, $state, $rootScope, Unit) ->
+  controller: ($scope, $state, $rootScope, Unit, alertService) ->
     $scope.format = 'yyyy-MM-dd'
     $scope.initDate = new Date('2016-04-20')
     $scope.startOpened = $scope.endOpened = $scope.opened = false
@@ -247,10 +247,15 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     }
 
     $scope.saveUnit = ->
-      delete $scope.unit[convenors]
-      Unit.create { id: $scope.unit.id, unit: $scope.unit } if $scope.unit.id == -1
-      Unit.update { id: $scope.unit.id, unit: $scope.unit} if $scope.unit.id != -1
-      $state.transitionTo('admin/units#index')
+      if $scope.unit.convenors then delete $scope.unit[convenors]
+
+      if $scope.unit.id == -1
+        Unit.create { unit: $scope.unit }, (unit) ->
+          $scope.saveSuccess(unit)
+      else
+        Unit.update { id: $scope.unit.id, unit: $scope.unit}, (unit) ->
+          alertService.add("success", "Unit updated.", 2000)
+          $state.transitionTo('admin/units#index')
 
     $scope.open = ($event,which) ->
       $event.preventDefault()
