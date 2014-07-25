@@ -8,10 +8,11 @@
   <tab heading="Progress">
     <progress-info></progress-info>
   </tab>
-  <!--<tab heading="Task List">
-    <task-list></task-list>
-  </tab> -->
   <tab heading="Labs">
     <lab-list></lab-list>
   </tab>
 </tabset>
+
+<div class="alert-top">
+	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+</div> 

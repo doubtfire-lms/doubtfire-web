@@ -131,10 +131,10 @@ angular.module("doubtfire.api", [
     }
     
     fileUploader.onUploadSuccess = (response)  ->
-      #alert response
-      # Open the response in a new window
-      data = 'data:application/pdf;base64,' + response
-      $window.open data, "_blank"
+      # Open the response in a new window (i.e., upload URL's GET request instead of POST...)
+      win = $window.open fileUploader.url, "_blank"
+      win.href = ""
+      fileUploader.scope.close()
       fileUploader.clearQueue()
       
     fileUploader.onUploadFailure = (response) ->
@@ -155,8 +155,8 @@ angular.module("doubtfire.api", [
       xhr.onreadystatechange = () ->
         if xhr.readyState == 4
           fileUploader.isUploading = false
-          # Success
-          if xhr.status == 200
+          # Success (201 Created)
+          if xhr.status == 201
             fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
           # Fail
           else
@@ -188,8 +188,8 @@ angular.module("doubtfire.api", [
       fileUploader.unit = unit
       fileUploader.uploadAll()
       
-    fileUploader.onSuccessItem = (evt, xhr, item, response) ->
-      newTasks = xhr
+    fileUploader.onSuccessItem = (item, response, status, headers) ->
+      newTasks = response
       diff = newTasks.length - fileUploader.unit.task_definitions.length
       alertService.add("success", "Added #{diff} tasks.", 2000)
       fileUploader.scope.unit.task_definitions = xhr
@@ -223,11 +223,12 @@ angular.module("doubtfire.api", [
       fileUploader.unit = unit
       fileUploader.uploadAll()
       
-    fileUploader.onSuccessItem = (evt, xhr, item, response) ->
+    fileUploader.onSuccessItem = (item, response, status, headers) ->
+      newStudents = response
       # at least one student?
-      if xhr.length != 0
-        alertService.add("success", "Enrolled #{xhr.length} students.", 2000)
-        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(xhr)
+      if newStudents.length != 0
+        alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
+        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
       else
         alertService.add("info", "No students need to be enrolled.", 2000)
       fileUploader.clearQueue()

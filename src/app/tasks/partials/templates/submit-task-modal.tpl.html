@@ -4,7 +4,7 @@
 			{{uploadRequirements.length}} File{{uploadRequirements.length > 1 ? "s" : ""}} Required <span class="fa fa-cloud-upload fa-2x pull-right"></span>
 		</h3>
 		<h4>{{task.task_name}}</h4>
-		<p> To mark this task as <strong>Ready To Mark</strong>, you must provide the following files for submission. </p>
+		<p> To mark this task as <strong>Ready To Mark</strong>, you must provide the following files to generate your submission document. </p>
 	</div>
 	<div class="modal-body">
     <button ng-hide="fileUploader.isUploading || fileUploader.queue.length == 0" class="btn btn-sm btn-default pull-right" ng-click="clearUploads()"><span class="glyphicon glyphicon-ban-circle"></span></button>
@@ -19,7 +19,8 @@
       <p ng-show="fileUploader.queue.length > $index"class="form-control-static">{{fileUploader.queue[$index].file.name}} <span class="glyphicon glyphicon-file"></span></p>
     </div>
     <div class="form-group">
-      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != uploadRequirements.length" type="submit" class="btn btn-primary form-control col-sm-2 pull-right" value="Import" />
+      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != uploadRequirements.length" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Generate Submission" />
+      <br/>
       <div ng-show="fileUploader.isUploading">
         <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
         <p class="help-block text-center" ng-show="fileUploader.progress == 100">
