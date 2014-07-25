@@ -68,7 +68,7 @@ angular.module("doubtfire.api", [
         method: "POST",
         queueLimit: 1
       }
-      fileUploader.onSuccessItem = (evt, xhr, item, response) ->
+      fileUploader.onSuccessItem = (item, response, status, headers)  ->
         if response.length != 0
           alertService.add("success", "Added #{response.length} users.", 2000)
           fileUploader.scope.users = fileUploader.scope.users.concat(response)
@@ -76,10 +76,9 @@ angular.module("doubtfire.api", [
           alertService.add("info", "No users need to be added.", 2000)
         fileUploader.clearQueue()
         
-      fileUploader.onErrorItem = (evt, xhr, item, response) ->
+      fileUploader.onErrorItem = (item, response, status, headers) ->
         alertService.add("danger", "File Upload Failed: " + response.error, 2000)
         fileUploader.clearQueue()
-        
     fileUploader
         
   this.downloadFile =  ->
@@ -87,8 +86,93 @@ angular.module("doubtfire.api", [
     
   return this
 )
-.service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
+.service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService) ->
 
+  this.fileUploader = (scope, task) ->
+    # per scope or task
+    uploadUrl = "#{api}/submission/task/#{task.id}.json?auth_token=#{currentUser.authenticationToken}"
+    fileUploader = new FileUploader {
+      scope: scope,
+      url: uploadUrl
+      method: "POST",
+      queueLimit: task.task_upload_requirements.length
+    }
+    
+    extWhitelist = (name, exts) ->
+      # no extension
+      parts = name.split('.')
+      return false if parts.length == 0
+      ext = parts.pop()
+      ext in exts
+
+    fileUploader.filters.push {
+      name: 'is_code'
+      fn: (item) ->
+        valid = extWhitelist item.name, ['pas', 'cpp', 'c', 'h', 'java']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid code file", 2000)
+        valid
+    }
+    fileUploader.filters.push {
+      name: 'is_document'
+      fn: (item) ->
+        valid = extWhitelist item.name, ['doc', 'docx', 'pdf']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid document file", 2000)
+        valid
+    }
+    fileUploader.filters.push {
+      name: 'is_image'
+      fn: (item) ->
+        valid = extWhitelist item.name, ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+        if not valid
+          alertService.add("info", "#{item.name} is not a valid image file", 2000)
+        valid
+    }
+    
+    fileUploader.onUploadSuccess = (response)  ->
+      #alert response
+      # Open the response in a new window
+      data = 'data:application/pdf;base64,' + response
+      $window.open data, "_blank"
+      fileUploader.clearQueue()
+      
+    fileUploader.onUploadFailure = (response) ->
+      fileUploader.scope.close(response.error)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 2000)
+      fileUploader.clearQueue()
+      
+    fileUploader.uploadEnqueuedFiles = () ->
+      queue = fileUploader.queue
+      xhr = new XMLHttpRequest()
+      form = new FormData()
+      this.isUploading = true
+
+      # Setup progress
+      xhr.upload.onprogress = (event) ->
+        fileUploader.progress = Math.round (if event.lengthComputable then event.loaded * 100 / event.total else 0)
+        fileUploader._render()
+      xhr.onreadystatechange = () ->
+        if xhr.readyState == 4
+          fileUploader.isUploading = false
+          # Success
+          if xhr.status == 200
+            fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
+          # Fail
+          else
+            fileUploader.onUploadFailure(JSON.parse(xhr.responseText))
+            
+      # Append each file in the queue to the form
+      form.append item.alias, item._file for item in queue
+      
+      xhr.open(fileUploader.method, fileUploader.url, true)
+      xhr.send(form)
+        
+    fileUploader
+    
+  return this
+)
+.service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
   this.fileUploader = (scope) ->
     fileUploader = new FileUploader {
       scope: scope,

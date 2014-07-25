@@ -57,7 +57,7 @@ ul.nav.nav-tabs {
   text-align: center;
 }
 
-.well.drop.ng-file-over {
+.well.drop.file-over-hover {
   border-color: #3276b1;
   color: #3276b1;
 }
@@ -66,8 +66,14 @@ a {
   cursor: pointer; 
 }
 
-a { 
-  cursor: pointer; 
+.row { 
+  // Extra RHS margin fix
+  margin-right: 0px;
+}
+
+.alert-top {
+  // Fix alert on top of modals
+  z-index: 5000 !important;
 }
 
 @import 'modules/breadcrumbs.less';
