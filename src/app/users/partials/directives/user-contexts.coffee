@@ -3,7 +3,7 @@ angular.module('doubtfire.users.partials.contexts', [])
   restrict: 'E'
   templateUrl: 'users/partials/templates/user-list-context.tpl.html'
   controller: ($scope, $modal, User) ->
-    $scope.users = User.query()
+    # users from parent scope ==> $scope.users = User.query()
     # Table sort details
     $scope.sortOrder = "id"
     # Pagination details
