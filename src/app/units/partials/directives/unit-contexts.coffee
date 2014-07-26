@@ -275,15 +275,23 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         resolve: {
           tutorial: -> tutorial
           isNew: -> false
+          tutors: -> $scope.unit.staff
+          unit: -> $scope.unit
         }
     $scope.createTutorial = ->
-      tutorial = { create: true }
+      d = new Date()
+      d.setHours(8)
+      d.setMinutes(30)
+
+      tutorial = { abbreviation: "LA1-??", meeting_day: "Monday", meeting_time: d, meeting_location: "ATC???" }
       $modal.open
         controller: 'TutorialModalCtrl'
         templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
         resolve: {
-          tutorial: -> null
+          tutorial: -> tutorial
           isNew: -> true
+          tutors: -> $scope.unit.staff
+          unit: -> $scope.unit
         }
 
 )

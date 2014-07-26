@@ -45,6 +45,9 @@ angular.module("doubtfire.api", [
 .factory("Tutor", (resourcePlus) ->
   resourcePlus "/users/tutors"
 )
+.factory("Tutorial", (resourcePlus) ->
+  resourcePlus "/tutorials/:id", { id: "@id" }
+)
 .factory("Task", (resourcePlus) ->
   resourcePlus "/tasks/:id", { id: "@id" }
 )
