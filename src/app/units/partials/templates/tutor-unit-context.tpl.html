@@ -38,7 +38,7 @@
 	    					</accordion-group>
 						</accordion>
 					</td>
-			    	<td ng-click="student.open = !student.open"> <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor.name}}"> {{student.tutorial.abbreviation}} </span></td>
+			    	<td ng-click="student.open = !student.open"> <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor.name}}"> {{student.tutorial.abbreviation}} </span></td>
 			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)">Discussed</button></td>
 			    </tr>
 		    </tbody>
