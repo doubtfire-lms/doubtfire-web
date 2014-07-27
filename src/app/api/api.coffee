@@ -45,6 +45,9 @@ angular.module("doubtfire.api", [
 .factory("Tutor", (resourcePlus) ->
   resourcePlus "/users/tutors"
 )
+.factory("Tutorial", (resourcePlus) ->
+  resourcePlus "/tutorials/:id", { id: "@id" }
+)
 .factory("Task", (resourcePlus) ->
   resourcePlus "/tasks/:id", { id: "@id" }
 )
@@ -191,12 +194,12 @@ angular.module("doubtfire.api", [
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       newTasks = response
       diff = newTasks.length - fileUploader.unit.task_definitions.length
-      alertService.add("success", "Added #{diff} tasks.", 2000)
-      fileUploader.scope.unit.task_definitions = xhr
+      alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
+      _.extend(fileUploader.scope.unit.task_definitions, response)
       fileUploader.clearQueue()
       
-    fileUploader.onErrorItem = (evt, xhr, item, response) ->
-      alertService.add("danger", "File Upload Failed: #{xhr.error}", 2000)
+    fileUploader.onErrorItem = (evt, response, item, headers) ->
+      alertService.add("danger", "File Upload Failed: #{response.error}", 2000)
       fileUploader.clearQueue()
         
     fileUploader
@@ -233,8 +236,8 @@ angular.module("doubtfire.api", [
         alertService.add("info", "No students need to be enrolled.", 2000)
       fileUploader.clearQueue()
       
-    fileUploader.onErrorItem = (evt, xhr, item, response) ->
-      alertService.add("danger", "File Upload Failed: #{xhr.error}", 2000)
+    fileUploader.onErrorItem = (evt, response, item, headers) ->
+      alertService.add("danger", "File Upload Failed: #{response.error}", 5000)
       fileUploader.clearQueue()
         
     fileUploader

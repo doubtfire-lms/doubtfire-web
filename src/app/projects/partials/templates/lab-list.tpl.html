@@ -18,10 +18,10 @@
           <td>{{tutorial.meeting_day}}</td>
           <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
           <td>{{tutorial.meeting_location}}</td>
-          <td>{{tutorial.tutor.name}}</td>
-          <td ng-if="project.tutor_id == tutorial.tutor.id"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> </button>
+          <td>{{tutorial.tutor_name}}</td>
+          <td ng-if="project.tute == tutorial.id"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> </button>
           </td>
-          <td ng-if="project.tutor_id != tutorial.tutor.id"><button type="button" class="btn btn-warning" ng-click ="setTutorial(tutorial.id)"><span class="glyphicon glyphicon-minus"></span></button>
+          <td ng-if="project.tute != tutorial.id"><button type="button" class="btn btn-warning" ng-click ="setTutorial(tutorial.id)"><span class="glyphicon glyphicon-minus"></span></button>
           </td>
         </tr>
       </tbody>

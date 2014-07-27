@@ -1,10 +1,41 @@
 angular.module('doubtfire.units.partials.modals', [])
-.controller('TutorialModalCtrl', ($scope, $modalInstance,  tutorial, isNew, Tutor) ->
+.controller('TutorialModalCtrl', ($scope, $modalInstance,  tutorial, isNew, tutors, unit, Tutorial, alertService) ->
   $scope.tutorial = tutorial
   $scope.isNew = isNew
-  $scope.tutors = Tutor.query()
+  $scope.tutors = tutors
 
   $scope.saveTutorial = ->
+    save_data = _.omit(tutorial, 'tutor', 'tutor_name', 'meeting_time', 'data')
+    save_data.tutor_id = tutorial.tutor.user_id
+
+    if tutorial.meeting_time.getHours
+      save_data.meeting_time = tutorial.meeting_time.getHours() + ":" + tutorial.meeting_time.getMinutes()
+
+    if isNew
+      save_data.unit_id = unit.id
+      Tutorial.create( tutorial: save_data ).$promise.then (
+        (response) ->
+          $modalInstance.close(response)
+          unit.tutorials.push(response)
+      ),
+      (
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 5000)
+      )
+    else
+
+      Tutorial.update( { id: tutorial.id, tutorial: save_data } ).$promise.then (
+        (response) ->
+          $modalInstance.close(response)
+          tutorial.tutor = response.tutor
+          tutorial.tutor_name = response.tutor_name
+      ),
+      (
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 5000)
+      )
 )
 .controller('UnitModalCtrl', ($scope, $modalInstance, Unit, convenors, unit) ->
   $scope.unit = unit

@@ -14,7 +14,7 @@ angular.module("doubtfire.users", [
         templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Users Administration_"
-      roleWhitelist: ['Admin']
+      roleWhitelist: ['Admin', 'Convenor']
   )
 )
 .controller("AdminUsersCtrl", ($scope, $state, $stateParams, $modal, User) ->

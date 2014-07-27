@@ -25,6 +25,7 @@ angular.module('doubtfire.users.partials.modals', [])
       User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
+          user.name = user.first_name + " " + user.last_name
       ),
       (
         (response) ->
