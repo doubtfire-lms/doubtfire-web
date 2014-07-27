@@ -8,6 +8,9 @@ angular.module("doubtfire.errors", [
       main:
         controller: "NotFoundCtrl"
         templateUrl: "errors/not_found.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Not Found_"
   ).state("unauthorised",
@@ -16,6 +19,9 @@ angular.module("doubtfire.errors", [
       main:
         controller: "UnauthorisedCtrl"
         templateUrl: "errors/unauthorised.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Unauthorised_"
   )
