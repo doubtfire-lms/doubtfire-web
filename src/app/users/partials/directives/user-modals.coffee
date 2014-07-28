@@ -14,7 +14,8 @@ angular.module('doubtfire.users.partials.modals', [])
       User.create( user: $scope.user ).$promise.then (
         (response) ->
           $modalInstance.close(response)
-          $scope.users.push(response)
+          if $scope.users
+            $scope.users.push(response)
       ),
       (
         (response) ->

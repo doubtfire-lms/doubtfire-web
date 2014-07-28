@@ -16,10 +16,20 @@ angular.module("doubtfire.home", [])
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, UnitRole, Project, headerService) ->
+.controller("HomeCtrl", ($scope, $state, $modal, User, UnitRole, Project, headerService, currentUser) ->
   $scope.unitRoles = UnitRole.query()
   $scope.projects = Project.query()
   headerService.clearMenus()
+
+  if currentUser.profile.name.toLowerCase() == "first name surname"
+    $modal.open
+      templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
+      controller: 'UserModalCtrl'
+      resolve:
+        # Actually load in all current user info when we request the user settings
+        user: ->  currentUser.profile
+        isNew: -> false
+        users: -> false
 
   #
   # Filter functions to separate units in repeater
