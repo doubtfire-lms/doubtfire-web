@@ -100,9 +100,7 @@ angular.module("doubtfire.sessions", [
         id: response.user.id
         authenticationToken: response.auth_token
         role: _.string.camelize(response.user.system_role)
-        profile:
-          name: response.user.first_name + " " + response.user.last_name
-          nickname: response.user.nickname
+        profile: response.user
 
       if tryChangeUser user
         success()
@@ -110,7 +108,9 @@ angular.module("doubtfire.sessions", [
         error()
     ).error error
 
-  signOut: -> tryChangeUser defaultAnonymousUser
+  signOut: (authenticationUrl) ->
+    $http.delete(authenticationUrl)
+    tryChangeUser defaultAnonymousUser
 
 ).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api, alertService) ->
   stateAfterSignIn = "home" # TODO: Make this a constant
@@ -126,17 +126,9 @@ angular.module("doubtfire.sessions", [
         $state.go stateAfterSignIn
       , (response) ->
         $scope.session.password = ''
-        alertService.add("danger", "Login failed: " + response.error, 2000)
-        #$scope.alerts.push {type: "danger", msg: "Login failed: " + response.error}
-      # , ->
-      #   # If error alert already showing, delay before showing the new sign-in error. Looks better.
-      #   if flash.now.has "error"
-      #     flash.now.remove "error"
-      #     $timeout(->
-      #       flash.now.set "error", "_Failed to sign in. Your username and/or password may be incorrect._"
-      #     , 150)
+        alertService.add("danger", "Login failed: " + response.error, 5000)
 
-).controller "SignOutCtrl", ($state, $timeout, auth) ->
-  if auth.signOut()
+).controller "SignOutCtrl", ($state, $timeout, auth, api, currentUser) ->
+  if auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
     $timeout (-> $state.go "sign_in"), 750
   return this
