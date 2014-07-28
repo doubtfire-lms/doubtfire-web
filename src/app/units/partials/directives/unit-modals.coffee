@@ -17,6 +17,7 @@ angular.module('doubtfire.units.partials.modals', [])
         (response) ->
           $modalInstance.close(response)
           unit.tutorials.push(response)
+          alertService.add("success", "Tutorial Added", 5000)
       ),
       (
         (response) ->
@@ -30,6 +31,7 @@ angular.module('doubtfire.units.partials.modals', [])
           $modalInstance.close(response)
           tutorial.tutor = response.tutor
           tutorial.tutor_name = response.tutor_name
+          alertService.add("success", "Tutorial Updated", 5000)
       ),
       (
         (response) ->
@@ -68,4 +70,59 @@ angular.module('doubtfire.units.partials.modals', [])
       projects.push project
       $modalInstance.close()
       #TODO: success and error alerts
+)
+.controller('TaskEditModalCtrl', ($scope, $modalInstance, TaskDefinition, task, unit, alertService, isNew) ->
+  $scope.unit = unit
+  $scope.task = task
+  $scope.isNew = isNew
+  # Datepicker opts
+  $scope.pickerOpened = false
+  # Datepicker opener
+  $scope.open = ($event) ->
+    $event.preventDefault
+    $event.stopPropagation
+    $scope.pickerOpened = true
+    
+  $scope.addUpReq = () ->
+    newLength = $scope.task.upload_requirements.length + 1
+    newUpReq = { key: "file#{newLength-1}", name: "", type: "code" }
+    $scope.task.upload_requirements.push newUpReq
+  
+  $scope.removeUpReq = (upReq) ->
+    $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
+    
+  $scope.saveTask = () ->
+    # Map the task to upload to the appropriate fields
+    task = $scope.task
+    task.abbreviation = $scope.task.abbr
+    task.weighting = $scope.task.weight
+    task.unit_id = $scope.unit.id
+    task.upload_requirements = JSON.stringify $scope.task.upload_requirements
+    task.description = $scope.task.desc
+    
+    if $scope.isNew
+      TaskDefinition.create( { task_def: task } ).$promise.then (
+        (response) ->
+          $modalInstance.close(response)
+          $scope.unit.task_definitions.push(response)
+          alertService.add("success", "#{response.name} Added", 5000)
+      ),
+      (
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 5000)
+      )
+    else
+      TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
+        (response) ->
+          $modalInstance.close(response)
+          $scope.unit.task_definitions.push(response)
+          alertService.add("success", "#{response.name} Updated", 5000)
+      ),
+      (
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 5000)
+      )
+
 )
