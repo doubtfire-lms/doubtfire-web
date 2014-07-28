@@ -51,6 +51,9 @@ angular.module("doubtfire.api", [
 .factory("Task", (resourcePlus) ->
   resourcePlus "/tasks/:id", { id: "@id" }
 )
+.factory("TaskDefinition", (resourcePlus) ->
+  resourcePlus "/task_definitions/:id", { id: "@id" }
+)
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
 )
@@ -180,7 +183,7 @@ angular.module("doubtfire.api", [
     fileUploader = new FileUploader {
       scope: scope,
       method: "POST",
-      url: "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=0"
+      url: "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=0"
       queueLimit: 1
     }
     fileUploader.onBeforeUploadItem = (item) ->
@@ -205,7 +208,7 @@ angular.module("doubtfire.api", [
     fileUploader
         
   this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/tasks?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}", "_blank"
+    $window.open "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}", "_blank"
     
   return this
 )

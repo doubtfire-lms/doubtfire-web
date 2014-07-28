@@ -225,7 +225,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $rootScope, TaskCSV, Unit) ->
+  controller: ($scope, $modal, $rootScope, TaskCSV, Unit) ->
     $scope.tasksFileUploader = TaskCSV.fileUploader $scope
 
     $scope.submitTasksUpload = () ->
@@ -238,6 +238,27 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.currentPage = 1
     $scope.maxSize = 5
     $scope.pageSize = 15
+    
+    # Modal Events
+    $scope.editTask = (task) ->
+      $modal.open
+        controller: 'TaskEditModalCtrl'
+        templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
+        resolve: {
+          task: -> task
+          isNew: -> false
+          unit: -> $scope.unit
+        }
+    $scope.createTask = ->
+      task = { target_date: new Date(), required: true, upload_requirements: [] }
+      $modal.open
+        controller: 'TaskEditModalCtrl'
+        templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
+        resolve: {
+          task: -> task
+          isNew: -> true
+          unit: -> $scope.unit
+        }
 )
 .directive('adminUnitContext', ->
   replace: true
