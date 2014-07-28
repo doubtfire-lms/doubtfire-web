@@ -156,6 +156,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.setTutorial = (id) ->
       Project.update({ id: $scope.project.project_id, tutorial_id: id }).$promise.then (
         (project) ->
-          $scope.project.tutor_id = project.tutor_id
+          $scope.project.tute = project.tute
       )
 )
