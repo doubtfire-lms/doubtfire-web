@@ -75,13 +75,12 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.unit = unit
   $scope.task = task
   $scope.isNew = isNew
-  # Datepicker opts
-  $scope.pickerOpened = false
+  
   # Datepicker opener
   $scope.open = ($event) ->
-    $event.preventDefault
-    $event.stopPropagation
-    $scope.pickerOpened = true
+    $event.preventDefault()
+    $event.stopPropagation()
+    $scope.opened = true
     
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
