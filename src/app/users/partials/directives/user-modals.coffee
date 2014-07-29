@@ -10,7 +10,6 @@ angular.module('doubtfire.users.partials.modals', [])
   
   $scope.saveUser = ->
     if $scope.isNew
-      $scope.user.username = $scope.user.first_name
       User.create( user: $scope.user ).$promise.then (
         (response) ->
           $modalInstance.close(response)
