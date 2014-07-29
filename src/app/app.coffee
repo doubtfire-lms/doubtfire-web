@@ -49,7 +49,6 @@ angular.module("doubtfire", [
   "ui.bootstrap"
   # "mgcrea.ngStrap"
   "nvd3ChartDirectives"
-
   "angularFileUpload"
 
   "doubtfire.api"

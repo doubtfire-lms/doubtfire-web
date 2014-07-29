@@ -148,12 +148,65 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal) ->
-    $scope.activeTask = $scope.submittedTasks[0]
+  controller: ($scope, $modal, TaskFeedback) ->
+    #
+    # PDF Local Funcs
+    #
+    $scope.pdfLoaded = false
+    loadPdf = (task) ->
+      $scope.pdfLoaded = false
+      PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
+        $scope.pdf = pdf
+        $scope.pageNo = 1
+        renderPdf()
+      )
+    renderPdf = () ->
+      $scope.pdf.getPage($scope.pageNo).then( (page)->
+        viewport = page.getViewport(1.0) # Scale of 1.0
+        
+        canvas = document.getElementById("pdf")
+        context = canvas.getContext("2d")
+        canvas.height = viewport.height
+        canvas.width = viewport.width
+        
+        renderContext = { canvasContext: context, viewport: viewport }
+        page.render(renderContext).then ( ()->
+          $scope.pdfLoaded = true
+        )
+      )
+    $scope.nextPage = () ->
+      if $scope.pageNo < $scope.pdf.numPages and $scope.pdfLoaded
+        $scope.pageNo++
+        renderPdf()
+    $scope.prevPage = () ->
+      if $scope.pageNo > 0 and $scope.pdfLoaded
+        $scope.pageNo--
+        renderPdf()
+    #
+    # Loading the active task
+    #
     $scope.setActiveTask = (task) ->
+      return if task == $scope.activeTask
       $scope.activeTask = task
+      loadPdf(task)
+    
+    $scope.activeTaskUrl = ->
+      TaskFeedback.getTaskUrl($scope.activeTask)
+    
+    #
+    # Initialiser
+    #
+    $scope.activeTask = $scope.submittedTasks[0]
+    loadPdf($scope.activeTask)
+      
+    #
+    # Status Data Getters
+    #
     $scope.statusData = (task) ->
       { icon: statusIcons[task.status], label: statusLabels[task.status] }
     $scope.activeStatusData = ->
       $scope.statusData($scope.activeTask)
+    # This function gets the status CSS class for the indicated status
+    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
+    
 )

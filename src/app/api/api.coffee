@@ -54,6 +54,14 @@ angular.module("doubtfire.api", [
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
+.factory("TaskFeedback", (api, currentUser, $window) ->
+  this.getTaskUrl = (task) ->
+    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  this.openFeedback = (task) ->
+    $window.open this.getTaskUrl(task), "_blank"
+    
+  return this
+)
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
 )
@@ -174,9 +182,6 @@ angular.module("doubtfire.api", [
       xhr.send(form)
         
     fileUploader
-  
-  this.getTaskUrl = (task) ->
-    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
   
   this.openTaskInNewWindow = (task) ->
     win = $window.open this.getTaskUrl(task), "_blank"
