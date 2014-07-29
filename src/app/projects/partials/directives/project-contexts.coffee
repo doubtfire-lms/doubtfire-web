@@ -159,3 +159,13 @@ angular.module('doubtfire.projects.partials.contexts', [])
           $scope.project.tutor_id = project.tutor_id
       )
 )
+.directive('taskFeedback', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
+  scope:
+    student: "=student"
+    tasks: "=tasks"
+    taskDefs: "=taskDefs"
+  controller: ($scope, $modal) ->
+#     $scope.submittedTasks = _.find($scope.tasks, (task) -> task.status_text == )
+)

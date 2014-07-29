@@ -96,13 +96,15 @@ angular.module("doubtfire.api", [
 
   this.fileUploader = (scope, task) ->
     # per scope or task
-    uploadUrl = "#{api}/submission/task/#{task.id}.json?auth_token=#{currentUser.authenticationToken}"
+    uploadUrl = "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
     fileUploader = new FileUploader {
       scope: scope,
       url: uploadUrl
       method: "POST",
       queueLimit: task.task_upload_requirements.length
     }
+    
+    fileUploader.task = task
     
     extWhitelist = (name, exts) ->
       # no extension
@@ -111,35 +113,32 @@ angular.module("doubtfire.api", [
       ext = parts.pop()
       ext in exts
 
+    fileFilter = (acceptList, type, item) ->
+      valid = extWhitelist item.name, acceptList
+      if not valid
+        alertService.add("info", "#{item.name} is not a valid #{type} file (accepts <code>#{_.flatten(acceptList)}</code>)", 6000)
+      valid
+
     fileUploader.filters.push {
       name: 'is_code'
       fn: (item) ->
-        valid = extWhitelist item.name, ['pas', 'cpp', 'c', 'h', 'java']
-        if not valid
-          alertService.add("info", "#{item.name} is not a valid code file", 2000)
-        valid
+        fileFilter ['pas', 'cpp', 'c', 'cs', 'h', 'java'], "code" , item
     }
     fileUploader.filters.push {
       name: 'is_document'
       fn: (item) ->
-        valid = extWhitelist item.name, ['doc', 'docx', 'pdf']
-        if not valid
-          alertService.add("info", "#{item.name} is not a valid document file", 2000)
-        valid
+        fileFilter ['pdf'], "document" , item
     }
     fileUploader.filters.push {
       name: 'is_image'
       fn: (item) ->
-        valid = extWhitelist item.name, ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
-        if not valid
-          alertService.add("info", "#{item.name} is not a valid image file", 2000)
-        valid
+        fileFilter ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg'], "image" , item
     }
     
     fileUploader.onUploadSuccess = (response)  ->
       # Open the response in a new window (i.e., upload URL's GET request instead of POST...)
-      win = $window.open fileUploader.url, "_blank"
-      win.href = ""
+      # openTaskInNewWindow(fileUploader.task)
+      alertService.add("success", "#{fileUploader.task.task_name} uploaded successfully!", 2000)
       fileUploader.scope.close()
       fileUploader.clearQueue()
       
@@ -175,6 +174,13 @@ angular.module("doubtfire.api", [
       xhr.send(form)
         
     fileUploader
+  
+  this.getTaskUrl = (task) ->
+    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  
+  this.openTaskInNewWindow = (task) ->
+    win = $window.open this.getTaskUrl(task), "_blank"
+    win.href = ""
     
   return this
 )
@@ -218,12 +224,12 @@ angular.module("doubtfire.api", [
     fileUploader = new FileUploader {
       scope: scope,
       method: "POST",
-      url: "#{api}/csv/units/0.json?auth_token=#{currentUser.authenticationToken}"
+      url: "#{api}/csv/units/0?auth_token=#{currentUser.authenticationToken}"
       queueLimit: 1
     }
     fileUploader.onBeforeUploadItem = (item) ->
       # ensure this item will be uploading for this unit it...
-      item.url = fileUploader.url.replace(/\d+.json/, "#{fileUploader.unit.id}.json")
+      item.url = fileUploader.url.replace(/\d+\?/, "#{fileUploader.unit.id}?")
       
     fileUploader.uploadStudentEnrolmentCSV = (unit) ->
       fileUploader.unit = unit
@@ -246,7 +252,7 @@ angular.module("doubtfire.api", [
     fileUploader
         
   this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/units/#{unit.id}.json?auth_token=#{currentUser.authenticationToken}", "_blank"
+    $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
     
   return this
 )

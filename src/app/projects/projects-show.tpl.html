@@ -4,15 +4,14 @@
 </ul>
 
 <tabset class="col-md-offset-2 col-md-8">
-  <h2>{{unit.name}} - {{project.student_name}}</h2>
+  <h2>{{unit.name}}<p class="lead"> {{project.student_name}} </p></h2>
   <tab heading="Progress">
     <progress-info></progress-info>
+  </tab>
+  <tab heading="Feedback">
+    <task-feedback student="project.student" tasks="project.tasks" taskDefs="unit.task_definitions"></task-feedback>
   </tab>
   <tab heading="Labs">
     <lab-list></lab-list>
   </tab>
-</tabset>
-
-<div class="alert-top">
-	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
-</div> 
+</tabset> 
