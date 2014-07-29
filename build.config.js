@@ -85,10 +85,11 @@ module.exports = {
       'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js',
       'vendor/angular-file-upload/angular-file-upload.js',
       'vendor/es5-shim/es5-shim.js',
-      'vendor/es5-shim/es5-shim.map',
+      // 'vendor/es5-shim/es5-shim.map',
       'vendor/angular-pdf/dist/angular-pdf.js',
+      'vendor/pdfjs-bower/dist/compatibility.js',
       'vendor/pdfjs-bower/dist/pdf.js',
-      'vendor/pdfjs-bower/dist/pdf-worker.js'
+      'vendor/pdfjs-bower/dist/pdf.worker.js'
     ],
     css: [
     ]

@@ -604,7 +604,8 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less', 'copy:compile_assets', 'ngmin', 'concat', 'uglify', 'index:compile'
+    // 'less', 'copy:compile_assets', 'ngmin', 'concat', 'uglify', 'index:compile'
+    'less', 'copy:compile_assets', 'ngmin', 'concat', 'index:compile'
   ]);
 
   /**
