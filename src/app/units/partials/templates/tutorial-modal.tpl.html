@@ -1,8 +1,5 @@
 
 <div>
-  <div class="alert-top">
-  	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
-  </div>
 	<form class="form-horizontal" ng-submit="saveTutorial()" role="form">
   	<div class="modal-header">
   		<h3>{{isNew ? "Create Tutorial" : "Edit Tutorial"}}</h3>
