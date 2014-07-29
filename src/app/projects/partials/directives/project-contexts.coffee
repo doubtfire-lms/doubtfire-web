@@ -154,13 +154,13 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     $scope.pdfLoaded = false
     loadPdf = (task) ->
-      $scope.pdfLoaded = false
       PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
         $scope.pdf = pdf
         $scope.pageNo = 1
         renderPdf()
       )
     renderPdf = () ->
+      $scope.pdfLoaded = false
       $scope.pdf.getPage($scope.pageNo).then( (page)->
         viewport = page.getViewport(1.0) # Scale of 1.0
         
