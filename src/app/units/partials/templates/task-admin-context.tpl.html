@@ -33,7 +33,6 @@
   <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
   <button class="btn btn-success pull-right" ng-click="createTask()">Create Task</button>
 
-
   <h4>Batch Import / Export</h4>
   <form class="form-horizontal" ng-submit="submitTasksUpload()">
     <div class="form-group">
@@ -59,8 +58,4 @@
       <button ng-click="requestTasksExport()" class="btn btn-primary form-control col-sm-2">Export</button>
     </div>
   </form><!--/csv-batch-->
-
-  <div class="alert-top">
-  	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
-  </div>
 </div>

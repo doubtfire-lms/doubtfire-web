@@ -4,8 +4,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
   controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService) ->
-    $scope.unitLoaded = false
-  
     $scope.studentProjectId = $stateParams.projectId
   
     #
@@ -51,16 +49,13 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #   }
     # ]
   
-    $scope.projectLoaded = false
-  
-    Project.get { id: $scope.studentProjectId }, (project) ->
-      
-      # Clear any page-specific menus
-      headerService.clearMenus()
-      
-      # Provide access to the Project's details
-      $scope.project = project # the selected unit role
-  
+#     $scope.projectLoaded = false
+#     Project.get { id: $scope.studentProjectId }, (project) ->
+#       # Clear any page-specific menus
+#       headerService.clearMenus()
+#       # Provide access to the Project's details
+#       $scope.project = project # the selected unit role
+
       # Set the roles in the header
       # links = []
       # if project
@@ -70,19 +65,16 @@ angular.module('doubtfire.projects.partials.contexts', [])
       #     links.push { class: "", url: "#/units?unitRole=" + other_role.id, name: other_role.role }
   
       # headerService.setLinks( links )
-  
-      if project
-        Unit.get { id: project.unit_id }, (unit) ->
-          $scope.unit = unit # the unit related to the role
-          $scope.unitLoaded = true
-  
-        if $stateParams.unitRole?
-          UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
-            if unitRole.unit_id == $scope.unit.id
-              $scope.assessingUnitRole = unitRole
-        
-        $scope.burndownData = project.burndown_chart_data
-        $scope.projectLoaded = true
+#       if project
+#         Unit.get { id: project.unit_id }, (unit) ->
+#           $scope.unit = unit # the unit related to the role
+#           $scope.unitLoaded = true
+#         if $stateParams.unitRole?
+#           UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
+#             if unitRole.unit_id == $scope.unit.id
+#               $scope.assessingUnitRole = unitRole
+#         $scope.burndownData = project.burndown_chart_data
+#         $scope.projectLoaded = true
   
     # end get project
   
@@ -125,12 +117,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     $scope.lateEndDate = () ->
       return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
-    
-    #
-    # Allow the caller to fetch a task definition from the unit based on its id
-    #
-    $scope.taskDef = (taskDefId) ->
-      _.where $scope.unit.task_definitions, {id: taskDefId}
   
     #
     # Allow the caller to fetch a tutorial from the unit based on its id
@@ -158,4 +144,69 @@ angular.module('doubtfire.projects.partials.contexts', [])
         (project) ->
           $scope.project.tute = project.tute
       )
+)
+.directive('taskFeedback', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
+  controller: ($scope, $modal, TaskFeedback) ->
+    #
+    # PDF Local Funcs
+    #
+    $scope.pdfLoaded = false
+    loadPdf = (task) ->
+      PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
+        $scope.pdf = pdf
+        $scope.pageNo = 1
+        renderPdf()
+      )
+    renderPdf = () ->
+      $scope.pdfLoaded = false
+      $scope.pdf.getPage($scope.pageNo).then( (page)->
+        viewport = page.getViewport(1.0) # Scale of 1.0
+        
+        canvas = document.getElementById("pdf")
+        context = canvas.getContext("2d")
+        canvas.height = viewport.height
+        canvas.width = viewport.width
+        
+        renderContext = { canvasContext: context, viewport: viewport }
+        page.render(renderContext).then ( ()->
+          $scope.pdfLoaded = true
+        )
+      )
+    $scope.nextPage = () ->
+      if $scope.pageNo < $scope.pdf.numPages and $scope.pdfLoaded
+        $scope.pageNo++
+        renderPdf()
+    $scope.prevPage = () ->
+      if $scope.pageNo > 0 and $scope.pdfLoaded
+        $scope.pageNo--
+        renderPdf()
+    #
+    # Loading the active task
+    #
+    $scope.setActiveTask = (task) ->
+      return if task == $scope.activeTask
+      $scope.activeTask = task
+      loadPdf(task)
+    
+    $scope.activeTaskUrl = ->
+      TaskFeedback.getTaskUrl($scope.activeTask)
+    
+    #
+    # Initialiser
+    #
+    $scope.activeTask = $scope.submittedTasks[0]
+    loadPdf($scope.activeTask)
+      
+    #
+    # Status Data Getters
+    #
+    $scope.statusData = (task) ->
+      { icon: statusIcons[task.status], label: statusLabels[task.status] }
+    $scope.activeStatusData = ->
+      $scope.statusData($scope.activeTask)
+    # This function gets the status CSS class for the indicated status
+    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
+    
 )

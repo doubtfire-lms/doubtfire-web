@@ -20,14 +20,14 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
     $rootScope.header_menu_data.push new_menu if (menu for menu in $rootScope.header_menu_data when menu.name is new_menu.name).length == 0
 )
 
-.factory("alertService", ($rootScope, $timeout) ->
+.factory("alertService", ($rootScope, $timeout, $sce) ->
   $rootScope.alerts = []
 
   alertSvc =
     add: (type, msg, timeout) ->
       $rootScope.alerts.push(
         type: type,
-        msg: msg,
+        msg: $sce.trustAsHtml(msg),
         close: ->
           alertSvc.closeAlert(this)
       )
