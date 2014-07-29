@@ -1,6 +1,17 @@
 <div>
-  {{tasks}}
-  <ul class="nav nav-pills nav-stacked">
-    
+  <ul class="pull-left nav nav-pills nav-stacked col-md-2">
+    <li ng-repeat="task in submittedTasks" ng-class="{'active' : task == activeTask}"><a href="" class="text-center" ng-click="setActiveTask(task)">{{task.task_abbr}}</a></li>
   </ul>
+  <div class="pull-right col-md-10">
+    <div class="pull-left col-md-6">
+      <h3 class="lead">{{activeTask.task_name}}</h3>
+      <p>{{activeTask.task_desc}}</p>
+    </div><!--/task-details-->
+    
+    <div class="pull-right text-center well col-md-4">
+      <i class="{{activeStatusData().icon}} fa-5x"></i>
+      <br/>
+      <h4>{{activeStatusData().label}}</h4>
+    </div><!--/task-status-->
+  </div>
 </div>

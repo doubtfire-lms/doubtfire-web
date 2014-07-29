@@ -8,10 +8,10 @@
   <tab heading="Progress">
     <progress-info></progress-info>
   </tab>
-  <tab heading="Feedback">
-    <task-feedback student="project.student" tasks="project.tasks" taskDefs="unit.task_definitions"></task-feedback>
+  <tab ng-show="submittedTasks.length > 0" heading="Feedback">
+    <task-feedback ng-if="unitLoaded"></task-feedback>
   </tab>
   <tab heading="Labs">
     <lab-list></lab-list>
   </tab>
-</tabset> 
+</tabset>
