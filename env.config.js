@@ -5,6 +5,7 @@ module.exports = {
     },
 
     development: {
+      // API_URL  : 'http://ictwebsvm6.ict.swin.edu.au:8000/api'
       API_URL  : 'http://localhost:3000/api'
     },
 
