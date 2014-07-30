@@ -136,12 +136,32 @@ module.exports = function ( grunt ) {
           }
         ]
       },
+      prod_vendor_copy: {
+        files: [
+          {
+            src: [ '<%= vendor_copy_files.js %>' ],
+            dest: '<%= compile_dir %>/assets',
+            cwd: '.',
+            expand: true
+          }
+        ]
+      },
       compile_assets: {
         files: [
           {
             src: [ '**' ],
             dest: '<%= compile_dir %>/assets',
             cwd: '<%= build_dir %>/assets',
+            expand: true
+          }
+        ]
+      },
+      to_api: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= api_dir %>/public',
+            cwd: '<%= compile_dir %>',
             expand: true
           }
         ]
@@ -158,7 +178,21 @@ module.exports = function ( grunt ) {
        */
       compile_js: {
         options: {
-          banner: '<%= meta.banner %>'
+          banner: '<%= meta.banner %>',
+          process: function (src, filepath) {
+            if (filepath.indexOf("/pdfjs-bower/dist/") > -1) {
+              src = "";
+            }
+            return src;
+          }
+          /**,
+          process: function (src, filepath) {
+            if (filepath.indexOf("/pdfjs-bower/dist/pdf.js") > -1) {
+              src = src.replace(/Util.loadScript\(PDFJS.workerSrc\);/g,"//Util.loadScript(PDFJS.workerSrc);");
+              src = src.replace(/\/\/[#]if PRODUCTION [&][&] SINGLE_FILE\n\/\//g,"//#if PRODUCTION && SINGLE_FILE\n");
+            }
+            return src;
+          }*/
         },
         src: [ 
           '<%= vendor_files.js %>', 
@@ -267,7 +301,8 @@ module.exports = function ( grunt ) {
     uglify: {
       compile: {
         options: {
-          banner: '<%= meta.banner %>'
+          banner: '<%= meta.banner %>',
+          mangle: false
         },
         files: {
           '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
@@ -405,6 +440,7 @@ module.exports = function ( grunt ) {
       compile: {
         dir: '<%= compile_dir %>',
         src: [
+          '<%= compile_dir %>/assets/**/*.js',
           '<%= concat.compile_js.dest %>',
           '<%= vendor_files.css %>',
           '<%= less.options.dest %>'
@@ -556,7 +592,8 @@ module.exports = function ( grunt ) {
           port: 8000,
           base: '<%= build_dir %>',
           keepalive: true,
-          debug: true
+          debug: true,
+          livereload: true
         }
       },
       watchserver: {
@@ -566,9 +603,8 @@ module.exports = function ( grunt ) {
           livereload: true
         }
       }
-
-    }
-  };
+    } // end connect
+  }; //end task config
 
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig, envConfig ) );
 
@@ -581,11 +617,12 @@ module.exports = function ( grunt ) {
    */
   grunt.renameTask( 'watch', 'delta' );
   grunt.registerTask( 'watch', [ 'env:development', 'build', 'karma:unit', 'delta' ] );
-  grunt.registerTask( 'watchsvr', [ 'env:development', 'build', 'karma:unit', 'connect:watchserver', 'delta' ] );
+  grunt.registerTask( 'watchsvr', [ 'env:development', 'build', 'connect:watchserver', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
+  grunt.registerTask( 'deploy',  [ 'copy:to_api' ] );
   grunt.registerTask( 'production',  [ 'env:production', 'build', 'compile' ] );
   grunt.registerTask( 'development', [ 'env:development', 'build' ]);
   grunt.registerTask( 'default',     [ 'development' ]);
@@ -605,7 +642,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'compile', [
     // 'less', 'copy:compile_assets', 'ngmin', 'concat', 'uglify', 'index:compile'
-    'less', 'copy:compile_assets', 'ngmin', 'concat', 'index:compile'
+    'less', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'index:compile'
   ]);
 
   /**
