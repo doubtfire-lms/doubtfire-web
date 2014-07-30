@@ -261,3 +261,37 @@ angular.module("doubtfire.api", [
     
   return this
 )
+.service("TutorMarker", (api, $window, FileUploader, currentUser, alertService) ->
+
+  this.fileUploader = (scope) ->
+    fileUploader = new FileUploader {
+      scope: scope,
+      method: "POST",
+      url: "#{api}/submission/assess.json?unit_id=#{scope.unit.id}&auth_token=#{currentUser.authenticationToken}"
+      queueLimit: 1
+    }
+      
+    fileUploader.uploadZip = () ->
+      fileUploader.uploadAll()
+      
+    fileUploader.onSuccessItem = (item, response, status, headers) ->
+      markedTasks = response
+      # at least one student?
+      if newStudents.length != 0
+        alertService.add("success", "Uploaded #{markedTasks.length} marked tasks.", 2000)
+        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
+      else
+        alertService.add("info", "No tasks were uploaded.", 2000)
+      fileUploader.clearQueue()
+      
+    fileUploader.onErrorItem = (evt, response, item, headers) ->
+      alertService.add("danger", "File Upload Failed: #{response.error}", 5000)
+      fileUploader.clearQueue()
+        
+    fileUploader
+        
+  this.downloadFile = (unit) ->
+    $window.open "#{api}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
+    
+  return this
+)

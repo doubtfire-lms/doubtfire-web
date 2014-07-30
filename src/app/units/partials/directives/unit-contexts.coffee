@@ -336,3 +336,17 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.maxSize = 5
     $scope.pageSize = 15
 )
+.directive('tutorMarkingContext', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
+  controller: ($scope, TutorMarker) ->
+    $scope.markingFileUploader =
+      TutorMarker.fileUploader($scope)
+
+    $scope.submitMarkingUpload = () ->
+      $scope.markingFileUploader.uploadZip()
+    
+    $scope.requestMarkingExport = () ->
+      TutorMarker.downloadFile($scope.unit)
+)

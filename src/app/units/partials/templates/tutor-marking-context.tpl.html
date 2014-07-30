@@ -1,0 +1,29 @@
+<div>
+  <form class="form-horizontal" ng-submit="submitMarkingUpload()">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Marked Work</label>
+      <input ng-hide="markingFileUploader.isHTML5" type="file" class="col-sm-7" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
+      <div nv-file-drop ng-show="markingFileUploader.isHTML5 && markingFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over uploader="markingFileUploader">
+        <p class="fa fa-file-archive-o fa-3x"></p>
+        <br/>
+        Drop zip here
+      </div>
+      <p class="help-block col-sm-7 col-sm-offset-3">Compress the individual student folders and <code>marks.csv</code>, not a root folder containing these items</p>
+	    <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+    </div>
+    <div class="form-group">
+      <input ng-hide="markingFileUploader.isUploading || markingFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
+      <div class="col-sm-offset-3 col-sm-6" ng-show="markingFileUploader.isUploading">
+        <progressbar class="progress-striped active" value="markingFileUploader.progress"></progressbar>
+        <p class="help-block text-center" ng-show="markingFileUploader.progress == 100">
+          Please wait for the server to update student's statuses...
+        </p>
+      </div>
+    </div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Ready To Mark</label>
+      <input ng-click="requestMarkingExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Download Files" />
+    </div>
+  </form>
+</div>
