@@ -152,17 +152,35 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     # PDF Local Funcs
     #
-    $scope.pdfLoaded = false
+    $scope.pdf = { numPages: 0 }
+    $scope.pageNo = 0
+    
+    pdfLoaded = false
     loadPdf = (task) ->
+      $scope.pageNo = 0
       PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
         $scope.pdf = pdf
         $scope.pageNo = 1
         renderPdf()
       )
+    # resize window? Re-render pdf...
+    window.onresize = () ->
+      if $scope.pdf && pdfLoaded
+        renderPdf()
+        
     renderPdf = () ->
-      $scope.pdfLoaded = false
+      pdfLoaded = false
+      # Cancel if no pages to render...
+      if $scope.pdf.numPages == 0
+        $scope.pageNo = 0
+        return
       $scope.pdf.getPage($scope.pageNo).then( (page)->
+        # We need to ensure the PDF fits inside 600px
+        maxWidth = document.getElementById("panel").offsetWidth - 30
         viewport = page.getViewport(1.0) # Scale of 1.0
+        if viewport.width > maxWidth
+          scale = maxWidth / viewport.width
+          viewport = page.getViewport(scale)
         
         canvas = document.getElementById("pdf")
         context = canvas.getContext("2d")
@@ -171,17 +189,31 @@ angular.module('doubtfire.projects.partials.contexts', [])
         
         renderContext = { canvasContext: context, viewport: viewport }
         page.render(renderContext).then ( ()->
-          $scope.pdfLoaded = true
+          pdfLoaded = true
         )
+      # FORCE update scope to recheck its functions inside HTML
+      # This is needed for nav of pdf pages to be force-checked
+      $scope.$apply()
       )
+    #
+    # PDF Interaction Funcs
+    #
     $scope.nextPage = () ->
-      if $scope.pageNo < $scope.pdf.numPages and $scope.pdfLoaded
+      if $scope.pageNo < $scope.pdf.numPages and pdfLoaded
         $scope.pageNo++
         renderPdf()
     $scope.prevPage = () ->
-      if $scope.pageNo > 0 and $scope.pdfLoaded
+      if $scope.pageNo > 0 and pdfLoaded
         $scope.pageNo--
         renderPdf()
+        
+    $scope.shouldDisableLeftNav = () ->
+      $scope.pageNo == 1
+    $scope.shouldDisableRightNav = () ->
+      $scope.pageNo == $scope.pdf.numPages
+    $scope.shouldHideNav = $scope.corruptPdf = () ->
+      $scope.pageNo == 0
+      
     #
     # Loading the active task
     #
