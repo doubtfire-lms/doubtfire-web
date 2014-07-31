@@ -229,7 +229,8 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # Initialiser
     #
     $scope.activeTask = $scope.submittedTasks[0]
-    loadPdf($scope.activeTask)
+    if $scope.activeTask
+      loadPdf($scope.activeTask)
       
     #
     # Status Data Getters
