@@ -622,7 +622,7 @@ module.exports = function ( grunt ) {
   /**
    * The default task is to build and compile.
    */
-  grunt.registerTask( 'deploy',      [ 'copy:to_api' ] );
+  grunt.registerTask( 'deploy',      [ 'production', 'copy:to_api' ] );
   grunt.registerTask( 'production',  [ 'env:production', 'build', 'compile' ] );
   grunt.registerTask( 'development', [ 'env:development', 'build' ]);
   grunt.registerTask( 'default',     [ 'development' ]);
