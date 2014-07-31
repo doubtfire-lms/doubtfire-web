@@ -76,8 +76,10 @@ a.task-status.btn
 
 .well-sm.task-status
 {
-  margin-right: 13px;
-  
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  display: inline-block;
   &.ready-to-mark     { background-color: #0079D8; color: white; }
   &.not-submitted     { background-color: #CCCCCC; color: white; }
   &.working-on-it     { background-color: #EB8F06; color: white; }
@@ -94,6 +96,12 @@ a.task-status.btn
 
 }
 
+.panel-heading.task-status
+{
+  h3 { display: inline-block; padding: 15px 0 15px 0; }
+  div { margin-top: 2px; }
+  .pdf-nav.btn-group { margin: -10px 15px 0 0; }
+}
 
 
 

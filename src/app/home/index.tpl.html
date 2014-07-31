@@ -10,7 +10,7 @@
 	  </div>
 	</div>
 
-	<div class="panel panel-default">
+	<div class="panel panel-default" ng-hide="projects.length == 0">
 	  <div class="panel-heading">
 	    <h4 class="panel-title">Units You Study</h4>
 	  </div>
@@ -26,11 +26,17 @@
 	    <h4 class="panel-title">Administration</h4>
 	  </div>
 	  <div class="panel-body">
-		<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
-		<div><a href="#/admin/users" if-role="Admin">Manage Users</a></div>
+  		<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
+  		<div><a href="#/admin/users" if-role="Admin">Manage Users</a></div>
 	  </div>
 	</div>
 
+	<div ng-show="projects.length == 0 && unitRoles.length == 0" class="text-center col-sm-offset-3 col-sm-6" ng-class="{'hidden' : projects.length == 0 && unitRoles.length == 0}">
+	  <i class="fa fa-fire fa-5x"></i>
+	  <h1>Welcome To Doubtfire</h1>
+	  <p class="lead">You do not study or teach in any units that use Doubtfire.</p>
+	</div>
+  
 	<div class="panel panel-default" if-role="Convenor">
 	  <div class="panel-heading">
 	    <h4 class="panel-title">Administration</h4>
@@ -39,4 +45,5 @@
 			<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
 	  </div>
 	</div>
+	
 </div>
