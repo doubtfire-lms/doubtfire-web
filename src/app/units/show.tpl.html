@@ -1,20 +1,17 @@
-<div ng-if="unitLoaded" ng-switch on="unitRole.role">
-	<ul class="breadcrumb">
-    	<li><a href="#/home">Units</a></li>
-    	<li class="active">{{unitRole.unit_name}} {{unitRole.role.name}}</li>
-	</ul>
-	<div class="col-md-offset-2 col-md-8" ng-switch on="unitRole.role">
-    <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View </p></h2>
-    <tabset>
-      <tab heading="Assess">
-    		<tutor-unit-context ng-switch-when="Tutor"></tutor-unit-context>
-    		<tutor-unit-context ng-switch-when="Convenor"></tutor-unit-context>
-      </tab>
-      <tab heading="Marking">
-        <tutor-marking-context ng-if="unitLoaded"  ng-switch-when="Tutor"></tutor-marking-context>
-        <tutor-marking-context ng-if="unitLoaded"  ng-switch-when="Convenor"></tutor-marking-context>
-      </tab>
-    </tabset>
-		<!-- <student-unit-context student-project-id="unitRole.project_id" task-def="taskDef" unit="unit" ng-switch-when="Student"></student-unit-context> -->
-	</div>
+<div>
+  	<ul class="breadcrumb">
+      	<li><a href="#/home">Units</a></li>
+      	<li class="active">{{unitRole.unit_name}} {{unitRole.role}}</li>
+  	</ul>
+  	<div class="col-md-offset-2 col-md-8" ng-if="unitRole.role != 'Student'">
+      <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View </p></h2>
+      <tabset ng-if="unitLoaded">
+        <tab heading="Assess">
+      		<tutor-unit-context></tutor-unit-context>
+        </tab>
+        <tab heading="Marking">
+          <tutor-marking-context></tutor-marking-context>
+        </tab>
+      </tabset>
+  	</div>
 </div>
