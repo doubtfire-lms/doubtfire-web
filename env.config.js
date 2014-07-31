@@ -9,7 +9,8 @@ module.exports = {
     },
 
     production: {
-      API_URL  : 'http://ictwebsvm6.ict.swin.edu.au:8000/api'
+      // API_URL  : 'http://ictwebsvm6.ict.swin.edu.au:8000/api'
+      API_URL  : 'https://doubtfire.ict.swin.edu.au/api'
     }
   }
 }
