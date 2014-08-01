@@ -17,12 +17,12 @@ angular.module('doubtfire.units.partials.modals', [])
         (response) ->
           $modalInstance.close(response)
           unit.tutorials.push(response)
-          alertService.add("success", "Tutorial Added", 5000)
+          alertService.add("success", "Tutorial Added", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
     else
 
@@ -31,12 +31,12 @@ angular.module('doubtfire.units.partials.modals', [])
           $modalInstance.close(response)
           tutorial.tutor = response.tutor
           tutorial.tutor_name = response.tutor_name
-          alertService.add("success", "Tutorial Updated", 5000)
+          alertService.add("success", "Tutorial Updated", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 )
 .controller('UnitModalCtrl', ($scope, $modalInstance, Unit, convenors, unit) ->
@@ -104,24 +104,24 @@ angular.module('doubtfire.units.partials.modals', [])
         (response) ->
           $modalInstance.close(response)
           $scope.unit.task_definitions.push(response)
-          alertService.add("success", "#{response.name} Added", 5000)
+          alertService.add("success", "#{response.name} Added", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
     else
       TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
           $scope.unit.task_definitions.push(response)
-          alertService.add("success", "#{response.name} Updated", 5000)
+          alertService.add("success", "#{response.name} Updated", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 
 )

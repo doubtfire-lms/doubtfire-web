@@ -19,7 +19,7 @@ angular.module('doubtfire.users.partials.modals', [])
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 2000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
     else
       User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
@@ -30,6 +30,6 @@ angular.module('doubtfire.users.partials.modals', [])
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 2000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 )
