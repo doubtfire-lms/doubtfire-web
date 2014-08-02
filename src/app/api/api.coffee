@@ -277,7 +277,6 @@ angular.module("doubtfire.api", [
       # at least one student?
       if markedTasks.length != 0
         alertService.add("success", "Uploaded #{markedTasks.length} marked tasks.", 2000)
-        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
       else
         alertService.add("info", "No tasks were uploaded.", 2000)
       fileUploader.clearQueue()
