@@ -144,8 +144,6 @@ angular.module("doubtfire.api", [
     }
     
     fileUploader.onUploadSuccess = (response)  ->
-      # Open the response in a new window (i.e., upload URL's GET request instead of POST...)
-      # openTaskInNewWindow(fileUploader.task)
       alertService.add("success", "#{fileUploader.task.task_name} uploaded successfully!", 2000)
       fileUploader.scope.close()
       fileUploader.clearQueue()
@@ -277,7 +275,7 @@ angular.module("doubtfire.api", [
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       markedTasks = response
       # at least one student?
-      if newStudents.length != 0
+      if markedTasks.length != 0
         alertService.add("success", "Uploaded #{markedTasks.length} marked tasks.", 2000)
         fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
       else
