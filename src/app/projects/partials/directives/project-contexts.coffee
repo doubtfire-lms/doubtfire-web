@@ -157,11 +157,13 @@ angular.module('doubtfire.projects.partials.contexts', [])
     
     pdfLoaded = false
     loadPdf = (task) ->
+      return if task.processing_pdf
       $scope.pageNo = 0
       PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
         $scope.pdf = pdf
         $scope.pageNo = 1
         renderPdf()
+        
       )
     # resize window? Re-render pdf...
     window.onresize = () ->
@@ -175,8 +177,9 @@ angular.module('doubtfire.projects.partials.contexts', [])
         $scope.pageNo = 0
         return
       $scope.pdf.getPage($scope.pageNo).then( (page)->
-        # We need to ensure the PDF fits inside 600px
-        maxWidth = document.getElementById("panel").offsetWidth - 30
+        # We need to ensure the PDF fits inside the designated width of the panel
+        # (offsetWidth of panel is initially 0 onpageload... default to 600)
+        maxWidth = (document.getElementById("panel").offsetWidth || 600) - 30
         viewport = page.getViewport(1.0) # Scale of 1.0
         if viewport.width > maxWidth
           scale = maxWidth / viewport.width
@@ -207,13 +210,23 @@ angular.module('doubtfire.projects.partials.contexts', [])
         $scope.pageNo--
         renderPdf()
         
+    #
+    # Navigation
+    #
     $scope.shouldDisableLeftNav = () ->
       $scope.pageNo == 1
     $scope.shouldDisableRightNav = () ->
       $scope.pageNo == $scope.pdf.numPages
-    $scope.shouldHideNav = $scope.corruptPdf = () ->
-      $scope.pageNo == 0
-      
+    $scope.shouldHideNav = () ->
+      $scope.taskStillProcessing() || $scope.corruptPdf()
+    #
+    # Exceptional scenarios
+    #
+    $scope.corruptPdf = () ->
+      not pdfLoaded and $scope.pageNo == 0 and not $scope.taskStillProcessing()
+    $scope.taskStillProcessing = () ->
+      $scope.activeTask.processing_pdf
+    
     #
     # Loading the active task
     #
@@ -226,11 +239,11 @@ angular.module('doubtfire.projects.partials.contexts', [])
       TaskFeedback.getTaskUrl($scope.activeTask)
     
     #
-    # Initialiser
+    # Initialiser to load pdf
     #
     $scope.activeTask = $scope.submittedTasks[0]
     loadPdf($scope.activeTask)
-      
+    
     #
     # Status Data Getters
     #
