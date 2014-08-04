@@ -74,7 +74,7 @@ angular.module("doubtfire.projects", [
 
       if $stateParams.unitRole?
         UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
-          if unitRole.unit_id == $scope.unit.id
+          if unitRole.unit_id == project.unit_id
             $scope.assessingUnitRole = unitRole
       
       $scope.burndownData = project.burndown_chart_data
