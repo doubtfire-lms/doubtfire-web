@@ -25,7 +25,6 @@ angular.module('doubtfire.units.partials.modals', [])
             alertService.add("danger", "Error: " + response.data.error, 5000)
       )
     else
-
       Tutorial.update( { id: tutorial.id, tutorial: save_data } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
@@ -89,7 +88,22 @@ angular.module('doubtfire.units.partials.modals', [])
   
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
-    
+  
+  populate_task = (oldTask, newTask) ->
+    _.extend(oldTask, newTask)
+    if newTask.abbreviation
+      oldTask.abbr = newTask.abbreviation
+    else
+      oldTask.abbr = newTask.abbr
+    if newTask.weighting
+      oldTask.weight = newTask.weighting
+    else
+      oldTask.weight = newTask.weight
+    oldTask.name = newTask.name
+    oldTask.upload_requirements = newTask.upload_requirements
+    oldTask.target_date = newTask.target_date
+    oldTask.required = newTask.required
+
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
     task = $scope.task
@@ -97,6 +111,11 @@ angular.module('doubtfire.units.partials.modals', [])
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
+    # task.upload_requirements = $scope.task.upload_requirements
+    if task.target_date && task.target_date.getMonth
+      tgt = task.target_date
+      task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+    
     task.description = $scope.task.desc
     
     if $scope.isNew
@@ -115,8 +134,8 @@ angular.module('doubtfire.units.partials.modals', [])
       TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
-          $scope.unit.task_definitions.push(response)
           alertService.add("success", "#{response.name} Updated", 5000)
+          populate_task($scope.task, response)
       ),
       (
         (response) ->
