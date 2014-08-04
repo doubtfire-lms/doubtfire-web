@@ -71,13 +71,13 @@ angular.module('doubtfire.tasks.partials.modals', [])
             if onChange
               onChange()
           else
-            alertService.add("danger", "Status change was not changed.", 2000)
+            alertService.add("info", "Status change was not changed.", 4000)
         ),
         # Fail
         (value) ->
           $modalInstance.close(value.data.error)
           $scope.task.status = oldStatus
-          alertService.add("danger", value.data.error, 4000)
+          alertService.add("danger", value.data.error, 6000)
 
 
   $scope.readyToAssessStatuses = ['ready_to_mark', 'not_submitted']

@@ -642,7 +642,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'compile', [
     // 'less', 'copy:compile_assets', 'ngmin', 'concat', 'uglify', 'index:compile'
-    'less', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'index:compile'
+    'less', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'uglify', 'index:compile'
   ]);
 
   /**
