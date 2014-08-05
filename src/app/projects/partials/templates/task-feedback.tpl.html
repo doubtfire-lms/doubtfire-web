@@ -23,19 +23,19 @@
           </div>
       </div>
       <div class="panel-body">
-        <p class="lead text-center" ng-if="taskStillProcessing()">
+        <p class="lead text-center" ng-show="taskStillProcessing()">
           <br/>
           <i class="fa fa-clock-o fa-2x"></i>
           <br/>
           PDF is being processed. Come back soon.
         </p><!--/pdf-in-process-->
-        <p class="lead text-center text-danger" ng-if="corruptPdf()">
+        <p class="lead text-center text-danger" ng-show="corruptPdf()">
           <br/>
           <i class="fa fa-exclamation-triangle fa-2x"></i>
           <br/>
           PDF preview cannot be rendered.
         </p><!--/corrupt-pdf-->
-        <a href="{{activeTaskUrl()}}" ng-if="!corruptPdf() && !taskStillProcessing()">
+        <a href="{{activeTaskUrl()}}" ng-show="!corruptPdf() && !taskStillProcessing()">
           <canvas width="0" height="0" id="pdf"></canvas>
         </a><!--/pdf-->
       </div>
