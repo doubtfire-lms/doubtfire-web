@@ -9,6 +9,7 @@ module.exports = {
    */
   build_dir: 'build',
   compile_dir: 'bin',
+  api_dir: '../doubtfire-api',
 
   /**
    * This controls which files need preprocessing. This allows us to have
@@ -94,4 +95,12 @@ module.exports = {
     css: [
     ]
   },
+
+  vendor_copy_files: {
+    js: [
+      'vendor/pdfjs-bower/dist/compatibility.js',
+      'vendor/pdfjs-bower/dist/pdf.js',
+      'vendor/pdfjs-bower/dist/pdf.worker.js'
+    ]
+  }
 };

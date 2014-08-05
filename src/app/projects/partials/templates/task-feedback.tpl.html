@@ -1,4 +1,4 @@
-<div ng-init="foo()">
+<div ng-if="activeTask">
   <div class="pull-left list-group col-md-2">
     <a ng-repeat="task in submittedTasks" ng-class="{'active' : task == activeTask }" class="list-group-item text-center" ng-click="setActiveTask(task)">{{task.task_abbr}}</a>
   </div>

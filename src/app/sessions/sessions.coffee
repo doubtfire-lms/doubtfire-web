@@ -126,7 +126,7 @@ angular.module("doubtfire.sessions", [
         $state.go stateAfterSignIn
       , (response) ->
         $scope.session.password = ''
-        alertService.add("danger", "Login failed: " + response.error, 5000)
+        alertService.add("danger", "Login failed: " + response.error, 6000)
 
 ).controller "SignOutCtrl", ($state, $timeout, auth, api, currentUser) ->
   if auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"

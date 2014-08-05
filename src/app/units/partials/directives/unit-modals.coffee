@@ -17,26 +17,25 @@ angular.module('doubtfire.units.partials.modals', [])
         (response) ->
           $modalInstance.close(response)
           unit.tutorials.push(response)
-          alertService.add("success", "Tutorial Added", 5000)
+          alertService.add("success", "Tutorial Added", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
     else
-
       Tutorial.update( { id: tutorial.id, tutorial: save_data } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
           tutorial.tutor = response.tutor
           tutorial.tutor_name = response.tutor_name
-          alertService.add("success", "Tutorial Updated", 5000)
+          alertService.add("success", "Tutorial Updated", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 )
 .controller('UnitModalCtrl', ($scope, $modalInstance, Unit, convenors, unit) ->
@@ -89,7 +88,22 @@ angular.module('doubtfire.units.partials.modals', [])
   
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
-    
+  
+  populate_task = (oldTask, newTask) ->
+    _.extend(oldTask, newTask)
+    if newTask.abbreviation
+      oldTask.abbr = newTask.abbreviation
+    else
+      oldTask.abbr = newTask.abbr
+    if newTask.weighting
+      oldTask.weight = newTask.weighting
+    else
+      oldTask.weight = newTask.weight
+    oldTask.name = newTask.name
+    oldTask.upload_requirements = newTask.upload_requirements
+    oldTask.target_date = newTask.target_date
+    oldTask.required = newTask.required
+
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
     task = $scope.task
@@ -97,6 +111,11 @@ angular.module('doubtfire.units.partials.modals', [])
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
+    # task.upload_requirements = $scope.task.upload_requirements
+    if task.target_date && task.target_date.getMonth
+      tgt = task.target_date
+      task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+    
     task.description = $scope.task.desc
     
     if $scope.isNew
@@ -104,24 +123,24 @@ angular.module('doubtfire.units.partials.modals', [])
         (response) ->
           $modalInstance.close(response)
           $scope.unit.task_definitions.push(response)
-          alertService.add("success", "#{response.name} Added", 5000)
+          alertService.add("success", "#{response.name} Added", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
     else
       TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
         (response) ->
           $modalInstance.close(response)
-          $scope.unit.task_definitions.push(response)
-          alertService.add("success", "#{response.name} Updated", 5000)
+          populate_task($scope.task, response)
+          alertService.add("success", "#{response.name} Updated", 2000)
       ),
       (
         (response) ->
           if response.data.error?
-            alertService.add("danger", "Error: " + response.data.error, 5000)
+            alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 
 )

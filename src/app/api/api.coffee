@@ -87,11 +87,11 @@ angular.module("doubtfire.api", [
           alertService.add("success", "Added #{response.length} users.", 2000)
           fileUploader.scope.users = fileUploader.scope.users.concat(response)
         else
-          alertService.add("info", "No users need to be added.", 2000)
+          alertService.add("info", "No users need to be added.", 4000)
         fileUploader.clearQueue()
         
       fileUploader.onErrorItem = (item, response, status, headers) ->
-        alertService.add("danger", "File Upload Failed: " + response.error, 2000)
+        alertService.add("danger", "File Upload Failed: " + response.error, 6000)
         fileUploader.clearQueue()
     fileUploader
         
@@ -150,7 +150,7 @@ angular.module("doubtfire.api", [
       
     fileUploader.onUploadFailure = (response) ->
       fileUploader.scope.close(response.error)
-      alertService.add("danger", "File Upload Failed: #{response.error}", 2000)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 6000)
       fileUploader.clearQueue()
       
     fileUploader.uploadEnqueuedFiles = () ->
@@ -211,7 +211,7 @@ angular.module("doubtfire.api", [
       fileUploader.clearQueue()
       
     fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}", 2000)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 6000)
       fileUploader.clearQueue()
         
     fileUploader
@@ -245,11 +245,11 @@ angular.module("doubtfire.api", [
         alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
         fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
       else
-        alertService.add("info", "No students need to be enrolled.", 2000)
+        alertService.add("info", "No students need to be enrolled.", 4000)
       fileUploader.clearQueue()
       
     fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}", 5000)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 6000)
       fileUploader.clearQueue()
         
     fileUploader
@@ -282,7 +282,7 @@ angular.module("doubtfire.api", [
       fileUploader.clearQueue()
       
     fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}", 5000)
+      alertService.add("danger", "File Upload Failed: #{response.error}", 6000)
       fileUploader.clearQueue()
         
     fileUploader
