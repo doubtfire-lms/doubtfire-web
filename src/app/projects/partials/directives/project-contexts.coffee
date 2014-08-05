@@ -186,6 +186,8 @@ angular.module('doubtfire.projects.partials.contexts', [])
           viewport = page.getViewport(scale)
         
         canvas = document.getElementById("pdf")
+        if not canvas
+          return
         context = canvas.getContext("2d")
         canvas.height = viewport.height
         canvas.width = viewport.width
@@ -194,9 +196,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
         page.render(renderContext).then ( ()->
           pdfLoaded = true
         )
-      # FORCE update scope to recheck its functions inside HTML
-      # This is needed for nav of pdf pages to be force-checked
-      $scope.$apply()
       )
     #
     # PDF Interaction Funcs
