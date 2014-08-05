@@ -70,7 +70,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           task: -> task,
           student: -> $scope.student,
           project: -> $scope.project,
-          assessingUnitRole: -> $scope.assessingUnitRole
+          assessingUnitRole: -> $scope.assessingUnitRole,
           onChange: -> $scope.onChange
         }
 )

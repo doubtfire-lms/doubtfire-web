@@ -102,7 +102,7 @@ angular.module("doubtfire.api", [
 )
 .service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService) ->
 
-  this.fileUploader = (scope, task) ->
+  this.fileUploader = (scope, task, student, onChange) ->
     # per scope or task
     uploadUrl = "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
     fileUploader = new FileUploader {
@@ -113,6 +113,8 @@ angular.module("doubtfire.api", [
     }
     
     fileUploader.task = task
+    fileUploader.student = student
+    fileUploader.onChange = onChange
     
     extWhitelist = (name, exts) ->
       # no extension
@@ -147,6 +149,13 @@ angular.module("doubtfire.api", [
       alertService.add("success", "#{fileUploader.task.task_name} uploaded successfully!", 2000)
       fileUploader.scope.close()
       fileUploader.clearQueue()
+      task.status = response.status
+
+      if student? && student.task_stats?
+        update_task_stats(student.task_stats, response.new_stats)
+
+      if fileUploader.onChange?
+        fileUploader.onChange()
       
     fileUploader.onUploadFailure = (response) ->
       fileUploader.scope.close(response.error)

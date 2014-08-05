@@ -48,6 +48,8 @@ angular.module('doubtfire.tasks.partials.modals', [])
         templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
         resolve: {
           task: -> $scope.task,
+          student: -> student,
+          onChange: -> onChange
         }
       ).result.then(
         (val) -> ,
@@ -110,10 +112,10 @@ angular.module('doubtfire.tasks.partials.modals', [])
       { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
   }
 )
-.controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, task, alertService) ->
+.controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, Task, task, student, onChange, alertService) ->
   $scope.task = task
   $scope.uploadRequirements = task.task_upload_requirements
-  $scope.fileUploader = TaskSubmission.fileUploader($scope, task)
+  $scope.fileUploader = TaskSubmission.fileUploader($scope, task, student, onChange)
   $scope.submitUpload = () ->
     $scope.fileUploader.uploadEnqueuedFiles()
   $scope.clearUploads = () ->
