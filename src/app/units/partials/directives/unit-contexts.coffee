@@ -349,4 +349,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     
     $scope.requestMarkingExport = () ->
       TutorMarker.downloadFile($scope.unit)
+
+    $scope.isMac = () ->
+      navigator.platform == "MacIntel"
 )

@@ -8,8 +8,14 @@
         <br/>
         Drop CSV here
       </div>
-      <p class="help-block col-sm-7 col-sm-offset-3" ng-hide="markingFileUploader.isUploading">Compress the individual student folders and <code>marks.csv</code>, <strong>not</strong> a root folder containing these items.</p>
-	    <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+      
+      <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+      
+      <div class="help-block col-sm-7 col-sm-offset-3">
+        <p>Compress the individual student folders and <code>marks.csv</code>, <strong>not</strong> a root folder containing these items.</p>
+        <p ng-show="isMac()"><strong>Warning:</strong> due to quarantining in OS X's native ZIP compressor, you should use a third party ZIP compressor. Alternatively, compress using the command line: <pre>cd /folder/containing/marks.csv/; zip -r upload.zip .</pre></p>
+      </div>
+      
     </div>
     <div class="form-group">
       <input ng-hide="markingFileUploader.isUploading || markingFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
