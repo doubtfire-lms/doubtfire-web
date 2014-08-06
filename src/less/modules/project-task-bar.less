@@ -23,6 +23,20 @@
 .task-progress-bar
 {
 	width: 384px;
+
+	.progress-bar
+	{
+		&[aria-valuenow="1"],
+		&[aria-valuenow="2"] 
+		{
+			min-width: 0px;
+		}
+
+		&[aria-valuenow="0"] 
+		{
+			min-width: 0px;
+		}
+	}
 }
 
 .task-progress-accordion .panel-heading
