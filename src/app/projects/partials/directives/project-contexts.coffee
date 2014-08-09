@@ -223,10 +223,12 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # Exceptional scenarios
     #
     $scope.corruptPdf = () ->
-      not pdfLoaded and $scope.pageNo == 0 and not $scope.taskStillProcessing()
+      (not pdfLoaded) and $scope.pageNo == 0 and not $scope.taskStillProcessing()
     $scope.taskStillProcessing = () ->
       $scope.activeTask.processing_pdf
-    
+    $scope.readyToShowPDF = () ->
+      pdfLoaded && (! $scope.corruptPdf()) && (! $scope.taskStillProcessing() )
+
     #
     # Loading the active task
     #
