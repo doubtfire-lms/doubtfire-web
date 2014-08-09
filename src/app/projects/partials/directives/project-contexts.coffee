@@ -195,6 +195,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
         renderContext = { canvasContext: context, viewport: viewport }
         page.render(renderContext).then ( ()->
           pdfLoaded = true
+          $scope.$apply() #need to reapply scope so that pdf canvas is updated to show
         )
       )
     #
