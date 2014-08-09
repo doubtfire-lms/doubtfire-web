@@ -23,6 +23,12 @@
           </div>
       </div>
       <div class="panel-body">
+        <p class="lead text-center" ng-hide="taskStillProcessing() || corruptPdf() || readyToShowPDF()">
+          <br/>
+          <i class="fa fa-download fa-2x"></i>
+          <br/>
+          PDF is being processed. Come back soon.
+        </p><!--/pdf-in-process-->
         <p class="lead text-center" ng-show="taskStillProcessing()">
           <br/>
           <i class="fa fa-clock-o fa-2x"></i>
@@ -35,7 +41,7 @@
           <br/>
           PDF preview cannot be rendered.
         </p><!--/corrupt-pdf-->
-        <a href="{{activeTaskUrl()}}" ng-show="!corruptPdf() && !taskStillProcessing()">
+        <a href="{{activeTaskUrl()}}" ng-show="readyToShowPDF()">
           <canvas width="0" height="0" id="pdf"></canvas>
         </a><!--/pdf-->
       </div>
