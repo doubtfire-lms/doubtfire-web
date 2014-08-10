@@ -155,15 +155,20 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.pdf = { numPages: 0 }
     $scope.pageNo = 0
     
+    loadingPdf = true
     pdfLoaded = false
+
     loadPdf = (task) ->
+      loadingPdf = true
+      pdfLoaded = false
       return if task.processing_pdf
       $scope.pageNo = 0
       PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
         $scope.pdf = pdf
         $scope.pageNo = 1
+        pdfLoaded = true
+        loadingPdf = false
         renderPdf()
-        
       )
     # resize window? Re-render pdf...
     window.onresize = () ->
@@ -171,9 +176,10 @@ angular.module('doubtfire.projects.partials.contexts', [])
         renderPdf()
         
     renderPdf = () ->
-      pdfLoaded = false
       # Cancel if no pages to render...
       if $scope.pdf.numPages == 0
+        pdfLoaded = false
+        loadingPdf = false
         $scope.pageNo = 0
         return
       $scope.pdf.getPage($scope.pageNo).then( (page)->
@@ -223,11 +229,11 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # Exceptional scenarios
     #
     $scope.corruptPdf = () ->
-      (not pdfLoaded) and $scope.pageNo == 0 and not $scope.taskStillProcessing()
+      (not loadingPdf) and $scope.pageNo == 0 and not $scope.taskStillProcessing()
     $scope.taskStillProcessing = () ->
       $scope.activeTask.processing_pdf
     $scope.readyToShowPDF = () ->
-      pdfLoaded && (! $scope.corruptPdf()) && (! $scope.taskStillProcessing() )
+      pdfLoaded and (not $scope.taskStillProcessing() )
 
     #
     # Loading the active task
