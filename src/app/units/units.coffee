@@ -128,7 +128,7 @@ angular.module("doubtfire.units", [
     $scope.tutorialFromId = (tuteId) ->
       _.where($scope.unit.tutorials, { id: tuteId })
         
-    Students.query { unit_id: $scope.unit.id }, (students) ->
+    Students.query { unit_id: $scope.unit.id, all: true }, (students) ->
       $scope.unit.students = students.map (student) ->
         tute = $scope.tutorialFromId( student.tute )
         if tute[0]

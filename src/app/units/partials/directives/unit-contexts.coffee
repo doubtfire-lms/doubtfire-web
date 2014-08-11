@@ -321,7 +321,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, StudentEnrolmentCSV) ->
+  controller: ($scope, StudentEnrolmentCSV, Project, alertService) ->
     # TODO: limit scope for duplicate method names (i.e., $scope.requestExport
     # in this scope vs. $scope.requestExport in Task Admin Unit Context)
     $scope.seFileUploader = StudentEnrolmentCSV.fileUploader $scope
@@ -331,6 +331,19 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     
     $scope.requestSEExport = () ->
       StudentEnrolmentCSV.downloadFile($scope.unit)
+
+    change_enrolment = (student, value) ->
+      Project.update { id: student.project_id, enrolled: value }, (project) ->
+        if value == project.enrolled
+          alertService.add("success", "Enrolment changed.", 2000)
+        else
+          alertService.add("danger", "Enrolment change failed.", 5000)
+        student.enrolled = project.enrolled
+
+    $scope.withdraw = (student) ->
+      change_enrolment(student, false)
+    $scope.enrol = (student) ->
+      change_enrolment(student, true)
       
     # Pagination details
     $scope.currentPage = 1
