@@ -14,6 +14,13 @@ statusKeys = [
   'complete'
 ]
 
+progressKeys = [
+  'on_time',
+  'one_week_late',
+  'two_weeks_late',
+  'not_started'
+]
+
 statusLabels = {
   'ready_to_mark':      'Ready to Mark',
   'not_submitted':      'Not Started',

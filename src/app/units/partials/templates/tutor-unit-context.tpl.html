@@ -12,6 +12,7 @@
 		    		<th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
 		    		<th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
 		    		<th>Stats</th>
+		    		<th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
 		    		<th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
 		    		<th>Actions</th>
 		    	</tr>
@@ -21,7 +22,7 @@
 			    	<td class="task-progress" ng-click="student.open = !student.open"><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
             		<td ng-click="student.open = !student.open">{{student.name}}</td>
 			    	<td ng-click="student.open = !student.open" class="task-progress-bar">
-			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
+ 			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
 	    					<accordion-group is-open="student.open">
 	    						<accordion-heading>
 	    							<progress class="task-progress" animate="false">
@@ -35,6 +36,12 @@
 	      						</div>
 	    					</accordion-group>
 						</accordion>
+ 					</td>
+					<td ng-click="student.open = !student.open">
+ 						<progress class="progress-progress-bar" animate="false">
+							<bar ng-repeat="bar in student.progress_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
+							</bar>
+						</progress>
 					</td>
 			    	<td ng-click="student.open = !student.open"> <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor.name}}"> {{student.tutorial.abbreviation}} </span></td>
 			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)">Discussed</button></td>

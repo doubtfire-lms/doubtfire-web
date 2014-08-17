@@ -1,7 +1,15 @@
-
-update_task_stats = (stats_array, new_stats_str) ->
+#
+# TODO: Move to service
+#
+update_task_stats = (student, new_stats_str) ->
   for i, value of new_stats_str.split("|")
-    stats_array[i].value = 100 * value
+    if i < student.task_stats.length
+      student.task_stats[i].value = 100 * value
+    else
+      student.progress_stats[i - student.task_stats.length].value = 100 * value
+  student.progress_sort = 0
+  for i, stat of student.progress_stats
+    student.progress_sort = (student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
 
 angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
@@ -144,14 +152,20 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           { value: 0, type: _.trim(_.dasherize(statusKeys[5]))},
           { value: 0, type: _.trim(_.dasherize(statusKeys[6]))},
           { value: 0, type: _.trim(_.dasherize(statusKeys[7]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[8]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[9]))}
+          { value: 0, type: _.trim(_.dasherize(statusKeys[8]))}
         ]
-        update_task_stats(student.task_stats, student.stats)
+        student.progress_stats = [
+          # Progress stats
+          { value: 0, type: _.trim(_.dasherize(progressKeys[0]))},
+          { value: 0, type: _.trim(_.dasherize(progressKeys[1]))},
+          { value: 0, type: _.trim(_.dasherize(progressKeys[2]))},
+          { value: 0, type: _.trim(_.dasherize(progressKeys[3]))},
+        ]
+        update_task_stats(student, student.stats)
         student
 
     update_project_details = (student, project) ->
-      update_task_stats(student.task_stats, project.stats)
+      update_task_stats(student, project.stats)
       if student.project
         _.each student.project.tasks, (task) =>
           task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status

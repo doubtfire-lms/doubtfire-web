@@ -24,6 +24,11 @@
 {
 	width: 384px;
 
+	.panel-group
+	{
+		margin-bottom: 0px;
+	}
+
 	.progress-bar
 	{
 		&[aria-valuenow="1"],
@@ -39,12 +44,15 @@
 	}
 }
 
-.task-progress-accordion .panel-heading
+.task-progress-accordion, .progress-progress-bar
 {
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
+	.panel-heading
+	{
+		padding-top: 5px;
+		padding-bottom: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
 }
 
 .progress-bar-ready-to-mark     { background-color: #0079D8; color: white; }
@@ -60,3 +68,19 @@
     background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
     color: white; 
   } 
+
+
+.progress-progress-bar {
+	height: 30px;
+	margin-bottom: 0px;
+}
+
+.progress-bar-not-started     	{ background-color: #CCCCCC; color: white; }	
+.progress-bar-one-week-late     { background-color: #CCCCCC; color: white; }
+.progress-bar-two-weeks-late   { background-color: #CCCCCC; color: white; }
+.progress-bar-on-time  { 
+    background-color: #5BB75B; 
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
+    color: white; 
+  } 
+

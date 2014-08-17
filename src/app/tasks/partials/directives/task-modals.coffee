@@ -66,7 +66,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
           $modalInstance.close(status)
   
           if student? && student.task_stats?
-            update_task_stats(student.task_stats, value.new_stats)
+            update_task_stats(student, value.new_stats)
           
           if value.status == status
             alertService.add("success", "Status saved.", 2000)
