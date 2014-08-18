@@ -369,6 +369,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
   controller: ($scope, TutorMarker) ->
+    $scope.dropper = true
+    
     $scope.markingFileUploader =
       TutorMarker.fileUploader($scope)
 

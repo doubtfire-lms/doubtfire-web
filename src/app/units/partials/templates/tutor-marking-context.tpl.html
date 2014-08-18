@@ -1,14 +1,18 @@
 <div>
   <form class="form-horizontal" ng-submit="submitMarkingUpload()">
     <div class="form-group">
-      <label class="col-sm-3 control-label">Marked Work</label>
-      <input ng-hide="markingFileUploader.isHTML5" type="file" class="col-sm-7" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
-      <div nv-file-drop ng-show="markingFileUploader.isHTML5 && markingFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over uploader="markingFileUploader">
-        <p class="fa fa-file-archive-o fa-3x"></p>
-        <br/>
-        Drop CSV here
+      <label class="col-sm-3 control-label" ng-click="dropper = !dropper">Marked Work</label>
+
+      <div ng-show="markingFileUploader.queue.length == 0" class="col-sm-offset-3">
+        <input ng-show="markingFileUploader.queue.length == 0 && ( !markingFileUploader.isHTML5 || !dropper )" type="file" class="col-sm-10" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
+        <div nv-file-drop ng-show="markingFileUploader.isHTML5 && dropper && markingFileUploader.queue.length == 0" class="drop well col-sm-10" nv-file-over uploader="markingFileUploader">
+          <p class="fa fa-file-archive-o fa-3x"></p>
+          <br/>
+          Drop CSV here
+        </div>
+        <button class="col-sm-3 btn btn-default btn-xs" ng-click="dropper = !dropper">Toggle Drop Zone</button>
       </div>
-      
+
       <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
       
       <div class="help-block col-sm-7 col-sm-offset-3">
