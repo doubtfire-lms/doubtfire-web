@@ -208,10 +208,12 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # PDF Interaction Funcs
     #
     $scope.nextPage = () ->
+      return if $scope.shouldDisableRightNav()
       if $scope.pageNo < $scope.pdf.numPages and pdfLoaded
         $scope.pageNo++
         renderPdf()
     $scope.prevPage = () ->
+      return if $scope.shouldDisableLeftNav()
       if $scope.pageNo > 0 and pdfLoaded
         $scope.pageNo--
         renderPdf()
@@ -225,6 +227,20 @@ angular.module('doubtfire.projects.partials.contexts', [])
       $scope.pageNo == $scope.pdf.numPages
     $scope.shouldHideNav = () ->
       $scope.taskStillProcessing() || $scope.corruptPdf()
+    # Keyboard nav
+    document.onkeydown = (e) ->
+      e = e || window.event
+      switch (e.which || e.keyCode)
+        # Left arrow
+        when 37
+          e.preventDefault()
+          $scope.prevPage()
+        # Right arrow
+        when 39
+          e.preventDefault()
+          $scope.nextPage()
+      
+    
     #
     # Exceptional scenarios
     #
