@@ -25,7 +25,12 @@
     </div>
   </form><!--/batch-io-->
 
-  <h4>All Enrolled Students</h4>
+  <h4>Enrolled Students</h4>
+  <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
+      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+      <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+      <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length == 0">No students found.</p>
+  </form>
   <table class="table table-condensed table-hover">
     <thead>
       <tr> 
@@ -38,7 +43,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="student in unit.students | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+      <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
         <td>{{student.username}}</td>
         <td>{{student.first_name}}</td>
         <td>{{student.last_name}}</td>

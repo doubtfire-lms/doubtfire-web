@@ -63,6 +63,7 @@ angular.module("doubtfire", [
   "doubtfire.errors"
   "doubtfire.sessions"
   "doubtfire.header"
+  "doubtfire.unit-service"
 
   "doubtfire.home"
   "doubtfire.units"

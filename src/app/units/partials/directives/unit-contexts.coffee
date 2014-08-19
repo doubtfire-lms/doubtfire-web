@@ -102,12 +102,13 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, $rootScope, $modal, Project, Students, $filter, alertService) ->
+  controller: ($scope, $rootScope, $modal, Project, Students, $filter, alertService, unitService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
     $scope.accordionReady = false
 
+    $scope.unitService = unitService
     $scope.search = ""
 
     $scope.getCSVHeader = () ->
@@ -309,7 +310,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
-  controller: ($scope, $state, $rootScope, Unit, alertService) ->
+  controller: ($scope, $state, $rootScope, Unit, alertService, unitService) ->
     $scope.format = 'yyyy-MM-dd'
     $scope.initDate = new Date('2016-04-20')
     $scope.startOpened = $scope.endOpened = $scope.opened = false
@@ -317,6 +318,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       formatYear: 'yy',
       startingDay: 1
     }
+    $scope.unitTypeAheadData = unitService.unitTypeAheadData
+    $scope.studentSearch = ""
 
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
