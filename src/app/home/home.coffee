@@ -17,8 +17,29 @@ angular.module("doubtfire.home", [])
 )
 
 .controller("HomeCtrl", ($scope, $state, $modal, User, UnitRole, Project, headerService, currentUser) ->
-  $scope.unitRoles = UnitRole.query()
-  $scope.projects = Project.query()
+  hasRoles = false
+  hasProjects = false
+
+  testSingleProjectRole = () ->
+    if not (hasRoles && hasProjects)
+      return
+    if $scope.unitRoles.length + $scope.projects.length == 1
+      if $scope.projects.length == 1
+        $state.go 'projects#show', {projectId: $scope.projects[0].project_id}
+      else if $scope.unitRoles.length == 1
+        $state.go 'units#show', {unitRole: $scope.unitRoles[0].id}
+
+  UnitRole.query (roles) ->
+    $scope.unitRoles = roles
+    hasRoles = true
+    testSingleProjectRole()
+
+
+  Project.query (projects) ->
+    $scope.projects = projects
+    hasProjects = true
+    testSingleProjectRole()
+
   headerService.clearMenus()
 
   if currentUser.profile.name.toLowerCase() == "first name surname"
@@ -30,7 +51,6 @@ angular.module("doubtfire.home", [])
         user: ->  currentUser.profile
         isNew: -> false
         users: -> false
-
   #
   # Filter functions to separate units in repeater
   #

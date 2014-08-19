@@ -5,7 +5,7 @@
 	  </div>
 	  <div class="panel-body">
 		<div ng-repeat="unitRole in convenorRoles = unitRoles">
-			<a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
+			<a ui-sref="units#show({unitRole: unitRole.id})">{{unitRole.unit_name}}</a>
 		</div>
 	  </div>
 	</div>
@@ -16,7 +16,7 @@
 	  </div>
 	  <div class="panel-body">
   		<div ng-repeat="project in projects">
-  			<a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
+  			<a ui-sref='projects#show({projectId: project.project_id})'>{{project.unit_name}}</a>
   		</div>
 	  </div>
 	</div>
