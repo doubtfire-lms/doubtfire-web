@@ -57,6 +57,7 @@ angular.module("doubtfire", [
   # "mgcrea.ngStrap"
   "nvd3ChartDirectives"
   "angularFileUpload"
+  "ngCsv"
 
   "doubtfire.api"
   "doubtfire.errors"

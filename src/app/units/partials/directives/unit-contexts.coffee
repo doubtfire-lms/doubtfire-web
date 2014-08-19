@@ -4,12 +4,12 @@
 update_task_stats = (student, new_stats_str) ->
   for i, value of new_stats_str.split("|")
     if i < student.task_stats.length
-      student.task_stats[i].value = 100 * value
+      student.task_stats[i].value = Math.round(100 * value)
     else
       student.progress_stats[i - student.task_stats.length].value = 100 * value
   student.progress_sort = 0
   for i, stat of student.progress_stats
-    student.progress_sort = (student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
+    student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
 
 angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
@@ -102,17 +102,47 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, $rootScope, $modal, Project, Students, filterFilter, alertService) ->
+  controller: ($scope, $rootScope, $modal, Project, Students, $filter, alertService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
     $scope.accordionReady = false
+
+    $scope.search = ""
+
+    $scope.getCSVHeader = () ->
+      result = ['student_code', 'name', 'email']
+      angular.forEach(progressKeys, (key) ->
+        result.push(key)
+      )
+      angular.forEach(statusKeys, (key) ->
+        result.push(key)
+      )
+      result
+
+    $scope.getCSVData = () ->
+      filteredStudents = $filter('filter')($scope.students, $scope.search)
+      result = []
+      angular.forEach(filteredStudents, (student) ->
+        row = {}
+        row['student_code'] = student.student_id
+        row['name'] = student.name
+        row['email'] = student.student_email
+        angular.forEach(student.progress_stats, (stat) ->
+          row[stat.type] = stat.value
+        )
+        angular.forEach(student.task_stats, (stat) ->
+          row[stat.type] = stat.value
+        )
+        result.push row
+      )
+      result
+
     # The following is called when the unit is loaded
     prepAccordion = () ->
       # 5 tasks per row, each 32 pixels in size
       $scope.accordionHeight = $scope.taskCount() / 5 * 32
       $scope.accordionReady = true
-
     
     if ! $scope.unitLoaded
       unwatchFn = $scope.$watch( ( () -> $scope.unitLoaded ), (value) ->

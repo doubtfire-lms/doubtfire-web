@@ -1,10 +1,9 @@
 <div>   
   <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
-      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search.$" typeahead="student.name for student in students | filter:$viewValue | limitTo:8" autofocus />
+      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="student.name for student in students | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
       <p class="help-block" ng-show="filteredStudents.length < students.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{students.length}} students enrolled.</p>
       <p class="help-block" ng-show="filteredStudents.length < students.length && filteredStudents.length == 0">No students found.</p>
   </form>
-    
 	<div class="table-responsive">
 	    <table class="table table-condensed table-hover">
 	    	<thead>
@@ -48,7 +47,10 @@
 			    </tr>
 		    </tbody>
 		</table>
-		<a href class="btn btn-success pull-right" ng-click="showEnrolModal()">Enrol Student</a>
+		<div class="pull-right">
+			<button type="button" class="btn btn-success" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv">Export</button>
+			<button type="button" class="btn btn-success" ng-click="showEnrolModal()">Enrol Student</button>
+		</div>
 		<pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
 	</div>
 </div>
