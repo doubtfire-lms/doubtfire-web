@@ -6,7 +6,7 @@ update_task_stats = (student, new_stats_str) ->
     if i < student.task_stats.length
       student.task_stats[i].value = Math.round(100 * value)
     else
-      student.progress_stats[i - student.task_stats.length].value = 100 * value
+      student.progress_stats[i - student.task_stats.length].value = Math.round(100 * value)
   student.progress_sort = 0
   for i, stat of student.progress_stats
     student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
