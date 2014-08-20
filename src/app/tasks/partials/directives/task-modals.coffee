@@ -4,38 +4,12 @@ angular.module('doubtfire.tasks.partials.modals', [])
 # task = the task to update
 # student = passed through from tutor view to allow update of task stats
 #
-.controller('AssessTaskModalCtrl', ($scope, $modalInstance, $modal, task, student, project, onChange, assessingUnitRole, Task, alertService) ->
-  # statusLabels global
-  # statusLabels = {
-  #   'ready_to_mark':      'Ready to Mark',
-  #   'not_submitted':      'Not Started',
-  #   'working_on_it':      'Working On It',
-  #   'need_help':          'Need Help',
-  #   'redo':               'Redo',
-  #   'fix_and_include':    'Fix and Include',
-  #   'fix_and_resubmit':   'Resubmit',
-  #   'discuss':            'Discuss',
-  #   'complete':           'Complete'
-  # }
-
-  # statusIcons = {
-  #   'ready_to_mark':      'fa fa-thumbs-o-up',
-  #   'not_submitted':      'fa fa-times',
-  #   'working_on_it':      'fa fa-bolt',
-  #   'need_help':          'fa fa-question-circle',
-  #   'redo':               'fa fa-refresh',
-  #   'fix_and_include':    'fa fa-stop',
-  #   'fix_and_resubmit':   'fa fa-wrench',
-  #   'discuss':            'fa fa-comment',
-  #   'complete':           'fa fa-check-circle-o'
-  # }
-
+.controller('AssessTaskModalCtrl', ($scope, $modalInstance, $modal, task, student, project, onChange, assessingUnitRole, Task, alertService, projectService, taskService) ->
   $scope.task = task
-  # $scope.task.status = 'not_ready_to_mark'
 
   $scope.$watch 'task.status', ->
     $scope.taskClass = _.trim(_.dasherize($scope.task.status), '-')
-    $scope.taskStatusLabel = statusLabels[$scope.task.status]
+    $scope.taskStatusLabel = taskService.statusLabels[$scope.task.status]
 
   $scope.triggerTransition = (status) ->
     oldStatus = $scope.task.status
@@ -66,7 +40,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
           $modalInstance.close(status)
   
           if student? && student.task_stats?
-            update_task_stats(student, value.new_stats)
+            projectService.updateTaskStats(student, value.new_stats)
           
           if value.status == status
             alertService.add("success", "Status saved.", 2000)
@@ -101,15 +75,15 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.taskEngagementConfig = {
     readyToAssess: $scope.readyToAssessStatuses.map (status) ->
-      { status: status, label: statusLabels[status], iconClass: statusIcons[status] }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status] }
     engagement: $scope.engagementStatuses.map (status) ->
-      { status: status, label: statusLabels[status], iconClass: statusIcons[status] }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status] }
     all: $scope.orderedStatuses.map (status) ->
-      { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
     tutorTriggers: $scope.tutorStatuses.map (status) ->
-      { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
     complete: $scope.completeStatuses.map (status) ->
-      { status: status, label: statusLabels[status], iconClass: statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
   }
 )
 .controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, Task, task, student, onChange, alertService) ->

@@ -148,7 +148,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal, TaskFeedback) ->
+  controller: ($scope, $modal, TaskFeedback, taskService) ->
     #
     # PDF Local Funcs
     #
@@ -270,13 +270,11 @@ angular.module('doubtfire.projects.partials.contexts', [])
       loadPdf($scope.activeTask)
 
     #
-    # Status Data Getters
+    # Functions from taskService to get data
     #
-    $scope.statusData = (task) ->
-      { icon: statusIcons[task.status], label: statusLabels[task.status] }
+    $scope.statusData = taskService.statusData
+    $scope.statusClass = taskService.statusClass
+
     $scope.activeStatusData = ->
       $scope.statusData($scope.activeTask)
-    # This function gets the status CSS class for the indicated status
-    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
-    
 )

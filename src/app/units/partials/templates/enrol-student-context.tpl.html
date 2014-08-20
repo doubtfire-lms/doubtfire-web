@@ -26,7 +26,7 @@
   </form><!--/batch-io-->
 
   <h4>Enrolled Students</h4>
-  <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
+  <form role="search" class="pull-right form-horizontal" style="margin:-50px 0 0px 0;">
       <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
       <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
       <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length == 0">No students found.</p>
@@ -44,11 +44,11 @@
     </thead>
     <tbody>
       <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-        <td>{{student.username}}</td>
+        <td>{{student.student_id}}</td>
         <td>{{student.first_name}}</td>
         <td>{{student.last_name}}</td>
-        <td><a href="mailto:{{student.email}}">{{student.email}}</a></td>
-        <td>{{student.tutorial}}</td>
+        <td><a href="mailto:{{student.email}}">{{student.student_email}}</a></td>
+        <td>{{student.tutorial.abbreviation}}</td>
         <td>
           <span ng-show="student.enrolled" class="glyphicon glyphicon-ok text-success" ng-click="withdraw(student)"></span>
           <span ng-hide="student.enrolled" class="glyphicon glyphicon-remove text-danger" ng-click="enrol(student)"></span>

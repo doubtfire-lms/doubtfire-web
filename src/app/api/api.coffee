@@ -152,7 +152,7 @@ angular.module("doubtfire.api", [
       task.status = response.status
 
       if student? && student.task_stats?
-        update_task_stats(student, response.new_stats)
+        updateTaskStats(student, response.new_stats)
 
       if fileUploader.onChange?
         fileUploader.onChange()

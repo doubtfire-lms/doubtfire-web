@@ -1,4 +1,3 @@
-
 angular.module("doubtfire.units", [
   'doubtfire.units.partials'
 ]
@@ -8,7 +7,7 @@ angular.module("doubtfire.units", [
     url: "/units?unitRole"
     views:
       main:
-        controller: "UnitsShowCtrl"
+        controller: "TutorUnitViewRootCtrl"
         templateUrl: "units/show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
@@ -45,51 +44,32 @@ angular.module("doubtfire.units", [
       roleWhitelist: ['Admin', 'Convenor']
    )
 )
-.controller("UnitsShowCtrl", ($scope, $state, $stateParams, Unit, UnitRole, headerService, alertService) ->
+
+#
+# The Tutor Unit View Controller is the root controller for the tutor
+# unit contexts.
+#
+.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, alertService, unitService) ->
   $scope.unitLoaded = false
 
-  #
-  # Unit Role header menu
-  #
+  # Fetch the user's Unit Role
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
-    # The user selects the unit role to view - allows multiple roles per unit
     $scope.unitRole = unitRole # the selected unit role
-    headerService.clearMenus()
     
-    # Set menu header for links
     if unitRole
-      # Only add 'Roles' menu if there are > 1 roles for the unit
-      if unitRole.other_roles.length > 0
-        rolesMenu = { name: "#{unitRole.role} View", links: [ ], icon: 'globe' }
-        rolesMenu.links.push { class: "active", url: "#/units?unitRole=" + unitRole.id, name: unitRole.role }
-        
-        for other_role in unitRole.other_roles
-          rolesMenu.links.push { class: "", url: "#/units?unitRole=" + other_role.id, name: other_role.role }
-        
-        # Push the roles menu to the header (remove old roles)
-        headerService.setMenus( [rolesMenu] )
-
-    if unitRole
-      Unit.get { id: unitRole.unit_id }, (unit) ->
+      unitService.getUnit unitRole.unit_id, true, false, (unit)->
         $scope.unit = unit # the unit related to the role
+
         $scope.unitLoaded = true
   # end get unit role
-    
-  #
-  # Allow the caller to fetch a task definition from the unit based on its id
-  #
-  $scope.taskDef = (taskDefId) ->
-    _.where $scope.unit.task_definitions, {id: taskDefId}
+  
+  # Unit Service allows access to typeahead data
+  $scope.unitService = unitService
 
-  #
-  # Allow the caller to fetch a tutorial from the unit based on its id
-  #
-  $scope.tutorialFromId = (tuteId) ->
-    _.where $scope.unit.tutorials, { id: tuteId }
-
-  $scope.taskCount = () ->
-    $scope.unit.task_definitions.length
-
+  $scope.closeAllStudents = () ->
+    angular.forEach($scope.unit.students, (student) ->
+      student.open = false
+    )
 
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit) ->
@@ -108,7 +88,7 @@ angular.module("doubtfire.units", [
       }
 )
 
-.controller('EditUnitCtrl', ($scope, $state, $stateParams, Unit, UnitRole,  headerService, alertService, Convenor, Tutor, Students) ->
+.controller('EditUnitCtrl', ($scope, $state, $stateParams, unitService, headerService, alertService, Convenor, Tutor) ->
   Convenor.query().$promise.then( (convenors) ->
     Tutor.query().$promise.then( (tutors) ->
       staff = _.union(convenors,tutors)
@@ -122,24 +102,9 @@ angular.module("doubtfire.units", [
     )
   )
 
-  Unit.get  { id: $state.params.unitId }, (unit) ->
+  unitService.getUnit $state.params.unitId, true, true, (unit) ->
     $scope.unit = unit
     $scope.currentStaff = $scope.unit.staff
-    $scope.tutorialFromId = (tuteId) ->
-      _.where($scope.unit.tutorials, { id: tuteId })
-        
-    Students.query { unit_id: $scope.unit.id, all: true }, (students) ->
-      $scope.unit.students = students.map (student) ->
-        tute = $scope.tutorialFromId( student.tute )
-        if tute[0]
-          student.tutorial = tute[0].abbreviation
-        else
-          student.tutorial = ""
-        student.first_name = student.name.split(' ')[0]
-        student.last_name = student.name.split(' ').pop()
-        student.email = student.student_email
-        student.username = student.student_id
-        student
 )
 
 .controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit) ->

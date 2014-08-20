@@ -106,7 +106,9 @@ angular.module('doubtfire.units.partials.modals', [])
 
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
-    task = $scope.task
+    task = {}
+    _.extend(task, $scope.task)
+
     task.abbreviation = $scope.task.abbr
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id

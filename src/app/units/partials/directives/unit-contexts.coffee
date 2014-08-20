@@ -1,128 +1,41 @@
-#
-# TODO: Move to service
-#
-update_task_stats = (student, new_stats_str) ->
-  for i, value of new_stats_str.split("|")
-    if i < student.task_stats.length
-      student.task_stats[i].value = Math.round(100 * value)
-    else
-      student.progress_stats[i - student.task_stats.length].value = Math.round(100 * value)
-  student.progress_sort = 0
-  for i, stat of student.progress_stats
-    student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
-
 angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
-.filter('startFrom', ->
-  (input, start) ->
-    start = +start # parse to int
-    if input
-      input.slice(start)
-    else
-      input
-)
 #
-# Student Unit Tasks
-# - display the tasks associated with a student in a unit
-# - shows in a box grid that can be used to update task status
+# The Tutor Student List view shows a list of students, with
+# their tasks and progress.
 #
-.directive('studentUnitTasks', ->
-  replace: false
+.directive('tutorStudentList', ->
+  replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/student-unit-tasks.tpl.html'
+  templateUrl: 'units/partials/templates/tutor-student-list.tpl.html'
   scope:
-    student: "=student"
-    project: "=project"
-    onChange: "=onChange"
-    studentProjectId: "=studentProjectId"
-    taskDef: "=taskDef"
+    unitRole: "=unitRole"
     unit: "=unit"
-    assessingUnitRole: "=assessingUnitRole"
+    studentFilter: "=studentFilter"
+    unitLoaded: "=unitLoaded"
 
-  controller: ($scope, $modal, Project) ->
-    # This function gets the status CSS class for the indicated status
-    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
-    
-    # This function gets the status text for the indicated status
-    $scope.statusText = (status) -> statusLabels[status]
-
-    # Prepare the scope with the passed in project - either from resource or from passed in scope
-    showProject = () ->
-      # Extend the tasks with the task definitions
-      # - add in task abbreviation, description, name, and status
-      $scope.tasks    = $scope.project.tasks.map (task) ->
-        td = $scope.taskDef(task.task_definition_id)[0]
-        task.task_abbr = td.abbr
-        task.task_desc = td.desc
-        task.task_name = td.name
-        task.due_date = td.target_date
-        task.task_upload_requirements = td.upload_requirements
-        task.status_txt = statusLabels[task.status]
-        task
-
-    updateChart = false
-    # Get the Project associated with the student's project id
-    if $scope.project
-      showProject()
-      updateChart = true
-    else
-      Project.get { id: $scope.studentProjectId }, (project) ->
-        $scope.project  = project
-        showProject()
-
-    # Show the status update dialog for the indicated task
-    $scope.showAssessTaskModal = (task) ->
-      $modal.open
-        controller: 'AssessTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
-        resolve: {
-          task: -> task,
-          student: -> $scope.student,
-          project: -> $scope.project,
-          assessingUnitRole: -> $scope.assessingUnitRole,
-          onChange: -> $scope.onChange
-        }
-)
-
-.directive('studentUnitContext', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/student-unit-context.tpl.html'
-  controller: ($scope, $rootScope, UnitRole) ->
-    #CHECK: rootScope use here?
-    if $rootScope.assessingUnitRole? && $rootScope.assessingUnitRole.unit_id == $scope.unitRole.unit_id
-      $scope.assessingUnitRole = $rootScope.assessingUnitRole
-      $scope.showBack = true
-    else
-      $scope.assessingUnitRole = $scope.unitRole
-      $scope.showBack = false
-)
-
-.directive('tutorUnitContext', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-unit-context.tpl.html'
-  controller: ($scope, $rootScope, $modal, Project, Students, $filter, alertService, unitService) ->
+  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
     $scope.accordionReady = false
 
-    $scope.unitService = unitService
+    $scope.tutorName = currentUser.name
+
     $scope.search = ""
 
     $scope.getCSVHeader = () ->
       result = ['student_code', 'name', 'email']
-      angular.forEach(progressKeys, (key) ->
+      angular.forEach(projectService.progressKeys, (key) ->
         result.push(key)
       )
-      angular.forEach(statusKeys, (key) ->
+      angular.forEach(taskService.statusKeys, (key) ->
         result.push(key)
       )
       result
 
     $scope.getCSVData = () ->
-      filteredStudents = $filter('filter')($scope.students, $scope.search)
+      filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.studentFilter, $scope.tutorName), $scope.search)
       result = []
       angular.forEach(filteredStudents, (student) ->
         row = {}
@@ -142,7 +55,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     # The following is called when the unit is loaded
     prepAccordion = () ->
       # 5 tasks per row, each 32 pixels in size
-      $scope.accordionHeight = $scope.taskCount() / 5 * 32
+      $scope.accordionHeight = $scope.unit.taskCount() / 5 * 32
       $scope.accordionReady = true
     
     if ! $scope.unitLoaded
@@ -157,46 +70,16 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       prepAccordion()
   
     $scope.reverse = false
-    $scope.statusClass = (status) -> _.trim(_.dasherize(status))
+    $scope.statusClass = taskService.statusClass
     $scope.barLargerZero = (bar) -> bar.value > 0
 
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
     $scope.pageSize = 15
-    # $scope.pageChanged = () ->
-    #   console.log('Page changed to: ' + $scope.currentPage)
-    # $scope.setPage = (pageNo) ->
-    #   $scope.currentPage = pageNo
-
-    Students.query { unit_id: $scope.unitRole.unit_id }, (students) ->
-      # extend the students with their tutorial data
-      $scope.students = students.map (student) ->
-        student.open = false
-        student.tutorial = $scope.tutorialFromId( student.tute )[0]
-        student.task_stats = [
-          { value: 0, type: _.trim(_.dasherize(statusKeys[0]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[1]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[2]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[3]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[4]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[5]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[6]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[7]))},
-          { value: 0, type: _.trim(_.dasherize(statusKeys[8]))}
-        ]
-        student.progress_stats = [
-          # Progress stats
-          { value: 0, type: _.trim(_.dasherize(progressKeys[0]))},
-          { value: 0, type: _.trim(_.dasherize(progressKeys[1]))},
-          { value: 0, type: _.trim(_.dasherize(progressKeys[2]))},
-          { value: 0, type: _.trim(_.dasherize(progressKeys[3]))},
-        ]
-        update_task_stats(student, student.stats)
-        student
 
     update_project_details = (student, project) ->
-      update_task_stats(student, project.stats)
+      projectService.updateTaskStats(student, project.stats)
       if student.project
         _.each student.project.tasks, (task) =>
           task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
@@ -208,21 +91,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           update_project_details(student, project)
       )
 
-    #CHECK: rootScope use here?
     # The assessingUnitRole is accessed in student views loaded from this view
     $scope.assessingUnitRole = $scope.unitRole
-
-    # Project.query { unit_role_id: $scope.unitRole.id }, (projects) ->
-    #   $scope.projects  = projects.map (project) ->
-    #     # extend the tasks with the task definitions
-    #     project.tasks    = project.tasks.map (task) ->
-    #       td = $scope.taskDef(task.task_definition_id)[0]
-    #       task.task_abbr = td.abbr
-    #       task.task_desc = td.desc
-    #       task.task_name = td.name
-    #       task.status_txt = statusLabels[task.status]
-    #       task
-    #     project
 
     $scope.showEnrolModal = () ->
       $modal.open
@@ -231,9 +101,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         resolve:
           unit: -> $scope.unit
           projects: -> $scope.students
-
-
 )
+
 .directive('staffAdminUnitContext', ->
   replace: true
   restrict: 'E'
