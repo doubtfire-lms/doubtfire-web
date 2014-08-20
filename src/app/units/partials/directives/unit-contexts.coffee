@@ -25,7 +25,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.search = ""
 
     $scope.getCSVHeader = () ->
-      result = ['student_code', 'name', 'email']
+      result = ['student_code', 'name', 'email', 'lab']
       angular.forEach(projectService.progressKeys, (key) ->
         result.push(key)
       )
@@ -42,6 +42,10 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         row['student_code'] = student.student_id
         row['name'] = student.name
         row['email'] = student.student_email
+        if student.tutorial
+          row['lab'] = student.tutorial.abbreviation
+        else
+          row['lab'] = ""
         angular.forEach(student.progress_stats, (stat) ->
           row[stat.type] = stat.value
         )
