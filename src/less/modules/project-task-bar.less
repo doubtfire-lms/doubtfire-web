@@ -1,58 +1,69 @@
 .project-task-bar
 {
-  li { display: inline; }
+  white-space: normal;
+  padding: 5px;
+
+  li 
+  {
+    display: inline; 
+    padding: 2px;
+  }
 }
 
 .task-progress
 {
-	td { vertical-align: middle; }
+  tr
+  { 
+    vertical-align: middle; 
+  }
 
-	margin-bottom: 0px;
-	// height: 10px;
+  margin-bottom: 0px;
+  // height: 10px;
 }
 
 .progress-bar
 {
-	span
-	{
-		// font-size: 8pt;
-		font: 12px/1.7em 'Open Sans', Helvetica;
-	}
+  span
+  {
+    // font-size: 8pt;
+    font: 12px/1.7em 'Open Sans', Helvetica;
+  }
 }
 
 .task-progress-bar
 {
-	width: 384px;
+  min-width: 128px;
+  width: 360px;
 
-	.panel-group
-	{
-		margin-bottom: 0px;
-	}
+  .panel-group
+  {
+    margin-bottom: 0px;
+  }
 
-	.progress-bar
-	{
-		&[aria-valuenow="1"],
-		&[aria-valuenow="2"] 
-		{
-			min-width: 0px;
-		}
+  .progress-bar
+  {
+    &[aria-valuenow="1"],
+    &[aria-valuenow="2"] 
+    {
+      min-width: 0px;
+    }
 
-		&[aria-valuenow="0"] 
-		{
-			min-width: 0px;
-		}
-	}
+    &[aria-valuenow="0"] 
+    {
+      min-width: 0px;
+    }
+  }
 }
 
 .task-progress-accordion, .progress-progress-bar
 {
-	.panel-heading
-	{
-		padding-top: 5px;
-		padding-bottom: 5px;
-		padding-left: 10px;
-		padding-right: 10px;
-	}
+  .panel-heading
+  {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 .progress-bar-ready-to-mark     { background-color: #0079D8; color: white; }
@@ -71,11 +82,11 @@
 
 
 .progress-progress-bar {
-	height: 30px;
-	margin-bottom: 0px;
+  height: 30px;
+  margin-bottom: 0px;
 }
 
-.progress-bar-not-started     	{ background-color: #CCCCCC; color: white; }	
+.progress-bar-not-started       { background-color: #CCCCCC; color: white; }  
 .progress-bar-one-week-late     { background-color: #CCCCCC; color: white; }
 .progress-bar-two-weeks-late   { background-color: #CCCCCC; color: white; }
 .progress-bar-on-time  { 

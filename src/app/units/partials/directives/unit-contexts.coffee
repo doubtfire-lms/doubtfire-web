@@ -19,6 +19,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
     $scope.accordionReady = false
+    $scope.unitService = unitService
 
     $scope.tutorName = currentUser.name
 
