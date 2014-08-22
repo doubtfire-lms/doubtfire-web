@@ -1,4 +1,4 @@
-<div>  
+<div>
   <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
       <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
       <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>

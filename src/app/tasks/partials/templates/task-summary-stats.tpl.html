@@ -1,0 +1,17 @@
+<div>
+	<button class="button btn btn-primary pull-right" ng-click="fetchStats()">Fetch Stats</button>
+	<table class="table table-striped">
+	  <thead>
+	  	<tr>
+	  		<th>Task</th>
+	  		<th ng-repeat="header in headerRow">{{header.label}}</th>
+	  	</tr>
+	  </thead>
+	  <tbody>
+	  	<tr ng-repeat="row in stats">
+	  		<td>{{row.task}}</td>
+	  		<td ng-repeat="status in row.stats" ng-class="countClass(status.count)">{{status.count}}</td>
+	  	</tr>
+	  </tbody>
+	</table>
+</div>

@@ -21,7 +21,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.accordionReady = false
     $scope.unitService = unitService
 
-    $scope.tutorName = currentUser.name
+    $scope.tutorName = currentUser.profile.name
 
     $scope.search = ""
 

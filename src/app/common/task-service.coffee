@@ -52,5 +52,15 @@ angular.module("doubtfire.task-service", [  ])
   taskService.statusData = (task) ->
     { icon: taskService.statusIcons[task.status], label: taskService.statusLabels[task.status] }
 
+  taskService.indexOf = (status) ->
+    _.indexOf(taskService.statusKeys, status)
+
+  # Return a list of all the the status values and icons
+  taskService.allStatusData = () ->
+    result = []
+    angular.forEach taskService.statusKeys, (sk) ->
+      result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
+    result
+
   taskService
 )
