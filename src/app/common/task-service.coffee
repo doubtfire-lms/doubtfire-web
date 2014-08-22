@@ -24,7 +24,7 @@ angular.module("doubtfire.task-service", [  ])
     'working_on_it':      'Working On It',
     'need_help':          'Need Help',
     'redo':               'Redo',
-    'fix_and_include':    'Fix and Include',
+    'fix_and_include':    "Don't resubmit",
     'fix_and_resubmit':   'Resubmit',
     'discuss':            'Discuss',
     'complete':           'Complete'
