@@ -3,19 +3,16 @@
     <div class="col-md-12">
       <h3 class="lead">Target Grade</h3>
       <div class="btn-group" dropdown is-open="status.isopen">
-        <button id="targetGradeButton" type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
-          {{project.targetGrade}} <span class="caret"></span>
+        <button id="targetGradeButton" type="button" class="btn btn-primary dropdown-toggle">
+          {{grades[project.target_grade]}} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-          <li ng-click="targetGrade=0; status.isopen=false"><a>Pass</a></li>
-          <li ng-click="targetGrade=1; status.isopen=false"><a>Credit</a></li>
-          <li ng-click="targetGrade=2; status.isopen=false"><a>Distinction</a></li>
-          <li ng-click="targetGrade=3; status.isopen=false"><a>High Distinction</a></li>
+          <li ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false"><a>{{grade}}</a></li>
         </ul>
       </div>
     </div>
     <div class="col-md-12">
-      <h3 class="lead">Task Completion</h3>
+      <h3 class="lead">Task List</h3>
       <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole"></student-unit-tasks>
     </div>
   </div>

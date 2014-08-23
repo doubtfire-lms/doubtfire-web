@@ -18,7 +18,9 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
     Unit.get { id: unitId }, (unit) ->
       # Allow the caller to fetch a task definition from the unit based on its id
       unit.taskDef = (taskDefId) ->
-        _.where unit.task_definitions, {id: taskDefId}
+        result = _.where unit.task_definitions, {id: taskDefId}
+        if result
+          result[0]
 
       # Allow the caller to fetch a tutorial from the unit based on its id
       unit.tutorialFromId = (tuteId) ->

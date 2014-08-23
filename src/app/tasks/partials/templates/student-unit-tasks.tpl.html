@@ -1,5 +1,5 @@
 <ul class="project-task-bar">
-  <li class="col-sm-4" ng-repeat="task in tasks | orderBy:'task_abbr' | orderBy:'due_date'">
-      <a class="col-sm-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="showAssessTaskModal(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}}</a>
+  <li class="col-sm-4" ng-repeat="task in tasks | orderBy:'task_abbr' | orderBy:'due_date'" ng-hide="taskDisabled(task)">
+      <button type="button" class="col-sm-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="showAssessTaskModal(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}}</button>
   </li>
 </ul>

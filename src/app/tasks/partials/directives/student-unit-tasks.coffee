@@ -22,12 +22,15 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
 
+    $scope.taskDisabled = (task) ->
+      $scope.unit.taskDef(task.task_definition_id).target_grade > $scope.project.target_grade
+
     # Prepare the scope with the passed in project - either from resource or from passed in scope
     showProject = () ->
       # Extend the tasks with the task definitions
       # - add in task abbreviation, description, name, and status
       $scope.tasks    = $scope.project.tasks.map (task) ->
-        td = $scope.unit.taskDef(task.task_definition_id)[0]
+        td = $scope.unit.taskDef(task.task_definition_id)
         task.task_abbr = td.abbr
         task.task_desc = td.desc
         task.task_name = td.name

@@ -60,7 +60,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     # The following is called when the unit is loaded
     prepAccordion = () ->
       # 5 tasks per row, each 32 pixels in size
-      $scope.accordionHeight = $scope.unit.taskCount() / 3 * 28 + 30
+      $scope.accordionHeight = $scope.unit.taskCount() / 3 * 38 + 30
       $scope.accordionReady = true
     
     if ! $scope.unitLoaded
