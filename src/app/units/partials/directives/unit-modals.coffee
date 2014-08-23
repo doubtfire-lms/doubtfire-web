@@ -70,10 +70,12 @@ angular.module('doubtfire.units.partials.modals', [])
       $modalInstance.close()
       #TODO: success and error alerts
 )
-.controller('TaskEditModalCtrl', ($scope, $modalInstance, TaskDefinition, task, unit, alertService, isNew) ->
+.controller('TaskEditModalCtrl', ($scope, $modalInstance, TaskDefinition, task, unit, alertService, isNew, gradeService) ->
   $scope.unit = unit
   $scope.task = task
   $scope.isNew = isNew
+
+  $scope.grades = gradeService.grades
   
   # Datepicker opener
   $scope.open = ($event) ->

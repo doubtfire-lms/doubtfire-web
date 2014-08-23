@@ -8,7 +8,7 @@
         <th>Description</th>
         <th>Target Date</th>
         <th>Weighting</th>
-        <th>Required</th>
+        <th>Grade</th>
         <th>File Upload Requirements</th>
       </tr>
     </thead>
@@ -19,7 +19,7 @@
         <td style="max-width:150px">{{task.desc}}</td>
         <td>{{task.target_date | date:'d MMM yyyy'}}</td>
         <td>{{task.weight}}</td>
-        <td>{{task.required}}</td>
+        <td>{{grades[task.target_grade]}}</td>
         <td>
           <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.upload_requirements.length == 0">
             <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>

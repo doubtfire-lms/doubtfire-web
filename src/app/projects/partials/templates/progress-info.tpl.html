@@ -1,33 +1,51 @@
 <div ng-if="unitLoaded">
-  <div class="col-md-4 pull-right">
-    <h3 class="lead">Task Completion</h3>
-    <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole"></student-unit-tasks>
+  <div class="col-lg-4 pull-right">
+    <div class="col-md-12">
+      <h3 class="lead">Target Grade</h3>
+      <div class="btn-group" dropdown is-open="status.isopen">
+        <button id="targetGradeButton" type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
+          {{project.targetGrade}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li ng-click="targetGrade=0; status.isopen=false"><a>Pass</a></li>
+          <li ng-click="targetGrade=1; status.isopen=false"><a>Credit</a></li>
+          <li ng-click="targetGrade=2; status.isopen=false"><a>Distinction</a></li>
+          <li ng-click="targetGrade=3; status.isopen=false"><a>High Distinction</a></li>
+        </ul>
+      </div>
     </div>
-  <div class="col-md-8 pull-left">
-    <h3 class="lead">Burndown Chart</h3>
-    <div id="burndownChart" ng-if="projectLoaded">
-  		<nvd3-line-chart
-  			data="burndownData"
-  			id="burndownId"
-  			width="550"
-  			height="350"
-  			showXAxis="true"
-  			showYAxis="true"
-  			showLegend="true"
-  			tooltips="true"
-  			useInteractiveGuideline="true"
-  			margin="{left:80,top:50,bottom:50,right:10}"
-  			xAxisTickFormat="xAxisTickFormat_Date_Format()"
-  			yAxisLabel="Tasks Remaining"
-  			yAxisTickFormat="yAxisTickFormat_Percent_Format()"
-  			color="colorFunction()"
-  			legendColor="colorFunction()"
-  			y="yAxisClipNegBurndown()"
-  			x="xAxisClipNegBurndown()"
-  			forcex="[{{lateEndDate()}}]">
-  			<svg></svg>
-  		</nvd3-line-chart>
-  	</div>
+    <div class="col-md-12">
+      <h3 class="lead">Task Completion</h3>
+      <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole"></student-unit-tasks>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="col-md-12">
+      <h3 class="lead">Burndown Chart</h3>
+      <div id="burndownChart" ng-if="projectLoaded">
+    		<nvd3-line-chart
+    			data="burndownData"
+    			id="burndownId"
+    			width="500"
+    			height="440"
+    			showXAxis="true"
+    			showYAxis="true"
+    			showLegend="true"
+    			tooltips="true"
+    			useInteractiveGuideline="true"
+    			margin="{left:80,top:50,bottom:50,right:10}"
+    			xAxisTickFormat="xAxisTickFormat_Date_Format()"
+    			yAxisLabel="Tasks Remaining"
+    			yAxisTickFormat="yAxisTickFormat_Percent_Format()"
+    			color="colorFunction()"
+    			legendColor="colorFunction()"
+    			y="yAxisClipNegBurndown()"
+    			x="xAxisClipNegBurndown()"
+    			forcex="[{{lateEndDate()}}]">
+    			<svg></svg>
+    		</nvd3-line-chart>
+    	</div>
+    </div>
   </div>
 </div>
 

@@ -15,6 +15,13 @@
   	  </div><!--/abbr-->
   	  
   	  <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Grade</label>
+        <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
+          <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
+        </label>
+      </div><!--/desc-->
+
+      <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Description</label>
         <textarea class="form-control col-sm-8" ng-model="task.desc"></textarea>
   	  </div><!--/desc-->

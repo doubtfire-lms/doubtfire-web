@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
+angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals', 'doubtfire.grade-service'])
 
 #
 # The Tutor Student List view shows a list of students, with
@@ -145,8 +145,10 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, TaskCSV, Unit) ->
+  controller: ($scope, $modal, $rootScope, TaskCSV, Unit, gradeService) ->
     $scope.tasksFileUploader = TaskCSV.fileUploader $scope
+
+    $scope.grades = gradeService.grades
 
     $scope.submitTasksUpload = () ->
       $scope.tasksFileUploader.uploadTaskCSV($scope.unit)

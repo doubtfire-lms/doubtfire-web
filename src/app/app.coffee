@@ -16,6 +16,7 @@ angular.module("doubtfire", [
   "doubtfire.sessions"
   "doubtfire.header"
   "doubtfire.task-service"
+  "doubtfire.grade-service"
   "doubtfire.unit-service"
   "doubtfire.project-service"
   "doubtfire.filters"
