@@ -14,11 +14,12 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     studentFilter: "=studentFilter"
     unitLoaded: "=unitLoaded"
 
-  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService) ->
+  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
     # We need to ensure that we have a height for the lazy loaded accordion contents
     $scope.accordionHeight = 100
     # Accordion ready is used to show the accordions
     $scope.accordionReady = false
+    $scope.grades = gradeService.grades
     $scope.unitService = unitService
 
     $scope.tutorName = currentUser.profile.name
