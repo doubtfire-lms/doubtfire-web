@@ -18,6 +18,30 @@ angular.module("doubtfire.task-service", [  ])
     'complete'
   ]
 
+  taskService.acronymKey = {
+    'RTM': 'ready_to_mark',
+    'NOS': 'not_submitted',
+    'WRK': 'working_on_it',
+    'HLP': 'need_help',
+    'RDO': 'redo',
+    "DNR": 'fix_and_include',
+    'FIX': 'fix_and_resubmit',
+    'DIS': 'discuss',
+    'COM': 'complete'
+  }
+
+  taskService.statusAcronym = {
+    'ready_to_mark':      'RTM',
+    'not_submitted':      'NOS',
+    'working_on_it':      'WRK',
+    'need_help':          'HLP',
+    'redo':               'RDO',
+    'fix_and_include':    "DNR",
+    'fix_and_resubmit':   'FIX',
+    'discuss':            'DIS',
+    'complete':           'COM'
+  }
+
   taskService.statusLabels = {
     'ready_to_mark':      'Ready to Mark',
     'not_submitted':      'Not Started',

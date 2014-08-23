@@ -18,15 +18,17 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
 
     $scope.headerRow = taskService.allStatusData()
 
-    $scope.stats = []
+    $scope.scatterData = []
 
-    angular.forEach $scope.unit.task_definitions, (td) ->
-      row = {}
-      row.stats = taskService.allStatusData() #get a dict with all status in it
-      row.task = td.abbr
-      angular.forEach row.stats, (rs) ->
-        rs.count = 0
-      $scope.stats.push(row)
+    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbr)
+
+    indexOfTask = (abbr) ->
+      _.indexOf taskAbbrs, abbr
+    indexOfTutorial = (tutorialId) ->
+      _.indexOf $scope.unit.tutorials, _.find( $scope.unit.tutorials, (tutorial) -> tutorial.id == tutorialId )
+
+    angular.forEach $scope.unit.tutorials, (tute) ->
+      tutorial = { key: tute.abbreviation }
 
     numStudents = 0
     $scope.countClass = (count) ->
@@ -35,16 +37,86 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       else if count / numStudents > 0.25 then 'info'
       else ''
 
-    updateTask = (abbr, status) ->
-      _.find($scope.stats, (stat) -> abbr == stat.task).stats[taskService.indexOf(status)].count += 1
-
     $scope.fetchStats = () ->
       numStudents = $scope.unit.students.length
+      if numStudents == 0
+        return
 
-      angular.forEach $scope.stats, (row) ->
-        angular.forEach row.stats, (rs) ->
-          rs.count = 0
+      # clear tmpScatterData
+      tmpScatterData = []
+
+      updateTask = (abbr, status, tutorialId) ->
+        tutorialIdx = indexOfTutorial(tutorialId)
+        taskIdx = indexOfTask(abbr)
+        statusIdx = taskService.indexOf(status)
+
+        tmpScatterData[tutorialIdx][statusIdx][taskIdx] += 1
+
+
+      angular.forEach $scope.unit.tutorials, (tute) ->
+        tutorialData = []
+
+        angular.forEach taskService.statusKeys, (sk) ->
+          col = []
+          angular.forEach $scope.unit.task_definitions, (td) ->
+            col.push 0
+          tutorialData.push col
+        tmpScatterData.push tutorialData
+
+      # angular.forEach $scope.stats, (row) ->
+      #   angular.forEach row.stats, (rs) ->
+      #     rs.count = 0
       Task.query { unit_id: $scope.unit.id }, (tasks) ->
         angular.forEach tasks, (task) ->
-          updateTask(task.task_abbr, task.status)
+          updateTask(task.task_abbr, task.status, task.tutorial_id)
+
+        # generate pcts
+        _.each tmpScatterData, (tute, tuteIdx) ->
+          _.each tute, (row, colIdx) ->
+            _.each row, (val, idx) ->
+              tmpScatterData[tuteIdx][colIdx][idx] /= numStudents
+
+        # generate graph data
+        scatterData = []
+        _.each( $scope.unit.tutorials, (tute, tuteIdx) ->
+          tutorial = {
+            key: tute.abbreviation
+            values: []
+          }
+          _.each tmpScatterData[tuteIdx], (col, statusIdx) ->
+            _.each col, (val, taskIdx) ->
+              if val > 0
+                data = {
+                  x: statusIdx + tuteIdx / ($scope.unit.tutorials.length * 2)
+                  y: taskIdx
+                  size: val
+                }
+                tutorial.values.push(data)
+          scatterData.push(tutorial)
+        ) # end each tutorial
+
+        $scope.scatterData = scatterData
+
+        # data[i].values.push({
+        #   x: random()
+        #   , y: random()
+        #   , size: Math.random()   //Configure the size of each scatter point
+        #   , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
+        #   });
+
+
+    $scope.yAxisTickFormatFunction = () ->
+      # d3.format('.02f')
+      (value) ->
+        $scope.unit.task_definitions[value].abbr
+
+    $scope.xAxisTickFormatFunction = () ->
+      # d3.format('.02f')
+      (value) ->
+        idx = Math.floor(value)
+        taskService.statusAcronym[taskService.statusKeys[idx]]
+
+    $scope.tooltipContentFunction = () ->
+      (key, x, y) ->
+        '<strong>' + key + '</strong><br /> ' + taskService.statusLabels[taskService.acronymKey[x]] + ' <i class="' + taskService.statusIcons[taskService.acronymKey[x]] + '"> '
 )

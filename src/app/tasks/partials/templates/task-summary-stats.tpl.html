@@ -1,17 +1,21 @@
 <div>
-	<button class="button btn btn-primary pull-right" ng-click="fetchStats()">Fetch Stats</button>
-	<table class="table table-striped">
-	  <thead>
-	  	<tr>
-	  		<th>Task</th>
-	  		<th ng-repeat="header in headerRow">{{header.label}}</th>
-	  	</tr>
-	  </thead>
-	  <tbody>
-	  	<tr ng-repeat="row in stats">
-	  		<td>{{row.task}}</td>
-	  		<td ng-repeat="status in row.stats" ng-class="countClass(status.count)">{{status.count}}</td>
-	  	</tr>
-	  </tbody>
-	</table>
+  <button ng-hide="scatterData.length > 0" class="button btn btn-primary pull-right" ng-click="fetchStats()">Fetch Stats</button>
+  
+  <nvd3-scatter-chart
+    data="scatterData"
+    id="taskScatter"
+    width="800"
+    height="600"
+    yAxisTickFormat="yAxisTickFormatFunction()"
+    xAxisTickFormat="xAxisTickFormatFunction()"
+    showLegend="true"
+    noData="Fetch Data to View"
+    interactive="true"
+    tooltips="true"
+    tooltipContent="tooltipContentFunction()"
+    showDistX="true"
+    showDistY="true"
+    transitionDuration="350">
+    <svg></svg>
+  </nvd3-scatter-chart>
 </div>
