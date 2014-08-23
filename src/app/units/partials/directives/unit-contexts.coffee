@@ -117,7 +117,6 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         controller: 'EnrolStudentModalCtrl'
         resolve:
           unit: -> $scope.unit
-          projects: -> $scope.students
 )
 
 .directive('staffAdminUnitContext', ->

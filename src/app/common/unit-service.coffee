@@ -29,6 +29,10 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
       # Extend unit to know task count
       unit.taskCount = () -> unit.task_definitions.length
 
+      unit.addStudent = (student) ->
+        unit.extendStudent(student)
+        unit.students.push(student)
+
       unit.extendStudent = (student) ->
         # test is already extended...
         if student.name?
