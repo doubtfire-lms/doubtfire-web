@@ -51,6 +51,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
         statusIdx = taskService.indexOf(status)
 
         tmpScatterData[tutorialIdx][statusIdx][taskIdx] += 1
+        tmpScatterData[tutorialIdx][0][taskIdx] -= 1  #remove one from not-started
 
 
       angular.forEach $scope.unit.tutorials, (tute) ->
@@ -59,7 +60,11 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
         angular.forEach taskService.statusKeys, (sk) ->
           col = []
           angular.forEach $scope.unit.task_definitions, (td) ->
-            col.push 0
+            if sk == taskService.statusKeys[0]
+              col.push tute.num_students #not started has all student initially
+            else
+              col.push 0
+
           tutorialData.push col
         tmpScatterData.push tutorialData
 
