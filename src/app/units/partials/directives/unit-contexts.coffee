@@ -26,6 +26,17 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
 
     $scope.search = ""
 
+    $scope.switchToLab = (student, tutorial) ->
+      if tutorial
+        newId = tutorial.id
+      else
+        newId = -1
+      Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
+        (project) ->
+          student.tute = project.tute
+          student.tutorial = $scope.unit.tutorialFromId( student.tute )[0]
+      )
+
     $scope.getCSVHeader = () ->
       result = ['student_code', 'name', 'email', 'lab']
       angular.forEach(projectService.progressKeys, (key) ->

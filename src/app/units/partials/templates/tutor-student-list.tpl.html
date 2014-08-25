@@ -4,55 +4,67 @@
       <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
       <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</p>
   </form>
-	<div class="table-responsive">
-	    <table class="table table-condensed table-hover">
-	    	<thead>
-	    		<tr>
-		    		<th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-		    		<th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-		    		<th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
-		    		<th>Stats</th>
-		    		<th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
-		    		<th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
-		    		<th>Actions</th>
-		    	</tr>
-	    	</thead>
-	    	<tbody>
-		    	<tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
-			    	<td class="task-progress" ng-click="student.open = !student.open"><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
-            		<td ng-click="student.open = !student.open">{{student.name}}</td>
-            		<td ng-click="student.open = !student.open">{{grades[student.target_grade]}}</td>
-			    	<td ng-click="student.open = !student.open" class="task-progress-bar">
- 			    		<accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
-	    					<accordion-group is-open="student.open">
-	    						<accordion-heading>
-	    							<progress class="task-progress" animate="false">
-	    								<bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
-	    									<span ng-hide="bar.value < 10">{{bar.value}}%</span>
-	    								</bar>
-	    							</progress>
-	    						</accordion-heading>
-	    						<div ng-style="{ 'min-height': '{{accordionHeight}}px' }" >
-      								<student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" unit="unit" assessing-unit-role="assessingUnitRole" project="student.project"></student-unit-tasks>
-	      						</div>
-	    					</accordion-group>
-						</accordion>
- 					</td>
-					<td ng-click="student.open = !student.open">
- 						<progress class="progress-progress-bar" animate="false">
-							<bar ng-repeat="bar in student.progress_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
-							</bar>
-						</progress>
-					</td>
-			    	<td ng-click="student.open = !student.open"> <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> {{student.tutorial.abbreviation}} </span></td>
-			    	<td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)"><span class="fa fa-comment"></span></button></td>
-			    </tr>
-		    </tbody>
-		</table>
-		<div class="pull-right">
-			<button type="button" class="btn btn-success" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv">Export</button>
-			<button type="button" class="btn btn-success" ng-click="showEnrolModal()">Enrol Student</button>
-		</div>
-		<pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
-	</div>
+  <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+            <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+            <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
+            <th>Stats</th>
+            <th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
+            <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
+            <td class="task-progress" ng-click="student.open = !student.open"><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
+                <td ng-click="student.open = !student.open">{{student.name}}</td>
+                <td ng-click="student.open = !student.open">{{grades[student.target_grade]}}</td>
+            <td ng-click="student.open = !student.open" class="task-progress-bar">
+              <accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
+                <accordion-group is-open="student.open">
+                  <accordion-heading>
+                    <progress class="task-progress" animate="false">
+                      <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
+                        <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+                      </bar>
+                    </progress>
+                  </accordion-heading>
+                  <div ng-style="{ 'min-height': '{{accordionHeight}}px' }" >
+                      <student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" unit="unit" assessing-unit-role="assessingUnitRole" project="student.project"></student-unit-tasks>
+                    </div>
+                </accordion-group>
+            </accordion>
+          </td>
+          <td ng-click="student.open = !student.open">
+            <progress class="progress-progress-bar" animate="false">
+              <bar ng-repeat="bar in student.progress_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
+              </bar>
+            </progress>
+          </td>
+            <td>
+              <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
+                <div class="btn-group" dropdown is-open="status.isopen">
+                  <button type="button" class="btn btn-default dropdown-toggle">
+                    {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a ng-click="switchToLab(student, nil); status.isopen = false">None</a></li>
+                    <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToLab(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
+                  </ul>
+                </div>
+              </span>
+            </td>
+            <td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)"><span class="fa fa-comment"></span></button></td>
+          </tr>
+        </tbody>
+    </table>
+    <div class="pull-right">
+      <button type="button" class="btn btn-success" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv">Export</button>
+      <button type="button" class="btn btn-success" ng-click="showEnrolModal()">Enrol Student</button>
+    </div>
+    <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+  </div>
 </div>
