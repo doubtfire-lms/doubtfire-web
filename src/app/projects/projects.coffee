@@ -39,7 +39,8 @@ angular.module("doubtfire.projects", [
         unit.extendStudent project
         $scope.tasks = project.tasks
 
-        $scope.submittedTasks = _.filter($scope.tasks, (task) -> _.contains(['ready_to_mark', 'discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo'], task.status))
+        # $scope.submittedTasks = _.filter($scope.tasks, (task) -> _.contains(['ready_to_mark', 'discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo'], task.status))
+        $scope.submittedTasks = _.filter($scope.tasks, (task) -> task.has_pdf )
         $scope.submittedTasks = _.sortBy($scope.submittedTasks, (t) -> t.task_abbr).reverse()
         $scope.unitLoaded = true
 
