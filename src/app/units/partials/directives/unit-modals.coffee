@@ -62,6 +62,7 @@ angular.module('doubtfire.units.partials.modals', [])
 )
 .controller('EnrolStudentModalCtrl', ($scope, $modalInstance, Project, unit) ->
   $scope.unit = unit
+  $scope.projects = unit.students
 
   $scope.enrolStudent = (student_id, tutorial) ->
     # get tutorial_id from tutorial_name
