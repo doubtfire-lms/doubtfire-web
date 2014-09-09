@@ -62,7 +62,7 @@ angular.module("doubtfire.task-service", [  ])
     'redo':               'fa fa-refresh',
     'fix_and_include':    'fa fa-stop',
     'fix_and_resubmit':   'fa fa-wrench',
-    'discuss':            'fa fa-comment',
+    'discuss':            'fa fa-check',
     'complete':           'fa fa-check-circle-o'
   }
 

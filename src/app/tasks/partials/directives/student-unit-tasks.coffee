@@ -34,6 +34,7 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
         task.task_abbr = td.abbr
         task.task_desc = td.desc
         task.task_name = td.name
+        task.seq = td.seq
         task.due_date = td.target_date
         task.task_upload_requirements = td.upload_requirements
         task.status_txt = taskService.statusLabels[task.status]

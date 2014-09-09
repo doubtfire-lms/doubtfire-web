@@ -16,6 +16,10 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
 
     # Get the unit data
     Unit.get { id: unitId }, (unit) ->
+      # Add a sequence from the order fetched from server
+      _.each(unit.task_definitions, (td, index, list) ->
+        td.seq = index
+      )
       # Allow the caller to fetch a task definition from the unit based on its id
       unit.taskDef = (taskDefId) ->
         result = _.where unit.task_definitions, {id: taskDefId}
@@ -28,6 +32,10 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
 
       # Extend unit to know task count
       unit.taskCount = () -> unit.task_definitions.length
+
+      unit.addStudent = (student) ->
+        unit.extendStudent(student)
+        unit.students.push(student)
 
       unit.extendStudent = (student) ->
         # test is already extended...

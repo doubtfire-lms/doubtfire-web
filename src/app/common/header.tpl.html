@@ -11,11 +11,11 @@
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed = true" ng-show="!navCollapsed">
+  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown" ng-repeat="menu in menus | orderBy:'name'">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-{{menu.icon}}"> {{menu.name}}</span><b class="caret"></b></a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" role="menu">
           <li ng-repeat="link in menu.links | orderBy:'name'"
               ng-class="{active: link.class === 'active'}">
             <a href="{{link.url}}">{{link.name}}</a>
