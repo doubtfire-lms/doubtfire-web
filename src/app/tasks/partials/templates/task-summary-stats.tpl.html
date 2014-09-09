@@ -1,6 +1,9 @@
-<div>
-  <button ng-hide="scatterData.length > 0" class="button btn btn-primary pull-right" ng-click="fetchStats()">Fetch Stats</button>
-  
+<div class="pull-left list-group col-md-2 task-status">
+  <a class="list-group-item text-center" ng-click="fetchCSV()">Fetch CSV</a>
+  <a class="list-group-item text-center" ng-click="fetchStats()">Fetch Stats</a>
+</div>
+
+<div class="col-md-10 pull-right">
   <nvd3-scatter-chart
     data="scatterData"
     id="taskScatter"
