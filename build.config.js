@@ -71,6 +71,7 @@ module.exports = {
       'vendor/jquery/jquery.js',
       'vendor/angular/angular.js',
       'vendor/angular-cookies/angular-cookies.js',
+      'vendor/angular-local-storage/angular-local-storage.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',

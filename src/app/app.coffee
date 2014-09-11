@@ -27,7 +27,9 @@ angular.module("doubtfire", [
   "doubtfire.projects"
   "doubtfire.users"
 ])
-.config(($urlRouterProvider, $httpProvider) ->
+.config( (localStorageServiceProvider) ->
+  localStorageServiceProvider.setPrefix('doubtfire')
+).config(($urlRouterProvider, $httpProvider) ->
 
   # Catch bad URLs.
   $urlRouterProvider.otherwise "/not_found"
@@ -37,19 +39,33 @@ angular.module("doubtfire", [
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 
-).run(($rootScope, $state, $filter, auth) ->
+).run(($rootScope, $state, $filter, $location, auth) ->
 
-  handleUnauthorised = ->
+  serialize = (obj, prefix) ->
+    str = []
+    for p, v of obj
+      k = if prefix then prefix + "[" + p + "]" else p
+      if typeof v == "object"
+        str.push(serialize(v, k))
+      else
+        str.push(encodeURIComponent(k) + "=" + encodeURIComponent(v))
+
+    str.join("&")
+
+  handleUnauthorisedDest = (toState, toParams) ->
     if auth.isAuthenticated()
       $state.go "unauthorised"
     else if $state.current.name isnt "sign_in"
-      $state.go "sign_in"
+      $state.go "sign_in", { dest: toState.name, params: serialize(toParams) }
+
+  handleUnauthorised = ->
+    handleUnauthorisedDest($state.get("Home"))
 
   # Don't let the user see pages not intended for their role
-  $rootScope.$on "$stateChangeStart", (evt, toState) ->
+  $rootScope.$on "$stateChangeStart", (evt, toState, toParams) ->
     unless auth.isAuthorised toState.data.roleWhitelist
       evt.preventDefault()
-      handleUnauthorised()
+      handleUnauthorisedDest(toState, toParams)
 
   # Redirect the user if they make an unauthorised API request
   $rootScope.$on "unauthorisedRequestIntercepted", handleUnauthorised

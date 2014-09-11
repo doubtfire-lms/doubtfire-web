@@ -1,5 +1,6 @@
 angular.module("doubtfire.sessions", [
   "ngCookies"
+  "LocalStorageModule"
   "ui.router"
   "doubtfire.api"
 ]).constant("authRoles", [
@@ -28,7 +29,7 @@ angular.module("doubtfire.sessions", [
 ).config(($stateProvider) ->
 
   $stateProvider.state("sign_in",
-    url: "/sign_in"
+    url: "/sign_in?dest&params"
     views:
       main:
         controller: "SignInCtrl"
@@ -61,7 +62,7 @@ angular.module("doubtfire.sessions", [
         $rootScope.$broadcast "unauthorisedRequestIntercepted"
       $q.reject response
 
-).factory("auth", ($http, $cookieStore, userCookieName, currentUser, authRoles) ->
+).factory("auth", ($http, $cookieStore, userCookieName, currentUser, authRoles, localStorageService) ->
 
   # Private factory methods.
   tryChangeUser = (user) ->
@@ -79,7 +80,8 @@ angular.module("doubtfire.sessions", [
     _.difference(roleWhitelist, authRoles).length == 0
 
   defaultAnonymousUser = _.clone currentUser
-  tryChangeUser $cookieStore.get(userCookieName)
+  if not tryChangeUser $cookieStore.get(userCookieName)
+    tryChangeUser localStorageService.get(userCookieName)
 
   # Public factory methods to expose.
   isAuthenticated: ->
@@ -111,19 +113,43 @@ angular.module("doubtfire.sessions", [
   signOut: (authenticationUrl) ->
     $http.delete(authenticationUrl)
     tryChangeUser defaultAnonymousUser
+    localStorageService.remove(userCookieName)
 
-).controller("SignInCtrl", ($scope, $state, $timeout, $modal, currentUser, auth, api, alertService) ->
+).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService) ->
+  $scope.remember_me = true
+
+  #TODO: need to test multiple params and nested objects here
+  deserialize = (str, prefix) ->
+    result = {}
+    parts = str.split "&"
+
+    for i, attr of parts
+      kv = attr.split "="
+      k = kv[0]
+      v = kv[1]
+      result[k] = v
+
+    result
+
   stateAfterSignIn = "home" # TODO: Make this a constant
+  newStateParams = {}
+  if $stateParams["dest"]
+    stateAfterSignIn = $stateParams["dest"]
+    newStateParams = deserialize $stateParams["params"]
 
   if auth.isAuthenticated()
-    $state.go stateAfterSignIn
+    $state.go stateAfterSignIn, newStateParams
   else
     $scope.signIn = ->
       auth.signIn api + "/auth",
         username: $scope.session.username
         password: $scope.session.password
       , ->
-        $state.go stateAfterSignIn
+        $state.go stateAfterSignIn, newStateParams
+        if $scope.remember_me
+          localStorageService.set(userCookieName, currentUser)
+        else
+          localStorageService.remove(userCookieName)
       , (response) ->
         $scope.session.password = ''
         alertService.add("danger", "Login failed: " + response.error, 6000)
