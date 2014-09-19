@@ -24,8 +24,26 @@ angular.module("doubtfire.errors", [
         templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Unauthorised_"
+  ).state("timeout",
+    url: "/timeout?dest&params"
+    views:
+      main:
+        controller: "TimeoutCtrl"
+        templateUrl: "errors/timeout.tpl.html"
+      header:
+        controller: "ErrorHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
+    data:
+      pageTitle: "_Timeout_"
   )
 
-).controller("NotFoundCtrl", ($scope) ->
+)
+.controller("TimeoutCtrl", ($scope, $timeout, api, auth, redirectService, currentUser) ->
+  doRedirect = () ->
+    redirectService.redirect "home", {}
 
-).controller "UnauthorisedCtrl", ($scope) ->
+  if auth.isAuthenticated() and auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
+    $timeout doRedirect, 750
+)
+.controller("NotFoundCtrl", ($scope) ->)
+.controller("UnauthorisedCtrl", ($scope) ->)

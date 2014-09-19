@@ -48,7 +48,7 @@ describe "Sessions module", ->
     expect(currentUser.id).toEqual signInResponse.user.id
 
     # Sign out.
-    auth.signOut()
+    auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
     expect(currentUser).toEqual defaultAnonymousUser
 
   it "should not change user when signing in fails", ->

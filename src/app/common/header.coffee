@@ -71,6 +71,12 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
         users: -> false
 )
 
+.controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
+  $scope.menus = headerService.menus()
+  $scope.currentUser = currentUser.profile
+)
+
+
 .controller("BasicSidebarCtrl", ($scope, $state, currentUser, headerService, UnitRole, Project) ->
   $scope.unitRoles = UnitRole.query()
   $scope.projects = Project.query()
