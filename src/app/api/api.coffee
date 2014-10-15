@@ -118,7 +118,7 @@ angular.module("doubtfire.api", [
     
     extWhitelist = (name, exts) ->
       # no extension
-      parts = name.split('.')
+      parts = name.toLowerCase().split('.')
       return false if parts.length == 0
       ext = parts.pop()
       ext in exts
