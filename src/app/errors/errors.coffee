@@ -42,8 +42,9 @@ angular.module("doubtfire.errors", [
   doRedirect = () ->
     redirectService.redirect "home", {}
 
-  if auth.isAuthenticated() and auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
-    $timeout doRedirect, 750
+  if auth.isAuthenticated()
+    auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
+    $timeout doRedirect, 2000
 )
 .controller("NotFoundCtrl", ($scope) ->)
 .controller("UnauthorisedCtrl", ($scope) ->)
