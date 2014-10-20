@@ -1,0 +1,28 @@
+<div id="panel" class="panel panel-default">
+  <div class="panel-heading task-status row-fluid">
+      <h3 class="panel-title">Step 2: Select Tasks for Portfolio</h3>
+  </div>
+  <div class="panel-body">
+    <div class="col-xs-12">
+      <p>Select the tasks you want to include in your portfolio. Doubtfire will then incorporate your work from these tasks into your portfolio.</p>
+      <ul class="project-task-bar">
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (tasks | filter:hasPDF | orderBy:'seq')" ng-hide="taskDisabled(task)">
+            <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="task.includeInPortfolio = !task.includeInPortfolio" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}} <span class='fa fa-check' ng-show="task.includeInPortfolio"></span></button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12">
+      <div class="callout callout-warning" ng-show="filteredTasks.length == 0">
+        <h4>Submit Tasks to Include</h4>
+        <p>Please submit tasks to Doubtfire to include in your portfolio. Processing time may take a few minutes, so check back if you have recently submitted work.</p>
+      </div>
+      <div class="callout callout-info" ng-show="filteredTasks.length > 0">
+        <h4>Tasks with Changes</h4>
+        <p>If you have significantly change a task, you can upload the new version as an "<emph>Other</emph>" file.</p>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" ng-click="currentView = 2">Step 3: Add other files <span class="fa fa-angle-double-right fa-lg"></span></button>.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+.callout(@color, @bgcolor: lighten(@color, 35%)) {
+    display: block;
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid @color;
+    background-color: @bgcolor;
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+        color: @color;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+    code, .highlight {
+        background-color: #fff;
+    }
+}
+
+.callout-primary {
+    .callout(@brand-primary, lighten(@brand-primary, 45%));
+}
+
+.callout-danger {
+    .callout(@brand-danger, lighten(@brand-danger, 30%));
+}
+
+.callout-warning {
+    .callout(@brand-warning, lighten(@brand-warning, 30%));
+}
+
+.callout-info {
+    .callout(@brand-info, lighten(@brand-info, 30%));
+}
+    
+.callout-success {
+    .callout(@brand-success, lighten(@brand-success, 30%));
+}

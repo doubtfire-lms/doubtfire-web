@@ -1,0 +1,34 @@
+<div id="panel" class="panel panel-default">
+  <div class="panel-heading task-status row-fluid">
+      <h3 class="panel-title">Step 1: Learning Summary Report</h3><!--/title-->
+  </div>
+  <div class="panel-body">
+    <form ng-submit="submitUpload()">
+      <p>Your <i>Learning Summary Report</i> is a summary of what you have learnt in this unit. It consists of two parts: a self-assessment and your reflections. The self-assessment indicates how your portfolio aligns with the assessment criteria, and which grade you are applying for. Your reflections are a personal comment on what you have learnt in the unit, and how your knowledge and skills have developed.</p>
+      <div ng-hide="fileUploader.isUploading">
+        <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file0' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
+        <div uploader="fileUploader" ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well" over-class="file-over-hover" options="{ alias: 'file0' }" nv-file-drop nv-file-over filters="is_document">
+          <p class="fa fa-file-pdf-o fa-3x"></p>
+          <br/>
+          Drop Learning Summary Report here
+        </div>
+        <p ng-show="fileUploader.queue.length == 1" class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+      </div>
+      <div class="form-group">
+        <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != 1" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Upload" />
+        <br/>
+        <div ng-show="fileUploader.isUploading">
+          <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
+        </div>
+      </form>
+
+      <div class="callout callout-info">
+        <h4>Writing the Learning Summary</h4>
+        <p>Think of this as applying for a grade. Provide a justification for why you believe you have achieved your selected grade.</p>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" ng-click="currentView = 1">Step 2: Select Tasks <span class="fa fa-angle-double-right fa-lg"></span></button>.
+    </div>
+  </div>
+</div>

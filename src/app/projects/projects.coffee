@@ -18,8 +18,22 @@ angular.module("doubtfire.projects", [
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
+  $stateProvider.state("projects#progress",
+    url: "/projects/:projectId/progress?authToken"
+    views:
+      main:
+        controller: "ProjectsShowCtrl"
+        templateUrl: "projects/projects-progress.tpl.html"
+    data:
+      pageTitle: "_Home_"
+      # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
+  )
 )
-.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService) ->
+.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser) ->
+  if $stateParams.authToken?
+    $scope.message = $stateParams.authToken
+    currentUser.authenticationToken = $stateParams.authToken
+    
   $scope.unitLoaded = false
   $scope.studentProjectId = $stateParams.projectId
   $scope.projectLoaded = false
