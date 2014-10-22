@@ -314,6 +314,11 @@ angular.module("doubtfire.api", [
 )
 .service("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
 
+  this.getPortfolioUrl = (project) ->
+    "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+  this.openPortfolio = (project) ->
+    $window.open this.getTaskUrl(task), "_blank"
+
   this.fileUploader = (scope, project) ->
     # per scope or task
     uploadUrl = "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"

@@ -5,8 +5,55 @@
   <div class="panel-body">
     <div class="col-xs-12">
       <p>You can download or review your portfolio online. Check that it includes all of the evidence you need to achieve the grade you are applying for. If needed, you can delete this version and repeat the process to create a new portolio.</p>
-      <button class="btn btn-danger">Delete</span></button>
-      <button class="btn btn-primary pull-right" ng-click="currentView = -1">Done</span></button>
+    </div>
+
+    <div class="col-md-12">
+      <div id="panel" class="panel panel-default">
+        <div class="panel-heading portfolio-preview row-fluid">
+            <h3 class="panel-title">Portfolio Preview</h3><!--/title-->
+            <div class="btn-group pdf-nav pull-right" ng-hide="shouldHideNav()">
+              <button type="button" class="btn btn-default" ng-disabled="shouldDisableLeftNav()" ng-click="prevPage()">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </button>
+              <button type="button" class="btn btn-default" ng-disabled="shouldDisableRightNav()" ng-click="nextPage()">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </button>
+            </div>
+        </div>
+        <div class="panel-body">
+          <p class="lead text-center" ng-hide="noPortfolioAvailable() || corruptPdf() || readyToShowPDF()">
+            <br/>
+            <i class="fa fa-spinner fa-spin fa-2x"></i>
+            <br/>
+            PDF is rendering...
+          </p><!--/pdf-in-process-->
+          <p class="lead text-center" ng-show="noPortfolioAvailable()">
+            <br/>
+            <i class="fa fa-clock-o fa-2x"></i>
+            <br/>
+            Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Schedule Compile"}}
+          </p><!--/pdf-in-process-->
+          <p class="lead text-center text-danger" ng-show="corruptPdf()">
+            <br/>
+            <i class="fa fa-exclamation-triangle fa-2x"></i>
+            <br/>
+            PDF preview cannot be rendered.
+          </p><!--/corrupt-pdf-->
+          <a href="{{portfolioUrl()}}" ng-show="readyToShowPDF()">
+            <canvas width="0" height="0" id="portfolio-pdf"></canvas>
+          </a><!--/pdf-->
+        </div>
+        <div ng-hide="noPortfolioAvailable()" class="panel-footer" style="height: 60px">
+          <div class="pull-left text-muted">
+            <button class="btn btn-danger">Delete</span></button>
+          </div>
+          <div class="pull-right btn-group">
+            <a href="{{portfolioUrl()}}" class="btn btn-success">
+              <span class="glyphicon glyphicon-cloud-download"></span>
+            </a>
+          </div>
+        </div><!--/panel-footer-->
+      </div>
     </div>
   </div>
 </div>

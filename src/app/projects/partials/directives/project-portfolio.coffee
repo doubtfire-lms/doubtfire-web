@@ -4,6 +4,9 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
   controller: ($scope, taskService, PortfolioSubmission) ->
+    $scope.projectHasLearningSummaryReport = () ->
+      _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
+
     $scope.fileUploader = PortfolioSubmission.fileUploader($scope, $scope.project)
     $scope.clearUploads = () ->
       $scope.fileUploader.clearQueue()
@@ -27,8 +30,6 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     # file uploaded from parent
     $scope.submitLearningSummaryReport = () ->
       $scope.fileUploader.uploadPortfolioPart("LearningSummaryReport", "document")
-    $scope.projectHasLearningSummaryReport = () ->
-      _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
 )
 
 .directive('portfolioTasks', ->
@@ -74,7 +75,116 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 .directive('portfolioReview', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-review.tpl.html'
-  controller: ($scope) ->
+  controller: ($scope, PortfolioSubmission) ->
+    #
+    # PDF Local Funcs
+    #
+    $scope.pdf = { numPages: 0 }
+    $scope.pageNo = 0
+    
+    loadingPdf = true
+    pdfLoaded = false
+
+    loadPdf = () ->
+      loadingPdf = true
+      pdfLoaded = false
+      return if not $scope.project.portfolio_available
+      $scope.pageNo = 0
+      PDFJS.getDocument(PortfolioSubmission.getPortfolioUrl($scope.project)).then( (pdf)->
+        $scope.pdf = pdf
+        $scope.pageNo = 1
+        pdfLoaded = true
+        loadingPdf = false
+        renderPdf()
+      )
+    # resize window? Re-render pdf...
+    window.onresize = () ->
+      if $scope.pdf && pdfLoaded
+        renderPdf()
+        
+    renderPdf = () ->
+      # Cancel if no pages to render...
+      if $scope.pdf.numPages == 0
+        pdfLoaded = false
+        loadingPdf = false
+        $scope.pageNo = 0
+        return
+      $scope.pdf.getPage($scope.pageNo).then( (page)->
+        # We need to ensure the PDF fits inside the designated width of the panel
+        # (offsetWidth of panel is initially 0 onpageload... default to 600)
+        maxWidth = (document.getElementById("panel").offsetWidth || 600) - 60
+        viewport = page.getViewport(1.0) # Scale of 1.0
+        if viewport.width > maxWidth
+          scale = maxWidth / viewport.width
+          viewport = page.getViewport(scale)
+        
+        canvas = document.getElementById("portfolio-pdf")
+        if not canvas
+          return
+        context = canvas.getContext("2d")
+        canvas.height = viewport.height
+        canvas.width = viewport.width
+        
+        renderContext = { canvasContext: context, viewport: viewport }
+        page.render(renderContext).then ( ()->
+          pdfLoaded = true
+          $scope.$apply() #need to reapply scope so that pdf canvas is updated to show
+        )
+      )
+    #
+    # PDF Interaction Funcs
+    #
+    $scope.nextPage = () ->
+      return if $scope.shouldDisableRightNav()
+      if $scope.pageNo < $scope.pdf.numPages and pdfLoaded
+        $scope.pageNo++
+        renderPdf()
+    $scope.prevPage = () ->
+      return if $scope.shouldDisableLeftNav()
+      if $scope.pageNo > 0 and pdfLoaded
+        $scope.pageNo--
+        renderPdf()
+        
+    #
+    # Navigation
+    #
+    $scope.shouldDisableLeftNav = () ->
+      $scope.pageNo == 1
+    $scope.shouldDisableRightNav = () ->
+      $scope.pageNo == $scope.pdf.numPages
+    $scope.shouldHideNav = () ->
+      $scope.noPortfolioAvailable() || $scope.corruptPdf()
+    # Keyboard nav
+    document.onkeydown = (e) ->
+      e = e || window.event
+      switch (e.which || e.keyCode)
+        # Left arrow
+        when 37
+          e.preventDefault()
+          $scope.prevPage()
+        # Right arrow
+        when 39
+          e.preventDefault()
+          $scope.nextPage()
+    #
+    # Exceptional scenarios
+    #
+    $scope.corruptPdf = () ->
+      (not loadingPdf) and $scope.pageNo == 0 and $scope.portfolioAvailable()
+    $scope.portfolioAvailable = () ->
+      $scope.project.portfolio_available
+    $scope.noPortfolioAvailable = () ->
+      not $scope.project.portfolio_available
+    $scope.readyToShowPDF = () ->
+      pdfLoaded and $scope.portfolioAvailable
+
+    $scope.portfolioUrl = ->
+      PortfolioSubmission.getPortfolioUrl($scope.project)
+    
+    #
+    # Initialiser to load pdf
+    #
+    loadPdf()
 )
 
 .directive('portfolioFiles', ->
