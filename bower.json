@@ -19,7 +19,7 @@
     "lodash": "latest",
     "underscore.string": "latest",
     "angular-ui-calendar": "latest",
-    "angular-file-upload": "~1.0.0",
+    "angular-file-upload": "~1.1.0",
     "pdfjs-bower": "latest",
     "ng-csv": "~0.2.3"
   },

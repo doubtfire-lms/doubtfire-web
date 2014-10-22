@@ -4,8 +4,13 @@ angular.module("doubtfire.api", [
 
 .constant("api", '/* @echo API_URL */') # Set in env.config.js
 
+#
+# Resource "plus"
+# - base URL path
+# - the addition of the authentication token
+# - change save to use PUT for update and POST for create
+#
 .factory("resourcePlus", ($resource, api, currentUser) ->
-
   (url, paramDefaults, actions) ->
     # Prefix specified relative url with API endpoint.
     url = api + url
@@ -307,11 +312,11 @@ angular.module("doubtfire.api", [
     
   return this
 )
-.service("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService) ->
+.service("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
 
-  this.fileUploader = (scope, unit, student) ->
+  this.fileUploader = (scope, project) ->
     # per scope or task
-    uploadUrl = "#{api}/submission/portfolio/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
+    uploadUrl = "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
     fileUploader = new FileUploader {
       scope: scope,
       url: uploadUrl
@@ -319,8 +324,7 @@ angular.module("doubtfire.api", [
       queueLimit: 1
     }
     
-    fileUploader.unit = unit
-    fileUploader.student = student
+    fileUploader.project = project
     
     extWhitelist = (name, exts) ->
       # no extension
@@ -350,15 +354,26 @@ angular.module("doubtfire.api", [
       fn: (item) ->
         fileFilter ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg'], "image" , item
     }
+
+    fileUploader.onBeforeUploadItem = (item) ->
+      # ensure this item will be uploading for this unit it...
+      item.formData = fileUploader.formData
+
+    fileUploader.uploadPortfolioPart = (name, kind) ->
+      fileUploader.formData = [ {name: name}, {kind: kind} ]
+      fileUploader.uploadAll()
     
-    fileUploader.onUploadSuccess = (response)  ->
+    fileUploader.onSuccessItem = (item, response)  ->
       alertService.add("success", "File uploaded successfully!", 2000)
+      if not _.findWhere(fileUploader.project.portfolio_files, response)
+        fileUploader.project.portfolio_files.push(response)
       fileUploader.clearQueue()
       
-    fileUploader.onUploadFailure = (response) ->
-      fileUploader.scope.close(response.error)
+    fileUploader.onErrorItem = (response) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
+
+    fileUploader.api = resourcePlus "/submission/project/:id/portfolio", { id: "@id" }
 
     fileUploader
   return this

@@ -1,0 +1,21 @@
+<div id="panel" class="panel panel-default">
+  <div class="panel-heading task-status row-fluid">
+      <h3 class="panel-title">Step 4: Compile Portfolio</h3>
+  </div>
+  <div class="panel-body">
+    <div class="col-xs-12">
+      <p>Compiling your portfolio combines together your learning summary report, tasks, and other files into a single document.</p>
+      <button class="btn btn-primary" ng-hide="project.compile_portfolio" ng-click="toggleCompileProject()">Schedule Compile</span></button>
+      <button class="btn btn-danger" ng-show="project.compile_portfolio" ng-click="toggleCompileProject()">Cancel Compile</span></button>
+    </div>
+    <div class="col-xs-12">
+      <div class="callout callout-warning">
+        <h4>Processing Takes Time</h4>
+        <p>Once you click Compile, the construction of your portfolio will be scheduled with Doubtfire. This process will take some time, and you will be emailed when your portfolio is ready to review.</p>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" ng-click="currentView = 4">Step 5: Review Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
+    </div>
+  </div>
+</div>

@@ -3,7 +3,7 @@
       <h3 class="panel-title">Step 3: Add Other Files</h3><!--/title-->
   </div>
   <div class="panel-body">
-    <form ng-submit="submitUpload()">
+    <form ng-submit="submitOther()">
       <p>You can upload <i>other files</i> you want to include in your portfolio.</p>
       <h4>Upload New File</h4> 
       <div class="btn-group" dropdown is-open="uploadDropdown.open">
@@ -34,12 +34,16 @@
         </div>
       </form>
 
-      <div class="callout callout-info">
+      <div class="callout callout-info" ng-show="project.portfolio_files.length < 2">
         <h4>No files to add?</h4>
         <p>If you do not have any files to add you can skip this step.</p>
       </div>
+      <div class="callout callout-info" ng-show="project.portfolio_files.length >= 2">
+        <h4>Adding Files</h4>
+        <p>The files you add will appear in the portfolio in the order shown.</p>
+      </div>
     </div>
-    <div class="pull-right">
+    <div class="pull-right ">
       <button class="btn btn-primary" ng-click="currentView = 3">Step 4: Compile Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
     </div>
   </div>
