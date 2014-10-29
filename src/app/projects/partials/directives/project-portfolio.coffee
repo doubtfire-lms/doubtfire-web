@@ -188,6 +188,14 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     $scope.portfolioUrl = ->
       PortfolioSubmission.getPortfolioUrl($scope.project)
     
+    $scope.deletePortfolio = () ->
+      $scope.fileUploader.api.delete {
+        id: $scope.project.project_id
+      }, (response) ->
+        $scope.currentView = 3
+        $scope.project.portfolio_available = false
+        loadPdf()
+
     #
     # Initialiser to load pdf
     #
