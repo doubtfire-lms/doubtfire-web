@@ -11,7 +11,14 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     $scope.clearUploads = () ->
       $scope.fileUploader.clearQueue()
 
-    $scope.currentView = -1
+    if $scope.project.portfolio_available
+      $scope.currentView = 4
+    else if $scope.project.compile_portfolio
+      $scope.currentView = 3
+    else if $scope.projectHasLearningSummaryReport()
+      $scope.currentView = 1
+    else
+      $scope.currentView = -1
     #
     # Functions from taskService to get data
     #

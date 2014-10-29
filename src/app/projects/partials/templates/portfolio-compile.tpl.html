@@ -3,6 +3,12 @@
       <h3 class="panel-title">Step 4: Compile Portfolio</h3>
   </div>
   <div class="panel-body">
+    <div class="col-xs-12" ng-show="project.compile_portfolio">
+      <div class="callout callout-info">
+        <h4>Compile Scheduled</h4>
+        <p>Your portfolio compilation is scheduled with Doubtfire. This process will take some time, check back soon to see if your portfolio is available. Alternatively, you can cancel the compile if you want to make changes.</p>
+      </div>
+    </div>
     <div class="col-xs-12">
       <p>Compiling your portfolio combines together your learning summary report, tasks, and other files into a single document.</p>
       <div ng-show="projectHasLearningSummaryReport()">
