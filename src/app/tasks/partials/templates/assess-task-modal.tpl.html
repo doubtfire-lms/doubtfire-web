@@ -36,6 +36,10 @@
 				disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
 			</label>
 		</div>
+		<div ng-show="task.status == 'discuss' || task.status == 'fix_and_include' || task.status == 'complete'">
+			<hr>
+			<button class="btn btn-primary col-xs-12" ng-click="uploadFiles()">Re-upload Evidence <i class="fa fa-cloud-upload"></i></button>
+		</div>
 	</div>
 	<div class="modal-footer">
 	</div>

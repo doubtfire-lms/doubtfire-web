@@ -11,27 +11,34 @@ angular.module('doubtfire.tasks.partials.modals', [])
     $scope.taskClass = _.trim(_.dasherize($scope.task.status), '-')
     $scope.taskStatusLabel = taskService.statusLabels[$scope.task.status]
 
+  #
+  # Allow user to upload new portfolio evidence
+  #
+  $scope.uploadFiles = () ->
+    oldStatus = $scope.task.status
+    $modalInstance.close(oldStatus) # close task modal to allow new submission modal
+    $modal.open(
+      controller: 'SubmitTaskModalCtrl'
+      templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
+      resolve: {
+        task: -> $scope.task,
+        student: -> student,
+        onChange: -> onChange
+      }
+    ).result.then(
+      (val) -> ,
+      # They cancelled the upload...
+      () ->
+        $scope.task.status = oldStatus
+        alertService.add("info", "Upload cancelled: status was reverted.", 2000)
+    )
+
   $scope.triggerTransition = (status) ->
     oldStatus = $scope.task.status
     # If we have a task with upload requirements and we're changing state to ready to mark
     # then open the next modal and close this one...
     if status == 'ready_to_mark' and $scope.task.task_upload_requirements.length > 0
-      $modalInstance.close(oldStatus)
-      $modal.open(
-        controller: 'SubmitTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
-        resolve: {
-          task: -> $scope.task,
-          student: -> student,
-          onChange: -> onChange
-        }
-      ).result.then(
-        (val) -> ,
-        # They cancelled the upload...
-        () ->
-          $scope.task.status = oldStatus
-          alertService.add("info", "Upload cancelled: status was reverted.", 2000)
-      )
+      $scope.uploadFiles()
     else
       Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
         # Success
