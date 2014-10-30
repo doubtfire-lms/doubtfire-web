@@ -4,6 +4,14 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
   controller: ($scope, taskService, PortfolioSubmission) ->
+    $scope.startStep = -1
+    $scope.gradeStep = 0
+    $scope.summaryStep = 1
+    $scope.taskStep = 2
+    $scope.otherFilesStep = 3
+    $scope.compileStep = 4
+    $scope.reviewStep = 5
+
     $scope.projectHasLearningSummaryReport = () ->
       _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
 
@@ -12,13 +20,13 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.clearQueue()
 
     if $scope.project.portfolio_available
-      $scope.currentView = 4
+      $scope.currentView = $scope.reviewStep
     else if $scope.project.compile_portfolio
-      $scope.currentView = 3
+      $scope.currentView = $scope.compileStep
     else if $scope.projectHasLearningSummaryReport()
-      $scope.currentView = 1
+      $scope.currentView = $scope.taskStep
     else
-      $scope.currentView = -1
+      $scope.currentView = $scope.startStep
     #
     # Functions from taskService to get data
     #
@@ -214,4 +222,14 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         name: file.name
       }, (response) ->
         $scope.project.portfolio_files = _.without $scope.project.portfolio_files, file
+)
+
+.directive('portfolioGradeSelect', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/portfolio-grade.tpl.html'
+  controller: ($scope, Project) ->
+    $scope.chooseGrade = (idx) ->
+      Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
+        $scope.project.target_grade = project.target_grade
+        $scope.burndownData = project.burndown_chart_data
 )

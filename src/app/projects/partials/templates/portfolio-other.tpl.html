@@ -1,6 +1,6 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step 3: Add Other Files</h3><!--/title-->
+      <h3 class="panel-title">Step {{otherFilesStep + 1}}: Add Other Files</h3><!--/title-->
   </div>
   <div class="panel-body">
     <form ng-submit="submitOther()">
@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="pull-right ">
-      <button class="btn btn-primary" ng-click="currentView = 3">Step 4: Compile Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
+      <button class="btn btn-primary" ng-click="currentView = otherFilesStep + 1">Step {{otherFilesStep + 2}}: Compile Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 <div id="panel" class="panel panel-default">
-  <div class="panel-heading row-fluid">
-      <h3 class="panel-title">Step 1: Learning Summary Report</h3><!--/title-->
+  <div class="panel-heading task-status row-fluid">
+      <h3 class="panel-title">Step {{summaryStep + 1}}: Learning Summary Report</h3><!--/title-->
   </div>
   <div class="panel-body">
     <form ng-submit="submitLearningSummaryReport()">
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = 1">Step 2: Select Tasks <span class="fa fa-angle-double-right fa-lg"></span></button>.
+      <button class="btn btn-primary" ng-click="currentView = taskStep">Step {{summaryStep + 2}}: Select Tasks <span class="fa fa-angle-double-right fa-lg"></span></button>.
     </div>
   </div>
 </div>

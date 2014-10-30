@@ -1,10 +1,10 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step 2: Select Tasks for Portfolio</h3>
+      <h3 class="panel-title">Step {{taskStep + 1}}: Select Tasks for Portfolio</h3>
   </div>
   <div class="panel-body">
     <div class="col-xs-12">
-      <p>Select the tasks you want to include in your portfolio. Doubtfire will then incorporate your work from these tasks into your portfolio.</p>
+      <p>Select the tasks you want to include in your portfolio. Make sure that you select enough tasks you include demonstrate that you have met all of the unit's learning outcomes. Doubtfire will then incorporate your work from these tasks into your portfolio.</p>
       <ul class="project-task-bar">
         <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (tasks | filter:hasPDF | orderBy:'seq')" ng-hide="taskDisabled(task)">
             <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="task.include_in_portfolio = !task.include_in_portfolio; updateTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}} <span class='fa fa-check' ng-show="task.include_in_portfolio"></span></button>
@@ -14,15 +14,15 @@
     <div class="col-xs-12">
       <div class="callout callout-warning" ng-show="filteredTasks.length == 0">
         <h4>Submit Tasks to Include</h4>
-        <p>Please submit tasks to Doubtfire to include in your portfolio. Processing time may take a few minutes, so check back if you have recently submitted work.</p>
+        <p>Please submit tasks to Doubtfire to include in your portfolio. You need to make sure that the tasks you include will demonstrate all of the unit's learning outcomes. Processing time may take a few minutes, so check back if you have recently submitted work.</p>
       </div>
       <div class="callout callout-info" ng-show="filteredTasks.length > 0">
         <h4>Tasks with Changes</h4>
-        <p>If you have significantly change a task, you can upload the new version as an "<emph>Other</emph>" file.</p>
+        <p>If you have significantly change a task, revisit the tasks and you can upload the files again. This wont change the state of the task, but will allow you to upload files that include new changes.</p>
       </div>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = 2">Step 3: Add other files <span class="fa fa-angle-double-right fa-lg"></span></button>.
+      <button class="btn btn-primary" ng-click="currentView = taskStep + 1">Step {{taskStep + 2}}: Add other files <span class="fa fa-angle-double-right fa-lg"></span></button>.
     </div>
   </div>
 </div>

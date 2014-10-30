@@ -1,11 +1,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-2 list-group">
-      <a ng-class="{'active' : currentView == 0 }" class="list-group-item text-center" ng-click="currentView = 0">Summary <i class="fa fa-graduation-cap fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == 1 }" class="list-group-item text-center" ng-click="currentView = 1">Tasks <i class="fa fa-tasks fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == 2 }" class="list-group-item text-center" ng-click="currentView = 2">Other <i class="fa fa-plus fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == 3 }" class="list-group-item text-center" ng-click="currentView = 3">Compile <i class="fa fa-file-pdf-o fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == 4 }" class="list-group-item text-center" ng-click="currentView = 4">Review <i class="fa fa-search fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == gradeStep }" class="list-group-item text-center" ng-click="currentView = gradeStep">Grade <i class="fa fa-trophy fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == summaryStep }" class="list-group-item text-center" ng-click="currentView = summaryStep">Summary <i class="fa fa-graduation-cap fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == taskStep }" class="list-group-item text-center" ng-click="currentView = taskStep">Tasks <i class="fa fa-tasks fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == otherFilesStep }" class="list-group-item text-center" ng-click="currentView = otherFilesStep">Other <i class="fa fa-plus fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == compileStep }" class="list-group-item text-center" ng-click="currentView = compileStep">Compile <i class="fa fa-file-pdf-o fa-lg"></i></a>
+      <a ng-class="{'active' : currentView == reviewStep }" class="list-group-item text-center" ng-click="currentView = reviewStep">Review <i class="fa fa-search fa-lg"></i></a>
     </div>
     <div class="col-md-10">
       <div ng-show="currentView == -1">
@@ -15,8 +16,9 @@
           </div>
           <div class="panel-body">
             <div class="col-xs-12">
-              <p>Preparing your portfolio involves 5 steps:</p>
+              <p>Preparing your portfolio involves 6 steps:</p>
               <ol>
+                <li>Select your <b>Grade</b> you are applying for</li>
                 <li>Upload your <b>Learning Summary Report</b></li>
                 <li>Select the <b>Tasks</b> you want included</li>
                 <li>Upload any <b>Other Resources</b> you want to add</li>
@@ -28,17 +30,18 @@
               </p>
             </div>
             <div class="pull-right">
-              <button class="btn btn-primary" ng-click="currentView = 0">Step 1: Learning Summary Report <span class="fa fa-angle-double-right fa-lg"></span></button>.
+              <button class="btn btn-primary" ng-click="currentView = 0">Step 1: Select Grade <span class="fa fa-angle-double-right fa-lg"></span></button>.
             </div>
           </div>
         </div>
       </div>
-      <learning-summary-report ng-show="currentView == 0"></learning-summary-report>
-      <portfolio-tasks ng-show="currentView == 1"></portfolio-tasks>
-      <portfolio-other ng-show="currentView == 2"></portfolio-other>
-      <portfolio-compile ng-show="currentView == 3"></portfolio-compile>
-      <portfolio-review ng-show="currentView == 4"></portfolio-review>
-      <div ng-show="project.portfolio_files.length > 0 && currentView < 3">
+      <portfolio-grade-select ng-show="currentView == gradeStep"></portfolio-grade-select>
+      <learning-summary-report ng-show="currentView == summaryStep"></learning-summary-report>
+      <portfolio-tasks ng-show="currentView == taskStep"></portfolio-tasks>
+      <portfolio-other ng-show="currentView == otherFilesStep"></portfolio-other>
+      <portfolio-compile ng-show="currentView == compileStep"></portfolio-compile>
+      <portfolio-review ng-show="currentView == reviewStep"></portfolio-review>
+      <div ng-show="project.portfolio_files.length > 0 && currentView < reviewStep">
         <portfolio-files></portfolio-files>
       </div>
     </div>
