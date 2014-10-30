@@ -35,8 +35,13 @@ angular.module("doubtfire.api", [
 .factory("Project", (resourcePlus) ->
   resourcePlus "/projects/:id", { id: "@id" }
 )
-.factory("Unit", (resourcePlus) ->
-  resourcePlus "/units/:id", { id: "@id" }
+.factory("Unit", (resourcePlus, currentUser, $window, api) ->
+  result = resourcePlus "/units/:id", { id: "@id" }
+  result.getPortfoliosUrl = (unit) ->
+    "#{api}/submission/unit/#{unit.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+  result.downloadPortfolios = (unit) ->
+    $window.open result.getPortfoliosUrl(unit)
+  result
 )
 .factory("UnitRole", (resourcePlus) ->
   resourcePlus "/unit_roles/:id", { id: "@id" }

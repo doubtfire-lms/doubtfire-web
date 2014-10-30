@@ -303,3 +303,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.isMac = () ->
       navigator.platform == "MacIntel"
 )
+.directive('unitPortfolios', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/unit-portfolios.tpl.html'
+  controller: ($scope, Unit) ->
+    $scope.downloadPortfolios = () ->
+      Unit.downloadPortfolios($scope.unit)
+)
