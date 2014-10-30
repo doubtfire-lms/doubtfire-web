@@ -505,7 +505,7 @@ module.exports = function ( grunt ) {
         files: [ 
           '<%= app_files.js %>'
         ],
-        tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
+        tasks: [ 'jshint:src', 'copy:build_appjs' ] //'karma:unit:run', 
       },
 
       /**
@@ -516,7 +516,7 @@ module.exports = function ( grunt ) {
         files: [ 
           '<%= app_files.coffee %>'
         ],
-        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs', 'preprocess' ]
+        tasks: [ 'coffeelint:src', 'coffee:source', 'copy:build_appjs', 'preprocess' ] //'karma:unit:run', 
       },
 
       /**
@@ -616,7 +616,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'env:development', 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'env:development', 'build', 'delta' ] );
   grunt.registerTask( 'watchsvr', [ 'env:development', 'build', 'connect:watchserver', 'delta' ] );
 
   /**
@@ -633,7 +633,7 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee','less',
     'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs',
-    'index:build', 'karmaconfig', 'karma:continuous', 'preprocess'
+    'index:build', 'preprocess'
   ]);
 
   /**
