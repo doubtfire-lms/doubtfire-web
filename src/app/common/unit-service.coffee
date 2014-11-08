@@ -43,6 +43,13 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
           return
         student.open = false
         student.name = student.first_name + " " + student.last_name
+        if student.has_portfolio
+          student.portfolio_status = 1
+        else if student.compile_portfolio
+          student.portfolio_status = 0.5
+        else
+          student.portfolio_status = 0
+          
         student.tutorial = unit.tutorialFromId( student.tute )[0]
         student.task_stats = [
           { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))},

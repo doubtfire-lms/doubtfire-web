@@ -13,6 +13,7 @@
             <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
             <th>Stats</th>
             <th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
+            <th><a href="" ng-click="sortOrder='portfolio_status'; reverse=!reverse">Portfolio</a></th>
             <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
             <th>Actions</th>
           </tr>
@@ -44,21 +45,22 @@
               </bar>
             </progress>
           </td>
-            <td>
-              <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
-                <div class="btn-group" dropdown is-open="status.isopen">
-                  <button type="button" class="btn btn-default dropdown-toggle">
-                    {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="switchToLab(student, nil); status.isopen = false">None</a></li>
-                    <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToLab(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
-                  </ul>
-                </div>
-              </span>
-            </td>
-            <td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)"><span class="fa fa-comment"></span></button></td>
-          </tr>
+          <td><span style="margin-left: 10px" class="fa {{student.has_portfolio ? 'fa-circle' : student.compile_portfolio ? 'fa-dot-circle-o' : 'fa-circle-o'}} fa-2x"></span></td>
+          <td>
+            <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
+              <div class="btn-group" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle">
+                  {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a ng-click="switchToLab(student, nil); status.isopen = false">None</a></li>
+                  <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToLab(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
+                </ul>
+              </div>
+            </span>
+          </td>
+          <td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)"><span class="fa fa-comment"></span></button></td>
+        </tr>
         </tbody>
     </table>
     <div class="pull-right">
