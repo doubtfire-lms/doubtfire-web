@@ -38,7 +38,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       )
 
     $scope.getCSVHeader = () ->
-      result = ['student_code', 'name', 'email', 'lab']
+      result = ['student_code', 'name', 'email', 'portfolio', 'lab']
       angular.forEach(projectService.progressKeys, (key) ->
         result.push(key)
       )
@@ -55,6 +55,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         row['student_code'] = student.student_id
         row['name'] = student.name
         row['email'] = student.student_email
+        row['portfolio'] = student.portfolio_status
         if student.tutorial
           row['lab'] = student.tutorial.abbreviation
         else
