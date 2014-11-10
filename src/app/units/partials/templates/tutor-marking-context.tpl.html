@@ -1,4 +1,10 @@
 <div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Ready To Mark</label>
+      <input ng-click="requestMarkingExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Download Files" />
+    </div>
+  </form>
   <form class="form-horizontal" ng-submit="submitMarkingUpload()">
     <div class="form-group">
       <label class="col-sm-3 control-label" ng-click="dropper = !dropper">Marked Work</label>
@@ -29,10 +35,32 @@
         </p>
       </div>
     </div>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Ready To Mark</label>
-      <input ng-click="requestMarkingExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Download Files" />
-    </div>
   </form>
+  <div ng-show="taskUploadResults">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Marking Results</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-responsive">
+          <thead>
+            <th>Filename</th>
+            <th>Message</th>
+          </thead>
+          <tr ng-repeat="item in taskUploadResults.failed" class="danger">
+            <td>{{item.file}}</td>
+            <td>{{item.error}}</td>
+          </tr>
+          <tr ng-repeat="item in taskUploadResults.succeeded">
+            <td>{{item.file}}</td>
+            <td>Success</td>
+          </tr>
+          <tr ng-repeat="item in taskUploadResults.ignored" class="info">
+            <td>{{item.file}}</td>
+            <td>File ignored</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

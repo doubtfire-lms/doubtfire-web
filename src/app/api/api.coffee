@@ -292,13 +292,14 @@ angular.module("doubtfire.api", [
       fileUploader.uploadAll()
       
     fileUploader.onSuccessItem = (item, response, status, headers) ->
-      markedTasks = response
-      # at least one student?
-      if markedTasks.length != 0
-        alertService.add("success", "Uploaded #{markedTasks.length} marked tasks.", 2000)
-      else
-        alertService.add("info", "No tasks were uploaded.", 2000)
+      # markedTasks = response
+      # # at least one student?
+      # if markedTasks.length != 0
+      alertService.add("success", "Uploaded marked tasks.", 2000)
+      # else
+      #   alertService.add("info", "No tasks were uploaded.", 2000)
       fileUploader.clearQueue()
+      fileUploader.scope.taskUploadResults = response
       
     fileUploader.onErrorItem = (evt, response, item, headers) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
