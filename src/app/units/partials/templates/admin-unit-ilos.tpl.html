@@ -1,0 +1,20 @@
+<div>
+<!-- {{unit.ilos}} -->
+
+<table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'" ng-click="editILO(ilo)">
+          <td>{{ilo.ilo_number}}</td>
+          <td>{{ilo.name}}</td>
+          <td>{{ilo.description}}</td>
+      </tbody>
+</table>
+	<button class="btn btn-primary pull-right" ng-click="createILO()">Create ILO</button>
+</div>

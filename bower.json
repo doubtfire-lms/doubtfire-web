@@ -5,7 +5,7 @@
   "dependencies": {
     "angular": "~1.2",
     "angular-cookies": "~1.2",
-    "angular-local-storage": "latest",
+    "angular-local-storage": "0.0.7",
     "angular-mocks": "~1.2",
     "angular-resource": "~1.2",
     "d3": "~3.4.1",

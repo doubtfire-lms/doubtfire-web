@@ -152,6 +152,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       UnitRole.delete { id: staff.id }
       staffUser = $scope.findStaffUser(staff.user_id)
 )
+
 .directive('taskAdminUnitContext', ->
   replace: true
   restrict: 'E'
@@ -310,4 +311,30 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   controller: ($scope, Unit) ->
     $scope.downloadPortfolios = () ->
       Unit.downloadPortfolios($scope.unit)
+)
+
+.directive('adminUnitIlos', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
+  controller: ($scope, $modal, $rootScope, Unit) ->
+    $scope.editILO = (ilo) ->
+      $modal.open
+        controller: 'IloModalCtrl'
+        templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
+        resolve: {
+          ilo: -> ilo
+          isNew: -> false
+          unit: -> $scope.unit
+        }
+    $scope.createILO = ->
+      $modal.open
+        controller: 'IloModalCtrl'
+        templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
+        resolve: {
+          ilo: -> {name:"", description:""}
+          isNew: -> true
+          unit: -> $scope.unit
+        }
+
 )

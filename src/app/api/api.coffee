@@ -64,6 +64,9 @@ angular.module("doubtfire.api", [
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
+.factory("IntendedLearningOutcome", (resourcePlus) ->
+  resourcePlus "/ilos/:id", { id: "@id" }
+)
 .factory("TaskFeedback", (api, currentUser, $window) ->
   this.getTaskUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
@@ -74,6 +77,9 @@ angular.module("doubtfire.api", [
 )
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
+)
+.factory("User", (resourcePlus) ->
+  resourcePlus "/users/:id", { id: "@id" }
 )
 .factory("User", (resourcePlus) ->
   resourcePlus "/users/:id", { id: "@id" }
