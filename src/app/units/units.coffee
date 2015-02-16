@@ -73,7 +73,7 @@ angular.module("doubtfire.units", [
 
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit) ->
-  $scope.units = Unit.query {  }
+  $scope.units = Unit.query { include_in_active: true }
 
   $scope.showUnit = (unit) ->
     unitToShow = if unit?
