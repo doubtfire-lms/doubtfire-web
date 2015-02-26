@@ -107,6 +107,23 @@ angular.module('doubtfire.units.partials.modals', [])
     oldTask.target_date = newTask.target_date
     oldTask.required = newTask.required
 
+  $scope.deleteTask = () ->
+    TaskDefinition.delete( { id: $scope.task.id }).$promise.then (
+      (response) ->
+        $modalInstance.close(response)
+        $scope.unit.task_definitions = $scope.unit.task_definitions.filter (e) -> e != $scope.task
+
+        alertService.add("success", "Task Deleted", 2000)
+    ),
+    (
+      (response) ->
+        if response.data.error?
+          alertService.add("danger", "Error: " + response.data.error, 6000)
+        else
+          alertService.add("danger", "Unexpected error connecting to Doubtfire.", 6000)
+    )
+
+  
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
     task = {}
