@@ -50,6 +50,9 @@
           <strong>Note:</strong> {{activeTask.status != 'ready_to_mark' ? "Comments are viewable once PDF is downloaded" : "Comments will be available once your tutor has assessed your submission"}}
         </div>
         <div class="pull-right btn-group">
+          <button class="btn btn-info" ng-click="recreatePDF()" tooltip-popup-delay='500' tooltip-placement="top" tooltip="Recreate the task's PDF">
+            <span class="fa fa-recycle"></span>
+          </button>
           <a href="{{activeTaskUrl()}}" class="btn btn-success">
             <span class="glyphicon glyphicon-cloud-download"></span>
           </a>

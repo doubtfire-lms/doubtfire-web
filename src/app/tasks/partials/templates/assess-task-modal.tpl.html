@@ -40,6 +40,10 @@
 			<hr>
 			<button class="btn btn-primary col-xs-12" ng-click="uploadFiles()">Re-upload Evidence <i class="fa fa-cloud-upload"></i></button>
 		</div>
+		<div ng-show="(task.status == 'ready_to_mark' || task.status == 'complete') && task.has_pdf">
+			<hr>
+			<button class="btn btn-primary col-xs-12" ng-click="recreateTask()">Re-create PDF <i class="fa fa-file-pdf-o"></i></button>
+		</div>
 	</div>
 	<div class="modal-footer">
 	</div>

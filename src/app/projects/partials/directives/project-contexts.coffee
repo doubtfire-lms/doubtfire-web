@@ -99,7 +99,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal, TaskFeedback, taskService) ->
+  controller: ($scope, $modal, TaskFeedback, taskService, alertService) ->
     #
     # PDF Local Funcs
     #
@@ -228,4 +228,15 @@ angular.module('doubtfire.projects.partials.contexts', [])
 
     $scope.activeStatusData = ->
       $scope.statusData($scope.activeTask)
+
+    $scope.recreatePDF = ->
+      TaskFeedback.resource.update({ id: $scope.activeTask.id } ).$promise.then (
+        (value) ->  #success
+          if value.result == "false"
+            alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+          else
+            alertService.add("info", "Task PDF will be recreated.", 2000)
+        ),
+        (value) -> #fail
+          alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
 )

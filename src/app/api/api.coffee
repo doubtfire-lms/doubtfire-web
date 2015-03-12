@@ -64,7 +64,9 @@ angular.module("doubtfire.api", [
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
-.factory("TaskFeedback", (api, currentUser, $window) ->
+.factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
+  this.resource = resourcePlus "/submission/task/:id", { id: "@id" }
+
   this.getTaskUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
   this.openFeedback = (task) ->
