@@ -280,6 +280,45 @@ angular.module("doubtfire.api", [
     
   return this
 )
+.service("StudentUnenrolCSV", (api, $window, FileUploader, currentUser, alertService) ->
+
+  this.fileUploader = (scope) ->
+    fileUploader = new FileUploader {
+      scope: scope,
+      method: "POST",
+      # 0 in the following url is relaced on upload -- ensure no other numbers :)
+      url: "#{api}/csv/units/0/withdraw?auth_token=#{currentUser.authenticationToken}"
+      queueLimit: 1
+    }
+    fileUploader.onBeforeUploadItem = (item) ->
+      # ensure this item will be uploading for this unit it...
+      item.url = fileUploader.url.replace(/\/0\//, "/#{fileUploader.unit.id}/")
+      
+    fileUploader.uploadStudentWithdrawCSV = (unit) ->
+      fileUploader.unit = unit
+      fileUploader.uploadAll()
+      
+    fileUploader.onSuccessItem = (item, response, status, headers) ->
+      withdrawnStudents = response
+      # at least one student?
+      if withdrawnStudents.length != 0
+        alertService.add("success", "Withdrawn #{withdrawnStudents.length} students.", 2000)
+        student.enrolled = false for student in fileUploader.scope.unit.students when student.student_id in withdrawnStudents
+      else
+        alertService.add("info", "No students were withdrawn.", 4000)
+      fileUploader.clearQueue()
+      
+    fileUploader.onErrorItem = (evt, response, item, headers) ->
+      alertService.add("danger", "File Upload Failed: #{response.error}")
+      fileUploader.clearQueue()
+        
+    fileUploader
+        
+  this.downloadFile = (unit) ->
+    $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
+    
+  return this
+)
 .service("TutorMarker", (api, $window, FileUploader, currentUser, alertService) ->
 
   this.fileUploader = (scope) ->

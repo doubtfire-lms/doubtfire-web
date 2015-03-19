@@ -256,14 +256,18 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, StudentEnrolmentCSV, Project, alertService) ->
+  controller: ($scope, StudentEnrolmentCSV, StudentUnenrolCSV, Project, alertService) ->
     # TODO: limit scope for duplicate method names (i.e., $scope.requestExport
     # in this scope vs. $scope.requestExport in Task Admin Unit Context)
     $scope.seFileUploader = StudentEnrolmentCSV.fileUploader $scope
+    $scope.withdrawFileUploader = StudentUnenrolCSV.fileUploader $scope
 
     $scope.submitSEUpload = () ->
       $scope.seFileUploader.uploadStudentEnrolmentCSV($scope.unit)
     
+    $scope.submitWithdrawUpload = () ->
+      $scope.withdrawFileUploader.uploadStudentWithdrawCSV($scope.unit)
+
     $scope.requestSEExport = () ->
       StudentEnrolmentCSV.downloadFile($scope.unit)
 
