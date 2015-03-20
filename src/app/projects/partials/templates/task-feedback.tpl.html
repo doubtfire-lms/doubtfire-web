@@ -2,11 +2,40 @@
   <div class="pull-left list-group col-md-2 task-status">
     <a ng-repeat="task in submittedTasks" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
   </div>
-
   <div class="col-md-10 pull-right">
+    <div>
+      <h4>Comments</h4>
+      <div style="margin-bottom:5px">
+        <form class="form-horizontal" ng-submit="addComment()" role="form">
+          <label class="col-sm-2 control-label">Add Comment: </label>
+          <input class="form-control col-sm-8" ng-model="comment.text" placeholder="New comment text"/>
+          <button type="submit" class="btn btn-primary" style="margin-left:5px"><span class="glyphicon glyphicon-plus"></span></button>
+        </form>
+      </div>
+      <table class="table table-condensed table-hover" ng-hide="(! activeTask.comments) || activeTask.comments.length == 0">
+        <thead>
+          <tr> 
+            <th>Date</th>
+            <th>Comment By</th>
+            <th>Comment</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="comment in activeTask.comments | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+            <td>{{comment.created_at | date: 'd MMM yyyy'}}</td>
+            <td>{{comment.comment_by}}</td>
+            <td style="max-width:400px">{{comment.comment}}</td>
+            <td><a ng-click="deleteComment(comment.id)">delete</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination total-items="activeTask.comments.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" style="margin-top:0px; margin-bottom:5px"  ng-hide="(! activeTask.comments) || activeTask.comments.length < pageSize"></pagination>
+    </div>
+
     <div id="panel" class="panel panel-default">
       <div class="panel-heading task-status row-fluid">
-          <h3 class="panel-title">{{activeTask.task_name}}</h3><!--/title-->
+          <h3 class="panel-title" ng-click="showAssessTaskModal(activeTask)">{{activeTask.task_name}}</h3><!--/title-->
           <div class="pull-right">
             <div class="btn-group pdf-nav" ng-hide="shouldHideNav()">
               <button type="button" class="btn btn-default" ng-disabled="shouldDisableLeftNav()" ng-click="prevPage()">
@@ -17,7 +46,7 @@
               </button>
             </div><!--/page-nav-->
             
-            <div class="well-sm task-status {{statusClass(activeTask.status)}}" tooltip-placement="right" tooltip="{{activeStatusData().label}}">
+            <div class="well-sm task-status {{statusClass(activeTask.status)}}" tooltip-placement="right" tooltip="{{activeStatusData().label}}" ng-click="showAssessTaskModal(activeTask)">
               <i class="{{activeStatusData().icon}} fa-2x"></i>
             </div><!--/status-->
           </div>

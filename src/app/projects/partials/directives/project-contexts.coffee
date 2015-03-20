@@ -99,7 +99,50 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal, TaskFeedback, taskService, alertService) ->
+  controller: ($scope, $modal, TaskFeedback, TaskComment, taskService, alertService) ->
+    #
+    # Comment code
+    #
+    $scope.comment = { text: "" }
+    $scope.currentPage = 1
+    $scope.pageSize = 3
+    $scope.maxSize = 5
+
+    $scope.showAssessTaskModal = (activeTask) ->
+      $modal.open
+        controller: 'AssessTaskModalCtrl'
+        templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
+        resolve: {
+          task: -> activeTask,
+          student: -> null,
+          project: -> $scope.project,
+          assessingUnitRole: -> $scope.assessingUnitRole,
+          onChange: -> null
+        }
+
+    fetchTaskComments = (task) ->
+      TaskComment.query {task_id: task.id},
+        (response) ->
+          task.comments = response
+
+    $scope.addComment = () ->
+      TaskComment.create { task_id: $scope.activeTask.id, comment: $scope.comment.text },
+        (response) ->
+          if ! $scope.activeTask.comments
+            $scope.activeTask.comments = []
+          $scope.activeTask.comments.unshift response
+          $scope.comment.text = ""
+        (error) ->
+          alertService.add("danger", "Request failed, cannot add a comment at this time.", 2000)
+
+    $scope.deleteComment = (id) ->
+      TaskComment.delete { task_id: $scope.activeTask.id, id: id },
+        (response) ->
+          #$scope.activeTask.comments.splice response
+          $scope.activeTask.comments = $scope.activeTask.comments.filter (e) -> e.id != id
+        (error) ->
+          alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
+
     #
     # PDF Local Funcs
     #
@@ -208,6 +251,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.setActiveTask = (task) ->
       return if task == $scope.activeTask
       $scope.activeTask = task
+      fetchTaskComments(task)
       loadPdf(task)
     
     $scope.activeTaskUrl = ->
@@ -218,6 +262,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     $scope.activeTask = $scope.submittedTasks[0]
     if $scope.activeTask
+      fetchTaskComments($scope.activeTask)
       loadPdf($scope.activeTask)
 
     #

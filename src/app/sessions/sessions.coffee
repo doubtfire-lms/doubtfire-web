@@ -166,7 +166,8 @@ angular.module("doubtfire.sessions", [
   # Return the auth object
   auth
 ).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie) ->
-  $scope.remember_me = true
+  
+  $scope.session = { remember_me: true }
 
   if auth.isAuthenticated()
     redirectService.redirect "home", {}
@@ -175,7 +176,7 @@ angular.module("doubtfire.sessions", [
       auth.signIn api + "/auth",
         username: $scope.session.username
         password: $scope.session.password
-        remember: $scope.remember_me
+        remember: $scope.session.remember_me
       , ->
         if $scope.remember_me
           localStorageService.set(userCookieName, currentUser)

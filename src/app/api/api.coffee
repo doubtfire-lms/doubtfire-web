@@ -61,6 +61,9 @@ angular.module("doubtfire.api", [
 .factory("Task", (resourcePlus) ->
   resourcePlus "/tasks/:id", { id: "@id" }
 )
+.factory("TaskComment", (resourcePlus) ->
+  resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
+)
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
@@ -112,7 +115,7 @@ angular.module("doubtfire.api", [
     
   return this
 )
-.service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService) ->
+.service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService, projectService) ->
 
   this.fileUploader = (scope, task, student, onChange) ->
     # per scope or task
@@ -164,7 +167,7 @@ angular.module("doubtfire.api", [
       task.status = response.status
 
       if student? && student.task_stats?
-        updateTaskStats(student, response.new_stats)
+        projectService.updateTaskStats(student, response.new_stats)
 
       if fileUploader.onChange?
         fileUploader.onChange()
