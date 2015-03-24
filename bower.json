@@ -3,27 +3,27 @@
   "version": "0.0.1",
   "devDependencies": {},
   "dependencies": {
-    "angular": "~1.2",
-    "angular-cookies": "~1.2",
-    "angular-local-storage": "latest",
-    "angular-mocks": "~1.2",
-    "angular-resource": "~1.2",
-    "d3": "~3.4.1",
-    "nvd3": "latest",
-    "angularjs-nvd3-directives": "latest",
-    "bootstrap": "latest",
-    "angular-bootstrap": "~0.11.0",
+    "angular": "1.2.22",
+    "angular-cookies": "1.2.22",
+    "angular-local-storage": "0.0.7",
+    "angular-mocks": "1.2.22",
+    "angular-resource": "1.2.22",
+    "d3": "3.4.11",
+    "nvd3": "~1.1.15",
+    "angularjs-nvd3-directives": "0.0.7",
+    "bootstrap": "3.2.0",
+    "angular-bootstrap": "0.11.0",
     "angular-ui-router": "0.2.7",
-    "jquery": "latest",
-    "momentjs": "~2.1.0",
-    "lodash": "latest",
-    "underscore.string": "latest",
-    "angular-ui-calendar": "latest",
-    "angular-file-upload": "~1.1.0",
-    "pdfjs-bower": "latest",
-    "ng-csv": "~0.2.3"
+    "jquery": "2.1.1",
+    "momentjs": "2.1.0",
+    "lodash": "2.4.1",
+    "underscore.string": "2.3.3",
+    "angular-ui-calendar": "0.8.1",
+    "angular-file-upload": "1.0.3",
+    "pdfjs-bower": "1.0.233",
+    "ng-csv": "0.2.3"
   },
   "resolutions": {
-    "d3": "~3.4.1"
+    "d3": "3.4.11"
   }
 }
