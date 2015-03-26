@@ -31,7 +31,7 @@
             <br/>
             <i class="fa fa-clock-o fa-2x"></i>
             <br/>
-            Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Schedule Compile"}}
+            Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Please compile the portfolio first."}}
           </p><!--/pdf-in-process-->
           <p class="lead text-center text-danger" ng-show="corruptPdf()">
             <br/>
@@ -55,5 +55,8 @@
         </div><!--/panel-footer-->
       </div>
     </div>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
   </div>
 </div>

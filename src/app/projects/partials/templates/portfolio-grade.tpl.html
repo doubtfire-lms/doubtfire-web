@@ -19,8 +19,11 @@
       <h4>Assessment Criteria</h4>
       <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = summaryStep">Step {{stepGrade + 2}}: Learning Summary <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

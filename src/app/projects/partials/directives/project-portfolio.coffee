@@ -4,7 +4,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
   controller: ($scope, taskService, PortfolioSubmission) ->
-    $scope.startStep = -1
+    $scope.welcomeStep = -1
     $scope.gradeStep = 0
     $scope.summaryStep = 1
     $scope.taskStep = 2
@@ -26,7 +26,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     else if $scope.projectHasLearningSummaryReport()
       $scope.currentView = $scope.taskStep
     else
-      $scope.currentView = $scope.startStep
+      $scope.currentView = $scope.welcomeStep
     #
     # Functions from taskService to get data
     #
