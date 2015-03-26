@@ -21,8 +21,11 @@
         <p>If you have significantly change a task, revisit the tasks and you can upload the files again. This wont change the state of the task, but will allow you to upload files that include new changes.</p>
       </div>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = taskStep + 1">Step {{taskStep + 2}}: Add other files <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

@@ -28,8 +28,11 @@
         <p>Your portfolio must include a learning summary report. Upload this before you schedule your portfolio to be compiled.</p>
       </div>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = compileStep + 1">Step {{compileStep + 2}}: Review Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

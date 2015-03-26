@@ -1,15 +1,33 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2 list-group">
-      <a ng-class="{'active' : currentView == gradeStep }" class="list-group-item text-center" ng-click="currentView = gradeStep">Grade <i class="fa fa-trophy fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == summaryStep }" class="list-group-item text-center" ng-click="currentView = summaryStep">Summary <i class="fa fa-graduation-cap fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == taskStep }" class="list-group-item text-center" ng-click="currentView = taskStep">Tasks <i class="fa fa-tasks fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == otherFilesStep }" class="list-group-item text-center" ng-click="currentView = otherFilesStep">Other <i class="fa fa-plus fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == compileStep }" class="list-group-item text-center" ng-click="currentView = compileStep">Compile <i class="fa fa-file-pdf-o fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == reviewStep }" class="list-group-item text-center" ng-click="currentView = reviewStep">Review <i class="fa fa-search fa-lg"></i></a>
+    <div class="text-center">
+      <div class="btn-group">
+        <button style="padding: 10px" ng-class="{'active' : currentView == welcomeStep }" class="btn btn-default text-center" ng-click="currentView = welcomeStep">
+          <i class="fa fa-smile-o fa-2x"></i><br/>Welcome
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == gradeStep }" class="btn btn-default text-center" ng-click="currentView = gradeStep">
+          <i class="fa fa-trophy fa-2x"></i><br/>My Grade
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == summaryStep }" class="btn btn-default text-center" ng-click="currentView = summaryStep">
+          <i class="fa fa-graduation-cap fa-2x"></i><br/>My Report
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == taskStep }" class="btn btn-default text-center" ng-click="currentView = taskStep">
+          <i class="fa fa-tasks fa-2x"></i><br/>Select Tasks
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == otherFilesStep }" class="btn btn-default text-center" ng-click="currentView = otherFilesStep">
+          <i class="fa fa-plus fa-2x"></i><br/>Add Extra Files
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == compileStep }" class="btn btn-default text-center" ng-click="currentView = compileStep">
+          <i class="fa fa-file-pdf-o fa-2x"></i><br/>Compile
+        </button>
+        <button style="padding: 10px" ng-class="{'active' : currentView == reviewStep }" class="btn btn-default text-center" ng-click="currentView = reviewStep">
+          <i class="fa fa-check fa-2x"></i><br/>Review
+        </button>
+      </div>
     </div>
-    <div class="col-md-10">
-      <div ng-show="currentView == -1">
+    <hr/>
+    <div class="col-md-12">
+      <div ng-show="currentView == welcomeStep">
         <div id="panel" class="panel panel-default">
           <div class="panel-heading task-status row-fluid">
               <h3 class="panel-title">Preparing Your Portfolio</h3>
@@ -29,8 +47,10 @@
                 Once you have completed all of these steps, your portfolio will be prepared by Doubtfire and you will be notified when it is ready. You can then check your work, and if you want to make any corrections you can repeat these steps to create a new version of your portfolio.
               </p>
             </div>
-            <div class="pull-right">
-              <button class="btn btn-primary" ng-click="currentView = 0">Step 1: Select Grade <span class="fa fa-angle-double-right fa-lg"></span></button>.
+          </div>
+          <div class="panel-footer">
+            <div class="text-right">
+              <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
             </div>
           </div>
         </div>
