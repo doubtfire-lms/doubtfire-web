@@ -3,34 +3,44 @@
     <a ng-repeat="task in submittedTasks" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
   </div>
   <div class="col-md-10 pull-right">
-    <div>
-      <h4>Comments</h4>
-      <div style="margin-bottom:5px">
-        <form class="form-horizontal" ng-submit="addComment()" role="form">
-          <label class="col-sm-2 control-label">Add Comment: </label>
-          <input class="form-control col-sm-8" ng-model="comment.text" placeholder="New comment text"/>
-          <button type="submit" class="btn btn-primary" style="margin-left:5px"><span class="glyphicon glyphicon-plus"></span></button>
+    <div class="comments-panel panel panel-default">
+      <div class="panel-heading task-status row-fluid">
+        <h3 class="panel-title">Comments</h3>
+      </div>
+      <div class="panel-body" style="max-height: 250px; overflow-y: scroll" >
+        <div class="text-center" ng-show="(!activeTask.comments) || activeTask.comments.length == 0" style="margin: 30px">
+          <i class="fa fa-2x fa-comments-o"></i><br/>
+          No comments have yet been made.
+        </div>
+        <div class="comment" ng-repeat="comment in activeTask.comments">
+          <div class="comment-details col-md-2">
+            <span class="comment-by">
+              {{comment.comment_by}}
+            </span>
+            <span class="comment-date">
+              {{comment.created_at | date: 'd MMM yyyy'}}
+            </span>
+          </div>
+          <div class="comment-text col-md-10">
+            <div class="col-md-11">
+              {{comment.comment}}
+            </div>
+            <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)">
+              <i class="fa fa-times-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <form class="input-group" ng-submit="addComment()" role="form">
+          <textarea ng-keyup="checkCommentTextareaEnter()" ng-model="comment.text" class="form-control" style="height: 45px; resize: none;" placeholder="Make a comment on this submission..."></textarea>
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary"  style="height: 45px" type="button" ng-disabled="comment.text.trim().length == 0">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </span>
         </form>
       </div>
-      <table class="table table-condensed table-hover" ng-hide="(! activeTask.comments) || activeTask.comments.length == 0">
-        <thead>
-          <tr> 
-            <th>Date</th>
-            <th>Comment By</th>
-            <th>Comment</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="comment in activeTask.comments | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-            <td>{{comment.created_at | date: 'd MMM yyyy'}}</td>
-            <td>{{comment.comment_by}}</td>
-            <td style="max-width:400px">{{comment.comment}}</td>
-            <td><a ng-click="deleteComment(comment.id)">delete</a></td>
-          </tr>
-        </tbody>
-      </table>
-      <pagination total-items="activeTask.comments.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" style="margin-top:0px; margin-bottom:5px"  ng-hide="(! activeTask.comments) || activeTask.comments.length < pageSize"></pagination>
     </div>
 
     <div id="panel" class="panel panel-default">
@@ -45,7 +55,7 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </button>
             </div><!--/page-nav-->
-            
+
             <div class="well-sm task-status {{statusClass(activeTask.status)}}" tooltip-placement="right" tooltip="{{activeStatusData().label}}" ng-click="showAssessTaskModal(activeTask)">
               <i class="{{activeStatusData().icon}} fa-2x"></i>
             </div><!--/status-->
@@ -76,7 +86,7 @@
       </div>
       <div ng-hide="taskStillProcessing()" class="panel-footer" style="height: 60px">
         <div class="pull-left text-muted">
-          <strong>Note:</strong> {{activeTask.status != 'ready_to_mark' ? "Comments are viewable once PDF is downloaded" : "Comments will be available once your tutor has assessed your submission"}}
+          <strong>Note:</strong> {{activeTask.status != 'ready_to_mark' ? "Annotated comments are viewable once PDF is downloaded" : "Comments will be available once your tutor has assessed your submission"}}
         </div>
         <div class="pull-right btn-group">
           <button class="btn btn-info" ng-click="recreatePDF()" tooltip-popup-delay='500' tooltip-placement="top" tooltip="Recreate the task's PDF">

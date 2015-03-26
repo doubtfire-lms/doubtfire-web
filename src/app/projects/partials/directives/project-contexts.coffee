@@ -14,10 +14,10 @@ angular.module('doubtfire.projects.partials.contexts', [])
 
     $scope.xAxisTickFormat_Date_Format = () ->
       (d) -> d3.time.format('%b %d')(new Date(d * 1000))
-  
+
     $scope.yAxisTickFormat_Percent_Format = () ->
       (d) -> d3.format(',%')(d)
-  
+
     $scope.colorFunction = () ->
       (d, i) ->
         if i == 0 #projeted
@@ -28,7 +28,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
           '#336699'
         else #sign off
           '#E01B5D'
-  
+
     #
     # Clips x values to be at the y = 0 intercept if y < 0
     #
@@ -49,32 +49,32 @@ angular.module('doubtfire.projects.partials.contexts', [])
           -c/m
         else
           d[0]
-    
+
     #
     # Clips y to 0 if y < 0
     #
     $scope.yAxisClipNegBurndown = () ->
       (d) ->
         if d[1] < 0.0 then 0 else d[1]
-      
+
     $scope.updateBurndownChart = () ->
       # $scope.burndownData.length = 0
       Project.get { id: $scope.studentProjectId }, (project) ->
         # $scope.burndownData.push(project.burndown_chart_data...)
         $scope.burndownData = project.burndown_chart_data
-    
+
     #
     # Finds max end range for chart defined as 2 weeks (12096e5 ms) after unit's end date
     #
     $scope.lateEndDate = () ->
       return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
-  
+
     #
     # Allow the caller to fetch a tutorial from the unit based on its id
     #
     $scope.tutorialFromId = (tuteId) ->
       _.where $scope.unit.tutorialFromId(tuteId)
-  
+
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
 )
@@ -125,6 +125,17 @@ angular.module('doubtfire.projects.partials.contexts', [])
         (response) ->
           task.comments = response
 
+    #
+    # Comment text area enter to submit comment
+    #
+    $scope.checkCommentTextareaEnter = (e) ->
+      e = e || window.event
+      # Hit return and not shift key
+      if e.keyCode is 13 and not e.shiftKey
+        $scope.addComment()
+        return false
+      return true
+
     $scope.addComment = () ->
       TaskComment.create { task_id: $scope.activeTask.id, comment: $scope.comment.text },
         (response) ->
@@ -148,7 +159,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     $scope.pdf = { numPages: 0 }
     $scope.pageNo = 0
-    
+
     loadingPdf = true
     pdfLoaded = false
 
@@ -168,7 +179,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     window.onresize = () ->
       if $scope.pdf && pdfLoaded
         renderPdf()
-        
+
     renderPdf = () ->
       # Cancel if no pages to render...
       if $scope.pdf.numPages == 0
@@ -184,14 +195,14 @@ angular.module('doubtfire.projects.partials.contexts', [])
         if viewport.width > maxWidth
           scale = maxWidth / viewport.width
           viewport = page.getViewport(scale)
-        
+
         canvas = document.getElementById("pdf")
         if not canvas
           return
         context = canvas.getContext("2d")
         canvas.height = viewport.height
         canvas.width = viewport.width
-        
+
         renderContext = { canvasContext: context, viewport: viewport }
         page.render(renderContext).then ( ()->
           pdfLoaded = true
@@ -211,7 +222,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
       if $scope.pageNo > 0 and pdfLoaded
         $scope.pageNo--
         renderPdf()
-        
+
     #
     # Navigation
     #
@@ -224,6 +235,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # Keyboard nav
     document.onkeydown = (e) ->
       e = e || window.event
+      return if document.activeElement.type is 'textarea' or document.activeElement.type is 'input'
       switch (e.which || e.keyCode)
         # Left arrow
         when 37
@@ -233,8 +245,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
         when 39
           e.preventDefault()
           $scope.nextPage()
-      
-    
+
     #
     # Exceptional scenarios
     #
@@ -253,10 +264,10 @@ angular.module('doubtfire.projects.partials.contexts', [])
       $scope.activeTask = task
       fetchTaskComments(task)
       loadPdf(task)
-    
+
     $scope.activeTaskUrl = ->
       TaskFeedback.getTaskUrl($scope.activeTask)
-    
+
     #
     # Initialiser to load pdf
     #

@@ -96,7 +96,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     #
     $scope.pdf = { numPages: 0 }
     $scope.pageNo = 0
-    
+
     loadingPdf = true
     pdfLoaded = false
 
@@ -116,7 +116,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     window.onresize = () ->
       if $scope.pdf && pdfLoaded
         renderPdf()
-        
+
     renderPdf = () ->
       # Cancel if no pages to render...
       if $scope.pdf.numPages == 0
@@ -132,14 +132,14 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         if viewport.width > maxWidth
           scale = maxWidth / viewport.width
           viewport = page.getViewport(scale)
-        
+
         canvas = document.getElementById("portfolio-pdf")
         if not canvas
           return
         context = canvas.getContext("2d")
         canvas.height = viewport.height
         canvas.width = viewport.width
-        
+
         renderContext = { canvasContext: context, viewport: viewport }
         page.render(renderContext).then ( ()->
           pdfLoaded = true
@@ -159,7 +159,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       if $scope.pageNo > 0 and pdfLoaded
         $scope.pageNo--
         renderPdf()
-        
+
     #
     # Navigation
     #
@@ -195,7 +195,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 
     $scope.portfolioUrl = ->
       PortfolioSubmission.getPortfolioUrl($scope.project)
-    
+
     $scope.deletePortfolio = () ->
       $scope.fileUploader.api.delete {
         id: $scope.project.project_id
