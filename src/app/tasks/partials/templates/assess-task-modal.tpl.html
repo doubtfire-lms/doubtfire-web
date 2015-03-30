@@ -36,15 +36,19 @@
 				disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
 			</label>
 		</div>
-		<div ng-show="task.status == 'discuss' || task.status == 'fix_and_include' || task.status == 'complete'">
-			<hr>
-			<button class="btn btn-primary col-xs-12" ng-click="uploadFiles()">Re-upload Evidence <i class="fa fa-cloud-upload"></i></button>
-		</div>
-		<div ng-show="(task.status == 'ready_to_mark' || task.status == 'complete') && task.has_pdf">
-			<hr>
-			<button class="btn btn-primary col-xs-12" ng-click="recreateTask()">Re-create PDF <i class="fa fa-file-pdf-o"></i></button>
-		</div>
 	</div>
 	<div class="modal-footer">
+		<!-- More options... -->
+    <div class="btn-group" dropdown>
+      <button type="button" class="btn btn-default dropdown-toggle">
+        <i class="fa fa-cog"></i> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+      	<li ng-class="{'disabled': !allowReupload}" tooltip="Use this to change what files are submitted for this task. Task must be marked as 'Discuss', 'Don't Resubmit' or 'Complete'." tooltip-placement="top">
+      		<a ng-click="allowReupload && uploadFiles()"><i class="fa fa-cloud-upload"></i> Re-Upload Files</a>
+      	</li>
+        <li ng-class="{'disabled': !allowRegeneratePdf}" tooltip="Use this to ask Doubtfire to regenerate the PDF that was created for you if you believe there was an error processing. Task must marked as 'Ready to Mark', 'Discuss' or 'Complete' and a PDF must have been previously generated." tooltip-placement="top"><a ng-click="allowRegeneratePdf && recreateTask()"><i class="fa fa-recycle"></i> Regenerate PDF</a></li>
+      </ul>
+   	</div>
 	</div>
 </form>

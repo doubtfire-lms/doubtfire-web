@@ -12,6 +12,12 @@ angular.module('doubtfire.tasks.partials.modals', [])
     $scope.taskStatusLabel = taskService.statusLabels[$scope.task.status]
 
   #
+  # More option booleans
+  #
+  $scope.allowReupload = $scope.task.status == 'discuss' || $scope.task.status == 'fix_and_include' || $scope.task.status == 'complete'
+  $scope.allowRegeneratePdf = ($scope.task.status == 'ready_to_mark' || $scope.task.status == 'discuss' || $scope.task.status == 'complete') && $scope.task.has_pdf
+
+  #
   # Allow user to upload new portfolio evidence
   #
   $scope.uploadFiles = () ->
