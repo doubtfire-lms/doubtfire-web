@@ -99,7 +99,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal, TaskFeedback, TaskComment, taskService, alertService) ->
+  controller: ($scope, $modal, TaskFeedback, TaskComment, Task, taskService, alertService) ->
     #
     # Comment code
     #
@@ -295,4 +295,70 @@ angular.module('doubtfire.projects.partials.contexts', [])
         ),
         (value) -> #fail
           alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+
+    #
+    # Statuses tutors may change task to
+    #
+    $scope.studentStatuses       = ['not_submitted', 'need_help', 'working_on_it', 'ready_to_mark']
+    $scope.tutorStatuses         = ['discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo']
+    $scope.taskEngagementConfig = {
+      studentTriggers: $scope.studentStatuses.map (status) ->
+        { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
+      tutorTriggers: $scope.tutorStatuses.map (status) ->
+        { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
+      }
+
+    #
+    # Allow user to upload new portfolio evidence
+    #
+    $scope.uploadFiles = () ->
+      oldStatus = $scope.activeTask.status
+      $modal.open(
+        controller: 'SubmitTaskModalCtrl'
+        templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
+        resolve: {
+          task: -> $scope.activeTask,
+          student: -> null,
+          onChange: -> null
+        }
+      ).result.then(
+        (val) -> ,
+        # They cancelled the upload...
+        () ->
+          $scope.activeTask.status = oldStatus
+          alertService.add("info", "Upload cancelled: status was reverted.", 2000)
+      )
+
+
+    #
+    # Change state of task
+    #
+    $scope.triggerTransition = (status) ->
+      oldStatus = $scope.activeTask.status
+      if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
+        $scope.uploadFiles()
+      else
+        Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
+          # Success
+          (value) ->
+            $scope.activeTask.status = value.status
+    
+            if student? && student.task_stats?
+              projectService.updateTaskStats(student, value.new_stats)
+
+            if value.status == status
+              alertService.add("success", "Status saved.", 2000)
+            else
+              alertService.add("info", "Status change was not changed.", 4000)
+          ),
+          # Fail
+          (value) ->
+            $scope.activeTask.status = oldStatus
+            alertService.add("danger", value.data.error, 6000)
+    
+    $scope.activeClass = (status) ->
+      if status == $scope.activeTask.status
+        "active"
+      else
+        ""
 )

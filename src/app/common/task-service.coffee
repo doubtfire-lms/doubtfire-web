@@ -85,7 +85,7 @@ angular.module("doubtfire.task-service", [  ])
   taskService.statusText = (status) -> taskService.statusLabels[status]
 
   # This function gets the help text for the indicated status
-  taskService.helpText = (status) -> console.log status; console.log taskService.helpTextDesc[status];  taskService.helpTextDesc[status]
+  taskService.helpText = (status) -> taskService.helpTextDesc[status]
 
   # Return an icon and label for the task
   taskService.statusData = (task) ->
