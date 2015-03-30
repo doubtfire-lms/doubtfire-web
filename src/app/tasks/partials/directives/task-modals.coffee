@@ -101,16 +101,19 @@ angular.module('doubtfire.tasks.partials.modals', [])
 
   $scope.taskEngagementConfig = {
     readyToAssess: $scope.readyToAssessStatuses.map (status) ->
-      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status] }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], helpText: taskService.helpText(status) }
     engagement: $scope.engagementStatuses.map (status) ->
-      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status] }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], helpText: taskService.helpText(status) }
     all: $scope.orderedStatuses.map (status) ->
-      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
     tutorTriggers: $scope.tutorStatuses.map (status) ->
-      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
     complete: $scope.completeStatuses.map (status) ->
-      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-') }
+      { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
   }
+
+  # Whether or not to show help
+  $scope.showHelp = false
 )
 .controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, Task, task, student, onChange, alertService) ->
   $scope.task = task

@@ -9,35 +9,47 @@
 	</div>
 	<div class="modal-body">
 
-		<div class="btn-group btn-group-justified task-status">
+		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
 			<label ng-repeat="action in taskEngagementConfig.all" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
 				ng-model="task.status" 
 				btn-radio="action.status" 
-				ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
+				ng-click="triggerTransition(action.status)">
+					<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+					<strong>{{action.label}}</strong>
+					<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
 		</div>
 		<br />
-		<div class="btn-group btn-group-justified task-status">
+		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
 			<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
 				ng-model="task.status" 
 				btn-radio="action.status"
 				ng-class="role == 'Student' ? 'disabled' : ''"
-				ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
+				ng-click="triggerTransition(action.status)">
+				<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+				<strong>{{action.label}}</strong>
+				<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
 		</div>
 		<br />
-		<div class="btn-group btn-group-justified task-status">
+		<div class="btn-group btn-group-justified text-center task-status task-status-change-trigger">
 			<label ng-repeat="action in taskEngagementConfig.complete"
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
 				ng-model="task.status" 
 				btn-radio="action.status" 
-				disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
+				disabled="disabled">
+				<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+				<strong>{{action.label}}</strong>
+				<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
 		</div>
 	</div>
 	<div class="modal-footer">
+		<button type="button" class="btn btn-info" ng-model="showHelp" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+      <i class="fa fa-question"></i>
+    </button>
 		<!-- More options... -->
     <div class="btn-group" dropdown>
       <button type="button" class="btn btn-default dropdown-toggle">

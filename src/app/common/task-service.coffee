@@ -48,7 +48,7 @@ angular.module("doubtfire.task-service", [  ])
     'working_on_it':      'Working On It',
     'need_help':          'Need Help',
     'redo':               'Redo',
-    'fix_and_include':    "Don't resubmit",
+    'fix_and_include':    "Do Not Resubmit",
     'fix_and_resubmit':   'Resubmit',
     'discuss':            'Discuss',
     'complete':           'Complete'
@@ -63,7 +63,19 @@ angular.module("doubtfire.task-service", [  ])
     'fix_and_include':    'fa fa-stop',
     'fix_and_resubmit':   'fa fa-wrench',
     'discuss':            'fa fa-check',
-    'complete':           'fa fa-check-circle-o'
+    'complete':           'fa fa-check-square-o'
+  }
+
+  taskService.helpTextDesc = {
+    'ready_to_mark':      'Task yet to be marked.',
+    'not_submitted':      'Task yet to be started.',
+    'working_on_it':      'Indicate to your tutor that you\'re working on this task.',
+    'need_help':          'Indicate to your tutor that you need help on this task.',
+    'redo':               'Your tutor wants you to start this task from scratch.',
+    'fix_and_include':    'Your tutor wants you to stop submitting this task and include it fixed in your portfolio.',
+    'fix_and_resubmit':   'Your tutor wants you to fix something and resubmit it for review again.',
+    'discuss':            'Your tutor is happy with your work. To mark as complete, attend the lab and discuss it with your tutor.',
+    'complete':           'Your tutor is happy with your work and it has been discussed with them.'
   }
 
   # This function gets the status CSS class for the indicated status
@@ -71,6 +83,9 @@ angular.module("doubtfire.task-service", [  ])
   
   # This function gets the status text for the indicated status
   taskService.statusText = (status) -> taskService.statusLabels[status]
+
+  # This function gets the help text for the indicated status
+  taskService.helpText = (status) -> console.log status; console.log taskService.helpTextDesc[status];  taskService.helpTextDesc[status]
 
   # Return an icon and label for the task
   taskService.statusData = (task) ->
