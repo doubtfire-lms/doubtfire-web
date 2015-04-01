@@ -67,10 +67,10 @@ angular.module("doubtfire.task-service", [  ])
   }
 
   taskService.helpTextDesc = {
-    'ready_to_mark':      'Task yet to be marked.',
-    'not_submitted':      'Task yet to be started.',
-    'working_on_it':      'Indicate to your tutor that you\'re working on this task.',
-    'need_help':          'Indicate to your tutor that you need help on this task.',
+    'ready_to_mark':      'You have completed the Task, and uploaded it for your tutor to assess.',
+    'not_submitted':      'You have not yet started the Task.',
+    'working_on_it':      'You are working on the task, but it is not yet ready to assess.',
+    'need_help':          'You are working on the task but would like some help to get it complete.',
     'redo':               'Your tutor wants you to start this task from scratch.',
     'fix_and_include':    'Your tutor wants you to stop submitting this task and include it fixed in your portfolio.',
     'fix_and_resubmit':   'Your tutor wants you to fix something and resubmit it for review again.',
