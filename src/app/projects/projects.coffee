@@ -34,6 +34,9 @@ angular.module("doubtfire.projects", [
       main:
         controller: "ProjectsShowCtrl"
         templateUrl: "projects/projects-show.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/header.tpl.html"
     data:
       pageTitle: "_Home_"
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -49,7 +52,7 @@ angular.module("doubtfire.projects", [
   $scope.projectLoaded = false
   $scope.showTaskId = $stateParams.showTaskId
   $scope.showFeedback = false
-  
+
   if $stateParams.viewing
     $scope.viewing = $stateParams.viewing
     if $stateParams.viewing == 'feedback'
