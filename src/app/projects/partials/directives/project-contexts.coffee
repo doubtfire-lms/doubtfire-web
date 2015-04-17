@@ -69,12 +69,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.lateEndDate = () ->
       return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
 
-    #
-    # Allow the caller to fetch a tutorial from the unit based on its id
-    #
-    $scope.tutorialFromId = (tuteId) ->
-      _.where $scope.unit.tutorialFromId(tuteId)
-
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
 )
@@ -166,7 +160,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     loadPdf = (task) ->
       loadingPdf = true
       pdfLoaded = false
-      return if task.processing_pdf
+      return if task.processing_pdf || not task.has_pdf
       $scope.pageNo = 0
       PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
         $scope.pdf = pdf
@@ -227,9 +221,9 @@ angular.module('doubtfire.projects.partials.contexts', [])
     # Navigation
     #
     $scope.shouldDisableLeftNav = () ->
-      $scope.pageNo == 1
+      $scope.pageNo <= 1
     $scope.shouldDisableRightNav = () ->
-      $scope.pageNo == $scope.pdf.numPages
+      $scope.pageNo >= $scope.pdf.numPages
     $scope.shouldHideNav = () ->
       $scope.taskStillProcessing() || $scope.corruptPdf()
     # Keyboard nav
@@ -254,7 +248,9 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.taskStillProcessing = () ->
       $scope.activeTask.processing_pdf
     $scope.readyToShowPDF = () ->
-      pdfLoaded and (not $scope.taskStillProcessing() )
+      pdfLoaded and (not $scope.taskStillProcessing())
+    $scope.notSubmitted = () ->
+      not $scope.activeTask.has_pdf and (not $scope.taskStillProcessing())
 
     #
     # Loading the active task
@@ -271,7 +267,13 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     # Initialiser to load pdf
     #
-    $scope.activeTask = $scope.submittedTasks[0]
+    if $scope.showTaskId
+      id = parseInt($scope.showTaskId, 10)
+      $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == id
+      if not $scope.activeTask
+        $scope.activeTask = $scope.submittedTasks[0]
+    else
+      $scope.activeTask = $scope.submittedTasks[0]
     if $scope.activeTask
       fetchTaskComments($scope.activeTask)
       loadPdf($scope.activeTask)
@@ -286,15 +288,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
       $scope.statusData($scope.activeTask)
 
     $scope.recreatePDF = ->
-      TaskFeedback.resource.update({ id: $scope.activeTask.id } ).$promise.then (
-        (value) ->  #success
-          if value.result == "false"
-            alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
-          else
-            alertService.add("info", "Task PDF will be recreated.", 2000)
-        ),
-        (value) -> #fail
-          alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+      taskService.recreatePDF($scope.activeTask, null)
 
     #
     # Statuses tutors may change task to

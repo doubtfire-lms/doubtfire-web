@@ -4,7 +4,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
 # task = the task to update
 # student = passed through from tutor view to allow update of task stats
 #
-.controller('AssessTaskModalCtrl', ($scope, $modalInstance, $modal, task, student, project, onChange, assessingUnitRole, Task, alertService, projectService, taskService, TaskFeedback) ->
+.controller('AssessTaskModalCtrl', ($scope, $modalInstance, $modal, task, student, project, onChange, assessingUnitRole, Task, alertService, projectService, taskService) ->
   $scope.task = task
 
   $scope.$watch 'task.status', ->
@@ -40,17 +40,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
     )
 
   $scope.recreateTask = () ->
-    TaskFeedback.resource.update({ id: $scope.task.id } ).$promise.then (
-      (value) ->  #success
-        if value.result == "false"
-          alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
-        else
-          alertService.add("info", "Task PDF will be recreated.", 2000)
-        $modalInstance.close(true)
-      ),
-      (value) -> #fail
-        alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
-        $modalInstance.close(true)
+    taskService.recreatePDF $scope.task, () -> $modalInstance.close()
 
   $scope.triggerTransition = (status) ->
     oldStatus = $scope.task.status
@@ -121,6 +111,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
   $scope.fileUploader = TaskSubmission.fileUploader($scope, task, student, onChange)
   $scope.submitUpload = () ->
     $scope.fileUploader.uploadEnqueuedFiles()
+    task.processing_pdf = true
   $scope.clearUploads = () ->
     $scope.fileUploader.clearQueue()
   $scope.close = () ->
