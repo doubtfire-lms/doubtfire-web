@@ -28,6 +28,16 @@ angular.module("doubtfire.projects", [
       pageTitle: "_Home_"
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
+  $stateProvider.state("projects#feedback",
+    url: "/projects/:projectId/:viewing/:showTaskId"
+    views:
+      main:
+        controller: "ProjectsShowCtrl"
+        templateUrl: "projects/projects-show.tpl.html"
+    data:
+      pageTitle: "_Home_"
+      # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
+  )
 )
 .controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser) ->
   if $stateParams.authToken?
@@ -37,6 +47,15 @@ angular.module("doubtfire.projects", [
   $scope.unitLoaded = false
   $scope.studentProjectId = $stateParams.projectId
   $scope.projectLoaded = false
+  $scope.showTaskId = $stateParams.showTaskId
+  $scope.showFeedback = false
+  
+  if $stateParams.viewing
+    $scope.viewing = $stateParams.viewing
+    if $stateParams.viewing == 'feedback'
+      $scope.showFeedback = true
+  else
+    $scope.viewing = "progress"
   
   Project.get { id: $scope.studentProjectId }, (project) ->
     # Clear any page-specific menus
@@ -54,8 +73,8 @@ angular.module("doubtfire.projects", [
         $scope.tasks = project.tasks
 
         # $scope.submittedTasks = _.filter($scope.tasks, (task) -> _.contains(['ready_to_mark', 'discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo'], task.status))
-        $scope.submittedTasks = _.filter($scope.tasks, (task) -> task.has_pdf )
-        $scope.submittedTasks = _.sortBy($scope.submittedTasks, (t) -> t.task_abbr).reverse()
+        # $scope.submittedTasks = _.filter($scope.tasks, (task) -> task.has_pdf )
+        $scope.submittedTasks = _.sortBy($scope.tasks, (t) -> t.task_abbr).reverse()
         $scope.unitLoaded = true
 
       if $stateParams.unitRole?

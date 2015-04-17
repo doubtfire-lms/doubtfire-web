@@ -1,6 +1,6 @@
 angular.module("doubtfire.task-service", [  ])
 
-.factory("taskService", () ->
+.factory("taskService", (TaskFeedback, alertService) ->
   #
   # The unit service object
   #
@@ -100,6 +100,21 @@ angular.module("doubtfire.task-service", [  ])
     angular.forEach taskService.statusKeys, (sk) ->
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
+
+  taskService.recreatePDF = (task, success) ->
+    TaskFeedback.resource.update({ id: task.id } ).$promise.then (
+      (value) ->  #success
+        if value.result == "false"
+          alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+        else
+          task.processing_pdf = true
+          alertService.add("info", "Task PDF will be recreated.", 2000)
+
+          if success
+            success()
+      ),
+      (value) -> #fail
+        alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
 
   taskService
 )
