@@ -14,7 +14,7 @@
         <div nv-file-drop ng-show="markingFileUploader.isHTML5 && dropper && markingFileUploader.queue.length == 0" class="drop well col-sm-10" nv-file-over uploader="markingFileUploader">
           <p class="fa fa-file-archive-o fa-3x"></p>
           <br/>
-          Drop zip here
+          Drop zip or csv here
         </div>
         <button class="col-sm-1 btn btn-default btn-xs" style="margin-left: 10px; height: 30px;" ng-class="{'active' : dropper }" ng-click="dropper = !dropper">Drop</button>
       </div>
@@ -45,18 +45,22 @@
         <table class="table table-striped table-responsive">
           <thead>
             <th>Filename</th>
+            <th>Task</th>
             <th>Message</th>
           </thead>
           <tr ng-repeat="item in taskUploadResults.failed" class="danger">
             <td>{{item.file}}</td>
+            <td>{{item.task}}</td>
             <td>{{item.error}}</td>
           </tr>
           <tr ng-repeat="item in taskUploadResults.succeeded">
             <td>{{item.file}}</td>
+            <td>{{item.task}}</td>
             <td>Success</td>
           </tr>
           <tr ng-repeat="item in taskUploadResults.ignored" class="info">
             <td>{{item.file}}</td>
+            <td>{{item.task}}</td>
             <td>File ignored</td>
           </tr>
         </table>
