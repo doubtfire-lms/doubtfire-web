@@ -69,6 +69,14 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
         user: ->  $scope.currentUser
         isNew: -> false
         users: -> false
+
+  $scope.openNotificationSettings = () ->
+    $modal.open
+      templateUrl: 'users/partials/templates/user-notification-settings.tpl.html'
+      controller: 'UserNotificationSettingsModalCtrl'
+      resolve:
+        # Actually load in all current user info when we request the user settings
+        user: ->  $scope.currentUser
 )
 
 .controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
