@@ -1,0 +1,28 @@
+<div>
+	<form class="form-horizontal" ng-submit="saveNotifications()" role="form">
+  	<div class="modal-header">
+      <h3>Notification Settings</h3>
+    </div>
+  	<div class="modal-body">
+  	  <div class="form-group">
+  	    <label class="col-sm-6 control-label">Username</label>
+  	    <p class="form-control-static">{{user.username}}</p>
+  	  </div>
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Task Notifications</label>
+        <span ng-show="user.receive_task_notifications" class="form-control col-sm-1 glyphicon glyphicon-ok text-success" ng-click="user.receive_task_notifications = false"></span><span ng-hide="user.receive_task_notifications" class="form-control col-sm-1 glyphicon glyphicon-remove text-danger" ng-click="user.receive_task_notifications = true"></span>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Feedback Notifications</label>
+        <span ng-show="user.receive_feedback_notifications" class="form-control col-sm-1 glyphicon glyphicon-ok text-success" ng-click="user.receive_feedback_notifications = false"></span><span ng-hide="user.receive_feedback_notifications" class="form-control col-sm-1 glyphicon glyphicon-remove text-danger" ng-click="user.receive_feedback_notifications = true"></span>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Portfolio Notifications</label>
+        <span ng-show="user.receive_portfolio_notifications" class="form-control col-sm-1 glyphicon glyphicon-ok text-success" ng-click="user.receive_portfolio_notifications = false"></span><span ng-hide="user.receive_portfolio_notifications" class="form-control col-sm-1 glyphicon glyphicon-remove text-danger" ng-click="user.receive_portfolio_notifications = true"></span>
+      </div>
+  	</div>
+		<div class="modal-footer text-right">
+			<input type="submit" class="btn btn-primary" value="Save" />
+		</div>
+	</form>
+</div>

@@ -76,6 +76,10 @@ angular.module("doubtfire.sessions", [
   checkAuth = () ->
     not _.isEqual currentUser, defaultAnonymousUser
 
+  saveCurrentUser = () ->
+    localStorageService.set(userCookieName, currentUser)
+    $cookieStore.put userCookieName, currentUser
+
   updateAuth = (authenticationUrl) ->
     if not checkAuth()
       return
@@ -88,8 +92,7 @@ angular.module("doubtfire.sessions", [
       remember: remember
     ).success((response) ->
       currentUser.authenticationToken = response.auth_token
-      localStorageService.set(userCookieName, currentUser)
-      $cookieStore.put userCookieName, currentUser
+      saveCurrentUser()
 
       $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), 1000*60*60
     )
@@ -102,7 +105,7 @@ angular.module("doubtfire.sessions", [
       delete currentUser[prop] for prop of currentUser
       _.extend currentUser, user
       if checkAuth()
-        $cookieStore.put userCookieName, currentUser
+        saveCurrentUser()
       else
         $cookieStore.remove userCookieName
         localStorageService.remove userCookieName
@@ -117,6 +120,8 @@ angular.module("doubtfire.sessions", [
     tryChangeUser localStorageService.get(userCookieName)
 
   auth = {}
+
+  auth.saveCurrentUser = saveCurrentUser
 
   auth.isAuthenticated = checkAuth
 
@@ -178,7 +183,7 @@ angular.module("doubtfire.sessions", [
         password: $scope.session.password
         remember: $scope.session.remember_me
       , ->
-        if $scope.remember_me
+        if $scope.session.remember_me
           localStorageService.set(userCookieName, currentUser)
           localStorageService.set(rememberDoubtfireCookie, true)
           localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())
