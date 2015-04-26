@@ -20,10 +20,6 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
 
     $scope.scatterData = []
 
-    # accordian seem to be broken in this
-    $scope.open[0] = true;
-    $scope.open[1] = false;
-
     taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbr)
 
     indexOfTask = (abbr) ->
