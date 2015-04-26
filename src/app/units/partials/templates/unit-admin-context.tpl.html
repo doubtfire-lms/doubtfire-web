@@ -8,7 +8,7 @@
     <label class="col-sm-2 control-label" for="name">Name</label>
     <input id="name" type="text" class="form-control col-sm-9" ng-model="unit.name">
   </div><!--/name-date-->
-  
+
   <div class="form-group">
     <label class="col-sm-2 control-label" for="description">Description</label>
     <textarea id="description" class="form-control col-sm-9" ng-model="unit.description"></textarea>
@@ -31,17 +31,23 @@
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
       </span>
-    </div> 
+    </div>
   </div><!--/end-date-->
 
   <div class="form-group">
     <label class="col-sm-2 control-label" for="enddate">Active</label>
     <div class="col-sm-9 input-group">
-      <span ng-click="unit.active=!unit.active" ng-show="unit.active" class="glyphicon glyphicon-ok text-success"></span>
-      <span ng-click="unit.active=!unit.active" ng-hide="unit.active" class="glyphicon glyphicon-remove text-danger"></span>
-    </div> 
-  </div><!--/end-date-->
-  
+      <div class="btn-group">
+          <label class="btn btn-default" ng-model="unit.active" btn-radio="true" uncheckable>
+            <i class="glyphicon glyphicon-ok"></i>
+          </label>
+          <label class="btn btn-default" ng-model="unit.active" btn-radio="false" uncheckable>
+            <i class="glyphicon glyphicon-remove"></i>
+          </label>
+      </div>
+    </div>
+  </div><!--/active-->
+
   <div class="form-group">
     <input type="submit" value="{{ unit.id == -1 ? 'Create Unit' : 'Update Unit' }}" class="btn btn-primary col-sm-2 col-sm-offset-9" />
   </div>
