@@ -1,6 +1,6 @@
-<!-- hidden div to simulate an autoload -->
-<div ng-mousemove="fetchStats()"
-  style="width: 100%; height: 100%; position: absolute; top: 0px; bottom: 0px;">
+<!-- hidden div to simulate an autoload, remove once loaded -->
+<div onmousemove="this.remove()" ng-mousemove="fetchStats()"
+  style="width: 100%; height: 100%; position: absolute; top: 0px">
 </div>
 <div>
   <div style="padding-top: 150px" ng-show="scatterData.length == 0" class="text-center">
