@@ -12,19 +12,19 @@
       <div ng-show="markingFileUploader.queue.length == 0" class="col-sm-offset-3">
         <input ng-show="markingFileUploader.queue.length == 0 && ( !markingFileUploader.isHTML5 || !dropper )" type="file" class="col-sm-10" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
         <div nv-file-drop ng-show="markingFileUploader.isHTML5 && dropper && markingFileUploader.queue.length == 0" class="drop well col-sm-10" nv-file-over uploader="markingFileUploader">
-          <p class="fa fa-file-archive-o fa-3x"></p>
-          <br/>
-          Drop zip or csv here
+          <i class="fa fa-file-archive-o fa-3x"></i><span style="display: inline-block; width: 30px"></span><i class="fa fa-file-excel-o fa-3x"></i>
+          <br/><br/>
+          Drop zip or CSV here
         </div>
         <button class="col-sm-1 btn btn-default btn-xs" style="margin-left: 10px; height: 30px;" ng-class="{'active' : dropper }" ng-click="dropper = !dropper">Drop</button>
       </div>
 
       <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-      
+
       <div class="help-block col-sm-7 col-sm-offset-3" ng-show="isMac()">
         <p><strong>Warning:</strong> due to quarantining in OS X's native zip compressor, you should use a third party zip compressor. Alternatively, compress using the command line: <pre>cd /folder/containing/marks.csv/; zip -r upload.zip .</pre></p>
       </div>
-      
+
     </div>
     <div class="form-group">
       <input ng-hide="markingFileUploader.isUploading || markingFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
