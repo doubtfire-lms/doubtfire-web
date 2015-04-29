@@ -1,4 +1,15 @@
 <div ng-if="activeTask">
+  <div class="feedbackFloatToolbar well" if-role="Admin Convenor Tutor">
+    <label>Actions</label>
+    <button ng-click="transitionWeekEnd()" class="btn btn-info">
+      <i class="fa fa-comment fa-2x"></i><br/>
+      Discussed
+    </button>
+    <a href="#/units?unitRole={{assessingUnitRole.id}}" class="btn btn-default">
+      <i class="fa fa-list fa-2x"></i><br/>
+      Student List
+    </a>
+  </div>
   <div class="pull-left list-group col-md-2 task-status">
     <a ng-repeat="task in submittedTasks| orderBy:'seq'" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
   </div>
@@ -65,14 +76,14 @@
               </button>
               <ul class="dropdown-menu" role="menu" style="padding: 0px;">
                 <li if-role="Tutor Convenor Admin" ng-repeat="action in taskEngagementConfig.tutorTriggers" class="text-center">
-                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" uncheckable> 
-                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i> 
+                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" uncheckable>
+                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
                     <strong>{{action.label}}</strong>
                   </a>
                 </li><!--/tutor-statuses-->
                 <li ng-repeat="action in taskEngagementConfig.studentTriggers" class="text-center">
-                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" > 
-                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i> 
+                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" >
+                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
                     <strong>{{action.label}}</strong>
                   </a>
                 </li><!--/student-statuses-->
