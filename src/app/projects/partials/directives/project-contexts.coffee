@@ -93,7 +93,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
-  controller: ($scope, $modal, TaskFeedback, TaskComment, Task, taskService, alertService) ->
+  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
     #
     # Comment code
     #
@@ -118,6 +118,18 @@ angular.module('doubtfire.projects.partials.contexts', [])
       TaskComment.query {task_id: task.id},
         (response) ->
           task.comments = response
+
+    #
+    # Batch Discuss button
+    #
+    $scope.transitionWeekEnd = () ->
+      Project.update({ id: $scope.project.project_id, trigger: "trigger_week_end" }).$promise.then (
+        (project) ->
+          oldId = $scope.activeTask.id
+          angular.extend $scope.submittedTasks, project.tasks
+          $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == oldId
+          alertService.add("success", "Status updated.", 2000)
+      )
 
     #
     # Comment text area enter to submit comment
@@ -336,7 +348,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
           # Success
           (value) ->
             $scope.activeTask.status = value.status
-    
+
             if student? && student.task_stats?
               projectService.updateTaskStats(student, value.new_stats)
 
@@ -349,7 +361,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
           (value) ->
             $scope.activeTask.status = oldStatus
             alertService.add("danger", value.data.error, 6000)
-    
+
     $scope.activeClass = (status) ->
       if status == $scope.activeTask.status
         "active"
