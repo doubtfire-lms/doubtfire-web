@@ -126,7 +126,11 @@ angular.module('doubtfire.projects.partials.contexts', [])
       Project.update({ id: $scope.project.project_id, trigger: "trigger_week_end" }).$promise.then (
         (project) ->
           oldId = $scope.activeTask.id
-          angular.extend $scope.submittedTasks, project.tasks
+
+          # go through each task and update the status only to the new project task's status
+          _.each $scope.submittedTasks, (task) ->
+            task.status = (_.find project.tasks, (t) -> task.id == t.id).status
+
           $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == oldId
           alertService.add("success", "Status updated.", 2000)
       )
