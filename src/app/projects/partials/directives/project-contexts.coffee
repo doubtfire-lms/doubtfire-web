@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.partials.contexts', [])
+angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
 .directive('progressInfo', ->
   restrict: 'E'
@@ -131,20 +131,26 @@ angular.module('doubtfire.projects.partials.contexts', [])
         title: "View Task Sheet"
         subtitle: "The task sheet contains the requirements of this task"
         icon: "fa-info"
+        active: false
       fileUpload:
         title: "Upload Submission"
         subtitle: "Upload your submission so it is ready for your tutor to mark"
         icon: "fa-upload"
+        active: false
       viewSubmission:
         title: "View Submission"
         subtitle: "View the latest submission you have uploaded"
         icon: "fa-file-o"
+        active: false
       viewComments:
         title: "View Comments"
         subtitle: "Write and read comments between you and your tutor"
         icon: "fa-comments-o"
+        active: false
     $scope.setActiveTab = (tab) ->
       $scope.activeTab = $scope.tabsData[tab]
+      _.each $scope.tabsData, (tab) -> tab.active = false
+      $scope.activeTab.active = true
 
     #
     # Comment text area enter to submit comment
@@ -312,7 +318,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     # Statuses tutors may change task to
     #
-    $scope.studentStatuses       = ['working_on_it', 'need_help', 'ready_to_mark', 'not_submitted' ]
+    $scope.studentStatuses       = ['working_on_it', 'need_help', 'ready_to_mark', 'not_submitted']
     $scope.tutorStatuses         = ['discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo']
     $scope.taskEngagementConfig = {
       studentTriggers: $scope.studentStatuses.map (status) ->
@@ -349,8 +355,9 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
       if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
-        # TODO: Bring up new needs help modal
-        # $scope.uploadFiles()
+        alertService.add("info", "Upload required.", 4000)
+        $scope.setActiveTab('fileUpload')
+        $scope.activeTask.status = oldStatus
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
           # Success
