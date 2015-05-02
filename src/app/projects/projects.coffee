@@ -46,29 +46,20 @@ angular.module("doubtfire.projects", [
   if $stateParams.authToken?
     $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
-    
+
   $scope.unitLoaded = false
   $scope.studentProjectId = $stateParams.projectId
   $scope.projectLoaded = false
-  $scope.showTaskId = $stateParams.showTaskId
-  $scope.showFeedback = false
 
-  if $stateParams.viewing
-    $scope.viewing = $stateParams.viewing
-    if $stateParams.viewing == 'feedback'
-      $scope.showFeedback = true
-  else
-    $scope.viewing = "progress"
-  
   Project.get { id: $scope.studentProjectId }, (project) ->
     # Clear any page-specific menus
     headerService.clearMenus()
-    
+
     # Provide access to the Project's details
     $scope.project = project # the selected unit role
-    
+
     $scope.submittedTasks = []
-    
+
     if project
       unitService.getUnit project.unit_id, false, false, (unit) ->
         $scope.unit = unit # the unit related to the role
@@ -84,8 +75,22 @@ angular.module("doubtfire.projects", [
         UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
           if unitRole.unit_id == project.unit_id
             $scope.assessingUnitRole = unitRole
-      
+
       $scope.burndownData = project.burndown_chart_data
       $scope.projectLoaded = true
   # end get project
+
+  #
+  # Switcher to task view
+  #
+  $scope.activeTab = [true, false, false, false]
+  $scope.showTaskView = (task) ->
+    if not (task or $scope.selectedTask)
+      task = $scope.submittedTasks[0]
+    else if not task and $scope.selectedTask
+      task = $scope.selectedTask
+
+    $scope.activeTab[1] = true
+    $scope.activeTab[0] = $scope.activeTab[2] = $scope.activeTab[3] = false
+    $scope.selectedTask = task
 )

@@ -93,7 +93,12 @@ angular.module('doubtfire.projects.partials.contexts', [])
 .directive('taskFeedback', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
+  scope:
+    project: '='
+    activeTask: '='
+    submittedTasks: '='
   controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
+
     #
     # Comment code
     #
@@ -279,20 +284,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
 
     $scope.activeTaskUrl = ->
       TaskFeedback.getTaskUrl($scope.activeTask)
-
-    #
-    # Initialiser to load pdf
-    #
-    if $scope.showTaskId
-      id = parseInt($scope.showTaskId, 10)
-      $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == id
-      if not $scope.activeTask
-        $scope.activeTask = $scope.submittedTasks[0]
-    else
-      $scope.activeTask = $scope.submittedTasks[0]
-    if $scope.activeTask
-      fetchTaskComments($scope.activeTask)
-      loadPdf($scope.activeTask)
 
     #
     # Functions from taskService to get data

@@ -15,6 +15,7 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
     onChange: "=onChange"
     studentProjectId: "=studentProjectId"
     unit: "=unit"
+    onSelect: "=onSelect"
     assessingUnitRole: "=assessingUnitRole"
 
   controller: ($scope, $modal, Project, taskService) ->
@@ -49,17 +50,4 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
       Project.get { id: $scope.studentProjectId }, (project) ->
         $scope.project  = project
         showProject()
-
-    # Show the status update dialog for the indicated task
-    $scope.showAssessTaskModal = (task) ->
-      $modal.open
-        controller: 'AssessTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
-        resolve: {
-          task: -> task,
-          student: -> $scope.student,
-          project: -> $scope.project,
-          assessingUnitRole: -> $scope.assessingUnitRole,
-          onChange: -> $scope.onChange
-        }
 )

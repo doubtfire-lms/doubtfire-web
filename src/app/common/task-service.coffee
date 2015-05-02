@@ -98,7 +98,6 @@ angular.module("doubtfire.task-service", [  ])
     now = new Date()
     diffTime = now.getTime() - dueDate.getTime()
     diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
-    console.log diffDays
     return false if diffDays <= 0
     diffDays
 
