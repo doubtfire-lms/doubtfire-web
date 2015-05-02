@@ -10,10 +10,10 @@
 	<div class="modal-body">
 
 		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
-			<label ng-repeat="action in taskEngagementConfig.all" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
-				ng-model="task.status" 
-				btn-radio="action.status" 
+			<label ng-repeat="action in taskEngagementConfig.all"
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
+				btn-radio="action.status"
 				ng-click="triggerTransition(action.status)">
 					<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
 					<strong>{{action.label}}</strong>
@@ -22,9 +22,9 @@
 		</div>
 		<br />
 		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
-			<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
-				ng-model="task.status" 
+			<label ng-repeat="action in taskEngagementConfig.tutorTriggers"
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
 				btn-radio="action.status"
 				ng-class="role == 'Student' ? 'disabled' : ''"
 				ng-click="triggerTransition(action.status)">
@@ -36,9 +36,9 @@
 		<br />
 		<div class="btn-group btn-group-justified text-center task-status task-status-change-trigger">
 			<label ng-repeat="action in taskEngagementConfig.complete"
-				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center" 
-				ng-model="task.status" 
-				btn-radio="action.status" 
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
+				btn-radio="action.status"
 				ng-class="role == 'Student' ? 'disabled' : ''"
 				ng-click="triggerTransition(action.status)">
 				<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
@@ -56,12 +56,6 @@
       <button type="button" class="btn btn-default dropdown-toggle">
         <i class="fa fa-cog"></i> <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
-      	<li ng-class="{'disabled': !allowReupload}" tooltip="Use this to change what files are submitted for this task. Task must be marked as 'Discuss', 'Don't Resubmit' or 'Complete'." tooltip-placement="top">
-      		<a ng-click="allowReupload && uploadFiles()"><i class="fa fa-cloud-upload"></i> Re-Upload Files</a>
-      	</li>
-        <li ng-class="{'disabled': !allowRegeneratePdf}" tooltip="Use this to ask Doubtfire to regenerate the PDF that was created for you if you believe there was an error processing. Task must marked as 'Ready to Mark', 'Discuss' or 'Complete' and a PDF must have been previously generated." tooltip-placement="top"><a ng-click="allowRegeneratePdf && recreateTask()"><i class="fa fa-recycle"></i> Regenerate PDF</a></li>
-      </ul>
-   	</div>
+
 	</div>
 </form>

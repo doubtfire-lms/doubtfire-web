@@ -74,7 +74,7 @@ angular.module("doubtfire.api", [
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
   this.openFeedback = (task) ->
     $window.open this.getTaskUrl(task), "_blank"
-    
+
   return this
 )
 .factory("Students", (resourcePlus) ->
@@ -85,7 +85,7 @@ angular.module("doubtfire.api", [
 )
 .service("UserCSV", (api, $window, FileUploader, currentUser, alertService) ->
   csvUrl = "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
-  
+
   fileUploader = null
 
   this.fileUploader = (scope) ->
@@ -104,20 +104,25 @@ angular.module("doubtfire.api", [
         else
           alertService.add("info", "No users need to be added.", 4000)
         fileUploader.clearQueue()
-        
+
       fileUploader.onErrorItem = (item, response, status, headers) ->
         alertService.add("danger", "File Upload Failed: " + response.error, 6000)
         fileUploader.clearQueue()
     fileUploader
-        
+
   this.downloadFile =  ->
     $window.open csvUrl, "_blank"
-    
+
   return this
 )
 .service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService, projectService) ->
 
-  this.fileUploader = (scope, task, student, onChange) ->
+  #
+  # When using the file uploader, be sure to have
+  # fileUploadSuccess and fileUploadFailed functions
+  # declared
+  #
+  this.fileUploader = (scope, task) ->
     # per scope or task
     uploadUrl = "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
     fileUploader = new FileUploader {
@@ -126,11 +131,9 @@ angular.module("doubtfire.api", [
       method: "POST",
       queueLimit: task.task_upload_requirements.length
     }
-    
+
     fileUploader.task = task
-    fileUploader.student = student
-    fileUploader.onChange = onChange
-    
+
     extWhitelist = (name, exts) ->
       # no extension
       parts = name.toLowerCase().split('.')
@@ -159,24 +162,18 @@ angular.module("doubtfire.api", [
       fn: (item) ->
         fileFilter ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg'], "image" , item
     }
-    
+
     fileUploader.onUploadSuccess = (response)  ->
-      alertService.add("success", "#{fileUploader.task.task_name} uploaded successfully!", 2000)
-      fileUploader.scope.close()
+      fileUploader.scope.fileUploadSuccess()
+      fileUploader.scope.$apply()
       fileUploader.clearQueue()
       task.status = response.status
 
-      if student? && student.task_stats?
-        projectService.updateTaskStats(student, response.new_stats)
-
-      if fileUploader.onChange?
-        fileUploader.onChange()
-      
     fileUploader.onUploadFailure = (response) ->
-      fileUploader.scope.close(response.error)
-      alertService.add("danger", "File Upload Failed: #{response.error}")
+      fileUploader.scope.fileUploadFailed(response.error)
+      fileUploader.scope.$apply()
       fileUploader.clearQueue()
-      
+
     fileUploader.uploadEnqueuedFiles = () ->
       queue = fileUploader.queue
       xhr = new XMLHttpRequest()
@@ -195,20 +192,21 @@ angular.module("doubtfire.api", [
             fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
           # Fail
           else
-            fileUploader.onUploadFailure(JSON.parse(xhr.responseText))
-            
+            error = if xhr.responseText == '' then '{ "error": "Unknown Error" }' else xhr.responseText
+            fileUploader.onUploadFailure(JSON.parse(error))
+
       # Append each file in the queue to the form
       form.append item.alias, item._file for item in queue
-      
+
       xhr.open(fileUploader.method, fileUploader.url, true)
       xhr.send(form)
-        
+
     fileUploader
-  
+
   this.openTaskInNewWindow = (task) ->
     win = $window.open this.getTaskUrl(task), "_blank"
     win.href = ""
-    
+
   return this
 )
 .service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
@@ -222,27 +220,27 @@ angular.module("doubtfire.api", [
     fileUploader.onBeforeUploadItem = (item) ->
       # ensure this item will be uploading for this unit it...
       item.url = fileUploader.url.replace(/unit_id=\d+/, "unit_id=#{fileUploader.unit.id}")
-      
+
     fileUploader.uploadTaskCSV = (unit) ->
       fileUploader.unit = unit
       fileUploader.uploadAll()
-      
+
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       newTasks = response
       diff = newTasks.length - fileUploader.unit.task_definitions.length
       alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
       _.extend(fileUploader.scope.unit.task_definitions, response)
       fileUploader.clearQueue()
-      
+
     fileUploader.onErrorItem = (evt, response, item, headers) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
-        
+
     fileUploader
-        
+
   this.downloadFile = (unit) ->
     $window.open "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}", "_blank"
-    
+
   return this
 )
 .service("StudentEnrolmentCSV", (api, $window, FileUploader, currentUser, alertService) ->
@@ -257,11 +255,11 @@ angular.module("doubtfire.api", [
     fileUploader.onBeforeUploadItem = (item) ->
       # ensure this item will be uploading for this unit it...
       item.url = fileUploader.url.replace(/\d+\?/, "#{fileUploader.unit.id}?")
-      
+
     fileUploader.uploadStudentEnrolmentCSV = (unit) ->
       fileUploader.unit = unit
       fileUploader.uploadAll()
-      
+
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       newStudents = response
       # at least one student?
@@ -271,16 +269,16 @@ angular.module("doubtfire.api", [
       else
         alertService.add("info", "No students need to be enrolled.", 4000)
       fileUploader.clearQueue()
-      
+
     fileUploader.onErrorItem = (evt, response, item, headers) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
-        
+
     fileUploader
-        
+
   this.downloadFile = (unit) ->
     $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
-    
+
   return this
 )
 .service("StudentUnenrolCSV", (api, $window, FileUploader, currentUser, alertService) ->
@@ -296,11 +294,11 @@ angular.module("doubtfire.api", [
     fileUploader.onBeforeUploadItem = (item) ->
       # ensure this item will be uploading for this unit it...
       item.url = fileUploader.url.replace(/\/0\//, "/#{fileUploader.unit.id}/")
-      
+
     fileUploader.uploadStudentWithdrawCSV = (unit) ->
       fileUploader.unit = unit
       fileUploader.uploadAll()
-      
+
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       withdrawnStudents = response
       # at least one student?
@@ -310,16 +308,16 @@ angular.module("doubtfire.api", [
       else
         alertService.add("info", "No students were withdrawn.", 4000)
       fileUploader.clearQueue()
-      
+
     fileUploader.onErrorItem = (evt, response, item, headers) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
-        
+
     fileUploader
-        
+
   this.downloadFile = (unit) ->
     $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
-    
+
   return this
 )
 .service("TutorMarker", (api, $window, FileUploader, currentUser, alertService) ->
@@ -331,10 +329,10 @@ angular.module("doubtfire.api", [
       url: "#{api}/submission/assess.json?unit_id=#{scope.unit.id}&auth_token=#{currentUser.authenticationToken}"
       queueLimit: 1
     }
-      
+
     fileUploader.uploadZip = () ->
       fileUploader.uploadAll()
-      
+
     fileUploader.onSuccessItem = (item, response, status, headers) ->
       # markedTasks = response
       # # at least one student?
@@ -344,22 +342,22 @@ angular.module("doubtfire.api", [
       #   alertService.add("info", "No tasks were uploaded.", 2000)
       fileUploader.clearQueue()
       fileUploader.scope.taskUploadResults = response
-      
+
     fileUploader.onErrorItem = (evt, response, item, headers) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
-        
+
     fileUploader
-        
+
   this.downloadFile = (unit) ->
     $window.open "#{api}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
-    
+
   return this
 )
 .service("TaskCompletionCSV", (api, $window, currentUser) ->
   this.downloadFile = (unit) ->
     $window.open "#{api}/csv/units/#{unit.id}/task_completion.json?auth_token=#{currentUser.authenticationToken}", "_blank"
-    
+
   return this
 )
 .service("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
@@ -378,9 +376,9 @@ angular.module("doubtfire.api", [
       method: "POST",
       queueLimit: 1
     }
-    
+
     fileUploader.project = project
-    
+
     extWhitelist = (name, exts) ->
       # no extension
       parts = name.toLowerCase().split('.')
@@ -417,13 +415,13 @@ angular.module("doubtfire.api", [
     fileUploader.uploadPortfolioPart = (name, kind) ->
       fileUploader.formData = [ {name: name}, {kind: kind} ]
       fileUploader.uploadAll()
-    
+
     fileUploader.onSuccessItem = (item, response)  ->
       alertService.add("success", "File uploaded successfully!", 2000)
       if not _.findWhere(fileUploader.project.portfolio_files, response)
         fileUploader.project.portfolio_files.push(response)
       fileUploader.clearQueue()
-      
+
     fileUploader.onErrorItem = (response) ->
       alertService.add("danger", "File Upload Failed: #{response.error}")
       fileUploader.clearQueue()
