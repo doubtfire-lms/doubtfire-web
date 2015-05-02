@@ -48,7 +48,7 @@ angular.module("doubtfire.task-service", [  ])
     'working_on_it':      'Working On It',
     'need_help':          'Need Help',
     'redo':               'Redo',
-    'fix_and_include':    "Do Not Resubmit",
+    'fix_and_include':    "Don't Resubmit",
     'fix_and_resubmit':   'Resubmit',
     'discuss':            'Discuss',
     'complete':           'Complete'
@@ -80,7 +80,7 @@ angular.module("doubtfire.task-service", [  ])
 
   # This function gets the status CSS class for the indicated status
   taskService.statusClass = (status) -> _.trim(_.dasherize(status))
-  
+
   # This function gets the status text for the indicated status
   taskService.statusText = (status) -> taskService.statusLabels[status]
 
@@ -89,7 +89,16 @@ angular.module("doubtfire.task-service", [  ])
 
   # Return an icon and label for the task
   taskService.statusData = (task) ->
-    { icon: taskService.statusIcons[task.status], label: taskService.statusLabels[task.status] }
+    { icon: taskService.statusIcons[task.status], label: taskService.statusLabels[task.status], class: taskService.statusClass(task.status), daysOverdue: taskService.daysOverdue(task) }
+
+  # Return number of days task is overdue, or false if not overdue
+  taskService.daysOverdue = (task) ->
+    dueDate = new Date(task.due_date)
+    now = new Date()
+    diffTime = now.getTime() - dueDate.getTime()
+    diffDays = Math.ceil(diffTime / (1000 * 3600 * 24))
+    return false if diffDays < 0
+    diffDays
 
   taskService.indexOf = (status) ->
     _.indexOf(taskService.statusKeys, status)
