@@ -1,0 +1,34 @@
+<div class="panel-body" style="max-height: 550px; overflow-y: scroll" >
+  <div class="text-center" ng-show="(!activeTask.comments) || activeTask.comments.length == 0" style="margin: 30px">
+    <i class="fa fa-2x fa-comments-o"></i><br/>
+    No comments have yet been made.
+  </div>
+  <div class="comment" ng-repeat="comment in activeTask.comments">
+    <div class="comment-details col-md-2">
+      <span class="comment-by">
+        {{comment.comment_by}}
+      </span>
+      <span class="comment-date">
+        {{comment.created_at | date: 'd MMM yyyy'}}
+      </span>
+    </div>
+    <div class="comment-text col-md-10">
+      <div class="col-md-11">
+        {{comment.comment}}
+      </div>
+      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)">
+        <i class="fa fa-times-circle"></i>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <form class="input-group" ng-submit="addComment()" role="form">
+    <textarea ng-keyup="checkCommentTextareaEnter()" ng-model="comment.text" class="form-control" style="height: 45px; resize: none;" placeholder="Make a comment on this submission..."></textarea>
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary"  style="height: 45px" type="button" ng-disabled="comment.text.trim().length == 0">
+        <i class="fa fa-plus fa-2x"></i>
+      </button>
+    </span>
+  </form>
+</div>

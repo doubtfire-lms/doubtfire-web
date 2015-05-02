@@ -119,7 +119,7 @@ angular.module("doubtfire.api", [
 
   #
   # When using the file uploader, be sure to have
-  # fileUploadSuccess and fileUploadFailed functions
+  # fileUploadSuccess(status) and fileUploadFailed(error) functions
   # declared
   #
   this.fileUploader = (scope, task) ->
@@ -164,10 +164,9 @@ angular.module("doubtfire.api", [
     }
 
     fileUploader.onUploadSuccess = (response)  ->
-      fileUploader.scope.fileUploadSuccess()
+      fileUploader.scope.fileUploadSuccess(response.status)
       fileUploader.scope.$apply()
       fileUploader.clearQueue()
-      task.status = response.status
 
     fileUploader.onUploadFailure = (response) ->
       fileUploader.scope.fileUploadFailed(response.error)

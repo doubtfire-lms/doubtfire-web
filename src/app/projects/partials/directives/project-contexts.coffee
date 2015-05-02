@@ -151,40 +151,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       $scope.activeTab = $scope.tabsData[tab]
       _.each $scope.tabsData, (tab) -> tab.active = false
       $scope.activeTab.active = true
-
-    #
-    # Comment text area enter to submit comment
-    #
-    fetchTaskComments = (task) ->
-      TaskComment.query {task_id: task.id},
-        (response) ->
-          task.comments = response
-
-    $scope.checkCommentTextareaEnter = (e) ->
-      e = e || window.event
-      # Hit return and not shift key
-      if e.keyCode is 13 and not e.shiftKey
-        $scope.addComment()
-        return false
-      return true
-
-    $scope.addComment = () ->
-      TaskComment.create { task_id: $scope.activeTask.id, comment: $scope.comment.text },
-        (response) ->
-          if ! $scope.activeTask.comments
-            $scope.activeTask.comments = []
-          $scope.activeTask.comments.unshift response
-          $scope.comment.text = ""
-        (error) ->
-          alertService.add("danger", "Request failed, cannot add a comment at this time.", 2000)
-
-    $scope.deleteComment = (id) ->
-      TaskComment.delete { task_id: $scope.activeTask.id, id: id },
-        (response) ->
-          #$scope.activeTask.comments.splice response
-          $scope.activeTask.comments = $scope.activeTask.comments.filter (e) -> e.id != id
-        (error) ->
-          alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
+    $scope.setActiveTab('taskSheet')
 
     #
     # PDF Local Funcs
@@ -318,7 +285,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     #
     # Statuses tutors may change task to
     #
-    $scope.studentStatuses       = ['working_on_it', 'need_help', 'ready_to_mark', 'not_submitted']
+    $scope.studentStatuses       = ['working_on_it', 'need_help', 'not_submitted']
     $scope.tutorStatuses         = ['discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo']
     $scope.taskEngagementConfig = {
       studentTriggers: $scope.studentStatuses.map (status) ->
@@ -328,36 +295,12 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       }
 
     #
-    # Allow user to upload new portfolio evidence
-    #
-    $scope.uploadFiles = () ->
-      oldStatus = $scope.activeTask.status
-      $modal.open(
-        controller: 'SubmitTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/submit-task-modal.tpl.html'
-        resolve: {
-          task: -> $scope.activeTask,
-          student: -> null,
-          onChange: -> null
-        }
-      ).result.then(
-        (val) -> ,
-        # They cancelled the upload...
-        () ->
-          $scope.activeTask.status = oldStatus
-          alertService.add("info", "Upload cancelled: status was reverted.", 2000)
-      )
-
-
-    #
     # Change state of task
     #
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
       if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
-        alertService.add("info", "Upload required.", 4000)
-        $scope.setActiveTab('fileUpload')
-        $scope.activeTask.status = oldStatus
+        # ready_to_mark selected...
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
           # Success
@@ -382,4 +325,42 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         "active"
       else
         ""
+)
+.directive('viewComments', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/view-comments.tpl.html'
+  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
+    #
+    # Comment text area enter to submit comment
+    #
+    fetchTaskComments = (task) ->
+      TaskComment.query {task_id: task.id},
+        (response) ->
+          task.comments = response
+
+    $scope.checkCommentTextareaEnter = (e) ->
+      e = e || window.event
+      # Hit return and not shift key
+      if e.keyCode is 13 and not e.shiftKey
+        $scope.addComment()
+        return false
+      return true
+
+    $scope.addComment = () ->
+      TaskComment.create { task_id: $scope.activeTask.id, comment: $scope.comment.text },
+        (response) ->
+          if ! $scope.activeTask.comments
+            $scope.activeTask.comments = []
+          $scope.activeTask.comments.unshift response
+          $scope.comment.text = ""
+        (error) ->
+          alertService.add("danger", "Request failed, cannot add a comment at this time.", 2000)
+
+    $scope.deleteComment = (id) ->
+      TaskComment.delete { task_id: $scope.activeTask.id, id: id },
+        (response) ->
+          #$scope.activeTask.comments.splice response
+          $scope.activeTask.comments = $scope.activeTask.comments.filter (e) -> e.id != id
+        (error) ->
+          alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
 )
