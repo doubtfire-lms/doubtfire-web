@@ -58,7 +58,7 @@
         <span class="item-info text-right">
           <label>Due Date:</label> {{activeTask.due_date | date:'EEE MMM d'}}
         </span>
-        <span class="overdue label label-{{activeStatusData().daysOverdue > 5 ? 'danger' : 'warning'}} pull-right" ng-hide="activeStatusData().daysOverdue === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">Overdue By <br/> {{activeStatusData().daysOverdue}} days</span>
+        <span class="overdue label label-{{activeStatusData().daysOverdue > 5 ? 'danger' : 'warning'}} pull-right" ng-hide="activeStatusData().daysOverdue === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">Overdue By <br/> {{activeStatusData().daysOverdue}} day{{activeStatusData().daysOverdue > 1 ? 's' : ''}}</span>
       </div>
     </div><!--/task-header-info-->
   </div><!--/task-toolbar-->
