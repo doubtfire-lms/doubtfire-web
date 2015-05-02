@@ -1,0 +1,25 @@
+<div class="panel-body" ng-show="notSubmitted() || taskStillProcessing()">
+  <p class="lead text-center" ng-show="notSubmitted()">
+    <br/>
+    <i class="fa fa-upload fa-2x"></i>
+    <br/>
+    Upload submission before viewing.
+  </p><!--/no-pdf-->
+  <p class="lead text-center" ng-show="taskStillProcessing()">
+    <br/>
+    <i class="fa fa-clock-o fa-2x"></i>
+    <br/>
+    Submission is being processed. Come back soon.
+  </p><!--/pdf-in-process-->
+</div>
+<pdf-panel-viewer pdf-url="taskUrl()" ng-hide="notSubmitted() || taskStillProcessing()"></pdf-panel-viewer>
+<div class="panel-footer" style="height: 60px" ng-hide="notSubmitted() || taskStillProcessing()">
+  <div class="pull-left text-muted">
+    <strong>Note:</strong> {{activeTask.status != 'ready_to_mark' ? "Annotated comments are viewable once PDF is downloaded" : "Comments will be available once your tutor has assessed your submission"}}
+  </div>
+  <div class="pull-right btn-group">
+    <a href="{{taskUrl()}}" class="btn btn-success">
+      <span class="glyphicon glyphicon-cloud-download"></span>
+    </a>
+  </div>
+</div><!--/panel-footer-->
