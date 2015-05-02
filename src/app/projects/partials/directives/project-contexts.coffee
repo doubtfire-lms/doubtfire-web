@@ -107,23 +107,6 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.pageSize = 3
     $scope.maxSize = 5
 
-    $scope.showAssessTaskModal = (activeTask) ->
-      $modal.open
-        controller: 'AssessTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
-        resolve: {
-          task: -> activeTask,
-          student: -> null,
-          project: -> $scope.project,
-          assessingUnitRole: -> $scope.assessingUnitRole,
-          onChange: -> null
-        }
-
-    fetchTaskComments = (task) ->
-      TaskComment.query {task_id: task.id},
-        (response) ->
-          task.comments = response
-
     #
     # Batch Discuss button
     #
@@ -141,8 +124,36 @@ angular.module('doubtfire.projects.partials.contexts', [])
       )
 
     #
+    # Active task tab group
+    #
+    $scope.tabsData =
+      taskSheet:
+        title: "View Task Sheet"
+        subtitle: "The task sheet contains the requirements of this task"
+        icon: "fa-info"
+      fileUpload:
+        title: "Upload Submission"
+        subtitle: "Upload your submission so it is ready for your tutor to mark"
+        icon: "fa-upload"
+      viewSubmission:
+        title: "View Submission"
+        subtitle: "View the latest submission you have uploaded"
+        icon: "fa-file-o"
+      viewComments:
+        title: "View Comments"
+        subtitle: "Write and read comments between you and your tutor"
+        icon: "fa-comments-o"
+    $scope.setActiveTab = (tab) ->
+      $scope.activeTab = $scope.tabsData[tab]
+
+    #
     # Comment text area enter to submit comment
     #
+    fetchTaskComments = (task) ->
+      TaskComment.query {task_id: task.id},
+        (response) ->
+          task.comments = response
+
     $scope.checkCommentTextareaEnter = (e) ->
       e = e || window.event
       # Hit return and not shift key
@@ -301,7 +312,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     # Statuses tutors may change task to
     #
-    $scope.studentStatuses       = ['not_submitted', 'need_help', 'working_on_it' ] ##'ready_to_mark'##]
+    $scope.studentStatuses       = ['working_on_it', 'need_help', 'ready_to_mark', 'not_submitted' ]
     $scope.tutorStatuses         = ['discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo']
     $scope.taskEngagementConfig = {
       studentTriggers: $scope.studentStatuses.map (status) ->
@@ -338,7 +349,8 @@ angular.module('doubtfire.projects.partials.contexts', [])
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
       if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
-        $scope.uploadFiles()
+        # TODO: Bring up new needs help modal
+        # $scope.uploadFiles()
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
           # Success

@@ -65,7 +65,37 @@
 
   <hr>
 
+  <tabset class="pull-left col-md-2" vertical="true" type="pills">
+    <tab ng-repeat="(tabKey, tabData) in tabsData" select="setActiveTab(tabKey)">
+      <tab-heading tooltip="{{tabData.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+        <div class="text-center">
+          <i class="fa fa-2x {{tabData.icon}}"></i>
+        </div>
+      </tab-heading>
+    </tab>
+  </tabset><!--/tab-headings-->
 
+  <div class="col-md-10 pull-right">
+    <div class="panel panel-default">
+      <div class="panel-heading row-fluid">
+        <h3 class="panel-title">
+          {{activeTab.title}}
+          <br>
+          <small>{{activeTab.subtitle}}</small>
+        </h3>
+      </div>
+      <div ng-switch="activeTab">
+        <task-sheet ng-switch-when="tabsData[taskSheet]">
+        </task-sheet>
+        <file-upload ng-switch-when="tabsData[fileUpload]">
+        </file-upload>
+        <view-submission ng-switch-when="tabsData[viewSubmission]">
+        </view-submission>
+        <view-comments ng-switch-when="tabsData[viewComments]">
+        </view-comments>
+      </div>
+    </div>
+  </div><!--/tab-contents-->
 
 
   <div class="pull-left list-group col-md-2 task-status">
