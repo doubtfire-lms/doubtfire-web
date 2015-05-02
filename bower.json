@@ -20,7 +20,6 @@
     "underscore.string": "2.3.3",
     "angular-ui-calendar": "0.8.1",
     "angular-file-upload": "1.0.3",
-    "pdfjs-bower": "1.0.233",
     "ng-csv": "0.2.3"
   },
   "resolutions": {
