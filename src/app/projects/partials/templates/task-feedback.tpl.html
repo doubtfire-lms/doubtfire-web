@@ -1,5 +1,5 @@
 <div ng-if="activeTask">
-  <div class="feedbackFloatToolbar well" if-role="Admin Convenor Tutor">
+  <div class="feedback-float-toolbar well" if-role="Admin Convenor Tutor">
     <label>Actions</label>
     <button ng-click="transitionWeekEnd()" class="btn btn-info">
       <i class="fa fa-comment fa-2x"></i><br/>
@@ -9,9 +9,67 @@
       <i class="fa fa-list fa-2x"></i><br/>
       Student List
     </a>
-  </div>
+  </div><!--/feedback-float-toolbar-->
+
+  <div>
+    <div class="btn-group pull-left status-switcher" dropdown>
+      <button class="btn task-status {{activeStatusData().class}} dropdown-toggle">
+        <label>{{activeTask.task_abbr}}</label>
+        <span class="caret"></span>
+      </button><!--/dropdown-button-->
+      <ul class="dropdown-menu project-task-bar" role="menu" >
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in submittedTasks">
+            <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == activeTask}" ng-click="setActiveTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">
+              {{task.task_abbr}}
+            </button>
+        </li>
+      </ul>
+    </div><!--/active-task-switcher-->
+
+    <div tooltip-placement="right" tooltip="{{activeStatusData().label}}" class="btn-group pull-right status-switcher" dropdown>
+      <button type="button" class="btn task-status {{statusClass(activeTask.status)}} dropdown-toggle">
+        <i class="{{activeStatusData().icon}} fa-2x"></i>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu project-task-bar">
+        <li if-role="Tutor Convenor Admin" class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
+          <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" uncheckable>
+            <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+            <strong>{{action.label}}</strong>
+          </button>
+        </li><!--/tutor-statuses-->
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.studentTriggers" >
+          <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" >
+            <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+            <strong>{{action.label}}</strong>
+          </button>
+        </li><!--/student-statuses-->
+      </ul>
+    </div><!--/active-task-status-switcher-->
+    <div class="clearfix task-header-info">
+      <div class="col-sm-6 pull-left">
+
+        <h4>{{activeTask.task_name}}</h4>
+        <p class="text-justify">
+          {{activeTask.task_desc}}
+        </p>
+      </div>
+      <div class="col-sm-2 date-info pull-right">
+        <span class="item-info text-right">
+          <label>Due Date:</label> {{activeTask.due_date | date:'EEE MMM d'}}
+        </span>
+        <span class="overdue label label-{{activeStatusData().daysOverdue > 5 ? 'danger' : 'warning'}} pull-right" ng-show="{{activeStatusData().daysOverdue}}">Overdue By <br/> {{activeStatusData().daysOverdue}} days</span>
+      </div>
+    </div><!--/task-header-info-->
+  </div><!--/task-toolbar-->
+
+  <hr>
+
+
+
+
   <div class="pull-left list-group col-md-2 task-status">
-    <a ng-repeat="task in submittedTasks| orderBy:'seq'" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
+    <a ng-repeat="task in submittedTasks| orderBy:'seq'" ng-class="{'active' : task == activeTask }" class="list-group-item text-center " ng-click="setActiveTask(task)">{{task.task_abbr}} </i></a>
   </div>
   <div class="col-md-10 pull-right">
     <div class="comments-panel panel panel-default">
@@ -67,28 +125,7 @@
               </button>
             </div><!--/page-nav-->
 
-            <div tooltip-placement="right" tooltip="{{activeStatusData().label}}" class="btn-group" dropdown>
-              <button style="width: 52px;" class="btn task-status {{statusClass(activeTask.status)}}" ng-click="showAssessTaskModal(activeTask)">
-                <i class="{{activeStatusData().icon}} fa-2x"></i>
-              </button>
-              <button style="height: 42px;"type="button" class="btn task-status {{statusClass(activeTask.status)}} dropdown-toggle">
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" role="menu" style="padding: 0px;">
-                <li if-role="Tutor Convenor Admin" ng-repeat="action in taskEngagementConfig.tutorTriggers" class="text-center">
-                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" uncheckable>
-                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
-                    <strong>{{action.label}}</strong>
-                  </a>
-                </li><!--/tutor-statuses-->
-                <li ng-repeat="action in taskEngagementConfig.studentTriggers" class="text-center">
-                  <a style="padding: 15px;" class="{{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" >
-                    <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
-                    <strong>{{action.label}}</strong>
-                  </a>
-                </li><!--/student-statuses-->
-              </ul>
-            </div>
+
 
           </div>
       </div>
