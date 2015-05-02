@@ -3,7 +3,7 @@ angular.module("doubtfire", [
   "templates-app"
   "templates-common"
   "localization"
-  
+
   "ui.router"
   "ui.bootstrap"
   # "mgcrea.ngStrap"
@@ -20,6 +20,7 @@ angular.module("doubtfire", [
   "doubtfire.unit-service"
   "doubtfire.project-service"
   "doubtfire.filters"
+  "doubtfire.pdf-panel-viewer"
 
   "doubtfire.home"
   "doubtfire.units"

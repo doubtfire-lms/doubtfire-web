@@ -154,108 +154,12 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.setActiveTab('taskSheet')
 
     #
-    # PDF Local Funcs
+    # Comment text area enter to submit comment
     #
-    $scope.pdf = { numPages: 0 }
-    $scope.pageNo = 0
-
-    loadingPdf = true
-    pdfLoaded = false
-
-    loadPdf = (task) ->
-      loadingPdf = true
-      pdfLoaded = false
-      return if task.processing_pdf || not task.has_pdf
-      $scope.pageNo = 0
-      PDFJS.getDocument(TaskFeedback.getTaskUrl(task)).then( (pdf)->
-        $scope.pdf = pdf
-        $scope.pageNo = 1
-        pdfLoaded = true
-        loadingPdf = false
-        renderPdf()
-      )
-    # resize window? Re-render pdf...
-    window.onresize = () ->
-      if $scope.pdf && pdfLoaded
-        renderPdf()
-
-    renderPdf = () ->
-      # Cancel if no pages to render...
-      if $scope.pdf.numPages == 0
-        pdfLoaded = false
-        loadingPdf = false
-        $scope.pageNo = 0
-        return
-      $scope.pdf.getPage($scope.pageNo).then( (page)->
-        # We need to ensure the PDF fits inside the designated width of the panel
-        # (offsetWidth of panel is initially 0 onpageload... default to 600)
-        maxWidth = (document.getElementById("panel").offsetWidth || 600) - 30
-        viewport = page.getViewport(1.0) # Scale of 1.0
-        if viewport.width > maxWidth
-          scale = maxWidth / viewport.width
-          viewport = page.getViewport(scale)
-
-        canvas = document.getElementById("pdf")
-        if not canvas
-          return
-        context = canvas.getContext("2d")
-        canvas.height = viewport.height
-        canvas.width = viewport.width
-
-        renderContext = { canvasContext: context, viewport: viewport }
-        page.render(renderContext).then ( ()->
-          pdfLoaded = true
-          $scope.$apply() #need to reapply scope so that pdf canvas is updated to show
-        )
-      )
-    #
-    # PDF Interaction Funcs
-    #
-    $scope.nextPage = () ->
-      return if $scope.shouldDisableRightNav()
-      if $scope.pageNo < $scope.pdf.numPages and pdfLoaded
-        $scope.pageNo++
-        renderPdf()
-    $scope.prevPage = () ->
-      return if $scope.shouldDisableLeftNav()
-      if $scope.pageNo > 0 and pdfLoaded
-        $scope.pageNo--
-        renderPdf()
-
-    #
-    # Navigation
-    #
-    $scope.shouldDisableLeftNav = () ->
-      $scope.pageNo <= 1
-    $scope.shouldDisableRightNav = () ->
-      $scope.pageNo >= $scope.pdf.numPages
-    $scope.shouldHideNav = () ->
-      $scope.taskStillProcessing() || $scope.corruptPdf()
-    # Keyboard nav
-    document.onkeydown = (e) ->
-      e = e || window.event
-      return if document.activeElement.type is 'textarea' or document.activeElement.type is 'input'
-      switch (e.which || e.keyCode)
-        # Left arrow
-        when 37
-          e.preventDefault()
-          $scope.prevPage()
-        # Right arrow
-        when 39
-          e.preventDefault()
-          $scope.nextPage()
-
-    #
-    # Exceptional scenarios
-    #
-    $scope.corruptPdf = () ->
-      (not loadingPdf) and $scope.pageNo == 0 and not $scope.taskStillProcessing()
-    $scope.taskStillProcessing = () ->
-      $scope.activeTask.processing_pdf
-    $scope.readyToShowPDF = () ->
-      pdfLoaded and (not $scope.taskStillProcessing())
-    $scope.notSubmitted = () ->
-      not $scope.activeTask.has_pdf and (not $scope.taskStillProcessing())
+    fetchTaskComments = (task) ->
+      TaskComment.query {task_id: task.id},
+        (response) ->
+          task.comments = response
 
     #
     # Loading the active task
@@ -264,10 +168,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       return if task == $scope.activeTask
       $scope.activeTask = task
       fetchTaskComments(task)
-      loadPdf(task)
-
-    $scope.activeTaskUrl = ->
-      TaskFeedback.getTaskUrl($scope.activeTask)
 
     #
     # Functions from taskService to get data
@@ -330,13 +230,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/view-comments.tpl.html'
   controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
-    #
-    # Comment text area enter to submit comment
-    #
-    fetchTaskComments = (task) ->
-      TaskComment.query {task_id: task.id},
-        (response) ->
-          task.comments = response
 
     $scope.checkCommentTextareaEnter = (e) ->
       e = e || window.event
@@ -363,4 +256,19 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
           $scope.activeTask.comments = $scope.activeTask.comments.filter (e) -> e.id != id
         (error) ->
           alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
+)
+.directive('viewSubmission', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/view-submission.tpl.html'
+  controller: ($scope, TaskFeedback) ->
+    $scope.taskUrl = ->
+      TaskFeedback.getTaskUrl($scope.activeTask)
+
+    #
+    # Exceptional scenarios
+    #
+    $scope.taskStillProcessing = () ->
+      $scope.activeTask.processing_pdf
+    $scope.notSubmitted = () ->
+      not $scope.activeTask.has_pdf and (not $scope.taskStillProcessing())
 )
