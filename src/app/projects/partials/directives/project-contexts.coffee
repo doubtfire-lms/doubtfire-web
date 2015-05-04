@@ -138,7 +138,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         seq: 3
 
     $scope.setActiveTab = (tab) ->
-      $scope.activeTab = $scope.tabsData[tab]
+      $scope.activeTab = tab #$scope.tabsData[tab]
       _.each $scope.tabsData, (tab) -> tab.active = false
       $scope.activeTab.active = true
 
@@ -155,9 +155,9 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
 
     if $stateParams.viewing == 'feedback' || ($scope.activeTask && $scope.activeTask.has_pdf)
-      $scope.setActiveTab('viewSubmission')
+      $scope.setActiveTab($scope.tabsData['viewSubmission'])
     else
-      $scope.setActiveTab('taskSheet')
+      $scope.setActiveTab($scope.tabsData['taskSheet'])
 
     #
     # Comment text area enter to submit comment
