@@ -1,5 +1,5 @@
 <div ng-if="activeTask">
-  <div class="feedbackFloatToolbar well" if-role="Admin Convenor Tutor">
+  <div class="feedbackFloatToolbar well" ng-if="assessingUnitRole">
     <label>Actions</label>
     <button ng-click="transitionWeekEnd()" class="btn btn-info">
       <i class="fa fa-comment fa-2x"></i><br/>
