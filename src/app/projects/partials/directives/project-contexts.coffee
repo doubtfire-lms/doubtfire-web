@@ -117,21 +117,25 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         subtitle: "The task sheet contains the requirements of this task"
         icon: "fa-info"
         active: false
+        seq: 0
       fileUpload:
         title: "Upload Submission"
         subtitle: "Upload your submission so it is ready for your tutor to mark"
         icon: "fa-upload"
         active: false
+        seq: 1
       viewSubmission:
         title: "View Submission"
         subtitle: "View the latest submission you have uploaded"
         icon: "fa-file-o"
         active: false
+        seq: 2
       viewComments:
         title: "View Comments"
         subtitle: "Write and read comments between you and your tutor"
         icon: "fa-comments-o"
         active: false
+        seq: 3
 
     $scope.setActiveTab = (tab) ->
       $scope.activeTab = $scope.tabsData[tab]
