@@ -1,16 +1,4 @@
 <div ng-if="activeTask">
-  <div class="feedback-float-toolbar well" if-role="Admin Convenor Tutor">
-    <label>Actions</label>
-    <button ng-click="transitionWeekEnd()" class="btn btn-info">
-      <i class="fa fa-comment fa-2x"></i><br/>
-      Discussed
-    </button>
-    <a href="#/units?unitRole={{assessingUnitRole.id}}" class="btn btn-default">
-      <i class="fa fa-list fa-2x"></i><br/>
-      Student List
-    </a>
-  </div><!--/feedback-float-toolbar-->
-
   <div>
     <div class="btn-group pull-left status-switcher" dropdown>
       <button class="btn task-status {{activeStatusData().class}} dropdown-toggle">
@@ -32,7 +20,7 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu project-task-bar">
-        <li if-role="Tutor Convenor Admin" class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
+        <li ng-show="assessingUnitRole" class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
           <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : activeTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="activeTask.status" btn-radio="action.status" uncheckable>
             <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
             <strong>{{action.label}}</strong>
@@ -47,14 +35,14 @@
       </ul>
     </div><!--/active-task-status-switcher-->
     <div class="clearfix task-header-info">
-      <div class="col-sm-6 pull-left">
+      <div class="col-sm-5 pull-left">
 
         <h4>{{activeTask.task_name}}</h4>
         <p class="text-justify">
           {{activeTask.task_desc}}
         </p>
       </div>
-      <div class="col-sm-2 date-info pull-right">
+      <div class="col-sm-3 date-info pull-right">
         <span class="item-info text-right">
           <label>Due Date:</label> {{activeTask.due_date | date:'EEE MMM d'}}
         </span>
@@ -66,7 +54,7 @@
   <hr>
 
   <tabset class="pull-left col-md-2" vertical="true" type="pills">
-    <tab ng-repeat="(tabKey, tabData) in tabsData" active="tabData[tabKey].active" select="setActiveTab(tabKey)">
+    <tab ng-repeat="(tabKey, tabData) in tabsData" active="tabData.active" ng-click="setActiveTab(tabKey)">
       <tab-heading tooltip="{{tabData.title}}" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x {{tabData.icon}}"></i>
@@ -84,14 +72,10 @@
           <small>{{activeTab.subtitle}}</small>
         </h3>
       </div>
-      <task-sheet ng-if="activeTab == tabsData['taskSheet']">
-      </task-sheet>
-      <submit-task-form task="activeTask" project="project" ng-if="activeTab == tabsData['fileUpload']">
-      </submit-task-form>
-      <view-submission ng-if="activeTab == tabsData['viewSubmission']">
-      </view-submission>
-      <view-comments ng-if="activeTab == tabsData['viewComments']">
-      </view-comments>
+      <task-sheet ng-if="activeTab == tabsData['taskSheet']"></task-sheet>
+      <submit-task-form task="activeTask" project="project" ng-if="activeTab == tabsData['fileUpload']"></submit-task-form>
+      <view-submission ng-if="activeTab == tabsData['viewSubmission']"></view-submission>
+      <view-comments ng-if="activeTab == tabsData['viewComments']"></view-comments>
     </div>
   </div><!--/tab-contents-->
 

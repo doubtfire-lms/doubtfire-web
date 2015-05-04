@@ -97,7 +97,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     project: '='
     activeTask: '='
     submittedTasks: '='
-  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
+    assessingUnitRole: '='
+  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
 
     #
     # Comment code
@@ -106,22 +107,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.currentPage = 1
     $scope.pageSize = 3
     $scope.maxSize = 5
-
-    #
-    # Batch Discuss button
-    #
-    $scope.transitionWeekEnd = () ->
-      Project.update({ id: $scope.project.project_id, trigger: "trigger_week_end" }).$promise.then (
-        (project) ->
-          oldId = $scope.activeTask.id
-
-          # go through each task and update the status only to the new project task's status
-          _.each $scope.submittedTasks, (task) ->
-            task.status = (_.find project.tasks, (t) -> task.id == t.id).status
-
-          $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == oldId
-          alertService.add("success", "Status updated.", 2000)
-      )
 
     #
     # Active task tab group
@@ -147,19 +132,11 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         subtitle: "Write and read comments between you and your tutor"
         icon: "fa-comments-o"
         active: false
+
     $scope.setActiveTab = (tab) ->
       $scope.activeTab = $scope.tabsData[tab]
       _.each $scope.tabsData, (tab) -> tab.active = false
       $scope.activeTab.active = true
-    $scope.setActiveTab('taskSheet')
-
-    #
-    # Comment text area enter to submit comment
-    #
-    fetchTaskComments = (task) ->
-      TaskComment.query {task_id: task.id},
-        (response) ->
-          task.comments = response
 
     #
     # Loading the active task
@@ -168,6 +145,23 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       return if task == $scope.activeTask
       $scope.activeTask = task
       fetchTaskComments(task)
+
+    # Ensure there is an active task
+    $scope.setActiveTask($scope.activeTask)
+
+
+    if $stateParams.viewing == 'feedback' || ($scope.activeTask && $scope.activeTask.has_pdf)
+      $scope.setActiveTab('viewSubmission')
+    else
+      $scope.setActiveTab('taskSheet')
+
+    #
+    # Comment text area enter to submit comment
+    #
+    fetchTaskComments = (task) ->
+      TaskComment.query {task_id: task.id},
+        (response) ->
+          task.comments = response
 
     #
     # Functions from taskService to get data
