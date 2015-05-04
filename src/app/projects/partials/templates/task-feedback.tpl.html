@@ -54,7 +54,7 @@
   <hr>
 
   <tabset class="pull-left col-md-2" vertical="true" type="pills">
-    <tab ng-repeat="(tabKey, tabData) in tabsData | orderObjectBy:'seq'" active="tabData.active" ng-click="setActiveTab(tabKey)">
+    <tab ng-repeat="tabData in tabsData | orderObjectBy:'seq'" active="tabData.active" ng-click="setActiveTab(tabData)">
       <tab-heading tooltip="{{tabData.title}}" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x {{tabData.icon}}"></i>
