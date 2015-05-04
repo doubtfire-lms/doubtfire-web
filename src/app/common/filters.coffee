@@ -22,3 +22,19 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+.filter('orderObjectBy', ->
+  (items, field, reverse) ->
+    filtered = []
+    
+    angular.forEach items, (item) ->
+      filtered.push(item)
+    
+    filtered.sort (a, b) ->
+      a[field] > b[field] ? 1 : -1
+
+    if reverse
+      filtered.reverse()
+    
+    filtered
+)
