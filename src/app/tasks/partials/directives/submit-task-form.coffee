@@ -11,6 +11,8 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
   templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
   controller: ($scope, TaskSubmission, Task, alertService, projectService, taskService) ->
 
+    $scope.currentState = 'select-status'
+
     #
     # More option booleans
     #
