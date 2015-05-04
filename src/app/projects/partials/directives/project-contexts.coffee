@@ -156,6 +156,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
     if $stateParams.viewing == 'feedback' || ($scope.activeTask && $scope.activeTask.has_pdf)
       $scope.setActiveTab($scope.tabsData['viewSubmission'])
+    else if $stateParams.viewing == 'submit'
+      $scope.setActiveTab($scope.tabsData['fileUpload'])
     else
       $scope.setActiveTab($scope.tabsData['taskSheet'])
 
