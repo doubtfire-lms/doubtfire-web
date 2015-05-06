@@ -22,3 +22,11 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+.filter('byGrade', ->
+  (input, grade) ->
+    if input
+      _.filter input, (task) -> task.definition.target_grade <= grade
+    else
+      input
+)
