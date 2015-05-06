@@ -228,10 +228,22 @@ angular.module("doubtfire.api", [
       fileUploader.uploadAll()
       
     fileUploader.onSuccessItem = (item, response, status, headers) ->
-      newTasks = response
-      diff = newTasks.length - fileUploader.unit.task_definitions.length
-      alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
-      _.extend(fileUploader.scope.unit.task_definitions, response)
+      newTasks = response.added
+      updatedTasks = response.updated
+      failedTasks = response.failed
+
+      if newTasks.length > 0
+        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
+        _.extend(fileUploader.scope.unit.task_definitions, newTasks)
+      if updatedTasks.length > 0
+        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
+        _.each updatedTasks, (td) ->
+          idx = _.findIndex fileUploader.scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
+          if idx >= 0
+            _.extend fileUploader.scope.unit.task_definitions[idx], td
+      if failedTasks.length > 0
+        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
+
       fileUploader.clearQueue()
       
     fileUploader.onErrorItem = (evt, response, item, headers) ->

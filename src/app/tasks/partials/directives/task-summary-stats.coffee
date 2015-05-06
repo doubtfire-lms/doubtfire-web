@@ -20,7 +20,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
 
     $scope.scatterData = []
 
-    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbr)
+    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbreviation)
 
     indexOfTask = (abbr) ->
       _.indexOf taskAbbrs, abbr
@@ -117,7 +117,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       # d3.format('.02f')
       (value) ->
         if $scope.unit.task_definitions[value]
-          $scope.unit.task_definitions[value].abbr
+          $scope.unit.task_definitions[value].abbreviation
         else
           ''
 
