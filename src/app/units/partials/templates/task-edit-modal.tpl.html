@@ -11,7 +11,7 @@
       
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Abbreviation</label>
-        <input type="text" class="form-control col-sm-8" ng-model="task.abbr"/>
+        <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
   	  </div><!--/abbr-->
   	  
   	  <div class="form-group" ng-required="isNew">
@@ -19,11 +19,11 @@
         <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
           <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
         </label>
-      </div><!--/desc-->
+      </div><!--/grade-->
 
       <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Description</label>
-        <textarea class="form-control col-sm-8" ng-model="task.desc"></textarea>
+        <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
   	  </div><!--/desc-->
   	  
   	  <div class="form-group" ng-required="isNew">
@@ -35,6 +35,11 @@
   	    <label class="col-sm-3 control-label">Required</label>
         <input type="checkbox" class="form-control col-sm-8" ng-model="task.required"/>
   	  </div><!--/required-->
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Restricted</label>
+        <input type="checkbox" class="form-control col-sm-8" ng-model="task.restrict_status_updates"/>
+      </div><!--/required-->
   	  
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Target Date</label>
