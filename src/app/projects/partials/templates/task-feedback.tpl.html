@@ -11,7 +11,7 @@
     </a>
   </div>
   <div class="pull-left list-group col-md-2 task-status">
-    <a ng-repeat="task in submittedTasks| orderBy:'seq'" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
+    <a ng-repeat="task in submittedTasks| orderBy:'seq' | byGrade:project.target_grade" ng-class="{'active' : task == activeTask }" class="list-group-item text-center {{statusClass(task.status)}}" ng-click="setActiveTask(task)">{{task.task_abbr}} <i class="task-icon {{statusData(task).icon}} fa-lg"></i></a>
   </div>
   <div class="col-md-10 pull-right">
     <div class="comments-panel panel panel-default">
