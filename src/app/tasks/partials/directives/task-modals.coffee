@@ -46,7 +46,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
     oldStatus = $scope.task.status
     # If we have a task with upload requirements and we're changing state to ready to mark
     # then open the next modal and close this one...
-    if status == 'ready_to_mark' and $scope.task.task_upload_requirements.length > 0
+    if status == 'ready_to_mark' and $scope.task.upload_requirements.length > 0
       $scope.uploadFiles()
     else
       Task.update({ id: $scope.task.id, trigger: status }).$promise.then (
@@ -107,7 +107,7 @@ angular.module('doubtfire.tasks.partials.modals', [])
 )
 .controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, Task, task, student, onChange, alertService) ->
   $scope.task = task
-  $scope.uploadRequirements = task.task_upload_requirements
+  $scope.uploadRequirements = task.upload_requirements
   $scope.fileUploader = TaskSubmission.fileUploader($scope, task, student, onChange)
   $scope.submitUpload = () ->
     $scope.fileUploader.uploadEnqueuedFiles()

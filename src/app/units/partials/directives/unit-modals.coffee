@@ -89,11 +89,20 @@ angular.module('doubtfire.units.partials.modals', [])
     
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
-    newUpReq = { key: "file#{newLength-1}", name: "", type: "code" }
+    newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
     $scope.task.upload_requirements.push newUpReq
   
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
+
+  $scope.addCheck = () ->
+    newLength = $scope.task.plagiarism_checks.length + 1
+    newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
+    $scope.task.plagiarism_checks.push newCheck
+  
+  $scope.removeCheck = (check) ->
+    $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
+
   
   populate_task = (oldTask, newTask) ->
     _.extend(oldTask, newTask)
@@ -105,6 +114,7 @@ angular.module('doubtfire.units.partials.modals', [])
       oldTask.weight = newTask.weight
     oldTask.name = newTask.name
     oldTask.upload_requirements = newTask.upload_requirements
+    oldTask.plagiarism_checks = newTask.plagiarism_checks
     oldTask.target_date = newTask.target_date
     oldTask.required = newTask.required
 
@@ -133,7 +143,8 @@ angular.module('doubtfire.units.partials.modals', [])
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
-    # task.upload_requirements = $scope.task.upload_requirements
+    task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+
     if task.target_date && task.target_date.getMonth
       tgt = task.target_date
       task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"

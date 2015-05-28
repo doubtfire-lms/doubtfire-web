@@ -184,7 +184,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           unit: -> $scope.unit
         }
     $scope.createTask = ->
-      task = { target_date: new Date(), required: true, upload_requirements: [] }
+      task = { target_date: new Date(), required: true, upload_requirements: [], plagiarism_checks: [] }
       $modal.open
         controller: 'TaskEditModalCtrl'
         templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'

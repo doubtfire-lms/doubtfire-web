@@ -124,7 +124,7 @@ angular.module("doubtfire.api", [
       scope: scope,
       url: uploadUrl
       method: "POST",
-      queueLimit: task.task_upload_requirements.length
+      queueLimit: task.upload_requirements.length
     }
     
     fileUploader.task = task
