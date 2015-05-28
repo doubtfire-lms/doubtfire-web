@@ -345,7 +345,7 @@ angular.module('doubtfire.projects.partials.contexts', [])
     #
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
-      if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
+      if status == 'ready_to_mark' and $scope.activeTask.upload_requirements.length > 0
         $scope.uploadFiles()
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (

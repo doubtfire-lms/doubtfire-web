@@ -11,6 +11,7 @@
         <th>Grade</th>
         <th>Restricted</th>
         <th>File Upload Requirements</th>
+        <th>Plagiarism Checks</th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +31,12 @@
             <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
           </ol>
           <span ng-show="task.upload_requirements.length == 0">No Files To Upload</span>
+        </td>
+        <td>
+          <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.plagiarism_checks.length == 0">
+            <li ng-repeat="check in task.plagiarism_checks">{{check.type}} ({{check.pattern}})</li>
+          </ol>
+          <span ng-show="task.plagiarism_checks.length == 0">No Plagiarism Checks</span>
         </td>
       </tr>
     </tbody>
