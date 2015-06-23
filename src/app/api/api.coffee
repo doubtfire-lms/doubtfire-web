@@ -77,6 +77,12 @@ angular.module("doubtfire.api", [
     
   return this
 )
+.factory("TaskSimilarity", ($http, api, currentUser) ->
+  get: (task, match, callback) ->
+    url = "#{api}/tasks/#{task.id}/similarity/#{match}?auth_token=#{currentUser.authenticationToken}"
+    $http.get(url).success ( data ) ->
+      callback(data)
+)
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
 )

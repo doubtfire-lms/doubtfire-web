@@ -55,7 +55,7 @@
     </div>
 
     <div id="panel" class="panel panel-default">
-      <div class="panel-heading task-status row-fluid">
+      <div class="panel-heading task-status nav-header row-fluid">
           <h3 class="panel-title">{{activeTask.task_name}}</h3><!--/title-->
           <div class="pull-right">
             <div class="btn-group pdf-nav" ng-hide="shouldHideNav()">
@@ -134,7 +134,9 @@
           </a>
         </div>
       </div><!--/panel-footer-->
-    </div>
+    </div><!--/panel-->
+    <div style="marginTop:30px" ng-if="activeTask.similar_to_count > 0">
+        <task-plagiarism-report task="activeTask"></task-plagiarism-report>
+      </div><!-- End of right panel -->
   </div>
-
 </div>

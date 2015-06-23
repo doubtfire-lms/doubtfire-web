@@ -14,16 +14,18 @@
     "bootstrap": "3.2.0",
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "0.2.7",
-    "jquery": "2.1.1",
+    "jquery": "2.1.4",
     "momentjs": "2.1.0",
     "lodash": "2.4.1",
     "underscore.string": "2.3.3",
     "angular-ui-calendar": "0.8.1",
     "angular-file-upload": "1.0.3",
     "pdfjs-bower": "1.0.233",
-    "ng-csv": "0.2.3"
+    "ng-csv": "0.2.3",
+    "angular-sanitize": "1.2.22"
   },
   "resolutions": {
-    "d3": "3.4.11"
+    "d3": "3.4.11",
+    "jquery": "2.1.4"
   }
 }
