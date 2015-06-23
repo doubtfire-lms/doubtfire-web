@@ -10,6 +10,7 @@ angular.module("doubtfire", [
   "nvd3ChartDirectives"
   "angularFileUpload"
   "ngCsv"
+  "ngSanitize"
 
   "doubtfire.api"
   "doubtfire.errors"
