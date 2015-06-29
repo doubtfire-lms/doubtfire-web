@@ -12,6 +12,7 @@
         <th>Restricted</th>
         <th>File Upload Requirements</th>
         <th>Plagiarism Checks</th>
+        <th>Plagiarism Warn</th>
       </tr>
     </thead>
     <tbody>
@@ -38,6 +39,7 @@
           </ol>
           <span ng-show="task.plagiarism_checks.length == 0">No Plagiarism Checks</span>
         </td>
+        <td><span ng-show="task.plagiarism_checks.length > 0">{{task.plagiarism_warn_pct}}%</span></td>
       </tr>
     </tbody>
   </table><!--/task-table-->

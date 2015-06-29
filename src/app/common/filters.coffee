@@ -30,3 +30,11 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+.filter('studentsWithPlagiarism', ->
+  (input) ->
+    if input
+      _.filter  input, (student) -> student.tasks_with_similarities > 0
+    else
+      input
+)

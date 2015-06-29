@@ -98,6 +98,10 @@
           </li>
         </ul>
       </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Plagiarism Warn Percent</label>
+        <input type="number" class="form-control col-sm-8" ng-model="task.plagiarism_warn_pct"/>
+      </div><!--/abbr-->
       <div class="form-group">
         <button type="button" ng-click="addCheck()" class="btn btn-success col-sm-offset-10 col-sm-1">
             <span class="glyphicon glyphicon-plus"></span>
