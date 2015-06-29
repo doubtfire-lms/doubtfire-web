@@ -18,11 +18,17 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
     $scope.test = "Test"
     $scope.match = 1
     #$scope.plagiarismPage = $sce.trustAsResourceUrl("#{api}/tasks/20/similarity/#{$scope.match}?auth_token=#{currentUser.authenticationToken}")
-    $scope.similarityHtml = "<pre>Fetching</pre>"
+    $scope.similarityData = null
+
+    $scope.$watch 'task', ->
+      $scope.fetchSimilarity()
+
+    $scope.$watch 'match', ->
+      $scope.fetchSimilarity()
 
     $scope.fetchSimilarity = () ->
-      TaskSimilarity.get($scope.task, $scope.match, (html) ->
-        $scope.similarityHtml = html
+      TaskSimilarity.get($scope.task, $scope.match, (data) ->
+        $scope.similarityData = data
       )
 
     $scope.shouldDisableLeftNav = () ->
@@ -31,15 +37,18 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
     $scope.shouldDisableRightNav = () ->
       $scope.match >= $scope.task.similar_to_count
 
-    $scope.prevMatch = () ->
-      $scope.match--
-      $scope.fetchSimilarity($scope.task, $scope.match - 1)
-
-    $scope.nextMatch = () ->
-      $scope.match++
-      $scope.fetchSimilarity($scope.task, $scope.match - 1)
-
     if $scope.task
       $scope.taskId = $scope.task.id
       $scope.fetchSimilarity($scope.task, $scope.match - 1)
+)
+
+.directive('taskPlagiarismFileView', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'tasks/partials/templates/task-plagiarism-file-view.tpl.html'
+  scope:
+    match: "=match"
+
+  controller: ($scope) ->
+
 )

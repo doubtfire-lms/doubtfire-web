@@ -1,20 +1,9 @@
-<div id="panel" class="panel panel-default">
-  <div class="panel-heading nav-header row-fluid">
-    <h3 class="panel-title">Plagiarism Report</h3>
-    <div class="pull-right">
-      <span>Match {{match}} of {{task.similar_to_count}}</span>
-      <div class="btn-group pdf-nav" ng-hide="shouldHideNav()">
-        <button type="button" class="btn btn-default" ng-disabled="shouldDisableLeftNav()" ng-click="prevMatch()">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </button>
-        <button type="button" class="btn btn-default" ng-disabled="shouldDisableRightNav()" ng-click="nextMatch()">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </button>
-      </div><!--/page-nav-->
-    </div>
+<div class="col-sm-12">
+  <div ng-class="similarityData.other_student.name == '???' ? col-sm-12 : col-sm-6">
+    <task-plagiarism-file-view match="similarityData.student"></task-plagiarism-file-view>
   </div>
-  <div class="panel-body">
-    <!-- <iframe src="{{plagiarismPage}}" width="100%" height="300px"></iframe> -->
-    <span class="plagiarism-panel" ng-bind-html="similarityHtml"></span>
+  <div ng-class="similarityData.other_student.name == '???' ? col-sm-12 : col-sm-6">
+    <task-plagiarism-file-view match="similarityData.other_student"></task-plagiarism-file-view>
   </div>
+  <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
 </div>

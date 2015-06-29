@@ -38,3 +38,11 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+.filter('taskWithPlagiarism', ->
+  (input) ->
+    if input
+      _.filter input, (task) -> task.pct_similar > 0
+    else
+      input
+)

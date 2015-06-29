@@ -1,6 +1,6 @@
 angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
 
-.factory("projectService", (taskService) ->
+.factory("projectService", (taskService, Project) ->
   #
   # The unit service object
   #
@@ -26,5 +26,26 @@ angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
     student.progress_sort = 0
     for i, stat of student.progress_stats
       student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
+  
+  projectService.fetchDetailsForProject = (student, unit, callback) ->
+    if student.tasks
+      callback(student)
+    else
+      Project.get { id: student.project_id }, (project) ->
+        _.extend student, project
+        if unit
+          student.tasks = student.tasks.map (task) ->
+            td = unit.taskDef(task.task_definition_id)
+            task.definition = td
+            task.task_abbr = td.abbreviation
+            task.task_desc = td.description
+            task.task_name = td.name
+            task.seq = td.seq
+            task.due_date = td.target_date
+            task.upload_requirements = td.upload_requirements
+            task.status_txt = taskService.statusLabels[task.status]
+            task
+        callback(student)
+
   projectService
 )

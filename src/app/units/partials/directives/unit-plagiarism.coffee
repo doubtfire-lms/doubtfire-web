@@ -4,7 +4,7 @@ angular.module('doubtfire.units.partials.unit-plagiarism',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-plagiarism-tab.tpl.html'
-  controller: ($scope, $filter, currentUser, gradeService) ->
+  controller: ($scope, $filter, currentUser, gradeService, projectService) ->
     $scope.grades = gradeService.grades
 
     $scope.view = "all-students"
@@ -25,5 +25,16 @@ angular.module('doubtfire.units.partials.unit-plagiarism',[])
         studentFilter = "myStudents"
       else
         studentFilter = "allStudents"
-      
+    
+    $scope.activeStudent = null
+    $scope.activeTask = null
+
+    $scope.selectStudent = (student) ->
+      $scope.activeStudent = student
+      if student
+        projectService.fetchDetailsForProject student, $scope.unit, (project) ->
+          $scope.activeTask = _.find(student.tasks, (task) -> task.similar_to_count > 0)
+
+    $scope.selectTask = (task) ->
+      $scope.activeTask = task
 )
