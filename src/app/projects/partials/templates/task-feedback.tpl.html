@@ -136,7 +136,14 @@
       </div><!--/panel-footer-->
     </div><!--/panel-->
     <div style="marginTop:30px" ng-if="activeTask.similar_to_count > 0">
-        <task-plagiarism-report task="activeTask"></task-plagiarism-report>
-      </div><!-- End of right panel -->
+      <div id="panel" class="panel panel-default">
+        <div class="panel-heading nav-header row-fluid">
+          <h3 class="panel-title">Plagiarism Report</h3>
+        </div>
+        <div class="panel-body">
+          <task-plagiarism-report task="activeTask"></task-plagiarism-report>
+        </div>
+      </div>
+    </div><!-- End of right panel -->
   </div>
 </div>
