@@ -1,8 +1,8 @@
 <div class="col-sm-12">
-  <div ng-class="similarityData.other_student.name == '???' ? col-sm-12 : col-sm-6">
+  <div ng-class="classForViews()">
     <task-plagiarism-file-view match="similarityData.student"></task-plagiarism-file-view>
   </div>
-  <div ng-class="similarityData.other_student.name == '???' ? col-sm-12 : col-sm-6">
+  <div ng-class="classForViews()">
     <task-plagiarism-file-view match="similarityData.other_student"></task-plagiarism-file-view>
   </div>
   <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>

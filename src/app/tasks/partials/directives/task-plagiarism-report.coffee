@@ -37,6 +37,12 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
     $scope.shouldDisableRightNav = () ->
       $scope.match >= $scope.task.similar_to_count
 
+    $scope.classForViews = () ->
+      if $scope.similarityData.other_student.name == '???'
+        'col-xs-12'
+      else
+        'col-lg-6 col-xs-12'
+
     if $scope.task
       $scope.taskId = $scope.task.id
       $scope.fetchSimilarity($scope.task, $scope.match - 1)
@@ -50,5 +56,4 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
     match: "=match"
 
   controller: ($scope) ->
-
 )
