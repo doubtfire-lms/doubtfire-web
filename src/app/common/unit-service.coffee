@@ -1,6 +1,6 @@
 angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
 
-.factory("unitService", (Unit, Students, projectService, taskService) ->
+.factory("unitService", (Unit, Students, Group, projectService, taskService) ->
   #
   # The unit service object
   #
@@ -72,6 +72,10 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
           { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[3]))},
         ]
         projectService.updateTaskStats(student, student.stats)
+
+      unit.getGroups = (group_set, callback) ->
+        Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
+          callback(groups)
 
       if loadStudents
         # Fetch the students for the unit

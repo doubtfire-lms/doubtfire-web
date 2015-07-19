@@ -11,6 +11,7 @@ angular.module("doubtfire", [
   "angularFileUpload"
   "ngCsv"
   "ngSanitize"
+  "xeditable"
 
   "doubtfire.api"
   "doubtfire.errors"
@@ -40,7 +41,8 @@ angular.module("doubtfire", [
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 
-).run(($rootScope, $state, $filter, $location, auth) ->
+).run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
+  editableOptions.theme = 'bs3'
 
   serialize = (obj, prefix) ->
     str = []
