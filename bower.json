@@ -22,10 +22,12 @@
     "angular-file-upload": "1.0.3",
     "pdfjs-bower": "1.0.233",
     "ng-csv": "0.2.3",
-    "angular-sanitize": "1.2.22"
+    "angular-sanitize": "1.2.22",
+    "angular-xeditable": "0.1.8"
   },
   "resolutions": {
     "d3": "3.4.11",
-    "jquery": "2.1.4"
+    "jquery": "2.1.4",
+    "angular": "1.2.22"
   }
 }

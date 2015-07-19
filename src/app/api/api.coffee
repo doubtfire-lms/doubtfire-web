@@ -67,6 +67,12 @@ angular.module("doubtfire.api", [
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
+.factory("Group", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:id", { id: "@id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
+)
+.factory("GroupSet", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/group_sets/:id", { id: "@id", unit_id: "@unit_id" }
+)
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
   this.resource = resourcePlus "/submission/task/:id", { id: "@id" }
 

@@ -4,16 +4,34 @@
       <tr> 
         <th>Select</th>
         <th>Name</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="gs in unit.group_sets">
-        <td></td>
-        <td>{{gs.name}}</td> 
+        <td><a href="" ng-click="selectGroupSet(gs)">Select</a></td>
+        <td>
+          <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
+            {{ gs.name || 'empty' }}
+          </span>
+        </td>
+        <td style="white-space: nowrap">
+          <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
+            <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="buttons" ng-show="!gsRowform.$visible">
+            <a href="" ng-click="gsRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(gs)">delete</a>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
-
+  <button ng-click="addGroupSet()">Add New Student Groupwork</button>
   <h4>Student Groups</h4>
-
+{{groups}}
 </div>
