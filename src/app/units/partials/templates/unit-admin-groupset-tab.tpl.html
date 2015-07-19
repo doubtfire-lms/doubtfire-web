@@ -32,6 +32,44 @@
     </tbody>
   </table>
   <button ng-click="addGroupSet()">Add New Student Groupwork</button>
-  <h4>Student Groups</h4>
-{{groups}}
+  <h4>Student Groups - {{selectedGroupset.name}}</h4>
+  <div class="col-sm-6">
+    <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th>Select</th>
+        <th>Name</th>
+        <th>Tutorial</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="grp in groups | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+        <td><a href="" ng-click="selectGroup(grp)">Select</a></td>
+        <td>
+          <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
+            {{ grp.name || 'empty' }}
+          </span>
+        </td>
+        <td>
+          {{grp.tutorial.abbreviation}}
+        </td>
+        <td style="white-space: nowrap">
+          <form editable-form name="grpRowform" onbeforesave="saveGroupSet($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
+            <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="grpRowform.$waiting" ng-click="grpRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="buttons" ng-show="!grpRowform.$visible">
+            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(grp)">delete</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+    <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+  </div>
 </div>

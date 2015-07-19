@@ -11,7 +11,11 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
   templateUrl: 'units/partials/templates/unit-admin-groupset-tab.tpl.html'
 
   controller: ($scope, GroupSet) ->
-    $scope.text = "Hello World"
+    # pagination of groups
+    $scope.currentPage = 1
+    $scope.maxSize = 5
+    $scope.pageSize = 15
+
     $scope.addGroupSet = () ->
       if $scope.unit.group_sets.length == 0
         GroupSet.create( { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }, (gs) -> $scope.unit.group_sets.push(gs) )
@@ -27,4 +31,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
     $scope.selectGroupSet = (gs) ->
       $scope.unit.getGroups gs, (groups) ->
         $scope.groups = groups
+        $scope.selectedGroupset = gs
+
+    $scope.selectGroupSet($scope.unit.group_sets[0])
 )
