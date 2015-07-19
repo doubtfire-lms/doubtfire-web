@@ -144,6 +144,10 @@ angular.module('doubtfire.units.partials.modals', [])
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
     task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+    if task.group_set
+      task.group_set_id = task.group_set.id
+    else
+      task.group_set_id = -1
 
     if task.target_date && task.target_date.getMonth
       tgt = task.target_date

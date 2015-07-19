@@ -152,6 +152,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       $scope.unit.staff = _.without $scope.unit.staff, staff
       UnitRole.delete { id: staff.id }
       staffUser = $scope.findStaffUser(staff.user_id)
+
+    $scope.groupSetName = (id) ->
+      gs = _.find($scope.unit.group_sets, (gs) -> gs.id == id)
+      return gs.name if gs
+
 )
 .directive('taskAdminUnitContext', ->
   replace: true
