@@ -9,6 +9,7 @@
         <th>Target Date</th>
         <th>Weighting</th>
         <th>Grade</th>
+        <th>Group</th>
         <th>Restricted</th>
         <th>File Upload Requirements</th>
         <th>Plagiarism Checks</th>
@@ -23,6 +24,7 @@
         <td>{{task.target_date | date:'d MMM yyyy'}}</td>
         <td>{{task.weight}}</td>
         <td>{{grades[task.target_grade]}}</td>
+        <td>{{groupSetName(task.group_set_id)}}</td>
         <td>
           <span ng-show="task.restrict_status_updates" class="glyphicon glyphicon-ok text-success"></span>
           <span ng-hide="task.restrict_status_updates">No</span>

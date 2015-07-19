@@ -19,6 +19,8 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
       # Add a sequence from the order fetched from server
       _.each(unit.task_definitions, (td, index, list) ->
         td.seq = index
+        if td.group_set_id
+          td.group_set = _.find(unit.group_sets, (gs) -> td.group_set_id == gs.id)
       )
       # Allow the caller to fetch a task definition from the unit based on its id
       unit.taskDef = (taskDefId) ->
