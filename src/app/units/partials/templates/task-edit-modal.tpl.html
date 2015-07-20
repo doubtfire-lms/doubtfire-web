@@ -32,7 +32,7 @@
   	  </div><!--/weighting-->
 
       <div class="form-group" ng-required="isNew">
-        <label class="col-sm-3 control-label">Group Task {{task.group_set.id}}</label>
+        <label class="col-sm-3 control-label">Group Task</label>
         <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
 <!--         <select class="form-control col-sm-8" ng-model="task.group_set_id" convert-to-number>
           <option value="-1">None</option>

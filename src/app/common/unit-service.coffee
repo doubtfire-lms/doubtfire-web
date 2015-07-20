@@ -74,6 +74,7 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
         projectService.updateTaskStats(student, student.stats)
 
       unit.getGroups = (group_set, callback) ->
+        return unless group_set
         Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
           callback(groups)
 
