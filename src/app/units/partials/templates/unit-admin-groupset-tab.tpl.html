@@ -5,6 +5,9 @@
         <tr> 
           <th>Select</th>
           <th>Name</th>
+          <th>Create Groups</th>
+          <th>Manage Groups?</th>
+          <th>Restrict to Tutorials</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -14,6 +17,21 @@
           <td>
             <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
               {{ gs.name || 'empty' }}
+            </span>
+          </td>
+          <td>
+            <span editable-checkbox="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-title="Allow students to create groups?" e-form="gsRowform">
+              {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+            </span>
+          </td>
+          <td>
+            <span editable-checkbox="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-title="Allow students to manage groups?" e-form="gsRowform">
+              {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+            </span>
+          </td>
+          <td>
+            <span editable-checkbox="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-title="Restrict students to group's tutorial?" e-form="gsRowform">
+              {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
             </span>
           </td>
           <td style="white-space: nowrap">
@@ -74,8 +92,10 @@
       </tr>
     </tbody>
     </table>
-    <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
-    <button ng-click="addGroup()">Add Group</button>
+    <div ng-show="groups.length > pageSize" class="col-sm-12">
+      <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    </div>
+    <button ng-click="addGroup()" ng-show="selectedGroupset">Add Group</button>
   </div>
   <div class="col-sm-6">
     <h4>{{selectedGroup.name}} Members</h4>
@@ -100,7 +120,7 @@
       </tbody>
     </table>
     <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
-      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
+      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
       
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="addSelectedStudent()">

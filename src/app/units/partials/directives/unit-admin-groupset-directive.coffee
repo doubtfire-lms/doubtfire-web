@@ -23,7 +23,18 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
         GroupSet.create( { unit_id: $scope.unit.id, group_set: { name: "More Group Work" } }, (gs) -> $scope.unit.group_sets.push(gs) )
 
     $scope.saveGroupSet = (data, id) ->
-      GroupSet.update( { unit_id: $scope.unit.id, id: id, group_set: { name: data.name } } )
+      GroupSet.update(
+        {
+          unit_id: $scope.unit.id,
+          id: id,
+          group_set:
+            {
+              name: data.name
+              allow_students_to_create_groups: data.allow_students_to_create_groups,
+              allow_students_to_manage_groups: data.allow_students_to_manage_groups,
+              keep_groups_in_same_class: data.keep_groups_in_same_class
+            }
+        } )
 
     $scope.removeGroupSet = (gs) ->
       GroupSet.delete( { unit_id: $scope.unit.id, id: gs.id }, (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id ) )
@@ -51,7 +62,10 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupset.id,
           id: id,
-          group: { name: data.name, tutorial_id: data.tutorial_id }
+          group: {
+            name: data.name,
+            tutorial_id: data.tutorial_id,
+          }
         } )
 
     $scope.removeGroup = (grp) ->
@@ -90,6 +104,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
           group_id: $scope.selectedGroup.id
           project_id: $scope.selectedStudent.project_id
         }, (member) -> $scope.members.push(member))
+      $scope.selectedStudent = null
 
     $scope.studentDetails = (student) ->
       if student && student.student_id && student.name
