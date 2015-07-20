@@ -10,7 +10,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-groupset-tab.tpl.html'
 
-  controller: ($scope, GroupSet) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService) ->
     # pagination of groups
     $scope.currentPage = 1
     $scope.maxSize = 5
@@ -32,6 +32,70 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       $scope.unit.getGroups gs, (groups) ->
         $scope.groups = groups
         $scope.selectedGroupset = gs
+
+    $scope.addGroup = () ->
+      Group.create(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id: $scope.selectedGroupset.id
+          group:
+            {
+              name: "Group #{$scope.groups.length + 1}"
+              tutorial_id: $scope.unit.tutorials[0].id
+            }
+        }, (grp) -> $scope.groups.push(grp) )
+
+    $scope.saveGroup = (data, id) ->
+      Group.update(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          id: id,
+          group: { name: data.name, tutorial_id: data.tutorial_id }
+        } )
+
+    $scope.removeGroup = (grp) ->
+      Group.delete(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          id: grp.id
+        }, (response) -> $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id ) )
+
+    $scope.selectGroup = (grp) ->
+      GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: grp.id }, (members) ->
+        $scope.members = members
+        $scope.selectedGroup = grp
+
+    $scope.selectTutorial = (id) ->
+      _.find($scope.unit.tutorials, (t) -> t.id == id)
+
+    $scope.gradeFor = (member) ->
+      gradeService.grades[member.target_grade]
+
+    $scope.removeGroupMember = (member) ->
+      GroupMember.delete(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          group_id: $scope.selectedGroup.id
+          id: member.project_id
+        }, (response) -> $scope.members = _.filter($scope.members, (member1) -> member.project_id != member1.project_id ) )
+
+    $scope.addSelectedStudent = () ->
+      GroupMember.create(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          group_id: $scope.selectedGroup.id
+          project_id: $scope.selectedStudent.project_id
+        }, (member) -> $scope.members.push(member))
+
+    $scope.studentDetails = (student) ->
+      if student && student.student_id && student.name
+        "#{student.student_id} #{student.name}"
+      else
+        "Select Student"
 
     $scope.selectGroupSet($scope.unit.group_sets[0])
 )
