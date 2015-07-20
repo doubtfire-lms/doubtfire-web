@@ -1,39 +1,41 @@
 <div>
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr> 
-        <th>Select</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="gs in unit.group_sets">
-        <td><a href="" ng-click="selectGroupSet(gs)">Select</a></td>
-        <td>
-          <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
-            {{ gs.name || 'empty' }}
-          </span>
-        </td>
-        <td style="white-space: nowrap">
-          <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
-            <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
-              save
-            </button>
-            <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
-              cancel
-            </button>
-          </form>
-          <div class="buttons" ng-show="!gsRowform.$visible">
-            <a href="" ng-click="gsRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(gs)">delete</a>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button ng-click="addGroupSet()">Add New Student Groupwork</button>
-  <h4>Student Groups - {{selectedGroupset.name}}</h4>
+  <div>
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr> 
+          <th>Select</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="gs in unit.group_sets">
+          <td><a href="" ng-click="selectGroupSet(gs)">Select</a></td>
+          <td>
+            <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
+              {{ gs.name || 'empty' }}
+            </span>
+          </td>
+          <td style="white-space: nowrap">
+            <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
+              <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
+                save
+              </button>
+              <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
+                cancel
+              </button>
+            </form>
+            <div class="buttons" ng-show="!gsRowform.$visible">
+              <a href="" ng-click="gsRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(gs)">delete</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button ng-click="addGroupSet()">Add New Student Groupwork</button>
+  </div>
   <div class="col-sm-6">
+    <h4>{{selectedGroupset.name}} Groups</h4>
     <table class="table table-condensed table-hover">
     <thead>
       <tr> 
@@ -52,10 +54,12 @@
           </span>
         </td>
         <td>
-          {{grp.tutorial.abbreviation}}
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials">
+          {{ selectTutorial(grp.tutorial_id).abbreviation }}
+          </span>
         </td>
         <td style="white-space: nowrap">
-          <form editable-form name="grpRowform" onbeforesave="saveGroupSet($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
+          <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
             <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
               save
             </button>
@@ -64,12 +68,45 @@
             </button>
           </form>
           <div class="buttons" ng-show="!grpRowform.$visible">
-            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(grp)">delete</a>
+            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroup(grp)">delete</a>
           </div>
         </td>
       </tr>
     </tbody>
     </table>
     <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <button ng-click="addGroup()">Add Group</button>
+  </div>
+  <div class="col-sm-6">
+    <h4>{{selectedGroup.name}} Members</h4>
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr> 
+          <th>Username</th>
+          <th>Name</th>
+          <th>Target Grade</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="member in members">
+          <td>{{member.student_id}}</td>
+          <td>{{member.student_name}}</td>
+          <td>{{gradeFor(member)}}</td>
+          <td style="white-space: nowrap">
+            <a href="" ng-click="removeGroupMember(member)">remove</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
+      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students| filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
+      
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="addSelectedStudent()">
+          <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </span>
+    </div>
   </div>
 </div>
