@@ -100,7 +100,7 @@
       </tbody>
     </table>
     <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
-      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students| filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
+      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
       
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="addSelectedStudent()">

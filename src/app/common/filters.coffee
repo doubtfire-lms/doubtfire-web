@@ -46,3 +46,14 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+.filter('studentsForGroup', ->
+  (input, gs, grp) ->
+    if input
+      if gs.keep_groups_in_same_class
+        _.filter input, (student) -> student.tute == grp.tutorial_id
+      else
+        input
+    else
+      input
+)
