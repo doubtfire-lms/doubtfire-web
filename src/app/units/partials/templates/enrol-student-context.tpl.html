@@ -83,7 +83,7 @@
         <tbody>
             <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
                 <td>
-                    {{student.student_id}}
+                    <a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a>
                 </td>
                 <td>
                     {{student.first_name}}
