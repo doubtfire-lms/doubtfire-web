@@ -44,6 +44,11 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
         $scope.groups = groups
         $scope.selectedGroupset = gs
 
+        if groups.length > 0
+          $scope.selectGroup(groups[0])
+        else
+          $scope.selectGroup(null)
+
     $scope.addGroup = () ->
       Group.create(
         {
@@ -77,9 +82,13 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
         }, (response) -> $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id ) )
 
     $scope.selectGroup = (grp) ->
-      GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: grp.id }, (members) ->
-        $scope.members = members
-        $scope.selectedGroup = grp
+      if grp
+        GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: grp.id }, (members) ->
+          $scope.members = members
+          $scope.selectedGroup = grp
+      else
+        $scope.members = null
+        $scope.selectedGroup = null
 
     $scope.selectTutorial = (id) ->
       _.find($scope.unit.tutorials, (t) -> t.id == id)
@@ -112,5 +121,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       else
         "Select Student"
 
-    $scope.selectGroupSet($scope.unit.group_sets[0])
+    if $scope.unit.group_sets.length > 0
+      $scope.selectGroupSet($scope.unit.group_sets[0])
+
 )
