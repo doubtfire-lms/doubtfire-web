@@ -31,6 +31,25 @@ angular.module("doubtfire", [
   "doubtfire.users"
   "doubtfire.groups"
 ])
+.constant('DoubtfireContributors', [
+  #
+  # Add contributors to Doubtfire here, which should be their GitHub usernames
+  #
+  'macite'              # Andrew Cain
+  'apj'                 # Allan Jones
+  'alexcu-'             # Alex Cummaudo
+  'joostfunkekupper'    # Joost Funke Kupper
+  'rohanliston'         # Rohan Liston
+  'lukehorvat'          # Luke Horvat
+
+  #
+  # TODO: Find out account names for...
+  # '???'                 # Evo Kellerman
+  # '???'                 # Reuben Wilson
+  # '???'                 # Cliff Warren
+  # '???'                 # Angus Morton
+  #
+])
 .config( (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
 ).config(($urlRouterProvider, $httpProvider) ->

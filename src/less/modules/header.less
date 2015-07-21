@@ -4,14 +4,19 @@
 	h4 { font-size: 12px; }
 }
 
-.navbar-brand {
-	background-image: url('/assets/images/logo.png');
-	background-repeat: no-repeat;
-	background-size: 30px 30px;
-	background-position: left center;
-	font-weight: lighter;
-	margin-left: 15px;
-	padding-left: 40px;
+a.navbar-brand {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+					align-items: center;
+	i.logo {
+		height: 1.6em;
+		width: 1.6em;
+	}
+	h1.logo {
+		font-size: 1.3em;
+		margin: 0;
+	}
 }
 
 .alert-top
