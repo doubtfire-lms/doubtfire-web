@@ -36,7 +36,6 @@
     </div><!--/active-task-status-switcher-->
     <div class="clearfix task-header-info">
       <div class="col-sm-5 pull-left">
-
         <h4>{{activeTask.task_name}}</h4>
         <p class="text-justify">
           {{activeTask.task_desc}}
@@ -50,6 +49,8 @@
       </div>
     </div><!--/task-header-info-->
   </div><!--/task-toolbar-->
+
+  {{activeTask}}
 
   <hr>
 
@@ -76,7 +77,13 @@
       <submit-task-form task="activeTask" project="project" ng-if="activeTab == tabsData['fileUpload']"></submit-task-form>
       <view-submission ng-if="activeTab == tabsData['viewSubmission']"></view-submission>
       <view-comments ng-if="activeTab == tabsData['viewComments']"></view-comments>
+      <task-plagiarism-report task="activeTask" ng-if="activeTab == tabsData['plagiarismReport'] && activeTask.similar_to_count > 0"></task-plagiarism-report>
+      <div ng-if="activeTab == tabsData['plagiarismReport'] && activeTask.similar_to_count <= 0">
+        All Good... no similarities detected with this task.
+      </div>
+    </div><!-- End of right panel -->
+  </div>
+
     </div>
   </div><!--/tab-contents-->
-
 </div>

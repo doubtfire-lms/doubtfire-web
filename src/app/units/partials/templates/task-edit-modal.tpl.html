@@ -11,7 +11,7 @@
       
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Abbreviation</label>
-        <input type="text" class="form-control col-sm-8" ng-model="task.abbr"/>
+        <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
   	  </div><!--/abbr-->
   	  
   	  <div class="form-group" ng-required="isNew">
@@ -19,22 +19,37 @@
         <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
           <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
         </label>
-      </div><!--/desc-->
+      </div><!--/grade-->
 
       <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Description</label>
-        <textarea class="form-control col-sm-8" ng-model="task.desc"></textarea>
+        <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
   	  </div><!--/desc-->
   	  
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Weighting</label>
         <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
   	  </div><!--/weighting-->
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Group Task</label>
+        <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
+<!--         <select class="form-control col-sm-8" ng-model="task.group_set_id" convert-to-number>
+          <option value="-1">None</option>
+          <option ng-repeat="gs in unit.group_sets" value="{{gs.id}}">{{gs.name}}</option>
+        </select>
+ -->      </div><!--/required-->
+
   	  
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Required</label>
         <input type="checkbox" class="form-control col-sm-8" ng-model="task.required"/>
   	  </div><!--/required-->
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Restricted</label>
+        <input type="checkbox" class="form-control col-sm-8" ng-model="task.restrict_status_updates"/>
+      </div><!--/required-->
   	  
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Target Date</label>
@@ -73,7 +88,35 @@
             <span class="glyphicon glyphicon-plus"></span>
         </button>
       </div><!--/upload-requirements-->
-
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Plagiarism Checks</label>
+        <div class="col-sm-8 form-control-static" ng-show="task.plagiarism_checks.length == 0">
+          None
+        </div>
+        <ul class="col-sm-8 input-group" ng-show="task.plagiarism_checks.length > 0">
+          <li class="list-group-item" ng-repeat="check in task.plagiarism_checks">
+            <select class="form-control" ng-model="check.type">
+              <option value="moss pascal">Moss Pascal</option>
+              <option value="moss c">Moss C</option>
+              <option value="moss csharp">Moss C#</option>
+              <option value="moss cc">Moss C++</option>
+              <option value="moss python">Moss Python</option>
+            </select>
+            <br/>
+            <input class="form-control" placeholder="File patterns (| separate)" type="text" required ng-model="check.pattern"/>
+            <i class="glyphicon glyphicon-remove" style="padding-top: 10px; cursor: pointer;" ng-click="removeCheck(check)"></i>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Plagiarism Warn Percent</label>
+        <input type="number" class="form-control col-sm-8" ng-model="task.plagiarism_warn_pct"/>
+      </div><!--/abbr-->
+      <div class="form-group">
+        <button type="button" ng-click="addCheck()" class="btn btn-success col-sm-offset-10 col-sm-1">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div><!--/plagiarism checks-->
 		<div class="modal-footer text-right">
       <button type="button" ng-show="!isNew" class="btn btn-danger" ng-click="deleteTask()">
         Delete

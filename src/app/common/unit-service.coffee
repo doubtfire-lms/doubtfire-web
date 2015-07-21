@@ -1,6 +1,6 @@
 angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
 
-.factory("unitService", (Unit, Students, projectService, taskService) ->
+.factory("unitService", (Unit, Students, Group, projectService, taskService) ->
   #
   # The unit service object
   #
@@ -19,6 +19,8 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
       # Add a sequence from the order fetched from server
       _.each(unit.task_definitions, (td, index, list) ->
         td.seq = index
+        if td.group_set_id
+          td.group_set = _.find(unit.group_sets, (gs) -> td.group_set_id == gs.id)
       )
       # Allow the caller to fetch a task definition from the unit based on its id
       unit.taskDef = (taskDefId) ->
@@ -70,6 +72,11 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
           { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[3]))},
         ]
         projectService.updateTaskStats(student, student.stats)
+
+      unit.getGroups = (group_set, callback) ->
+        return unless group_set
+        Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
+          callback(groups)
 
       if loadStudents
         # Fetch the students for the unit

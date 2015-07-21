@@ -67,6 +67,15 @@ angular.module("doubtfire.api", [
 .factory("TaskDefinition", (resourcePlus) ->
   resourcePlus "/task_definitions/:id", { id: "@id" }
 )
+.factory("GroupMember", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:group_id/members/:id", { id: "@id", group_id: "@group_id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
+)
+.factory("Group", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:id", { id: "@id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
+)
+.factory("GroupSet", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/group_sets/:id", { id: "@id", unit_id: "@unit_id" }
+)
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
   this.resource = resourcePlus "/submission/task/:id", { id: "@id" }
 
@@ -76,6 +85,12 @@ angular.module("doubtfire.api", [
     $window.open this.getTaskUrl(task), "_blank"
 
   return this
+)
+.factory("TaskSimilarity", ($http, api, currentUser) ->
+  get: (task, match, callback) ->
+    url = "#{api}/tasks/#{task.id}/similarity/#{match}?auth_token=#{currentUser.authenticationToken}"
+    $http.get(url).success ( data ) ->
+      callback(data)
 )
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
@@ -129,7 +144,7 @@ angular.module("doubtfire.api", [
       scope: scope,
       url: uploadUrl
       method: "POST",
-      queueLimit: task.task_upload_requirements.length
+      queueLimit: task.upload_requirements.length
     }
 
     fileUploader.task = task
@@ -225,10 +240,22 @@ angular.module("doubtfire.api", [
       fileUploader.uploadAll()
 
     fileUploader.onSuccessItem = (item, response, status, headers) ->
-      newTasks = response
-      diff = newTasks.length - fileUploader.unit.task_definitions.length
-      alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
-      _.extend(fileUploader.scope.unit.task_definitions, response)
+      newTasks = response.added
+      updatedTasks = response.updated
+      failedTasks = response.failed
+
+      if newTasks.length > 0
+        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
+        _.extend(fileUploader.scope.unit.task_definitions, newTasks)
+      if updatedTasks.length > 0
+        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
+        _.each updatedTasks, (td) ->
+          idx = _.findIndex fileUploader.scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
+          if idx >= 0
+            _.extend fileUploader.scope.unit.task_definitions[idx], td
+      if failedTasks.length > 0
+        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
+
       fileUploader.clearQueue()
 
     fileUploader.onErrorItem = (evt, response, item, headers) ->

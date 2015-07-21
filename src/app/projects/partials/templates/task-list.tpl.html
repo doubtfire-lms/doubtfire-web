@@ -1,7 +1,7 @@
 <div>
   <accordion close-others="oneAtATime">
-    <accordion-group heading="{{task_def.name}} : {{task_def.abbr}}" ng-repeat="task_def in unit.task_definitions">
-      <p>{{task_def.desc}}</p>
+    <accordion-group heading="{{task_def.name}} : {{task_def.abbreviation}}" ng-repeat="task_def in unit.task_definitions">
+      <p>{{task_def.description}}</p>
       <p>Due Date : {{task_def.target_date}}</p>
     </accordion-group>
   </accordion>

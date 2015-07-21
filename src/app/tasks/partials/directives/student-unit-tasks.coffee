@@ -32,12 +32,13 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
       # - add in task abbreviation, description, name, and status
       $scope.tasks    = $scope.project.tasks.map (task) ->
         td = $scope.unit.taskDef(task.task_definition_id)
-        task.task_abbr = td.abbr
-        task.task_desc = td.desc
+        task.definition = td
+        task.task_abbr = td.abbreviation
+        task.task_desc = td.description
         task.task_name = td.name
         task.seq = td.seq
         task.due_date = td.target_date
-        task.task_upload_requirements = td.upload_requirements
+        task.upload_requirements = td.upload_requirements
         task.status_txt = taskService.statusLabels[task.status]
         task
 
