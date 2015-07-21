@@ -183,6 +183,9 @@ angular.module("doubtfire.api", [
       fileUploader.scope.$apply()
       fileUploader.clearQueue()
 
+      if fileUploader.onChange?
+        fileUploader.onChange()
+
     fileUploader.onUploadFailure = (response) ->
       fileUploader.scope.fileUploadFailed(response.error)
       fileUploader.scope.$apply()
@@ -206,8 +209,7 @@ angular.module("doubtfire.api", [
             fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
           # Fail
           else
-            error = if xhr.responseText == '' then '{ "error": "Unknown Error" }' else xhr.responseText
-            fileUploader.onUploadFailure(JSON.parse(error))
+            fileUploader.onUploadFailure(JSON.parse(xhr.responseText))
 
       # Append each file in the queue to the form
       form.append item.alias, item._file for item in queue

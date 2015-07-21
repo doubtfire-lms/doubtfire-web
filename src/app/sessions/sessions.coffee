@@ -165,14 +165,20 @@ angular.module("doubtfire.sessions", [
 
     if delayTime < 100
       delayTime = 100
-    
+
     $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), delayTime
 
   # Return the auth object
   auth
 ).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie) ->
-  
+
   $scope.session = { remember_me: true }
+
+  $scope.openAboutModal = ->
+    $modal.open
+      templateUrl: 'common/about-doubtfire-modal.tpl.html'
+      controller: 'AboutDoubtfireModalCtrl'
+      size: 'lg'
 
   if auth.isAuthenticated()
     redirectService.redirect "home", {}
