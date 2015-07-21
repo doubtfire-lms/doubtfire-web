@@ -152,6 +152,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       $scope.unit.staff = _.without $scope.unit.staff, staff
       UnitRole.delete { id: staff.id }
       staffUser = $scope.findStaffUser(staff.user_id)
+
+    $scope.groupSetName = (id) ->
+      gs = _.find($scope.unit.group_sets, (gs) -> gs.id == id)
+      return gs.name if gs
+
 )
 .directive('taskAdminUnitContext', ->
   replace: true
@@ -184,7 +189,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           unit: -> $scope.unit
         }
     $scope.createTask = ->
-      task = { target_date: new Date(), required: true, upload_requirements: [] }
+      task = { target_date: new Date(), required: true, upload_requirements: [], plagiarism_checks: [] }
       $modal.open
         controller: 'TaskEditModalCtrl'
         templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'

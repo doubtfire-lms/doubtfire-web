@@ -136,6 +136,12 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         icon: "fa-comments-o"
         active: false
         seq: 3
+      plagiarismReport:
+        title: "View Similarities Detected"
+        subtitle: "See the other submissions and how closely they relate to your submission"
+        icon: "fa-eye"
+        active: false
+        seq: 4
 
     $scope.setActiveTab = (tab) ->
       $scope.activeTab = tab #$scope.tabsData[tab]
@@ -199,7 +205,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     #
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
-      if status == 'ready_to_mark' and $scope.activeTask.task_upload_requirements.length > 0
+      if status == 'ready_to_mark' and $scope.activeTask.upload_requirements.length > 0
+        # $scope.uploadFiles()
         # ready_to_mark selected...
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (

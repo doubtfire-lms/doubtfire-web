@@ -89,24 +89,32 @@ angular.module('doubtfire.units.partials.modals', [])
     
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
-    newUpReq = { key: "file#{newLength-1}", name: "", type: "code" }
+    newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
     $scope.task.upload_requirements.push newUpReq
   
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
+
+  $scope.addCheck = () ->
+    newLength = $scope.task.plagiarism_checks.length + 1
+    newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
+    $scope.task.plagiarism_checks.push newCheck
+  
+  $scope.removeCheck = (check) ->
+    $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
+
   
   populate_task = (oldTask, newTask) ->
     _.extend(oldTask, newTask)
-    if newTask.abbreviation
-      oldTask.abbr = newTask.abbreviation
-    else
-      oldTask.abbr = newTask.abbr
+    oldTask.abbreviation = newTask.abbreviation
+    oldTask.description = newTask.description
     if newTask.weighting
       oldTask.weight = newTask.weighting
     else
       oldTask.weight = newTask.weight
     oldTask.name = newTask.name
     oldTask.upload_requirements = newTask.upload_requirements
+    oldTask.plagiarism_checks = newTask.plagiarism_checks
     oldTask.target_date = newTask.target_date
     oldTask.required = newTask.required
 
@@ -132,16 +140,18 @@ angular.module('doubtfire.units.partials.modals', [])
     task = {}
     _.extend(task, $scope.task)
 
-    task.abbreviation = $scope.task.abbr
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
-    # task.upload_requirements = $scope.task.upload_requirements
+    task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+    if task.group_set
+      task.group_set_id = task.group_set.id
+    else
+      task.group_set_id = -1
+
     if task.target_date && task.target_date.getMonth
       tgt = task.target_date
       task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-    
-    task.description = $scope.task.desc
     
     if $scope.isNew
       TaskDefinition.create( { task_def: task } ).$promise.then (

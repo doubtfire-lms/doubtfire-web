@@ -14,6 +14,7 @@
             <th>Stats</th>
             <th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
             <th><a href="" ng-click="sortOrder='portfolio_status'; reverse=!reverse">Portfolio</a></th>
+            <th><a href="" ng-click="sortOrder='tasks_with_similarities * 100 + max_pct_copy'; reverse=!reverse">Plagiarism</a></th>
             <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
             <th>Actions</th>
           </tr>
@@ -46,6 +47,8 @@
             </progress>
           </td>
           <td><span style="margin-left: 10px" class="fa {{student.has_portfolio ? 'fa-circle' : student.compile_portfolio ? 'fa-dot-circle-o' : 'fa-circle-o'}} fa-2x"></span></td>
+          <td ng-if="student.tasks_with_similarities > 0">{{student.tasks_with_similarities}} @ &lt;= {{student.max_pct_copy}}%</td>
+          <td ng-if="student.tasks_with_similarities == 0"></td>
           <td>
             <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
               <div class="btn-group" dropdown is-open="status.isopen">
