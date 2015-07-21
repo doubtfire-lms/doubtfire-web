@@ -21,10 +21,11 @@
     "lodash": "2.4.1",
     "underscore.string": "2.3.3",
     "angular-ui-calendar": "0.8.1",
-    "angular-file-upload": "1.0.3",
     "pdfjs-bower": "1.0.233",
     "ng-csv": "0.2.3",
-    "angular-sanitize": "1.2.22"
+    "angular-sanitize": "1.2.22",
+    "angular-file-upload": "1.0.3",
+    "ng-file-upload": "~5.0.9"
   },
   "resolutions": {
     "d3": "3.4.11",

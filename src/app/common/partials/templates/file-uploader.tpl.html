@@ -1,0 +1,19 @@
+<div>
+  <button ng-show="clearEnqueuedFilesEnabled()" class="btn btn-sm btn-default pull-right" ng-click="clearEnqueuedFiles()">
+    <span class="glyphicon glyphicon-ban-circle"></span>
+  </button>
+  <div ng-repeat="upload in uploadZones">
+    <h5>{{$index + 1}}. {{upload.fileName}}</h5>
+    <div ngf-drop
+      ng-show="upload.model == null"
+      class="drop well"
+      ng-model="upload.model"
+      ngf-accept="upload.accept"
+      ngf-drag-over-class="{accept:'file-over-hover', reject:'file-over-reject', delay:1000}">
+        <p class="fa fa-file-{{upload.icon}}-o fa-3x"></p>
+        <p>Drop {{upload.type}} here</p>
+      </div><!--/drop-zone-->
+    <div ng-hide="upload.model == null">
+      {{upload.model}}
+    </div><!--/actual-file-->
+</div>

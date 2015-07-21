@@ -1,5 +1,6 @@
 angular.module("doubtfire.api", [
   "ngResource"
+  "ngFileUpload"
 ])
 
 .constant("api", '/* @echo API_URL */') # Set in env.config.js
