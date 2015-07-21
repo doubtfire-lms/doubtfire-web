@@ -1,13 +1,13 @@
-angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
+angular.module("doubtfire.header", ["doubtfire.units.partials.modals"])
 
 .factory("headerService", ($rootScope) ->
-  
+
   # use the menus here to inject non-global menus
   # dynamically to a page (i.e., page-specific menus such as "role")
-  
+
   # menuLinks = [ { class: 'active/nil', url: '/someUrl', name: 'Link Title' } ... ]
   # menu      = { name: 'Menu Title', links: menuLinks, icon: 'icon' }
-  
+
   $rootScope.header_menu_data = [ ]
   menus: () -> $rootScope.header_menu_data
   clearMenus: ->
@@ -54,12 +54,12 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
   # Global Units Menu
   $scope.unitRoles = UnitRole.query()
   $scope.projects = Project.query()
-  
+
   $scope.isUniqueUnitRole = (unit) ->
     units = (item for item in $scope.unitRoles when item.unit_id is unit.unit_id)
     # teaching userRoles will default to tutor role if both convenor and tutor
     units.length == 1 || unit.role == "Tutor"
-    
+
   $scope.openUserSettings = () ->
     $modal.open
       templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
@@ -77,6 +77,12 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
       resolve:
         # Actually load in all current user info when we request the user settings
         user: ->  $scope.currentUser
+
+  $scope.openAboutModal = ->
+    $modal.open
+      templateUrl: 'common/about-doubtfire-modal.tpl.html'
+      controller: 'AboutDoubtfireModalCtrl'
+      size: 'lg'
 )
 
 .controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
@@ -93,4 +99,26 @@ angular.module("doubtfire.header", [ "doubtfire.units.partials.modals" ])
     userRole.role == "Tutor"
   $scope.isConvenor = (userRole) ->
     userRole.role == "Convenor"
+)
+
+.controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $modalInstance, $http, $q) ->
+  contributors = DoubtfireContributors
+  # initial data
+  $scope.contributors = _.map contributors, (c) ->
+    avatar:   '/assets/images/person-unknown.gif'
+    handler:  c
+  $scope.close = ->
+    $modalInstance.dismiss()
+  for handler, index in contributors
+    do (handler, index) ->
+      $http.get("https://api.github.com/users/#{handler}").then (response) ->
+        data = response.data
+        if data.blog
+          data.blog = 'http://' + data.blog unless data.blog.match /^[a-zA-Z]+:\/\//
+        $scope.contributors[index] =
+          name:     data.name
+          avatar:   data.avatar_url or '/assets/images/person-unknown.gif'
+          website:  data.blog or data.html_url
+          github:   data.html_url
+          handler:  handler
 )

@@ -3,7 +3,7 @@ angular.module("doubtfire", [
   "templates-app"
   "templates-common"
   "localization"
-  
+
   "ui.router"
   "ui.bootstrap"
   # "mgcrea.ngStrap"
@@ -27,6 +27,25 @@ angular.module("doubtfire", [
   "doubtfire.tasks"
   "doubtfire.projects"
   "doubtfire.users"
+])
+.constant('DoubtfireContributors', [
+  #
+  # Add contributors to Doubtfire here, which should be their GitHub usernames
+  #
+  'macite'              # Andrew Cain
+  'apj'                 # Allan Jones
+  'alexcu-'             # Alex Cummaudo
+  'joostfunkekupper'    # Joost Funke Kupper
+  'rohanliston'         # Rohan Liston
+  'lukehorvat'          # Luke Horvat
+
+  #
+  # TODO: Find out account names for...
+  # '???'                 # Evo Kellerman
+  # '???'                 # Reuben Wilson
+  # '???'                 # Cliff Warren
+  # '???'                 # Angus Morton
+  #
 ])
 .config( (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
