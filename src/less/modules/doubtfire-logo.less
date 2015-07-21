@@ -1,0 +1,33 @@
+@doubtfire-color: #cf3d22;
+
+h1.logo {
+  font-weight: lighter;
+  letter-spacing: -1px;
+  font-size: 4em;
+  small {
+    font-weight: lighter;
+    display: block;
+    text-align: right;
+    font-size: 0.5em;
+  }
+}
+i.logo, h1.logo i {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: @doubtfire-color;
+  background-image: url('/assets/images/fire.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10%;
+}
+
+i.logo + h1.logo {
+  margin-left: 1ex;
+  display: inline-block;
+}
+
+a:hover > i.logo {
+  background-color: lighten(@doubtfire-color, 10%);
+}

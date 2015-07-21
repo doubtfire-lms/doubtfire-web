@@ -2,3 +2,63 @@
   width: @width;
   margin-left: ((@width - @ui-bootstrap-modal-width) / 2) * -1;
 }
+
+// Fade-in
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-moz-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-ms-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-o-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in(@seconds) {
+  -webkit-animation: fadein @seconds;
+     -moz-animation: fadein @seconds;
+      -ms-animation: fadein @seconds;
+       -o-animation: fadein @seconds;
+          animation: fadein @seconds;
+}
+
+// Move down
+
+@keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@-moz-keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@-webkit-keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@-ms-keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@-o-keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+.slide-down(@seconds) {
+  -webkit-animation: slidedown @seconds;
+     -moz-animation: slidedown @seconds;
+      -ms-animation: slidedown @seconds;
+       -o-animation: slidedown @seconds;
+          animation: slidedown @seconds;
+}

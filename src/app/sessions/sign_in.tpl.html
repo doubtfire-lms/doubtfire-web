@@ -1,14 +1,20 @@
 <div class="container landing-page">
-	<h1 class="logo">Doubtfire</h1>
-	<form class="form-signin well" name="form" ng-submit="signIn()">
-		<input class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
-		<input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
-    <div class="checkbox remember-me">
-  		<label>
-  			<input type="checkbox" ng-model="session.remember_me">Remember me</input>
-  		</label>
-    </div>
-		<input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" />
-	</form>
+  <main>
+  	<h1 class="logo">
+      <i></i> Doubtfire
+    </h1>
+  	<form class="form-signin well" name="form" ng-submit="signIn()">
+  		<input class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
+  		<input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
+      <div class="checkbox remember-me">
+    		<label>
+    			<input type="checkbox" ng-model="session.remember_me">Remember me</input>
+    		</label>
+      </div>
+  		<input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" />
+  	</form>
+  </main>
+  <footer class="about-doubtfire text-center">
+    <a href="" ng-click="openAboutModal()">About Doubtfire</a>
+  </footer>
 </div>
-

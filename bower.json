@@ -1,6 +1,8 @@
 {
   "name": "doubtfire",
-  "version": "0.0.1",
+  "version": "3.0.0",
+  "homepage": "http://doubtfire.ict.swin.edu.au",
+  "description": "A modern, lightweight learning management system.",
   "devDependencies": {},
   "dependencies": {
     "angular": "1.2.22",
