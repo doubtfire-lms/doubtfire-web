@@ -29,6 +29,7 @@ angular.module("doubtfire", [
   "doubtfire.tasks"
   "doubtfire.projects"
   "doubtfire.users"
+  "doubtfire.groups"
 ])
 .config( (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')

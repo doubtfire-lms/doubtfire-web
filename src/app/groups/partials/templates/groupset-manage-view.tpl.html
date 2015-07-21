@@ -1,0 +1,79 @@
+<div>
+  <div class="col-sm-6">
+    <h4>{{selectedGroupset.name}} Groups</h4>
+    <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th>Select</th>
+        <th><a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">Name</a></th>
+        <th><a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">Tutorial</a></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="grp in groups | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+        <td><a href="" ng-click="selectGroup(grp)">Select</a></td>
+        <td>
+          <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
+            {{ grp.name || 'empty' }}
+          </span>
+        </td>
+        <td>
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials">
+          {{ selectTutorial(grp.tutorial_id).abbreviation }}
+          </span>
+        </td>
+        <td style="white-space: nowrap">
+          <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
+            <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="grpRowform.$waiting" ng-click="grpRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="buttons" ng-show="!grpRowform.$visible">
+            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroup(grp)">delete</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+    <div ng-show="groups.length > pageSize" class="col-sm-12">
+      <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    </div>
+    <button ng-click="addGroup()" ng-show="selectedGroupset">Add Group</button>
+  </div>
+  <div class="col-sm-6">
+    <h4>{{selectedGroup.name}} Members</h4>
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr> 
+          <th><a href="" ng-click="memberSortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+          <th><a href="" ng-click="memberSortOrder='student_name'; reverse=!reverse">Name</a></th>
+          <th><a href="" ng-click="memberSortOrder='target_grade'; reverse=!reverse">Target Grade</a></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="member in members | orderBy:memberSortOrder:reverse">
+          <td><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
+          <td>{{member.student_name}}</td>
+          <td>{{gradeFor(member)}}</td>
+          <td style="white-space: nowrap">
+            <a href="" ng-click="removeGroupMember(member)">remove</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
+      <input class="form-control" id="convenors" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
+      
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="addSelectedStudent()">
+          <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+<div>

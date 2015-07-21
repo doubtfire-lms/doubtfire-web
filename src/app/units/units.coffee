@@ -88,7 +88,7 @@ angular.module("doubtfire.units", [
       }
 )
 
-.controller('EditUnitCtrl', ($scope, $state, $stateParams, unitService, headerService, alertService, Convenor, Tutor) ->
+.controller('EditUnitCtrl', ($scope, $state, $stateParams, unitService, headerService, alertService, Convenor, Tutor, UnitRole) ->
   Convenor.query().$promise.then( (convenors) ->
     Tutor.query().$promise.then( (tutors) ->
       staff = _.union(convenors,tutors)
@@ -105,6 +105,10 @@ angular.module("doubtfire.units", [
   unitService.getUnit $state.params.unitId, true, true, (unit) ->
     $scope.unit = unit
     $scope.currentStaff = $scope.unit.staff
+    UnitRole.query (roles) ->
+      $scope.unitRoles = _.filter(roles, (role) -> role.unit_id == unit.id)
+      if $scope.unitRoles
+        $scope.assessingUnitRole = $scope.unitRoles[0]
 )
 
 .controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit) ->
