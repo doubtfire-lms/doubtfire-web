@@ -20,20 +20,6 @@ angular.module("doubtfire.home", [])
   hasRoles = false
   hasProjects = false
 
-  ###
-  TEST
-  ###
-  $scope.test = {}
-  $scope.test.files = {
-    file0: { name: 'Silly Name Code', type: 'code'    },
-    fileX: { name: 'Silly name Shot', type: 'image'   },
-    fileA: { name: 'Zip of stuff'   , type: 'zip'     },
-    fileC: { name: 'Csv of stuff'   , type: 'csv'     },
-    file1: { name: 'Pdf of stuff'   , type: 'document'}
-  }
-  $scope.test.payload = { chicken: "eggs" }
-
-
   testSingleProjectRole = () ->
     if not (hasRoles && hasProjects)
       return
