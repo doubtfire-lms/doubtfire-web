@@ -16,7 +16,7 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
 
     $scope.addGroup = (name) ->
       if $scope.project #in a student context
-        tutorial_id = $scope.project.tutorial_id
+        tutorial_id = $scope.project.tutorial.id
       else #convenor/tutor
         tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == $scope.assessingUnitRole.name
         if not tutorial_id
