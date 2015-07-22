@@ -1,5 +1,5 @@
 <div class="file-upload-area">
-  <div ng-repeat="upload in uploadZones">
+  <div ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones">
     <h3 class="file-title">
       {{uploadZones.length == 0 ? '' : $index + 1}} - {{upload.display.name}}
     </h3>
@@ -18,7 +18,7 @@
           <small> Accepted files: <code>{{upload.accept}}</code> </small>
         </p>
         <p ng-show="dropSupported" ng-hide="upload.display.error">
-          Drop a {{upload.display.type}} here
+          Drop {{upload.display.type}} file here
           <small> or click to select one </small>
         </p>
         <p ng-hide="dropSupported || upload.display.error">
@@ -35,4 +35,33 @@
       </a>
       </p>
     </div><!--/actual-file-->
+  </div><!--/drop-zones-->
+  <div ng-show="readyToUpload()" class="upload-area text-center">
+    <button ng-show="uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary">
+      <p class="fa fa-cloud-upload fa-3x"></p>
+      <p>Upload</p>
+    </button><!--/upload-button-->
+    <div ng-hide="uploadingInfo == null || uploadingInfo.complete" class="progress-area">
+      <div class="icons">
+        <i ng-repeat="upload in uploadZones" class="fa {{upload.display.icon}}"></i>
+        <i class="fa fa-arrow-right"></i>
+        <i class="logo"></i>
+      </div>
+      <progressbar class="progress-striped active" value="uploadingInfo.progress"></progressbar>
+    </div><!--/progress-area-->
+    <div ng-if="uploadingInfo.complete" class="result-area">
+      <i class="fa {{uploadingInfo.success === true ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'}} fa-4x"></i>
+      <h3>Upload {{uploadingInfo.success === true ? 'Successful' : 'Failed'}}</h3>
+      <div ng-show="uploadingInfo.error != null"
+        <p>
+          <strong>Error Message: </strong>
+          {{uploadingInfo.error}}
+        </p>
+        <p class="retry-options">
+          <a href='' ng-click="initiateUpload()">Retry Upload</a>
+          <a href='' ng-click="resetUploader()">Cancel</a>
+        </p>
+      </div><!--/error-message-area-->
+    </div><!--/result-area-->
+  </div><!--/upload-area-->
 </div>

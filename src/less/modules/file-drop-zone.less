@@ -5,7 +5,7 @@
   @reject-color: @brand-danger;
 
   // Extra additional icons
-  @ban-icon: "\f05e";
+  @ban-icon:   "\f05e";
   @place-icon: "\f019";
 
   .well.drop {
@@ -70,5 +70,49 @@
       color: @reject-color;
     }
     display: inline-block;
+  }
+  // Upload area/result
+  .upload-area {
+    // Upload button
+    button {
+      padding: 1ex;
+      width: 10%;
+      min-width: 150px;
+      p {
+        margin: 0;
+      }
+    }
+    .progress-area {
+      .icons {
+        width: 100%;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+                justify-content: center;
+      }
+      i.fa-arrow-right {
+        .wobble();
+      }
+      i {
+        float: left;
+        margin-right: 1ex;
+        font-size: 3em;
+        margin-bottom: 1em;
+      }
+    }
+    .result-area {
+      i {
+        font-size: 6em;
+        .bounce-in();
+      }
+      .retry-options {
+        font-weight: bolder;
+        font-size: 1.2em;
+        a:first-child {
+          display: inline-block;
+          margin-right: 2ex;
+        }
+      }
+    }
   }
 }

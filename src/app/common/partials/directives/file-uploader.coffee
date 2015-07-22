@@ -1,7 +1,6 @@
 angular.module('doubtfire.file-uploader', ['ngFileUpload'])
 
 .directive 'fileUploader', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'common/partials/templates/file-uploader.tpl.html'
   scope:
@@ -14,10 +13,16 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     files: "="
     # URL to where image is to be uploaded
     url: '@'
+    # Optional HTTP method used to post data (defaults to POST)
+    method: '@'
     # Other payload data to pass in the upload
     # E.g.:
     # { unit_id: 10, other: { key: data, with: [array, of, stuff] } ... }
     payload: "="
+    # Optional function to perform on success (with one response parameter)
+    onSuccess: '='
+    # Optional function to perform on failure (with one response parameter)
+    onFailure: '='
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -97,6 +102,70 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
       zone
 
     #
-    # Is uploading
+    # Checks if okay to upload (i.e., file models exist for each drop zone)
     #
-    isUploading = false
+    $scope.readyToUpload = ->
+      _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
+
+
+    #
+    # Uploading data is null until the upload starts
+    #
+    $scope.uploadingInfo = null
+
+    #
+    # Resets the uploader
+    #
+    $scope.resetUploader = ->
+      $scope.uploadingInfo = null
+      for upload in $scope.uploadZones
+        $scope.clearEnqueuedUpload(upload)
+
+    #
+    # Initiates the upload
+    #
+    $scope.initiateUpload = ->
+      xhr   = new XMLHttpRequest()
+      form  = new FormData()
+      # Append data
+      files = ({ name: zone.name; data: zone.model[0] } for zone in $scope.uploadZones)
+      form.append file.name, file.data for file in files
+      # Append payload
+      payload = ({ key: k; value: v } for k, v of $scope.payload)
+      form.append payloadItem.key, payloadItem.value for payloadItem in payload
+      # Set the percent
+      $scope.uploadingInfo =
+        progress: 5
+        success: null
+        error: null
+        complete: false
+      # Callbacks
+      xhr.onreadystatechange = ->
+        if xhr.readyState is 4
+          $timeout (->
+            # Upload is now complete
+            $scope.uploadingInfo.complete = true
+            response = null
+            try
+              response = JSON.parse xhr.responseText
+            catch e
+              response = xhr.responseText
+            # Success (20x success range)
+            if xhr.status >= 200 and xhr.status < 300
+              $scope.onSuccess?(response)
+              $scope.uploadingInfo.success = true
+              $timeout $scope.resetUploader, 2500
+            # Fail
+            else
+              $scope.onFailure?(response)
+              $scope.uploadingInfo.success = false
+              $scope.uploadingInfo.error   = response
+            $scope.$apply()), 2000
+      xhr.upload.onprogress = (event) ->
+        $scope.uploadingInfo.progress = parseInt(100.0 * event.position / event.totalSize)
+        $scope.$apply()
+      # Default the method to POST if it was not defined
+      $scope.method = 'POST' unless $scope.method?
+      # Send it
+      xhr.open $scope.method, $scope.url, true
+      xhr.send form
