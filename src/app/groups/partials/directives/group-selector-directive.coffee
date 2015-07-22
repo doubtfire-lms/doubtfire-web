@@ -46,6 +46,9 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
         $scope.selectedGroup = grp
       else
         $scope.selectedGroup = null
+
+      if $scope.onSelectGroup
+        $scope.onSelectGroup(grp)
       $scope.$digest #notify
 
     if $scope.selectedGroupset
