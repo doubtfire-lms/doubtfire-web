@@ -38,6 +38,16 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupset = gs
       $scope.$digest #notify
+
+    $scope.studentStaffOptions = [
+      { value: true, text: "Staff and Students" }
+      { value: false, text: "Staff Only" }
+    ]
+
+    $scope.tutorialOptions = [
+      { value: true, text: "Same Tutorial" }
+      { value: false, text: "Any Tutorial" }
+    ]
     
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
