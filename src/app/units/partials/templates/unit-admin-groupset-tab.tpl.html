@@ -14,23 +14,23 @@
       <tbody>
         <tr ng-repeat="gs in unit.group_sets">
           <td><a href="" ng-click="selectGroupSet(gs)">Select</a></td>
-          <td>
+          <td class="col-sm-3">
             <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
               {{ gs.name || 'empty' }}
             </span>
           </td>
           <td>
-            <span editable-checkbox="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-title="Allow students to create groups?" e-form="gsRowform">
+            <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
               {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
             </span>
           </td>
           <td>
-            <span editable-checkbox="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-title="Allow students to manage groups?" e-form="gsRowform">
+            <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
               {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
             </span>
           </td>
           <td>
-            <span editable-checkbox="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-title="Restrict students to group's tutorial?" e-form="gsRowform">
+            <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
               {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
             </span>
           </td>
