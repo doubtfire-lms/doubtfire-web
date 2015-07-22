@@ -55,10 +55,11 @@ angular.module("doubtfire.projects", [
   # Switcher to task view
   #
   $scope.activeTab =
-    progress: true
-    feedback: false
-    lablist: false
-    portfolio: false
+    progress:   true
+    feedback:   false
+    groups:     false
+    lablist:    false
+    portfolio:  false
 
   $scope.showTaskView = (task) ->
     if not (task or $scope.selectedTask)
