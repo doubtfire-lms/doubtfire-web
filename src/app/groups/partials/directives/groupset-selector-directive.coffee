@@ -4,9 +4,10 @@ angular.module('doubtfire.groups.partials.groupset-selector', [])
   replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/groupset-selector.tpl.html'
-  scope:
-    unit: "="
-    selectedGroupset: "="
+  # scope:
+  #   unit: "="
+  #   selectedGroupset: "="
+  #   selectedGroup: "="
 
   controller: ($scope) ->
     $scope.status = {
@@ -19,12 +20,11 @@ angular.module('doubtfire.groups.partials.groupset-selector', [])
       $scope.status.isopen = !$scope.status.isopen
 
     $scope.selectGroupSet = (gs) ->
+      $scope.selectedGroup = null
       $scope.selectedGroupset = gs
       $scope.$digest #notify
       $scope.status.isopen = false
     
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
-
-
 )
