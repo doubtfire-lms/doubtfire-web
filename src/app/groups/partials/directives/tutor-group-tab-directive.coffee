@@ -6,5 +6,4 @@ angular.module('doubtfire.groups.partials.tutor-group-tab', [])
   templateUrl: 'groups/partials/templates/tutor-group-tab.tpl.html'
 
   controller: ($scope) ->
-    $scope.message = "Hello World"
 )

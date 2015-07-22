@@ -1,0 +1,55 @@
+<div>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th>Select</th>
+        <th><a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">Name</a></th>
+        <th><a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">Tutorial</a></th>
+        <th ng-if="assessingUnitRole">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="grp in groups | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+        <td><a href="" ng-click="selectGroup(grp)">Select</a></td>
+        <td>
+          <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
+            {{ grp.name || 'empty' }}
+          </span>
+        </td>
+        <td>
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials">
+          {{ selectTutorial(grp.tutorial_id).abbreviation }}
+          </span>
+        </td>
+        <td style="white-space: nowrap" ng-if="assessingUnitRole">
+          <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
+            <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="grpRowform.$waiting" ng-click="grpRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="buttons" ng-show="!grpRowform.$visible">
+            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroup(grp)">delete</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+  <div ng-show="groups.length > pageSize" class="pull-left">
+    <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+  </div>
+  <div class="pull-right col-sm-6" style="margin-top:20px;margin-bottom:20px">
+    <div class="input-group">
+        <input class="form-control" id="grpName" placeholder="New Group" ng-model="newGroupName"> 
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="addGroup(newGroupName)">
+            <i class="glyphicon glyphicon-plus"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

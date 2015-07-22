@@ -32,15 +32,23 @@
       </tab-heading>
       <task-feedback active-task="selectedTask" project="project" submitted-tasks="submittedTasks" assessing-unit-role="assessingUnitRole" ng-if="unitLoaded"></task-feedback>
     </tab>
-    <tab active="activeTab[2]">
+    <tab active="activeTab[2]" ng-id="unit.group_sets.length > 0">
       <tab-heading>
         <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-group fa-2x"></i> <br> Lab Groups
+          <i style="padding-bottom: 5px" class="fa fa-group fa-2x"></i> <br> Groups
+        </div>
+      </tab-heading>
+      <student-group-tab></student-group-tab>
+    </tab>
+    <tab active="activeTab[3]">
+      <tab-heading>
+        <div class="text-center">
+          <i style="padding-bottom: 5px" class="fa fa-pencil fa-2x"></i> <br> Tutorial
         </div>
       </tab-heading>
       <lab-list></lab-list>
     </tab>
-    <tab active="activeTab[3]">
+    <tab active="activeTab[4]">
       <tab-heading>
         <div class="text-center">
           <i style="padding-bottom: 5px" class="fa fa-book fa-2x"></i> <br> Portfolio

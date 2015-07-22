@@ -10,38 +10,6 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
     selectedGroupset: "="
 
   controller: ($scope, Group, GroupMember, gradeService, alertService) ->
-    # pagination of groups
-    $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 5
-
-    # initial sort orders
-    $scope.memberSortOrder = 'student_name'
-    $scope.groupSortOrder = 'name'
-
-    $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
-      $scope.selectGroupSet(newValue)
-
-    $scope.selectGroupSet = (gs) ->
-      $scope.unit.getGroups gs, (groups) ->
-        $scope.groups = groups
-
-        if groups.length > 0
-          $scope.selectGroup(groups[0])
-        else
-          $scope.selectGroup(null)
-
-    $scope.addGroup = () ->
-      Group.create(
-        {
-          unit_id: $scope.unit.id,
-          group_set_id: $scope.selectedGroupset.id
-          group:
-            {
-              name: "Group #{$scope.groups.length + 1}"
-              tutorial_id: $scope.unit.tutorials[0].id
-            }
-        }, (grp) -> $scope.groups.push(grp) )
 
     $scope.saveGroup = (data, id) ->
       Group.update(
@@ -55,7 +23,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
           }
         }, (response) ->
         (response) -> alertService.add("danger", response.data.error, 6000)
-        )
+      )
 
     $scope.removeGroup = (grp) ->
       Group.delete(
@@ -64,21 +32,6 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
           group_set_id:$scope.selectedGroupset.id,
           id: grp.id
         }, (response) -> $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id ) )
-
-    $scope.selectGroup = (grp) ->
-      if grp
-        GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: grp.id }, (members) ->
-          $scope.members = members
-          $scope.selectedGroup = grp
-      else
-        $scope.members = null
-        $scope.selectedGroup = null
-
-    $scope.selectTutorial = (id) ->
-      _.find($scope.unit.tutorials, (t) -> t.id == id)
-
-    $scope.gradeFor = (member) ->
-      gradeService.grades[member.target_grade]
 
     $scope.removeGroupMember = (member) ->
       GroupMember.delete(
@@ -104,4 +57,10 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
         "#{student.student_id} #{student.name}"
       else
         "Select Student"
+
+    $scope.$watch "selectedGroupset", (newValue, oldValue) ->
+      if $scope.groups && $scope.groups.length > 0
+        $scope.selectGroup($scope.groups[0])
+      else
+        $scope.selectGroup(null)
 )

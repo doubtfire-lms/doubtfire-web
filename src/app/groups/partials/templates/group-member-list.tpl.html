@@ -1,0 +1,22 @@
+<div>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr> 
+        <th ng-if="assessingUnitRole"><a href="" ng-click="memberSortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+        <th><a href="" ng-click="memberSortOrder='student_name'; reverse=!reverse">Name</a></th>
+        <th><a href="" ng-click="memberSortOrder='target_grade'; reverse=!reverse">Target Grade</a></th>
+        <th ng-if="assessingUnitRole">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="member in members | orderBy:memberSortOrder:reverse">
+        <td ng-if="assessingUnitRole"><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
+        <td>{{member.student_name}}</td>
+        <td>{{gradeFor(member)}}</td>
+        <td style="white-space: nowrap" ng-if="assessingUnitRole">
+          <a href="" ng-click="removeGroupMember(member)">remove</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
