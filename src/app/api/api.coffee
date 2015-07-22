@@ -59,8 +59,14 @@ angular.module("doubtfire.api", [
 .factory("Tutorial", (resourcePlus) ->
   resourcePlus "/tutorials/:id", { id: "@id" }
 )
-.factory("Task", (resourcePlus) ->
-  resourcePlus "/tasks/:id", { id: "@id" }
+.factory("Task", (resourcePlus, api, currentUser) ->
+  Task = resourcePlus "/tasks/:id", { id: "@id" }
+  #
+  # Generates a url for the given task
+  #
+  Task.generateSubmissionUrl = (task) ->
+    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  Task
 )
 .factory("TaskComment", (resourcePlus) ->
   resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
