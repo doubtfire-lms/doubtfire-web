@@ -5,7 +5,7 @@
         <th>Select</th>
         <th><a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">Name</a></th>
         <th><a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">Tutorial</a></th>
-        <th ng-if="assessingUnitRole">Actions</th>
+        <th ng-show="assessingUnitRole">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
           {{ selectTutorial(grp.tutorial_id).abbreviation }}
           </span>
         </td>
-        <td style="white-space: nowrap" ng-if="assessingUnitRole">
+        <td style="white-space: nowrap" ng-show="assessingUnitRole">
           <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
             <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
               save
