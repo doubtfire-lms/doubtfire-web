@@ -54,10 +54,10 @@ angular.module('doubtfire.tasks.partials.modals', [])
         (value) ->
           $scope.task.status = value.status
           $modalInstance.close(status)
-  
+
           if student? && student.task_stats?
             projectService.updateTaskStats(student, value.new_stats)
-          
+
           if value.status == status
             alertService.add("success", "Status saved.", 2000)
             if onChange
@@ -105,17 +105,17 @@ angular.module('doubtfire.tasks.partials.modals', [])
   # Whether or not to show help
   $scope.showHelp = false
 )
-.controller('SubmitTaskModalCtrl', ($scope, $modalInstance, TaskSubmission, Task, task, student, onChange, alertService) ->
-  $scope.task = task
-  $scope.uploadRequirements = task.upload_requirements
-  $scope.fileUploader = TaskSubmission.fileUploader($scope, task, student, onChange)
-  $scope.submitUpload = () ->
-    $scope.fileUploader.uploadEnqueuedFiles()
+.controller('SubmitTaskModalCtrl', ($scope, $modalInstance, Task, task, onChange) ->
+  $scope.files = {}
+  _.each task.upload_requirements, (upload) ->
+    $scope.files[upload.key] = { name: upload.name, type: upload.type}
+  $scope.url = Task.generateSubmissionUrl task
+  $scope.onSuccess = onChange
+  $scope.numberOfFiles = task.upload_requirements.length
+  $scope.onComplete = ->
     task.processing_pdf = true
-  $scope.clearUploads = () ->
-    $scope.fileUploader.clearQueue()
-  $scope.close = () ->
-    $modalInstance.close()
+    $scope.close()
+  $scope.close = $modalInstance.close
 )
 
 

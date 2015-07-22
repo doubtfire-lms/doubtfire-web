@@ -23,6 +23,9 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     onSuccess: '='
     # Optional function to perform on failure (with one response parameter)
     onFailure: '='
+    # Optional function to perform when the upload is successful and about
+    # to go back into its default state
+    onComplete: '='
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -154,7 +157,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
               $scope.uploadingInfo.success = true
-              $timeout $scope.resetUploader, 2500
+              $timeout (-> $scope.onComplete?(); $scope.resetUploader()), 2500
             # Fail
             else
               $scope.onFailure?(response)
