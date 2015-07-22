@@ -41,11 +41,11 @@
   <div ng-show="filteredGroups.length > pageSize" class="pull-left">
     <pagination total-items="filteredGroups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
   </div>
-  <div class="pull-right col-sm-6" style="margin-top:20px;margin-bottom:20px">
+  <div class="pull-right col-sm-6" style="margin-top:20px;margin-bottom:20px" ng-if="assessingUnitRole || selectedGroupset.allow_students_to_create_groups">
     <div class="input-group">
-        <input class="form-control" id="grpName" placeholder="New Group" ng-model="newGroupName"> 
+        <input class="form-control" id="grpName" placeholder="New Group" ng-model="grpName"> 
         <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="addGroup(newGroupName)">
+          <button class="btn btn-default" ng-click="addGroup(grpName)">
             <i class="glyphicon glyphicon-plus"></i>
           </button>
         </span>
