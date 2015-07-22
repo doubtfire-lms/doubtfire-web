@@ -1,19 +1,37 @@
-<div>
+<div class="file-upload-area">
   <button ng-show="clearEnqueuedFilesEnabled()" class="btn btn-sm btn-default pull-right" ng-click="clearEnqueuedFiles()">
     <span class="glyphicon glyphicon-ban-circle"></span>
   </button>
   <div ng-repeat="upload in uploadZones">
-    <h5>{{$index + 1}}. {{upload.fileName}}</h5>
-    <div ngf-drop
-      ng-show="upload.model == null"
-      class="drop well"
+    <h3 class="file-title">
+      {{uploadZones.length == 0 ? '' : $index + 1}} - {{upload.display.name}}
+    </h3>
+    <div ngf-select ngf-drop
+      ng-show="upload.model == null || upload.model.length == 0"
+      class="drop well {{upload.display.error ? 'file-rejected' : ''}}"
       ng-model="upload.model"
-      ngf-accept="upload.accept"
-      ngf-drag-over-class="{accept:'file-over-hover', reject:'file-over-reject', delay:1000}">
-        <p class="fa fa-file-{{upload.icon}}-o fa-3x"></p>
-        <p>Drop {{upload.type}} here</p>
+      ng-model-rejected="upload.rejects"
+      ngf-change="checkForError(upload)"
+      ngf-accept="{{upload.accept}}"
+      ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
+      ngf-drop-available="dropSupported">
+        <p class="fa {{upload.display.icon}} fa-3x"></p>
+        <p ng-show="upload.display.error">
+          Invalid file provided
+          <small> Accepted files: <code>{{upload.accept}}</code> </small>
+        </p>
+        <p ng-show="dropSupported" ng-hide="upload.display.error">
+          Drop a {{upload.display.type}} here
+          <small> or click to select one </small>
+        </p>
+        <p ng-hide="dropSupported || upload.display.error">
+          Click to select {{upload.display.type}} file
+        </p>
       </div><!--/drop-zone-->
-    <div ng-hide="upload.model == null">
-      {{upload.model}}
+    <div ng-hide="upload.model == null || upload.model.length == 0">
+      <p class="file-registered">
+        <i class="fa {{upload.display.icon}}"></i>
+        {{upload.model[0].name}}
+      </p>
     </div><!--/actual-file-->
 </div>
