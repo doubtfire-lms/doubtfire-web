@@ -22,6 +22,8 @@ angular.module("doubtfire", [
   "doubtfire.project-service"
   "doubtfire.filters"
 
+  "doubtfire.file-uploader"
+
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"
