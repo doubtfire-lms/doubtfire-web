@@ -32,7 +32,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     #
     ACCEPTED_TYPES =
       document:
-        extensions: ['pdf']
+        extensions: ['pdf', 'ps']
         icon:       'fa-file-pdf-o'
         name:       'PDF'
       csv:
@@ -40,7 +40,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
         icon:       'fa-file-excel-o'
         name:       'CSV'
       code:
-        extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java']
+        extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java', 'py']
         icon:       'fa-file-code-o'
         name:       'code'
       image:
@@ -91,7 +91,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
       zone =
         name:     uploadName
         model:    null
-        accept:   "'." + typeData.extensions.join(', .') + "'"
+        accept:   "'." + typeData.extensions.join(',.') + "'"
         # Rejected files
         rejects:  null
         display:
