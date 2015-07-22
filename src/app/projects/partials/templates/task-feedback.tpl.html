@@ -1,7 +1,7 @@
 <div ng-if="activeTask">
   <div>
-    <div class="btn-group pull-left status-switcher" dropdown>
-      <button class="btn task-status {{activeStatusData().class}} dropdown-toggle">
+    <div class="btn-group dropdown pull-left status-switcher" dropdown>
+      <button class="btn task-status {{activeStatusData().class}} dropdown-toggle" dropdown-toggle>
         <label>{{activeTask.task_abbr}}</label>
         <span class="caret"></span>
       </button><!--/dropdown-button-->
@@ -14,8 +14,8 @@
       </ul>
     </div><!--/active-task-switcher-->
 
-    <div tooltip-placement="right" tooltip="{{activeStatusData().label}}" class="btn-group pull-right status-switcher" dropdown>
-      <button type="button" class="btn task-status {{statusClass(activeTask.status)}} dropdown-toggle">
+    <div tooltip-placement="right" tooltip="{{activeStatusData().label}}" class="btn-group dropdown pull-right status-switcher" dropdown>
+      <button type="button" class="btn task-status {{statusClass(activeTask.status)}} dropdown-toggle" dropdown-toggle>
         <i class="{{activeStatusData().icon}} fa-2x"></i>
         <span class="caret"></span>
       </button>

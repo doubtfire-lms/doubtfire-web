@@ -5,16 +5,17 @@
   "description": "A modern, lightweight learning management system.",
   "devDependencies": {},
   "dependencies": {
-    "angular": "1.2.22",
-    "angular-cookies": "1.2.22",
+    "angular": "1.2.28",
+    "angular-cookies": "1.2.28",
     "angular-local-storage": "0.0.7",
-    "angular-mocks": "1.2.22",
-    "angular-resource": "1.2.22",
+    "angular-mocks": "1.2.28",
+    "angular-resource": "1.2.28",
+    "angular-sanitize": "1.2.28",
     "d3": "3.4.11",
     "nvd3": "~1.1.15",
     "angularjs-nvd3-directives": "0.0.7",
     "bootstrap": "3.2.0",
-    "angular-bootstrap": "0.11.0",
+    "angular-bootstrap": "~0.12.0",
     "angular-ui-router": "0.2.7",
     "jquery": "2.1.4",
     "momentjs": "2.1.0",
@@ -24,12 +25,11 @@
     "angular-file-upload": "1.0.3",
     "ng-csv": "0.2.3",
     "pdfjs-bower": "1.0.233",
-    "angular-sanitize": "1.2.22",
     "angular-xeditable": "0.1.8"
   },
   "resolutions": {
     "d3": "3.4.11",
     "jquery": "2.1.4",
-    "angular": "1.2.22"
+    "angular": "1.2.28",
   }
 }

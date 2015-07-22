@@ -9,7 +9,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
     unit: "="
     selectedGroupset: "="
 
-  controller: ($scope, $rootScope, Group, GroupMember, gradeService, alertService) ->
+  controller: ($scope, Group, GroupMember, gradeService, alertService) ->
     # pagination of groups
     $scope.currentPage = 1
     $scope.maxSize = 5

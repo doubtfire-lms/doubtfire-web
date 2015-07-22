@@ -8,14 +8,14 @@
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-            <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-            <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
+            <th><a ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+            <th><a ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+            <th><a ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
             <th>Stats</th>
-            <th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
-            <th><a href="" ng-click="sortOrder='portfolio_status'; reverse=!reverse">Portfolio</a></th>
-            <th><a href="" ng-click="sortOrder='tasks_with_similarities * 100 + max_pct_copy'; reverse=!reverse">Plagiarism</a></th>
-            <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
+            <th><a ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
+            <th><a ng-click="sortOrder='portfolio_status'; reverse=!reverse">Portfolio</a></th>
+            <th><a ng-click="sortOrder='tasks_with_similarities * 100 + max_pct_copy'; reverse=!reverse">Plagiarism</a></th>
+            <th><a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -51,11 +51,11 @@
           <td ng-if="student.tasks_with_similarities == 0"></td>
           <td>
             <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
-              <div class="btn-group" dropdown is-open="status.isopen">
-                <button type="button" class="btn btn-default dropdown-toggle">
+              <div class="btn-group dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
                   {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu">
                   <li><a ng-click="switchToLab(student, nil); status.isopen = false">None</a></li>
                   <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToLab(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
                 </ul>
