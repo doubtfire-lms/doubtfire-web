@@ -18,7 +18,12 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
       if $scope.project #in a student context
         tutorial_id = $scope.project.tutorial_id
       else #convenor/tutor
-        tutorial_id = $scope.unit.tutorials[0].id
+        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == $scope.assessingUnitRole.name
+        if not tutorial_id
+          tutorial_id = $scope.unit.tutorials[0].id
+          $scope.staffFilter = 'all'
+        else
+          tutorial_id = tutorial_id.id
       
       Group.create(
         {
@@ -30,7 +35,9 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
               tutorial_id: tutorial_id
             }
         },
-        (grp) -> $scope.groups.push(grp)
+        (grp) ->
+          $scope.groups.push(grp)
+          grpName = null
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
