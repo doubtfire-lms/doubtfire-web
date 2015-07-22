@@ -4,10 +4,10 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
   replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/groupset-manage-view.tpl.html'
-  scope:
-    assessingUnitRole: "="
-    unit: "="
-    selectedGroupset: "="
+  # scope:
+  #   assessingUnitRole: "="
+  #   unit: "="
+  #   selectedGroupset: "="
 
   controller: ($scope, Group, GroupMember, gradeService, alertService) ->
     $scope.staffFilter = 'mine'
