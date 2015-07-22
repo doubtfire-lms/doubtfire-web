@@ -56,10 +56,19 @@
     font-weight: bold;
     color: #555;
   }
-  .file-registered {
+  p.file-registered {
     font-size: 1.2em;
+    display: inline-block;
     i {
-      margin-right: 1.5ex;
+      margin-right: 1ex;
     }
+  }
+  a.clear-upload {
+    margin-left: 1ex;
+    &:hover i {
+      font-size: 1.15em;
+      color: @reject-color;
+    }
+    display: inline-block;
   }
 }
