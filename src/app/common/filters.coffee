@@ -73,3 +73,27 @@ angular.module("doubtfire.filters", [  ])
     else
       input
 )
+
+#
+# Filter groups for students and in group admin pages
+#   gs: group set to determine if keep to class
+#   project: nil for admin pages, otherwise student
+#   assessingUnitRole: nil for student, otherwise staff details
+#   kind: 'all' | 'mine'
+#
+.filter('groupFilter', ->
+  (input, unit, gs, project, assessingUnitRole, kind) ->
+    if input
+      if assessingUnitRole && ! project # staff only... so tutorial is ignored!
+        if kind == 'mine'
+          _.filter input, (grp) -> unit.tutorialFromId(grp.tutorial_id).tutor_name == assessingUnitRole.name
+        else # just all
+          input
+      else  # student...
+        if gs.keep_groups_in_same_class # match just those in this tutorial
+          _.filter input, (grp) -> grp.tutorial_id == project.tutorial.id
+        else # all
+          input
+    else
+      input
+)

@@ -10,6 +10,13 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
     selectedGroupset: "="
 
   controller: ($scope, Group, GroupMember, gradeService, alertService) ->
+    $scope.staffFilter = 'mine'
+
+    $scope.toggleStaffFilter = () ->
+      if $scope.staffFilter == 'mine'
+        $scope.staffFilter = 'all'
+      else
+        $scope.staffFilter = 'mine'
 
     $scope.saveGroup = (data, id) ->
       Group.update(
