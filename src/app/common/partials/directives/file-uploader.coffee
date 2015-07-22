@@ -50,25 +50,10 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     throw Error "No files provided to uploader" if $scope.files?.length is 0
 
     #
-    # Files enqueued to be uploaded, dynamically returned from
-    # reducing the uploadZone models down to their model values only
-    #
-    enqueuedFiles = ->
-      (zone.model for zone in $scope.uploadZones)
-
-    #
     # Whether or not clearEnqueuedFiles is enabled
     #
-    $scope.clearEnqueuedFilesEnabled = ->
-      not isUploading and enqueuedFiles().length isnt 0
-
-    #
-    # Clears all files enqueued
-    #
-    $scope.clearEnqueuedFiles = ->
-      _.each $scope.uploadZones, (zone) ->
-        # Reset each model to null
-        zone.model = null
+    $scope.clearEnqueuedUpload = (upload) ->
+      upload.model = null
 
     #
     # When a file is dropped, if there has been rejected files

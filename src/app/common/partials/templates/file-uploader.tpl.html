@@ -1,7 +1,4 @@
 <div class="file-upload-area">
-  <button ng-show="clearEnqueuedFilesEnabled()" class="btn btn-sm btn-default pull-right" ng-click="clearEnqueuedFiles()">
-    <span class="glyphicon glyphicon-ban-circle"></span>
-  </button>
   <div ng-repeat="upload in uploadZones">
     <h3 class="file-title">
       {{uploadZones.length == 0 ? '' : $index + 1}} - {{upload.display.name}}
@@ -32,6 +29,10 @@
       <p class="file-registered">
         <i class="fa {{upload.display.icon}}"></i>
         {{upload.model[0].name}}
+      </p>
+      <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
+        <i class="fa fa-times"></i>
+      </a>
       </p>
     </div><!--/actual-file-->
 </div>
