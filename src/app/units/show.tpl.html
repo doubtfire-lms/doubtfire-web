@@ -13,7 +13,7 @@
       		<tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded" student-filter="'allStudents'"></tutor-student-list>
         </tab>
         <tab heading="Groups" ng-if="unit.group_sets.length > 0">
-          
+          <tutor-group-tab></tutor-group-tab>
         </tab>
         <tab heading="Marking">
           <tutor-marking-context></tutor-marking-context>

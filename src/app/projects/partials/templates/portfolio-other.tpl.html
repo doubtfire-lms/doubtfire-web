@@ -6,10 +6,10 @@
     <form ng-submit="submitOther()">
       <p>You can upload <i>other files</i> you want to include in your portfolio.</p>
       <h4>Upload New File</h4>
-      <div class="btn-group" dropdown is-open="uploadDropdown.open">
-        <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">Upload {{uploadType}} <span class="caret"></span>
+      <div class="dropdown" dropdown is-open="uploadDropdown.open">
+        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">Upload {{uploadType}} <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu">
+        <ul class="dropdown-menu">
           <li><a ng-click="changeTo('code')">Code</a></li>
           <li><a ng-click="changeTo('document')">Document</a></li>
           <li><a ng-click="changeTo('image')">Image</a></li>
