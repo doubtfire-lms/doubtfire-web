@@ -9,8 +9,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="grp in groups | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-        <td><a href="" ng-click="selectGroup(grp)">Select</a></td>
+      <tr ng-repeat="grp in filteredGroups = (groups | groupFilter:unit:selectedGroupset:project:assessingUnitRole:staffFilter) | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+        <td><a ng-click="selectGroup(grp)">Select</a></td>
         <td>
           <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
             {{ grp.name || 'empty' }}
@@ -38,8 +38,8 @@
     </tbody>
   </table>
   <div>
-  <div ng-show="groups.length > pageSize" class="pull-left">
-    <pagination total-items="groups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+  <div ng-show="filteredGroups.length > pageSize" class="pull-left">
+    <pagination total-items="filteredGroups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
   </div>
   <div class="pull-right col-sm-6" style="margin-top:20px;margin-bottom:20px">
     <div class="input-group">

@@ -30,7 +30,7 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
 
       # Allow the caller to fetch a tutorial from the unit based on its id
       unit.tutorialFromId = (tuteId) ->
-        _.where unit.tutorials, { id: tuteId }
+        _.find unit.tutorials, { id: tuteId }
 
       # Extend unit to know task count
       unit.taskCount = () -> unit.task_definitions.length
@@ -52,7 +52,7 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
         else
           student.portfolio_status = 0
           
-        student.tutorial = unit.tutorialFromId( student.tute )[0]
+        student.tutorial = unit.tutorialFromId( student.tute )
         student.task_stats = [
           { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))},
           { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[1]))},

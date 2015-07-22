@@ -1,6 +1,11 @@
 <div>
   <div class="col-sm-6">
-    <h4>{{selectedGroupset.name}} Groups</h4>
+    <h4 class="pull-left">{{selectedGroupset.name}} Groups</h4>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" ng-click="toggleStaffFilter()">
+        {{staffFilter == 'mine'? "My Tutorials" : "All Tutorials"}}</span>
+      </button>
+    </div>
     <group-selector></group-selector>
   </div>
   <div class="col-sm-6">
