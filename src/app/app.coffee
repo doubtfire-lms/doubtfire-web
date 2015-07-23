@@ -24,6 +24,8 @@ angular.module("doubtfire", [
   "doubtfire.filters"
   "doubtfire.pdf-panel-viewer"
 
+  "doubtfire.file-uploader"
+
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"

@@ -9,7 +9,7 @@ angular.module("doubtfire.home", [])
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/header.tpl.html"
-        
+
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
