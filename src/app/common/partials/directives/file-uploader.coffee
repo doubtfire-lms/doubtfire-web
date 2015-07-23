@@ -12,7 +12,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     #   fileX: { name: 'Silly name Shot', type: 'image' } ... }
     files: "="
     # URL to where image is to be uploaded
-    url: '@'
+    url: '='
     # Optional HTTP method used to post data (defaults to POST)
     method: '@'
     # Other payload data to pass in the upload
@@ -154,6 +154,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
             catch e
               response = xhr.responseText
             # Success (20x success range)
+            console.log xhr.status
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
               $scope.uploadingInfo.success = true
@@ -161,9 +162,12 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
             # Fail
             else
               $scope.onFailure?(response)
+              if xhr.status is 0
+                response.error = 'Could not connect to the Doubtfire server'
               $scope.uploadingInfo.success = false
-              $scope.uploadingInfo.error   = response
-            $scope.$apply()), 2000
+              $scope.uploadingInfo.error   = response.error or "Unknown error"
+            $scope.$apply()
+          ), 2000
       xhr.upload.onprogress = (event) ->
         $scope.uploadingInfo.progress = parseInt(100.0 * event.position / event.totalSize)
         $scope.$apply()

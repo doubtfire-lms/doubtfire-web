@@ -1,6 +1,6 @@
 angular.module("doubtfire.task-service", [  ])
 
-.factory("taskService", (TaskFeedback, alertService) ->
+.factory("taskService", (TaskFeedback, Task, alertService, $q) ->
   #
   # The unit service object
   #
@@ -129,6 +129,22 @@ angular.module("doubtfire.task-service", [  ])
     angular.forEach taskService.statusKeys, (sk) ->
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
+
+  taskService.updateTaskStatus = (task, status) ->
+    oldStatus = task.status
+    d = $q.defer()
+    Task.update({ id: task.id, trigger: status }).$promise.then (
+      # Success
+      (value) ->
+        task.status = value.status
+        if student? and student.task_stats?
+          projectService.updateTaskStats(student, value.new_stats)
+        d.resolve(task)),
+      # Failure
+      ((value) ->
+        task.status = oldStatus
+        d.reject(value.data.error))
+    d.promise
 
   taskService.recreatePDF = (task, success) ->
     TaskFeedback.resource.update({ id: task.id } ).$promise.then (

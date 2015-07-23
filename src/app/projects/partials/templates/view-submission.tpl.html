@@ -1,16 +1,12 @@
 <div class="panel-body" ng-show="notSubmitted() || taskStillProcessing()">
-  <p class="lead text-center" ng-show="notSubmitted()">
-    <br/>
+  <div class="help-block" ng-show="notSubmitted()">
     <i class="fa fa-upload fa-2x"></i>
-    <br/>
-    Upload submission before viewing.
-  </p><!--/no-pdf-->
-  <p class="lead text-center" ng-show="taskStillProcessing()">
-    <br/>
-    <i class="fa fa-clock-o fa-2x"></i>
-    <br/>
-    Submission is being processed. Come back soon.
-  </p><!--/pdf-in-process-->
+    <p>Upload submission before viewing.</p>
+  </div><!--/no-pdf-->
+  <div class="help-block" ng-show="taskStillProcessing()">
+      <i class="fa fa-clock-o fa-2x"></i>
+      <p>Submission is being processed. Come back soon.</p>
+  </div><!--/pdf-in-process-->
 </div>
 <pdf-panel-viewer pdf-url="taskUrl()" ng-hide="notSubmitted() || taskStillProcessing()"></pdf-panel-viewer>
 <div class="panel-footer" style="height: 60px" ng-hide="notSubmitted() || taskStillProcessing()">
