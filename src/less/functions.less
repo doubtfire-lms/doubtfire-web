@@ -9,27 +9,12 @@
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-@-moz-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
 @-webkit-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@-ms-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@-o-keyframes fadein {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 .fade-in(@seconds) {
   -webkit-animation: fadein @seconds;
-     -moz-animation: fadein @seconds;
-      -ms-animation: fadein @seconds;
-       -o-animation: fadein @seconds;
           animation: fadein @seconds;
 }
 
@@ -39,26 +24,91 @@
   from { margin-top: -2em; }
   to   { margin-top: inherit; }
 }
-@-moz-keyframes slidedown {
-  from { margin-top: -2em; }
-  to   { margin-top: inherit; }
-}
 @-webkit-keyframes slidedown {
-  from { margin-top: -2em; }
-  to   { margin-top: inherit; }
-}
-@-ms-keyframes slidedown {
-  from { margin-top: -2em; }
-  to   { margin-top: inherit; }
-}
-@-o-keyframes slidedown {
   from { margin-top: -2em; }
   to   { margin-top: inherit; }
 }
 .slide-down(@seconds) {
   -webkit-animation: slidedown @seconds;
-     -moz-animation: slidedown @seconds;
-      -ms-animation: slidedown @seconds;
-       -o-animation: slidedown @seconds;
           animation: slidedown @seconds;
+}
+.transform(@string){
+  -webkit-transform: @string;
+  transform:         @string;
+}
+
+// Wobble side to side
+@-webkit-keyframes wobble {
+    0%, 100% { -webkit-transform: translateX(+5px); }
+    25%, 75% { -webkit-transform: translateX(0); }
+         50% { -webkit-transform: translateX(-5px); }
+}
+
+@keyframes wobble {
+    0%, 100% { transform: translateX(+5px); }
+    25%, 75% { transform: translateX(0); }
+         50% { transform: translateX(-5px); }
+}
+
+.wobble() {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-name: wobble;
+  animation-name: wobble;
+}
+
+// Check bounce in
+@-webkit-keyframes bounce-in {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(.3);
+    }
+
+    50% {
+        opacity: 1;
+        -webkit-transform: scale(1.05);
+    }
+
+    70% {
+        -webkit-transform: scale(.9);
+    }
+
+    100% {
+         -webkit-transform: scale(1);
+    }
+}
+
+@keyframes bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.bounce-in() {
+    -webkit-animation-name: bounce-in;
+    animation-name: bounce-in;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
 }

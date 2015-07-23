@@ -1,5 +1,6 @@
 angular.module("doubtfire.api", [
   "ngResource"
+  "ngFileUpload"
 ])
 
 .constant("api", '/* @echo API_URL */') # Set in env.config.js
@@ -58,8 +59,14 @@ angular.module("doubtfire.api", [
 .factory("Tutorial", (resourcePlus) ->
   resourcePlus "/tutorials/:id", { id: "@id" }
 )
-.factory("Task", (resourcePlus) ->
-  resourcePlus "/tasks/:id", { id: "@id" }
+.factory("Task", (resourcePlus, api, currentUser) ->
+  Task = resourcePlus "/tasks/:id", { id: "@id" }
+  #
+  # Generates a url for the given task
+  #
+  Task.generateSubmissionUrl = (task) ->
+    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  Task
 )
 .factory("TaskComment", (resourcePlus) ->
   resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
@@ -127,101 +134,6 @@ angular.module("doubtfire.api", [
 
   this.downloadFile =  ->
     $window.open csvUrl, "_blank"
-
-  return this
-)
-.service("TaskSubmission", (api, $window, FileUploader, currentUser, alertService, projectService) ->
-
-  #
-  # When using the file uploader, be sure to have
-  # fileUploadSuccess(status) and fileUploadFailed(error) functions
-  # declared
-  #
-  this.fileUploader = (scope, task) ->
-    # per scope or task
-    uploadUrl = "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
-    fileUploader = new FileUploader {
-      scope: scope,
-      url: uploadUrl
-      method: "POST",
-      queueLimit: task.upload_requirements.length
-    }
-
-    fileUploader.task = task
-
-    extWhitelist = (name, exts) ->
-      # no extension
-      parts = name.toLowerCase().split('.')
-      return false if parts.length == 0
-      ext = parts.pop()
-      ext in exts
-
-    fileFilter = (acceptList, type, item) ->
-      valid = extWhitelist item.name, acceptList
-      if not valid
-        alertService.add("info", "#{item.name} is not a valid #{type} file (accepts <code>#{_.flatten(acceptList)}</code>)", 6000)
-      valid
-
-    fileUploader.filters.push {
-      name: 'is_code'
-      fn: (item) ->
-        fileFilter ['pas', 'cpp', 'c', 'cs', 'h', 'java'], "code" , item
-    }
-    fileUploader.filters.push {
-      name: 'is_document'
-      fn: (item) ->
-        fileFilter ['pdf'], "document" , item
-    }
-    fileUploader.filters.push {
-      name: 'is_image'
-      fn: (item) ->
-        fileFilter ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg'], "image" , item
-    }
-
-    fileUploader.onUploadSuccess = (response)  ->
-      fileUploader.scope.fileUploadSuccess(response.status)
-      fileUploader.scope.$apply()
-      fileUploader.clearQueue()
-
-      if fileUploader.onChange?
-        fileUploader.onChange()
-
-    fileUploader.onUploadFailure = (response) ->
-      fileUploader.scope.fileUploadFailed(response.error)
-      fileUploader.scope.$apply()
-      fileUploader.clearQueue()
-
-    fileUploader.uploadEnqueuedFiles = () ->
-      queue = fileUploader.queue
-      xhr = new XMLHttpRequest()
-      form = new FormData()
-      this.isUploading = true
-
-      # Setup progress
-      xhr.upload.onprogress = (event) ->
-        fileUploader.progress = Math.round (if event.lengthComputable then event.loaded * 100 / event.total else 0)
-        fileUploader._render()
-      xhr.onreadystatechange = () ->
-        if xhr.readyState == 4
-          fileUploader.isUploading = false
-          # Success (201 Created)
-          if xhr.status == 201
-            fileUploader.onUploadSuccess(JSON.parse(xhr.responseText))
-          # Fail
-          else
-            fileUploader.onUploadFailure(JSON.parse(xhr.responseText))
-
-      # Append each file in the queue to the form
-      form.append item.alias, item._file for item in queue
-
-      xhr.open(fileUploader.method, fileUploader.url, true)
-      xhr.send(form)
-
-    fileUploader
-
-  this.openTaskInNewWindow = (task) ->
-    win = $window.open this.getTaskUrl(task), "_blank"
-    win.href = ""
 
   return this
 )

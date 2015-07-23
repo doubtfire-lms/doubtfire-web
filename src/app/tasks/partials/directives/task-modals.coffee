@@ -1,6 +1,4 @@
 angular.module('doubtfire.tasks.partials.modals', [])
-# <<<<<<< HEAD
-# =======
 
 # #
 # # task = the task to update
@@ -56,10 +54,10 @@ angular.module('doubtfire.tasks.partials.modals', [])
 #         (value) ->
 #           $scope.task.status = value.status
 #           $modalInstance.close(status)
-  
+
 #           if student? && student.task_stats?
 #             projectService.updateTaskStats(student, value.new_stats)
-          
+
 #           if value.status == status
 #             alertService.add("success", "Status saved.", 2000)
 #             if onChange
@@ -119,4 +117,3 @@ angular.module('doubtfire.tasks.partials.modals', [])
 #   $scope.close = () ->
 #     $modalInstance.close()
 # )
-# >>>>>>> add-group-submissions
