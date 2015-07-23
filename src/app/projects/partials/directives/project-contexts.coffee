@@ -3,7 +3,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('progressInfo', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
-  controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService) ->
+  controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService) ->
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
 
@@ -144,7 +144,15 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         seq: 4
 
     $scope.setActiveTab = (tab) ->
-      $scope.activeTab = tab #$scope.tabsData[tab]
+      # Do nothing if we're switching to the same tab
+      return if tab is $scope.activeTab
+      # Revert the status to oldStatus if old tab was fileUpload and current
+      # status isnt oldStatus
+      console.log "old status =", $scope.oldStatus, '\ncurrent status =', $scope.activeTask?.status, '\nold tab is fileUpload?', $scope.activeTab is $scope.tabsData.fileUpload
+      if $scope.oldStatus? and $scope.activeTask?.status isnt $scope.oldStatus and $scope.activeTab is $scope.tabsData.fileUpload
+        $scope.activeTask.status = $scope.oldStatus
+        alertService.add("info", "No file uploaded. Status reverted.", 4000)
+      $scope.activeTab = tab
       _.each $scope.tabsData, (tab) -> tab.active = false
       $scope.activeTab.active = true
 
@@ -189,10 +197,10 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       taskService.recreatePDF($scope.activeTask, null)
 
     #
-    # Statuses tutors may change task to
+    # Statuses tutors/students may change task to
     #
-    $scope.studentStatuses       = ['working_on_it', 'need_help', 'not_submitted']
-    $scope.tutorStatuses         = ['discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo']
+    $scope.studentStatuses  = taskService.switchableStates.student
+    $scope.tutorStatuses    = taskService.switchableStates.tutor
     $scope.taskEngagementConfig = {
       studentTriggers: $scope.studentStatuses.map (status) ->
         { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
@@ -204,10 +212,13 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     # Change state of task
     #
     $scope.triggerTransition = (status) ->
-      oldStatus = $scope.activeTask.status
-      if status == 'ready_to_mark' and $scope.activeTask.upload_requirements.length > 0
-        # $scope.uploadFiles()
-        # ready_to_mark selected...
+      $scope.oldStatus = $scope.activeTask.status
+      switchToUploadTab =
+        status in ['ready_to_mark', 'need_help'] and
+        $scope.activeTask.upload_requirements.length > 0
+      # An upload is required and we're not already in the upload tab
+      if switchToUploadTab
+        $scope.setActiveTab($scope.tabsData.fileUpload)
       else
         Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
           # Success
@@ -224,7 +235,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
           ),
           # Fail
           (value) ->
-            $scope.activeTask.status = oldStatus
+            $scope.activeTask.status = $scope.oldStatus
             alertService.add("danger", value.data.error, 6000)
 
     $scope.activeClass = (status) ->

@@ -9,41 +9,21 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     task: '='
     project: '='
   templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
-  controller: ($scope, TaskSubmission, Task, alertService, projectService, taskService) ->
+  controller: ($scope, Task, taskService) ->
 
     $scope.currentState = 'select-status'
 
     #
     # More option booleans
     #
-    $scope.allowReupload = $scope.task.status == 'discuss' or $scope.task.status == 'fix_and_include' or $scope.task.status == 'complete'
-    $scope.allowRegeneratePdf = ($scope.task.status == 'ready_to_mark' or $scope.task.status == 'discuss' or $scope.task.status == 'complete') and $scope.task.has_pdf
+    $scope.allowReupload =
+      $scope.task.status in ['discuss', 'fix_and_include', 'complete']
 
+    #
+    # TODO: I think re-create PDF should be deprecated, or moved elsewhere?
+    #
     $scope.recreateTask = () ->
-      taskService.recreatePDF $scope.task, () -> $modalInstance.close()
-
-    #
-    # automatically recreate the FileUploader based on a change of Task
-    #
-    $scope.$watch 'task.id', ->
-      $scope.uploadRequirements = $scope.task.task_upload_requirements
-      $scope.fileUploader = TaskSubmission.fileUploader($scope, $scope.task)
-      $scope.dismissMessage()
-
-    #
-    # upload functions
-    #
-    $scope.dismissMessage = ->
-      $scope.uploadSucceeded = $scope.uploadFailed = false
-      $scope.errorMessage = ''
-    $scope.submitUpload = () ->
-      $scope.fileUploader.uploadEnqueuedFiles()
-      $scope.task.processing_pdf = true
-    $scope.clearUploads = () ->
-      $scope.fileUploader.clearQueue()
-    $scope.fileUploadSuccess = () ->
-      $scope.uploadSucceeded = true
-    $scope.fileUploadFailed = (error) ->
-      $scope.uploadFailed = true
-      $scope.errorMessage = error
+      # No callback
+      taskService.recreatePDF $scope.task, null
+    $scope.allowRegeneratePdf = ($scope.task.status == 'ready_to_mark' or $scope.task.status == 'discuss' or $scope.task.status == 'complete') and $scope.task.has_pdf
   )
