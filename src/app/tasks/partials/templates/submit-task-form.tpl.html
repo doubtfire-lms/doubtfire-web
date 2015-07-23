@@ -4,51 +4,5 @@
     <button class="btn task-status need-help col-md-6"><i class="fa fa-question-circle fa-2x task-engagement-icon"></i><label>Need Help</label></button>
     <button class="btn task-status ready-to-mark col-md-6"><i class="fa fa fa-thumbs-o-up fa-2x task-engagement-icon"></i><label>Ready to Mark</label></button>
   </div>
-  <div ng-show="currentState == 'upload-files'">
-    <form ng-submit="submitUpload()" class="form-group" ng-hide="fileUploader.isUploading || uploadSucceeded || uploadFailed">
-      <button ng-hide="fileUploader.isUploading || fileUploader.queue.length == 0" class="btn btn-sm btn-default pull-right" ng-click="clearUploads()"><span class="glyphicon glyphicon-ban-circle"></span></button>
-      <div ng-repeat="upload in uploadRequirements">
-        <h5>{{$index + 1}}. {{upload.name}}</h5>
-        <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file{{$index}}' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
-        <div ng-show="fileUploader.queue.length == $index" uploader="fileUploader" ng-show="fileUploader.isHTML5 && !(fileUploader.queue.length > $index)" class="drop well" over-class="file-over-hover" options="{ alias: 'file{{$index}}' }" nv-file-drop nv-file-over filters="is_{{upload.type}}">
-          <p class="fa fa-file-{{upload.type == 'document' ? 'pdf' : upload.type}}-o fa-3x"></p>
-          <br/>
-          Drop {{upload.type}} here
-        </div>
-        <p ng-show="fileUploader.queue.length > $index"class="form-control-static">{{fileUploader.queue[$index].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-      </div>
-      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != uploadRequirements.length" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Generate Submission" />
-    </form><!--/form-->
-    <div ng-show="fileUploader.isUploading && !uploadSucceeded && !uploadFailed" class="text-center">
-      <h4>Uploading Submission...</h4><br/>
-      <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
-    </div>
-    <div class="form-group text-center">
-      <div ng-show="uploadSucceeded">
-        <i class="fa fa-check-circle text-success fa-3x"></i>
-        <h4>Upload Succeeded</h4>
-        <button class="btn btn-default" ng-click="dismissMessage()"> Dismiss </button>
-      </div>
-      <div ng-show="uploadFailed">
-        <i class="fa fa-times-circle text-danger fa-3x"></i>
-        <h4>Upload Failed</h4>
-        <p><strong>Error Message:</strong> {{errorMessage}}</p>
-        <button class="btn btn-default" ng-click="dismissMessage()"> Try Again </button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- <div class="panel-footer text-right">
-  <div class="btn-group" dropdown>
-    <button type="button" class="btn btn-default dropdown-toggle">
-      <i class="fa fa-cog"></i> <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li ng-class="{'disabled': !allowReupload}" tooltip="Use this to change what files are submitted for this task. Task must be marked as 'Discuss', 'Don't Resubmit' or 'Complete'." tooltip-placement="top">
-        <a ng-click="allowReupload && uploadFiles()"><i class="fa fa-cloud-upload"></i> Re-Upload Files</a>
-      </li>
-      <li ng-class="{'disabled': !allowRegeneratePdf}" tooltip="Use this to ask Doubtfire to regenerate the PDF that was created for you if you believe there was an error processing. Task must marked as 'Ready to Mark', 'Discuss' or 'Complete' and a PDF must have been previously generated." tooltip-placement="top"><a ng-click="allowRegeneratePdf && recreateTask()"><i class="fa fa-recycle"></i> Regenerate PDF</a></li>
-    </ul>
-  </div>
-</div> -->
+</div>

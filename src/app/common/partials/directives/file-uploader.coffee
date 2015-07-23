@@ -26,6 +26,8 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     # Optional function to perform when the upload is successful and about
     # to go back into its default state
     onComplete: '='
+    # This value is bound to whether or not the uploader is currently uploading
+    isUploading: '='
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -110,19 +112,16 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     $scope.readyToUpload = ->
       _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
 
-
     #
-    # Uploading data is null until the upload starts
-    #
-    $scope.uploadingInfo = null
-
-    #
-    # Resets the uploader
+    # Resets the uploader and call it
     #
     $scope.resetUploader = ->
+      # No upload info and we're not uploading
       $scope.uploadingInfo = null
+      $scope.isUploading = false
       for upload in $scope.uploadZones
         $scope.clearEnqueuedUpload(upload)
+    $scope.resetUploader()
 
     #
     # Initiates the upload
@@ -142,6 +141,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
         success: null
         error: null
         complete: false
+      $scope.isUploading = true
       # Callbacks
       xhr.onreadystatechange = ->
         if xhr.readyState is 4
