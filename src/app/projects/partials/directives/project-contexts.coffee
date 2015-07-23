@@ -116,45 +116,41 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         title: "View Task Sheet"
         subtitle: "The task sheet contains the requirements of this task"
         icon: "fa-info"
-        active: false
         seq: 0
       fileUpload:
         title: "Upload Submission"
         subtitle: "Upload your submission so it is ready for your tutor to mark"
         icon: "fa-upload"
-        active: false
         seq: 1
       viewSubmission:
         title: "View Submission"
         subtitle: "View the latest submission you have uploaded"
         icon: "fa-file-o"
-        active: false
         seq: 2
       viewComments:
         title: "View Comments"
         subtitle: "Write and read comments between you and your tutor"
         icon: "fa-comments-o"
-        active: false
         seq: 3
       plagiarismReport:
         title: "View Similarities Detected"
         subtitle: "See the other submissions and how closely they relate to your submission"
         icon: "fa-eye"
-        active: false
         seq: 4
 
+    #
+    # Sets the active tab
+    #
     $scope.setActiveTab = (tab) ->
       # Do nothing if we're switching to the same tab
       return if tab is $scope.activeTab
-      # Revert the status to oldStatus if old tab was fileUpload and current
-      # status isnt oldStatus
-      console.log "old status =", $scope.oldStatus, '\ncurrent status =', $scope.activeTask?.status, '\nold tab is fileUpload?', $scope.activeTab is $scope.tabsData.fileUpload
-      if $scope.oldStatus? and $scope.activeTask?.status isnt $scope.oldStatus and $scope.activeTab is $scope.tabsData.fileUpload
-        $scope.activeTask.status = $scope.oldStatus
-        alertService.add("info", "No file uploaded. Status reverted.", 4000)
       $scope.activeTab = tab
-      _.each $scope.tabsData, (tab) -> tab.active = false
-      $scope.activeTab.active = true
+
+    #
+    # Checks if tab is the active tab
+    #
+    $scope.isActiveTab = (tab) ->
+      tab is $scope.activeTab
 
     #
     # Loading the active task
@@ -164,9 +160,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       $scope.activeTask = task
       fetchTaskComments(task)
 
-    # Ensure there is an active task
+    # Ensure there is an active task!
     $scope.setActiveTask($scope.activeTask)
-
 
     if $stateParams.viewing == 'feedback' || ($scope.activeTask && $scope.activeTask.has_pdf)
       $scope.setActiveTab($scope.tabsData['viewSubmission'])
@@ -186,7 +181,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     #
     # Functions from taskService to get data
     #
-    $scope.statusData = taskService.statusData
+    $scope.statusData  = taskService.statusData
     $scope.statusClass = taskService.statusClass
     $scope.daysOverdue = taskService.daysOverdue
 
@@ -207,36 +202,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       tutorTriggers: $scope.tutorStatuses.map (status) ->
         { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
       }
-
-    #
-    # Change state of task
-    #
-    $scope.triggerTransition = (status) ->
-      $scope.oldStatus = $scope.activeTask.status
-      switchToUploadTab =
-        status in ['ready_to_mark', 'need_help'] and
-        $scope.activeTask.upload_requirements.length > 0
-      # An upload is required and we're not already in the upload tab
-      if switchToUploadTab
-        $scope.setActiveTab($scope.tabsData.fileUpload)
-      else
-        Task.update({ id: $scope.activeTask.id, trigger: status }).$promise.then (
-          # Success
-          (value) ->
-            $scope.activeTask.status = value.status
-
-            if student? && student.task_stats?
-              projectService.updateTaskStats(student, value.new_stats)
-
-            if value.status == status
-              alertService.add("success", "Status saved.", 2000)
-            else
-              alertService.add("info", "Status change was not changed.", 4000)
-          ),
-          # Fail
-          (value) ->
-            $scope.activeTask.status = $scope.oldStatus
-            alertService.add("danger", value.data.error, 6000)
 
     $scope.activeClass = (status) ->
       if status == $scope.activeTask.status

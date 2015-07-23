@@ -27,9 +27,10 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
       $scope.fetchSimilarity()
 
     $scope.fetchSimilarity = () ->
-      TaskSimilarity.get($scope.task, $scope.match, (data) ->
-        $scope.similarityData = data
-      )
+      if $scope.task?.similar_to_count > 0
+        TaskSimilarity.get($scope.task, $scope.match, (data) ->
+          $scope.similarityData = data
+        )
 
     $scope.shouldDisableLeftNav = () ->
       $scope.match <= 1
@@ -43,7 +44,7 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
       else
         'col-lg-6 col-xs-12'
 
-    if $scope.task
+    if $scope.task?.similar_to_count > 0
       $scope.taskId = $scope.task.id
       $scope.fetchSimilarity($scope.task, $scope.match - 1)
 )

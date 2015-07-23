@@ -112,3 +112,19 @@
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
+
+.flex-center() {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-align-content: center;
+          align-content: center;
+  height: 100%;
+  & > * {
+    -webkit-flex-basis: 100%;
+    flex-basis: 100%;
+  }
+}

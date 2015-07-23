@@ -1,7 +1,7 @@
-<div class="panel-body" style="max-height: 550px; overflow-y: scroll" >
-  <div class="text-center" ng-show="(!activeTask.comments) || activeTask.comments.length == 0" style="margin: 30px">
-    <i class="fa fa-2x fa-comments-o"></i><br/>
-    No comments have yet been made.
+<div class="panel-body">
+  <div class="help-block" ng-show="(!activeTask.comments) || activeTask.comments.length == 0">
+    <i class="fa fa-2x fa-comments-o"></i>
+    <p>No comments have yet been made</p>
   </div>
   <div class="comment" ng-repeat="comment in activeTask.comments">
     <div class="comment-details col-md-2">
@@ -23,10 +23,10 @@
   </div>
 </div>
 <div class="panel-footer">
-  <form class="input-group" ng-submit="addComment()" role="form">
-    <textarea ng-keyup="checkCommentTextareaEnter()" ng-model="comment.text" class="form-control" style="height: 45px; resize: none;" placeholder="Make a comment on this submission..."></textarea>
+  <form class="input-group comment-submitter" ng-submit="addComment()" role="form">
+    <textarea ng-keyup="checkCommentTextareaEnter()" ng-model="comment.text" class="form-control" placeholder="Make a comment on this submission..."></textarea>
     <span class="input-group-btn">
-      <button type="submit" class="btn btn-primary"  style="height: 45px" type="button" ng-disabled="comment.text.trim().length == 0">
+      <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
         <i class="fa fa-plus fa-2x"></i>
       </button>
     </span>

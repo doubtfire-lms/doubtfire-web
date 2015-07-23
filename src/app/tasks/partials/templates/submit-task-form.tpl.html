@@ -1,8 +1,58 @@
-<div class="panel-body">
-  <div ng-show="currentState == 'select-status'">
-    <h5>Select status</h5>
-    <button class="btn task-status need-help col-md-6"><i class="fa fa-question-circle fa-2x task-engagement-icon"></i><label>Need Help</label></button>
-    <button class="btn task-status ready-to-mark col-md-6"><i class="fa fa fa-thumbs-o-up fa-2x task-engagement-icon"></i><label>Ready to Mark</label></button>
-  </div>
-
+<div class="file-upload-tab panel-body">
+  <div class="help-block" ng-hide="uploadType">
+    <div>
+      <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
+    </div>
+    <h3>{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required</h3>
+    <p class="lead">
+      <span ng-show="uploadType || helpLabel">
+      Upload as
+      </span>
+      {{helpLabel || "Please select upload type below"}}
+    </p>
+    <div class="text-center">
+      <div class="btn-group">
+        <button ng-repeat="(key, data) in uploadTypes"
+            class="btn btn-lg task-status {{data.class}}"
+            ng-click="setUploadType(key)"
+            ng-mouseover="setHelpLabel(data.text)"
+            ng-mouseout="setHelpLabel()"
+            ng-if="!data.hide"
+            ng-class="{active: uploadType == key}">
+          <i class="fa-2x {{data.icon}}"></i>
+        </button>
+      </div><!--/upload-type-buttons-->
+    </div>
+  </div><!--upload-header-->
+  <div class="upload-type-selected-state" ng-if="uploadType">
+    <div class="upload-assistant clearfix" ng-if="!isUploading">
+      <h3>
+        Upload {{task.definition.name}}...
+        <small>Select {{numberOfFiles}} file{{numberOfFiles > 1 ? "s" : ""}} below</small>
+      </h3>
+      <div class="upload-type-switcher">
+        <div class="btn-group">
+          <button ng-repeat="(key, data) in uploadTypes"
+              class="btn task-status {{data.class}}"
+              ng-click="setUploadType(key)"
+              ng-mouseover="setHelpLabel(data.text)"
+              ng-mouseout="setHelpLabel()"
+              ng-if="!data.hide"
+              ng-class="{active: uploadType == key}">
+            <i class="fa-2x {{data.icon}}"></i>
+          </button>
+        </div><!--/upload-type-buttons-->
+        <p class="">
+          <strong>Upload{{helpLabel == '' ? 'ing' : ''}} as</strong>
+          <span>{{helpLabel || uploadTypes[uploadType].text}}</span>
+        </p>
+      </div>
+    </div><!--/upload-assistant-->
+    <file-uploader
+      files="files"
+      url="url"
+      is-uploading="isUploading"
+      on-success="onSuccess"
+      on-complete="onComplete"></file-uploader>
+  </div><!--/upload-area-->
 </div>
