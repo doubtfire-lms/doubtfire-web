@@ -209,6 +209,30 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         "active"
       else
         ""
+
+    $scope.triggerTransition = (status) ->
+      oldStatus = $scope.activeTask.status
+      
+      if (status == 'ready_to_mark' || status == 'need_help') and $scope.activeTask.upload_requirements.length > 0
+        $scope.setActiveTab($scope.tabsData['fileUpload'])
+        return # handle with the uploader...
+      else
+        Task.update(
+          { id: $scope.activeTask.id, trigger: status }
+          # Success
+          (value) ->
+            $scope.activeTask.status = value.status
+            projectService.updateTaskStats($scope.project, value.new_stats)
+
+            if value.status == status
+              alertService.add("success", "Status saved.", 2000)
+            else
+              alertService.add("info", "Status change was not changed.", 4000)
+          # Fail
+          (value) ->
+            $scope.activeTask.status = oldStatus
+            alertService.add("danger", value.data.error, 6000)
+        )
 )
 .directive('viewComments', ->
   restrict: 'E'
