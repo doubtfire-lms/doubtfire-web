@@ -1,4 +1,4 @@
-angular.module("doubtfire.grade-service", [  ])
+angular.module("doubtfire.services.grades", [  ])
 
 .factory("gradeService", () ->
   #

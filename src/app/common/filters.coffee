@@ -1,4 +1,4 @@
-angular.module("doubtfire.filters", [  ])
+angular.module("doubtfire.filters", [])
 
 #
 # Paging filter - start from the indicated index
@@ -26,16 +26,16 @@ angular.module("doubtfire.filters", [  ])
 .filter('orderObjectBy', ->
   (items, field, reverse) ->
     filtered = []
-    
+
     angular.forEach items, (item) ->
       filtered.push(item)
-    
+
     filtered.sort (a, b) ->
       a[field] > b[field] ? 1 : -1
 
     if reverse
       filtered.reverse()
-    
+
     filtered
 )
 

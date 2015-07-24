@@ -10,7 +10,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/not_found.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Not Found_"
   ).state("unauthorised",
@@ -21,7 +21,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/unauthorised.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Unauthorised_"
   ).state("timeout",
@@ -32,7 +32,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/timeout.tpl.html"
       header:
         controller: "ErrorHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Timeout_"
   )

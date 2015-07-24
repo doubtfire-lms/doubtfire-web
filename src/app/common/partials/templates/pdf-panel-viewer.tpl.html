@@ -1,0 +1,13 @@
+<div class="panel-body">
+  <iframe ng-src="{{getGoogleDocsViewerUrl()}}"></iframe>
+</div><!--/panel-body-->
+<div class="panel-footer">
+  <div class="pull-left text-muted" ng-show="footerText">
+    <strong>Note:</strong> {{footerText}}
+  </div>
+  <div class="pull-right btn-group">
+    <a href="{{pdfUrl}}" class="btn btn-success">
+      <i class="fa fa-download"></i>
+    </a>
+  </div>
+</div><!--/panel-footer-->

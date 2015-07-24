@@ -1,4 +1,4 @@
-angular.module("doubtfire.redirect-service", [  ])
+angular.module("doubtfire.services.redirect", [])
 
 .factory("redirectService", ($state, $stateParams) ->
   #
@@ -22,7 +22,7 @@ angular.module("doubtfire.redirect-service", [  ])
   redirectService.redirect = (defaultState, defaultParams) ->
     destState = defaultState
     destParams = defaultParams
-  
+
     if $stateParams["dest"]
       destState = $stateParams["dest"]
       destParams = deserialize $stateParams["params"]
