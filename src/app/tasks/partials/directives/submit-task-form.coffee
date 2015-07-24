@@ -115,6 +115,9 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
       else
         $scope.payload = {}
 
+      if $scope.uploadType == 'need_help'
+        $scope.payload.trigger = 'need_help'
+
     $scope.inGroupForTask = () ->
       projectService.getGroupForTask($scope.project, $scope.task)?
 
