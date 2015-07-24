@@ -171,6 +171,16 @@ angular.module("doubtfire.sessions", [
 
   $scope.session = { remember_me: true }
 
+  # April Fools Easter Egg :-)
+  today = new Date()
+  aprilFools =  today.getDate()   is 1 and # first day of the
+                today.getMonth()  is 3     # fourth month (April - zero-based)
+  if aprilFools
+    logo = document.querySelector('.landing-page h1.logo i')
+    logo?.style.backgroundImage = 'url("/assets/images/mrsdoubtfire.png")'
+    logo?.style.backgroundColor = 'inherit'
+    logo?.title = 'Happy April Fools Day!'
+
   $scope.openAboutModal = ->
     $modal.open
       templateUrl: 'common/partials/templates/about-doubtfire-modal.tpl.html'
