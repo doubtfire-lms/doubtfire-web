@@ -13,5 +13,8 @@ angular.module("doubtfire.grade-service", [  ])
     'High Distinction'
   ]
 
+  gradeService.gradeFor = (project) ->
+    gradeService.grades[project.target_grade]
+
   gradeService
 )
