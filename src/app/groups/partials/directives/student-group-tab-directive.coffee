@@ -21,9 +21,10 @@ angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
           group: {
             name: data
           }
-        }, (response) -> alertService.add("success", "Group name changed", 2000)
+        }
+        (response) -> alertService.add("success", "Group name changed", 2000)
         (response) -> alertService.add("danger", response.data.error, 6000)
-        )
+      )
 
     $scope.onSelectGroup = (grp) ->
       GroupMember.create(

@@ -6,7 +6,7 @@
     <h3 class="col-sm-5 pull-left">
       <span ng-show="selectedGroup">
         <a editable-text="selectedGroup.name" ng-show="selectedGroupset.allow_students_to_manage_groups" onbeforesave="updateGroup($data)">{{selectedGroup.name}}</a>
-        <a editable-text="selectedGroup.name" ng-hide="selectedGroupset.allow_students_to_manage_groups">{{selectedGroup.name}}</a>
+        <span ng-hide="selectedGroupset.allow_students_to_manage_groups">{{selectedGroup.name}}</span>
       </span>
       <span ng-hide="selectedGroup">No Group</span>
     </h3>
