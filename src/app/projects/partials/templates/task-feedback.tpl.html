@@ -6,7 +6,7 @@
         <span class="caret"></span>
       </button><!--/dropdown-button-->
       <ul class="dropdown-menu project-task-bar" role="menu" >
-        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in submittedTasks | orderBy: 'task_abbr'">
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in submittedTasks | byGrade:project.target_grade | orderBy: 'seq'">
             <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == activeTask}" ng-click="setActiveTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">
               {{task.task_abbr}}
             </button>

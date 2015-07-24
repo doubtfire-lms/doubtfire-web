@@ -63,7 +63,7 @@ angular.module("doubtfire.projects", [
 
   $scope.showTaskView = (task) ->
     if not (task or $scope.selectedTask)
-      task = $scope.submittedTasks[0]
+      task = _.find _.sortBy($scope.submittedTasks, 'seq'), (t) -> t.definition.target_grade <= $scope.project.target_grade
     else if not task and $scope.selectedTask
       task = $scope.selectedTask
 
