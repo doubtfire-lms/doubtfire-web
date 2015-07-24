@@ -110,7 +110,10 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
 
     $scope.uploadZones = updateUploadZones $scope.files
 
-    # What for changes in the files, and recreate the zones when they do change
+    #
+    # Watch for changes in the files, and recreate the zones when
+    # they do change
+    #
     $scope.$watch 'files', (files, oldFiles) ->
       $scope.uploadZones = updateUploadZones files
 
@@ -165,7 +168,6 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
             catch e
               response = xhr.responseText
             # Success (20x success range)
-            console.log xhr.status
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
               $scope.uploadingInfo.success = true
