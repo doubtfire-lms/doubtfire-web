@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.group-service", [  ])
+angular.module("doubtfire.services.group-service", [  ])
 
 .factory("groupService", () ->
   #

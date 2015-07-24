@@ -1,4 +1,4 @@
-angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
+angular.module("doubtfire.services.projects", [])
 
 .factory("projectService", (taskService, Project) ->
   #

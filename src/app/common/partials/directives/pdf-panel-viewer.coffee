@@ -1,10 +1,11 @@
-angular.module("doubtfire.pdf-panel-viewer", [])
+angular.module("doubtfire.common.pdf-panel-viewer", [])
 .directive('pdfPanelViewer', ->
   restrict: 'E'
-  templateUrl: 'common/pdf-panel-viewer.tpl.html'
+  templateUrl: 'common/partials/templates/pdf-panel-viewer.tpl.html'
   scope:
     pdfUrl: '='
+    footerText: '@'
   controller: ($scope, $sce) ->
-    $scope.getUrl = ->
+    $scope.getGoogleDocsViewerUrl = ->
       $sce.trustAsResourceUrl "http://docs.google.com/gview?url=#{$scope.pdfUrl}&embedded=true"
 )
