@@ -42,7 +42,7 @@ angular.module("doubtfire.projects", [
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
 )
-.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser) ->
+.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser, projectService) ->
   if $stateParams.authToken?
     # $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
@@ -75,16 +75,12 @@ angular.module("doubtfire.projects", [
   # Batch Discuss button
   #
   $scope.transitionWeekEnd = () ->
-    Project.update({ id: $scope.project.project_id, trigger: "trigger_week_end" }).$promise.then (
+    Project.update(
+      { id: $scope.project.project_id, trigger: "trigger_week_end" }
       (project) ->
-        oldId = $scope.activeTask.id
-
-        # go through each task and update the status only to the new project task's status
-        _.each $scope.submittedTasks, (task) ->
-          task.status = (_.find project.tasks, (t) -> task.id == t.id).status
-
-        $scope.activeTask = _.find $scope.submittedTasks, (task) -> task.id == oldId
+        projectService.updateTaskStats($scope.project, project.stats)
         alertService.add("success", "Status updated.", 2000)
+      (response) -> alertService.add("danger", response.data.error, 6000)
     )
 
   #
