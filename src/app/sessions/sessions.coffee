@@ -3,7 +3,6 @@ angular.module("doubtfire.sessions", [
   "LocalStorageModule"
   "ui.router"
   "doubtfire.api"
-  "doubtfire.redirect-service"
 ]).constant("authRoles", [
   "anon"
   "Student"
@@ -11,13 +10,11 @@ angular.module("doubtfire.sessions", [
   "Convenor"
   "Admin"
 ]).constant("currentUser",
-
   id: 0
   role: "anon"
   profile:
     name: "Anonymous"
     nickname: "anon"
-
 )
 .constant("userCookieName", "doubtfire_user")
 .constant("rememberDoubtfireCookie", "remember_doubtfire_token")
@@ -176,7 +173,7 @@ angular.module("doubtfire.sessions", [
 
   $scope.openAboutModal = ->
     $modal.open
-      templateUrl: 'common/about-doubtfire-modal.tpl.html'
+      templateUrl: 'common/partials/templates/about-doubtfire-modal.tpl.html'
       controller: 'AboutDoubtfireModalCtrl'
       size: 'lg'
 

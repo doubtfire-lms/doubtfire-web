@@ -11,7 +11,7 @@ angular.module("doubtfire.users", [
         templateUrl: "users/admin.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']

@@ -12,7 +12,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
 
     data:
       pageTitle: "_Home_"
@@ -36,7 +36,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Home_"
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']

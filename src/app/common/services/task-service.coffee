@@ -1,4 +1,4 @@
-angular.module("doubtfire.task-service", [  ])
+angular.module("doubtfire.services.tasks", [])
 
 .factory("taskService", (TaskFeedback, Task, alertService, $q) ->
   #

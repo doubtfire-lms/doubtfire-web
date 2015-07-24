@@ -1,4 +1,4 @@
-angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
+angular.module("doubtfire.services.units", [])
 
 .factory("unitService", (Unit, Students, Group, projectService, taskService) ->
   #
@@ -51,7 +51,7 @@ angular.module("doubtfire.unit-service", [ 'doubtfire.api' ])
           student.portfolio_status = 0.5
         else
           student.portfolio_status = 0
-          
+
         student.tutorial = unit.tutorialFromId( student.tute )
         student.task_stats = [
           { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))},

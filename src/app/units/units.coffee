@@ -11,7 +11,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
 
     data:
       pageTitle: "_Home_"
@@ -25,7 +25,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/admin.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
@@ -38,7 +38,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/unit.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
@@ -55,14 +55,14 @@ angular.module("doubtfire.units", [
   # Fetch the user's Unit Role
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
     $scope.unitRole = unitRole # the selected unit role
-    
+
     if unitRole
       unitService.getUnit unitRole.unit_id, true, false, (unit)->
         $scope.unit = unit # the unit related to the role
 
         $scope.unitLoaded = true
   # end get unit role
-  
+
   # Unit Service allows access to typeahead data
   $scope.unitService = unitService
 
