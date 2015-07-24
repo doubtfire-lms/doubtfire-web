@@ -81,13 +81,14 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('labList', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/lab-list.tpl.html'
-  controller: ($scope, $modal, User, Project) ->
+  controller: ($scope, $modal, User, Project, alertService) ->
     # Todo, write...
     $scope.sortOrder = 'abbreviation'
     $scope.setTutorial = (id) ->
-      Project.update({ id: $scope.project.project_id, tutorial_id: id }).$promise.then (
-        (project) ->
-          $scope.project.tute = project.tute
+      Project.update(
+        { id: $scope.project.project_id, tutorial_id: id }
+        (project) -> $scope.project.tute = project.tute
+        (response) -> alertService.add("danger", response.data.error, 6000)
       )
 )
 .directive('taskFeedback', ->

@@ -47,7 +47,10 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
           group_set_id:$scope.selectedGroupset.id,
           group_id: $scope.selectedGroup.id
           id: member.project_id
-        }, (response) -> $scope.members = _.filter($scope.members, (member1) -> member.project_id != member1.project_id ) )
+        }
+        (response) -> $scope.members = _.filter($scope.members, (member1) -> member.project_id != member1.project_id )
+        (response) -> alertService.add("danger", response.data.error, 6000)
+      )
 
     $scope.addSelectedStudent = () ->
       GroupMember.create(
@@ -56,7 +59,10 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
           group_set_id:$scope.selectedGroupset.id,
           group_id: $scope.selectedGroup.id
           project_id: $scope.selectedStudent.project_id
-        }, (member) -> $scope.members.push(member))
+        }
+        (member) -> $scope.members.push(member)
+        (response) -> alertService.add("danger", response.data.error, 6000)
+      )
       $scope.selectedStudent = null
 
     $scope.studentDetails = (student) ->

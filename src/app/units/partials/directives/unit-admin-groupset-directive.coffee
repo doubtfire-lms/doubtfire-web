@@ -14,9 +14,17 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
 
     $scope.addGroupSet = () ->
       if $scope.unit.group_sets.length == 0
-        GroupSet.create( { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }, (gs) -> $scope.unit.group_sets.push(gs) )
+        GroupSet.create(
+          { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }
+          (gs) -> $scope.unit.group_sets.push(gs)
+          (response) -> alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
+        )
       else
-        GroupSet.create( { unit_id: $scope.unit.id, group_set: { name: "More Group Work" } }, (gs) -> $scope.unit.group_sets.push(gs) )
+        GroupSet.create(
+          { unit_id: $scope.unit.id, group_set: { name: "More Group Work" } }
+          (gs) -> $scope.unit.group_sets.push(gs)
+          (response) -> alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
+        )
 
     $scope.saveGroupSet = (data, id) ->
       GroupSet.update(
@@ -30,10 +38,17 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
               allow_students_to_manage_groups: data.allow_students_to_manage_groups,
               keep_groups_in_same_class: data.keep_groups_in_same_class
             }
-        } )
+        }
+        (response) -> alertService.add("success", "Group set updated.", 2000)
+        (response) -> alertService.add("danger", "Failed to update group set. #{response.data.error}", 6000)
+      )
 
     $scope.removeGroupSet = (gs) ->
-      GroupSet.delete( { unit_id: $scope.unit.id, id: gs.id }, (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id ) )
+      GroupSet.delete(
+        { unit_id: $scope.unit.id, id: gs.id },
+        (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
+        (response) -> alertService.add("danger", "Failed to delete group set. #{response.data.error}", 6000)
+      )
 
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupset = gs
