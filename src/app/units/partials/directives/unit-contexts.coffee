@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals', 'doubtfire.grade-service'])
+angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
 #
 # The Tutor Student List view shows a list of students, with
@@ -75,7 +75,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       # 5 tasks per row, each 32 pixels in size
       $scope.accordionHeight = $scope.unit.taskCount() / 3 * 38 + 30
       $scope.accordionReady = true
-    
+
     if ! $scope.unitLoaded
       unwatchFn = $scope.$watch( ( () -> $scope.unitLoaded ), (value) ->
         if ( value )
@@ -86,7 +86,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       )
     else
       prepAccordion()
-  
+
     $scope.reverse = false
     $scope.statusClass = taskService.statusClass
     $scope.barLargerZero = (bar) -> bar.value > 0
@@ -169,15 +169,15 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
 
     $scope.submitTasksUpload = () ->
       $scope.tasksFileUploader.uploadTaskCSV($scope.unit)
-    
+
     $scope.requestTasksExport = () ->
       TaskCSV.downloadFile($scope.unit)
-    
+
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
     $scope.pageSize = 15
-    
+
     # Modal Events
     $scope.editTask = (task) ->
       $modal.open
@@ -269,7 +269,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
 
     $scope.submitSEUpload = () ->
       $scope.seFileUploader.uploadStudentEnrolmentCSV($scope.unit)
-    
+
     $scope.submitWithdrawUpload = () ->
       $scope.withdrawFileUploader.uploadStudentWithdrawCSV($scope.unit)
 
@@ -288,7 +288,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       change_enrolment(student, false)
     $scope.enrol = (student) ->
       change_enrolment(student, true)
-      
+
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
@@ -300,13 +300,13 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
   controller: ($scope, TutorMarker) ->
     $scope.dropper = true
-    
+
     $scope.markingFileUploader =
       TutorMarker.fileUploader($scope)
 
     $scope.submitMarkingUpload = () ->
       $scope.markingFileUploader.uploadZip()
-    
+
     $scope.requestMarkingExport = () ->
       TutorMarker.downloadFile($scope.unit)
 

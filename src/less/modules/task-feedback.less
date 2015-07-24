@@ -1,3 +1,7 @@
+// Tab contents height is set here
+// 50vh == 50% of Vertical Height of display
+@task-feedback-tab-content-height: 50vh;
+
 .task-feedback .task-feedback-toolbar {
   border-bottom: 1px dashed #ddd;
   padding-bottom: 2em;
@@ -32,7 +36,7 @@
 }
 
 .task-feedback .task-feedback-tab-panel .panel-body {
-  height: 40vh; // CHANGE SIZE OF TAB BODY HERE
+  height: @task-feedback-tab-content-height;
   overflow: scroll;
   .help-block {
     .flex-center();
