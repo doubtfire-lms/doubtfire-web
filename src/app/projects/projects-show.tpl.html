@@ -32,7 +32,7 @@
       </tab-heading>
       <task-feedback active-task="selectedTask" project="project" submitted-tasks="submittedTasks" assessing-unit-role="assessingUnitRole" ng-if="unitLoaded"></task-feedback>
     </tab>
-    <tab active="activeTab[2]" ng-id="unit.group_sets.length > 0">
+    <tab active="activeTab[2]" ng-if="unit.group_sets.length > 0">
       <tab-heading>
         <div class="text-center">
           <i style="padding-bottom: 5px" class="fa fa-group fa-2x"></i> <br> Groups
