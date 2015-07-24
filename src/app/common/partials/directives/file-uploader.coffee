@@ -84,7 +84,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     #
     # Data required for each upload zone
     #
-    $scope.uploadZones = _.map $scope.files, (uploadData, uploadName) ->
+    updateUploadZones = (files) -> _.map files, (uploadData, uploadName) ->
       type = uploadData.type
       typeData = ACCEPTED_TYPES[type]
       # No typeData found?
@@ -105,6 +105,12 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
           # Whether or not a reject error is shown
           error:  false
       zone
+
+    $scope.uploadZones = updateUploadZones $scope.files
+
+    # What for changes in the files, and recreate the zones when they do change
+    $scope.$watch 'files', (files, oldFiles) ->
+      $scope.uploadZones = updateUploadZones files
 
     #
     # Checks if okay to upload (i.e., file models exist for each drop zone)
