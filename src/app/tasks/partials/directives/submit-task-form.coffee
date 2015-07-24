@@ -14,10 +14,8 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
     # Reverts changes to task state made during the upload
     revertChanges = (task) ->
-      console.log "reverting..."
       if $scope.uploadType? and $scope.uploadType in UPLOAD_STATUS_TYPES and $scope.oldStatus? and $scope.oldStatus isnt task.status
         # Revert it
-        console.log "reverted!"
         task.status = $scope.oldStatus if $scope.oldStatus?
         alertService.add("info", "No file(s) uploaded. Status reverted.", 4000)
     # Watch the task, and reinitialise oldStatus if it changes
@@ -33,7 +31,6 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
       $scope.files = {}
       for upload in task.upload_requirements
         $scope.files[upload.key] = { name: upload.name, type: upload.type }
-      console.log "updating files ->", $scope.files
       # Re-generate the submission URL and numberOfFiles
       $scope.url = Task.generateSubmissionUrl $scope.task
       $scope.numberOfFiles = task.upload_requirements.length
