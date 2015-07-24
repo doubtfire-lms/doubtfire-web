@@ -47,5 +47,10 @@ angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
             task
         callback(student)
 
+  projectService.getGroupForTask = (project, task) ->
+    return null if not task.definition.group_set
+
+    _.find project.groups, (grp) -> grp.group_set_id == task.definition.group_set.id
+
   projectService
 )

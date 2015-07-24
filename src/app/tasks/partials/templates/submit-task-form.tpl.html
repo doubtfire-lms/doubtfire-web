@@ -48,9 +48,15 @@
         </p>
       </div>
     </div><!--/upload-assistant-->
+    <div ng-if="task.definition.group_set">
+      <group-member-contributions task="task" project="project" team="team"></group-member-contributions>
+      <hr>
+    </div>
     <file-uploader
       files="files"
       url="url"
+      payload="payload"
+      on-before-upload="onBeforeUpload"
       is-uploading="isUploading"
       on-success="onSuccess"
       on-complete="onComplete"></file-uploader>

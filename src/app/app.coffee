@@ -26,6 +26,8 @@ angular.module("doubtfire", [
 
   "doubtfire.file-uploader"
 
+  "doubtfire.common.services"
+
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"

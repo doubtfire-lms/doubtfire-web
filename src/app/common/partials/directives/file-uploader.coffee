@@ -19,6 +19,8 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     # E.g.:
     # { unit_id: 10, other: { key: data, with: [array, of, stuff] } ... }
     payload: "="
+    # Optional function to notify just prior to upload, enables injection of payload for example
+    onBeforeUpload: "="
     # Optional function to perform on success (with one response parameter)
     onSuccess: '='
     # Optional function to perform on failure (with one response parameter)
@@ -133,6 +135,9 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
     # Initiates the upload
     #
     $scope.initiateUpload = ->
+      if $scope.onBeforeUpload
+        $scope.onBeforeUpload()
+
       xhr   = new XMLHttpRequest()
       form  = new FormData()
       # Append data
@@ -140,7 +145,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
       form.append file.name, file.data for file in files
       # Append payload
       payload = ({ key: k; value: v } for k, v of $scope.payload)
-      form.append payloadItem.key, payloadItem.value for payloadItem in payload
+      form.append payloadItem.key, JSON.stringify(payloadItem.value) for payloadItem in payload
       # Set the percent
       $scope.uploadingInfo =
         progress: 5
