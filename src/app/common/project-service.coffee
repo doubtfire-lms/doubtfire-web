@@ -13,10 +13,11 @@ angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
     'not_started'
   ]
 
-  #
-  # projects's can update their task stats
-  # converts the | delimited stats to its component arrays
-  #
+  ###
+  projects's can update their task stats
+  converts the | delimited stats to its component arrays
+  @param  student [Student|Project] The student's stats to update
+  ###
   projectService.updateTaskStats = (student, new_stats_str) ->
     for i, value of new_stats_str.split("|")
       if i < student.task_stats.length
@@ -26,7 +27,7 @@ angular.module("doubtfire.project-service", [ "doubtfire.task-service" ])
     student.progress_sort = 0
     for i, stat of student.progress_stats
       student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
-  
+
   projectService.fetchDetailsForProject = (student, unit, callback) ->
     if student.tasks
       callback(student)
