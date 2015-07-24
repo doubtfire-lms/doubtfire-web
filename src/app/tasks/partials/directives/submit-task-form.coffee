@@ -9,7 +9,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     task: '='
     project: '='
   templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
-  controller: ($scope, Task, taskService, alertService) ->
+  controller: ($scope, Task, taskService, alertService, projectService) ->
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
     # Reverts changes to task state made during the upload
@@ -74,12 +74,8 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     # When upload is successful, update the task status on the back-end
     $scope.onSuccess = (response) ->
       $scope.task.status = response.status
-      # TODO: Where to get student without initiating another XHR???
-      # Can't seem to find it for the life of me and get lost tracing
-      # it from the old modal upload dialog we used to have :S
-      alert "student missing - can't update burndown chart!" unless student?
-      if student? and student.task_stats?
-        projectService.updateTaskStats(student, response.new_stats)
+      # Update the project's task stats and burndown data
+      projectService.updateTaskStats($scope.project, response.new_stats)
       $scope.task.processing_pdf = response.processing_pdf
     $scope.onComplete = ->
       $scope.uploadType = null

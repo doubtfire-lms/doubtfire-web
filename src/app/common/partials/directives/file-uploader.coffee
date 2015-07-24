@@ -93,7 +93,7 @@ angular.module('doubtfire.file-uploader', ['ngFileUpload'])
       zone =
         name:     uploadName
         model:    null
-        accept:   "'." + typeData.extensions.join(', .') + "'"
+        accept:   "'." + typeData.extensions.join(',.') + "'"
         # Rejected files
         rejects:  null
         display:
