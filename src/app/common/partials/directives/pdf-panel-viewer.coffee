@@ -5,6 +5,8 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
   scope:
     pdfUrl: '='
     footerText: '@'
+    resourcesUrl: '='
+
   controller: ($scope, $sce) ->
     $scope.getGoogleDocsViewerUrl = ->
       $sce.trustAsResourceUrl "http://docs.google.com/gview?url=#{$scope.pdfUrl}&embedded=true"

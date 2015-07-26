@@ -6,8 +6,11 @@
     <strong>Note:</strong> {{footerText}}
   </div>
   <div class="pull-right btn-group">
+  	<a href="{{resourcesUrl}}" class="btn btn-primary" ng-if="resourcesUrl">
+      <i class="fa fa-download"></i><span> Resources</span>
+    </a>
     <a href="{{pdfUrl}}" class="btn btn-success">
-      <i class="fa fa-download"></i>
+      <i class="fa fa-download"></i><span ng-show="resourcesUrl"> PDF</span>
     </a>
   </div>
 </div><!--/panel-footer-->

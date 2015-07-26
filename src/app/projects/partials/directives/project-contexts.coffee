@@ -95,6 +95,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/task-feedback.tpl.html'
   scope:
+    unit: '='
     project: '='
     activeTask: '='
     submittedTasks: '='
