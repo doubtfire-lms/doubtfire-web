@@ -68,6 +68,41 @@
         </p>
       </div>
     </div>
+  </form>
+  <hr>
+  <div>
+    <div class="upload-type-selected-state">
+      <div class="upload-assistant clearfix" ng-if="!isTaskPDFUploading">
+        <h4>
+          Upload Task PDFs...
+          <small>Upload zip containing PDFs and zip file resources. Name each with Task abbreviation.</small>
+        </h4>
+      </div>
+    </div>
+    <file-uploader
+      files="taskFiles"
+      url="taskUploadUrl"
+      is-uploading="isTaskPDFUploading"
+      on-success="onTaskPDFSuccess"
+      on-complete="onTaskPDFComplete"></file-uploader>
+  </div> <!-- Upload of task files -->
+  <table ng-show="filesUploaded" class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Filename</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="file in filesUploaded.ignored_files">
+        <td>{{file.name}}</td><td>Ignored</td>
+      </tr>
+      <tr ng-repeat="file in filesUploaded.added_files">
+        <td>{{file.name}}</td><td>Added</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Download</label>

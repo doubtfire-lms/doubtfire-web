@@ -162,7 +162,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, TaskCSV, Unit, gradeService) ->
+  controller: ($scope, $modal, $rootScope, TaskCSV, Unit, gradeService, alertService) ->
     $scope.tasksFileUploader = TaskCSV.fileUploader $scope
 
     $scope.grades = gradeService.grades
@@ -176,7 +176,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
-    $scope.pageSize = 15
+    $scope.pageSize = 5
 
     # Modal Events
     $scope.editTask = (task) ->
@@ -198,6 +198,18 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           isNew: -> true
           unit: -> $scope.unit
         }
+
+    $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
+    $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
+    $scope.isTaskPDFUploading = null
+
+    $scope.onTaskPDFSuccess = (response) ->
+      alertService.add("success", "Files uploaded", 2000)
+      $scope.filesUploaded = response
+    
+    $scope.onTaskPDFComplete = ->
+      $scope.isTaskPDFUploading = null
+
 )
 .directive('adminUnitContext', ->
   replace: true
