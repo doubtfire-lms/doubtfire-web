@@ -66,6 +66,13 @@ angular.module("doubtfire.api", [
   #
   Task.generateSubmissionUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  
+  Task.getTaskPDFUrl = (unit, task_def) ->
+    "#{api}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
+
+  Task.getTaskResourcesUrl = (unit, task_def) ->
+    "#{api}/units/#{unit.id}/task_definitions/#{task_def.id}/task_resources.json?auth_token=#{currentUser.authenticationToken}"
+
   Task
 )
 .factory("TaskComment", (resourcePlus) ->

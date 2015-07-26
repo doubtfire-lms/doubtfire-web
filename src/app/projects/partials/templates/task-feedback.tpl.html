@@ -74,7 +74,7 @@
           </h3>
         </div>
         <div class="task-feedback-tab-panel">
-          <task-sheet ng-if="activeTab == tabsData.taskSheet"></task-sheet>
+          <task-sheet task="activeTask" unit="unit" ng-if="activeTab == tabsData.taskSheet"></task-sheet>
           <submit-task-form task="activeTask" project="project" ng-if="activeTab == tabsData.fileUpload"></submit-task-form>
           <view-submission ng-if="activeTab == tabsData.viewSubmission"></view-submission>
           <view-comments ng-if="activeTab == tabsData.viewComments"></view-comments>

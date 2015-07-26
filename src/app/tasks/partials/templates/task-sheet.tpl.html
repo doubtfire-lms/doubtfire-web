@@ -1,0 +1,19 @@
+<div>
+  <div class="panel-body" ng-hide="hasPDF()">
+    <div class="help-block">
+      <i class="fa fa-frown-o fa-2x"></i>
+      <p>Doubtfire does not have a PDF for this Task.</p>
+    </div><!--/no-pdf-->
+  </div>
+  <div ng-if="hasPDF() && hasResources()">
+    <pdf-panel-viewer
+      pdf-url="taskPDFUrl()"
+      resources-url="resourceUrl()">
+    </pdf-panel-viewer>
+  </div>
+  <div ng-if="hasPDF() && ! hasResources()">
+    <pdf-panel-viewer
+      pdf-url="taskPDFUrl()">
+    </pdf-panel-viewer>
+  </div>
+</div>
