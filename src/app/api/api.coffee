@@ -42,6 +42,8 @@ angular.module("doubtfire.api", [
     "#{api}/submission/unit/#{unit.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
   result.downloadPortfolios = (unit) ->
     $window.open result.getPortfoliosUrl(unit)
+  result.taskUploadUrl = (unit) ->
+    "#{api}/units/#{unit.id}/task_definitions/task_pdfs?auth_token=#{currentUser.authenticationToken}"
   result
 )
 .factory("UnitRole", (resourcePlus) ->
