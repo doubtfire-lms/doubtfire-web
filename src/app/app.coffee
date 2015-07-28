@@ -15,6 +15,7 @@ angular.module("doubtfire", [
 
   "doubtfire.sessions"
   "doubtfire.common"
+  "doubtfire.errors"
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"

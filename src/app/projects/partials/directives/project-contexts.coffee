@@ -25,7 +25,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         else if i == 1 #target
           '#777777'
         else if i == 2 #done
-          '#336699'
+          '#0079d8'
         else #sign off
           '#E01B5D'
 
