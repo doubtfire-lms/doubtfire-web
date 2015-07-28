@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
 
 .directive('groupsetManage', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/groupset-manage-view.tpl.html'
   # scope:

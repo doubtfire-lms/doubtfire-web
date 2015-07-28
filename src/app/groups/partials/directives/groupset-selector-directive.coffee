@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.groupset-selector', [])
 
 .directive('groupsetSelector', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/groupset-selector.tpl.html'
   # scope:
@@ -13,7 +12,7 @@ angular.module('doubtfire.groups.partials.groupset-selector', [])
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupset = gs
       $scope.$digest #notify
-    
+
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
 )

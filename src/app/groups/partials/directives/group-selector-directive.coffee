@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.group-selector-directive', [])
 
 .directive('groupSelector', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/group-selector.tpl.html'
 
@@ -24,7 +23,7 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
           $scope.staffFilter = 'all'
         else
           tutorial_id = tutorial_id.id
-      
+
       Group.create(
         {
           unit_id: $scope.unit.id,

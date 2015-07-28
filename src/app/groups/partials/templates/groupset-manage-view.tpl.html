@@ -1,6 +1,6 @@
-<div>
+<div class="groupset-manage-view">
   <div class="col-sm-6">
-    <h4 class="pull-left">{{selectedGroupset.name}} Groups</h4>
+    <h4 class="pull-left"><strong>{{selectedGroupset.name}}</strong> Groups</h4>
     <div class="pull-right">
       <button type="button" class="btn btn-default" ng-click="toggleStaffFilter()">
         {{staffFilter == 'mine'? "My Tutorials" : "All Tutorials"}}</span>
@@ -12,8 +12,8 @@
     <h4>{{selectedGroup.name}} Members</h4>
     <group-member-list></group-member-list>
     <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
-      <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"> 
-      
+      <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
+
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="addSelectedStudent()">
           <i class="glyphicon glyphicon-plus"></i>
