@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
 
 .directive('studentGroupTab', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/student-group-tab.tpl.html'
 
