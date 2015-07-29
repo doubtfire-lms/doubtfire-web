@@ -23,9 +23,6 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
           }
         }, (response) ->
           alertService.add("info", "#{grp.name} was updated", 3000)
-          # Update the tutorial if need be
-          grp = _.find($scope.groups, (g) -> g.id is id)
-          grp?.tutorial = $scope.selectTutorial(grp.tutorial_id)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
