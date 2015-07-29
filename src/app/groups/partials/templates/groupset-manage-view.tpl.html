@@ -46,37 +46,4 @@
       </div>
     </div>
   <div>
-  <div class="col-sm-12">
-    <button class="btn btn-primary" ng-click="downloadGroupCSV">Download Group CSV</button>
-    <div class="upload-type-selected-state">
-      <div class="upload-assistant clearfix" ng-if="!isTaskPDFUploading">
-        <h4>
-          Upload Group CSV PDFs...
-          <small>Upload csv with group name, username, and tutorial code.</small>
-        </h4>
-      </div>
-    </div>
-    <file-uploader
-      files="groupCSV"
-      url="groupCSVUploadUrl"
-      is-uploading="isGroupCSVUploading"
-      on-success="onGroupCSVSuccess"
-      on-complete="onGroupCSVComplete"></file-uploader>
-
-    <table ng-show="csvImportResponse.errors.length > 0" class="table table-condensed table-hover">
-    <thead>
-      <tr>
-        <th>Group</th>
-        <th>Username</th>
-        <th>Reason</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="line in csvImportResponse.errors">
-        <td>{{line.group}}</td><td>{{line.user}}</td><td>{{line.reason}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  </div> <!-- Upload of task files -->
 </div>
