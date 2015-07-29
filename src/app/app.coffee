@@ -12,6 +12,7 @@ angular.module("doubtfire", [
   "ngCsv"
   "ngSanitize"
   "xeditable"
+  'angular.filter'
 
   "doubtfire.sessions"
   "doubtfire.common"

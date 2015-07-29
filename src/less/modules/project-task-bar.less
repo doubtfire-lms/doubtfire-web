@@ -2,19 +2,37 @@
 {
   white-space: normal;
   padding: 5px;
+  ul {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-left: 0px;
+    -webkit-padding-start: 0px;
+  }
 
-  li 
+  .groupset-name {
+    color: #777;
+    text-align: center;
+    font-weight: medium;
+    font-size: 0.9em;
+  }
+
+  li
   {
-    display: inline; 
+    display: inline;
     padding: 2px;
   }
+}
+
+.dropdown-menu.project-task-bar {
+  padding-bottom: 15px;
 }
 
 .task-progress
 {
   tr
-  { 
-    vertical-align: middle; 
+  {
+    vertical-align: middle;
   }
 
   margin-bottom: 0px;
@@ -30,12 +48,12 @@
   }
 
   &[aria-valuenow="1"],
-  &[aria-valuenow="2"] 
+  &[aria-valuenow="2"]
   {
     min-width: 0px;
   }
 
-  &[aria-valuenow="0"] 
+  &[aria-valuenow="0"]
   {
     min-width: 0px;
   }
@@ -71,11 +89,11 @@
 .progress-bar-fix-and-include   { background-color: #d93713; color: white; }
 .progress-bar-redo              { background-color: #804000; color: white; }
 .progress-bar-discuss           { background-color: #31b0d5; color: white; }
-.progress-bar-complete  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
-  } 
+.progress-bar-complete  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
+  }
 
 
 .progress-progress-bar {
@@ -83,12 +101,12 @@
   margin-bottom: 0px;
 }
 
-.progress-bar-not-started       { background-color: #CCCCCC; color: white; }  
+.progress-bar-not-started       { background-color: #CCCCCC; color: white; }
 .progress-bar-one-week-late     { background-color: #CCCCCC; color: white; }
 .progress-bar-two-weeks-late   { background-color: #CCCCCC; color: white; }
-.progress-bar-on-time  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
-  } 
+.progress-bar-on-time  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
+  }
 
