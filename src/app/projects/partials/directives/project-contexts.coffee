@@ -190,6 +190,13 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.activeStatusData = ->
       $scope.statusData($scope.activeTask)
 
+    $scope.getGroupSet = (gsid) ->
+      taskService.groupSet(gsid, $scope.unit)
+
+    $scope.hideGroupSetName = ->
+      gsNames = _.pluck $scope.unit.group_sets.id
+      gsNames.length is 1 and gsNames[0] is null
+
     $scope.recreatePDF = ->
       taskService.recreatePDF($scope.activeTask, null)
 
@@ -213,7 +220,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
-      
+
       if (status == 'ready_to_mark' || status == 'need_help') and $scope.activeTask.upload_requirements.length > 0
         $scope.setActiveTab($scope.tabsData['fileUpload'])
         return # handle with the uploader...

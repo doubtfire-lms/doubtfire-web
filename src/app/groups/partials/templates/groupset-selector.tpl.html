@@ -1,5 +1,5 @@
-<div ng-if="unit.group_sets.length > 1">
-  <span class="dropdown" dropdown style="cursor: pointer;">
+<div class="groupset-selector">
+  <span class="dropdown" dropdown>
     <h3 class="nav dropdown-toggle" dropdown-toggle>{{selectedGroupset.name}} <span class="caret"></span></h3>
     <ul class="dropdown-menu">
       <li ng-repeat="gs in unit.group_sets" ng-click="selectGroupSet(gs)"><a href="">{{gs.name}}</a></li>

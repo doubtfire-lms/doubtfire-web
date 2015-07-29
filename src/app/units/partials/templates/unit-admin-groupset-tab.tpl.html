@@ -1,19 +1,35 @@
-<div>
-  <div>
-    <table class="table table-condensed table-hover">
+<div class="unit-admin-groupset-tab">
+  <div class="groupset-area col-sm-12">
+    <div class="info-area col-sm-12">
+      <div class="col-sm-8 pull-left">
+        <h3>Group Sets</h3>
+        <p class="help-block">A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams.</p>
+      </div>
+      <button class="btn pull-right btn-success add-group-set" ng-click="addGroupSet()">
+        <i class="fa fa-users"></i>
+        <i class="fa fa-plus"></i>
+        <p> New Group Set </p>
+      </button>
+    </i>
+  </div>
+  <div class="groupset-selector col-sm-12">
+    <div ng-hide="unit.group_sets.length > 0">
+      <div class="callout callout-info">
+        This unit has no group sets
+      </div>
+    </div>
+    <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover groupsets">
       <thead>
-        <tr> 
-          <th>Select</th>
-          <th>Name</th>
-          <th>Create Groups</th>
-          <th>Manage Groups?</th>
-          <th>Restrict to Tutorials</th>
+        <tr>
+          <th><span tooltip="Name of the group set">Name</span></th>
+          <th><span tooltip="Who can create groups?">Create Groups</span></th>
+          <th><span tooltip="Who can manage groups?">Manage Groups</span></th>
+          <th><span tooltip="Are groups restricted to tutorials?">Restrict to Tutorials</span></th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="gs in unit.group_sets">
-          <td><a href="" ng-click="selectGroupSet(gs)">Select</a></td>
+        <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupset}" ng-click="selectGroupSet(gs)">
           <td class="col-sm-3">
             <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
               {{ gs.name || 'empty' }}
@@ -34,7 +50,7 @@
               {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
             </span>
           </td>
-          <td style="white-space: nowrap">
+          <td>
             <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
               <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
                 save
@@ -43,14 +59,18 @@
                 cancel
               </button>
             </form>
-            <div class="buttons" ng-show="!gsRowform.$visible">
-              <a href="" ng-click="gsRowform.$show()">edit</a> | <a href="" ng-click="removeGroupSet(gs)">delete</a>
-            </div>
+            <div class="btn-group" ng-show="!gsRowform.$visible">
+              <button ng-click="gsRowform.$show()" class="btn col-sm-6 btn-primary">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button ng-click="removeGroupSet(gs)" class="btn col-sm-6 btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </div><!--/actions-->
           </td>
         </tr>
       </tbody>
     </table>
-    <button ng-click="addGroupSet()">Add New Student Groupwork</button>
   </div>
-  <groupset-manage></groupset-manage>
+  <groupset-manage ng-show="selectedGroupset && unit.group_sets.length > 0" class="col-sm-12"></groupset-manage>
 </div>
