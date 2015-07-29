@@ -230,8 +230,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       if $scope.unit.convenors then delete $scope.unit.convenors
 
       if $scope.unit.id == -1
-        Unit.create { unit: $scope.unit }, (unit) ->
-          $scope.saveSuccess(unit)
+        Unit.create { unit: $scope.unit },
+          (unit) ->
+            $scope.saveSuccess(unit)
+          (response) ->
+            alertService.add("danger", response.data.error, 6000)
       else
         Unit.update { id: $scope.unit.id, unit: $scope.unit}, (unit) ->
           alertService.add("success", "Unit updated.", 2000)
