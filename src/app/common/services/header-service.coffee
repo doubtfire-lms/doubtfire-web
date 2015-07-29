@@ -8,6 +8,7 @@ angular.module("doubtfire.services.header", [])
   # menu      = { name: 'Menu Title', links: menuLinks, icon: 'icon' }
 
   $rootScope.header_menu_data = [ ]
+  
   menus: () -> $rootScope.header_menu_data
   clearMenus: ->
     $rootScope.header_menu_data.length = 0

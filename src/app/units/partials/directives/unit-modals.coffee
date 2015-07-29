@@ -116,7 +116,6 @@ angular.module('doubtfire.units.partials.modals', [])
     oldTask.upload_requirements = newTask.upload_requirements
     oldTask.plagiarism_checks = newTask.plagiarism_checks
     oldTask.target_date = newTask.target_date
-    oldTask.required = newTask.required
 
   $scope.deleteTask = () ->
     TaskDefinition.delete( { id: $scope.task.id }).$promise.then (

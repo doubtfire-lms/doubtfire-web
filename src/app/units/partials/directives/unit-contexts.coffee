@@ -188,8 +188,35 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           isNew: -> false
           unit: -> $scope.unit
         }
+
+    guessTaskAbbreviation = () ->
+      unit = $scope.unit
+      if unit.task_definitions.length == 0
+        "1.1P"
+      else
+        last_abbr = unit.task_definitions[unit.task_definitions.length-1].abbreviation
+        regex = /(.*)(\d+)(\D*)/
+        match = regex.exec last_abbr
+        if match?
+          "#{match[1]}#{parseInt(match[2])+1}#{match[3]}"
+        else
+          "#{last_abbr}1"
+
+
     $scope.createTask = ->
-      task = { target_date: new Date(), required: true, upload_requirements: [], plagiarism_checks: [] }
+      abbr = guessTaskAbbreviation()
+      task = {
+        name: "Task #{abbr}",
+        abbreviation: abbr,
+        description: "New Description",
+        target_date: new Date(),
+        upload_requirements: [],
+        plagiarism_checks: []
+        weight: 4
+        target_grade: 0
+        restrict_status_updates: false
+        plagiarism_warn_pct: 80
+      }
       $modal.open
         controller: 'TaskEditModalCtrl'
         templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
