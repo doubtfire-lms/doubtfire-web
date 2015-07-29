@@ -112,7 +112,7 @@ angular.module("doubtfire.units", [
 )
 
 .controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit) ->
-  $scope.unit = new Unit { id: -1, active: true, code: "COS????" }
+  $scope.unit = new Unit { id: -1, active: true, code: "COS????", name: "Unit Name" }
   $scope.saveSuccess = (unit) ->
     alertService.add("success", "Unit created.", 2000)
     $modalInstance.close()
