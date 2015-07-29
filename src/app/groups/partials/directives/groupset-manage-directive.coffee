@@ -11,17 +11,21 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
   controller: ($scope, Group, GroupMember, gradeService, alertService) ->
     $scope.staffFilter = 'mine'
 
-    $scope.saveGroup = (data, id) ->
+    $scope.saveGroup = (grp, id) ->
       Group.update(
         {
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupset.id,
           id: id,
           group: {
-            name: data.name,
-            tutorial_id: data.tutorial_id,
+            name: grp.name,
+            tutorial_id: grp.tutorial_id,
           }
-        }, (response) -> alertService.add("info", "#{data.name} was updated", 3000)
+        }, (response) ->
+          alertService.add("info", "#{grp.name} was updated", 3000)
+          # Update the tutorial if need be
+          grp = _.find($scope.groups, (g) -> g.id is id)
+          grp?.tutorial = $scope.selectTutorial(grp.tutorial_id)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
@@ -50,18 +54,20 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
-    $scope.addSelectedStudent = () ->
+    $scope.addSelectedStudent = (student) ->
+      console.log $scope
       GroupMember.create(
         {
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupset.id,
           group_id: $scope.selectedGroup.id
-          project_id: $scope.selectedStudent.project_id
+          project_id: student.project_id
         }
-        (member) -> $scope.members.push(member)
+        (member) ->
+          $scope.members.push(member)
+          addStudentForm.reset()
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
-      $scope.selectedStudent = null
 
     $scope.studentDetails = (student) ->
       if student && student.student_id && student.name
