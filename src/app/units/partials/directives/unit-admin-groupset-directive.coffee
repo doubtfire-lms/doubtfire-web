@@ -67,4 +67,22 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
 
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
+
+    $scope.csvImportResponse = {}
+    $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
+    $scope.groupCSVUploadUrl = GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
+    $scope.isGroupCSVUploading = null
+    $scope.onGroupCSVSuccess = (response) ->
+      if response.errors.length == 0
+        alertService.add("success", "CSV uploaded. Added #{response.added.length}", 2000)
+      else if response.added.length > 0
+        alertService.add("warning", "CSV uploaded, added #{response.added.length}, but #{response.errors.length} errors", 6000)
+      else
+        alertService.add("danger", "CSV uploaded but #{response.errors.length} errors", 6000)
+      $scope.csvImportResponse.errors = response.errors
+    $scope.onGroupCSVComplete = () ->
+      $scope.isGroupCSVUploading = null
+
+    $scope.downloadGroupCSV = () ->
+      GroupSet.downloadCSV($scope.unit, $scope.selectedGroupset)
 )
