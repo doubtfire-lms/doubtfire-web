@@ -41,7 +41,7 @@ angular.module("doubtfire.common.header", [])
       size: 'lg'
 )
 
-.controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
+.controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService) ->
   $scope.menus = headerService.menus()
   $scope.currentUser = currentUser.profile
 )
