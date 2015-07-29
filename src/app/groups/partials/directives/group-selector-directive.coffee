@@ -35,7 +35,6 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
             }
         },
         (grp) ->
-          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
           $scope.groups.push(grp)
           addGroupForm.reset()
           $scope.selectGroup(grp) if $scope.selectedGroup is null
@@ -57,16 +56,12 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
 
     if $scope.selectedGroupset
       $scope.unit.getGroups $scope.selectedGroupset, (groups) ->
-        $scope.groups = _.map groups, (grp) ->
-          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
-          grp
+        $scope.groups = groups
 
     $scope.selectTutorial = (id) ->
       _.find($scope.unit.tutorials, (t) -> t.id is id)
 
     $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
       $scope.unit.getGroups newValue, (groups) ->
-        $scope.groups = _.map groups, (grp) ->
-          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
-          grp
+        $scope.groups = groups
 )
