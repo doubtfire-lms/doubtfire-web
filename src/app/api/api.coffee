@@ -89,8 +89,11 @@ angular.module("doubtfire.api", [
 .factory("Group", (resourcePlus) ->
   resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:id", { id: "@id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
 )
-.factory("GroupSet", (resourcePlus) ->
+.factory("GroupSet", (resourcePlus, api, currentUser) ->
   resourcePlus "/units/:unit_id/group_sets/:id", { id: "@id", unit_id: "@unit_id" }
+  this.groupCSVUploadUrl = (unit, group_set) ->
+    "#{api}/units/#{unit.id}/group_sets/#{group_set.id}/groups/csv.json?auth_token=#{currentUser.authenticationToken}"
+  return this
 )
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
   this.resource = resourcePlus "/submission/task/:id", { id: "@id" }
