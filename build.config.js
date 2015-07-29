@@ -94,7 +94,8 @@ module.exports = {
       'vendor/pdfjs-bower/dist/pdf.worker.js',
       'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/ng-csv/build/ng-csv.js',
-      'vendor/angular-xeditable/dist/js/xeditable.js'
+      'vendor/angular-xeditable/dist/js/xeditable.js',
+      'vendor/angular-filter/dist/angular-filter.js'
     ],
     css: [
       // 'vendor/angular-xeditable/dist/css/xeditable.css'

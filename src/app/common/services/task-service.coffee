@@ -130,6 +130,10 @@ angular.module("doubtfire.services.tasks", [])
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
 
+  taskService.groupSet = (groupSetId, unit) ->
+    groupSetId = +groupSetId # convert from str -> num if needed
+    _.find(unit.group_sets, (gs) -> gs.id is groupSetId) || { name: "Individual Work" }
+
   taskService.updateTaskStatus = (task, status) ->
     oldStatus = task.status
     d = $q.defer()
