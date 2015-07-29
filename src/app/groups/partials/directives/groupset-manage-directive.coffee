@@ -8,7 +8,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
   #   unit: "="
   #   selectedGroupset: "="
 
-  controller: ($scope, Group, GroupMember, gradeService, alertService) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService) ->
     $scope.staffFilter = 'mine'
 
     $scope.removeGroupMember = (member) ->
@@ -49,4 +49,19 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
         $scope.selectGroup($scope.groups[0])
       else
         $scope.selectGroup(null)
+
+    $scope.csvImportResponse = {}
+    $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
+    $scope.groupCSVUploadUrl = GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
+    $scope.isGroupCSVUploading = null
+    $scope.onGroupCSVSuccess = (response) ->
+      if response.errors.length == 0
+        alertService.add("success", "CSV uploaded. Added #{response.added.length}", 2000)
+      else if response.added.length > 0
+        alertService.add("warning", "CSV uploaded, added #{response.added.length}, but #{response.errors.length} errors", 6000)
+      else
+        alertService.add("danger", "CSV uploaded but #{response.errors.length} errors", 6000)
+      $scope.csvImportResponse.errors = response.errors
+    $scope.onGroupCSVComplete = () ->
+      $scope.isGroupCSVUploading = null
 )
