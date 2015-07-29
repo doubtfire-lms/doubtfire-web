@@ -124,14 +124,17 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
-  controller: ($scope, $rootScope, Unit, UnitRole) ->
+  controller: ($scope, $rootScope, Unit, UnitRole, alertService) ->
     temp = []
     users = []
 
     $scope.changeRole = (unitRole, role_id) ->
       unitRole.role_id = role_id
       unitRole.unit_id = $scope.unit.id
-      UnitRole.update { id: unitRole.id, unit_role: unitRole }
+      UnitRole.update { id: unitRole.id, unit_role: unitRole },
+        (response) -> alertService.add("success", "Role changed", 2000)
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
 
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
