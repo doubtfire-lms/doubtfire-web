@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.group-member-contribution-directive', [])
 
 .directive('groupMemberContributions', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/group-member-contributions.tpl.html'
   scope:
@@ -30,7 +29,7 @@ angular.module('doubtfire.groups.partials.group-member-contribution-directive', 
         member.rating = 1
 
       member.confRating = member.rating
-      
+
     $scope.hoveringOver = (member, value) ->
       member.overStar = value
       member.percent = (100 * (value / groupService.groupContributionSum($scope.team.members, member, value))).toFixed()

@@ -16,7 +16,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       if $scope.unit.group_sets.length == 0
         GroupSet.create(
           { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }
-          (gs) -> $scope.unit.group_sets.push(gs)
+          (gs) -> $scope.selectGroupSet(gs); $scope.unit.group_sets.push(gs)
           (response) -> alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
         )
       else
@@ -49,6 +49,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
         (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
         (response) -> alertService.add("danger", "Failed to delete group set. #{response.data.error}", 6000)
       )
+      $scope.selectGroupSet(null) if gs is $scope.selectedGroupset
 
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupset = gs
@@ -63,7 +64,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       { value: true, text: "Same Tutorial" }
       { value: false, text: "Any Tutorial" }
     ]
-    
+
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
 )

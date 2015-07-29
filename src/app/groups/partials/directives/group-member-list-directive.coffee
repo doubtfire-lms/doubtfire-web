@@ -1,7 +1,6 @@
 angular.module('doubtfire.groups.partials.group-member-list-directive', [])
 
 .directive('groupMemberList', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'groups/partials/templates/group-member-list.tpl.html'
 
