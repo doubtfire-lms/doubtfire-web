@@ -11,12 +11,6 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
   controller: ($scope, Group, GroupMember, gradeService, alertService) ->
     $scope.staffFilter = 'mine'
 
-    $scope.toggleStaffFilter = () ->
-      if $scope.staffFilter == 'mine'
-        $scope.staffFilter = 'all'
-      else
-        $scope.staffFilter = 'mine'
-
     $scope.saveGroup = (data, id) ->
       Group.update(
         {
@@ -27,17 +21,22 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
             name: data.name,
             tutorial_id: data.tutorial_id,
           }
-        }, (response) ->
+        }, (response) -> alertService.add("info", "#{data.name} was updated", 3000)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
     $scope.removeGroup = (grp) ->
+      $scope.selectGroup(null) if grp is $scope.selectedGroup
       Group.delete(
         {
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupset.id,
           id: grp.id
-        }, (response) -> $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id ) )
+        },
+          (response) ->
+            $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id )
+            alertService.add("info", "#{grp.name} was deleted", 3000)
+        )
 
     $scope.removeGroupMember = (member) ->
       GroupMember.delete(
@@ -71,7 +70,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
         "Select Student"
 
     $scope.$watch "selectedGroupset", (newValue, oldValue) ->
-      if $scope.groups && $scope.groups.length > 0
+      if $scope.groups?.length > 0
         $scope.selectGroup($scope.groups[0])
       else
         $scope.selectGroup(null)

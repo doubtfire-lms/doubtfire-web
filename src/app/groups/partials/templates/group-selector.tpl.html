@@ -1,27 +1,33 @@
-<div>
+<div class="col-sm-12 group-selector">
   <table class="table table-condensed table-hover">
     <thead>
-      <tr> 
-        <th>Select</th>
-        <th><a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">Name</a></th>
-        <th><a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">Tutorial</a></th>
+      <tr>
+        <th>
+          <a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">
+            Group Name <i ng-show="groupSortOrder == 'name'" class="fa fa-caret-{{grpReverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">
+            Tutorial <i ng-show="groupSortOrder == 'tutorial_id'" class="fa fa-caret-{{grpReverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
         <th ng-show="assessingUnitRole">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="grp in filteredGroups = (groups | groupFilter:unit:selectedGroupset:project:assessingUnitRole:staffFilter) | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-        <td><a ng-click="selectGroup(grp)">Select</a></td>
-        <td>
+      <tr ng-repeat="grp in filteredGroups = (groups | groupFilter:unit:selectedGroupset:project:assessingUnitRole:staffFilter) | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{info: grp == selectedGroup}">
+        <td ng-click="selectGroup(grp)" class="group-name">
           <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
             {{ grp.name || 'empty' }}
           </span>
         </td>
-        <td>
-          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials">
-          {{ selectTutorial(grp.tutorial_id).abbreviation }}
+        <td ng-click="selectGroup(grp)" class="tutorial-id">
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials" tooltip-html-unsafe="<strong>{{grp.tutorial.meeting_day}} {{grp.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{grp.tutorial.meeting_location}} - {{grp.tutorial.tutor_name}}">
+            {{ grp.tutorial.abbreviation }}
           </span>
         </td>
-        <td style="white-space: nowrap" ng-show="assessingUnitRole">
+        <td class="actions" ng-show="assessingUnitRole">
           <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
             <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
               save
@@ -31,25 +37,18 @@
             </button>
           </form>
           <div class="buttons" ng-show="!grpRowform.$visible">
-            <a href="" ng-click="grpRowform.$show()">edit</a> | <a href="" ng-click="removeGroup(grp)">delete</a>
-          </div>
+            <button ng-click="grpRowform.$show()" class="btn btn-small btn-primary">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button ng-click="removeGroup(grp)" class="btn btn-small btn-danger">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </div><!--/actions-->
         </td>
       </tr>
     </tbody>
   </table>
-  <div>
-  <div ng-show="filteredGroups.length > pageSize" class="pull-left">
+  <div ng-show="filteredGroups.length > pageSize" class="text-center col-sm-12">
     <pagination total-items="filteredGroups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
-  </div>
-  <div class="pull-right col-sm-6" style="margin-top:20px;margin-bottom:20px" ng-if="assessingUnitRole || selectedGroupset.allow_students_to_create_groups">
-    <div class="input-group">
-        <input class="form-control" id="grpName" placeholder="New Group" ng-model="grpName"> 
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="addGroup(grpName)">
-            <i class="glyphicon glyphicon-plus"></i>
-          </button>
-        </span>
-      </div>
-    </div>
   </div>
 </div>
