@@ -14,6 +14,8 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
     $scope.groupSortOrder = 'name'
 
     $scope.addGroup = (name) ->
+      if $scope.unit.tutorials.length == 0
+        alertService.add("danger", "Please ensure there is at least one tutorial before groups are created", 6000)
       if $scope.project #in a student context
         tutorial_id = $scope.project.tutorial.id
       else #convenor/tutor
@@ -42,6 +44,34 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
           alertService.add("success", "#{grp.name} was created!", 3000)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
+
+    $scope.saveGroup = (grp, id) ->
+      Group.update(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          id: id,
+          group: {
+            name: grp.name,
+            tutorial_id: grp.tutorial_id,
+          }
+        }, (response) ->
+          alertService.add("info", "#{grp.name} was updated", 3000)
+        (response) -> alertService.add("danger", response.data.error, 6000)
+      )
+
+    $scope.removeGroup = (grp) ->
+      $scope.selectGroup(null) if grp is $scope.selectedGroup
+      Group.delete(
+        {
+          unit_id: $scope.unit.id,
+          group_set_id:$scope.selectedGroupset.id,
+          id: grp.id
+        },
+          (response) ->
+            $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id )
+            alertService.add("info", "#{grp.name} was deleted", 3000)
+        )
 
     $scope.selectGroup = (grp) ->
       if grp
