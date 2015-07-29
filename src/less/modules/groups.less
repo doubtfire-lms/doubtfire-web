@@ -1,5 +1,5 @@
 .groupset-manage-view {
-  .info-area {
+  & > .info-area {
     margin-bottom: 3em;
   }
   .multi-group-actions {
@@ -51,4 +51,8 @@
   &.group-name  { width: 50%; }
   &.tutorial-id { width: 25%; }
   &.actions     { width: 25%; }
+}
+
+.group-selector form, .group-memberships form {
+  margin-bottom: 3em;
 }

@@ -17,7 +17,7 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
       if $scope.project #in a student context
         tutorial_id = $scope.project.tutorial.id
       else #convenor/tutor
-        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == $scope.assessingUnitRole.name
+        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor.id == $scope.assessingUnitRole.id
         if not tutorial_id
           tutorial_id = $scope.unit.tutorials[0].id
           $scope.staffFilter = 'all'
@@ -37,6 +37,9 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
         (grp) ->
           grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
           $scope.groups.push(grp)
+          addGroupForm.reset()
+          $scope.selectGroup(grp) if $scope.selectedGroup is null
+
           alertService.add("success", "#{grp.name} was created!", 3000)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
@@ -59,7 +62,7 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
           grp
 
     $scope.selectTutorial = (id) ->
-      _.find($scope.unit.tutorials, (t) -> t.id == id)
+      _.find($scope.unit.tutorials, (t) -> t.id is id)
 
     $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
       $scope.unit.getGroups newValue, (groups) ->

@@ -1,5 +1,5 @@
 <div class="groupset-manage-view">
-  <div class="col-sm-6">
+  <div class="group-listings col-sm-6">
     <div class="info-area col-sm-12">
       <div class="col-sm-8 pull-left">
         <h4>
@@ -10,14 +10,6 @@
         </p>
       </div>
       <div class="pull-right col-sm-4 text-right multi-group-actions">
-        <form name="addGroupForm" class="input-group" ng-if="assessingUnitRole || selectedGroupset.allow_students_to_create_groups" ng-submit="addGroup(groupAddName)">
-          <input class="form-control" placeholder="Add New Group..." ng-model="groupAddName">
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-success">
-              <i class="fa fa-plus"></i>
-            </button>
-          </span>
-        </form>
         <p class="btn-group">
           <label class="btn btn-primary" ng-model="staffFilter" btn-radio="'all'">
             <i class="fa fa-university" tooltip="Show groups from every tutorial"></i>
@@ -29,25 +21,20 @@
       </div>
     </div>
     <div class="col-sm-12">
-      <div ng-hide="groups.length > 0">
-        <div class="callout callout-info">
-          {{selectedGroupset.name}} has no groups {{staffFilter == 'mine' ? 'in this tutorial' : '' }}
-        </div>
-      </div>
-      <group-selector ng-show="groups.length > 0"></group-selector>
+      <group-selector></group-selector>
     </div>
   </div>
-  <div class="col-sm-6" ng-if="selectedGroup">
-    <h4>{{selectedGroup.name}} Members</h4>
-    <group-member-list></group-member-list>
-    <div class="col-sm-offset-1 col-sm-10 input-group" ng-show="selectedGroup">
+  <div class="group-memberships col-sm-6" ng-show="selectedGroup">
+    <h4>Members of <strong>{{selectedGroup.name}}</strong></h4>
+    <form name="addStudentForm" ng-submit="addSelectedStudent(selectedStudent)" class="col-sm-12 input-group" ng-show="selectedGroup">
       <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
 
       <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="addSelectedStudent()">
-          <i class="glyphicon glyphicon-plus"></i>
+        <button type="submit" class="btn btn-success">
+          <i class="fa fa-plus"></i>
         </button>
       </span>
-    </div>
+    </form>
+    <group-member-list></group-member-list>
   </div>
 <div>

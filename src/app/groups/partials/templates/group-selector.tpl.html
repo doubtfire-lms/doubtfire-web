@@ -1,5 +1,18 @@
 <div class="col-sm-12 group-selector">
-  <table class="table table-condensed table-hover">
+  <form name="addGroupForm" class="add-group-form input-group" ng-if="assessingUnitRole || selectedGroupset.allow_students_to_create_groups" ng-submit="addGroup(groupAddName)">
+    <input class="form-control" placeholder="Add New Group..." ng-model="groupAddName">
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-success">
+        <i class="fa fa-plus"></i>
+      </button>
+    </span>
+  </form>
+  <div ng-hide="filteredGroups.length > 0">
+    <div class="callout callout-info">
+      {{selectedGroupset.name}} has no groups {{staffFilter == 'mine' ? 'in this tutorial' : '' }}
+    </div>
+  </div>
+  <table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover">
     <thead>
       <tr>
         <th>
