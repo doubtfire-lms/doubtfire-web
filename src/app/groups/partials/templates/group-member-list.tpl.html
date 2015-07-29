@@ -1,4 +1,4 @@
-<div>
+<div class="group-member-list">
   <div ng-hide="members.length > 0">
     <div class="callout callout-info">
       There are no members in this group
@@ -26,10 +26,10 @@
     </thead>
     <tbody>
       <tr ng-repeat="member in members | orderBy:memberSortOrder:reverse">
-        <td ng-if="assessingUnitRole"><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
-        <td>{{member.student_name}}</td>
-        <td>{{gradeFor(member)}}</td>
-        <td ng-if="assessingUnitRole">
+        <td class="student-id" ng-if="assessingUnitRole"><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
+        <td class="student-name">{{member.student_name}}</td>
+        <td class="student-grade">{{gradeFor(member)}}</td>
+        <td class="actions" ng-if="assessingUnitRole">
           <button ng-click="removeGroupMember(member)" class="btn btn-small btn-danger">
             <i class="fa fa-trash-o"></i>
           </button>
