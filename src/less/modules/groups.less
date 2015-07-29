@@ -1,0 +1,54 @@
+.groupset-manage-view {
+  .info-area {
+    margin-bottom: 3em;
+  }
+  .multi-group-actions {
+    form {
+      margin-bottom: 1em;
+    }
+  }
+}
+
+.unit-admin-groupset-tab {
+  .groupset-selector  {
+    margin-bottom: 3em;
+  }
+  .groupset-selector + groupset-manage {
+    padding-top: 3em;
+    border-top: 1px dashed gray;
+  }
+  .groupset-area > .info-area {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-justify-content: space-between;
+            justify-content: space-between;
+    margin-bottom: 3em;
+    button.add-group-set {
+      i {
+        margin-bottom: 0.25em;
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.unit-admin-groupset-tab, .groupset-selector {
+  table {
+    td {
+      vertical-align: middle !important;
+    }
+    tr {
+      cursor: pointer;
+    }
+  }
+}
+
+.group-selector table td {
+  &.group-name  { width: 50%; }
+  &.tutorial-id { width: 25%; }
+  &.actions     { width: 25%; }
+}

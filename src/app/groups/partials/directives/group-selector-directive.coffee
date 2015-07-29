@@ -35,8 +35,9 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
             }
         },
         (grp) ->
+          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
           $scope.groups.push(grp)
-          grpName = null
+          alertService.add("success", "#{grp.name} was created!", 3000)
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 
@@ -48,16 +49,21 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
 
       if $scope.onSelectGroup
         $scope.onSelectGroup(grp)
+
       $scope.$digest #notify
 
     if $scope.selectedGroupset
       $scope.unit.getGroups $scope.selectedGroupset, (groups) ->
-        $scope.groups = groups
+        $scope.groups = _.map groups, (grp) ->
+          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
+          grp
 
     $scope.selectTutorial = (id) ->
       _.find($scope.unit.tutorials, (t) -> t.id == id)
 
     $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
       $scope.unit.getGroups newValue, (groups) ->
-        $scope.groups = groups
+        $scope.groups = _.map groups, (grp) ->
+          grp.tutorial = $scope.selectTutorial(grp.tutorial_id)
+          grp
 )
