@@ -19,7 +19,7 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
       if $scope.project #in a student context
         tutorial_id = $scope.project.tutorial.id
       else #convenor/tutor
-        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor.id == $scope.assessingUnitRole.id
+        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == $scope.assessingUnitRole.name
         if not tutorial_id
           tutorial_id = $scope.unit.tutorials[0].id
           $scope.staffFilter = 'all'
