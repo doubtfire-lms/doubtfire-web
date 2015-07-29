@@ -50,7 +50,7 @@
               {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
             </span>
           </td>
-          <td style="white-space: nowrap">
+          <td>
             <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
               <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
                 save
@@ -59,11 +59,11 @@
                 cancel
               </button>
             </form>
-            <div class="buttons" ng-show="!gsRowform.$visible">
-              <button ng-click="gsRowform.$show()" class="btn btn-small btn-primary">
+            <div class="btn-group" ng-show="!gsRowform.$visible">
+              <button ng-click="gsRowform.$show()" class="btn col-sm-6 btn-primary">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button ng-click="removeGroupSet(gs)" class="btn btn-small btn-danger">
+              <button ng-click="removeGroupSet(gs)" class="btn col-sm-6 btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </div><!--/actions-->
