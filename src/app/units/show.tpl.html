@@ -3,7 +3,7 @@
       	<li><a href="#/home">Units</a></li>
       	<li class="active">{{unitRole.unit_name}} {{unitRole.role}}</li>
   	</ul>
-  	<div class="col-md-offset-2 col-md-8" ng-if="unitRole.role != 'Student'">
+  	<div class="root-view" id="teacher-view" ng-if="unitRole.role != 'Student'">
       <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View</p></h2>
       <tabset ng-if="unitLoaded">
         <tab heading="My Students" ng-click="closeAllStudents()">
