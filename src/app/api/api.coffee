@@ -68,7 +68,7 @@ angular.module("doubtfire.api", [
   #
   Task.generateSubmissionUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
-  
+
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{api}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
 
@@ -90,22 +90,22 @@ angular.module("doubtfire.api", [
   resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:id", { id: "@id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
 )
 .factory("GroupSet", (resourcePlus, api, currentUser, $window) ->
-  resourcePlus "/units/:unit_id/group_sets/:id", { id: "@id", unit_id: "@unit_id" }
-  this.groupCSVUploadUrl = (unit, group_set) ->
+  GroupSet = resourcePlus "/units/:unit_id/group_sets/:id", { id: "@id", unit_id: "@unit_id" }
+  GroupSet.groupCSVUploadUrl = (unit, group_set) ->
     "#{api}/units/#{unit.id}/group_sets/#{group_set.id}/groups/csv.json?auth_token=#{currentUser.authenticationToken}"
-  this.downloadCSV = (unit, group_set) ->
+  GroupSet.downloadCSV = (unit, group_set) ->
     $window.open "#{api}/units/#{unit.id}/group_sets/#{group_set.id}/groups/csv.json?auth_token=#{currentUser.authenticationToken}", "_blank"
-  return this
+  return GroupSet
 )
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
-  this.resource = resourcePlus "/submission/task/:id", { id: "@id" }
+  TaskFeedback = resourcePlus "/submission/task/:id", { id: "@id" }
 
-  this.getTaskUrl = (task) ->
+  TaskFeedback.getTaskUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
-  this.openFeedback = (task) ->
-    $window.open this.getTaskUrl(task), "_blank"
+  TaskFeedback.openFeedback = (task) ->
+    $window.open TaskFeedback.getTaskUrl(task), "_blank"
 
-  return this
+  return TaskFeedback
 )
 .factory("TaskSimilarity", ($http, api, currentUser) ->
   get: (task, match, callback) ->
