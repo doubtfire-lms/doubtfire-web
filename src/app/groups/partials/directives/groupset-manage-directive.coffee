@@ -24,7 +24,6 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
       )
 
     $scope.addSelectedStudent = (student) ->
-      console.log $scope
       GroupMember.create(
         {
           unit_id: $scope.unit.id,
@@ -44,7 +43,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
       else
         "Select Student"
 
-    $scope.$watch "selectedGroupset", (newValue, oldValue) ->
+    $scope.$watch "groups", (newValue, oldValue) ->
       if $scope.groups?.length > 0
         $scope.selectGroup($scope.groups[0])
       else

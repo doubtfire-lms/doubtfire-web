@@ -1,53 +1,55 @@
 <div>
-  <h4>All Tasks</h4>
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr> 
-        <th>Abbr</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Target Date</th>
-        <th>Weighting</th>
-        <th>Grade</th>
-        <th>Group</th>
-        <th>Restricted</th>
-        <th>File Upload Requirements</th>
-        <th>Plagiarism Checks</th>
-        <th>Plagiarism Warn</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="editTask(task)">
-        <td>{{task.abbreviation}}</td>
-        <td>{{task.name}}</td>
-        <td style="max-width:150px">{{task.description}}</td>
-        <td>{{task.target_date | date:'d MMM yyyy'}}</td>
-        <td>{{task.weight}}</td>
-        <td>{{grades[task.target_grade]}}</td>
-        <td>{{groupSetName(task.group_set_id)}}</td>
-        <td>
-          <span ng-show="task.restrict_status_updates" class="glyphicon glyphicon-ok text-success"></span>
-          <span ng-hide="task.restrict_status_updates">No</span>
-        </td>
-        <td>
-          <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.upload_requirements.length == 0">
-            <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
-          </ol>
-          <span ng-show="task.upload_requirements.length == 0">No Files To Upload</span>
-        </td>
-        <td>
-          <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.plagiarism_checks.length == 0">
-            <li ng-repeat="check in task.plagiarism_checks">{{check.type}} ({{check.pattern}})</li>
-          </ol>
-          <span ng-show="task.plagiarism_checks.length == 0">No Plagiarism Checks</span>
-        </td>
-        <td><span ng-show="task.plagiarism_checks.length > 0">{{task.plagiarism_warn_pct}}%</span></td>
-      </tr>
-    </tbody>
-  </table><!--/task-table-->
-    
-  <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
-  <button class="btn btn-success pull-right" ng-click="createTask()">Create Task</button>
+  <div class="tasks-overview">
+    <h2>Tasks Overview</h2>
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th>Abbr</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Target Date</th>
+          <th>Weighting</th>
+          <th>Grade</th>
+          <th>Group</th>
+          <th>Restricted</th>
+          <th>File Upload Requirements</th>
+          <th>Plagiarism Checks</th>
+          <th>Plagiarism Warn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="editTask(task)">
+          <td>{{task.abbreviation}}</td>
+          <td>{{task.name}}</td>
+          <td style="max-width:150px">{{task.description}}</td>
+          <td>{{task.target_date | date:'d MMM yyyy'}}</td>
+          <td>{{task.weight}}</td>
+          <td>{{grades[task.target_grade]}}</td>
+          <td>{{groupSetName(task.group_set_id)}}</td>
+          <td>
+            <span ng-show="task.restrict_status_updates" class="glyphicon glyphicon-ok text-success"></span>
+            <span ng-hide="task.restrict_status_updates">No</span>
+          </td>
+          <td>
+            <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.upload_requirements.length == 0">
+              <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
+            </ol>
+            <span ng-show="task.upload_requirements.length == 0">No Files To Upload</span>
+          </td>
+          <td>
+            <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.plagiarism_checks.length == 0">
+              <li ng-repeat="check in task.plagiarism_checks">{{check.type}} ({{check.pattern}})</li>
+            </ol>
+            <span ng-show="task.plagiarism_checks.length == 0">No Plagiarism Checks</span>
+          </td>
+          <td><span ng-show="task.plagiarism_checks.length > 0">{{task.plagiarism_warn_pct}}%</span></td>
+        </tr>
+      </tbody>
+    </table><!--/task-table-->
+
+    <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <button class="btn btn-success pull-right" ng-click="createTask()">Create Task</button>
+  </div><!--/tasks-overview-->
 
   <h4>Batch Import / Export</h4>
   <form class="form-horizontal" ng-submit="submitTasksUpload()">
@@ -74,7 +76,7 @@
     <div class="upload-type-selected-state">
       <div class="upload-assistant clearfix" ng-if="!isTaskPDFUploading">
         <h4>
-          Upload Task PDFs...
+          Upload Task PDFs
           <small>Upload zip containing PDFs and zip file resources. Name each with Task abbreviation.</small>
         </h4>
       </div>
