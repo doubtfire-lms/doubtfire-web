@@ -6,7 +6,6 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
 #
 
 .directive('unitAdminGroupsetTab', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-groupset-tab.tpl.html'
 
@@ -44,6 +43,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       )
 
     $scope.removeGroupSet = (gs) ->
+      console.log GroupSet
       GroupSet.delete(
         { unit_id: $scope.unit.id, id: gs.id },
         (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
@@ -70,7 +70,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
 
     $scope.csvImportResponse = {}
     $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
-    $scope.groupCSVUploadUrl = GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
+    $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
       if response.errors.length == 0

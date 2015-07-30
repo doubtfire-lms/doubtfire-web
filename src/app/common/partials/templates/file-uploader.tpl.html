@@ -36,10 +36,9 @@
       </p>
     </div><!--/actual-file-->
   </div><!--/drop-zones-->
-  <div ng-show="readyToUpload()" class="upload-area text-center">
-    <button ng-show="uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary">
-      <p class="fa fa-cloud-upload fa-3x"></p>
-      <p>Upload</p>
+  <div ng-show="readyToUpload()" class="upload-area text-center clearfix">
+    <button ng-show="uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary pull-right">
+      <i class="fa fa-upload"></i> Upload
     </button><!--/upload-button-->
     <div ng-hide="uploadingInfo == null || uploadingInfo.complete" class="progress-area">
       <div class="icons">
