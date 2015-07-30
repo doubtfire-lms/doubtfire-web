@@ -8,12 +8,12 @@
         <label class="col-sm-3 control-label">Name</label>
         <input type="text" class="form-control col-sm-8" ng-model="task.name">
       </div><!--/name-->
-      
+
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Abbreviation</label>
         <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
   	  </div><!--/abbr-->
-  	  
+
   	  <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Grade</label>
         <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
@@ -25,7 +25,7 @@
   	    <label class="col-sm-3 control-label">Description</label>
         <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
   	  </div><!--/desc-->
-  	  
+
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Weighting</label>
         <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
@@ -34,12 +34,17 @@
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Group Task</label>
         <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
-      </div><!--/group task-->  	  
+      </div><!--/group task-->
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Restricted</label>
-        <input type="checkbox" class="form-control col-sm-8" ng-model="task.restrict_status_updates"/>
+        <button type="button" class="btn btn-default col-sm-1" ng-model="task.restrict_status_updates" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+          <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
+        </button>
+        <span class="help-block col-sm-6">
+          If true, the status cannot be changed by students after it has been assigned by staff
+        </span>
       </div><!--/restricted-->
-  	  
+
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Target Date</label>
         <div class="col-sm-8 input-group">
@@ -47,7 +52,7 @@
           <span class="input-group-btn">
             <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
-        </div> 
+        </div>
       </div><!--/target-date-->
 
       <div class="form-group" ng-required="isNew">

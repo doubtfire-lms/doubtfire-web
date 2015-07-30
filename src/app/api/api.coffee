@@ -37,14 +37,18 @@ angular.module("doubtfire.api", [
   resourcePlus "/projects/:id", { id: "@id" }
 )
 .factory("Unit", (resourcePlus, currentUser, $window, api) ->
-  result = resourcePlus "/units/:id", { id: "@id" }
-  result.getPortfoliosUrl = (unit) ->
-    "#{api}/submission/unit/#{unit.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
-  result.downloadPortfolios = (unit) ->
-    $window.open result.getPortfoliosUrl(unit)
-  result.taskUploadUrl = (unit) ->
+  Unit = resourcePlus "/units/:id", { id: "@id" }
+  Unit.getPortfoliosUrl = (unit) ->
+    "#{api}/submission/unit/#{unit?.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+  Unit.downloadPortfolios = (unit) ->
+    $window.open Unit.getPortfoliosUrl(unit)
+  Unit.taskUploadUrl = (unit) ->
     "#{api}/units/#{unit.id}/task_definitions/task_pdfs?auth_token=#{currentUser.authenticationToken}"
-  result
+  Unit.enrolStudentsCSVUrl = (unit) ->
+    "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
+  Unit.withdrawStudentsCSVUrl = (unit) ->
+    "#{api}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
+  Unit
 )
 .factory("UnitRole", (resourcePlus) ->
   resourcePlus "/unit_roles/:id", { id: "@id" }
@@ -75,13 +79,16 @@ angular.module("doubtfire.api", [
   Task.getTaskResourcesUrl = (unit, task_def) ->
     "#{api}/units/#{unit.id}/task_definitions/#{task_def.id}/task_resources.json?auth_token=#{currentUser.authenticationToken}"
 
+  Task.getTaskDefinitionBatchUploadUrl = (unit) ->
+    "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+
   Task
 )
 .factory("TaskComment", (resourcePlus) ->
   resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
 )
 .factory("TaskDefinition", (resourcePlus) ->
-  resourcePlus "/task_definitions/:id", { id: "@id" }
+  TaskDefinition = resourcePlus "/task_definitions/:id", { id: "@id" }
 )
 .factory("GroupMember", (resourcePlus) ->
   resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:group_id/members/:id", { id: "@id", group_id: "@group_id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
@@ -148,129 +155,6 @@ angular.module("doubtfire.api", [
 
   this.downloadFile =  ->
     $window.open csvUrl, "_blank"
-
-  return this
-)
-.service("TaskCSV", (api, $window, FileUploader, currentUser, alertService) ->
-  this.fileUploader = (scope) ->
-    fileUploader = new FileUploader {
-      scope: scope,
-      method: "POST",
-      url: "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=0"
-      queueLimit: 1
-    }
-    fileUploader.onBeforeUploadItem = (item) ->
-      # ensure this item will be uploading for this unit it...
-      item.url = fileUploader.url.replace(/unit_id=\d+/, "unit_id=#{fileUploader.unit.id}")
-
-    fileUploader.uploadTaskCSV = (unit) ->
-      fileUploader.unit = unit
-      fileUploader.uploadAll()
-
-    fileUploader.onSuccessItem = (item, response, status, headers) ->
-      newTasks = response.added
-      updatedTasks = response.updated
-      failedTasks = response.failed
-
-      if newTasks.length > 0
-        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
-        _.extend(fileUploader.scope.unit.task_definitions, newTasks)
-      if updatedTasks.length > 0
-        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
-        _.each updatedTasks, (td) ->
-          idx = _.findIndex fileUploader.scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
-          if idx >= 0
-            _.extend fileUploader.scope.unit.task_definitions[idx], td
-      if failedTasks.length > 0
-        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
-
-      fileUploader.clearQueue()
-
-    fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}")
-      fileUploader.clearQueue()
-
-    fileUploader
-
-  this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}", "_blank"
-
-  return this
-)
-.service("StudentEnrolmentCSV", (api, $window, FileUploader, currentUser, alertService) ->
-
-  this.fileUploader = (scope) ->
-    fileUploader = new FileUploader {
-      scope: scope,
-      method: "POST",
-      url: "#{api}/csv/units/0?auth_token=#{currentUser.authenticationToken}"
-      queueLimit: 1
-    }
-    fileUploader.onBeforeUploadItem = (item) ->
-      # ensure this item will be uploading for this unit it...
-      item.url = fileUploader.url.replace(/\d+\?/, "#{fileUploader.unit.id}?")
-
-    fileUploader.uploadStudentEnrolmentCSV = (unit) ->
-      fileUploader.unit = unit
-      fileUploader.uploadAll()
-
-    fileUploader.onSuccessItem = (item, response, status, headers) ->
-      newStudents = response
-      # at least one student?
-      if newStudents.length != 0
-        alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
-        fileUploader.scope.unit.students = fileUploader.scope.unit.students.concat(newStudents)
-      else
-        alertService.add("info", "No students need to be enrolled.", 4000)
-      fileUploader.clearQueue()
-
-    fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}")
-      fileUploader.clearQueue()
-
-    fileUploader
-
-  this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
-
-  return this
-)
-.service("StudentUnenrolCSV", (api, $window, FileUploader, currentUser, alertService) ->
-
-  this.fileUploader = (scope) ->
-    fileUploader = new FileUploader {
-      scope: scope,
-      method: "POST",
-      # 0 in the following url is relaced on upload -- ensure no other numbers :)
-      url: "#{api}/csv/units/0/withdraw?auth_token=#{currentUser.authenticationToken}"
-      queueLimit: 1
-    }
-    fileUploader.onBeforeUploadItem = (item) ->
-      # ensure this item will be uploading for this unit it...
-      item.url = fileUploader.url.replace(/\/0\//, "/#{fileUploader.unit.id}/")
-
-    fileUploader.uploadStudentWithdrawCSV = (unit) ->
-      fileUploader.unit = unit
-      fileUploader.uploadAll()
-
-    fileUploader.onSuccessItem = (item, response, status, headers) ->
-      withdrawnStudents = response
-      # at least one student?
-      if withdrawnStudents.length != 0
-        alertService.add("success", "Withdrawn #{withdrawnStudents.length} students.", 2000)
-        student.enrolled = false for student in fileUploader.scope.unit.students when student.student_id in withdrawnStudents
-      else
-        alertService.add("info", "No students were withdrawn.", 4000)
-      fileUploader.clearQueue()
-
-    fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}")
-      fileUploader.clearQueue()
-
-    fileUploader
-
-  this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}", "_blank"
 
   return this
 )

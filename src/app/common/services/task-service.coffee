@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, alertService, $q) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $q) ->
   #
   # The unit service object
   #
@@ -120,6 +120,21 @@ angular.module("doubtfire.services.tasks", [])
     return false if diffDays <= 0
     diffDays
 
+  taskService.deleteTask = (task, unit, callback = null) ->
+    TaskDefinition.delete( { id: task.id }).$promise.then (
+      (response) ->
+        unit.task_definitions = unit.task_definitions.filter (e) -> e != task
+        alertService.add("success", "Task Deleted", 2000)
+        callback?(response)
+    ),
+    (
+      (response) ->
+        if response.data.error?
+          alertService.add("danger", "Error: " + response.data.error, 6000)
+        else
+          alertService.add("danger", "Unexpected error connecting to Doubtfire.", 6000)
+    )
+
   taskService.indexOf = (status) ->
     _.indexOf(taskService.statusKeys, status)
 
@@ -129,10 +144,6 @@ angular.module("doubtfire.services.tasks", [])
     angular.forEach taskService.statusKeys, (sk) ->
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
-
-  taskService.groupSet = (groupSetId, unit) ->
-    groupSetId = +groupSetId # convert from str -> num if needed
-    _.find(unit.group_sets, (gs) -> gs.id is groupSetId) || { name: "Individual Work" }
 
   taskService.updateTaskStatus = (task, status) ->
     oldStatus = task.status

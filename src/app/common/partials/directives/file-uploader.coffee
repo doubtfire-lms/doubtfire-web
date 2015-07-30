@@ -10,7 +10,7 @@ angular.module('doubtfire.common.file-uploader', [])
     # E.g.:
     # { file0: { name: 'Silly Name Code', type: 'code'  },
     #   fileX: { name: 'Silly name Shot', type: 'image' } ... }
-    files: "="
+    files: '='
     # URL to where image is to be uploaded
     url: '='
     # Optional HTTP method used to post data (defaults to POST)
@@ -18,18 +18,18 @@ angular.module('doubtfire.common.file-uploader', [])
     # Other payload data to pass in the upload
     # E.g.:
     # { unit_id: 10, other: { key: data, with: [array, of, stuff] } ... }
-    payload: "="
+    payload: '=?'
     # Optional function to notify just prior to upload, enables injection of payload for example
-    onBeforeUpload: "="
+    onBeforeUpload: '=?'
     # Optional function to perform on success (with one response parameter)
-    onSuccess: '='
+    onSuccess: '=?'
     # Optional function to perform on failure (with one response parameter)
-    onFailure: '='
+    onFailure: '=?'
     # Optional function to perform when the upload is successful and about
     # to go back into its default state
-    onComplete: '='
+    onComplete: '=?'
     # This value is bound to whether or not the uploader is currently uploading
-    isUploading: '='
+    isUploading: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
