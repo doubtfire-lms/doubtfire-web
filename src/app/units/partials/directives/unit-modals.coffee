@@ -80,18 +80,18 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.isNew = isNew
 
   $scope.grades = gradeService.grades
-  
+
   # Datepicker opener
   $scope.open = ($event) ->
     $event.preventDefault()
     $event.stopPropagation()
     $scope.opened = true
-    
+
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
     newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
     $scope.task.upload_requirements.push newUpReq
-  
+
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
 
@@ -99,11 +99,11 @@ angular.module('doubtfire.units.partials.modals', [])
     newLength = $scope.task.plagiarism_checks.length + 1
     newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
     $scope.task.plagiarism_checks.push newCheck
-  
+
   $scope.removeCheck = (check) ->
     $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
 
-  
+
   populate_task = (oldTask, newTask) ->
     _.extend(oldTask, newTask)
     oldTask.abbreviation = newTask.abbreviation
@@ -118,22 +118,8 @@ angular.module('doubtfire.units.partials.modals', [])
     oldTask.target_date = newTask.target_date
 
   $scope.deleteTask = () ->
-    TaskDefinition.delete( { id: $scope.task.id }).$promise.then (
-      (response) ->
-        $modalInstance.close(response)
-        $scope.unit.task_definitions = $scope.unit.task_definitions.filter (e) -> e != $scope.task
+    taskService.deleteTask($scope.task, $scope.unit, $modalInstance.close)
 
-        alertService.add("success", "Task Deleted", 2000)
-    ),
-    (
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-        else
-          alertService.add("danger", "Unexpected error connecting to Doubtfire.", 6000)
-    )
-
-  
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
     task = {}
@@ -151,7 +137,7 @@ angular.module('doubtfire.units.partials.modals', [])
     if task.target_date && task.target_date.getMonth
       tgt = task.target_date
       task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-    
+
     if $scope.isNew
       TaskDefinition.create( { task_def: task } ).$promise.then (
         (response) ->

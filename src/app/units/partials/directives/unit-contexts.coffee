@@ -124,7 +124,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
-  controller: ($scope, $rootScope, Unit, UnitRole, alertService) ->
+  controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
     temp = []
     users = []
 
@@ -157,29 +157,20 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       staffUser = $scope.findStaffUser(staff.user_id)
 
     $scope.groupSetName = (id) ->
-      gs = _.find($scope.unit.group_sets, (gs) -> gs.id == id)
-      return gs.name if gs
+      groupService.groupSetName(id, $scope.unit)
 
 )
 .directive('taskAdminUnitContext', ->
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, TaskCSV, Unit, gradeService, alertService) ->
-    $scope.tasksFileUploader = TaskCSV.fileUploader $scope
-
+  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService) ->
     $scope.grades = gradeService.grades
-
-    $scope.submitTasksUpload = () ->
-      $scope.tasksFileUploader.uploadTaskCSV($scope.unit)
-
-    $scope.requestTasksExport = () ->
-      TaskCSV.downloadFile($scope.unit)
 
     # Pagination details
     $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 5
+    $scope.maxSize = 7
+    $scope.pageSize = 7
 
     # Modal Events
     $scope.editTask = (task) ->
@@ -229,16 +220,35 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           unit: -> $scope.unit
         }
 
+    $scope.deleteTask = (task) ->
+      taskService.deleteTask(task, $scope.unit)
+
     $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
     $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
-    $scope.isTaskPDFUploading = null
 
     $scope.onTaskPDFSuccess = (response) ->
       alertService.add("success", "Files uploaded", 2000)
       $scope.filesUploaded = response
-    
-    $scope.onTaskPDFComplete = ->
-      $scope.isTaskPDFUploading = null
+
+    $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
+    $scope.batchTaskUrl = ->
+      Task.getTaskDefinitionBatchUploadUrl($scope.unit)
+    $scope.onBatchTaskSuccess = (response) ->
+      newTasks = response.added
+      updatedTasks = response.updated
+      failedTasks = response.failed
+
+      if newTasks.length > 0
+        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
+        _.extend($scope.unit.task_definitions, newTasks)
+      if updatedTasks.length > 0
+        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
+        _.each updatedTasks, (td) ->
+          idx = _.findIndex $scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
+          if idx >= 0
+            _.extend $scope.unit.task_definitions[idx], td
+      if failedTasks.length > 0
+        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
 
 )
 .directive('adminUnitContext', ->
@@ -285,6 +295,12 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           tutors: -> $scope.unit.staff
           unit: -> $scope.unit
         }
+
+    $scope.deleteTutorial = (tutorial) ->
+      # TODO: No endpoint for this yet
+      alert "Functionality coming soon!"
+      $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+
     $scope.createTutorial = ->
       d = new Date()
       d.setHours(8)
@@ -306,20 +322,30 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, StudentEnrolmentCSV, StudentUnenrolCSV, Project, alertService) ->
-    # TODO: limit scope for duplicate method names (i.e., $scope.requestExport
-    # in this scope vs. $scope.requestExport in Task Admin Unit Context)
-    $scope.seFileUploader = StudentEnrolmentCSV.fileUploader $scope
-    $scope.withdrawFileUploader = StudentUnenrolCSV.fileUploader $scope
+  controller: ($scope, Unit, Project, alertService) ->
+    $scope.batchFiles = ->
+    $scope.batchEnrolmentUrl = -> Unit.enrolStudentsCSVUrl $scope.unit
+    $scope.batchWithdrawUrl  = -> Unit.withdrawStudentsCSVUrl $scope.unit
 
-    $scope.submitSEUpload = () ->
-      $scope.seFileUploader.uploadStudentEnrolmentCSV($scope.unit)
+    $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
 
-    $scope.submitWithdrawUpload = () ->
-      $scope.withdrawFileUploader.uploadStudentWithdrawCSV($scope.unit)
+    $scope.onBatchEnrolSuccess = (response) ->
+      newStudents = response
+      # at least one student?
+      if newStudents.length > 0
+        alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
+        $scope.unit.students = $scope.unit.students.concat(newStudents)
+      else
+        alertService.add("info", "No students need to be enrolled.", 4000)
 
-    $scope.requestSEExport = () ->
-      StudentEnrolmentCSV.downloadFile($scope.unit)
+    $scope.onBatchWithdrawSuccess = (response) ->
+      withdrawnStudents = response
+      # at least one student?
+      if withdrawnStudents.length > 0
+        alertService.add("success", "Withdrew #{withdrawnStudents.length} students.", 2000)
+        student.enrolled = false for student in $scope.unit.students when student.student_id in withdrawnStudents
+      else
+        alertService.add("info", "No students need to be withdrawn.", 4000)
 
     change_enrolment = (student, value) ->
       Project.update { id: student.project_id, enrolled: value }, (project) ->

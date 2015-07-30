@@ -1,7 +1,7 @@
 <div class="file-upload-area">
   <div ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones">
     <h3 class="file-title">
-      {{uploadZones.length == 0 ? '' : $index + 1}} - {{upload.display.name}}
+      {{uploadZones.length == 1 ? '' : $index + 1 + ' -'}} {{upload.display.name}}
     </h3>
     <div ngf-select ngf-drop
       ng-show="upload.model == null || upload.model.length == 0"

@@ -100,7 +100,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     activeTask: '='
     submittedTasks: '='
     assessingUnitRole: '='
-  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService) ->
+  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, TaskComment, Task, Project, taskService, groupService, alertService, projectService) ->
 
     #
     # Comment code
@@ -190,8 +190,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.activeStatusData = ->
       $scope.statusData($scope.activeTask)
 
-    $scope.getGroupSet = (gsid) ->
-      taskService.groupSet(gsid, $scope.unit)
+    $scope.groupSetName = (id) ->
+      groupService.groupSetName(id, $scope.unit)
 
     $scope.hideGroupSetName = ->
       gsNames = _.pluck $scope.unit.group_sets.id
