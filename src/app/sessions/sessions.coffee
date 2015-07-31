@@ -169,6 +169,15 @@ angular.module("doubtfire.sessions", [
   auth
 ).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie) ->
 
+  isIE = ->
+    window.navigator.appName is "Microsoft Internet Explorer"
+  ieVersion = ->
+    matches = new RegExp(" MSIE ([0-9].[0-9]);").exec(window.navigator.userAgent)
+    return parseInt(matches[1].replace(".0", "")) if matches? and matches.length > 1
+    true
+
+  $scope.isIE = isIE() and ieVersion() < 11 # Support IE11
+
   $scope.session = { remember_me: true }
 
   # April Fools Easter Egg :-)

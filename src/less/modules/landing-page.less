@@ -12,6 +12,7 @@ body > .container-fluid > .row > div[ui-view="main"], .landing-page {
 .landing-page {
   display: flex;
   display: -webkit-flex;
+  display: -ms-flex;
   -webkit-flex-wrap: wrap;
           flex-wrap: wrap;
   -webkit-align-content: center;
@@ -27,7 +28,7 @@ body > .container-fluid > .row > div[ui-view="main"], .landing-page {
     .fade-in(1s);
     text-align: center;
     margin-bottom: 0.5em;
-    i {
+    i.logo {
       margin: 0 auto 0.5em auto;
       width: 3em;
       height: 3em;
@@ -49,4 +50,20 @@ footer.about-doubtfire {
   a {
     color: #ccc;
   }
+}
+
+.no-ie {
+  main {
+    margin: 10% auto;
+  }
+  .logo a, a:hover {
+    text-decoration: none;
+  }
+  .upgrade {
+    font-size: 1.2em;
+    text-align: center;
+  }
+}
+.no-ie + .landing-page {
+  display: none;
 }
