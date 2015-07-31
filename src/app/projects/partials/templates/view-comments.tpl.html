@@ -3,7 +3,7 @@
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment" ng-repeat="comment in activeTask.comments">
+  <div class="comment col-sm-12" ng-repeat="comment in activeTask.comments">
     <div class="comment-details col-md-2">
       <span class="comment-by">
         {{comment.comment_by}}
@@ -12,9 +12,13 @@
         {{comment.created_at | date: 'd MMM yyyy'}}
       </span>
     </div>
-    <div class="comment-text col-md-10">
+    <div class="comment-text col-md-9">
       <div class="col-md-11">
-        {{comment.comment}}
+        <p>{{comment.comment}}</p>
+        <a ng-if="comment.comment | test: 'https?:\/\/.+\.(gif|jpe?g|png)': 'i'" ng-href="{{comment.comment}}">
+          <img ng-src="{{comment.comment}}">
+        </a>
+        </div>
       </div>
       <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)">
         <i class="fa fa-times-circle"></i>
