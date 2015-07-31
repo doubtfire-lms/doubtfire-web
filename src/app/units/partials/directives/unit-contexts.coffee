@@ -322,12 +322,19 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, Unit, Project, alertService) ->
+  controller: ($scope, $modal, Unit, Project, alertService) ->
     $scope.batchFiles = ->
     $scope.batchEnrolmentUrl = -> Unit.enrolStudentsCSVUrl $scope.unit
     $scope.batchWithdrawUrl  = -> Unit.withdrawStudentsCSVUrl $scope.unit
 
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
+
+    $scope.showEnrolModal = () ->
+      $modal.open
+        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
+        controller: 'EnrolStudentModalCtrl'
+        resolve:
+          unit: -> $scope.unit
 
     $scope.onBatchEnrolSuccess = (response) ->
       newStudents = response

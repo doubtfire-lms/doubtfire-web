@@ -8,15 +8,21 @@
                     </h3>
                     Summary of students enrolled in this unit
                 </div>
-                <form role="search" class="pull-right form-horizontal">
-                    <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
-                    <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length != 0">
-                        Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
-                    </p>
-                    <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length == 0">
-                        No students found.
-                    </p>
-                </form>
+                <div class="pull-right">
+                    <form style="margin-right: 1ex; display: inline-block" ng-hide="unit.students.length > 0"  role="search" class="form-horizontal">
+                        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
+                        <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length != 0">
+                            Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
+                        </p>
+                        <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length == 0">
+                            No students found.
+                        </p>
+                    </form>
+                    <button class="btn btn-success" ng-click="showEnrolModal()">
+                        <i class="fa fa-user"></i>
+                        <i class="fa fa-plus"></i> Enrol Student
+                    </button>
+                </div>
             </div>
             <div class="panel-body">
                 <div ng-hide="unit.students.length > 0" class="callout callout-info">There are no students enrolled in this unit</div>
@@ -74,7 +80,7 @@
                     </table><!--/enrolment-table-->
                 </div>
             </div>
-            <div class="panel-footer text-center">
+            <div class="panel-footer text-center" ng-show="unit.students.length > 0">
                 <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
             </div>
         </div>
