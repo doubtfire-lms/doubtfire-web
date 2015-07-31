@@ -1,7 +1,30 @@
-<div class="container landing-page">
+<div ng-if="isIE" class="landing-page no-ie">
+  <main>
+    <h1 class="logo">
+      <p>
+        <a href="http://www.apple.com/safari/">
+          <i tooltip="Safari is compatible with Doubtfire" class="fa fa-safari text-primary"></i>
+        </a>
+        <a href="http://www.google.com/chrome">
+          <i tooltip="Chrome is compatible with Doubtfire" class="fa fa-chrome text-primary"></i>
+        </a>
+        <a href="http://www.firefox.com/">
+          <i tooltip="Firefox is compatible with Doubtfire" class="fa fa-firefox text-primary"></i>
+        </a>
+        <a href="http://browsehappy.com">
+          <i tooltip="This version of Internet Explorer is not compatible with Doubtfire" class="fa fa-internet-explorer text-danger"></i>
+        </a>
+      </p>
+      Doubtfire
+    </h1>
+    <p class="upgrade"> To use Doubtfire, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
+  </main>
+</div>
+
+<div ng-if="!isIE" class="container landing-page">
   <main>
   	<h1 class="logo">
-      <i></i> Doubtfire
+      <i class="logo"></i> Doubtfire
     </h1>
   	<form class="form-signin well" name="form" ng-submit="signIn()">
   		<input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
