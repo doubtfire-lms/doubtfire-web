@@ -14,7 +14,10 @@
           </button>
       </div>
       <div class="panel-body tasks-overview">
-        <table class="table table-condensed table-hover table-pointer">
+        <div class="callout callout-info" ng-hide="unit.task_definitions.length > 0">
+          This unit has no tasks
+        </div>
+        <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer">
           <thead>
             <tr>
               <th>Name</th>
@@ -64,7 +67,7 @@
           </tbody>
         </table><!--/task-table-->
       </div>
-      <div class="panel-footer text-center">
+      <div class="panel-footer text-center" ng-show="unit.task_definitions.length > 0">
         <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
       </div>
     </div><!--/tasks-overview-->
