@@ -20,7 +20,7 @@ angular.module("doubtfire.services.group-service", [  ])
     task.definition.group_set?
 
   groupService.groupSetName = (id, unit) ->
-    gs = _.find(unit.group_sets, (gs) -> gs.id is id)
+    gs = _.find(unit.group_sets, (gs) -> gs.id is parseInt(id))
     if gs then gs.name else "Individual Work"
 
   groupService
