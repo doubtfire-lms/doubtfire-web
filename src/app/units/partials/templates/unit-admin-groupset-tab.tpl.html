@@ -2,18 +2,11 @@
   <div class="col-sm-9">
     <div class="col-sm-12">
       <div class="panel panel-primary">
-        <div class="panel-heading clearfix">
-          <div class="pull-left col-sm-6" style="padding: 0">
-            <h3 class="panel-title">
-              Group Sets
-            </h3>
-            A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
-          </div>
-          <button class="btn pull-right btn-success add-group-set" ng-click="addGroupSet()">
-            <i class="fa fa-users"></i>
-            <i class="fa fa-plus"></i>
-            New Group Set
-          </button>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Group Sets
+          </h3>
+          A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
         </div>
         <div class="groupset-selector panel-body">
           <div ng-hide="unit.group_sets.length > 0">
@@ -21,7 +14,7 @@
               This unit has no group sets
             </div>
           </div>
-          <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover groupsets">
+          <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover table-pointer groupsets">
             <thead>
               <tr>
                 <th><span tooltip="Name of the group set">Name</span></th>
@@ -74,6 +67,13 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="panel-footer clearfix">
+          <button class="btn pull-right btn-success" ng-click="addGroupSet()">
+            <i class="fa fa-users"></i>
+            <i class="fa fa-plus"></i>
+            New Group Set
+          </button>
         </div>
       </div>
     </div>
