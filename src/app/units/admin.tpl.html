@@ -1,32 +1,40 @@
 <div class="root-view" id="admin-units">
-	<div class="panel panel-default" ng-show="units.length > 0">
+	<div class="panel panel-primary" ng-show="units.length > 0">
     <div class="panel-heading">
       <h4 class="panel-title">Units</h4>
+      Listed area all units registered with Doubtfire
     </div>
-   <table class="table table-condensed table-hover">
-     <thead>
-       <tr>
-         <th>Code</th>
-         <th>Name</th>
-         <th>Start Date</th>
-         <th>End Date</th>
-         <th>Active</th>
+    <div class="panel-body">
+      <table class="table table-condensed table-hover table-pointer">
+       <thead>
+         <tr>
+           <th>Code</th>
+           <th>Name</th>
+           <th>Start Date</th>
+           <th>End Date</th>
+           <th>Active</th>
+         </tr>
+       </thead>
+       <tbody>
+       <tr ng-repeat="unit in units" ng-click="showUnit(unit)" >
+         <td>{{unit.code}}</td>
+         <td>{{unit.name}}</td>
+         <td>{{unit.start_date | date: short }}</td>
+         <td>{{unit.end_date | date: short }}</td>
+         <td>
+           <i ng-show="unit.active" class="fa fa-check"></i>
+           <i ng-hide="unit.active" class="fa fa-times"></i>
+         </td>
        </tr>
-     </thead>
-     <tbody>
-     <tr ng-repeat="unit in units" ng-click="showUnit(unit)" >
-       <td>{{unit.code}}</td>
-       <td>{{unit.name}}</td>
-       <td>{{unit.start_date | date: short }}</td>
-       <td>{{unit.end_date | date: short }}</td>
-       <td>
-         <span ng-show="unit.active" class="glyphicon glyphicon-ok text-success"></span>
-         <span ng-hide="unit.active" class="glyphicon glyphicon-remove
-           text-danger" ></span>
-       </td>
-     </tr>
-     </tbody>
-   </table>
+       </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <button class="btn btn-success pull-right" ng-click="createUnit()">
+        <i class="fa fa-university"></i>
+        <i class="fa fa-plus"></i>
+         Create Unit
+      </button>
+    </div>
   </div>
-  <button class="btn btn-primary" ng-click="createUnit()">Create Unit</button>
 </div>
