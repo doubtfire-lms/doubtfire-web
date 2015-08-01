@@ -94,11 +94,6 @@ a {
   }
 }
 
-.panel-body + .panel-heading {
-  border-top: 1px solid #ddd !important;
-  border-radius: 0 !important;
-}
-
 table.table-pointer {
   tr {
     cursor: pointer;
@@ -111,6 +106,18 @@ table td {
 
 .panel-footer .pagination {
   margin: 0;
+}
+
+.panel-body + .panel-heading {
+  border-top: 1px solid #ddd !important;
+  border-radius: 0 !important;
+}
+
+.panel-heading > .pull-left {
+  padding-left: 0 !important; // Override for col-sm-*
+}
+.panel-heading > .pull-right {
+  padding-right: 0 !important; // Override for col-sm-*
 }
 
 .center-full-screen {

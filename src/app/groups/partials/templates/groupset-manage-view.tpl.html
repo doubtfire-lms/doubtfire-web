@@ -1,7 +1,7 @@
 <div>
   <div class="groupset-manage-view">
     <div class="group-listings col-sm-6" ng-class="{'col-sm-offset-3': !selectedGroup}">
-      <div class="panel panel-default">
+      <div class="panel panel-primary">
         <div class="clearfix info-area panel-heading">
           <div class="col-sm-8 pull-left">
             <h4 class="panel-title">
@@ -10,14 +10,14 @@
             Total of {{groups.length}} Group{{groups.length == 1 ? '' : 's'}}
           </div>
           <div class="pull-right col-sm-4 text-right multi-group-actions">
-            <p class="btn-group">
-              <label class="btn btn-primary col-sm-6" ng-model="staffFilter" btn-radio="'all'">
+            <div class="btn-group">
+              <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'all'">
                 <i class="fa fa-university" tooltip="Show groups from every tutorial"></i>
               </label>
-              <label class="btn btn-primary col-sm-6" ng-model="staffFilter" btn-radio="'mine'">
+              <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'mine'">
                 <i class="fa fa-pencil" tooltip="Show groups from only my tutorials"></i>
               </label>
-            </p>
+            </div>
           </div>
         </div>
         <div class="panel-body">
