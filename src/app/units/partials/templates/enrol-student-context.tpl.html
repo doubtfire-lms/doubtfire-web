@@ -9,7 +9,7 @@
                     Summary of students enrolled in this unit
                 </div>
                 <div class="pull-right">
-                    <form style="margin-right: 1ex; display: inline-block" ng-hide="unit.students.length > 0"  role="search" class="form-horizontal">
+                    <form ng-hide="unit.students.length > 0"  role="search" class="form-horizontal">
                         <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
                         <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length != 0">
                             Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
@@ -18,10 +18,6 @@
                             No students found.
                         </p>
                     </form>
-                    <button class="btn btn-success" ng-click="showEnrolModal()">
-                        <i class="fa fa-user"></i>
-                        <i class="fa fa-plus"></i> Enrol Student
-                    </button>
                 </div>
             </div>
             <div class="panel-body">
@@ -80,8 +76,12 @@
                     </table><!--/enrolment-table-->
                 </div>
             </div>
-            <div class="panel-footer text-center" ng-show="unit.students.length > 0">
-                <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+            <div class="panel-footer clearfix" ng-show="unit.students.length > 0">
+                <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+                <button class="btn btn-success pull-right" ng-click="showEnrolModal()">
+                    <i class="fa fa-user"></i>
+                    <i class="fa fa-plus"></i> Enrol Student
+                </button>
             </div>
         </div>
     </div><!--/student-list-->
