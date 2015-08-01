@@ -71,8 +71,10 @@
         </tbody>
     </table>
   </div>
-  <div class="panel-body project-show" ng-if="fullscreen && activeStudent">
+  <div class="panel-body project-show" ng-if="fullscreen">
+    <p>Click a student to view their status in detail</p>
     <student-project
+      ng-if="activeStudent"
       class="root-view"
       scope="student-project-scope"
       project-id="activeStudent.project_id"
