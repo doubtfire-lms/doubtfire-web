@@ -11,14 +11,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   scope:
     unitRole: "=unitRole"
     unit: "=unit"
-    studentFilter: "=studentFilter"
     unitLoaded: "=unitLoaded"
 
-  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
-    # We need to ensure that we have a height for the lazy loaded accordion contents
-    $scope.accordionHeight = 100
-    # Accordion ready is used to show the accordions
-    $scope.accordionReady = false
+  controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
+    $scope.studentFilter = 'myStudents' # Mine by default
+
     $scope.grades = gradeService.grades
     $scope.unitService = unitService
 
@@ -70,31 +67,34 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       )
       result
 
-    # The following is called when the unit is loaded
-    prepAccordion = () ->
-      # 5 tasks per row, each 32 pixels in size
-      $scope.accordionHeight = $scope.unit.taskCount() / 3 * 38 + 30
-      $scope.accordionReady = true
-
-    if ! $scope.unitLoaded
-      unwatchFn = $scope.$watch( ( () -> $scope.unitLoaded ), (value) ->
-        if ( value )
-          prepAccordion()
-          unwatchFn()
-        else
-          $scope.accordionReady = false
-      )
-    else
-      prepAccordion()
+    #
+    # View a student
+    #
+    $scope.viewStudent = (student) ->
+      console.log {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
+      if $scope.fullscreen
+        $scope.activeStudent = student
+      else
+        $state.go "projects#show", {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
 
     $scope.reverse = false
     $scope.statusClass = taskService.statusClass
-    $scope.barLargerZero = (bar) -> bar.value > 0
+    $scope.statusName = (status) ->
+      taskService.statusLabels[status.replace(/\-/g, '_')]
 
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
     $scope.pageSize = 15
+
+    # Initially not full screen
+    $scope.fullscreen = false
+
+    $scope.$watch 'fullscreen', (newValue) ->
+      if newValue is true
+        $scope.pageSize = 9999 # allow infinite scroll
+      else
+        $scope.pageSize = 15 # default size
 
     update_project_details = (student, project) ->
       projectService.updateTaskStats(student, project.stats)
