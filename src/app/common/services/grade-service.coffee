@@ -13,6 +13,12 @@ angular.module("doubtfire.services.grades", [  ])
     'High Distinction'
   ]
 
+  gradeService.gradeAcronyms =
+    'Pass': 'P'
+    'Credit': 'C'
+    'Distinction': 'D'
+    'High Distinction': 'HD'
+
   gradeService.gradeFor = (project) ->
     gradeService.grades[project.target_grade]
 
