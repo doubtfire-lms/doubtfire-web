@@ -42,88 +42,35 @@ angular.module("doubtfire.projects", [
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
 )
-.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser, projectService) ->
+.controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole) ->
   if $stateParams.authToken?
     # $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
-
-  $scope.unitLoaded = false
   $scope.studentProjectId = $stateParams.projectId
-  $scope.projectLoaded = false
-
-  #
-  # Switcher to task view
-  #
-  $scope.activeTab =
-    progress:   true
-    feedback:   false
-    groups:     false
-    lablist:    false
-    portfolio:  false
-
-  $scope.showTaskView = (task) ->
-    if not (task or $scope.selectedTask)
-      task = _.find _.sortBy($scope.submittedTasks, 'seq'), (t) -> t.definition.target_grade <= $scope.project.target_grade
-    else if not task and $scope.selectedTask
-      task = $scope.selectedTask
-
-    $scope.activeTab[1] = true
-    $scope.activeTab[0] = $scope.activeTab[2] = $scope.activeTab[3] = false
-    $scope.selectedTask = task
-
+  # Provided show task id
+  if $stateParams.showTaskId?
+    $scope.showTaskId = parseInt($stateParams.showTaskId, 10)
+  $scope.unitRole = $stateParams.unitRole
+  # Bound to inner-directive
+  $scope.assessingUnitRole = null
+  # Bound to inner-directive
+  $scope.project = null
+  # Bound to inner-directive
+  $scope.unit = null
   #
   # Batch Discuss button
   #
   $scope.transitionWeekEnd = () ->
+    # Reject if there is no project
+    return unless $scope.project?
     Project.update(
       { id: $scope.project.project_id, trigger: "trigger_week_end" }
       (project) ->
         projectService.updateTaskStats($scope.project, project.stats)
         # Update the task stats
-        _.each $scope.tasks, (task) =>
+        _.each $scope.project.tasks, (task) =>
           task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
         alertService.add("success", "Status updated.", 2000)
       (response) -> alertService.add("danger", response.data.error, 6000)
     )
-
-  #
-  # Get the project, which loads all subsequent views
-  #
-  Project.get { id: $scope.studentProjectId }, (project) ->
-    # Clear any page-specific menus
-    headerService.clearMenus()
-
-    # Provide access to the Project's details
-    $scope.project = project # the selected unit role
-
-    $scope.submittedTasks = []
-
-    if project
-      unitService.getUnit project.unit_id, false, false, (unit) ->
-        $scope.unit = unit # the unit related to the role
-        unit.extendStudent project
-        $scope.tasks = project.tasks
-
-        # $scope.submittedTasks = _.filter($scope.tasks, (task) -> _.contains(['ready_to_mark', 'discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo'], task.status))
-        # $scope.submittedTasks = _.filter($scope.tasks, (task) -> task.has_pdf )
-        $scope.submittedTasks = _.sortBy($scope.tasks, (t) -> t.task_abbr).reverse()
-
-        #
-        # Show task if in url
-        #
-        if $stateParams.showTaskId
-          id = parseInt($stateParams.showTaskId, 10)
-          task = _.find $scope.submittedTasks, (task) -> task.id == id
-          $scope.showTaskView(task)
-
-        $scope.unitLoaded = true
-
-      if $stateParams.unitRole?
-        UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
-          if unitRole.unit_id == project.unit_id
-            $scope.assessingUnitRole = unitRole
-
-      $scope.burndownData = project.burndown_chart_data
-      $scope.projectLoaded = true
-  # end get project
 )
