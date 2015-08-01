@@ -79,6 +79,9 @@ angular.module("doubtfire.projects", [
       { id: $scope.project.project_id, trigger: "trigger_week_end" }
       (project) ->
         projectService.updateTaskStats($scope.project, project.stats)
+        # Update the task stats
+        _.each $scope.tasks, (task) =>
+          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
         alertService.add("success", "Status updated.", 2000)
       (response) -> alertService.add("danger", response.data.error, 6000)
     )
