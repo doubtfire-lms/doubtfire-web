@@ -123,40 +123,11 @@ angular.module("doubtfire.api", [
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
 )
-.factory("User", (resourcePlus) ->
-  resourcePlus "/users/:id", { id: "@id" }
-)
-.service("UserCSV", (api, $window, FileUploader, currentUser, alertService) ->
-  csvUrl = "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
-
-  fileUploader = null
-
-  this.fileUploader = (scope) ->
-    # singleton per scope
-    if !fileUploader? && scope
-      fileUploader = new FileUploader {
-        scope: scope,
-        url: csvUrl,
-        method: "POST",
-        queueLimit: 1
-      }
-      fileUploader.onSuccessItem = (item, response, status, headers)  ->
-        if response.length != 0
-          alertService.add("success", "Added #{response.length} users.", 2000)
-          fileUploader.scope.users = fileUploader.scope.users.concat(response)
-        else
-          alertService.add("info", "No users need to be added.", 4000)
-        fileUploader.clearQueue()
-
-      fileUploader.onErrorItem = (item, response, status, headers) ->
-        alertService.add("danger", "File Upload Failed: " + response.error, 6000)
-        fileUploader.clearQueue()
-    fileUploader
-
-  this.downloadFile =  ->
-    $window.open csvUrl, "_blank"
-
-  return this
+.factory("User", (resourcePlus, currentUser, api) ->
+  User = resourcePlus "/users/:id", { id: "@id" }
+  User.csvUrl = ->
+    "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
+  return User
 )
 .service("TutorMarker", (api, $window, FileUploader, currentUser, alertService) ->
 
