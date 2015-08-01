@@ -112,8 +112,10 @@
         <h3 class="panel-title">Export <strong>{{selectedGroupset.name}}</strong></h3>
         Download a CSV of all teams in the {{selectedGroupset.name}} Group Set.
       </div>
-      <div class="panel-body clearfix">
-        <button class="btn btn-primary pull-right" ng-click="downloadGroupCSV()"><i class="fa fa-download"></i> Download CSV</button>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadGroupCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
       </div>
     </div>
   </div><!-- IO panels -->

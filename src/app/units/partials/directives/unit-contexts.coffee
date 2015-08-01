@@ -323,11 +323,16 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
   controller: ($scope, $modal, Unit, Project, alertService) ->
-    $scope.batchFiles = ->
-    $scope.batchEnrolmentUrl = -> Unit.enrolStudentsCSVUrl $scope.unit
-    $scope.batchWithdrawUrl  = -> Unit.withdrawStudentsCSVUrl $scope.unit
-
-    $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
+    $scope.activeBatchStudentType = 'enrol' # Enrol by default
+    $scope.batchStudentTypes =
+      enrol:
+        batchUrl: -> Unit.enrolStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Enrol CSV Data', type: 'csv'  } }
+        onSuccess: onBatchEnrolSuccess
+      withdraw:
+        batchUrl: -> Unit.withdrawStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
+        onSuccess: onBatchWithdrawSuccess
 
     $scope.showEnrolModal = () ->
       $modal.open
@@ -336,7 +341,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         resolve:
           unit: -> $scope.unit
 
-    $scope.onBatchEnrolSuccess = (response) ->
+    onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
       if newStudents.length > 0
@@ -345,7 +350,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       else
         alertService.add("info", "No students need to be enrolled.", 4000)
 
-    $scope.onBatchWithdrawSuccess = (response) ->
+    onBatchWithdrawSuccess = (response) ->
       withdrawnStudents = response
       # at least one student?
       if withdrawnStudents.length > 0
