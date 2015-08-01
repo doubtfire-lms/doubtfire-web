@@ -40,8 +40,6 @@ angular.module("doubtfire.api", [
   Unit = resourcePlus "/units/:id", { id: "@id" }
   Unit.getPortfoliosUrl = (unit) ->
     "#{api}/submission/unit/#{unit?.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
-  Unit.downloadPortfolios = (unit) ->
-    $window.open Unit.getPortfoliosUrl(unit)
   Unit.taskUploadUrl = (unit) ->
     "#{api}/units/#{unit.id}/task_definitions/task_pdfs?auth_token=#{currentUser.authenticationToken}"
   Unit.enrolStudentsCSVUrl = (unit) ->
@@ -81,6 +79,11 @@ angular.module("doubtfire.api", [
 
   Task.getTaskDefinitionBatchUploadUrl = (unit) ->
     "#{api}/csv/task_definitions?auth_token=#{currentUser.authenticationToken}&unit_id=#{unit.id}"
+
+  Task.getTaskMarkingUrl = (unit) ->
+    "#{api}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
+
+  Task.generateMarkingSubmissionUrl = ->
 
   Task
 )
@@ -128,40 +131,6 @@ angular.module("doubtfire.api", [
   User.csvUrl = ->
     "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
   return User
-)
-.service("TutorMarker", (api, $window, FileUploader, currentUser, alertService) ->
-
-  this.fileUploader = (scope) ->
-    fileUploader = new FileUploader {
-      scope: scope,
-      method: "POST",
-      url: "#{api}/submission/assess.json?unit_id=#{scope.unit.id}&auth_token=#{currentUser.authenticationToken}"
-      queueLimit: 1
-    }
-
-    fileUploader.uploadZip = () ->
-      fileUploader.uploadAll()
-
-    fileUploader.onSuccessItem = (item, response, status, headers) ->
-      # markedTasks = response
-      # # at least one student?
-      # if markedTasks.length != 0
-      alertService.add("success", "Uploaded marked tasks.", 2000)
-      # else
-      #   alertService.add("info", "No tasks were uploaded.", 2000)
-      fileUploader.clearQueue()
-      fileUploader.scope.taskUploadResults = response
-
-    fileUploader.onErrorItem = (evt, response, item, headers) ->
-      alertService.add("danger", "File Upload Failed: #{response.error}")
-      fileUploader.clearQueue()
-
-    fileUploader
-
-  this.downloadFile = (unit) ->
-    $window.open "#{api}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
-
-  return this
 )
 .service("TaskCompletionCSV", (api, $window, currentUser) ->
   this.downloadFile = (unit) ->
