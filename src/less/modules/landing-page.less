@@ -1,26 +1,3 @@
-html {
-  height:  calc(~"100% - " (@navbar-height));
-}
-body,
-body > .container-fluid,
-body > .container-fluid > .row,
-body > .container-fluid > .row > div[ui-view="main"],
-body > .container-fluid > .row > div[ui-view="main"], .landing-page {
-  height: 100%;
-}
-
-.landing-page {
-  display: flex;
-  display: -webkit-flex;
-  display: -ms-flex;
-  -webkit-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-align-content: center;
-          align-content: center;
-  -webkit-justify-content: center;
-          justify-content: center;
-}
-
 .landing-page > main {
 	width: 330px;
   .slide-down(1s);
