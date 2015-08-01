@@ -128,3 +128,67 @@
     flex-basis: 100%;
   }
 }
+
+/* Extra large columns */
+
+// xLarge screen / wide desktop
+@screen-xl:                  1440px;
+@screen-xl-min:              @screen-xl;
+//** Deprecated `@screen-lg-desktop` as of v3.0.1
+@screen-xl-desktop:          @screen-xl-min;
+// So media queries don't overlap when required, provide a maximum
+@screen-lg-max:              (@screen-xl-min - 1);
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+// xLarge screen / wide desktop
+@container-xlarge-desktop:      (@screen-xl + @grid-gutter-width);
+//** For `@screen-xl-min` and up.
+@container-xl:                 @container-xlarge-desktop;
+
+// Container widths
+//
+// Set the container width, and override it for fixed navbars in media queries.
+
+.container {
+  .container-fixed();
+  @media (min-width: @screen-xl-min) {
+    width: @container-xl;
+  }
+}
+
+// xLarge grid
+//
+// Columns, offsets, pushes, and pulls for the xlarge desktop device range.
+
+@media (min-width: @screen-xl-min) {
+  .make-grid(xl);
+}
+
+// Generate the xlarge columns
+.make-xl-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  @media (min-width: @screen-xl-min) {
+    float: left;
+    width: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-offset(@columns) {
+  @media (min-width: @screen-xl-min) {
+    margin-left: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-push(@columns) {
+  @media (min-width: @screen-xl-min) {
+    left: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-pull(@columns) {
+  @media (min-width: @screen-xl-min) {
+    right: percentage((@columns / @grid-columns));
+  }
+}
