@@ -34,12 +34,12 @@ angular.module("doubtfire", [
   'joostfunkekupper'    # Joost Funke Kupper
   'rohanliston'         # Rohan Liston
   'lukehorvat'          # Luke Horvat
+  'hellola'             # Evo Kellerman
+  'AvDongle'            # Cliff Warren
 
   #
   # TODO: Find out account names for...
-  # '???'                 # Evo Kellerman
   # '???'                 # Reuben Wilson
-  # '???'                 # Cliff Warren
   # '???'                 # Angus Morton
   #
 ])
