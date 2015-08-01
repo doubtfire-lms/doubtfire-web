@@ -381,26 +381,19 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-  controller: ($scope, TutorMarker) ->
-    $scope.dropper = true
-
-    $scope.markingFileUploader =
-      TutorMarker.fileUploader($scope)
-
-    $scope.submitMarkingUpload = () ->
-      $scope.markingFileUploader.uploadZip()
-
-    $scope.requestMarkingExport = () ->
-      TutorMarker.downloadFile($scope.unit)
-
-    $scope.isMac = () ->
-      navigator.platform == "MacIntel"
-)
-.directive('unitPortfolios', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-portfolios.tpl.html'
-  controller: ($scope, Unit) ->
-    $scope.downloadPortfolios = () ->
-      Unit.downloadPortfolios($scope.unit)
+  controller: ($scope, $sce) ->
+    $scope.activeContext = 'submissions'
+    $scope.setActiveContext = (context) ->
+      return if context is $scope.activeContext
+      $scope.activeContext = context
+    $scope.contexts =
+      submissions:
+        title: 'Mark Submissions Offline'
+        subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
+        icon: 'file'
+      portfolios:
+        title: 'Mark Portfolios'
+        subtitle: 'Download all submitted portfolios here for marking'
+        icon: 'book'
+      # potentially tests here too?
 )
