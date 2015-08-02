@@ -96,11 +96,14 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     # Initially not full screen
     $scope.fullscreen = false
 
+    oldCurrentPage = $scope.currentPage
     $scope.$watch 'fullscreen', (newValue) ->
-      if newValue is true
+      if newValue
         $scope.pageSize = 9999 # allow infinite scroll
+        $scope.currentPage = 1
       else
         $scope.pageSize = 15 # default size
+        $scope.currentPage = oldCurrentPage
 
     update_project_details = (student, project) ->
       projectService.updateTaskStats(student, project.stats)
