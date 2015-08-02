@@ -72,7 +72,10 @@
     </table>
   </div>
   <div class="panel-body project-show" ng-if="fullscreen">
-    <p>Click a student to view their status in detail</p>
+    <div class="no-student" ng-hide="activeStudent">
+      <i class="fa fa-user"></i>
+      <p>Click a student to view their status in detail</p>
+    </div>
     <student-project
       ng-if="activeStudent"
       class="root-view"
