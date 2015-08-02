@@ -12,10 +12,10 @@
       </div>
       <div class="btn-group pull-right" style="margin-left: 1ex">
         <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
-          <i class="fa fa-university" tooltip="Show all students"></i>
+          <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
         </label>
         <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-          <i class="fa fa-pencil" tooltip="Show only my students"></i>
+          <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
         </label>
       </div>
       <form role="search" class="col-sm-4 form-horizontal pull-right">
@@ -28,13 +28,40 @@
       <table ng-hide="filteredStudents.length < allStudents.length && filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
         <thead>
           <tr>
-            <th><a ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-            <th><a ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-            <th><a ng-click="sortOrder='progress_sort'; reverse=!reverse">Stats</a></th>
-            <th><a ng-click="sortOrder='flag_sort'; reverse=!reverse">Flags</a></th>
-            <!-- <th><a ng-click="sortOrder='tasks_with_similarities * 100 + max_pct_copy'; reverse=!reverse">Plagiarism</a></th> -->
-            <th><a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
-            <th>Actions</th>
+            <th class="student-id">
+              <a ng-click="sortOrder='student_id'; reverse=!reverse">
+                Student ID <i ng-show="sortOrder=='student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="name">
+              <a ng-click="sortOrder='name'; reverse=!reverse">
+                Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="stats">
+              <a ng-click="sortOrder='progress_sort'; reverse=!reverse">
+                Stats <i ng-show="sortOrder=='progress_sort'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="flags">
+              <a class="sort-by-flag-anchor" ng-click="showFlagSortOptions = !showFlagSortOptions">
+                <span class="show-link"> Flags </span> <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy' || sortOrder=='target_grade' || sortOrder=='portfolio_status'" class="ng-hide fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+              <span class="flag-sort-options" ng-show="showFlagSortOptions">
+                <grade-icon ng-click="setFlagSort('target_grade')" tooltip="Sort by grade" class="text-muted" ng-class="{'text-primary' : sortOrder == 'target_grade'}"></grade-icon>
+                <i ng-show="sortOrder=='target_grade'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagarism" ng-class="{'text-primary' : sortOrder == 'tasks_with_similarities * 100 + max_pct_copy'}" ng-click="setFlagSort('tasks_with_similarities * 100 + max_pct_copy')"></i>
+                <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <i class="fa fa-book fa-2x text-muted" tooltip="Sort by portfolio status" ng-class="{'text-primary' : sortOrder == 'portfolio_status'}" ng-click="setFlagSort('portfolio_status')"></i>
+                <i ng-show="sortOrder=='portfolio_status'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </span>
+            </th>
+            <th class="tutorial">
+              <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
+                <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+              </a>
+            </th>
+            <th class="actions">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -48,10 +75,10 @@
                 </bar>
               </progress>
             </td>
-            <td ng-click="viewStudent(student)">
+            <td ng-click="viewStudent(student)" class="flags-data">
               <grade-icon grade="student.target_grade"></grade-icon>
-              <i class="fa fa-eye" ng-if="student.tasks_with_similarities > 0"></i>
-              <i class="fa fa-book" ng-if="student.has_portfolio" ng-class="{text-muted: student.compile_portfolio}}"></i>
+              <i class="fa fa-eye fa-2x" ng-if="student.tasks_with_similarities > 0"></i>
+              <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{text-muted: student.compile_portfolio}}"></i>
             </td><!--/flags-->
             <td ng-click="viewStudent(student)">
               <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">

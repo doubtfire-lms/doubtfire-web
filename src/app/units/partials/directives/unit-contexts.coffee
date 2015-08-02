@@ -77,6 +77,12 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       else
         $state.go "projects#show", {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
 
+    $scope.setFlagSort = (flag) ->
+      if $scope.sortOrder is flag
+        $scope.reverse = not $scope.reverse
+      else
+        $scope.sortOrder = flag
+
     $scope.reverse = false
     $scope.statusClass = taskService.statusClass
     $scope.statusName = (status) ->

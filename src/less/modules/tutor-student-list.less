@@ -1,3 +1,50 @@
+.tutor-student-list {
+  table thead th {
+    vertical-align: middle;
+  }
+  a.sort-by-flag-anchor {
+    &:hover {
+      text-decoration: none;
+      .show-link {
+        text-decoration: underline;
+      }
+    }
+  }
+  a.sort-by-flag-anchor + .flag-sort-options {
+    display: -webkit-flex;
+    display: flex;
+    max-width: 35px * 3; // Multiply this by number of flags you have
+    margin: 0.5em 0;
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-justify-content: space-between;
+            justify-content: space-between;
+    i:hover {
+      color: @link-hover-color;
+    }
+    grade-icon:hover span {
+      background-color: @link-hover-color;
+    }
+  }
+  table {
+    td.flags-data i, grade-icon span {
+      margin-right: 1ex;
+    }
+    td.task-progress-bar {
+      padding-right: 3ex;
+      .progress {
+        border-radius: 10px;
+      }
+    }
+
+    th.student-id { width: 10%; }
+    th.name       { width: 30%; }
+    th.stats      { width: 30%; }
+    th.flags      { width: 20%; }
+    th.tutorial   { width: 20%; }
+    th.actions    { width: 10%; }
+  }
+}
 .tutor-student-list.fullscreen {
   border-radius: 0;
   position: fixed;
