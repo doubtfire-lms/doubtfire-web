@@ -29,11 +29,11 @@ angular.module("doubtfire.projects.student-project-directive", [
     # Switcher to task view
     #
     $scope.activeTab =
-      progress:   ! $scope.assessingUnitRole?
-      feedback:   $scope.assessingUnitRole?
-      groups:     false
-      lablist:    false
-      portfolio:  false
+      0:   ! $scope.unitRole? #progress
+      1:   $scope.unitRole?   #feedback
+      2:   false              #tutorial
+      3:   false              #group
+      4:   false              #portfolio
 
     #
     # Get the project, which loads all subsequent views whenever the project
@@ -51,43 +51,32 @@ angular.module("doubtfire.projects.student-project-directive", [
 
             $scope.unitLoaded = true
             $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
-            showProjectTasks(project)
+            selectProjectTask(project)
         else if $scope.unit?
           $scope.unitLoaded = true
-          showProjectTasks(project)
+          selectProjectTask(project)
       )
 
-    showProjectTasks = (project) ->
+    selectProjectTask = (project) ->
       filteredTasks = _.select project.tasks, (t) -> $scope.taskDefinition(t).target_grade <= project.target_grade
       $scope.projectLoaded = true
 
       # no tasks so dont try to select a task
       if filteredTasks.length > 0
-        $scope.showTaskView(filteredTasks[0])
+        $scope.selectedTask = filteredTasks[0]
 
         # Show task if in url
         if $scope.showTaskId?
           task = _.find filteredTasks, (task) -> task.id == $scope.showTaskId
           if task?
-            return $scope.showTaskView(task)
+            $scope.selectedTask = task
         else
           # Show the first interesting task
           if $scope.assessingUnitRole?
             # Find first task that is Ready To Mark or Need Help
             t = _.find filteredTasks, (t) -> t.status == 'need_help' || t.status == 'ready_to_mark'
-            return $scope.showTaskView(t)
+            $scope.selectedTask = t
       else
-        selectedTask = null
+        $scope.selectedTask = null
       # end if filtered tasks
-
-
-
-      #     if $scope.unitRole?
-      #       UnitRole.get { id: $scope.unitRole }, (unitRole) ->
-      #         if unitRole.unit_id == project.unit_id
-      #           $scope.assessingUnitRole = unitRole
-
-      #     $scope.project.burndown_chart_data = project.burndown_chart_data
-      #     $scope.projectLoaded = true
-    # end get project
 )
