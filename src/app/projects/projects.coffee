@@ -42,7 +42,7 @@ angular.module("doubtfire.projects", [
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
 )
-.controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole) ->
+.controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService) ->
   if $stateParams.authToken?
     # $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
