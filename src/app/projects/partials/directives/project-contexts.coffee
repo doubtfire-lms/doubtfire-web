@@ -157,6 +157,25 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       return if task == $scope.activeTask
       $scope.activeTask = task
 
+      # select initial tab
+      if $stateParams.viewing == 'feedback'
+        $scope.setActiveTab($scope.tabsData['viewSubmission'])
+      else if $stateParams.viewing == 'submit'
+        $scope.setActiveTab($scope.tabsData['fileUpload'])
+      else if $scope.activeTask?
+        switch $scope.activeTask.status
+          when 'not_submitted'
+            $scope.setActiveTab($scope.tabsData['taskSheet'])
+          when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
+            $scope.setActiveTab($scope.tabsData['viewSubmission'])
+          when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
+            $scope.setActiveTab($scope.tabsData['fileUpload'])
+          else
+            $scope.setActiveTab($scope.tabsData['taskSheet'])
+      else
+        $scope.setActiveTab($scope.tabsData['taskSheet'])
+
+
     #
     # Functions from taskService to get data
     #
@@ -221,24 +240,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
     # Ensure there is an active task!
     $scope.setActiveTask($scope.activeTask)
-
-    # select initial tab
-    if $stateParams.viewing == 'feedback'
-      $scope.setActiveTab($scope.tabsData['viewSubmission'])
-    else if $stateParams.viewing == 'submit'
-      $scope.setActiveTab($scope.tabsData['fileUpload'])
-    else if $scope.activeTask?
-      switch $scope.activeTask.status
-        when 'not_submitted'
-          $scope.setActiveTab($scope.tabsData['taskSheet'])
-        when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
-          $scope.setActiveTab($scope.tabsData['viewSubmission'])
-        when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
-          $scope.setActiveTab($scope.tabsData['fileUpload'])
-        else
-          $scope.setActiveTab($scope.tabsData['taskSheet'])
-    else
-      $scope.setActiveTab($scope.tabsData['taskSheet'])
 )
 .directive('viewSubmission', ->
   restrict: 'E'
