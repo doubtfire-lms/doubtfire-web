@@ -80,7 +80,7 @@
               <i class="fa fa-eye fa-2x" ng-if="student.tasks_with_similarities > 0"></i>
               <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{'text-muted': student.compile_portfolio}"></i>
             </td><!--/flags-->
-            <td ng-click="viewStudent(student)">
+            <td>
               <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
                 <div class="btn-group dropdown" dropdown is-open="status.isopen">
                   <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
