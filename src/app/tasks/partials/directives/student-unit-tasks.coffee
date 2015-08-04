@@ -10,7 +10,7 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
   restrict: 'E'
   templateUrl: 'tasks/partials/templates/student-unit-tasks.tpl.html'
   scope:
-    student: "=student"
+    # student: "=student"
     project: "=project"
     onChange: "=onChange"
     studentProjectId: "=studentProjectId"
@@ -18,37 +18,12 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
     onSelect: "=onSelect"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $modal, Project, taskService) ->
+  controller: ($scope, $modal, taskService) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
+    $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
 
     $scope.taskDisabled = (task) ->
-      $scope.unit.taskDef(task.task_definition_id).target_grade > $scope.project.target_grade
-
-    # Prepare the scope with the passed in project - either from resource or from passed in scope
-    showProject = () ->
-      # Extend the tasks with the task definitions
-      # - add in task abbreviation, description, name, and status
-      $scope.tasks    = $scope.project.tasks.map (task) ->
-        td = $scope.unit.taskDef(task.task_definition_id)
-        task.definition = td
-        task.task_abbr = td.abbreviation
-        task.task_desc = td.description
-        task.task_name = td.name
-        task.seq = td.seq
-        task.due_date = td.target_date
-        task.upload_requirements = td.upload_requirements
-        task.status_txt = taskService.statusLabels[task.status]
-        task
-
-    updateChart = false
-    # Get the Project associated with the student's project id
-    if $scope.project
-      showProject()
-      updateChart = true
-    else
-      Project.get { id: $scope.studentProjectId }, (project) ->
-        $scope.project  = project
-        showProject()
+      $scope.taskDefinition(task).target_grade > $scope.project.target_grade
 )

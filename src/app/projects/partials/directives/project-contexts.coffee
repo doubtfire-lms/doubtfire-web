@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
-        $scope.burndownData = project.burndown_chart_data
+        $scope.project.burndown_chart_data = project.burndown_chart_data
 
     $scope.xAxisTickFormat_Date_Format = () ->
       (d) -> d3.time.format('%b %d')(new Date(d * 1000))
@@ -37,7 +37,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         if d[1] < 0.0
           # find the x intercept at y = 0
           # know originX is the origin date of the graph (i.e. burnoff is still 100%)
-          originX = $scope.burndownData[0].values[0][0]
+          originX = $scope.project.burndown_chart_data[0].values[0][0]
           # work off the 100% point and this point
           [pt1x, pt1y] = [originX, 1]
           [pt2x, pt2y] = [d[0], d[1]]
@@ -58,10 +58,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         if d[1] < 0.0 then 0 else d[1]
 
     $scope.updateBurndownChart = () ->
-      # $scope.burndownData.length = 0
       Project.get { id: $scope.studentProjectId }, (project) ->
-        # $scope.burndownData.push(project.burndown_chart_data...)
-        $scope.burndownData = project.burndown_chart_data
+        $scope.project.burndown_chart_data = project.burndown_chart_data
 
     #
     # Finds max end range for chart defined as 2 weeks (12096e5 ms) after unit's end date
@@ -98,7 +96,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     unit: '='
     project: '='
     activeTask: '='
-    submittedTasks: '='
     assessingUnitRole: '='
   controller: ($scope, $modal, $state, $stateParams, TaskFeedback, TaskComment, Task, Project, taskService, groupService, alertService, projectService) ->
 
@@ -162,16 +159,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       $scope.activeTask = task
       fetchTaskComments(task)
 
-    # Ensure there is an active task!
-    $scope.setActiveTask($scope.activeTask)
-
-    if $stateParams.viewing == 'feedback' || ($scope.activeTask && $scope.activeTask.has_pdf)
-      $scope.setActiveTab($scope.tabsData['viewSubmission'])
-    else if $stateParams.viewing == 'submit'
-      $scope.setActiveTab($scope.tabsData['fileUpload'])
-    else
-      $scope.setActiveTab($scope.tabsData['taskSheet'])
-
     #
     # Comment text area enter to submit comment
     #
@@ -221,7 +208,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.triggerTransition = (status) ->
       oldStatus = $scope.activeTask.status
 
-      if (status == 'ready_to_mark' || status == 'need_help') and $scope.activeTask.upload_requirements.length > 0
+      if (status == 'ready_to_mark' || status == 'need_help') and $scope.activeTask.definition.upload_requirements.length > 0
         $scope.setActiveTab($scope.tabsData['fileUpload'])
         return # handle with the uploader...
       else
@@ -241,6 +228,27 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
             $scope.activeTask.status = oldStatus
             alertService.add("danger", value.data.error, 6000)
         )
+
+    # Ensure there is an active task!
+    $scope.setActiveTask($scope.activeTask)
+
+    # select initial tab
+    if $stateParams.viewing == 'feedback'
+      $scope.setActiveTab($scope.tabsData['viewSubmission'])
+    else if $stateParams.viewing == 'submit'
+      $scope.setActiveTab($scope.tabsData['fileUpload'])
+    else if $scope.activeTask?
+      switch $scope.activeTask.status
+        when 'not_submitted'
+          $scope.setActiveTab($scope.tabsData['taskSheet'])
+        when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
+          $scope.setActiveTab($scope.tabsData['viewSubmission'])
+        when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
+          $scope.setActiveTab($scope.tabsData['fileUpload'])
+        else
+          $scope.setActiveTab($scope.tabsData['taskSheet'])
+    else
+      $scope.setActiveTab($scope.tabsData['taskSheet'])
 )
 .directive('viewComments', ->
   restrict: 'E'

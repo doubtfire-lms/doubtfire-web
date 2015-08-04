@@ -19,14 +19,32 @@ angular.module("doubtfire.services.projects", [])
   @param  student [Student|Project] The student's stats to update
   ###
   projectService.updateTaskStats = (student, new_stats_str) ->
+    new_stats = student.task_stats
     for i, value of new_stats_str.split("|")
       if i < student.task_stats.length
-        student.task_stats[i].value = Math.round(100 * value)
+        new_stats[i].value = Math.round(100 * value)
       else
         student.progress_stats[i - student.task_stats.length].value = Math.round(100 * value)
     student.progress_sort = 0
     for i, stat of student.progress_stats
       student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
+
+    student.task_stats = new_stats
+
+  projectService.addTaskDetailsToProject = (student, unit) ->
+    student.tasks = student.tasks.map (task) ->
+      td = unit.taskDef(task.task_definition_id)
+      task.definition = td
+      # task.task_abbr = td.abbreviation
+      # task.task_desc = td.description
+      # task.task_name = td.name
+      # task.seq = td.seq
+      # task.due_date = td.target_date
+      # task.upload_requirements = td.upload_requirements
+      task.status_txt = taskService.statusLabels[task.status]
+      task
+    student.tasks = _.sortBy(student.tasks, (t) -> t.definition.abbreviation).reverse()
+    student
 
   projectService.fetchDetailsForProject = (student, unit, callback) ->
     if student.tasks
@@ -35,17 +53,7 @@ angular.module("doubtfire.services.projects", [])
       Project.get { id: student.project_id }, (project) ->
         _.extend student, project
         if unit
-          student.tasks = student.tasks.map (task) ->
-            td = unit.taskDef(task.task_definition_id)
-            task.definition = td
-            task.task_abbr = td.abbreviation
-            task.task_desc = td.description
-            task.task_name = td.name
-            task.seq = td.seq
-            task.due_date = td.target_date
-            task.upload_requirements = td.upload_requirements
-            task.status_txt = taskService.statusLabels[task.status]
-            task
+          projectService.addTaskDetailsToProject(student, unit)
         callback(student)
 
   projectService.getGroupForTask = (project, task) ->

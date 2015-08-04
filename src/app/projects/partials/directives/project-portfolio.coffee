@@ -231,5 +231,5 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
-        $scope.burndownData = project.burndown_chart_data
+        $scope.project.burndown_chart_data = project.burndown_chart_data
 )

@@ -106,6 +106,10 @@ angular.module("doubtfire.services.tasks", [])
   # This function gets the help text for the indicated status
   taskService.helpText = (status) -> taskService.helpTextDesc[status]
 
+  taskService.taskDefinitionFn = (unit) ->
+    (task) ->
+      unit.taskDef(task.task_definition_id)
+
   # Return an icon and label for the task
   taskService.statusData = (task) ->
     { icon: taskService.statusIcons[task.status], label: taskService.statusLabels[task.status], class: taskService.statusClass(task.status), daysOverdue: taskService.daysOverdue(task) }
@@ -113,7 +117,7 @@ angular.module("doubtfire.services.tasks", [])
   # Return number of days task is overdue, or false if not overdue
   taskService.daysOverdue = (task) ->
     return false if task.status == 'complete'
-    dueDate = new Date(task.due_date)
+    dueDate = new Date(task.definition.target_date)
     now = new Date()
     diffTime = now.getTime() - dueDate.getTime()
     diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
@@ -162,7 +166,7 @@ angular.module("doubtfire.services.tasks", [])
     d.promise
 
   taskService.recreatePDF = (task, success) ->
-    TaskFeedback.resource.update({ id: task.id } ).$promise.then (
+    TaskFeedback.update { id: task.id },
       (value) ->  #success
         if value.result == "false"
           alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
@@ -172,7 +176,6 @@ angular.module("doubtfire.services.tasks", [])
 
           if success
             success()
-      ),
       (value) -> #fail
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
 

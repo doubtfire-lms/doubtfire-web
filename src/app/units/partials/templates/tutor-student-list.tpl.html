@@ -78,7 +78,7 @@
             <td ng-click="viewStudent(student)" class="flags-data">
               <grade-icon grade="student.target_grade"></grade-icon>
               <i class="fa fa-eye fa-2x" ng-if="student.tasks_with_similarities > 0"></i>
-              <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{text-muted: student.compile_portfolio}}"></i>
+              <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{'text-muted': student.compile_portfolio}"></i>
             </td><!--/flags-->
             <td ng-click="viewStudent(student)">
               <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
@@ -107,8 +107,9 @@
       ng-if="activeStudent"
       class="root-view"
       scope="student-project-scope"
-      project-id="activeStudent.project_id"
-      unit-role="assessingUnitRole.id"></student-project>
+      project="activeStudent"
+      unit="unit"
+      assessing-unit-role="assessingUnitRole"></student-project>
   </div>
   <div class="panel-footer clearfix">
     <div class="pull-right">
