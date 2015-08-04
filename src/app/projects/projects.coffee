@@ -53,8 +53,17 @@ angular.module("doubtfire.projects", [
 
   $scope.unitRole = $stateParams.unitRole
   
-  # Bound to inner-directive
-  $scope.assessingUnitRole = $scope.unitRole
+  if $scope.unitRole?
+    # Bound to inner-directive
+    UnitRole.get { id: $scope.unitRole },
+      (response) ->
+        $scope.assessingUnitRole = response
+      (error) ->
+        $scope.assessingUnitRole = null
+        $scope.unitRole = null
+  else
+    $scope.assessingUnitRole = null
+
   # Bound to inner-directive
   $scope.project = { project_id: $stateParams.projectId }
   # Bound to inner-directive
