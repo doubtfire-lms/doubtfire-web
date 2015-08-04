@@ -32,6 +32,7 @@ angular.module("doubtfire.services.projects", [])
     student.task_stats = new_stats
 
   projectService.addTaskDetailsToProject = (student, unit) ->
+    return if ! student.tasks?
     student.tasks = student.tasks.map (task) ->
       td = unit.taskDef(task.task_definition_id)
       task.definition = td
