@@ -1,5 +1,5 @@
 <ul class="project-task-bar">
-  <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in tasks | orderBy:'seq'" ng-hide="taskDisabled(task)">
-      <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="onSelect(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}}</button>
+  <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in project.tasks | orderBy:'seq'" ng-hide="taskDisabled(task)">
+      <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="onSelect(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{taskDefinition(task).name}}: {{statusText(task.status)}}">{{taskDefinition(task).abbreviation}}</button>
   </li>
 </ul>

@@ -46,17 +46,20 @@ angular.module("doubtfire.projects", [
   if $stateParams.authToken?
     # $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
-  $scope.studentProjectId = $stateParams.projectId
+
   # Provided show task id
   if $stateParams.showTaskId?
     $scope.showTaskId = parseInt($stateParams.showTaskId, 10)
+
   $scope.unitRole = $stateParams.unitRole
+  
   # Bound to inner-directive
-  $scope.assessingUnitRole = null
+  $scope.assessingUnitRole = $scope.unitRole
   # Bound to inner-directive
-  $scope.project = null
+  $scope.project = { project_id: $stateParams.projectId }
   # Bound to inner-directive
   $scope.unit = null
+
   #
   # Batch Discuss button
   #

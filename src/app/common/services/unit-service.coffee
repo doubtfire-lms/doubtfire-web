@@ -72,6 +72,7 @@ angular.module("doubtfire.services.units", [])
           { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[3]))},
         ]
         projectService.updateTaskStats(student, student.stats)
+        projectService.addTaskDetailsToProject(student, unit)
 
       unit.getGroups = (group_set, callback) ->
         return unless group_set
