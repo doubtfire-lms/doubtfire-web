@@ -1,6 +1,6 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{stepGrade + 1}}: Select Grade</h3><!--/title-->
+      <h3 class="panel-title">Select Grade</h3><!--/title-->
   </div>
   <div class="panel-body">
     <div class="col-xs-12">
@@ -21,9 +21,9 @@
     </div>
   </div>
   <div class="panel-footer">
-    <button class="btn btn-primary pull-left" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="text-right">
-      <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

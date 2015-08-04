@@ -116,26 +116,31 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         subtitle: "The task sheet contains the requirements of this task"
         icon: "fa-info"
         seq: 0
+        active: false
       fileUpload:
         title: "Upload Submission"
         subtitle: "Upload your submission so it is ready for your tutor to mark"
         icon: "fa-upload"
         seq: 1
+        active: false
       viewSubmission:
         title: "View Submission"
         subtitle: "View the latest submission you have uploaded"
         icon: "fa-file-o"
         seq: 2
+        active: false
       viewComments:
         title: "View Comments"
         subtitle: "Write and read comments between you and your tutor"
         icon: "fa-comments-o"
         seq: 3
+        active: false
       plagiarismReport:
         title: "View Similarities Detected"
         subtitle: "See the other submissions and how closely they relate to your submission"
         icon: "fa-eye"
         seq: 4
+        active: false
 
     #
     # Sets the active tab
@@ -143,7 +148,10 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.setActiveTab = (tab) ->
       # Do nothing if we're switching to the same tab
       return if tab is $scope.activeTab
+      if $scope.activeTab?
+        $scope.activeTab.active = false
       $scope.activeTab = tab
+      $scope.activeTab.active = true
 
     #
     # Checks if tab is the active tab

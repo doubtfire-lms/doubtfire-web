@@ -4,13 +4,49 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
   controller: ($scope, taskService, PortfolioSubmission) ->
-    $scope.welcomeStep = -1
-    $scope.gradeStep = 0
-    $scope.summaryStep = 1
-    $scope.taskStep = 2
-    $scope.otherFilesStep = 3
-    $scope.compileStep = 4
-    $scope.reviewStep = 5
+    #
+    # Active task tab group
+    #
+    $scope.portfolioTabsData =
+      welcomeStep:
+        title: "Welcome"
+        icon: "fa-smile-o"
+        seq: 0
+      gradeStep:
+        title: "Select Grade"
+        icon: "fa-trophy"
+        seq: 1
+      summaryStep:
+        title: "Learning Summary Report"
+        icon: "fa-graduation-cap"
+        seq: 2
+      taskStep:
+        title: "Select Tasks"
+        icon: "fa-tasks"
+        seq: 3
+      otherFilesStep:
+        title: "Upload Other Files"
+        icon: "fa-plus"
+        seq: 4
+      compileStep:
+        title: "Compile PDF"
+        icon: "fa-file-pdf-o"
+        seq: 5
+      reviewStep:
+        title: "Review Portfolio"
+        icon: "fa-check"
+        seq: 6
+    $scope.setActivePortfolioTab = (tab) ->
+      # $scope.activePortfolioTab?.active = false
+      $scope.activePortfolioTab = tab
+      # $scope.activePortfolioTab.active = true
+    $scope.$watch 'activePortfolioTab', (newTab, oldTab) ->
+      newTab.active = true
+      oldTab?.active = false
+    $scope.advanceActivePortfolioTab = (advanceBy) ->
+      newSeq = $scope.activePortfolioTab.seq + advanceBy
+      $scope.activePortfolioTab = (tab for tabKey, tab of $scope.portfolioTabsData when tab.seq is newSeq)[0]
+    $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     $scope.projectHasLearningSummaryReport = () ->
       _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
@@ -20,13 +56,13 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.clearQueue()
 
     if $scope.project.portfolio_available
-      $scope.currentView = $scope.reviewStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.reviewStep
     else if $scope.project.compile_portfolio
-      $scope.currentView = $scope.compileStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.compileStep
     else if $scope.projectHasLearningSummaryReport()
-      $scope.currentView = $scope.taskStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.taskStep
     else
-      $scope.currentView = $scope.welcomeStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.welcomeStep
     #
     # Functions from taskService to get data
     #
@@ -200,7 +236,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.api.delete {
         id: $scope.project.project_id
       }, (response) ->
-        $scope.currentView = 3
+        $scope.activePortfolioTab = $scope.tabData.compileStep
         $scope.project.portfolio_available = false
         loadPdf()
 
