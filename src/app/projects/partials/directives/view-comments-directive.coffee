@@ -14,7 +14,7 @@ angular.module("doubtfire.projects.view-comments-directive", [
     $scope.pageSize = 3
     $scope.maxSize = 5
 
-    $scope.$watch 'activeTask', (newTask) ->
+    $scope.$watch 'project.selectedTask', (newTask) ->
       fetchTaskComments(newTask)
 
     #
@@ -36,20 +36,19 @@ angular.module("doubtfire.projects.view-comments-directive", [
       return true
 
     $scope.addComment = () ->
-      TaskComment.create { task_id: $scope.activeTask.id, comment: $scope.comment.text },
+      TaskComment.create { task_id: $scope.project.selectedTask.id, comment: $scope.comment.text },
         (response) ->
-          if ! $scope.activeTask.comments
-            $scope.activeTask.comments = []
-          $scope.activeTask.comments.unshift response
+          if ! $scope.project.selectedTask.comments
+            $scope.project.selectedTask.comments = []
+          $scope.project.selectedTask.comments.unshift response
           $scope.comment.text = ""
         (error) ->
           alertService.add("danger", "Request failed, cannot add a comment at this time.", 2000)
 
     $scope.deleteComment = (id) ->
-      TaskComment.delete { task_id: $scope.activeTask.id, id: id },
+      TaskComment.delete { task_id: $scope.project.selectedTask.id, id: id },
         (response) ->
-          #$scope.activeTask.comments.splice response
-          $scope.activeTask.comments = $scope.activeTask.comments.filter (e) -> e.id != id
+          $scope.project.selectedTask.comments = $scope.project.selectedTask.comments.filter (e) -> e.id != id
         (error) ->
           alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
 )
