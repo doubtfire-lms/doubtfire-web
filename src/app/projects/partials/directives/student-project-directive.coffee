@@ -72,7 +72,16 @@ angular.module("doubtfire.projects.student-project-directive", [
           if $scope.assessingUnitRole?
             # Find first task that is Ready To Mark or Need Help
             t = _.find filteredTasks, (t) -> t.status == 'need_help' || t.status == 'ready_to_mark'
+            if not t? # else find discuss
+              t = _.find filteredTasks, (t) -> t.status == 'discuss'
+            if not t? # else find resubmit or redo
+              t = _.find filteredTasks, (t) -> t.status == 'redo' || t.status == 'fix_and_resubmit' || t.status == 'fix_and_include'
+            if not t? # else find working on it
+              t = _.find filteredTasks, (t) -> t.status == 'working_on_it'
+            if not t? # else find not_submitted
+              t = _.find filteredTasks, (t) -> t.status == 'not_submitted'
             $scope.project.selectedTask = t
+
       
         if not $scope.project.selectedTask?
           $scope.project.selectedTask = $scope.project.selectedTask = filteredTasks[0]
