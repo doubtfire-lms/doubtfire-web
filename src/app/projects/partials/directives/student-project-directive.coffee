@@ -81,7 +81,13 @@ angular.module("doubtfire.projects.student-project-directive", [
             if not t? # else find not_submitted
               t = _.find filteredTasks, (t) -> t.status == 'not_submitted'
             $scope.project.selectedTask = t
-
+          else # student... go to task they are working on
+            t = _.find filteredTasks, (t) -> t.status == 'working_on_it'
+            if not t? # else find resubmit or redo
+              t = _.find filteredTasks, (t) -> t.status == 'redo' || t.status == 'fix_and_resubmit'
+            if not t? # else find not_submitted
+              t = _.find filteredTasks, (t) -> t.status == 'not_submitted'
+            $scope.project.selectedTask = t
       
         if not $scope.project.selectedTask?
           $scope.project.selectedTask = $scope.project.selectedTask = filteredTasks[0]
