@@ -10,6 +10,6 @@
 </div>
 <pdf-panel-viewer
   pdf-url="taskUrl()"
-  footer-text="{{activeTask.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
+  footer-text="{{project.selectedTask.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
   ng-hide="notSubmitted() || taskStillProcessing()">
 </pdf-panel-viewer>
