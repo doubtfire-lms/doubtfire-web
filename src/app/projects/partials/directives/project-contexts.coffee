@@ -79,13 +79,16 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('labList', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/lab-list.tpl.html'
-  controller: ($scope, $modal, User, Project, alertService) ->
+  controller: ($scope, $modal, User, Project, alertService, projectService) ->
     # Todo, write...
     $scope.sortOrder = 'abbreviation'
     $scope.setTutorial = (id) ->
       Project.update(
         { id: $scope.project.project_id, tutorial_id: id }
-        (project) -> $scope.project.tute = project.tute
+        (project) ->
+          $scope.project.tute = project.tute
+          $scope.project.tutorial = $scope.unit.tutorialFromId( $scope.project.tute )
+          projectService.updateGroups($scope.project) #can be removed from groups by changing labs
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 )
