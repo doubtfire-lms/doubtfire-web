@@ -106,17 +106,19 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         $scope.pageSize = 15 # default size
         $scope.currentPage = oldCurrentPage
 
-    update_project_details = (student, project) ->
-      projectService.updateTaskStats(student, project.stats)
-      if student.project
-        _.each student.project.tasks, (task) =>
-          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
+    update_project_details = (project, response) ->
+      projectService.updateTaskStats(project, response.stats)
+      if project.tasks
+        _.each project.tasks, (task) =>
+          task.status = _.where(response.tasks, { task_definition_id: task.task_definition_id })[0].status
       alertService.add("success", "Status updated.", 2000)
 
-    $scope.transitionWeekEnd = (student) ->
-      Project.update({ id: student.project_id, trigger: "trigger_week_end" }).$promise.then (
-        (project) ->
-          update_project_details(student, project)
+    $scope.transitionWeekEnd = (project) ->
+      Project.update({ id: project.project_id, trigger: "trigger_week_end" }
+        (response) ->
+          update_project_details(project, response)
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
       )
 
     # The assessingUnitRole is accessed in student views loaded from this view
