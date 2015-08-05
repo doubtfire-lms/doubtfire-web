@@ -12,6 +12,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     unitRole: "=unitRole"
     unit: "=unit"
     unitLoaded: "=unitLoaded"
+    fullscreen: '=?'
 
   controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
     $scope.studentFilter = 'myStudents' # Mine by default

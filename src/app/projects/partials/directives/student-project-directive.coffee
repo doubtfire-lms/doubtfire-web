@@ -11,6 +11,7 @@ angular.module("doubtfire.projects.student-project-directive", [
     project: '=?' # to bind project to outer-scope
     unit: '=?' # to bind unit to outer-scope
     assessingUnitRole: '=?' # to bind assessingUnitRole to outer-scope
+    fullscreen: '=?'
   controller: ($scope, $state, Project, UnitRole, headerService, alertService, taskService, unitService, projectService) ->
     if $scope.unit?
       $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
@@ -61,8 +62,6 @@ angular.module("doubtfire.projects.student-project-directive", [
 
       # no tasks so dont try to select a task
       if filteredTasks.length > 0
-        $scope.project.selectedTask = filteredTasks[0]
-
         # Show task if in url
         if $scope.showTaskId?
           task = _.find filteredTasks, (task) -> task.id == $scope.showTaskId
@@ -74,7 +73,10 @@ angular.module("doubtfire.projects.student-project-directive", [
             # Find first task that is Ready To Mark or Need Help
             t = _.find filteredTasks, (t) -> t.status == 'need_help' || t.status == 'ready_to_mark'
             $scope.project.selectedTask = t
-      else
+      
+        if not $scope.project.selectedTask?
+          $scope.project.selectedTask = $scope.project.selectedTask = filteredTasks[0]
+      else # no tasks for student!
         $scope.project.selectedTask = null
       # end if filtered tasks
 )
