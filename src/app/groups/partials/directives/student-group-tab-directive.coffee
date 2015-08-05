@@ -4,7 +4,7 @@ angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
   restrict: 'E'
   templateUrl: 'groups/partials/templates/student-group-tab.tpl.html'
 
-  controller: ($scope, Group, alertService, GroupMember) ->
+  controller: ($scope, Group, alertService, GroupMember, projectService) ->
     $scope.selectedGroup = null
 
     $scope.groupForSet = (gs) ->
@@ -33,11 +33,21 @@ angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
           group_id: grp.id
           project_id: $scope.project.project_id
         },
-        (response) -> alertService.add("success", "Joined group", 2000)
+        (response) ->
+          projectService.updateGroups($scope.project) #change groups
+          alertService.add("success", "Joined group", 2000)
         (error) ->
           alertService.add("danger", error.data.error, 6000)
           $scope.selectedGroup = null
       )
+
+    $scope.$watch 'project.groups', (newValue, oldValue) ->
+      $scope.selectedGroup = $scope.groupForSet($scope.selectedGroupset)
+        $scope.$digest #notify
+
+    $scope.$watch 'project', (newValue, oldValue) ->
+      $scope.selectedGroup = $scope.groupForSet($scope.selectedGroupset)
+      $scope.$digest #notify
 
     $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
       $scope.selectedGroup = $scope.groupForSet(newValue)

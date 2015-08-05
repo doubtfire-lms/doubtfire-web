@@ -8,7 +8,7 @@ angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
   #   unit: "="
   #   selectedGroupset: "="
 
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, projectService) ->
     $scope.staffFilter = 'mine'
 
     $scope.removeGroupMember = (member) ->

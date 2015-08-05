@@ -57,6 +57,11 @@ angular.module("doubtfire.services.projects", [])
           projectService.addTaskDetailsToProject(student, unit)
         callback(student)
 
+  projectService.updateGroups = (project) ->
+    if project.groups?
+      Project.get { id: project.project_id }, (response) ->
+        project.groups = response.groups
+
   projectService.getGroupForTask = (project, task) ->
     return null if not task.definition.group_set
 
