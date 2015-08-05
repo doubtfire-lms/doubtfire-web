@@ -40,13 +40,15 @@
 @import '../../vendor/bootstrap/less/pagination.less';
 @import '../../vendor/bootstrap/less/labels.less';
 
+// Import font awesome
+@import "../../vendor/font-awesome/less/font-awesome.less";
+@fa-font-path: "./fonts/"; /* Tell font-awesome where to find fa- fonts */
+
 // Import css... if no less
 @import (less) "../../vendor/nvd3/nv.d3.css";
 @import (less) "../../vendor/angular-xeditable/dist/css/xeditable.css";
 
-// Import font awesome
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
-
+// Import our custom functions
 @import 'functions.less';
 
 body {
