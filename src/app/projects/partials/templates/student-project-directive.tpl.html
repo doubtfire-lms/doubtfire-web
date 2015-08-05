@@ -1,5 +1,5 @@
 <div ng-if="unitLoaded">
-  <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
+  <h2 ng-hide="fullscreen">{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
   <tabset justified="true">
     <tab active="activeTab[0]">
       <tab-heading>
