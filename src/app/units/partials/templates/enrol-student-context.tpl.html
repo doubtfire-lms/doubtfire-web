@@ -94,8 +94,12 @@
             </div>
             <div class="panel-body">
                 <div class="btn-group btn-group-justified">
-                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">Enrol Students</label>
-                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">Withdraw Students</label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">
+                        Enrol<br>Students
+                    </label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">
+                        Withdraw<br>Students
+                    </label>
                 </div>
                 <file-uploader
                   files="batchStudentTypes[activeBatchStudentType].batchFiles"
