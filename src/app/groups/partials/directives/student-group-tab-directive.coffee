@@ -41,10 +41,6 @@ angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
           $scope.selectedGroup = null
       )
 
-    $scope.$watch 'project.groups', (newValue, oldValue) ->
-      $scope.selectedGroup = $scope.groupForSet($scope.selectedGroupset)
-        $scope.$digest #notify
-
     $scope.$watch 'project', (newValue, oldValue) ->
       $scope.selectedGroup = $scope.groupForSet($scope.selectedGroupset)
       $scope.$digest #notify
