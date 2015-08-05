@@ -43,7 +43,7 @@
                 Stats <i ng-show="sortOrder=='progress_sort'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
-            <th class="flags">
+            <th class="flags" colspan="2">
               <a class="sort-by-flag-anchor" ng-click="showFlagSortOptions = !showFlagSortOptions">
                 <span class="show-link"> Flags </span> <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy' || sortOrder=='target_grade' || sortOrder=='portfolio_status'" class="ng-hide fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
@@ -77,6 +77,8 @@
             </td>
             <td ng-click="viewStudent(student)" class="flags-data">
               <grade-icon grade="student.target_grade"></grade-icon>
+            </td>
+            <td ng-click="viewStudent(student)" class="flags-data">
               <i class="fa fa-eye fa-2x" ng-if="student.tasks_with_similarities > 0"></i>
               <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{'text-muted': student.compile_portfolio}"></i>
             </td><!--/flags-->
