@@ -11,7 +11,7 @@
             {{groupSetName(groupSetId)}}</h5>
             <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in relatedTasks | byGrade:project.target_grade | orderBy: 'seq'">
               <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == project.selectedTask}" ng-click="setSelectedTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.task_name}}:</strong><br>{{task.status_txt}}">
-                {{task.definition.abbreviation}}
+                {{task.definition.abbreviation}} <i class="fa fa-eye" ng-show="task.similar_to_count > 0"></i>
               </button>
             </li>
           </div>

@@ -15,7 +15,6 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
   controller: ($scope, TaskSimilarity) ->
     # functions from task service
     #$scope.task = task
-    $scope.test = "Test"
     $scope.match = 1
     #$scope.plagiarismPage = $sce.trustAsResourceUrl("#{api}/tasks/20/similarity/#{$scope.match}?auth_token=#{currentUser.authenticationToken}")
     $scope.similarityData = null

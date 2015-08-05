@@ -67,15 +67,18 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
       else if $stateParams.viewing == 'submit'
         $scope.setActiveTab($scope.tabsData['fileUpload'])
       else if $scope.project.selectedTask?
-        switch $scope.project.selectedTask.status
-          when 'not_submitted'
-            $scope.setActiveTab($scope.tabsData['taskSheet'])
-          when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
-            $scope.setActiveTab($scope.tabsData['viewSubmission'])
-          when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
-            $scope.setActiveTab($scope.tabsData['fileUpload'])
-          else
-            $scope.setActiveTab($scope.tabsData['taskSheet'])
+        if $scope.project.selectedTask.similar_to_count > 0
+          $scope.setActiveTab($scope.tabsData['plagiarismReport'])
+        else
+          switch $scope.project.selectedTask.status
+            when 'not_submitted'
+              $scope.setActiveTab($scope.tabsData['taskSheet'])
+            when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
+              $scope.setActiveTab($scope.tabsData['viewSubmission'])
+            when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
+              $scope.setActiveTab($scope.tabsData['fileUpload'])
+            else
+              $scope.setActiveTab($scope.tabsData['taskSheet'])
       else
         $scope.setActiveTab($scope.tabsData['taskSheet'])
 
