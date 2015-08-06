@@ -36,12 +36,6 @@ angular.module("doubtfire.services.projects", [])
     student.tasks = student.tasks.map (task) ->
       td = unit.taskDef(task.task_definition_id)
       task.definition = td
-      # task.task_abbr = td.abbreviation
-      # task.task_desc = td.description
-      # task.task_name = td.name
-      # task.seq = td.seq
-      # task.due_date = td.target_date
-      # task.upload_requirements = td.upload_requirements
       task.status_txt = taskService.statusLabels[task.status]
       task
     student.tasks = _.sortBy(student.tasks, (t) -> t.definition.abbreviation).reverse()
