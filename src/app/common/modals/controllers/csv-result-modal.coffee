@@ -3,7 +3,7 @@ angular.module("doubtfire.common.csv-result-modal", [])
 #
 # Services for making alerts
 #
-.factory("csvResultService", ($modal) ->
+.factory("csvResultService", ($modal, alertService) ->
   csvResultSvc =
     #
     # Show the details from the response.
@@ -15,6 +15,13 @@ angular.module("doubtfire.common.csv-result-modal", [])
     # }
     #
     show: (title, response) ->
+      if response.errors.length == 0
+        alertService.add("success", "CSV uploaded. Success with #{response.success.length} rows.", 2000)
+      else if response.success.length > 0
+        alertService.add("warning", "CSV uploaded, success with #{response.success.length} rows, but #{response.errors.length} errors.", 6000)
+      else
+        alertService.add("danger", "CSV uploaded but #{response.errors.length} errors", 6000)
+
       $modal.open
         templateUrl: 'common/modals/templates/csv-result-modal.tpl.html'
         controller: 'CsvResultModal'
