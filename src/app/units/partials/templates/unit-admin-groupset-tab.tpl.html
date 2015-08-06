@@ -83,7 +83,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Import to <strong>{{selectedGroupset.name}}</strong></h3>
-        Import groups into {{selectedGroupset.name}} with a CSV containing: group name, username, tutorial code.
+        Import groups into {{selectedGroupset.name}} with a CSV containing: group_name, username, and tutorial.
       </div>
       <div class="panel-body">
         <file-uploader
@@ -92,21 +92,6 @@
           is-uploading="isGroupCSVUploading"
           on-success="onGroupCSVSuccess"
           on-complete="onGroupCSVComplete"></file-uploader>
-
-        <table ng-show="csvImportResponse.errors.length > 0" class="table table-condensed table-hover">
-          <thead>
-            <tr>
-              <th>Group</th>
-              <th>Username</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="line in csvImportResponse.errors">
-              <td>{{line.group}}</td><td>{{line.user}}</td><td>{{line.reason}}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
       <div class="panel-heading">
         <h3 class="panel-title">Export <strong>{{selectedGroupset.name}}</strong></h3>

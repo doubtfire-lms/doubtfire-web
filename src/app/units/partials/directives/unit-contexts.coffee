@@ -217,10 +217,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       # at least one student?
       csvResultService.show("Enrol Student CSV Results", response)
       if response.success.length > 0
-        alertService.add("success", "Enrolled #{response.success.length} students.", 2000)
         $scope.unit.refreshStudents()
-      else
-        alertService.add("info", "No students need to be enrolled.", 4000)
 
     onBatchWithdrawSuccess = (response) ->
       csvResultService.show("Withdraw Student CSV Results", response)
