@@ -1,4 +1,17 @@
 angular.module("doubtfire.common.about-doubtfire-modal", [])
+
+#
+# Services for making alerts
+#
+.factory("aboutModalService", ($modal) ->
+  aboutService =
+    show: () ->
+      $modal.open
+        templateUrl: 'common/modals/templates/about-doubtfire-modal.tpl.html'
+        controller: 'AboutDoubtfireModalCtrl'
+        size: 'lg'
+)
+
 .controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $modalInstance, $http, $q) ->
   contributors = DoubtfireContributors
   # initial data

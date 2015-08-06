@@ -89,13 +89,13 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">Batch Student Uploads</h4>
-                Batch enrol or withdraw students into this subject using a CSV containing:
-                username, first_name, last_name, email, tutorial.
+                Batch enrol or withdraw students into this unit using a CSV containing:
+                unit_code, username, first_name, last_name, email, tutorial.
             </div>
             <div class="panel-body">
                 <div class="btn-group btn-group-justified">
-                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">Enrol Students</label>
-                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">Withdraw Students</label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">Enrol</label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">Withdraw</label>
                 </div>
                 <file-uploader
                   files="batchStudentTypes[activeBatchStudentType].batchFiles"

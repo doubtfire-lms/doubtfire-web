@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.header", [])
 
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project, aboutModalService) ->
   # $scope.currentUser = {}
   # $scope.currentUser.nickname = currentUser.profile.nickname
   # $scope.currentUser.name = currentUser.profile.name
@@ -35,10 +35,7 @@ angular.module("doubtfire.common.header", [])
         user: ->  $scope.currentUser
 
   $scope.openAboutModal = ->
-    $modal.open
-      templateUrl: 'common/partials/templates/about-doubtfire-modal.tpl.html'
-      controller: 'AboutDoubtfireModalCtrl'
-      size: 'lg'
+    aboutModalService.show()
 )
 
 .controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService) ->

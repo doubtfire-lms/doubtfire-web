@@ -16,6 +16,8 @@ angular.module("doubtfire.services.units", [])
 
     # Get the unit data
     Unit.get { id: unitId }, (unit) ->
+      unit.allStudents = allStudents
+
       # Add a sequence from the order fetched from server
       _.each(unit.task_definitions, (td, index, list) ->
         td.seq = index
@@ -34,6 +36,16 @@ angular.module("doubtfire.services.units", [])
 
       # Extend unit to know task count
       unit.taskCount = () -> unit.task_definitions.length
+
+      unit.refreshStudents = () ->
+        # Fetch the students for the unit
+        Students.query { unit_id: unit.id, all: unit.allStudents }, (students) ->
+          # extend the students with their tutorial data
+          new_students = students.map (student) ->
+            unit.extendStudent(student)
+            student
+
+          unit.students = new_students
 
       unit.addStudent = (student) ->
         unit.extendStudent(student)
@@ -80,12 +92,7 @@ angular.module("doubtfire.services.units", [])
           callback(groups)
 
       if loadStudents
-        # Fetch the students for the unit
-        Students.query { unit_id: unit.id, all: allStudents }, (students) ->
-          # extend the students with their tutorial data
-          unit.students = students.map (student) ->
-            unit.extendStudent(student)
-            student
+        unit.refreshStudents()
 
       callback(unit)
   # end get unit
