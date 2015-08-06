@@ -27,7 +27,8 @@
     "ng-csv": "0.2.3",
     "angular-file-upload": "1.0.3",
     "ng-file-upload": "~5.0.9",
-    "angular-filter": "~0.5.4"
+    "angular-filter": "~0.5.4",
+    "font-awesome": "~4.4.0"
   },
   "resolutions": {
     "d3": "3.4.11",
