@@ -17,7 +17,15 @@ angular.module("doubtfire.users", [
       roleWhitelist: ['Admin', 'Convenor']
   )
 )
-.controller("AdminUsersCtrl", ($scope, $modal, User, alertService) ->
+.controller("AdminUsersCtrl", ($scope, $modal, User, alertService, csvResultService) ->
+  $scope.file_data =
+    onBatchUserSuccess: (response) ->
+      csvResultService.show "User CSV import results", response
+      $scope.users = User.query()
+    batchUserUrl: User.csvUrl()
+    batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }
+  
+
   $scope.users = User.query()
   # Table sort details
   $scope.sortOrder = "id"
@@ -38,14 +46,4 @@ angular.module("doubtfire.users", [
         user: -> userToShow
         isNew: -> !user?
         users: -> $scope.users
-
-  $scope.batchUserUrl = User.csvUrl()
-  $scope.batchUserFiles = { file: { name: 'CSV File', type: 'csv' } }
-  $scope.onBatchUserSuccess = (response) ->
-    if response.length != 0
-      alertService.add("success", "Added #{response.length} users.", 2000)
-      $scope.users = $scope.users.concat(response)
-    else
-      alertService.add("info", "No users need to be added.", 4000)
-
 )
