@@ -74,6 +74,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
       csvResultService.show 'Group CSV upload results.', response
+      $scope.unit.refresh()
     $scope.onGroupCSVComplete = () ->
       $scope.isGroupCSVUploading = null
 
