@@ -44,7 +44,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService) ->
+  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -114,21 +114,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.batchTaskUrl = ->
       Task.getTaskDefinitionBatchUploadUrl($scope.unit)
     $scope.onBatchTaskSuccess = (response) ->
-      newTasks = response.added
-      updatedTasks = response.updated
-      failedTasks = response.failed
-
-      if newTasks.length > 0
-        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
-        _.extend($scope.unit.task_definitions, newTasks)
-      if updatedTasks.length > 0
-        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
-        _.each updatedTasks, (td) ->
-          idx = _.findIndex $scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
-          if idx >= 0
-            _.extend $scope.unit.task_definitions[idx], td
-      if failedTasks.length > 0
-        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
+      csvResultService.show "Task CSV Upload Results", response
+      if response.success.length > 0
+        $scope.unit.refresh()
 
 )
 .directive('adminUnitContext', ->
