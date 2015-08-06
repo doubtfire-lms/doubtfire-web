@@ -46,7 +46,7 @@
   </ul>
   <div class="col-sm-12" ng-if="activeTask">
     <task-plagiarism-report task="activeTask"></task-plagiarism-report>
-    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task_name}}</a></span>
+    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
   </div>
 </div>
 </div>
