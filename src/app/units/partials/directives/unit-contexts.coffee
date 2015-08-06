@@ -202,17 +202,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, $modal, Unit, Project, alertService) ->
+  controller: ($scope, $modal, Unit, Project, alertService, csvResultService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
-    $scope.batchStudentTypes =
-      enrol:
-        batchUrl: -> Unit.enrolStudentsCSVUrl $scope.unit
-        batchFiles: { file: { name: 'Enrol CSV Data', type: 'csv'  } }
-        onSuccess: onBatchEnrolSuccess
-      withdraw:
-        batchUrl: -> Unit.withdrawStudentsCSVUrl $scope.unit
-        batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
-        onSuccess: onBatchWithdrawSuccess
 
     $scope.showEnrolModal = () ->
       $modal.open
@@ -224,28 +215,41 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
-      if newStudents.length > 0
-        alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
-        $scope.unit.students = $scope.unit.students.concat(newStudents)
+      csvResultService.show("Enrol Student CSV Results", response)
+      if response.success.length > 0
+        alertService.add("success", "Enrolled #{response.success.length} students.", 2000)
+        $scope.unit.refreshStudents()
       else
         alertService.add("info", "No students need to be enrolled.", 4000)
 
     onBatchWithdrawSuccess = (response) ->
-      withdrawnStudents = response
-      # at least one student?
-      if withdrawnStudents.length > 0
-        alertService.add("success", "Withdrew #{withdrawnStudents.length} students.", 2000)
-        student.enrolled = false for student in $scope.unit.students when student.student_id in withdrawnStudents
+      csvResultService.show("Withdraw Student CSV Results", response)
+      if response.success.length > 0
+        alertService.add("success", "Withdrew #{response.success.length} students.", 2000)
+        $scope.unit.refreshStudents()
       else
         alertService.add("info", "No students need to be withdrawn.", 4000)
 
+    $scope.batchStudentTypes =
+      enrol:
+        batchUrl: -> Unit.enrolStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Enrol CSV Data', type: 'csv'  } }
+        onSuccess: onBatchEnrolSuccess
+      withdraw:
+        batchUrl: -> Unit.withdrawStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
+        onSuccess: onBatchWithdrawSuccess
+
     change_enrolment = (student, value) ->
-      Project.update { id: student.project_id, enrolled: value }, (project) ->
-        if value == project.enrolled
-          alertService.add("success", "Enrolment changed.", 2000)
-        else
-          alertService.add("danger", "Enrolment change failed.", 5000)
-        student.enrolled = project.enrolled
+      Project.update { id: student.project_id, enrolled: value },
+        (project) ->
+          if value == project.enrolled
+            alertService.add("success", "Enrolment changed.", 2000)
+          else
+            alertService.add("danger", "Enrolment change failed.", 5000)
+          student.enrolled = project.enrolled
+        (response) ->
+          alertService.add("danger", response.data.error, 5000)
 
     $scope.withdraw = (student) ->
       change_enrolment(student, false)
