@@ -18,7 +18,7 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
     onSelect: "=onSelect"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $modal, taskService) ->
+  controller: ($scope, $modal, taskService, groupService) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
@@ -26,4 +26,11 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
 
     $scope.taskDisabled = (task) ->
       $scope.taskDefinition(task).target_grade > $scope.project.target_grade
+
+    $scope.groupSetName = (id) ->
+      groupService.groupSetName(id, $scope.unit)
+
+    $scope.hideGroupSetName = () ->
+      gsNames = _.pluck $scope.unit.group_sets.id
+      gsNames.length is 1 and gsNames[0] is null
 )
