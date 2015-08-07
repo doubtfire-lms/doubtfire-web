@@ -1,3 +1,16 @@
+/* Widths of Table */
+@student-id-width: 10%;
+@name-width:       30%;
+@stats-width:      30%;
+@flags-width:      20%;
+@tutorial-width:   20%;
+@actions-width:    10%;
+
+/* Flag Icon stuff */
+@flag-icon-width: 35px;
+/* !!! Use this for the number of flags you have !!! */
+@number-of-flags: 3;
+
 .tutor-student-list {
   table thead th {
     vertical-align: middle;
@@ -13,22 +26,35 @@
   a.sort-by-flag-anchor + .flag-sort-options {
     display: -webkit-flex;
     display: flex;
-    max-width: 35px * 3; // Multiply this by number of flags you have
+    max-width: @flag-icon-width * @number-of-flags;
     margin: 0.5em 0;
     -webkit-align-items: center;
             align-items: center;
     -webkit-justify-content: space-between;
             justify-content: space-between;
-    i:hover {
+    .flag-sort {
+      i, grade-icon {
+        display: inline-block;
+      }
+    }
+    .flag-sort > i:hover {
       color: @link-hover-color;
     }
-    grade-icon:hover span {
+    .flag-sort > grade-icon:hover span {
       background-color: @link-hover-color;
     }
   }
   table {
-    td.flags-data i, grade-icon span {
-      margin-right: 1ex;
+    td.flags-data {
+      .flags {
+        max-width: @flag-icon-width * @number-of-flags;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center;
+                align-items: center;
+        -webkit-justify-content: space-between;
+                justify-content: space-between;
+      }
     }
     td.task-progress-bar {
       padding-right: 3ex;
@@ -37,12 +63,12 @@
       }
     }
 
-    th.student-id { width: 10%; }
-    th.name       { width: 30%; }
-    th.stats      { width: 30%; }
-    th.flags      { width: 20%; }
-    th.tutorial   { width: 20%; }
-    th.actions    { width: 10%; }
+    th.student-id { width: @student-id-width; }
+    th.name       { width: @name-width;       }
+    th.stats      { width: @stats-width;      }
+    th.flags      { width: @flags-width;      }
+    th.tutorial   { width: @tutorial-width;   }
+    th.actions    { width: @actions-width;    }
   }
 }
 .tutor-student-list.fullscreen {

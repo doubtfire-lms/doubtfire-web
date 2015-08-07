@@ -43,17 +43,23 @@
                 Stats <i ng-show="sortOrder=='progress_sort'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
-            <th class="flags" colspan="3">
+            <th class="flags">
               <a class="sort-by-flag-anchor" ng-click="showFlagSortOptions = !showFlagSortOptions">
                 <span class="show-link"> Flags </span> <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy' || sortOrder=='target_grade' || sortOrder=='portfolio_status'" class="ng-hide fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
               <span class="flag-sort-options" ng-show="showFlagSortOptions">
-                <grade-icon ng-click="setFlagSort('target_grade')" tooltip="Sort by grade" class="text-muted" ng-class="{'text-primary' : sortOrder == 'target_grade'}"></grade-icon>
-                <i ng-show="sortOrder=='target_grade'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagarism" ng-class="{'text-primary' : sortOrder == 'tasks_with_similarities * 100 + max_pct_copy'}" ng-click="setFlagSort('tasks_with_similarities * 100 + max_pct_copy')"></i>
-                <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                <i class="fa fa-book fa-2x text-muted" tooltip="Sort by portfolio status" ng-class="{'text-primary' : sortOrder == 'portfolio_status'}" ng-click="setFlagSort('portfolio_status')"></i>
-                <i ng-show="sortOrder=='portfolio_status'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <span class="flag-sort">
+                  <grade-icon ng-click="setFlagSort('target_grade')" tooltip="Sort by grade" class="text-muted" ng-class="{'text-primary' : sortOrder == 'target_grade'}"></grade-icon>
+                  <i ng-show="sortOrder=='target_grade'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
+                <span class="flag-sort">
+                  <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagarism" ng-class="{'text-primary' : sortOrder == 'tasks_with_similarities * 100 + max_pct_copy'}" ng-click="setFlagSort('tasks_with_similarities * 100 + max_pct_copy')"></i>
+                  <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
+                <span class="flag-sort">
+                  <i class="fa fa-book fa-2x text-muted" tooltip="Sort by portfolio status" ng-class="{'text-primary' : sortOrder == 'portfolio_status'}" ng-click="setFlagSort('portfolio_status')"></i>
+                  <i ng-show="sortOrder=='portfolio_status'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
               </span>
             </th>
             <th class="tutorial">
@@ -75,15 +81,20 @@
                 </bar>
               </progress>
             </td>
-            <td ng-click="viewStudent(student)" class="flags-data">
-              <grade-icon grade="student.target_grade"></grade-icon>
+            <td class="flags-data">
+              <span class="flags">
+                <span ng-click="viewStudent(student)" class="flag">
+                  <grade-icon grade="student.target_grade"></grade-icon>
+                </span>
+                <span ng-if="student.tasks_with_similarities > 0" ng-click="viewStudent(student)" class="flag">
+                  <i class="fa fa-eye fa-2x" ></i>
+                </span>
+                <span ng-if="student.has_portfolio" ng-click="viewStudent(student)" class="flag">
+                  <i class="fa fa-book fa-2x" ng-class="{'text-muted': student.compile_portfolio}"></i>
+                </span>
+              </span>
             </td>
-            <td ng-click="viewStudent(student)" class="flags-data">
-              <i class="fa fa-eye fa-2x" ng-if="student.tasks_with_similarities > 0"></i>
-            </td>
-            <td ng-click="viewStudent(student)" class="flags-data">
-              <i class="fa fa-book fa-2x" ng-if="student.has_portfolio" ng-class="{'text-muted': student.compile_portfolio}"></i>
-            </td><!--/flags-->
+            <!--/flags-data-->
             <td>
               <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
                 <div class="btn-group dropdown" dropdown is-open="status.isopen">
