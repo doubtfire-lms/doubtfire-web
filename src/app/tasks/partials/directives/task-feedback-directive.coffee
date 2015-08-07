@@ -128,26 +128,9 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
         ""
 
     $scope.triggerTransition = (status) ->
-      oldStatus = $scope.project.selectedTask.status
-
       if (status == 'ready_to_mark' || status == 'need_help') and $scope.project.selectedTask.definition.upload_requirements.length > 0
         $scope.setActiveTab($scope.tabsData['fileUpload'])
         return # handle with the uploader...
       else
-        Task.update(
-          { id: $scope.project.selectedTask.id, trigger: status }
-          # Success
-          (value) ->
-            $scope.project.selectedTask.status = value.status
-            projectService.updateTaskStats($scope.project, value.new_stats)
-
-            if value.status == status
-              alertService.add("success", "Status saved.", 2000)
-            else
-              alertService.add("info", "Status change was not changed.", 4000)
-          # Fail
-          (value) ->
-            $scope.project.selectedTask.status = oldStatus
-            alertService.add("danger", value.data.error, 6000)
-        )
+        taskService.updateTaskStatus($scope.unit, $scope.project, $scope.project.selectedTask, status)
 )

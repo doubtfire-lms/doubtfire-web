@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $q) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService) ->
   #
   # The unit service object
   #
@@ -85,6 +85,7 @@ angular.module("doubtfire.services.tasks", [])
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
     student: [
+      'not_submitted'
       'working_on_it'
       'need_help'
       'ready_to_mark'
@@ -149,21 +150,29 @@ angular.module("doubtfire.services.tasks", [])
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
 
-  taskService.updateTaskStatus = (task, status) ->
+  taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
-    d = $q.defer()
-    Task.update({ id: task.id, trigger: status }).$promise.then (
+    Task.update(
+      { id: task.id, trigger: status }
       # Success
       (value) ->
         task.status = value.status
-        if student? and student.task_stats?
-          projectService.updateTaskStats(student, value.new_stats)
-        d.resolve(task)),
-      # Failure
-      ((value) ->
+        task.updateTaskStatus project, value.new_stats
+
+        if value.other_projects?
+          _.each value.other_projects, (details) ->
+            proj = unit.findStudent(details.id)
+            if proj?
+              task.updateTaskStatus proj, details.new_stats
+        if value.status == status
+          alertService.add("success", "Status saved.", 2000)
+        else
+          alertService.add("info", "Status change was not changed.", 4000)
+      # Fail
+      (value) ->
         task.status = oldStatus
-        d.reject(value.data.error))
-    d.promise
+        alertService.add("danger", value.data.error, 6000)
+    )
 
   taskService.recreatePDF = (task, success) ->
     TaskFeedback.update { id: task.id },
