@@ -1,125 +1,5 @@
 angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
-#
-# The Tutor Student List view shows a list of students, with
-# their tasks and progress.
-#
-.directive('tutorStudentList', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-student-list.tpl.html'
-  scope:
-    unitRole: "=unitRole"
-    unit: "=unit"
-    studentFilter: "=studentFilter"
-    unitLoaded: "=unitLoaded"
-
-  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
-    # We need to ensure that we have a height for the lazy loaded accordion contents
-    $scope.accordionHeight = 100
-    # Accordion ready is used to show the accordions
-    $scope.accordionReady = false
-    $scope.grades = gradeService.grades
-    $scope.unitService = unitService
-
-    $scope.tutorName = currentUser.profile.name
-
-    $scope.search = ""
-
-    $scope.switchToLab = (student, tutorial) ->
-      if tutorial
-        newId = tutorial.id
-      else
-        newId = -1
-      Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
-        (project) ->
-          student.tute = project.tute
-          student.tutorial = $scope.unit.tutorialFromId( student.tute )
-      )
-
-    $scope.getCSVHeader = () ->
-      result = ['student_code', 'name', 'email', 'portfolio', 'lab']
-      angular.forEach(projectService.progressKeys, (key) ->
-        result.push(key)
-      )
-      angular.forEach(taskService.statusKeys, (key) ->
-        result.push(key)
-      )
-      result
-
-    $scope.getCSVData = () ->
-      filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.studentFilter, $scope.tutorName), $scope.search)
-      result = []
-      angular.forEach(filteredStudents, (student) ->
-        row = {}
-        row['student_code'] = student.student_id
-        row['name'] = student.name
-        row['email'] = student.student_email
-        row['portfolio'] = student.portfolio_status
-        if student.tutorial
-          row['lab'] = student.tutorial.abbreviation
-        else
-          row['lab'] = ""
-        angular.forEach(student.progress_stats, (stat) ->
-          row[stat.type] = stat.value
-        )
-        angular.forEach(student.task_stats, (stat) ->
-          row[stat.type] = stat.value
-        )
-        result.push row
-      )
-      result
-
-    # The following is called when the unit is loaded
-    prepAccordion = () ->
-      # 5 tasks per row, each 32 pixels in size
-      $scope.accordionHeight = $scope.unit.taskCount() / 3 * 38 + 30
-      $scope.accordionReady = true
-
-    if ! $scope.unitLoaded
-      unwatchFn = $scope.$watch( ( () -> $scope.unitLoaded ), (value) ->
-        if ( value )
-          prepAccordion()
-          unwatchFn()
-        else
-          $scope.accordionReady = false
-      )
-    else
-      prepAccordion()
-
-    $scope.reverse = false
-    $scope.statusClass = taskService.statusClass
-    $scope.barLargerZero = (bar) -> bar.value > 0
-
-    # Pagination details
-    $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 15
-
-    update_project_details = (student, project) ->
-      projectService.updateTaskStats(student, project.stats)
-      if student.project
-        _.each student.project.tasks, (task) =>
-          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
-      alertService.add("success", "Status updated.", 2000)
-
-    $scope.transitionWeekEnd = (student) ->
-      Project.update({ id: student.project_id, trigger: "trigger_week_end" }).$promise.then (
-        (project) ->
-          update_project_details(student, project)
-      )
-
-    # The assessingUnitRole is accessed in student views loaded from this view
-    $scope.assessingUnitRole = $scope.unitRole
-
-    $scope.showEnrolModal = () ->
-      $modal.open
-        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
-        controller: 'EnrolStudentModalCtrl'
-        resolve:
-          unit: -> $scope.unit
-)
-
 .directive('staffAdminUnitContext', ->
   replace: true
   restrict: 'E'
@@ -164,7 +44,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService) ->
+  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -234,21 +114,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.batchTaskUrl = ->
       Task.getTaskDefinitionBatchUploadUrl($scope.unit)
     $scope.onBatchTaskSuccess = (response) ->
-      newTasks = response.added
-      updatedTasks = response.updated
-      failedTasks = response.failed
-
-      if newTasks.length > 0
-        alertService.add("success", "Added #{newTasks.length} tasks.", 2000)
-        _.extend($scope.unit.task_definitions, newTasks)
-      if updatedTasks.length > 0
-        alertService.add("success", "Updated #{updatedTasks.length} tasks.", 2000)
-        _.each updatedTasks, (td) ->
-          idx = _.findIndex $scope.unit.task_definitions, { 'abbreviation': td.abbreviation }
-          if idx >= 0
-            _.extend $scope.unit.task_definitions[idx], td
-      if failedTasks.length > 0
-        alertService.add("danger", "Failed to add #{failedTasks.length} tasks.")
+      csvResultService.show "Task CSV Upload Results", response
+      if response.success.length > 0
+        $scope.unit.refresh()
 
 )
 .directive('adminUnitContext', ->
@@ -322,12 +190,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, $modal, Unit, Project, alertService) ->
-    $scope.batchFiles = ->
-    $scope.batchEnrolmentUrl = -> Unit.enrolStudentsCSVUrl $scope.unit
-    $scope.batchWithdrawUrl  = -> Unit.withdrawStudentsCSVUrl $scope.unit
-
-    $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
+  controller: ($scope, $modal, Unit, Project, alertService, csvResultService) ->
+    $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
     $scope.showEnrolModal = () ->
       $modal.open
@@ -336,31 +200,41 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         resolve:
           unit: -> $scope.unit
 
-    $scope.onBatchEnrolSuccess = (response) ->
+    onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
-      if newStudents.length > 0
-        alertService.add("success", "Enrolled #{newStudents.length} students.", 2000)
-        $scope.unit.students = $scope.unit.students.concat(newStudents)
-      else
-        alertService.add("info", "No students need to be enrolled.", 4000)
+      csvResultService.show("Enrol Student CSV Results", response)
+      if response.success.length > 0
+        $scope.unit.refreshStudents()
 
-    $scope.onBatchWithdrawSuccess = (response) ->
-      withdrawnStudents = response
-      # at least one student?
-      if withdrawnStudents.length > 0
-        alertService.add("success", "Withdrew #{withdrawnStudents.length} students.", 2000)
-        student.enrolled = false for student in $scope.unit.students when student.student_id in withdrawnStudents
+    onBatchWithdrawSuccess = (response) ->
+      csvResultService.show("Withdraw Student CSV Results", response)
+      if response.success.length > 0
+        alertService.add("success", "Withdrew #{response.success.length} students.", 2000)
+        $scope.unit.refreshStudents()
       else
         alertService.add("info", "No students need to be withdrawn.", 4000)
 
+    $scope.batchStudentTypes =
+      enrol:
+        batchUrl: -> Unit.enrolStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Enrol CSV Data', type: 'csv'  } }
+        onSuccess: onBatchEnrolSuccess
+      withdraw:
+        batchUrl: -> Unit.withdrawStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
+        onSuccess: onBatchWithdrawSuccess
+
     change_enrolment = (student, value) ->
-      Project.update { id: student.project_id, enrolled: value }, (project) ->
-        if value == project.enrolled
-          alertService.add("success", "Enrolment changed.", 2000)
-        else
-          alertService.add("danger", "Enrolment change failed.", 5000)
-        student.enrolled = project.enrolled
+      Project.update { id: student.project_id, enrolled: value },
+        (project) ->
+          if value == project.enrolled
+            alertService.add("success", "Enrolment changed.", 2000)
+          else
+            alertService.add("danger", "Enrolment change failed.", 5000)
+          student.enrolled = project.enrolled
+        (response) ->
+          alertService.add("danger", response.data.error, 5000)
 
     $scope.withdraw = (student) ->
       change_enrolment(student, false)
@@ -376,26 +250,19 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-  controller: ($scope, TutorMarker) ->
-    $scope.dropper = true
-
-    $scope.markingFileUploader =
-      TutorMarker.fileUploader($scope)
-
-    $scope.submitMarkingUpload = () ->
-      $scope.markingFileUploader.uploadZip()
-
-    $scope.requestMarkingExport = () ->
-      TutorMarker.downloadFile($scope.unit)
-
-    $scope.isMac = () ->
-      navigator.platform == "MacIntel"
-)
-.directive('unitPortfolios', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-portfolios.tpl.html'
-  controller: ($scope, Unit) ->
-    $scope.downloadPortfolios = () ->
-      Unit.downloadPortfolios($scope.unit)
+  controller: ($scope, $sce) ->
+    $scope.activeContext = 'submissions'
+    $scope.setActiveContext = (context) ->
+      return if context is $scope.activeContext
+      $scope.activeContext = context
+    $scope.contexts =
+      submissions:
+        title: 'Mark Submissions Offline'
+        subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
+        icon: 'file'
+      portfolios:
+        title: 'Mark Portfolios'
+        subtitle: 'Download all submitted portfolios here for marking'
+        icon: 'book'
+      # potentially tests here too?
 )

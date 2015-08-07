@@ -9,4 +9,6 @@ angular.module("doubtfire.common", [
   # Custom directives
   'doubtfire.common.file-uploader'
   'doubtfire.common.pdf-panel-viewer'
+  'doubtfire.common.grade-icon'
+  'doubtfire.common.csv-result-modal'
 ])

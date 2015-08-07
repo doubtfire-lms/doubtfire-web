@@ -30,6 +30,8 @@ angular.module('doubtfire.common.file-uploader', [])
     onComplete: '=?'
     # This value is bound to whether or not the uploader is currently uploading
     isUploading: '=?'
+    # This value is bound to whether or not the uploader is ready to upload
+    isReady: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -121,7 +123,7 @@ angular.module('doubtfire.common.file-uploader', [])
     # Checks if okay to upload (i.e., file models exist for each drop zone)
     #
     $scope.readyToUpload = ->
-      _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
+      return $scope.isReady = _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
 
     #
     # Resets the uploader and call it
@@ -138,9 +140,7 @@ angular.module('doubtfire.common.file-uploader', [])
     # Initiates the upload
     #
     $scope.initiateUpload = ->
-      if $scope.onBeforeUpload
-        $scope.onBeforeUpload()
-
+      $scope.onBeforeUpload?()
       xhr   = new XMLHttpRequest()
       form  = new FormData()
       # Append data

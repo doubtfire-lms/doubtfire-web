@@ -3,8 +3,8 @@
 		<h3>
 			Assess Task<span class="fa fa-graduation-cap fa-2x pull-right"></span>
 		</h3>
-		<h4>{{task.task_name}}</h4>
-		<p>{{task.task_desc}}</p>
+		<h4>{{task.definition.name}}</h4>
+		<p>{{task.definition.description}}</p>
 		<p><strong>Task Due:</strong> {{task.due_date | date: 'dd MMMM yyyy'}}</p>
 	</div>
 	<div class="modal-body">

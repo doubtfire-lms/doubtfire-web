@@ -1,3 +1,9 @@
+<ul class="breadcrumb">
+    <li><a href="#/home">Home</a></li>
+    <li>Administrator</li>
+    <li><a href="#/admin/units">Manage Units</a></li>
+    <li class="active">{{unit.id == -1 ? 'New Unit' : unit.name}}</li>
+</ul>
 <div class="root-view" id="unit">
   <div ng-hide="unit.id == -1">
     <h3>Edit {{unit.name}}</h3>

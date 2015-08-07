@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $q) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService) ->
   #
   # The unit service object
   #
@@ -85,6 +85,7 @@ angular.module("doubtfire.services.tasks", [])
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
     student: [
+      'not_submitted'
       'working_on_it'
       'need_help'
       'ready_to_mark'
@@ -106,6 +107,10 @@ angular.module("doubtfire.services.tasks", [])
   # This function gets the help text for the indicated status
   taskService.helpText = (status) -> taskService.helpTextDesc[status]
 
+  taskService.taskDefinitionFn = (unit) ->
+    (task) ->
+      unit.taskDef(task.task_definition_id)
+
   # Return an icon and label for the task
   taskService.statusData = (task) ->
     { icon: taskService.statusIcons[task.status], label: taskService.statusLabels[task.status], class: taskService.statusClass(task.status), daysOverdue: taskService.daysOverdue(task) }
@@ -113,7 +118,7 @@ angular.module("doubtfire.services.tasks", [])
   # Return number of days task is overdue, or false if not overdue
   taskService.daysOverdue = (task) ->
     return false if task.status == 'complete'
-    dueDate = new Date(task.due_date)
+    dueDate = new Date(task.definition.target_date)
     now = new Date()
     diffTime = now.getTime() - dueDate.getTime()
     diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
@@ -145,24 +150,32 @@ angular.module("doubtfire.services.tasks", [])
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
 
-  taskService.updateTaskStatus = (task, status) ->
+  taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
-    d = $q.defer()
-    Task.update({ id: task.id, trigger: status }).$promise.then (
+    Task.update(
+      { id: task.id, trigger: status }
       # Success
       (value) ->
         task.status = value.status
-        if student? and student.task_stats?
-          projectService.updateTaskStats(student, value.new_stats)
-        d.resolve(task)),
-      # Failure
-      ((value) ->
+        task.updateTaskStatus project, value.new_stats
+
+        if value.other_projects?
+          _.each value.other_projects, (details) ->
+            proj = unit.findStudent(details.id)
+            if proj?
+              task.updateTaskStatus proj, details.new_stats
+        if value.status == status
+          alertService.add("success", "Status saved.", 2000)
+        else
+          alertService.add("info", "Status change was not changed.", 4000)
+      # Fail
+      (value) ->
         task.status = oldStatus
-        d.reject(value.data.error))
-    d.promise
+        alertService.add("danger", value.data.error, 6000)
+    )
 
   taskService.recreatePDF = (task, success) ->
-    TaskFeedback.resource.update({ id: task.id } ).$promise.then (
+    TaskFeedback.update { id: task.id },
       (value) ->  #success
         if value.result == "false"
           alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
@@ -172,7 +185,6 @@ angular.module("doubtfire.services.tasks", [])
 
           if success
             success()
-      ),
       (value) -> #fail
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
 

@@ -2,18 +2,11 @@
   <div class="col-sm-9">
     <div class="col-sm-12">
       <div class="panel panel-primary">
-        <div class="panel-heading clearfix">
-          <div class="pull-left col-sm-6" style="padding: 0">
-            <h3 class="panel-title">
-              Group Sets
-            </h3>
-            A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
-          </div>
-          <button class="btn pull-right btn-success add-group-set" ng-click="addGroupSet()">
-            <i class="fa fa-users"></i>
-            <i class="fa fa-plus"></i>
-            New Group Set
-          </button>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Group Sets
+          </h3>
+          A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
         </div>
         <div class="groupset-selector panel-body">
           <div ng-hide="unit.group_sets.length > 0">
@@ -21,7 +14,7 @@
               This unit has no group sets
             </div>
           </div>
-          <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover groupsets">
+          <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover table-pointer groupsets">
             <thead>
               <tr>
                 <th><span tooltip="Name of the group set">Name</span></th>
@@ -75,6 +68,13 @@
             </tbody>
           </table>
         </div>
+        <div class="panel-footer clearfix">
+          <button class="btn pull-right btn-success" ng-click="addGroupSet()">
+            <i class="fa fa-users"></i>
+            <i class="fa fa-plus"></i>
+            New Group Set
+          </button>
+        </div>
       </div>
     </div>
     <groupset-manage ng-show="selectedGroupset && unit.group_sets.length > 0" class="col-sm-12"></groupset-manage>
@@ -83,7 +83,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Import to <strong>{{selectedGroupset.name}}</strong></h3>
-        Import groups into {{selectedGroupset.name}} with a CSV containing: group name, username, tutorial code.
+        Import groups into {{selectedGroupset.name}} with a CSV containing: group_name, username, and tutorial.
       </div>
       <div class="panel-body">
         <file-uploader
@@ -92,28 +92,15 @@
           is-uploading="isGroupCSVUploading"
           on-success="onGroupCSVSuccess"
           on-complete="onGroupCSVComplete"></file-uploader>
-
-        <table ng-show="csvImportResponse.errors.length > 0" class="table table-condensed table-hover">
-          <thead>
-            <tr>
-              <th>Group</th>
-              <th>Username</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="line in csvImportResponse.errors">
-              <td>{{line.group}}</td><td>{{line.user}}</td><td>{{line.reason}}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
       <div class="panel-heading">
         <h3 class="panel-title">Export <strong>{{selectedGroupset.name}}</strong></h3>
         Download a CSV of all teams in the {{selectedGroupset.name}} Group Set.
       </div>
-      <div class="panel-body clearfix">
-        <button class="btn btn-primary pull-right" ng-click="downloadGroupCSV()"><i class="fa fa-download"></i> Download CSV</button>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadGroupCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
       </div>
     </div>
   </div><!-- IO panels -->

@@ -1,5 +1,6 @@
 *.sw*
 *~
+.DS_Store
 build/
 bin/
 node_modules/

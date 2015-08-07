@@ -42,11 +42,11 @@
   </div>
   <div class="col-sm-12">
   <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.task_abbr}}</a></li>
+    <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
   </ul>
   <div class="col-sm-12" ng-if="activeTask">
     <task-plagiarism-report task="activeTask"></task-plagiarism-report>
-    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task_name}}</a></span>
+    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
   </div>
 </div>
 </div>

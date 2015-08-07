@@ -4,45 +4,48 @@
       <h3 class="panel-title">Modify Unit Staff</h3>
       Add staff members to the unit, assigning them a convenor or tutor role.
     </div>
-    <form class="panel-body form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="convenors">Add Staff</label>
-        <div class="col-md-9 input-group">
-          <input class="form-control" id="convenors" placeholder="Staff Name" ng-model="selectedStaff" typeahead="staff as
-          staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff">
+    <div class="panel-body">
+      <div class="input-group col-sm-12">
+        <input class="form-control" id="convenors" placeholder="Staff Name" ng-model="selectedStaff" typeahead="staff as
+        staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff">
 
-          <span class="input-group-btn">
-            <button class="btn btn-success" ng-click="addSelectedStaff()">
-              <i class="glyphicon glyphicon-plus"></i>
-            </button>
-          </span>
+        <span class="input-group-btn">
+          <button class="btn btn-success" ng-click="addSelectedStaff()">
+            <i class="glyphicon glyphicon-plus"></i>
+          </button>
+        </span>
+      </div>
+      <br>
+      <div class="col-sm-12">
+        <div class="callout callout-info" ng-hide="unit.staff.length > 0">This unit has no staff assigned</div>
+        <div ng-show="unit.staff.length > 0">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th> Name </th>
+                <th> Role </th>
+                <th> Actions </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="staff in unit.staff">
+                <td> {{staff.name}} </td>
+                <td>
+                  <div class="btn-group">
+                    <label class="btn btn-default" ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
+                    <label class="btn btn-default" ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-danger" ng-click="removeStaff(staff)">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="currentConvenors" >Current Staff</label>
-        <div class="col-md-9 callout callout-info" ng-hide="unit.staff.length > 0">This unit has no staff assigned</div>
-        <ul class="col-md-9 input-group" ng-show="unit.staff.length > 0">
-          <li class="list-group-item" ng-repeat="staff in unit.staff">
-
-            <span class="badge btn btn-default" ng-click="removeStaff(staff)">
-                <i class="glyphicon glyphicon-remove"></i>
-            </span>
-
-            <strong>{{staff.name}}</strong>
-            <br/>
-
-            <label name="staffRole" class="radio-inline" for="radio-tutor-{{staff.id}}">
-              <input type="radio" id="radio-tutor-{{staff.id}}" value="Tutor" ng-model="staff.role" ng-click="changeRole(staff,2)"/>Tutor
-            </label>
-
-            <label name="staffRole" class="radio-inline" for="radio-convenor-{{staff.id}}">
-              <input type="radio" id="radio-convenor-{{staff.id}}" value="Convenor" ng-model="staff.role" ng-click="changeRole(staff,3)" />Convenor
-            </label>
-
-          </li>
-        </ul>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

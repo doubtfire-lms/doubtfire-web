@@ -1,6 +1,6 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{compileStep + 1}}: Compile Portfolio</h3>
+      <h3 class="panel-title">Compile Portfolio</h3>
   </div>
   <div class="panel-body">
     <div class="col-xs-12" ng-show="project.compile_portfolio">
@@ -30,9 +30,9 @@
     </div>
   </div>
   <div class="panel-footer">
-    <button class="btn btn-primary pull-left" ng-click="currentView = currentView - 1"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="text-right">
-      <button class="btn btn-primary" ng-click="currentView = currentView + 1">Next <i class="fa fa-arrow-right"></i></button>
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>
