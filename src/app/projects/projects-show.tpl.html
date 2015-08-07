@@ -2,8 +2,8 @@
   	<li><a href="#/home">Home</a></li>
   	<li class="active">{{unit.name}}</li>
 </ul>
-<div class="feedback-float-toolbar well" ng-if="assessingUnitRole && unitLoaded">
-  <label>Actions</label>
+<div class="feedback-float-toolbar well" ng-if="assessingUnitRole && project">
+  <label>Tutor Actions</label>
   <button ng-click="transitionWeekEnd()" class="btn btn-info">
     <i class="fa fa-comment fa-2x"></i><br/>
     Discussed
@@ -13,48 +13,12 @@
     Student List
   </a>
 </div><!--/feedback-float-toolbar-->
-<div class="root-view" id="projects-show" ng-if="unitLoaded">
-  <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
-  <tabset justified="true">
-    <tab active="activeTab[0]">
-      <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-bar-chart fa-2x"></i> <br> Progress
-        </div>
-      </tab-heading>
-      <progress-info></progress-info>
-    </tab>
-    <tab select="showTaskView()" active="activeTab[1]">
-      <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-tasks fa-2x"></i> <br> Task List
-        </div>
-      </tab-heading>
-      <task-feedback active-task="selectedTask" unit="unit" project="project" submitted-tasks="submittedTasks" assessing-unit-role="assessingUnitRole" ng-if="unitLoaded"></task-feedback>
-    </tab>
-    <tab active="activeTab[2]" ng-if="unit.group_sets.length > 0">
-      <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-group fa-2x"></i> <br> Groups
-        </div>
-      </tab-heading>
-      <student-group-tab></student-group-tab>
-    </tab>
-    <tab active="activeTab[3]">
-      <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-pencil fa-2x"></i> <br> Tutorial
-        </div>
-      </tab-heading>
-      <lab-list></lab-list>
-    </tab>
-    <tab active="activeTab[4]">
-      <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-book fa-2x"></i> <br> Portfolio
-        </div>
-      </tab-heading>
-      <project-portfolio></project-portfolio>
-    </tab>
-  </tabset>
+<div class="root-view" id="projects-show">
+  <student-project
+    project-id="studentProjectId"
+    show-task-id="showTaskId"
+    unit-role="unitRole"
+    project="project"
+    unit="unit"
+    assessing-unit-role="assessingUnitRole"></student-project>
 </div>

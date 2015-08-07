@@ -1,0 +1,44 @@
+<div>
+  <div class="modal-header">
+    <h3>
+      {{title}}
+      <br>
+      <small>Response details</small>
+    </h3>
+  </div>
+  <div class="modal-body">
+    <div class="btn-group btn-group-justified">
+        <label class="btn btn-default" ng-model="activeCsvResponseSelection" btn-radio="'success'">Success</label>
+        <label class="btn btn-default" ng-model="activeCsvResponseSelection" btn-radio="'errors'">Errors</label>
+        <label class="btn btn-default" ng-model="activeCsvResponseSelection" btn-radio="'ignored'">Ignored</label>
+    </div>
+    <table class="table table-condensed table-hover">
+      <thead>
+          <tr>
+              <th class="col-sm-4">
+                  Message
+              </th>
+              <th class="col-sm-8">
+                  Data
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr ng-repeat="item in response[activeCsvResponseSelection] | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+              <td class="col-sm-4">
+                {{item.message}}
+              </td>
+              <td class="col-sm-8">
+                <span class="csv-row">
+                  {{item.row}}
+                </span>
+              </td>
+          </tr>
+      </tbody>
+  </table><!--/enrolment-table-->
+  </div>
+  <div class="modal-footer">
+    <pagination ng-show="response[activeCsvResponseSelection].length > pageSize" total-items="response[activeCsvResponseSelection].length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+    <button class="btn btn-primary" ng-click="close()">Done</button>
+  </div>
+</div>

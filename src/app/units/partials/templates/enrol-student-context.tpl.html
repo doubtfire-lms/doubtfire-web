@@ -9,7 +9,7 @@
                     Summary of students enrolled in this unit
                 </div>
                 <div class="pull-right">
-                    <form style="margin-right: 1ex; display: inline-block" ng-hide="unit.students.length > 0"  role="search" class="form-horizontal">
+                    <form ng-show="unit.students.length > 0"  role="search" class="form-horizontal">
                         <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
                         <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length != 0">
                             Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
@@ -18,10 +18,6 @@
                             No students found.
                         </p>
                     </form>
-                    <button class="btn btn-success" ng-click="showEnrolModal()">
-                        <i class="fa fa-user"></i>
-                        <i class="fa fa-plus"></i> Enrol Student
-                    </button>
                 </div>
             </div>
             <div class="panel-body">
@@ -80,40 +76,42 @@
                     </table><!--/enrolment-table-->
                 </div>
             </div>
-            <div class="panel-footer text-center" ng-show="unit.students.length > 0">
-                <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+            <div class="panel-footer clearfix" ng-show="unit.students.length > 0">
+                <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+                <button class="btn btn-success pull-right" ng-click="showEnrolModal()">
+                    <i class="fa fa-user"></i>
+                    <i class="fa fa-plus"></i> Enrol Student
+                </button>
             </div>
         </div>
     </div><!--/student-list-->
     <div class="col-sm-3">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title">Batch Student Enrol</h4>
-                Batch enrol students into this subject using a CSV containing:
-                username, first_name, last_name, email, tutorial.
+                <h4 class="panel-title">Batch Student Uploads</h4>
+                Batch enrol or withdraw students into this unit using a CSV containing:
+                unit_code, username, first_name, last_name, email, tutorial.
             </div>
             <div class="panel-body">
+                <div class="btn-group btn-group-justified">
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">
+                        Enrol<br>Students
+                    </label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">
+                        Withdraw<br>Students
+                    </label>
+                </div>
                 <file-uploader
-                  files="batchFiles"
-                  url="batchEnrolmentUrl()"
-                  on-success="onBatchEnrolSuccess"></file-uploader>
+                  files="batchStudentTypes[activeBatchStudentType].batchFiles"
+                  url="batchStudentTypes[activeBatchStudentType].batchUrl()"
+                  on-success="batchStudentTypes[activeBatchStudentType].onSuccess"></file-uploader>
             </div><!--batch-enrol-->
-            <div class="panel-heading">
-                <h4 class="panel-title">Batch Student Withdraw</h4>
-                Batch withdraw students from this subject using a CSV containing: username, first_name, last_name, email, tutorial.
-            </div>
-            <div class="panel-body">
-                <file-uploader
-                  files="batchFiles"
-                  url="batchWithdrawUrl()"
-                  on-success="onBatchWithdrawSuccess"></file-uploader>
-            </div><!--batch-withdraw-->
             <div class="panel-heading">
                 <h4 class="panel-title">Download Enrolled Students</h4>
                 Download all enrolled students in this unit.
             </div>
-            <div class="panel-body text-right">
-                <a target="_blank" href="{{batchEnrolmentUrl()}}" class="btn btn-primary">
+            <div class="panel-body text-center">
+                <a target="_blank" href="{{batchStudentTypes.enrol.batchUrl()}}" class="btn btn-primary btn-download">
                     <i class="fa fa-download"></i> Download
                 </a>
             </div>

@@ -1,40 +1,45 @@
-<div>
-  <!-- ensure content remains in root div tag -->
-  <div class="table-responsive">
-    <table class="table table-condensed table-hover">
-      <thead>
-        <tr>
-          <th>Lab Code</th>
-          <th><a href="" ng-click="sortOrder='meeting_day'; reverse=!reverse">Day</a></th>
-          <th>Time</th>
-          <th>Room</th>
-          <th>Tutor</th>
-          <th>Assigned</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse">
-          <td>{{tutorial.abbreviation}}</td>
-          <td>{{tutorial.meeting_day}}</td>
-          <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
-          <td>{{tutorial.meeting_location}}</td>
-          <td>{{tutorial.tutor_name}}</td>
-          <td ng-if="project.tute == tutorial.id"><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> </button>
-          </td>
-          <td ng-if="project.tute != tutorial.id"><button type="button" class="btn btn-default" ng-click ="setTutorial(tutorial.id)"><span class="glyphicon glyphicon-minus"></span></button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot if-role="Tutor Convenor Admin">
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><button type="button" class="btn btn-danger" ng-click="setTutorial(-1)"><span class="glyphicon glyphicon-remove"></span></button></td>
-        </tr>
-      </tfoot>
-    </table>
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Select a Tutorial</h4>
+      Click a check to assign yourself to that tutorial, or select the red cross at the end of the list to remove yourself from all tutorials.
+    </div>
+    <div class="panel-body">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Lab Code</th>
+            <th><a href="" ng-click="sortOrder='meeting_day'; reverse=!reverse">Day</a></th>
+            <th>Time</th>
+            <th>Room</th>
+            <th>Tutor</th>
+            <th>Assigned</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse">
+            <td>{{tutorial.abbreviation}}</td>
+            <td>{{tutorial.meeting_day}}</td>
+            <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
+            <td>{{tutorial.meeting_location}}</td>
+            <td>{{tutorial.tutor_name}}</td>
+            <td ng-if="project.tute == tutorial.id"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> </button>
+            </td>
+            <td ng-if="project.tute != tutorial.id"><button type="button" class="btn btn-default" ng-click ="setTutorial(tutorial.id)"><span class="glyphicon glyphicon-minus"></span></button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot if-role="Tutor Convenor Admin">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button type="button" class="btn btn-danger" ng-click="setTutorial(-1)"><span class="glyphicon glyphicon-remove"></span></button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
 </div>

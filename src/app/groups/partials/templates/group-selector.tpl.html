@@ -9,10 +9,10 @@
   </form>
   <div ng-hide="filteredGroups.length > 0">
     <div class="callout callout-info">
-      {{selectedGroupset.name}} has no groups {{staffFilter == 'mine' ? 'in this tutorial' : '' }}
+      {{selectedGroupset.name}} has no groups {{(staffFilter == 'mine' || selectedGroupset.keep_groups_in_same_class) ? 'in this tutorial' : '' }}
     </div>
   </div>
-  <table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover">
+  <table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
     <thead>
       <tr>
         <th>

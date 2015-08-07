@@ -38,10 +38,10 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
         },
         (grp) ->
           $scope.groups.push(grp)
-          addGroupForm.reset()
           $scope.selectGroup(grp) if $scope.selectedGroup is null
-
           alertService.add("success", "#{grp.name} was created!", 3000)
+
+          addGroupForm.reset()
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 

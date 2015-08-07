@@ -167,7 +167,16 @@ angular.module("doubtfire.sessions", [
 
   # Return the auth object
   auth
-).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie) ->
+).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie, aboutModalService) ->
+
+  isIE = ->
+    window.navigator.appName is "Microsoft Internet Explorer"
+  ieVersion = ->
+    matches = new RegExp(" MSIE ([0-9].[0-9]);").exec(window.navigator.userAgent)
+    return parseInt(matches[1].replace(".0", "")) if matches? and matches.length > 1
+    true
+
+  $scope.isIE = isIE() and ieVersion() < 11 # Support IE11
 
   $scope.session = { remember_me: true }
 
@@ -182,10 +191,7 @@ angular.module("doubtfire.sessions", [
     logo?.title = 'Happy April Fools Day!'
 
   $scope.openAboutModal = ->
-    $modal.open
-      templateUrl: 'common/partials/templates/about-doubtfire-modal.tpl.html'
-      controller: 'AboutDoubtfireModalCtrl'
-      size: 'lg'
+    aboutModalService.show()
 
   if auth.isAuthenticated()
     redirectService.redirect "home", {}
