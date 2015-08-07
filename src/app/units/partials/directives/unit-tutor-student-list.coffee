@@ -103,15 +103,6 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
     # Initially not full screen
     $scope.fullscreen = false
 
-    oldCurrentPage = $scope.currentPage
-    $scope.$watch 'fullscreen', (newValue) ->
-      if newValue
-        $scope.pageSize = 9999 # allow infinite scroll
-        $scope.currentPage = 1
-      else
-        $scope.pageSize = 15 # default size
-        $scope.currentPage = oldCurrentPage
-
     update_project_details = (project, response) ->
       projectService.updateTaskStats(project, response.stats)
       if project.tasks
