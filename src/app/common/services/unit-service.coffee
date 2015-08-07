@@ -63,6 +63,9 @@ angular.module("doubtfire.services.units", [])
 
         unit.students = new_students
 
+    unit.findStudent = (id) ->
+      _.find unit.students, (s) -> s.project_id == id
+
     unit.addStudent = (student) ->
       unit.extendStudent(student)
       unit.students.push(student)

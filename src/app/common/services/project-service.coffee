@@ -37,6 +37,8 @@ angular.module("doubtfire.services.projects", [])
       td = unit.taskDef(task.task_definition_id)
       task.definition = td
       task.status_txt = taskService.statusLabels[task.status]
+      task.updateTaskStatus = (project, new_stats) ->
+        projectService.updateTaskStats(project, new_stats)
       task
     student.tasks = _.sortBy(student.tasks, (t) -> t.definition.abbreviation).reverse()
     student
