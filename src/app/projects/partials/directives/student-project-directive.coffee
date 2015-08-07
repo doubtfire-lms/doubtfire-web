@@ -58,6 +58,8 @@ angular.module("doubtfire.projects.student-project-directive", [
 
     selectProjectTask = (project) ->
       filteredTasks = _.select project.tasks, (t) -> $scope.taskDefinition(t).target_grade <= project.target_grade
+      filteredTasks = _.sortBy filteredTasks, (t) -> t.definition.seq
+
       $scope.projectLoaded = true
 
       # no tasks so dont try to select a task
@@ -90,7 +92,7 @@ angular.module("doubtfire.projects.student-project-directive", [
             $scope.project.selectedTask = t
       
         if not $scope.project.selectedTask?
-          $scope.project.selectedTask = $scope.project.selectedTask = filteredTasks[0]
+          $scope.project.selectedTask = filteredTasks[0]
       else # no tasks for student!
         $scope.project.selectedTask = null
       # end if filtered tasks

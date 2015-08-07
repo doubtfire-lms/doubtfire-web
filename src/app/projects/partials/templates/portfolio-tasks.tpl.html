@@ -6,7 +6,7 @@
     <div class="col-xs-12">
       <p>Select the tasks you want to include in your portfolio. Make sure that you select enough tasks you include demonstrate that you have met all of the unit's learning outcomes. Doubtfire will then incorporate your work from these tasks into your portfolio.</p>
       <ul class="project-task-bar">
-        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (project.tasks | filter:hasPDF | orderBy:'seq')" ng-hide="taskDisabled(task)">
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (project.tasks | filter:hasPDF | orderBy:'definition.seq')" ng-hide="taskDisabled(task)">
             <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="task.include_in_portfolio = !task.include_in_portfolio; updateTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.definition.name}}: {{statusText(task.status)}}">{{task.definition.abbreviation}} <span class='fa fa-check' ng-show="task.include_in_portfolio"></span></button>
         </li>
       </ul>
