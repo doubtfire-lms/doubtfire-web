@@ -36,6 +36,7 @@ angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
         (response) ->
           projectService.updateGroups($scope.project) #change groups
           alertService.add("success", "Joined group", 2000)
+          $scope.refreshGroupMembers()
         (error) ->
           alertService.add("danger", error.data.error, 6000)
           $scope.selectedGroup = null
