@@ -24,8 +24,8 @@
     </form>
   </div>
   <div class="panel-body student-list">
-      <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</div>
-      <table ng-hide="filteredStudents.length < allStudents.length && filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
+      <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredStudents.length == 0">No students found.</div>
+      <table ng-hide="filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
         <thead>
           <tr>
             <th class="student-id">
