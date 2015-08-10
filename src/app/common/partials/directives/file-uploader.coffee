@@ -38,7 +38,7 @@ angular.module('doubtfire.common.file-uploader', [])
     #
     ACCEPTED_TYPES =
       document:
-        extensions: ['pdf']
+        extensions: ['pdf', 'ps']
         icon:       'fa-file-pdf-o'
         name:       'PDF'
       csv:
@@ -46,7 +46,7 @@ angular.module('doubtfire.common.file-uploader', [])
         icon:       'fa-file-excel-o'
         name:       'CSV'
       code:
-        extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java']
+        extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java', 'py']
         icon:       'fa-file-code-o'
         name:       'code'
       image:
