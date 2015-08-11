@@ -43,7 +43,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
       )
 
     $scope.removeGroupSet = (gs) ->
-      console.log GroupSet
+      # console.log GroupSet
       GroupSet.delete(
         { unit_id: $scope.unit.id, id: gs.id },
         (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )

@@ -8,6 +8,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
   scope:
     task: '='
     project: '='
+    unit: '='
   templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
   controller: ($scope, Task, taskService, alertService, projectService, groupService) ->
     # Upload types which are also task states
@@ -80,8 +81,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     $scope.onSuccess = (response) ->
       $scope.task.status = response.status
       # Update the project's task stats and burndown data
-      projectService.updateTaskStats($scope.project, response.new_stats)
-      $scope.task.processing_pdf = response.processing_pdf
+      taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
 
     $scope.onComplete = ->
       $scope.uploadType = null

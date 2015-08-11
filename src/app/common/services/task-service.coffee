@@ -150,24 +150,29 @@ angular.module("doubtfire.services.tasks", [])
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
 
+  taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+    task.status = response.status
+    task.updateTaskStatus project, response.new_stats
+    task.processing_pdf = response.processing_pdf
+
+    if response.status == status
+      alertService.add("success", "Status saved.", 2000)
+      if response.other_projects?
+        _.each response.other_projects, (details) ->
+          proj = unit.findStudent(details.id)
+          if proj?
+            task.updateTaskStatus proj, details.new_stats
+    else
+      alertService.add("info", "Status change was not changed.", 4000)
+
+
   taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
     Task.update(
       { id: task.id, trigger: status }
       # Success
       (value) ->
-        task.status = value.status
-        task.updateTaskStatus project, value.new_stats
-
-        if value.other_projects?
-          _.each value.other_projects, (details) ->
-            proj = unit.findStudent(details.id)
-            if proj?
-              task.updateTaskStatus proj, details.new_stats
-        if value.status == status
-          alertService.add("success", "Status saved.", 2000)
-        else
-          alertService.add("info", "Status change was not changed.", 4000)
+        taskService.processTaskStatusChange unit, project, task, status, value
       # Fail
       (value) ->
         task.status = oldStatus

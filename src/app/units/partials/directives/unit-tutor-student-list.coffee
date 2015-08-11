@@ -78,7 +78,7 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
     # View a student
     #
     $scope.viewStudent = (student) ->
-      console.log {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
+      # console.log {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
       if $scope.fullscreen
         $scope.activeStudent = student
       else
