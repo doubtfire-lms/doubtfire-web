@@ -1,11 +1,15 @@
 .feedback-float-toolbar {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 2;
-  margin: 0;
+  @media (min-width: @screen-md-min) {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    border-top-left-radius: 1em;
+    margin: 0;
+  }
+  margin: 3em 0;
   border-radius: 0;
-  border-top-left-radius: 1em;
+  text-align: center;
   label {
     text-transform: uppercase;
     display: block;
