@@ -1,4 +1,4 @@
-<div class="panel panel-primary">
+<div class="panel panel-success">
   <div class="panel-heading">Files Uploaded</div>
   <div class="panel-body">
     <table class="table table-condensed table-hover">
@@ -6,14 +6,17 @@
         <tr>
           <th>Kind</th>
           <th>File</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="file in project.portfolio_files">
           <td>{{file.name}}</td>
-          <td><span class="fa fa-file-{{file.kind == 'document' ? 'pdf' : file.kind}}-o fa-2x"></span></td>
-          <td><button class="btn btn-danger pull-right" ng-click="removeFile(file)"><span class="glyphicon glyphicon-remove"></span></td>
+          <td>
+            <i tooltip="{{file.kind | ucfirst }}" class="fa fa-file-{{file.kind == 'document' ? 'pdf' : file.kind}}-o fa-2x"></i>
+          </td>
+          <td>
+            <button class="btn btn-danger pull-right" ng-click="removeFile(file)"><i tooltip="Remove this file" class="fa fa-times"></i>
+          </td>
         </tr>
       </tbody>
     </table>
