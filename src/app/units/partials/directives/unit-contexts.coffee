@@ -152,7 +152,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit, UnitRole) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, alertService) ->
     $scope.editTutorial = (tutorial) ->
       $modal.open
         controller: 'TutorialModalCtrl'
@@ -166,8 +166,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
 
     $scope.deleteTutorial = (tutorial) ->
       # TODO: No endpoint for this yet
-      alert "Functionality coming soon!"
-      $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+      Tutorial.delete { id: tutorial.id },
+        (response) ->
+          $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+        (response) ->
+          alertService.add("danger", response.data.error)
 
     $scope.createTutorial = ->
       d = new Date()
