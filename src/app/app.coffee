@@ -30,7 +30,7 @@ angular.module("doubtfire", [
   #
   'macite'              # Andrew Cain
   'apj'                 # Allan Jones
-  'alexcu-'             # Alex Cummaudo
+  'alexcu'              # Alex Cummaudo
   'joostfunkekupper'    # Joost Funke Kupper
   'rohanliston'         # Rohan Liston
   'lukehorvat'          # Luke Horvat
