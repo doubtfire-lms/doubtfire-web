@@ -71,6 +71,8 @@ angular.module('doubtfire.groups.partials.group-selector-directive', [])
           (response) ->
             $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id )
             alertService.add("info", "#{grp.name} was deleted", 3000)
+          (response) ->
+            alertService.add("danger", response.data.error, 3000)
         )
 
     $scope.selectGroup = (grp) ->
