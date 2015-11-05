@@ -3,23 +3,48 @@
       	<li><a href="#/home">Units</a></li>
       	<li class="active">{{unitRole.unit_name}} {{unitRole.role}}</li>
   	</ul>
-  	<div class="col-md-offset-2 col-md-8" ng-if="unitRole.role != 'Student'">
+  	<div class="root-view" id="teacher-view" ng-if="unitRole.role != 'Student'">
       <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View</p></h2>
-      <tabset ng-if="unitLoaded">
-        <tab heading="My Students" ng-click="closeAllStudents()">
-          <tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded" student-filter="'myStudents'"></tutor-student-list>
+      <tabset justified="true" ng-if="unitLoaded">
+        <tab>
+          <tab-heading>
+            <div class="text-center">
+              <i style="padding-bottom: 5px" class="fa fa-user fa-2x"></i> <br> Students
+            </div>
+          </tab-heading>
+          <tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
         </tab>
-        <tab heading="All Students" ng-click="closeAllStudents()">
-      		<tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded" student-filter="'allStudents'"></tutor-student-list>
+        <tab ng-if="unit.group_sets.length > 0">
+          <tab-heading>
+            <div class="text-center">
+              <i style="padding-bottom: 5px" class="fa fa-users fa-2x"></i> <br> Groups
+            </div>
+          </tab-heading>
+          <tutor-group-tab></tutor-group-tab>
         </tab>
-        <tab heading="Task Stats">
-          <task-summary-stats unit="unit"></task-summary-stats>
-        </tab>
-        <tab heading="Marking">
+        <tab>
+          <tab-heading>
+            <div class="text-center">
+              <i style="padding-bottom: 5px" class="fa fa-check-square-o fa-2x"></i> <br> Marking
+            </div>
+          </tab-heading>
           <tutor-marking-context></tutor-marking-context>
         </tab>
-        <tab heading="Portfolios">
-          <unit-portfolios></unit-portfolios>
+        <tab>
+          <tab-heading>
+            <div class="text-center">
+              <i style="padding-bottom: 5px" class="fa fa-eye fa-2x"></i> <br> Plagiarism
+            </div>
+          </tab-heading>
+          <unit-plagiarism-tab></unit-plagiarism-tab>
+        </tab>
+        <tab>
+          <tab-heading>
+            <div class="text-center">
+              <i style="padding-bottom: 5px" class="fa fa-bar-chart fa-2x"></i> <br> Statistics
+            </div>
+          </tab-heading>
+          <task-summary-stats unit="unit"></task-summary-stats>
         </tab>
       </tabset>
   	</div>

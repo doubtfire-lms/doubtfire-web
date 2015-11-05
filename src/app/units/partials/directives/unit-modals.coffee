@@ -60,16 +60,19 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.saveUnit = ->
     Unit.create { unit: $scope.unit }
 )
-.controller('EnrolStudentModalCtrl', ($scope, $modalInstance, Project, unit) ->
+.controller('EnrolStudentModalCtrl', ($scope, $modalInstance, Project, unit, alertService) ->
   $scope.unit = unit
   $scope.projects = unit.students
 
   $scope.enrolStudent = (student_id, tutorial) ->
     # get tutorial_id from tutorial_name
-    Project.create {unit_id: unit.id, student_num: student_id, tutorial_id: if tutorial then tutorial.id else null }, (project) ->
-      unit.addStudent project
-      $modalInstance.close()
-      #TODO: success and error alerts
+    Project.create {unit_id: unit.id, student_num: student_id, tutorial_id: if tutorial then tutorial.id else null },
+      (project) ->
+        unit.addStudent project
+        $modalInstance.close()
+        alertService.add("success", "Student enrolled", 2000)
+      , (response) ->
+        alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)
 )
 .controller('TaskEditModalCtrl', ($scope, $modalInstance, TaskDefinition, task, unit, alertService, isNew, gradeService) ->
   $scope.unit = unit
@@ -77,52 +80,64 @@ angular.module('doubtfire.units.partials.modals', [])
   $scope.isNew = isNew
 
   $scope.grades = gradeService.grades
-  
+
   # Datepicker opener
   $scope.open = ($event) ->
     $event.preventDefault()
     $event.stopPropagation()
     $scope.opened = true
-    
+
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
-    newUpReq = { key: "file#{newLength-1}", name: "", type: "code" }
+    newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
     $scope.task.upload_requirements.push newUpReq
-  
+
   $scope.removeUpReq = (upReq) ->
     $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
-  
+
+  $scope.addCheck = () ->
+    newLength = $scope.task.plagiarism_checks.length + 1
+    newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
+    $scope.task.plagiarism_checks.push newCheck
+
+  $scope.removeCheck = (check) ->
+    $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
+
+
   populate_task = (oldTask, newTask) ->
     _.extend(oldTask, newTask)
-    if newTask.abbreviation
-      oldTask.abbr = newTask.abbreviation
-    else
-      oldTask.abbr = newTask.abbr
+    oldTask.abbreviation = newTask.abbreviation
+    oldTask.description = newTask.description
     if newTask.weighting
       oldTask.weight = newTask.weighting
     else
       oldTask.weight = newTask.weight
     oldTask.name = newTask.name
     oldTask.upload_requirements = newTask.upload_requirements
+    oldTask.plagiarism_checks = newTask.plagiarism_checks
     oldTask.target_date = newTask.target_date
-    oldTask.required = newTask.required
+
+  $scope.deleteTask = () ->
+    taskService.deleteTask($scope.task, $scope.unit, $modalInstance.close)
 
   $scope.saveTask = () ->
     # Map the task to upload to the appropriate fields
     task = {}
     _.extend(task, $scope.task)
 
-    task.abbreviation = $scope.task.abbr
     task.weighting = $scope.task.weight
     task.unit_id = $scope.unit.id
     task.upload_requirements = JSON.stringify $scope.task.upload_requirements
-    # task.upload_requirements = $scope.task.upload_requirements
+    task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+    if task.group_set
+      task.group_set_id = task.group_set.id
+    else
+      task.group_set_id = -1
+
     if task.target_date && task.target_date.getMonth
       tgt = task.target_date
       task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-    
-    task.description = $scope.task.desc
-    
+
     if $scope.isNew
       TaskDefinition.create( { task_def: task } ).$promise.then (
         (response) ->

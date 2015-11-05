@@ -1,0 +1,90 @@
+// Tab contents height is set here
+// 50vh == 50% of Vertical Height of display
+@task-feedback-tab-content-height: 60vh;
+
+.task-feedback .task-feedback-toolbar {
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+}
+
+.task-feedback .task-header-info {
+  .task-description {
+    float: left;
+  }
+  .date-info {
+    float: right;
+    text-align: right;
+    .overdue.label {
+      i {
+        display: inline-block;
+        font-size: 2em;
+        float: left;
+        margin-right: 0.25ex;
+      }
+      font-size: 1em;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 5px 2ex;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .due-date {
+      margin: 0;
+    }
+  }
+}
+
+.task-feedback .task-feedback-tab-panel .panel-body {
+  height: @task-feedback-tab-content-height;
+  overflow: scroll;
+  .help-block {
+    .flex-center();
+    margin: 0;
+    color: #333;
+    width: 100%;
+    text-align: center;
+    font-size: 2.1em;
+    font-weight: lighter;
+    i {
+      margin: 0.5em 0.5ex;
+    }
+  }
+}
+
+// Custom CSS for each tab:
+submit-task-form {
+  .upload-assistant {
+    padding-bottom: 1.25em;
+    margin-bottom: 2em;
+    border-bottom: 1px solid #ddd;
+    h3 {
+      float: left;
+      font-size: 2em;
+      small {
+        margin-top: 0.5em;
+        font-weight: lighter;
+        display: block;
+      }
+    }
+    .upload-type-switcher {
+      float: right;
+      text-align: right;
+      p {
+        margin-top: 0.75em;
+      }
+    }
+  }
+  // Cascade down to .result- and .progress-area to apply flex
+  .upload-type-selected-state, file-uploader, .file-upload-area, .upload-area {
+    height: 100%;
+  }
+  file-uploader .file-upload-area {
+    width: 65%;
+    margin: 0 auto;
+    text-align: center;
+    .result-area, .progress-area {
+      .flex-center()
+    }
+  }
+}

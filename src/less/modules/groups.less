@@ -1,0 +1,41 @@
+.groupset-manage-view {
+  .multi-group-actions {
+    form {
+      margin-bottom: 1em;
+    }
+  }
+}
+
+.group-selector table td {
+  &.group-name  { width: 40%; }
+  &.tutorial-id { width: 25%; }
+  &.actions     { width: 35%; }
+}
+
+.group-member-list table {
+  td.student-id    { width: 25%; }
+  td.actions       { width: 25%; }
+  td.student-name  { width: 50%; }
+  td.student-grade { width: 50%; }
+
+  td.student-id + td.student-name { width: 30%; }
+  td.student-id + td.student-name + td.student-grade { width: 20%; }
+}
+
+.group-selector form, .group-memberships form {
+  margin-bottom: 3em;
+}
+
+.groupset-selector .dropdown {
+  cursor: pointer;
+}
+
+.group-member-contribution-rating {
+  &:focus {
+    outline: none;
+  }
+  i {
+    font-size: 2em;
+    cursor: pointer;
+  }
+}

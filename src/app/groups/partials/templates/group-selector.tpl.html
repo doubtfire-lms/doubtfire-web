@@ -1,0 +1,67 @@
+<div class="col-sm-12 group-selector">
+  <form name="addGroupForm" class="add-group-form input-group" ng-if="assessingUnitRole || selectedGroupset.allow_students_to_create_groups" ng-submit="addGroup(groupAddName)">
+    <input class="form-control" placeholder="Add New Group..." ng-model="groupAddName">
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-success">
+        <i class="fa fa-plus"></i>
+      </button>
+    </span>
+  </form>
+  <div ng-hide="filteredGroups.length > 0">
+    <div class="callout callout-info">
+      {{selectedGroupset.name}} has no groups {{(staffFilter == 'mine' || selectedGroupset.keep_groups_in_same_class) ? 'in this tutorial' : '' }}
+    </div>
+  </div>
+  <table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="groupSortOrder='name'; grpReverse=!grpReverse">
+            Group Name <i ng-show="groupSortOrder == 'name'" class="fa fa-caret-{{grpReverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="groupSortOrder='tutorial_id'; grpReverse=!grpReverse">
+            Tutorial <i ng-show="groupSortOrder == 'tutorial_id'" class="fa fa-caret-{{grpReverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th ng-show="assessingUnitRole">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="grp in filteredGroups = (groups | groupFilter:unit:selectedGroupset:project:assessingUnitRole:staffFilter) | orderBy:groupSortOrder:grpReverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{info: grp == selectedGroup}">
+        <td ng-click="selectGroup(grp)" class="group-name">
+          <span editable-text="grp.name" e-name="name" e-form="grpRowform" e-required>
+            {{ grp.name || 'empty' }}
+          </span>
+        </td>
+        <td ng-click="selectGroup(grp)" ng-init="tutorial = selectTutorial(grp.tutorial_id)" class="tutorial-id">
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials" tooltip-html-unsafe="<strong>{{tutorial.meeting_day}} {{tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{tutorial.meeting_location}} - {{tutorial.tutor_name}}">
+            {{ tutorial.abbreviation }}
+          </span>
+        </td>
+        <td class="actions" ng-show="assessingUnitRole">
+          <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
+            <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="grpRowform.$waiting" ng-click="grpRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="btn-group" ng-show="!grpRowform.$visible">
+            <button ng-click="grpRowform.$show()" class="btn btn-primary col-sm-6">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button ng-click="removeGroup(grp)" class="btn btn-danger col-sm-6">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </div><!--/actions-->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-show="filteredGroups.length > pageSize" class="text-center col-sm-12">
+    <pagination total-items="filteredGroups.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+  </div>
+</div>

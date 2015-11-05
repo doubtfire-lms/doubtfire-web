@@ -20,7 +20,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
 
     $scope.scatterData = []
 
-    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbr)
+    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbreviation)
 
     indexOfTask = (abbr) ->
       _.indexOf taskAbbrs, abbr
@@ -116,7 +116,10 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
     $scope.yAxisTickFormatFunction = () ->
       # d3.format('.02f')
       (value) ->
-        $scope.unit.task_definitions[value].abbr
+        if $scope.unit.task_definitions[value]
+          $scope.unit.task_definitions[value].abbreviation
+        else
+          ''
 
     $scope.xAxisTickFormatFunction = () ->
       # d3.format('.02f')

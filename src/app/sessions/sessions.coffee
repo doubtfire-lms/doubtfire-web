@@ -3,7 +3,6 @@ angular.module("doubtfire.sessions", [
   "LocalStorageModule"
   "ui.router"
   "doubtfire.api"
-  "doubtfire.redirect-service"
 ]).constant("authRoles", [
   "anon"
   "Student"
@@ -11,13 +10,11 @@ angular.module("doubtfire.sessions", [
   "Convenor"
   "Admin"
 ]).constant("currentUser",
-
   id: 0
   role: "anon"
   profile:
     name: "Anonymous"
     nickname: "anon"
-
 )
 .constant("userCookieName", "doubtfire_user")
 .constant("rememberDoubtfireCookie", "remember_doubtfire_token")
@@ -76,6 +73,10 @@ angular.module("doubtfire.sessions", [
   checkAuth = () ->
     not _.isEqual currentUser, defaultAnonymousUser
 
+  saveCurrentUser = () ->
+    localStorageService.set(userCookieName, currentUser)
+    $cookieStore.put userCookieName, currentUser
+
   updateAuth = (authenticationUrl) ->
     if not checkAuth()
       return
@@ -88,8 +89,7 @@ angular.module("doubtfire.sessions", [
       remember: remember
     ).success((response) ->
       currentUser.authenticationToken = response.auth_token
-      localStorageService.set(userCookieName, currentUser)
-      $cookieStore.put userCookieName, currentUser
+      saveCurrentUser()
 
       $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), 1000*60*60
     )
@@ -102,7 +102,7 @@ angular.module("doubtfire.sessions", [
       delete currentUser[prop] for prop of currentUser
       _.extend currentUser, user
       if checkAuth()
-        $cookieStore.put userCookieName, currentUser
+        saveCurrentUser()
       else
         $cookieStore.remove userCookieName
         localStorageService.remove userCookieName
@@ -117,6 +117,8 @@ angular.module("doubtfire.sessions", [
     tryChangeUser localStorageService.get(userCookieName)
 
   auth = {}
+
+  auth.saveCurrentUser = saveCurrentUser
 
   auth.isAuthenticated = checkAuth
 
@@ -160,13 +162,36 @@ angular.module("doubtfire.sessions", [
 
     if delayTime < 100
       delayTime = 100
-    
+
     $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), delayTime
 
   # Return the auth object
   auth
-).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie) ->
-  $scope.remember_me = true
+).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie, aboutModalService) ->
+
+  isIE = ->
+    window.navigator.appName is "Microsoft Internet Explorer"
+  ieVersion = ->
+    matches = new RegExp(" MSIE ([0-9].[0-9]);").exec(window.navigator.userAgent)
+    return parseInt(matches[1].replace(".0", "")) if matches? and matches.length > 1
+    true
+
+  $scope.isIE = isIE() and ieVersion() < 11 # Support IE11
+
+  $scope.session = { remember_me: true }
+
+  # April Fools Easter Egg :-)
+  today = new Date()
+  aprilFools =  today.getDate()   is 1 and # first day of the
+                today.getMonth()  is 3     # fourth month (April - zero-based)
+  if aprilFools
+    logo = document.querySelector('.landing-page h1.logo i')
+    logo?.style.backgroundImage = 'url("/assets/images/mrsdoubtfire.png")'
+    logo?.style.backgroundColor = 'inherit'
+    logo?.title = 'Happy April Fools Day!'
+
+  $scope.openAboutModal = ->
+    aboutModalService.show()
 
   if auth.isAuthenticated()
     redirectService.redirect "home", {}
@@ -175,9 +200,9 @@ angular.module("doubtfire.sessions", [
       auth.signIn api + "/auth",
         username: $scope.session.username
         password: $scope.session.password
-        remember: $scope.remember_me
+        remember: $scope.session.remember_me
       , ->
-        if $scope.remember_me
+        if $scope.session.remember_me
           localStorageService.set(userCookieName, currentUser)
           localStorageService.set(rememberDoubtfireCookie, true)
           localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())

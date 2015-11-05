@@ -1,0 +1,52 @@
+<div>
+  <ul class="nav nav-pills nav-stacked col-sm-2">
+    <li role="presentation" ng-class="{'active' : view == 'all-students' }"><a ng-click="setActiveView('all-students')">All Students</a></li>
+    <li role="presentation" ng-class="{'active' : view == 'my-students' }"><a ng-click="setActiveView('my-students')">My Students</a></li>
+    <li role="presentation" ng-class="{'active' : view == 'tasks' }"><a ng-click="setActiveView('tasks')">Tasks</a></li>
+  </ul>
+  <div class="col-sm-10">
+    <div ng-show="view == 'all-students' || view == 'my-students'">
+      <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
+        <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="500" autofocus />
+        <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{allStudents.length}} students.</p>
+        <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</p>
+      </form>  
+      <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th></th>
+              <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+              <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+              <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
+              <th><a href="" ng-click="sortOrder='tasks_with_similarities'; reverse=!reverse">Number Similar</a></th>
+              <th><a href="" ng-click="sortOrder='max_pct_copy'; reverse=!reverse">Max Pct Similar</a></th>
+              <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
+              <td><a ng-show="activeStudent != student" href="" ng-click="selectStudent(student)">Select</a><a ng-hide="activeStudent != student" href="" ng-click="selectStudent(null)">Deselect</a></td>
+              <td><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
+              <td>{{student.name}}</td>
+              <td>{{grades[student.target_grade]}}</td>
+              <td>{{student.tasks_with_similarities}}</td>
+              <td>{{student.max_pct_copy}}%</td>
+              <td><span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
+    </div> <!-- end students div -->
+  </div>
+  <div class="col-sm-12">
+  <ul class="nav nav-tabs nav-justified">
+    <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
+  </ul>
+  <div class="col-sm-12" ng-if="activeTask">
+    <task-plagiarism-report task="activeTask"></task-plagiarism-report>
+    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
+  </div>
+</div>
+</div>

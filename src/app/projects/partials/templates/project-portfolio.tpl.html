@@ -1,49 +1,50 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2 list-group">
-      <a ng-class="{'active' : currentView == gradeStep }" class="list-group-item text-center" ng-click="currentView = gradeStep">Grade <i class="fa fa-trophy fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == summaryStep }" class="list-group-item text-center" ng-click="currentView = summaryStep">Summary <i class="fa fa-graduation-cap fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == taskStep }" class="list-group-item text-center" ng-click="currentView = taskStep">Tasks <i class="fa fa-tasks fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == otherFilesStep }" class="list-group-item text-center" ng-click="currentView = otherFilesStep">Other <i class="fa fa-plus fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == compileStep }" class="list-group-item text-center" ng-click="currentView = compileStep">Compile <i class="fa fa-file-pdf-o fa-lg"></i></a>
-      <a ng-class="{'active' : currentView == reviewStep }" class="list-group-item text-center" ng-click="currentView = reviewStep">Review <i class="fa fa-search fa-lg"></i></a>
-    </div>
-    <div class="col-md-10">
-      <div ng-show="currentView == -1">
-        <div id="panel" class="panel panel-default">
-          <div class="panel-heading task-status row-fluid">
-              <h3 class="panel-title">Preparing Your Portfolio</h3>
+<div>
+  <tabset class="pull-left col-md-2" vertical="true" type="pills">
+    <tab ng-repeat="(tabKey, tab) in portfolioTabsData | orderObjectBy: 'seq'" active="tab.active" select="setActivePortfolioTab(tab)">
+      <tab-heading tooltip-html-unsafe="<strong>Step {{tab.seq}}</strong><br>{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+        <div class="text-center">
+          <i class="fa fa-2x {{tab.icon}}"></i>
+        </div>
+      </tab-heading>
+    </tab>
+  </tabset><!--/tab-selector-->
+  <div class="col-md-10">
+    <div ng-if="activePortfolioTab == portfolioTabsData.welcomeStep">
+      <div id="panel" class="panel panel-default">
+        <div class="panel-heading task-status row-fluid">
+            <h3 class="panel-title">Preparing Your Portfolio</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12">
+            <p>Preparing your portfolio involves 6 steps:</p>
+            <ol>
+              <li>Select your <strong>Grade</strong> you are applying for</li>
+              <li>Upload your <strong>Learning Summary Report</strong></li>
+              <li>Select the <strong>Tasks</strong> you want included</li>
+              <li>Upload any <strong>Other Resources</strong> you want to add</li>
+              <li><strong>Compile</strong> your resources into your portfolio</li>
+              <li><strong>Review</strong> your portfolio</li>
+            </ol>
+            <p>
+              Once you have completed all of these steps, your portfolio will be prepared by Doubtfire and you will be notified when it is ready. You can then check your work, and if you want to make any corrections you can repeat these steps to create a new version of your portfolio.
+            </p>
           </div>
-          <div class="panel-body">
-            <div class="col-xs-12">
-              <p>Preparing your portfolio involves 6 steps:</p>
-              <ol>
-                <li>Select your <b>Grade</b> you are applying for</li>
-                <li>Upload your <b>Learning Summary Report</b></li>
-                <li>Select the <b>Tasks</b> you want included</li>
-                <li>Upload any <b>Other Resources</b> you want to add</li>
-                <li><b>Compile</b> your resources into your portfolio</li>
-                <li><b>Review</b> your portfolio</li>
-              </ol>
-              <p>
-                Once you have completed all of these steps, your portfolio will be prepared by Doubtfire and you will be notified when it is ready. You can then check your work, and if you want to make any corrections you can repeat these steps to create a new version of your portfolio.
-              </p>
-            </div>
-            <div class="pull-right">
-              <button class="btn btn-primary" ng-click="currentView = 0">Step 1: Select Grade <span class="fa fa-angle-double-right fa-lg"></span></button>.
-            </div>
+        </div>
+        <div class="panel-footer">
+          <div class="text-right">
+            <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
           </div>
         </div>
       </div>
-      <portfolio-grade-select ng-show="currentView == gradeStep"></portfolio-grade-select>
-      <learning-summary-report ng-show="currentView == summaryStep"></learning-summary-report>
-      <portfolio-tasks ng-show="currentView == taskStep"></portfolio-tasks>
-      <portfolio-other ng-show="currentView == otherFilesStep"></portfolio-other>
-      <portfolio-compile ng-show="currentView == compileStep"></portfolio-compile>
-      <portfolio-review ng-show="currentView == reviewStep"></portfolio-review>
-      <div ng-show="project.portfolio_files.length > 0 && currentView < reviewStep">
-        <portfolio-files></portfolio-files>
-      </div>
     </div>
-  </div>
+    <portfolio-grade-select ng-if="activePortfolioTab == portfolioTabsData.gradeStep"></portfolio-grade-select>
+    <learning-summary-report ng-if="activePortfolioTab == portfolioTabsData.summaryStep"></learning-summary-report>
+    <portfolio-tasks ng-if="activePortfolioTab == portfolioTabsData.taskStep"></portfolio-tasks>
+    <portfolio-other ng-if="activePortfolioTab == portfolioTabsData.otherFilesStep"></portfolio-other>
+    <portfolio-compile ng-if="activePortfolioTab == portfolioTabsData.compileStep"></portfolio-compile>
+    <portfolio-review ng-if="activePortfolioTab == portfolioTabsData.reviewStep"></portfolio-review>
+    <div ng-if="project.portfolio_files.length > 0 && activePortfolioTab < reviewStep">
+      <portfolio-files></portfolio-files>
+    </div>
+  </div><!--/tabs-->
 </div>

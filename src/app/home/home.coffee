@@ -1,22 +1,22 @@
 angular.module("doubtfire.home", [])
 .config(($stateProvider) ->
   $stateProvider.state("home",
-    url: "/home"
+    url: "/home?notifications"
     views:
       main:
         controller: "HomeCtrl"
         templateUrl: "home/index.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
-        
+        templateUrl: "common/partials/templates/header.tpl.html"
+
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, $modal, User, UnitRole, Project, headerService, currentUser) ->
+.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, UnitRole, Project, headerService, currentUser) ->
   hasRoles = false
   hasProjects = false
 
@@ -51,6 +51,13 @@ angular.module("doubtfire.home", [])
         user: ->  currentUser.profile
         isNew: -> false
         users: -> false
+  else if $stateParams['notifications']
+    $modal.open
+      templateUrl: 'users/partials/templates/user-notification-settings.tpl.html'
+      controller: 'UserNotificationSettingsModalCtrl'
+      resolve:
+        # Actually load in all current user info when we request the user settings
+        user: ->  currentUser.profile
   #
   # Filter functions to separate units in repeater
   #

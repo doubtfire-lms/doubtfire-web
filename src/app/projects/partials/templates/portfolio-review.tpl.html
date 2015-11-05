@@ -1,59 +1,40 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{reviewStep + 1}}: Review Portfolio</h3>
+      <h3 class="panel-title">Review Portfolio</h3>
   </div>
   <div class="panel-body">
     <div class="col-xs-12">
       <p>You can download or review your portfolio online. Check that it includes all of the evidence you need to achieve the grade you are applying for. If needed, you can delete this version and repeat the process to create a new portolio.</p>
     </div>
-
-    <div class="col-md-12">
-      <div id="panel" class="panel panel-default">
-        <div class="panel-heading portfolio-preview row-fluid">
-            <h3 class="panel-title">Portfolio Preview</h3><!--/title-->
-            <div class="btn-group pdf-nav pull-right" ng-hide="shouldHideNav()">
-              <button type="button" class="btn btn-default" ng-disabled="shouldDisableLeftNav()" ng-click="prevPage()">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-              </button>
-              <button type="button" class="btn btn-default" ng-disabled="shouldDisableRightNav()" ng-click="nextPage()">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </button>
-            </div>
-        </div>
-        <div class="panel-body">
-          <p class="lead text-center" ng-hide="noPortfolioAvailable() || corruptPdf() || readyToShowPDF()">
-            <br/>
-            <i class="fa fa-spinner fa-spin fa-2x"></i>
-            <br/>
-            PDF is rendering...
-          </p><!--/pdf-in-process-->
-          <p class="lead text-center" ng-show="noPortfolioAvailable()">
-            <br/>
-            <i class="fa fa-clock-o fa-2x"></i>
-            <br/>
-            Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Schedule Compile"}}
-          </p><!--/pdf-in-process-->
-          <p class="lead text-center text-danger" ng-show="corruptPdf()">
-            <br/>
-            <i class="fa fa-exclamation-triangle fa-2x"></i>
-            <br/>
-            PDF preview cannot be rendered.
-          </p><!--/corrupt-pdf-->
-          <a href="{{portfolioUrl()}}" ng-show="readyToShowPDF()">
-            <canvas width="0" height="0" id="portfolio-pdf"></canvas>
-          </a><!--/pdf-->
-        </div>
-        <div ng-hide="noPortfolioAvailable()" class="panel-footer" style="height: 60px">
-          <div class="pull-left text-muted">
-            <button class="btn btn-danger" ng-click="deletePortfolio()">Delete</span></button>
-          </div>
-          <div class="pull-right btn-group">
-            <a href="{{portfolioUrl()}}" class="btn btn-success">
-              <span class="glyphicon glyphicon-cloud-download"></span>
-            </a>
-          </div>
-        </div><!--/panel-footer-->
-      </div>
+  </div>
+  <div class="panel-heading clearfix">
+    <div class="pull-left">
+      <h3 class="panel-title">Portfolio Preview</h3><!--/title-->
+      This is the exact same document your unit assessor will see
+    </div>
+    <div class="pull-right" ng-show="project.portfolio_available">
+      <button class="btn btn-danger" ng-click="deletePortfolio()">
+        <i class="fa fa-trash-o" tooltip="Delete Portfolio"></i>
+      </button>
+      <a href="{{portfolioUrl()}}" class="btn btn-success">
+        <i class="fa fa-download" tooltip="Download Portfolio"></i>
+      </a>
+    </div>
+  </div>
+  <div class="panel-body" ng-hide="project.portfolio_available">
+    <p class="lead text-center">
+      <i class="fa fa-clock-o fa-2x"></i>
+      <br/>
+      Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Please compile the portfolio first."}}
+    </p><!--/pdf-in-process-->
+  </div>
+  <pdf-panel-viewer
+    ng-show="project.portfolio_available"
+    pdf-url="portfolioUrl()">
+  </pdf-panel-viewer>
+  <div class="panel-footer">
+    <div>
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
     </div>
   </div>
 </div>

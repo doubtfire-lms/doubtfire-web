@@ -1,13 +1,13 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{taskStep + 1}}: Select Tasks for Portfolio</h3>
+    <h3 class="panel-title">Select Tasks for Portfolio</h3>
   </div>
   <div class="panel-body">
     <div class="col-xs-12">
       <p>Select the tasks you want to include in your portfolio. Make sure that you select enough tasks you include demonstrate that you have met all of the unit's learning outcomes. Doubtfire will then incorporate your work from these tasks into your portfolio.</p>
       <ul class="project-task-bar">
-        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (tasks | filter:hasPDF | orderBy:'seq')" ng-hide="taskDisabled(task)">
-            <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="task.include_in_portfolio = !task.include_in_portfolio; updateTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.task_name}}: {{statusText(task.status)}}">{{task.task_abbr}} <span class='fa fa-check' ng-show="task.include_in_portfolio"></span></button>
+        <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in filteredTasks = (project.tasks | filter:hasPDF | orderBy:'definition.seq')" ng-hide="taskDisabled(task)">
+            <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="task.include_in_portfolio = !task.include_in_portfolio; updateTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task.definition.name}}: {{statusText(task.status)}}">{{task.definition.abbreviation}} <span class='fa fa-check' ng-show="task.include_in_portfolio"></span></button>
         </li>
       </ul>
     </div>
@@ -21,8 +21,11 @@
         <p>If you have significantly change a task, revisit the tasks and you can upload the files again. This wont change the state of the task, but will allow you to upload files that include new changes.</p>
       </div>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = taskStep + 1">Step {{taskStep + 2}}: Add other files <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

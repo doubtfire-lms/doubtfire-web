@@ -1,6 +1,6 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{summaryStep + 1}}: Learning Summary Report</h3><!--/title-->
+      <h3 class="panel-title">Learning Summary Report</h3><!--/title-->
   </div>
   <div class="panel-body">
     <form ng-submit="submitLearningSummaryReport()">
@@ -26,8 +26,11 @@
         <p>Think of this as applying for a grade. Provide a justification for why you believe you have achieved your selected grade.</p>
       </div>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = taskStep">Step {{summaryStep + 2}}: Select Tasks <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

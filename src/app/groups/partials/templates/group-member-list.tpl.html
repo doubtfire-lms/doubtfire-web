@@ -1,0 +1,40 @@
+<div class="group-member-list">
+  <div ng-hide="members.length > 0">
+    <div class="callout callout-info">
+      There are no members in this group
+    </div>
+  </div>
+  <table ng-show="members.length > 0" class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th ng-if="assessingUnitRole">
+          <a href="" ng-click="memberSortOrder='student_id'; reverse=!reverse"> Student ID  <i ng-show="memberSortOrder == 'student_id'" class="fa fa-caret-{{reverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="memberSortOrder='student_name'; reverse=!reverse">
+            Name <i ng-show="memberSortOrder == 'student_name'" class="fa fa-caret-{{reverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="memberSortOrder='target_grade'; reverse=!reverse">
+            Target Grade <i ng-show="memberSortOrder == 'target_grade'" class="fa fa-caret-{{reverse ? 'up' : 'down'}}"></i>
+          </a>
+        </th>
+        <th ng-if="assessingUnitRole">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="member in members | orderBy:memberSortOrder:reverse">
+        <td class="student-id" ng-if="assessingUnitRole"><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
+        <td class="student-name">{{member.student_name}}</td>
+        <td class="student-grade">{{gradeFor(member)}}</td>
+        <td class="actions" ng-if="assessingUnitRole">
+          <button ng-click="removeGroupMember(member)" class="btn btn-small btn-danger">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

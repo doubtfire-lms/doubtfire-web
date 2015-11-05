@@ -1,61 +1,122 @@
-<div>
-  <h4>All Tasks</h4>
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr> 
-        <th>Abbr</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Target Date</th>
-        <th>Weighting</th>
-        <th>Grade</th>
-        <th>File Upload Requirements</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="editTask(task)">
-        <td>{{task.abbr}}</td>
-        <td>{{task.name}}</td>
-        <td style="max-width:150px">{{task.desc}}</td>
-        <td>{{task.target_date | date:'d MMM yyyy'}}</td>
-        <td>{{task.weight}}</td>
-        <td>{{grades[task.target_grade]}}</td>
-        <td>
-          <ol style="margin-left: 0; padding-left: 0;"  ng-hide="task.upload_requirements.length == 0">
-            <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
-          </ol>
-          <span ng-show="task.upload_requirements.length == 0">No Files To Upload</span>
-        </td>
-      </tr>
-    </tbody>
-  </table><!--/task-table-->
-    
-  <pagination total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
-  <button class="btn btn-success pull-right" ng-click="createTask()">Create Task</button>
-
-  <h4>Batch Import / Export</h4>
-  <form class="form-horizontal" ng-submit="submitTasksUpload()">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Upload</label>
-      <input uploader="tasksFileUploader" ng-hide="tasksFileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!tasksFileUploader.isHTML5" nv-file-select />
-      <div uploader="tasksFileUploader"  ng-show="tasksFileUploader.isHTML5 && tasksFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
-        Drop CSV here
+<div ng-if="unit">
+  <div class="col-sm-9">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <h3 class="panel-title">
+          Task Overview
+        </h3>
+        Summary of tasks added as work for this unit
       </div>
-	    <p ng-show="tasksFileUploader.queue.length == 1"class="form-control-static">{{tasksFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-    </div>
-    <div class="form-group">
-      <input ng-hide="tasksFileUploader.isUploading || tasksFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
-      <div class="col-sm-offset-3 col-sm-6" ng-show="tasksFileUploader.isUploading">
-        <progressbar class="progress-striped active" value="tasksFileUploader.progress"></progressbar>
-        <p class="help-block text-center" ng-show="tasksFileUploader.progress == 100">
-          Please wait for the server to insert the tasks...
-        </p>
+      <div class="panel-body tasks-overview">
+        <div class="callout callout-info" ng-hide="unit.task_definitions.length > 0">
+          This unit has no tasks
+        </div>
+        <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Target Date</th>
+              <th>Weighting</th>
+              <th>Grade</th>
+              <th>Group Set</th>
+              <th>Restricted</th>
+              <th>Assessment Uploads</th>
+              <th>Plagiarism Detection</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+              <td ng-click="editTask(task)"><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
+              <td ng-click="editTask(task)">{{task.description}}</td>
+              <td ng-click="editTask(task)">{{task.target_date | date:'d MMM yyyy'}}</td>
+              <td ng-click="editTask(task)">{{task.weight}}</td>
+              <td ng-click="editTask(task)">{{grades[task.target_grade]}}</td>
+              <td ng-click="editTask(task)">{{groupSetName(task.group_set_id)}}</td>
+              <td ng-click="editTask(task)">
+                <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
+              </td>
+              <td ng-click="editTask(task)">
+                <ol style="margin-left: 0; padding-left: 0;" ng-hide="task.upload_requirements.length == 0">
+                  <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
+                </ol>
+                <span ng-show="task.upload_requirements.length == 0">None</span>
+              </td>
+              <td ng-click="editTask(task)">
+                <span ng-hide="task.plagiarism_checks.length == 0">
+                  Warn at {{task.plagiarism_warn_pct}}% with:
+                  <ol style="margin-left: 0; padding-left: 0;" >
+                    <li ng-repeat="check in task.plagiarism_checks">{{check.type}} ({{check.pattern}})</li>
+                  </ol>
+                </span>
+                <span ng-show="task.plagiarism_checks.length == 0">None</span>
+              </td>
+              <td>
+                <button class="btn btn-danger" ng-click="deleteTask(task)">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table><!--/task-table-->
       </div>
+      <div class="panel-footer clearfix">
+        <pagination  ng-show="unit.task_definitions.length > pageSize" total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+        <button class="btn btn-success pull-right" ng-click="createTask()">
+          <i class="fa fa-file"></i>
+          <i class="fa fa-plus"></i> Add Task
+        </button>
+      </div>
+    </div><!--/tasks-overview-->
+  </div>
+  <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Upload Task PDFs</h4>
+                Upload PDFs of tasks such that they are viewable for students Doubtfire under the relevant task. Upload a ZIP containing PDFs and ZIP file resources. Name each with task abbreviation.
+            </div>
+            <div class="panel-body">
+              <file-uploader
+                files="taskFiles"
+                url="taskUploadUrl"
+                on-success="onTaskPDFSuccess"></file-uploader>
+                <table ng-show="filesUploaded" class="table table-condensed table-hover">
+                  <thead>
+                    <tr>
+                      <th>Filename</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="file in filesUploaded.ignored_files">
+                      <td>{{file.name}}</td><td>Ignored</td>
+                    </tr>
+                    <tr ng-repeat="file in filesUploaded.added_files">
+                      <td>{{file.name}}</td><td>Added</td>
+                    </tr>
+                  </tbody>
+              </table>
+            </div><!--batch-enrol-->
+            <div class="panel-heading">
+                <h4 class="panel-title">Batch Upload Task Definitions</h4>
+                Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade,restrict_status_updates, upload_requirements, target_date. Note that upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type".
+            </div>
+            <div class="panel-body">
+                <file-uploader
+                  files="batchFiles"
+                  url="batchTaskUrl()"
+                  on-success="onBatchTaskSuccess"></file-uploader>
+            </div><!--batch-withdraw-->
+            <div class="panel-heading">
+                <h4 class="panel-title">Download Tasks</h4>
+                Download all tasks for the unit.
+            </div>
+            <div class="panel-body text-center">
+                <a target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary btn-download">
+                    <i class="fa fa-download"></i> Download
+                </a>
+            </div>
+        </div>
     </div>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Download</label>
-      <button ng-click="requestTasksExport()" class="btn btn-primary form-control col-sm-2">Export</button>
-    </div>
-  </form><!--/csv-batch-->
 </div>

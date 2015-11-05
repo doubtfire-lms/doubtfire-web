@@ -13,11 +13,11 @@
     &.fix-and-include   { background-color: #d93713; color: white; }
     &.redo              { background-color: #804000; color: white; }
     &.discuss           { background-color: #31b0d5; color: white; }
-    &.complete  { 
-      background-color: #5BB75B; 
-      background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-      color: white; 
-    } 
+    &.complete  {
+      background-color: #5BB75B;
+      background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+      color: white;
+    }
 
     span.caret { float: right; margin-top: 8px; }
   }
@@ -30,7 +30,7 @@
   }
 }
 
-button.task-status
+.task-status
 {
   &.ready-to-mark     { background-color: #0079D8; color: white; }
   &.not-submitted     { background-color: #CCCCCC; color: white; }
@@ -40,11 +40,11 @@ button.task-status
   &.fix-and-include   { background-color: #d93713; color: white; }
   &.redo              { background-color: #804000; color: white; }
   &.discuss           { background-color: #31b0d5; color: white; }
-  &.complete  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
-  } 
+  &.complete  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
+  }
 }
 
 .task-status
@@ -57,7 +57,7 @@ button.task-status
   .fix-and-include   { background-color: #F8F8F8; }
   .redo              { background-color: #F8F8F8; }
   .discuss           { background-color: #F8F8F8; }
-  .complete          { background-color: #F8F8F8; } 
+  .complete          { background-color: #F8F8F8; }
 
   .ready-to-mark.active     { background-color: #0079D8; color: white; }
   .not-submitted.active     { background-color: #CCCCCC; color: white; }
@@ -67,10 +67,10 @@ button.task-status
   .fix-and-include.active   { background-color: #d93713; color: white; }
   .redo.active              { background-color: #804000; color: white; }
   .discuss.active           { background-color: #31b0d5; color: white; }
-  .complete.active  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
+  .complete.active  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
   }
 }
 
@@ -84,11 +84,11 @@ button.task-status
   .fix-and-include   { background-color: rgba(216, 53, 26, 0.20); color: #CCCCCC; }
   .redo              { background-color: rgba(127, 63, 8, 0.20); color: #CCCCCC; }
   .discuss           { background-color: rgba(52, 173, 207, 0.20); color: #CCCCCC; }
-  .complete  { 
-    background-color: rgba(148, 204, 148, 0.20); 
-    background-image: linear-gradient(rgba(98, 196, 98, 0.20), rgb(81, 163, 81, 0.20)); 
-    color: #CCCCCC; 
-  } 
+  .complete  {
+    background-color: rgba(148, 204, 148, 0.20);
+    background-image: linear-gradient(rgba(98, 196, 98, 0.20), rgb(81, 163, 81, 0.20));
+    color: #CCCCCC;
+  }
 
   .ready-to-mark.active     { background-color: #0079D8; color: white; }
   .not-submitted.active     { background-color: #CCCCCC; color: white; }
@@ -98,11 +98,11 @@ button.task-status
   .fix-and-include.active   { background-color: #d93713; color: white; }
   .redo.active              { background-color: #804000; color: white; }
   .discuss.active           { background-color: #31b0d5; color: white; }
-  .complete.active  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
-  } 
+  .complete.active  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
+  }
 }
 
 .task-icon
@@ -124,15 +124,15 @@ button.task-status
   &.fix-and-include   { background-color: #d93713; color: white; }
   &.redo              { background-color: #804000; color: white; }
   &.discuss           { background-color: #31b0d5; color: white; }
-  &.complete  { 
-    background-color: #5BB75B; 
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81)); 
-    color: white; 
-  } 
+  &.complete  {
+    background-color: #5BB75B;
+    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
+    color: white;
+  }
 
 }
 
-.panel-heading.task-status
+.panel-heading.nav-header
 {
   h3 { display: inline-block; padding: 15px 0 15px 0; }
   div { margin-top: 2px; }
@@ -146,4 +146,17 @@ button.task-status
   .pdf-nav.btn-group { margin: 0px 15px 0 0; }
 }
 
+.task-engagement-icon {
+  display: block;
+  margin-bottom: 7px;
+}
 
+.task-status.task-status-change-trigger {
+  label {
+    padding: 15px 10px;
+  }
+  small, strong {
+    display: block;
+    white-space: normal;
+  }
+}

@@ -1,0 +1,51 @@
+<div class="csv-result-modal">
+  <div class="modal-header clearfix">
+    <h3 class="modal-title">
+      <i class="fa fa-file-excel-o fa-2x pull-left"></i>
+      {{title}}
+      <small>Response details</small>
+    </h3>
+  </div>
+  <div class="modal-body clearfix">
+    <p class="btn-group col-sm-8 col-sm-offset-2">
+        <button class="btn btn-default col-sm-4" ng-class="{ 'btn-success': activeCsvResponseSelection == 'success' }" ng-model="activeCsvResponseSelection" btn-radio="'success'">
+          Inserted <span class="badge pull-right">{{response.success.length}}</span>
+        </button>
+        <button class="btn btn-default col-sm-4" ng-class="{ 'btn-danger': activeCsvResponseSelection == 'errors' }" ng-model="activeCsvResponseSelection" btn-radio="'errors'">
+          Errors <span class="badge pull-right">{{response.errors.length}}</span>
+        </button>
+        <button class="btn btn-default col-sm-4" ng-class="{ 'btn-warning': activeCsvResponseSelection == 'ignored' }" ng-model="activeCsvResponseSelection" btn-radio="'ignored'">
+          Ignored <span class="badge pull-right">{{response.ignored.length}}</span>
+        </button>
+    </p>
+    <div ng-hide="response[activeCsvResponseSelection].length > 0" class="callout callout-info col-sm-12">
+      No data to show
+    </div>
+    <table ng-show="response[activeCsvResponseSelection].length > 0" class="table table-condensed table-hover">
+      <thead>
+          <tr>
+              <th class="message">
+                  Message
+              </th>
+              <th class="data">
+                  Data
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr ng-repeat="item in response[activeCsvResponseSelection] | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+              <td>
+                {{item.message}}
+              </td>
+              <td class="csv-row">
+                {{item.row}}
+              </td>
+          </tr>
+      </tbody>
+  </table><!--/enrolment-table-->
+  </div>
+  <div class="modal-footer clearfix">
+    <pagination ng-show="response[activeCsvResponseSelection].length > pageSize" total-items="response[activeCsvResponseSelection].length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+    <button class="btn btn-primary pull-right" ng-click="close()">Done</button>
+  </div>
+</div>

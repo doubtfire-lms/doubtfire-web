@@ -1,0 +1,32 @@
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="col-md-12">
+    <div class="groupset-switcher" ng-show="unit.group_sets.length > 1">
+      <groupset-selector></groupset-selector>
+      <hr/>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span ng-show="selectedGroup">
+            Group Members of
+            <strong>
+              <a editable-text="selectedGroup.name" ng-show="selectedGroupset.allow_students_to_manage_groups" onbeforesave="updateGroup($data)">{{selectedGroup.name}}</a>
+              <span ng-hide="selectedGroupset.allow_students_to_manage_groups">{{selectedGroup.name}}</span>
+            </strong>
+          </span>
+          <span ng-hide="selectedGroup">
+            Join a Group
+          </span>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <group-member-list ng-show="selectedGroup"></group-member-list>
+        <div ng-hide="selectedGroup">
+          <group-selector ng-show="selectedGroupset.allow_students_to_manage_groups"></group-selector>
+          <span class="callout callout-info" ng-hide="selectedGroupset.allow_students_to_manage_groups">
+          <strong>You are not part of a group.</strong> Talk to your tutor or convenor and ask them to add you to a group.
+          </span>
+        </div>
+    </div>
+  </div>
+</div>

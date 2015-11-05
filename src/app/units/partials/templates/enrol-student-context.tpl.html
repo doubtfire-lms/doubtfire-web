@@ -1,60 +1,120 @@
-<div>
-  <h4>Batch Import / Export</h4>
-  <form class="form-horizontal" ng-submit="submitSEUpload()">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Upload</label>
-      <input uploader="seFileUploader" ng-hide="seFileUploader.isHTML5" type="file" class="col-sm-7" accept="text/csv" ng-required="!seFileUploader.isHTML5" nv-file-select />
-      <div uploader="seFileUploader"  ng-show="seFileUploader.isHTML5 && seFileUploader.queue.length == 0" class="drop well col-sm-7" nv-file-over nv-file-drop>
-        Drop CSV here
-      </div>
-	    <p ng-show="seFileUploader.queue.length == 1"class="form-control-static">{{seFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
+<div ng-if="unit">
+    <div class="col-sm-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class="pull-left">
+                    <h3 class="panel-title">
+                        Enrolled Students
+                    </h3>
+                    Summary of students enrolled in this unit
+                </div>
+                <div class="pull-right">
+                    <form ng-show="unit.students.length > 0"  role="search" class="form-horizontal">
+                        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
+                        <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length != 0">
+                            Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
+                        </p>
+                        <p ng-show="filteredStudents.length &lt; unit.students.length &amp;&amp; filteredStudents.length == 0">
+                            No students found.
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div ng-hide="unit.students.length > 0" class="callout callout-info">There are no students enrolled in this unit</div>
+                <div ng-show="unit.students.length > 0">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Username
+                                </th>
+                                <th>
+                                    First Name
+                                </th>
+                                <th>
+                                    Last Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Tutorial
+                                </th>
+                                <th>
+                                    Enrolled
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
+                                <td>
+                                    <a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a>
+                                </td>
+                                <td>
+                                    {{student.first_name}}
+                                </td>
+                                <td>
+                                    {{student.last_name}}
+                                </td>
+                                <td>
+                                    <a href="mailto:{{student.email}}">{{student.student_email}}</a>
+                                </td>
+                                <td>
+                                    {{student.tutorial.abbreviation}}
+                                </td>
+                                <td>
+                                  <button ng-show="student.enrolled" class="btn col-sm-6 btn-success" ng-click="withdraw(student)">
+                                      <i class="fa fa-check" tooltip="Click to withdraw {{student.first_name}}"></i>
+                                  </button>
+                                  <button ng-hide="student.enrolled" class="btn col-sm-6 btn-danger" ng-click="enrol(student)">
+                                      <i class="fa fa-times" tooltip="Click to enrol {{student.first_name}}"></i>
+                                  </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table><!--/enrolment-table-->
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+                <pagination ng-show="unit.students.length > pageSize" total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+                <button class="btn btn-success pull-right" ng-click="showEnrolModal()">
+                    <i class="fa fa-user"></i>
+                    <i class="fa fa-plus"></i> Enrol Student
+                </button>
+            </div>
+        </div>
+    </div><!--/student-list-->
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Batch Student Uploads</h4>
+                Batch enrol or withdraw students into this unit using a CSV containing:
+                unit_code, username, first_name, last_name, email, tutorial.
+            </div>
+            <div class="panel-body">
+                <div class="btn-group btn-group-justified">
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'enrol'">
+                        Enrol<br>Students
+                    </label>
+                    <label class="btn btn-default" ng-model="activeBatchStudentType" btn-radio="'withdraw'">
+                        Withdraw<br>Students
+                    </label>
+                </div>
+                <file-uploader
+                  files="batchStudentTypes[activeBatchStudentType].batchFiles"
+                  url="batchStudentTypes[activeBatchStudentType].batchUrl()"
+                  on-success="batchStudentTypes[activeBatchStudentType].onSuccess"></file-uploader>
+            </div><!--batch-enrol-->
+            <div class="panel-heading">
+                <h4 class="panel-title">Download Enrolled Students</h4>
+                Download all enrolled students in this unit.
+            </div>
+            <div class="panel-body text-center">
+                <a target="_blank" href="{{batchStudentTypes.enrol.batchUrl()}}" class="btn btn-primary btn-download">
+                    <i class="fa fa-download"></i> Download
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      <input ng-hide="seFileUploader.isUploading || seFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
-      <div class="col-sm-offset-3 col-sm-6" ng-show="seFileUploader.isUploading">
-        <progressbar class="progress-striped active" value="seFileUploader.progress"></progressbar>
-        <p class="help-block text-center" ng-show="seFileUploader.progress == 100">
-          Please wait for the server to insert the students...
-        </p>
-      </div>
-    </div>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Download</label>
-      <button ng-click="requestSEExport()" class="btn btn-primary form-control col-sm-2">Export</button>
-    </div>
-  </form><!--/batch-io-->
-
-  <h4>Enrolled Students</h4>
-  <form role="search" class="pull-right form-horizontal" style="margin:-50px 0 0px 0;">
-      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
-      <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
-      <p class="help-block" ng-show="filteredStudents.length < unit.students.length && filteredStudents.length == 0">No students found.</p>
-  </form>
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr> 
-        <th>Username</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Tutorial</th>
-        <th>Enrolled</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-        <td>{{student.student_id}}</td>
-        <td>{{student.first_name}}</td>
-        <td>{{student.last_name}}</td>
-        <td><a href="mailto:{{student.email}}">{{student.student_email}}</a></td>
-        <td>{{student.tutorial.abbreviation}}</td>
-        <td>
-          <span ng-show="student.enrolled" class="glyphicon glyphicon-ok text-success" ng-click="withdraw(student)"></span>
-          <span ng-hide="student.enrolled" class="glyphicon glyphicon-remove text-danger" ng-click="enrol(student)"></span>
-      </tr>
-    </tbody>
-  </table><!--/task-table-->
-
-  <pagination total-items="unit.students.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
 </div>

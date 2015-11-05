@@ -1,0 +1,129 @@
+/* Widths of Table */
+@student-id-width: 10%;
+@name-width:       30%;
+@stats-width:      30%;
+@flags-width:      20%;
+@tutorial-width:   20%;
+@actions-width:    10%;
+
+/* Flag Icon stuff */
+@flag-icon-width: 35px;
+/* !!! Use this for the number of flags you have !!! */
+@number-of-flags: 3;
+
+.tutor-student-list {
+  table thead th {
+    vertical-align: middle;
+  }
+  a.sort-by-flag-anchor {
+    &:hover {
+      text-decoration: none;
+      .show-link {
+        text-decoration: underline;
+      }
+    }
+  }
+  a.sort-by-flag-anchor + .flag-sort-options {
+    display: -webkit-flex;
+    display: flex;
+    max-width: @flag-icon-width * @number-of-flags;
+    margin: 0.5em 0;
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-justify-content: space-between;
+            justify-content: space-between;
+    .flag-sort {
+      i, grade-icon {
+        display: inline-block;
+      }
+    }
+    .flag-sort > i:hover {
+      color: @link-hover-color;
+    }
+    .flag-sort > grade-icon:hover span {
+      background-color: @link-hover-color;
+    }
+  }
+  table {
+    td.flags-data {
+      .flags {
+        max-width: @flag-icon-width * @number-of-flags;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center;
+                align-items: center;
+        -webkit-justify-content: space-between;
+                justify-content: space-between;
+      }
+    }
+    td.task-progress-bar {
+      padding-right: 3ex;
+      .progress {
+        border-radius: 10px;
+      }
+    }
+
+    th.student-id { width: @student-id-width; }
+    th.name       { width: @name-width;       }
+    th.stats      { width: @stats-width;      }
+    th.flags      { width: @flags-width;      }
+    th.tutorial   { width: @tutorial-width;   }
+    th.actions    { width: @actions-width;    }
+  }
+}
+.tutor-student-list.fullscreen {
+  border-radius: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  z-index: 4;
+  border-bottom: none;
+
+  // Flex stuff
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+
+  .panel-body.student-list {
+    height: 20vh;
+    resize: vertical;
+    max-height: 40vh;
+    overflow: scroll;
+    border-bottom: 2px solid #428bca;
+    box-shadow: 1px 1px 3px;
+  }
+  .panel-body.project-show {
+    overflow-y: scroll;
+    -webkit-flex: 1;
+            flex: 1;
+    position: relative;
+    .no-student {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+              align-items: center;
+      -webkit-align-content: center;
+              align-content: center;
+      -webkit-flex-wrap: wrap;
+              flex-wrap: wrap;
+      position: absolute;
+      height: 90%;
+      width: 98%;
+      font-size: 3em;
+      text-align: center;
+      font-weight: 200;
+      i, p {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.75em;
+      }
+    }
+  }
+}
+.tutor-student-list:not(.fullscreen) .panel-body {
+  height: auto !important; // Needs to be important to override resize
+}

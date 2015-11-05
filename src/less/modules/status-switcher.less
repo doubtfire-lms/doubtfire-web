@@ -1,0 +1,34 @@
+.btn-group.status-switcher {
+  height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  // first button
+  & > button {
+    height: 100%;
+    width: 100%;
+    label, i {
+      text-align: center;
+    }
+    label {
+      font-size: 1.5em;
+      margin: 0px;
+    }
+    // not a split button group
+    span.caret {
+      margin-left: 10px;
+      margin-bottom: 6px;
+    }
+  }
+  // open button
+  &.open > button {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  // menu underneath
+  ul.dropdown-menu {
+    width: 400px;
+    margin-top: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+}

@@ -1,0 +1,30 @@
+<div class="modal-about">
+  <div class="modal-header">
+    <i class="logo"></i>
+    <h1 class="full logo">
+      Doubtfire
+      <small>Version 3</small>
+    </h1>
+  </div>
+  <div class="modal-body">
+    <h2>Contributors</h2>
+    <ul>
+      <li ng-repeat="person in contributors">
+        <a ng-href="{{person.website}}">
+          <img ng-src="{{person.avatar}}">
+          <span class="name">{{person.name}}</span>
+        </a>
+        <a ng-href="{{person.github}}" class="handler">@{{person.handler}}</a>
+      </li>
+    </ul>
+    <p class="text-muted text-center">
+      &copy; 2012&ndash;2015
+    </p>
+    <p class="text-muted text-center logo-smallprint">
+      Doubtfire Logo adapted under Creative Commons from "Progress" by Creative Stall from the <a href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="close()">Done</button>
+  </div>
+</div>

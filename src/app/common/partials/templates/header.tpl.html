@@ -1,0 +1,72 @@
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    <a class="navbar-brand" href="#">
+      <i class="logo"></i>
+      <h1 class="sup logo">Doubtfire<small>3</small></h1>
+    </a>
+  </div>
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown" dropdown ng-repeat="menu in menus | orderBy:'name'">
+        <a class="dropdown-toggle" dropdown-toggle role="button"><span class="glyphicon glyphicon-{{menu.icon}}">{{menu.name}}</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="link in menu.links | orderBy:'name'"
+              ng-class="{active: link.class === 'active'}">
+            <a href="{{link.url}}">{{link.name}}</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown" dropdown ng-hide="projects.length == 0 && unitRoles.length == 0">
+        <a role="button" class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-book"></span> Units <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
+  				<li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
+            <a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
+          </li>
+          <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
+          <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
+  				<li ng-repeat="project in projects">
+  				  <a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
+  				</li>
+        </ul>
+      </li>
+
+      <li class="dropdown" dropdown if-role="Admin">
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#/admin/units">Manage Units</a></li>
+          <li><a href="#/admin/users">Manage Users</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown" dropdown if-role="Convenor">
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#/admin/units">Manage Units</a></li>
+          <li><a href="#/admin/users">Manage Users</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown" dropdown>
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-user"></span> {{currentUser.name}} ({{currentUser.nickname}}) <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="openUserSettings()">Profile</a></li>
+          <li><a ng-click="openNotificationSettings()">Notifications</a></li>
+          <li class="divider"></li>
+          <li><a ng-click="openAboutModal()">About</a></li>
+          <li class="divider"></li>
+          <li><a href="#/sign_out">Sign Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>

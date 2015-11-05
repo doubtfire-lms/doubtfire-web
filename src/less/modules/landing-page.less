@@ -1,8 +1,46 @@
-.landing-page
-{
-	max-width: 330px;
-	padding: 15px;
-	margin: 0 auto;
+.landing-page main {
+	width: 330px;
+  .slide-down(1s);
+  h1.logo {
+    .fade-in(1s);
+    text-align: center;
+    margin-bottom: 0.5em;
+    i.logo {
+      margin: 0 auto 0.5em auto;
+      width: 3em;
+      height: 3em;
+      display: block;
+    }
+  }
+  form input:focus {
+    box-shadow: none;
+    outline-color: transparent;
+    outline-style: none;
+  }
+  form, footer {
+    .fade-in(3s);
+  }
+}
 
-	h1 { font-weight: lighter; letter-spacing: -1px; text-align: center; font-size: 4em; padding-bottom: 10px; }
+footer.about-doubtfire {
+  width: 100%;
+  a {
+    color: #ccc;
+  }
+}
+
+.no-ie {
+  main {
+    margin: 10% auto;
+  }
+  .logo a, a:hover {
+    text-decoration: none;
+  }
+  .upgrade {
+    font-size: 1.2em;
+    text-align: center;
+  }
+}
+.no-ie + .landing-page {
+  display: none;
 }

@@ -1,0 +1,77 @@
+<div class="file-upload-tab panel-body">
+  <div class="help-block" ng-show="task.definition.upload_requirements.length == 0">
+    <i class="fa fa-upload fa-2x"></i>
+    <p>No files required for this task.</p>
+  </div><!--/no-files-required-->
+  <div class="help-block" ng-show="isGroupTask() && ! inGroupForTask()">
+    <i class="fa fa-upload fa-2x"></i>
+    <p>Join a {{task.definition.group_set.name}} group to submit this task.</p>
+  </div><!--/no-detections-->
+  <div class="help-block" ng-hide="uploadType" ng-if="task.definition.upload_requirements.length > 0 && (! isGroupTask()) || inGroupForTask()">
+    <div>
+      <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
+    </div>
+    <h3>{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required</h3>
+    <p class="lead">
+      <span ng-show="uploadType || helpLabel">
+      Upload as
+      </span>
+      {{helpLabel || "Please select upload type below"}}
+    </p>
+    <div class="text-center">
+      <div class="btn-group">
+        <button ng-repeat="(key, data) in uploadTypes"
+            class="btn btn-lg task-status {{data.class}}"
+            ng-click="setUploadType(key)"
+            ng-mouseover="setHelpLabel(data.text)"
+            ng-mouseout="setHelpLabel()"
+            ng-if="!data.hide"
+            ng-class="{active: uploadType == key}">
+          <i class="fa-2x {{data.icon}}"></i>
+        </button>
+      </div><!--/upload-type-buttons-->
+    </div>
+  </div><!--upload-header-->
+  <div class="upload-type-selected-state" ng-if="uploadType">
+    <div class="upload-assistant clearfix" ng-if="!isUploading">
+      <h3>
+        Upload {{task.definition.name}}...
+        <small>Select {{numberOfFiles}} file{{numberOfFiles > 1 ? "s" : ""}} below</small>
+      </h3>
+      <div class="upload-type-switcher">
+        <div class="btn-group">
+          <button ng-repeat="(key, data) in uploadTypes"
+              class="btn task-status {{data.class}}"
+              ng-click="setUploadType(key)"
+              ng-mouseover="setHelpLabel(data.text)"
+              ng-mouseout="setHelpLabel()"
+              ng-if="!data.hide"
+              ng-class="{active: uploadType == key}">
+            <i class="fa-2x {{data.icon}}"></i>
+          </button>
+        </div><!--/upload-type-buttons-->
+        <p class="">
+          <strong>Upload{{helpLabel == '' ? 'ing' : ''}} as</strong>
+          <span>{{helpLabel || uploadTypes[uploadType].text}}</span>
+        </p>
+      </div>
+    </div><!--/upload-assistant-->
+    <div ng-if="isGroupTask()">
+      <group-member-contributions task="task" project="project" team="team"></group-member-contributions>
+      <hr>
+    </div>
+    <file-uploader
+      files="files"
+      url="url"
+      payload="payload"
+      on-before-upload="onBeforeUpload"
+      is-uploading="isUploading"
+      on-success="onSuccess"
+      on-complete="onComplete"></file-uploader>
+  </div><!--/upload-area--><!--end if to hide group tasks-->
+</div>
+<div class="panel-footer clearfix" ng-if="allowRegeneratePdf">
+  <button class="btn btn-primary pull-right" tooltip="Ask Doubtfire to regenerate the PDF that was created" ng-click="recreateTask()">
+    <i class='fa fa-refresh'></i>
+  </button>
+</div>

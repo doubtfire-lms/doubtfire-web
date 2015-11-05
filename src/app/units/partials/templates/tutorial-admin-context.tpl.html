@@ -1,23 +1,45 @@
-<div>
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr> 
-        <th>Abbr</th>
-        <th>Location</th>
-        <th>Day</th>
-        <th>Time</th>
-        <th>Tutor</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="tutorial in unit.tutorials" ng-click="editTutorial(tutorial)">
-        <td>{{tutorial.abbreviation}}</td>
-        <td>{{tutorial.meeting_location}}</td>
-        <td>{{tutorial.meeting_day}}</td>
-        <td>{{tutorial.meeting_time | date:'HH:mm'}}</td>
-        <td>{{tutorial.tutor_name}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <button class="btn btn-primary pull-right" ng-click="createTutorial()">Create Tutorial</button>
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">Modify Unit Tutorials</h3>
+      Add new tutorials to the unit or modify existing ones
+    </div>
+    <div class="panel-body">
+      <div ng-hide="unit.tutorials.length > 0" class="callout callout-info">
+        This unit has no tutorials
+      </div>
+      <table ng-show="unit.tutorials.length > 0" class="table table-condensed table-hover table-pointer">
+        <thead>
+          <tr>
+            <th>Abbreviation</th>
+            <th>Location</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Tutor</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="tutorial in unit.tutorials">
+            <td ng-click="editTutorial(tutorial)">{{tutorial.abbreviation}}</td>
+            <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_location}}</td>
+            <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_day}}</td>
+            <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_time | date:'HH:mm'}}</td>
+            <td ng-click="editTutorial(tutorial)">{{tutorial.tutor_name}}</td>
+            <td>
+              <button class="btn btn-danger" ng-click="deleteTutorial(tutorial)">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <button class="btn btn-success pull-right" ng-click="createTutorial()">
+        <i class="fa fa-pencil"></i>
+        <i class="fa fa-plus"></i> Add Tutorial
+      </button>
+    </div>
+  </div>
 </div>

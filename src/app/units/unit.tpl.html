@@ -1,4 +1,10 @@
-<div class="col-md-offset-2 col-md-8">
+<ul class="breadcrumb">
+    <li><a href="#/home">Home</a></li>
+    <li>Administrator</li>
+    <li><a href="#/admin/units">Manage Units</a></li>
+    <li class="active">{{unit.id == -1 ? 'New Unit' : unit.name}}</li>
+</ul>
+<div class="root-view" id="unit">
   <div ng-hide="unit.id == -1">
     <h3>Edit {{unit.name}}</h3>
   </div>
@@ -15,14 +21,17 @@
     <tab heading="Staff">
       <staff-admin-unit-context></staff-admin-unit-context>
     </tab>
-    <tab heading="Tutorials"> 
+    <tab heading="Tutorials">
       <tutorial-unit-context></tutorial-unit-context>
     </tab>
     <tab heading="Students">
       <enrol-students-context></enrol-students-context>
     </tab>
     <tab heading="Tasks">
-      <task-admin-unit-context></task-admin-unit-context>
+      <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
+    </tab>
+    <tab heading="Groups">
+      <unit-admin-groupset-tab ng-if="unit"></unit-admin-groupset-tab>
     </tab>
   </tabset>
 </div>

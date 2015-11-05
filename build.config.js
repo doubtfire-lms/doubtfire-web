@@ -86,15 +86,19 @@ module.exports = {
       'vendor/nvd3/nv.d3.js',
       'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js',
       'vendor/angular-file-upload/angular-file-upload.js',
+      'vendor/ng-file-upload/ng-file-upload-all.min.js',
       'vendor/es5-shim/es5-shim.js',
       'vendor/angular-pdf/dist/angular-pdf.js',
       'vendor/pdfjs-bower/dist/compatibility.js',
       'vendor/pdfjs-bower/dist/pdf.js',
       'vendor/pdfjs-bower/dist/pdf.worker.js',
       'vendor/angular-sanitize/angular-sanitize.js',
-      'vendor/ng-csv/build/ng-csv.js'
+      'vendor/ng-csv/build/ng-csv.js',
+      'vendor/angular-xeditable/dist/js/xeditable.js',
+      'vendor/angular-filter/dist/angular-filter.js'
     ],
     css: [
+      // 'vendor/angular-xeditable/dist/css/xeditable.css'
     ]
   },
 

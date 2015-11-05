@@ -10,56 +10,27 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
   restrict: 'E'
   templateUrl: 'tasks/partials/templates/student-unit-tasks.tpl.html'
   scope:
-    student: "=student"
+    # student: "=student"
     project: "=project"
     onChange: "=onChange"
     studentProjectId: "=studentProjectId"
     unit: "=unit"
+    onSelect: "=onSelect"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $modal, Project, taskService) ->
+  controller: ($scope, $modal, taskService, groupService) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
+    $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
 
     $scope.taskDisabled = (task) ->
-      $scope.unit.taskDef(task.task_definition_id).target_grade > $scope.project.target_grade
+      $scope.taskDefinition(task).target_grade > $scope.project.target_grade
 
-    # Prepare the scope with the passed in project - either from resource or from passed in scope
-    showProject = () ->
-      # Extend the tasks with the task definitions
-      # - add in task abbreviation, description, name, and status
-      $scope.tasks    = $scope.project.tasks.map (task) ->
-        td = $scope.unit.taskDef(task.task_definition_id)
-        task.task_abbr = td.abbr
-        task.task_desc = td.desc
-        task.task_name = td.name
-        task.seq = td.seq
-        task.due_date = td.target_date
-        task.task_upload_requirements = td.upload_requirements
-        task.status_txt = taskService.statusLabels[task.status]
-        task
+    $scope.groupSetName = (id) ->
+      groupService.groupSetName(id, $scope.unit)
 
-    updateChart = false
-    # Get the Project associated with the student's project id
-    if $scope.project
-      showProject()
-      updateChart = true
-    else
-      Project.get { id: $scope.studentProjectId }, (project) ->
-        $scope.project  = project
-        showProject()
-
-    # Show the status update dialog for the indicated task
-    $scope.showAssessTaskModal = (task) ->
-      $modal.open
-        controller: 'AssessTaskModalCtrl'
-        templateUrl: 'tasks/partials/templates/assess-task-modal.tpl.html'
-        resolve: {
-          task: -> task,
-          student: -> $scope.student,
-          project: -> $scope.project,
-          assessingUnitRole: -> $scope.assessingUnitRole,
-          onChange: -> $scope.onChange
-        }
+    $scope.hideGroupSetName = () ->
+      gsNames = _.pluck $scope.unit.group_sets.id
+      gsNames.length is 1 and gsNames[0] is null
 )

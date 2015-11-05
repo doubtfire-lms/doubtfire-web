@@ -1,0 +1,43 @@
+.comment {
+  .comment-details {
+    padding-top: 8px;
+    .comment-by, .comment-date {
+      display: block;
+    }
+    .comment-by {
+      font-weight: bolder;
+    }
+    .comment-date {
+      margin-top: -5px;
+      font-size: 0.8em;
+    }
+  }
+  .comment-text {
+    padding: 15px;
+    background-color: #efefef;
+    border-left: 5px solid #ddd;
+    font-style: oblique;
+    margin-bottom: 20px;
+    img {
+      border-radius: 1em;
+    }
+  }
+  .delete-comment {
+    font-style: normal;
+    color: #bbb;
+    font-size: 1.6em;
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
+}
+
+.comment-submitter {
+  textarea, button {
+    height: 45px;
+  }
+  textarea {
+    resize: none;
+  }
+}

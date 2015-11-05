@@ -1,0 +1,27 @@
+<div>
+  <h4>
+    Team Contribution<br/>
+    <small>
+      Please rate each team member's contribution to this work. To mark a <i>0% contribution</i>, click the first star twice.
+    </small>
+  </h4>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th><a ng-click="memberSortOrder='student_name'; reverse=!reverse">Team Member</a></th>
+        <th><a ng-click="memberSortOrder='target_grade'; reverse=!reverse">Target Grade</a></th>
+        <th class="col-sm-4"><a ng-click="memberSortOrder='rating'; reverse=!reverse">Contribution</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
+        <td>{{member.student_name}}</td>
+        <td>{{gradeFor(member)}}</td>
+        <td ng-init="member.rating = initialStars">
+          <rating class="group-member-contribution-rating" ng-click="checkClearRating(member)" ng-model="member.rating" on-hover="hoveringOver(member, value)" on-leave="hoveringOver(member, null)" max="numStars"></rating>
+          <span class="label" ng-class="{'label-danger': member.percent==dangerPct, 'label-warning': member.percent>dangerPct && member.percent<infoPct,'label-info': member.percent>=infoPct && member.percent<successPct, 'label-success': member.percent>=successPct}" ng-show="member.overStar">{{member.percent}}%</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

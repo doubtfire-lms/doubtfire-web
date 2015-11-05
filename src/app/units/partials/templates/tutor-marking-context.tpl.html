@@ -1,38 +1,21 @@
-<div>
-  <form class="form-horizontal" ng-submit="submitMarkingUpload()">
-    <div class="form-group">
-      <label class="col-sm-3 control-label" ng-click="dropper = !dropper">Marked Work</label>
-
-      <div ng-show="markingFileUploader.queue.length == 0" class="col-sm-offset-3">
-        <input ng-show="markingFileUploader.queue.length == 0 && ( !markingFileUploader.isHTML5 || !dropper )" type="file" class="col-sm-10" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
-        <div nv-file-drop ng-show="markingFileUploader.isHTML5 && dropper && markingFileUploader.queue.length == 0" class="drop well col-sm-10" nv-file-over uploader="markingFileUploader">
-          <p class="fa fa-file-archive-o fa-3x"></p>
-          <br/>
-          Drop zip here
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">{{contexts[activeContext].title}}</h4>
+        {{contexts[activeContext].subtitle}}
+      </div>
+      <div class="pull-right">
+        <div class="btn-group">
+          <label ng-repeat="(context, data) in contexts" class="btn btn-default" ng-click="setActiveContext(context)" ng-class="{active: context == activeContext}">
+            <i class="fa fa-{{data.icon}}" tooltip="Mark {{context}}"></i>
+          </label>
         </div>
-        <button class="col-sm-1 btn btn-default btn-xs" style="margin-left: 10px; height: 30px;" ng-class="{'active' : dropper }" ng-click="dropper = !dropper">Drop</button>
-      </div>
-
-      <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-      
-      <div class="help-block col-sm-7 col-sm-offset-3" ng-show="isMac()">
-        <p><strong>Warning:</strong> due to quarantining in OS X's native zip compressor, you should use a third party zip compressor. Alternatively, compress using the command line: <pre>cd /folder/containing/marks.csv/; zip -r upload.zip .</pre></p>
-      </div>
-      
-    </div>
-    <div class="form-group">
-      <input ng-hide="markingFileUploader.isUploading || markingFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
-      <div class="col-sm-offset-3 col-sm-6" ng-show="markingFileUploader.isUploading">
-        <progressbar class="progress-striped active" value="markingFileUploader.progress"></progressbar>
-        <p class="help-block text-center" ng-show="markingFileUploader.progress == 100">
-          Please wait for the server to update student's statuses...
-        </p>
       </div>
     </div>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Ready To Mark</label>
-      <input ng-click="requestMarkingExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Download Files" />
+    <div class="panel-body panel-marking-context">
+      <submission-marking-context ng-show="activeContext == 'submissions'"></submission-marking-context>
+      <portfolio-marking-context ng-show="activeContext == 'portfolios'"></portfolio-marking-context>
     </div>
-  </form>
+  </div>
 </div>

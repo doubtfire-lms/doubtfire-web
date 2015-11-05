@@ -1,14 +1,44 @@
-<div class="container landing-page">
-	<h1>Doubtfire</h1>
-	<form class="form-signin well" name="form" ng-submit="signIn()">
-		<input class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
-		<input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
-    <div class="checkbox remember-me">
-  		<label>
-  			<input type="checkbox" ng-model="remember_me">Remember me</input>
-  		</label>
-    </div>
-		<input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" />
-	</form>
+<div class="center-full-screen container landing-page">
+  <div ng-if="isIE" class="no-ie">
+    <main>
+      <h1 class="logo">
+        <p>
+          <a href="http://www.apple.com/safari/">
+            <i tooltip="Safari is compatible with Doubtfire" class="fa fa-safari text-primary"></i>
+          </a>
+          <a href="http://www.google.com/chrome">
+            <i tooltip="Chrome is compatible with Doubtfire" class="fa fa-chrome text-primary"></i>
+          </a>
+          <a href="http://www.firefox.com/">
+            <i tooltip="Firefox is compatible with Doubtfire" class="fa fa-firefox text-primary"></i>
+          </a>
+          <a href="http://browsehappy.com">
+            <i tooltip="This version of Internet Explorer is not compatible with Doubtfire" class="fa fa-internet-explorer text-danger"></i>
+          </a>
+        </p>
+        Doubtfire
+      </h1>
+      <p class="upgrade"> To use Doubtfire, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
+    </main>
+  </div>
+  <div ng-if="!isIE">
+    <main>
+    	<h1 class="logo">
+        <i class="logo"></i> Doubtfire
+      </h1>
+    	<form class="form-signin well" name="form" ng-submit="signIn()">
+    		<input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
+    		<input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
+        <div class="checkbox remember-me">
+      		<label>
+      			<input type="checkbox" ng-model="session.remember_me">Remember me</input>
+      		</label>
+        </div>
+    		<input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" />
+    	</form>
+    </main>
+    <footer class="about-doubtfire text-center">
+      <a href="" ng-click="openAboutModal()">About Doubtfire</a>
+    </footer>
+  </div>
 </div>
-

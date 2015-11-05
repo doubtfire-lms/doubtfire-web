@@ -1,30 +1,18 @@
 <form ng-submit="submitUpload()">
 	<div class="modal-header">
 		<h3>
-			{{uploadRequirements.length}} File{{uploadRequirements.length > 1 ? "s" : ""}} Required <span class="fa fa-cloud-upload fa-2x pull-right"></span>
+			{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required <span class="fa fa-cloud-upload fa-2x pull-right"></span>
 		</h3>
-		<h4>{{task.task_name}}</h4>
+		<h4>{{task.definition.name}}</h4>
 		<p> To mark this task as <strong>Ready To Mark</strong>, you must provide the following files to generate your submission document. </p>
 	</div>
 	<div class="modal-body">
-    <button ng-hide="fileUploader.isUploading || fileUploader.queue.length == 0" class="btn btn-sm btn-default pull-right" ng-click="clearUploads()"><span class="glyphicon glyphicon-ban-circle"></span></button>
-    <div ng-repeat="upload in uploadRequirements" ng-hide="fileUploader.isUploading">
-      <h5>{{$index + 1}}. {{upload.name}}</h5>
-      <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file{{$index}}' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
-      <div ng-show="fileUploader.queue.length == $index" uploader="fileUploader" ng-show="fileUploader.isHTML5 && !(fileUploader.queue.length > $index)" class="drop well" over-class="file-over-hover" options="{ alias: 'file{{$index}}' }" nv-file-drop nv-file-over filters="is_{{upload.type}}">
-        <p class="fa fa-file-{{upload.type == 'document' ? 'pdf' : upload.type}}-o fa-3x"></p>
-        <br/>
-        Drop {{upload.type}} here
-      </div>
-      <p ng-show="fileUploader.queue.length > $index"class="form-control-static">{{fileUploader.queue[$index].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-    </div>
-    <div class="form-group">
-      <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != uploadRequirements.length" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Generate Submission" />
-      <br/>
-      <div ng-show="fileUploader.isUploading">
-        <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
-      </div>
-    </div>
+    <file-uploader
+      files="files"
+      url="{{url}}"
+      on-complete="onComplete"
+      on-success="onSuccess">
+    </file-uploader>
 	</div>
 	<div class="modal-footer">
 	</div>

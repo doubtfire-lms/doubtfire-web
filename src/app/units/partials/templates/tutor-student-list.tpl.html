@@ -1,56 +1,107 @@
-<div>
-  <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
-      <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
-      <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
-      <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</p>
-  </form>
-  <div class="table-responsive">
-      <table class="table table-condensed table-hover">
+<div class="panel panel-primary tutor-student-list" ng-class="{fullscreen: fullscreen}">
+  <div class="panel-heading clearfix">
+    <div class="pull-left">
+      <h4 class="panel-title">Students</h4>
+      Students from {{studentFilter == 'myStudents' ? 'my tutorials' : 'every tutorial'}} and their current state
+    </div>
+    <div class="col-sm-5 text-right"></div>
+      <div class="pull-right">
+        <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+          <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
+        </button>
+      </div>
+      <div class="btn-group pull-right" style="margin-left: 1ex">
+        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+          <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
+        </label>
+        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+          <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
+        </label>
+      </div>
+      <form role="search" class="col-sm-4 form-horizontal pull-right">
+        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+        <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+    </form>
+  </div>
+  <div class="panel-body student-list">
+      <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredStudents.length == 0">No students found.</div>
+      <table ng-hide="filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
         <thead>
           <tr>
-            <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-            <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-            <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
-            <th>Stats</th>
-            <th><a href="" ng-click="sortOrder='progress_sort'; reverse=!reverse">Progress</a></th>
-            <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
-            <th>Actions</th>
+            <th class="student-id">
+              <a ng-click="sortOrder='student_id'; reverse=!reverse">
+                Student ID <i ng-show="sortOrder=='student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="name">
+              <a ng-click="sortOrder='name'; reverse=!reverse">
+                Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="stats">
+              <a ng-click="sortOrder='progress_sort'; reverse=!reverse">
+                Stats <i ng-show="sortOrder=='progress_sort'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="flags">
+              <a class="sort-by-flag-anchor" ng-click="showFlagSortOptions = !showFlagSortOptions">
+                <span class="show-link"> Flags </span> <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy' || sortOrder=='target_grade' || sortOrder=='portfolio_status'" class="ng-hide fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+              <span class="flag-sort-options" ng-show="showFlagSortOptions">
+                <span class="flag-sort">
+                  <grade-icon ng-click="setFlagSort('target_grade')" tooltip="Sort by grade" class="text-muted" ng-class="{'text-primary' : sortOrder == 'target_grade'}"></grade-icon>
+                  <i ng-show="sortOrder=='target_grade'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
+                <span class="flag-sort">
+                  <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagarism" ng-class="{'text-primary' : sortOrder == 'tasks_with_similarities * 100 + max_pct_copy'}" ng-click="setFlagSort('tasks_with_similarities * 100 + max_pct_copy')"></i>
+                  <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
+                <span class="flag-sort">
+                  <i class="fa fa-book fa-2x text-muted" tooltip="Sort by portfolio status" ng-class="{'text-primary' : sortOrder == 'portfolio_status'}" ng-click="setFlagSort('portfolio_status')"></i>
+                  <i ng-show="sortOrder=='portfolio_status'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </span>
+              </span>
+            </th>
+            <th class="tutorial">
+              <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
+                <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+              </a>
+            </th>
+            <th class="actions">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
-            <td class="task-progress" ng-click="student.open = !student.open"><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
-                <td ng-click="student.open = !student.open">{{student.name}}</td>
-                <td ng-click="student.open = !student.open">{{grades[student.target_grade]}}</td>
-            <td ng-click="student.open = !student.open" class="task-progress-bar">
-              <accordion ng-if="accordionReady" class="task-progress-accordion" ng-click="student.open = !student.open">
-                <accordion-group is-open="student.open">
-                  <accordion-heading>
-                    <progress class="task-progress" animate="false">
-                      <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
-                        <span ng-hide="bar.value < 10">{{bar.value}}%</span>
-                      </bar>
-                    </progress>
-                  </accordion-heading>
-                  <div ng-style="{ 'min-height': '{{accordionHeight}}px' }" >
-                      <student-unit-tasks ng-if="student.open" student="student" student-project-id="student.project_id" unit="unit" assessing-unit-role="assessingUnitRole" project="student.project"></student-unit-tasks>
-                    </div>
-                </accordion-group>
-            </accordion>
-          </td>
-          <td ng-click="student.open = !student.open">
-            <progress class="progress-progress-bar" animate="false">
-              <bar ng-repeat="bar in student.progress_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}">
-              </bar>
-            </progress>
-          </td>
+          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': fullscreen && activeStudent == student}">
+            <td ng-click="viewStudent(student)">{{student.student_id}}</td>
+            <td ng-click="viewStudent(student)">{{student.name}}</td>
+            <td ng-click="viewStudent(student)" class="task-progress-bar">
+              <progress class="task-progress" animate="true">
+                <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}" tooltip="{{bar.value}}% {{statusName(bar.type)}}">
+                  <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+                </bar>
+              </progress>
+            </td>
+            <td class="flags-data">
+              <span class="flags">
+                <span ng-click="viewStudent(student)" class="flag">
+                  <grade-icon grade="student.target_grade"></grade-icon>
+                </span>
+                <span ng-if="student.tasks_with_similarities > 0" ng-click="viewStudent(student)" class="flag">
+                  <i class="fa fa-eye fa-2x" ></i>
+                </span>
+                <span ng-if="student.has_portfolio" ng-click="viewStudent(student)" class="flag">
+                  <i class="fa fa-book fa-2x" ng-class="{'text-muted': student.compile_portfolio}"></i>
+                </span>
+              </span>
+            </td>
+            <!--/flags-data-->
             <td>
-              <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}"> 
-                <div class="btn-group" dropdown is-open="status.isopen">
-                  <button type="button" class="btn btn-default dropdown-toggle">
+              <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
+                <div class="btn-group dropdown" dropdown is-open="status.isopen">
+                  <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
                     {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" role="menu">
+                  <ul class="dropdown-menu">
                     <li><a ng-click="switchToLab(student, nil); status.isopen = false">None</a></li>
                     <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToLab(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
                   </ul>
@@ -58,12 +109,35 @@
               </span>
             </td>
             <td><button type="button" class="btn btn-info" ng-click="transitionWeekEnd(student)"><span class="fa fa-comment"></span></button></td>
-          </tr>
+        </tr>
         </tbody>
     </table>
+  </div>
+  <div class="panel-body project-show" ng-if="fullscreen">
+    <div class="no-student" ng-hide="activeStudent">
+      <i class="fa fa-user"></i>
+      <p>Click a student to view their status in detail</p>
+    </div>
+    <student-project
+      ng-if="activeStudent"
+      class="root-view"
+      scope="student-project-scope"
+      project="activeStudent"
+      unit="unit"
+      assessing-unit-role="assessingUnitRole"
+      unit-role="assessingUnitRole.id"
+      fullscreen="fullscreen"></student-project>
+  </div>
+  <div class="panel-footer clearfix">
     <div class="pull-right">
-      <button type="button" class="btn btn-success" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv">Export</button>
-      <button type="button" class="btn btn-success" ng-click="showEnrolModal()">Enrol Student</button>
+      <button type="button" class="btn btn-success btn-download" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv" ng-hide="filteredStudents.length < allStudents.length && filteredStudents.length == 0" target="_blank">
+        <i class="fa fa-file-excel-o"></i>
+        <i class="fa fa-download"></i> Export
+      </button>
+      <button type="button" class="btn btn-success btn-download" ng-click="showEnrolModal()">
+        <i class="fa fa-user"></i>
+        <i class="fa fa-plus"></i> Enrol
+      </button>
     </div>
     <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
   </div>

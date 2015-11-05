@@ -1,49 +1,67 @@
-<form class="form-horizontal row" role="form" ng-submit="saveUnit()">
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="code">Code</label>
-    <input class="form-control col-sm-9" id="code" type="text" placeholder="Enter unit code" ng-model="unit.code">
-  </div><!--/code-date-->
-
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="name">Name</label>
-    <input id="name" type="text" class="form-control col-sm-9" ng-model="unit.name">
-  </div><!--/name-date-->
-  
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="description">Description</label>
-    <textarea id="description" class="form-control col-sm-9" ng-model="unit.description"></textarea>
-  </div><!--/description-date-->
-
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="startdate">Start Date</label>
-    <div class="col-sm-9 input-group">
-      <input type="text" class="form-control" id="startdate" datepicker-popup="{{format}}" ng-model="unit.start_date"   is-open="startOpened" ng-required="true" close-text="Close" />
-      <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="open($event,'start')"><i class="glyphicon glyphicon-calendar"></i></button>
-      </span>
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="panel panel-primary">
+    <div class="panel-heading" ng-if="unit.id == -1">
+      <h3 class="panel-title">Create Unit</h3>
+      Create a new unit with all overview unit details here.
     </div>
-  </div><!--/start-date-->
+    <div class="panel-heading" ng-if="unit.id != -1">
+      <h3 class="panel-title">Update Unit</h3>
+      Update overview details of the unit below.
+    </div>
+    <form class="form-horizontal" role="form" name="unitForm" ng-submit="saveUnit()">
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="code">Code</label>
+          <input class="form-control col-sm-9" id="code" type="text" placeholder="Enter unit code" ng-model="unit.code">
+        </div><!--/code-date-->
 
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="enddate">End Date</label>
-    <div class="col-sm-9 input-group">
-      <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="endOpened"ng-required="true" close-text="Close" />
-      <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
-      </span>
-    </div> 
-  </div><!--/end-date-->
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="name">Name</label>
+          <input id="name" type="text" class="form-control col-sm-9" ng-model="unit.name">
+        </div><!--/name-date-->
 
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="enddate">Active</label>
-    <div class="col-sm-9 input-group">
-      <span ng-click="unit.active=!unit.active" ng-show="unit.active" class="glyphicon glyphicon-ok text-success"></span>
-      <span ng-click="unit.active=!unit.active" ng-hide="unit.active" class="glyphicon glyphicon-remove text-danger"></span>
-    </div> 
-  </div><!--/end-date-->
-  
-  <div class="form-group">
-    <input type="submit" value="{{ unit.id == -1 ? 'Create Unit' : 'Update Unit' }}" class="btn btn-primary col-sm-2 col-sm-offset-9" />
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="description">Description</label>
+          <textarea id="description" class="form-control col-sm-9" ng-model="unit.description"></textarea>
+        </div><!--/description-date-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="startdate">Start Date</label>
+          <div class="col-sm-9 input-group">
+            <input type="text" class="form-control" id="startdate" datepicker-popup="{{format}}" ng-model="unit.start_date"   is-open="startOpened" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'start')"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+        </div><!--/start-date-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">End Date</label>
+          <div class="col-sm-9 input-group">
+            <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="endOpened"ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+        </div><!--/end-date-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Active</label>
+          <div class="col-sm-9 input-group">
+            <div class="btn-group">
+                <label class="btn btn-{{unit.active ? 'success' : 'default'}}" ng-model="unit.active" btn-radio="true" uncheckable>
+                  <i class="glyphicon glyphicon-ok"></i>
+                </label>
+                <label class="btn btn-{{unit.active ? 'default' : 'danger'}}" ng-model="unit.active" btn-radio="false" uncheckable>
+                  <i class="glyphicon glyphicon-remove"></i>
+                </label>
+            </div>
+          </div>
+        </div><!--/active-->
+      </div>
+      <div class="panel-footer text-right">
+        <input type="submit" value="{{ unit.id == -1 ? 'Create' : 'Update' }}" class="btn btn-success" ng-disabled="unitForm.$pristine" />
+      </div>
+    </form>
   </div>
-  <br />
-</form>
+</div>

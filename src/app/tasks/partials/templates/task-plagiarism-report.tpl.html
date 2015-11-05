@@ -1,0 +1,17 @@
+<div class="panel-body">
+  <div class="help-block" ng-show="task.similar_to_count <= 0 || similarityData == null">
+    <i class="fa fa-eye fa-2x"></i>
+    <p>Doubtfire has detected no similarities for this work</p>
+  </div><!--/no-detections-->
+  <div ng-if="task.similar_to_count > 0 && similarityData">
+    <div ng-class="classForViews()">
+      <task-plagiarism-file-view match="similarityData.student"></task-plagiarism-file-view>
+    </div>
+    <div ng-class="classForViews()">
+      <task-plagiarism-file-view match="similarityData.other_student"></task-plagiarism-file-view>
+    </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+</div>

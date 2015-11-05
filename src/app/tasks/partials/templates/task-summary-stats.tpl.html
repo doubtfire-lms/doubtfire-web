@@ -1,24 +1,41 @@
-<div class="pull-left list-group col-md-2 task-status">
-  <a class="list-group-item text-center" ng-click="fetchCSV()">Fetch CSV</a>
-  <a class="list-group-item text-center" ng-click="fetchStats()">Fetch Stats</a>
+<!-- hidden div to simulate an autoload, remove once loaded -->
+<div onmousemove="this.remove()" ng-mousemove="fetchStats()"
+  style="width: 100%; height: 100%; position: absolute; top: 0px">
 </div>
 
-<div class="col-md-10 pull-right">
-  <nvd3-scatter-chart
-    data="scatterData"
-    id="taskScatter"
-    width="800"
-    height="600"
-    yAxisTickFormat="yAxisTickFormatFunction()"
-    xAxisTickFormat="xAxisTickFormatFunction()"
-    showLegend="true"
-    noData="Fetch Data to View"
-    interactive="true"
-    tooltips="true"
-    tooltipContent="tooltipContentFunction()"
-    showDistX="true"
-    showDistY="true"
-    transitionDuration="350">
-    <svg></svg>
-  </nvd3-scatter-chart>
+<div class="col-sm-8 col-sm-offset-2">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h4 class="panel-title"> Task Statistics </h4>
+      Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph.
+    </div>
+    <div class="panel-body text-center">
+      <div ng-show="scatterData.length == 0">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+        <h2>Loading...</h2>
+      </div>
+      <nvd3-scatter-chart
+        ng-hide="scatterData.length == 0"
+        data="scatterData"
+        id="taskScatter"
+        width="800"
+        height="600"
+        yAxisTickFormat="yAxisTickFormatFunction()"
+        xAxisTickFormat="xAxisTickFormatFunction()"
+        showLegend="true"
+        interactive="true"
+        tooltips="true"
+        tooltipContent="tooltipContentFunction()"
+        showDistX="true"
+        showDistY="true"
+        transitionDuration="350">
+          <svg></svg>
+        </nvd3-scatter-chart>
+    </div>
+    <div class="panel-footer clearfix">
+      <a class="btn btn-success pull-right" ng-click="fetchCSV()">
+        <i class="fa fa-file-excel-o"></i> Download as CSV
+      </a>
+    </div>
+  </div>
 </div>

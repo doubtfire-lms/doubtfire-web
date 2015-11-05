@@ -1,15 +1,15 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{otherFilesStep + 1}}: Add Other Files</h3><!--/title-->
+      <h3 class="panel-title">Add Extra Files</h3><!--/title-->
   </div>
   <div class="panel-body">
     <form ng-submit="submitOther()">
       <p>You can upload <i>other files</i> you want to include in your portfolio.</p>
-      <h4>Upload New File</h4> 
-      <div class="btn-group" dropdown is-open="uploadDropdown.open">
-        <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">Upload {{uploadType}} <span class="caret"></span>
+      <h4>Upload New File</h4>
+      <div class="dropdown" dropdown is-open="uploadDropdown.open">
+        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">Upload {{uploadType}} <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu">
+        <ul class="dropdown-menu">
           <li><a ng-click="changeTo('code')">Code</a></li>
           <li><a ng-click="changeTo('document')">Document</a></li>
           <li><a ng-click="changeTo('image')">Image</a></li>
@@ -43,8 +43,11 @@
         <p>The files you add will appear in the portfolio in the order shown.</p>
       </div>
     </div>
-    <div class="pull-right ">
-      <button class="btn btn-primary" ng-click="currentView = otherFilesStep + 1">Step {{otherFilesStep + 2}}: Compile Portfolio <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="advancePorfolioActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

@@ -3,14 +3,79 @@
   	<li>Administrator</li>
   	<li class="active">Manage Users</li>
 </ul>
-<div class="col-md-offset-2 col-md-8">
-  <h2>Manage Doubtfire Users</h2>
-  <tabset>
-    <tab heading="User List">
-      <user-list-context></user-list-context>
-    </tab>
-    <tab heading="Import / Export">
-      <data-import-export-context></data-import-export-context>
-    </tab>
-  </tabset>
+<div class="root-view" id='admin-users'>
+  <div class="col-sm-9">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">
+            Doubtfire Users
+          </h4>
+          Modify users registered with Doubtfire
+        </div>
+        <form role="search" class="pull-right form-horizontal">
+          <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search" ng-model="search.$" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
+          <p ng-show="filteredUsers.length < students.length && filteredUsers.length != 0">Showing {{filteredUsers.length}} of {{users.length}} users.</p>
+          <p ng-show="filteredUsers.length < students.length && filteredUsers.length == 0">No students found.</p>
+        </form>
+      </div>
+      <div class="panel-body">
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th><a href="" ng-click="sortOrder='id'; reverse=!reverse">User ID</a></th>
+              <th><a href="" ng-click="sortOrder='first_name'; reverse=!reverse">First Name</a></th>
+              <th><a href="" ng-click="sortOrder='last_name'; reverse=!reverse">Last Name</a></th>
+              <th>Username</th>
+              <th>Email</th>
+              <th><a href="" ng-click="sortOrder='system_role'; reverse=!reverse">System Role</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
+              <td>{{user.id}}</td>
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td>{{user.username}}</td>
+              <td><a href="mailto:{{user.email}}">{{user.email}}</a></td>
+              <td>
+                {{user.system_role}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer clearfix">
+        <a href class="btn btn-success pull-right" ng-click="showUserModal()">
+          <i class="fa fa-user"></i>
+          <i class="fa fa-plus"></i>
+           Add New User
+        </a>
+        <pagination total-items="filteredUsers.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Import Users</h4>
+        Import users using a CSV containing: email, first_name, last_name, username, nickname, role
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          url="file_data.batchUserUrl"
+          files="file_data.batchUserFiles"
+          on-success="file_data.onBatchUserSuccess"></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Export Users</h4>
+        Download a CSV of all users registered with Doubtfire.
+      </div>
+      <div class="panel-body text-right">
+        <a href="batchUserUrl" class="btn btn-primary">
+          <i class="fa fa-download"></i> Download
+        </a>
+      </div>
+    </div>
+  </div>
 </div>

@@ -3,44 +3,59 @@
 		<h3>
 			Assess Task<span class="fa fa-graduation-cap fa-2x pull-right"></span>
 		</h3>
-		<h4>{{task.task_name}}</h4>
-		<p>{{task.task_desc}}</p>
-		<p>Due: {{task.due_date | date: 'dd-MMM-yyyy'}}</p>
+		<h4>{{task.definition.name}}</h4>
+		<p>{{task.definition.description}}</p>
+		<p><strong>Task Due:</strong> {{task.due_date | date: 'dd MMMM yyyy'}}</p>
 	</div>
 	<div class="modal-body">
 
-		<div class="btn-group btn-group-justified task-status">
-			<label ng-repeat="action in taskEngagementConfig.all" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
-				ng-model="task.status" 
-				btn-radio="action.status" 
-				ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
+		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
+			<label ng-repeat="action in taskEngagementConfig.all"
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
+				btn-radio="action.status"
+				ng-click="triggerTransition(action.status)">
+					<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+					<strong>{{action.label}}</strong>
+					<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
 		</div>
 		<br />
-		<div class="btn-group btn-group-justified task-status">
-			<label ng-repeat="action in taskEngagementConfig.tutorTriggers" 
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
-				ng-model="task.status" 
+		<div class="btn-group btn-group-justified task-status task-status-change-trigger">
+			<label ng-repeat="action in taskEngagementConfig.tutorTriggers"
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
 				btn-radio="action.status"
 				ng-class="role == 'Student' ? 'disabled' : ''"
-				ng-click="triggerTransition(action.status)">{{action.label}} <i class="{{action.iconClass}}"></i>
+				ng-click="triggerTransition(action.status)">
+				<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+				<strong>{{action.label}}</strong>
+				<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
 		</div>
 		<br />
-		<div class="btn-group btn-group-justified task-status">
+		<div class="btn-group btn-group-justified text-center task-status task-status-change-trigger">
 			<label ng-repeat="action in taskEngagementConfig.complete"
-				class="btn {{action.taskClass}} {{activeClass(action.status)}}" 
-				ng-model="task.status" 
-				btn-radio="action.status" 
-				disabled="disabled">{{action.label}} <i class="{{action.iconClass}}"></i>
+				class="btn {{action.taskClass}} {{activeClass(action.status)}} text-center"
+				ng-model="task.status"
+				btn-radio="action.status"
+				ng-class="role == 'Student' ? 'disabled' : ''"
+				ng-click="triggerTransition(action.status)">
+				<i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+				<strong>{{action.label}}</strong>
+				<small ng-show="showHelp">{{action.helpText}}</small>
 			</label>
-		</div>
-		<div ng-show="task.status == 'discuss' || task.status == 'fix_and_include' || task.status == 'complete'">
-			<hr>
-			<button class="btn btn-primary col-xs-12" ng-click="uploadFiles()">Re-upload Evidence <i class="fa fa-cloud-upload"></i></button>
 		</div>
 	</div>
 	<div class="modal-footer">
+		<button type="button" class="btn btn-info" ng-model="showHelp" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+      <i class="fa fa-question"></i>
+    </button>
+		<!-- More options... -->
+    <div class="btn-group dropdown" dropdown>
+      <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+        <i class="fa fa-cog"></i> <span class="caret"></span>
+      </button>
+
 	</div>
 </form>

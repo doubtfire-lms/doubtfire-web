@@ -12,7 +12,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/header.tpl.html"
+        templateUrl: "common/partials/templates/header.tpl.html"
 
     data:
       pageTitle: "_Home_"
@@ -28,42 +28,61 @@ angular.module("doubtfire.projects", [
       pageTitle: "_Home_"
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
   )
+  $stateProvider.state("projects#feedback",
+    url: "/projects/:projectId/:viewing/:showTaskId"
+    views:
+      main:
+        controller: "ProjectsShowCtrl"
+        templateUrl: "projects/projects-show.tpl.html"
+      header:
+        controller: "BasicHeaderCtrl"
+        templateUrl: "common/partials/templates/header.tpl.html"
+    data:
+      pageTitle: "_Home_"
+      # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
+  )
 )
-.controller("ProjectsShowCtrl", ($scope, $state, $stateParams, Project, UnitRole, headerService, alertService, taskService, unitService, currentUser) ->
+.controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService) ->
   if $stateParams.authToken?
-    $scope.message = $stateParams.authToken
+    # $scope.message = $stateParams.authToken
     currentUser.authenticationToken = $stateParams.authToken
-    
-  $scope.unitLoaded = false
-  $scope.studentProjectId = $stateParams.projectId
-  $scope.projectLoaded = false
+
+  # Provided show task id
+  if $stateParams.showTaskId?
+    $scope.showTaskId = parseInt($stateParams.showTaskId, 10)
+
+  $scope.unitRole = $stateParams.unitRole
   
-  Project.get { id: $scope.studentProjectId }, (project) ->
-    # Clear any page-specific menus
-    headerService.clearMenus()
-    
-    # Provide access to the Project's details
-    $scope.project = project # the selected unit role
-    
-    $scope.submittedTasks = []
-    
-    if project
-      unitService.getUnit project.unit_id, false, false, (unit) ->
-        $scope.unit = unit # the unit related to the role
-        unit.extendStudent project
-        $scope.tasks = project.tasks
+  if $scope.unitRole?
+    # Bound to inner-directive
+    UnitRole.get { id: $scope.unitRole },
+      (response) ->
+        $scope.assessingUnitRole = response
+      (error) ->
+        $scope.assessingUnitRole = null
+        $scope.unitRole = null
+  else
+    $scope.assessingUnitRole = null
 
-        # $scope.submittedTasks = _.filter($scope.tasks, (task) -> _.contains(['ready_to_mark', 'discuss', 'complete', 'fix_and_resubmit', 'fix_and_include', 'redo'], task.status))
-        $scope.submittedTasks = _.filter($scope.tasks, (task) -> task.has_pdf )
-        $scope.submittedTasks = _.sortBy($scope.submittedTasks, (t) -> t.task_abbr).reverse()
-        $scope.unitLoaded = true
+  # Bound to inner-directive
+  $scope.project = { project_id: $stateParams.projectId }
+  # Bound to inner-directive
+  $scope.unit = null
 
-      if $stateParams.unitRole?
-        UnitRole.get { id: $stateParams.unitRole }, (unitRole) ->
-          if unitRole.unit_id == project.unit_id
-            $scope.assessingUnitRole = unitRole
-      
-      $scope.burndownData = project.burndown_chart_data
-      $scope.projectLoaded = true
-  # end get project
+  #
+  # Batch Discuss button
+  #
+  $scope.transitionWeekEnd = () ->
+    # Reject if there is no project
+    return unless $scope.project?
+    Project.update(
+      { id: $scope.project.project_id, trigger: "trigger_week_end" }
+      (project) ->
+        projectService.updateTaskStats($scope.project, project.stats)
+        # Update the task stats
+        _.each $scope.project.tasks, (task) =>
+          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
+        alertService.add("success", "Status updated.", 2000)
+      (response) -> alertService.add("danger", response.data.error, 6000)
+    )
 )

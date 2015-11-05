@@ -2,19 +2,23 @@
   	<li><a href="#/home">Home</a></li>
   	<li class="active">{{unit.name}}</li>
 </ul>
-
-<tabset class="col-md-offset-2 col-md-8" ng-if="unitLoaded">
-  <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} </p></h2>
-  <tab heading="Progress">
-    <progress-info></progress-info>
-  </tab>
-  <tab ng-show="submittedTasks.length > 0" heading="Feedback">
-    <task-feedback ng-if="unitLoaded"></task-feedback>
-  </tab>
-  <tab heading="Labs">
-    <lab-list></lab-list>
-  </tab>
-  <tab heading="My Portfolio">
-    <project-portfolio></project-portfolio>
-  </tab>
-</tabset>
+<div class="feedback-float-toolbar well" ng-if="assessingUnitRole && project">
+  <label>Tutor Actions</label>
+  <button ng-click="transitionWeekEnd()" class="btn btn-info">
+    <i class="fa fa-comment fa-2x"></i><br/>
+    Discussed
+  </button>
+  <a href="#/units?unitRole={{assessingUnitRole.id}}" class="btn btn-default">
+    <i class="fa fa-list fa-2x"></i><br/>
+    Student List
+  </a>
+</div><!--/feedback-float-toolbar-->
+<div class="root-view" id="projects-show">
+  <student-project
+    project-id="studentProjectId"
+    show-task-id="showTaskId"
+    unit-role="unitRole"
+    project="project"
+    unit="unit"
+    assessing-unit-role="assessingUnitRole"></student-project>
+</div>

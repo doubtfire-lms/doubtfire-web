@@ -1,0 +1,72 @@
+.modal-about {
+
+  .modal-header {
+    text-align: center;
+  }
+
+  .modal-content {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+  i.logo {
+    height: 6em;
+    width: 6em;
+  }
+  h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #333;
+  }
+  ul {
+    -webkit-padding-start: 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+    width: 85%;
+    margin: 0 auto;
+  }
+  li {
+    display: inline-block;
+    width: 15%;
+    margin: 3em 5% 3em 5%;
+    &:last-child {
+      margin-right: auto;
+    }
+    a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 1.3em;
+      color: #444;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+      &.handler {
+        display: block;
+        margin-top: 0.25em;
+        font-size: 1.1em;
+      }
+      .name {
+        font-weight: bold;
+      }
+    }
+    img {
+      width: 100%;
+      margin: 0 auto;
+      border-radius: 100%;
+      margin-bottom: 1em;
+    }
+  }
+  .logo-smallprint {
+    font-size: 0.8em;
+    a {
+      color: #222;
+    }
+  }
+}

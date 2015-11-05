@@ -2,3 +2,193 @@
   width: @width;
   margin-left: ((@width - @ui-bootstrap-modal-width) / 2) * -1;
 }
+
+// Fade-in
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in(@seconds) {
+  -webkit-animation: fadein @seconds;
+          animation: fadein @seconds;
+}
+
+// Move down
+
+@keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@-webkit-keyframes slidedown {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+.slide-down(@seconds) {
+  -webkit-animation: slidedown @seconds;
+          animation: slidedown @seconds;
+}
+.transform(@string){
+  -webkit-transform: @string;
+  transform:         @string;
+}
+
+// Wobble side to side
+@-webkit-keyframes wobble {
+    0%, 100% { -webkit-transform: translateX(+5px); }
+    25%, 75% { -webkit-transform: translateX(0); }
+         50% { -webkit-transform: translateX(-5px); }
+}
+
+@keyframes wobble {
+    0%, 100% { transform: translateX(+5px); }
+    25%, 75% { transform: translateX(0); }
+         50% { transform: translateX(-5px); }
+}
+
+.wobble() {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-name: wobble;
+  animation-name: wobble;
+}
+
+// Check bounce in
+@-webkit-keyframes bounce-in {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(.3);
+    }
+
+    50% {
+        opacity: 1;
+        -webkit-transform: scale(1.05);
+    }
+
+    70% {
+        -webkit-transform: scale(.9);
+    }
+
+    100% {
+         -webkit-transform: scale(1);
+    }
+}
+
+@keyframes bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.bounce-in() {
+    -webkit-animation-name: bounce-in;
+    animation-name: bounce-in;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.flex-center() {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-align-content: center;
+          align-content: center;
+  height: 100%;
+  & > * {
+    -webkit-flex-basis: 100%;
+    flex-basis: 100%;
+  }
+}
+
+/* Extra large columns */
+
+// xLarge screen / wide desktop
+@screen-xl:                  1440px;
+@screen-xl-min:              @screen-xl;
+//** Deprecated `@screen-lg-desktop` as of v3.0.1
+@screen-xl-desktop:          @screen-xl-min;
+// So media queries don't overlap when required, provide a maximum
+@screen-lg-max:              (@screen-xl-min - 1);
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+// xLarge screen / wide desktop
+@container-xlarge-desktop:      (@screen-xl + @grid-gutter-width);
+//** For `@screen-xl-min` and up.
+@container-xl:                 @container-xlarge-desktop;
+
+// Container widths
+//
+// Set the container width, and override it for fixed navbars in media queries.
+
+.container {
+  .container-fixed();
+  @media (min-width: @screen-xl-min) {
+    width: @container-xl;
+  }
+}
+
+// xLarge grid
+//
+// Columns, offsets, pushes, and pulls for the xlarge desktop device range.
+
+@media (min-width: @screen-xl-min) {
+  .make-grid(xl);
+}
+
+// Generate the xlarge columns
+.make-xl-column(@columns; @gutter: @grid-gutter-width) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  @media (min-width: @screen-xl-min) {
+    float: left;
+    width: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-offset(@columns) {
+  @media (min-width: @screen-xl-min) {
+    margin-left: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-push(@columns) {
+  @media (min-width: @screen-xl-min) {
+    left: percentage((@columns / @grid-columns));
+  }
+}
+.make-xl-column-pull(@columns) {
+  @media (min-width: @screen-xl-min) {
+    right: percentage((@columns / @grid-columns));
+  }
+}

@@ -1,26 +1,31 @@
 <div id="panel" class="panel panel-default">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Step {{stepGrade + 1}}: Select Grade</h3><!--/title-->
+      <h3 class="panel-title">Select Grade</h3><!--/title-->
   </div>
   <div class="panel-body">
     <div class="col-xs-12">
       <p>In preparing your portfolio, you need to undertake a self assessment. Use the unit's assessment criteria to determine the grade your portfolio should be awarded.</p>
-      <p>Select the grade you are applying for.</p>
-      <div class="btn-group col-xs-4" dropdown is-open="status.isopen">
-        <button id="targetGradeButton" type="button" class="btn btn-primary dropdown-toggle col-xs-12">
-          {{grades[project.target_grade]}} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu col-xs-12" role="menu">
-          <li ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false"><a>{{grade}}</a></li>
-        </ul>
+      <p>Select the <strong>grade</strong> you are applying for below:</p>
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="dropdown" dropdown>
+          <button id="targetGradeButton" type="button" class="btn btn-primary dropdown-toggle btn-block" dropdown-toggle>
+            {{grades[project.target_grade]}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false"><a>{{grade}}</a></li>
+          </ul>
+        </div>
+        <div class="callout callout-warning">
+          <h4>Assessment Criteria</h4>
+          <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
+        </div>
       </div>
     </div>
-    <div class="callout callout-info col-xs-12">
-      <h4>Assessment Criteria</h4>
-      <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
-    </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" ng-click="currentView = summaryStep">Step {{stepGrade + 2}}: Learning Summary <span class="fa fa-angle-double-right fa-lg"></span></button>.
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>

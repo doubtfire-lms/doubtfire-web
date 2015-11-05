@@ -1,136 +1,20 @@
-angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals', 'doubtfire.grade-service'])
-
-#
-# The Tutor Student List view shows a list of students, with
-# their tasks and progress.
-#
-.directive('tutorStudentList', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-student-list.tpl.html'
-  scope:
-    unitRole: "=unitRole"
-    unit: "=unit"
-    studentFilter: "=studentFilter"
-    unitLoaded: "=unitLoaded"
-
-  controller: ($scope, $rootScope, $modal, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
-    # We need to ensure that we have a height for the lazy loaded accordion contents
-    $scope.accordionHeight = 100
-    # Accordion ready is used to show the accordions
-    $scope.accordionReady = false
-    $scope.grades = gradeService.grades
-    $scope.unitService = unitService
-
-    $scope.tutorName = currentUser.profile.name
-
-    $scope.search = ""
-
-    $scope.switchToLab = (student, tutorial) ->
-      if tutorial
-        newId = tutorial.id
-      else
-        newId = -1
-      Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
-        (project) ->
-          student.tute = project.tute
-          student.tutorial = $scope.unit.tutorialFromId( student.tute )[0]
-      )
-
-    $scope.getCSVHeader = () ->
-      result = ['student_code', 'name', 'email', 'lab']
-      angular.forEach(projectService.progressKeys, (key) ->
-        result.push(key)
-      )
-      angular.forEach(taskService.statusKeys, (key) ->
-        result.push(key)
-      )
-      result
-
-    $scope.getCSVData = () ->
-      filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.studentFilter, $scope.tutorName), $scope.search)
-      result = []
-      angular.forEach(filteredStudents, (student) ->
-        row = {}
-        row['student_code'] = student.student_id
-        row['name'] = student.name
-        row['email'] = student.student_email
-        if student.tutorial
-          row['lab'] = student.tutorial.abbreviation
-        else
-          row['lab'] = ""
-        angular.forEach(student.progress_stats, (stat) ->
-          row[stat.type] = stat.value
-        )
-        angular.forEach(student.task_stats, (stat) ->
-          row[stat.type] = stat.value
-        )
-        result.push row
-      )
-      result
-
-    # The following is called when the unit is loaded
-    prepAccordion = () ->
-      # 5 tasks per row, each 32 pixels in size
-      $scope.accordionHeight = $scope.unit.taskCount() / 3 * 38 + 30
-      $scope.accordionReady = true
-    
-    if ! $scope.unitLoaded
-      unwatchFn = $scope.$watch( ( () -> $scope.unitLoaded ), (value) ->
-        if ( value )
-          prepAccordion()
-          unwatchFn()
-        else
-          $scope.accordionReady = false
-      )
-    else
-      prepAccordion()
-  
-    $scope.reverse = false
-    $scope.statusClass = taskService.statusClass
-    $scope.barLargerZero = (bar) -> bar.value > 0
-
-    # Pagination details
-    $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 15
-
-    update_project_details = (student, project) ->
-      projectService.updateTaskStats(student, project.stats)
-      if student.project
-        _.each student.project.tasks, (task) =>
-          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
-      alertService.add("success", "Status updated.", 2000)
-
-    $scope.transitionWeekEnd = (student) ->
-      Project.update({ id: student.project_id, trigger: "trigger_week_end" }).$promise.then (
-        (project) ->
-          update_project_details(student, project)
-      )
-
-    # The assessingUnitRole is accessed in student views loaded from this view
-    $scope.assessingUnitRole = $scope.unitRole
-
-    $scope.showEnrolModal = () ->
-      $modal.open
-        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
-        controller: 'EnrolStudentModalCtrl'
-        resolve:
-          unit: -> $scope.unit
-)
+angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.modals'])
 
 .directive('staffAdminUnitContext', ->
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
-  controller: ($scope, $rootScope, Unit, UnitRole) ->
+  controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
     temp = []
     users = []
 
     $scope.changeRole = (unitRole, role_id) ->
       unitRole.role_id = role_id
       unitRole.unit_id = $scope.unit.id
-      UnitRole.update { id: unitRole.id, unit_role: unitRole }
+      UnitRole.update { id: unitRole.id, unit_role: unitRole },
+        (response) -> alertService.add("success", "Role changed", 2000)
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
 
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
@@ -151,28 +35,24 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       $scope.unit.staff = _.without $scope.unit.staff, staff
       UnitRole.delete { id: staff.id }
       staffUser = $scope.findStaffUser(staff.user_id)
+
+    $scope.groupSetName = (id) ->
+      groupService.groupSetName(id, $scope.unit)
+
 )
 
 .directive('taskAdminUnitContext', ->
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, TaskCSV, Unit, gradeService) ->
-    $scope.tasksFileUploader = TaskCSV.fileUploader $scope
-
+  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
     $scope.grades = gradeService.grades
 
-    $scope.submitTasksUpload = () ->
-      $scope.tasksFileUploader.uploadTaskCSV($scope.unit)
-    
-    $scope.requestTasksExport = () ->
-      TaskCSV.downloadFile($scope.unit)
-    
     # Pagination details
     $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 15
-    
+    $scope.maxSize = 7
+    $scope.pageSize = 7
+
     # Modal Events
     $scope.editTask = (task) ->
       $modal.open
@@ -183,8 +63,35 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           isNew: -> false
           unit: -> $scope.unit
         }
+
+    guessTaskAbbreviation = () ->
+      unit = $scope.unit
+      if unit.task_definitions.length == 0
+        "1.1P"
+      else
+        last_abbr = unit.task_definitions[unit.task_definitions.length-1].abbreviation
+        regex = /(.*)(\d+)(\D*)/
+        match = regex.exec last_abbr
+        if match?
+          "#{match[1]}#{parseInt(match[2])+1}#{match[3]}"
+        else
+          "#{last_abbr}1"
+
+
     $scope.createTask = ->
-      task = { target_date: new Date(), required: true, upload_requirements: [] }
+      abbr = guessTaskAbbreviation()
+      task = {
+        name: "Task #{abbr}",
+        abbreviation: abbr,
+        description: "New Description",
+        target_date: new Date(),
+        upload_requirements: [],
+        plagiarism_checks: []
+        weight: 4
+        target_grade: 0
+        restrict_status_updates: false
+        plagiarism_warn_pct: 80
+      }
       $modal.open
         controller: 'TaskEditModalCtrl'
         templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
@@ -193,6 +100,25 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           isNew: -> true
           unit: -> $scope.unit
         }
+
+    $scope.deleteTask = (task) ->
+      taskService.deleteTask(task, $scope.unit)
+
+    $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
+    $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
+
+    $scope.onTaskPDFSuccess = (response) ->
+      alertService.add("success", "Files uploaded", 2000)
+      $scope.filesUploaded = response
+
+    $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
+    $scope.batchTaskUrl = ->
+      Task.getTaskDefinitionBatchUploadUrl($scope.unit)
+    $scope.onBatchTaskSuccess = (response) ->
+      csvResultService.show "Task CSV Upload Results", response
+      if response.success.length > 0
+        $scope.unit.refresh()
+
 )
 .directive('adminUnitContext', ->
   replace: true
@@ -213,8 +139,11 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       if $scope.unit.convenors then delete $scope.unit.convenors
 
       if $scope.unit.id == -1
-        Unit.create { unit: $scope.unit }, (unit) ->
-          $scope.saveSuccess(unit)
+        Unit.create { unit: $scope.unit },
+          (unit) ->
+            $scope.saveSuccess(unit)
+          (response) ->
+            alertService.add("danger", response.data.error, 6000)
       else
         Unit.update { id: $scope.unit.id, unit: $scope.unit}, (unit) ->
           alertService.add("success", "Unit updated.", 2000)
@@ -224,7 +153,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit, UnitRole) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, alertService) ->
     $scope.editTutorial = (tutorial) ->
       $modal.open
         controller: 'TutorialModalCtrl'
@@ -235,6 +164,15 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           tutors: -> $scope.unit.staff
           unit: -> $scope.unit
         }
+
+    $scope.deleteTutorial = (tutorial) ->
+      # TODO: No endpoint for this yet
+      Tutorial.delete { id: tutorial.id },
+        (response) ->
+          $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+        (response) ->
+          alertService.add("danger", response.data.error)
+
     $scope.createTutorial = ->
       d = new Date()
       d.setHours(8)
@@ -256,30 +194,57 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, StudentEnrolmentCSV, Project, alertService) ->
-    # TODO: limit scope for duplicate method names (i.e., $scope.requestExport
-    # in this scope vs. $scope.requestExport in Task Admin Unit Context)
-    $scope.seFileUploader = StudentEnrolmentCSV.fileUploader $scope
+  controller: ($scope, $modal, Unit, Project, alertService, csvResultService) ->
+    $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
-    $scope.submitSEUpload = () ->
-      $scope.seFileUploader.uploadStudentEnrolmentCSV($scope.unit)
-    
-    $scope.requestSEExport = () ->
-      StudentEnrolmentCSV.downloadFile($scope.unit)
+    $scope.showEnrolModal = () ->
+      $modal.open
+        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
+        controller: 'EnrolStudentModalCtrl'
+        resolve:
+          unit: -> $scope.unit
+
+    onBatchEnrolSuccess = (response) ->
+      newStudents = response
+      # at least one student?
+      csvResultService.show("Enrol Student CSV Results", response)
+      if response.success.length > 0
+        $scope.unit.refreshStudents()
+
+    onBatchWithdrawSuccess = (response) ->
+      csvResultService.show("Withdraw Student CSV Results", response)
+      if response.success.length > 0
+        alertService.add("success", "Withdrew #{response.success.length} students.", 2000)
+        $scope.unit.refreshStudents()
+      else
+        alertService.add("info", "No students need to be withdrawn.", 4000)
+
+    $scope.batchStudentTypes =
+      enrol:
+        batchUrl: -> Unit.enrolStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Enrol CSV Data', type: 'csv'  } }
+        onSuccess: onBatchEnrolSuccess
+      withdraw:
+        batchUrl: -> Unit.withdrawStudentsCSVUrl $scope.unit
+        batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
+        onSuccess: onBatchWithdrawSuccess
 
     change_enrolment = (student, value) ->
-      Project.update { id: student.project_id, enrolled: value }, (project) ->
-        if value == project.enrolled
-          alertService.add("success", "Enrolment changed.", 2000)
-        else
-          alertService.add("danger", "Enrolment change failed.", 5000)
-        student.enrolled = project.enrolled
+      Project.update { id: student.project_id, enrolled: value },
+        (project) ->
+          if value == project.enrolled
+            alertService.add("success", "Enrolment changed.", 2000)
+          else
+            alertService.add("danger", "Enrolment change failed.", 5000)
+          student.enrolled = project.enrolled
+        (response) ->
+          alertService.add("danger", response.data.error, 5000)
 
     $scope.withdraw = (student) ->
       change_enrolment(student, false)
     $scope.enrol = (student) ->
       change_enrolment(student, true)
-      
+
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
@@ -289,28 +254,21 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-  controller: ($scope, TutorMarker) ->
-    $scope.dropper = true
-    
-    $scope.markingFileUploader =
-      TutorMarker.fileUploader($scope)
-
-    $scope.submitMarkingUpload = () ->
-      $scope.markingFileUploader.uploadZip()
-    
-    $scope.requestMarkingExport = () ->
-      TutorMarker.downloadFile($scope.unit)
-
-    $scope.isMac = () ->
-      navigator.platform == "MacIntel"
-)
-.directive('unitPortfolios', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-portfolios.tpl.html'
-  controller: ($scope, Unit) ->
-    $scope.downloadPortfolios = () ->
-      Unit.downloadPortfolios($scope.unit)
+  controller: ($scope, $sce) ->
+    $scope.activeContext = 'submissions'
+    $scope.setActiveContext = (context) ->
+      return if context is $scope.activeContext
+      $scope.activeContext = context
+    $scope.contexts =
+      submissions:
+        title: 'Mark Submissions Offline'
+        subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
+        icon: 'file'
+      portfolios:
+        title: 'Mark Portfolios'
+        subtitle: 'Download all submitted portfolios here for marking'
+        icon: 'book'
+      # potentially tests here too?
 )
 
 .directive('adminUnitIlos', ->

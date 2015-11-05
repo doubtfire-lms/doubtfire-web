@@ -1,0 +1,11 @@
+<div id="panel" class="panel panel-default">
+  <div class="panel-heading">
+    <h5 class="panel-title">{{match.username}}: {{match.name}}
+    	<br>
+    	<small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a></small>
+    </h5>
+  </div>
+  <div class="panel-body plagiarism-panel">
+    <code ng-class="match.name == '???' ? 'col-sm-12' : 'plagiarism-panel col-sm-12'" ng-bind-html="match.html"></code>
+  </div>
+</div>

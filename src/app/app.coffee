@@ -3,29 +3,45 @@ angular.module("doubtfire", [
   "templates-app"
   "templates-common"
   "localization"
-  
+
   "ui.router"
   "ui.bootstrap"
   # "mgcrea.ngStrap"
   "nvd3ChartDirectives"
   "angularFileUpload"
   "ngCsv"
+  "ngSanitize"
+  "xeditable"
+  'angular.filter'
 
-  "doubtfire.api"
-  "doubtfire.errors"
   "doubtfire.sessions"
-  "doubtfire.header"
-  "doubtfire.task-service"
-  "doubtfire.grade-service"
-  "doubtfire.unit-service"
-  "doubtfire.project-service"
-  "doubtfire.filters"
-
+  "doubtfire.common"
+  "doubtfire.errors"
   "doubtfire.home"
   "doubtfire.units"
   "doubtfire.tasks"
   "doubtfire.projects"
   "doubtfire.users"
+  "doubtfire.groups"
+])
+.constant('DoubtfireContributors', [
+  #
+  # Add contributors to Doubtfire here, which should be their GitHub usernames
+  #
+  'macite'              # Andrew Cain
+  'apj'                 # Allan Jones
+  'alexcu'              # Alex Cummaudo
+  'joostfunkekupper'    # Joost Funke Kupper
+  'rohanliston'         # Rohan Liston
+  'lukehorvat'          # Luke Horvat
+  'hellola'             # Evo Kellerman
+  'AvDongle'            # Cliff Warren
+
+  #
+  # TODO: Find out account names for...
+  # '???'                 # Reuben Wilson
+  # '???'                 # Angus Morton
+  #
 ])
 .config( (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
@@ -39,7 +55,8 @@ angular.module("doubtfire", [
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 
-).run(($rootScope, $state, $filter, $location, auth) ->
+).run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
+  editableOptions.theme = 'bs3'
 
   serialize = (obj, prefix) ->
     str = []

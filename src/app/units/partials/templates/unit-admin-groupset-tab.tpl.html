@@ -1,0 +1,107 @@
+<div class="unit-admin-groupset-tab">
+  <div class="col-sm-9">
+    <div class="col-sm-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Group Sets
+          </h3>
+          A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
+        </div>
+        <div class="groupset-selector panel-body">
+          <div ng-hide="unit.group_sets.length > 0">
+            <div class="callout callout-info">
+              This unit has no group sets
+            </div>
+          </div>
+          <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover table-pointer groupsets">
+            <thead>
+              <tr>
+                <th><span tooltip="Name of the group set">Name</span></th>
+                <th><span tooltip="Who can create groups?">Create Groups</span></th>
+                <th><span tooltip="Who can manage groups?">Manage Groups</span></th>
+                <th><span tooltip="Are groups restricted to tutorials?">Restrict to Tutorials</span></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupset}" ng-click="selectGroupSet(gs)">
+                <td class="col-sm-3">
+                  <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
+                    {{ gs.name || 'empty' }}
+                  </span>
+                </td>
+                <td>
+                  <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                    {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+                  </span>
+                </td>
+                <td>
+                  <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                    {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+                  </span>
+                </td>
+                <td>
+                  <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
+                    {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
+                  </span>
+                </td>
+                <td>
+                  <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
+                    <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
+                      save
+                    </button>
+                    <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
+                      cancel
+                    </button>
+                  </form>
+                  <div class="btn-group" ng-show="!gsRowform.$visible">
+                    <button ng-click="gsRowform.$show()" class="btn col-sm-6 btn-primary">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                    <button ng-click="removeGroupSet(gs)" class="btn col-sm-6 btn-danger">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div><!--/actions-->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-footer clearfix">
+          <button class="btn pull-right btn-success" ng-click="addGroupSet()">
+            <i class="fa fa-users"></i>
+            <i class="fa fa-plus"></i>
+            New Group Set
+          </button>
+        </div>
+      </div>
+    </div>
+    <groupset-manage ng-show="selectedGroupset && unit.group_sets.length > 0" class="col-sm-12"></groupset-manage>
+  </div>
+  <div class="col-sm-3" ng-if="selectedGroupset">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Import to <strong>{{selectedGroupset.name}}</strong></h3>
+        Import groups into {{selectedGroupset.name}} with a CSV containing: group_name, username, and tutorial.
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          files="groupCSV"
+          url="groupCSVUploadUrl()"
+          is-uploading="isGroupCSVUploading"
+          on-success="onGroupCSVSuccess"
+          on-complete="onGroupCSVComplete"></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Export <strong>{{selectedGroupset.name}}</strong></h3>
+        Download a CSV of all teams in the {{selectedGroupset.name}} Group Set.
+      </div>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadGroupCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
+      </div>
+    </div>
+  </div><!-- IO panels -->
+</div>

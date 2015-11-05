@@ -39,34 +39,50 @@
 @import '../../vendor/bootstrap/less/progress-bars.less';
 @import '../../vendor/bootstrap/less/pagination.less';
 @import '../../vendor/bootstrap/less/labels.less';
-@import (less) "../../vendor/nvd3/nv.d3.css";
 
+// Import font awesome
+@import "../../vendor/font-awesome/less/font-awesome.less";
+@fa-font-path: "./fonts/"; /* Tell font-awesome where to find fa- fonts */
+
+// Import css... if no less
+@import (less) "../../vendor/nvd3/nv.d3.css";
+@import (less) "../../vendor/angular-xeditable/dist/css/xeditable.css";
+
+// Import our custom functions
 @import 'functions.less';
 
 body {
   font: 11px/1.7em 'Open Sans', Helvetica;
 }
+
+body > .container-fluid {
+  padding: 0;
+}
+
+.root-view {
+  @col-xl-size: 8;
+  @col-lg-size: 11;
+
+  .make-xs-column(12);
+  .make-sm-column(12);
+  .make-md-column(12);
+
+  .make-lg-column(@col-lg-size);
+  .make-lg-column-offset((12 - @col-lg-size) / 2);
+
+  .make-xl-column(@col-xl-size);
+  .make-xl-column-offset((12 - @col-xl-size) / 2);
+}
+
 ul.nav.nav-tabs {
   margin-bottom: 20px;
 }
-.well.drop {
-  border: 3px #bbb dotted;
-  font-size: larger;
-  font-weight: bold;
-  color: #aaa;
-  text-align: center;
+
+a {
+  cursor: pointer;
 }
 
-.well.drop.file-over-hover, .well.drop.nv-file-over {
-  border-color: #3276b1;
-  color: #3276b1;
-}
-
-a { 
-  cursor: pointer; 
-}
-
-.row { 
+.row {
   // Extra RHS margin fix
   margin-right: 0px;
 }
@@ -76,12 +92,33 @@ a {
   z-index: 5000 !important;
 }
 
-.sign-out-container {
-  i
-  {
-    margin-top: 100px;
-    font-size: 100px;
+.center-full-screen {
+  height: 100vh;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-align-content: center;
+          align-content: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+
+.btn-download {
+  i {
+    margin-right: 0.8ex;
   }
+  padding: 1ex;
+  width: 10%;
+  min-width: 150px;
+}
+
+// Broken batch fix
+.badge {
+  border-radius: 1em;
+  padding: 0 1ex;
+  text-align: center;
+  display: inline-block;
 }
 
 @import 'modules/breadcrumbs.less';
@@ -93,5 +130,18 @@ a {
 @import 'modules/project.less';
 @import 'modules/errors.less';
 @import 'modules/callout.less';
-
-
+@import 'modules/comment.less';
+@import 'modules/feedback-float-toolbar.less';
+@import 'modules/status-switcher.less';
+@import 'modules/task-feedback.less';
+@import 'modules/plagiarism.less';
+@import 'modules/about-doubtfire-modal.less';
+@import 'modules/doubtfire-logo.less';
+@import 'modules/file-drop-zone.less';
+@import 'modules/pdf-panel-viewer.less';
+@import 'modules/groups.less';
+@import 'modules/panel-fixes.less';
+@import 'modules/table-fixes.less';
+@import 'modules/grade-icon.less';
+@import 'modules/tutor-student-list.less';
+@import 'modules/csv-result-modal.less';

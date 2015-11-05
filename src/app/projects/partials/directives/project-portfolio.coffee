@@ -4,13 +4,49 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
   controller: ($scope, taskService, PortfolioSubmission) ->
-    $scope.startStep = -1
-    $scope.gradeStep = 0
-    $scope.summaryStep = 1
-    $scope.taskStep = 2
-    $scope.otherFilesStep = 3
-    $scope.compileStep = 4
-    $scope.reviewStep = 5
+    #
+    # Active task tab group
+    #
+    $scope.portfolioTabsData =
+      welcomeStep:
+        title: "Welcome"
+        icon: "fa-smile-o"
+        seq: 0
+      gradeStep:
+        title: "Select Grade"
+        icon: "fa-trophy"
+        seq: 1
+      summaryStep:
+        title: "Learning Summary Report"
+        icon: "fa-graduation-cap"
+        seq: 2
+      taskStep:
+        title: "Select Tasks"
+        icon: "fa-tasks"
+        seq: 3
+      otherFilesStep:
+        title: "Upload Other Files"
+        icon: "fa-plus"
+        seq: 4
+      compileStep:
+        title: "Compile PDF"
+        icon: "fa-file-pdf-o"
+        seq: 5
+      reviewStep:
+        title: "Review Portfolio"
+        icon: "fa-check"
+        seq: 6
+    $scope.setActivePortfolioTab = (tab) ->
+      # $scope.activePortfolioTab?.active = false
+      $scope.activePortfolioTab = tab
+      # $scope.activePortfolioTab.active = true
+    $scope.$watch 'activePortfolioTab', (newTab, oldTab) ->
+      newTab.active = true
+      oldTab?.active = false
+    $scope.advanceActivePortfolioTab = (advanceBy) ->
+      newSeq = $scope.activePortfolioTab.seq + advanceBy
+      $scope.activePortfolioTab = (tab for tabKey, tab of $scope.portfolioTabsData when tab.seq is newSeq)[0]
+    $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     $scope.projectHasLearningSummaryReport = () ->
       _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
@@ -20,13 +56,13 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.clearQueue()
 
     if $scope.project.portfolio_available
-      $scope.currentView = $scope.reviewStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.reviewStep
     else if $scope.project.compile_portfolio
-      $scope.currentView = $scope.compileStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.compileStep
     else if $scope.projectHasLearningSummaryReport()
-      $scope.currentView = $scope.taskStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.taskStep
     else
-      $scope.currentView = $scope.startStep
+      $scope.activePortfolioTab = $scope.portfolioTabsData.welcomeStep
     #
     # Functions from taskService to get data
     #
@@ -94,120 +130,15 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     #
     # PDF Local Funcs
     #
-    $scope.pdf = { numPages: 0 }
-    $scope.pageNo = 0
-    
-    loadingPdf = true
-    pdfLoaded = false
-
-    loadPdf = () ->
-      loadingPdf = true
-      pdfLoaded = false
-      return if not $scope.project.portfolio_available
-      $scope.pageNo = 0
-      PDFJS.getDocument(PortfolioSubmission.getPortfolioUrl($scope.project)).then( (pdf)->
-        $scope.pdf = pdf
-        $scope.pageNo = 1
-        pdfLoaded = true
-        loadingPdf = false
-        renderPdf()
-      )
-    # resize window? Re-render pdf...
-    window.onresize = () ->
-      if $scope.pdf && pdfLoaded
-        renderPdf()
-        
-    renderPdf = () ->
-      # Cancel if no pages to render...
-      if $scope.pdf.numPages == 0
-        pdfLoaded = false
-        loadingPdf = false
-        $scope.pageNo = 0
-        return
-      $scope.pdf.getPage($scope.pageNo).then( (page)->
-        # We need to ensure the PDF fits inside the designated width of the panel
-        # (offsetWidth of panel is initially 0 onpageload... default to 600)
-        maxWidth = (document.getElementById("panel").offsetWidth || 600) - 60
-        viewport = page.getViewport(1.0) # Scale of 1.0
-        if viewport.width > maxWidth
-          scale = maxWidth / viewport.width
-          viewport = page.getViewport(scale)
-        
-        canvas = document.getElementById("portfolio-pdf")
-        if not canvas
-          return
-        context = canvas.getContext("2d")
-        canvas.height = viewport.height
-        canvas.width = viewport.width
-        
-        renderContext = { canvasContext: context, viewport: viewport }
-        page.render(renderContext).then ( ()->
-          pdfLoaded = true
-          $scope.$apply() #need to reapply scope so that pdf canvas is updated to show
-        )
-      )
-    #
-    # PDF Interaction Funcs
-    #
-    $scope.nextPage = () ->
-      return if $scope.shouldDisableRightNav()
-      if $scope.pageNo < $scope.pdf.numPages and pdfLoaded
-        $scope.pageNo++
-        renderPdf()
-    $scope.prevPage = () ->
-      return if $scope.shouldDisableLeftNav()
-      if $scope.pageNo > 0 and pdfLoaded
-        $scope.pageNo--
-        renderPdf()
-        
-    #
-    # Navigation
-    #
-    $scope.shouldDisableLeftNav = () ->
-      $scope.pageNo == 1
-    $scope.shouldDisableRightNav = () ->
-      $scope.pageNo == $scope.pdf.numPages
-    $scope.shouldHideNav = () ->
-      $scope.noPortfolioAvailable() || $scope.corruptPdf()
-    # Keyboard nav
-    document.onkeydown = (e) ->
-      e = e || window.event
-      switch (e.which || e.keyCode)
-        # Left arrow
-        when 37
-          e.preventDefault()
-          $scope.prevPage()
-        # Right arrow
-        when 39
-          e.preventDefault()
-          $scope.nextPage()
-    #
-    # Exceptional scenarios
-    #
-    $scope.corruptPdf = () ->
-      (not loadingPdf) and $scope.pageNo == 0 and $scope.portfolioAvailable()
-    $scope.portfolioAvailable = () ->
-      $scope.project.portfolio_available
-    $scope.noPortfolioAvailable = () ->
-      not $scope.project.portfolio_available
-    $scope.readyToShowPDF = () ->
-      pdfLoaded and $scope.portfolioAvailable
-
     $scope.portfolioUrl = ->
       PortfolioSubmission.getPortfolioUrl($scope.project)
-    
+
     $scope.deletePortfolio = () ->
       $scope.fileUploader.api.delete {
         id: $scope.project.project_id
       }, (response) ->
-        $scope.currentView = 3
+        $scope.activePortfolioTab = $scope.tabData.compileStep
         $scope.project.portfolio_available = false
-        loadPdf()
-
-    #
-    # Initialiser to load pdf
-    #
-    loadPdf()
 )
 
 .directive('portfolioFiles', ->
@@ -231,5 +162,5 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
-        $scope.burndownData = project.burndown_chart_data
+        $scope.project.burndown_chart_data = project.burndown_chart_data
 )

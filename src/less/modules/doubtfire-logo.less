@@ -1,0 +1,40 @@
+@doubtfire-color: #da532c;
+
+h1.logo {
+  font-weight: lighter;
+  letter-spacing: -1px;
+  font-size: 4em;
+  small {
+    font-weight: lighter;
+    text-align: right;
+    font-size: 0.5em;
+  }
+  &.full.logo small {
+    display: block;
+  }
+  &.sup.logo small {
+    vertical-align: super;
+    margin-left: 0.5ex;
+    color: #999;
+  }
+}
+i.logo {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: @doubtfire-color;
+  background-image: url('/assets/images/doubtfire-logo-person-white.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10%;
+}
+
+i.logo + h1.logo {
+  margin-left: 1ex;
+  display: inline-block;
+}
+
+a:hover > i.logo {
+  background-color: lighten(@doubtfire-color, 10%);
+}

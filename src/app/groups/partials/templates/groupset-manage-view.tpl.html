@@ -1,0 +1,47 @@
+<div>
+  <div class="groupset-manage-view">
+    <div class="group-listings col-sm-6" ng-class="{'col-sm-offset-3': !selectedGroup}">
+      <div class="panel panel-primary">
+        <div class="clearfix info-area panel-heading">
+          <div class="col-sm-8 pull-left">
+            <h4 class="panel-title">
+              <strong>{{selectedGroupset.name}}</strong> Groups
+            </h4>
+            Total of {{groups.length}} Group{{groups.length == 1 ? '' : 's'}}
+          </div>
+          <div class="pull-right col-sm-4 text-right multi-group-actions">
+            <div class="btn-group">
+              <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'all'">
+                <i class="fa fa-university" tooltip="Show groups from every tutorial"></i>
+              </label>
+              <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'mine'">
+                <i class="fa fa-pencil" tooltip="Show groups from only my tutorials"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <group-selector></group-selector>
+        </div>
+      </div>
+    </div>
+    <div class="group-memberships col-sm-6" ng-show="selectedGroup">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Members of <strong>{{selectedGroup.name}}</strong></h4>
+        </div>
+        <div class="panel-body">
+          <form name="addStudentForm" ng-submit="addSelectedStudent(selectedStudent)" class="input-group" ng-show="selectedGroup">
+            <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
+            <span class="input-group-btn">
+              <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </form>
+          <group-member-list></group-member-list>
+        </div>
+      </div>
+    </div>
+  <div>
+</div>

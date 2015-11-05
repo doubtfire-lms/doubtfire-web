@@ -8,34 +8,43 @@
         <label class="col-sm-3 control-label">Name</label>
         <input type="text" class="form-control col-sm-8" ng-model="task.name">
       </div><!--/name-->
-      
+
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Abbreviation</label>
-        <input type="text" class="form-control col-sm-8" ng-model="task.abbr"/>
+        <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
   	  </div><!--/abbr-->
-  	  
+
   	  <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Grade</label>
         <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
           <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
         </label>
-      </div><!--/desc-->
+      </div><!--/grade-->
 
       <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Description</label>
-        <textarea class="form-control col-sm-8" ng-model="task.desc"></textarea>
+        <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
   	  </div><!--/desc-->
-  	  
+
   	  <div class="form-group" ng-required="isNew">
   	    <label class="col-sm-3 control-label">Weighting</label>
         <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
   	  </div><!--/weighting-->
-  	  
-  	  <div class="form-group" ng-required="isNew">
-  	    <label class="col-sm-3 control-label">Required</label>
-        <input type="checkbox" class="form-control col-sm-8" ng-model="task.required"/>
-  	  </div><!--/required-->
-  	  
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Group Task</label>
+        <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
+      </div><!--/group task-->
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Restricted</label>
+        <button type="button" class="btn btn-default col-sm-1" ng-model="task.restrict_status_updates" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+          <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
+        </button>
+        <span class="help-block col-sm-6">
+          If true, the status cannot be changed by students after it has been assigned by staff
+        </span>
+      </div><!--/restricted-->
+
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Target Date</label>
         <div class="col-sm-8 input-group">
@@ -43,7 +52,7 @@
           <span class="input-group-btn">
             <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
-        </div> 
+        </div>
       </div><!--/target-date-->
 
       <div class="form-group" ng-required="isNew">
@@ -51,7 +60,7 @@
         <div class="col-sm-8 form-control-static" ng-show="task.upload_requirements.length == 0">
           None
         </div>
-        <ul class="col-sm-8 input-group" ng-show="task.upload_requirements.length > 0">
+        <ul class="col-sm-8 list-group" style="padding: 0" ng-show="task.upload_requirements.length > 0">
           <li class="list-group-item" ng-repeat="upreq in task.upload_requirements">
             <input class="form-control" placeholder="Upload Name" type="text" required ng-model="upreq.name"/>
             <br/>
@@ -73,8 +82,46 @@
             <span class="glyphicon glyphicon-plus"></span>
         </button>
       </div><!--/upload-requirements-->
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Plagiarism Checks</label>
+        <div class="col-sm-8 form-control-static" ng-show="task.plagiarism_checks.length == 0">
+          None
+        </div>
+        <ul class="col-sm-8 list-group" style="padding: 0" ng-show="task.plagiarism_checks.length > 0">
+          <li class="list-group-item clearfix" ng-repeat="check in task.plagiarism_checks">
+            <select class="form-control" ng-model="check.type">
+              <option selected disabled value="">Select language</option>
+              <option value="moss pascal">Pascal</option>
+              <option value="moss c">C</option>
+              <option value="moss csharp">C#</option>
+              <option value="moss cc">C++</option>
+              <option value="moss python">Python</option>
+            </select>
+            <p class="help-block">
+              Doubtfire uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
+            </p>
 
+            <input class="form-control" placeholder="File patterns" type="text" required ng-model="check.pattern"/>
+            <p class="help-block">
+              Separate file patterns with a pipe symbol, e.g.: <code>*.c|*.h</code>
+            </p>
+            <i class="glyphicon glyphicon-remove pull-right" style="padding-top: 10px; cursor: pointer;" ng-click="removeCheck(check)"></i>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <button type="button" ng-click="addCheck()" class="btn btn-success col-sm-offset-10 col-sm-1">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div><!--/plagiarism checks-->
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Plagiarism Warn Percent</label>
+        <input type="number" class="form-control col-sm-8" ng-model="task.plagiarism_warn_pct"/>
+      </div><!--/abbr-->
 		<div class="modal-footer text-right">
+      <button type="button" ng-show="!isNew" class="btn btn-danger" ng-click="deleteTask()">
+        Delete
+      </button>
 			<input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
 		</div>
 	</form>
