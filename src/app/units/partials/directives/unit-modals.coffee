@@ -177,13 +177,11 @@ angular.module('doubtfire.units.partials.modals', [])
     }
 
     if isNew
-      IntendedLearningOutcome.create( save_data ).$promise.then (
+      IntendedLearningOutcome.create(save_data,
         (response) ->
           $modalInstance.close(response)
           unit.ilos.push(response)
           alertService.add("success", "Intended Learning Outcome Added", 2000)
-      ),
-      (
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
