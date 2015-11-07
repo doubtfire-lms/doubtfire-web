@@ -16,43 +16,57 @@
       <tab-heading>
         <i class="fa fa-university fa-2x"></i> Unit
       </tab-heading>
-      <admin-unit-context unit="unit"></admin-unit-context>
+      <div class="col-sm-8 col-sm-offset-2">
+        <admin-unit-context unit="unit"></admin-unit-context>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-graduation-cap fa-2x"></i> Learning Outcomes
       </tab-heading>
-      <admin-unit-ilos></admin-unit-ilos>
+      <div class="col-sm-8 col-sm-offset-2">
+        <admin-unit-ilos></admin-unit-ilos>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-male fa-2x"></i> Staff
       </tab-heading>
-      <staff-admin-unit-context></staff-admin-unit-context>
+      <div class="col-sm-8 col-sm-offset-2">
+        <staff-admin-unit-context></staff-admin-unit-context>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-pencil fa-2x"></i> Tutorials
       </tab-heading>
-      <tutorial-unit-context></tutorial-unit-context>
+      <div class="col-sm-8 col-sm-offset-2">
+        <tutorial-unit-context></tutorial-unit-context>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-user fa-2x"></i> Users
       </tab-heading>
-      <enrol-students-context></enrol-students-context>
+      <div class="col-sm-12">
+        <enrol-students-context></enrol-students-context>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-tasks fa-2x"></i> Tasks
       </tab-heading>
-      <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
+      <div class="col-sm-12">
+        <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
+      </div>
     </tab>
     <tab>
       <tab-heading>
         <i class="fa fa-users fa-2x"></i> Groups
       </tab-heading>
-      <unit-admin-groupset-tab ng-if="unit"></unit-admin-groupset-tab>
+      <div class="col-sm-12">
+        <unit-admin-groupset-tab ng-if="unit"></unit-admin-groupset-tab>
+      </div>
     </tab>
   </tabset>
 </div>
