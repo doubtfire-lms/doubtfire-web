@@ -97,6 +97,7 @@ module.exports = {
       'vendor/angular-xeditable/dist/js/xeditable.js',
       'vendor/angular-filter/dist/angular-filter.js',
       'vendor/codemirror/lib/codemirror.js',
+      'vendor/codemirror/addon/display/placeholder.js',
       'vendor/codemirror/mode/markdown/markdown.js',
       'vendor/angular-ui-codemirror/ui-codemirror.js',
       'vendor/showdown/dist/showdown.js',

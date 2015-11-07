@@ -6,6 +6,7 @@ angular.module('doubtfire.common.markdown-editor', [])
   scope:
     markdownText: '=ngModel'
     height: '@'
+    placeholder: '@'
   controller: ($scope) ->
     DEFAULT_HEIGHT = 300
     $scope.isEditing = true
@@ -18,3 +19,4 @@ angular.module('doubtfire.common.markdown-editor', [])
       lineWrapping : true
       mode: 'markdown'
       theme: 'xq-light'
+      placeholder: $scope.placeholder
