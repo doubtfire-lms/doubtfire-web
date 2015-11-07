@@ -286,13 +286,13 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           unit: -> $scope.unit
         }
     $scope.createILO = ->
-      $scope.updateILO()
+      $scope.editILO()
 
     $scope.deleteILO = (ilo) ->
-      success = (response) ->
-        $scope.unit.ilos = _.without $scope.unit.tutorials, ilo
-        alertService.add("info", "ILO #{ilo.id} was deleted successfully", 2000)
-      failure = (response) ->
-        alertService.add("danger", "Error: " + response.data.error, 6000)
-      ilo.$delete success, failure
+      IntendedLearningOutcome.delete { id: ilo.id, unit_id: ilo.unit_id },
+        (response) ->
+          $scope.unit.ilos = _.without $scope.unit.ilos, ilo
+          alertService.add("info", "ILO #{ilo.id} was deleted successfully", 2000)
+        (response) ->
+          alertService.add("danger", "Error: " + response.data.error, 6000)
 )
