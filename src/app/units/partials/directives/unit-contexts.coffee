@@ -289,7 +289,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       $scope.editILO()
 
     $scope.deleteILO = (ilo) ->
-      IntendedLearningOutcome.delete { id: ilo.id, unit_id: ilo.unit_id },
+      IntendedLearningOutcome.delete { id: ilo.id, unit_id: $scope.unit.id },
         (response) ->
           $scope.unit.ilos = _.without $scope.unit.ilos, ilo
           alertService.add("info", "ILO #{ilo.id} was deleted successfully", 2000)
