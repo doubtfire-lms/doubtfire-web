@@ -6,13 +6,15 @@ angular.module("doubtfire", [
 
   "ui.router"
   "ui.bootstrap"
+  "ui.codemirror"
   # "mgcrea.ngStrap"
   "nvd3ChartDirectives"
   "angularFileUpload"
   "ngCsv"
   "ngSanitize"
   "xeditable"
-  'angular.filter'
+  "angular.filter"
+  "markdown"
 
   "doubtfire.sessions"
   "doubtfire.common"

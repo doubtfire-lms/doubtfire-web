@@ -95,7 +95,13 @@ module.exports = {
       'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/ng-csv/build/ng-csv.js',
       'vendor/angular-xeditable/dist/js/xeditable.js',
-      'vendor/angular-filter/dist/angular-filter.js'
+      'vendor/angular-filter/dist/angular-filter.js',
+      'vendor/codemirror/lib/codemirror.js',
+      'vendor/codemirror/mode/markdown/markdown.js',
+      'vendor/angular-ui-codemirror/ui-codemirror.js',
+      'vendor/showdown/dist/showdown.js',
+      'vendor/showdown/dist/showdown.js.map',
+      'vendor/angular-markdown-filter/markdown.js'
     ],
     css: [
       // 'vendor/angular-xeditable/dist/css/xeditable.css'
