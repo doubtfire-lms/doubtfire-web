@@ -166,10 +166,10 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         }
 
     $scope.deleteTutorial = (tutorial) ->
-      # TODO: No endpoint for this yet
       Tutorial.delete { id: tutorial.id },
         (response) ->
           $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+          alertService.add("info", "Tutorial #{tutorial.abbreviation} was deleted successfully")
         (response) ->
           alertService.add("danger", response.data.error)
 
@@ -275,24 +275,24 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit) ->
+  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService) ->
     $scope.editILO = (ilo) ->
       $modal.open
         controller: 'IloModalCtrl'
         templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
         resolve: {
-          ilo: -> ilo
-          isNew: -> false
+          ilo: -> ilo || { name: null, description: null }
+          isNew: -> not ilo?
           unit: -> $scope.unit
         }
     $scope.createILO = ->
-      $modal.open
-        controller: 'IloModalCtrl'
-        templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
-        resolve: {
-          ilo: -> {name:"", description:""}
-          isNew: -> true
-          unit: -> $scope.unit
-        }
+      $scope.updateILO()
 
+    $scope.deleteILO = (ilo) ->
+      success = (response) ->
+        $scope.unit.ilos = _.without $scope.unit.tutorials, ilo
+        alertService.add("info", "ILO #{ilo.id} was deleted successfully", 2000)
+      failure = (response) ->
+        alertService.add("danger", "Error: " + response.data.error, 6000)
+      ilo.$delete success, failure
 )

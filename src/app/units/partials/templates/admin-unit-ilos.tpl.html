@@ -8,7 +8,7 @@
       <div class="col-sm-12">
         <div class="callout callout-info" ng-hide="unit.ilos.length > 0">This unit has no Intended Learning Outcomes</div>
         <div ng-show="unit.ilos.length > 0">
-          <table class="table table-condensed table-hover">
+          <table class="table table-pointer table-hover">
             <thead>
               <tr>
                 <th> Number </th>
@@ -18,12 +18,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'" ng-click="editILO(ilo)">
-                <td>{{ilo.ilo_number}}</td>
-                <td>{{ilo.name}}</td>
-                <td>{{ilo.description}}</td>
+              <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'">
+                <td ng-click="editILO(ilo)">{{ilo.ilo_number}}</td>
+                <td ng-click="editILO(ilo)">{{ilo.name}}</td>
+                <td ng-click="editILO(ilo)">{{ilo.description}}</td>
                 <td>
-                  <button class="btn btn-danger" ng-click="removeIlo(ilo)">
+                  <button class="btn btn-danger" ng-click="deleteILO(ilo)">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </td>
