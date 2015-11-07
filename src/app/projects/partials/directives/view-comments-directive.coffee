@@ -26,15 +26,6 @@ angular.module("doubtfire.projects.view-comments-directive", [
           task.comments = response
           $scope.currentPage = 1
 
-
-    $scope.checkCommentTextareaEnter = (e) ->
-      e = e || window.event
-      # Hit return and not shift key
-      if e.keyCode is 13 and not e.shiftKey
-        $scope.addComment()
-        return false
-      return true
-
     $scope.addComment = () ->
       TaskComment.create { task_id: $scope.project.selectedTask.id, comment: $scope.comment.text },
         (response) ->
