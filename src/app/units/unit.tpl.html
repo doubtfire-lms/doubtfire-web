@@ -11,26 +11,47 @@
   <div ng-show="unit.id == -1">
     <h3>Create Unit</h3>
   </div>
-  <tabset>
-    <tab heading="Unit">
+  <tabset justified="true" class="tabset-icon">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-university fa-2x"></i> Unit
+      </tab-heading>
       <admin-unit-context unit="unit"></admin-unit-context>
     </tab>
-    <tab heading="ILOs">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-graduation-cap fa-2x"></i> Learning Outcomes
+      </tab-heading>
       <admin-unit-ilos></admin-unit-ilos>
     </tab>
-    <tab heading="Staff">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-male fa-2x"></i> Staff
+      </tab-heading>
       <staff-admin-unit-context></staff-admin-unit-context>
     </tab>
-    <tab heading="Tutorials">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-pencil fa-2x"></i> Tutorials
+      </tab-heading>
       <tutorial-unit-context></tutorial-unit-context>
     </tab>
-    <tab heading="Students">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-user fa-2x"></i> Users
+      </tab-heading>
       <enrol-students-context></enrol-students-context>
     </tab>
-    <tab heading="Tasks">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-tasks fa-2x"></i> Tasks
+      </tab-heading>
       <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
     </tab>
-    <tab heading="Groups">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-users fa-2x"></i> Groups
+      </tab-heading>
       <unit-admin-groupset-tab ng-if="unit"></unit-admin-groupset-tab>
     </tab>
   </tabset>

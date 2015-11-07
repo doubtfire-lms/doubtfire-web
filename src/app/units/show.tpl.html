@@ -5,44 +5,34 @@
   	</ul>
   	<div class="root-view" id="teacher-view" ng-if="unitRole.role != 'Student'">
       <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View</p></h2>
-      <tabset justified="true" ng-if="unitLoaded">
+      <tabset class="tabset-icon" justified="true" ng-if="unitLoaded">
         <tab>
           <tab-heading>
-            <div class="text-center">
-              <i style="padding-bottom: 5px" class="fa fa-user fa-2x"></i> <br> Students
-            </div>
+            <i class="fa fa-user fa-2x"></i> Students
           </tab-heading>
           <tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
         </tab>
         <tab ng-if="unit.group_sets.length > 0">
           <tab-heading>
-            <div class="text-center">
-              <i style="padding-bottom: 5px" class="fa fa-users fa-2x"></i> <br> Groups
-            </div>
+            <i class="fa fa-users fa-2x"></i> Groups
           </tab-heading>
           <tutor-group-tab></tutor-group-tab>
         </tab>
         <tab>
           <tab-heading>
-            <div class="text-center">
-              <i style="padding-bottom: 5px" class="fa fa-check-square-o fa-2x"></i> <br> Marking
-            </div>
+            <i class="fa fa-check-square-o fa-2x"></i> Marking
           </tab-heading>
           <tutor-marking-context></tutor-marking-context>
         </tab>
         <tab>
           <tab-heading>
-            <div class="text-center">
-              <i style="padding-bottom: 5px" class="fa fa-eye fa-2x"></i> <br> Plagiarism
-            </div>
+            <i class="fa fa-eye fa-2x"></i> Plagiarism
           </tab-heading>
           <unit-plagiarism-tab></unit-plagiarism-tab>
         </tab>
         <tab>
           <tab-heading>
-            <div class="text-center">
-              <i style="padding-bottom: 5px" class="fa fa-bar-chart fa-2x"></i> <br> Statistics
-            </div>
+            <i class="fa fa-bar-chart fa-2x"></i> Statistics
           </tab-heading>
           <task-summary-stats unit="unit"></task-summary-stats>
         </tab>

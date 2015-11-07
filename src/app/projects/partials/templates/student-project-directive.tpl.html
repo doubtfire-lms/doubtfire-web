@@ -1,43 +1,33 @@
 <div ng-if="unitLoaded">
   <h2 ng-hide="fullscreen">{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
-  <tabset justified="true">
+  <tabset class="tabset-icon" justified="true">
     <tab active="activeTab[0]">
       <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-bar-chart fa-2x"></i> <br> Progress
-        </div>
+        <i class="fa fa-bar-chart fa-2x"></i> Progress
       </tab-heading>
       <progress-info></progress-info>
     </tab>
     <tab select="showTaskView()" active="activeTab[1]">
       <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-tasks fa-2x"></i> <br> Task List
-        </div>
+        <i class="fa fa-tasks fa-2x"></i> Task List
       </tab-heading>
       <task-feedback ng-if="unitLoaded && activeTab[1]" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-feedback>
     </tab>
     <tab active="activeTab[2]" ng-if="unit.group_sets.length > 0">
       <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-group fa-2x"></i> <br> Groups
-        </div>
+        <i class="fa fa-group fa-2x"></i> Groups
       </tab-heading>
       <student-group-tab ng-if="activeTab[2]"></student-group-tab>
     </tab>
     <tab active="activeTab[3]">
       <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-pencil fa-2x"></i> <br> Tutorial
-        </div>
+        <i class="fa fa-pencil fa-2x"></i> Tutorial
       </tab-heading>
       <lab-list ng-if="activeTab[3]"></lab-list>
     </tab>
     <tab active="activeTab[4]">
       <tab-heading>
-        <div class="text-center">
-          <i style="padding-bottom: 5px" class="fa fa-book fa-2x"></i> <br> Portfolio
-        </div>
+        <i class="fa fa-book fa-2x"></i> Portfolio
       </tab-heading>
       <project-portfolio ng-if="activeTab[4]" project="project"></project-portfolio>
     </tab>
