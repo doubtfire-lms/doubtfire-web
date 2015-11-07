@@ -1,20 +1,42 @@
 <div>
-<!-- {{unit.ilos}} -->
-
-<table class="table table-condensed table-hover">
-      <thead>
-        <tr>
-          <th>Number</th>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'" ng-click="editILO(ilo)">
-          <td>{{ilo.ilo_number}}</td>
-          <td>{{ilo.name}}</td>
-          <td>{{ilo.description}}</td>
-      </tbody>
-</table>
-	<button class="btn btn-primary pull-right" ng-click="createILO()">Create ILO</button>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Edit Intended Learning Outcomes</h3>
+      Add, edit or delete intended learning outcomes for this unit
+    </div>
+    <div class="panel-body">
+      <div class="col-sm-12">
+        <div class="callout callout-info" ng-hide="unit.ilos.length > 0">This unit has no Intended Learning Outcomes</div>
+        <div ng-show="unit.ilos.length > 0">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th> Number </th>
+                <th> Name </th>
+                <th> Description </th>
+                <th> Actions </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'" ng-click="editILO(ilo)">
+                <td>{{ilo.ilo_number}}</td>
+                <td>{{ilo.name}}</td>
+                <td>{{ilo.description}}</td>
+                <td>
+                  <button class="btn btn-danger" ng-click="removeIlo(ilo)">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer clearfix">
+      <button class="btn btn-success pull-right" ng-click="createILO()">
+        <i class="fa fa-graduation-cap"></i>
+        <i class="fa fa-plus"></i> Add Outcome
+      </button>
+    </div>
+  </div>
 </div>
