@@ -63,6 +63,9 @@ angular.module("doubtfire.api", [
 .factory("Tutorial", (resourcePlus) ->
   resourcePlus "/tutorials/:id", { id: "@id" }
 )
+.factory("LearningAlignments", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/learning_alignments/:id", { id: "@id", unit_id: "@unit_id" }
+)
 .factory("IntendedLearningOutcome", (resourcePlus) ->
   resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
 )

@@ -1,0 +1,49 @@
+<div>
+  <table ng-show="unit.task_outcome_alignments.length > 0" class="table table-condensed table-hover table-pointer">
+    <thead>
+      <tr>
+        <th><span tooltip="Outcome related to this task">Outcome</span></th>
+        <th><span tooltip="Task related to this outcome">Task</span></th>
+        <th><span tooltip="How well you feel this task related to this outcome.">Rating</span></th>
+        <th><span tooltip="Why you feel that the task and outcome are aligned.">Description</span></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="align in unit.task_outcome_alignments">
+        <td class="col-sm-3">
+          {{unit.outcome(align.learning_outcome_id).name}}
+        </td>
+        <td class="col-sm-3">
+          {{unit.taskDef(align.task_definition_id).name}}
+        </td>
+        <td>
+          <rating class="group-member-contribution-rating" ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
+        </td>
+        <td>
+          <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>
+            {{ align.description || 'empty' }}
+          </span>
+        </td>
+        <td>
+          <form editable-form name="alignRowform" onbeforesave="saveTaskAlignment($data, align.id)" ng-show="alignRowform.$visible" class="form-buttons form-inline" shown="inserted == align">
+            <button type="submit" ng-disabled="alignRowform.$waiting" class="btn btn-primary">
+              save
+            </button>
+            <button type="button" ng-disabled="alignRowform.$waiting" ng-click="alignRowform.$cancel()" class="btn btn-default">
+              cancel
+            </button>
+          </form>
+          <div class="btn-group" ng-show="!alignRowform.$visible">
+            <button ng-click="alignRowform.$show()" class="btn col-sm-6 btn-primary">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button ng-click="removeTaskAlignment(align)" class="btn col-sm-6 btn-danger">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </div><!--/actions-->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

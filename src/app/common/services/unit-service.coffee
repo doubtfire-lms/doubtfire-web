@@ -46,6 +46,11 @@ angular.module("doubtfire.services.units", [])
       if result
         result[0]
 
+    unit.outcome = (outcomeId) ->
+      result = _.where unit.ilos, {id: outcomeId}
+      if result
+        result[0]
+
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->
       _.find unit.tutorials, { id: tuteId }
