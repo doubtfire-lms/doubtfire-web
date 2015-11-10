@@ -106,6 +106,24 @@
             See how the alignment details you have provided relate to each learning outcome.
         </div>
         <div class="panel-body">
+          <nvd3-multi-bar-chart
+            data="visualisationData"
+            id="alignmentId"
+            width="500"
+            height="400"
+            showXAxis="true"
+            showYAxis="false"
+            showLegend="true"
+            margin="{left:50,top:50,bottom:50,right:50}"
+            y="yFunction()"
+            x="xFunction()"
+            showControls="true"
+            clipEdge="true"
+            stacked="true"
+            rotateLabels="40"
+            >
+            <svg></svg>
+          </nvd3-multi-bar-chart>
         </div>
       </div>
     </div>
