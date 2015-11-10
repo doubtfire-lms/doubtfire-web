@@ -1,49 +1,141 @@
 <div>
-  <table ng-show="unit.task_outcome_alignments.length > 0" class="table table-condensed table-hover table-pointer">
-    <thead>
-      <tr>
-        <th><span tooltip="Outcome related to this task">Outcome</span></th>
-        <th><span tooltip="Task related to this outcome">Task</span></th>
-        <th><span tooltip="How well you feel this task related to this outcome.">Rating</span></th>
-        <th><span tooltip="Why you feel that the task and outcome are aligned.">Description</span></th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="align in unit.task_outcome_alignments">
-        <td class="col-sm-3">
-          {{unit.outcome(align.learning_outcome_id).name}}
-        </td>
-        <td class="col-sm-3">
-          {{unit.taskDef(align.task_definition_id).name}}
-        </td>
-        <td>
-          <rating class="group-member-contribution-rating" ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
-        </td>
-        <td>
-          <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>
-            {{ align.description || 'empty' }}
-          </span>
-        </td>
-        <td>
-          <form editable-form name="alignRowform" onbeforesave="saveTaskAlignment($data, align.id)" ng-show="alignRowform.$visible" class="form-buttons form-inline" shown="inserted == align">
-            <button type="submit" ng-disabled="alignRowform.$waiting" class="btn btn-primary">
-              save
-            </button>
-            <button type="button" ng-disabled="alignRowform.$waiting" ng-click="alignRowform.$cancel()" class="btn btn-default">
-              cancel
-            </button>
-          </form>
-          <div class="btn-group" ng-show="!alignRowform.$visible">
-            <button ng-click="alignRowform.$show()" class="btn col-sm-6 btn-primary">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button ng-click="removeTaskAlignment(align)" class="btn col-sm-6 btn-danger">
-              <i class="fa fa-trash-o"></i>
-            </button>
-          </div><!--/actions-->
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="col-sm-8">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">Task Outcome Alignment</h4>
+          {{selectAlignmentBy == 'Outcome' ? 'Tasks that align with the selected outcome' : 'Outcomes that the selected task contributes toward'}}.
+        </div>
+    <!--     <div class="col-sm-5 text-right"></div>
+        <div class="pull-right">
+          <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+            <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
+          </button>
+        </div>
+     -->    <div class="btn-group pull-right" style="margin-left: 1ex">
+          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Outcome'">
+            <i class="fa fa-graduation-cap" tooltip-placement="top" tooltip="Perform alignment for selected outcomes."></i>
+          </label>
+          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Task'">
+            <i class="fa fa-tasks" tooltip-placement="top" tooltip="Perform alignment for selected tasks."></i>
+          </label>
+        </div>
+
+        <div class="col-sm-4 pull-right btn-group" dropdown ng-show="selectAlignmentBy == 'Outcome'">
+          <button type="button" class="col-sm-12 btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+            {{ selectedOutcome ? selectedOutcome.name : 'Select Outcome'}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="outcome in unit.ilos"><a ng-click="selectOutcome(outcome)">{{outcome.name}}</a></li>
+          </ul>
+        </div>    
+
+        <div class="col-sm-4 pull-right btn-group" dropdown ng-show="selectAlignmentBy == 'Task'">
+          <button type="button" class="col-sm-12 btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+            {{ selectedTask ? selectedTask.name : 'Select Task'}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="task in unit.task_definitions"><a ng-click="selectTask(task)">{{task.name}}</a></li>
+          </ul>
+        </div>
+
+        <!-- <form role="search" class="col-sm-4 form-horizontal pull-right">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+        </form> -->
+      </div>
+
+      <div class="panel-body student-list">
+        <div class="help-block text-center" style="margin: 5em 0;" ng-show="(selectedOutcome == null && selectAlignmentBy == 'Outcome') || (selectedTask == NULL && selectAlignmentBy == 'Task')">Select {{ selectAlignmentBy == 'Outcome' ? 'an Outcome' : 'a Task' }} to start.</div>
+        <div ng-hide="(selectedOutcome == null && selectAlignmentBy == 'Outcome') || (selectedTask == NULL && selectAlignmentBy == 'Task')">
+          <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredAlignments.length == 0">Add {{ selectAlignmentBy == 'Outcome' ? 'Tasks related to this Outcome' : 'Outcomes related to this Task' }}.</div>
+          <table ng-show="filteredAlignments.length > 0" class="table table-condensed table-hover table-pointer">
+            <thead>
+              <tr>
+                <th ng-show="selectAlignmentBy=='Task'"><span tooltip="Outcome related to this task">Outcome</span></th>
+                <th ng-show="selectAlignmentBy=='Outcome'"><span tooltip="Task related to this outcome">Task</span></th>
+                <th><span tooltip="How well you feel this task related to this outcome.">Rating</span></th>
+                <th><span tooltip="Why you feel that the task and outcome are aligned.">Description</span></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="align in filteredAlignments = (unit.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
+                <td class="col-sm-3" ng-show="selectAlignmentBy=='Task'">
+                  {{unit.outcome(align.learning_outcome_id).name}}
+                </td>
+                <td class="col-sm-3" ng-show="selectAlignmentBy=='Outcome'">
+                  {{unit.taskDef(align.task_definition_id).name}}
+                </td>
+                <td>
+                  <rating class="group-member-contribution-rating" ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
+                </td>
+                <td>
+                  <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>
+                    {{ align.description || 'empty' }}
+                  </span>
+                </td>
+                <td>
+                  <form editable-form name="alignRowform" onbeforesave="saveTaskAlignment($data, align.id)" ng-show="alignRowform.$visible" class="form-buttons form-inline" shown="inserted == align">
+                    <button type="submit" ng-disabled="alignRowform.$waiting" class="btn btn-primary">
+                      save
+                    </button>
+                    <button type="button" ng-disabled="alignRowform.$waiting" ng-click="alignRowform.$cancel()" class="btn btn-default">
+                      cancel
+                    </button>
+                  </form>
+                  <div class="btn-group" ng-show="!alignRowform.$visible">
+                    <button ng-click="alignRowform.$show()" class="btn col-sm-6 btn-primary">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                    <button ng-click="removeTaskAlignment(align)" class="btn col-sm-6 btn-danger">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div><!--/actions-->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Visualise Task Alignment</h4>
+            See how the alignment details you have provided relate to each learning outcome.
+        </div>
+        <div class="panel-body">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default" ng-show="selectAlignmentBy == 'Outcome'">
+        <div class="panel-heading">
+            <h4 class="panel-title">Add Task</h4>
+            Add tasks that are aligned to the currently selected outcome.
+        </div>
+        <div class="panel-body">
+          <ul class="project-task-bar">
+            <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task_def in unit.task_definitions">
+                <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="addTask(task_def)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{task_def.name}}">{{task_def.abbreviation}}</button>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="panel panel-default" ng-show="selectAlignmentBy == 'Task'">
+        <div class="panel-heading">
+            <h4 class="panel-title">Add Outcome</h4>
+            Add outcomes that are aligned to the currently selected task.
+        </div>
+        <div class="panel-body">
+          <ul class="project-task-bar">
+            <li class="col-xs-12" ng-repeat="outcome in unit.ilos">
+                <button type="button" class="col-xs-12 btn btn-default task-status {{statusClass(task.status)}}" ng-click="addOutcome(outcome)">{{outcome.name}}</button>
+            </li>
+          </ul>
+        </div>
+    </div>
+  </div>
 </div>

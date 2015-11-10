@@ -97,3 +97,19 @@ angular.module("doubtfire.filters", [])
     else
       input
 )
+
+.filter('outcomeFilter', ->
+  (input, outcomeId) ->
+    if input && outcomeId
+      _.filter input, (item) -> item.learning_outcome_id == outcomeId
+    else
+      input
+)
+
+.filter('taskFilter', ->
+  (input, taskDefId) ->
+    if input && taskDefId
+      _.filter input, (item) -> item.task_definition_id == taskDefId
+    else
+      input
+)
