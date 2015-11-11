@@ -4,7 +4,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
-  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService) ->
+  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation) ->
 
     if $scope.project?
       $scope.source = $scope.project
@@ -100,6 +100,35 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
             alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 
+    xFn = (d) -> d.label
+    yFn = (d) -> d.value
+
+    $scope.options = Visualisation 'multiBarChart', {
+      clipEdge: yes
+      stacked: yes
+      height: 440
+      width: 600
+      margin:
+        left: 75
+        right: 50
+      rotateLabels: 30
+      duration: 500
+      x: xFn
+      y: yFn
+      forceY: 0
+      showYAxis: no
+      # xAxis:
+      #   axisLabel: "Outcomes"
+        # tickFormat: xAxisTickFormatDateFormat
+      # yAxis:
+      #   axisLabel: "Tasks Remaining"
+        # tickFormat: yAxisTickFormatPercentFormat
+      # color: colorFunction
+      # legendColor: colorFunction
+      # yDomain: [0, ]
+      # xDomain: [+new Date($scope.unit.start_date).getTime() / 1000, lateEndDate()]
+    }
+
     $scope.visualisationData = []
 
     $scope.calculateAlignmentVisualisation = (source) ->
@@ -128,7 +157,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       _.each outcomes, (outcome, key) ->
         _.each outcome, (tmp, key1) ->
           scale = Math.pow(2, parseInt(key1,10))
-          values[key1].push [ $scope.unit.outcome(parseInt(key,10)).name,  _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale ]
+          values[key1].push { label: $scope.unit.outcome(parseInt(key,10)).name, value:  _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale }
 
       _.each values, (vals, idx) ->
         result.push { key: gradeService.grades[idx], values: vals }
@@ -136,13 +165,4 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       result
 
     $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
-
-    $scope.yFunction = () ->
-      (d) ->
-        d[1]
-
-    $scope.xFunction = () ->
-      (d) ->
-        d[0]
-
 )
