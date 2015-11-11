@@ -10,10 +10,17 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
   scope:
     task: '='
     unit: '='
+    project: '='
 
   controller: ($scope, currentUser, Task) ->
+
+    $scope.showTaskSheet = false
+
     $scope.hasPDF = () ->
       $scope.task.definition.has_task_pdf
+
+    $scope.toggleTaskSheet = () ->
+      $scope.showTaskSheet = ! $scope.showTaskSheet
 
     $scope.hasResources = () ->
       $scope.task.definition.has_task_resources

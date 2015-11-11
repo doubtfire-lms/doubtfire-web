@@ -6,4 +6,5 @@ angular.module('doubtfire.tasks.partials', [
   'doubtfire.tasks.partials.task-plagiarism-report'
   'doubtfire.tasks.partials.task-sheet'
   'doubtfire.tasks.partials.task-feedback-directive'
+  'doubtfire.tasks.partials.view-alignment-directive'
 ])
