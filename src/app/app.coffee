@@ -1,21 +1,27 @@
 angular.module("doubtfire", [
+  # ng*
   "ngCookies"
+  "ngCsv"
+  "ngSanitize"
+
+  # templates
   "templates-app"
   "templates-common"
-  "localization"
 
+  # ui.*
   "ui.router"
   "ui.bootstrap"
   "ui.codemirror"
-  # "mgcrea.ngStrap"
-  "nvd3ChartDirectives"
-  "angularFileUpload"
-  "ngCsv"
-  "ngSanitize"
-  "xeditable"
-  "angular.filter"
-  "markdown"
 
+  # other libraries
+  "angularFileUpload"
+  "angular.filter"
+  "localization"
+  "markdown"
+  "nvd3"
+  "xeditable"
+
+  # doubtfire.*
   "doubtfire.sessions"
   "doubtfire.common"
   "doubtfire.errors"
@@ -25,6 +31,7 @@ angular.module("doubtfire", [
   "doubtfire.projects"
   "doubtfire.users"
   "doubtfire.groups"
+  "doubtfire.visualisations"
 ])
 .constant('DoubtfireContributors', [
   #

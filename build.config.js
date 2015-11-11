@@ -83,8 +83,8 @@ module.exports = {
       'vendor/underscore.string/dist/underscore.string.min.js',
       'vendor/momentjs/moment.js',
       'vendor/d3/d3.js',
-      'vendor/nvd3/nv.d3.js',
-      'vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js',
+      'vendor/nvd3/build/nv.d3.js',
+      'vendor/angular-nvd3/dist/angular-nvd3.js',
       'vendor/angular-file-upload/angular-file-upload.js',
       'vendor/ng-file-upload/ng-file-upload-all.min.js',
       'vendor/es5-shim/es5-shim.js',
@@ -105,7 +105,6 @@ module.exports = {
       'vendor/angular-markdown-filter/markdown.js'
     ],
     css: [
-      // 'vendor/angular-xeditable/dist/css/xeditable.css'
     ]
   },
 

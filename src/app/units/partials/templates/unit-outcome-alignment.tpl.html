@@ -28,7 +28,7 @@
           <ul class="dropdown-menu" role="menu">
             <li ng-repeat="outcome in unit.ilos"><a ng-click="selectOutcome(outcome)">{{outcome.name}}</a></li>
           </ul>
-        </div>    
+        </div>
 
         <div class="col-sm-4 pull-right btn-group" dropdown ng-show="selectAlignmentBy == 'Task'">
           <button type="button" class="col-sm-12 btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -106,24 +106,7 @@
             See how the alignment details you have provided relate to each learning outcome.
         </div>
         <div class="panel-body">
-          <nvd3-multi-bar-chart
-            data="visualisationData"
-            id="alignmentId"
-            width="500"
-            height="400"
-            showXAxis="true"
-            showYAxis="false"
-            showLegend="true"
-            margin="{left:50,top:50,bottom:50,right:50}"
-            y="yFunction()"
-            x="xFunction()"
-            showControls="true"
-            clipEdge="true"
-            stacked="true"
-            rotateLabels="40"
-            >
-            <svg></svg>
-          </nvd3-multi-bar-chart>
+          <nvd3 data="visualisationData" options="options"></nvd3>
         </div>
       </div>
     </div>

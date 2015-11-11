@@ -14,23 +14,10 @@
         <i class="fa fa-4x fa-spinner fa-spin"></i>
         <h2>Loading...</h2>
       </div>
-      <nvd3-scatter-chart
-        ng-hide="scatterData.length == 0"
-        data="scatterData"
-        id="taskScatter"
-        width="800"
-        height="600"
-        yAxisTickFormat="yAxisTickFormatFunction()"
-        xAxisTickFormat="xAxisTickFormatFunction()"
-        showLegend="true"
-        interactive="true"
-        tooltips="true"
-        tooltipContent="tooltipContentFunction()"
-        showDistX="true"
-        showDistY="true"
-        transitionDuration="350">
-          <svg></svg>
-        </nvd3-scatter-chart>
+      <div ng-if="scatterData.length > 0">
+        <summary-task-status-scatter data="scatterData" unit="unit">
+        </summary-task-status-scatter>
+      </div>
     </div>
     <div class="panel-footer clearfix">
       <a class="btn btn-success pull-right" ng-click="fetchCSV()">
