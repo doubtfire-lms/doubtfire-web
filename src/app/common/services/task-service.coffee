@@ -29,6 +29,17 @@ angular.module("doubtfire.services.tasks", [])
     DIS: 'discuss'
     COM: 'complete'
 
+  taskService.learningWeight =
+    ready_to_mark:      0.7
+    not_submitted:      0.0
+    working_on_it:      0.0
+    need_help:          0.0
+    redo:               0.2
+    fix_and_include:    0.2
+    fix_and_resubmit:   0.4
+    discuss:            0.7
+    complete:           0.8
+
   taskService.statusAcronym =
     ready_to_mark:      'RTM'
     not_submitted:      'NOS'
