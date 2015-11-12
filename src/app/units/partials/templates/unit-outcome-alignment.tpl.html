@@ -138,5 +138,28 @@
           </ul>
         </div>
     </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Import Task Outcome Alignments</h3>
+        Import links between tasks and outcomes from a CSV containing: unit_code, learning_outcome, task_abbr, rating.
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          files="taskAlignmentCSV"
+          url="taskAlignmentCSVUploadUrl()"
+          is-uploading="isTaskAlignmentCSVUploading"
+          on-success="onTaskAlignmentCSVSuccess"
+          on-complete="onTaskAlignmentCSVComplete"></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Export Task Outcome Alignments</h3>
+        Download a CSV of task outcome alignment details.
+      </div>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadTaskAlignmentCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
+      </div>
+    </div>
   </div>
 </div>

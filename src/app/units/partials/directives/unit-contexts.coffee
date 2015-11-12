@@ -281,7 +281,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         controller: 'IloModalCtrl'
         templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
         resolve: {
-          ilo: -> ilo || { name: null, description: null }
+          ilo: -> ilo || { name: null, description: null, abbreviation: null }
           isNew: -> not ilo?
           unit: -> $scope.unit
         }

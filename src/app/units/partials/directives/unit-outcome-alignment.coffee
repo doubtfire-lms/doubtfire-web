@@ -4,7 +4,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
-  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation) ->
+  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService) ->
 
     if $scope.project?
       $scope.source = $scope.project
@@ -165,4 +165,28 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       result
 
     $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
+
+    $scope.csvImportResponse = {}
+    $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
+    $scope.taskAlignmentCSVUploadUrl = () ->
+      if $scope.project?
+        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, $scope.project.project_id)
+      else
+        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, null)
+    $scope.isTaskCSVUploading = null
+    $scope.onTaskAlignmentCSVSuccess = (response) ->
+      csvResultService.show 'Task CSV upload results.', response
+      if $scope.project?
+        $scope.project.refresh($scope.unit)
+      else
+        $scope.unit.refresh()
+    $scope.onTaskAlignmentCSVComplete = () ->
+      $scope.isTaskCSVUploading = null
+
+
+    $scope.downloadTaskAlignmentCSV = () ->
+      if $scope.project?
+        TaskAlignment.downloadCSV($scope.unit, $scope.project.project_id)
+      else
+        TaskAlignment.downloadCSV($scope.unit, null)
 )

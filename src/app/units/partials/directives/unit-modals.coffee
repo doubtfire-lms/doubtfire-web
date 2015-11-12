@@ -174,6 +174,7 @@ angular.module('doubtfire.units.partials.modals', [])
       unit_id: unit.id
       name: ilo.name
       description: ilo.description
+      abbreviation: ilo.abbreviation
     }
 
     if isNew

@@ -12,6 +12,7 @@
             <thead>
               <tr>
                 <th> Number </th>
+                <th> Abbreviation </th>
                 <th> Name </th>
                 <th> Description </th>
                 <th> Actions </th>
@@ -20,6 +21,7 @@
             <tbody>
               <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'">
                 <td ng-click="editILO(ilo)">{{ilo.ilo_number}}</td>
+                <td ng-click="editILO(ilo)">{{ilo.abbreviation}}</td>
                 <td ng-click="editILO(ilo)">{{ilo.name}}</td>
                 <td ng-click="editILO(ilo)">{{ilo.description}}</td>
                 <td>

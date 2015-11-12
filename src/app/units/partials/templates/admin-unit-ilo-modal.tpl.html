@@ -5,10 +5,15 @@
   		<h3>{{isNew ? "Create ILO" : "Edit ILO: " + ilo.ilo_number}}</h3>
   	</div>
   	<div class="modal-body">
-  	  <div class="form-group" required>
-  	    <label class="col-sm-3 control-label">Name</label>
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Name</label>
         <input type="text" class="form-control col-sm-7"
         ng-model="ilo.name"/>
+      </div>
+  	  <div class="form-group" required>
+  	    <label class="col-sm-3 control-label">Abbreviation</label>
+        <input type="text" class="form-control col-sm-7"
+        ng-model="ilo.abbreviation"/>
   	  </div>
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Description</label>

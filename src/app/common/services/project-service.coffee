@@ -49,6 +49,12 @@ angular.module("doubtfire.services.projects", [])
     else
       Project.get { id: student.project_id }, (project) ->
         _.extend student, project
+        student.refresh = (unit_obj) ->
+          Project.get { id: student.project_id }, (response) ->
+            _.extend student, response
+            if unit_obj
+              projectService.addTaskDetailsToProject(student, unit_obj)
+
         if unit
           projectService.addTaskDetailsToProject(student, unit)
         callback(student)
