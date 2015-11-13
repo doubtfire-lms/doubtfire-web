@@ -22,7 +22,6 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       newValue.push timeSeries
       $scope.data.length = 0
       _.extend $scope.data, newValue
-      # $scope.data = newValue
       if $scope.api?
         $scope.api.refresh()
       null

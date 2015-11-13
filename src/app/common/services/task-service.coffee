@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope) ->
   #
   # The unit service object
   #
@@ -167,6 +167,7 @@ angular.module("doubtfire.services.tasks", [])
     task.processing_pdf = response.processing_pdf
 
     if response.status == status
+      $rootScope.$broadcast('UpdateAlignmentChart')
       project.updateBurndownChart()
       alertService.add("success", "Status saved.", 2000)
       if response.other_projects?
