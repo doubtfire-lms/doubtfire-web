@@ -167,6 +167,7 @@ angular.module("doubtfire.services.tasks", [])
     task.processing_pdf = response.processing_pdf
 
     if response.status == status
+      project.updateBurndownChart()
       alertService.add("success", "Status saved.", 2000)
       if response.other_projects?
         _.each response.other_projects, (details) ->

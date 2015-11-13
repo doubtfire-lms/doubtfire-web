@@ -12,12 +12,6 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
 
-    $scope.updateBurndownChart = () ->
-      $scope.projectLoaded = false
-      Project.get { id: $scope.studentProjectId }, (project) ->
-        $scope.project.burndown_chart_data = project.burndown_chart_data
-        $scope.projectLoaded = true
-
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
 )

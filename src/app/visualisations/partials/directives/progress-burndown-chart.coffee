@@ -7,6 +7,8 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     project: '='
     unit: '='
   controller: ($scope, Visualisation) ->
+    $scope.data = []
+
     $scope.$watch 'project.burndown_chart_data', (newValue) ->
       now = +new Date().getTime() / 1000
       timeSeries =
@@ -18,7 +20,12 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
         color: '#CACACA'
         classed: 'dashed'
       newValue.push timeSeries
-      $scope.data = newValue
+      $scope.data.length = 0
+      _.extend $scope.data, newValue
+      # $scope.data = newValue
+      if $scope.api?
+        $scope.api.refresh()
+      null
 
     xAxisTickFormatDateFormat = (d) ->
       d3.time.format('%b %d')(new Date(d * 1000))
@@ -68,7 +75,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     lateEndDate = () ->
       return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
 
-    $scope.options = Visualisation 'lineChart', {
+    [$scope.options, $scope.config] = Visualisation 'lineChart', {
       useInteractiveGuideline: yes
       height: 440
       width: 600
@@ -87,4 +94,4 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       y: yAxisClipNegBurndown
       yDomain: [0, 1]
       xDomain: [+new Date($scope.unit.start_date).getTime() / 1000, lateEndDate()]
-    }
+    }, {}

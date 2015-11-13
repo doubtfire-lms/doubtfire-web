@@ -1,13 +1,14 @@
 angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.summary-task-status-scatter'
   'doubtfire.visualisations.progress-burndown-chart'
+  'doubtfire.visualisations.alignment-bar-chart'
 ])
 
-.constant('Visualisation', (type, opts) ->
-  DEFAULTS =
+.constant('Visualisation', (type, opts, conf) ->
+  DEFAULT_OPTS =
     objectequality: yes
     interactive: yes
-    tooltips: yes
+    # tooltips: yes
     showValues: yes
     showXAxis: yes
     showYAxis: yes
@@ -27,10 +28,23 @@ angular.module('doubtfire.visualisations', [
       "#bcbd22"
       "#17becf"
     ]
-  dirtyOpts = angular.copy opts
+
+  DEFAULT_CONF = {
+    visible: true, # default: true
+    extended: false, # default: false
+    disabled: false, # default: false
+    autorefresh: true, # default: true
+    refreshDataOnly: true, # default: true
+    deepWatchOptions: true, # default: true
+    deepWatchData: false, # default: false
+    deepWatchConfig: true, # default: true
+    debounce: 10 # default: 10
+  }
+
+  dirtyOpts = angular.extend {}, DEFAULT_OPTS, opts
   dirtyOpts.type = type
-  dirtyOpts = angular.extend dirtyOpts, DEFAULTS
-  # Need to override angular extend's defaults if present in opts
-  dirtyOpts[key] = value for key, value of opts
-  { chart: dirtyOpts }
+
+  dirtyConf = angular.extend {}, DEFAULT_CONF, conf
+
+  return [ { chart: dirtyOpts },  dirtyConf ]
 )

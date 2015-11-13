@@ -5,7 +5,6 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
   controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService) ->
-
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->
@@ -36,7 +35,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.create data,
         (response) ->
           $scope.source.task_outcome_alignments.push(response)
-          $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
+          $scope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -69,7 +68,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment saved", 2000)
-          $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
+          $scope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -81,7 +80,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update(data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment rating saved", 2000)
-          $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
+          $scope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -94,77 +93,11 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.delete(data,
         (response) ->
           $scope.source.task_outcome_alignments = _.without $scope.source.task_outcome_alignments, align
-          $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
+          $scope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
       )
-
-    xFn = (d) -> d.label
-    yFn = (d) -> d.value
-
-    $scope.options = Visualisation 'multiBarChart', {
-      clipEdge: yes
-      stacked: yes
-      height: 440
-      width: 600
-      margin:
-        left: 75
-        right: 50
-      rotateLabels: 30
-      duration: 500
-      x: xFn
-      y: yFn
-      forceY: 0
-      showYAxis: no
-      # xAxis:
-      #   axisLabel: "Outcomes"
-        # tickFormat: xAxisTickFormatDateFormat
-      # yAxis:
-      #   axisLabel: "Tasks Remaining"
-        # tickFormat: yAxisTickFormatPercentFormat
-      # color: colorFunction
-      # legendColor: colorFunction
-      # yDomain: [0, ]
-      # xDomain: [+new Date($scope.unit.start_date).getTime() / 1000, lateEndDate()]
-    }
-
-    $scope.visualisationData = []
-
-    $scope.calculateAlignmentVisualisation = (source) ->
-      unit = $scope.unit
-      result = []
-      outcomes = {}
-      _.each unit.ilos, (outcome) ->
-        outcomes[outcome.id] = {
-          0: []
-          1: []
-          2: []
-          3: []
-        }
-
-      _.each source.task_outcome_alignments, (align) ->
-        td = unit.taskDef(align.task_definition_id)
-        outcomes[align.learning_outcome_id][td.target_grade].push align.rating * $scope.taskStatusFactor(td.id)
-
-      values = {
-        '0': []
-        '1': []
-        '2': []
-        '3': []
-      }
-
-      _.each outcomes, (outcome, key) ->
-        _.each outcome, (tmp, key1) ->
-          scale = Math.pow(2, parseInt(key1,10))
-          values[key1].push { label: $scope.unit.outcome(parseInt(key,10)).name, value:  _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale }
-
-      _.each values, (vals, idx) ->
-        result.push { key: gradeService.grades[idx], values: vals }
-
-      result
-
-    $scope.visualisationData = $scope.calculateAlignmentVisualisation($scope.source)
 
     $scope.csvImportResponse = {}
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
@@ -176,13 +109,13 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
       csvResultService.show 'Task CSV upload results.', response
+      $scope.$broadcast('UpdateAlignmentChart')
       if $scope.project?
         $scope.project.refresh($scope.unit)
       else
         $scope.unit.refresh()
     $scope.onTaskAlignmentCSVComplete = () ->
       $scope.isTaskCSVUploading = null
-
 
     $scope.downloadTaskAlignmentCSV = () ->
       if $scope.project?
