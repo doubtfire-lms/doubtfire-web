@@ -48,6 +48,26 @@ markdown-editor {
 
 // Text that has been converted from markdown to html
 .markdown-to-html {
+  &.dashed {
+    border-top: 1px dashed #ddd;
+    border-bottom: 1px dashed #ddd;
+    margin: 30px;
+    padding: 10px;
+  }
+
+  &.bordered {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 10px 15px;
+  }
+
+  &.smaller {
+    h1, h2, h3, h4, h5, h6 {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  }
+
   pre, code {
     font-family: Menlo, Monaco, monospace;
   }

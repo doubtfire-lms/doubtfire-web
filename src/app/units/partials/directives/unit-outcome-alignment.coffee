@@ -16,18 +16,30 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       $scope.updateRequest = (data) ->
       $scope.taskStatusFactor = (task_definition_id) -> 1
 
-    $scope.selectAlignmentBy = 'Outcome'
-    $scope.selectedOutcome = null
-
     $scope.selectOutcome = (outcome) ->
       $scope.selectedOutcome = outcome
       $scope.selectedTask = null
-      $scope.selectAlignmentBy = 'Outcome'
 
     $scope.selectTask = (task) ->
       $scope.selectedOutcome = null
       $scope.selectedTask = task
-      $scope.selectAlignmentBy = 'Task'
+
+    # Generalise selection
+    $scope.selectAlignmentByItem = (item) ->
+      item.selected = true
+      $scope["select#{$scope.selectAlignmentBy}"](item)
+      $scope.selectedAlignmentByItem = item
+
+    $scope.$watch 'selectAlignmentBy', (newValue) ->
+      if $scope.unit.ilos.length > 0 and newValue is 'Outcome'
+        $scope.selectAlignmentByItems = $scope.unit.ilos
+        $scope.selectAlignmentByItem($scope.unit.ilos[0])
+        $scope.inverseSelectAlignmentBy = 'Task'
+      else if $scope.unit.task_definitions.length > 0 and newValue is 'Task'
+        $scope.selectAlignmentByItems = $scope.unit.task_definitions
+        $scope.selectAlignmentByItem($scope.unit.task_definitions[0])
+        $scope.inverseSelectAlignmentBy = 'Outcome'
+    $scope.selectAlignmentBy = 'Outcome'
 
     addLink = (data) ->
       $scope.updateRequest(data)
