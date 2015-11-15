@@ -17,10 +17,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
       clipEdge: yes
       stacked: yes
       height: 440
-      width: 600
-      margin:
-        left: 75
-        right: 50
+      width: 675
       rotateLabels: 30
       duration: 500
       x: xFn
