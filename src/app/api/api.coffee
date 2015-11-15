@@ -66,8 +66,13 @@ angular.module("doubtfire.api", [
 .factory("LearningAlignments", (resourcePlus) ->
   resourcePlus "/units/:unit_id/learning_alignments/:id", { id: "@id", unit_id: "@unit_id" }
 )
-.factory("IntendedLearningOutcome", (resourcePlus) ->
-  resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
+.factory("IntendedLearningOutcome", (resourcePlus, api, currentUser) ->
+  IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
+
+  IntendedLearningOutcome.getOutcomeBatchUploadUrl = (unit) ->
+    "#{api}/units/#{unit.id}/outcomes/csv?auth_token=#{currentUser.authenticationToken}"
+
+  IntendedLearningOutcome
 )
 
 .factory("Task", (resourcePlus, api, currentUser) ->

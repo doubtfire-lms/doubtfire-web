@@ -270,29 +270,3 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         icon: 'book'
       # potentially tests here too?
 )
-
-.directive('adminUnitIlos', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
-  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService) ->
-    $scope.editILO = (ilo) ->
-      $modal.open
-        controller: 'IloModalCtrl'
-        templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
-        resolve: {
-          ilo: -> ilo || { name: null, description: null, abbreviation: null }
-          isNew: -> not ilo?
-          unit: -> $scope.unit
-        }
-    $scope.createILO = ->
-      $scope.editILO()
-
-    $scope.deleteILO = (ilo) ->
-      IntendedLearningOutcome.delete { id: ilo.id, unit_id: $scope.unit.id },
-        (response) ->
-          $scope.unit.ilos = _.without $scope.unit.ilos, ilo
-          alertService.add("info", "ILO #{ilo.id} was deleted successfully", 2000)
-        (response) ->
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-)

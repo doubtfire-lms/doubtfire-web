@@ -1,44 +1,69 @@
 <div>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">Edit Intended Learning Outcomes</h3>
-      Add, edit or delete intended learning outcomes for this unit
-    </div>
-    <div class="panel-body">
-      <div class="col-sm-12">
-        <div class="callout callout-info" ng-hide="unit.ilos.length > 0">This unit has no Intended Learning Outcomes</div>
-        <div ng-show="unit.ilos.length > 0">
-          <table class="table table-pointer table-hover">
-            <thead>
-              <tr>
-                <th> Number </th>
-                <th> Abbreviation </th>
-                <th> Name </th>
-                <th> Description </th>
-                <th> Actions </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'">
-                <td ng-click="editILO(ilo)">{{ilo.ilo_number}}</td>
-                <td ng-click="editILO(ilo)">{{ilo.abbreviation}}</td>
-                <td ng-click="editILO(ilo)">{{ilo.name}}</td>
-                <td ng-click="editILO(ilo)">{{ilo.description}}</td>
-                <td>
-                  <button class="btn btn-danger" ng-click="deleteILO(ilo)">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                </td>
-            </tbody>
-          </table>
+  <div class="col-sm-9">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Edit Intended Learning Outcomes</h3>
+        Add, edit or delete intended learning outcomes for this unit
+      </div>
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <div class="callout callout-info" ng-hide="unit.ilos.length > 0">This unit has no Intended Learning Outcomes</div>
+          <div ng-show="unit.ilos.length > 0">
+            <table class="table table-pointer table-hover">
+              <thead>
+                <tr>
+                  <th> Number </th>
+                  <th> Abbreviation </th>
+                  <th> Name </th>
+                  <th> Description </th>
+                  <th> Actions </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'">
+                  <td ng-click="editILO(ilo)">{{ilo.ilo_number}}</td>
+                  <td ng-click="editILO(ilo)">{{ilo.abbreviation}}</td>
+                  <td ng-click="editILO(ilo)">{{ilo.name}}</td>
+                  <td ng-click="editILO(ilo)">{{ilo.description}}</td>
+                  <td>
+                    <button class="btn btn-danger" ng-click="deleteILO(ilo)">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </td>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+      <div class="panel-footer clearfix">
+        <button class="btn btn-success pull-right" ng-click="createILO()">
+          <i class="fa fa-graduation-cap"></i>
+          <i class="fa fa-plus"></i> Add Outcome
+        </button>
+      </div>
     </div>
-    <div class="panel-footer clearfix">
-      <button class="btn btn-success pull-right" ng-click="createILO()">
-        <i class="fa fa-graduation-cap"></i>
-        <i class="fa fa-plus"></i> Add Outcome
-      </button>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Batch Upload Outcome Definitions</h4>
+            Batch upload learning outcome definitions with a CSV containing: unit_code, ilo_number, abbreviation, name, and description.
+        </div>
+        <div class="panel-body">
+            <file-uploader
+              files="batchFiles"
+              url="batchOutcomeUrl()"
+              on-success="onBatchOutcomeSuccess"></file-uploader>
+        </div><!--batch-withdraw-->
+        <div class="panel-heading">
+            <h4 class="panel-title">Download Outcomes</h4>
+            Download all outcomes for the unit.
+        </div>
+        <div class="panel-body text-center">
+            <a target="_blank" ng-href="{{batchOutcomeUrl()}}" class="btn btn-primary btn-download">
+                <i class="fa fa-download"></i> Download
+            </a>
+        </div>
     </div>
   </div>
 </div>
