@@ -102,7 +102,8 @@ module.exports = {
       'vendor/angular-ui-codemirror/ui-codemirror.js',
       'vendor/showdown/dist/showdown.js',
       'vendor/showdown/dist/showdown.js.map',
-      'vendor/angular-markdown-filter/markdown.js'
+      'vendor/angular-markdown-filter/markdown.js',
+      'vendor/angular-ui-select/dist/select.js'
     ],
     css: [
     ]

@@ -124,3 +124,11 @@ angular.module("doubtfire.filters", [])
     else
       input
 )
+
+.filter('truncatedMarkdown', ($filter) ->
+  (input, truncateTo) ->
+    truncateTo = truncateTo or 128
+    input = $filter('markdown')(input)
+    input = $filter('stripTags')(input)
+    $filter('truncate')(input, truncateTo, '...')
+)

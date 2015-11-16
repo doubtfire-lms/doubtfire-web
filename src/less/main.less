@@ -49,6 +49,7 @@
 @import (less) "../../vendor/angular-xeditable/dist/css/xeditable.css";
 @import (less) "../../vendor/codemirror/lib/codemirror.css";
 @import (less) "../../vendor/codemirror/theme/xq-light.css";
+@import (less) "../../vendor/angular-ui-select/dist/select.css";
 
 // Import our custom functions
 @import 'functions.less';
@@ -123,6 +124,12 @@ a {
   display: inline-block;
 }
 
+// Broken UI select active fix
+.ui-select-bootstrap .ui-select-choices-row.active > a {
+  color: #333;
+  background-color: inherit;
+}
+
 @import 'modules/breadcrumbs.less';
 @import 'modules/landing-page.less';
 @import 'modules/sign-in-form.less';
@@ -149,3 +156,4 @@ a {
 @import 'modules/csv-result-modal.less';
 @import 'modules/tabset-icon.less';
 @import 'modules/markdown-editor.less';
+@import 'modules/nvd3-graph.less';

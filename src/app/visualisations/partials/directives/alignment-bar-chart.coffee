@@ -17,11 +17,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
       clipEdge: yes
       stacked: yes
       height: 440
-      width: 600
-      margin:
-        left: 75
-        right: 50
-      rotateLabels: 30
+      width: 675
       duration: 500
       x: xFn
       y: yFn
@@ -59,7 +55,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
       _.each outcomes, (outcome, key) ->
         _.each outcome, (tmp, key1) ->
           scale = Math.pow(2, parseInt(key1,10))
-          values[key1].push { label: $scope.unit.outcome(parseInt(key,10)).name, value:  _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale }
+          values[key1].push { label: $scope.unit.outcome(parseInt(key,10)).abbreviation, value:  _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale }
 
       _.each values, (vals, idx) ->
         result.push { key: gradeService.grades[idx], values: vals }
