@@ -31,13 +31,13 @@
           <thead>
             <tr>
               <th class="task-abbr">
-                <a ng-click="sortOrder='project().student_id'; reverse=!reverse">
-                  Student ID <i ng-show="sortOrder=='project().student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <a ng-click="sortOrder='project.student_id'; reverse=!reverse">
+                  Student ID <i ng-show="sortOrder=='project.student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th class="name">
-                <a ng-click="sortOrder='project().name'; reverse=!reverse">
-                  Name <i ng-show="sortOrder=='project().name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <a ng-click="sortOrder='project.name'; reverse=!reverse">
+                  Name <i ng-show="sortOrder=='project.name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th class="task">
@@ -51,19 +51,19 @@
                 </a>
               </th>
               <th class="tutorial">
-                <a ng-click="sortOrder='project().tutorial.abbreviation'; reverse=!reverse">
-                  <i ng-show="sortOrder=='project().tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+                <a ng-click="sortOrder='project.tutorial.abbreviation'; reverse=!reverse">
+                  <i ng-show="sortOrder=='project.tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
                 </a>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
-              <td>{{task.project().student_id}}</td>
-              <td>{{task.project().name}}</td>
+              <td>{{task.project.student_id}}</td>
+              <td>{{task.project.name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
               <td>{{task.times_assessed}}</td>
-              <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
+              <td><span tooltip-html-unsafe="<strong>{{task.project.tutorial.meeting_day}} {{task.project.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project.tutorial.meeting_location}} - {{task.project.tutorial.tutor_name}}">{{task.project.tutorial.abbreviation}}</span></td>
           </tr>
           </tbody>
       </table>
@@ -77,7 +77,7 @@
         ng-if="activeTask"
         class="root-view"
         scope="student-project-scope"
-        project="activeTask"
+        task="activeTask"
         unit="unit"
         assessing-unit-role="assessingUnitRole"
         unit-role="assessingUnitRole.id"
@@ -109,7 +109,7 @@
         ng-if="activeTask"
         class="root-view"
         scope="student-project-scope"
-        project="activeTask"
+        task="activeTask"
         unit="unit"
         assessing-unit-role="assessingUnitRole"
         unit-role="assessingUnitRole.id"

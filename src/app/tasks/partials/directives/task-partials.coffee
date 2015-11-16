@@ -8,4 +8,5 @@ angular.module('doubtfire.tasks.partials', [
   'doubtfire.tasks.partials.task-feedback-directive'
   'doubtfire.tasks.partials.view-alignment-directive'
   'doubtfire.tasks.partials.tutor-task-feedback-view'
+  'doubtfire.tasks.partials.provide-task-feedback'
 ])
