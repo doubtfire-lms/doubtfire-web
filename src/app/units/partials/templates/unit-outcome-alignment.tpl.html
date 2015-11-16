@@ -61,26 +61,37 @@
       </div><!--/align-panel-heading-->
 
       <div class="panel-body student-list" ng-show="selected.items.length > 0">
-        <table ng-show="filteredAlignments.length > 0" class="table table-condensed table-hover table-pointer">
+        <table ng-show="filteredAlignments.length > 0" class="table table-hover table-pointer">
           <thead>
             <tr>
-              <th ng-show="selectAlignmentBy=='Task'"><span tooltip="Outcome related to this task">Outcome</span></th>
-              <th ng-show="selectAlignmentBy=='Outcome'"><span tooltip="Task related to this outcome">Task</span></th>
-              <th><span tooltip="How well you feel this task related to this outcome.">Rating</span></th>
-              <th><span tooltip="Why you feel that the task and outcome are aligned.">Description</span></th>
-              <th>Actions</th>
+              <th>
+                <div>{{inverseSelectAlignmentBy}}</div>
+                <small class="text-muted">{{inverseSelectAlignmentBy}} related to {{selectedAlignmentByItem.abbreviation}}</small>
+              </th>
+              <th>
+                <div>Rating</div>
+                <small class="text-muted">Rating how well you feel this task related to {{selectedAlignmentByItem.abbreviation}}</small>
+              </th>
+              <th>
+                <div>Rationale</div>
+                <small class="text-muted">Justify this rating with a brief rationale</small>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="align in filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
-              <td class="col-sm-3" ng-show="selectAlignmentBy=='Task'">
-                {{unit.outcome(align.learning_outcome_id).name}}
+              <td ng-show="selectAlignmentBy=='Task'">
+                <strong>
+                  {{unit.outcome(align.learning_outcome_id).abbreviation}}
+                </strong> - {{unit.outcome(align.learning_outcome_id).name}}
               </td>
-              <td class="col-sm-3" ng-show="selectAlignmentBy=='Outcome'">
-                {{unit.taskDef(align.task_definition_id).name}}
+              <td ng-show="selectAlignmentBy=='Outcome'">
+                <strong>
+                  {{unit.taskDef(align.task_definition_id).abbreviation}}
+                </strong> - {{unit.taskDef(align.task_definition_id).name}}
               </td>
               <td>
-                <rating class="group-member-contribution-rating" ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
+                <rating ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
               </td>
               <td>
                 <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>
