@@ -1,5 +1,5 @@
 <div>
-  <div class="col-sm-8" ng-class="{'col-sm-offset-2' : unitRole.role != 'Convenor'}">
+  <div class="col-sm-8" ng-class="{'col-sm-offset-2' : !showCsv}">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
         <div class="pull-left">
@@ -134,7 +134,7 @@
       </div>
     </div><!--/visualisation-->
   </div>
-  <div class="col-sm-4" ng-if="unitRole.role == 'Convenor'">
+  <div class="col-sm-4" ng-if="showCsv">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Import Task Outcome Alignments</h3>

@@ -4,6 +4,11 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
+  scope:
+    unit: "=unit"
+    project: "=project"
+    showCsv: "=showCsv"
+
   controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService) ->
     if $scope.project?
       $scope.source = $scope.project
