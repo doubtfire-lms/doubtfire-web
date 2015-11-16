@@ -10,14 +10,19 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
     $scope.studentFilter = 'myStudents' # Mine by default
 
     # Pagination details
-    $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 15
+    $scope.taskCurrentPage = 1
+    $scope.taskMaxSize = 5
+    $scope.taskPageSize = 5
 
     # Initially not full screen
     $scope.fullscreen = false
 
     $scope.refreshed = false
+
+    $scope.activeTask = null
+
+    $scope.viewTask = (task) ->
+      $scope.activeTask = task
 
     $scope.$watch 'unit.students', (newUnit) ->
       filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
