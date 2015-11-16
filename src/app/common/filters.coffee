@@ -23,6 +23,17 @@ angular.module("doubtfire.filters", [])
       input
 )
 
+.filter('showTasks', ->
+  (input, kind, tutorName) ->
+    if input
+      if kind == "myStudents"
+        _.select  input, (t) -> t.project().tutorial.tutor_name == tutorName
+      else
+        input
+    else
+      input
+)
+
 .filter('orderObjectBy', ->
   (items, field, reverse) ->
     filtered = []

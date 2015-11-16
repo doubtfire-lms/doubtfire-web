@@ -46,6 +46,8 @@ angular.module("doubtfire.api", [
     "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
     "#{api}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
+
+  Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
   Unit
 )
 .factory("UnitRole", (resourcePlus) ->

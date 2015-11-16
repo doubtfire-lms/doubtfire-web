@@ -116,6 +116,14 @@ angular.module("doubtfire.services.units", [])
         if group_callback?
           group_callback(groups)
 
+    unit.incorporateTasks = (tasks) ->
+      _.map tasks, (t) ->
+        project = unit.findStudent(t.project_id)
+        if project.incorporateTask?
+          project.incorporateTask(t)
+        else
+          projectService.mapTask t, unit, project
+
     unit.refresh(callback)
     unit
   # end get unit

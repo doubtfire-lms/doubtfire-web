@@ -18,51 +18,66 @@ angular.module("doubtfire.services.projects", [])
   converts the | delimited stats to its component arrays
   @param  student [Student|Project] The student's stats to update
   ###
-  projectService.updateTaskStats = (student, new_stats_str) ->
-    new_stats = student.task_stats
+  projectService.updateTaskStats = (project, new_stats_str) ->
+    new_stats = project.task_stats
     for i, value of new_stats_str.split("|")
-      if i < student.task_stats.length
+      if i < project.task_stats.length
         new_stats[i].value = Math.round(100 * value)
       else
-        student.progress_stats[i - student.task_stats.length].value = Math.round(100 * value)
-    student.progress_sort = 0
-    for i, stat of student.progress_stats
-      student.progress_sort = Math.round(student.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
+        project.progress_stats[i - project.task_stats.length].value = Math.round(100 * value)
+    project.progress_sort = 0
+    for i, stat of project.progress_stats
+      project.progress_sort = Math.round(project.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
 
-    student.task_stats = new_stats
+    project.task_stats = new_stats
 
-  projectService.addTaskDetailsToProject = (student, unit) ->
-    return if ! student.tasks?
-    student.tasks = student.tasks.map (task) ->
-      td = unit.taskDef(task.task_definition_id)
-      task.definition = td
-      task.status_txt = taskService.statusLabels[task.status]
-      task.updateTaskStatus = (project, new_stats) ->
-        projectService.updateTaskStats(project, new_stats)
-      task
-    student.tasks = _.sortBy(student.tasks, (t) -> t.definition.abbreviation).reverse()
-    student
+  projectService.mapTask = ( task, unit, project ) ->
+    td = unit.taskDef(task.task_definition_id)
+    task.definition = td
+    task.status_txt = () -> taskService.statusLabels[task.status]
+    task.project = () -> project
+    task.updateTaskStatus = (project, new_stats) ->
+      projectService.updateTaskStats(project, new_stats)
+    task
 
-  projectService.fetchDetailsForProject = (student, unit, callback) ->
-    if student.tasks
-      callback(student)
+  projectService.addTaskDetailsToProject = (project, unit) ->
+    return if ! project.tasks?
+    project.tasks = project.tasks.map (task) ->
+      projectService.mapTask task, unit, project
+    project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
+    project
+
+  projectService.fetchDetailsForProject = (project, unit, callback) ->
+    if project.tasks
+      callback(project)
     else
-      Project.get { id: student.project_id }, (project) ->
-        _.extend student, project
+      Project.get { id: project.project_id }, (project_response) ->
+        _.extend project, project_response
 
-        student.updateBurndownChart = () ->
-          Project.get { id: student.project_id }, (response) ->
-            student.burndown_chart_data = response.burndown_chart_data
+        project.updateBurndownChart = () ->
+          Project.get { id: project.project_id }, (response) ->
+            project.burndown_chart_data = response.burndown_chart_data
 
-        student.refresh = (unit_obj) ->
-          Project.get { id: student.project_id }, (response) ->
-            _.extend student, response
+        project.incorporateTask = (newTask) ->
+          currentTask = _.find project.tasks, (t) -> t.id == newTask.id
+
+          if currentTask?
+            currentTask = _.extend currentTask, newTask
+          else
+            project.tasks.push projectService.mapTask(newTask, unit, project)
+            currentTask = newTask
+
+          currentTask
+
+        project.refresh = (unit_obj) ->
+          Project.get { id: project.project_id }, (response) ->
+            _.extend project, response
             if unit_obj
-              projectService.addTaskDetailsToProject(student, unit_obj)
+              projectService.addTaskDetailsToProject(project, unit_obj)
 
         if unit
-          projectService.addTaskDetailsToProject(student, unit)
-        callback(student)
+          projectService.addTaskDetailsToProject(project, unit)
+        callback(project)
 
   projectService.updateGroups = (project) ->
     if project.groups?

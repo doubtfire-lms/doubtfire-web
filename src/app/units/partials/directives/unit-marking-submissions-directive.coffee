@@ -8,7 +8,7 @@ angular.module('doubtfire.units.partials.unit-marking-submissions-directive', []
   restrict: 'E'
   templateUrl: 'units/partials/templates/submission-marking-context.tpl.html'
   controller: ($scope, alertService, Task, csvResultService) ->
-    $scope.zipMarkingFiles = { file: { name: 'Re-Zipped Marked Files', type: 'zip' } }
+    $scope.zipMarkingFiles = { file: { name: 'Zipped Feedback Files', type: 'zip' } }
     $scope.csvMarkingFiles = { file: { name: 'Marks.csv', type: 'csv' } }
     $scope.uploadSubmissionUrl = $scope.readyToMarkSubmissionsUrl =
       Task.getTaskMarkingUrl($scope.unit)

@@ -1,21 +1,16 @@
-<div class="col-sm-8 col-sm-offset-2">
-  <div class="panel panel-primary">
-    <div class="panel-heading clearfix">
-      <div class="pull-left">
-        <h4 class="panel-title">{{contexts[activeContext].title}}</h4>
-        {{contexts[activeContext].subtitle}}
+<div>
+  <div class="col-sm-9">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">Task Feedback</h4>
+        Provide feedback to assist student learning and progress.
       </div>
-      <div class="pull-right">
-        <div class="btn-group">
-          <label ng-repeat="(context, data) in contexts" class="btn btn-default" ng-click="setActiveContext(context)" ng-class="{active: context == activeContext}">
-            <i class="fa fa-{{data.icon}}" tooltip="Mark {{context}}"></i>
-          </label>
-        </div>
+      <div class="panel-body">
+        <tutor-task-feedback-view></tutor-task-feedback-view>
       </div>
     </div>
-    <div class="panel-body panel-marking-context">
-      <submission-marking-context ng-show="activeContext == 'submissions'"></submission-marking-context>
-      <portfolio-marking-context ng-show="activeContext == 'portfolios'"></portfolio-marking-context>
-    </div>
+  </div>
+  <div class="col-sm-3">
+    <submission-marking-context></submission-marking-context>
   </div>
 </div>
