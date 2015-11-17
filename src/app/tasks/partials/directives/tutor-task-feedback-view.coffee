@@ -48,6 +48,11 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.activeTask = null
 
+    $scope.statusText = taskService.statusText
+    $scope.statusData = taskService.statusData
+    $scope.statusClass = taskService.statusClass
+    $scope.statusIcon = (status) -> taskService.statusIcons[status]
+
     $scope.viewTask = (task) ->
       $scope.activeTask = task
 

@@ -45,6 +45,11 @@
                   Task <i ng-show="sortOrder=='definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
+              <th class="status">
+                <a ng-click="sortOrder='status'; reverse=!reverse">
+                  Status <i ng-show="sortOrder=='status'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
               <th class="times_assessed">
                 <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
                   Times Assessed <i ng-show="sortOrder=='times_assessed'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
@@ -62,6 +67,7 @@
               <td>{{task.project().student_id}}</td>
               <td>{{task.project().name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
+              <td class="text-center task-status {{statusClass(task.status)}}"><span><i class="{{statusIcon(task.status)}}"></i> {{statusText(task.status)}}</span></td>
               <td>{{task.times_assessed}}</td>
               <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
           </tr>
