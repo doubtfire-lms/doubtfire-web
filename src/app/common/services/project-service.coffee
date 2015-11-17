@@ -34,7 +34,8 @@ angular.module("doubtfire.services.projects", [])
   projectService.mapTask = ( task, unit, project ) ->
     td = unit.taskDef(task.task_definition_id)
     task.definition = td
-    task.project = project
+    # must be function to avoid cyclic structure
+    task.project = () -> project
     task.status_txt = () -> taskService.statusLabels[task.status]
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)

@@ -58,12 +58,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
-              <td>{{task.project.student_id}}</td>
-              <td>{{task.project.name}}</td>
+            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+              <td>{{task.project().student_id}}</td>
+              <td>{{task.project().name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
               <td>{{task.times_assessed}}</td>
-              <td><span tooltip-html-unsafe="<strong>{{task.project.tutorial.meeting_day}} {{task.project.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project.tutorial.meeting_location}} - {{task.project.tutorial.tutor_name}}">{{task.project.tutorial.abbreviation}}</span></td>
+              <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
           </tr>
           </tbody>
       </table>

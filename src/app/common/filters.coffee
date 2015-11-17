@@ -27,7 +27,7 @@ angular.module("doubtfire.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "myStudents"
-        _.select  input, (t) -> t.project.tutorial.tutor_name == tutorName
+        _.select  input, (t) -> t.project().tutorial.tutor_name == tutorName
       else
         input
     else

@@ -6,6 +6,33 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
   templateUrl: 'tasks/partials/templates/tutor-task-feedback-view.tpl.html'
   controller: ($scope, $filter, currentUser, Unit, alertService, gradeService, taskService) ->
     $scope.search = ""
+
+    searchObj = (obj, value, searched) ->
+      _.some(_.keys(obj), (key) ->
+        if _.isObject(obj[key])
+          if _.contains(searched, obj[key])
+            return false
+          searched.push obj[key]
+
+          if searchObj(obj[key], value, searched)
+            return true
+          # else go to next key for this obj
+        else
+          actual = ('' + obj[key]).toLowerCase()
+          expected = ('' + value).toLowerCase()
+
+          if actual.indexOf(expected) > -1
+            return true
+          # else go to next key for this obj
+        return false
+      )
+    $scope.searchIncProject = (item) ->
+      if $scope.search.length == 0
+        return true
+      itemWithProj = _.extend {}, item, { project: item.project() }
+
+      searchObj itemWithProj, $scope.search, []
+
     $scope.tutorName = currentUser.profile.name
     $scope.studentFilter = 'myStudents' # Mine by default
 
