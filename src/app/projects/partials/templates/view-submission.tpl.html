@@ -8,8 +8,10 @@
       <p>Submission is being processed. Come back soon.</p>
   </div><!--/pdf-in-process-->
 </div>
-<pdf-panel-viewer
-  pdf-url="taskUrl()"
-  footer-text="{{project.selectedTask.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
-  ng-hide="notSubmitted() || taskStillProcessing()">
-</pdf-panel-viewer>
+<div ng-if="task.has_pdf">
+  <pdf-panel-viewer
+    pdf-url="taskUrl()"
+    footer-text="{{task.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
+    ng-hide="notSubmitted() || taskStillProcessing()">
+  </pdf-panel-viewer>
+</div>

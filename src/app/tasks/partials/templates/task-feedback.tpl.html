@@ -78,8 +78,8 @@
         <div class="task-feedback-tab-panel">
           <task-sheet task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabsData.taskSheet"></task-sheet>
           <submit-task-form task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabsData.fileUpload"></submit-task-form>
-          <view-submission ng-if="activeTab == tabsData.viewSubmission"></view-submission>
-          <view-comments ng-if="activeTab == tabsData.viewComments"></view-comments>
+          <view-submission ng-show="activeTab == tabsData.viewSubmission" project="project" task="project.selectedTask"></view-submission>
+          <view-comments ng-show="activeTab == tabsData.viewComments" project="project" task="project.selectedTask"></view-comments>
           <task-plagiarism-report task="project.selectedTask" ng-if="activeTab == tabsData.plagiarismReport"></task-plagiarism-report>
         </div><!--/panel-body-area-->
       </div><!--/tab-contents-panel-->

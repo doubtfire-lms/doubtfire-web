@@ -40,15 +40,18 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('viewSubmission', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/view-submission.tpl.html'
+  scope:
+    project: "=project"
+    task: "=task"
   controller: ($scope, TaskFeedback) ->
     $scope.taskUrl = ->
-      TaskFeedback.getTaskUrl($scope.project.selectedTask)
+      TaskFeedback.getTaskUrl($scope.task)
 
     #
     # Exceptional scenarios
     #
     $scope.taskStillProcessing = () ->
-      $scope.project.selectedTask.processing_pdf
+      $scope.task.processing_pdf
     $scope.notSubmitted = () ->
-      not $scope.project.selectedTask.has_pdf and (not $scope.taskStillProcessing())
+      not $scope.task.has_pdf and (not $scope.taskStillProcessing())
 )

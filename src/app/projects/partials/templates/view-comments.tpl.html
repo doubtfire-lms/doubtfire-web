@@ -1,9 +1,9 @@
 <div class="panel-body">
-  <div class="help-block" ng-show="(!project.selectedTask.comments) || project.selectedTask.comments.length == 0">
+  <div class="help-block" ng-show="(!task.comment-texts) || task.comments.length == 0">
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment col-sm-12" ng-repeat="comment in project.selectedTask.comments">
+  <div class="comment col-sm-12" ng-repeat="comment in task.comments">
     <div class="comment-details col-md-2">
       <span class="comment-by">
         {{comment.comment_by}}
