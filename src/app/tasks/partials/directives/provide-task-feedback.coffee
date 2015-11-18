@@ -9,7 +9,11 @@ angular.module('doubtfire.tasks.partials.provide-task-feedback',[])
     unit: "=unit"
     assessingUnitRole: "=assessingUnitRole"
     unitRole: "=unitRole"
-    fullscreen: "=fullscreen"
-  controller: ($scope) ->
-    $scope.search = ""
+    onStatusUpdate: "=onStatusUpdate"
+  controller: ($scope, taskService) ->
+    
+    $scope.triggerTransition = (status) ->
+      taskService.updateTaskStatus($scope.unit, $scope.task.project(), $scope.task, status)
+      if $scope.onStatusUpdate? && _.isFunction($scope.onStatusUpdate)
+        $scope.onStatusUpdate(status)
 )

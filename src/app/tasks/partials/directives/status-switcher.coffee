@@ -8,6 +8,7 @@ angular.module('doubtfire.tasks.partials.status-switcher',[])
     task: "=task"
     assessingUnitRole: "=assessingUnitRole"
     inMenu: "=inMenu"
+    triggerTransition: "=triggerTransition"
   controller: ($scope, taskService) ->
     #
     # Statuses tutors/students may change task to
@@ -20,5 +21,4 @@ angular.module('doubtfire.tasks.partials.status-switcher',[])
       tutorTriggers: $scope.tutorStatuses.map (status) ->
         { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
       }
-
 )

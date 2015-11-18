@@ -55,6 +55,9 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.viewTask = (task) ->
       $scope.activeTask = task
+    
+    $scope.onStatusUpdate = (status) ->
+      $scope.activeTask = null
 
     $scope.$watch 'unit.students', (newUnit) ->
       filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
@@ -74,5 +77,4 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
           $scope.tasksForFeedback = _.extend $scope.tasksForFeedback, tasks
         (response) ->
           alertService.add("danger", response.data.error, 6000)
-
 )
