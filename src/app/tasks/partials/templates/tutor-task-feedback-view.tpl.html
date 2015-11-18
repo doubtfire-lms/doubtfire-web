@@ -19,6 +19,14 @@
             <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Only show tasks for my students"></i>
           </label>
         </div>
+        <div class="btn-group pull-right" style="margin-left: 1ex">
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'assess'">
+            <i class="fa fa-check-square-o" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to provide feedback on."></i>
+          </label>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
+            <i class="fa fa-comment" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to discuss with students."></i>
+          </label>
+        </div>
         <form role="search" class="col-sm-4 form-horizontal pull-right">
           <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autofocus />
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
@@ -63,7 +71,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | statusFilter:statusFilter | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
               <td>{{task.project().student_id}}</td>
               <td>{{task.project().name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
