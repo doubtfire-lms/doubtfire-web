@@ -36,13 +36,13 @@ angular.module("doubtfire.projects.view-comments-directive", [
             $scope.task.comments = []
           $scope.task.comments.unshift response
           $scope.comment.text = ""
-        (error) ->
-          alertService.add("danger", "Request failed, cannot add a comment at this time.", 2000)
+        (response) ->
+          alertService.add("danger", response.data.error, 2000)
 
     $scope.deleteComment = (id) ->
       TaskComment.delete { task_id: $scope.task.id, id: id },
         (response) ->
           $scope.task.comments = $scope.task.comments.filter (e) -> e.id != id
-        (error) ->
-          alertService.add("danger", "Request failed, you cannot delete this comment.", 2000)
+        (response) ->
+          alertService.add("danger", response.data.error, 2000)
 )

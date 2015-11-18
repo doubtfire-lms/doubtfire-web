@@ -74,13 +74,8 @@
           </tbody>
       </table>
     </div>
-    <div class="panel-body project-show" ng-if="fullscreen">
-      <div class="no-student" ng-hide="activeTask">
-        <i class="fa fa-tasks"></i>
-        <p>Click a task to view its status in detail</p>
-      </div>
-      <provide-task-feedback
-        ng-if="activeTask"
+    <provide-task-feedback
+        ng-if="fullscreen"
         class="root-view"
         scope="student-project-scope"
         task="activeTask"
@@ -88,7 +83,6 @@
         assessing-unit-role="assessingUnitRole"
         unit-role="assessingUnitRole.id"
         fullscreen="fullscreen"></provide-task-feedback>
-    </div>
     <div class="panel-footer clearfix">
       <div class="pull-right">
         <button type="button" class="btn btn-success btn-download" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv" ng-hide="filteredTasks.length < allTasks.length && filteredTasks.length == 0" target="_blank">
@@ -102,24 +96,12 @@
       <pagination total-items="filteredTasks.length" ng-model="taskCurrentPage" items-per-page="taskPageSize" max-size="taskMaxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
     </div>
   </div>
-  <div class="panel panel-default" ng-hide="fullscreen">
-    <div class="panel-heading clearfix">
-      <h4 class="panel-title">Task Details</h4>
-    </div>
-    <div class="panel-body">
-      <div class="no-task" ng-hide="activeTask">
-        <i class="fa fa-tasks"></i>
-        <p>Click a task to view its status in detail</p>
-      </div>
-      <provide-task-feedback
-        ng-if="activeTask"
-        class="root-view"
-        scope="student-project-scope"
-        task="activeTask"
-        unit="unit"
-        assessing-unit-role="assessingUnitRole"
-        unit-role="assessingUnitRole.id"
-        fullscreen="fullscreen"></provide-task-feedback>
-    </div>
-  </div>
+  <provide-task-feedback
+    ng-if="!fullscreen"
+    scope="student-project-scope"
+    task="activeTask"
+    unit="unit"
+    assessing-unit-role="assessingUnitRole"
+    unit-role="assessingUnitRole.id"
+    fullscreen="fullscreen"></provide-task-feedback>
 </div>

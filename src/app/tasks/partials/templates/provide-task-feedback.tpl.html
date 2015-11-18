@@ -1,4 +1,33 @@
 <div>
-	<view-submission project="task.project" task="task"></view-submission>
-	<view-comments project="task.project" task="task"></view-comments>
+  <div class="panel panel-default" ng-hide="task">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Task Details
+      </h3>
+    </div>
+    <div class="panel-body large-notice-block" ng-hide="task">
+      <i class="fa fa-tasks"></i>
+      <p>Select a task to view its status in detail</p>
+    </div>
+  </div>
+  <div class="panel panel-default" ng-if="task">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Task Details
+      </h3>
+    </div>
+    
+    <div class="panel-body large-notice-block" ng-hide="task.has_pdf">
+        <i class="fa fa-file-pdf-o fa-2x"></i>
+        <p>No submission PDF available.</p>
+    </div>
+    <view-submission ng-show="task.has_pdf" project="task.project" task="task"></view-submission>
+
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Task Comments
+      </h3>
+    </div>
+    <view-comments project="task.project" task="task"></view-comments>
+  </div>
 </div>
