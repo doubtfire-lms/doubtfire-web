@@ -35,7 +35,7 @@
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
       </form>
     </div>
-    <div class="panel-body task-list">
+    <div class="panel-body student-list">
       <div class="help-block text-center" style="margin: 5em 0;" ng-hide="refreshed">Refresh to view tasks.</div>
       <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredTasks.length == 0 && refreshed">No tasks found.</div>
         <table ng-hide="(!refreshed) || filteredTasks.length == 0" class="table table-condensed table-hover table-pointer ">
@@ -85,15 +85,15 @@
           </tbody>
       </table>
     </div>
-    <provide-task-feedback
-        ng-if="fullscreen"
+    <div class="panel-body project-show" ng-if="fullscreen">
+      <provide-task-feedback
         class="root-view"
         scope="student-project-scope"
         task="activeTask"
         unit="unit"
         assessing-unit-role="assessingUnitRole"
-        unit-role="assessingUnitRole.id"
-        fullscreen="fullscreen"></provide-task-feedback>
+        unit-role="assessingUnitRole.id"></provide-task-feedback>
+    </div>
     <div class="panel-footer clearfix">
       <div class="pull-right">
         <button type="button" class="btn btn-success btn-download" ng-click="refreshTasksForFeedback()">
