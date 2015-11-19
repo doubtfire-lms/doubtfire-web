@@ -21,7 +21,7 @@
         </div>
         <div class="btn-group pull-right" style="margin-left: 1ex">
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
-            <i class="fa fa-check-square-o" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
+            <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
           </label>
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
             <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that need help."></i>
@@ -74,7 +74,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName) | statusFilter:statusFilter | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
               <td>{{task.project().student_id}}</td>
               <td>{{task.project().name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
