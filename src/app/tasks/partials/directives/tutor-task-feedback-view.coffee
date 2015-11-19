@@ -35,7 +35,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.tutorName = currentUser.profile.name
     $scope.studentFilter = 'myStudents' # Mine by default
-    $scope.statusFilter = 'assess'
+    $scope.statusFilter = 'ready_to_mark'
 
     # Pagination details
     $scope.taskCurrentPage = 1

@@ -137,12 +137,13 @@ angular.module("doubtfire.filters", [])
   (input, statusKind) ->
     if input && statusKind
       _.filter input, (task) ->
-        if statusKind == 'assess'
-          task.status == 'ready_to_mark' || task.status == 'need_help'
-        else if statusKind == 'discuss'
-          task.status == 'discuss'
-        else
-          true
+        task.status == statusKind
+        # if statusKind == 'assess'
+        #   task.status == 'ready_to_mark' || task.status == 'need_help'
+        # else if statusKind == 'discuss'
+        #   task.status == 'discuss'
+        # else
+        #   true
     else
       input
 )

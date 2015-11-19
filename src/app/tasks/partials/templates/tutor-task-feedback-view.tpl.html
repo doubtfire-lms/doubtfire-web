@@ -20,8 +20,11 @@
           </label>
         </div>
         <div class="btn-group pull-right" style="margin-left: 1ex">
-          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'assess'">
-            <i class="fa fa-check-square-o" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to provide feedback on."></i>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
+            <i class="fa fa-check-square-o" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
+          </label>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
+            <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that need help."></i>
           </label>
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
             <i class="fa fa-comment" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to discuss with students."></i>
