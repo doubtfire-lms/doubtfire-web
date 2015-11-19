@@ -3,7 +3,7 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Tasks Requring Feedback</h4>
-        Tasks requring feedback from students in {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}
+        from students in {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}
       </div>
       <div class="col-sm-5 text-right"></div>
         <div class="pull-right">
@@ -30,7 +30,7 @@
             <i class="fa fa-comment" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to discuss with students."></i>
           </label>
         </div>
-        <form role="search" class="col-sm-4 form-horizontal pull-right">
+        <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">
           <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autofocus />
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
       </form>
