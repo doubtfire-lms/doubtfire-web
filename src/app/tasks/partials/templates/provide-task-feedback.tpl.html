@@ -11,13 +11,13 @@
     </div>
   </div>
   <div class="panel panel-default" ng-if="task">
-    <div class="panel-heading">
+    <div class="panel-heading" ng-show="task.definition.upload_requirements.length > 0">
       <h3 class="panel-title">
-        Task Details
+        Task Submission
       </h3>
     </div>
     
-    <div class="panel-body large-notice-block" ng-hide="task.has_pdf">
+    <div class="panel-body large-notice-block" ng-show="(!task.has_pdf) && task.definition.upload_requirements.length > 0">
         <i class="fa fa-file-pdf-o fa-2x"></i>
         <p>No submission PDF available.</p>
     </div>
