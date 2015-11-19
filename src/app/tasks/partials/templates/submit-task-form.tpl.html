@@ -7,7 +7,7 @@
     <i class="fa fa-upload fa-2x"></i>
     <p>Join a {{task.definition.group_set.name}} group to submit this task.</p>
   </div><!--/no-detections-->
-  <div class="help-block" ng-hide="uploadType" ng-if="task.definition.upload_requirements.length > 0 && (! isGroupTask()) || inGroupForTask()">
+  <div class="help-block" ng-hide="uploadType" ng-if="task.definition.upload_requirements.length > 0 && ((! isGroupTask()) || inGroupForTask())">
     <div>
       <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
     </div>
@@ -32,7 +32,7 @@
       </div><!--/upload-type-buttons-->
     </div>
   </div><!--upload-header-->
-  <div class="upload-type-selected-state" ng-if="uploadType">
+  <div class="upload-type-selected-state" ng-if="uploadType && task.definition.upload_requirements.length > 0">
     <div class="upload-assistant clearfix" ng-if="!isUploading">
       <h3>
         Upload {{task.definition.name}}...
