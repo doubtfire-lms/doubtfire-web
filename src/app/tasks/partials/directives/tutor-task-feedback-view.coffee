@@ -64,6 +64,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
       filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
       if filteredStudents? && filteredStudents.length == 0
         $scope.studentFilter = 'allStudents'
+      $scope.refreshTasksForFeedback()
 
     $scope.tasksForFeedback = []
 
