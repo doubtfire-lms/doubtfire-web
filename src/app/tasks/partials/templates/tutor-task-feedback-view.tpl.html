@@ -96,10 +96,6 @@
         fullscreen="fullscreen"></provide-task-feedback>
     <div class="panel-footer clearfix">
       <div class="pull-right">
-        <button type="button" class="btn btn-success btn-download" ng-csv="getCSVData" lazy-load="true" csv-header="getCSVHeader()" filename="student-project-export.csv" ng-hide="filteredTasks.length < allTasks.length && filteredTasks.length == 0" target="_blank">
-          <i class="fa fa-file-excel-o"></i>
-          <i class="fa fa-download"></i> Export
-        </button>
         <button type="button" class="btn btn-success btn-download" ng-click="refreshTasksForFeedback()">
           <i class="fa fa-refresh"></i> Refresh Tasks
         </button>
