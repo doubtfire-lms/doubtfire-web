@@ -49,6 +49,31 @@ angular.module("doubtfire.services.projects", [])
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
     project
 
+  projectService.addProjectMethods = (project, unit) ->
+    project.updateBurndownChart = () ->
+      Project.get { id: project.project_id }, (response) ->
+        project.burndown_chart_data = response.burndown_chart_data
+
+    project.incorporateTask = (newTask) ->
+      if ! project.tasks?
+        project.tasks = []
+        
+      currentTask = _.find project.tasks, (t) -> t.id == newTask.id
+
+      if currentTask?
+        currentTask = _.extend currentTask, newTask
+      else
+        project.tasks.push projectService.mapTask(newTask, unit, project)
+        currentTask = newTask
+
+      currentTask
+
+    project.refresh = (unit_obj) ->
+      Project.get { id: project.project_id }, (response) ->
+        _.extend project, response
+        if unit_obj
+          projectService.addTaskDetailsToProject(project, unit_obj)
+
   projectService.fetchDetailsForProject = (project, unit, callback) ->
     if project.tasks
       callback(project)
@@ -56,26 +81,7 @@ angular.module("doubtfire.services.projects", [])
       Project.get { id: project.project_id }, (project_response) ->
         _.extend project, project_response
 
-        project.updateBurndownChart = () ->
-          Project.get { id: project.project_id }, (response) ->
-            project.burndown_chart_data = response.burndown_chart_data
-
-        project.incorporateTask = (newTask) ->
-          currentTask = _.find project.tasks, (t) -> t.id == newTask.id
-
-          if currentTask?
-            currentTask = _.extend currentTask, newTask
-          else
-            project.tasks.push projectService.mapTask(newTask, unit, project)
-            currentTask = newTask
-
-          currentTask
-
-        project.refresh = (unit_obj) ->
-          Project.get { id: project.project_id }, (response) ->
-            _.extend project, response
-            if unit_obj
-              projectService.addTaskDetailsToProject(project, unit_obj)
+        projectService.addProjectMethods(project, unit)
 
         if unit
           projectService.addTaskDetailsToProject(project, unit)
