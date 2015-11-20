@@ -73,6 +73,17 @@ angular.module("doubtfire.services.tasks", [])
     discuss:            'fa fa-check'
     complete:           'fa fa-check-square-o'
 
+  taskService.statusSeq =
+    ready_to_mark:      6
+    not_submitted:      1
+    working_on_it:      5
+    need_help:          4
+    redo:               3
+    fix_and_include:    2
+    fix_and_resubmit:   7
+    discuss:            8
+    complete:           9
+
   taskService.helpTextDesc =
     ready_to_mark:
       'You have completed the Task, and uploaded it for your tutor to assess.'

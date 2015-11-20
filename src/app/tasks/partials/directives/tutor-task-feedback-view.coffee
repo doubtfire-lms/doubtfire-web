@@ -4,7 +4,21 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
   replace: true
   restrict: 'E'
   templateUrl: 'tasks/partials/templates/tutor-task-feedback-view.tpl.html'
+  scope:
+    unit: "=unit"
+    context: "=context"
+    assessingUnitRole: "=assessingUnitRole"
+
   controller: ($scope, $filter, currentUser, Unit, alertService, gradeService, taskService) ->
+    if $scope.context == 'assess'
+      $scope.title = "Tasks Requring Feedback"
+      $scope.statusFilter = 'ready_to_mark'
+      $scope.taskPageSize = 5
+    else
+      $scope.title = "Selected Task"
+      $scope.statusFilter = null
+      $scope.taskPageSize = 10
+
     $scope.search = ""
 
     searchObj = (obj, value, searched) ->
@@ -35,12 +49,10 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.tutorName = currentUser.profile.name
     $scope.studentFilter = 'myStudents' # Mine by default
-    $scope.statusFilter = 'ready_to_mark'
 
     # Pagination details
     $scope.taskCurrentPage = 1
     $scope.taskMaxSize = 5
-    $scope.taskPageSize = 5
 
     # Initially not full screen
     $scope.fullscreen = false
@@ -60,13 +72,29 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
     $scope.onStatusUpdate = (status) ->
       $scope.activeTask = null
 
-    $scope.$watch 'unit.students', (newUnit) ->
-      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
-      if filteredStudents? && filteredStudents.length == 0
-        $scope.studentFilter = 'allStudents'
-      $scope.refreshTasksForFeedback()
-
     $scope.tasksForFeedback = []
+
+    $scope.selectedDefinition = null
+
+    $scope.refreshTasksForSingleDef = () ->
+      $scope.refreshed = false
+      return unless $scope.selectedDefinition?
+      Unit.tasksForDefinition.query { id: $scope.unit.id, task_def_id: $scope.selectedDefinition.id },
+        (response) ->
+          $scope.refreshed = true
+          $scope.tasksForFeedback.length = 0
+          tasks = $scope.unit.incorporateTasks response
+
+          $scope.tasksForFeedback = _.extend $scope.tasksForFeedback, tasks
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
+
+
+    $scope.onSelectDefinition = (taskDef) ->
+      return if taskDef == $scope.selectedDefinition
+      $scope.activeTask = null
+      $scope.selectedDefinition = taskDef
+      $scope.refreshTasksForSingleDef()
 
     $scope.refreshTasksForFeedback = () ->
       $scope.refreshed = false
@@ -79,4 +107,16 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
           $scope.tasksForFeedback = _.extend $scope.tasksForFeedback, tasks
         (response) ->
           alertService.add("danger", response.data.error, 6000)
+
+    $scope.refreshTasks = () ->
+      if $scope.context == 'assess'
+        $scope.refreshTasksForFeedback()
+      else
+        $scope.refreshTasksForSingleDef()
+
+    $scope.$watch 'unit.students', (newUnit) ->
+      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
+      if filteredStudents? && filteredStudents.length == 0
+        $scope.studentFilter = 'allStudents'
+      $scope.refreshTasks()
 )

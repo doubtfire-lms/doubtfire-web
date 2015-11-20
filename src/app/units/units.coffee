@@ -8,7 +8,7 @@ angular.module("doubtfire.units", [
     views:
       main:
         controller: "TutorUnitViewRootCtrl"
-        templateUrl: "units/show.tpl.html"
+        templateUrl: "units/tutor-home.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/partials/templates/header.tpl.html"

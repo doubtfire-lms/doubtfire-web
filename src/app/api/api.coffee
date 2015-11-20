@@ -48,6 +48,8 @@ angular.module("doubtfire.api", [
     "#{api}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
 
   Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
+  Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
+
   Unit
 )
 .factory("UnitRole", (resourcePlus) ->

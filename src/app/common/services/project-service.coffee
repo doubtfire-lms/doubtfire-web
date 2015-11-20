@@ -37,6 +37,7 @@ angular.module("doubtfire.services.projects", [])
     # must be function to avoid cyclic structure
     task.project = () -> project
     task.status_txt = () -> taskService.statusLabels[task.status]
+    task.statusSeq = () -> taskService.statusSeq[task.status]
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
     task

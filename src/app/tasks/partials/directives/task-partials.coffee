@@ -10,4 +10,5 @@ angular.module('doubtfire.tasks.partials', [
   'doubtfire.tasks.partials.tutor-task-feedback-view'
   'doubtfire.tasks.partials.provide-task-feedback'
   'doubtfire.tasks.partials.status-switcher'
+  'doubtfire.tasks.partials.task-definition-selector'
 ])

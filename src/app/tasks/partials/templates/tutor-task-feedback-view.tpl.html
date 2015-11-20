@@ -2,7 +2,8 @@
   <div class="panel panel-primary tutor-student-list" ng-class="{fullscreen: fullscreen}">
     <div class="panel-heading clearfix">
       <div class="pull-left">
-        <h4 class="panel-title">Tasks Requring Feedback</h4>
+        <h4 class="panel-title" ng-hide="context=='task'">{{title}}</h4>
+        <task-definition-selector class="col-sm-12" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
         from students in {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}
       </div>
       <div class="col-sm-5 text-right"></div>
@@ -19,7 +20,7 @@
             <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Only show tasks for my students"></i>
           </label>
         </div>
-        <div class="btn-group pull-right" style="margin-left: 1ex">
+        <div class="btn-group pull-right" style="margin-left: 1ex" ng-show="context == 'assess'">
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
             <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
           </label>
@@ -33,7 +34,7 @@
         <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">
           <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autofocus />
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
-      </form>
+        </form>
     </div>
     <div class="panel-body student-list">
       <div class="help-block text-center" style="margin: 5em 0;" ng-hide="refreshed">Refresh to view tasks.</div>
@@ -42,13 +43,13 @@
           <thead>
             <tr>
               <th class="task-abbr">
-                <a ng-click="sortOrder='project.student_id'; reverse=!reverse">
-                  Student ID <i ng-show="sortOrder=='project.student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <a ng-click="sortOrder='project().student_id'; reverse=!reverse">
+                  Student ID <i ng-show="sortOrder=='project().student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th class="name">
-                <a ng-click="sortOrder='project.name'; reverse=!reverse">
-                  Name <i ng-show="sortOrder=='project.name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <a ng-click="sortOrder='project().name'; reverse=!reverse">
+                  Name <i ng-show="sortOrder=='project().name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th class="task">
@@ -57,8 +58,8 @@
                 </a>
               </th>
               <th class="status">
-                <a ng-click="sortOrder='status'; reverse=!reverse">
-                  Status <i ng-show="sortOrder=='status'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
+                  Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th class="times_assessed">
@@ -67,8 +68,8 @@
                 </a>
               </th>
               <th class="tutorial">
-                <a ng-click="sortOrder='project.tutorial.abbreviation'; reverse=!reverse">
-                  <i ng-show="sortOrder=='project.tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+                <a ng-click="sortOrder='project().tutorial.abbreviation'; reverse=!reverse">
+                  <i ng-show="sortOrder=='project().tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
                 </a>
               </th>
             </tr>
@@ -96,7 +97,7 @@
     </div>
     <div class="panel-footer clearfix">
       <div class="pull-right">
-        <button type="button" class="btn btn-success btn-download" ng-click="refreshTasksForFeedback()">
+        <button type="button" class="btn btn-success btn-download" ng-click="refreshTasks()">
           <i class="fa fa-refresh"></i> Refresh Tasks
         </button>
       </div>

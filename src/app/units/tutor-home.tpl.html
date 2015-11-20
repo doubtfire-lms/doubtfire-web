@@ -8,21 +8,27 @@
       <tabset class="tabset-icon" justified="true" ng-if="unitLoaded">
         <tab>
           <tab-heading>
+            <i class="fa fa-check-square-o fa-2x"></i> Feedback
+          </tab-heading>
+          <tutor-marking-context></tutor-marking-context>
+        </tab>
+        <tab>
+          <tab-heading>
             <i class="fa fa-user fa-2x"></i> Students
           </tab-heading>
           <tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
+        </tab>
+        <tab>
+          <tab-heading>
+            <i class="fa fa-tasks fa-2x"></i> Tasks
+          </tab-heading>
+          <tutor-task-feedback-view class="col-sm-12" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
         </tab>
         <tab ng-if="unit.group_sets.length > 0">
           <tab-heading>
             <i class="fa fa-users fa-2x"></i> Groups
           </tab-heading>
           <tutor-group-tab></tutor-group-tab>
-        </tab>
-        <tab>
-          <tab-heading>
-            <i class="fa fa-check-square-o fa-2x"></i> Feedback
-          </tab-heading>
-          <tutor-marking-context></tutor-marking-context>
         </tab>
         <tab>
           <tab-heading>
