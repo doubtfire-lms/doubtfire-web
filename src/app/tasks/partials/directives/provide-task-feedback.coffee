@@ -10,6 +10,7 @@ angular.module('doubtfire.tasks.partials.provide-task-feedback',[])
     assessingUnitRole: "=assessingUnitRole"
     unitRole: "=unitRole"
     onStatusUpdate: "=onStatusUpdate"
+    viewOptions: "="
   controller: ($scope, taskService) ->
     
     $scope.triggerTransition = (status) ->

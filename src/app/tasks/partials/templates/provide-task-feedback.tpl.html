@@ -12,25 +12,28 @@
   </div>
   <div class="panel panel-default" ng-if="task">
     <div class="panel-heading" ng-show="task.definition.upload_requirements.length > 0">
+      <a class="pull-right" ng-click="viewOptions.showPdf = !viewOptions.showPdf"><i ng-show="viewOptions.showPdf" class="fa fa-2x fa-angle-double-down"></i><i ng-hide="viewOptions.showPdf" class="fa fa-2x fa-angle-double-up"></i></a>
       <h3 class="panel-title">
         Task Submission
       </h3>
     </div>
     
-    <div class="panel-body large-notice-block" ng-show="(!task.has_pdf) && task.definition.upload_requirements.length > 0">
+    <div class="panel-body large-notice-block" ng-show="viewOptions.showPdf && (!task.has_pdf) && task.definition.upload_requirements.length > 0 ">
         <i class="fa fa-file-pdf-o fa-2x"></i>
         <p>No submission PDF available.</p>
     </div>
-    <view-submission ng-show="task.has_pdf" project="task.project" task="task"></view-submission>
+    <view-submission ng-show="viewOptions.showPdf && task.has_pdf" project="task.project" task="task"></view-submission>
 
     <div class="panel-heading">
+      <a class="pull-right" ng-click="viewOptions.showComments = !viewOptions.showComments"><i ng-show="viewOptions.showComments" class="fa fa-2x fa-angle-double-down"></i><i ng-hide="viewOptions.showComments" class="fa fa-2x fa-angle-double-up"></i></a>
       <h3 class="panel-title">
         Task Comments
       </h3>
     </div>
-    <view-comments project="task.project" task="task"></view-comments>
+    <view-comments project="task.project" task="task" ng-show="viewOptions.showComments"></view-comments>
 
     <div class="panel-heading">
+      <a class="pull-right" ng-click="viewOptions.showClassify = !viewOptions.showClassify"><i ng-show="viewOptions.showClassify" class="fa fa-2x fa-angle-double-down"></i><i ng-hide="viewOptions.showClassify" class="fa fa-2x fa-angle-double-up"></i></a>
       <h3 class="panel-title">
         Update Task Status
       </h3>
@@ -40,7 +43,9 @@
         task="task"
         assessing-unit-role="assessingUnitRole"
         in-menu="false" 
-        trigger-transition="triggerTransition"></status-switcher>
+        trigger-transition="triggerTransition"
+        ng-show="viewOptions.showClassify"
+        ></status-switcher>
     </div>
   </div>
 </div>

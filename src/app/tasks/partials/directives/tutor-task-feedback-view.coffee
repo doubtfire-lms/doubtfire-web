@@ -21,6 +21,12 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.search = ""
 
+    $scope.viewOptions = {
+      showPdf: true
+      showComments: true
+      showClassify: true
+    }
+
     searchObj = (obj, value, searched) ->
       _.some(_.keys(obj), (key) ->
         if _.isObject(obj[key])
