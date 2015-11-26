@@ -1,14 +1,8 @@
-<img style="height: 150px; float: right;" src="http://puu.sh/lyClF/fde5bfbbe7.png" alt="Doubfire Logo"/>
+![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
 
-<div style="width: 70%; height: 150px; display: inline-block;">
-
-    <h1> Doubtfire Web </h1>
+# Doubtfire Web
             
-    A modern, lightweight learning management system.
-
-</div>
-
-
+A modern, lightweight learning management system.
 
 ## Getting Started
 
