@@ -68,9 +68,6 @@ angular.module("doubtfire.services.projects", [])
 
       currentTask
 
-    project.taskStatusFactor = (task_definition_id) ->
-      taskService.learningWeight[projectService.taskFromTaskDefId(project, task_definition_id).status]
-
     project.refresh = (unit_obj) ->
       Project.get { id: project.project_id }, (response) ->
         _.extend project, response

@@ -8,7 +8,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
       activeTab: 'list'
     }
 
-    $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit)
+    $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
 
     $scope.currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 

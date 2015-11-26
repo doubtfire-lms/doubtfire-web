@@ -7,7 +7,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
     project: '='
     unit: '='
     source: '='
-
+    taskStatusFactor: '='
   controller: ($scope, Visualisation, projectService, gradeService, taskService, outcomeService) ->
     xFn = (d) -> d.label
     yFn = (d) -> d.value
@@ -26,15 +26,15 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
 
     $scope.data = []
 
-    $scope.calculateAlignmentVisualisation = (source) ->
+    $scope.calculateAlignmentVisualisation = (source, taskStatusFactor) ->
       unit = $scope.unit
       _.extend $scope.data, outcomeService.targetsByGrade($scope.unit, source)
       
       if $scope.api?
         $scope.api.update()
 
-    $scope.calculateAlignmentVisualisation($scope.source)
+    $scope.calculateAlignmentVisualisation($scope.source, $scope.taskStatusFactor)
 
     $scope.$on('UpdateAlignmentChart', () ->
-      $scope.calculateAlignmentVisualisation($scope.source)
+      $scope.calculateAlignmentVisualisation($scope.source, $scope.taskStatusFactor)
     )

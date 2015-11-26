@@ -9,17 +9,16 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     project: "=project"
     showCsv: "=showCsv"
 
-  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService) ->
+  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->
         data.task_id = projectService.taskFromTaskDefId($scope.project, data.task_definition_id).id
-      $scope.taskStatusFactor = (task_definition_id) ->
-        taskService.learningWeight[projectService.taskFromTaskDefId($scope.project, task_definition_id).status]
+      $scope.taskStatusFactor = outcomeService.projectTaskStatusFactor($scope.project)
     else
       $scope.source = $scope.unit
       $scope.updateRequest = (data) ->
-      $scope.taskStatusFactor = (task_definition_id) -> 1
+      $scope.taskStatusFactor = outcomeService.unitTaskStatusFactor()
 
     $scope.selectOutcome = (outcome) ->
       $scope.selectedOutcome = outcome

@@ -25,6 +25,8 @@
   <div class="col-md-offset-2">
     <div ng-show="poaView.activeTab == 'list'">
       List unit learning outcomes here
+      {{currentProgress}}
+      {{targets}}
     </div>
     <div ng-show="poaView.activeTab == 'progress'" ng-if="medians">
       <div ng-repeat="ilo in unit.ilos">
