@@ -3,11 +3,15 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
   replace: true
   restrict: 'E'
   templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  scope:
+    project:  '=project'
+    unit:     '=unit'
+    ilo:      '=ilo'
+    targets:  '=targets'
+    currentProgress: '=currentProgress'
+    medians: '=medians'
 
   controller: ($scope, Visualisation) ->
-    xFn = (d) -> d.label
-    yFn = (d) -> d.value
-
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
       # based on the work of Clint Ivy, Jamie Love, and Jason Davies.
@@ -20,12 +24,13 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             availableHeight = height - (margin.top) - (margin.bottom)
             container = d3.select(this)
             nv.utils.initSVG container
-            rangez = ranges.call(this, d, i).slice().sort(d3.descending)
+            rangez = ranges.call(this, d, i).slice().reverse()
             markerz = markers.call(this, d, i).slice().sort(d3.descending)
             measurez = measures.call(this, d, i).slice().sort(d3.descending)
             rangeLabelz = rangeLabels.call(this, d, i).slice().reverse()
             markerLabelz = markerLabels.call(this, d, i).slice()
             measureLabelz = measureLabels.call(this, d, i).slice()
+            
             # Setup Scales
             # Compute the new x-scale.
             x1 = d3.scale.linear().domain(d3.extent(d3.merge([
@@ -43,19 +48,25 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               0
               Infinity
             ]).range(x1.range())
+
             # Stash the new scale.
             @__chart__ = x1
-            rangeMin = d3.min(rangez)
-            rangeMax = d3.max(rangez)
-            rangeAvg = rangez[1]
+
+            # Get the range values
+            rangeHD = rangez[0]
+            rangeD = rangez[1]
+            rangeC = rangez[2]
+            rangeP = rangez[3]
+
             # Setup containers and skeleton of chart
             wrap = container.selectAll('g.nv-wrap.nv-bullet').data([ d ])
             wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet')
             gEnter = wrapEnter.append('g')
             g = wrap.select('g')
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeMax'
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeAvg'
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeMin'
+            gEnter.append('rect').attr 'class', 'nv-range nv-rangeHD'
+            gEnter.append('rect').attr 'class', 'nv-range nv-rangeD'
+            gEnter.append('rect').attr 'class', 'nv-range nv-rangeC'
+            gEnter.append('rect').attr 'class', 'nv-range nv-rangeP'
             gEnter.append('rect').attr 'class', 'nv-measure'
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
 
@@ -71,9 +82,32 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             xp1 = (d) ->
               if d < 0 then x1(d) else x1(0)
 
-            g.select('rect.nv-rangeMax').attr('height', availableHeight).attr('width', w1(if rangeMax > 0 then rangeMax else rangeMin)).attr('x', xp1(if rangeMax > 0 then rangeMax else rangeMin)).datum if rangeMax > 0 then rangeMax else rangeMin
-            g.select('rect.nv-rangeAvg').attr('height', availableHeight).attr('width', w1(rangeAvg)).attr('x', xp1(rangeAvg)).datum rangeAvg
-            g.select('rect.nv-rangeMin').attr('height', availableHeight).attr('width', w1(rangeMax)).attr('x', xp1(rangeMax)).attr('width', w1(if rangeMax > 0 then rangeMin else rangeMax)).attr('x', xp1(if rangeMax > 0 then rangeMin else rangeMax)).datum if rangeMax > 0 then rangeMin else rangeMax
+            g.select('rect.nv-rangeHD')
+              .attr('height', availableHeight)
+              .attr('width', w1(if rangeHD > 0 then rangeHD else rangeP) )
+              .attr('x', xp1(if rangeHD > 0 then rangeHD else rangeP))
+              .datum if rangeHD > 0 then rangeHD else rangeHD
+            
+            g.select('rect.nv-rangeD')
+              .attr('height', availableHeight)
+              .attr('width', w1(rangeD))
+              .attr('x', xp1(rangeD))
+              .datum rangeD
+
+            g.select('rect.nv-rangeC')
+              .attr('height', availableHeight)
+              .attr('width', w1(rangeC))
+              .attr('x', xp1(rangeC))
+              .datum rangeC
+            
+            g.select('rect.nv-rangeP')
+              .attr('height', availableHeight)
+              .attr('width', w1(rangeHD))
+              .attr('x', xp1(rangeHD))
+              .attr('width', w1(if rangeHD > 0 then rangeP else rangeHD))
+              .attr('x', xp1(if rangeHD > 0 then rangeP else rangeHD))
+              .datum if rangeHD > 0 then rangeP else rangeHD
+            
             g.select('rect.nv-measure').style('fill', color).attr('height', availableHeight / 3).attr('y', availableHeight / 3).attr('width', if measurez < 0 then x1(0) - x1(measurez[0]) else x1(measurez[0]) - x1(0)).attr('x', xp1(measurez)).on('mouseover', ->
               dispatch.elementMouseover
                 value: measurez[0]
@@ -121,25 +155,28 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
                 label: d.label or 'Previous'
                 color: d3.select(this).style('fill')
               return
-            g.selectAll('path.nv-markerTriangle').data(markerData).attr 'transform', (d) ->
-              'translate(' + x1(d.value) + ',' + availableHeight / 2 + ')'
+
+            g.selectAll('path.nv-markerTriangle')
+              .data(markerData).attr 'transform', (d) ->
+                'translate(' + x1(d.value) + ',' + availableHeight / 2 + ')'
+            
             wrap.selectAll('.nv-range').on('mouseover', (d, i) ->
               label = rangeLabelz[i] or (if !i then 'Maximum' else if i == 1 then 'Mean' else 'Minimum')
               dispatch.elementMouseover
-                value: d
+                # value: d
                 label: label
                 color: d3.select(this).style('fill')
               return
             ).on('mousemove', ->
               dispatch.elementMousemove
-                value: measurez[0]
+                # value: measurez[0]
                 label: measureLabelz[0] or 'Previous'
                 color: d3.select(this).style('fill')
               return
             ).on 'mouseout', (d, i) ->
               label = rangeLabelz[i] or (if !i then 'Maximum' else if i == 1 then 'Mean' else 'Minimum')
               dispatch.elementMouseout
-                value: d
+                # value: d
                 label: label
                 color: d3.select(this).style('fill')
               return
@@ -274,19 +311,18 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         orient = 'left' # TODO top & bottom
         reverse = false
         margin = { top: 5, right: 40, bottom: 20, left: 120 }
+
         ranges = (d) -> d.ranges
-
         rangeLabels = (d) -> d.rangeLabels
-        
         markers = (d) -> if d.markers then d.markers else []
-
         measures = (d) -> d.measures
+
         width = null
         height = 55
         tickFormat = null
         ticks = null
         noData = null
-        dispatch = d3.dispatch()
+        dispatch = d3.dispatch
         
         tooltip
           .duration(0)
@@ -362,47 +398,47 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             bulletWrap = g.select('.nv-bulletWrap')
             d3.transition(bulletWrap).call(bullet)
 
-            # Compute the tick format.
-            format = tickFormat || x1.tickFormat( availableWidth / 100 )
+            # # Compute the tick format.
+            # format = tickFormat || x1.tickFormat( availableWidth / 100 )
 
-            # Update the tick groups.
-            tick = g.selectAll('g.nv-tick')
-              .data x1.ticks( if ticks then ticks else (availableWidth / 50) ), (d) ->
-                this.textContent || format(d)
+            # # Update the tick groups.
+            # tick = g.selectAll('g.nv-tick')
+            #   .data x1.ticks( if ticks then ticks else (availableWidth / 50) ), (d) ->
+            #     this.textContent || format(d)
 
-            # Initialize the ticks with the old scale, x0.
-            tickEnter = tick.enter().append('g')
-              .attr('class', 'nv-tick')
-              .attr('transform', (d) -> 'translate(' + x0(d) + ',0)' )
-              .style('opacity', 1e-6)
+            # # Initialize the ticks with the old scale, x0.
+            # tickEnter = tick.enter().append('g')
+            #   .attr('class', 'nv-tick')
+            #   .attr('transform', (d) -> 'translate(' + x0(d) + ',0)' )
+            #   .style('opacity', 1e-6)
 
-            tickEnter.append('line')
-              .attr('y1', availableHeight)
-              .attr('y2', availableHeight * 7 / 6)
+            # tickEnter.append('line')
+            #   .attr('y1', availableHeight)
+            #   .attr('y2', availableHeight * 7 / 6)
 
-            tickEnter.append('text')
-              .attr('text-anchor', 'middle')
-              .attr('dy', '1em')
-              .attr('y', availableHeight * 7 / 6)
-              .text(format)
+            # tickEnter.append('text')
+            #   .attr('text-anchor', 'middle')
+            #   .attr('dy', '1em')
+            #   .attr('y', availableHeight * 7 / 6)
+            #   .text(format)
 
-            # Transition the updating ticks to the new scale, x1.
-            tickUpdate = d3.transition(tick)
-              .attr('transform', (d) -> 'translate(' + x1(d) + ',0)')
-              .style('opacity', 1)
+            # # Transition the updating ticks to the new scale, x1.
+            # tickUpdate = d3.transition(tick)
+            #   .attr('transform', (d) -> 'translate(' + x1(d) + ',0)')
+            #   .style('opacity', 1)
 
-            tickUpdate.select('line')
-              .attr('y1', availableHeight)
-              .attr('y2', availableHeight * 7 / 6)
+            # tickUpdate.select('line')
+            #   .attr('y1', availableHeight)
+            #   .attr('y2', availableHeight * 7 / 6)
 
-            tickUpdate.select('text')
-              .attr('y', availableHeight * 7 / 6)
+            # tickUpdate.select('text')
+            #   .attr('y', availableHeight * 7 / 6)
 
-            #Transition the exiting ticks to the new scale, x1.
-            d3.transition(tick.exit())
-              .attr('transform', (d) -> 'translate(' + x1(d) + ',0)' )
-              .style('opacity', 1e-6 )
-              .remove( )
+            # #Transition the exiting ticks to the new scale, x1.
+            # d3.transition(tick.exit())
+            #   .attr('transform', (d) -> 'translate(' + x1(d) + ',0)' )
+            #   .style('opacity', 1e-6 )
+            #   .remove( )
           # end selection each
 
           d3.timer.flush()
@@ -415,7 +451,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         bullet.dispatch.on 'elementMouseover.tooltip', (evt) ->
           evt['series'] = {
             key: evt.label
-            value: evt.value
+            # value: evt.value
             color: evt.color
           }
           tooltip.data(evt).hidden(false)
@@ -467,20 +503,27 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         chart
 
     [$scope.options, $scope.config] = Visualisation 'iloChart', {
-      clipEdge: yes
-      height: 100
-      width: 675
+      height: 60
+      width: 600
       duration: 500
-      showYAxis: no
     }, {}
 
+    targetP = $scope.targets[$scope.ilo.id][0]
+    targetC = targetP + $scope.targets[$scope.ilo.id][1]
+    targetD = targetC + $scope.targets[$scope.ilo.id][2]
+    targetHD = targetD + $scope.targets[$scope.ilo.id][3]
+
+    progress = $scope.currentProgress[$scope.ilo.id]
+
+    classMedian = if $scope.medians? && $scope.medians[$scope.ilo.id]? then $scope.medians[$scope.ilo.id] else 0
+
     $scope.data = {
-      "title":"Revenue",    #Label the bullet chart
-      "subtitle":"US$, in thousands",   #sub-label for bullet chart
-      "ranges":[150,225,300,450],  #Minimum, mean and maximum values.
+      "title": $scope.ilo.abbreviation,    #Label the bullet chart
+      "subtitle": $scope.ilo.name,   #sub-label for bullet chart
+      "ranges":[targetP,targetC,targetD,targetHD],  #Minimum, mean and maximum values.
       "rangeLabels":['Pass','Credit','Distinction','High Distinction'],  #Minimum, mean and maximum values.
-      "measures":[220],    #Value representing current measurement (the thick blue line in the example)
+      "measures":[classMedian],    #Value representing current measurement (the thick blue line in the example)
       "measureLabels": ['Class Average']
-      "markers":[250]      #Place a marker on the chart (the white triangle marker)
-      "markerLabels": ['Your Grade']
+      "markers":[progress]      #Place a marker on the chart (the white triangle marker)
+      "markerLabels": ['Your Progress']
     }

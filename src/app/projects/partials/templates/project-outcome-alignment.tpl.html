@@ -1,6 +1,13 @@
 <div>
   <tabset class="task-feedback-tab-selector pull-left col-md-2" vertical="true" type="pills">
-    <tab ng-click="poaView.activeTab = 'progress'">
+    <tab ng-click="poaView.activeTab = 'list'">
+      <tab-heading tooltip="View learning outcomes" tooltip-placement="right" tooltip-popup-delay="200">
+        <div class="text-center">
+          <i class="fa fa-2x fa-list" style="margin-right: 1ex"></i>
+        </div>
+      </tab-heading>
+    </tab>
+    <tab ng-click="selectProgress()">
       <tab-heading tooltip="View learning progress" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x fa-bar-chart" style="margin-right: 1ex"></i>
@@ -15,5 +22,15 @@
       </tab-heading>
     </tab>
   </tabset><!--/tab-selector-->
-  <unit-outcome-alignment show-csv="false" unit="unit" project="project" ng-show="poaView.activeTab == 'reflect'"></unit-outcome-alignment>
+  <div class="col-md-offset-2">
+    <div ng-show="poaView.activeTab == 'list'">
+      List unit learning outcomes here
+    </div>
+    <div ng-show="poaView.activeTab == 'progress'" ng-if="medians">
+      <div ng-repeat="ilo in unit.ilos">
+        <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
+      </div>
+    </div>
+    <unit-outcome-alignment show-csv="false" unit="unit" project="project" ng-show="poaView.activeTab == 'reflect'"></unit-outcome-alignment>
+  </div>
 </div>

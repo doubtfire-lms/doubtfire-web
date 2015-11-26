@@ -75,6 +75,8 @@ angular.module("doubtfire.services.units", [])
       unit.extendStudent(student)
       unit.students.push(student)
 
+    unit.taskStatusFactor  = (task_definition_id) -> 1
+
     unit.extendStudent = (student) ->
       # test is already extended...
       if student.name?

@@ -7,4 +7,5 @@ angular.module("doubtfire.services", [
   'doubtfire.services.tasks'
   'doubtfire.services.units'
   'doubtfire.services.group-service'
+  'doubtfire.services.outcome-service'
 ])
