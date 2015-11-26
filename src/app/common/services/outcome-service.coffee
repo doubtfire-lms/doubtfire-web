@@ -31,12 +31,16 @@ angular.module("doubtfire.services.outcome-service", [])
       outcomes
 
     calculateProgress: (unit, project) ->
-      outcomes = outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
+      outcome_set = []
 
-      _.each outcomes, (outcome, key) ->
-        outcomes[key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
+      outcome_set.push outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
+      outcome_set.push outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
 
-      outcomes
+      _.each outcome_set, (outcomes, key) ->
+        _.each outcomes, (outcome, key) ->
+          outcomes[key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
+
+      outcome_set
 
 
     targetsByGrade: (unit, source) ->

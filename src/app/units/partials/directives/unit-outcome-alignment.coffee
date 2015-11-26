@@ -9,7 +9,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     project: "=project"
     showCsv: "=showCsv"
 
-  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
+  controller: ($scope, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->
@@ -83,7 +83,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.create data,
         (response) ->
           $scope.source.task_outcome_alignments.push(response)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -135,7 +135,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment saved", 2000)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -147,7 +147,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update(data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment rating saved", 2000)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -160,7 +160,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.delete(data,
         (response) ->
           $scope.source.task_outcome_alignments = _.without $scope.source.task_outcome_alignments, align
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -176,7 +176,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
       csvResultService.show 'Task CSV upload results.', response
-      $scope.$broadcast('UpdateAlignmentChart')
+      $rootScope.$broadcast('UpdateAlignmentChart')
       if $scope.project?
         $scope.project.refresh($scope.unit)
       else
