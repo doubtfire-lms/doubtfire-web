@@ -43,7 +43,7 @@
     <portfolio-other ng-if="activePortfolioTab == portfolioTabsData.otherFilesStep"></portfolio-other>
     <portfolio-compile ng-if="activePortfolioTab == portfolioTabsData.compileStep"></portfolio-compile>
     <portfolio-review ng-if="activePortfolioTab == portfolioTabsData.reviewStep"></portfolio-review>
-    <div ng-if="project.portfolio_files.length > 0 && activePortfolioTab < reviewStep">
+    <div ng-if="project.portfolio_files.length > 0 && activePortfolioTab.seq < portfolioTabsData.reviewStep.seq">
       <portfolio-files></portfolio-files>
     </div>
   </div><!--/tabs-->
