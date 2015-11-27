@@ -30,7 +30,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             rangeLabelz = rangeLabels.call(this, d, i).slice().reverse()
             markerLabelz = markerLabels.call(this, d, i).slice()
             measureLabelz = measureLabels.call(this, d, i).slice()
-            
+
             # Setup Scales
             # Compute the new x-scale.
             x1 = d3.scale.linear().domain(d3.extent(d3.merge([
@@ -87,7 +87,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               .attr('width', w1(rangeHD - rangeD) )
               .attr('x', xp1(rangeD))
               .datum rangeHD
-            
+
             g.select('rect.nv-rangeD')
               .attr('height', availableHeight)
               .attr('width', w1(rangeD - rangeC))
@@ -99,13 +99,13 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               .attr('width', w1(rangeC - rangeP))
               .attr('x', xp1(rangeP))
               .datum rangeC
-            
+
             g.select('rect.nv-rangeP')
               .attr('height', availableHeight)
               .attr('width', w1(rangeP))
               .attr('x', xp1(0))
               .datum rangeP
-            
+
             g.select('rect.nv-measure')
               .style('fill', "#373737")
               .style('fill-opacity',0.6)
@@ -176,7 +176,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             g.selectAll('path.nv-markerTriangle')
               .data(markerData).attr 'transform', (d) ->
                 'translate(' + x1(d.value) + ',' + availableHeight / 2 + ')'
-            
+
             wrap.selectAll('.nv-range').on('mouseover', (d, i) ->
               label = rangeLabelz[i] or (if !i then 'Maximum' else if i == 1 then 'Mean' else 'Minimum')
               dispatch.elementMouseover
@@ -340,7 +340,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         ticks = null
         noData = null
         dispatch = d3.dispatch
-        
+
         tooltip
           .duration(0)
           .headerEnabled(false)
@@ -398,7 +398,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             title = gEnter.select('.nv-titles').append('g')
               .attr('text-anchor', 'end')
               .attr('transform', 'translate(-6,' + (height - margin.top - margin.bottom) / 2 + ')')
-            
+
             title.append('text')
               .attr('class', 'nv-title')
               .text((d) -> d.title )
@@ -521,7 +521,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'iloChart', {
       height: 60
-      width: 600
+      width: 400
       duration: 500
     }, {}
 

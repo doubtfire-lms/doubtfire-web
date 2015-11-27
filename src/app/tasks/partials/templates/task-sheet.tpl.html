@@ -2,13 +2,13 @@
   <div class="panel-body task-description">
     <div class="markdown-to-pdf" ng-bind-html="project.selectedTask.definition.description | markdown"></div>
   </div><!--task-description-panel-body-->
-  <div class="panel-heading task-view-alignment-panel" ng-hide="showTaskSheet" ng-show="alignments">
+  <div class="panel-heading task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
     <h3 class="panel-title">
       Task Outcome Alignments
     </h3>
-    Teaching staff believe that completing this task will help you the outcomes listed below {{alignments}}
+    Teaching staff believe that completing this task will help you the outcomes listed below
   </div><!--view-alignment-panel-header-->
-  <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-show="alignments">
+  <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
     <view-alignment></view-alignment>
   </div><!--view-alignment-panel-body-->
   <div class="panel-heading row-fluid task-download" ng-show="hasPDF() || hasResources()">
