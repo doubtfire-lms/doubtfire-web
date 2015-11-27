@@ -166,6 +166,14 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
             alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 
+    $scope.toggleEditRationale = (align) ->
+      if align.editingRationale
+        data = align
+        data.editingRationale = undefined
+        $scope.saveTaskAlignment(data, align.id)
+      else
+        align.editingRationale = !align.editingRationale
+
     $scope.csvImportResponse = {}
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
     $scope.taskAlignmentCSVUploadUrl = () ->

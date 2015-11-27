@@ -1,0 +1,33 @@
+table.table-unit-outcome-alignment {
+  th.selectBy {
+    width: auto;
+  }
+  th.rating {
+    width: 40%;
+  }
+  th.rationale {
+    width: 40%;
+  }
+  .not-editing-rationale {
+    cursor: pointer;
+  }
+  .rationale-actions {
+    font-size: 1.4em;
+    i {
+      color: @gray-light;
+    }
+    i + i {
+      display: block;
+      margin-top: 1em;
+    }
+    i:hover {
+      cursor: pointer;
+    }
+    i.edit:hover, i.edit.active {
+      color: @brand-primary;
+    }
+    i.delete:hover {
+      color: @brand-danger;
+    }
+  }
+}
