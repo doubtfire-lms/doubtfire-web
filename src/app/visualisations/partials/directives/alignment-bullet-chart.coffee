@@ -63,10 +63,10 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet')
             gEnter = wrapEnter.append('g')
             g = wrap.select('g')
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeHD'
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeD'
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeC'
-            gEnter.append('rect').attr 'class', 'nv-range nv-rangeP'
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#d62728')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2ca02c')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#ff7f0e')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeP').style('fill-opacity', '0.6').style('fill','#1f77b4')
             gEnter.append('rect').attr 'class', 'nv-measure'
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
 
@@ -77,55 +77,61 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               Math.abs x1(d) - x1(0)
 
             xp0 = (d) ->
-              if d < 0 then x0(d) else x0(0)
+              if d > 0 then x0(d) else x0(0)
 
             xp1 = (d) ->
-              if d < 0 then x1(d) else x1(0)
+              if d > 0 then x1(d) else x1(0)
 
             g.select('rect.nv-rangeHD')
               .attr('height', availableHeight)
-              .attr('width', w1(if rangeHD > 0 then rangeHD else rangeP) )
-              .attr('x', xp1(if rangeHD > 0 then rangeHD else rangeP))
-              .datum if rangeHD > 0 then rangeHD else rangeHD
+              .attr('width', w1(rangeHD - rangeD) )
+              .attr('x', xp1(rangeD))
+              .datum rangeHD
             
             g.select('rect.nv-rangeD')
               .attr('height', availableHeight)
-              .attr('width', w1(rangeD))
-              .attr('x', xp1(rangeD))
+              .attr('width', w1(rangeD - rangeC))
+              .attr('x', xp1(rangeC))
               .datum rangeD
 
             g.select('rect.nv-rangeC')
               .attr('height', availableHeight)
-              .attr('width', w1(rangeC))
-              .attr('x', xp1(rangeC))
+              .attr('width', w1(rangeC - rangeP))
+              .attr('x', xp1(rangeP))
               .datum rangeC
             
             g.select('rect.nv-rangeP')
               .attr('height', availableHeight)
-              .attr('width', w1(rangeHD))
-              .attr('x', xp1(rangeHD))
-              .attr('width', w1(if rangeHD > 0 then rangeP else rangeHD))
-              .attr('x', xp1(if rangeHD > 0 then rangeP else rangeHD))
-              .datum if rangeHD > 0 then rangeP else rangeHD
+              .attr('width', w1(rangeP))
+              .attr('x', xp1(0))
+              .datum rangeP
             
-            g.select('rect.nv-measure').style('fill', color).attr('height', availableHeight / 3).attr('y', availableHeight / 3).attr('width', if measurez < 0 then x1(0) - x1(measurez[0]) else x1(measurez[0]) - x1(0)).attr('x', xp1(measurez)).on('mouseover', ->
-              dispatch.elementMouseover
-                value: measurez[0]
-                label: measureLabelz[0] or 'Current'
-                color: d3.select(this).style('fill')
-              return
-            ).on('mousemove', ->
-              dispatch.elementMousemove
-                value: measurez[0]
-                label: measureLabelz[0] or 'Current'
-                color: d3.select(this).style('fill')
-              return
-            ).on 'mouseout', ->
-              dispatch.elementMouseout
-                value: measurez[0]
-                label: measureLabelz[0] or 'Current'
-                color: d3.select(this).style('fill')
-              return
+            g.select('rect.nv-measure')
+              .style('fill', "#373737")
+              .style('fill-opacity',0.6)
+              .attr('height', availableHeight / 3)
+              .attr('y', availableHeight / 3)
+              .attr('width', w1(measurez[0]))
+              .attr('x', xp1(0))
+              .on('mouseover', ->
+                dispatch.elementMouseover
+                  value: measurez[0]
+                  label: measureLabelz[0] or 'Current'
+                  color: d3.select(this).style('fill')
+                return)
+              .on('mousemove', ->
+                dispatch.elementMousemove
+                  value: measurez[0]
+                  label: measureLabelz[0] or 'Current'
+                  color: d3.select(this).style('fill')
+                return)
+              .on 'mouseout', ->
+                dispatch.elementMouseout
+                  value: measurez[0]
+                  label: measureLabelz[0] or 'Current'
+                  color: d3.select(this).style('fill')
+                return
+
             h3 = availableHeight / 6
             markerData = markerz.map((marker, index) ->
               {
