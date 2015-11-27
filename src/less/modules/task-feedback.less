@@ -88,3 +88,91 @@ submit-task-form {
     }
   }
 }
+
+.task-feedback .task-feedback-tab-panel .task-sheet {
+  .panel-body.task-description, .panel-body.task-view-alignment-panel {
+    height: auto;
+  }
+
+  .panel-body.ng-hide {
+    transition: all ease-out 0.2s;
+  }
+
+  .panel-body.task-description {
+    font-size: 1.25em;
+    font-weight: lighter;
+    margin: 1em auto;
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .panel-heading {
+    color: #ffffff;
+    background-color: #428bca;
+    border-color: #428bca;
+  }
+
+  .panel-body.task-buttons-download-area {
+    display: flex;
+    display: -webkit-flex;
+    background: #428bca;
+    height: @task-feedback-tab-content-height / 4;
+    min-height: 130px;
+    padding: 0;
+    -webkit-transition: all 0.3s ease-in;
+            transition: all 0.3s ease-in;
+    .btn {
+      flex: 1;
+      -webkit-flex: 1;
+      display: flex;
+      display: -webkit-flex;
+      -webkit-justify-content: center;
+              justify-content: center;
+      -webkit-align-items: center;
+              align-items: center;
+      height: calc(~'100% - 1px');
+      text-align: center;
+      border-radius: 0;
+      &:first-child {
+        border-bottom-left-radius: 3px;
+      }
+      &:last-child {
+        border-bottom-right-radius: 3px;
+      }
+      i {
+        margin-bottom: 0.5ex;
+      }
+      i + i {
+        margin-left: 1ex;
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .panel-body.task-buttons-download-area.small {
+    height: @task-feedback-tab-content-height / 6;
+    min-height: 50px;
+    .btn:first-child {
+      flex: 2;
+      -webkit-flex: 2;
+    }
+    .btn {
+      font-size: 1.4em;
+      i {
+        margin-bottom: 0;
+        margin-right: 1ex;
+      }
+      i + i {
+        margin-left: 0;
+      }
+      p {
+        display: inline-block;
+        vertical-align: top;
+        padding-top: 0.5em;
+      }
+    }
+  }
+}

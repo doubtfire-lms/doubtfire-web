@@ -1,11 +1,22 @@
 pdf-panel-viewer {
   .panel-body {
     padding: 0;
+    position: relative;;
     overflow: inherit !important;
+    background-color: #d1d1d1;
+  }
+  .iframe-wrapper {
+    position: absolute;
+    top: 1px;
+    bottom: -1px;
+    left: 1px;
+    right: 0;
   }
   iframe {
-    width: 100%;
+    position: absolute;
+    display: block;
     height: 100%;
+    width: 100%;
     border: none;
   }
   .panel-footer {

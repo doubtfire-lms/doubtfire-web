@@ -3,7 +3,7 @@
   <ul>
     <li ng-repeat="align in unit.task_outcome_alignments | taskFilter: project.selectedTask.task_definition_id"><h5>{{unit.outcome(align.learning_outcome_id).name}}</h5><rating class="group-member-contribution-rating" ng-model="align.rating" max="5" readonly="true"></rating><br>{{align.description}}</li>
   </ul>
-  
+
   <div ng-repeat="ilo in unit.ilos">
     <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
   </div>
