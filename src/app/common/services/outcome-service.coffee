@@ -9,6 +9,17 @@ angular.module("doubtfire.services.outcome-service", [])
       (task_definition_id) ->
         taskService.learningWeight[projectService.taskFromTaskDefId(project, task_definition_id).status]
 
+    individualTaskStatusFactor: (project, task) ->
+      (task_definition_id) ->
+        if task.definition.id == task_definition_id
+          taskService.learningWeight[projectService.taskFromTaskDefId(project, task_definition_id).status]
+        else
+          0
+
+    individualTaskPotentialFactor: (project, task) ->
+      (task_definition_id) ->
+        if task.definition.id == task_definition_id then 1 else 0
+
     calculateTargets: (unit, source, taskStatusFactor) ->
       outcomes = {}
       _.each unit.ilos, (outcome) ->
@@ -30,15 +41,37 @@ angular.module("doubtfire.services.outcome-service", [])
 
       outcomes
 
+    calculateTaskContribution: (unit, project, task) ->
+      outcome_set = []
+      outcome_set[0] = outcomeService.calculateTargets(unit, unit, outcomeService.individualTaskStatusFactor(project, task))
+
+      _.each outcome_set[0], (outcome, key) ->
+        outcome_set[0][key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
+
+      outcome_set[0].title = 'Current Task Contribution'
+      outcome_set
+
+    calculateTaskPotentialContribution: (unit, project, task) ->
+      outcomes = outcomeService.calculateTargets(unit, unit, outcomeService.individualTaskPotentialFactor(project, task))
+
+      _.each outcomes, (outcome, key) ->
+        outcomes[key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
+
+      outcomes['title'] = 'Potential Task Contribution'
+      outcomes
+
     calculateProgress: (unit, project) ->
       outcome_set = []
 
-      outcome_set.push outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
-      outcome_set.push outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
+      outcome_set[0] = outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
+      outcome_set[1] = outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
 
       _.each outcome_set, (outcomes, key) ->
         _.each outcomes, (outcome, key) ->
           outcomes[key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
+
+      outcome_set[0].title = "Your Progress - Staff Suggestion"
+      outcome_set[1].title = "Your Progress - Your Reflection"
 
       outcome_set
 

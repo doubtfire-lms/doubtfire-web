@@ -539,16 +539,21 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
       "rangeLabels":['Pass','Credit','Distinction','High Distinction'],  #Minimum, mean and maximum values.
       "measures":[classMedian],    #Value representing current measurement (the thick blue line in the example)
       "measureLabels": ['Class Average']
-      "markers":[0, 0]      #Place a marker on the chart (the white triangle marker)
+      "markers":[]      #Place a marker on the chart (the white triangle marker)
       "markerLabels": ['Your Progress - Staff Suggestion', 'Your Progress - Self Reflection']
     }
 
-    updateProgress = () ->
-      progressStaff = $scope.currentProgress[0][$scope.ilo.id]
-      progressSelf = $scope.currentProgress[1][$scope.ilo.id]
+    if $scope.medians? && $scope.medians.title?
+      $scope.data.measureLabels[0] = $scope.medians.title
 
-      $scope.data.markers[0] = progressStaff
-      $scope.data.markers[1] = progressSelf
+    updateProgress = () ->
+      if $scope.currentProgress?
+        _.each $scope.currentProgress, (d, i) ->
+          $scope.data.markers[i] = $scope.currentProgress[i][$scope.ilo.id]
+          if $scope.currentProgress[i].title?
+            $scope.data.markerLabels[i] = $scope.currentProgress[i].title
+
+      $scope.data.measures[0] = if $scope.medians? && $scope.medians[$scope.ilo.id]? then $scope.medians[$scope.ilo.id] else 0
 
     updateProgress()
 
