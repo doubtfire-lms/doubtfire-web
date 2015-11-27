@@ -96,7 +96,8 @@
               <td class="clearfix">
                 <div class="col-sm-10 pull-left">
                   <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
-                    {{(align.description || 'No rational provided') | truncatedMarkdown}}
+                    {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
+                    <a ng-hide="align.description">Click to add one.</a>
                   </div>
                   <div ng-if="align.editingRationale" class="clearfix">
                     <markdown-editor
