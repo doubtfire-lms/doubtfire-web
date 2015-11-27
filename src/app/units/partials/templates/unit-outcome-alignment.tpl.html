@@ -91,7 +91,7 @@
                 </strong> - {{unit.taskDef(align.task_definition_id).name}}
               </td>
               <td>
-                <rating ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
+                <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
               </td>
               <td>
                 <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>

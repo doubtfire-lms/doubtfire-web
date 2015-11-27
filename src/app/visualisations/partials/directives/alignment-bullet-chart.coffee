@@ -133,28 +133,39 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
                 label: markerLabelz[index]
               }
             )
-            gEnter.selectAll('path.nv-markerTriangle').data(markerData).enter().append('path').attr('class', 'nv-markerTriangle').attr('d', 'M0,' + h3 + 'L' + h3 + ',' + -h3 + ' ' + -h3 + ',' + -h3 + 'Z').on('mouseover', (d) ->
-              dispatch.elementMouseover
-                value: d.value
-                label: d.label or 'Previous'
-                color: d3.select(this).style('fill')
-                pos: [
-                  x1(d.value)
-                  availableHeight / 2
-                ]
-              return
-            ).on('mousemove', (d) ->
-              dispatch.elementMousemove
-                value: d.value
-                label: d.label or 'Previous'
-                color: d3.select(this).style('fill')
-              return
-            ).on 'mouseout', (d, i) ->
-              dispatch.elementMouseout
-                value: d.value
-                label: d.label or 'Previous'
-                color: d3.select(this).style('fill')
-              return
+            gEnter.selectAll('path.nv-markerTriangle')
+              .data(markerData)
+              .enter()
+              .append('path')
+              .attr('class', 'nv-markerTriangle')
+              .attr('d', (d,i) ->
+                if i % 2 == 0
+                  'M0,' + h3 + 'L' + h3 + ',' + -h3 + ' ' + -h3 + ',' + -h3 + 'Z'
+                else
+                  'M0,' + -h3 + 'L' + -h3 + ',0L0,' + h3 + 'L' + h3 + ',0Z'
+                )
+              .on('mouseover', (d) ->
+                dispatch.elementMouseover(
+                  value: d.value
+                  label: d.label or 'Previous'
+                  color: d3.select(this).style('fill')
+                  pos: [
+                    x1(d.value)
+                    availableHeight / 2
+                  ])
+                return )
+              .on('mousemove', (d) ->
+                dispatch.elementMousemove(
+                  value: d.value
+                  label: d.label or 'Previous'
+                  color: d3.select(this).style('fill') )
+                return )
+              .on 'mouseout', (d, i) ->
+                dispatch.elementMouseout(
+                  value: d.value
+                  label: d.label or 'Previous'
+                  color: d3.select(this).style('fill'))
+                return
 
             g.selectAll('path.nv-markerTriangle')
               .data(markerData).attr 'transform', (d) ->
@@ -163,20 +174,20 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrap.selectAll('.nv-range').on('mouseover', (d, i) ->
               label = rangeLabelz[i] or (if !i then 'Maximum' else if i == 1 then 'Mean' else 'Minimum')
               dispatch.elementMouseover
-                # value: d
+                value: d
                 label: label
                 color: d3.select(this).style('fill')
               return
             ).on('mousemove', ->
               dispatch.elementMousemove
-                # value: measurez[0]
+                value: measurez[0]
                 label: measureLabelz[0] or 'Previous'
                 color: d3.select(this).style('fill')
               return
             ).on 'mouseout', (d, i) ->
               label = rangeLabelz[i] or (if !i then 'Maximum' else if i == 1 then 'Mean' else 'Minimum')
               dispatch.elementMouseout
-                # value: d
+                value: d
                 label: label
                 color: d3.select(this).style('fill')
               return
