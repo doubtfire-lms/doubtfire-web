@@ -22,7 +22,7 @@
       </tab-heading>
     </tab>
   </tabset><!--/tab-selector-->
-  <div class="col-md-offset-2">
+  <div class="col-md-10">
     <div ng-show="poaView.activeTab == 'list'">
       List unit learning outcomes here
       {{currentProgress}}
@@ -32,6 +32,8 @@
         <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
       </div>
     </div>
-    <unit-outcome-alignment show-csv="false" unit="unit" project="project" ng-show="poaView.activeTab == 'reflect'"></unit-outcome-alignment>
+    <div>
+      <unit-outcome-alignment show-csv="false" unit="unit" project="project" ng-show="poaView.activeTab == 'reflect'"></unit-outcome-alignment>
+    </div>
   </div>
 </div>
