@@ -95,7 +95,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           learning_outcome_id: $scope.selectedOutcome.id
           task_definition_id: taskDef.id
           rating: 3
-          description: 'Provide rationale.'
+          description: null
         }
         addLink(data)
 
@@ -106,7 +106,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           learning_outcome_id: outcome.id
           task_definition_id: $scope.selectedTask.id
           rating: 3
-          description: 'Provide rationale.'
+          description: null
         }
         addLink(data)
 

@@ -98,16 +98,17 @@
                   <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
                     {{(align.description || 'No rational provided') | truncatedMarkdown}}
                   </div>
-                  <div ng-show="align.editingRationale" class="clearfix">
+                  <div ng-if="align.editingRationale" class="clearfix">
                     <markdown-editor
                       height="200"
                       ng-model="align.description"
-                      placeholder="Edit rationale...">
+                      placeholder="Edit rationale..."
+                      autofocus="true">
                     </markdown-editor>
                     <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
                   </div>
                 </div>
-                <div class="col-sm-1 pull-right rationale-actions">
+                <div class="col-sm-1 pull-right rationale-actions" ng-hide="align.editingRationale">
                   <i tooltip="Edit rationale" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" ng-class="{active: editingRationale}" class="fa fa-pencil edit" ng-click="toggleEditRationale(align)"></i>
                   <i tooltip="Remove alignment" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" class="fa fa-trash delete" ng-click="removeTaskAlignment(align)"></i>
                 </div>
