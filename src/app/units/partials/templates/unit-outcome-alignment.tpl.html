@@ -68,13 +68,9 @@
                 <div>{{inverseSelectAlignmentBy}}</div>
                 <small class="text-muted">{{inverseSelectAlignmentBy}} related to {{selectedAlignmentByItem.abbreviation}}</small>
               </th>
-              <th class="rating">
-                <div>Rating</div>
-                <small class="text-muted">Rating how well you feel this task related to {{selectedAlignmentByItem.abbreviation}}</small>
-              </th>
-              <th class="rationale">
-                <div>Rationale</div>
-                <small class="text-muted">Justify this rating with a brief rationale</small>
+              <th class="rating-rationale">
+                <div>Rating and Rationale</div>
+                <small class="text-muted">Rating how well you feel this task related to {{selectedAlignmentByItem.abbreviation}} and justify with a brief rationale</small>
               </th>
             </tr>
           </thead>
@@ -90,28 +86,30 @@
                   {{unit.taskDef(align.task_definition_id).abbreviation}}
                 </strong> - {{unit.taskDef(align.task_definition_id).name}}
               </td>
-              <td>
-                <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
-              </td>
-              <td class="clearfix">
-                <div class="col-sm-10 pull-left">
-                  <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
-                    {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
-                    <a ng-hide="align.description">Click to add one.</a>
-                  </div>
-                  <div ng-if="align.editingRationale" class="clearfix">
-                    <markdown-editor
-                      height="200"
-                      ng-model="align.description"
-                      placeholder="Edit rationale..."
-                      autofocus="true">
-                    </markdown-editor>
-                    <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
-                  </div>
+              <td class="clearfix rating-rationale">
+                <div class="col-sm-12 rating">
+                  <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
                 </div>
-                <div class="col-sm-1 pull-right rationale-actions" ng-hide="align.editingRationale">
-                  <i tooltip="Edit rationale" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" ng-class="{active: editingRationale}" class="fa fa-pencil edit" ng-click="toggleEditRationale(align)"></i>
-                  <i tooltip="Remove alignment" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" class="fa fa-trash delete" ng-click="removeTaskAlignment(align)"></i>
+                <div class="col-sm-12 rationale">
+                  <div class="pull-left col-sm-{{align.editingRationale ? '12' : '10'}}">
+                    <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
+                      {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
+                      <a ng-hide="align.description">Click to add one.</a>
+                    </div>
+                    <div ng-if="align.editingRationale" class="clearfix">
+                      <markdown-editor
+                        height="200"
+                        ng-model="align.description"
+                        placeholder="Edit rationale..."
+                        autofocus="true">
+                      </markdown-editor>
+                      <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
+                    </div>
+                  </div>
+                  <div class="col-sm-1 pull-right rationale-actions" ng-hide="align.editingRationale">
+                    <i tooltip="Edit rationale" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" ng-class="{active: editingRationale}" class="fa fa-pencil edit" ng-click="toggleEditRationale(align)"></i>
+                    <i tooltip="Remove alignment" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" class="fa fa-trash delete" ng-click="removeTaskAlignment(align)"></i>
+                  </div>
                 </div>
               </td>
             </tr>
