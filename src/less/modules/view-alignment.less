@@ -1,13 +1,6 @@
 .view-alignment {
-  display: -webkit-flex;
-  display: flex;
-  .alignment-list, .chart-area {
-    flex: 1;
-    -webkit-flex: 1;
-  }
   .alignment-list {
     margin: 0;
-    border-right: 1px solid #dddddd;
     & > li {
       border-radius: 0;
       border: 0;
@@ -19,6 +12,41 @@
       &.expanded {
         background-color: #f9f9f9;
       }
+      header {
+        display: -webkit-flex;
+        display: flex;
+        .header-item {
+          display: -webkit-flex;
+          display: flex;
+          -webkit-align-items: center;
+                  align-items: center;
+        }
+        .header-item.pull-right {
+          -webkit-justify-content: flex-end;
+                  justify-content: flex-end;
+        }
+        .expand-icon {
+          margin-left: 2em;
+        }
+        .label {
+          margin-right: 1em;
+        }
+      }
+      .alignment-content {
+        h5 {
+          margin-top: 2em;
+          color: #666;
+          font-size: 1.2em;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+        .markdown-to-html {
+          font-size: 1.5em;
+        }
+      }
+    }
+    svg.nvd3-svg {
+      margin: initial;
     }
     & > li:not(:first-child) {
       border-top: 1px solid #dddddd;
@@ -26,18 +54,5 @@
     .outcome-heading {
       margin-bottom: 1em;
     }
-  }
-  .chart-area {
-    padding: 1em;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-wrap: wrap;
-            flex-wrap: wrap;
-    -webkit-align-items: center;
-            align-items: center;
-    -webkit-align-content: space-around;
-            align-content: space-around;
-    -webkit-justify-content: center;
-            justify-content: center;
   }
 }

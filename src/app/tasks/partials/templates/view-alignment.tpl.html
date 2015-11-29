@@ -6,26 +6,49 @@
 </div><!--view-alignment-panel-header-->
 <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
   <div class="view-alignment clearfix">
-    <ul class="list-group alignment-list pull-left">
-      <li ng-click="align.showDescription = !align.showDescription" ng-class="{expanded: align.showDescription}" ng-repeat="align in unit.task_outcome_alignments | orderBy: 'ilo_number' | taskFilter: project && project.selectedTask.task_definition_id" class="list-group-item clearfix">
-        <h4 class="list-group-item-heading outcome-heading]">
-          {{unit.outcome(align.learning_outcome_id).name}}
-          <span class="label label-info pull-right">{{unit.outcome(align.learning_outcome_id).abbreviation}}</span>
-        </h4>
-        <outcome-alignment-rating
-          readonly="true"
-          unit="unit"
-          ng-model="align">
-        </outcome-alignment-rating>
-        <div class="list-group-item-text" ng-show="align.showDescription">
-          <div class="markdown-to-html smaller" ng-bind-html="(align.description || 'No description') | markdown"></div>
+    <ul class="list-group alignment-list">
+      <li ng-click="align.expanded = !align.expanded" ng-class="{expanded: align.expanded}" ng-repeat="align in unit.task_outcome_alignments | orderBy: 'ilo_number' | taskFilter: project && project.selectedTask.task_definition_id" class="list-group-item col-sm-12">
+        <header class="clearfix">
+          <div class="col-sm-6 pull-left header-item">
+            {{ilo = unit.outcome(align.learning_outcome_id); ''}}
+            <h3 class="list-group-item-heading outcome-heading]">
+              {{ilo.name}}
+              <span class="label label-info pull-left">{{ilo.abbreviation}}</span>
+            </h3>
+          </div>
+          <div class="col-sm-6 pull-right clearfix header-item">
+            <outcome-alignment-rating
+              readonly="true"
+              unit="unit"
+              ng-model="align">
+            </outcome-alignment-rating>
+            <div class="expand-icon text-muted text-{{align.expanded ? 'primary' : 'muted'}}">
+              <i class="fa fa-3x fa-chevron-circle-{{align.expanded ? 'up' : 'down'}}"></i>
+            </div>
+          </div>
+        </header><!--/alignment-header-->
+        <div class="list-group-item-text alignment-content col-sm-8" ng-show="align.expanded">
+          <div ng-show="ilo.description">
+            <h5>Description</h5>
+            <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
+          </div>
+          <div ng-if="ilo && medians">
+            <h5>Visualisation</h5>
+            <alignment-bullet-chart
+              show-legend="false"
+              unit="unit"
+              project="project"
+              ilo="ilo"
+              targets="targets"
+              current-progress="currentProgress"
+              medians="medians">
+            </alignment-bullet-chart>
+          </div>
+          <div ng-show="align.description">
+            <h5>Rationale</h5>
+            <div class="markdown-to-html" ng-bind-html="align.description | markdown"></div>
+          </div>
         </div>
       </li>
     </ul>
-    <div class="chart-area pull-right">
-      <div ng-repeat="ilo in unit.ilos | orderBy: 'ilo_number'">
-        <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
-      </div>
-    </div>
-  </div>
 </div><!--view-alignment-panel-body-->

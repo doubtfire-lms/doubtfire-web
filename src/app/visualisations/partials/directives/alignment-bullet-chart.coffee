@@ -10,18 +10,18 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     targets: '='
     currentProgress: '='
     medians: '='
-    showLabels: '='
+    showLegend: '=?'
 
   controller: ($scope, Visualisation) ->
+    $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
       # based on the work of Clint Ivy, Jamie Love, and Jason Davies.
       # http://projects.instantcognition.com/protovis/bulletchart/
       nv.models.iloBullet = ->
-
         chart = (selection) ->
           selection.each (d, i) ->
-            availableWidth = width - (margin.left) - (margin.right)
+            availableWidth = width - (if $scope.legend then margin.left else 0) - (margin.right)
             availableHeight = height - (margin.top) - (margin.bottom)
             container = d3.select(this)
             nv.utils.initSVG container
@@ -378,7 +378,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             gEnter.append('g').attr('class', 'nv-bulletWrap')
             gEnter.append('g').attr('class', 'nv-titles')
 
-            wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            wrap.attr('transform', 'translate(' + (if $scope.legend then margin.left else 10) + ',' + margin.top + ')')
 
             # Compute the new x-scale.
             x1 = d3.scale.linear()
@@ -396,18 +396,19 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             w0 = (d) -> Math.abs(x0(d) - x0(0)) # TODO: could optimize by precalculating x0(0) and x1(0)
             w1 = (d) -> Math.abs(x1(d) - x1(0))
 
-            title = gEnter.select('.nv-titles').append('g')
-              .attr('text-anchor', 'end')
-              .attr('transform', 'translate(-6,' + (height - margin.top - margin.bottom) / 2 + ')')
+            if $scope.legend
+              title = gEnter.select('.nv-titles').append('g')
+                .attr('text-anchor', 'end')
+                .attr('transform', 'translate(-6,' + (height - margin.top - margin.bottom) / 2 + ')')
 
-            title.append('text')
-              .attr('class', 'nv-title')
-              .text((d) -> d.title )
+              title.append('text')
+                .attr('class', 'nv-title')
+                .text((d) -> d.title )
 
-            title.append('text')
-              .attr('class', 'nv-subtitle')
-              .attr('dy', '1em')
-              .text( (d) -> d.subtitle )
+              title.append('text')
+                .attr('class', 'nv-subtitle')
+                .attr('dy', '1em')
+                .text( (d) -> d.subtitle )
 
             bullet
               .width(availableWidth)
@@ -523,7 +524,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'iloChart', {
       height: 60
-      width: 400
+      width: 600
       duration: 500
     }, {}
 
