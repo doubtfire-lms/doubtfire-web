@@ -24,59 +24,13 @@
           </h3>
           Overall progress on outcome alignments are shown below
         </div>
-        <div class="panel-body">
-          <ul class="list-group alignment-list">
-            <li ng-click="ilo.expanded = !ilo.expanded" ng-class="{expanded: ilo.expanded}" ng-repeat="ilo in unit.ilos | orderBy: 'ilo_number'" class="list-group-item col-sm-12">
-              <header class="clearfix">
-                <div class="col-sm-6 pull-left header-item">
-                  <h3 class="list-group-item-heading outcome-heading]">
-                    {{ilo.name}}
-                    <span class="label label-info pull-left">{{ilo.abbreviation}}</span>
-                  </h3>
-                </div>
-                <div class="col-sm-6 pull-right clearfix header-item">
-                  <div class="expand-icon text-muted text-{{ilo.expanded ? 'primary' : 'muted'}}">
-                    <i class="fa fa-3x fa-chevron-circle-{{ilo.expanded ? 'up' : 'down'}}"></i>
-                  </div>
-                </div>
-              </header><!--/alignment-header-->
-              <div class="list-group-item-text alignment-content col-sm-8">
-                <div ng-if="ilo && medians">
-                  <h5>Visualisation</h5>
-                  <alignment-bullet-chart
-                    show-legend="false"
-                    unit="unit"
-                    project="project"
-                    ilo="ilo"
-                    targets="targets"
-                    current-progress="currentProgress"
-                    medians="medians">
-                  </alignment-bullet-chart>
-                </div>
-                <div ng-show="ilo.expanded">
-                <div ng-show="ilo.description">
-                  <h5>Description</h5>
-                    <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
-                  </div>
-                  <h5>Related Tasks</h5>
-                  <ul>
-                    <li ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id">
-                      <div class="col-sm-6 pull-right clearfix header-item">
-                        <outcome-alignment-rating
-                          readonly="true"
-                          unit="unit"
-                          ng-model="align">
-                        </outcome-alignment-rating>
-                        {{unit.taskDef(align.task_definition_id).abbreviation}} 
-                        {{unit.taskDef(align.task_definition_id).name}}
-                        status?
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
+        <div class="panel-body view-alignment" style="padding: 0px;">
+          <view-alignment
+            project="project"
+            unit="unit"
+            medians="medians"
+            alignments="unit.task_outcome_alignments"
+            summary-only="true"></view-alignment>
         </div>
       </div>
     </div>

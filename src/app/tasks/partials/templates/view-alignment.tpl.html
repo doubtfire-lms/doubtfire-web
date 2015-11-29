@@ -4,17 +4,27 @@
       <header class="clearfix">
         <div class="col-sm-6 pull-left header-item">
           {{ilo = unit.outcome(align.learning_outcome_id); ''}}
-          <h3 class="list-group-item-heading outcome-heading]">
+          <h3 class="list-group-item-heading outcome-heading">
             {{ilo.name}}
             <span class="label label-info pull-left">{{ilo.abbreviation}}</span>
           </h3>
         </div>
         <div class="col-sm-6 pull-right clearfix header-item">
           <outcome-alignment-rating
+            ng-hide="summaryOnly"
             readonly="true"
             unit="unit"
-            ng-model="align">
-          </outcome-alignment-rating>
+            ng-model="align"></outcome-alignment-rating>
+          <div ng-if="ilo && medians && summaryOnly">
+            <alignment-bullet-chart
+              show-legend="false"
+              unit="unit"
+              project="project"
+              ilo="ilo"
+              targets="targets"
+              current-progress="currentProgress"
+              medians="medians"></alignment-bullet-chart>
+          </div>
           <div class="expand-icon text-muted text-{{align.expanded ? 'primary' : 'muted'}}">
             <i class="fa fa-3x fa-chevron-circle-{{align.expanded ? 'up' : 'down'}}"></i>
           </div>
@@ -37,9 +47,28 @@
             medians="medians">
           </alignment-bullet-chart>
         </div>
-        <div ng-show="align.description">
+        <div ng-show="!summaryOnly && align.description">
           <h5>Rationale</h5>
           <div class="markdown-to-html" ng-bind-html="align.description | markdown"></div>
+        </div>
+        <div ng-show="summaryOnly">
+          <h5>Related Tasks</h5>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id">
+              <div class="clearfix">
+                {{taskDef = unit.taskDef(align.task_definition_id); ''}}
+                <outcome-alignment-rating
+                  class="pull-right"
+                  readonly="true"
+                  unit="unit"
+                  ng-model="align">
+                </outcome-alignment-rating>
+                <div class="task-def-alignment-item">
+                  <strong>{{taskDef.abbreviation}}</strong> - {{taskDef.name}}
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </li>
