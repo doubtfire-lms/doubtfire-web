@@ -24,6 +24,8 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
 
       $scope.poaView.activeTab = 'progress'
 
+    $scope.selectProgress()
+
     $scope.$on('UpdateAlignmentChart', () ->
       $scope.currentProgress.length = 0
       $scope.currentProgress = _.extend $scope.currentProgress, outcomeService.calculateProgress($scope.unit, $scope.project)

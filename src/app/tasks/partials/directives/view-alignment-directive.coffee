@@ -4,6 +4,8 @@ angular.module('doubtfire.tasks.partials.view-alignment-directive', [])
   restrict: 'E'
   templateUrl: 'tasks/partials/templates/view-alignment.tpl.html'
   scope:
+    currentProgress: '=?'
+    medians: '=?'
     project: '=?'
     task: '=?'
     unit: '='
