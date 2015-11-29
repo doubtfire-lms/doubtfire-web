@@ -4,12 +4,13 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
   restrict: 'E'
   templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
   scope:
-    project:  '=project'
-    unit:     '=unit'
-    ilo:      '=ilo'
-    targets:  '=targets'
-    currentProgress: '=currentProgress'
-    medians: '=medians'
+    project: '='
+    unit: '='
+    ilo: '='
+    targets: '='
+    currentProgress: '='
+    medians: '='
+    showLabels: '='
 
   controller: ($scope, Visualisation) ->
     if ! nv.models.iloBullet?

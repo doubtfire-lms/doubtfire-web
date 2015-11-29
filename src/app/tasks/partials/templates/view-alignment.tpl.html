@@ -1,23 +1,31 @@
-<div class="view-alignment clearfix">
-  <ul class="list-group alignment-list pull-left">
-    <li ng-click="align.showDescription = !align.showDescription" ng-class="{expanded: align.showDescription}" ng-repeat="align in unit.task_outcome_alignments | taskFilter: project.selectedTask.task_definition_id | orderBy: 'ilo_number'" class="list-group-item clearfix">
-      <h4 class="list-group-item-heading outcome-heading]">
-        {{unit.outcome(align.learning_outcome_id).name}}
-        <span class="label label-info pull-right">{{unit.outcome(align.learning_outcome_id).abbreviation}}</span>
-      </h4>
-      <outcome-alignment-rating
-        readonly="true"
-        unit="unit"
-        ng-model="align">
-      </outcome-alignment-rating>
-      <div class="list-group-item-text" ng-show="align.showDescription">
-        <div class="markdown-to-html smaller" ng-bind-html="(align.description || 'No description') | markdown"></div>
+<div class="panel-heading task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
+  <h3 class="panel-title">
+    Task Outcome Alignments
+  </h3>
+  Teaching staff believe that completing this task will help you the outcomes listed below
+</div><!--view-alignment-panel-header-->
+<div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
+  <div class="view-alignment clearfix">
+    <ul class="list-group alignment-list pull-left">
+      <li ng-click="align.showDescription = !align.showDescription" ng-class="{expanded: align.showDescription}" ng-repeat="align in unit.task_outcome_alignments | orderBy: 'ilo_number' | taskFilter: project && project.selectedTask.task_definition_id" class="list-group-item clearfix">
+        <h4 class="list-group-item-heading outcome-heading]">
+          {{unit.outcome(align.learning_outcome_id).name}}
+          <span class="label label-info pull-right">{{unit.outcome(align.learning_outcome_id).abbreviation}}</span>
+        </h4>
+        <outcome-alignment-rating
+          readonly="true"
+          unit="unit"
+          ng-model="align">
+        </outcome-alignment-rating>
+        <div class="list-group-item-text" ng-show="align.showDescription">
+          <div class="markdown-to-html smaller" ng-bind-html="(align.description || 'No description') | markdown"></div>
+        </div>
+      </li>
+    </ul>
+    <div class="chart-area pull-right">
+      <div ng-repeat="ilo in unit.ilos | orderBy: 'ilo_number'">
+        <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
       </div>
-    </li>
-  </ul>
-  <div class="chart-area pull-right">
-    <div ng-repeat="ilo in unit.ilos | orderBy: 'ilo_number'">
-      <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
     </div>
   </div>
-</div>
+</div><!--view-alignment-panel-body-->
