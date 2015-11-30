@@ -9,12 +9,12 @@ angular.module('doubtfire.tasks.partials.view-alignment-directive', [])
     project: '=?'
     task: '=?'
     unit: '='
-    alignments: '='
+    alignments: '=?'
     summaryOnly: '=?'
   controller: ($scope, outcomeService) ->
     $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
 
-    $scope.alignments = $scope.unit.ilos if $scope.summaryOnly
+    $scope.alignments = $scope.unit.ilos unless $scope.alignments?
 
     if $scope.project? and $scope.task?
       $scope.medians = outcomeService.calculateTaskPotentialContribution($scope.unit, $scope.project, $scope.task)

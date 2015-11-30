@@ -3,7 +3,7 @@
     <li ng-click="align.expanded = !align.expanded" ng-class="{expanded: align.expanded}" ng-repeat="align in alignments | orderBy: 'ilo_number'" class="list-group-item col-sm-12">
       <header class="clearfix">
         <div class="col-sm-6 pull-left header-item">
-          {{ilo = unit.outcome(align.learning_outcome_id); ''}}
+          {{ilo = summaryOnly ? align : unit.outcome(align.learning_outcome_id); ''}}
           <h3 class="list-group-item-heading outcome-heading">
             {{ilo.name}}
             <span class="label label-info pull-left">{{ilo.abbreviation}}</span>
@@ -54,7 +54,7 @@
         <div ng-show="summaryOnly">
           <h5>Related Tasks</h5>
           <ul class="list-group">
-            <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id">
+            <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
               <div class="clearfix">
                 {{taskDef = unit.taskDef(align.task_definition_id); ''}}
                 <outcome-alignment-rating
