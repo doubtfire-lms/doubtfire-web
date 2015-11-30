@@ -12,7 +12,12 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     medians: '='
     showLegend: '=?'
 
-  controller: ($scope, Visualisation) ->
+  controller: ($scope, $interval, Visualisation) ->
+    # this is really dodgy, but it's the only way to overcome the redraw issue...
+    # note that the width is now not set on 529 (trying to make the width dynamic so that
+    # we can show it in both the visualisation subsection (in task sheet) and on the sidebar
+    # (in the alignment mapping tab))
+    $interval -> window.dispatchEvent(new Event('resize'))
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
@@ -21,7 +26,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
       nv.models.iloBullet = ->
         chart = (selection) ->
           selection.each (d, i) ->
-            availableWidth = width - (if $scope.legend then margin.left else 0) - (margin.right)
+            availableWidth = width - (if $scope.legend then margin.left else 0) - (if $scope.legend then margin.right else 0)
             availableHeight = height - (margin.top) - (margin.bottom)
             container = d3.select(this)
             nv.utils.initSVG container
@@ -328,7 +333,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
         orient = 'left' # TODO top & bottom
         reverse = false
-        margin = { top: 5, right: 40, bottom: 20, left: 120 }
+        margin = if $scope.legend then { top: 5, right: 40, bottom: 5, left: 120 } else { top: 5, right: 5, bottom: 5, left: 5 }
 
         ranges = (d) -> d.ranges
         rangeLabels = (d) -> d.rangeLabels
@@ -376,7 +381,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             g = wrap.select('g')
 
             gEnter.append('g').attr('class', 'nv-bulletWrap')
-            gEnter.append('g').attr('class', 'nv-titles')
+            gEnter.append('g').attr('class', 'nv-titles') if $scope.legend
 
             wrap.attr('transform', 'translate(' + (if $scope.legend then margin.left else 10) + ',' + margin.top + ')')
 
@@ -466,7 +471,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         #============================================================
         # Event Handling/Dispatching (out of chart's scope)
         #------------------------------------------------------------
-
+        console.log $scope.data
         bullet.dispatch.on 'elementMouseover.tooltip', (evt) ->
           evt['series'] = {
             key: evt.label
@@ -524,7 +529,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'iloChart', {
       height: 60
-      width: 600
       duration: 500
     }, {}
 
