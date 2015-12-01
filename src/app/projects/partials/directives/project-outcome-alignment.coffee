@@ -3,7 +3,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
 .directive("projectOutcomeAlignment", ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-outcome-alignment.tpl.html'
-  controller: ($scope, $rootScope, outcomeService, Unit, alertService) ->
+  controller: ($scope, $rootScope, $interval, outcomeService, Unit, alertService) ->
     $scope.poaView = {
       activeTab: 'list'
     }
@@ -23,8 +23,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
             $scope.medians = {}
 
       $scope.poaView.activeTab = 'progress'
-
-    $scope.selectProgress()
+      $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
 
     $scope.$on('UpdateAlignmentChart', () ->
       $scope.currentProgress.length = 0
