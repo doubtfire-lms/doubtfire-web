@@ -39,7 +39,7 @@
         <div class="col-sm-12">
           <hr>
           <label>Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}</label>
-          <ui-select multiple tagging tagging-tokens="" placeholder="Select..." on-select="addAlignmentItem($item)" on-remove="removeAlignmentItem($item)" ng-model="selected.items">
+          <ui-select multiple tagging tagging-label="false" tagging-tokens="" placeholder="Select..." on-select="addAlignmentItem($item)" on-remove="removeAlignmentItem($item)" ng-model="selected.items">
             <ui-select-match placeholder="Add {{inverseSelectAlignmentBy}}s...">
               <strong>{{$item.abbreviation}}</strong> - {{$item.name}}
             </ui-select-match>
