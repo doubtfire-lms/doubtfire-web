@@ -13,12 +13,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     showLegend: '=?'
 
   controller: ($scope, $interval, Visualisation) ->
-    # this is really dodgy, but it's the only way to overcome the redraw issue...
-    # note that the width is now not set on 529 (trying to make the width dynamic so that
-    # we can show it in both the visualisation subsection (in task sheet) and on the sidebar
-    # (in the alignment mapping tab))
-    # $interval -> window.dispatchEvent(new Event('resize'))
-
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
