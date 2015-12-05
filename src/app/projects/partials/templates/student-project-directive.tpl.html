@@ -1,7 +1,7 @@
 <div ng-if="unitLoaded">
   <h2 ng-hide="fullscreen">{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
   <tabset class="tabset-icon" justified="true">
-    <tab active="activeTab[0]">
+    <tab active="activeTab[0]" ng-click="refreshCharts()">
       <tab-heading>
         <i class="fa fa-line-chart fa-2x"></i> Progress
       </tab-heading>

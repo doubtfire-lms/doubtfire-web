@@ -77,7 +77,6 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     [$scope.options, $scope.config] = Visualisation 'lineChart', {
       useInteractiveGuideline: yes
       height: 440
-      width: 600
       margin:
         left: 75
         right: 50
