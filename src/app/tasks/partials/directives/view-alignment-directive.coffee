@@ -11,13 +11,13 @@ angular.module('doubtfire.tasks.partials.view-alignment-directive', [])
     unit: '='
     alignments: '=?'
     summaryOnly: '=?'
-  controller: ($scope, $interval, outcomeService) ->
+  controller: ($scope, $timeout, outcomeService) ->
     $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
 
     $scope.toggleExpanded = (align) ->
       align.expanded = !align.expanded
       if align.expanded
-        $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
+        $timeout -> window.dispatchEvent new Event('resize')
 
     $scope.alignments = $scope.unit.ilos unless $scope.alignments?
 

@@ -472,7 +472,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         #============================================================
         # Event Handling/Dispatching (out of chart's scope)
         #------------------------------------------------------------
-        console.log $scope.data
         bullet.dispatch.on 'elementMouseover.tooltip', (evt) ->
           evt['series'] = {
             key: evt.label
