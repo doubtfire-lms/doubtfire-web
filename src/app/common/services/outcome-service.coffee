@@ -64,14 +64,14 @@ angular.module("doubtfire.services.outcome-service", [])
       outcome_set = []
 
       outcome_set[0] = outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
-      outcome_set[1] = outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
+      # outcome_set[1] = outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
 
       _.each outcome_set, (outcomes, key) ->
         _.each outcomes, (outcome, key) ->
           outcomes[key] = _.reduce(outcome, ((memo, num) -> memo + num), 0)
 
-      outcome_set[0].title = "Your Progress - Staff Suggestion"
-      outcome_set[1].title = "Your Progress - Your Reflection"
+      outcome_set[0].title = "Your Progress" # - Staff Suggestion"
+      # outcome_set[1].title = "Your Progress - Your Reflection"
 
       outcome_set
 

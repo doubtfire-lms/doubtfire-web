@@ -64,11 +64,12 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet')
             gEnter = wrapEnter.append('g')
             g = wrap.select('g')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#d62728')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2ca02c')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#ff7f0e')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#299ff0')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2796e3')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#2590d9')
             gEnter.append('rect').attr('class', 'nv-range nv-rangeP').style('fill-opacity', '0.6').style('fill','#1f77b4')
             gEnter.append('rect').attr 'class', 'nv-measure'
+            gEnter.append('rect').attr('class', 'nv-median').style('fill-opacity', '1.0').style('fill','#ffffff')
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
 
             w0 = (d) ->
@@ -108,11 +109,37 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               .datum rangeP
 
             if measurez?
+              g.select('rect.nv-median')
+                .style('fill', "#373737")
+                .style('fill-opacity',0.6)
+                .attr('height', availableHeight)
+                .attr('y', 0)
+                .attr('width', 2)
+                .attr('x', xp1(measurez.median))
+                .on('mouseover', ->
+                  dispatch.elementMouseover
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on('mousemove', ->
+                  dispatch.elementMousemove
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on 'mouseout', ->
+                  dispatch.elementMouseout
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return
+
               g.select('rect.nv-measure')
                 .style('fill', "#373737")
                 .style('fill-opacity',0.6)
-                .attr('height', availableHeight / 3)
-                .attr('y', availableHeight / 3)
+                .attr('height', availableHeight * 2 / 3)
+                .attr('y', availableHeight / 6)
                 .attr('width', xp1(measurez.upper) - xp1(measurez.lower))
                 .attr('x', xp1(measurez.lower))
                 .on('mouseover', ->
