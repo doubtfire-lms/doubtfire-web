@@ -46,6 +46,11 @@ angular.module("doubtfire.services.units", [])
       if result
         result[0]
 
+    unit.outcome = (outcomeId) ->
+      result = _.where unit.ilos, {id: outcomeId}
+      if result
+        result[0]
+
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->
       _.find unit.tutorials, { id: tuteId }
@@ -110,6 +115,15 @@ angular.module("doubtfire.services.units", [])
       Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
         if group_callback?
           group_callback(groups)
+
+    unit.incorporateTasks = (tasks) ->
+      _.map tasks, (t) ->
+        project = unit.findStudent(t.project_id)
+        if ! project.incorporateTask?
+          projectService.mapTask t, unit, project
+          projectService.addProjectMethods(project, unit)
+
+        project.incorporateTask(t)
 
     unit.refresh(callback)
     unit

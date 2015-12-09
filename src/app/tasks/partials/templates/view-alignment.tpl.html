@@ -1,0 +1,6 @@
+<div>
+  Teaching staff believe that completing this task will help you with the following unit learning outcomes:
+  <ul>
+    <li ng-repeat="align in unit.task_outcome_alignments | taskFilter: project.selectedTask.task_definition_id"><h5>{{unit.outcome(align.learning_outcome_id).name}}</h5><rating class="group-member-contribution-rating" ng-model="align.rating" max="5" readonly="true"></rating><br>{{align.description}}</li>
+  </ul>
+</div>

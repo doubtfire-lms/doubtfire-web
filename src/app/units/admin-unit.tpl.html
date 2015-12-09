@@ -1,0 +1,80 @@
+<ul class="breadcrumb">
+    <li><a href="#/home">Home</a></li>
+    <li>Administrator</li>
+    <li><a href="#/admin/units">Manage Units</a></li>
+    <li class="active">{{unit.id == -1 ? 'New Unit' : unit.name}}</li>
+</ul>
+<div class="root-view" id="unit">
+  <div ng-hide="unit.id == -1">
+    <h3>Edit {{unit.name}}</h3>
+  </div>
+  <div ng-show="unit.id == -1">
+    <h3>Create Unit</h3>
+  </div>
+  <tabset justified="true" class="tabset-icon">
+    <tab>
+      <tab-heading>
+        <i class="fa fa-university fa-2x"></i> Unit
+      </tab-heading>
+      <div class="col-sm-8 col-sm-offset-2">
+        <admin-unit-context unit="unit"></admin-unit-context>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-graduation-cap fa-2x"></i> Learning Outcomes
+      </tab-heading>
+      <div class="col-sm-12">
+        <admin-unit-ilos ng-if="unit"></admin-unit-ilos>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-male fa-2x"></i> Staff
+      </tab-heading>
+      <div class="col-sm-8 col-sm-offset-2">
+        <staff-admin-unit-context></staff-admin-unit-context>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-pencil fa-2x"></i> Tutorials
+      </tab-heading>
+      <div class="col-sm-8 col-sm-offset-2">
+        <tutorial-unit-context></tutorial-unit-context>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-user fa-2x"></i> Users
+      </tab-heading>
+      <div class="col-sm-12">
+        <enrol-students-context></enrol-students-context>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-tasks fa-2x"></i> Tasks
+      </tab-heading>
+      <div class="col-sm-12">
+        <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-link fa-2x"></i> Task Alignment
+      </tab-heading>
+      <div class="col-sm-12">
+        <unit-outcome-alignment ng-if="unit" show-csv="true" unit="unit"></unit-outcome-alignment>
+      </div>
+    </tab>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-users fa-2x"></i> Groups
+      </tab-heading>
+      <div class="col-sm-12">
+        <unit-admin-groupset-tab ng-if="unit"></unit-admin-groupset-tab>
+      </div>
+    </tab>
+  </tabset>
+</div>

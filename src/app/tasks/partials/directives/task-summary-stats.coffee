@@ -31,6 +31,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       tutorial = { key: tute.abbreviation }
 
     numStudents = 0
+
     $scope.countClass = (count) ->
       if numStudents == 0 then ''
       else if count / numStudents > 0.5 then 'warning'
@@ -104,30 +105,4 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
         ) # end each tutorial
 
         $scope.scatterData = scatterData
-
-        # data[i].values.push({
-        #   x: random()
-        #   , y: random()
-        #   , size: Math.random()   //Configure the size of each scatter point
-        #   , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
-        #   });
-
-
-    $scope.yAxisTickFormatFunction = () ->
-      # d3.format('.02f')
-      (value) ->
-        if $scope.unit.task_definitions[value]
-          $scope.unit.task_definitions[value].abbreviation
-        else
-          ''
-
-    $scope.xAxisTickFormatFunction = () ->
-      # d3.format('.02f')
-      (value) ->
-        idx = Math.floor(value)
-        taskService.statusAcronym[taskService.statusKeys[idx]]
-
-    $scope.tooltipContentFunction = () ->
-      (key, x, y) ->
-        '<strong>' + key + '</strong><br /> ' + taskService.statusLabels[taskService.acronymKey[x]] + ' <i class="' + taskService.statusIcons[taskService.acronymKey[x]] + '"> '
 )

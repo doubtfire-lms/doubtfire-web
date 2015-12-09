@@ -9,7 +9,7 @@
   <div class="modal-body clearfix">
     <p class="btn-group col-sm-8 col-sm-offset-2">
         <button class="btn btn-default col-sm-4" ng-class="{ 'btn-success': activeCsvResponseSelection == 'success' }" ng-model="activeCsvResponseSelection" btn-radio="'success'">
-          Inserted <span class="badge pull-right">{{response.success.length}}</span>
+          Success <span class="badge pull-right">{{response.success.length}}</span>
         </button>
         <button class="btn btn-default col-sm-4" ng-class="{ 'btn-danger': activeCsvResponseSelection == 'errors' }" ng-model="activeCsvResponseSelection" btn-radio="'errors'">
           Errors <span class="badge pull-right">{{response.errors.length}}</span>

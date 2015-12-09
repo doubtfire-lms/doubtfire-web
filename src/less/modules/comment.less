@@ -1,3 +1,8 @@
+.comment-panel {
+  overflow: scroll;
+  height: 30vh;
+}
+
 .comment {
   .comment-details {
     padding-top: 8px;
@@ -34,10 +39,11 @@
 }
 
 .comment-submitter {
-  textarea, button {
-    height: 45px;
+  button {
+    height: 59px;
   }
-  textarea {
-    resize: none;
+  .markdown-editor {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }

@@ -1,25 +1,21 @@
-<div class="panel panel-default panel-submission-marking-context">
-  <div class="panel-heading text-center">
-    <h5 class="panel-title">1. Download Ready to Mark Submissions</h5>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">Download Submissions</h4>
+    Download a zip file containing the tasks that require feedback, along with a CSV you can use to submit your comments and task status changes.      
   </div>
   <div class="panel-body text-center">
     <a target="_blank" class="btn btn-primary btn-download" href="{{readyToMarkSubmissionsUrl}}">
       <i class="fa fa-download"></i> Download
     </a>
   </div>
-  <div class="panel-heading text-center">
-    <h5 class="panel-title">2. Upload Marked Submissions</h5>
+  <div class="panel-heading">
+    <h4 class="panel-title">Upload Feedback</h4>
+    Provide changes in downloaded <code>marks.csv</code> and optionally annotate PDFs with feedback. Upload just <code>marks.csv</code> or re-zip and upload with annotated PDFs.
   </div>
   <div class="panel-body text-center">
     <div ng-hide="taskUploadResults && taskUploadResults.length > 0">
-      <p class="help-block" ng-hide="isUploading">
-        Mark your corrections in <code>marks.csv</code> in the downloaded zip above and optionally annotate submission PDFs for student feedback.
-        <br>
-        When you have marked, you may either upload the updated <code>marks.csv</code> or re-zip all updated files with annotated submission PDFs.
-      </p>
       <file-uploader
         ng-hide="isReady.csv"
-        ng-class="{'col-sm-6 col-sm-offset-3': isReady.zip, 'col-sm-6': !isReady.zip}"
         url="uploadSubmissionUrl"
         files="zipMarkingFiles"
         is-uploading="isUploading"
@@ -27,7 +23,6 @@
         on-success="onMarkingUploadSuccess"></file-uploader>
       <file-uploader
         ng-hide="isReady.zip"
-        ng-class="{'col-sm-6 col-sm-offset-3': isReady.csv, 'col-sm-6': !isReady.csv}"
         url="uploadSubmissionUrl"
         files="csvMarkingFiles"
         is-uploading="isUploading"

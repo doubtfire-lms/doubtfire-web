@@ -1,0 +1,16 @@
+.burndown-chart {
+  // Dashed for time line
+  .dashed {
+    stroke-dasharray: 5,5;
+  }
+  // :last-child applies to hide time line from legend
+	.nv-legendWrap .nv-series:last-child {
+    display: none;
+  }
+  .nvtooltip tr:last-child {
+    display: none;
+  }
+  // since we're hiding time line we can move the rest right
+  .nv-legend{ transform: translate(50px, -15px); }
+  .nv-legendWrap{ transform: translate(50px, -15px); }
+}

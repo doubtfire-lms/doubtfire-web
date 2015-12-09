@@ -6,4 +6,6 @@ angular.module('doubtfire.units.partials', [
     'doubtfire.units.partials.unit-marking-submissions-directive'
     'doubtfire.units.partials.unit-marking-portfolios-directive'
     'doubtfire.units.partials.unit-tutor-student-list'
+    'doubtfire.units.partials.unit-outcome-alignment'
+    'doubtfire.units.partials.admin-unit-ilo-directive'
   ])

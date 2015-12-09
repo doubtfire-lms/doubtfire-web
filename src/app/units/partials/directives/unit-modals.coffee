@@ -164,3 +164,40 @@ angular.module('doubtfire.units.partials.modals', [])
       )
 
 )
+
+.controller('IloModalCtrl', ($scope, $modalInstance, ilo, isNew, unit, IntendedLearningOutcome, alertService) ->
+  $scope.ilo = ilo
+  $scope.isNew = isNew
+
+  $scope.saveILO = ->
+    save_data = {
+      unit_id: unit.id
+      name: ilo.name
+      description: ilo.description
+      abbreviation: ilo.abbreviation
+    }
+
+    if isNew
+      IntendedLearningOutcome.create(save_data,
+        (response) ->
+          $modalInstance.close(response)
+          unit.ilos.push(response)
+          alertService.add("success", "Intended Learning Outcome Added", 2000)
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 6000)
+      )
+    else
+      save_data.id = ilo.id
+      IntendedLearningOutcome.update(save_data).$promise.then (
+        (response) ->
+          $modalInstance.close(response)
+          alertService.add("success", "Intended Learning Outcome Updated", 2000)
+      ),
+      (
+        (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 6000)
+      )
+)
+

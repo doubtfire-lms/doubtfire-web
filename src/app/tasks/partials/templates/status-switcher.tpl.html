@@ -1,0 +1,14 @@
+<ul ng-class="{'dropdown-menu' :inMenu}" class="project-task-bar">
+  <li ng-show="assessingUnitRole" class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
+    <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" uncheckable>
+      <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+      <strong>{{action.label}}</strong>
+    </button>
+  </li><!--/tutor-statuses-->
+  <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="action in taskEngagementConfig.studentTriggers" >
+    <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" >
+      <i class="{{action.iconClass}} fa-2x task-engagement-icon"></i>
+      <strong>{{action.label}}</strong>
+    </button>
+  </li><!--/student-statuses-->
+</ul>

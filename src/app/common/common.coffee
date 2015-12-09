@@ -11,4 +11,5 @@ angular.module("doubtfire.common", [
   'doubtfire.common.pdf-panel-viewer'
   'doubtfire.common.grade-icon'
   'doubtfire.common.csv-result-modal'
+  'doubtfire.common.markdown-editor'
 ])

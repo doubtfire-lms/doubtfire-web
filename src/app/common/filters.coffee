@@ -23,6 +23,17 @@ angular.module("doubtfire.filters", [])
       input
 )
 
+.filter('showTasks', ->
+  (input, kind, tutorName) ->
+    if input
+      if kind == "myStudents"
+        _.select  input, (t) -> t.project().tutorial.tutor_name == tutorName
+      else
+        input
+    else
+      input
+)
+
 .filter('orderObjectBy', ->
   (items, field, reverse) ->
     filtered = []
@@ -94,6 +105,45 @@ angular.module("doubtfire.filters", [])
           _.filter input, (grp) -> grp.tutorial_id == project.tutorial.id
         else # all
           input
+    else
+      input
+)
+
+.filter('outcomeFilter', ->
+  (input, outcomeId) ->
+    if input && outcomeId
+      _.filter input, (item) -> item.learning_outcome_id == outcomeId
+    else
+      input
+)
+
+.filter('taskFilter', ->
+  (input, taskDefId) ->
+    if input && taskDefId
+      _.filter input, (item) -> item.task_definition_id == taskDefId
+    else
+      input
+)
+
+.filter('truncatedMarkdown', ($filter) ->
+  (input, truncateTo) ->
+    truncateTo = truncateTo or 128
+    input = $filter('markdown')(input)
+    input = $filter('stripTags')(input)
+    $filter('truncate')(input, truncateTo, '...')
+)
+
+.filter('statusFilter', ->
+  (input, statusKind) ->
+    if input && statusKind
+      _.filter input, (task) ->
+        task.status == statusKind
+        # if statusKind == 'assess'
+        #   task.status == 'ready_to_mark' || task.status == 'need_help'
+        # else if statusKind == 'discuss'
+        #   task.status == 'discuss'
+        # else
+        #   true
     else
       input
 )

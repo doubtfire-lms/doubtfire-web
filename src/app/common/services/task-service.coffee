@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope) ->
   #
   # The unit service object
   #
@@ -28,6 +28,17 @@ angular.module("doubtfire.services.tasks", [])
     FIX: 'fix_and_resubmit'
     DIS: 'discuss'
     COM: 'complete'
+
+  taskService.learningWeight =
+    ready_to_mark:      0.7
+    not_submitted:      0.0
+    working_on_it:      0.0
+    need_help:          0.0
+    redo:               0.2
+    fix_and_include:    0.2
+    fix_and_resubmit:   0.4
+    discuss:            0.7
+    complete:           0.8
 
   taskService.statusAcronym =
     ready_to_mark:      'RTM'
@@ -61,6 +72,17 @@ angular.module("doubtfire.services.tasks", [])
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-check'
     complete:           'fa fa-check-square-o'
+
+  taskService.statusSeq =
+    ready_to_mark:      6
+    not_submitted:      1
+    working_on_it:      5
+    need_help:          4
+    redo:               3
+    fix_and_include:    2
+    fix_and_resubmit:   7
+    discuss:            8
+    complete:           9
 
   taskService.helpTextDesc =
     ready_to_mark:
@@ -152,10 +174,14 @@ angular.module("doubtfire.services.tasks", [])
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
     task.status = response.status
+    task.times_assessed = response.times_assessed
     task.updateTaskStatus project, response.new_stats
     task.processing_pdf = response.processing_pdf
 
     if response.status == status
+      $rootScope.$broadcast('UpdateAlignmentChart')
+      if project.updateBurndownChart?
+        project.updateBurndownChart()
       alertService.add("success", "Status saved.", 2000)
       if response.other_projects?
         _.each response.other_projects, (details) ->

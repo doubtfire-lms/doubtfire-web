@@ -46,6 +46,10 @@ angular.module("doubtfire.api", [
     "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
     "#{api}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
+
+  Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
+  Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
+
   Unit
 )
 .factory("UnitRole", (resourcePlus) ->
@@ -63,6 +67,18 @@ angular.module("doubtfire.api", [
 .factory("Tutorial", (resourcePlus) ->
   resourcePlus "/tutorials/:id", { id: "@id" }
 )
+.factory("LearningAlignments", (resourcePlus) ->
+  resourcePlus "/units/:unit_id/learning_alignments/:id", { id: "@id", unit_id: "@unit_id" }
+)
+.factory("IntendedLearningOutcome", (resourcePlus, api, currentUser) ->
+  IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
+
+  IntendedLearningOutcome.getOutcomeBatchUploadUrl = (unit) ->
+    "#{api}/units/#{unit.id}/outcomes/csv?auth_token=#{currentUser.authenticationToken}"
+
+  IntendedLearningOutcome
+)
+
 .factory("Task", (resourcePlus, api, currentUser) ->
   Task = resourcePlus "/tasks/:id", { id: "@id" }
   #
@@ -107,8 +123,23 @@ angular.module("doubtfire.api", [
     $window.open "#{api}/units/#{unit.id}/group_sets/#{group_set.id}/groups/csv.json?auth_token=#{currentUser.authenticationToken}", "_blank"
   return GroupSet
 )
+.factory("TaskAlignment", (resourcePlus, api, currentUser, $window) ->
+  TaskAlignment = {}
+  TaskAlignment.taskAlignmentCSVUploadUrl = (unit, project_id) ->
+    if project_id?
+      "#{api}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}&auth_token=#{currentUser.authenticationToken}"
+    else
+      "#{api}/units/#{unit.id}/learning_alignments/csv.json?auth_token=#{currentUser.authenticationToken}"
+    
+  TaskAlignment.downloadCSV = (unit, project_id) ->
+    if project_id?
+      $window.open "#{api}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}&auth_token=#{currentUser.authenticationToken}", "_blank"
+    else
+      $window.open "#{api}/units/#{unit.id}/learning_alignments/csv.json?auth_token=#{currentUser.authenticationToken}", "_blank"
+  return TaskAlignment
+)
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
-  TaskFeedback = resourcePlus "/submission/task/:id", { id: "@id" }
+  TaskFeedback = resourcePlus "/submission/task/:id?project_id=:project_id", { id: "@id", project_id: "@project_id" }
 
   TaskFeedback.getTaskUrl = (task) ->
     "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"

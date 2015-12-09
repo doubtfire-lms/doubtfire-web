@@ -1,19 +1,28 @@
 angular.module("doubtfire", [
+  # ng*
   "ngCookies"
-  "templates-app"
-  "templates-common"
-  "localization"
-
-  "ui.router"
-  "ui.bootstrap"
-  # "mgcrea.ngStrap"
-  "nvd3ChartDirectives"
-  "angularFileUpload"
   "ngCsv"
   "ngSanitize"
-  "xeditable"
-  'angular.filter'
 
+  # templates
+  "templates-app"
+  "templates-common"
+
+  # ui.*
+  "ui.router"
+  "ui.bootstrap"
+  "ui.codemirror"
+  "ui.select"
+
+  # other libraries
+  "angularFileUpload"
+  "angular.filter"
+  "localization"
+  "markdown"
+  "nvd3"
+  "xeditable"
+
+  # doubtfire.*
   "doubtfire.sessions"
   "doubtfire.common"
   "doubtfire.errors"
@@ -23,6 +32,7 @@ angular.module("doubtfire", [
   "doubtfire.projects"
   "doubtfire.users"
   "doubtfire.groups"
+  "doubtfire.visualisations"
 ])
 .constant('DoubtfireContributors', [
   #
@@ -43,10 +53,12 @@ angular.module("doubtfire", [
   # '???'                 # Angus Morton
   #
 ])
-.config( (localStorageServiceProvider) ->
+# Local Storage Config
+.config((localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
-).config(($urlRouterProvider, $httpProvider) ->
-
+)
+# Routing Config
+.config(($urlRouterProvider, $httpProvider) ->
   # Catch bad URLs.
   $urlRouterProvider.otherwise "/not_found"
   $urlRouterProvider.when "", "/"
@@ -54,8 +66,9 @@ angular.module("doubtfire", [
   # Map root/home URL to a default state of our choosing.
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
-
-).run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
+)
+# Doubtfire run
+.run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
   editableOptions.theme = 'bs3'
 
   serialize = (obj, prefix) ->
@@ -94,7 +107,9 @@ angular.module("doubtfire", [
   $rootScope.$on "tokenTimeout", handleTokenTimeout
 
   _.mixin(_.string.exports())
-).controller "AppCtrl", ($rootScope, $state, $document, $filter) ->
+)
+# Root application controller
+.controller("AppCtrl", ($rootScope, $state, $document, $filter) ->
 
   # Automatically localise page titles
   # TODO: consider putting this in a directive?
@@ -105,3 +120,4 @@ angular.module("doubtfire", [
   # $rootScope.$on "i18nReady", ->
   #   setPageTitle $state.current
   #   $rootScope.$on "$stateChangeSuccess", (evt, toState) -> setPageTitle toState
+)

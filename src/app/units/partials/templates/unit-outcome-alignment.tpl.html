@@ -1,0 +1,162 @@
+<div>
+  <div class="col-sm-8" ng-class="{'col-sm-offset-2' : !showCsv}">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">Task Outcome Alignment</h4>
+          {{selectAlignmentBy == 'Outcome' ? 'Select an outcome and then tasks that align with the selected outcome' : 'Select a task and then the outcomes that the selected task contributes toward'}}
+        </div>
+        <div class="btn-group pull-right" style="margin-left: 1ex">
+          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Outcome'">
+            <i class="fa fa-graduation-cap" tooltip-placement="top" tooltip="Align by outcome"></i>
+          </label>
+          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Task'">
+            <i class="fa fa-tasks" tooltip-placement="top" tooltip="Align by task"></i>
+          </label>
+        </div>
+      </div><!--/select-panel-heading-->
+
+      <div class="panel-body" style="padding-bottom: 30px;">
+        <div class="col-sm-12">
+          <label>Selected {{selectAlignmentBy}}</label>
+          <ui-select on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
+            <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
+              <strong>{{selectedAlignmentByItem.abbreviation}}</strong> - {{selectedAlignmentByItem.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="item in selectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
+              <h4>
+                {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
+              </h4>
+              <p class="help-block">
+                {{item.description | truncatedMarkdown}}
+              </p>
+            </ui-select-choices>
+          </ui-select>
+          <p class="clearfix">
+            <div class="markdown-to-html smaller col-sm-12 " ng-bind-html="selectedAlignmentByItem.description | markdown"></div>
+          </p>
+        </div><!--/select-alignment-by-->
+        <div class="col-sm-12">
+          <hr>
+          <label>Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}</label>
+          <ui-select multiple tagging tagging-tokens="" placeholder="Select..." on-select="addAlignmentItem($item)" on-remove="removeAlignmentItem($item)" ng-model="selected.items">
+            <ui-select-match placeholder="Add {{inverseSelectAlignmentBy}}s...">
+              <strong>{{$item.abbreviation}}</strong> - {{$item.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
+              <h4>
+                {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
+              </h4>
+              <p class="help-block">
+                {{item.description | truncatedMarkdown}}
+              </p>
+            </ui-select-choices>
+          </ui-select>
+        </div><!--/add-alignment-items-->
+      </div><!--/select-panel-body-->
+
+      <div class="panel-heading" ng-show="selected.items.length > 0">
+        <h4 class="panel-title">Align {{inverseSelectAlignmentBy}}s to {{selectAlignmentBy}}</h4>
+        Align the <strong>{{selected.items.length > 1 ? selected.items.length : ''}} selected {{inverseSelectAlignmentBy}}{{selected.items.length > 1 ? 's' : ''}}</strong> to the {{selectAlignmentBy}} <strong>{{selectedAlignmentByItem.name}}</strong>
+      </div><!--/align-panel-heading-->
+
+      <div class="panel-body student-list" ng-show="selected.items.length > 0">
+        <table ng-show="filteredAlignments.length > 0" class="table table-hover table-pointer">
+          <thead>
+            <tr>
+              <th>
+                <div>{{inverseSelectAlignmentBy}}</div>
+                <small class="text-muted">{{inverseSelectAlignmentBy}} related to {{selectedAlignmentByItem.abbreviation}}</small>
+              </th>
+              <th>
+                <div>Rating</div>
+                <small class="text-muted">Rating how well you feel this task related to {{selectedAlignmentByItem.abbreviation}}</small>
+              </th>
+              <th>
+                <div>Rationale</div>
+                <small class="text-muted">Justify this rating with a brief rationale</small>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="align in filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
+              <td ng-show="selectAlignmentBy=='Task'">
+                <strong>
+                  {{unit.outcome(align.learning_outcome_id).abbreviation}}
+                </strong> - {{unit.outcome(align.learning_outcome_id).name}}
+              </td>
+              <td ng-show="selectAlignmentBy=='Outcome'">
+                <strong>
+                  {{unit.taskDef(align.task_definition_id).abbreviation}}
+                </strong> - {{unit.taskDef(align.task_definition_id).name}}
+              </td>
+              <td>
+                <rating ng-model="align.rating" max="5" ng-click="updateRating(align)"></rating>
+              </td>
+              <td>
+                <span editable-text="align.description" e-name="description" e-form="alignRowform" e-required>
+                  {{ align.description || 'empty' }}
+                </span>
+              </td>
+              <td>
+                <form editable-form name="alignRowform" onbeforesave="saveTaskAlignment($data, align.id)" ng-show="alignRowform.$visible" class="form-buttons form-inline" shown="inserted == align">
+                  <button type="submit" ng-disabled="alignRowform.$waiting" class="btn btn-primary">
+                    save
+                  </button>
+                  <button type="button" ng-disabled="alignRowform.$waiting" ng-click="alignRowform.$cancel()" class="btn btn-default">
+                    cancel
+                  </button>
+                </form>
+                <div class="btn-group" ng-show="!alignRowform.$visible">
+                  <button ng-click="alignRowform.$show()" class="btn col-sm-6 btn-primary">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button ng-click="removeTaskAlignment(align)" class="btn col-sm-6 btn-danger">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </div><!--/actions-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!--/align-panel-heading-->
+
+    <div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Visualise Task Alignment</h4>
+            See how the alignment details you have provided relate to each learning outcome.
+        </div>
+        <div class="panel-body">
+          <alignment-bar-chart unit="unit" project="project" source="source" task-status-factor="taskStatusFactor"></alignment-bar-chart>
+        </div>
+      </div>
+    </div><!--/visualisation-->
+  </div>
+  <div class="col-sm-4" ng-if="showCsv">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Import Task Outcome Alignments</h3>
+        Import links between tasks and outcomes from a CSV containing: unit_code, learning_outcome, task_abbr, rating.
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          files="taskAlignmentCSV"
+          url="taskAlignmentCSVUploadUrl()"
+          is-uploading="isTaskAlignmentCSVUploading"
+          on-success="onTaskAlignmentCSVSuccess"
+          on-complete="onTaskAlignmentCSVComplete"></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Export Task Outcome Alignments</h3>
+        Download a CSV of task outcome alignment details.
+      </div>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadTaskAlignmentCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
+      </div>
+    </div><!--/csv-import-export-->
+  </div>
+</div>

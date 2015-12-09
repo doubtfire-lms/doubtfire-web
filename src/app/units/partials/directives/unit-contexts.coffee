@@ -40,6 +40,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       groupService.groupSetName(id, $scope.unit)
 
 )
+
 .directive('taskAdminUnitContext', ->
   replace: true
   restrict: 'E'
@@ -165,10 +166,10 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         }
 
     $scope.deleteTutorial = (tutorial) ->
-      # TODO: No endpoint for this yet
       Tutorial.delete { id: tutorial.id },
         (response) ->
           $scope.unit.tutorials = _.without $scope.unit.tutorials, tutorial
+          alertService.add("info", "Tutorial #{tutorial.abbreviation} was deleted successfully")
         (response) ->
           alertService.add("danger", response.data.error)
 

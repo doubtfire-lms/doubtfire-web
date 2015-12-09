@@ -8,7 +8,7 @@ angular.module("doubtfire.units", [
     views:
       main:
         controller: "TutorUnitViewRootCtrl"
-        templateUrl: "units/show.tpl.html"
+        templateUrl: "units/tutor-home.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/partials/templates/header.tpl.html"
@@ -22,7 +22,7 @@ angular.module("doubtfire.units", [
     views:
       main:
         controller: "AdminUnitsCtrl"
-        templateUrl: "units/admin.tpl.html"
+        templateUrl: "units/admin-home.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/partials/templates/header.tpl.html"
@@ -35,7 +35,7 @@ angular.module("doubtfire.units", [
     views:
       main:
         controller: "EditUnitCtrl"
-        templateUrl: "units/unit.tpl.html"
+        templateUrl: "units/admin-unit.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
         templateUrl: "common/partials/templates/header.tpl.html"

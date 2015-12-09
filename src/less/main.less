@@ -45,8 +45,11 @@
 @fa-font-path: "./fonts/"; /* Tell font-awesome where to find fa- fonts */
 
 // Import css... if no less
-@import (less) "../../vendor/nvd3/nv.d3.css";
+@import (less) "../../vendor/nvd3/build/nv.d3.css";
 @import (less) "../../vendor/angular-xeditable/dist/css/xeditable.css";
+@import (less) "../../vendor/codemirror/lib/codemirror.css";
+@import (less) "../../vendor/codemirror/theme/xq-light.css";
+@import (less) "../../vendor/angular-ui-select/dist/select.css";
 
 // Import our custom functions
 @import 'functions.less';
@@ -121,13 +124,19 @@ a {
   display: inline-block;
 }
 
+// Broken UI select active fix
+.ui-select-bootstrap .ui-select-choices-row.active > a {
+  color: #333;
+  background-color: inherit;
+}
+
 @import 'modules/breadcrumbs.less';
 @import 'modules/landing-page.less';
 @import 'modules/sign-in-form.less';
 @import 'modules/project-task-bar.less';
 @import 'modules/task-engagement-input.less';
 @import 'modules/header.less';
-@import 'modules/project.less';
+@import 'modules/burndown-chart.less';
 @import 'modules/errors.less';
 @import 'modules/callout.less';
 @import 'modules/comment.less';
@@ -145,3 +154,8 @@ a {
 @import 'modules/grade-icon.less';
 @import 'modules/tutor-student-list.less';
 @import 'modules/csv-result-modal.less';
+@import 'modules/tabset-icon.less';
+@import 'modules/markdown-editor.less';
+@import 'modules/nvd3-graph.less';
+@import 'modules/tutor-task-feedback-view.less';
+@import 'common.less';

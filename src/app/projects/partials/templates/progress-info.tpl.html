@@ -40,27 +40,7 @@
           </div>
           <div class="panel-body">
             <div class="burndown-chart" ng-if="projectLoaded">
-          		<nvd3-line-chart
-          			data="project.burndown_chart_data"
-          			id="burndownId"
-          			width="500"
-          			height="440"
-          			showXAxis="true"
-          			showYAxis="true"
-          			showLegend="true"
-          			tooltips="true"
-          			useInteractiveGuideline="true"
-          			margin="{left:80,top:50,bottom:50,right:10}"
-          			xAxisTickFormat="xAxisTickFormat_Date_Format()"
-          			yAxisLabel="Tasks Remaining"
-          			yAxisTickFormat="yAxisTickFormat_Percent_Format()"
-          			color="colorFunction()"
-          			legendColor="colorFunction()"
-          			y="yAxisClipNegBurndown()"
-          			x="xAxisClipNegBurndown()"
-          			forcex="[{{lateEndDate()}}]">
-          			<svg></svg>
-          		</nvd3-line-chart>
+              <progress-burndown-chart project="project" unit="unit"></progress-burndown-chart>
             </div>
           </div>
         </div>
@@ -68,8 +48,3 @@
     </div>
   </div>
 </div>
-
-<!-- 	    <div ng-show="showBack">
-	    	<a href="#/units?unitRole={{assessingUnitRole.id}}">Back</a>
-	    </div>
- -->

@@ -1,21 +1,10 @@
-<div class="col-sm-8 col-sm-offset-2">
+<div>
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">Modify Unit Staff</h3>
       Add staff members to the unit, assigning them a convenor or tutor role.
     </div>
     <div class="panel-body">
-      <div class="input-group col-sm-12">
-        <input class="form-control" id="convenors" placeholder="Staff Name" ng-model="selectedStaff" typeahead="staff as
-        staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff">
-
-        <span class="input-group-btn">
-          <button class="btn btn-success" ng-click="addSelectedStaff()">
-            <i class="glyphicon glyphicon-plus"></i>
-          </button>
-        </span>
-      </div>
-      <br>
       <div class="col-sm-12">
         <div class="callout callout-info" ng-hide="unit.staff.length > 0">This unit has no staff assigned</div>
         <div ng-show="unit.staff.length > 0">
@@ -45,6 +34,19 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+    <div class="panel-footer clearfix">
+      <div class="input-group col-sm-12">
+        <input class="form-control" id="convenors" placeholder="Staff Name" ng-model="selectedStaff" typeahead="staff as
+        staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff">
+
+        <span class="input-group-btn">
+          <button class="btn btn-success pull-right" ng-click="addSelectedStaff()">
+            <i class="fa fa-male"></i>
+            <i class="fa fa-plus"></i> Add Staff
+          </button>
+        </span>
       </div>
     </div>
   </div>

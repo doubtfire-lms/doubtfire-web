@@ -1,0 +1,118 @@
+<div>
+  <div class="panel panel-primary tutor-student-list" ng-class="{fullscreen: fullscreen}">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title" ng-hide="context=='task'">{{title}}</h4>
+        <task-definition-selector class="col-sm-12" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
+        from students in {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}
+      </div>
+      <div class="col-sm-5 text-right"></div>
+        <div class="pull-right">
+          <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+            <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
+          </button>
+        </div>
+        <div class="btn-group pull-right" style="margin-left: 1ex">
+          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allTasks'">
+            <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks for all students"></i>
+          </label>
+          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+            <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Only show tasks for my students"></i>
+          </label>
+        </div>
+        <div class="btn-group pull-right" style="margin-left: 1ex" ng-show="context == 'assess'">
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
+            <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
+          </label>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
+            <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that need help."></i>
+          </label>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
+            <i class="fa fa-comment" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to discuss with students."></i>
+          </label>
+        </div>
+        <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autofocus />
+          <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
+        </form>
+    </div>
+    <div class="panel-body student-list">
+      <div class="help-block text-center" style="margin: 5em 0;" ng-hide="refreshed">Refresh to view tasks.</div>
+      <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredTasks.length == 0 && refreshed">No tasks found.</div>
+        <table ng-hide="(!refreshed) || filteredTasks.length == 0" class="table table-condensed table-hover table-pointer ">
+          <thead>
+            <tr>
+              <th class="task-abbr">
+                <a ng-click="sortOrder='project().student_id'; reverse=!reverse">
+                  Student ID <i ng-show="sortOrder=='project().student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="name">
+                <a ng-click="sortOrder='project().name'; reverse=!reverse">
+                  Name <i ng-show="sortOrder=='project().name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="task">
+                <a ng-click="sortOrder='definition.abbreviation'; reverse=!reverse">
+                  Task <i ng-show="sortOrder=='definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="status">
+                <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
+                  Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="times_assessed">
+                <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
+                  Times Assessed <i ng-show="sortOrder=='times_assessed'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="tutorial">
+                <a ng-click="sortOrder='project().tutorial.abbreviation'; reverse=!reverse">
+                  <i ng-show="sortOrder=='project().tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+                </a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+              <td>{{task.project().student_id}}</td>
+              <td>{{task.project().name}}</td>
+              <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
+              <td class="text-center task-status {{statusClass(task.status)}}"><span><i class="{{statusIcon(task.status)}}"></i> {{statusText(task.status)}}</span></td>
+              <td>{{task.times_assessed}}</td>
+              <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
+    <div class="panel-body project-show" ng-if="fullscreen">
+      <provide-task-feedback
+        class="root-view"
+        scope="student-project-scope"
+        task="activeTask"
+        unit="unit"
+        view-options="viewOptions"
+        assessing-unit-role="assessingUnitRole"
+        unit-role="assessingUnitRole.id"></provide-task-feedback>
+    </div>
+    <div class="panel-footer clearfix">
+      <div class="pull-right">
+        <button type="button" class="btn btn-success btn-download" ng-click="refreshTasks()">
+          <i class="fa fa-refresh"></i> Refresh Tasks
+        </button>
+      </div>
+      <pagination total-items="filteredTasks.length" ng-model="taskCurrentPage" items-per-page="taskPageSize" max-size="taskMaxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+    </div>
+  </div>
+  <provide-task-feedback
+    ng-if="!fullscreen"
+    scope="student-project-scope"
+    task="activeTask"
+    unit="unit"
+    view-options="viewOptions"
+    assessing-unit-role="assessingUnitRole"
+    unit-role="assessingUnitRole.id"
+    fullscreen="fullscreen"
+    on-status-update="onStatusUpdate"></provide-task-feedback>
+</div>

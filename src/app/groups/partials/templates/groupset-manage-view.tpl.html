@@ -1,6 +1,6 @@
 <div>
   <div class="groupset-manage-view">
-    <div class="group-listings col-sm-6" ng-class="{'col-sm-offset-3': !selectedGroup}">
+    <div class="group-listings col-sm-6">
       <div class="panel panel-primary">
         <div class="clearfix info-area panel-heading">
           <div class="col-sm-8 pull-left">
@@ -24,6 +24,10 @@
           <group-selector></group-selector>
         </div>
       </div>
+    </div>
+    <div class="group-memberships not-selected col-sm-6" ng-hide="selectedGroup">
+      <i class="fa fa-3x fa-chevron-circle-right"></i><i class="fa fa-3x fa-users"></i>
+      <p>Please select a group in the groups list on the left</p>
     </div>
     <div class="group-memberships col-sm-6" ng-show="selectedGroup">
       <div class="panel panel-default">

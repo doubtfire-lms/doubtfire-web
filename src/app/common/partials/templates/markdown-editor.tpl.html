@@ -1,0 +1,16 @@
+<div class="markdown-editor">
+  <div ng-show="isEditing" ui-codemirror="{ onLoad : codemirrorLoaded }" ui-codemirror-opts="editorOpts" ui-refresh="true" ng-model="markdownText"></div>
+  <div style="{{heightStyle()}}" class="markdown-editor-preview markdown-to-html" ng-hide="isEditing">
+    <div ng-bind-html="markdownText | markdown"></div>
+  </div>
+  <div class="markdown-editor-actions">
+    <span ng-click="isEditing = !isEditing" class="markdown-editor-action fa-stack fa-lg" tooltip="{{isEditing ? 'View preview' : 'Continue editing'}}">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-{{isEditing ? 'eye' : 'pencil'}} fa-stack-1x fa-inverse"></i>
+    </span>
+    <a href="https://en.support.wordpress.com/markdown-quick-reference/" target="_blank" class="markdown-editor-action fa-stack fa-lg" tooltip="Markdown guide">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-question fa-stack-1x fa-inverse"></i>
+    </a>
+  </div>
+</div>

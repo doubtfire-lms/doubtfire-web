@@ -10,7 +10,7 @@
             <h5 class="groupset-name" ng-hide="hideGroupSetName()">
             {{groupSetName(groupSetId)}}</h5>
             <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in relatedTasks | byGrade:project.target_grade | orderBy: 'definition.seq'">
-              <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == project.selectedTask}" ng-click="setSelectedTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.definition.name}}:</strong><br>{{task.status_txt}}">
+              <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == project.selectedTask}" ng-click="setSelectedTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.definition.name}}:</strong><br>{{task.status_txt()}}">
                 {{task.definition.abbreviation}} <i class="fa fa-eye" ng-show="task.similar_to_count > 0"></i>
               </button>
             </li>
@@ -21,9 +21,6 @@
     <div class="task-header-info col-sm-10">
       <div class="col-sm-7 task-description">
         <h4>{{project.selectedTask.definition.name}}</h4>
-        <p class="text-justify">
-          {{project.selectedTask.definition.description}}
-        </p>
       </div>
       <div class="col-sm-3 date-info">
         <p class="due-date">
@@ -79,10 +76,10 @@
           </h3>
         </div>
         <div class="task-feedback-tab-panel">
-          <task-sheet task="project.selectedTask" unit="unit" ng-if="activeTab == tabsData.taskSheet"></task-sheet>
+          <task-sheet task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabsData.taskSheet"></task-sheet>
           <submit-task-form task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabsData.fileUpload"></submit-task-form>
-          <view-submission ng-if="activeTab == tabsData.viewSubmission"></view-submission>
-          <view-comments ng-if="activeTab == tabsData.viewComments"></view-comments>
+          <view-submission ng-show="activeTab == tabsData.viewSubmission" project="project" task="project.selectedTask"></view-submission>
+          <view-comments ng-show="activeTab == tabsData.viewComments" project="project" task="project.selectedTask"></view-comments>
           <task-plagiarism-report task="project.selectedTask" ng-if="activeTab == tabsData.plagiarismReport"></task-plagiarism-report>
         </div><!--/panel-body-area-->
       </div><!--/tab-contents-panel-->

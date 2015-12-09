@@ -1,9 +1,9 @@
-<div class="panel-body">
-  <div class="help-block" ng-show="(!project.selectedTask.comments) || project.selectedTask.comments.length == 0">
+<div class="panel-body comment-panel">
+  <div class="large-notice-block" ng-show="(!task.comments) || task.comments.length == 0">
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment col-sm-12" ng-repeat="comment in project.selectedTask.comments">
+  <div class="comment col-sm-12" ng-repeat="comment in task.comments">
     <div class="comment-details col-md-2">
       <span class="comment-by">
         {{comment.comment_by}}
@@ -13,13 +13,7 @@
       </span>
     </div>
     <div class="comment-text col-md-9">
-      <div class="col-md-11">
-        <p>{{comment.comment}}</p>
-        <a ng-if="comment.comment | test: 'https?:\/\/.+\.(gif|jpe?g|png)': 'i'" ng-href="{{comment.comment}}">
-          <img ng-src="{{comment.comment}}">
-        </a>
-        </div>
-      </div>
+      <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
       <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)">
         <i class="fa fa-times-circle"></i>
       </div>
@@ -28,7 +22,7 @@
 </div>
 <div class="panel-footer">
   <form class="input-group comment-submitter" ng-submit="addComment()" role="form">
-    <textarea ng-keyup="checkCommentTextareaEnter()" ng-model="comment.text" class="form-control" placeholder="Make a comment on this submission..."></textarea>
+    <markdown-editor ng-model="comment.text" placeholder="Make a comment on this submission..." height="45"></markdown-editor>
     <span class="input-group-btn">
       <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
         <i class="fa fa-plus fa-2x"></i>
