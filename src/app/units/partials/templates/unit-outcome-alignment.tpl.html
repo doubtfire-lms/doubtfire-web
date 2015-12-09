@@ -1,4 +1,4 @@
-<div>
+<div class="unit-outcome-alignment">
   <div ng-class="{'col-sm-8': showCsv}">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
@@ -16,12 +16,12 @@
         </div>
       </div><!--/select-panel-heading-->
 
-      <div class="panel-body" style="padding-bottom: 30px;">
+      <div class="panel-body">
         <div class="col-sm-12">
-          <label>Selected {{selectAlignmentBy}}</label>
-          <ui-select on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
+          <ui-select class="select-alignment-item" on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
             <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
-              <strong>{{selectedAlignmentByItem.abbreviation}}</strong> - {{selectedAlignmentByItem.name}}
+              <label class="label label-info">{{selectedAlignmentByItem.abbreviation}}</label>
+              <span class="selected-alignment-item-name">{{selectedAlignmentByItem.name}}</span>
             </ui-select-match>
             <ui-select-choices repeat="item in selectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
               <h4>
