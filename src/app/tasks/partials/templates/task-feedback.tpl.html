@@ -17,7 +17,6 @@
           </div>
         </ul>
     </div><!--/active-task-switcher-->
-
     <div class="task-header-info col-sm-10">
       <div class="col-sm-7 task-description">
         <h4>{{project.selectedTask.definition.name}}</h4>
@@ -67,13 +66,12 @@
     </tabset><!--/tab-selector-->
 
     <div class="col-md-10 pull-right task-feedback-tab-contents">
-      <div class="panel panel-default">
+      <div class="panel panel-primary">
         <div class="panel-heading row-fluid">
           <h3 class="panel-title">
             {{activeTab.title}}
-            <br>
-            <small>{{activeTab.subtitle}}</small>
           </h3>
+          {{activeTab.subtitle}}
         </div>
         <div class="task-feedback-tab-panel">
           <task-sheet task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabsData.taskSheet"></task-sheet>

@@ -13,8 +13,8 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     #
     $scope.tabsData =
       taskSheet:
-        title: "View Task Sheet"
-        subtitle: "The task sheet contains the requirements of this task"
+        title: "Task Description"
+        subtitle: "A brief description of this task"
         icon: "fa-info"
         seq: 0
         active: false

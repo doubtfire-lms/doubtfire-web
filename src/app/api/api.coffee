@@ -47,6 +47,7 @@ angular.module("doubtfire.api", [
   Unit.withdrawStudentsCSVUrl = (unit) ->
     "#{api}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
 
+  Unit.learningProgressMedians = resourcePlus "/units/:id/learning_alignments/medians", { id: "@id" }
   Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
   Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
 

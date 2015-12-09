@@ -30,13 +30,13 @@ angular.module("doubtfire.services.tasks", [])
     COM: 'complete'
 
   taskService.learningWeight =
-    ready_to_mark:      0.7
+    ready_to_mark:      0.5
     not_submitted:      0.0
     working_on_it:      0.0
     need_help:          0.0
-    redo:               0.2
-    fix_and_include:    0.2
-    fix_and_resubmit:   0.4
+    redo:               0.1
+    fix_and_include:    0.1
+    fix_and_resubmit:   0.3
     discuss:            0.7
     complete:           0.8
 

@@ -1,38 +1,54 @@
-<div>
-  <a ng-click="toggleTaskSheet()" class="btn btn-default pull-right" ng-if="hasPDF()">
-    <i class="fa fa-file-pdf-o"></i><span ng-hide="showTaskSheet"> View PDF</span> <span ng-show="showTaskSheet"> Hide PDF</span>
-  </a>
-  <div ng-hide="showTaskSheet">
-    <p class="text-justify">
-      {{project.selectedTask.definition.description}}
-    </p>
+<div class="task-sheet" ng-init="alignments = (unit.task_outcome_alignments | taskFilter: project.selectedTask.task_definition_id)">
+  <div class="panel-body task-description">
+    <div class="markdown-to-pdf" ng-bind-html="project.selectedTask.definition.description | markdown"></div>
+  </div><!--task-description-panel-body-->
+  <div class="panel-heading task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
+    <h3 class="panel-title">
+      Task Outcome Alignments
+    </h3>
+    Teaching staff believe that completing this task will help you the outcomes listed below
+  </div><!--view-alignment-panel-header-->
+  <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
     <view-alignment></view-alignment>
-    <div class="panel-footer">
-      <a href="{{taskPDFUrl()}}" class="btn btn-success" ng-if="hasPDF()">
-        <i class="fa fa-download"></i><span> Download PDF</span>
-      </a>
-      <a href="{{resourceUrl()}}" class="btn btn-primary" ng-if="hasResources()">
-        <i class="fa fa-download"></i><span> Download Resources</span>
-      </a>
-    </div>
+  </div><!--view-alignment-panel-body-->
+  <div class="panel-heading row-fluid task-download" ng-show="hasPDF() || hasResources()">
+    <h3 class="panel-title">
+      Begin task
+    </h3>
+    Begin task by {{hasPDF() ? "viewing the task sheet" : ""}} {{hasPDF() && hasResources() ? "or" : ""}} {{hasResources() ? "downloading task resources" : ""}}
   </div>
-  <div ng-if="showTaskSheet">
-    <div class="panel-body" ng-hide="hasPDF()">
-      <div class="help-block">
-        <i class="fa fa-frown-o fa-2x"></i>
-        <p>Doubtfire does not have a PDF for this Task.</p>
-      </div><!--/no-pdf-->
-    </div>
-    <div ng-if="hasPDF() && hasResources()">
-      <pdf-panel-viewer
-        pdf-url="taskPDFUrl()"
-        resources-url="resourceUrl()">
-      </pdf-panel-viewer>
-    </div>
-    <div ng-if="hasPDF() && ! hasResources()">
-      <pdf-panel-viewer
-        pdf-url="taskPDFUrl()">
-      </pdf-panel-viewer>
-    </div>
+  <div class="panel-body task-buttons-download-area" ng-class="{ small: showTaskSheet }" ng-show="hasPDF() || hasResources()">
+    <a ng-class="{ active: showTaskSheet }" ng-click="toggleTaskSheet()" ng-show="hasPDF()" class="btn btn-lg btn-default">
+      <div>
+        <i class="fa fa-2x fa-file-pdf-o"></i>
+        <p>View{{showTaskSheet ? "ing" : ''}} PDF</p>
+      </div>
+    </a>
+    <a href="{{taskPDFUrl()}}" ng-show="hasPDF()" target="_blank" class="btn btn-lg btn-info">
+      <div>
+        <i class="fa fa-2x fa-file-pdf-o"></i>
+        <i class="fa fa-2x fa-download"></i>
+        <p>Download PDF</p>
+      </div>
+    </a>
+    <a href="{{resourceUrl()}}" ng-show="hasResources()" target="_blank" class="btn btn-lg btn-success">
+      <div>
+        <i class="fa fa-2x fa-download"></i>
+        <p>Download Resources</p>
+      </div>
+    </a>
   </div>
+  <div ng-if="showTaskSheet && hasPDF() && hasResources()">
+    <pdf-panel-viewer
+      pdf-url="taskPDFUrl()"
+      resources-url="resourceUrl()"
+      hide-footer="true">
+    </pdf-panel-viewer>
+  </div>
+  <div ng-if="showTaskSheet && hasPDF() && !hasResources()">
+    <pdf-panel-viewer
+      pdf-url="taskPDFUrl()"
+      hide-footer="true">
+    </pdf-panel-viewer>
+  </div><!--viewing-task-sheet-->
 </div>

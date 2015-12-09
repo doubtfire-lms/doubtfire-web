@@ -21,11 +21,11 @@ angular.module('doubtfire.units.partials.outcome-alignment-rating',[])
     $scope.max = 5
 
     $scope.tooltips = [
-      "Rating 1 description",
-      "Rating 2 description",
-      "Rating 3 description",
-      "Rating 4 description",
-      "Rating 5 description",
+      "The task is slightly related to this outcome",
+      "The task is related to this outcome",
+      "The task is a reasonable example for this outcome",
+      "The task is a strong example of this outcome",
+      "The task is the best example of this outcome",
     ]
 
     $scope.setHoverValue = (value) ->

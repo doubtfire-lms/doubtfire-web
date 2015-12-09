@@ -9,17 +9,16 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     project: "=project"
     showCsv: "=showCsv"
 
-  controller: ($scope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService) ->
+  controller: ($scope, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->
         data.task_id = projectService.taskFromTaskDefId($scope.project, data.task_definition_id).id
-      $scope.taskStatusFactor = (task_definition_id) ->
-        taskService.learningWeight[projectService.taskFromTaskDefId($scope.project, task_definition_id).status]
+      $scope.taskStatusFactor = outcomeService.projectTaskStatusFactor($scope.project)
     else
       $scope.source = $scope.unit
       $scope.updateRequest = (data) ->
-      $scope.taskStatusFactor = (task_definition_id) -> 1
+      $scope.taskStatusFactor = outcomeService.unitTaskStatusFactor()
 
     $scope.selectOutcome = (outcome) ->
       $scope.selectedOutcome = outcome
@@ -84,7 +83,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.create data,
         (response) ->
           $scope.source.task_outcome_alignments.push(response)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -96,7 +95,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           learning_outcome_id: $scope.selectedOutcome.id
           task_definition_id: taskDef.id
           rating: 3
-          description: 'Provide rationale.'
+          description: null
         }
         addLink(data)
 
@@ -107,7 +106,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           learning_outcome_id: outcome.id
           task_definition_id: $scope.selectedTask.id
           rating: 3
-          description: 'Provide rationale.'
+          description: null
         }
         addLink(data)
 
@@ -136,7 +135,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment saved", 2000)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -148,7 +147,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update(data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment rating saved", 2000)
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -161,11 +160,19 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.delete(data,
         (response) ->
           $scope.source.task_outcome_alignments = _.without $scope.source.task_outcome_alignments, align
-          $scope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart')
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
       )
+
+    $scope.toggleEditRationale = (align) ->
+      if align.editingRationale
+        data = align
+        data.editingRationale = undefined
+        $scope.saveTaskAlignment(data, align.id)
+      else
+        align.editingRationale = !align.editingRationale
 
     $scope.csvImportResponse = {}
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
@@ -177,7 +184,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
       csvResultService.show 'Task CSV upload results.', response
-      $scope.$broadcast('UpdateAlignmentChart')
+      $rootScope.$broadcast('UpdateAlignmentChart')
       if $scope.project?
         $scope.project.refresh($scope.unit)
       else

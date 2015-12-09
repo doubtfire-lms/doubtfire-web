@@ -1,7 +1,9 @@
 <div class="panel-body">
-  <iframe ng-src="{{getGoogleDocsViewerUrl()}}"></iframe>
+  <div class="iframe-wrapper">
+    <iframe ng-src="{{getGoogleDocsViewerUrl()}}"></iframe>
+  </div>
 </div><!--/panel-body-->
-<div class="panel-footer">
+<div class="panel-footer" ng-if="!hideFooter">
   <div class="pull-left text-muted" ng-show="footerText">
     <strong>Note:</strong> {{footerText}}
   </div>

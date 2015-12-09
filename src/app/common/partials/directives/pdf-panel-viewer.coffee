@@ -6,6 +6,7 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
     pdfUrl: '='
     footerText: '@'
     resourcesUrl: '='
+    hideFooter: '=?'
 
   controller: ($scope, $sce) ->
     $scope.getGoogleDocsViewerUrl = ->

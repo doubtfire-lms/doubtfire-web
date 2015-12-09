@@ -1,0 +1,43 @@
+.view-alignment {
+  display: -webkit-flex;
+  display: flex;
+  .alignment-list, .chart-area {
+    flex: 1;
+    -webkit-flex: 1;
+  }
+  .alignment-list {
+    margin: 0;
+    border-right: 1px solid #dddddd;
+    & > li {
+      border-radius: 0;
+      border: 0;
+      padding: 3em 1.5em;
+      cursor: pointer;
+      &:hover {
+        background-color: #eee;
+      }
+      &.expanded {
+        background-color: #f9f9f9;
+      }
+    }
+    & > li:not(:first-child) {
+      border-top: 1px solid #dddddd;
+    }
+    .outcome-heading {
+      margin-bottom: 1em;
+    }
+  }
+  .chart-area {
+    padding: 1em;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-align-content: space-around;
+            align-content: space-around;
+    -webkit-justify-content: center;
+            justify-content: center;
+  }
+}
