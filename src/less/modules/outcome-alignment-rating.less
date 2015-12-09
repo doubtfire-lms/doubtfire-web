@@ -1,0 +1,33 @@
+.outcome-alignment-rating {
+  &.colorful {
+    @base-color: hsl(219, 74%, 83%);
+
+    // This function generates colors for 0..<n
+    .generate-colors(5);
+    .generate-colors(@n, @i: 1) when (@i <= @n) {
+      @color: darken(@base-color, @i * 10%);
+      .rating-static-tooltip .badge.rating-@{i} {
+        background-color: @color !important;
+        color: white;
+      }
+      .rating-area {
+        i:nth-of-type(@{i}) { color:  @color; }
+      }
+      .generate-colors(@n, (@i + 1));
+    }
+
+  }
+  .rating-area {
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    &:focus {
+      outline: none;
+    }
+    i {
+      cursor: pointer;
+      padding: 0 10px;
+    }
+  }
+}
