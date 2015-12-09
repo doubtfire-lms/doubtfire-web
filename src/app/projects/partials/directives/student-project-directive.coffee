@@ -12,9 +12,11 @@ angular.module("doubtfire.projects.student-project-directive", [
     unit: '=?' # to bind unit to outer-scope
     assessingUnitRole: '=?' # to bind assessingUnitRole to outer-scope
     fullscreen: '=?'
-  controller: ($scope, $state, Project, UnitRole, headerService, alertService, taskService, unitService, projectService) ->
+  controller: ($scope, $state, Visualisation, Project, UnitRole, headerService, alertService, taskService, unitService, projectService) ->
     if $scope.unit?
       $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
+
+    $scope.refreshCharts = Visualisation.refreshAll
 
     $scope.showTaskView = (task) ->
       if not (task or $scope.project.selectedTask)

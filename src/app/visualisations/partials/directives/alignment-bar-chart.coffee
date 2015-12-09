@@ -16,7 +16,6 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
       clipEdge: yes
       stacked: yes
       height: 440
-      width: 675
       duration: 500
       x: xFn
       y: yFn
@@ -29,7 +28,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
     $scope.calculateAlignmentVisualisation = (source, taskStatusFactor) ->
       unit = $scope.unit
       _.extend $scope.data, outcomeService.targetsByGrade($scope.unit, source)
-      
+
       if $scope.api?
         $scope.api.update()
 

@@ -29,6 +29,7 @@ angular.module('doubtfire.units.partials.outcome-alignment-rating',[])
     ]
 
     $scope.setHoverValue = (value) ->
+      return $scope.ngModel if $scope.readonly
       $scope.hoveringOver = value
 
     # Set defaults

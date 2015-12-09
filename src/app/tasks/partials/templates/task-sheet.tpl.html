@@ -1,4 +1,4 @@
-<div class="task-sheet" ng-init="alignments = (unit.task_outcome_alignments | taskFilter: project.selectedTask.task_definition_id)">
+<div class="task-sheet">
   <div class="panel-body task-description">
     <div class="markdown-to-pdf" ng-bind-html="project.selectedTask.definition.description | markdown"></div>
   </div><!--task-description-panel-body-->
@@ -9,7 +9,12 @@
     Teaching staff believe that completing this task will help you the outcomes listed below
   </div><!--view-alignment-panel-header-->
   <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
-    <view-alignment></view-alignment>
+    <view-alignment
+      project="project"
+      task="task"
+      unit="unit"
+      alignments="alignments"
+      summative="false"></view-alignment>
   </div><!--view-alignment-panel-body-->
   <div class="panel-heading row-fluid task-download" ng-show="hasPDF() || hasResources()">
     <h3 class="panel-title">

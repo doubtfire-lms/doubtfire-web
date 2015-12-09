@@ -4,29 +4,30 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
   restrict: 'E'
   templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
   scope:
-    project:  '=project'
-    unit:     '=unit'
-    ilo:      '=ilo'
-    targets:  '=targets'
-    currentProgress: '=currentProgress'
-    medians: '=medians'
+    project: '='
+    unit: '='
+    ilo: '='
+    targets: '='
+    currentProgress: '='
+    classStats: '='
+    showLegend: '=?'
 
-  controller: ($scope, Visualisation) ->
+  controller: ($scope, $interval, Visualisation) ->
+    $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
       # based on the work of Clint Ivy, Jamie Love, and Jason Davies.
       # http://projects.instantcognition.com/protovis/bulletchart/
       nv.models.iloBullet = ->
-
         chart = (selection) ->
           selection.each (d, i) ->
-            availableWidth = width - (margin.left) - (margin.right)
+            availableWidth = width - (if $scope.legend then margin.left else 0) - (if $scope.legend then margin.right else 0)
             availableHeight = height - (margin.top) - (margin.bottom)
             container = d3.select(this)
             nv.utils.initSVG container
             rangez = ranges.call(this, d, i).slice().reverse()
             markerz = markers.call(this, d, i).slice().sort(d3.descending)
-            measurez = measures.call(this, d, i).slice().sort(d3.descending)
+            measurez = measures.call(this, d, i)
             rangeLabelz = rangeLabels.call(this, d, i).slice().reverse()
             markerLabelz = markerLabels.call(this, d, i).slice()
             measureLabelz = measureLabels.call(this, d, i).slice()
@@ -63,11 +64,12 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet')
             gEnter = wrapEnter.append('g')
             g = wrap.select('g')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#d62728')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2ca02c')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#ff7f0e')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#299ff0')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2796e3')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#2590d9')
             gEnter.append('rect').attr('class', 'nv-range nv-rangeP').style('fill-opacity', '0.6').style('fill','#1f77b4')
             gEnter.append('rect').attr 'class', 'nv-measure'
+            gEnter.append('rect').attr('class', 'nv-median').style('fill-opacity', '1.0').style('fill','#ffffff')
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
 
             w0 = (d) ->
@@ -106,31 +108,58 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
               .attr('x', xp1(0))
               .datum rangeP
 
-            g.select('rect.nv-measure')
-              .style('fill', "#373737")
-              .style('fill-opacity',0.6)
-              .attr('height', availableHeight / 3)
-              .attr('y', availableHeight / 3)
-              .attr('width', w1(measurez[0]))
-              .attr('x', xp1(0))
-              .on('mouseover', ->
-                dispatch.elementMouseover
-                  value: measurez[0]
-                  label: measureLabelz[0] or 'Current'
-                  color: d3.select(this).style('fill')
-                return)
-              .on('mousemove', ->
-                dispatch.elementMousemove
-                  value: measurez[0]
-                  label: measureLabelz[0] or 'Current'
-                  color: d3.select(this).style('fill')
-                return)
-              .on 'mouseout', ->
-                dispatch.elementMouseout
-                  value: measurez[0]
-                  label: measureLabelz[0] or 'Current'
-                  color: d3.select(this).style('fill')
-                return
+            if measurez?
+              g.select('rect.nv-median')
+                .style('fill', "#373737")
+                .style('fill-opacity',0.6)
+                .attr('height', availableHeight)
+                .attr('y', 0)
+                .attr('width', 2)
+                .attr('x', xp1(measurez.median))
+                .on('mouseover', ->
+                  dispatch.elementMouseover
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on('mousemove', ->
+                  dispatch.elementMousemove
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on 'mouseout', ->
+                  dispatch.elementMouseout
+                    value: measurez.median
+                    label: 'Class Median'
+                    color: d3.select(this).style('fill')
+                  return
+
+              g.select('rect.nv-measure')
+                .style('fill', "#373737")
+                .style('fill-opacity',0.6)
+                .attr('height', availableHeight * 2 / 3)
+                .attr('y', availableHeight / 6)
+                .attr('width', xp1(measurez.upper) - xp1(measurez.lower))
+                .attr('x', xp1(measurez.lower))
+                .on('mouseover', ->
+                  dispatch.elementMouseover
+                    value: measurez[0]
+                    label: measureLabelz[0] or 'Current'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on('mousemove', ->
+                  dispatch.elementMousemove
+                    value: measurez[0]
+                    label: measureLabelz[0] or 'Current'
+                    color: d3.select(this).style('fill')
+                  return)
+                .on 'mouseout', ->
+                  dispatch.elementMouseout
+                    value: measurez[0]
+                    label: measureLabelz[0] or 'Current'
+                    color: d3.select(this).style('fill')
+                  return
 
             h3 = availableHeight / 6
             markerData = markerz.map((marker, index) ->
@@ -327,7 +356,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
         orient = 'left' # TODO top & bottom
         reverse = false
-        margin = { top: 5, right: 40, bottom: 20, left: 120 }
+        margin = if $scope.legend then { top: 5, right: 40, bottom: 5, left: 120 } else { top: 5, right: 5, bottom: 5, left: 5 }
 
         ranges = (d) -> d.ranges
         rangeLabels = (d) -> d.rangeLabels
@@ -366,7 +395,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
             rangez = ranges.call(this, d, i).slice().sort(d3.descending)
             markerz = markers.call(this, d, i).slice().sort(d3.descending)
-            measurez = measures.call(this, d, i).slice().sort(d3.descending)
+            measurez = measures.call(this, d, i)
 
             # Setup containers and skeleton of chart
             wrap = container.selectAll('g.nv-wrap.nv-bulletChart').data([d])
@@ -375,9 +404,9 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             g = wrap.select('g')
 
             gEnter.append('g').attr('class', 'nv-bulletWrap')
-            gEnter.append('g').attr('class', 'nv-titles')
+            gEnter.append('g').attr('class', 'nv-titles') if $scope.legend
 
-            wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            wrap.attr('transform', 'translate(' + (if $scope.legend then margin.left else 10) + ',' + margin.top + ')')
 
             # Compute the new x-scale.
             x1 = d3.scale.linear()
@@ -395,18 +424,19 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             w0 = (d) -> Math.abs(x0(d) - x0(0)) # TODO: could optimize by precalculating x0(0) and x1(0)
             w1 = (d) -> Math.abs(x1(d) - x1(0))
 
-            title = gEnter.select('.nv-titles').append('g')
-              .attr('text-anchor', 'end')
-              .attr('transform', 'translate(-6,' + (height - margin.top - margin.bottom) / 2 + ')')
+            if $scope.legend
+              title = gEnter.select('.nv-titles').append('g')
+                .attr('text-anchor', 'end')
+                .attr('transform', 'translate(-6,' + (height - margin.top - margin.bottom) / 2 + ')')
 
-            title.append('text')
-              .attr('class', 'nv-title')
-              .text((d) -> d.title )
+              title.append('text')
+                .attr('class', 'nv-title')
+                .text((d) -> d.title )
 
-            title.append('text')
-              .attr('class', 'nv-subtitle')
-              .attr('dy', '1em')
-              .text( (d) -> d.subtitle )
+              title.append('text')
+                .attr('class', 'nv-subtitle')
+                .attr('dy', '1em')
+                .text( (d) -> d.subtitle )
 
             bullet
               .width(availableWidth)
@@ -464,7 +494,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         #============================================================
         # Event Handling/Dispatching (out of chart's scope)
         #------------------------------------------------------------
-
         bullet.dispatch.on 'elementMouseover.tooltip', (evt) ->
           evt['series'] = {
             key: evt.label
@@ -477,6 +506,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
           tooltip.hidden(true)
 
         bullet.dispatch.on 'elementMousemove.tooltip', (evt) ->
+          tooltip.position({ top: d3.event.pageY, left: d3.event.pageX })()
           tooltip()
 
         #============================================================
@@ -521,7 +551,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'iloChart', {
       height: 60
-      width: 400
       duration: 500
     }, {}
 
@@ -530,21 +559,19 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     targetD = targetC + $scope.targets[$scope.ilo.id][2]
     targetHD = targetD + $scope.targets[$scope.ilo.id][3]
 
-    classMedian = if $scope.medians? && $scope.medians[$scope.ilo.id]? then $scope.medians[$scope.ilo.id] else 0
-
     $scope.data = {
       "title": $scope.ilo.abbreviation,    #Label the bullet chart
       "subtitle": $scope.ilo.name,   #sub-label for bullet chart
       "ranges":[targetP,targetC,targetD,targetHD],  #Minimum, mean and maximum values.
       "rangeLabels":['Pass','Credit','Distinction','High Distinction'],  #Minimum, mean and maximum values.
-      "measures":[classMedian],    #Value representing current measurement (the thick blue line in the example)
-      "measureLabels": ['Class Average']
+      "measures": {},    #Value representing current measurement (the thick blue line in the example)
+      "measureLabels": ['Most of Class is in this range']
       "markers":[]      #Place a marker on the chart (the white triangle marker)
       "markerLabels": ['Your Progress - Staff Suggestion', 'Your Progress - Self Reflection']
     }
 
-    if $scope.medians? && $scope.medians.title?
-      $scope.data.measureLabels[0] = $scope.medians.title
+    if $scope.classStats? && $scope.classStats.title?
+      $scope.data.measureLabels[0] = $scope.classStats.title
 
     updateProgress = () ->
       if $scope.currentProgress?
@@ -553,7 +580,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
           if $scope.currentProgress[i].title?
             $scope.data.markerLabels[i] = $scope.currentProgress[i].title
 
-      $scope.data.measures[0] = if $scope.medians? && $scope.medians[$scope.ilo.id]? then $scope.medians[$scope.ilo.id] else 0
+      $scope.data.measures = if $scope.classStats? && $scope.classStats[$scope.ilo.id]? then $scope.classStats[$scope.ilo.id] else 0
 
     updateProgress()
 

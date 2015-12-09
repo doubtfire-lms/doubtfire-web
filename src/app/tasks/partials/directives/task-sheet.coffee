@@ -12,9 +12,12 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
     unit: '='
     project: '='
 
-  controller: ($scope, currentUser, Task) ->
+  controller: ($scope, $filter, currentUser, Task) ->
 
     $scope.showTaskSheet = false
+
+    $scope.$watch 'project.selectedTask.task_definition_id', (newTaskDefId) ->
+      $scope.alignments = $filter('taskFilter')($scope.unit.task_outcome_alignments, newTaskDefId)
 
     $scope.hasPDF = () ->
       $scope.task.definition.has_task_pdf

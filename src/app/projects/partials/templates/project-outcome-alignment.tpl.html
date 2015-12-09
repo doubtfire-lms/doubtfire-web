@@ -1,20 +1,13 @@
 <div>
   <tabset class="task-feedback-tab-selector pull-left col-md-2" vertical="true" type="pills">
-    <tab ng-click="poaView.activeTab = 'list'">
-      <tab-heading tooltip="View learning outcomes" tooltip-placement="right" tooltip-popup-delay="200">
-        <div class="text-center">
-          <i class="fa fa-2x fa-list" style="margin-right: 1ex"></i>
-        </div>
-      </tab-heading>
-    </tab>
-    <tab ng-click="selectProgress()">
+    <tab ng-click="selectTab('progress')">
       <tab-heading tooltip="View learning progress" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x fa-bar-chart" style="margin-right: 1ex"></i>
         </div>
       </tab-heading>
     </tab>
-    <tab ng-click="poaView.activeTab = 'reflect'">
+    <tab ng-click="selectTab('reflect')">
       <tab-heading tooltip="Reflect on learning" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x fa-balance-scale" style="margin-right: 1ex"></i>
@@ -23,17 +16,26 @@
     </tab>
   </tabset><!--/tab-selector-->
   <div class="col-md-10">
-    <div ng-show="poaView.activeTab == 'list'">
-      List unit learning outcomes here
-      {{currentProgress}}
-    </div>
-    <div ng-show="poaView.activeTab == 'progress'" ng-if="medians">
-      <div ng-repeat="ilo in unit.ilos">
-        <alignment-bullet-chart unit="unit" project="project" ilo="ilo" targets="targets" current-progress="currentProgress" medians="medians"></alignment-bullet-chart>
+    <div ng-show="poaView.activeTab == 'progress'">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Outcome Alignments
+          </h3>
+          Overall progress on outcome alignments are shown below
+        </div>
+        <div class="panel-body view-alignment" style="padding: 0px;">
+          <view-alignment
+            project="project"
+            unit="unit"
+            class-stats="classStats"
+            current-progress="currentProgress"
+            summary-only="true"></view-alignment>
+        </div>
       </div>
     </div>
-    <div>
-      <unit-outcome-alignment show-csv="false" unit="unit" project="project" ng-show="poaView.activeTab == 'reflect'"></unit-outcome-alignment>
+    <div ng-show="poaView.activeTab == 'reflect'">
+      <unit-outcome-alignment show-csv="false" unit="unit" project="project"></unit-outcome-alignment>
     </div>
   </div>
 </div>
