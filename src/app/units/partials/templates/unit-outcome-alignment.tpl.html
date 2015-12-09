@@ -17,25 +17,27 @@
       </div><!--/select-panel-heading-->
 
       <div class="panel-body">
-        <div class="col-sm-12">
-          <ui-select class="select-alignment-item" on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
-            <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
-              <label class="label label-info">{{selectedAlignmentByItem.abbreviation}}</label>
-              <span class="selected-alignment-item-name">{{selectedAlignmentByItem.name}}</span>
-            </ui-select-match>
-            <ui-select-choices repeat="item in selectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
-              <h4>
-                {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
-              </h4>
-              <p class="help-block select-alignment-by-item-description">
-                {{item.description | truncatedMarkdown}}
-              </p>
-            </ui-select-choices>
-          </ui-select>
-          <p class="clearfix">
-            <div class="markdown-to-html smaller col-sm-12 " ng-bind-html="selectedAlignmentByItem.description | markdown"></div>
-          </p>
-        </div><!--/select-alignment-by-->
+        <div class="panel-body-wrapper clearfix">
+          <div class="col-sm-12">
+            <ui-select class="select-alignment-item" on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
+              <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
+                <label class="label label-info">{{selectedAlignmentByItem.abbreviation}}</label>
+                <span class="selected-alignment-item-name">{{selectedAlignmentByItem.name}}</span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in selectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
+                <h4>
+                  {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
+                </h4>
+                <p class="help-block select-alignment-by-item-description">
+                  {{item.description | truncatedMarkdown}}
+                </p>
+              </ui-select-choices>
+            </ui-select>
+            <p class="clearfix">
+              <div class="markdown-to-html smaller col-sm-12 " ng-bind-html="selectedAlignmentByItem.description | markdown"></div>
+            </p>
+          </div><!--/select-alignment-by-->
+        </div>
         <div class="col-sm-12">
           <hr>
           <label>Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}</label>
