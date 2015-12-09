@@ -62,3 +62,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 - [Angular X-Editable](http://vitalets.github.io/angular-xeditable/)
 - [Angular Filters](https://github.com/a8m/angular-filter)
 - [Angular Markdown Filter](https://github.com/vpegado/angular-markdown-filter)
+
+## Contributing
+
+Refer to CONTRIBUTING.md
