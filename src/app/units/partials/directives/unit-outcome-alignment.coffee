@@ -110,6 +110,22 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
         }
         addLink(data)
 
+    $scope.itemIsAligned = (item) ->
+      removeBy = if $scope.selectAlignmentBy is 'Outcome' then 'task_definition_id' else 'learning_outcome_id'
+      properties = {}
+      properties[removeBy] = item.id
+      _.findWhere($scope.filteredAlignments, properties)?
+
+    selectedInverseAlignmentItem = null
+
+    $scope.isSelectedInverseAlignmentItem = (item) ->
+      selectedInverseAlignmentItem is item
+
+    $scope.selectInverseAlignmentItem = (item) ->
+      selectedInverseAlignmentItem = item
+      # auto-add if not added
+      $scope.addAlignmentItem(item) unless $scope.itemIsAligned(item)
+
     # Generalise add items
     $scope.addAlignmentItem = (item) ->
       $scope["add#{$scope.inverseSelectAlignmentBy}"](item)
@@ -128,6 +144,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
                 .findWhere(properties)
                 .value()
       $scope.removeTaskAlignment align
+      item.isLinked = false
 
     $scope.saveTaskAlignment = (data, id) ->
       data.unit_id = $scope.unit.id

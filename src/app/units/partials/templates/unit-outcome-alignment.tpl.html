@@ -17,9 +17,9 @@
       </div><!--/select-panel-heading-->
 
       <div class="panel-body">
-        <div class="panel-body-wrapper clearfix">
+        <div class="panel-body-wrapper clearfix select-alignment-item">
           <div class="col-sm-12">
-            <ui-select class="select-alignment-item" on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
+            <ui-select on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
               <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
                 <label class="label label-info">{{selectedAlignmentByItem.abbreviation}}</label>
                 <span class="selected-alignment-item-name">{{selectedAlignmentByItem.name}}</span>
@@ -38,23 +38,31 @@
             </p>
           </div><!--/select-alignment-by-->
         </div>
-        <div class="col-sm-12">
-          <hr>
-          <label>Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}</label>
-          <ui-select multiple tagging tagging-label="false" tagging-tokens="" placeholder="Select..." on-select="addAlignmentItem($item)" on-remove="removeAlignmentItem($item)" ng-model="selected.items">
-            <ui-select-match placeholder="Add {{inverseSelectAlignmentBy}}s...">
-              <strong>{{$item.abbreviation}}</strong> - {{$item.name}}
-            </ui-select-match>
-            <ui-select-choices repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
-              <h4>
-                {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
-              </h4>
-              <p class="help-block">
-                {{item.description | truncatedMarkdown}}
-              </p>
-            </ui-select-choices>
-          </ui-select>
-        </div><!--/add-alignment-items-->
+        <div class="bottom-panel">
+          <div class="panel-body-wrapper clearfix inverse-select-alignment-by-items">
+            <div class="col-sm-12">
+              <label>
+                Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}
+              </label>
+              <div class="small text-muted">Scroll to view more {{inverseSelectAlignmentBy}}s</div>
+              <div class="list-group-inverse-select-alignment">
+                <div class="list-group">
+                  <button ng-class="{active: isSelectedInverseAlignmentItem(item), 'list-group-item-info': itemIsAligned(item)}" class="list-group-item list-group-inverse-item" ng-click="selectInverseAlignmentItem(item)" ng-repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq'">
+                    <h4>
+                      <span class="item-label-overflow">
+                        {{item.name}}
+                      </span>
+                      <span class="label label-info pull-right">{{item.abbreviation}}</span>
+                    </h4>
+                    <p class="help-block">
+                      {{item.description | truncatedMarkdown}}
+                    </p>
+                  </button>
+                </div>
+              </div>
+            </div><!--/add-alignment-items-->
+          </div>
+        </div><!--/bottom-panel-->
       </div><!--/select-panel-body-->
 
       <div class="panel-heading" ng-show="selected.items.length > 0">
