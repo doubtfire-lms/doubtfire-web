@@ -50,15 +50,15 @@ You may want to branch again, e.g.:
 | |/
 | (m3)
 | /|
-|/ | 
+|/ |
 (m4)
 |  |
 |  |
 *  *
- ```
- 
+```
+
 Here, we:
- 
+
  1. branched off `master` to create our `develop` branch, at **`b1`**
  2. branched off `develop` to create a new feature under the new branch `feature/my-new-feature`, at **`b2`**
  3. branched off `feature/my-new-feature` to create some unit tests for that feature under `test/unit-tests-for-new-feature`, at **`b3`**
@@ -69,7 +69,7 @@ Here, we:
  8. decide we're ready to release, so merge `develop` into `master`, at **`m4`**
 
 Note that along the way **we're deleting branches after we don't need them**. This helps us keep *short-lived* branches that don't go *stale* after months of inactivity, and prevents us from forgetting about open branches. The only branch we kept open was `develop`, which we can always branch off for new, un-released changes again.
-  
+
 Ideally, any changes that are merged into `master` have been **code-reviewed** before they were merged into `develop`. **You should always code review before merging back into `develop`**. You can do this by performing a Pull Request, where the reviewer can see the changes you want to merge in to `develop`.
 
 ### Branch Prefixes
@@ -133,7 +133,7 @@ Write your commits in the imperative mood and not the indicative mood
 A properly formed git commit subject line should always be able to complete the following sentence:
 
 > If applied, this commit will **your subject line here**
-> 
+>
 > If applied, this commit will **fix a bug**
 >
 > If applied, this commit will **change the behaviour of Y**
