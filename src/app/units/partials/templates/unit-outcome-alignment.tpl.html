@@ -1,4 +1,4 @@
-<div class="unit-outcome-alignment">
+<div class="unit-outcome-alignment" ng-init="filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
   <div ng-class="{'col-sm-8': showCsv}">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
@@ -38,13 +38,13 @@
             </p>
           </div><!--/select-alignment-by-->
         </div>
-        <div class="bottom-panel">
-          <div class="panel-body-wrapper clearfix inverse-select-alignment-by-items">
+        <div class="bottom-panel clearfix">
+          <div class="panel-body-wrapper clearfix inverse-select-alignment-by-items pull-left">
             <div class="col-sm-12">
               <label>
                 Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}
               </label>
-              <div class="small text-muted">Scroll to view more {{inverseSelectAlignmentBy}}s</div>
+              <label class="small text-muted">Scroll to view more {{inverseSelectAlignmentBy}}s. Click once to select the {{inverseSelectAlignmentBy}} and rate on the right and click again to deselect {{inverseSelectAlignmentBy}}.</label>
               <div class="list-group-inverse-select-alignment">
                 <div class="list-group">
                   <button ng-class="{active: isSelectedInverseAlignmentItem(item), 'list-group-item-info': itemIsAligned(item)}" class="list-group-item list-group-inverse-item" ng-click="selectInverseAlignmentItem(item)" ng-repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq'">
@@ -62,84 +62,43 @@
               </div>
             </div><!--/add-alignment-items-->
           </div>
+          <div class="panel-body-wrapper clearfix alignment-rater pull-right">
+            {{align = searchForAlignmentForItem(selectedInverseAlignmentItem); ''}}
+            <div ng-if="align">
+              <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
+              <div class="pull-left col-sm-{{align.editingRationale ? '12' : '10'}}">
+                <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
+                  {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
+                  <a ng-hide="align.description">Click to add one.</a>
+                </div>
+                <div ng-if="align.editingRationale" class="clearfix">
+                  <markdown-editor
+                    height="200"
+                    ng-model="align.description"
+                    placeholder="Edit rationale..."
+                    autofocus="true">
+                  </markdown-editor>
+                  <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
+                </div>
+              </div>
+            </div>
+            <div ng-hide="align">
+              No {{inverseSelectAlignmentBy}} is selected. Select one on the left first.
+            </div>
+          </div>
         </div><!--/bottom-panel-->
       </div><!--/select-panel-body-->
-
-      <div class="panel-heading" ng-show="selected.items.length > 0">
-        <h4 class="panel-title">Align {{inverseSelectAlignmentBy}}s to {{selectAlignmentBy}}</h4>
-        Align the <strong>{{selected.items.length > 1 ? selected.items.length : ''}} selected {{inverseSelectAlignmentBy}}{{selected.items.length > 1 ? 's' : ''}}</strong> to the {{selectAlignmentBy}} <strong>{{selectedAlignmentByItem.name}}</strong>
-      </div><!--/align-panel-heading-->
-
-      <div class="panel-body student-list" ng-show="selected.items.length > 0">
-        <table ng-show="filteredAlignments.length > 0" class="table table-hover table-pointer table-unit-outcome-alignment">
-          <thead>
-            <tr>
-              <th class="selectBy">
-                <div>{{inverseSelectAlignmentBy}}</div>
-                <small class="text-muted">{{inverseSelectAlignmentBy}} related to {{selectedAlignmentByItem.abbreviation}}</small>
-              </th>
-              <th class="rating-rationale">
-                <div>Rating and Rationale</div>
-                <small class="text-muted">Rating how well you feel this task related to {{selectedAlignmentByItem.abbreviation}} and justify with a brief rationale</small>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="align in filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
-              <td ng-show="selectAlignmentBy=='Task'">
-                <strong>
-                  {{unit.outcome(align.learning_outcome_id).abbreviation}}
-                </strong> - {{unit.outcome(align.learning_outcome_id).name}}
-              </td>
-              <td ng-show="selectAlignmentBy=='Outcome'">
-                <strong>
-                  {{unit.taskDef(align.task_definition_id).abbreviation}}
-                </strong> - {{unit.taskDef(align.task_definition_id).name}}
-              </td>
-              <td class="clearfix rating-rationale">
-                <div class="col-sm-12 rating">
-                  <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
-                </div>
-                <div class="col-sm-12 rationale">
-                  <div class="pull-left col-sm-{{align.editingRationale ? '12' : '10'}}">
-                    <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
-                      {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
-                      <a ng-hide="align.description">Click to add one.</a>
-                    </div>
-                    <div ng-if="align.editingRationale" class="clearfix">
-                      <markdown-editor
-                        height="200"
-                        ng-model="align.description"
-                        placeholder="Edit rationale..."
-                        autofocus="true">
-                      </markdown-editor>
-                      <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
-                    </div>
-                  </div>
-                  <div class="col-sm-1 pull-right rationale-actions" ng-hide="align.editingRationale">
-                    <i tooltip="Edit rationale" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" ng-class="{active: editingRationale}" class="fa fa-pencil edit" ng-click="toggleEditRationale(align)"></i>
-                    <i tooltip="Remove alignment" tooltip-append-to-body="true" tooltip-popup-delay="500" tooltip-placement="right" class="fa fa-trash delete" ng-click="removeTaskAlignment(align)"></i>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div><!--/select-panel-->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <h4 class="panel-title">Visualise Task Alignment</h4>
+          See how the alignment details you have provided relate to each learning outcome.
       </div>
-    </div><!--/align-panel-heading-->
-
-    <div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">Visualise Task Alignment</h4>
-            See how the alignment details you have provided relate to each learning outcome.
-        </div>
-        <div class="panel-body">
-          <alignment-bar-chart unit="unit" project="project" source="source" task-status-factor="taskStatusFactor"></alignment-bar-chart>
-        </div>
+      <div class="panel-body">
+        <alignment-bar-chart unit="unit" project="project" source="source" task-status-factor="taskStatusFactor"></alignment-bar-chart>
       </div>
     </div><!--/visualisation-->
-  </div>
+  </div><!--/main-panels-->
   <div class="col-sm-4" ng-if="showCsv">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -164,5 +123,5 @@
         </button>
       </div>
     </div><!--/csv-import-export-->
-  </div>
+  </div><!--/csv-panels-->
 </div>
