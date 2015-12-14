@@ -35,7 +35,7 @@
           <h5>Description</h5>
           <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
         </div>
-        <div ng-if="ilo && classStats">
+        <div ng-if="ilo && classStats &&!hideVisualisation">
           <h5>Visualisation</h5>
           <alignment-bullet-chart
             show-legend="false"
