@@ -22,23 +22,50 @@ angular.module("doubtfire.services.outcome-service", [])
 
     calculateTargets: (unit, source, taskStatusFactor) ->
       outcomes = {}
+      # For each learning outcome (LO) -- produce a map with grades containing task scores
+      # calculated from alignment details, task target grade, and task status factor.
+      #
+      # The Task Status Factor for projects will be a value between 0 and 1
+      # In the unit the taskStatusFactor will always be 1 (100%) to show potential values
+      # for the unit -- in effect removing the task status from unit calculations
       _.each unit.ilos, (outcome) ->
+        # Add grade map for this LO to outcomes map
         outcomes[outcome.id] = {
-          0: []
-          1: []
+          # Using 0..3 so that it can be used to calculate the grade scale below
+          0: [] # Pass grade... -- will contain scores for pass grade tasks
+          1: [] # Credit grade... -- etc.
           2: []
           3: []
         }
 
+      # For each outcome / task alignment...
       _.each source.task_outcome_alignments, (align) ->
+        # Get the task definition
         td = unit.taskDef(align.task_definition_id)
+        # Store a partial score for this task in the relevant outcomes ( outcomes[outcome id][grade] << score )
+        # At this stage it is just rating * taskFactor (1 to 5 times 0 to 1)
         outcomes[align.learning_outcome_id][td.target_grade].push align.rating * taskStatusFactor(td.id)
 
+      # Finally reduce all of these into one score for each outcome / grade
       _.each outcomes, (outcome, key) ->
+        # For this outcome
         _.each outcome, (tmp, key1) ->
+          # get a scale for the grade
           scale = Math.pow(2, parseInt(key1,10))
+          # Reduce all task partial scores and * grade scale -- replace array with single value
           outcome[key1] = _.reduce(tmp, ((memo, num) -> memo + num), 0) * scale
 
+      # Returns map of...
+      # {
+      #   <OutcomeID>: {
+      #     0: <score>
+      #     1: <score> ...
+      #   },
+      #   86: {   <--- OutcomeID 86 --> "Programming Principles"
+      #     0: 27 <--- Pass: 27 score (from rating * task status factor * scale reduced)
+      #     1: 53 ...
+      #   },
+      # }
       outcomes
 
     calculateTaskContribution: (unit, project, task) ->
