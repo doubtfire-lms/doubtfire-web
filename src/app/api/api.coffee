@@ -50,6 +50,7 @@ angular.module("doubtfire.api", [
   Unit.learningProgressClassStats = resourcePlus "/units/:id/learning_alignments/class_stats", { id: "@id" }
   Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
   Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
+  Unit.taskStatusCountByTutorial = resourcePlus "/units/:id/stats/task_status_pct", {id: "@id"}
 
   Unit
 )
