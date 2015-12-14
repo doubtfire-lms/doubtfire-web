@@ -53,22 +53,26 @@
         </div>
         <div ng-show="summaryOnly">
           <h5>Related Tasks</h5>
-          <ul class="list-group">
-            <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
-              <div class="clearfix">
-                {{taskDef = unit.taskDef(align.task_definition_id); ''}}
-                <outcome-alignment-rating
-                  class="pull-right"
-                  readonly="true"
-                  unit="unit"
-                  ng-model="align">
-                </outcome-alignment-rating>
-                <div class="task-def-alignment-item">
-                  <strong>{{taskDef.abbreviation}}</strong> - {{taskDef.name}}
+          <div class="related-outcome-tasks">
+            <ul class="list-group">
+              <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
+                <div class="clearfix">
+                  {{taskDef = unit.taskDef(align.task_definition_id); ''}}
+                  <outcome-alignment-rating
+                    class="pull-right"
+                    readonly="true"
+                    unit="unit"
+                    show-tooltips="true"
+                    ng-model="align">
+                  </outcome-alignment-rating>
+                  <div class="task-def-alignment-item">
+                    <label class="label label-info task-def-label pull-left">{{taskDef.abbreviation}}</label>
+                    <span class="col-sm-6">{{taskDef.name}}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </li>

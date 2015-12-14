@@ -17,6 +17,8 @@ angular.module('doubtfire.units.partials.outcome-alignment-rating',[])
     colorful: '=?'
     # Show static tooltip for selected rating (defaults to true)
     selectedTooltip: '=?'
+    # Show as tooltips instead (false)
+    showTooltips: '=?'
   controller: ($scope) ->
     $scope.max = 5
 
@@ -29,12 +31,14 @@ angular.module('doubtfire.units.partials.outcome-alignment-rating',[])
     ]
 
     $scope.setHoverValue = (value) ->
-      return $scope.ngModel if $scope.readonly
+      return $scope.ngModel if $scope.readonly and not $scope.showTooltips
       $scope.hoveringOver = value
 
     # Set defaults
     for property in ['tooltips', 'colorful', 'selectedTooltip']
       $scope[property] = if $scope[property]? then $scope[property] else true
+
+    $scope.showTooltips = if $scope.showTooltips? then $scope.showTooltips else false
 
     if $scope.onRatingChanged?
       $scope.$watch 'ngModel.rating', (newValue, oldValue) ->
