@@ -1,7 +1,12 @@
 <div>
+	<h1>New Grade Distribution</h1>
+	<a ng-click="fetchTargetGradeStats()">Click Me</a>
+	<p>Returns a list of tutorial, grade, num. Show visualisations:<ul><li>Overall grade distribution (reduce to just grade and percent)</li><li>Grade distribution by tutorial</li></ul></p>
+	{{unit.analytics.targetGradeStats}}
+
 	<h1>New Task Summary Stats by Tutorial</h1>
 	<a ng-click="fetchTaskStatusStats()">Click Me</a>
-	<p>Returns a map of each TaskDef that contains a map of each tutorial, that contains a list of counts for each status. From this data we can generate several visualisations: <ul><li>Overall task progress (reduce all maps to single {tasks status, pct values}).</li><li>Show status percents by Task (reduce each task to a single list of status with pct values)</li><li>Show status percents by Tutorial (extract task status pcts from tasks but keep tutorials)</li><li>Show tutorial status percents for a single task (filter task def, then use data as is)</li></p>
+	<p>Returns a map of each TaskDef that contains a map of each tutorial, that contains a list of counts for each status. From this data we can generate several visualisations: <ul><li>Overall task progress (reduce all maps to single {tasks status, pct values}).</li><li>Show status percents by Task (reduce each task to a single list of status with pct values)</li><li>Show status percents by Tutorial (extract task status pcts from tasks but keep tutorials)</li><li>Show tutorial status percents for a single task (filter task def, then use data as is)</li></ul></p>
 	{{unit.analytics.taskStatusCountByTutorial}}
 
 

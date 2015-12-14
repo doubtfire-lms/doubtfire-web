@@ -11,6 +11,10 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
     # Store all analytics data in $scope.unit.analytics.
     #
 
+    $scope.fetchTargetGradeStats = () ->
+      Unit.targetGradeStats.query {id: $scope.unit.id},
+        (response) ->
+          $scope.unit.analytics.targetGradeStats = response
 
     $scope.fetchTaskStatusStats = () ->
       Unit.taskStatusCountByTutorial.get {id: $scope.unit.id},
