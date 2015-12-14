@@ -61,7 +61,7 @@ angular.module("doubtfire.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> student.tasks_with_similarities > 0
+      _.filter  input, (student) -> student.max_pct_copy > 0
     else
       input
 )
