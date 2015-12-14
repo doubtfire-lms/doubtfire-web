@@ -66,10 +66,13 @@
             {{align = searchForAlignmentForItem(selectedInverseAlignmentItem); ''}}
             <div ng-if="align">
               <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
-              <div class="pull-left col-sm-{{align.editingRationale ? '12' : '10'}}">
-                <div ng-click="toggleEditRationale(align)" class="not-editing-rationale" ng-hide="align.editingRationale">
-                  {{(align.description || 'No rationale provided.') | truncatedMarkdown}}
-                  <a ng-hide="align.description">Click to add one.</a>
+              <div class="pull-left col-sm-12 rationale-wrapper">
+                <div tooltip="Click to edit rationale" tooltip-placement="left" tooltip-append-to-body="false" tooltip-popup-delay="300" tooltip-enable="align.description != null" ng-click="toggleEditRationale(align)" class="rationale" ng-class="{'no-rationale': align.description == null}" ng-hide="align.editingRationale">
+                  <label class="text-muted" ng-show="align.description != null">
+                    Provided Rationale
+                  </label>
+                  <div ng-bind-html="(align.description || 'No rationale provided') | markdown"></div>
+                  <div class="small" ng-hide="align.description">Click to add one</div>
                 </div>
                 <div ng-if="align.editingRationale" class="clearfix">
                   <markdown-editor
@@ -82,8 +85,10 @@
                 </div>
               </div>
             </div>
-            <div ng-hide="align">
-              No {{inverseSelectAlignmentBy}} is selected. Select one on the left first.
+            <div ng-hide="align" class="no-inverse-select-alignment-by-selected-wrapper">
+              <div class="no-inverse-select-alignment-by-selected">
+                No {{inverseSelectAlignmentBy}} is selected. Select one on the left first.
+              </div>
             </div>
           </div>
         </div><!--/bottom-panel-->

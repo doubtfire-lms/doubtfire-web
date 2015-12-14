@@ -37,6 +37,35 @@
 
   .alignment-rater {
     width: 60%;
+    .outcome-alignment-rating, .rationale {
+      margin: 30px;
+    }
+    .rationale-wrapper {
+      display: table;
+    }
+    .rationale {
+      display: table-cell;
+      height: 200px;
+      overflow: scroll;
+      padding: 30px;
+      border-radius: 6px;
+      font-size: 1.5em;
+      cursor: pointer;
+      label {
+        font-size: 0.75em;
+        text-transform: uppercase;
+      }
+      &.no-rationale {
+        border: 1px dashed #aaa;
+        vertical-align: middle;
+        text-align: center;
+        color: #aaa;
+      }
+      &:hover {
+        border-color: #428bca;
+        color: #428bca;
+      }
+    }
   }
 
   .list-group-inverse-select-alignment {
@@ -76,50 +105,16 @@
     }
   }
 
-}
-
-table.table-unit-outcome-alignment {
-  // Old
-  th.rating-rationale {
-    width: 80%;
-  }
-  td.rating-rationale {
-    padding: 2em;
-    .rating {
-      margin-bottom: 2em;
+  .no-inverse-select-alignment-by-selected-wrapper {
+    height: 300px;
+    display: table;
+    width: 100%;
+    text-align: center;
+    .no-inverse-select-alignment-by-selected {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 1.5em;
+      color: #888;
     }
-    .rationale {
-      padding: 2em;
-      border: 1px #ddd dashed; 
-      border-radius: 3px;
-    }
-  }
-  .not-editing-rationale {
-    cursor: pointer;
-  }
-  .rationale-actions {
-    font-size: 1.4em;
-    i {
-      color: @gray-light;
-    }
-    i + i {
-      display: block;
-      margin-top: 1em;
-    }
-    i:hover {
-      cursor: pointer;
-    }
-    i.edit:hover, i.active {
-      color: @brand-primary;
-    }
-    i.delete:hover {
-      color: @brand-danger;
-    }
-  }
-
-  .help-block.select-alignment-by-item-description {
-    overflow:hidden;
-    text-overflow: ellipsis;
-    width: 600px;
   }
 }
