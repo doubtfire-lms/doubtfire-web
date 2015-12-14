@@ -33,6 +33,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       item.selected = true
       $scope["select#{$scope.selectAlignmentBy}"](item)
       $scope.selectedAlignmentByItem = item
+      $scope.selectedInverseAlignmentItem = null
 
     $scope.$watch 'selectAlignmentBy', (newValue) ->
       # Needs to be an object containing array for ui.select
