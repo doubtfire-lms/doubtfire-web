@@ -17,6 +17,7 @@ angular.module("doubtfire.services.units", [])
     unit = {
       allStudents: allStudents
       loadStudents: loadStudents
+      analytics: {}
     }
 
     #
