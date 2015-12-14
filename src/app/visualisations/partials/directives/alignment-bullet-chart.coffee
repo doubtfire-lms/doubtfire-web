@@ -119,7 +119,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
                 .on('mouseover', ->
                   dispatch.elementMouseover
                     value: measurez.median
-                    label: 'Class Median'
+                    label: 'The most average student is here'
                     color: d3.select(this).style('fill')
                   return)
                 .on('mousemove', ->
@@ -565,9 +565,9 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
       "ranges":[targetP,targetC,targetD,targetHD],  #Minimum, mean and maximum values.
       "rangeLabels":['Pass','Credit','Distinction','High Distinction'],  #Minimum, mean and maximum values.
       "measures": {},    #Value representing current measurement (the thick blue line in the example)
-      "measureLabels": ['Most of Class is in this range']
+      "measureLabels": ['Most of the class are in this area']
       "markers":[]      #Place a marker on the chart (the white triangle marker)
-      "markerLabels": ['Your Progress - Staff Suggestion', 'Your Progress - Self Reflection']
+      "markerLabels": ['Your Suggested Progress - Staff Suggestion', 'Your Current Progress - Self Reflection']
     }
 
     if $scope.classStats? && $scope.classStats.title?
