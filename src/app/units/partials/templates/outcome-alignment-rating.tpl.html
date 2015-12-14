@@ -1,6 +1,6 @@
 <div class="outcome-alignment-rating" ng-class="{colorful: colorful}">
-  <rating on-leave="setHoverValue(null)" on-hover="setHoverValue(value)" titles="null" ng-model="ngModel.rating" max="max" state-on="'fa fa-2x fa-circle'" state-off="'fa fa-2x fa-circle-o'" readonly="readonly" class="rating-area"></rating>
-  <div ng-show="selectedTooltip" class="text-center rating-static-tooltip">
+  <rating on-leave="setHoverValue(null)" on-hover="setHoverValue(value)" titles="null" ng-model="ngModel.rating" max="max" state-on="'fa fa-2x fa-circle'" state-off="'fa fa-2x fa-circle-o'" tooltip="{{tooltips[hoveringOver-1]}}" tooltip-placement="right" tooltip-class="tooltip-rating-{{hoveringOver}}" tooltip-append-to-body="true" tooltip-popup-delay="200" tooltip-enable="showTooltips" readonly="readonly" class="rating-area"></rating>
+  <div ng-show="selectedTooltip && !showTooltips" class="text-center rating-static-tooltip">
     <span class="rating-{{hoveringOver || ngModel.rating}} badge">{{tooltips[(hoveringOver || ngModel.rating) - 1]}}</span>
   </div>
 </div>

@@ -1,4 +1,27 @@
 .view-alignment {
+  .related-outcome-tasks {
+    max-height: 200px;
+    overflow: scroll;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    .list-group li {
+      border-left: none;
+      border-right: none;
+      &:first-child {
+        border-top: none;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    .task-def-alignment-item {
+      font-size: 1.5em;
+      label {
+        margin-top: 10px;
+      }
+    }
+  }
   .alignment-list {
     margin: 0;
     & > li {
