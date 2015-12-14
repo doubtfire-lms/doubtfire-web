@@ -1,4 +1,5 @@
-<div class="unit-outcome-alignment" ng-init="filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id)">
+<div class="unit-outcome-alignment">
+  {{filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id); ''}}
   <div ng-class="{'col-sm-8': showCsv}">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
