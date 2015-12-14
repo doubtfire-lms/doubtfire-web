@@ -73,6 +73,17 @@ angular.module("doubtfire.services.tasks", [])
     discuss:            'fa fa-check'
     complete:           'fa fa-check-square-o'
 
+  taskService.statusColors =
+    ready_to_mark:     '#0079D8'
+    not_submitted:     '#CCCCCC'
+    working_on_it:     '#EB8F06'
+    need_help:         '#a48fce'
+    fix_and_resubmit:  '#f2d85c'
+    fix_and_include:   '#d93713'
+    redo:              '#804000'
+    discuss:           '#31b0d5'
+    complete:          '#5BB75B'
+
   taskService.statusSeq =
     ready_to_mark:      6
     not_submitted:      1
