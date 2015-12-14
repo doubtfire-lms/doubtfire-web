@@ -9,4 +9,5 @@ angular.module('doubtfire.units.partials', [
     'doubtfire.units.partials.unit-outcome-alignment'
     'doubtfire.units.partials.admin-unit-ilo-directive'
     'doubtfire.units.partials.outcome-alignment-rating'
+    'doubtfire.units.partials.unit-analytics'
   ])
