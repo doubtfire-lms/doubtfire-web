@@ -119,11 +119,12 @@ angular.module("doubtfire.services.units", [])
     unit.incorporateTasks = (tasks) ->
       _.map tasks, (t) ->
         project = unit.findStudent(t.project_id)
-        if ! project.incorporateTask?
-          projectService.mapTask t, unit, project
-          projectService.addProjectMethods(project, unit)
+        if project?
+          if ! project.incorporateTask?
+            projectService.mapTask t, unit, project
+            projectService.addProjectMethods(project, unit)
 
-        project.incorporateTask(t)
+          project.incorporateTask(t)
 
     unit.refresh(callback)
     unit
