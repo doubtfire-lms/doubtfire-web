@@ -75,7 +75,7 @@ angular.module("doubtfire.services.projects", [])
           projectService.addTaskDetailsToProject(project, unit_obj)
 
   projectService.fetchDetailsForProject = (project, unit, callback) ->
-    if project.tasks
+    if project.burndown_chart_data?
       callback(project)
     else
       Project.get { id: project.project_id }, (project_response) ->
