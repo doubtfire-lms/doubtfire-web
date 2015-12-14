@@ -137,21 +137,8 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.addAlignmentItem = (item) ->
       $scope["add#{$scope.inverseSelectAlignmentBy}"](item)
     $scope.removeAlignmentItem = (item) ->
-      # call removeTaskAlignment for all items with task_definition_id or learning_outcome_id
-      # just find the task_outcome_alignments with the ^ and delete item
-      # then call without on this item for selected.items
-      removeBy = if $scope.selectAlignmentBy is 'Outcome' then 'task_definition_id' else 'learning_outcome_id'
-      properties = {}
-      properties[removeBy] = item.id
-      filterOut = if $scope.selectAlignmentBy is 'Outcome' then 'learning_outcome_id' else 'task_definition_id'
-      onlyConsider = {}
-      onlyConsider[filterOut] = $scope.selectedAlignmentByItem.id
-      align = _ .chain($scope.source.task_outcome_alignments)
-                .where(onlyConsider)
-                .findWhere(properties)
-                .value()
-      $scope.removeTaskAlignment align
-      item.isLinked = false
+      $scope.removeTaskAlignment item
+      $scope.selectedInverseAlignmentItem = null
 
     $scope.saveTaskAlignment = (data, id) ->
       data.unit_id = $scope.unit.id
