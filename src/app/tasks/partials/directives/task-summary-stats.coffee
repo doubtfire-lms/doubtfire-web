@@ -20,10 +20,10 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
 
     $scope.scatterData = []
 
-    taskAbbrs = _.map($scope.unit.task_definitions, (td) -> td.abbreviation)
+    taskIDs = _.map($scope.unit.task_definitions, (td) -> td.id)
 
-    indexOfTask = (abbr) ->
-      _.indexOf taskAbbrs, abbr
+    indexOfTask = (task_definition_id) ->
+      _.indexOf taskIDs, task_definition_id
     indexOfTutorial = (tutorialId) ->
       _.indexOf $scope.unit.tutorials, _.find( $scope.unit.tutorials, (tutorial) -> tutorial.id == tutorialId )
 
@@ -49,9 +49,9 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       # clear tmpScatterData
       tmpScatterData = []
 
-      updateTask = (abbr, status, tutorialId) ->
+      updateTask = (task_definition_id, status, tutorialId) ->
         tutorialIdx = indexOfTutorial(tutorialId)
-        taskIdx = indexOfTask(abbr)
+        taskIdx = indexOfTask(task_definition_id)
         statusIdx = taskService.indexOf(status)
 
         tmpScatterData[tutorialIdx][statusIdx][taskIdx] += 1
@@ -77,7 +77,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       #     rs.count = 0
       Task.summaryData.query { unit_id: $scope.unit.id }, (tasks) ->
         angular.forEach tasks, (task) ->
-          updateTask(task.task_abbr, task.status, task.tutorial_id)
+          updateTask(task.task_definition_id, task.status, task.tutorial_id)
 
         # generate pcts
         _.each tmpScatterData, (tute, tuteIdx) ->
