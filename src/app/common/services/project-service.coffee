@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.projects", [])
 
-.factory("projectService", (taskService, Project) ->
+.factory("projectService", ($filter, taskService, Project) ->
   #
   # The unit service object
   #
@@ -57,7 +57,7 @@ angular.module("doubtfire.services.projects", [])
     project.incorporateTask = (newTask) ->
       if ! project.tasks?
         project.tasks = []
-        
+
       currentTask = _.find project.tasks, (t) -> t.id == newTask.id
 
       if currentTask?
@@ -99,6 +99,13 @@ angular.module("doubtfire.services.projects", [])
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
     _.find project.tasks, (task) -> task.task_definition_id == task_definition_id
+
+  projectService.tasksInTargetGrade = (project) ->
+    $filter('byGrade')(project.tasks, project.target_grade)
+
+  projectService.tasksByStatus = (project, statusKey) ->
+    tasksToConsider = projectService.tasksInTargetGrade(project)
+    _.where(tasksToConsider, {status: statusKey})
 
   projectService
 )
