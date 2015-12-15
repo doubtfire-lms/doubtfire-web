@@ -75,7 +75,7 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
       # angular.forEach $scope.stats, (row) ->
       #   angular.forEach row.stats, (rs) ->
       #     rs.count = 0
-      Task.query { unit_id: $scope.unit.id }, (tasks) ->
+      Task.summaryData.query { unit_id: $scope.unit.id }, (tasks) ->
         angular.forEach tasks, (task) ->
           updateTask(task.task_abbr, task.status, task.tutorial_id)
 
