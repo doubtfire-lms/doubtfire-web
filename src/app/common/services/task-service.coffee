@@ -184,6 +184,7 @@ angular.module("doubtfire.services.tasks", [])
     result
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+    task.id = response.id
     task.status = response.status
     task.times_assessed = response.times_assessed
     task.updateTaskStatus project, response.new_stats
@@ -206,7 +207,7 @@ angular.module("doubtfire.services.tasks", [])
   taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
     Task.update(
-      { id: task.id, trigger: status }
+      { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status }
       # Success
       (value) ->
         taskService.processTaskStatusChange unit, project, task, status, value
