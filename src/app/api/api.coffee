@@ -113,7 +113,7 @@ angular.module("doubtfire.api", [
   Task
 )
 .factory("TaskComment", (resourcePlus) ->
-  resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
+  resourcePlus "/projects/:project_id/task_def_id/:task_definition_id/comments/:id", { id: "@id", project_id: "@project_id", task_definition_id: "@task_definition_id" }
 )
 .factory("TaskDefinition", (resourcePlus) ->
   TaskDefinition = resourcePlus "/task_definitions/:id", { id: "@id" }

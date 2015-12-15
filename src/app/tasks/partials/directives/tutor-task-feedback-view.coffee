@@ -90,6 +90,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
           $scope.refreshed = true
           $scope.tasksForFeedback.length = 0
           tasks = $scope.unit.incorporateTasks response
+          tasks = $scope.unit.fillWithUnStartedTasks tasks, $scope.selectedDefinition
 
           $scope.tasksForFeedback = _.extend $scope.tasksForFeedback, tasks
         (response) ->
