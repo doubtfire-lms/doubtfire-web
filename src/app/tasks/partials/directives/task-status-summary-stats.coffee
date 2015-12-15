@@ -13,7 +13,25 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           delete response.$promise
           delete response.$resolved
           $scope.unit.analytics.taskStatusCountByTutorial = response
-          $scope.data = $scope.reduceDataToTaskDef()
+          $scope.dataModel = { selectedType: 'unit' }
+
+    $scope.$watch 'dataModel.selectedType', (newValue) ->
+      return unless newValue?
+      switch newValue
+        when 'unit'
+          $scope.data = $scope.reduceDataToOverall()
+        when 'tutorial'
+          $scope.dataModel.selectedTutorial = _.last $scope.unit.tutorials
+        when 'task'
+          $scope.dataModel.selectedTask = _.first $scope.unit.task_definitions
+
+    $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
+      return unless newValue?
+      $scope.data = $scope.reduceDataToTutorialWithId(newValue)
+
+    $scope.$watch 'dataModel.selectedTask', (newValue) ->
+      return unless newValue?
+      $scope.data = $scope.reduceDataToTaskDefWithId(newValue)
 
     #
     # Essentially, we kill the tutorials by reducing them out
@@ -52,7 +70,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
     # Same as above, but gets specific task definition
     #
     $scope.reduceDataToTaskDefWithId = (taskDef) ->
-      $scope.reduceDataToTaskDef[taskDef.id]
+      $scope.reduceDataToTaskDef()[taskDef.id]
 
     #
     # Kill both the tutorials and the task definitions
@@ -83,4 +101,10 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
             data[tutorialId][statuses.status] = 0 unless data[tutorialId][statuses.status]?
             data[tutorialId][statuses.status] += statuses.num
       data
+
+    #
+    # Same as above, but gets specific tutorial
+    #
+    $scope.reduceDataToTutorialWithId = (tutorial) ->
+      $scope.reduceDataToTutorial()[tutorial.id]
 )
