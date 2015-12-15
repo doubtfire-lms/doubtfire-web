@@ -37,8 +37,8 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
         newId = -1
       Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
         (project) ->
-          student.tute = project.tute
-          student.tutorial = $scope.unit.tutorialFromId( student.tute )
+          student.tutorial_id = project.tutorial_id
+          student.tutorial = $scope.unit.tutorialFromId( student.tutorial_id )
       )
 
     $scope.getCSVHeader = () ->
