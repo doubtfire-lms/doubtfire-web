@@ -5,7 +5,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
   templateUrl: 'tasks/partials/templates/task-status-summary-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit) ->
+  controller: ($scope, Unit, taskService) ->
     # Load data if not loaded already
     unless $scope.unit.analytics.taskStatusCountByTutorial?
       Unit.taskStatusCountByTutorial.get {id: $scope.unit.id},
@@ -32,6 +32,18 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
     $scope.$watch 'dataModel.selectedTask', (newValue) ->
       return unless newValue?
       $scope.data = $scope.reduceDataToTaskDefWithId(newValue)
+
+    $scope.$watch 'data', (newValue) ->
+      return unless newValue?
+      total = _ .chain(newValue)
+                .values()
+                .reduce(((memo, num) -> memo + num), 0)
+                .value()
+      completedPct = newValue[taskService.acronymKey.COM] / total
+      $scope.completeStats = {
+        completed:  Math.round(completedPct * 100)
+        left:       Math.round((1 - completedPct) * 100)
+      }
 
     #
     # Essentially, we kill the tutorials by reducing them out
