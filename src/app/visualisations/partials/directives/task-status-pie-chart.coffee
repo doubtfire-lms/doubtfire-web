@@ -16,11 +16,14 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
       $scope.data = _.map rawData, (value, status) ->
         { key: taskService.statusLabels[status], y: value, status_key: status }
       $timeout ->
-        $scope.api.refresh() if $scope.api?.refresh?
+        if $scope.api?.refresh?
+          $scope.api.refresh()
 
     updateData($scope.rawData)
 
     $scope.$watch 'rawData', updateData
+
+    zeroMargin = { top: 0, right: 0, bottom: 0, left: 0 }
 
     [$scope.options, $scope.config] = Visualisation 'pieChart', {
       color: (d, i) ->
@@ -28,6 +31,10 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
       x: (d) -> d.key
       y: (d) -> d.y
       showLabels: no
+      margin: zeroMargin
+      legend:
+        padding: 64
+        margin: zeroMargin
       tooltip:
         valueFormatter: (d) ->
           pct   = Math.round((d / $scope.total) * 100)
