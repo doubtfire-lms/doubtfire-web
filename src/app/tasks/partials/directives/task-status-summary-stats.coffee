@@ -1,0 +1,86 @@
+angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
+.directive('taskStatusSummaryStats', ->
+  replace: false
+  restrict: 'E'
+  templateUrl: 'tasks/partials/templates/task-status-summary-stats.tpl.html'
+  scope:
+    unit: "="
+  controller: ($scope, Unit) ->
+    # Load data if not loaded already
+    unless $scope.unit.analytics.taskStatusCountByTutorial?
+      Unit.taskStatusCountByTutorial.get {id: $scope.unit.id},
+        (response) ->
+          delete response.$promise
+          delete response.$resolved
+          $scope.unit.analytics.taskStatusCountByTutorial = response
+          $scope.data = $scope.reduceDataToTaskDef()
+
+    #
+    # Essentially, we kill the tutorials by reducing them out
+    #   { task_definition_id: { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    # becomes
+    #   { task_definition_id: { status, num }, task_definition_id: { status, num } ... }
+    #
+    $scope.reduceDataToTaskDef = ->
+      # Begin the mapping
+      _ .chain($scope.unit.analytics.taskStatusCountByTutorial)
+        .map( (taskDef, taskDefId) ->
+          # This task def id
+          statusesForThisTaskDefId =
+            _.chain(taskDef)
+             # Grab out all the tutorials and flatten them, group by status
+             .values()
+             .flatten()
+             .groupBy('status')
+             # With each status grouped
+             .map( (value, status) ->
+               # Calculate the sum of the 'num' field in each status
+               sumOfStatuses = _.chain(value)
+                                .pluck('num')
+                                .reduce(((memo, num) -> memo + num), 0)
+                                .value()
+               [status, sumOfStatuses]
+            )
+            .object()
+            .value()
+          [taskDefId, statusesForThisTaskDefId]
+        )
+        .object()
+        .value()
+
+    #
+    # Same as above, but gets specific task definition
+    #
+    $scope.reduceDataToTaskDefWithId = (taskDef) ->
+      $scope.reduceDataToTaskDef[taskDef.id]
+
+    #
+    # Kill both the tutorials and the task definitions
+    #   { task_definition_id: { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    # becomes
+    #   [ { status, num }, { status, num } ]
+    #
+    $scope.reduceDataToOverall = ->
+      taskDefValues = _.values($scope.reduceDataToTaskDef())
+      _.reduce taskDefValues, ((memo, taskDef) ->
+        for status of taskDef
+          memo[status] = (if status of memo then memo[status] else 0) + taskDef[status]
+        memo
+      ), {}
+
+    #
+    # Kill the task definitions
+    #   { task_definition_id: { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    # becomes
+    #   { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    #
+    $scope.reduceDataToTutorial = ->
+      data = {}
+      for taskDef, tutorialData of $scope.unit.analytics.taskStatusCountByTutorial
+        for tutorialId, tutorialStatuses of tutorialData
+          data[tutorialId] = {} unless data[tutorialId]?
+          for statuses in tutorialStatuses
+            data[tutorialId][statuses.status] = 0 unless data[tutorialId][statuses.status]?
+            data[tutorialId][statuses.status] += statuses.num
+      data
+)
