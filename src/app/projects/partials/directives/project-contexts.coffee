@@ -3,7 +3,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('progressInfo', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
-  controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService) ->
+  controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService) ->
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
 
@@ -14,6 +14,9 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
+
+    $scope.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
+    $scope.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.numberOfTasksCompleted
 )
 .directive('taskList', ->
   restrict: 'E'
