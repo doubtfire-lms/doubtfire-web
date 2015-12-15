@@ -117,6 +117,9 @@ angular.module("doubtfire.services.units", [])
         if group_callback?
           group_callback(groups)
 
+    #
+    # Push all of the tasks downloaded into the existing student projects
+    #
     unit.incorporateTasks = (tasks) ->
       _.map tasks, (t) ->
         project = unit.findStudent(t.project_id)
@@ -126,6 +129,19 @@ angular.module("doubtfire.services.units", [])
             projectService.addProjectMethods(project, unit)
 
           project.incorporateTask(t)
+
+    #
+    # Add any missing tasks and return the new collection
+    #
+    unit.fillWithUnStartedTasks = (tasks, task_def) ->
+      projs = _.select(unit.students, (s) -> s.target_grade >= task_def.target_grade)
+
+      _.map projs, (p) ->
+        t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == task_def.id
+        if ! t?
+          _.find p.tasks, (t) -> t.task_definition_id == task_def.id
+        else
+          t
 
     unit.refresh(callback)
     unit

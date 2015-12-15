@@ -22,7 +22,7 @@
         <i class="fa fa-file-pdf-o fa-2x"></i>
         <p>No submission PDF available.</p>
     </div>
-    <view-submission ng-show="viewOptions.showPdf && task.has_pdf" project="task.project" task="task"></view-submission>
+    <view-submission ng-show="viewOptions.showPdf && task.has_pdf" project="task.project()" task="task"></view-submission>
 
     <div class="panel-heading">
       <a class="pull-right" ng-click="viewOptions.showComments = !viewOptions.showComments"><i ng-show="viewOptions.showComments" class="fa fa-2x fa-angle-double-down"></i><i ng-hide="viewOptions.showComments" class="fa fa-2x fa-angle-double-up"></i></a>
@@ -30,7 +30,7 @@
         Task Comments
       </h3>
     </div>
-    <view-comments project="task.project" task="task" ng-show="viewOptions.showComments"></view-comments>
+    <view-comments project="task.project()" task="task" ng-show="viewOptions.showComments"></view-comments>
 
     <div class="panel-heading">
       <a class="pull-right" ng-click="viewOptions.showClassify = !viewOptions.showClassify"><i ng-show="viewOptions.showClassify" class="fa fa-2x fa-angle-double-down"></i><i ng-hide="viewOptions.showClassify" class="fa fa-2x fa-angle-double-up"></i></a>
