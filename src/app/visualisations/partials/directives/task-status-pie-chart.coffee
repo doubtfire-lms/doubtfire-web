@@ -22,8 +22,7 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
       $scope.data = _.map rawData, (value, status) ->
         { key: taskService.statusLabels[status], y: value, status_key: status }
       $timeout ->
-        if $scope.api?.refresh?
-          $scope.api.refresh()
+        $scope.api.refresh() if $scope.api?.refresh?
 
     updateData($scope.rawData)
 
