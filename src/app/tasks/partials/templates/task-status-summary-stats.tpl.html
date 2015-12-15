@@ -24,3 +24,6 @@
   </div>
   <task-status-pie-chart data="data"></task-status-pie-chart>
 </div>
+<div class="panel-footer text-center" ng-show="data">
+  <strong>{{completeStats.completed}}%</strong> of students are marked as complete, while <strong>{{completeStats.left}}%</strong> are not
+</div>
