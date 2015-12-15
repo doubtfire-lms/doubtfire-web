@@ -105,4 +105,5 @@ angular.module('doubtfire.tasks.partials.task-summary-stats', [])
         ) # end each tutorial
 
         $scope.scatterData = scatterData
+    $scope.fetchStats()
 )

@@ -1,25 +1,45 @@
 <div>
-	<h1>New Task Completion stats</h1>
-	<a ng-click="fetchTaskCompletionStats()">Click Me</a>
-	<p>Returns a map containing distribution of tasks completed in the unit.{"median":9,"lower":8,"upper":12,"min":1,"max":19} -- shows the number of tasks completed by students in the unit on average.</p>
-	{{unit.analytics.taskCompletionStats}}
+  <tabset class="pull-left col-md-2" vertical="true" type="pills">
+    <tab ng-repeat="(tabKey, tab) in tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+        <div class="text-center">
+          <i class="fa fa-2x {{tab.icon}}" style="margin-right: 1ex"></i>
+        </div>
+      </tab-heading>
+    </tab>
+  </tabset><!--/tab-selector-->
 
-	<h1>New Achievement for Class/Group</h1>
-	<a ng-click="fetchLearningProgressClassDetails()">Click Me</a>
-	<p>This returns a map of tutorial_id -> stats/details. The stats/details contains one map per ILO that lists the median, lower, and upper scores for the students in that tutorial, as well as students that is a list of all of the students and their scores for each ILO. This can be used to create: <ul><li>Priority 10 visualisation - scatter of the students.</li><li>Priority 11 - box plot of each ILO</li><li>Priority 15</li></ul></p>
-	{{unit.analytics.learningProgressClassDetails}}
+  <div class="col-md-10 pull-right">
+    <div class="panel panel-primary">
+      <div class="panel-heading row-fluid">
+        <h3 class="panel-title">
+          {{activeTab.title}}
+        </h3>
+        {{activeTab.subtitle}}
+      </div>
+      <task-summary-stats unit="unit" ng-if="unit.students" ng-show="activeTab === tabsData.taskSummaryStats"></task-summary-stats>
+      <task-status-summary-stats unit="unit" ng-if="activeTab === tabsData.taskStatusSummaryStats"></task-status-summary-stats>
+      <div ng-show="activeTab === tabsData.developer">
+        <h1>New Task Completion stats</h1>
+        <a ng-click="fetchTaskCompletionStats()">Click Me</a>
+        <p>Returns a map containing distribution of tasks completed in the unit.{"median":9,"lower":8,"upper":12,"min":1,"max":19} -- shows the number of tasks completed by students in the unit on average.</p>
+        <pre>{{unit.analytics.taskCompletionStats|json}}</pre>
 
-	<h1>New Grade Distribution</h1>
-	<a ng-click="fetchTargetGradeStats()">Click Me</a>
-	<p>Returns a list of tutorial, grade, num. Show visualisations:<ul><li>Overall grade distribution (reduce to just grade and percent)</li><li>Grade distribution by tutorial</li></ul></p>
-	{{unit.analytics.targetGradeStats}}
+        <h1>New Achievement for Class/Group</h1>
+        <a ng-click="fetchLearningProgressClassDetails()">Click Me</a>
+        <p>This returns a map of tutorial_id -> stats/details. The stats/details contains one map per ILO that lists the median, lower, and upper scores for the students in that tutorial, as well as students that is a list of all of the students and their scores for each ILO. This can be used to create: <ul><li>Priority 10 visualisation - scatter of the students.</li><li>Priority 11 - box plot of each ILO</li><li>Priority 15</li></ul></p>
+        <pre>{{unit.analytics.learningProgressClassDetails|json}}</pre>
 
-	<h1>New Task Summary Stats by Tutorial</h1>
-	<a ng-click="fetchTaskStatusStats()">Click Me</a>
-	<p>Returns a map of each TaskDef that contains a map of each tutorial, that contains a list of counts for each status. From this data we can generate several visualisations: <ul><li>Priority 13 -- but sliced a few ways</li><li>Overall task progress (reduce all maps to single {tasks status, pct values}).</li><li>Show status percents by Task (reduce each task to a single list of status with pct values)</li><li>Show status percents by Tutorial (extract task status pcts from tasks but keep tutorials)</li><li>Show tutorial status percents for a single task (filter task def, then use data as is)</li></ul></p>
-	{{unit.analytics.taskStatusCountByTutorial}}
+        <h1>New Grade Distribution</h1>
+        <a ng-click="fetchTargetGradeStats()">Click Me</a>
+        <p>Returns a list of tutorial, grade, num. Show visualisations:<ul><li>Overall grade distribution (reduce to just grade and percent)</li><li>Grade distribution by tutorial</li></ul></p>
+        <pre>{{unit.analytics.targetGradeStats|json}}</pre>
 
-
-	<h1>Old Task Summary Details -- needs work</h1>
-	<task-summary-stats unit="unit" ng-if="unit.students"></task-summary-stats>
-</div>
+        <h1>New Task Summary Stats by Tutorial</h1>
+        <a ng-click="fetchTaskStatusStats()">Click Me</a>
+        <p>Returns a map of each TaskDef that contains a map of each tutorial, that contains a list of counts for each status. From this data we can generate several visualisations: <ul><li>Priority 13 -- but sliced a few ways</li><li>Overall task progress (reduce all maps to single {tasks status, pct values}).</li><li>Show status percents by Task (reduce each task to a single list of status with pct values)</li><li>Show status percents by Tutorial (extract task status pcts from tasks but keep tutorials)</li><li>Show tutorial status percents for a single task (filter task def, then use data as is)</li></ul></p>
+        <pre>{{unit.analytics.taskStatusCountByTutorial|json}}</pre>
+      </div>
+    </div><!--/tab-contents-panel-->
+  </div><!--/tab-contents-->
+</div><!--/tab-feedback-tabs-->
