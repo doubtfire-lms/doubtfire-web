@@ -28,7 +28,6 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           $scope.dataModel.selectedTask = _.first $scope.unit.task_definitions
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
-      console.log 2, newValue
       return unless newValue?
       $scope.data = $scope.reduceDataToTutorialWithId(newValue)
 

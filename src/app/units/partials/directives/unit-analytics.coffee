@@ -32,13 +32,13 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
     $scope.tabsData =
       taskSummaryStats:
         title: "Task Statistics"
-        subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph."
+        subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph"
         icon: "fa-circle-thin"
         seq: 0
         active: false
       taskStatusSummaryStats:
         title: "Task Status Stats"
-        subtitle: "View tasks by statuses"
+        subtitle: "View tasks by statuses either unit-wide or broken down into a specific tutorial or task"
         icon: "fa-pie-chart"
         seq: 1
         active: false
