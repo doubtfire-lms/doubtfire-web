@@ -6,6 +6,8 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
   scope:
     unit: "="
   controller: ($scope, Unit, taskService) ->
+    # Required for button press -- shouldn't really have objects directly on
+    # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
 
     # Load data if not loaded already
