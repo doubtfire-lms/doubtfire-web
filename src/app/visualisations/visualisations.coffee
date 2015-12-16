@@ -5,6 +5,7 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.alignment-bullet-chart'
   'doubtfire.visualisations.student-task-status-pie-chart'
   'doubtfire.visualisations.task-status-pie-chart'
+  'doubtfire.visualisations.target-grade-pie-chart'
 ])
 
 .factory('Visualisation', ($timeout) ->
