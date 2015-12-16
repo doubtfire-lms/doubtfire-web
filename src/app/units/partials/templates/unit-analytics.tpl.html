@@ -17,7 +17,7 @@
         </h3>
         {{activeTab.subtitle}}
       </div>
-      <task-summary-stats unit="unit" ng-if="unit.students" ng-show="activeTab === tabsData.taskSummaryStats"></task-summary-stats>
+      <task-summary-stats unit="unit" ng-if="unit.students && activeTab === tabsData.taskSummaryStats"></task-summary-stats>
       <task-status-summary-stats unit="unit" ng-if="activeTab === tabsData.taskStatusSummaryStats"></task-status-summary-stats>
       <div ng-show="activeTab === tabsData.developer">
         <h1>New Task Completion stats</h1>
