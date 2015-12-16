@@ -4,8 +4,7 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
   replace: false
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-analytics.tpl.html'
-  controller: ($scope, Unit, Visualisation) ->
-
+  controller: ($scope, Unit) ->
     #
     # We need to avoid hitting the server with these requests unless this is actually viewed...
     # Store all analytics data in $scope.unit.analytics.
@@ -42,11 +41,17 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         icons: ["fa-pie-chart", "fa-tasks"]
         seq: 1
         active: false
+      targetGradeStats:
+        title: "Target Grade Stats"
+        subtitle: "View each student's target grade either unit-wide or broken down into a specific tutorial"
+        icons: ["fa-pie-chart", "fa-trophy"]
+        seq: 2
+        active: false
       developer:
         title: "Developer"
         subtitle: "Developer tools"
         icons: ["fa-code"]
-        seq: 2
+        seq: 3
         active: false
 
     #

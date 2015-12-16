@@ -17,6 +17,8 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
       stacked: yes
       height: 440
       duration: 500
+      color: (d) ->
+        gradeService.gradeColors[gradeService.gradeAcronyms[d.key]]
       x: xFn
       y: yFn
       forceY: 0
