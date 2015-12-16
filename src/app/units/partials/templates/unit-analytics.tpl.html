@@ -19,6 +19,7 @@
       </div>
       <task-summary-stats unit="unit" ng-if="unit.students && activeTab === tabsData.taskSummaryStats"></task-summary-stats>
       <task-status-summary-stats unit="unit" ng-if="activeTab === tabsData.taskStatusSummaryStats"></task-status-summary-stats>
+      <target-grade-stats unit="unit" ng-if="activeTab === tabsData.targetGradeStats"></target-grade-stats>
       <div ng-show="activeTab === tabsData.developer">
         <h1>New Task Completion stats</h1>
         <a ng-click="fetchTaskCompletionStats()">Click Me</a>
