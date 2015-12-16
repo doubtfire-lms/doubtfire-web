@@ -3,7 +3,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('progressInfo', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
-  controller: ($scope, $state, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService) ->
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
 
@@ -11,12 +11,24 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
+        $rootScope.$broadcast "TargetGradeUpdated"
 
     $scope.taskCount = () ->
       $scope.unit.task_definitions.length
 
-    $scope.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
-    $scope.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.numberOfTasksCompleted
+    $scope.taskStats = {}
+
+    updateTaskCompletionStats = () ->
+      $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
+      $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
+
+    $scope.$on 'TaskStatusUpdated', () ->
+      updateTaskCompletionStats()
+
+    $scope.$on 'TargetGradeUpdated', () ->
+      updateTaskCompletionStats()
+
+    updateTaskCompletionStats()
 )
 .directive('taskList', ->
   restrict: 'E'
