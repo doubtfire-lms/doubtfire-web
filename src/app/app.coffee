@@ -1,3 +1,4 @@
+# Define doubtfire
 angular.module("doubtfire", [
   # ng*
   "ngCookies"
@@ -121,3 +122,9 @@ angular.module("doubtfire", [
   #   setPageTitle $state.current
   #   $rootScope.$on "$stateChangeSuccess", (evt, toState) -> setPageTitle toState
 )
+
+
+# Debug helper method
+scope = ($0) ->
+  throw new Error "Select a DOM element using 'Inspect Element' first, then call using scope($0)" unless $0?
+  angular.element($0).scope()
