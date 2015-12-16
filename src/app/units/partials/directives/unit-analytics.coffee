@@ -33,19 +33,19 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
       taskSummaryStats:
         title: "Task Statistics"
         subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph"
-        icon: "fa-circle-thin"
+        icons: ["fa-circle-thin"]
         seq: 0
         active: false
       taskStatusSummaryStats:
         title: "Task Status Stats"
         subtitle: "View tasks by statuses either unit-wide or broken down into a specific tutorial or task"
-        icon: "fa-pie-chart"
+        icons: ["fa-pie-chart", "fa-tasks"]
         seq: 1
         active: false
       developer:
         title: "Developer"
         subtitle: "Developer tools"
-        icon: "fa-code"
+        icons: ["fa-code"]
         seq: 2
         active: false
 

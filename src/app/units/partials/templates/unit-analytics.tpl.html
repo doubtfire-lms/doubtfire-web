@@ -3,7 +3,7 @@
     <tab ng-repeat="(tabKey, tab) in tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
       <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
-          <i class="fa fa-2x {{tab.icon}}" style="margin-right: 1ex"></i>
+          <i class="fa fa-2x {{icon}}" ng-repeat="icon in tab.icons"></i>
         </div>
       </tab-heading>
     </tab>
