@@ -4,7 +4,7 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
   replace: false
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-analytics.tpl.html'
-  controller: ($scope, Unit) ->
+  controller: ($scope, Unit, Visualisation) ->
 
     #
     # We need to avoid hitting the server with these requests unless this is actually viewed...
