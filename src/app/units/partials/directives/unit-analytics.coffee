@@ -37,13 +37,13 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         active: false
       taskStatusSummaryStats:
         title: "Task Status Stats"
-        subtitle: "View tasks by statuses either unit-wide or broken down into a specific tutorial or task"
+        subtitle: "View distribution of tasks by their current status either unit-wide or broken down into a specific tutorial or task"
         icons: ["fa-pie-chart", "fa-tasks"]
         seq: 1
         active: false
       targetGradeStats:
         title: "Target Grade Stats"
-        subtitle: "View each student's target grade either unit-wide or broken down into a specific tutorial"
+        subtitle: "View distribution of student target grades either unit-wide or broken down into a specific tutorial"
         icons: ["fa-pie-chart", "fa-trophy"]
         seq: 2
         active: false
