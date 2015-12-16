@@ -18,6 +18,8 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           delete response.$resolved
           $scope.unit.analytics.taskStatusCountByTutorial = response
           $scope.dataModel.selectedType = 'unit'
+    else
+      $scope.dataModel.selectedType = 'unit'
 
     $scope.$watch 'dataModel.selectedType', (newValue) ->
       $scope.dataModel.selectedTutorial = null
