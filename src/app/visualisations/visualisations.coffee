@@ -7,7 +7,7 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.task-status-pie-chart'
 ])
 
-.factory('Visualisation', ($timeout) ->
+.factory('Visualisation', ($interval) ->
   Visualisation = (type, opts, conf) ->
     DEFAULT_OPTS =
       objectequality: yes
@@ -53,7 +53,7 @@ angular.module('doubtfire.visualisations', [
     [ { chart: dirtyOpts },  dirtyConf ]
 
   Visualisation.refreshAll = ->
-    $timeout -> window.dispatchEvent new Event('resize')
+    $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
 
   Visualisation
 )
