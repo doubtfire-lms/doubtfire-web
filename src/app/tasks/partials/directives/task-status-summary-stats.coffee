@@ -9,6 +9,28 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
     # Required for button press -- shouldn't really have objects directly on
     # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
+    $scope.depth = 0
+
+    $scope.tasksForSelector = [{ text: '--- Overview ---', seq: -1, id: -1 }]
+
+    _.each $scope.unit.task_definitions, (td) ->
+      $scope.tasksForSelector.push {
+        text: td.abbreviation + ' - ' + td.name
+        id: td.id
+        seq: td.seq
+      }
+    
+    $scope.tutorialsForSelector = []
+
+    _.each $scope.unit.tutorials, (t) ->
+      $scope.tutorialsForSelector.push {
+        text: t.abbreviation + ' - ' + t.tutor_name
+        id: t.id
+        abbreviation: t.abbreviation
+      }
+
+    $scope.tutorialsForSelector.push { text: '--- Overview ---', abbreviation: "ZZZ", id: -1 }
+
 
     # Load data if not loaded already
     unless $scope.unit.analytics.taskStatusCountByTutorial?
@@ -18,28 +40,53 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           delete response.$resolved
           $scope.unit.analytics.taskStatusCountByTutorial = response
           $scope.dataModel.selectedType = 'unit'
+          test = $scope.switchToTasksForTutorial()
     else
       $scope.dataModel.selectedType = 'unit'
 
     $scope.$watch 'dataModel.selectedType', (newValue) ->
-      $scope.dataModel.selectedTutorial = null
-      $scope.dataModel.selectedTask = null
-      return unless newValue?
-      switch newValue
-        when 'unit'
-          $scope.data = $scope.reduceDataToOverall()
-        when 'tutorial'
-          $scope.dataModel.selectedTutorial = _.last $scope.unit.tutorials
-        when 'task'
-          $scope.dataModel.selectedTask = _.first $scope.unit.task_definitions
+      if $scope.depth < 1
+        $scope.dataModel.selectedTutorial = null
+        $scope.dataModel.selectedTask = null
+
+        $scope.depth = 0
+        return unless newValue?
+        switch newValue
+          when 'unit'
+            $scope.data = $scope.reduceDataToOverall()
+          when 'tutorial'
+            $scope.dataModel.selectedTutorial = $scope.tutorialsForSelector[$scope.tutorialsForSelector.length - 1]
+          when 'task'
+            $scope.dataModel.selectedTask = $scope.tasksForSelector[0]
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
       return unless newValue?
-      $scope.data = $scope.reduceDataToTutorialWithId(newValue)
-
+      if newValue.id >= 0
+        $scope.depth = 0
+        $scope.data = $scope.reduceDataToTutorialWithId(newValue)
+      else
+        $scope.depth = 1
+        $scope.data = $scope.reduceDataToTutorial()
+        $scope.overview_keys = _.map $scope.unit.tutorials, (t) ->
+          {
+            title: t.tutor_name + ' - ' + t.abbreviation
+            data: $scope.data[t.id]
+            tutorial: t
+          }
     $scope.$watch 'dataModel.selectedTask', (newValue) ->
       return unless newValue?
-      $scope.data = $scope.reduceDataToTaskDefWithId(newValue)
+      if newValue.id >= 0
+        $scope.depth = 0
+        $scope.data = $scope.reduceDataToTaskDefWithId(newValue)
+      else
+        $scope.depth = 1
+        $scope.data = $scope.reduceDataToTaskDef()
+        $scope.overview_keys = _.map $scope.unit.task_definitions, (td) ->
+          {
+            title: "#{td.abbreviation}"
+            data: $scope.data[td.id]
+            task: td
+          }
 
     $scope.$watch 'data', (newValue) ->
       return unless newValue?
@@ -58,6 +105,78 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           completed:  0
           left:       100
         }
+
+    $scope.switchToTask = (task) ->
+      $scope.dataModel.selectedType = 'task'
+      $scope.dataModel.selectedTutorial = null
+      $scope.dataModel.selectedTask = task
+
+    $scope.switchToTutorial = (tutorial) ->
+      $scope.dataModel.selectedType = 'tutorial'
+      $scope.dataModel.selectedTask = null
+      $scope.dataModel.selectedTutorial = tutorial
+
+    $scope.drillDown = () ->
+      switch $scope.dataModel.selectedType
+        when 'unit'
+          $scope.dataModel.selectedType = 'tutorial'
+        when 'tutorial'
+          $scope.depth = 2
+          $scope.data = $scope.switchToTasksForTutorial()[$scope.dataModel.selectedTutorial.id]
+          $scope.overview_keys = _.map $scope.unit.task_definitions, (td) ->
+            {
+              title: "#{td.abbreviation} - in #{$scope.dataModel.selectedTutorial.abbreviation}"
+              data: $scope.data[td.id]
+              task: td
+            }
+        when 'task'
+          $scope.depth = 2
+          $scope.data = $scope.switchToTutorialsForTask()[$scope.dataModel.selectedTask.id]
+          $scope.overview_keys = _.map $scope.unit.tutorials, (t) ->
+            {
+              title: "#{t.tutor_name} - #{t.abbreviation} - for #{$scope.dataModel.selectedTask.abbreviation}"
+              data: $scope.data[t.id]
+              tutorial: t
+            }
+
+    #
+    # Essentially, we kill the tutorials by reducing them out
+    #   { task_definition_id: { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    # becomes
+    #   { tutorial_id: { task_definition_id: { status, num }, task_definition_id: { status, num } ... }
+    #
+    $scope.switchToTasksForTutorial = () ->
+      result = {}
+      _.each $scope.unit.tutorials, (tutorial) ->
+        result[tutorial.id] = {}
+        _.each $scope.unit.task_definitions, (td) ->
+          result[tutorial.id][td.id] = {}
+
+      _.each $scope.unit.analytics.taskStatusCountByTutorial, (taskDef, taskDefId) ->
+        _.each taskDef, (stats, tutorialId) ->
+          _.each stats, (value) ->
+
+            result[tutorialId][taskDefId][value.status] = value.num
+      result
+
+    #
+    # Essentially, we kill the tutorials by reducing them out
+    #   { task_definition_id: { tutorial_id: { status, num }, tutorial_id: { status, num } ... }
+    # becomes
+    #   { task_definition_id: { tutorial_id: { status: num, status: num, ... }, tutorial_id: { status, num } ... }
+    #
+    $scope.switchToTutorialsForTask = () ->
+      result = {}
+      _.each $scope.unit.task_definitions, (td) ->
+        result[td.id] = {}
+        _.each $scope.unit.tutorials, (tutorial) ->
+          result[td.id][tutorial.id] = {}
+
+      _.each $scope.unit.analytics.taskStatusCountByTutorial, (taskDef, taskDefId) ->
+        _.each taskDef, (stats, tutorialId) ->
+          _.each stats, (value, key) ->
+            result[taskDefId][tutorialId][value.status] = value.num
+      result
 
     #
     # Essentially, we kill the tutorials by reducing them out

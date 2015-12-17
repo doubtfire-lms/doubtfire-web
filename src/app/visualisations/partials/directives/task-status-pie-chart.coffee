@@ -5,8 +5,14 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
   templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
   scope:
     rawData: '=data'
+    title: '@title'
+    showLegend: '&showLegend'
+    height: '&height'
   controller: ($scope, $timeout, taskService, projectService, Visualisation) ->
     colors = taskService.statusColors
+
+    height = $scope.height()
+    showLegend = $scope.showLegend()
 
     updateData = (rawData) ->
       $scope.total = _.chain(rawData)
@@ -32,9 +38,25 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
       y: (d) -> d.y
       showLabels: no
       margin: zeroMargin
+      height: height
       legend:
         padding: 64
         margin: zeroMargin
+      showLegend: showLegend
+      caption:
+        enable: true #$scope.title?
+        text: "Test" #$scope.title
+        className: "h4"
+        css:
+          width: "500px"
+          textAlign: "center"
+      title:
+        enable: true
+        text: "Write Your Title"
+        className: "h4"
+        css:
+          width: "500px",
+          textAlign: "center"
       tooltip:
         valueFormatter: (d) ->
           pct   = Math.round((d / $scope.total) * 100)
