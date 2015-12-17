@@ -1,0 +1,48 @@
+<div class="panel-body" ng-if="data">
+  <div class="clearfix">
+    <div class="btn-group col-sm-6 pull-left">
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
+        <i tooltip="View task statuses over entire unit" class="fa fa-university"></i>
+      </label>
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'tutorial'">
+        <i tooltip="View task statuses by tutorial" class="fa fa-pencil"></i>
+      </label>
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'task'">
+        <i tooltip="View task statuses by task" class="fa fa-tasks"></i>
+      </label>
+    </div>
+    <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'tutorial'">
+      <select
+        class="form-control"
+        ng-options="tutorial as (tutorial.text) for tutorial in (tutorialsForSelector | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
+        ng-model="dataModel.selectedTutorial"></select>
+    </div>
+    <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'task'">
+      <select
+        class="form-control"
+        ng-options="task as (task.text) for task in (tasksForSelector | orderBy: 'seq') track by task.id"
+        ng-model="dataModel.selectedTask"></select>
+    </div>
+  </div>
+  <hr>
+  <div ng-if="depth == 0" ng-click="drillDown()" ng-click="dataModel.selectedType = 'tutorial'" style="cursor: pointer;">
+    <task-status-pie-chart data="data" show-legend="true" height="600"></task-status-pie-chart>
+  </div>
+  <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" style="cursor: pointer;">
+    <h4 class="col-xs-12" style="text-align: center;" ng-show="depth == 2">Status by Task for Tutorial {{dataModel.selectedTutorial.abbreviation}}</h4>
+    <div ng-repeat="chart in overview_keys" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTask(chart.task)">
+      <task-status-pie-chart data="chart.data" title="chart.title" show-legend="false" height="200"></task-status-pie-chart>
+      <div class="col-xs-12 caption" style="text-align: center;">{{chart.title}}</div>
+    </div>
+  </div>
+  <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" style="cursor: pointer;">
+    <h4 class="col-xs-12" style="text-align: center;" ng-show="depth == 2">Status by Tutorial for Task {{dataModel.selectedTask.abbreviation}}</h4>
+    <div ng-repeat="chart in (overview_keys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
+      <task-status-pie-chart data="chart.data" title="chart.title" show-legend="false" height="200"></task-status-pie-chart>
+      <div class="col-xs-12 caption" style="text-align: center;">{{chart.title}}</div>
+    </div>
+  </div>
+</div>
+<div class="panel-footer text-center" ng-show="data && depth == 0">
+  <strong>{{completeStats.completed}}%</strong> of student tasks are marked as complete, while <strong>{{completeStats.left}}%</strong> are not
+</div>

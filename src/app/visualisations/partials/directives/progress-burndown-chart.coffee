@@ -10,6 +10,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     $scope.data = []
 
     $scope.$watch 'project.burndown_chart_data', (newValue) ->
+      return unless newValue?
       now = +new Date().getTime() / 1000
       timeSeries =
         key: "NOW",

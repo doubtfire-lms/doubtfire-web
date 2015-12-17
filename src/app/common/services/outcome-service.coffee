@@ -7,7 +7,11 @@ angular.module("doubtfire.services.outcome-service", [])
 
     projectTaskStatusFactor: (project) ->
       (task_definition_id) ->
-        taskService.learningWeight[projectService.taskFromTaskDefId(project, task_definition_id).status]
+        task = projectService.taskFromTaskDefId(project, task_definition_id)
+        if task?
+          taskService.learningWeight[task.status]
+        else
+          0
 
     individualTaskStatusFactor: (project, task) ->
       (task_definition_id) ->

@@ -24,13 +24,13 @@ angular.module("doubtfire.projects.view-comments-directive", [
     # Comment text area enter to submit comment
     #
     fetchTaskComments = (task) ->
-      TaskComment.query {task_id: task.id},
+      TaskComment.query {project_id: $scope.project.project_id, task_definition_id: task.task_definition_id},
         (response) ->
           task.comments = response
           $scope.currentPage = 1
 
     $scope.addComment = () ->
-      TaskComment.create { task_id: $scope.task.id, comment: $scope.comment.text },
+      TaskComment.create { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, comment: $scope.comment.text },
         (response) ->
           if ! $scope.task.comments
             $scope.task.comments = []
@@ -40,7 +40,7 @@ angular.module("doubtfire.projects.view-comments-directive", [
           alertService.add("danger", response.data.error, 2000)
 
     $scope.deleteComment = (id) ->
-      TaskComment.delete { task_id: $scope.task.id, id: id },
+      TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
         (response) ->
           $scope.task.comments = $scope.task.comments.filter (e) -> e.id != id
         (response) ->

@@ -43,7 +43,21 @@ angular.module("doubtfire.services.projects", [])
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
-    return if ! project.tasks?
+    if (! project.tasks?) || project.tasks.length < unit.task_definitions.length
+      base = unit.task_definitions.map (td) -> {
+        id: null
+        status: "not_submitted"
+        task_definition_id: td.id
+        processing_pdf: false
+        has_pdf: false
+        include_in_portfolio: true
+        pct_similar: 0
+        similar_to_count: 0
+        times_assessed: 0
+      }
+
+      project.tasks = _.extend base, project.tasks
+
     project.tasks = project.tasks.map (task) ->
       projectService.mapTask task, unit, project
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
@@ -58,7 +72,7 @@ angular.module("doubtfire.services.projects", [])
       if ! project.tasks?
         project.tasks = []
 
-      currentTask = _.find project.tasks, (t) -> t.id == newTask.id
+      currentTask = _.find project.tasks, (t) -> t.task_definition_id == newTask.task_definition_id
 
       if currentTask?
         currentTask = _.extend currentTask, newTask
@@ -75,7 +89,7 @@ angular.module("doubtfire.services.projects", [])
           projectService.addTaskDetailsToProject(project, unit_obj)
 
   projectService.fetchDetailsForProject = (project, unit, callback) ->
-    if project.tasks
+    if project.burndown_chart_data?
       callback(project)
     else
       Project.get { id: project.project_id }, (project_response) ->

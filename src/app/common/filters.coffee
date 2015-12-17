@@ -61,7 +61,7 @@ angular.module("doubtfire.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> student.tasks_with_similarities > 0
+      _.filter  input, (student) -> student.max_pct_copy > 0
     else
       input
 )
@@ -78,7 +78,7 @@ angular.module("doubtfire.filters", [])
   (input, gs, grp, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student.tute == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else

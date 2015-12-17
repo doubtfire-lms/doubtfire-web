@@ -35,7 +35,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
       for upload in task.definition.upload_requirements
         $scope.files[upload.key] = { name: upload.name, type: upload.type }
       # Re-generate the submission URL and numberOfFiles
-      $scope.url = Task.generateSubmissionUrl $scope.task
+      $scope.url = Task.generateSubmissionUrl $scope.project, $scope.task
       $scope.numberOfFiles = task.definition.upload_requirements.length
 
     # Watch the task's status and set it as the new upload type if it changes

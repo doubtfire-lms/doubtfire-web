@@ -184,6 +184,7 @@ angular.module("doubtfire.services.tasks", [])
     result
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+    task.id = response.id
     task.status = response.status
     task.times_assessed = response.times_assessed
     task.updateTaskStatus project, response.new_stats
@@ -194,6 +195,7 @@ angular.module("doubtfire.services.tasks", [])
       if project.updateBurndownChart?
         project.updateBurndownChart()
       alertService.add("success", "Status saved.", 2000)
+      $rootScope.$broadcast('TaskStatusUpdated')
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id)
@@ -206,7 +208,7 @@ angular.module("doubtfire.services.tasks", [])
   taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
     Task.update(
-      { id: task.id, trigger: status }
+      { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status }
       # Success
       (value) ->
         taskService.processTaskStatusChange unit, project, task, status, value

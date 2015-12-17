@@ -49,7 +49,7 @@ angular.module("doubtfire.units", [
 # The Tutor Unit View Controller is the root controller for the tutor
 # unit contexts.
 #
-.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, alertService, unitService) ->
+.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, alertService, unitService, Visualisation) ->
   $scope.unitLoaded = false
 
   # Fetch the user's Unit Role
@@ -70,6 +70,8 @@ angular.module("doubtfire.units", [
     angular.forEach($scope.unit.students, (student) ->
       student.open = false
     )
+
+  $scope.refreshCharts = Visualisation.refreshAll
 
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit) ->
@@ -118,4 +120,3 @@ angular.module("doubtfire.units", [
     $modalInstance.close()
     units.push(unit)
 )
-

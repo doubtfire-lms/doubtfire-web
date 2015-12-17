@@ -7,14 +7,24 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
     project: '='
   controller: ($scope, taskService, projectService, Visualisation) ->
     colors = taskService.statusColors
+    $scope.data = []
 
     updateData = ->
-      $scope.data = []
+      $scope.data.length = 0
       _.each taskService.statusLabels, (label, key) ->
         count = projectService.tasksByStatus($scope.project, key).length
         $scope.data.push { key: label, y: count, status_key: key }
+      
+      if $scope.api
+        $scope.api.update()
 
-    $scope.$watch 'project.burndown_chart_data', updateData
+    $scope.$on 'TaskStatusUpdated', () ->
+      updateData()
+
+    $scope.$on 'TargetGradeUpdated', () ->
+      updateData()
+
+    updateData()
 
     [$scope.options, $scope.config] = Visualisation 'pieChart', {
       color: (d, i) ->

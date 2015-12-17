@@ -86,12 +86,15 @@ angular.module("doubtfire.api", [
 )
 
 .factory("Task", (resourcePlus, api, currentUser) ->
-  Task = resourcePlus "/tasks/:id", { id: "@id" }
+  Task = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id", { project_id: "@project_id", task_definition_id: "@task_definition_id" }
+
+  Task.summaryData = resourcePlus "/tasks/:id", { id: "@id" }
+
   #
   # Generates a url for the given task
   #
-  Task.generateSubmissionUrl = (task) ->
-    "#{api}/submission/task/#{task.id}?auth_token=#{currentUser.authenticationToken}"
+  Task.generateSubmissionUrl = (project, task) ->
+    "#{api}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
 
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{api}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
@@ -110,7 +113,7 @@ angular.module("doubtfire.api", [
   Task
 )
 .factory("TaskComment", (resourcePlus) ->
-  resourcePlus "/tasks/:task_id/comments/:id", { id: "@id", task_id: "@task_id" }
+  resourcePlus "/projects/:project_id/task_def_id/:task_definition_id/comments/:id", { id: "@id", project_id: "@project_id", task_definition_id: "@task_definition_id" }
 )
 .factory("TaskDefinition", (resourcePlus) ->
   TaskDefinition = resourcePlus "/task_definitions/:id", { id: "@id" }
@@ -136,7 +139,7 @@ angular.module("doubtfire.api", [
       "#{api}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}&auth_token=#{currentUser.authenticationToken}"
     else
       "#{api}/units/#{unit.id}/learning_alignments/csv.json?auth_token=#{currentUser.authenticationToken}"
-    
+
   TaskAlignment.downloadCSV = (unit, project_id) ->
     if project_id?
       $window.open "#{api}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}&auth_token=#{currentUser.authenticationToken}", "_blank"
