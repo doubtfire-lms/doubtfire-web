@@ -5,7 +5,29 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
   templateUrl: 'tasks/partials/templates/target-grade-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit, taskService) ->
+  controller: ($scope, $filter, Unit, taskService) ->
+
+    $scope.overviewSelectors =
+      tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
+
+    $scope.tutorialsForSelector = []
+    _.each $scope.unit.tutorials, (t) ->
+      $scope.tutorialsForSelector.push {
+        text: t.abbreviation + ' - ' + t.tutor_name
+        id: t.id
+        meeting_time: t.meeting_time
+        tutor_name: t.tutor_name
+        abbreviation: t.abbreviation
+      }
+
+    $scope.tutorialsForSelector.push $scope.overviewSelectors.tutorial
+
+    $scope.switchToTutorial = (tutorial) ->
+      $scope.dataModel.selectedType = 'tutorial'
+      $scope.dataModel.selectedTask = null
+      $scope.dataModel.selectedTutorial = tutorial
+      $scope.depth = 0
+
     # Required for button press -- shouldn't really have objects directly on
     # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
@@ -24,16 +46,50 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
     $scope.$watch 'dataModel.selectedType', (newValue) ->
       $scope.dataModel.selectedTutorial = null
       $scope.dataModel.selectedTask = null
+      $scope.depth = 0
       return unless newValue?
       switch newValue
         when 'unit'
           $scope.data = $scope.reduceDataToOverall()
         when 'tutorial'
-          $scope.dataModel.selectedTutorial = _.last $scope.unit.tutorials
+          $scope.dataModel.selectedTutorial = $scope.overviewSelectors.tutorial
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
       return unless newValue?
-      $scope.data = $scope.reduceDataToTutorialWithId(newValue)
+      if newValue.id >= 0
+        $scope.depth = 0
+        $scope.data = $scope.reduceDataToTutorialWithId(newValue)
+      else
+        $scope.depth = 1
+        $scope.data = $scope.reduceDataToTutorial()
+        $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
+          {
+            subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+            title: t.abbreviation
+            data: $scope.data[t.id]
+            tutorial: t
+          }
+
+    $scope.resetToOverview = ->
+      switch $scope.dataModel.selectedType
+        when 'unit'
+          return
+        when 'tutorial'
+          $scope.dataModel.selectedTutorial = $scope.overviewSelectors.tutorial
+       drillDown()
+
+    $scope.drillDown = () ->
+      switch $scope.dataModel.selectedType
+        when 'unit'
+          $scope.dataModel.selectedType = 'tutorial'
+        when 'tutorial'
+          $scope.depth = 2
+          $scope.data = $scope.switchToTasksForTutorial()[$scope.dataModel.selectedTutorial.id]
+          $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
+            {
+              data: $scope.data[td.id]
+              task: td
+            }
 
     #
     # Kill both the tutorials and reduce them down

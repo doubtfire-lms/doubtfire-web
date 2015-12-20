@@ -40,7 +40,7 @@
     <task-status-pie-chart data="data" show-legend="true" height="600"></task-status-pie-chart>
   </div>
   <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in overview_keys" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTask(chart.task)">
+    <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTask(chart.task)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
         <strong>{{chart.title}}</strong>
@@ -49,7 +49,7 @@
     </div>
   </div>
   <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in (overview_keys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
+    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
         <strong>{{chart.title}}</strong>
