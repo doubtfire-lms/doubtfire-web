@@ -12,7 +12,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     classStats: '='
     showLegend: '=?'
 
-  controller: ($scope, $interval, Visualisation) ->
+  controller: ($scope, gradeService, Visualisation) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     if ! nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
@@ -64,10 +64,10 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet')
             gEnter = wrapEnter.append('g')
             g = wrap.select('g')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.6').style('fill','#299ff0')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeD').style('fill-opacity', '0.6').style('fill','#2796e3')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeC').style('fill-opacity', '0.6').style('fill','#2590d9')
-            gEnter.append('rect').attr('class', 'nv-range nv-rangeP').style('fill-opacity', '0.6').style('fill','#1f77b4')
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeHD').style('fill-opacity', '0.2').style('fill', gradeService.gradeColors.HD)
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeD' ).style('fill-opacity', '0.2').style('fill', gradeService.gradeColors.D)
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeC' ).style('fill-opacity', '0.2').style('fill', gradeService.gradeColors.C)
+            gEnter.append('rect').attr('class', 'nv-range nv-rangeP' ).style('fill-opacity', '0.2').style('fill', gradeService.gradeColors.P)
             gEnter.append('rect').attr 'class', 'nv-measure'
             gEnter.append('rect').attr('class', 'nv-median').style('fill-opacity', '1.0').style('fill','#ffffff')
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
