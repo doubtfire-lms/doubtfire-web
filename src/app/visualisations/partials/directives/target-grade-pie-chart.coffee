@@ -5,6 +5,8 @@ angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
   templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
   scope:
     rawData: '=data'
+    showLegend: '=?'
+    height: '=?'
   controller: ($scope, $timeout, gradeService, projectService, Visualisation) ->
     colors = gradeService.gradeColors
 
@@ -35,6 +37,8 @@ angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
       legend:
         padding: 64
         margin: zeroMargin
+      height: $scope.height
+      showLegend: $scope.showLegend
       tooltip:
         valueFormatter: (d) ->
           pct   = Math.round((d / $scope.total) * 100)

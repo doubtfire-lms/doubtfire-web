@@ -11,10 +11,28 @@
     <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'tutorial'">
       <select
         class="form-control"
-        ng-options="tutorial as (tutorial.abbreviation + ' - ' + tutorial.tutor_name) for tutorial in (unit.tutorials | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
+        ng-options="tutorial as (tutorial.text) for tutorial in (tutorialsForSelector | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
         ng-model="dataModel.selectedTutorial"></select>
     </div>
   </div>
   <hr>
-  <target-grade-pie-chart data="data"></target-grade-pie-chart>
+  <div ng-if="depth == 0" ng-click="resetToOverview()" style="cursor: pointer;">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+    </h4>
+    <p class="col-sm-12 help-block text-center" ng-show="depth == 0 && dataModel.selectedType != 'unit'">
+      Click chart to return to overview mode
+    </p>
+    <target-grade-pie-chart data="data" show-legend="true" height="600"></target-grade-pie-chart>
+  </div>
+  <div ng-if="dataModel.selectedTutorial.id < 0" style="cursor: pointer;">
+    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
+      <target-grade-pie-chart data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
+      <div class="col-xs-12 caption text-center">
+        <strong>{{chart.title}}</strong>
+        <div class="small text-muted">{{chart.subtitle}}</div>
+      </div>
+    </div>
+  </div>
 </div>
