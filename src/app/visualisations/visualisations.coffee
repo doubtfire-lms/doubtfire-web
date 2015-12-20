@@ -9,7 +9,7 @@ angular.module('doubtfire.visualisations', [
 ])
 
 .factory('Visualisation', ($interval) ->
-  Visualisation = (type, opts, conf) ->
+  Visualisation = (type, opts, conf, titleOpts, subtitleOpts) ->
     DEFAULT_OPTS =
       objectequality: yes
       interactive: yes
@@ -51,7 +51,7 @@ angular.module('doubtfire.visualisations', [
 
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
 
-    [ { chart: dirtyOpts },  dirtyConf ]
+    [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 
   Visualisation.refreshAll = ->
     $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1

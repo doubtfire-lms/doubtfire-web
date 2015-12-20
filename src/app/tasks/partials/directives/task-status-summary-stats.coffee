@@ -5,13 +5,26 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
   templateUrl: 'tasks/partials/templates/task-status-summary-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit, taskService) ->
+  controller: ($scope, $filter, Unit, taskService) ->
     # Required for button press -- shouldn't really have objects directly on
     # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
     $scope.depth = 0
 
-    $scope.tasksForSelector = [{ text: '--- Overview ---', seq: -1, id: -1 }]
+    $scope.resetToOverview = ->
+      switch $scope.dataModel.selectedType
+        when 'unit'
+          return
+        when 'tutorial'
+          $scope.dataModel.selectedTutorial = $scope.overviewSelectors.tutorial
+        when 'task'
+          $scope.dataModel.selectedTask = $scope.overviewSelectors.task
+       drillDown()
+
+    $scope.overviewSelectors =
+      task:     { text: 'Overview of tasks',     seq: -1,             id: -1 }
+      tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
+    $scope.tasksForSelector = [$scope.overviewSelectors.task]
 
     _.each $scope.unit.task_definitions, (td) ->
       $scope.tasksForSelector.push {
@@ -19,17 +32,16 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
         id: td.id
         seq: td.seq
       }
-    
+
     $scope.tutorialsForSelector = []
 
     _.each $scope.unit.tutorials, (t) ->
       $scope.tutorialsForSelector.push {
-        text: t.abbreviation + ' - ' + t.tutor_name
         id: t.id
         abbreviation: t.abbreviation
       }
 
-    $scope.tutorialsForSelector.push { text: '--- Overview ---', abbreviation: "ZZZ", id: -1 }
+    $scope.tutorialsForSelector.push $scope.overviewSelectors.tutorial
 
 
     # Load data if not loaded already
@@ -45,19 +57,18 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
       $scope.dataModel.selectedType = 'unit'
 
     $scope.$watch 'dataModel.selectedType', (newValue) ->
-      if $scope.depth < 1
-        $scope.dataModel.selectedTutorial = null
-        $scope.dataModel.selectedTask = null
+      $scope.dataModel.selectedTutorial = null
+      $scope.dataModel.selectedTask = null
 
-        $scope.depth = 0
-        return unless newValue?
-        switch newValue
-          when 'unit'
-            $scope.data = $scope.reduceDataToOverall()
-          when 'tutorial'
-            $scope.dataModel.selectedTutorial = $scope.tutorialsForSelector[$scope.tutorialsForSelector.length - 1]
-          when 'task'
-            $scope.dataModel.selectedTask = $scope.tasksForSelector[0]
+      $scope.depth = 0
+      return unless newValue?
+      switch newValue
+        when 'unit'
+          $scope.data = $scope.reduceDataToOverall()
+        when 'tutorial'
+          $scope.dataModel.selectedTutorial = $scope.overviewSelectors.tutorial
+        when 'task'
+          $scope.dataModel.selectedTask = $scope.overviewSelectors.task
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
       return unless newValue?
@@ -69,7 +80,8 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
         $scope.data = $scope.reduceDataToTutorial()
         $scope.overview_keys = _.map $scope.unit.tutorials, (t) ->
           {
-            title: t.tutor_name + ' - ' + t.abbreviation
+            subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+            title: t.abbreviation
             data: $scope.data[t.id]
             tutorial: t
           }
@@ -83,7 +95,8 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
         $scope.data = $scope.reduceDataToTaskDef()
         $scope.overview_keys = _.map $scope.unit.task_definitions, (td) ->
           {
-            title: "#{td.abbreviation}"
+            title: td.abbreviation
+            subtitle: td.name
             data: $scope.data[td.id]
             task: td
           }
@@ -110,11 +123,14 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
       $scope.dataModel.selectedType = 'task'
       $scope.dataModel.selectedTutorial = null
       $scope.dataModel.selectedTask = task
+      $scope.depth = 0
+
 
     $scope.switchToTutorial = (tutorial) ->
       $scope.dataModel.selectedType = 'tutorial'
       $scope.dataModel.selectedTask = null
       $scope.dataModel.selectedTutorial = tutorial
+      $scope.depth = 0
 
     $scope.drillDown = () ->
       switch $scope.dataModel.selectedType
@@ -125,7 +141,6 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           $scope.data = $scope.switchToTasksForTutorial()[$scope.dataModel.selectedTutorial.id]
           $scope.overview_keys = _.map $scope.unit.task_definitions, (td) ->
             {
-              title: "#{td.abbreviation} - in #{$scope.dataModel.selectedTutorial.abbreviation}"
               data: $scope.data[td.id]
               task: td
             }
@@ -134,7 +149,6 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           $scope.data = $scope.switchToTutorialsForTask()[$scope.dataModel.selectedTask.id]
           $scope.overview_keys = _.map $scope.unit.tutorials, (t) ->
             {
-              title: "#{t.tutor_name} - #{t.abbreviation} - for #{$scope.dataModel.selectedTask.abbreviation}"
               data: $scope.data[t.id]
               tutorial: t
             }
