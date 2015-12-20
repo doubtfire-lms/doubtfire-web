@@ -27,17 +27,17 @@ angular.module("doubtfire.services.grades", [  ])
 
   gradeService.gradeColors = {
     # Pass
-    0: '#3F92D5'
-    P: '#3F92D5'
+    0: '#FF0000'
+    P: '#FF0000'
     # Credit
-    1: '#3984BF'
-    C: '#3984BF'
+    1: '#FF8000'
+    C: '#FF8000'
     # Distinction
-    2: '#3172A5'
-    D: '#3172A5'
+    2: '#0080FF'
+    D: '#0080FF'
     # High Distinction
-    3: '#2A628F'
-    HD: '#2A628F'
+    3: '#80FF00'
+    HD: '#80FF00'
   }
 
   gradeService.gradeFor = (project) ->
