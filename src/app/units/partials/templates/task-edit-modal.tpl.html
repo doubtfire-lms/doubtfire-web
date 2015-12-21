@@ -48,9 +48,19 @@
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Target Date</label>
         <div class="col-sm-8 input-group">
-          <input datepicker-popup="yyyy-MM-dd" is-open="opened" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
+          <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
           <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div><!--/target-date-->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Due Date</label>
+        <div class="col-sm-8 input-group">
+          <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
         </div>
       </div><!--/target-date-->

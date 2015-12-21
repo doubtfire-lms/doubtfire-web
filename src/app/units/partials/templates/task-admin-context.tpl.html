@@ -17,6 +17,7 @@
               <th>Name</th>
               <th>Description</th>
               <th>Target Date</th>
+              <th>Due Date</th>
               <th>Weighting</th>
               <th>Grade</th>
               <th>Group Set</th>
@@ -31,6 +32,7 @@
               <td ng-click="editTask(task)"><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
               <td ng-click="editTask(task)">{{task.description}}</td>
               <td ng-click="editTask(task)">{{task.target_date | date:'d MMM yyyy'}}</td>
+              <td ng-click="editTask(task)"><span ng-show="task.due_date">{{task.due_date | date:'d MMM yyyy'}}</span><span ng-hide="task.due_date">None</span></td>
               <td ng-click="editTask(task)">{{task.weight}}</td>
               <td ng-click="editTask(task)">{{grades[task.target_grade]}}</td>
               <td ng-click="editTask(task)">{{groupSetName(task.group_set_id)}}</td>
@@ -100,7 +102,7 @@
             </div><!--batch-enrol-->
             <div class="panel-heading">
                 <h4 class="panel-title">Batch Upload Task Definitions</h4>
-                Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade,restrict_status_updates, upload_requirements, target_date. Note that upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type".
+                Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade,restrict_status_updates, upload_requirements, target_date, due_date. Note that upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type".
             </div>
             <div class="panel-body">
                 <file-uploader

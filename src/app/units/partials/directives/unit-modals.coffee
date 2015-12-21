@@ -81,11 +81,21 @@ angular.module('doubtfire.units.partials.modals', [])
 
   $scope.grades = gradeService.grades
 
+  $scope.targetPicker = { open: false }
+  $scope.duePicker = { open: false }
+
   # Datepicker opener
-  $scope.open = ($event) ->
+  $scope.open = ($event, pickerData) ->
     $event.preventDefault()
     $event.stopPropagation()
-    $scope.opened = true
+
+    if ! pickerData.open
+      # Close both
+      $scope.targetPicker.open = false
+      $scope.duePicker.open = false
+
+    # Toggle one
+    pickerData.open = ! pickerData.open
 
   $scope.addUpReq = () ->
     newLength = $scope.task.upload_requirements.length + 1
