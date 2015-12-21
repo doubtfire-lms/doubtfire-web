@@ -23,21 +23,42 @@
         ng-options="task as (task.text) for task in (tasksForSelector | orderBy: 'seq') track by task.id"
         ng-model="dataModel.selectedTask"></select>
     </div>
-  </div>
+  </div><!--/toolbar-->
   <hr>
-  <p class="col-sm-12 help-block text-center" ng-show="depth < 2">
+  <div ng-show="depth == 0">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'unit'">
+      Task status distribution in <strong>{{unit.code}}</strong>
+    </h4>
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'task'">
+      <p>Task status distribution of <strong>{{dataModel.selectedTask.abbreviation}}</strong> in <strong>{{unit.code}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTask.name}}</p>
+    </h4>
+  </div><!--/headers-for-depth-0-->
+  <div ng-show="depth == 1">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      Task status distribution over all tutorials in <strong>{{unit.code}}</strong>
+    </h4>
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'task'">
+      Task status distribution over all tasks in <strong>{{unit.code}}</strong>
+    </h4>
+  </div><!--/headers-for-depth-1-->
+  <div ng-show="depth == 2">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+    </h4>
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'task'">
+      <p>Status by Tutorial for Task <strong>{{dataModel.selectedTask.abbreviation}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTask.name}}</p>
+    </h4>
+  </div><!--/headers-for-depth-2-->
+  <p class="col-sm-12 help-block text-center">
     Click chart to explore details
-  </p>
+  </p><!--/click-chart-help-block-->
   <div ng-if="depth == 0" ng-click="drillDown()" style="cursor: pointer;">
     <task-status-pie-chart data="data" show-legend="true" height="600"></task-status-pie-chart>
-  </div>
+  </div><!--/depth-0-chart-->
   <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" style="cursor: pointer;">
-    <div ng-show="depth == 2">
-      <h4 class="col-xs-12 text-center">
-        <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
-      </h4>
-    </div>
     <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTask(chart.task)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
@@ -45,14 +66,8 @@
         <div class="col-xs-12 small text-muted">{{chart.subtitle}}</div>
       </div>
     </div>
-  </div>
+  </div><!--/overview-chart-charts-of-tutorials-or-tasks-->
   <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" style="cursor: pointer;">
-    <div ng-show="depth == 2">
-      <h4 class="col-xs-12 text-center">
-        <p>Status by Tutorial for Task <strong>{{dataModel.selectedTask.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTask.name}}</p>
-      </h4>
-    </div>
     <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTutorial(chart.tutorial)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
@@ -60,8 +75,8 @@
         <div class="small text-muted">{{chart.subtitle}}</div>
       </div>
     </div>
-  </div>
+  </div><!--/overview-chart-charts-of-tutorials-or-tasks-->
 </div>
 <div class="panel-footer text-center" ng-show="data && depth == 0">
   <strong>{{completeStats.completed}}%</strong> of student tasks are marked as complete, while <strong>{{completeStats.left}}%</strong> are not
-</div>
+</div><!--/footer-->
