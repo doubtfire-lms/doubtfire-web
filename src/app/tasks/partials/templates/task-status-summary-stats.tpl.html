@@ -25,31 +25,35 @@
     </div>
   </div>
   <hr>
-  <div ng-if="depth == 0" ng-click="resetToOverview()" style="cursor: pointer;">
-    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
-      <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-      <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
-    </h4>
-    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'task'">
-      <p>Status by Task for Task <strong>{{dataModel.selectedTask.abbreviation}}</strong></p>
-      <p class='small text-muted'>{{dataModel.selectedTask.name}}</p>
-    </h4>
-    <p class="col-sm-12 help-block text-center" ng-show="depth == 0 && dataModel.selectedType != 'unit'">
-      Click chart to return to overview mode
-    </p>
+  <p class="col-sm-12 help-block text-center" ng-show="depth < 2">
+    Click chart to explore details
+  </p>
+  <div ng-if="depth == 0" ng-click="drillDown()" style="cursor: pointer;">
     <task-status-pie-chart data="data" show-legend="true" height="600"></task-status-pie-chart>
   </div>
   <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTask(chart.task)">
+    <div ng-show="depth == 2">
+      <h4 class="col-xs-12 text-center">
+        <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+      </h4>
+    </div>
+    <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTask(chart.task)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
-        <strong>{{chart.title}}</strong>
-        <div class="small text-muted">{{chart.subtitle}}</div>
+        <strong class="col-xs-12">{{chart.title}}</strong>
+        <div class="col-xs-12 small text-muted">{{chart.subtitle}}</div>
       </div>
     </div>
   </div>
   <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
+    <div ng-show="depth == 2">
+      <h4 class="col-xs-12 text-center">
+        <p>Status by Tutorial for Task <strong>{{dataModel.selectedTask.abbreviation}}</strong></p>
+        <p class='small text-muted'>{{dataModel.selectedTask.name}}</p>
+      </h4>
+    </div>
+    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTutorial(chart.tutorial)">
       <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
       <div class="col-xs-12 caption text-center">
         <strong>{{chart.title}}</strong>
