@@ -90,6 +90,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
             subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
+            show: _.keys($scope.data[t.id]).length > 0
             tutorial: t
           }
 
@@ -109,6 +110,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
             title: td.abbreviation
             subtitle: td.name
             data: $scope.data[td.id]
+            show: _.keys($scope.data[td.id]).length > 0
             task: td
           }
 
@@ -167,6 +169,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
             {
               data: $scope.data[td.id]
+              show: _.keys($scope.data[td.id]).length > 0
               task: td
               title: td.abbreviation
               subtitle: td.name
@@ -182,6 +185,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
             {
               data: $scope.data[t.id]
+              show: _.keys($scope.data[t.id]).length > 0
               tutorial: t
               title: t.abbreviation
               subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"

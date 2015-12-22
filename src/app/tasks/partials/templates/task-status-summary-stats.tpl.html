@@ -1,4 +1,4 @@
-<div class="panel-body" ng-if="data">
+<div class="task-status-summary-stats panel-body" ng-if="data">
   <div class="clearfix">
     <div class="btn-group col-sm-6 pull-left">
       <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
@@ -58,18 +58,24 @@
   <div ng-if="depth == 0" ng-click="drillDown()" style="cursor: pointer;">
     <task-status-pie-chart data="data" show-legend="true" height="600"></task-status-pie-chart>
   </div><!--/depth-0-chart-->
-  <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTask(chart.task)">
-      <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
+  <div ng-if="(dataModel.selectedTask.id < 0) || (depth >= 1 && dataModel.selectedTutorial.id > 0)" class="overview-pie-charts">
+    <div ng-repeat="chart in overviewKeys" class="col-xs-6 col-sm-4 col-md-3 overview-pie-chart" ng-click="drillToTask(chart.task)">
+      <task-status-pie-chart ng-if="chart.show" data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
+      <div class="no-data-to-display" ng-hide="chart.show">
+        No data
+      </div>
       <div class="col-xs-12 caption text-center">
         <strong class="col-xs-12">{{chart.title}}</strong>
         <div class="col-xs-12 small text-muted">{{chart.subtitle}}</div>
       </div>
     </div>
   </div><!--/overview-chart-charts-of-tutorials-or-tasks-->
-  <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" style="cursor: pointer;">
-    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="drillToTutorial(chart.tutorial)">
-      <task-status-pie-chart data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
+  <div ng-if="(dataModel.selectedTutorial.id < 0) || (depth >= 1 && dataModel.selectedTask.id > 0)" class="overview-pie-charts">
+    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3 overview-pie-chart" ng-click="drillToTutorial(chart.tutorial)">
+      <task-status-pie-chart ng-if="chart.show" data="chart.data" show-legend="false" height="200"></task-status-pie-chart>
+      <div class="no-data-to-display" ng-hide="chart.show">
+        No data
+      </div>
       <div class="col-xs-12 caption text-center">
         <strong>{{chart.title}}</strong>
         <div class="small text-muted">{{chart.subtitle}}</div>
