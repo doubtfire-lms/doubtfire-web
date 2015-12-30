@@ -98,6 +98,8 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           rating: 3
           description: null
         }
+        if $scope.project
+          data.project_id = $scope.project.project_id
         addLink(data)
 
     $scope.addOutcome = (outcome) ->
@@ -109,6 +111,8 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           rating: 3
           description: null
         }
+        if $scope.project
+          data.project_id = $scope.project.project_id
         addLink(data)
 
     $scope.searchForAlignmentForItem = (item) ->
