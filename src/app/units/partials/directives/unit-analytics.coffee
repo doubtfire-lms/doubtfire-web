@@ -47,11 +47,17 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         icons: ["fa-pie-chart", "fa-trophy"]
         seq: 2
         active: false
+      taskCompletionStats:
+        title: "Task Completion Stats"
+        subtitle: "View how tasks have been marked as completed as a box plot"
+        icons: ["fa-check", "fa-tasks"]
+        seq: 3
+        active: false
       developer:
         title: "Developer"
         subtitle: "Developer tools"
         icons: ["fa-code"]
-        seq: 3
+        seq: 4
         active: false
 
     #

@@ -6,6 +6,7 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.student-task-status-pie-chart'
   'doubtfire.visualisations.task-status-pie-chart'
   'doubtfire.visualisations.target-grade-pie-chart'
+  'doubtfire.visualisations.task-completion-box-plot'
 ])
 
 .factory('Visualisation', ($interval) ->
