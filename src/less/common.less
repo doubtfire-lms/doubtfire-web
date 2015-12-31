@@ -1,3 +1,79 @@
+body {
+  font: 11px/1.7em 'Open Sans', Helvetica;
+}
+
+body > .container-fluid {
+  padding: 0;
+}
+
+.root-view {
+  @col-xl-size: 8;
+  @col-lg-size: 11;
+
+  .make-xs-column(12);
+  .make-sm-column(12);
+  .make-md-column(12);
+
+  .make-lg-column(@col-lg-size);
+  .make-lg-column-offset((12 - @col-lg-size) / 2);
+
+  .make-xl-column(@col-xl-size);
+  .make-xl-column-offset((12 - @col-xl-size) / 2);
+}
+
+ul.nav.nav-tabs {
+  margin-bottom: 20px;
+}
+
+a {
+  cursor: pointer;
+}
+
+.row {
+  // Extra RHS margin fix
+  margin-right: 0px;
+}
+
+.alert-top {
+  // Fix alert on top of modals
+  z-index: 5000 !important;
+}
+
+.center-full-screen {
+  height: 100vh;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-align-content: center;
+          align-content: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+
+.btn-download {
+  i {
+    margin-right: 0.8ex;
+  }
+  padding: 1ex;
+  width: 10%;
+  min-width: 150px;
+}
+
+// Broken batch fix
+.badge {
+  border-radius: 1em;
+  padding: 0 1ex;
+  text-align: center;
+  display: inline-block;
+}
+
+// Broken UI select active fix
+.ui-select-bootstrap .ui-select-choices-row.active > a {
+  color: #333;
+  background-color: inherit;
+}
+
 .large-notice-block {
   display: -webkit-flex;
   display: flex;

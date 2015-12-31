@@ -51,7 +51,15 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
     else
       $scope.dataModel.selectedType = 'unit'
 
+    # Set userChange to false to stop code based changes to selected tutorial/task
+    # updating the view.
+    userChange = true
+    userChangeType = true
+
     $scope.$watch 'dataModel.selectedType', (newValue) ->
+      if ! userChangeType
+        userChangeType = true
+        return
       $scope.dataModel.selectedTutorial = null
       $scope.dataModel.selectedTask = null
 
@@ -67,6 +75,9 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
       return unless newValue?
+      if ! userChange
+        userChange = true
+        return
       if newValue.id >= 0
         $scope.depth = 0
         $scope.data = $scope.reduceDataToTutorialWithId(newValue)
@@ -78,10 +89,15 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
             subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
+            show: _.keys($scope.data[t.id]).length > 0
             tutorial: t
           }
+
     $scope.$watch 'dataModel.selectedTask', (newValue) ->
       return unless newValue?
+      if ! userChange
+        userChange = true
+        return
       if newValue.id >= 0
         $scope.depth = 0
         $scope.data = $scope.reduceDataToTaskDefWithId(newValue)
@@ -93,6 +109,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
             title: td.abbreviation
             subtitle: td.name
             data: $scope.data[td.id]
+            show: _.keys($scope.data[td.id]).length > 0
             task: td
           }
 
@@ -114,38 +131,63 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
           left:       100
         }
 
-    $scope.switchToTask = (task) ->
-      $scope.dataModel.selectedType = 'task'
-      $scope.dataModel.selectedTutorial = null
-      $scope.dataModel.selectedTask = task
-      $scope.depth = 0
+    $scope.drillToTask = (task) ->
+      if $scope.depth == 0 || $scope.depth == 2
+        userChangeType = false
+        userChange = $scope.depth == 2 # trigger focus on task if depth 2
+        $scope.dataModel.selectedType = 'task'
+        $scope.dataModel.selectedTutorial = null
+        $scope.dataModel.selectedTask = task
+      else
+        userChangeType = userChange = false
+        $scope.drillDown(task)
 
+    $scope.drillToTutorial = (tutorial) ->
+      if $scope.depth == 0 || $scope.depth == 2
+        userChangeType = false
+        userChange = $scope.depth == 2 # trigger focus on tutorial if depth 2
+        $scope.dataModel.selectedType = 'tutorial'
+        $scope.dataModel.selectedTask = null
+        $scope.dataModel.selectedTutorial = tutorial
+      else
+        userChangeType = userChange = false
+        $scope.drillDown(tutorial)
 
-    $scope.switchToTutorial = (tutorial) ->
-      $scope.dataModel.selectedType = 'tutorial'
-      $scope.dataModel.selectedTask = null
-      $scope.dataModel.selectedTutorial = tutorial
-      $scope.depth = 0
-
-    $scope.drillDown = () ->
+    $scope.drillDown = (focus) ->
       switch $scope.dataModel.selectedType
         when 'unit'
           $scope.dataModel.selectedType = 'tutorial'
         when 'tutorial'
           $scope.depth = 2
-          $scope.data = $scope.switchToTasksForTutorial()[$scope.dataModel.selectedTutorial.id]
+          if focus?
+            $scope.dataModel.selectedTutorial = focus
+            target = focus
+          else
+            target = $scope.dataModel.selectedTutorial
+          $scope.data = $scope.switchToTasksForTutorial()[target.id]
           $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
             {
               data: $scope.data[td.id]
+              show: _.keys($scope.data[td.id]).length > 0
               task: td
+              title: td.abbreviation
+              subtitle: td.name
             }
         when 'task'
           $scope.depth = 2
-          $scope.data = $scope.switchToTutorialsForTask()[$scope.dataModel.selectedTask.id]
+          if focus?
+            $scope.dataModel.selectedTask = focus
+            target = focus
+          else
+            target = $scope.dataModel.selectedTask
+          $scope.data = $scope.switchToTutorialsForTask()[target.id]
           $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
             {
               data: $scope.data[t.id]
+              show: _.keys($scope.data[t.id]).length > 0
               tutorial: t
+              title: t.abbreviation
+              subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
             }
 
     $scope.resetToOverview = ->

@@ -14,7 +14,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
       _.each taskService.statusLabels, (label, key) ->
         count = projectService.tasksByStatus($scope.project, key).length
         $scope.data.push { key: label, y: count, status_key: key }
-      
+
       if $scope.api
         $scope.api.update()
 
