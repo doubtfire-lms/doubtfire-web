@@ -9,14 +9,21 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
     upper: '='
     min: '='
     max: '='
+    range: '='
   controller: ($scope, $timeout, gradeService, projectService, Visualisation) ->
-    $scope.data =
-      label: "Unit"
-      Q1: $scope.lower
-      Q2: $scope.median
-      Q3: $scope.upper
-      whisker_low: $scope.min
-      whisker_high: $scope.max
+    $scope.data = [
+      {
+        label: "Unit"
+        values: {
+          Q1: $scope.lower
+          Q2: $scope.median
+          Q3: $scope.upper
+          whisker_low: $scope.min
+          whisker_high: $scope.max
+        }
+      }
+    ]
+
     [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
       colors: ['darkblue']
       x: (d) -> d.label
@@ -28,5 +35,5 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
       yAxis:
         axisLabel: "Number of tasks completed"
       maxBoxWidth: 75
-      yDomain: [0, Math.ceil($scope.upper/2) * 2] #round to nearest 2
+      yDomain: [0, Math.ceil($scope.range/2) * 2] #round to nearest 2
     }, {}
