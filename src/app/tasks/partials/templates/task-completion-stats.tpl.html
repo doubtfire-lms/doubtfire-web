@@ -1,9 +1,20 @@
 <div class="panel-body" ng-if="data">
+  <div class="clearfix">
+    <div class="btn-group col-sm-6 pull-left">
+      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'unit'">
+        <i tooltip="View stats over entire unit" class="fa fa-university"></i>
+      </label>
+      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'tutorial'">
+        <i tooltip="View stats by tutorial" class="fa fa-pencil"></i>
+      </label>
+      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'grade'">
+        <i tooltip="View stats by target grade" class="fa fa-trophy"></i>
+      </label>
+    </div>
+  </div>
+  <hr>
   <task-completion-box-plot
-      median="data.median"
-      lower="data.lower"
-      upper="data.upper"
-      min="data.min"
-      max="data.max"
-      range="data.range"></task-completion-box-plot>
+      data="data"
+      unit="unit"
+      type="dataModel.viewMode"></task-completion-box-plot>
 </div>

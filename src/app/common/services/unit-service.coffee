@@ -54,7 +54,7 @@ angular.module("doubtfire.services.units", [])
 
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->
-      _.find unit.tutorials, { id: tuteId }
+      _.find unit.tutorials, { id: +tuteId }
 
     # Extend unit to know task count
     unit.taskCount = () -> unit.task_definitions.length
