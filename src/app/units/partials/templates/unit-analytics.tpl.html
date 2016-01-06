@@ -20,6 +20,7 @@
       <task-status-summary-stats unit="unit" ng-if="activeTab === tabsData.taskStatusSummaryStats"></task-status-summary-stats>
       <target-grade-stats unit="unit" ng-if="activeTab === tabsData.targetGradeStats"></target-grade-stats>
       <task-completion-stats unit="unit" ng-if="activeTab === tabsData.taskCompletionStats"></task-completion-stats>
+      <achievement-stats unit="unit" ng-if="activeTab === tabsData.achievementStats"></achievement-stats>
       <div ng-show="activeTab === tabsData.developer">
         <h1>New Task Completion stats</h1>
         <a ng-click="fetchTaskCompletionStats()">Click Me</a>

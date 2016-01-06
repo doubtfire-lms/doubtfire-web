@@ -53,11 +53,17 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         icons: ["fa-check", "fa-tasks"]
         seq: 3
         active: false
+      achievementStats:
+        title: "ILO Achievement Stats"
+        subtitle: "View how ILOs have been achieved by students to their associated tasks as a box plot"
+        icons: ["fa-link", "fa-tasks"]
+        seq: 4
+        active: false
       developer:
         title: "Developer"
         subtitle: "Developer tools"
         icons: ["fa-code"]
-        seq: 4
+        seq: 5
         active: false
 
     #

@@ -1,0 +1,23 @@
+<div class="panel-body" ng-if="data">
+  <div class="clearfix">
+    <div class="btn-group col-sm-6 pull-left">
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
+        <i tooltip="View stats over entire unit" class="fa fa-university"></i>
+      </label>
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'tutorial'">
+        <i tooltip="View stats by tutorial" class="fa fa-pencil"></i>
+      </label>
+    </div>
+    <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'tutorial'">
+      <select
+        class="form-control"
+        ng-options="tutorial as (tutorial.abbreviation + ' - ' + tutorial.tutor_name) for tutorial in (unit.tutorials | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
+        ng-model="dataModel.selectedTutorial"></select>
+    </div>
+  </div>
+  <hr>
+  <achievement-box-plot
+    data="data"
+    unit="unit"
+    type="dataModel.selectedType"></achievement-box-plot>
+</div>
