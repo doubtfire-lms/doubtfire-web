@@ -21,7 +21,7 @@
       Target grade distribution in <strong>{{unit.code}}</strong>
     </h4>
     <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
-      <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+      <p>Task grade distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
       <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
     </h4>
   </div><!--/headers-for-depth-0-->
@@ -42,9 +42,12 @@
   <div ng-if="depth == 0" ng-click="drillDown()" class="overview-chart">
     <target-grade-pie-chart data="data" show-legend="true" height="600"></target-grade-pie-chart>
   </div><!--/depth-0-chart-->
-  <div ng-if="dataModel.selectedTutorial.id < 0" class="overview-chart">
-    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
+  <div ng-if="dataModel.selectedTutorial.id < 0" class="overview-charts">
+    <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3 overview-chart" ng-click="switchToTutorial(chart.tutorial)">
       <target-grade-pie-chart data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
+      <div class="no-data-to-display" ng-hide="chart.show">
+        No data
+      </div>
       <div class="col-xs-12 caption text-center">
         <strong>{{chart.title}}</strong>
         <div class="small text-muted">{{chart.subtitle}}</div>

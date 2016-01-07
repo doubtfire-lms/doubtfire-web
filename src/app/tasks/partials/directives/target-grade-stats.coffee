@@ -67,6 +67,7 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
             subtitle: "#{t.tutor_name} at #{$filter('date')(t.meeting_time, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
+            show: _.keys($scope.data[t.id]).length > 0
             tutorial: t
           }
 
