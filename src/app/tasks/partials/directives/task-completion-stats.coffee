@@ -14,11 +14,41 @@ angular.module('doubtfire.tasks.partials.task-completion-stats', [])
     else
       $scope.data = $scope.unit.analytics.taskCompletionStats.unit
 
-    $scope.dataModel = {
-      viewMode: 'unit'
+    overviewTutorial = {
+      id: -1
+      abbreviation: 'Overview'
+      tutor_name: 'All Tutorials'
     }
-    $scope.$watch 'dataModel.viewMode', (newValue) ->
+
+    $scope.tutorialsForSelector = [overviewTutorial].concat($scope.unit.tutorials)
+
+    $scope.depth = 0
+
+    $scope.switchToTutorial = (tutorial) ->
+      return unless $scope.unit.analytics?.taskCompletionStats?
+      $scope.dataModel.selectedTutorial = tutorial
+      if tutorial is overviewTutorial
+        $scope.data = $scope.unit.analytics.taskCompletionStats.tutorial
+        $scope.depth = 1
+      else
+        $scope.data = $scope.unit.analytics.taskCompletionStats.tutorial[tutorial.id]
+        $scope.depth = 0
+
+    $scope.drillDown = ->
+      $scope.dataModel.selectedType = 'tutorial'
+      $scope.switchToTutorial(overviewTutorial)
+
+    $scope.dataModel = {
+      selectedType: 'unit'
+      selectedTutorial: overviewTutorial
+    }
+
+    $scope.$watch 'dataModel.selectedType', (newValue) ->
       if $scope.unit.analytics?.taskCompletionStats?
         $scope.data = $scope.unit.analytics.taskCompletionStats[newValue]
-
+      if newValue is 'tutorial'
+        $scope.switchToTutorial(overviewTutorial)
+      else
+        $scope.depth = 0
+    $scope.$watch 'dataModel.selectedTutorial', $scope.switchToTutorial
 )

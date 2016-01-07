@@ -1,20 +1,59 @@
-<div class="panel-body" ng-if="data">
+<div class="drilldown-visualiser panel-body" ng-if="data">
   <div class="clearfix">
     <div class="btn-group col-sm-6 pull-left">
-      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'unit'">
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
         <i tooltip="View stats over entire unit" class="fa fa-university"></i>
       </label>
-      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'tutorial'">
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'tutorial'">
         <i tooltip="View stats by tutorial" class="fa fa-pencil"></i>
       </label>
-      <label class="btn btn-default" ng-model="dataModel.viewMode" btn-radio="'grade'">
+      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'grade'">
         <i tooltip="View stats by target grade" class="fa fa-trophy"></i>
       </label>
     </div>
+    <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'tutorial'">
+      <select
+        class="form-control"
+        ng-options="tutorial as (tutorial.abbreviation + ' - ' + tutorial.tutor_name) for tutorial in (tutorialsForSelector | orderBy: tutorial.id | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
+        ng-model="dataModel.selectedTutorial"></select>
+    </div>
   </div>
   <hr>
-  <task-completion-box-plot
-      data="data"
-      unit="unit"
-      type="dataModel.viewMode"></task-completion-box-plot>
+  <div ng-show="depth == 0">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'unit'">
+      Task completion distribution in <strong>{{unit.code}}</strong>
+    </h4>
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      <p>Task completion distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+    </h4>
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'grade'">
+      Task completion distribution by Target Grade
+    </h4>
+  </div><!--/headers-for-depth-0-->
+  <div ng-show="depth == 1">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      Task completion distribution over all tutorials in <strong>{{unit.code}}</strong>
+    </h4>
+  </div><!--/headers-for-depth-1-->
+  <div ng-if="depth == 0" ng-click="drillDown()" class="overview-chart">
+    <task-completion-box-plot
+        data="data"
+        unit="unit"
+        type="dataModel.selectedType"></task-completion-box-plot>
+  </div><!--/depth-0-chart-->
+  <div ng-if="dataModel.selectedTutorial.id < 0 && depth == 1" class="overview-chart">
+    <div ng-repeat="tutorial in unit.tutorials | orderBy: 'abbreviation'" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(tutorial)">
+      <task-completion-box-plot
+          data="data[tutorial.id]"
+          unit="unit"
+          type="dataModel.selectedType"
+          height="200"
+          show-legend="false"></task-completion-box-plot>
+      <div class="col-xs-12 caption text-center">
+        <strong>{{tutorial.abbreviation}}</strong>
+        <div class="small text-muted">{{tutorial.tutor_name}} at {{tutorial.meeting_time | date: shortTime}}</div>
+      </div>
+    </div>
+  </div><!--/overview-charts-->
 </div>
