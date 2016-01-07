@@ -83,13 +83,7 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
         when 'unit'
           $scope.dataModel.selectedType = 'tutorial'
         when 'tutorial'
-          $scope.depth = 2
-          $scope.data = $scope.switchToTasksForTutorial()[$scope.dataModel.selectedTutorial.id]
-          $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
-            {
-              data: $scope.data[td.id]
-              task: td
-            }
+          $scope.resetToOverview()
 
     #
     # Kill both the tutorials and reduce them down

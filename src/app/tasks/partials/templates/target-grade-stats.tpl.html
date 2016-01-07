@@ -1,4 +1,4 @@
-<div class="panel-body" ng-if="data">
+<div class="drilldown-visualiser panel-body" ng-if="data">
   <div class="clearfix">
     <div class="btn-group col-sm-6 pull-left">
       <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
@@ -14,19 +14,35 @@
         ng-options="tutorial as (tutorial.text) for tutorial in (tutorialsForSelector | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
         ng-model="dataModel.selectedTutorial"></select>
     </div>
-  </div>
+  </div><!--/toolbar-->
   <hr>
-  <div ng-if="depth == 0" ng-click="resetToOverview()" style="cursor: pointer;">
+  <div ng-show="depth == 0">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'unit'">
+      Target grade distribution in <strong>{{unit.code}}</strong>
+    </h4>
     <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
       <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
       <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
     </h4>
-    <p class="col-sm-12 help-block text-center" ng-show="depth == 0 && dataModel.selectedType != 'unit'">
-      Click chart to return to overview mode
-    </p>
+  </div><!--/headers-for-depth-0-->
+  <div ng-show="depth == 1">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      Target grade distribution over all tutorials in <strong>{{unit.code}}</strong>
+    </h4>
+  </div><!--/headers-for-depth-1-->
+  <div ng-show="depth == 2">
+    <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
+      <p>Target grade distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
+      <p class='small text-muted'>{{dataModel.selectedTutorial.tutor_name}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+    </h4>
+  </div><!--/headers-for-depth-2-->
+  <p class="col-sm-12 help-block text-center">
+    {{depth == 0 && dataModel.selectedType == 'unit' || depth == 1 ? 'Click chart to explore details' : 'Click to return to overview'}}
+  </p><!--/click-chart-help-block-->
+  <div ng-if="depth == 0" ng-click="drillDown()" class="overview-chart">
     <target-grade-pie-chart data="data" show-legend="true" height="600"></target-grade-pie-chart>
-  </div>
-  <div ng-if="dataModel.selectedTutorial.id < 0" style="cursor: pointer;">
+  </div><!--/depth-0-chart-->
+  <div ng-if="dataModel.selectedTutorial.id < 0" class="overview-chart">
     <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(chart.tutorial)">
       <target-grade-pie-chart data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
       <div class="col-xs-12 caption text-center">
@@ -34,5 +50,5 @@
         <div class="small text-muted">{{chart.subtitle}}</div>
       </div>
     </div>
-  </div>
+  </div><!--/overview-charts-->
 </div>
