@@ -7,7 +7,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     rawData: '=data'
     type: '='
     unit: '='
-  controller: ($scope, $timeout, Visualisation) ->
+  controller: ($scope, $timeout, Visualisation, outcomeService) ->
     refreshData = (newData) ->
       $scope.data = _.map newData, (d, id) ->
         label = _.findWhere($scope.unit.ilos, { id: +id }).abbreviation
@@ -28,6 +28,10 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     $scope.$watch 'rawData', refreshData
     refreshData($scope.rawData)
 
+    iloValues = _.map outcomeService.targetsByGrade($scope.unit, $scope.unit), (d) -> _.pluck(d.values, 'value')
+
+    rangeMax = _.max _.map iloValues, (d) -> _.reduce d, ((memo, value) -> memo + value), 0
+
     [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
       x: (d) -> d.label
       margin:
@@ -38,4 +42,5 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
       yAxis:
         axisLabel: "ILO Achievement"
       maxBoxWidth: 75
+      yDomain: [0, rangeMax]
     }, {}
