@@ -7,35 +7,42 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     rawData: '=data'
     type: '='
     unit: '='
+    pctHolder: '='
     height: '=?'
     showLegend: '=?'
   controller: ($scope, $timeout, Visualisation, outcomeService) ->
     $scope.showLegend = unless $scope.showLegend? then true else $scope.showLegend
     $scope.height     = unless $scope.height?     then 600  else $scope.height
 
+    iloValues = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+    iloMaxes = _.mapValues iloValues, (d, k) -> _.reduce d, ((memo, value) -> memo + value), 0
+    rangeMax = _.max iloMaxes
+
     refreshData = (newData) ->
+      isPct = ($scope.pctHolder? and $scope.pctHolder.pct)
+      if isPct
+        $scope.options.chart.yDomain = [0, 1]
+      else
+        $scope.options.chart.yDomain = [0, rangeMax]
+
       $scope.data = _.map newData, (d, id) ->
+        max = iloMaxes[id]
+        if (! max?) or max == 0 or ! isPct
+          max = 1
         label = _.findWhere($scope.unit.ilos, { id: +id }).abbreviation
         {
           label: label,
           values: {
-            Q1: d.lower
-            Q2: d.median
-            Q3: d.upper
-            whisker_low: d.min
-            whisker_high: d.max
+            Q1: d.lower / max
+            Q2: d.median / max
+            Q3: d.upper / max
+            whisker_low: d.min / max
+            whisker_high: d.max / max
           }
         }
       $timeout ->
         if $scope.api?.refresh?
           $scope.api.refresh()
-
-    $scope.$watch 'rawData', refreshData
-    refreshData($scope.rawData)
-
-    iloValues = _.map outcomeService.targetsByGrade($scope.unit, $scope.unit), (d) -> _.pluck(d.values, 'value')
-
-    rangeMax = _.max _.map iloValues, (d) -> _.reduce d, ((memo, value) -> memo + value), 0
 
     [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
       x: (d) -> d.label
@@ -51,5 +58,10 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
       tooltip:
         enabled: $scope.showLegend
       maxBoxWidth: 75
-      yDomain: [0, rangeMax]
+      yDomain: [0, 1]
     }, {}
+
+    # $scope.$watch 'rawData', refreshData($scope.rawData)
+    $scope.$watch 'pctHolder.pct', (newData, oldData) -> if newData != oldData then refreshData($scope.rawData)
+
+    refreshData($scope.rawData)

@@ -1,12 +1,22 @@
 <div class="drilldown-visualiser panel-body" ng-if="data">
   <div class="clearfix">
-    <div class="btn-group col-sm-6 pull-left">
-      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
-        <i tooltip="View stats over entire unit" class="fa fa-university"></i>
-      </label>
-      <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'tutorial'">
-        <i tooltip="View stats by tutorial" class="fa fa-pencil"></i>
-      </label>
+    <div class="col-sm-6 pull-left">
+      <div class="btn-group">
+        <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'unit'">
+          <i tooltip="View stats over entire unit" class="fa fa-university"></i>
+        </label>
+        <label class="btn btn-default" ng-model="dataModel.selectedType" btn-radio="'tutorial'">
+          <i tooltip="View stats by tutorial" class="fa fa-pencil"></i>
+        </label>
+      </div>
+      <div class="btn-group">
+        <label class="btn btn-default" ng-model="dataModel.pct" btn-radio="true">
+          <i tooltip="View as percent of maximum achievement" class="fa fa-percent"></i>
+        </label>
+        <label class="btn btn-default" ng-model="dataModel.pct" btn-radio="false">
+          <i tooltip="View as the raw achievement data" class="fa fa-database"></i>
+        </label>
+      </div>
     </div>
     <div class="col-sm-6 pull-right" ng-if="dataModel.selectedType == 'tutorial'">
       <select
@@ -37,7 +47,8 @@
     <achievement-box-plot
         data="data"
         unit="unit"
-        type="dataModel.selectedType"></achievement-box-plot>
+        type="dataModel.selectedType"
+        pct-holder="dataModel"></achievement-box-plot>
   </div><!--/depth-0-chart-->
   <div ng-if="dataModel.selectedTutorial.id < 0 && depth == 1" class="overview-chart">
     <div ng-repeat="tutorial in unit.tutorials | orderBy: 'abbreviation'" class="col-xs-6 col-sm-4 col-md-3" ng-click="switchToTutorial(tutorial)">
@@ -46,7 +57,8 @@
           unit="unit"
           type="dataModel.selectedType"
           height="200"
-          show-legend="false"></achievement-box-plot>
+          show-legend="false"
+          pct-holder="dataModel"></achievement-box-plot>
       <div class="col-xs-12 caption text-center">
         <strong>{{tutorial.abbreviation}}</strong>
         <div class="small text-muted">{{tutorial.tutor_name}} at {{tutorial.meeting_time | date: shortTime}}</div>

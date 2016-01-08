@@ -42,6 +42,7 @@ angular.module('doubtfire.units.partials.achievement-stats', [])
     $scope.dataModel = {
       selectedType: 'unit'
       selectedTutorial: overviewTutorial
+      pct: true
     }
 
     overviewTutorial = {
