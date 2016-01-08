@@ -7,7 +7,12 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     rawData: '=data'
     type: '='
     unit: '='
+    height: '=?'
+    showLegend: '=?'
   controller: ($scope, $timeout, Visualisation, outcomeService) ->
+    $scope.showLegend = unless $scope.showLegend? then true else $scope.showLegend
+    $scope.height     = unless $scope.height?     then 600  else $scope.height
+
     refreshData = (newData) ->
       $scope.data = _.map newData, (d, id) ->
         label = _.findWhere($scope.unit.ilos, { id: +id }).abbreviation
@@ -34,13 +39,17 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
 
     [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
       x: (d) -> d.label
+      height: $scope.height
+      showXAxis: $scope.showLegend
       margin:
-        top: 20
-        right: 10
-        bottom: 60
-        left: 80
+        top:    if $scope.showLegend then 20 else 20
+        right:  if $scope.showLegend then 10 else 10
+        bottom: if $scope.showLegend then 60 else 20
+        left:   if $scope.showLegend then 80 else 40
       yAxis:
-        axisLabel: "ILO Achievement"
+        axisLabel: if $scope.showLegend then "ILO Achievement"
+      tooltip:
+        enabled: $scope.showLegend
       maxBoxWidth: 75
       yDomain: [0, rangeMax]
     }, {}

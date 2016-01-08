@@ -6,32 +6,59 @@ angular.module('doubtfire.units.partials.achievement-stats', [])
   scope:
     unit: "="
   controller: ($scope, Unit) ->
-    mapData = (data) ->
-      return unless $scope.unit.analytics?.learningProgressClassDetails?
-      data = $scope.unit.analytics.learningProgressClassDetails unless data?
-      return unless $scope.dataModel?.selectedType? and data?
-      if $scope.dataModel.selectedType is 'unit'
-        data['all']
-      else
-        data = data[$scope.dataModel.selectedTutorial.id]
-        delete data.students
-        data
-
     # Load data if not loaded already
     unless $scope.unit.analytics?.learningProgressClassDetails?
       Unit.learningProgressClassDetails.get {id: $scope.unit.id},
         (response) ->
           $scope.unit.analytics.learningProgressClassDetails = response
-          $scope.data = mapData()
+          $scope.data = response.all
     else
-      $scope.data = mapData()
+      $scope.data = $scope.unit.analytics.learningProgressClassDetails.all
+
+    $scope.depth = 0
+
+    $scope.switchToTutorial = (tutorial) ->
+      return unless $scope.unit.analytics?.learningProgressClassDetails?
+      $scope.dataModel.selectedTutorial = tutorial
+      if tutorial is overviewTutorial
+        rawData = _.clone $scope.unit.analytics.learningProgressClassDetails
+        delete rawData.all
+        delete rawData.$promise
+        delete rawData.$resolved
+        $scope.data = rawData
+        $scope.depth = 1
+      else
+        $scope.data = $scope.unit.analytics.learningProgressClassDetails[tutorial.id]
+        $scope.depth = 0
+      $scope.data = _.chain($scope.data).map( (d, id) ->
+        delete d.students
+        [id, d]
+      ).object().value()
+
+    $scope.drillDown = ->
+      $scope.dataModel.selectedType = 'tutorial'
+      $scope.switchToTutorial(overviewTutorial)
 
     $scope.dataModel = {
-      selectedType: 'unit',
-      selectedTutorial: _.last $scope.unit.tutorials
+      selectedType: 'unit'
+      selectedTutorial: overviewTutorial
     }
-    $scope.$watch 'dataModel.selectedType', ->
-      $scope.data = mapData()
-    $scope.$watch 'dataModel.selectedTutorial', ->
-      $scope.data = mapData()
+
+    overviewTutorial = {
+      id: -1
+      abbreviation: 'Overview'
+      tutor_name: 'All Tutorials'
+    }
+
+    $scope.tutorialsForSelector = [overviewTutorial].concat($scope.unit.tutorials)
+
+    $scope.$watch 'dataModel.selectedType', (newValue) ->
+      return unless $scope.unit.analytics?.learningProgressClassDetails?
+      if newValue is 'tutorial'
+        $scope.switchToTutorial(overviewTutorial)
+      else
+        $scope.depth = 0
+        $scope.data = $scope.unit.analytics.learningProgressClassDetails.all
+
+    $scope.$watch 'dataModel.selectedTutorial', $scope.switchToTutorial
 )

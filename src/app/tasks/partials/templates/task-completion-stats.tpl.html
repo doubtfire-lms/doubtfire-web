@@ -17,7 +17,7 @@
         ng-options="tutorial as (tutorial.abbreviation + ' - ' + tutorial.tutor_name) for tutorial in (tutorialsForSelector | orderBy: tutorial.id | orderBy: tutorial.abbreviation | reverse) track by tutorial.id"
         ng-model="dataModel.selectedTutorial"></select>
     </div>
-  </div>
+  </div><!--/toolbar-->
   <hr>
   <div ng-show="depth == 0">
     <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'unit'">

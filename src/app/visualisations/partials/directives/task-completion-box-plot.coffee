@@ -53,10 +53,10 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
       height: $scope.height
       showXAxis: $scope.showLegend
       margin:
-        top:    if $scope.showLegend? then 20 else 0
-        right:  if $scope.showLegend? then 10 else 0
-        bottom: if $scope.showLegend? then 60 else 0
-        left:   if $scope.showLegend? then 80 else 0
+        top:    if $scope.showLegend then 20 else 20
+        right:  if $scope.showLegend then 10 else 10
+        bottom: if $scope.showLegend then 60 else 20
+        left:   if $scope.showLegend then 80 else 40
       yAxis:
         axisLabel: if $scope.showLegend then "Number of tasks completed"
       tooltip:
