@@ -105,7 +105,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 
     includeTaskInPorfolio = (task, shouldInclude) ->
       task.include_in_portfolio = shouldInclude
-      Task.update { id: task.id, include_in_portfolio: task.include_in_portfolio },
+      Task.update { project_id: $scope.project.project_id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
         (success) ->
           task.include_in_portfolio = success.include_in_portfolio
 )
