@@ -48,7 +48,7 @@
               <label class="small text-muted">Scroll to view more {{inverseSelectAlignmentBy}}s. Click once to select the {{inverseSelectAlignmentBy}} and rate on the right and click again to deselect {{inverseSelectAlignmentBy}}.</label>
               <div class="list-group-inverse-select-alignment">
                 <div class="list-group">
-                  <button ng-class="{active: isSelectedInverseAlignmentItem(item), 'list-group-item-info': itemIsAligned(item)}" class="list-group-item list-group-inverse-item" ng-click="selectInverseAlignmentItem(item)" ng-repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq'">
+                  <button ng-class="{active: isSelectedInverseAlignmentItem(item), 'list-group-item-info': colorAlignmentItem(item)}" class="list-group-item list-group-inverse-item" ng-click="selectInverseAlignmentItem(item)" ng-repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq'">
                     <h4>
                       <span class="item-label-overflow">
                         {{item.name}}

@@ -89,7 +89,6 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.create data,
         (response) ->
           $scope.source.task_outcome_alignments.push(response)
-          alertService.add("success", "Task - Outcome alignment saved", 2000)
           $rootScope.$broadcast('UpdateAlignmentChart', response, { created: true })
         (response) ->
           if response.data.error?
@@ -101,7 +100,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           unit_id: $scope.unit.id
           learning_outcome_id: $scope.selectedOutcome.id
           task_definition_id: taskDef.id
-          rating: 3
+          rating: 0
           description: null
         }
         if $scope.project
@@ -114,7 +113,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
           unit_id: $scope.unit.id
           learning_outcome_id: outcome.id
           task_definition_id: $scope.selectedTask.id
-          rating: 3
+          rating: 0
           description: null
         }
         if $scope.project
@@ -131,6 +130,9 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.itemIsAligned = (item) ->
       $scope.searchForAlignmentForItem(item)?
 
+    $scope.colorAlignmentItem = (item) ->
+      $scope.searchForAlignmentForItem(item)?.rating > 0
+
     $scope.isSelectedInverseAlignmentItem = (item) ->
       $scope.selectedInverseAlignmentItem is item
 
@@ -139,6 +141,9 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       if item is $scope.selectedInverseAlignmentItem
         $scope.selectedInverseAlignmentItem = null
         return
+      oldAlign = $scope.searchForAlignmentForItem $scope.selectedInverseAlignmentItem
+      if oldAlign? and oldAlign.rating is 0
+        $scope.removeAlignmentItem oldAlign
       $scope.selectedInverseAlignmentItem = item
       # auto-add if not added
       $scope.addAlignmentItem(item) unless $scope.itemIsAligned(item)
