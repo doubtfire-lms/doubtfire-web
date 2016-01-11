@@ -27,7 +27,7 @@ angular.module("doubtfire.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "myStudents"
-        _.select  input, (t) -> t.project().tutorial.tutor_name == tutorName
+        _.select  input, (t) -> (t?) && t.project().tutorial.tutor_name == tutorName
       else
         input
     else
@@ -53,7 +53,7 @@ angular.module("doubtfire.filters", [])
 .filter('byGrade', ->
   (input, grade) ->
     if input
-      _.filter input, (task) -> task.definition.target_grade <= grade
+      _.filter input, (task) -> (task?) && task.definition.target_grade <= grade
     else
       input
 )
@@ -61,7 +61,7 @@ angular.module("doubtfire.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> student.max_pct_copy > 0
+      _.filter  input, (student) -> (student?) && student.max_pct_copy > 0
     else
       input
 )
@@ -69,7 +69,7 @@ angular.module("doubtfire.filters", [])
 .filter('taskWithPlagiarism', ->
   (input) ->
     if input
-      _.filter input, (task) -> task.pct_similar > 0
+      _.filter input, (task) -> (task?) && task.pct_similar > 0
     else
       input
 )
@@ -78,9 +78,9 @@ angular.module("doubtfire.filters", [])
   (input, gs, grp, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
-        _.filter input, (student) -> not _.find(members, (mbr) -> student.project_id == mbr.project_id )
+        _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else
       input
 )

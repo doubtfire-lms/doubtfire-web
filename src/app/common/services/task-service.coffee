@@ -18,6 +18,28 @@ angular.module("doubtfire.services.tasks", [])
     'complete'
   ]
 
+  taskService.validTopTask = [
+    'not_submitted'
+    'redo'
+    'need_help'
+    'working_on_it'
+    'fix_and_resubmit'
+    'discuss'
+  ]
+
+  taskService.toBeWorkedOn = [
+    'not_submitted'
+    'redo'
+    'need_help'
+    'working_on_it'
+  ]
+
+  taskService.statusToDiscuss = [
+    'need_help'
+    'discuss'
+  ]
+
+
   taskService.acronymKey =
     RTM: 'ready_to_mark'
     NOS: 'not_submitted'
@@ -154,12 +176,18 @@ angular.module("doubtfire.services.tasks", [])
     }
 
   # Return number of days task is overdue, or false if not overdue
-  taskService.daysOverdue = (task) ->
-    return false if task.status == 'complete'
+  taskService.daysFromTarget = (task) ->
     dueDate = new Date(task.definition.target_date)
     now = new Date()
     diffTime = now.getTime() - dueDate.getTime()
     diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
+    diffDays
+
+
+  # Return number of days task is overdue, or false if not overdue
+  taskService.daysOverdue = (task) ->
+    return false if task.status == 'complete'
+    diffDays = taskService.daysFromTarget(task)
     return false if diffDays <= 0
     diffDays
 

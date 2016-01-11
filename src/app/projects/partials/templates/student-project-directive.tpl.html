@@ -5,7 +5,7 @@
       <tab-heading>
         <i class="fa fa-line-chart fa-2x"></i> Progress
       </tab-heading>
-      <progress-info></progress-info>
+      <progress-info ng-if="activeTab[0]"></progress-info>
     </tab>
     <tab select="showTaskView()" active="activeTab[1]">
       <tab-heading>
@@ -29,7 +29,7 @@
       <tab-heading>
         <i class="fa fa-graduation-cap fa-2x"></i> Learning Outcomes
       </tab-heading>
-      <project-outcome-alignment></project-outcome-alignment>
+      <project-outcome-alignment ng-if="activeTab[4]"></project-outcome-alignment>
     </tab>
     <tab active="activeTab[5]">
       <tab-heading>

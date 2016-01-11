@@ -79,7 +79,7 @@ module.exports = {
       'vendor/angular-charts/dist/angular-charts.js',
       'vendor/flashular/bin/flashular.js',
       'vendor/ngprogress/ngProgress.js',
-      'vendor/lodash/dist/lodash.js',
+      'vendor/lodash/lodash.js',
       'vendor/underscore.string/dist/underscore.string.min.js',
       'vendor/momentjs/moment.js',
       'vendor/d3/d3.js',

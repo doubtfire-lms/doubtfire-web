@@ -1,0 +1,31 @@
+<div>
+  <div class="help-block text-center" style="margin: 5em 0;" ng-show="topTasks.length == 0">You have completed all of the tasks!</div>
+  <table ng-hide="topTasks.length == 0" class="table table-condensed table-hover table-pointer ">
+    <thead>
+      <tr>
+        <th class="task-abbreviation">
+          <a ng-click="sortOrder='task.definition.abbreviation'; reverse=!reverse">
+            Task <i ng-show="sortOrder=='task.definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+        <th class="status">
+          <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
+            Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+        <th class="reason">
+          <a ng-click="sortOrder='reason'; reverse=!reverse">
+            Reason <i ng-show="sortOrder=='reason'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="data in topTasks" ng-click="onSelect(data.task)">
+        <td ng-click="viewTask(data.task)">{{data.task.definition.abbreviation}}</td>
+        <td class="text-center task-status {{statusClass(data.task.status)}}"><span><i class="{{statusIcon(data.task.status)}}"></i> {{statusText(data.task.status)}}</span></td>
+        <td ng-click="viewTask(data.task)">{{data.reason}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

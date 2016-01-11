@@ -81,75 +81,75 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
             )
             groups.watchTransition(renderWatch, 'discreteBar: groups').style('stroke-opacity', 1).style 'fill-opacity', .75
 
-            # Create the background bars... match one set per ILO
-            backBarSeries = groups.selectAll('g.nv-backBarSeries').data((d) ->
-              d.values
-            )
-            backBarSeries.exit().remove()
-            backBarSeries.enter().append('g').attr('transform', (d, i) ->
-              'translate(' + x(getX(d, i)) + x.rangeBand() * .05 + ', ' + y(0) + ')'
-            )
-            backBarSeries.attr('class', (d, i) ->
-              'nv-backBarSeries nv-backSeries-' + i
-            ).classed 'hover', (d) ->
-              d.hover
+            if targets? && _.size(targets) > 0
+              # Create the background bars... match one set per ILO
+              backBarSeries = groups.selectAll('g.nv-backBarSeries').data((d) ->
+                d.values
+              )
+              backBarSeries.exit().remove()
+              backBarSeries.enter().append('g').attr('transform', (d, i) ->
+                'translate(' + x(getX(d, i)) + x.rangeBand() * .05 + ', ' + y(0) + ')'
+              )
+              backBarSeries.attr('class', (d, i) ->
+                'nv-backBarSeries nv-backSeries-' + i
+              ).classed 'hover', (d) ->
+                d.hover
 
-            backBars = backBarSeries.selectAll('g.nv-backBar').data( (d,i) -> _.map(_.values(d.targets), (v) -> { value: v, key: d.label } ) )
-            backBars.exit().remove()
-            backBarsEnter = backBars.enter().append('g')
+              backBars = backBarSeries.selectAll('g.nv-backBar').data( (d,i) -> _.map(_.values(d.targets), (v) -> { value: v, key: d.label } ) )
+              backBars.exit().remove()
+              backBarsEnter = backBars.enter().append('g')
 
-            backBarsEnter.append('rect').attr('height', 10).attr 'width', x.rangeBand() * .9 / data.length
-            backBarsEnter.on('mouseover', (d, i) ->
-              #TODO: figure out why j works above, but not here
-              d3.select(this).classed 'hover', true
-              dispatch.elementMouseover
-                data: gradeService.grades[i]
-                index: i
-                color: d.value.color
-              return
-            ).on('mouseout', (d, i) ->
-              d3.select(this).classed 'hover', false
-              dispatch.elementMouseout
-                data: gradeService.grades[i]
-                index: i
-                color: d.value.color
-              return
-            ).on('mousemove', (d, i) ->
-              dispatch.elementMousemove
-                data: gradeService.grades[i]
-                index: i
-                color: d.value.color
-              return
-            ).on('click', (d, i) ->
-              element = this
-              dispatch.elementClick
-                data: gradeService.grades[i]
-                index: i
-                color: d.value.color
-                event: d3.event
-                element: element
-              d3.event.stopPropagation()
-              return
-            ).on('dblclick', (d, i) ->
-              dispatch.elementDblClick
-                data: gradeService.grades[i]
-                index: i
-                color: d.value.color
-              d3.event.stopPropagation()
-              return
-            )
+              backBarsEnter.append('rect').attr('height', 10).attr 'width', x.rangeBand() * .9 / data.length
+              backBarsEnter.on('mouseover', (d, i) ->
+                d3.select(this).classed 'hover', true
+                dispatch.elementMouseover
+                  data: gradeService.grades[i]
+                  index: i
+                  color: d.value.color
+                return
+              ).on('mouseout', (d, i) ->
+                d3.select(this).classed 'hover', false
+                dispatch.elementMouseout
+                  data: gradeService.grades[i]
+                  index: i
+                  color: d.value.color
+                return
+              ).on('mousemove', (d, i) ->
+                dispatch.elementMousemove
+                  data: gradeService.grades[i]
+                  index: i
+                  color: d.value.color
+                return
+              ).on('click', (d, i) ->
+                element = this
+                dispatch.elementClick
+                  data: gradeService.grades[i]
+                  index: i
+                  color: d.value.color
+                  event: d3.event
+                  element: element
+                d3.event.stopPropagation()
+                return
+              ).on('dblclick', (d, i) ->
+                dispatch.elementDblClick
+                  data: gradeService.grades[i]
+                  index: i
+                  color: d.value.color
+                d3.event.stopPropagation()
+                return
+              )
 
-            backBars.attr('class', (d, i, j) ->
-              if d.value.height < 0 then 'nv-backBar negative' else 'nv-backBar positive'
-            ).select('rect').attr('class', rectClass).style('fill-opacity', '0.2').
-              style('fill', (d) -> d.value.color).
-              watchTransition(renderWatch, 'discreteBar: backBars rect').attr 'width', x.rangeBand() * .9 / data.length
-            backBars.watchTransition(renderWatch, 'discreteBar: backBars').attr('transform', (d, i, j) ->
-              left = x(d.key) + x.rangeBand() * .05
-              top = y(d.value.height + d.value.offset)
-              'translate(' + left + ', ' + top + ')'
-            ).select('rect').attr 'height', (d, i, j) ->
-              Math.max Math.abs(y(d.value.height) - y(0)), 1
+              backBars.attr('class', (d, i, j) ->
+                if d.value.height < 0 then 'nv-backBar negative' else 'nv-backBar positive'
+              ).select('rect').attr('class', rectClass).style('fill-opacity', '0.2').
+                style('fill', (d) -> d.value.color).
+                watchTransition(renderWatch, 'discreteBar: backBars rect').attr 'width', x.rangeBand() * .9 / data.length
+              backBars.watchTransition(renderWatch, 'discreteBar: backBars').attr('transform', (d, i, j) ->
+                left = x(d.key) + x.rangeBand() * .05
+                top = y(d.value.height + d.value.offset)
+                'translate(' + left + ', ' + top + ')'
+              ).select('rect').attr 'height', (d, i, j) ->
+                Math.max Math.abs(y(d.value.height) - y(0)), 1
 
             bars = groups.selectAll('g.nv-bar').data((d) ->
               d.values

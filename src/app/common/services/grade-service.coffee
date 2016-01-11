@@ -6,6 +6,8 @@ angular.module("doubtfire.services.grades", [  ])
   #
   gradeService = {}
 
+  gradeService.gradeValues = [0..3]
+
   gradeService.grades = [
     'Pass',
     'Credit',

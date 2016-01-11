@@ -19,12 +19,27 @@
         </div>
       </div>
       <div class="col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Task List</h3>
+        <div class="panel panel-primary">
+          <div class="panel-heading clearfix">
+            <div class="pull-left">
+              <h4 class="panel-title">Task List</h4>
+              <div ng-hide="taskDetailsSelector.viewAll">The tasks you need to focus on now.</div>
+              <div ng-show="taskDetailsSelector.viewAll">All of the tasks you need to complete to achieve a {{grades[project.target_grade]}}.</div>
+            </div>
+            <div class="pull-right">
+              <div class="btn-group pull-right">
+                <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
+                  <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
+                </label>
+                <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="true">
+                  <i tooltip="View all tasks" class="fa fa-list"></i>
+                </label>
+              </div>
+            </div>
           </div>
           <div class="panel-body">
-            <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView"></student-unit-tasks>
+            <student-unit-tasks project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView" ng-if="taskDetailsSelector.viewAll"></student-unit-tasks>
+            <project-top-tasks on-select="showTaskView" project="project" ng-hide="taskDetailsSelector.viewAll"></project-top-tasks>
           </div>
         </div>
       </div>

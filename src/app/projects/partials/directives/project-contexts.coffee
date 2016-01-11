@@ -7,6 +7,8 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
 
+    $scope.taskDetailsSelector = { viewAll: false }
+
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
