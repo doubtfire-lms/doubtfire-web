@@ -1,8 +1,8 @@
 <div class="unit-outcome-alignment">
   {{filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id); ''}}
   <div ng-class="{'col-sm-8': showCsv}">
-    <div class="panel panel-primary">
-      <div class="panel-heading clearfix">
+    <div class="{{hidePanel ? '' : 'panel panel-primary'}}">
+      <div ng-hide="hidePanel" class="panel-heading clearfix">
         <div class="pull-left">
           <h4 class="panel-title">Task Outcome Alignment</h4>
           {{selectAlignmentBy == 'Outcome' ? 'Select an outcome and then tasks that align with the selected outcome' : 'Select a task and then the outcomes that the selected task contributes toward'}}
@@ -99,7 +99,7 @@
         </div><!--/bottom-panel-->
       </div><!--/select-panel-body-->
     </div><!--/select-panel-->
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="hideGraph">
       <div class="panel-heading">
           <h4 class="panel-title">Visualise Task Alignment</h4>
           See how the alignment details you have provided relate to each learning outcome.

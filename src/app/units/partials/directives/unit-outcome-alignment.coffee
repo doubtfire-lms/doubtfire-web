@@ -5,12 +5,16 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
   scope:
-    unit: "=unit"
-    project: "=project"
-    showCsv: "=showCsv"
+    unit: "="
+    project: "=?"
+    showCsv: "="
+    # use to filter out tasks to show only specific tasks
+    taskFilter: "=?"
+    hidePanel: '=?'
+    hideGraph: '=?'
 
   controller: ($scope, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
-    Visualisation.refreshAll()
+    $scope.taskFilter = unless $scope.taskFilter? then $scope.unit.task_definitions else $scope.taskFilter
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->
@@ -47,10 +51,10 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
                             .value()
         $scope.selectAlignmentByItem(defaultSelection)
         $scope.inverseSelectAlignmentBy = 'Task'
-        $scope.inverseSelectAlignmentByItems = $scope.unit.task_definitions
-      else if $scope.unit.task_definitions.length > 0 and newValue is 'Task'
-        $scope.selectAlignmentByItems = $scope.unit.task_definitions
-        defaultSelection = _.chain($scope.unit.task_definitions)
+        $scope.inverseSelectAlignmentByItems = $scope.taskFilter
+      else if $scope.taskFilter.length > 0 and newValue is 'Task'
+        $scope.selectAlignmentByItems = $scope.taskFilter
+        defaultSelection = _.chain($scope.taskFilter)
                             .sortBy((item) -> item.seq)
                             .first()
                             .value()
@@ -85,7 +89,8 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.create data,
         (response) ->
           $scope.source.task_outcome_alignments.push(response)
-          $rootScope.$broadcast('UpdateAlignmentChart')
+          alertService.add("success", "Task - Outcome alignment saved", 2000)
+          $rootScope.$broadcast('UpdateAlignmentChart', response, { created: true })
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -151,7 +156,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment saved", 2000)
-          $rootScope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart', response, { updated: true })
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -163,7 +168,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.update(data,
         (response) ->
           alertService.add("success", "Task - Outcome alignment rating saved", 2000)
-          $rootScope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart', response, { updated: true })
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -176,7 +181,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
       LearningAlignments.delete(data,
         (response) ->
           $scope.source.task_outcome_alignments = _.without $scope.source.task_outcome_alignments, align
-          $rootScope.$broadcast('UpdateAlignmentChart')
+          $rootScope.$broadcast('UpdateAlignmentChart', data, { remove: true })
         (response) ->
           if response.data.error?
             alertService.add("danger", "Error: " + response.data.error, 6000)
@@ -200,7 +205,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
       csvResultService.show 'Task CSV upload results.', response
-      $rootScope.$broadcast('UpdateAlignmentChart')
+      $rootScope.$broadcast('UpdateAlignmentChart', response, { batch: true })
       if $scope.project?
         $scope.project.refresh($scope.unit)
       else

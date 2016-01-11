@@ -42,15 +42,13 @@ angular.module("doubtfire.services.units", [])
           refresh_callback(unit)
 
     # Allow the caller to fetch a task definition from the unit based on its id
-    unit.taskDef = (taskDefId) ->
-      result = _.where unit.task_definitions, {id: taskDefId}
-      if result
-        result[0]
+    unit.taskDef = (taskDef) ->
+      if typeof taskDef isnt 'number'
+        taskDef = taskDef.task_definition_id
+      result = _.findWhere unit.task_definitions, {id: taskDef}
 
     unit.outcome = (outcomeId) ->
-      result = _.where unit.ilos, {id: outcomeId}
-      if result
-        result[0]
+      result = _.findWhere unit.ilos, {id: outcomeId}
 
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->

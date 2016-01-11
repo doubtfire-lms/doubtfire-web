@@ -86,13 +86,28 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 .directive('portfolioTasks', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
-  controller: ($scope, Task, alertService) ->
+  controller: ($scope, $rootScope, Task, alertService, taskService) ->
+    # Only show tasks with PDFs or marked as complete
+    taskFilterer = (task) ->
+      task.has_pdf or task.status is taskService.acronymKey.COM
+    $scope.filteredTasks =
+      _ .chain($scope.project.tasks)
+        .filter(taskFilterer)
+        .map($scope.unit.taskDef)
+        .value()
 
-    $scope.updateTask = (task) ->
+    $rootScope.$on 'UpdateAlignmentChart', (evt, align, type) ->
+      # just updated alignment, so ignore
+      return if type?.updated?
+      shouldInclude = type?.created?
+      task = _.findWhere $scope.project.tasks, { id: align.task_id }
+      includeTaskInPorfolio(task, shouldInclude)
+
+    includeTaskInPorfolio = (task, shouldInclude) ->
+      task.include_in_portfolio = shouldInclude
       Task.update { id: task.id, include_in_portfolio: task.include_in_portfolio },
         (success) ->
           task.include_in_portfolio = success.include_in_portfolio
-          alertService.add("success", "Task status saved.", 2000)
 )
 
 .directive('portfolioOther', ->
