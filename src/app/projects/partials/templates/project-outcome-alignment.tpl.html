@@ -24,13 +24,6 @@
           </h3>
           Overall progress on unit outcome are shown below
         </div>
-        <div class="col-xs-12">
-          <achievement-custom-bar-chart
-            show-legend="false"
-            unit="unit"
-            project="project">
-          </achievement-custom-bar-chart>
-        </div>
         <div class="panel-body view-alignment" style="padding: 0px;">
           <view-alignment
             project="project"
@@ -38,6 +31,22 @@
             class-stats="classStats"
             current-progress="currentProgress"
             summary-only="true"></view-alignment>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Visualise Achievement
+          </h3>
+          Your achievement with all ILOs are visualised below
+        </div>
+        <div class="panel-body clearfix">
+          <achievement-custom-bar-chart
+            show-legend="false"
+            unit="unit"
+            project="project"
+            class="col-sm-12">
+          </achievement-custom-bar-chart>
         </div>
       </div>
     </div>
