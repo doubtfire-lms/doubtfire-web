@@ -10,6 +10,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[])
     showCsv: "=showCsv"
 
   controller: ($scope, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, csvResultService, outcomeService) ->
+    Visualisation.refreshAll()
     if $scope.project?
       $scope.source = $scope.project
       $scope.updateRequest = (data) ->

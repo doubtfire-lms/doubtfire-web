@@ -1,10 +1,14 @@
-<div id="panel" class="panel panel-default">
+<div id="panel" class="panel panel-primary">
   <div class="panel-heading task-status row-fluid">
       <h3 class="panel-title">Learning Summary Report</h3><!--/title-->
   </div>
   <div class="panel-body">
     <form ng-submit="submitLearningSummaryReport()">
       <p>Your <i>Learning Summary Report</i> is a summary of what you have learnt in this unit. It consists of two parts: a self-assessment and your reflections. The self-assessment indicates how your portfolio aligns with the assessment criteria, and which grade you are applying for. Your reflections are a personal comment on what you have learnt in the unit, and how your knowledge and skills have developed.</p>
+      <div class="callout callout-warning">
+        <h4>Before you submit the Learning Summary</h4>
+        <p>Think of this as applying for a grade. Provide a justification for why you believe you have achieved your selected grade.</p>
+      </div>
       <div ng-hide="fileUploader.isUploading">
         <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file0' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
         <div uploader="fileUploader" ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well" over-class="file-over-hover" options="{ alias: 'file0' }" nv-file-drop nv-file-over filters="is_document">
@@ -21,10 +25,6 @@
           <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
         </div>
       </form>
-      <div class="callout callout-info">
-        <h4>Writing the Learning Summary</h4>
-        <p>Think of this as applying for a grade. Provide a justification for why you believe you have achieved your selected grade.</p>
-      </div>
     </div>
   </div>
   <div class="panel-footer">

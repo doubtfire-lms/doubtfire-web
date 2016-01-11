@@ -158,7 +158,8 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 .directive('portfolioGradeSelect', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-grade.tpl.html'
-  controller: ($scope, Project) ->
+  controller: ($scope, Project, gradeService) ->
+    $scope.gradeAcronyms = gradeService.gradeAcronyms
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
