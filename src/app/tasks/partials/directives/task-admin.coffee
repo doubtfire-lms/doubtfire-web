@@ -7,11 +7,89 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, taskService, gradeService, TaskDefinition, alertService) ->
+  controller: ($scope, $filter, taskService, gradeService, TaskDefinition, alertService, Unit, Task) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
+
+        #
+    # Active task tab group
+    #
+    $scope.taskAdmin =
+      tabsData:
+        taskSheet:
+          title: "Task Description"
+          subtitle: "Provide the descriptive details for this task"
+          icon: "fa-info"
+          seq: 0
+          active: false
+        fileUpload:
+          title: "Submission Details"
+          subtitle: "Indicate what files students need to submit for this task"
+          icon: "fa-upload"
+          seq: 1
+          active: false
+        taskResources:
+          title: "Task Resources"
+          subtitle: "Upload the task sheet and other resources for this task"
+          icon: "fa-file-o"
+          seq: 2
+          active: false
+        plagiarismChecks:
+          title: "Plagiarism Detection"
+          subtitle: "Add plagiarism checks for this task"
+          icon: "fa-eye"
+          seq: 4
+          active: false
+
+    #
+    # The task sheet uploader...
+    #
+    $scope.taskSheet = { file: { name: 'Task Sheet', type: 'document'  } }
+    $scope.taskSheetUploadUrl = () -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
+
+    $scope.onTaskSheetSuccess = (response) ->
+      alertService.add("success", "Task sheet uploaded", 2000)
+      $scope.task.has_task_pdf = true
+      # $scope.filesUploaded = response
+
+    $scope.taskPDFUrl = () ->
+      Task.getTaskPDFUrl($scope.unit, $scope.task)
+
+    #
+    # The task resources uploader...
+    #
+    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip'  } }
+    $scope.taskResourcesUploadUrl = () -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
+
+    $scope.onTaskResourcesSuccess = (response) ->
+      alertService.add("success", "Task sheet uploaded", 2000)
+      $scope.task.has_task_resources = true
+      # $scope.filesUploaded = response
+
+    $scope.resourceUrl = () ->
+      Task.getTaskResourcesUrl($scope.unit, $scope.task)
+
+
+    #
+    # Sets the active tab
+    #
+    $scope.setActiveTab = (tab) ->
+      # Do nothing if we're switching to the same tab
+      return if tab is $scope.activeTab
+      if $scope.activeTab?
+        $scope.activeTab.active = false
+      $scope.activeTab = tab
+      $scope.activeTab.active = true
+
+    #
+    # Checks if tab is the active tab
+    #
+    $scope.isActiveTab = (tab) ->
+      tab is $scope.activeTab
+
+    $scope.setActiveTab($scope.taskAdmin.tabsData['taskSheet'])
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->
@@ -85,7 +163,6 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
           (response) ->
             $scope.unit.task_definitions.push(response)
             alertService.add("success", "#{response.name} Added", 2000)
-            $scope.task = null
         ),
         (
           (response) ->
@@ -97,7 +174,6 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
           (response) ->
             populate_task($scope.task, response)
             alertService.add("success", "#{response.name} Updated", 2000)
-            $scope.task = null
         ),
         (
           (response) ->
