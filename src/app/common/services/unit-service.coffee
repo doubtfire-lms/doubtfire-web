@@ -33,6 +33,7 @@ angular.module("doubtfire.services.units", [])
           td.seq = index
           if td.group_set_id
             td.group_set = _.find(unit.group_sets, (gs) -> td.group_set_id == gs.id)
+          td.hasPlagiarismCheck = () -> td.plagiarism_checks.length > 0
         )
 
         if unit.loadStudents
@@ -117,6 +118,9 @@ angular.module("doubtfire.services.units", [])
       Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
         if group_callback?
           group_callback(groups)
+
+    unit.hasGroupwork = () ->
+      unit.group_sets? && unit.group_sets.length > 0
 
     #
     # Push all of the tasks downloaded into the existing student projects

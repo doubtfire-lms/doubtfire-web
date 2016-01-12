@@ -45,24 +45,29 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
+  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
-    $scope.currentPage = 1
-    $scope.maxSize = 7
-    $scope.pageSize = 7
+    $scope.taskAdminPager = {
+      currentPage: 1
+      maxSize: 5
+      pageSize: 5
+
+      search: ''
+      sortOrder: 'seq'
+      reverse: false
+    }
+
+    $scope.taskAdminData = {
+      selectedTask: null
+      isNew: false
+    }
 
     # Modal Events
     $scope.editTask = (task) ->
-      $modal.open
-        controller: 'TaskEditModalCtrl'
-        templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
-        resolve: {
-          task: -> task
-          isNew: -> false
-          unit: -> $scope.unit
-        }
+      $scope.taskAdminData.selectedTask = task
+      $scope.taskAdminData.isNew = false
 
     guessTaskAbbreviation = () ->
       unit = $scope.unit
@@ -92,14 +97,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         restrict_status_updates: false
         plagiarism_warn_pct: 80
       }
-      $modal.open
-        controller: 'TaskEditModalCtrl'
-        templateUrl: 'units/partials/templates/task-edit-modal.tpl.html'
-        resolve: {
-          task: -> task
-          isNew: -> true
-          unit: -> $scope.unit
-        }
+      $scope.taskAdminData.selectedTask = task
+      $scope.taskAdminData.isNew = true
 
     $scope.deleteTask = (task) ->
       taskService.deleteTask(task, $scope.unit)

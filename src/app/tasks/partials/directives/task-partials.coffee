@@ -14,4 +14,5 @@ angular.module('doubtfire.tasks.partials', [
   'doubtfire.tasks.partials.task-status-summary-stats'
   'doubtfire.tasks.partials.target-grade-stats'
   'doubtfire.tasks.partials.task-completion-stats'
+  'doubtfire.tasks.partials.task-admin'
 ])

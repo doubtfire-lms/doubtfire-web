@@ -2,10 +2,16 @@
   <div class="col-sm-9">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
-        <h3 class="panel-title">
-          Task Overview
-        </h3>
-        Summary of tasks added as work for this unit
+        <div class="pull-left">
+          <h3 class="panel-title">
+            Task List
+          </h3>
+          Summary of tasks added as work for this unit
+        </div>
+        <form role="search" class="col-sm-4 form-horizontal pull-right">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="taskAdminPager.search" autofocus />
+          <p ng-show="filteredTaskDefs.length < allTaskDefs.length && filteredTaskDefs.length != 0">Showing {{filteredTaskDefs.length}} of {{unit.task_definitions.length}} tasks.</p>
+        </form>
       </div>
       <div class="panel-body tasks-overview">
         <div class="callout callout-info" ng-hide="unit.task_definitions.length > 0">
@@ -14,63 +20,72 @@
         <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Target Date</th>
-              <th>Due Date</th>
-              <th>Weighting</th>
-              <th>Grade</th>
-              <th>Group Set</th>
-              <th>Restricted</th>
-              <th>Assessment Uploads</th>
-              <th>Plagiarism Detection</th>
-              <th>Actions</th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='abbreviation'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  Name <i ng-show="taskAdminPager.sortOrder=='abbreviation'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='target_grade'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  Grade <i ng-show="taskAdminPager.sortOrder=='target_grade'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='target_date'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  Target Date <i ng-show="taskAdminPager.sortOrder=='target_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='due_date'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  Due Date <i ng-show="taskAdminPager.sortOrder=='due_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th ng-show="unit.hasGroupwork()">
+                <a ng-click="taskAdminPager.sortOrder='group_set_id'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  Group Set <i ng-show="taskAdminPager.sortOrder=='group_set_id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='upload_requirements.length'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  <i class="fa fa-upload" tooltip="The number of files the student needs to submit."></i> <i ng-show="taskAdminPager.sortOrder=='upload_requirements.length'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='hasPlagiarismCheck()'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  <i class="fa fa-eye" tooltip="Is plagiarism checked?"></i> <i ng-show="taskAdminPager.sortOrder=='hasPlagiarismCheck()'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th>
+                <a ng-click="taskAdminPager.sortOrder='restrict_status_updates'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                  <i class="fa fa-lock" tooltip="Are status updated locked to staff only?"></i> <i ng-show="taskAdminPager.sortOrder=='restrict_status_updates'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                </a>
+
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="task in unit.task_definitions | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
-              <td ng-click="editTask(task)"><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
-              <td ng-click="editTask(task)">{{task.description}}</td>
-              <td ng-click="editTask(task)">{{task.target_date | date:'d MMM yyyy'}}</td>
-              <td ng-click="editTask(task)"><span ng-show="task.due_date">{{task.due_date | date:'d MMM yyyy'}}</span><span ng-hide="task.due_date">None</span></td>
-              <td ng-click="editTask(task)">{{task.weight}}</td>
-              <td ng-click="editTask(task)">{{grades[task.target_grade]}}</td>
-              <td ng-click="editTask(task)">{{groupSetName(task.group_set_id)}}</td>
-              <td ng-click="editTask(task)">
-                <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
-              </td>
-              <td ng-click="editTask(task)">
-                <ol style="margin-left: 0; padding-left: 0;" ng-hide="task.upload_requirements.length == 0">
-                  <li ng-repeat="upreq in task.upload_requirements">{{upreq.name}} ({{upreq.type}})</li>
-                </ol>
-                <span ng-show="task.upload_requirements.length == 0">None</span>
-              </td>
-              <td ng-click="editTask(task)">
-                <span ng-hide="task.plagiarism_checks.length == 0">
-                  Warn at {{task.plagiarism_warn_pct}}% with:
-                  <ol style="margin-left: 0; padding-left: 0;" >
-                    <li ng-repeat="check in task.plagiarism_checks">{{check.type}} ({{check.pattern}})</li>
-                  </ol>
-                </span>
-                <span ng-show="task.plagiarism_checks.length == 0">None</span>
-              </td>
-              <td>
-                <button class="btn btn-danger" ng-click="deleteTask(task)">
-                  <i class="fa fa-trash-o"></i>
-                </button>
-              </td>
+            <tr ng-repeat="task in filteredTaskDefs = (allTaskDefs = ( unit.task_definitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(task)" ng-class="{'info': taskAdminData.selectedTask == task}">
+              <td><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
+              <td>{{grades[task.target_grade]}}</td>
+              <td>{{task.target_date | date:'d MMM yyyy'}}</td>
+              <td><span ng-show="task.due_date">{{task.due_date | date:'d MMM yyyy'}}</span><span ng-hide="task.due_date">None</span></td>
+              <td ng-show="unit.hasGroupwork()">{{groupSetName(task.group_set_id)}}</td>
+              <td>{{task.upload_requirements.length}}</td>
+              <td><i ng-show="task.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="task.hasPlagiarismCheck()" class="fa fa-times"></i></td>
+              <td><i ng-show="task.restrict_status_updates" class="fa fa-check"></i><i ng-hide="task.restrict_status_updates" class="fa fa-times"></i></td>
             </tr>
           </tbody>
         </table><!--/task-table-->
       </div>
       <div class="panel-footer clearfix">
-        <pagination  ng-show="unit.task_definitions.length > pageSize" total-items="unit.task_definitions.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+        <pagination  ng-show="unit.task_definitions.length > taskAdminPager.pageSize" total-items="unit.task_definitions.length" ng-model="taskAdminPager.currentPage" items-per-page="taskAdminPager.pageSize" max-size="taskAdminPager.maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
         <button class="btn btn-success pull-right" ng-click="createTask()">
           <i class="fa fa-file"></i>
           <i class="fa fa-plus"></i> Add Task
         </button>
       </div>
     </div><!--/tasks-overview-->
+    <task-admin unit="unit" task="taskAdminData.selectedTask" is-new="taskAdminData.isNew"></task-admin>
   </div>
   <div class="col-sm-3">
         <div class="panel panel-default">

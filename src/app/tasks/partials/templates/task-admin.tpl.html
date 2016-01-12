@@ -1,20 +1,27 @@
-<div>
-	<form class="form-horizontal" ng-submit="saveTask()" role="form">
-  	<div class="modal-header">
-  		<h3>{{isNew ? "Create Task" : "Edit Task"}}</h3>
-  	</div>
-  	<div class="modal-body">
+<div class="panel panel-primary">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title">
+      {{task ? (isNew ? "Create Task" : "Edit Task") : "Task Details"}}
+    </h3>
+    Details of the {{task && isNew ? "new" : "selected"}} task.
+  </div>
+  <div class="panel-body large-notice-block" ng-hide="task" ng-hide="task">
+      <i class="fa fa-tasks"></i>
+      <p>Select a task to view its status in detail</p>
+    </div>
+  <div class="panel-body" ng-show="task">
+    <form class="form-horizontal" ng-submit="saveTask()" role="form">
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Name</label>
         <input type="text" class="form-control col-sm-8" ng-model="task.name">
       </div><!--/name-->
 
-  	  <div class="form-group" ng-required="isNew">
-  	    <label class="col-sm-3 control-label">Abbreviation</label>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Abbreviation</label>
         <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
-  	  </div><!--/abbr-->
+      </div><!--/abbr-->
 
-  	  <div class="form-group" ng-required="isNew">
+      <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Grade</label>
         <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
           <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
@@ -22,16 +29,16 @@
       </div><!--/grade-->
 
       <div class="form-group" ng-required="isNew">
-  	    <label class="col-sm-3 control-label">Description</label>
+        <label class="col-sm-3 control-label">Description</label>
         <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
-  	  </div><!--/desc-->
-
-  	  <div class="form-group" ng-required="isNew">
-  	    <label class="col-sm-3 control-label">Weighting</label>
-        <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
-  	  </div><!--/weighting-->
+      </div><!--/desc-->
 
       <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Weighting</label>
+        <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
+      </div><!--/weighting-->
+
+      <div class="form-group" ng-required="isNew" ng-show="unit.hasGroupwork()">
         <label class="col-sm-3 control-label">Group Task</label>
         <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
       </div><!--/group task-->
@@ -128,11 +135,12 @@
         <label class="col-sm-3 control-label">Plagiarism Warn Percent</label>
         <input type="number" class="form-control col-sm-8" ng-model="task.plagiarism_warn_pct"/>
       </div><!--/abbr-->
-		<div class="modal-footer text-right">
-      <button type="button" ng-show="!isNew" class="btn btn-danger" ng-click="deleteTask()">
-        Delete
-      </button>
-			<input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
-		</div>
-	</form>
+    </form>
+  </div>
+  <div class="panel-footer text-right" ng-show="task">
+    <button type="button" ng-show="!isNew" class="btn btn-danger" ng-click="deleteTask()">
+      Delete
+    </button>
+    <input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
+  </div>
 </div>
