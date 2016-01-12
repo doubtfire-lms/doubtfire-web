@@ -1,48 +1,79 @@
 <div class="root-view" id="home">
-	<div class="panel panel-default" ng-show="unitRoles.length > 0">
-	  <div class="panel-heading">
-	    <h4 class="panel-title">Units You Teach</h4>
-	  </div>
-	  <div class="panel-body">
-		<div ng-repeat="unitRole in convenorRoles = unitRoles">
-			<a ui-sref="units#show({unitRole: unitRole.id})">{{unitRole.unit_name}}</a>
-		</div>
-	  </div>
-	</div>
+  <div class="text-center welcome-to-doubtfire clearfix col-sm-12">
+    <i class="logo"></i>
+    <h1>Welcome To Doubtfire</h1>
+  </div>
 
-	<div class="panel panel-default" ng-hide="projects.length == 0">
-	  <div class="panel-heading">
-	    <h4 class="panel-title">Units You Study</h4>
-	  </div>
-	  <div class="panel-body">
-  		<div ng-repeat="project in projects">
-  			<a ui-sref='projects#show({projectId: project.project_id})'>{{project.unit_name}}</a>
-  		</div>
-	  </div>
-	</div>
+  <div class="col-sm-12 panel-wrapper">
+		<div class="col-sm-4 panel-container" ng-if="unitRoles.length > 0 && currentUser.role != 'Student'">
+			<div class="panel panel-primary panel-project">
+				<div class="panel-heading">
+					<h4 class="panel-title">Units You Teach</h4>
+				</div>
+				<div class="list-group">
+					<a ng-repeat="unitRole in unitRoles" ui-sref="units#show({unitRole: unitRole.id})" class="list-group-item clearfix">
+						<div>
+							<i class="fa fa-pencil"></i>
+							<h4 class="list-group-item-heading">{{unitRole.unit_name}}</h4>
+							<p class="list-group-item-text">
+								<label class="label label-info">{{unitRole.unit_code}}</label>
+								<label class="label label-primary">{{unitRole.role}}</label>
+							</p>
+						</div>
+					</a>
+				</div>
+				<div class="panel-body no-content" ng-if="unitRoles.length == 0">
+					<i class="fa fa-4x fa-pencil"></i>
+					You teach no units
+				</div>
+			</div>
+		</div><!--/project-teaching-->
 
-	<div class="panel panel-default" if-role="Admin">
-	  <div class="panel-heading">
-	    <h4 class="panel-title">Administration</h4>
-	  </div>
-	  <div class="panel-body">
-  		<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
-  		<div><a href="#/admin/users" if-role="Admin">Manage Users</a></div>
-	  </div>
-	</div>
+		<div class="col-sm-4 panel-container" ng-if="projects.length > 0">
+			<div class="panel panel-primary panel-project">
+				<div class="panel-heading">
+					<h4 class="panel-title">Units You Study</h4>
+				</div>
+				<div class="list-group">
+					<a ng-repeat="project in projects" ui-sref='projects#show({projectId: project.project_id})' class="list-group-item clearfix">
+						<div>
+							<i class="fa fa-university"></i>
+							<h4 class="list-group-item-heading">{{project.unit_name}}</h4>
+							<p class="list-group-item-text">
+								<label class="label label-info">{{project.unit_code}}</label>
+							</p>
+						</div>
+					</a>
+				</div>
+				<div class="panel-body no-content" ng-if="projects.length == 0">
+					<i class="fa fa-4x fa-university"></i>
+					You study no units
+				</div>
+			</div>
+		</div><!--/project-panel-->
 
-	<div ng-show="projects.length == 0 && unitRoles.length == 0" class="text-center col-sm-offset-3 col-sm-6" ng-class="{'hidden' : projects.length != 0 && unitRoles.length != 0}">
-	  <i class="fa fa-fire fa-5x"></i>
-	  <h1>Welcome To Doubtfire</h1>
-	  <p class="lead">You do not study or teach in any units that use Doubtfire.</p>
-	</div>
-
-	<div class="panel panel-default" if-role="Convenor">
-	  <div class="panel-heading">
-	    <h4 class="panel-title">Administration</h4>
-	  </div>
-	  <div class="panel-body">
-			<div><a href="#/admin/units" if-role="Admin">Manage Units</a></div>
-	  </div>
-	</div>
+		<div class="col-sm-4 panel-container" if-role="Admin Convenor">
+	    <div class="panel panel-primary panel-admin">
+	      <div class="panel-heading">
+	        <h4 class="panel-title">Administration</h4>
+	      </div>
+	      <div class="list-group">
+	        <a href="#/admin/units" class="list-group-item clearfix">
+						<div>
+							<i class="fa fa-university"></i>
+		          <h4 class="list-group-item-heading">Manage Units</h4>
+		          <p class="list-group-item-text">Add new units, or modify existing units you have convenor access to.</p>
+						</div>
+	        </a>
+					<a href="#/admin/users" class="list-group-item clearfix">
+						<div>
+							<i class="fa fa-user"></i>
+		          <h4 class="list-group-item-heading">Manage Users</h4>
+		          <p class="list-group-item-text">Add, modify or remove existing users.</p>
+						</div>
+	        </a>
+	      </div>
+	    </div>
+		</div><!--/admin-panel-->
+  </div>
 </div>

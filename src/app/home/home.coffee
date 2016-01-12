@@ -16,7 +16,7 @@ angular.module("doubtfire.home", [])
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, UnitRole, Project, headerService, currentUser) ->
+.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, UnitRole, Project, Unit, headerService, currentUser, unitService) ->
   hasRoles = false
   hasProjects = false
 
@@ -29,20 +29,31 @@ angular.module("doubtfire.home", [])
       else if $scope.unitRoles.length == 1
         $state.go 'units#show', {unitRole: $scope.unitRoles[0].id}
 
+  firstTimeUser     = currentUser.profile.name.toLowerCase() is "first name surname"
+  userHasNotOptedIn = currentUser.profile.opt_in_to_research is null
+
   UnitRole.query (roles) ->
     $scope.unitRoles = roles
     hasRoles = true
     testSingleProjectRole()
-
 
   Project.query (projects) ->
     $scope.projects = projects
     hasProjects = true
     testSingleProjectRole()
 
+  if currentUser.role isnt 'Student'
+    Unit.query (units) ->
+      $scope.units = units
+
+  $scope.unit = (unitId) ->
+    _.findWhere($scope.units, {id: unitId})
+
   headerService.clearMenus()
 
-  if currentUser.profile.name.toLowerCase() == "first name surname"
+  $scope.currentUser = currentUser
+
+  if firstTimeUser
     $modal.open
       templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
       controller: 'UserModalCtrl'
