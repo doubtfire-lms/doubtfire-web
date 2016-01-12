@@ -168,12 +168,12 @@ angular.module("doubtfire.services.tasks", [])
       'ready_to_mark'
     ]
     tutor: [
+      'complete'
       'discuss'
       'demonstrate'
-      'complete'
       'fix_and_resubmit'
-      'fix_and_include'
       'redo'
+      'fix_and_include'
       'fail'
     ]
 
