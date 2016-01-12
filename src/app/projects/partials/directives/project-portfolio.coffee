@@ -20,22 +20,26 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         title: "Learning Summary Report"
         icon: "fa-graduation-cap"
         seq: 2
+      alignmentStep:
+        title: "Task ILO Alignments"
+        icon: "fa-chain"
+        seq: 3
       taskStep:
         title: "Select Tasks"
         icon: "fa-tasks"
-        seq: 3
+        seq: 4
       otherFilesStep:
         title: "Upload Other Files"
         icon: "fa-plus"
-        seq: 4
+        seq: 5
       compileStep:
         title: "Compile PDF"
         icon: "fa-file-pdf-o"
-        seq: 5
+        seq: 6
       reviewStep:
         title: "Review Portfolio"
         icon: "fa-check"
-        seq: 6
+        seq: 7
     $scope.setActivePortfolioTab = (tab) ->
       # $scope.activePortfolioTab?.active = false
       $scope.activePortfolioTab = tab
@@ -83,10 +87,10 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.uploadPortfolioPart("LearningSummaryReport", "document")
 )
 
-.directive('portfolioTasks', ->
+.directive('portfolioAlignments', ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
-  controller: ($scope, $rootScope, Task, alertService, taskService) ->
+  templateUrl: 'projects/partials/templates/portfolio-alignments.tpl.html'
+  controller: ($scope, taskService) ->
     # Only show tasks with PDFs or marked as complete
     taskFilterer = (task) ->
       task.has_pdf or task.status is taskService.acronymKey.COM
@@ -95,16 +99,36 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         .filter(taskFilterer)
         .map($scope.unit.taskDef)
         .value()
+)
 
-    $rootScope.$on 'UpdateAlignmentChart', (evt, align, type) ->
-      # just updated alignment, so ignore
-      return if type?.updated?
-      shouldInclude = type?.created?
-      task = _.findWhere $scope.project.tasks, { id: align.task_id }
-      includeTaskInPorfolio(task, shouldInclude)
+.directive('portfolioTasks', ->
+  restrict: 'E'
+  templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
+  controller: ($scope, Task) ->
+    # alignments[task_definition_id][ilo_id]
+    alignments =
+      _ .chain($scope.project.task_outcome_alignments)
+        .filter( (d) -> d.rating > 0 )
+        .groupBy('task_definition_id')
+        .map (d, i) ->
+          d = _ .chain(d)
+                .groupBy('learning_outcome_id')
+                .map( (d, i) -> [i, d[0]] )
+                .object()
+                .value()
+          [i, d]
+        .object()
+        .value()
 
-    includeTaskInPorfolio = (task, shouldInclude) ->
-      task.include_in_portfolio = shouldInclude
+
+    $scope.alignmentForTaskAndIlo = (task, ilo) ->
+      alignments[task.task_definition_id]?[ilo.id]
+
+    $scope.disableInclude = (task) ->
+      alignments[task.task_definition_id] is undefined
+
+    $scope.includeTaskInPorfolio = (task) ->
+      task.include_in_portfolio = !task.include_in_portfolio
       Task.update { project_id: $scope.project.project_id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
         (success) ->
           task.include_in_portfolio = success.include_in_portfolio

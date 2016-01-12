@@ -1,0 +1,32 @@
+<div id="panel" class="panel panel-primary">
+  <div class="panel-heading task-status row-fluid">
+    <h3 class="panel-title">Align Tasks to ILOs</h3>
+    For a task to be included in your portfolio, you must align the task to an Intended Learning Outcome.
+    You must provide a rating for how much that task relates to the ILO you have selected and an optional rationale.
+  </div>
+  <div class="panel-body" style="padding: 0px;">
+    <div class="col-xs-12">
+      <div class="callout callout-warning" ng-show="filteredTasks.length == 0">
+        <h4>Submit Tasks to Include</h4>
+        <p>Please submit tasks to Doubtfire to include in your portfolio. You need to make sure that the tasks you include will demonstrate all of the unit's learning outcomes. Processing time may take a few minutes, so check back if you have recently submitted work.</p>
+      </div>
+      <div class="callout callout-info" ng-show="filteredTasks.length > 0">
+        <h4>Tasks with Changes</h4>
+        <p>If you have significantly change a task, revisit the tasks and you can upload the files again. This wont change the state of the task, but will allow you to upload files that include new changes.</p>
+      </div>
+    </div>
+    <unit-outcome-alignment
+      unit="unit"
+      project="project"
+      task-filter="filteredTasks"
+      hide-panel="true"
+      hide-graph="true">
+    </unit-outcome-alignment>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    </div>
+  </div>
+</div>

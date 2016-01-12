@@ -6,9 +6,14 @@
     .generate-colors(5);
     .generate-colors(@n, @i: 1) when (@i <= @n) {
       @color: darken(@base-color, @i * 10%);
-      .rating-static-tooltip .badge.rating-@{i} {
+      .rating-static-tooltip .badge.rating-@{i}, .compact-rating.rating-@{i} {
         background-color: @color !important;
         color: white;
+        border-radius: 2em;
+        font-size: 2em;
+        text-align: center;
+        width: 55%;
+        cursor: pointer;
       }
       .rating-area {
         i:nth-of-type(@{i}) { color:  @color; }

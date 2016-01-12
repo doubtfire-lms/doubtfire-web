@@ -19,8 +19,12 @@ angular.module('doubtfire.units.partials.outcome-alignment-rating',[])
     selectedTooltip: '=?'
     # Show as tooltips instead (false)
     showTooltips: '=?'
+    # Compact version
+    compact: '=?'
   controller: ($scope) ->
     $scope.max = 5
+
+    $scope.readonly = true if $scope.compact
 
     $scope.tooltips = [
       "The task is slightly related to this outcome",
