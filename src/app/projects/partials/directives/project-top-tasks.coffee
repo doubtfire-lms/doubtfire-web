@@ -38,7 +38,10 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       #
       # Step 1: if today is the tutorial day... show tasks to discuss with tutor
       #
-      tutorialDay = $scope.project.tutorial.meeting_day
+      if $scope.project? && $scope.project.tutorial?
+        tutorialDay = $scope.project.tutorial.meeting_day
+      else
+        tutorialDay = "Monday"
 
       tasksToDiscuss = _.filter overdueTasks, (task) -> _.contains taskService.statusToDiscuss, task.status
       
