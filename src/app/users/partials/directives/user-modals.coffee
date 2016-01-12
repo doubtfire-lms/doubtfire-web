@@ -4,10 +4,10 @@ angular.module('doubtfire.users.partials.modals', [])
   $scope.user = user
   $scope.users = users
   $scope.currentUser = currentUser
-  
+
   $scope.isNew = isNew
   $scope.modalState = {}
-  
+
   $scope.saveUser = ->
     if $scope.isNew
       User.create( user: $scope.user ).$promise.then (
@@ -39,7 +39,7 @@ angular.module('doubtfire.users.partials.modals', [])
   $scope.user = user
   $scope.currentUser = currentUser
   $scope.modalState = {}
-  
+
   $scope.saveNotifications = ->
     User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
       (response) ->

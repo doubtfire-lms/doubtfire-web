@@ -5,7 +5,7 @@
   </div>
 
   <div class="col-sm-12 panel-wrapper">
-		<div class="col-sm-4 panel-container" ng-if="unitRoles.length > 0 && currentUser.role != 'Student'">
+		<div class="col-sm-4 panel-container" ng-hide="showNewUserWizard" ng-if="unitRoles.length > 0 && currentUser.role != 'Student'">
 			<div class="panel panel-primary panel-project">
 				<div class="panel-heading">
 					<h4 class="panel-title">Units You Teach</h4>
@@ -29,7 +29,7 @@
 			</div>
 		</div><!--/project-teaching-->
 
-		<div class="col-sm-4 panel-container" ng-if="projects.length > 0">
+		<div class="col-sm-4 panel-container" ng-hide="showNewUserWizard" ng-if="projects.length > 0">
 			<div class="panel panel-primary panel-project">
 				<div class="panel-heading">
 					<h4 class="panel-title">Units You Study</h4>
@@ -52,7 +52,7 @@
 			</div>
 		</div><!--/project-panel-->
 
-		<div class="col-sm-4 panel-container" if-role="Admin Convenor">
+		<div class="col-sm-4 panel-container" ng-hide="showNewUserWizard" if-role="Admin Convenor">
 	    <div class="panel panel-primary panel-admin">
 	      <div class="panel-heading">
 	        <h4 class="panel-title">Administration</h4>
@@ -75,5 +75,9 @@
 	      </div>
 	    </div>
 		</div><!--/admin-panel-->
+
+		<div class="col-sm-6 col-sm-offset-3" ng-show="showNewUserWizard">
+			<new-user-wizard opt-in-only="userHasNotOptedIn" projects="unitRoles"></new-user-wizard>
+		</div>
   </div>
 </div>
