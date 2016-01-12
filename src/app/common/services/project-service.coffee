@@ -46,7 +46,7 @@ angular.module("doubtfire.services.projects", [])
     if (! project.tasks?) || project.tasks.length < unit.task_definitions.length
       base = unit.task_definitions.map (td) -> {
         id: null
-        status: "not_submitted"
+        status: "not_started"
         task_definition_id: td.id
         processing_pdf: false
         has_pdf: false

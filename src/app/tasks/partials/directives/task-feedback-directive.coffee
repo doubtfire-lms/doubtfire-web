@@ -71,9 +71,9 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
           $scope.setActiveTab($scope.tabsData['plagiarismReport'])
         else
           switch $scope.project.selectedTask.status
-            when 'not_submitted'
+            when 'not_started'
               $scope.setActiveTab($scope.tabsData['taskSheet'])
-            when 'ready_to_mark', 'complete', 'discuss', 'fix_and_include'
+            when 'ready_to_mark', 'complete', 'discuss', 'demonstrate'
               $scope.setActiveTab($scope.tabsData['viewSubmission'])
             when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
               $scope.setActiveTab($scope.tabsData['fileUpload'])

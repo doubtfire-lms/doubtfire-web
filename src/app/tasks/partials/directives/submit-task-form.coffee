@@ -69,7 +69,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
         text: "new evidence for portfolio"
         class: 'btn-info'
         # Upload evidence only okay in a final state
-        hide: $scope.task.status not in ['discuss', 'fix_and_include', 'complete']
+        hide: $scope.task.status not in ['demonstrate', 'discuss', 'fix_and_include', 'complete', 'fail']
 
     # Switch the status if the upload type matches a state
     $scope.setUploadType = (type) ->
@@ -97,7 +97,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
       # No callback
       taskService.recreatePDF $scope.task, null
 
-    $scope.allowRegeneratePdf = $scope.task.status in ['ready_to_mark', 'discuss', 'complete'] and $scope.task.has_pdf
+    $scope.allowRegeneratePdf = $scope.task.status in ['demonstrate', 'ready_to_mark', 'discuss', 'complete'] and $scope.task.has_pdf
 
     # Keep track of team contributions for upload of group tasks
     $scope.team = {members: []}

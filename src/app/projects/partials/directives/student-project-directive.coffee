@@ -77,20 +77,20 @@ angular.module("doubtfire.projects.student-project-directive", [
             # Find first task that is Ready To Mark or Need Help
             t = _.find filteredTasks, (t) -> t.status == 'need_help' || t.status == 'ready_to_mark'
             if not t? # else find discuss
-              t = _.find filteredTasks, (t) -> t.status == 'discuss'
+              t = _.find filteredTasks, (t) -> t.status == 'discuss' || t.status == 'demonstrate'
             if not t? # else find resubmit or redo
-              t = _.find filteredTasks, (t) -> t.status == 'redo' || t.status == 'fix_and_resubmit' || t.status == 'fix_and_include'
+              t = _.find filteredTasks, (t) -> t.status == 'redo' || t.status == 'fix_and_resubmit'
             if not t? # else find working on it
               t = _.find filteredTasks, (t) -> t.status == 'working_on_it'
-            if not t? # else find not_submitted
-              t = _.find filteredTasks, (t) -> t.status == 'not_submitted'
+            if not t? # else find not_started
+              t = _.find filteredTasks, (t) -> t.status == 'not_started'
             $scope.project.selectedTask = t
           else # student... go to task they are working on
             t = _.find filteredTasks, (t) -> t.status == 'working_on_it'
             if not t? # else find resubmit or redo
               t = _.find filteredTasks, (t) -> t.status == 'redo' || t.status == 'fix_and_resubmit'
-            if not t? # else find not_submitted
-              t = _.find filteredTasks, (t) -> t.status == 'not_submitted'
+            if not t? # else find not_started
+              t = _.find filteredTasks, (t) -> t.status == 'not_started'
             $scope.project.selectedTask = t
 
         if not $scope.project.selectedTask?

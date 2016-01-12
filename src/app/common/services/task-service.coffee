@@ -7,7 +7,7 @@ angular.module("doubtfire.services.tasks", [])
   taskService = {}
 
   taskService.statusKeys = [
-    'not_submitted'
+    'not_started'
     'fix_and_include'
     'redo'
     'need_help'
@@ -15,20 +15,23 @@ angular.module("doubtfire.services.tasks", [])
     'fix_and_resubmit'
     'ready_to_mark'
     'discuss'
+    'demonstrate'
     'complete'
+    'fail'
   ]
 
   taskService.validTopTask = [
-    'not_submitted'
+    'not_started'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
+    'demonstrate'
     'discuss'
   ]
 
   taskService.toBeWorkedOn = [
-    'not_submitted'
+    'not_started'
     'redo'
     'need_help'
     'working_on_it'
@@ -36,91 +39,106 @@ angular.module("doubtfire.services.tasks", [])
 
   taskService.statusToDiscuss = [
     'need_help'
+    'demonstrate'
     'discuss'
   ]
 
 
   taskService.acronymKey =
     RTM: 'ready_to_mark'
-    NOS: 'not_submitted'
+    NOS: 'not_started'
     WRK: 'working_on_it'
     HLP: 'need_help'
     RDO: 'redo'
     DNR: 'fix_and_include'
     FIX: 'fix_and_resubmit'
     DIS: 'discuss'
+    DEM: 'demonstrate'
     COM: 'complete'
+    FAL: 'fail'
 
   taskService.learningWeight =
-    ready_to_mark:      0.5
-    not_submitted:      0.0
+    fail:               0.0
+    not_started:        0.0
     working_on_it:      0.0
     need_help:          0.0
     redo:               0.1
     fix_and_include:    0.1
     fix_and_resubmit:   0.3
-    discuss:            0.7
-    complete:           0.8
+    ready_to_mark:      0.5
+    discuss:            0.8
+    demonstrate:        0.8
+    complete:           1.0
 
   taskService.statusAcronym =
     ready_to_mark:      'RTM'
-    not_submitted:      'NOS'
+    not_started:        'NOS'
     working_on_it:      'WRK'
     need_help:          'HLP'
     redo:               'RDO'
     fix_and_include:    "DNR"
     fix_and_resubmit:   'FIX'
     discuss:            'DIS'
+    demonstrate:        'DEM'
     complete:           'COM'
+    fail:               'FAL'
 
   taskService.statusLabels =
     ready_to_mark:      'Ready to Mark'
-    not_submitted:      'Not Started'
+    not_started:        'Not Started'
     working_on_it:      'Working On It'
     need_help:          'Need Help'
     redo:               'Redo'
     fix_and_include:    "Don't Resubmit"
     fix_and_resubmit:   'Resubmit'
     discuss:            'Discuss'
+    demonstrate:        'Demonstrate'
     complete:           'Complete'
+    fail:               'Fail'
 
   taskService.statusIcons =
     ready_to_mark:      'fa fa-thumbs-o-up'
-    not_submitted:      'fa fa-times'
+    not_started:        'fa fa-times'
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
     fix_and_include:    'fa fa-stop'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-check'
+    demonstrate:        'fa fa-check'
     complete:           'fa fa-check-square-o'
+    fail:               'fa fa-times-circle-o'
 
   taskService.statusColors =
     ready_to_mark:     '#0079D8'
-    not_submitted:     '#CCCCCC'
+    not_started:       '#CCCCCC'
     working_on_it:     '#EB8F06'
     need_help:         '#a48fce'
     fix_and_resubmit:  '#f2d85c'
     fix_and_include:   '#d93713'
     redo:              '#804000'
     discuss:           '#31b0d5'
+    demonstrate:       '#31b0d5'
     complete:          '#5BB75B'
+    fail:              '#d93713'
 
   taskService.statusSeq =
-    ready_to_mark:      6
-    not_submitted:      1
-    working_on_it:      5
-    need_help:          4
-    redo:               3
-    fix_and_include:    2
-    fix_and_resubmit:   7
-    discuss:            8
-    complete:           9
+    not_started:        1
+    fail:               2
+    fix_and_include:    3
+    redo:               4
+    need_help:          5
+    working_on_it:      6
+    ready_to_mark:      7
+    fix_and_resubmit:   8
+    discuss:            9
+    demonstrate:       10
+    complete:          11
 
   taskService.helpTextDesc =
     ready_to_mark:
       'You have completed the Task, and uploaded it for your tutor to assess.'
-    not_submitted:
+    not_started:
       'You have not yet started the Task.'
     working_on_it:
       'You are working on the task, but it is not yet ready to assess.'
@@ -133,24 +151,30 @@ angular.module("doubtfire.services.tasks", [])
     fix_and_resubmit:
       'Your tutor wants you to fix something and resubmit it for review again.'
     discuss:
-      'Your tutor is happy with your work. To mark as complete, attend the lab and discuss it with your tutor.'
+      'Your tutor is happy with your work. To mark as complete, attend class and discuss it with your tutor.'
+    demonstrate:
+      'Your work looks good. Attend class and demonstrate the task to your tutor to have it marked as Complete.'
     complete:
       'Your tutor is happy with your work and it has been discussed with them.'
+    fail:
+      'You have not successfully demonstrated the required learning for this task.'
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
     student: [
-      'not_submitted'
+      'not_started'
       'working_on_it'
       'need_help'
       'ready_to_mark'
     ]
     tutor: [
       'discuss'
+      'demonstrate'
       'complete'
       'fix_and_resubmit'
       'fix_and_include'
       'redo'
+      'fail'
     ]
 
   # This function gets the status CSS class for the indicated status
