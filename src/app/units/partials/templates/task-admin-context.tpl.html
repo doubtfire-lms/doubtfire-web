@@ -90,7 +90,26 @@
   <div class="col-sm-3">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title">Upload Task PDFs</h4>
+                <h4 class="panel-title">Batch Upload Task Definitions</h4>
+                <p>Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade, restrict_status_updates, upload_requirements, target_week, target_day, due_week, due_day.</p><p>Note: Upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type". Target and due weeks should be the number of weeks from the unit start, and the day should be a short text (eg "Tue").</p>
+            </div>
+            <div class="panel-body">
+                <file-uploader
+                  files="batchFiles"
+                  url="batchTaskUrl()"
+                  on-success="onBatchTaskSuccess"></file-uploader>
+            </div><!--batch-withdraw-->
+            <div class="panel-heading">
+                <h4 class="panel-title">Download Tasks</h4>
+                Download all tasks for the unit.
+            </div>
+            <div class="panel-body text-center">
+                <a target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary btn-download">
+                    <i class="fa fa-download"></i> Download
+                </a>
+            </div>
+            <div class="panel-heading">
+                <h4 class="panel-title">Upload All Task PDFs</h4>
                 Upload PDFs of tasks such that they are viewable for students Doubtfire under the relevant task. Upload a ZIP containing PDFs and ZIP file resources. Name each with task abbreviation.
             </div>
             <div class="panel-body">
@@ -115,25 +134,6 @@
                   </tbody>
               </table>
             </div><!--batch-enrol-->
-            <div class="panel-heading">
-                <h4 class="panel-title">Batch Upload Task Definitions</h4>
-                Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade,restrict_status_updates, upload_requirements, target_date, due_date. Note that upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type".
-            </div>
-            <div class="panel-body">
-                <file-uploader
-                  files="batchFiles"
-                  url="batchTaskUrl()"
-                  on-success="onBatchTaskSuccess"></file-uploader>
-            </div><!--batch-withdraw-->
-            <div class="panel-heading">
-                <h4 class="panel-title">Download Tasks</h4>
-                Download all tasks for the unit.
-            </div>
-            <div class="panel-body text-center">
-                <a target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary btn-download">
-                    <i class="fa fa-download"></i> Download
-                </a>
-            </div>
         </div>
     </div>
 </div>
