@@ -9,11 +9,6 @@
       .rating-static-tooltip .badge.rating-@{i}, .compact-rating.rating-@{i} {
         background-color: @color !important;
         color: white;
-        border-radius: 2em;
-        font-size: 2em;
-        text-align: center;
-        width: 55%;
-        cursor: pointer;
       }
       .rating-area {
         i:nth-of-type(@{i}) { color:  @color; }
@@ -21,6 +16,13 @@
       .generate-colors(@n, (@i + 1));
     }
 
+  }
+  .compact-rating {
+    border-radius: 2em;
+    font-size: 2em;
+    text-align: center;
+    width: 55%;
+    cursor: pointer;
   }
   .rating-area {
     margin-bottom: 10px;
