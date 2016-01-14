@@ -92,6 +92,11 @@ angular.module("doubtfire.services.units", [])
         _.filter student.tasks, (task) -> task.definition.target_grade <= student.target_grade
 
       student.tutorial = unit.tutorialFromId( student.tutorial_id )
+      student.tutorName = () ->
+        if student.tutorial?
+          student.tutorial.tutor_name
+        else
+          ''
       student.task_stats = [
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))},
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[1]))},
