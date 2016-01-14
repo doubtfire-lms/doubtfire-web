@@ -100,8 +100,14 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = true
 
-    $scope.deleteTask = (task) ->
-      taskService.deleteTask(task, $scope.unit)
+    # Watch for deletion
+    $scope.$watch 'unit.task_definitions.length', (newLength, oldLength) ->
+      # Return if adding or equal
+      return if newLength >= oldLength
+      if $scope.unit.task_definitions.length > 0
+        $scope.editTask _.first $scope.unit.task_definitions
+      else
+        $scope.taskAdminData.selectedTask = null
 
     $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
     $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)

@@ -13,7 +13,7 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
 
-        #
+    #
     # Active task tab group
     #
     $scope.taskAdmin =
@@ -134,7 +134,7 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
       # oldTask.target_date = newTask.target_date
 
     $scope.deleteTask = () ->
-      taskService.deleteTask($scope.task, $scope.unit, $modalInstance.close)
+      taskService.deleteTask $scope.task, $scope.unit, null
 
     $scope.saveTask = () ->
       # Map the task to upload to the appropriate fields

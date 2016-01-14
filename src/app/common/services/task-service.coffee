@@ -218,7 +218,7 @@ angular.module("doubtfire.services.tasks", [])
   taskService.deleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (
       (response) ->
-        unit.task_definitions = unit.task_definitions.filter (e) -> e != task
+        unit.task_definitions = _.without unit.task_definitions, task
         alertService.add("success", "Task Deleted", 2000)
         callback?(response)
     ),

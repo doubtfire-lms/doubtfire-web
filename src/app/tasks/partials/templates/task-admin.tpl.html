@@ -6,7 +6,7 @@
   </div>
   <div class="panel-body large-notice-block" ng-hide="task" ng-hide="task">
     <i class="fa fa-tasks"></i>
-    <p>Select a task to view its status in detail</p>
+    <p>Select a task to view its definition in detail</p>
   </div>
   <div class="panel-body" ng-show="task">
     <form class="form-horizontal" role="form">
@@ -200,9 +200,11 @@
     </form>
   </div>
   <div class="panel-footer text-right" ng-show="task">
-    <button type="button" ng-show="!isNew" class="btn btn-danger" ng-click="deleteTask()">
-      Delete
+    <button type="button" ng-hide="isNew" class="btn btn-danger" ng-click="deleteTask()">
+      <i class="fa fa-trash-o"></i> Delete
     </button>
-    <input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Save'}}" ng-click="saveTask()"/>
+    <button type="button" class="btn btn-primary" ng-click="saveTask()">
+      <i class="fa fa-save"></i> {{isNew ? 'Create' : 'Save'}}
+    </button>
   </div>
 </div>
