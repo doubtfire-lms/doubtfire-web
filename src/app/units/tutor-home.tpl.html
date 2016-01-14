@@ -6,43 +6,43 @@
   	<div class="root-view" id="teacher-view" ng-if="unitRole.role != 'Student'">
       <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View</p></h2>
       <tabset class="tabset-icon" justified="true" ng-if="unitLoaded">
-        <tab>
+        <tab active="tutorHomeActiveTab[0]">
           <tab-heading>
             <i class="fa fa-check-square-o fa-2x"></i> Feedback
           </tab-heading>
           <tutor-marking-context></tutor-marking-context>
         </tab>
-        <tab>
+        <tab active="tutorHomeActiveTab[1]">
           <tab-heading>
             <i class="fa fa-user fa-2x"></i> Students
           </tab-heading>
           <tutor-student-list unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
         </tab>
-        <tab>
+        <tab active="tutorHomeActiveTab[2]">
           <tab-heading>
             <i class="fa fa-tasks fa-2x"></i> Tasks
           </tab-heading>
-          <tutor-task-feedback-view class="col-sm-12" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
+          <tutor-task-feedback-view ng-if="tutorHomeActiveTab[2]" class="col-sm-12" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
         </tab>
-        <tab ng-if="unit.group_sets.length > 0">
+        <tab active="tutorHomeActiveTab[3]" ng-if="unit.group_sets.length > 0">
           <tab-heading>
             <i class="fa fa-users fa-2x"></i> Groups
           </tab-heading>
           <tutor-group-tab></tutor-group-tab>
         </tab>
-        <tab>
+        <tab active="tutorHomeActiveTab[4]">
           <tab-heading>
             <i class="fa fa-eye fa-2x"></i> Plagiarism
           </tab-heading>
-          <unit-plagiarism-tab></unit-plagiarism-tab>
+          <unit-plagiarism-tab ng-if="tutorHomeActiveTab[4]"></unit-plagiarism-tab>
         </tab>
-        <tab select="refreshCharts()" ng-if="unit.students.length > 10">
+        <tab active="tutorHomeActiveTab[5]" select="refreshCharts()" ng-if="unit.students.length > 10">
           <tab-heading>
             <i class="fa fa-bar-chart fa-2x"></i> Analytics
           </tab-heading>
-          <unit-analytics></unit-analytics>
+          <unit-analytics ng-if="tutorHomeActiveTab[5]"></unit-analytics>
         </tab>
-        <tab>
+        <tab active="tutorHomeActiveTab[6]">
           <tab-heading>
             <i class="fa fa-book fa-2x"></i> Grading
           </tab-heading>

@@ -52,6 +52,15 @@ angular.module("doubtfire.units", [
 .controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, alertService, unitService, Visualisation) ->
   $scope.unitLoaded = false
 
+  $scope.tutorHomeActiveTab =
+      0:  true        #feedback
+      1:  false       #Students
+      2:  false       #Tasks
+      3:  false       #Groups
+      4:  false       #Plagiarism
+      5:  false       #Analytics
+      6:  false       #Grading
+
   # Fetch the user's Unit Role
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
     $scope.unitRole = unitRole # the selected unit role

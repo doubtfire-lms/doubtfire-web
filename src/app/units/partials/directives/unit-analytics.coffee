@@ -29,16 +29,16 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
     # Active task tab group
     #
     $scope.tabsData =
-      taskSummaryStats:
-        title: "Task Statistics"
-        subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph"
-        icons: ["fa-circle-thin"]
-        seq: 0
-        active: false
       taskStatusSummaryStats:
         title: "Task Status Stats"
         subtitle: "View distribution of tasks by their current status either unit-wide or broken down into a specific tutorial or task"
         icons: ["fa-pie-chart", "fa-tasks"]
+        seq: 0
+        active: false
+      taskCompletionStats:
+        title: "Task Completion Stats"
+        subtitle: "View how tasks have been marked as completed as a box plot"
+        icons: ["fa-check", "fa-tasks"]
         seq: 1
         active: false
       targetGradeStats:
@@ -47,24 +47,24 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         icons: ["fa-pie-chart", "fa-trophy"]
         seq: 2
         active: false
-      taskCompletionStats:
-        title: "Task Completion Stats"
-        subtitle: "View how tasks have been marked as completed as a box plot"
-        icons: ["fa-check", "fa-tasks"]
-        seq: 3
-        active: false
       achievementStats:
         title: "ILO Achievement Stats"
         subtitle: "View how ILOs have been achieved by students to their associated tasks as a box plot"
-        icons: ["fa-link", "fa-tasks"]
+        icons: ["fa-link", "fa-graduation-cap"]
+        seq: 3
+        active: false
+      taskSummaryStats:
+        title: "Task Statistics"
+        subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph"
+        icons: ["fa-circle-thin"]
         seq: 4
         active: false
-      developer:
-        title: "Developer"
-        subtitle: "Developer tools"
-        icons: ["fa-code"]
-        seq: 5
-        active: false
+      # developer:
+      #   title: "Developer"
+      #   subtitle: "Developer tools"
+      #   icons: ["fa-code"]
+      #   seq: 5
+      #   active: false
 
     #
     # Sets the active tab
@@ -77,7 +77,7 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
       $scope.activeTab = tab
       $scope.activeTab.active = true
 
-    $scope.setActiveTab($scope.tabsData.taskSummaryStats)
+    $scope.setActiveTab($scope.tabsData.taskStatusSummaryStats)
 
     #
     # Checks if tab is the active tab

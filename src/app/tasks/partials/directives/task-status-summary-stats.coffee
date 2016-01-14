@@ -208,6 +208,10 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
     #
     $scope.switchToTasksForTutorial = () ->
       result = {}
+      result[''] = {}
+      _.each $scope.unit.task_definitions, (td) ->
+        result[''][td.id] = {}
+
       _.each $scope.unit.tutorials, (tutorial) ->
         result[tutorial.id] = {}
         _.each $scope.unit.task_definitions, (td) ->
@@ -232,6 +236,7 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
         result[td.id] = {}
         _.each $scope.unit.tutorials, (tutorial) ->
           result[td.id][tutorial.id] = {}
+        result[td.id][''] = {}
 
       _.each $scope.unit.analytics.taskStatusCountByTutorial, (taskDef, taskDefId) ->
         _.each taskDef, (stats, tutorialId) ->
