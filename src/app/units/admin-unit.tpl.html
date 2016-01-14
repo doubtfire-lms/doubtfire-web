@@ -12,7 +12,7 @@
     <h3>Create Unit</h3>
   </div>
   <tabset justified="true" class="tabset-icon">
-    <tab>
+    <tab active="activeTab[0]">
       <tab-heading>
         <i class="fa fa-university fa-2x"></i> Unit
       </tab-heading>
@@ -20,7 +20,7 @@
         <admin-unit-context unit="unit"></admin-unit-context>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[1]">
       <tab-heading>
         <i class="fa fa-graduation-cap fa-2x"></i> Learning Outcomes
       </tab-heading>
@@ -28,7 +28,7 @@
         <admin-unit-ilos ng-if="unit"></admin-unit-ilos>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[2]">
       <tab-heading>
         <i class="fa fa-male fa-2x"></i> Staff
       </tab-heading>
@@ -36,7 +36,7 @@
         <staff-admin-unit-context></staff-admin-unit-context>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[3]">
       <tab-heading>
         <i class="fa fa-pencil fa-2x"></i> Tutorials
       </tab-heading>
@@ -44,7 +44,7 @@
         <tutorial-unit-context></tutorial-unit-context>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[4]">
       <tab-heading>
         <i class="fa fa-user fa-2x"></i> Students
       </tab-heading>
@@ -52,7 +52,7 @@
         <enrol-students-context></enrol-students-context>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[5]">
       <tab-heading>
         <i class="fa fa-tasks fa-2x"></i> Tasks
       </tab-heading>
@@ -60,15 +60,15 @@
         <task-admin-unit-context ng-if="unit"></task-admin-unit-context>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[6]">
       <tab-heading>
         <i class="fa fa-link fa-2x"></i> Task Alignment
       </tab-heading>
-      <div class="col-sm-12">
+      <div class="col-sm-12" ng-if="activeTab[6]">
         <unit-outcome-alignment ng-if="unit" show-csv="true" unit="unit"></unit-outcome-alignment>
       </div>
     </tab>
-    <tab>
+    <tab active="activeTab[7]">
       <tab-heading>
         <i class="fa fa-users fa-2x"></i> Groups
       </tab-heading>

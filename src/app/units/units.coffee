@@ -91,6 +91,17 @@ angular.module("doubtfire.units", [
 )
 
 .controller('EditUnitCtrl', ($scope, $state, $stateParams, unitService, headerService, alertService, Convenor, Tutor, UnitRole) ->
+
+  $scope.unitAdminActiveTab =
+      0:  true        #unit
+      1:  false       #LOs
+      2:  false       #Staff
+      3:  false       #Tutorials
+      4:  false       #Students
+      5:  false       #Tasks
+      6:  false       # Alignments
+      7:  false       # Groups
+
   Convenor.query().$promise.then( (convenors) ->
     Tutor.query().$promise.then( (tutors) ->
       staff = _.union(convenors,tutors)

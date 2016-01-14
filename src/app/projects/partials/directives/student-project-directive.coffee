@@ -32,8 +32,8 @@ angular.module("doubtfire.projects.student-project-directive", [
     # Switcher to task view
     #
     $scope.activeTab =
-      0:   ! $scope.unitRole? #progress
-      1:   $scope.unitRole?   #feedback
+      0:   true               #progress
+      1:   false              #feedback
       2:   false              #tutorial
       3:   false              #group
       4:   false              #portfolio
