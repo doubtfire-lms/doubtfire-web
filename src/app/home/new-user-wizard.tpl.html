@@ -1,12 +1,11 @@
 <div>
   <div class="panel panel-primary text-center">
     <div class="panel-body">
-      {{step = steps[currentStep]; ''}}
       <i class="fa fa-5x {{step.icon}}"></i>
-      <h3>{{step.title}}</h3>
-      <p class="lead">{{step.subtitle}}</p>
+      <h3>{{currentStep.title}}</h3>
+      <p class="lead">{{currentStep.subtitle}}</p>
 
-      <div ng-show="currentStep == 0" class="col-sm-12">
+      <div ng-show="currentStep == steps.nameStep" class="col-sm-12">
         <div class="form-group col-sm-6">
           <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.first_name">
         </div>
@@ -14,11 +13,11 @@
           <input class="form-control text-center input-lg" placeholder="Last Name"  ng-model="user.last_name">
         </div>
       </div><!--/name-step-->
-      <div ng-show="currentStep == 1">
+      <div ng-show="currentStep == steps.nicknameStep">
         <input class="form-control text-center input-lg" placeholder="Nickname or Preferred Name"  ng-model="user.nickname">
         <p class="help-block col-sm-12 text-center">You can choose to leave this blank</p>
       </div><!--/nickname-step-->
-      <div ng-show="currentStep == 2">
+      <div ng-show="currentStep == steps.emailStep">
         <div class="form-group">
           <input class="form-control input-lg text-center" placeholder="Email Address"  ng-model="user.email">
         </div>
@@ -80,7 +79,7 @@
           </div>
         </div>
       </div><!--/email-step-->
-      <div ng-show="currentStep == 3">
+      <div ng-show="currentStep == steps.targetGradeStep">
         <div ng-repeat="project in projects">
           <div class="clearfix">
             <p>
@@ -96,14 +95,14 @@
           <hr>
         </div>
         <p class="help-block">You can change this target at any time while you are enrolled.</p>
-      </div><!--/grade-step-->
-      <div ng-show="currentStep == 4">
+      </div><!--/target-grade-step-->
+      <div ng-show="currentStep == steps.optInToResearchStep">
         <div class="col-sm-12 text-center">
           <div class="btn-group">
-            <label class="btn btn-default" ng-click="optInOnly && done()" ng-model="user.opt_in_to_research" btn-radio="true">
+            <label class="btn btn-default" ng-change="optInOnly && done(user)" ng-model="user.opt_in_to_research" btn-radio="true">
               <i class="fa fa-check"></i> Yes, I'll help
             </label>
-            <label class="btn btn-default" ng-click="optInOnly && done()" ng-model="user.opt_in_to_research" btn-radio="false">
+            <label class="btn btn-default" ng-change="optInOnly && done(user)" ng-model="user.opt_in_to_research" btn-radio="false">
               <i class="fa fa-close"></i> No, thank you
             </label>
           </div>
@@ -111,10 +110,10 @@
         </div>
       </div><!--/research-step-->
     </div>
-    <div class="panel-footer clearfix">
-      <button class="btn btn-primary pull-left" ng-click="moveStep(-1)" ng-hide="optInOnly && currentStep == 4 || currentStep == 0"><i class="fa fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary pull-right" ng-click="moveStep(1)" ng-disabled="determineDisabledForCurrentStep()" ng-hide="currentStep == 4">Next <i class="fa fa-arrow-right"></i></button>
-      <button class="btn btn-success pull-right" ng-click="done()" ng-hide="optInOnly" ng-disabled="determineDisabledForCurrentStep()" ng-show="currentStep == 4">Done <i class="fa fa-check"></i></a>
+    <div class="panel-footer clearfix" ng-hide="optInOnly">
+      <button class="btn btn-primary pull-left" ng-click="moveStep(-1)" ng-hide="currentStep == firstStep"><i class="fa fa-arrow-left"></i> Back</button>
+      <button class="btn btn-primary pull-right" ng-click="moveStep(1)" ng-disabled="determineDisabledForCurrentStep()" ng-hide="currentStep == lastStep">Next <i class="fa fa-arrow-right"></i></button>
+      <button class="btn btn-success pull-right" ng-click="done()" ng-disabled="determineDisabledForCurrentStep()" ng-show="currentStep == lastStep">Done <i class="fa fa-check"></i></a>
     </div>
   </div>
 </div>

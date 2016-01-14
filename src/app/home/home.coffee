@@ -29,7 +29,7 @@ angular.module("doubtfire.home", [])
       else if $scope.unitRoles.length == 1
         $state.go 'units#show', {unitRole: $scope.unitRoles[0].id}
 
-  firstTimeUser     = currentUser.profile.first_name.toLowerCase() is "first name"
+  firstTimeUser     = currentUser.profile.has_run_first_time_setup is false
   userHasNotOptedIn = currentUser.profile.opt_in_to_research is null
 
   $scope.showNewUserWizard = firstTimeUser or userHasNotOptedIn
@@ -75,79 +75,98 @@ angular.module("doubtfire.home", [])
   templateUrl: 'home/new-user-wizard.tpl.html'
   scope:
     optInOnly: '=?'
-  controller: ($scope, $state, $q, User, projectService, gradeService, currentUser, alertService, auth) ->
+  controller: ($scope, $state, $q, User, Project, projectService, gradeService, currentUser, alertService, auth) ->
+    # Get projects for target grades
     projectService.getProjects (projects) ->
       $scope.projects = projects
-    $scope.currentStep = if $scope.optInOnly then 4 else 0
-    $scope.user = {
-      first_name: if $scope.optInOnly then currentUser.profile.first_name,
-      last_name: if $scope.optInOnly then currentUser.profile.last_name,
-      nickname: if $scope.optInOnly then currentUser.profile.nickname,
-      email: if $scope.optInOnly then currentUser.profile.email,
-      receive_feedback_notifications: if $scope.optInOnly then currentUser.profile.receive_feedback_notifications,
-      receive_portfolio_notifications: if $scope.optInOnly then currentUser.profile.receive_portfolio_notifications,
-      receive_task_notifications: if $scope.optInOnly then currentUser.profile.receive_task_notifications,
-      opt_in_to_research: if $scope.optInOnly then currentUser.profile.opt_in_to_research
-    }
-    $scope.moveStep = (skip) ->
-      # if about to enter grade step and no grades? skip twice
-      if $scope.projects.length is 0
-        if skip is 1 and $scope.currentStep is 2
-          skip += 1
-        else if skip is -1 and $scope.currentStep is 4
-          skip -= 1
-      $scope.currentStep += skip
-
-    $scope.gradeAcronyms = gradeService.gradeAcronyms
-    $scope.grades        = gradeService.grades
-
-    $scope.steps = [
-      {
+    # Define steps for wizard
+    $scope.steps = {
+      nameStep: {
         title:    "What's your name?"
         subtitle: "We will need a name to help identify you on Doubtfire."
         icon:     'fa-pencil-square-o'
+        seq:      0
       },
-      {
+      nicknameStep: {
         title:    "Do you have a preferred name or nickname?"
         subtitle: "If you'll find it easier for your tutor to call you another name please let us know!"
         icon:     'fa-smile-o'
+        seq:      1
       },
-      {
+      emailStep: {
         title:    "How would you like us to email you?"
         subtitle: "Based on your preferences, we will email you as frequently as you'd like us to."
         icon:     'fa-envelope'
+        seq:      2
       },
-      {
+      targetGradeStep: {
         title:    "What grades are you aiming for?"
         subtitle: "We noticed you are enrolled in the following subject(s). Select your target grade for each."
         icon:     'fa-trophy'
+        seq:      3
       },
-      {
+      optInToResearchStep: {
         title:    "Would you like to help us make Doubtfire better?"
         subtitle: "We would like to anonymously use your Doubtfire usage for research in making Doubtfire better."
         icon:     'fa-line-chart'
+        seq:      4
       }
-    ]
-
+    }
+    # Alises to first and last step
+    $scope.firstStep = _.findWhere $scope.steps, { seq: 0 }
+    $scope.lastStep  = _.findWhere $scope.steps, { seq: _.keys($scope.steps).length - 1 }
+    # Skip to opt in if opt in step only
+    $scope.currentStep = if $scope.optInOnly then $scope.steps.optInToResearchStep else $scope.firstStep
+    # If using opt in, we don't need a blank slate user, except ensure that
+    # opt in is null
+    if $scope.optInOnly
+      $scope.user = currentUser.profile
+      $scope.user.opt_in_to_research = null
+    else
+      $scope.user = {
+        first_name: null
+        last_name: null
+        nickname: null
+        email: null
+        receive_feedback_notifications: null
+        receive_portfolio_notifications: null
+        receive_task_notifications: null
+        opt_in_to_research: null
+        has_run_first_time_setup: true
+      }
+    # Progress through wizard
+    $scope.moveStep = (skip) ->
+      # if about to enter grade step and no grades? skip twice
+      if $scope.projects.length is 0
+        stepBeforeTargetStep = _.findWhere $scope.steps, { seq: $scope.currentStep.targetGradeStep - 1 }
+        stepAfterTargetStep = _.findWhere $scope.steps, { seq: $scope.currentStep.targetGradeStep + 1 }
+        if skip is 1 and $scope.currentStep is stepBeforeTargetStep
+          skip += 1
+        else if skip is -1 and $scope.currentStep is stepAfterTargetStep
+          skip -= 1
+      $scope.currentStep = _.findWhere $scope.steps, { seq: $scope.currentStep.seq + skip }
+    # Alises for grade step
+    $scope.gradeAcronyms = gradeService.gradeAcronyms
+    $scope.grades        = gradeService.grades
+    # Determine if 'next' is disabled (i.e., validity for each step)
     $scope.determineDisabledForCurrentStep = ->
       switch $scope.currentStep
-        when 0
+        when $scope.steps.nameStep
           state = $scope.user.first_name?.trim().length > 0 and $scope.user.last_name?.trim().length > 0
-        when 1
+        when $scope.steps.nicknameStep, $scope.steps.targetGradeStep
           state = true
-        when 2
+        when $scope.steps.emailStep
           state =
             $scope.user.email?.trim().length > 0 and
             _.isBoolean($scope.user.receive_feedback_notifications) and
             _.isBoolean($scope.user.receive_portfolio_notifications) and
             _.isBoolean($scope.user.receive_task_notifications)
-        when 3
-          state = true
-        when 4
+        when $scope.steps.optInToResearchStep
           state = _.isBoolean($scope.user.opt_in_to_research)
       not state
-
-    $scope.done = ->
+    # POST changes to API
+    $scope.done = (user) ->
+      user = if user? then user else $scope.user
       promises = []
       errorFn = (response) ->
         console.log response

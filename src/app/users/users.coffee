@@ -24,7 +24,7 @@ angular.module("doubtfire.users", [
       $scope.users = User.query()
     batchUserUrl: User.csvUrl()
     batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }
-  
+
 
   $scope.users = User.query()
   # Table sort details
