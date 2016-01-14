@@ -13,6 +13,19 @@ angular.module("doubtfire.services.projects", [])
     'not_started'
   ]
 
+  projectService.loadedProjects = null
+
+  projectService.getProjects = ( callback ) ->
+    if ! projectService.loadedProjects?
+      projectService.loadedProjects = []
+      Project.query (projects) ->
+        Array.prototype.push.apply projectService.loadedProjects, projects
+
+    if _.isFunction(callback)
+      callback(projectService.loadedProjects)
+
+    projectService.loadedProjects
+
   ###
   projects's can update their task stats
   converts the | delimited stats to its component arrays

@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.header", [])
 
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, UnitRole, User, Project, aboutModalService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, currentUser, headerService, User, aboutModalService, unitService, projectService) ->
   # $scope.currentUser = {}
   # $scope.currentUser.nickname = currentUser.profile.nickname
   # $scope.currentUser.name = currentUser.profile.name
@@ -8,8 +8,10 @@ angular.module("doubtfire.common.header", [])
   $scope.currentUser = currentUser.profile
 
   # Global Units Menu
-  $scope.unitRoles = UnitRole.query()
-  $scope.projects = Project.query()
+  unitService.getUnitRoles (roles) ->
+    $scope.unitRoles = roles
+  projectService.getProjects (projects) ->
+    $scope.projects = projects
 
   $scope.isUniqueUnitRole = (unit) ->
     units = (item for item in $scope.unitRoles when item.unit_id is unit.unit_id)

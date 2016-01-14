@@ -16,7 +16,7 @@ angular.module("doubtfire.home", [])
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, UnitRole, Project, Unit, headerService, currentUser, unitService, $rootScope) ->
+.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, Unit, headerService, currentUser, unitService, projectService, $rootScope) ->
   hasRoles = false
   hasProjects = false
 
@@ -40,13 +40,13 @@ angular.module("doubtfire.home", [])
   else
     headerService.showNav()
 
-  UnitRole.query (roles) ->
+  unitService.getUnitRoles (roles) ->
     $scope.unitRoles = roles
     hasRoles = true
     unless $scope.showNewUserWizard
       testSingleProjectRole()
 
-  Project.query (projects) ->
+  projectService.getProjects (projects) ->
     $scope.projects = projects
     hasProjects = true
     unless $scope.showNewUserWizard
@@ -75,8 +75,8 @@ angular.module("doubtfire.home", [])
   templateUrl: 'home/new-user-wizard.tpl.html'
   scope:
     optInOnly: '=?'
-  controller: ($scope, $state, $q, User, Project, gradeService, currentUser, alertService, auth) ->
-    Project.query (projects) ->
+  controller: ($scope, $state, $q, User, projectService, gradeService, currentUser, alertService, auth) ->
+    projectService.getProjects (projects) ->
       $scope.projects = projects
     $scope.currentStep = if $scope.optInOnly then 4 else 0
     $scope.user = {

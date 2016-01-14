@@ -1,12 +1,24 @@
 angular.module("doubtfire.services.units", [])
 
-.factory("unitService", (Unit, Students, Group, projectService, taskService) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService) ->
   #
   # The unit service object
   #
   unitService = {}
 
   unitService.loadedUnits = {}
+  unitService.loadedUnitRoles = null
+
+  unitService.getUnitRoles = ( callback ) ->
+    if ! unitService.loadedUnitRoles?
+      unitService.loadedUnitRoles = []
+      UnitRole.query (roles) ->
+        Array.prototype.push.apply unitService.loadedUnitRoles, roles
+
+    if _.isFunction(callback)
+      callback(unitService.loadedUnitRoles)
+
+    unitService.loadedUnitRoles
 
   unitService.getUnit = (unitId, loadStudents, allStudents, callback) ->
     result = unitService.loadedUnits[unitId]
