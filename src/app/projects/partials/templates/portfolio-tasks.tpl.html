@@ -5,13 +5,13 @@
     understanding of each Indended Learning Outcome.
   </div>
   <div class="panel-body">
-    <table class="table">
+    <table class="table col-sm-12">
       <thead>
         <tr>
           <th></th>
           <th>Task</th>
-          <th ng-repeat="ilo in unit.ilos">
-            {{ilo.abbreviation}}
+          <th class="text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
+            <label class="label label-info">{{ilo.abbreviation}}</label>
           </th>
           <th>Include</th>
         </tr>
@@ -24,7 +24,7 @@
           <td>
             {{task.definition.name}}
           </td>
-          <td ng-repeat="ilo in unit.ilos">
+          <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="text-center">
             {{align = alignmentForTaskAndIlo(task, ilo); ''}}
             <outcome-alignment-rating ng-if="align" ng-model="align" compact="true"></outcome-alignment-rating>
             <i ng-hide="align" class="fa fa-circle-o fa-3x text-danger pointer" tooltip="You decided {{task.definition.abbreviation}} is not aligned to {{ilo.abbreviation}}"></i>
@@ -39,8 +39,14 @@
               <button
                 class="btn btn-sm btn-{{task.include_in_portfolio ? 'success' : 'default'}} col-sm-6 text-center"
                 ng-click="includeTaskInPorfolio(task)"
-                ng-disabled="disableInclude(task)">
+                ng-if="!disableInclude(task)">
                 <i class="fa fa-{{task.include_in_portfolio ? 'check' : 'times'}}"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-warning col-sm-6 text-center"
+                ng-disabled="disableInclude(task)"
+                ng-show="disableInclude(task)">
+                <i class="fa fa-question"></i>
               </button>
             </div>
           </td>
@@ -48,10 +54,11 @@
       </tbody>
     </table>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <button class="btn btn-primary pull-right" ng-disabled="noTasksSelected()" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="help-block pull-right col-sm-4" ng-show="noTasksSelected()">
+      You need to select at least one task that is aligned to an ILO, otherwise your portfolio will be consist of no tasks.
     </div>
   </div>
 </div>

@@ -5,20 +5,41 @@
   </div>
   <div class="panel-body">
     <form ng-submit="submitOther()">
-      <p>You can upload <i>other files</i> you want to include in your portfolio.</p>
-      <h4>Upload New File</h4>
-      <div class="dropdown" dropdown is-open="uploadDropdown.open">
-        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">Upload {{uploadType}} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a ng-click="changeTo('code')">Code</a></li>
-          <li><a ng-click="changeTo('document')">Document</a></li>
-          <li><a ng-click="changeTo('image')">Image</a></li>
-        </ul>
+      <div class="callout callout-info" ng-show="project.portfolio_files.length < 2">
+        <h4>No files to add?</h4>
+        <p>If you do not have any files to add you can skip this step.</p>
       </div>
+      <div class="callout callout-info" ng-show="project.portfolio_files.length >= 2">
+        <h4>Adding Files</h4>
+        <p>The files you add will appear in the portfolio in the order shown.</p>
+      </div>
+      <p>
+        You can upload <i>other files</i> you want to include in your portfolio. These will be added at the end of your portfolio.
       </p>
+      <p>
+        To select a new file to upload, select the <i>type</i> of file from the button switch below, and drag and drop the file in to
+        grey drop-zone. Then click upload.
+      </p>
+      <hr>
+      <h4 class="col-sm-12">Upload New File</h4>
+      <div class="col-sm-4">
+        <div class="btn-group col-sm-12">
+          <label class="btn btn-default col-sm-4" ng-click="changeTo('code')" ng-model="uploadType" btn-radio="'code'">
+            <i class="fa fa-file-code-o"></i>
+            <div>Code</div>
+          </label>
+          <label class="btn btn-default col-sm-4" ng-click="changeTo('document')" ng-model="uploadType" btn-radio="'document'">
+            <i class="fa fa-file-text-o"></i>
+            <div>Document</div>
+          </label>
+          <label class="btn btn-default col-sm-4" ng-click="changeTo('image')" ng-model="uploadType" btn-radio="'image'">
+            <i class="fa fa-file-image-o"></i>
+            <div>Image</div>
+          </label>
+        </div>
+      </div>
 
-      <div ng-hide="fileUploader.isUploading">
+      <div ng-hide="fileUploader.isUploading" class="col-sm-8">
         <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file0' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
         <div uploader="fileUploader" ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well" over-class="file-over-hover" options="{ alias: 'file0' }" nv-file-drop nv-file-over filters="is_{{uploadType}}">
           <p class="fa fa-file-{{uploadType == 'document' ? 'pdf' : uploadType}}-o fa-3x"></p>
@@ -28,27 +49,19 @@
         <p ng-show="fileUploader.queue.length == 1" class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
       </div>
       <div class="form-group">
-        <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != 1" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Upload" />
+        <button type="submit" ng-disabled="fileUploader.isUploading || fileUploader.queue.length != 1" class="btn btn-success form-control col-sm-3 col-sm-offset-9">
+          <i class="fa fa-cloud-upload"></i> Upload
+        </button>
         <br/>
         <div ng-show="fileUploader.isUploading">
           <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
         </div>
       </form>
 
-      <div class="callout callout-info" ng-show="project.portfolio_files.length < 2">
-        <h4>No files to add?</h4>
-        <p>If you do not have any files to add you can skip this step.</p>
-      </div>
-      <div class="callout callout-info" ng-show="project.portfolio_files.length >= 2">
-        <h4>Adding Files</h4>
-        <p>The files you add will appear in the portfolio in the order shown.</p>
-      </div>
     </div>
   </div>
-  <div class="panel-footer">
-    <button class="btn btn-primary pull-left" ng-click="advancePorfolioActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
-    </div>
+  <div class="panel-footer clearfix">
+    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-right" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
   </div>
 </div>

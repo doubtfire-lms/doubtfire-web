@@ -1,38 +1,40 @@
-<div id="panel" class="panel panel-primary">
+<div class="panel panel-primary">
   <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Compile Portfolio</h3>
+    <h3 class="panel-title">Compile Portfolio</h3>
   </div>
   <div class="panel-body">
+    <div class="col-sm-12" ng-hide="projectHasLearningSummaryReport()">
+      <div class="callout callout-danger">
+        <h4>Learning Summary Report Missing</h4>
+        <p>Your portfolio must include a learning summary report. Upload this before you schedule your portfolio to be compiled.</p>
+      </div>
+    </div>
     <div class="col-xs-12" ng-show="project.compile_portfolio">
       <div class="callout callout-info">
         <h4>Compile Scheduled</h4>
         <p>Your portfolio compilation is scheduled with Doubtfire. This process will take some time, check back soon to see if your portfolio is available. Alternatively, you can cancel the compile if you want to make changes.</p>
       </div>
     </div>
-    <div class="col-xs-12" ng-hide="project.compile_portfolio">
-      <p>Compiling your portfolio combines together your learning summary report, tasks, and other files into a single document.</p>
-      <p>Click the <strong>Create Portfolio</strong> button to schedule your portfolio to be compiled. This will take a few minutes, so check back later to see if your portfolio has been created.</p>
-      <div ng-show="projectHasLearningSummaryReport()">
-        <button class="btn btn-primary" ng-hide="project.compile_portfolio" ng-click="toggleCompileProject()">Create Portfolio</span></button>
-      </div>
-      <div class="col-xs-12" ng-show="projectHasLearningSummaryReport()">
+    <div class="col-xs-12" ng-show="projectHasLearningSummaryReport()">
       <div class="callout callout-warning">
         <h4>Click to Create Portfolio</h4>
-        <p>Your portfolio will not be created until you have clicked the <strong>Create Portfolio</strong> button. Once you click Create Portfolio, the construction of your portfolio will be scheduled with Doubtfire. This process will take some time, and you will be emailed when your portfolio is ready to review.</p>
+        <p>Your portfolio will not be created until you have clicked the <strong>Create Portfolio</strong>
+          button. Once you click Create Portfolio, the construction of your portfolio will be scheduled with Doubtfire. This process will take some time, and you will be emailed when your portfolio is ready to review if you have enabled portfolio notifications.</p>
       </div>
     </div>
-    </div>
-    <div class="col-xs-12" ng-hide="projectHasLearningSummaryReport()">
-      <div class="callout callout-danger">
-        <h4>Learning Summary Report Required</h4>
-        <p>Your portfolio must include a learning summary report. Upload this before you schedule your portfolio to be compiled.</p>
-      </div>
+    <div class="col-xs-12" ng-show="!project.compile_portfolio">
+      <p>Compiling your portfolio combines together your learning summary report, tasks, and other files into a single document.</p>
+      <p ng-show="projectHasLearningSummaryReport()">Click the <strong>Create Portfolio</strong> button to schedule your portfolio to be compiled. This will take a few minutes, so check back later to see if your portfolio has been created.</p>
     </div>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <button class="btn btn-primary pull-right" ng-show="project.compile_portfolio" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div ng-hide="project.compile_portfolio">
+      <button class="btn btn-success pull-right" ng-disabled="!projectHasLearningSummaryReport()" ng-click="toggleCompileProject(); advanceActivePortfolioTab(1)"><i class="fa fa-book"></i> Create Portfolio</span></button>
+      <div class="help-block pull-right col-sm-4" ng-hide="projectHasLearningSummaryReport()">
+        You're missing a Learning Summary Report. Add this first before you compile.
+      </div>
     </div>
   </div>
 </div>

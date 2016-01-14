@@ -17,16 +17,18 @@
     </div>
     <unit-outcome-alignment
       unit="unit"
+      ng-hide="filteredTasks.length == 0"
       project="project"
       task-filter="filteredTasks"
       hide-panel="true"
       hide-graph="true">
     </unit-outcome-alignment>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <button class="btn btn-primary pull-right" ng-disabled="filteredTasks.length == 0" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="help-block pull-right col-sm-4" ng-show="filteredTasks.length == 0">
+      You need to submit some tasks first so that you can align at least one task to an ILO
     </div>
   </div>
 </div>

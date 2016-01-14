@@ -1,41 +1,40 @@
-<div id="panel" class="panel panel-primary">
-  <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Review Portfolio</h3>
-      Review your portfolio submission progress.
-  </div>
-  <div class="panel-body">
-    <div class="col-xs-12">
-      <p>You can download or review your portfolio online. Check that it includes all of the evidence you need to achieve the grade you are applying for. If needed, you can delete this version and repeat the process to create a new portolio.</p>
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading task-status row-fluid">
+        <h3 class="panel-title">Review Portfolio</h3>
+        Review your portfolio submission progress.
     </div>
-  </div>
-  <div class="panel-heading clearfix">
-    <div class="pull-left">
-      <h3 class="panel-title">Portfolio Preview</h3><!--/title-->
-      This is the exact same document your unit assessor will see
+    <div class="panel-body">
+      <div class="col-xs-12">
+        <div class="callout callout-warning" ng-hide="project.portfolio_available">
+          <h4>Your portfolio not yet available</h4>
+          {{project.compile_portfolio ? "It is currently being processed. Check back soon." : "Please compile a portfolio first."}}
+        </div>
+        <p>You can download or review your portfolio online. Check that it includes all of the evidence you need to achieve the grade you are applying for. If needed, you can delete this version and repeat the process to create a new portolio.</p>
+      </div>
     </div>
-    <div class="pull-right" ng-show="project.portfolio_available">
-      <button class="btn btn-danger" ng-click="deletePortfolio()">
-        <i class="fa fa-trash-o" tooltip="Delete Portfolio"></i>
-      </button>
-      <a href="{{portfolioUrl()}}" class="btn btn-success">
-        <i class="fa fa-download" tooltip="Download Portfolio"></i>
-      </a>
-    </div>
-  </div>
-  <div class="panel-body" ng-hide="project.portfolio_available">
-    <p class="lead text-center">
-      <i class="fa fa-clock-o fa-2x"></i>
-      <br/>
-      Portfolio not yet available. {{project.compile_portfolio ? "Come back soon." : "Please compile the portfolio first."}}
-    </p><!--/pdf-in-process-->
-  </div>
-  <pdf-panel-viewer
-    ng-show="project.portfolio_available"
-    pdf-url="portfolioUrl()">
-  </pdf-panel-viewer>
-  <div class="panel-footer">
-    <div>
+    <div class="panel-footer">
       <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
     </div>
+  </div>
+  <div class="panel panel-primary" ng-if="project.portfolio_available">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h3 class="panel-title">Portfolio Preview</h3><!--/title-->
+        This is the exact same document your unit assessor will see
+      </div>
+      <div class="pull-right" ng-show="project.portfolio_available">
+        <button class="btn btn-danger" ng-click="deletePortfolio()">
+          <i class="fa fa-trash-o" tooltip="Delete Portfolio"></i>
+        </button>
+        <a href="{{portfolioUrl()}}" class="btn btn-success">
+          <i class="fa fa-download" tooltip="Download Portfolio"></i>
+        </a>
+      </div>
+    </div>
+    <pdf-panel-viewer
+      ng-show="project.portfolio_available"
+      pdf-url="portfolioUrl()">
+    </pdf-panel-viewer>
   </div>
 </div>

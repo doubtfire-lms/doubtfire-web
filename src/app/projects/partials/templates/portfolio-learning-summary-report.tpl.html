@@ -4,13 +4,13 @@
       Upload the Learning Summary Report, the primary porfolio document which justifies your desired grade.
   </div>
   <div class="panel-body">
-    <form ng-submit="submitLearningSummaryReport()">
-      <p>Your <i>Learning Summary Report</i> is a summary of what you have learnt in this unit. It consists of two parts: a self-assessment and your reflections. The self-assessment indicates how your portfolio aligns with the assessment criteria, and which grade you are applying for. Your reflections are a personal comment on what you have learnt in the unit, and how your knowledge and skills have developed.</p>
+    <form ng-submit="submitLearningSummaryReport()" class="col-sm-12">
       <div class="callout callout-warning">
         <h4>Before you submit the Learning Summary</h4>
         <p>Think of this as applying for a grade. Provide a justification for why you believe you have achieved your selected grade.</p>
       </div>
-      <div ng-hide="fileUploader.isUploading">
+      <p>Your <i>Learning Summary Report</i> is a summary of what you have learnt in this unit. It consists of two parts: a self-assessment and your reflections. The self-assessment indicates how your portfolio aligns with the assessment criteria, and which grade you are applying for. Your reflections are a personal comment on what you have learnt in the unit, and how your knowledge and skills have developed.</p>
+      <div ng-hide="fileUploader.isUploading" class="col-sm-4 col-sm-offset-4">
         <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file0' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
         <div uploader="fileUploader" ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well" over-class="file-over-hover" options="{ alias: 'file0' }" nv-file-drop nv-file-over filters="is_document">
           <p class="fa fa-file-pdf-o fa-3x"></p>
@@ -20,7 +20,9 @@
         <p ng-show="fileUploader.queue.length == 1" class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
       </div>
       <div class="form-group">
-        <input ng-hide="fileUploader.isUploading || fileUploader.queue.length != 1" type="submit" class="btn btn-primary form-control col-sm-4 col-sm-offset-8" value="Upload" />
+        <button type="submit" ng-disabled="fileUploader.isUploading || fileUploader.queue.length != 1" class="btn btn-success form-control col-sm-4 col-sm-offset-4">
+          <i class="fa fa-cloud-upload"></i> Upload
+        </button>
         <br/>
         <div ng-show="fileUploader.isUploading">
           <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
@@ -28,10 +30,11 @@
       </form>
     </div>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <button class="btn btn-primary pull-right" ng-disabled="!projectHasLearningSummaryReport()" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="help-block pull-right col-sm-4" ng-hide="projectHasLearningSummaryReport()">
+      You're missing a Learning Summary Report. Upload one to continue.
     </div>
   </div>
 </div>

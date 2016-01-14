@@ -16,12 +16,13 @@
           <p>{{grade}}</p>
         </label>
       </div>
+      <p class="help-block text-center col-sm-12">
+        Make sure this grade will be justified in the Learning Summary Report.
+      </p>
     </div>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <div class="text-right">
-      <button class="btn btn-primary" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
-    </div>
+    <button class="btn btn-primary pull-right" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
   </div>
 </div>

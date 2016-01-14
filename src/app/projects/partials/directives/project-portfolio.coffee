@@ -38,7 +38,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         seq: 6
       reviewStep:
         title: "Review Portfolio"
-        icon: "fa-check"
+        icon: "fa-book"
         seq: 7
     $scope.setActivePortfolioTab = (tab) ->
       # $scope.activePortfolioTab?.active = false
@@ -132,6 +132,9 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       Task.update { project_id: $scope.project.project_id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
         (success) ->
           task.include_in_portfolio = success.include_in_portfolio
+
+    $scope.noTasksSelected = ->
+      _.filter($scope.tasks, (t) -> t.include_in_portfolio and alignments[t.task_definition_id] is not undefined).length is 0
 )
 
 .directive('portfolioOther', ->
@@ -199,6 +202,8 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   templateUrl: 'projects/partials/templates/portfolio-grade.tpl.html'
   controller: ($scope, Project, gradeService) ->
     $scope.gradeAcronyms = gradeService.gradeAcronyms
+    $scope.grades        = gradeService.grades
+
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
