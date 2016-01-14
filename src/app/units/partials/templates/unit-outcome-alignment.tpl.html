@@ -1,6 +1,6 @@
 <div class="unit-outcome-alignment">
   {{filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id); ''}}
-  <div ng-class="{'col-sm-8': showCsv}">
+  <div class="alignment-panels" ng-class="{'col-sm-8': showCsv}">
     <div class="{{hidePanel ? '' : 'panel panel-primary'}}">
       <div ng-hide="hidePanel" class="panel-heading clearfix">
         <div class="pull-left">
