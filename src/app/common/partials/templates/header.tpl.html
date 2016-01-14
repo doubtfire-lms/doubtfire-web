@@ -57,7 +57,7 @@
       </li>
 
       <li class="dropdown" dropdown>
-        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-user"></span> {{currentUser.name}} ({{currentUser.nickname}}) <b class="caret"></b></a>
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-user"></span> {{currentUser.name}} {{currentUser.nickname ? '(' + currentUser.nickname + ')' : ''}}<b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><a ng-click="openUserSettings()">Profile</a></li>
           <li><a ng-click="openNotificationSettings()">Notifications</a></li>
