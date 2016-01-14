@@ -100,10 +100,10 @@
       <div ng-show="currentStep == 4">
         <div class="col-sm-12 text-center">
           <div class="btn-group">
-            <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="true">
+            <label class="btn btn-default" ng-click="optInOnly && done()" ng-model="user.opt_in_to_research" btn-radio="true">
               <i class="fa fa-check"></i> Yes, I'll help
             </label>
-            <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="false">
+            <label class="btn btn-default" ng-click="optInOnly && done()" ng-model="user.opt_in_to_research" btn-radio="false">
               <i class="fa fa-close"></i> No, thank you
             </label>
           </div>
@@ -114,7 +114,7 @@
     <div class="panel-footer clearfix">
       <button class="btn btn-primary pull-left" ng-click="moveStep(-1)" ng-hide="optInOnly && currentStep == 4 || currentStep == 0"><i class="fa fa-arrow-left"></i> Back</button>
       <button class="btn btn-primary pull-right" ng-click="moveStep(1)" ng-disabled="determineDisabledForCurrentStep()" ng-hide="currentStep == 4">Next <i class="fa fa-arrow-right"></i></button>
-      <button class="btn btn-success pull-right" ng-click="done()" ng-disabled="determineDisabledForCurrentStep()" ng-show="currentStep == 4">Done <i class="fa fa-check"></i></a>
+      <button class="btn btn-success pull-right" ng-click="done()" ng-hide="optInOnly" ng-disabled="determineDisabledForCurrentStep()" ng-show="currentStep == 4">Done <i class="fa fa-check"></i></a>
     </div>
   </div>
 </div>
