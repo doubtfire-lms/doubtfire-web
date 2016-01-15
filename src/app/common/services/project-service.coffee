@@ -69,7 +69,9 @@ angular.module("doubtfire.services.projects", [])
         times_assessed: 0
       }
 
-      project.tasks = _.extend base, project.tasks
+      base = _.filter base, (task) -> ! _.find(project.tasks, (pt) -> pt.task_definition_id == task.task_definition_id)
+
+      Array.prototype.push.apply project.tasks, base
 
     project.tasks = project.tasks.map (task) ->
       projectService.mapTask task, unit, project
