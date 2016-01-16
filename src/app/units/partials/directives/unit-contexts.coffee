@@ -259,8 +259,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-  controller: ($scope, $sce) ->
+  controller: ($scope, $sce, $stateParams) ->
     $scope.activeContext = 'submissions'
+    $scope.assessingUnitRole = $stateParams.unitRole
     $scope.setActiveContext = (context) ->
       return if context is $scope.activeContext
       $scope.activeContext = context
