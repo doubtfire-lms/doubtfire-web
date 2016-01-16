@@ -7,7 +7,7 @@
       </button><!--/dropdown-button-->
         <ul class="dropdown-menu project-task-bar">
           <div ng-repeat="(groupSetId, relatedTasks) in project.tasks | groupBy: 'definition.group_set_id'" class="col-sm-12 groupset-tasks">
-            <h5 class="groupset-name" ng-hide="hideGroupSetName()">
+            <h5 class="groupset-name" ng-hide="hideGroupSetName">
             {{groupSetName(groupSetId)}}</h5>
             <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in relatedTasks | byGrade:project.target_grade | orderBy: 'definition.seq'">
               <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == project.selectedTask}" ng-click="setSelectedTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.definition.name}}:</strong><br>{{task.status_txt()}}">

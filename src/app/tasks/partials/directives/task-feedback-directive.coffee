@@ -105,9 +105,7 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)
 
-    $scope.hideGroupSetName = ->
-      gsNames = _.pluck $scope.unit.group_sets.id
-      gsNames.length is 1 and gsNames[0] is null
+    $scope.hideGroupSetName = $scope.unit.group_sets.length is 0
 
     $scope.recreatePDF = ->
       taskService.recreatePDF($scope.project.selectedTask, null)
