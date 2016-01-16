@@ -1,30 +1,27 @@
-grade-icon.text-muted span {
+.grade-icon.text-muted {
   background-color: @text-muted;
 }
-grade-icon.text-primary span {
+.grade-icon.text-primary {
   background-color: @brand-primary;
 }
-grade-icon.text-success span {
+.grade-icon.text-success {
   background-color: @brand-success;
 }
-grade-icon.text-danger span {
+.grade-icon.text-danger {
   background-color: @brand-danger;
 }
-grade-icon.text-info span {
+.grade-icon.text-info {
   background-color: @brand-info;
 }
-grade-icon.text-warning span {
+.grade-icon.text-warning {
   background-color: @brand-warning;
 }
-a grade-icon:hover span {
+a .grade-icon:hover {
   background-color: @link-hover-color;
 }
-grade-icon span {
+.grade-icon {
   color: #fff;
   font-size: 1em;
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
   background: @text-color;
   border-radius: 100%;
   width: 2.25em;
@@ -32,4 +29,8 @@ grade-icon span {
   font-weight: 100;
   font-size: 1em;
   cursor: pointer;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
