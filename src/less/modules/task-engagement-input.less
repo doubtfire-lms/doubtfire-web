@@ -5,21 +5,17 @@
     width: 200px;
     text-align: left;
 
-    &.ready-to-mark     { background-color: #0079D8; color: white; }
-    &.not-started       { background-color: #CCCCCC; color: white; }
-    &.working-on-it     { background-color: #EB8F06; color: white; }
-    &.need-help         { background-color: #b09cd7; color: white; }
-    &.fix-and-resubmit  { background-color: #f2d85c; color: white; }
-    &.fix-and-include   { background-color: #d93713; color: white; }
-    &.fail              { background-color: #d93713; color: white; }
-    &.redo              { background-color: #804000; color: white; }
-    &.discuss           { background-color: #31b0d5; color: white; }
-    &.demonstrate       { background-color: #31b0d5; color: white; }
-    &.complete  {
-      background-color: #5BB75B;
-      background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-      color: white;
-    }
+    &.ready-to-mark     { .task-status-ready-to-mark;     }
+    &.not-started       { .task-status-not-started;       }
+    &.working-on-it     { .task-status-working-on-it;     }
+    &.need-help         { .task-status-need-help;         }
+    &.fix-and-resubmit  { .task-status-fix-and-resubmit;  }
+    &.fix-and-include   { .task-status-fix-and-include;   }
+    &.fail              { .task-status-fail;              }
+    &.redo              { .task-status-redo;              }
+    &.discuss           { .task-status-discuss;           }
+    &.demonstrate       { .task-status-demonstrate;       }
+    &.complete          { .task-status-complete;          }
 
     span.caret { float: right; margin-top: 8px; }
   }
@@ -34,87 +30,44 @@
 
 .task-status
 {
-  &.ready-to-mark     { background-color: #0079D8; color: white; }
-  &.not-started       { background-color: #CCCCCC; color: white; }
-  &.working-on-it     { background-color: #EB8F06; color: white; }
-  &.need-help         { background-color: #b09cd7; color: white; }
-  &.fix-and-resubmit  { background-color: #f2d85c; color: white; }
-  &.fix-and-include   { background-color: #d93713; color: white; }
-  &.fail              { background-color: #d93713; color: white; }
-  &.redo              { background-color: #804000; color: white; }
-  &.discuss           { background-color: #31b0d5; color: white; }
-  &.demonstrate       { background-color: #31b0d5; color: white; }
-  &.complete  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
+  &.ready-to-mark     { .task-status-ready-to-mark;     }
+  &.not-started       { .task-status-not-started;       }
+  &.working-on-it     { .task-status-working-on-it;     }
+  &.need-help         { .task-status-need-help;         }
+  &.fix-and-resubmit  { .task-status-fix-and-resubmit;  }
+  &.fix-and-include   { .task-status-fix-and-include;   }
+  &.fail              { .task-status-fail;              }
+  &.redo              { .task-status-redo;              }
+  &.discuss           { .task-status-discuss;           }
+  &.demonstrate       { .task-status-demonstrate;       }
+  &.complete          { .task-status-complete;          }
 }
 
 .task-status
 {
-  .ready-to-mark     { background-color: #F8F8F8; }
-  .not-started       { background-color: #F8F8F8; }
-  .working-on-it     { background-color: #F8F8F8; }
-  .need-help         { background-color: #F8F8F8; }
-  .fix-and-resubmit  { background-color: #F8F8F8; }
-  .fix-and-include   { background-color: #F8F8F8; }
-  .fail              { background-color: #F8F8F8; }
-  .redo              { background-color: #F8F8F8; }
-  .discuss           { background-color: #F8F8F8; }
-  .demonstrate       { background-color: #F8F8F8; }
-  .complete          { background-color: #F8F8F8; }
+  .ready-to-mark,
+  .not-started,
+  .working-on-it,
+  .need-help,
+  .fix-and-resubmit,
+  .fix-and-include,
+  .fail,
+  .redo,
+  .discuss,
+  .demonstrate,
+  .complete { background-color: #F8F8F8; }
 
-  .ready-to-mark.active     { background-color: #0079D8; color: white; }
-  .not-started.active       { background-color: #CCCCCC; color: white; }
-  .working-on-it.active     { background-color: #EB8F06; color: white; }
-  .need-help.active         { background-color: #b09cd7; color: white; }
-  .fix-and-resubmit.active  { background-color: #f2d85c; color: white; }
-  .fix-and-include.active   { background-color: #d93713; color: white; }
-  .fail.active              { background-color: #d93713; color: white; }
-  .redo.active              { background-color: #804000; color: white; }
-  .discuss.active           { background-color: #31b0d5; color: white; }
-  .demonstrate.active       { background-color: #31b0d5; color: white; }
-  .complete.active  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
-}
-
-.task-status-colored
-{
-  .ready-to-mark     { background-color: rgba(0, 125, 124, 0.20); color: #CCCCCC; }
-  .not-started       { background-color: #F8F8F8; color: #CCCCCC; }
-  .working-on-it     { background-color: rgba(234, 141, 30, 0.20); color: #CCCCCC; }
-  .need-help         { background-color: rgba(175, 158, 214, 0.20); color: #CCCCCC; }
-  .fix-and-resubmit  { background-color: rgba(242, 214, 99, 0.20); color: #CCCCCC; }
-  .fix-and-include   { background-color: rgba(216, 53, 26, 0.20); color: #CCCCCC; }
-  .fail              { background-color: rgba(216, 53, 26, 0.20); color: #CCCCCC; }
-  .redo              { background-color: rgba(127, 63, 8, 0.20); color: #CCCCCC; }
-  .discuss           { background-color: rgba(52, 173, 207, 0.20); color: #CCCCCC; }
-  .demonstrate       { background-color: rgba(52, 173, 207, 0.20); color: #CCCCCC; }
-  .complete  {
-    background-color: rgba(148, 204, 148, 0.20);
-    background-image: linear-gradient(rgba(98, 196, 98, 0.20), rgb(81, 163, 81, 0.20));
-    color: #CCCCCC;
-  }
-
-  .ready-to-mark.active     { background-color: #0079D8; color: white; }
-  .not-started.active       { background-color: #CCCCCC; color: white; }
-  .working-on-it.active     { background-color: #EB8F06; color: white; }
-  .need-help.active         { background-color: #b09cd7; color: white; }
-  .fix-and-resubmit.active  { background-color: #f2d85c; color: white; }
-  .fix-and-include.active   { background-color: #d93713; color: white; }
-  .fail.active   { background-color: #d93713; color: white; }
-  .redo.active              { background-color: #804000; color: white; }
-  .discuss.active           { background-color: #31b0d5; color: white; }
-  .demonstrate.active       { background-color: #31b0d5; color: white; }
-  .complete.active  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
+  .ready-to-mark.active     { .task-status-ready-to-mark;     }
+  .not-started.active       { .task-status-not-started;       }
+  .working-on-it.active     { .task-status-working-on-it;     }
+  .need-help.active         { .task-status-need-help;         }
+  .fix-and-resubmit.active  { .task-status-fix-and-resubmit;  }
+  .fix-and-include.active   { .task-status-fix-and-include;   }
+  .fail.active              { .task-status-fail;              }
+  .redo.active              { .task-status-redo;              }
+  .discuss.active           { .task-status-discuss;           }
+  .demonstrate.active       { .task-status-demonstrate;       }
+  .complete.active          { .task-status-complete;          }
 }
 
 .task-icon
@@ -128,21 +81,17 @@
   width: 40px;
   text-align: center;
   display: inline-block;
-  &.ready-to-mark     { background-color: #0079D8; color: white; }
-  &.not-started       { background-color: #CCCCCC; color: white; }
-  &.working-on-it     { background-color: #EB8F06; color: white; }
-  &.need-help         { background-color: #b09cd7; color: white; }
-  &.fix-and-resubmit  { background-color: #d2bc4e; color: white; }
-  &.fix-and-include   { background-color: #d93713; color: white; }
-  &.fail              { background-color: #d93713; color: white; }
-  &.redo              { background-color: #804000; color: white; }
-  &.discuss           { background-color: #31b0d5; color: white; }
-  &.demonstrate       { background-color: #31b0d5; color: white; }
-  &.complete  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
+  &.ready-to-mark     { .task-status-ready-to-mark;     }
+  &.not-started       { .task-status-not-started;       }
+  &.working-on-it     { .task-status-working-on-it;     }
+  &.need-help         { .task-status-need-help;         }
+  &.fix-and-resubmit  { .task-status-fix-and-resubmit;  }
+  &.fix-and-include   { .task-status-fix-and-include;   }
+  &.fail              { .task-status-fail;              }
+  &.redo              { .task-status-redo;              }
+  &.discuss           { .task-status-discuss;           }
+  &.demonstrate       { .task-status-demonstrate;       }
+  &.complete          { .task-status-complete;          }
 
 }
 

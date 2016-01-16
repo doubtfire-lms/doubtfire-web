@@ -105,20 +105,21 @@ angular.module("doubtfire.services.tasks", [])
     fix_and_include:    'fa fa-stop'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-check'
-    demonstrate:        'fa fa-check'
+    demonstrate:        'fa fa-laptop'
     complete:           'fa fa-check-square-o'
     fail:               'fa fa-times-circle-o'
 
   taskService.statusColors =
+    # Please make sure this matches task-status-colors.less
     ready_to_mark:     '#0079D8'
     not_started:       '#CCCCCC'
     working_on_it:     '#EB8F06'
     need_help:         '#a48fce'
     fix_and_resubmit:  '#f2d85c'
-    fix_and_include:   '#d93713'
+    fix_and_include:   '#d46b54'
     redo:              '#804000'
     discuss:           '#31b0d5'
-    demonstrate:       '#31b0d5'
+    demonstrate:       '#428bca'
     complete:          '#5BB75B'
     fail:              '#d93713'
 

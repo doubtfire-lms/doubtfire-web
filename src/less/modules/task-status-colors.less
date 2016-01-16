@@ -1,0 +1,60 @@
+/*
+ Define each colour here
+ */
+@task-color-ready-to-mark:     #0079D8;
+@task-color-not-started:       #CCCCCC;
+@task-color-working-on-it:     #EB8F06;
+@task-color-need-help:         #a48fce;
+@task-color-fix-and-resubmit:  #f2d85c;
+@task-color-fix-and-include:   #d46b54;
+@task-color-redo:              #804000;
+@task-color-discuss:           #31b0d5;
+@task-color-demonstrate:       #428bca;
+@task-color-complete:          #5BB75B;
+@task-color-fail:              #d93713;
+
+.task-status-color(@status) when (@status = 'complete') {
+  @darker-color: darken(@task-color-complete, 10%);
+  background-color: @task-color-complete;
+  background-image: linear-gradient(@task-color-complete, @darker-color);
+  color: white;
+}
+.task-status-color(@status) {
+  @color-to-use: "task-color-@{status}";
+  background-color: @@color-to-use;
+  color: white;
+}
+
+.task-status-ready-to-mark {
+  .task-status-color("ready-to-mark");
+}
+.task-status-not-started {
+  .task-status-color("not-started");
+}
+.task-status-working-on-it {
+  .task-status-color("working-on-it");
+}
+.task-status-need-help {
+  .task-status-color("need-help");
+}
+.task-status-fix-and-resubmit {
+  .task-status-color("fix-and-resubmit");
+}
+.task-status-fix-and-include {
+  .task-status-color("fix-and-include");
+}
+.task-status-redo {
+  .task-status-color("redo");
+}
+.task-status-discuss {
+  .task-status-color("discuss");
+}
+.task-status-demonstrate {
+  .task-status-color("demonstrate");
+}
+.task-status-complete {
+  .task-status-color("complete");
+}
+.task-status-fail {
+  .task-status-color("fail");
+}

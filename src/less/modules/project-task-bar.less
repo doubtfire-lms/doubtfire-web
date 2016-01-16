@@ -81,19 +81,17 @@
   }
 }
 
-.progress-bar-ready-to-mark     { background-color: #0079D8; color: white; }
-.progress-bar-not-started       { background-color: #CCCCCC; color: white; }
-.progress-bar-working-on-it     { background-color: #EB8F06; color: white; }
-.progress-bar-need-help         { background-color: #a48fce; color: white; }
-.progress-bar-fix-and-resubmit  { background-color: #f2d85c; color: white; }
-.progress-bar-fix-and-include   { background-color: #d93713; color: white; }
-.progress-bar-redo              { background-color: #804000; color: white; }
-.progress-bar-discuss           { background-color: #31b0d5; color: white; }
-.progress-bar-complete  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
+.progress-bar-ready-to-mark     { .task-status-ready-to-mark;     }
+.progress-bar-not-started       { .task-status-not-started;       }
+.progress-bar-working-on-it     { .task-status-working-on-it;     }
+.progress-bar-need-help         { .task-status-need-help;         }
+.progress-bar-fix-and-resubmit  { .task-status-fix-and-resubmit;  }
+.progress-bar-fix-and-include   { .task-status-fix-and-include;   }
+.progress-bar-fail              { .task-status-fail;              }
+.progress-bar-redo              { .task-status-redo;              }
+.progress-bar-discuss           { .task-status-discuss;           }
+.progress-bar-demonstrate       { .task-status-demonstrate;       }
+.progress-bar-complete          { .task-status-complete;          }
 
 
 .progress-progress-bar {
@@ -101,12 +99,7 @@
   margin-bottom: 0px;
 }
 
-.progress-bar-not-started       { background-color: #CCCCCC; color: white; }
-.progress-bar-one-week-late     { background-color: #CCCCCC; color: white; }
-.progress-bar-two-weeks-late   { background-color: #CCCCCC; color: white; }
-.progress-bar-on-time  {
-    background-color: #5BB75B;
-    background-image: linear-gradient(rgb(98, 196, 98), rgb(81, 163, 81));
-    color: white;
-  }
-
+.progress-bar-not-started       { .task-status-not-started;   }
+.progress-bar-one-week-late     { .task-status-working-on-it; }
+.progress-bar-two-weeks-late    { .task-status-fail;          }
+.progress-bar-on-time           { .task-status-complete;      }
