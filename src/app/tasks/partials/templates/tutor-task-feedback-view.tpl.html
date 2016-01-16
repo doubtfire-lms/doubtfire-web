@@ -3,8 +3,8 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title" ng-hide="context=='task'">{{title}}</h4>
-        <task-definition-selector class="col-sm-12" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
-        from students in {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}
+        <task-definition-selector button-style="default" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
+        <div>Show tasks that require some feedback from {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}</div>
       </div>
       <div class="col-sm-5 text-right"></div>
         <div class="pull-right">
@@ -14,21 +14,24 @@
         </div>
         <div class="btn-group pull-right" style="margin-left: 1ex">
           <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allTasks'">
-            <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks for all students"></i>
+            <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks for all students"></i>
           </label>
           <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-            <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Only show tasks for my students"></i>
+            <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Only show tasks for my students"></i>
           </label>
         </div>
         <div class="btn-group pull-right" style="margin-left: 1ex" ng-show="context == 'assess'">
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
-            <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that are ready to mark."></i>
+            <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that are ready to mark."></i>
           </label>
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
-            <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks that need help."></i>
+            <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that need help."></i>
+          </label>
+          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'demonstrate'">
+            <i class="fa fa-laptop" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that need to be demonstated."></i>
           </label>
           <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
-            <i class="fa fa-comment" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show tasks to discuss with students."></i>
+            <i class="fa fa-commenting" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks to discuss with students."></i>
           </label>
         </div>
         <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">

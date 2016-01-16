@@ -1,18 +1,19 @@
 <div class="btn-group status-switcher dropdown" dropdown>
-  <button class="btn btn-primary dropdown-toggle col-sm-12" type="button" dropdown-toggle>
-    <span ng-show="selectedDefinition">Task {{selectedDefinition.abbreviation}}</span>
+  <button class="btn btn-{{buttonStyle}} dropdown-toggle col-sm-12" type="button" dropdown-toggle>
+    <span ng-show="selectedDefinition">Task <label class="label label-info" ng-show="selectedDefinition" tooltip="{{selectedDefinition.name}}">{{selectedDefinition.abbreviation}}</label></span>
     <span ng-hide="selectedDefinition">Select Task</span>
     <div class="pull-right"><span class="caret" style="margin-right:0.5em"></span></div>
   </button><!--/dropdown-button-->
-    <ul class="dropdown-menu project-task-bar">
-      <div ng-repeat="(groupSetId, relatedTaskDefs) in unit.task_definitions | groupBy: 'group_set_id'" class="col-sm-12">
-        <h5 class="groupset-name" ng-hide="hideGroupSetName()">
-        {{groupSetName(groupSetId)}}</h5>
-        <li class="col-xs-4 col-sm-3" ng-repeat="taskDef in relatedTaskDefs | orderBy: 'seq'">
-          <button type="button" class="col-xs-12 btn btn-default" ng-class="{'active' : taskDef == selectedDefinition}" ng-click="setSelectedDefinition(taskDef)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{taskDef.name}}:</strong>">
-            {{taskDef.abbreviation}}
-          </button>
-        </li>
-      </div>
-    </ul>
+  <ul class="dropdown-menu project-task-bar">
+    <div ng-repeat="(groupSetId, relatedTaskDefs) in unit.task_definitions | groupBy: 'group_set_id'" class="col-sm-12">
+      <h5 class="groupset-name" ng-hide="hideGroupSetName">
+        {{groupSetName(groupSetId)}}
+      </h5>
+      <li class="col-xs-4 col-sm-3" ng-repeat="taskDef in relatedTaskDefs | orderBy: 'seq'">
+        <button type="button" class="col-xs-12 btn btn-default" ng-class="{'active' : taskDef == selectedDefinition}" ng-click="setSelectedDefinition(taskDef)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{taskDef.name}}">
+          {{taskDef.abbreviation}}
+        </button>
+      </li>
+    </div>
+  </ul>
 </div>
