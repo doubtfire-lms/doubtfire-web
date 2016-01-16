@@ -23,7 +23,9 @@
     <tbody>
       <tr ng-repeat="data in topTasks" ng-click="onSelect(data.task)">
         <td ng-click="viewTask(data.task)">{{data.task.definition.abbreviation}}</td>
-        <td class="text-center task-status {{statusClass(data.task.status)}}"><span><i class="{{statusIcon(data.task.status)}}"></i> {{statusText(data.task.status)}}</span></td>
+        <td ng-click="viewTask(data.task)">
+          <status-icon status="data.task.status"></status-icon>
+        </td>
         <td ng-click="viewTask(data.task)">{{data.reason}}</td>
       </tr>
     </tbody>

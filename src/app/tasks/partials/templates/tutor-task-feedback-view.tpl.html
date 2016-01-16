@@ -79,7 +79,9 @@
               <td>{{task.project().student_id}}</td>
               <td>{{task.project().name}}</td>
               <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
-              <td class="text-center task-status {{statusClass(task.status)}}"><span><i class="{{statusIcon(task.status)}}"></i> {{statusText(task.status)}}</span></td>
+              <td>
+                <status-icon status="task.status"></status-icon>
+              </td>
               <td>{{task.times_assessed}}</td>
               <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
           </tr>

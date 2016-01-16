@@ -8,7 +8,8 @@
     <table class="table col-sm-12">
       <thead>
         <tr>
-          <th></th>
+          <th></th><!--task-abbreviation-->
+          <th></th><!--task-status-->
           <th>Task</th>
           <th class="text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
             <label class="label label-info">{{ilo.abbreviation}}</label>
@@ -20,6 +21,8 @@
         <tr ng-repeat="task in project.tasks | orderBy: 'definition.seq'">
           <td>
             <label class="label label-info">{{task.definition.abbreviation}}</label>
+          </td>
+          <td>
             <status-icon status="task.status"></status-icon>
           </td>
           <td>
