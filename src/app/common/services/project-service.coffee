@@ -71,6 +71,7 @@ angular.module("doubtfire.services.projects", [])
 
       base = _.filter base, (task) -> ! _.find(project.tasks, (pt) -> pt.task_definition_id == task.task_definition_id)
 
+      project.tasks = [] unless project.tasks?
       Array.prototype.push.apply project.tasks, base
 
     project.tasks = project.tasks.map (task) ->
