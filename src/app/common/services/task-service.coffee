@@ -105,9 +105,9 @@ angular.module("doubtfire.services.tasks", [])
     fix_and_include:    'fa fa-stop'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-check'
-    demonstrate:        'fa fa-laptop'
-    complete:           'fa fa-check-square-o'
-    fail:               'fa fa-times-circle-o'
+    demonstrate:        'fa fa-check'
+    complete:           'fa fa-check'
+    fail:               'fa fa-times'
 
   taskService.statusColors =
     # Please make sure this matches task-status-colors.less
