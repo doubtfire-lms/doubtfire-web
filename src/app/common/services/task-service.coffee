@@ -197,7 +197,7 @@ angular.module("doubtfire.services.tasks", [])
       icon: taskService.statusIcons[task.status]
       label: taskService.statusLabels[task.status]
       class: taskService.statusClass(task.status)
-      daysOverdue: taskService.daysOverdue(task)
+      helpText: taskService.helpText(task.status)
     }
 
   # Return number of days task is overdue, or false if not overdue

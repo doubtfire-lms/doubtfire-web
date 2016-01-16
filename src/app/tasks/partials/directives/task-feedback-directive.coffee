@@ -96,6 +96,9 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     $scope.statusClass = taskService.statusClass
     $scope.daysOverdue = taskService.daysOverdue
 
+    $scope.daysOverdue = (task) ->
+      taskService.daysOverdue(task)
+
     $scope.activeStatusData = ->
       $scope.statusData($scope.project.selectedTask)
 

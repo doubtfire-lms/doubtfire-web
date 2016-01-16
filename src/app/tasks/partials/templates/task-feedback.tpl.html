@@ -18,16 +18,16 @@
         </ul>
     </div><!--/active-task-switcher-->
     <div class="task-header-info col-sm-10">
-      <div class="col-sm-6 task-description">
-        <h4>{{project.selectedTask.definition.name}}</h4>
+      <div class="col-sm-7 task-description">
+        <h3>{{project.selectedTask.definition.name}}</h3>
+        <p class="help-block">{{activeStatusData().helpText}}</p>
       </div>
-      <div class="col-sm-3">
-        <div class="overdue label label-{{activeStatusData().daysOverdue > 5 ? 'danger' : 'warning'}}" ng-hide="activeStatusData().daysOverdue === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
+      <div class="col-sm-4 date-info">
+        <div class="overdue label label-{{daysOverdue(project.selectedTask) > 5 ? 'danger' : 'warning'}}" ng-hide="daysOverdue(project.selectedTask) === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
           <i class="fa fa-exclamation-triangle"></i>
-          Past Target By <br/> {{activeStatusData().daysOverdue}} day{{activeStatusData().daysOverdue > 1 ? 's' : ''}}
+          Past Target By <br/> {{daysOverdue(project.selectedTask)}} day{{daysOverdue(project.selectedTask) > 1 ? 's' : ''}}
         </div>
-      </div>
-      <div class="col-sm-2 date-info">
+
         <p class="due-date">
           <label>Target:</label> {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
         </p>
@@ -37,7 +37,7 @@
       </div>
     </div><!--/task-header-info-->
 
-    <div tooltip-placement="right" tooltip="{{activeStatusData().label}}" class="btn-group dropdown status-switcher col-sm-1 pull-right" dropdown>
+    <div tooltip-placement="left" tooltip="{{activeStatusData().label}}" tooltip-append-to-body="true" class="btn-group dropdown status-switcher col-sm-1 pull-right" dropdown>
       <button type="button" class="btn task-status {{statusClass(project.selectedTask.status)}} dropdown-toggle" dropdown-toggle>
         <i class="{{activeStatusData().icon}} fa-2x"></i>
         <span class="caret"></span>
