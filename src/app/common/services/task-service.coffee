@@ -98,14 +98,14 @@ angular.module("doubtfire.services.tasks", [])
 
   taskService.statusIcons =
     ready_to_mark:      'fa fa-thumbs-o-up'
-    not_started:        'fa fa-times'
+    not_started:        'fa fa-pause'
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
-    fix_and_include:    'fa fa-stop'
+    fix_and_include:    'fa fa-book'
     fix_and_resubmit:   'fa fa-wrench'
-    discuss:            'fa fa-check'
-    demonstrate:        'fa fa-check'
+    discuss:            'fa fa-commenting'
+    demonstrate:        'fa fa-laptop'
     complete:           'fa fa-check'
     fail:               'fa fa-times'
 
