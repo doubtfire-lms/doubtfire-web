@@ -22,7 +22,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="data in topTasks" ng-click="onSelect(data.task)">
-        <td ng-click="viewTask(data.task)">{{data.task.definition.abbreviation}}</td>
+        <td ng-click="viewTask(data.task)"><label class="label label-info pointer" tooltip="{{data.task.definition.name}}" tooltip-append-to-body="true">{{data.task.definition.abbreviation}}</label></td>
         <td ng-click="viewTask(data.task)">
           <status-icon status="data.task.status"></status-icon>
         </td>
