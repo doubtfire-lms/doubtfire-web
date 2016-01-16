@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.partials.provide-task-feedback',[])
     onStatusUpdate: "=onStatusUpdate"
     viewOptions: "="
   controller: ($scope, taskService) ->
-    
+
     $scope.triggerTransition = (status) ->
       taskService.updateTaskStatus($scope.unit, $scope.task.project(), $scope.task, status)
       if $scope.onStatusUpdate? && _.isFunction($scope.onStatusUpdate)

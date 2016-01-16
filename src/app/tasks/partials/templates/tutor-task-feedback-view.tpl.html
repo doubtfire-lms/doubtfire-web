@@ -81,7 +81,7 @@
             <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
               <td>{{task.project().student_id}}</td>
               <td>{{task.project().name}}</td>
-              <td><span tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
+              <td><span class="label label-info" tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
               <td>
                 <status-icon status="task.status"></status-icon>
               </td>
@@ -91,9 +91,8 @@
           </tbody>
       </table>
     </div>
-    <div class="panel-body project-show" ng-if="fullscreen">
+    <div class="panel-body project-show no-padding" ng-if="fullscreen">
       <provide-task-feedback
-        class="root-view"
         scope="student-project-scope"
         task="activeTask"
         unit="unit"

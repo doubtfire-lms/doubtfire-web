@@ -81,15 +81,15 @@
                 </bar>
               </progress>
             </td>
-            <td class="flags-data">
+            <td class="flags-data" ng-click="viewStudent(student)">
               <span class="flags">
-                <span ng-click="viewStudent(student)" class="flag">
+                <span class="flag">
                   <grade-icon grade="student.target_grade"></grade-icon>
                 </span>
-                <span ng-if="student.tasks_with_similarities > 0" ng-click="viewStudent(student)" class="flag">
+                <span ng-if="student.tasks_with_similarities > 0" class="flag">
                   <i class="fa fa-eye fa-2x" ></i>
                 </span>
-                <span ng-if="student.has_portfolio" ng-click="viewStudent(student)" class="flag">
+                <span ng-if="student.has_portfolio" class="flag">
                   <i class="fa fa-book fa-2x" ng-class="{'text-muted': student.compile_portfolio}"></i>
                 </span>
               </span>
@@ -114,13 +114,12 @@
     </table>
   </div>
   <div class="panel-body project-show" ng-if="fullscreen">
-    <div class="no-student" ng-hide="activeStudent">
+    <div class="nothing-selected" ng-hide="activeStudent">
       <i class="fa fa-user"></i>
       <p>Click a student to view their status in detail</p>
     </div>
     <student-project
       ng-if="activeStudent"
-      class="root-view"
       scope="student-project-scope"
       project="activeStudent"
       unit="unit"

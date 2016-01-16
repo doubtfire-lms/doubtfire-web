@@ -88,6 +88,10 @@
   -webkit-flex-direction: column;
           flex-direction: column;
 
+  .panel-heading {
+    border-radius: 0;
+  }
+
   .panel-body.student-list {
     height: 20vh;
     resize: vertical;
@@ -101,7 +105,16 @@
     -webkit-flex: 1;
             flex: 1;
     position: relative;
-    .no-student {
+
+    &.no-padding {
+      padding: 0px;
+    }
+
+    .panel, .panel-heading {
+      border-radius: 0;
+    }
+
+    .nothing-selected {
       display: -webkit-flex;
       display: flex;
       -webkit-align-items: center;
