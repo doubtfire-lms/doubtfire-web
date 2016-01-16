@@ -28,10 +28,10 @@
           Past Target By <br/> {{daysOverdue(project.selectedTask)}} day{{daysOverdue(project.selectedTask) > 1 ? 's' : ''}}
         </div>
 
-        <p class="due-date">
+        <p class="due-date" tooltip="You should aim to complete the task by this date" tooltip-placement="right">
           <label>Target:</label> {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
         </p>
-        <p class="due-date" ng-show="project.selectedTask.definition.due_date">
+        <p class="due-date" ng-show="project.selectedTask.definition.due_date" tooltip="The task must be completed by this date" tooltip-placement="right">
           <label>Deadline:</label> {{project.selectedTask.definition.due_date | date:'EEE MMM d'}}
         </p>
       </div>
