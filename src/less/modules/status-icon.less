@@ -1,6 +1,6 @@
 .status-icon {
   display: inline-block;
-  
+
   .status-icon-generate(@status) {
     @status-color: "task-color-@{status}";
     @background-color: @@status-color;
@@ -28,10 +28,19 @@
   &.complete          { .status-icon-generate('complete');         }
   &.fail              { .status-icon-generate('fail');             }
 
+  width: 80%;
+  text-align: center;
+  display: inline-block;
+
   i {
     font-size: 1.25em;
     padding: 0.55em;
     border-radius: 1.25em;
     cursor: pointer;
+    width: 100%;
   }
+}
+
+.label {
+  font-size: 100% !important;
 }
