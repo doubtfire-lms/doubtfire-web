@@ -20,7 +20,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
         ]
         color: '#CACACA'
         classed: 'dashed'
-      newValue.push timeSeries
+      newValue.push timeSeries unless _.findWhere newValue, {key: 'NOW'}
       $scope.data.length = 0
       _.extend $scope.data, newValue
       if $scope.api?
