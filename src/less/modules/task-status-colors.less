@@ -20,9 +20,15 @@
   color: white;
 }
 .task-status-color(@status) {
-  @color-to-use: "task-color-@{status}";
-  background-color: @@color-to-use;
+  @background-color: "task-color-@{status}";
   color: white;
+  background-color: @@background-color;
+  & when (@status = 'not-started') {
+    color: #444;
+  }
+  & when (@status = 'fix-and-resubmit') {
+    color: #444;
+  }
 }
 
 .task-status-ready-to-mark {
