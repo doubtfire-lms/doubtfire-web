@@ -45,36 +45,46 @@
     <div class="col-lg-8 col-lg-pull-4">
       <div class="col-xs-12">
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Burndown Chart
-              <br>
-              <small>The Burndown chart shows how much work remains for you to achieve your target grade. Aim to keep your <i>Complete</i> line close to or ahead of the <i>Target</i> line to keep on track.</small>
-            </h3>
+          <div class="panel-heading clearfix">
+            <div class="pull-left">
+              <div ng-show="currentVisualisation == 'burndown'">
+                <h3 class="panel-title">Burndown Chart</h3>
+                The Burndown chart shows how much work remains for you to achieve your target grade.
+              </div>
+              <div ng-show="currentVisualisation == 'taskSummary'">
+                <h3 class="panel-title">Task Summary Chart</h3>
+                Summary of each of your task statuses
+              </div>
+            </div><!--/headings-->
+            <div class="pull-right text-right">
+              <div class="btn-group">
+                <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
+                  <i class="fa fa-line-chart"></i>
+                </label>
+                <label class="btn btn-default text-center" btn-radio="'taskSummary'" ng-model="currentVisualisation">
+                  <i class="fa fa-pie-chart"></i>
+                </label>
+              </div>
+            </div><!--/button-switch-->
           </div>
-          <div class="panel-body">
-            <div class="burndown-chart" ng-if="projectLoaded">
+          <div class="panel-body" ng-if="projectLoaded">
+            <div class="burndown-chart" ng-if="currentVisualisation == 'burndown'">
               <progress-burndown-chart project="project" unit="unit"></progress-burndown-chart>
             </div>
-          </div>
-        </div>
-
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Task Summary Chart
-              <br>
-              <small>Summary of each of your task statuses</small>
-            </h3>
-          </div>
-          <div class="panel-body">
-            <div ng-if="projectLoaded">
+            <div ng-if="currentVisualisation == 'taskSummary'">
               <student-task-status-pie-chart project="project"></student-task-status-pie-chart>
             </div>
           </div>
           <div class="panel-footer text-center">
-            You have completed <strong>{{taskStats.numberOfTasksCompleted}}</strong> tasks and have <strong>{{taskStats.numberOfTasksRemaining}}</strong> left to complete to achieve a <strong>{{grades[project.target_grade]}}</strong>.
+            <div ng-show="currentVisualisation == 'taskSummary'">
+              You have completed <strong>{{taskStats.numberOfTasksCompleted}}</strong> tasks and have <strong>{{taskStats.numberOfTasksRemaining}}</strong> left to complete to achieve a <strong>{{grades[project.target_grade]}}</strong>.
+            </div>
+            <div ng-show="currentVisualisation == 'burndown'">
+              Aim to keep your <strong style="color: #e01b5d">Complete</strong> line close to or ahead of the <strong class="text-muted">Target</strong> line to keep on track.
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div><!--primary-panel-->
   </div>
 </div>

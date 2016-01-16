@@ -7,7 +7,9 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
     $scope.gradeAcronyms = gradeService.gradeAcronyms
-    
+
+    $scope.currentVisualisation = 'burndown'
+
     $scope.taskDetailsSelector = { viewAll: false }
 
     $scope.chooseGrade = (idx) ->
