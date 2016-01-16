@@ -1,0 +1,37 @@
+.status-icon {
+  display: inline-block;
+  
+  .status-icon-generate(@status) {
+    @status-color: "task-color-@{status}";
+    @background-color: @@status-color;
+    i {
+      background-color: @background-color;
+      color: @task-foreground-color-light;
+      & when (@status = 'not-started') {
+        color: @task-foreground-color-dark;
+      }
+      & when (@status = 'fix-and-resubmit') {
+        color: @task-foreground-color-dark;
+      }
+    }
+  }
+
+  &.ready-to-mark     { .status-icon-generate('ready-to-mark');    }
+  &.not-started       { .status-icon-generate('not-started');      }
+  &.working-on-it     { .status-icon-generate('working-on-it');    }
+  &.need-help         { .status-icon-generate('need-help');        }
+  &.fix-and-resubmit  { .status-icon-generate('fix-and-resubmit'); }
+  &.fix-and-include   { .status-icon-generate('fix-and-include');  }
+  &.redo              { .status-icon-generate('redo');             }
+  &.discuss           { .status-icon-generate('discuss');          }
+  &.demonstrate       { .status-icon-generate('demonstrate');      }
+  &.complete          { .status-icon-generate('complete');         }
+  &.fail              { .status-icon-generate('fail');             }
+
+  i {
+    font-size: 1.25em;
+    padding: 0.55em;
+    border-radius: 1.25em;
+    cursor: pointer;
+  }
+}

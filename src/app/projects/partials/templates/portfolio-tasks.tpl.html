@@ -20,6 +20,7 @@
         <tr ng-repeat="task in project.tasks | orderBy: 'definition.seq'">
           <td>
             <label class="label label-info">{{task.definition.abbreviation}}</label>
+            <status-icon status="task.status"></status-icon>
           </td>
           <td>
             {{task.definition.name}}

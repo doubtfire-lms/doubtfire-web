@@ -13,6 +13,9 @@
 @task-color-complete:          #5BB75B;
 @task-color-fail:              #d93713;
 
+@task-foreground-color-light:  #fff;
+@task-foreground-color-dark:   #444;
+
 .task-status-color(@status) when (@status = 'complete') {
   @darker-color: darken(@task-color-complete, 10%);
   background-color: @task-color-complete;
@@ -21,13 +24,13 @@
 }
 .task-status-color(@status) {
   @background-color: "task-color-@{status}";
-  color: white;
+  color: @task-foreground-color-light;
   background-color: @@background-color;
   & when (@status = 'not-started') {
-    color: #444;
+    color: @task-foreground-color-dark;
   }
   & when (@status = 'fix-and-resubmit') {
-    color: #444;
+    color: @task-foreground-color-dark;
   }
 }
 
