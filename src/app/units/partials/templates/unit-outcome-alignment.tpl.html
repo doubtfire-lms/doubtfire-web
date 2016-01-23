@@ -1,102 +1,73 @@
 <div class="unit-outcome-alignment">
-  {{filteredAlignments = (source.task_outcome_alignments | outcomeFilter:selectedOutcome.id | taskFilter:selectedTask.id); ''}}
   <div class="alignment-panels" ng-class="{'col-sm-8': showCsv}">
     <div class="{{hidePanel ? '' : 'panel panel-primary'}}">
       <div ng-hide="hidePanel" class="panel-heading clearfix">
-        <div class="pull-left">
-          <h4 class="panel-title">Task Outcome Alignment</h4>
-          {{selectAlignmentBy == 'Outcome' ? 'Select an outcome and then tasks that align with the selected outcome' : 'Select a task and then the outcomes that the selected task contributes toward'}}
+        <h3 class="panel-title">
+          {{showIncludeTasks ? 'Select Tasks' : 'Intended Learning Outcome Alignment'}}
+        </h3>
+        <div ng-show="showIncludeTasks">
+          Select tasks to include and showcase in your portfolio that demonstrates your
+          understanding of each Indended Learning Outcome.
         </div>
-        <div class="btn-group pull-right" style="margin-left: 1ex">
-          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Outcome'">
-            <i class="fa fa-graduation-cap" tooltip-placement="top" tooltip="Align by outcome"></i>
-          </label>
-          <label class="btn btn-default" ng-model="selectAlignmentBy" btn-radio="'Task'">
-            <i class="fa fa-tasks" tooltip-placement="top" tooltip="Align by task"></i>
-          </label>
+        <div ng-hide="showIncludeTasks">
+          Align tasks to an Intended Learning Outcome by selecting the red circle and choosing a rating,
+          providing an optional rational to justify why that task is related to the outcome selected.
         </div>
-      </div><!--/select-panel-heading-->
+      </div><!--/heading-->
 
       <div class="panel-body">
-        <div class="panel-body-wrapper clearfix select-alignment-item">
-          <div class="col-sm-12">
-            <ui-select on-select="selectAlignmentByItem($item)" ng-model="selectedAlignmentByItem.selected">
-              <ui-select-match placeholder="Select {{selectAlignmentBy}}...">
-                <label class="label label-info">{{selectedAlignmentByItem.abbreviation}}</label>
-                <span class="selected-alignment-item-name">{{selectedAlignmentByItem.name}}</span>
-              </ui-select-match>
-              <ui-select-choices repeat="item in selectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq' | filterBy: ['name', 'abbreviation']: $select.search">
-                <h4>
-                  {{item.name}} <span class="label label-info pull-right">{{item.abbreviation}}</span>
-                </h4>
-                <p class="help-block select-alignment-by-item-description">
-                  {{item.description | truncatedMarkdown}}
-                </p>
-              </ui-select-choices>
-            </ui-select>
-            <p class="clearfix">
-              <div class="markdown-to-html smaller col-sm-12 " ng-bind-html="selectedAlignmentByItem.description | markdown"></div>
-            </p>
-          </div><!--/select-alignment-by-->
-        </div>
-        <div class="bottom-panel clearfix">
-          <div class="panel-body-wrapper clearfix inverse-select-alignment-by-items pull-left">
-            <div class="col-sm-12">
-              <label>
-                Select {{inverseSelectAlignmentBy}}s aligned to {{selectedAlignmentByItem.name}}
-              </label>
-              <label class="small text-muted">Scroll to view more {{inverseSelectAlignmentBy}}s. Click once to select the {{inverseSelectAlignmentBy}} and rate on the right and click again to deselect {{inverseSelectAlignmentBy}}.</label>
-              <div class="list-group-inverse-select-alignment">
-                <div class="list-group">
-                  <button ng-class="{active: isSelectedInverseAlignmentItem(item), 'list-group-item-info': colorAlignmentItem(item)}" class="list-group-item list-group-inverse-item" ng-click="selectInverseAlignmentItem(item)" ng-repeat="item in inverseSelectAlignmentByItems | orderBy: 'abbreviation' | orderBy: 'seq'">
-                    <h4>
-                      <span class="item-label-overflow">
-                        {{item.name}}
-                      </span>
-                      <span class="label label-info pull-right">{{item.abbreviation}}</span>
-                    </h4>
-                    <p class="help-block">
-                      {{item.description | truncatedMarkdown}}
-                    </p>
+        <table class="table table-task-alignment col-sm-12">
+          <thead>
+            <tr>
+              <th class="task" colspan="{{showTaskName ? 3 : 2}}">Task</th>
+              <th class="ilo text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
+                <label class="label label-info">{{ilo.abbreviation}}</label>
+              </th>
+              <th ng-if="showIncludeTasks" class="include-in-portfolio">Include</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="task in source.tasks | orderBy: 'definition.seq'">
+              <td class="task-abbreviation">
+                <label class="label label-info" tooltip="{{task.name}}">{{task.definition.abbreviation}}</label>
+              </td>
+              <td class="task-status-icon">
+                <status-icon status="task.status"></status-icon>
+              </td>
+              <td class="task-name" ng-show="showTaskName">
+                {{task.definition.name}}
+              </td>
+              <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="ilo-alignment text-center">
+                {{alignment = alignmentForTaskAndIlo(task, ilo); ''}}
+                <div ng-click="showAlignmentModal(task, ilo, alignment)" class="alignment-circle pointer">
+                  <outcome-alignment-rating ng-if="alignment" ng-model="alignment" compact="true"></outcome-alignment-rating>
+                  <i ng-hide="alignment" class="fa fa-circle-o fa-3x text-danger" tooltip="You decided {{task.definition.abbreviation}} is not aligned to {{ilo.abbreviation}}"></i>
+                </div>
+              </td>
+              <td ng-if="showIncludeTasks" class="include-in-portfolio">
+                <div
+                  tooltip-enable="disableInclude(task)"
+                  tooltip="You cannot select this task as it is not aligned to any ILOs"
+                  tooltip-placement="left"
+                  tooltip-append-to-body="true"
+                  class="button-wrapper">
+                  <button
+                    class="btn btn-sm btn-{{task.include_in_portfolio ? 'success' : 'default'}} col-sm-6 text-center"
+                    ng-click="includeTaskInPorfolio(task)"
+                    ng-if="!disableInclude(task)">
+                    <i class="fa fa-{{task.include_in_portfolio ? 'check' : 'times'}}"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-warning col-sm-6 text-center"
+                    ng-disabled="disableInclude(task)"
+                    ng-show="disableInclude(task)">
+                    <i class="fa fa-question"></i>
                   </button>
                 </div>
-              </div>
-            </div><!--/add-alignment-items-->
-          </div>
-          <div class="panel-body-wrapper clearfix alignment-rater pull-right">
-            {{align = searchForAlignmentForItem(selectedInverseAlignmentItem); ''}}
-            <div ng-if="align">
-              <h4 class="col-sm-12 text-center text-muted helper-header">
-                How much does <label class="label label-info" tooltip="{{selectedInverseAlignmentItem.name}}">{{selectedInverseAlignmentItem.abbreviation}}</label> relate to <label class="label label-info" tooltip="{{selectedAlignmentByItem.name}}">{{selectedAlignmentByItem.abbreviation}}</label>?
-              </h4>
-              <outcome-alignment-rating ng-model="align" on-rating-changed="updateRating"></outcome-alignment-rating>
-              <div class="pull-left col-sm-12 rationale-wrapper">
-                <div tooltip="Click to edit rationale" tooltip-placement="left" tooltip-append-to-body="false" tooltip-popup-delay="300" tooltip-enable="align.description != null" ng-click="toggleEditRationale(align)" class="rationale" ng-class="{'no-rationale': align.description == null}" ng-hide="align.editingRationale">
-                  <label class="text-muted" ng-show="align.description != null">
-                    Provided Rationale
-                  </label>
-                  <div ng-bind-html="(align.description || 'No rationale provided') | markdown"></div>
-                  <div class="small" ng-hide="align.description">Click to add one</div>
-                </div>
-                <div ng-if="align.editingRationale" class="clearfix">
-                  <markdown-editor
-                    height="200"
-                    ng-model="align.description"
-                    placeholder="Edit rationale..."
-                    autofocus="true">
-                  </markdown-editor>
-                  <a ng-click="toggleEditRationale(align)" class="pull-right">Done Editing</a>
-                </div>
-              </div>
-            </div>
-            <div ng-hide="align" class="no-inverse-select-alignment-by-selected-wrapper">
-              <div class="no-inverse-select-alignment-by-selected">
-                No {{inverseSelectAlignmentBy}} is selected. Select one on the left first.
-              </div>
-            </div>
-            <a ng-click="removeAlignmentItem(align)" class="col-sm-12 text-right" ng-show="align">Remove Alignment</a>
-          </div>
-        </div><!--/bottom-panel-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div><!--/select-panel-body-->
     </div><!--/select-panel-->
     <div class="panel panel-default" ng-hide="hideGraph">

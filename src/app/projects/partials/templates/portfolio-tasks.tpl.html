@@ -5,41 +5,39 @@
     understanding of each Indended Learning Outcome.
   </div>
   <div class="panel-body">
-    <table class="table col-sm-12">
+    <table class="table table-task-alignment col-sm-12">
       <thead>
         <tr>
-          <th></th><!--task-abbreviation-->
-          <th></th><!--task-status-->
-          <th>Task</th>
-          <th class="text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
+          <th class="task" colspan="{{showTaskName ? 3 : 2}}">Task</th>
+          <th class="ilo text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
             <label class="label label-info">{{ilo.abbreviation}}</label>
           </th>
-          <th>Include</th>
+          <th class="include-in-portfolio">Include</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="task in project.tasks | orderBy: 'definition.seq'">
-          <td>
-            <label class="label label-info">{{task.definition.abbreviation}}</label>
+          <td class="task-abbreviation">
+            <label class="label label-info" tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</label>
           </td>
-          <td>
+          <td class="task-status-icon">
             <status-icon status="task.status"></status-icon>
           </td>
-          <td>
+          <td class="task-name" ng-show="showTaskName">
             {{task.definition.name}}
           </td>
-          <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="text-center">
+          <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="ilo-alignment text-center">
             {{align = alignmentForTaskAndIlo(task, ilo); ''}}
             <outcome-alignment-rating ng-if="align" ng-model="align" compact="true"></outcome-alignment-rating>
             <i ng-hide="align" class="fa fa-circle-o fa-3x text-danger pointer" tooltip="You decided {{task.definition.abbreviation}} is not aligned to {{ilo.abbreviation}}"></i>
           </td>
-          <td>
+          <td class="include-in-portfolio">
             <div
               tooltip-enable="disableInclude(task)"
               tooltip="You cannot select this task as it is not aligned to any ILOs"
               tooltip-placement="left"
               tooltip-append-to-body="true"
-              class="col-sm-12">
+              class="button-wrapper">
               <button
                 class="btn btn-sm btn-{{task.include_in_portfolio ? 'success' : 'default'}} col-sm-6 text-center"
                 ng-click="includeTaskInPorfolio(task)"

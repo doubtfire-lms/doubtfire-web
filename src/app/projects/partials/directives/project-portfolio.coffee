@@ -104,37 +104,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 .directive('portfolioTasks', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
-  controller: ($scope, Task) ->
-    # alignments[task_definition_id][ilo_id]
-    alignments =
-      _ .chain($scope.project.task_outcome_alignments)
-        .filter( (d) -> d.rating > 0 )
-        .groupBy('task_definition_id')
-        .map (d, i) ->
-          d = _ .chain(d)
-                .groupBy('learning_outcome_id')
-                .map( (d, i) -> [i, d[0]] )
-                .object()
-                .value()
-          [i, d]
-        .object()
-        .value()
-
-
-    $scope.alignmentForTaskAndIlo = (task, ilo) ->
-      alignments[task.task_definition_id]?[ilo.id]
-
-    $scope.disableInclude = (task) ->
-      alignments[task.task_definition_id] is undefined
-
-    $scope.includeTaskInPorfolio = (task) ->
-      task.include_in_portfolio = !task.include_in_portfolio
-      Task.update { project_id: $scope.project.project_id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
-        (success) ->
-          task.include_in_portfolio = success.include_in_portfolio
-
-    $scope.noTasksSelected = ->
-      _.filter($scope.tasks, (t) -> t.include_in_portfolio and alignments[t.task_definition_id] is not undefined).length is 0
+  controller: ($scope) ->
 )
 
 .directive('portfolioOther', ->
