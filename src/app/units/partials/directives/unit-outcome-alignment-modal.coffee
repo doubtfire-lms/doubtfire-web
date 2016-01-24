@@ -16,14 +16,15 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment-modal',[])
 
   $scope.toggleEditRationale = ->
     if $scope.editingRationale
-      $scope.saveTaskAlignment(alignment, alignment.id)
+      updateAlignment()
     $scope.editingRationale = !$scope.editingRationale
 
   $scope.removeAlignmentItem = ->
     data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
     LearningAlignments.delete(data,
       (response) ->
-        $scope.source.task_outcome_alignments = _.without $scope.source.task_outcome_alignments, response
+        indexToDelete = $scope.source.task_outcome_alignments.indexOf _.findWhere $scope.source.task_outcome_alignments, { id: $scope.alignment.id }
+        $scope.source.task_outcome_alignments.splice indexToDelete, 1
         $scope.alignment = undefined
         $rootScope.$broadcast('UpdateAlignmentChart', data, { remove: true })
       (response) ->
@@ -57,8 +58,8 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment-modal',[])
 
     LearningAlignments.create data,
       (response) ->
-        $scope.source.task_outcome_alignments.push(response)
-        $scope.alignment = response
+        $scope.alignment.id = response.id
+        $scope.source.task_outcome_alignments.push($scope.alignment)
         $rootScope.$broadcast('UpdateAlignmentChart', response, { created: true })
       (response) ->
         if response.data.error?
@@ -70,4 +71,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment-modal',[])
     else
       updateAlignment alignment
 
-  $scope.closeModal = $modalInstance.dismiss
+  $scope.closeModal = ->
+    if $scope.editingRationale
+      $scope.updateRating $scope.alignment
+    $modalInstance.close $scope.alignment

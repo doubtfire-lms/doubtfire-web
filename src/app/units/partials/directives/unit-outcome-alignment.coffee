@@ -20,20 +20,20 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
     # Set source
     if $scope.project?
       $scope.source = $scope.project
-      $scope.updateRequest = (data) ->
-        data.task_id = projectService.taskFromTaskDefId($scope.project, data.task_definition_id).id
+      $scope.tasks = $scope.project.tasks
       $scope.taskStatusFactor = outcomeService.projectTaskStatusFactor($scope.project)
     else
       $scope.source = $scope.unit
-      $scope.updateRequest = (data) ->
+      $scope.tasks = _.map $scope.unit.task_definitions, (td) ->
+        { definition: td }
       $scope.taskStatusFactor = outcomeService.unitTaskStatusFactor()
 
     # alignments[task_definition_id][ilo_id]
     alignments = []
-    $scope.$watch 'source.task_outcome_alignments', (newAlignments) ->
-      return unless newAlignments?
+    $scope.$watch 'source.task_outcome_alignments.length', ->
+      return unless $scope.source.task_outcome_alignments?
       alignments =
-        _ .chain(newAlignments)
+        _ .chain($scope.source.task_outcome_alignments)
           .filter( (d) -> d.rating > 0 )
           .groupBy('task_definition_id')
           .map (d, i) ->
@@ -59,10 +59,10 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
           source: -> $scope.source
 
     $scope.alignmentForTaskAndIlo = (task, ilo) ->
-      alignments[task.task_definition_id]?[ilo.id]
+      alignments[task.definition.id]?[ilo.id]
 
     $scope.disableInclude = (task) ->
-      alignments[task.task_definition_id] is undefined
+      alignments[task.definition.id] is undefined
 
     $scope.includeTaskInPorfolio = (task) ->
       task.include_in_portfolio = !task.include_in_portfolio
