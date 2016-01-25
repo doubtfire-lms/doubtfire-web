@@ -88,7 +88,9 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
   controller: ($scope) ->
     $scope.noTasksSelected = ->
-      _.filter($scope.project.tasks, (d) -> d.include_in_portfolio).length is 0
+      selectedTasks = _.filter $scope.project.tasks, (d) ->
+        d.include_in_portfolio and _.findWhere($scope.project.task_outcome_alignments, { task_id: d.id })?
+      selectedTasks.length is 0
 )
 
 .directive('portfolioOther', ->
