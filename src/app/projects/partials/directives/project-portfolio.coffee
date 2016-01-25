@@ -20,26 +20,22 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         title: "Learning Summary Report"
         icon: "fa-graduation-cap"
         seq: 2
-      alignmentStep:
-        title: "Task ILO Alignments"
-        icon: "fa-chain"
-        seq: 3
       taskStep:
-        title: "Select Tasks"
+        title: "Align and Select Tasks"
         icon: "fa-tasks"
-        seq: 4
+        seq: 3
       otherFilesStep:
         title: "Upload Other Files"
         icon: "fa-plus"
-        seq: 5
+        seq: 4
       compileStep:
         title: "Compile PDF"
         icon: "fa-file-pdf-o"
-        seq: 6
+        seq: 5
       reviewStep:
         title: "Review Portfolio"
         icon: "fa-book"
-        seq: 7
+        seq: 6
     $scope.setActivePortfolioTab = (tab) ->
       # $scope.activePortfolioTab?.active = false
       $scope.activePortfolioTab = tab
@@ -87,24 +83,12 @@ angular.module('doubtfire.projects.partials.portfolio', [])
       $scope.fileUploader.uploadPortfolioPart("LearningSummaryReport", "document")
 )
 
-.directive('portfolioAlignments', ->
-  restrict: 'E'
-  templateUrl: 'projects/partials/templates/portfolio-alignments.tpl.html'
-  controller: ($scope, taskService) ->
-    # Only show tasks with PDFs or marked as complete
-    taskFilterer = (task) ->
-      task.has_pdf or task.status is taskService.acronymKey.COM
-    $scope.filteredTasks =
-      _ .chain($scope.project.tasks)
-        .filter(taskFilterer)
-        .map($scope.unit.taskDef)
-        .value()
-)
-
 .directive('portfolioTasks', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
   controller: ($scope) ->
+    $scope.noTasksSelected = ->
+      _.filter($scope.project.tasks, (d) -> d.include_in_portfolio).length is 0
 )
 
 .directive('portfolioOther', ->
