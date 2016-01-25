@@ -14,8 +14,8 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'multiBarChart', {
       clipEdge: yes
-      stacked: yes
-      height: 440
+      stacked: no
+      height: 200
       duration: 500
       color: (d) ->
         gradeService.gradeColors[gradeService.gradeAcronyms[d.key]]
