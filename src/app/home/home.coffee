@@ -123,11 +123,18 @@ angular.module("doubtfire.home", [])
       $scope.user = currentUser.profile
       $scope.user.opt_in_to_research = null
     else
+      firstName = null
+      lastName = null
+      email = null
+      unless currentUser.profile.first_name.toLowerCase() is 'first name' or currentUser.profile.last_name.toLowerCase() is 'last name'
+        firstName = currentUser.profile.first_name
+        lastName = currentUser.profile.last_name
+        email = currentUser.profile.email
       $scope.user = {
-        first_name: null
-        last_name: null
+        first_name: firstName
+        last_name: lastName
         nickname: null
-        email: null
+        email: email
         receive_feedback_notifications: null
         receive_portfolio_notifications: null
         receive_task_notifications: null
@@ -138,8 +145,8 @@ angular.module("doubtfire.home", [])
     $scope.moveStep = (skip) ->
       # if about to enter grade step and no grades? skip twice
       if $scope.projects.length is 0
-        stepBeforeTargetStep = _.findWhere $scope.steps, { seq: $scope.currentStep.targetGradeStep - 1 }
-        stepAfterTargetStep = _.findWhere $scope.steps, { seq: $scope.currentStep.targetGradeStep + 1 }
+        stepBeforeTargetStep = _.findWhere $scope.steps, { seq: $scope.steps.targetGradeStep.seq - 1 }
+        stepAfterTargetStep = _.findWhere $scope.steps, { seq: $scope.steps.targetGradeStep.seq + 1 }
         if skip is 1 and $scope.currentStep is stepBeforeTargetStep
           skip += 1
         else if skip is -1 and $scope.currentStep is stepAfterTargetStep
