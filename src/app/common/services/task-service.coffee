@@ -105,7 +105,7 @@ angular.module("doubtfire.services.tasks", [])
     fix_and_include:    'fa fa-book'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-commenting'
-    demonstrate:        'fa fa-laptop'
+    demonstrate:        'fa fa-check'
     complete:           'fa fa-check'
     fail:               'fa fa-times'
 
