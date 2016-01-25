@@ -11,12 +11,13 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
     project: "=?"
     showCsv: "="
     hidePanel: '=?'
-    hideGraph: '=?'
     # select tasks to include in portfolio
     showIncludeTasks: '=?'
   controller: ($scope, $modal, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, Task, csvResultService, outcomeService) ->
     $scope.showTaskName = $scope.unit.ilos.length < 5
-
+    $scope.showGraph = false
+    $scope.closeGraph = ->
+      $scope.showGraph = false
     # Set source
     if $scope.project?
       $scope.source = $scope.project

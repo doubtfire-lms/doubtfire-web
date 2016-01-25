@@ -5,13 +5,20 @@
         <h3 class="panel-title">
           {{showIncludeTasks ? 'Select Tasks' : 'Intended Learning Outcome Alignment'}}
         </h3>
-        <div ng-show="showIncludeTasks">
-          Select tasks to include and showcase in your portfolio that demonstrates your
-          understanding of each Indended Learning Outcome.
+        <div class="col-sm-8 pull-left" style="padding-left: 0;">
+          <div ng-show="showIncludeTasks" >
+            Select tasks to include and showcase in your portfolio that demonstrates your
+            understanding of each Indended Learning Outcome.
+          </div>
+          <div ng-hide="showIncludeTasks">
+            Align tasks to an Intended Learning Outcome by selecting the red circle and choosing a rating,
+            providing an optional rational to justify why that task is related to the outcome selected.
+          </div>
         </div>
-        <div ng-hide="showIncludeTasks">
-          Align tasks to an Intended Learning Outcome by selecting the red circle and choosing a rating,
-          providing an optional rational to justify why that task is related to the outcome selected.
+        <div class="btn-group pull-right">
+          <button class="btn btn-default" ng-model="showGraph" btn-radio="true" uncheckable>
+            <i class="fa fa-bar-chart"></i>
+          </button>
         </div>
       </div><!--/heading-->
 
@@ -70,13 +77,16 @@
         </table>
       </div><!--/select-panel-body-->
     </div><!--/select-panel-->
-    <div class="panel panel-default" ng-hide="hideGraph">
-      <div class="panel-heading">
-          <h4 class="panel-title">Visualise Task Alignment</h4>
-          See how the alignment details you have provided relate to each learning outcome.
+    <div class="panel panel-default visualisation" ng-if="showGraph">
+      <div class="panel-heading clearfix">
+          <h4 class="panel-title pull-left">Visualisation</h4>
+          <button class="pull-right close" ng-click="closeGraph()">&times;</button>
       </div>
       <div class="panel-body">
         <alignment-bar-chart unit="unit" project="project" source="source" task-status-factor="taskStatusFactor"></alignment-bar-chart>
+      </div>
+      <div class="panel-footer text-center">
+        Hover over this panel to highlight
       </div>
     </div><!--/visualisation-->
   </div><!--/main-panels-->
