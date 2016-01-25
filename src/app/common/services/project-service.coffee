@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.projects", [])
 
-.factory("projectService", ($filter, taskService, Project) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope) ->
   #
   # The unit service object
   #
@@ -14,6 +14,9 @@ angular.module("doubtfire.services.projects", [])
   ]
 
   projectService.loadedProjects = null
+
+  $rootScope.$on 'signOut', () ->
+    projectService.loadedProjects = null
 
   projectService.getProjects = ( callback ) ->
     if ! projectService.loadedProjects?

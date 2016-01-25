@@ -66,7 +66,7 @@ angular.module("doubtfire.sessions", [
           $rootScope.$broadcast "unauthorisedRequestIntercepted"
       $q.reject response
 
-).factory("auth", ($http, $cookieStore, $timeout, userCookieName, currentUser, authRoles, localStorageService, doubtfireLoginTimeCookie, rememberDoubtfireCookie, api) ->
+).factory("auth", ($http, $cookieStore, $timeout, userCookieName, currentUser, authRoles, localStorageService, doubtfireLoginTimeCookie, rememberDoubtfireCookie, api, $rootScope) ->
 
   defaultAnonymousUser = _.clone currentUser
 
@@ -150,6 +150,7 @@ angular.module("doubtfire.sessions", [
   auth.signOut = (authenticationUrl) ->
     $http.delete(authenticationUrl)
     tryChangeUser defaultAnonymousUser
+    $rootScope.$broadcast "signOut"
     localStorageService.remove(userCookieName)
     localStorageService.set(rememberDoubtfireCookie, false)
     localStorageService.remove(doubtfireLoginTimeCookie)

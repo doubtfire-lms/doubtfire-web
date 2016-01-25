@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope) ->
   #
   # The unit service object
   #
@@ -8,6 +8,10 @@ angular.module("doubtfire.services.units", [])
 
   unitService.loadedUnits = {}
   unitService.loadedUnitRoles = null
+
+  $rootScope.$on 'signOut', () ->
+    unitService.loadedUnits = {}
+    unitService.loadedUnitRoles = null
 
   unitService.getUnitRoles = ( callback ) ->
     if ! unitService.loadedUnitRoles?
