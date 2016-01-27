@@ -37,7 +37,7 @@ angular.module("doubtfire.projects.student-project-directive", [
           refreshCharts()
         when $scope.tabs.tasksTab
           showTaskView()
-      analyticsService.event 'Student Feedback Views', "Switched Tab #{if assessingUnitRole? then 'as Tutor' else 'as Student'}", "#{tab.title} Tab"
+      analyticsService.event 'Student Feedback Views', "Switched Tab #{if $scope.assessingUnitRole? then 'as Tutor' else 'as Student'}", "#{tab.title} Tab"
 
     #
     # Switcher to task view
