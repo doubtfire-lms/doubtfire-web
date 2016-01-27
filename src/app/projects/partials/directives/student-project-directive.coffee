@@ -58,7 +58,9 @@ angular.module("doubtfire.projects.student-project-directive", [
 
     # Set the active tab
     $scope.setActiveTab = (tab) ->
-      $scope.activeTab.active = false
+      # Do nothing if we're switching to the same tab
+      return if tab is $scope.activeTab
+      $scope.activeTab?.active = false
       $scope.activeTab = tab
       $scope.activeTab.active = true
       # Actions to take when selecting this tab
@@ -67,7 +69,8 @@ angular.module("doubtfire.projects.student-project-directive", [
           refreshCharts()
         when $scope.tabs.tasksTab
           showTaskView()
-      analyticsService.event 'Student Feedback Views', "Switched Tab as #{$scope.unitRole.role}", "#{tab.title} Tab"
+      asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
+      analyticsService.event 'Student Feedback View', "Switched Tab as #{asUser}", "#{tab.title} Tab"
 
     # Kill tabs that aren't applicable
     cleanupTabs = ->

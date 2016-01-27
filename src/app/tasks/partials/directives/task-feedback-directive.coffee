@@ -7,11 +7,11 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     unit: '='
     project: '='
     assessingUnitRole: '='
-  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService) ->
+  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
     #
     # Active task tab group
     #
-    $scope.tabsData =
+    $scope.tabs =
       taskSheet:
         title: "Task Description"
         subtitle: "A brief description of this task"
@@ -49,10 +49,11 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     $scope.setActiveTab = (tab) ->
       # Do nothing if we're switching to the same tab
       return if tab is $scope.activeTab
-      if $scope.activeTab?
-        $scope.activeTab.active = false
+      $scope.activeTab?.active = false
       $scope.activeTab = tab
       $scope.activeTab.active = true
+      asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
+      analyticsService.event 'Student Feedback View - Tasks Tab', "Switched Tab as #{asUser}", "#{tab.title} Tab"
 
     #
     # Checks if tab is the active tab
@@ -63,24 +64,24 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     $scope.$watch 'project.selectedTask', (newTask) ->
       # select initial tab
       if $stateParams.viewing == 'feedback'
-        $scope.setActiveTab($scope.tabsData['viewSubmission'])
+        $scope.setActiveTab($scope.tabs.viewSubmission)
       else if $stateParams.viewing == 'submit'
-        $scope.setActiveTab($scope.tabsData['fileUpload'])
+        $scope.setActiveTab($scope.tabs.fileUpload)
       else if $scope.project.selectedTask?
         if $scope.project.selectedTask.similar_to_count > 0
-          $scope.setActiveTab($scope.tabsData['plagiarismReport'])
+          $scope.setActiveTab($scope.tabs.plagiarismReport)
         else
           switch $scope.project.selectedTask.status
             when 'not_started'
-              $scope.setActiveTab($scope.tabsData['taskSheet'])
+              $scope.setActiveTab($scope.tabs.taskSheet)
             when 'ready_to_mark', 'complete', 'discuss', 'demonstrate'
-              $scope.setActiveTab($scope.tabsData['viewSubmission'])
+              $scope.setActiveTab($scope.tabs.viewSubmission)
             when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
-              $scope.setActiveTab($scope.tabsData['fileUpload'])
+              $scope.setActiveTab($scope.tabs.fileUpload)
             else
-              $scope.setActiveTab($scope.tabsData['taskSheet'])
+              $scope.setActiveTab($scope.tabs.taskSheet)
       else
-        $scope.setActiveTab($scope.tabsData['taskSheet'])
+        $scope.setActiveTab($scope.tabs.taskSheet)
 
     #
     # Loading the active task
@@ -130,7 +131,7 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
 
     $scope.triggerTransition = (status) ->
       if (status == 'ready_to_mark' || status == 'need_help') and $scope.project.selectedTask.definition.upload_requirements.length > 0
-        $scope.setActiveTab($scope.tabsData['fileUpload'])
+        $scope.setActiveTab($scope.tabs.fileUpload)
         return # handle with the uploader...
       else
         taskService.updateTaskStatus($scope.unit, $scope.project, $scope.project.selectedTask, status)
