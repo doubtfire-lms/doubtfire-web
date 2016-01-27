@@ -49,17 +49,66 @@ angular.module("doubtfire.units", [
 # The Tutor Unit View Controller is the root controller for the tutor
 # unit contexts.
 #
-.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, alertService, unitService, Visualisation) ->
+.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, Visualisation, alertService, unitService, analyticsService) ->
   $scope.unitLoaded = false
+  refreshCharts = Visualisation.refreshAll
 
-  $scope.tutorHomeActiveTab =
-      0:  true        #feedback
-      1:  false       #Students
-      2:  false       #Tasks
-      3:  false       #Groups
-      4:  false       #Plagiarism
-      5:  false       #Analytics
-      6:  false       #Grading
+  $scope.tabs =
+    feedbackTab:
+      title: 'Feedback'
+      icon:  'fa-check-square-o'
+      seq:   0
+    studentsTab:
+      title: 'Students'
+      icon:  'fa-user'
+      seq:   1
+    tasksTab:
+      title: 'Tasks'
+      icon:  'fa-tasks'
+      seq:   2
+    groupsTab:
+      title: 'Groups'
+      icon:  'fa-users'
+      seq:   3
+    plagiarismTab:
+      title: 'Plagiarism'
+      icon:  'fa-eye'
+      seq:   4
+    analyticsTab:
+      title: 'Analytics'
+      icon:  'fa-bar-chart'
+      seq:   5
+    gradingTab:
+      title: 'Grading'
+      icon:  'fa-book'
+      seq:   6
+
+  # Set the active tab
+  $scope.setActiveTab = (tab) ->
+    # Actions to perform when changing tab
+    $scope.activeTab.active = false
+    $scope.activeTab = tab
+    $scope.activeTab.active = true
+    # Actions to take when selecting this tab
+    switch tab
+      when $scope.tabs.analyticsTab
+        refreshCharts()
+    analyticsService.event 'Teacher View', "Switched Tab as #{$scope.unitRole.role}", "#{tab.title} Tab"
+
+  # Kill tabs that aren't applicable
+  cleanupTabs = ->
+    # Set the active tab if it isn't yet set
+    unless $scope.activeTab?
+      $scope.activeTab = $scope.tabs.feedbackTab
+    # Kill tabs on conditions (think ng-if to show tabs on conditions)
+    unless $scope.unit.group_sets.length > 0
+      delete $scope.tabs.groupsTab
+    unless $scope.unit.students.length > 10
+      delete $scope.tabs.analyticsTab
+
+  # Show the *right* tabs when unit is loaded
+  $scope.$watch 'unitLoaded', (newValue) ->
+    cleanupTabs() if newValue is true
 
   # Fetch the user's Unit Role
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
@@ -68,8 +117,9 @@ angular.module("doubtfire.units", [
     if unitRole
       unitService.getUnit unitRole.unit_id, true, false, (unit)->
         $scope.unit = unit # the unit related to the role
-
-        $scope.unitLoaded = true
+        # Unit is only "loaded" if all the students were loaded
+        $scope.$watch 'unit.students', (newValue) ->
+          $scope.unitLoaded = true if _.isArray(newValue)
   # end get unit role
 
   # Unit Service allows access to typeahead data
@@ -79,9 +129,6 @@ angular.module("doubtfire.units", [
     angular.forEach($scope.unit.students, (student) ->
       student.open = false
     )
-
-  $scope.refreshCharts = Visualisation.refreshAll
-
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit) ->
   $scope.units = Unit.query { include_in_active: true }
