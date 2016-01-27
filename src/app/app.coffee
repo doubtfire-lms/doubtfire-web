@@ -23,6 +23,11 @@ angular.module("doubtfire", [
   "nvd3"
   "xeditable"
 
+  # analytics
+  "angulartics"
+  "angulartics.debug"
+  "angulartics.google.analytics"
+
   # doubtfire.*
   "doubtfire.sessions"
   "doubtfire.common"
@@ -59,7 +64,7 @@ angular.module("doubtfire", [
   localStorageServiceProvider.setPrefix('doubtfire')
 )
 # Routing Config
-.config(($urlRouterProvider, $httpProvider) ->
+.config(($urlRouterProvider, $httpProvider, $analyticsProvider) ->
   # Catch bad URLs.
   $urlRouterProvider.otherwise "/not_found"
   $urlRouterProvider.when "", "/"
@@ -67,6 +72,9 @@ angular.module("doubtfire", [
   # Map root/home URL to a default state of our choosing.
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
+
+  # Disable virtual page views for analytics
+  $analyticsProvider.virtualPageviews(false)
 )
 # Doubtfire run
 .run(($rootScope, $state, $filter, $location, auth, editableOptions) ->

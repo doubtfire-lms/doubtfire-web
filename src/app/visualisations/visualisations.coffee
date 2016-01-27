@@ -11,7 +11,7 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.achievement-custom-bar-chart'
 ])
 
-.factory('Visualisation', ($interval) ->
+.factory('Visualisation', ($interval, $analytics) ->
   Visualisation = (type, opts, conf, titleOpts, subtitleOpts) ->
     DEFAULT_OPTS =
       objectequality: yes
@@ -54,9 +54,20 @@ angular.module('doubtfire.visualisations', [
 
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
 
+    # Google tracking
+    $analytics.eventTrack 'Visualisation Created', {
+      category: 'Visualisations'
+      label: type
+    }
+
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 
+
   Visualisation.refreshAll = ->
+    # Google tracking
+    $analytics.eventTrack 'Refresh All Visualisations', {
+      category: 'Visualisations'
+    }
     $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
 
   Visualisation

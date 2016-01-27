@@ -103,7 +103,10 @@ module.exports = {
       'vendor/showdown/dist/showdown.js',
       'vendor/showdown/dist/showdown.js.map',
       'vendor/angular-markdown-filter/markdown.js',
-      'vendor/angular-ui-select/dist/select.js'
+      'vendor/angular-ui-select/dist/select.js',
+      'vendor/angulartics/dist/angulartics.min.js',
+      'vendor/angulartics/dist/angulartics-debug.min.js',
+      'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
     ],
     css: [
     ]
