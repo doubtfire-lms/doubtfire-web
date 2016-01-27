@@ -30,14 +30,14 @@
         <p>View{{showTaskSheet ? "ing" : ''}} PDF</p>
       </div>
     </a>
-    <a href="{{taskPDFUrl()}}" ng-show="hasPDF()" target="_blank" class="btn btn-lg btn-info">
+    <a ng-click="downloadEvent('PDF')" href="{{taskPDFUrl()}}" ng-show="hasPDF()" target="_blank" class="btn btn-lg btn-info">
       <div>
         <i class="fa fa-2x fa-file-pdf-o"></i>
         <i class="fa fa-2x fa-download"></i>
         <p>Download PDF</p>
       </div>
     </a>
-    <a href="{{resourceUrl()}}" ng-show="hasResources()" target="_blank" class="btn btn-lg btn-success">
+    <a ng-click="downloadEvent('Resources')" href="{{resourceUrl()}}" ng-show="hasResources()" target="_blank" class="btn btn-lg btn-success">
       <div>
         <i class="fa fa-2x fa-download"></i>
         <p>Download Resources</p>

@@ -12,9 +12,12 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
     unit: '='
     project: '='
 
-  controller: ($scope, $filter, currentUser, Task) ->
+  controller: ($scope, $filter, currentUser, Task, analyticsService) ->
 
     $scope.showTaskSheet = false
+
+    $scope.downloadEvent = (type) ->
+      analyticsService.event 'Task Sheet', 'Downloaded #{type}'
 
     $scope.$watch 'project.selectedTask.task_definition_id', (newTaskDefId) ->
       $scope.alignments = $filter('taskFilter')($scope.unit.task_outcome_alignments, newTaskDefId)
