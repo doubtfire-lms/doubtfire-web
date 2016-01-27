@@ -53,6 +53,9 @@ angular.module("doubtfire.units", [
   $scope.unitLoaded = false
   refreshCharts = Visualisation.refreshAll
 
+  #
+  # Active tab group
+  #
   $scope.tabs =
     feedbackTab:
       title: 'Feedback'
@@ -146,17 +149,54 @@ angular.module("doubtfire.units", [
       }
 )
 
-.controller('EditUnitCtrl', ($scope, $state, $stateParams, unitService, headerService, alertService, Convenor, Tutor, UnitRole) ->
+.controller('EditUnitCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, headerService, alertService, analyticsService) ->
+  #
+  # Active tab group
+  #
+  $scope.tabs =
+    unitTab:
+      title: "Unit"
+      icon:  "fa-university"
+      seq:   0
+    learningOutcomesTab:
+      title: "Learning Outcomes"
+      icon:  "fa-graduation-cap"
+      seq:   1
+    staffTab:
+      title: "Staff"
+      icon:  "fa-male"
+      seq:   2
+    tutorialsTab:
+      title: "Tutorials"
+      icon:  "fa-pencil"
+      seq:   3
+    studentsTab:
+      title: "Students"
+      icon:  "fa-user"
+      seq:   4
+    tasksTab:
+      title: "Tasks"
+      icon:  "fa-tasks"
+      seq:   5
+    taskAlignmentTab:
+      title: "Task Alignment"
+      icon:  "fa-link"
+      seq:   5
+    groupsTab:
+      title: "Groups"
+      icon:  "fa-users"
+      seq:   6
 
-  $scope.unitAdminActiveTab =
-      0:  true        #unit
-      1:  false       #LOs
-      2:  false       #Staff
-      3:  false       #Tutorials
-      4:  false       #Students
-      5:  false       #Tasks
-      6:  false       # Alignments
-      7:  false       # Groups
+  # Set the active tab
+  $scope.setActiveTab = (tab) ->
+    # Actions to perform when changing tab
+    $scope.activeTab.active = false
+    $scope.activeTab = tab
+    $scope.activeTab.active = true
+    # Actions to take when selecting this tab
+    analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
+
+  $scope.activeTab = $scope.tabs.unitTab
 
   Convenor.query().$promise.then( (convenors) ->
     Tutor.query().$promise.then( (tutors) ->
@@ -173,6 +213,7 @@ angular.module("doubtfire.units", [
 
   unitService.getUnit $state.params.unitId, true, true, (unit) ->
     $scope.unit = unit
+    $scope.newUnit = $scope.unit.id == -1
     $scope.currentStaff = $scope.unit.staff
     UnitRole.query (roles) ->
       $scope.unitRoles = _.filter(roles, (role) -> role.unit_id == unit.id)
