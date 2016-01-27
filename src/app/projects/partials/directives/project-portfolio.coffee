@@ -3,7 +3,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
 .directive('projectPortfolio', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-portfolio.tpl.html'
-  controller: ($scope, taskService, PortfolioSubmission) ->
+  controller: ($scope, taskService, PortfolioSubmission, analyticsService) ->
     #
     # Active task tab group
     #
@@ -37,9 +37,8 @@ angular.module('doubtfire.projects.partials.portfolio', [])
         icon: "fa-book"
         seq: 6
     $scope.setActivePortfolioTab = (tab) ->
-      # $scope.activePortfolioTab?.active = false
       $scope.activePortfolioTab = tab
-      # $scope.activePortfolioTab.active = true
+      analyticsService.event 'Portfolio Wizard', 'Switched to Step', "#{tab.title} Step"
     $scope.$watch 'activePortfolioTab', (newTab, oldTab) ->
       newTab.active = true
       oldTab?.active = false
