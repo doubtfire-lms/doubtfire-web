@@ -12,11 +12,11 @@ angular.module("doubtfire.projects.student-project-directive", [
     unit: '=?' # to bind unit to outer-scope
     assessingUnitRole: '=?' # to bind assessingUnitRole to outer-scope
     fullscreen: '=?'
-  controller: ($scope, $state, Visualisation, Project, UnitRole, headerService, alertService, taskService, unitService, projectService) ->
+  controller: ($scope, $state, Visualisation, Project, UnitRole, headerService, alertService, taskService, unitService, projectService, analyticsService) ->
     if $scope.unit?
       $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
 
-    $scope.refreshCharts = Visualisation.refreshAll
+    refreshCharts = Visualisation.refreshAll
 
     $scope.showTaskView = (task) ->
       if not (task or $scope.project.selectedTask)
@@ -24,19 +24,58 @@ angular.module("doubtfire.projects.student-project-directive", [
       else if not task and $scope.project.selectedTask
         task = $scope.project.selectedTask
 
-      $scope.activeTab[1] = true
-      $scope.activeTab[0] = $scope.activeTab[2] = $scope.activeTab[3] = false
+      $scope.activeTab = $scope.tabs.tasksTab
       $scope.project.selectedTask = task
+
+    $scope.setActiveTab = (tab) ->
+      $scope.activeTab.active = false
+      $scope.activeTab = tab
+      $scope.activeTab.active = true
+      # Actions to take when selecting this tab
+      switch tab
+        when $scope.tabs.progressTab, $scope.tabs.learningOutcomeTab
+          refreshCharts()
+        when $scope.tabs.tasksTab
+          showTaskView()
+      analyticsService.event 'Student Feedback Views', 'Switched Tab', tab.title + ' Tab'
 
     #
     # Switcher to task view
     #
-    $scope.activeTab =
-      0:   true               #progress
-      1:   false              #feedback
-      2:   false              #tutorial
-      3:   false              #group
-      4:   false              #portfolio
+    $scope.tabs =
+      progressTab:
+        title:            'Progress'
+        icon:             'fa-line-chart'
+        seq:              0
+      tasksTab:
+        title:            'Tasks'
+        icon:             'fa-tasks'
+        seq:              1
+      tutorialTab:
+        title:            'Tutorials'
+        icon:             'fa-pencil'
+        seq:              2
+      groupTab:
+        title:            'Groups'
+        icon:             'fa-group'
+        seq:              3
+      learningOutcomeTab:
+        title:            'Learning Outcomes'
+        icon:             'fa-graduation-cap'
+        seq:              4
+      portfolioTab:
+        title:            'Portfolio'
+        icon:             'fa-book'
+        seq:              5
+
+    # Kill tabs that aren't applicable
+    cleanTabs = ->
+      if $scope.unit?.task_outcome_alignments.length is 0
+        delete $scope.tabs.learningOutcomeTab
+      if $scope.unit?.group_sets.length is 0
+        delete $scope.tabs.groupTab
+      unless $scope.activeTab?
+        $scope.activeTab = $scope.tabs.progressTab
 
     #
     # Get the project, which loads all subsequent views whenever the project
@@ -52,8 +91,10 @@ angular.module("doubtfire.projects.student-project-directive", [
 
             $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
             selectProjectTask(project)
+            cleanTabs()
             $scope.unitLoaded = true
         else if $scope.unit?
+          cleanTabs()
           $scope.unitLoaded = true
           selectProjectTask(project)
       )
