@@ -135,4 +135,6 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
         return # handle with the uploader...
       else
         taskService.updateTaskStatus($scope.unit, $scope.project, $scope.project.selectedTask, status)
+        asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
+        analyticsService.event 'Student Feedback View - Tasks Tab', "Updated Status as #{asUser}", taskService.statusLabels[status]
 )
