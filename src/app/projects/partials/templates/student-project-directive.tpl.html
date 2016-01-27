@@ -1,16 +1,18 @@
-<div ng-if="unitLoaded">
+<div>
   <h2 ng-hide="fullscreen">{{unit.name}} <small>{{unit.code}}</small><p class="lead"> {{project.student_name}} <small>{{project.student_id}}</small></p></h2>
-  <tabset class="tabset-icon" justified="true">
+  <tabset class="tabset-icon" justified="true" ng-if="unitLoaded">
     <tab ng-repeat="tab in tabs | toArray | orderBy: seq" active="tab.active" ng-click="setActiveTab(tab)">
       <tab-heading>
         <i class="fa fa-2x {{tab.icon}}"></i> {{tab.title}}
       </tab-heading>
     </tab>
-  </tabset>
-  <progress-info ng-if="activeTab === tabs.progressTab"></progress-info>
-  <task-feedback ng-if="activeTab === tabs.tasksTab && unitLoaded" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-feedback>
-  <student-group-tab ng-if="activeTab === tabs.groupTab"></student-group-tab>
-  <lab-list ng-if="activeTab === tabs.tutorialTab"></lab-list>
-  <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
-  <project-portfolio ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio>
+  </tabset><!--tabs-->
+  <div ng-if="unitLoaded">
+    <progress-info ng-if="activeTab === tabs.progressTab"></progress-info>
+    <task-feedback ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-feedback>
+    <student-group-tab ng-if="activeTab === tabs.groupTab"></student-group-tab>
+    <lab-list ng-if="activeTab === tabs.tutorialTab"></lab-list>
+    <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
+    <project-portfolio ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio>
+  </div><!--/content-->
 </div>

@@ -27,18 +27,6 @@ angular.module("doubtfire.projects.student-project-directive", [
       $scope.activeTab = $scope.tabs.tasksTab
       $scope.project.selectedTask = task
 
-    $scope.setActiveTab = (tab) ->
-      $scope.activeTab.active = false
-      $scope.activeTab = tab
-      $scope.activeTab.active = true
-      # Actions to take when selecting this tab
-      switch tab
-        when $scope.tabs.progressTab, $scope.tabs.learningOutcomeTab
-          refreshCharts()
-        when $scope.tabs.tasksTab
-          showTaskView()
-      analyticsService.event 'Student Feedback Views', "Switched Tab #{if $scope.assessingUnitRole? then 'as Tutor' else 'as Student'}", "#{tab.title} Tab"
-
     #
     # Switcher to task view
     #
@@ -68,14 +56,33 @@ angular.module("doubtfire.projects.student-project-directive", [
         icon:             'fa-book'
         seq:              5
 
+    # Set the active tab
+    $scope.setActiveTab = (tab) ->
+      $scope.activeTab.active = false
+      $scope.activeTab = tab
+      $scope.activeTab.active = true
+      # Actions to take when selecting this tab
+      switch tab
+        when $scope.tabs.progressTab, $scope.tabs.learningOutcomeTab
+          refreshCharts()
+        when $scope.tabs.tasksTab
+          showTaskView()
+      analyticsService.event 'Student Feedback Views', "Switched Tab as #{$scope.unitRole.role}", "#{tab.title} Tab"
+
     # Kill tabs that aren't applicable
-    cleanTabs = ->
-      if $scope.unit?.task_outcome_alignments.length is 0
-        delete $scope.tabs.learningOutcomeTab
-      if $scope.unit?.group_sets.length is 0
-        delete $scope.tabs.groupTab
+    cleanupTabs = ->
+      # Set the active tab if it isn't yet set
       unless $scope.activeTab?
         $scope.activeTab = $scope.tabs.progressTab
+      # Kill tabs on conditions (think ng-if to show tabs on conditions)
+      unless $scope.unit?.task_outcome_alignments.length > 0
+        delete $scope.tabs.learningOutcomeTab
+      unless $scope.unit?.group_sets.length > 0
+        delete $scope.tabs.groupTab
+
+    # Show the *right* tabs when unit is loaded
+    $scope.$watch 'unitLoaded', (newValue) ->
+      cleanupTabs() if newValue is true
 
     #
     # Get the project, which loads all subsequent views whenever the project
@@ -91,10 +98,8 @@ angular.module("doubtfire.projects.student-project-directive", [
 
             $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
             selectProjectTask(project)
-            cleanTabs()
             $scope.unitLoaded = true
         else if $scope.unit?
-          cleanTabs()
           $scope.unitLoaded = true
           selectProjectTask(project)
       )
