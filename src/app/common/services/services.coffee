@@ -8,4 +8,5 @@ angular.module("doubtfire.services", [
   'doubtfire.services.units'
   'doubtfire.services.group-service'
   'doubtfire.services.outcome-service'
+  'doubtfire.services.analytics'
 ])
