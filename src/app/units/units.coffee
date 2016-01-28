@@ -49,7 +49,7 @@ angular.module("doubtfire.units", [
 # The Tutor Unit View Controller is the root controller for the tutor
 # unit contexts.
 #
-.controller("TutorUnitViewRootCtrl", ($scope, $state, UnitRole, Visualisation, alertService, unitService, analyticsService) ->
+.controller("TutorUnitViewRootCtrl", ($scope, $state, $stateParams, UnitRole, Visualisation, alertService, unitService, analyticsService) ->
   $scope.unitLoaded = false
   refreshCharts = Visualisation.refreshAll
 
@@ -110,6 +110,8 @@ angular.module("doubtfire.units", [
       delete $scope.tabs.groupsTab
     unless $scope.unit.students.length > 10
       delete $scope.tabs.analyticsTab
+
+  $scope.assessingUnitRole = $stateParams.unitRole
 
   # Show the *right* tabs when unit is loaded
   $scope.$watch 'unitLoaded', (newValue) ->
