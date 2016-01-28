@@ -6,8 +6,8 @@ angular.module('doubtfire.units.partials.unit-marking-submissions-modal', [])
 
 .controller('SubmissionMarkingModal', ($scope, $modalInstance, alertService, unit, Task, csvResultService) ->
   $scope.unit = unit
-  $scope.zipMarkingFiles = { file: { name: 'Zipped Feedback Files', type: 'zip' } }
-  $scope.csvMarkingFiles = { file: { name: 'Marks.csv', type: 'csv' } }
+  $scope.zipMarkingFiles = { file: { name: 'Zip of annotated task PDFs and marks.csv', type: 'zip' } }
+  $scope.csvMarkingFiles = { file: { name: 'Modified marks.csv', type: 'csv' } }
   $scope.uploadSubmissionUrl = $scope.readyToMarkSubmissionsUrl =
     Task.getTaskMarkingUrl($scope.unit)
   $scope.isUploading = null

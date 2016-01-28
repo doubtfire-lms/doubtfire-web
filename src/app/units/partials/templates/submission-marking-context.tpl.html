@@ -3,69 +3,73 @@
     <h4 class="modal-title">Mark Tasks Offline</h4>
   </div>
   <div class="modal-body text-center">
-    <div class="btn-group">
-      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'download'">
-        <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-download fa-2x"></i></p>
-        <div>Download Unmarked Tasks</div>
-      </button>
-      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'uploadZip'">
-        <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
-        <div>Upload Marked Tasks</div>
-      </button>
-      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'uploadCSV'">
-        <p><i class="fa fa-file-excel-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
-        <div>Upload <code>marks.csv</code></div>
-      </button>
+    <div class="clearfix">
+      <div class="btn-group col-sm-12">
+        <button class="btn btn-default btn-large col-sm-4" ng-model="selectedGroup" btn-radio="'download'" style="padding: 1em;">
+          <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-download fa-2x"></i></p>
+          <div>Download Unmarked</div>
+        </button>
+        <button class="btn btn-default btn-large col-sm-4" ng-model="selectedGroup" btn-radio="'uploadZip'" style="padding: 1em;">
+          <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
+          <div>Upload Marked</div>
+        </button>
+        <button class="btn btn-default btn-large col-sm-4" ng-model="selectedGroup" btn-radio="'uploadCSV'" style="padding: 1em;">
+          <p><i class="fa fa-file-excel-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
+          <div>Upload <code>marks.csv</code></div>
+        </button>
+      </div>
     </div>
     <hr/>
-    <div ng-show="selectedGroup === 'download'">
+    <div ng-show="selectedGroup === 'download'" class="clearfix">
       <p class="help-block">
         Download a zip file containing the tasks that require feedback,
         along with a CSV you can use to submit your comments and task
         status changes.
       </p>
-      <a target="_blank" class="btn btn-primary btn-lg" href="{{readyToMarkSubmissionsUrl}}">
-        <i class="fa fa-file-zip-o"></i> <i class="fa fa-download"></i> Download
+      <a target="_blank" class="btn btn-primary btn-lg" href="{{readyToMarkSubmissionsUrl}}" style="margin-bottom: 1em">
+        <i class="fa fa-file-zip-o"></i> <i class="fa fa-download" style="margin-right:0.5ex"></i> Download Tasks To Mark
       </a>
     </div><!--/download-->
-    <div ng-hide="taskUploadResults && taskUploadResults.length > 0" ng-if="selectedGroup === 'uploadCSV' || selectedGroup === 'uploadZip'">
-      <div class="help-block" ng-show="selectedGroup === 'uploadZip'">
-        <p>
+    <div ng-hide="taskUploadResults && taskUploadResults.length > 0" ng-if="selectedGroup === 'uploadCSV' || selectedGroup === 'uploadZip'" class="clearfix">
+      <div class="col-sm-10 col-sm-offset-1" ng-show="selectedGroup === 'uploadZip'">
+        <strong>
           Make changes to student's statuses in the downloaded <code>marks.csv</code>
           file. Re-zip your changes and optional annotated PDFs with your feedback and
           upload below.
-        </p>
-        <p>
+        </strong>
+        <p class="help-block">
           Use this option when you have made annotations to student's work for feedback
           and to change student's task states.
         </p>
       </div>
-      <div ng-show="selectedGroup === 'uploadCSV'" class="help-block">
-        <p>
+      <div ng-show="selectedGroup === 'uploadCSV'" class="col-sm-10 col-sm-offset-1">
+        <strong>
           Make changes to student's statuses in the downloaded <code>marks.csv</code>
           file. Upload your modified <code>marks.csv</code> below.
-        </p>
-        <p>
+        </strong>
+        <p class="help-block">
           Use this option when you have not made annotations to student's work
           and just want to change student's task states.
         </p>
       </div>
-      <file-uploader
-        ng-if="selectedGroup === 'uploapZip'"
-        ng-hide="isReady.csv"
-        url="uploadSubmissionUrl"
-        files="zipMarkingFiles"
-        is-uploading="isUploading"
-        is-ready="isReady.zip"
-        on-success="onMarkingUploadSuccess"></file-uploader>
-      <file-uploader
-        ng-if="selectedGroup === 'uploadCSV'"
-        ng-hide="isReady.zip"
-        url="uploadSubmissionUrl"
-        files="csvMarkingFiles"
-        is-uploading="isUploading"
-        is-ready="isReady.csv"
-        on-success="onMarkingUploadSuccess"></file-uploader>
+      <div class="col-sm-12">
+        <file-uploader
+          ng-if="selectedGroup === 'uploadZip'"
+          ng-hide="isReady.csv"
+          url="uploadSubmissionUrl"
+          files="zipMarkingFiles"
+          is-uploading="isUploading"
+          is-ready="isReady.zip"
+          on-success="onMarkingUploadSuccess"></file-uploader>
+        <file-uploader
+          ng-if="selectedGroup === 'uploadCSV'"
+          ng-hide="isReady.zip"
+          url="uploadSubmissionUrl"
+          files="csvMarkingFiles"
+          is-uploading="isUploading"
+          is-ready="isReady.csv"
+          on-success="onMarkingUploadSuccess"></file-uploader>
+      </div>
     </div><!--/upload-files-->
     <div ng-show="taskUploadResults && taskUploadResults.length > 0">
       <p class="help-block">
