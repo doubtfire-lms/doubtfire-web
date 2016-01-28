@@ -1,6 +1,10 @@
 <ul class="breadcrumb">
   	<li><a href="#/home">Home</a></li>
-  	<li class="active">{{unit.name}}</li>
+  	<li>
+      <a ng-if="assessingUnitRole" href="#/units?unitRole={{assessingUnitRole.id}}">{{unit.name}}</a>
+      <span ng-if="!assessingUnitRole">{{unit.name}}</span>
+    </li>
+    <li class="active">{{project.student_name}}</li>
 </ul>
 <div class="feedback-float-toolbar well" ng-if="assessingUnitRole && project">
   <label>Tutor Actions</label>
