@@ -18,7 +18,7 @@ angular.module("doubtfire.projects.student-project-directive", [
 
     refreshCharts = Visualisation.refreshAll
 
-    showTaskView = (task) ->
+    $scope.showTaskView = (task) ->
       if not (task or $scope.project.selectedTask)
         task = _.find _.sortBy($scope.project.tasks, 'seq'), (t) -> $scope.taskDefinition(t).target_grade <= $scope.project.target_grade
       else if not task and $scope.project.selectedTask
