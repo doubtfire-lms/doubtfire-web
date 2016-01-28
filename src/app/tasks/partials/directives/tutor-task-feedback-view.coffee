@@ -9,7 +9,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
     context: "=context"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $filter, currentUser, Unit, alertService, gradeService, taskService) ->
+  controller: ($scope, $filter, $modal, currentUser, Unit, alertService, gradeService, taskService) ->
     if $scope.context == 'assess'
       $scope.title = "Tasks Requring Feedback"
       $scope.statusFilter = 'ready_to_mark'
@@ -74,7 +74,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
 
     $scope.viewTask = (task) ->
       $scope.activeTask = task
-    
+
     $scope.onStatusUpdate = (status) ->
       $scope.activeTask = null
 
@@ -126,4 +126,11 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
       if filteredStudents? && filteredStudents.length == 0
         $scope.studentFilter = 'allStudents'
       $scope.refreshTasks()
+
+    $scope.showMarkOfflineModal = ->
+      $modal.open
+        controller: 'SubmissionMarkingModal'
+        templateUrl: 'units/partials/templates/submission-marking-context.tpl.html'
+        resolve:
+          unit: -> $scope.unit
 )

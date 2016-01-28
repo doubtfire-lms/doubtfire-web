@@ -13,7 +13,7 @@
       </tab>
     </tabset><!--tabs-->
     <div ng-if="unitLoaded">
-      <tutor-marking-context ng-if="activeTab === tabs.feedbackTab"></tutor-marking-context>
+      <tutor-task-feedback-view ng-if="activeTab === tabs.feedbackTab" unit="unit" context="'assess'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
       <tutor-student-list  ng-if="activeTab === tabs.studentsTab" unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
       <tutor-task-feedback-view  ng-if="activeTab === tabs.tasksTab" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
       <tutor-group-tab ng-if="activeTab === tabs.groupsTab"></tutor-group-tab>

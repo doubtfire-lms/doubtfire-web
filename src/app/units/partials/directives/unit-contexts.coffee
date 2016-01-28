@@ -255,24 +255,24 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.maxSize = 5
     $scope.pageSize = 15
 )
-.directive('tutorMarkingContext', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-  controller: ($scope, $sce, $stateParams) ->
-    $scope.activeContext = 'submissions'
-    $scope.assessingUnitRole = $stateParams.unitRole
-    $scope.setActiveContext = (context) ->
-      return if context is $scope.activeContext
-      $scope.activeContext = context
-    $scope.contexts =
-      submissions:
-        title: 'Mark Submissions Offline'
-        subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
-        icon: 'file'
-      portfolios:
-        title: 'Mark Portfolios'
-        subtitle: 'Download all submitted portfolios here for marking'
-        icon: 'book'
-      # potentially tests here too?
-)
+# .directive('tutorMarkingContext', ->
+#   replace: true
+#   restrict: 'E'
+#   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
+#   controller: ($scope, $sce, $stateParams) ->
+#     $scope.activeContext = 'submissions'
+#     $scope.assessingUnitRole = $stateParams.unitRole
+#     $scope.setActiveContext = (context) ->
+#       return if context is $scope.activeContext
+#       $scope.activeContext = context
+#     $scope.contexts =
+#       submissions:
+#         title: 'Mark Submissions Offline'
+#         subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
+#         icon: 'file'
+#       portfolios:
+#         title: 'Mark Portfolios'
+#         subtitle: 'Download all submitted portfolios here for marking'
+#         icon: 'book'
+#       # potentially tests here too?
+# )

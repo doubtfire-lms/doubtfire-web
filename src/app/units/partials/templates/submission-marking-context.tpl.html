@@ -1,20 +1,57 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4 class="panel-title">Download Submissions</h4>
-    Download a zip file containing the tasks that require feedback, along with a CSV you can use to submit your comments and task status changes.      
+<div ng-init="selectedGroup = 'download'">
+  <div class="modal-header">
+    <h4 class="modal-title">Mark Tasks Offline</h4>
   </div>
-  <div class="panel-body text-center">
-    <a target="_blank" class="btn btn-primary btn-download" href="{{readyToMarkSubmissionsUrl}}">
-      <i class="fa fa-download"></i> Download
-    </a>
-  </div>
-  <div class="panel-heading">
-    <h4 class="panel-title">Upload Feedback</h4>
-    Provide changes in downloaded <code>marks.csv</code> and optionally annotate PDFs with feedback. Upload just <code>marks.csv</code> or re-zip and upload with annotated PDFs.
-  </div>
-  <div class="panel-body text-center">
-    <div ng-hide="taskUploadResults && taskUploadResults.length > 0">
+  <div class="modal-body text-center">
+    <div class="btn-group">
+      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'download'">
+        <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-download fa-2x"></i></p>
+        <div>Download Unmarked Tasks</div>
+      </button>
+      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'uploadZip'">
+        <p><i class="fa fa-file-zip-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
+        <div>Upload Marked Tasks</div>
+      </button>
+      <button class="btn btn-default btn-large" ng-model="selectedGroup" btn-radio="'uploadCSV'">
+        <p><i class="fa fa-file-excel-o fa-2x"></i> <i class="fa fa-upload fa-2x"></i></p>
+        <div>Upload <code>marks.csv</code></div>
+      </button>
+    </div>
+    <hr/>
+    <div ng-show="selectedGroup === 'download'">
+      <p class="help-block">
+        Download a zip file containing the tasks that require feedback,
+        along with a CSV you can use to submit your comments and task
+        status changes.
+      </p>
+      <a target="_blank" class="btn btn-primary btn-lg" href="{{readyToMarkSubmissionsUrl}}">
+        <i class="fa fa-file-zip-o"></i> <i class="fa fa-download"></i> Download
+      </a>
+    </div><!--/download-->
+    <div ng-hide="taskUploadResults && taskUploadResults.length > 0" ng-if="selectedGroup === 'uploadCSV' || selectedGroup === 'uploadZip'">
+      <div class="help-block" ng-show="selectedGroup === 'uploadZip'">
+        <p>
+          Make changes to student's statuses in the downloaded <code>marks.csv</code>
+          file. Re-zip your changes and optional annotated PDFs with your feedback and
+          upload below.
+        </p>
+        <p>
+          Use this option when you have made annotations to student's work for feedback
+          and to change student's task states.
+        </p>
+      </div>
+      <div ng-show="selectedGroup === 'uploadCSV'" class="help-block">
+        <p>
+          Make changes to student's statuses in the downloaded <code>marks.csv</code>
+          file. Upload your modified <code>marks.csv</code> below.
+        </p>
+        <p>
+          Use this option when you have not made annotations to student's work
+          and just want to change student's task states.
+        </p>
+      </div>
       <file-uploader
+        ng-if="selectedGroup === 'uploapZip'"
         ng-hide="isReady.csv"
         url="uploadSubmissionUrl"
         files="zipMarkingFiles"
@@ -22,13 +59,14 @@
         is-ready="isReady.zip"
         on-success="onMarkingUploadSuccess"></file-uploader>
       <file-uploader
+        ng-if="selectedGroup === 'uploadCSV'"
         ng-hide="isReady.zip"
         url="uploadSubmissionUrl"
         files="csvMarkingFiles"
         is-uploading="isUploading"
         is-ready="isReady.csv"
         on-success="onMarkingUploadSuccess"></file-uploader>
-    </div>
+    </div><!--/upload-files-->
     <div ng-show="taskUploadResults && taskUploadResults.length > 0">
       <p class="help-block">
       Upload results listed below. Click <a ng-click="dismissResults()" href="">here</a> to dismiss.
@@ -55,76 +93,11 @@
           <td>File ignored</td>
         </tr>
       </table>
-    </div>
+    </div><!--/upload-results-->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" ng-click="closeModal()">
+      <i class="fa fa-check"></i>
+    </button>
   </div>
 </div>
-<!--
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Ready To Mark</label>
-      <input ng-click="requestMarkingExport()" type="submit" class="btn btn-primary form-control col-sm-2" value="Download Files" />
-    </div>
-  </form>
-  <form class="form-horizontal" ng-submit="submitMarkingUpload()">
-    <div class="form-group">
-      <label class="col-sm-3 control-label" ng-click="dropper = !dropper">Marked Work</label>
-
-      <div ng-show="markingFileUploader.queue.length == 0" class="col-sm-offset-3">
-        <input ng-show="markingFileUploader.queue.length == 0 && ( !markingFileUploader.isHTML5 || !dropper )" type="file" class="col-sm-10" accept="application/zip" uploader="markingFileUploader" ng-required="!markingFileUploader.isHTML5" nv-file-select />
-        <div nv-file-drop ng-show="markingFileUploader.isHTML5 && dropper && markingFileUploader.queue.length == 0" class="drop well col-sm-10" nv-file-over uploader="markingFileUploader">
-          <i class="fa fa-file-archive-o fa-3x"></i><span style="display: inline-block; width: 30px"></span><i class="fa fa-file-excel-o fa-3x"></i>
-          <br/><br/>
-          Drop zip or CSV here
-        </div>
-        <button class="col-sm-1 btn btn-default btn-xs" style="margin-left: 10px; height: 30px;" ng-class="{'active' : dropper }" ng-click="dropper = !dropper">Drop</button>
-      </div>
-
-      <p ng-show="markingFileUploader.queue.length == 1" class="form-control-static">{{markingFileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-
-      <div class="help-block col-sm-7 col-sm-offset-3" ng-show="isMac()">
-        <p><strong>Warning:</strong> due to quarantining in OS X's native zip compressor, you should use a third party zip compressor. Alternatively, compress using the command line: <pre>cd /folder/containing/marks.csv/; zip -r upload.zip .</pre></p>
-      </div>
-
-    </div>
-    <div class="form-group">
-      <input ng-hide="markingFileUploader.isUploading || markingFileUploader.queue.length == 0" type="submit" class="btn btn-primary form-control col-sm-2 col-sm-offset-3" value="Import" />
-      <div class="col-sm-offset-3 col-sm-6" ng-show="markingFileUploader.isUploading">
-        <progressbar class="progress-striped active" value="markingFileUploader.progress"></progressbar>
-        <p class="help-block text-center" ng-show="markingFileUploader.progress == 100">
-          Please wait for the server to update student's statuses...
-        </p>
-      </div>
-    </div>
-  </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div> -->
