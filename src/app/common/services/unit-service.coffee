@@ -122,7 +122,8 @@ angular.module("doubtfire.services.units", [])
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[5]))},
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[6]))},
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[7]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[8]))}
+        # Skip demonstrate as it is not in the returned data...
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[9]))}
       ]
       student.progress_stats = [
         # Progress stats
