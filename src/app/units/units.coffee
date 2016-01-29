@@ -154,6 +154,15 @@ angular.module("doubtfire.units", [
 )
 
 .controller('EditUnitCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, headerService, alertService, analyticsService) ->
+  unitService.getUnit $state.params.unitId, true, true, (unit) ->
+    $scope.unit = unit
+    $scope.newUnit = $scope.unit.id == -1
+    $scope.currentStaff = $scope.unit.staff
+    UnitRole.query (roles) ->
+      $scope.unitRoles = _.filter(roles, (role) -> role.unit_id == unit.id)
+      if $scope.unitRoles
+        $scope.assessingUnitRole = $scope.unitRoles[0]
+  
   #
   # Active tab group
   #
@@ -200,7 +209,10 @@ angular.module("doubtfire.units", [
     $scope.activeTab = tab
     $scope.activeTab.active = true
     # Actions to take when selecting this tab
-    analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
+    if $scope.assessingUnitRole?
+      analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
+    else # guess as haven't loaded role yet -- or admin role
+      analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as Administrator", "#{tab.title} Tab"
 
   $scope.activeTab = $scope.tabs.unitTab
 
@@ -216,15 +228,6 @@ angular.module("doubtfire.units", [
       $scope.staff = staff
     )
   )
-
-  unitService.getUnit $state.params.unitId, true, true, (unit) ->
-    $scope.unit = unit
-    $scope.newUnit = $scope.unit.id == -1
-    $scope.currentStaff = $scope.unit.staff
-    UnitRole.query (roles) ->
-      $scope.unitRoles = _.filter(roles, (role) -> role.unit_id == unit.id)
-      if $scope.unitRoles
-        $scope.assessingUnitRole = $scope.unitRoles[0]
 )
 
 .controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit) ->
