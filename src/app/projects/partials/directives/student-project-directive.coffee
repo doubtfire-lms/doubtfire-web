@@ -68,7 +68,7 @@ angular.module("doubtfire.projects.student-project-directive", [
         when $scope.tabs.progressTab, $scope.tabs.learningOutcomeTab
           refreshCharts()
         when $scope.tabs.tasksTab
-          showTaskView()
+          $scope.showTaskView(null)
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
       analyticsService.event 'Student Feedback View', "Switched Tab as #{asUser}", "#{tab.title} Tab"
 

@@ -7,11 +7,18 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
     $scope.poaView = {
       activeTab: 'list'
     }
-
     $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
     $scope.currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 
     $scope.refreshCharts = Visualisation.refreshAll
+
+    refreshAlignmentData = () ->
+      $scope.currentProgress.length = 0
+      $scope.currentProgress = _.extend $scope.currentProgress, outcomeService.calculateProgress($scope.unit, $scope.project)
+
+    $scope.$watch 'project', () ->
+      refreshAlignmentData()
+      $rootScope.$broadcast('ProgressUpdated')
 
     $scope.selectTab = (tab) ->
       if tab is 'progress'
@@ -31,9 +38,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
     $scope.selectTab('progress')
 
     $scope.$on('UpdateAlignmentChart', () ->
-      $scope.currentProgress.length = 0
-      $scope.currentProgress = _.extend $scope.currentProgress, outcomeService.calculateProgress($scope.unit, $scope.project)
-
+      refreshAlignmentData()
       $rootScope.$broadcast('ProgressUpdated')
     )
 
