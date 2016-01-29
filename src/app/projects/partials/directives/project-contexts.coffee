@@ -16,6 +16,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
+        projectService.updateTaskStats $scope.project, project.stats
         $rootScope.$broadcast "TargetGradeUpdated"
 
     $scope.taskCount = () ->
