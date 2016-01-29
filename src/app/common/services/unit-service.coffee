@@ -114,15 +114,16 @@ angular.module("doubtfire.services.units", [])
         else
           ''
       student.task_stats = [
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[1]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[2]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[3]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[4]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[5]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[6]))},
-        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[7]))},
-        # Skip demonstrate as it is not in the returned data...
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[10]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[0]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[1]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[2]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[3]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[4]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[5]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[6]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[7]))}
+        { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[8]))}
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[9]))}
       ]
       student.progress_stats = [
