@@ -12,6 +12,7 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
 
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
+    $scope.startPicker = { open: false }
 
     #
     # Active task tab group
@@ -100,6 +101,7 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
         # Close both
         $scope.targetPicker.open = false
         $scope.duePicker.open = false
+        $scope.startPicker.open = false
 
       # Toggle one
       pickerData.open = ! pickerData.open
@@ -122,16 +124,8 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
 
     populate_task = (oldTask, newTask) ->
       _.extend(oldTask, newTask)
-      # oldTask.abbreviation = newTask.abbreviation
-      # oldTask.description = newTask.description
       if newTask.weighting
         oldTask.weight = newTask.weighting
-      # else
-      #   oldTask.weight = newTask.weight
-      # oldTask.name = newTask.name
-      # oldTask.upload_requirements = newTask.upload_requirements
-      # oldTask.plagiarism_checks = newTask.plagiarism_checks
-      # oldTask.target_date = newTask.target_date
 
     $scope.deleteTask = () ->
       taskService.deleteTask $scope.task, $scope.unit, null
@@ -153,6 +147,10 @@ angular.module('doubtfire.tasks.partials.task-admin', [])
       if task.target_date && task.target_date.getMonth
         tgt = task.target_date
         task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+
+      if task.start_date && task.start_date.getMonth
+        tgt = task.start_date
+        task.start_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
 
       if task.due_date && task.due_date.getMonth
         due = task.due_date

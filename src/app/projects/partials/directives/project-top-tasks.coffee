@@ -28,9 +28,9 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
     calculateTopTasks = (input) ->
       result = []
       #
-      # sort tasks by target date
+      # sort tasks by start date
       #
-      sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.contains taskService.validTopTask, task.status), 'definition.seq'), 'definition.target_date')
+      sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.contains taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
       
       overdueTasks = _.filter sortedTasks, (task) ->
         taskService.daysOverdue(task) > 0
@@ -82,6 +82,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       $scope.topTasks = calculateTopTasks($scope.project.activeTasks())
 
     $scope.$watch "project.target_grade", refreshTopTasks
+    $scope.$watch "project.tasks", refreshTopTasks
 
     refreshTopTasks()
 )
