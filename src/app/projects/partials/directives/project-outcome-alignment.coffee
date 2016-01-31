@@ -20,6 +20,10 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
       refreshAlignmentData()
       $rootScope.$broadcast('ProgressUpdated')
 
+    $scope.$watch 'project.tasks', () ->
+      refreshAlignmentData()
+      $rootScope.$broadcast('ProgressUpdated')
+
     $scope.selectTab = (tab) ->
       if tab is 'progress'
         if !$scope.classStats?
