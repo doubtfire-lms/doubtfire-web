@@ -3,7 +3,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
 .directive("projectOutcomeAlignment", ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/project-outcome-alignment.tpl.html'
-  controller: ($scope, $rootScope, $timeout, outcomeService, Unit, alertService, Visualisation) ->
+  controller: ($scope, $rootScope, $timeout, outcomeService, Unit, alertService, analyticsService, Visualisation) ->
     $scope.poaView = {
       activeTab: 'list'
     }
@@ -36,6 +36,8 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
                 alertService.add("danger", "Failed to get unit progress class statistics", 6000)
               $scope.classStats = {}
       $scope.poaView.activeTab = tab
+      eventName = if tab is 'progress' then "View Learning Progress Tab" else "Reflect on Learning Tab"
+      analyticsService.event "Stuent Feedback View - Learning Outcomes Tab", "Switched Tab", eventName
       $scope.refreshCharts()
 
     # Default tab
