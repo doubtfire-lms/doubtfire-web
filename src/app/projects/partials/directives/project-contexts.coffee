@@ -3,7 +3,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 .directive('progressInfo', ->
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
     $scope.studentProjectId = $stateParams.projectId
     $scope.grades = gradeService.grades
     $scope.gradeAcronyms = gradeService.gradeAcronyms
@@ -17,6 +17,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
         projectService.updateTaskStats $scope.project, project.stats
+        analyticsService.event "Student Feedback View - Progress Tab", "Grade Changed", idx
         $rootScope.$broadcast "TargetGradeUpdated"
 
     $scope.taskCount = () ->
