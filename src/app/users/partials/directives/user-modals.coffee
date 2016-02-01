@@ -1,6 +1,6 @@
 angular.module('doubtfire.users.partials.modals', [])
 
-.controller('UserModalCtrl', ($scope, $modalInstance, alertService, currentUser, User, user, users, isNew, auth) ->
+.controller('UserModalCtrl', ($scope, $modalInstance, alertService, analyticsService, currentUser, User, user, users, isNew, auth) ->
   $scope.user = user
   $scope.users = users
   $scope.currentUser = currentUser
