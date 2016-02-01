@@ -75,7 +75,7 @@ angular.module("doubtfire.home", [])
   templateUrl: 'home/new-user-wizard.tpl.html'
   scope:
     optInOnly: '=?'
-  controller: ($scope, $state, $q, User, Project, projectService, gradeService, currentUser, alertService, auth) ->
+  controller: ($scope, $state, $q, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
     # Get projects for target grades
     projectService.getProjects (projects) ->
       $scope.projects = projects
@@ -184,6 +184,7 @@ angular.module("doubtfire.home", [])
       # user update
       promises.push User.update(null, { id: currentUser.id, user: $scope.user }, ((user) -> currentUser.profile = user), errorFn).$promise
       $q.all(promises).then ->
+        analyticsService.event "Doubtfire Analytics", "User opted in research" if $scope.user.opt_in_to_research
         auth.saveCurrentUser()
         $state.go('home', {}, { reload: true })
 )

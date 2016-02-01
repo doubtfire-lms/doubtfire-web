@@ -28,6 +28,7 @@ angular.module('doubtfire.users.partials.modals', [])
           user.name = user.first_name + " " + user.last_name
           if user == currentUser.profile
             auth.saveCurrentUser()
+            analyticsService.event "Doubtfire Analytics", "User opted in research" if $scope.user.opt_in_to_research
       ),
       (
         (response) ->
