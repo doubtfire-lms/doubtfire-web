@@ -85,6 +85,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
       taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
       analyticsService.event 'Task Submit Form', "Updated Status as #{asUser}", taskService.statusLabels[$scope.task.status]
+      analyticsService.event 'Task Submit Form', "Files Uploaded", undefined, $scope.numberOfFiles
 
     $scope.onComplete = ->
       $scope.uploadType = null
