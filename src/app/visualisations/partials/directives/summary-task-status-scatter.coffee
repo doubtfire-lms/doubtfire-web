@@ -17,7 +17,7 @@ angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
       idx = Math.floor(value)
       taskService.statusAcronym[taskService.statusKeys[idx]]
 
-    [$scope.options, $scope.config] = Visualisation 'scatterChart', {
+    [$scope.options, $scope.config] = Visualisation 'scatterChart', 'Task Status Summary Scatter Chart', {
       xAxis:
         axisLabel: 'Statuses'
         tickFormat: xAxisTickFormatFunction

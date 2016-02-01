@@ -75,7 +75,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     lateEndDate = () ->
       return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
 
-    [$scope.options, $scope.config] = Visualisation 'lineChart', {
+    [$scope.options, $scope.config] = Visualisation 'lineChart', 'Student Progress Burndown Chart', {
       useInteractiveGuideline: yes
       height: 440
       margin:

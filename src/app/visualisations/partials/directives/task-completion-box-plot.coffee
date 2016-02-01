@@ -48,7 +48,7 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
     $scope.$watch 'rawData', refreshData
     refreshData($scope.rawData)
 
-    [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
+    [$scope.options, $scope.config] = Visualisation 'boxPlotChart', 'Task Completion Summary Box Plot', {
       x: (d) -> d.label
       height: $scope.height
       showXAxis: $scope.showLegend

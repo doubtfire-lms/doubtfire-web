@@ -44,7 +44,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
         if $scope.api?.refresh?
           $scope.api.refresh()
 
-    [$scope.options, $scope.config] = Visualisation 'boxPlotChart', {
+    [$scope.options, $scope.config] = Visualisation 'boxPlotChart', 'ILO Achievement Box Plot', {
       x: (d) -> d.label
       height: $scope.height
       showXAxis: $scope.showLegend
@@ -59,7 +59,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
         enabled: $scope.showLegend
       maxBoxWidth: 75
       yDomain: [0, 1]
-    }, {}
+    }, {}, Achievement Box Plot
 
     # $scope.$watch 'rawData', refreshData($scope.rawData)
     $scope.$watch 'pctHolder.pct', (newData, oldData) -> if newData != oldData then refreshData($scope.rawData)

@@ -26,7 +26,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
 
     updateData()
 
-    [$scope.options, $scope.config] = Visualisation 'pieChart', {
+    [$scope.options, $scope.config] = Visualisation 'pieChart', 'Student Task Status Pie Chart', {
       color: (d, i) ->
         colors[d.status_key]
       x: (d) -> d.key

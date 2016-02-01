@@ -12,7 +12,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
     xFn = (d) -> d.label
     yFn = (d) -> d.value
 
-    [$scope.options, $scope.config] = Visualisation 'multiBarChart', {
+    [$scope.options, $scope.config] = Visualisation 'multiBarChart', 'ILO Alignment Bar Chart', {
       clipEdge: yes
       stacked: no
       height: 200

@@ -12,7 +12,7 @@ angular.module('doubtfire.visualisations', [
 ])
 
 .factory('Visualisation', ($interval, analyticsService) ->
-  Visualisation = (type, opts, conf, titleOpts, subtitleOpts) ->
+  Visualisation = (type, visualisationName, opts, conf, titleOpts, subtitleOpts) ->
     DEFAULT_OPTS =
       objectequality: yes
       interactive: yes
@@ -55,7 +55,7 @@ angular.module('doubtfire.visualisations', [
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
 
     # Google tracking
-    analyticsService.event 'Visualisations', 'Created', type
+    analyticsService.event 'Visualisations', 'Created', visualisationName
 
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 

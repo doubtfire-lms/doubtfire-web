@@ -549,7 +549,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
         chart
 
-    [$scope.options, $scope.config] = Visualisation 'iloChart', {
+    [$scope.options, $scope.config] = Visualisation 'iloChart', 'ILO Alignment Bullet Chart', {
       height: 60
       duration: 500
     }, {}

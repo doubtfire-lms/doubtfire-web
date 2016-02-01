@@ -411,7 +411,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
               return
 
             chart.container = this
-            
+
             # Display No Data message if there's nothing to show.
             if (!data) or (!data.length) or data.filter(((d) -> d.values.length)).length <= 0
               nv.utils.noData chart, container
@@ -667,7 +667,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
         targets: iloTargets
       }
 
-    [$scope.options, $scope.config] = Visualisation 'achievementBarChart', {
+    [$scope.options, $scope.config] = Visualisation 'achievementBarChart', 'ILO Achievement Bar Chart', {
       height: 600
       duration: 500
       yDomain: [0, max]
