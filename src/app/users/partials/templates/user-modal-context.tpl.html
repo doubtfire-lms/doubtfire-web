@@ -44,19 +44,21 @@
         </label>
         <p ng-show="user.id == currentUser.id" class="help-block text-center">You cannot modify your own permissions</p>
       </div>
-      <hr>
-      <div class="form-group" ng-if="!isNew && user == currentUser">
-        <label class="col-sm-3 control-label">Allow Analytics</label>
-        <div class="col-sm-7">
-          <div class="btn-group">
-            <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="true">
-              <i class="fa fa-check"></i>
-            </label>
-            <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="false">
-              <i class="fa fa-close"></i>
-            </label>
+      <div ng-if="!isNew && user.id == currentUser.id">
+        <hr>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Allow Analytics</label>
+          <div class="col-sm-7">
+            <div class="btn-group">
+              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="true">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="false">
+                <i class="fa fa-close"></i>
+              </label>
+            </div>
+            <p class="help-block">Allow us to anonymously gather your usage to improve Doubtfire</p>
           </div>
-          <p class="help-block">Allow us to anonymously gather your usage to improve Doubtfire</p>
         </div>
       </div>
     </div>
