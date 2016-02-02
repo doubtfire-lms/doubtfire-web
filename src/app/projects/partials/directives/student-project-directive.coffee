@@ -18,7 +18,8 @@ angular.module("doubtfire.projects.student-project-directive", [
 
     refreshCharts = Visualisation.refreshAll
 
-    $scope.showTaskView = (task) ->
+    $scope.showTaskView = (task, trigger) ->
+      analyticsService.event 'Student Project View', "Switch to Task", trigger
       if not (task or $scope.project.selectedTask)
         task = _.find _.sortBy($scope.project.tasks, 'seq'), (t) -> $scope.taskDefinition(t).target_grade <= $scope.project.target_grade
       else if not task and $scope.project.selectedTask
@@ -68,9 +69,9 @@ angular.module("doubtfire.projects.student-project-directive", [
         when $scope.tabs.progressTab, $scope.tabs.learningOutcomeTab
           refreshCharts()
         when $scope.tabs.tasksTab
-          $scope.showTaskView(null)
+          $scope.showTaskView(null, "Tab Selected")
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
-      analyticsService.event 'Student Feedback View', "Switched Tab as #{asUser}", "#{tab.title} Tab"
+      analyticsService.event 'Student Project View', "Switched Tab as #{asUser}", "#{tab.title} Tab"
 
     # Kill tabs that aren't applicable
     cleanupTabs = ->

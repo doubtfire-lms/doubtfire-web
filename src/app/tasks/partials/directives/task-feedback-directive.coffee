@@ -53,7 +53,7 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
       $scope.activeTab = tab
       $scope.activeTab.active = true
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
-      analyticsService.event 'Student Feedback View - Tasks Tab', "Switched Tab as #{asUser}", "#{tab.title} Tab"
+      analyticsService.event 'Student Project View - Tasks Tab', "Switched Tab as #{asUser}", "#{tab.title} Tab"
 
     #
     # Checks if tab is the active tab
@@ -87,6 +87,7 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     # Loading the active task
     #
     $scope.setSelectedTask = (task) ->
+      analyticsService.event 'Student Project View', "Switch to Task", 'Task Feedback Page Dropdown'
       return if task == $scope.project.selectedTask
       $scope.project.selectedTask = task
 
@@ -136,5 +137,5 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
       else
         taskService.updateTaskStatus($scope.unit, $scope.project, $scope.project.selectedTask, status)
         asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
-        analyticsService.event 'Student Feedback View - Tasks Tab', "Updated Status as #{asUser}", taskService.statusLabels[status]
+        analyticsService.event 'Student Project View - Tasks Tab', "Updated Status as #{asUser}", taskService.statusLabels[status]
 )

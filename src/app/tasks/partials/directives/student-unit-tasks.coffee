@@ -18,7 +18,9 @@ angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.
     onSelect: "=onSelect"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $modal, taskService, groupService) ->
+  controller: ($scope, $modal, taskService, groupService, analyticsService) ->
+    analyticsService.event 'Student Project View', "Show Unit Tasks Button List"
+
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText

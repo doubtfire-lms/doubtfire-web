@@ -17,7 +17,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
         projectService.updateTaskStats $scope.project, project.stats
-        analyticsService.event "Student Feedback View - Progress Tab", "Grade Changed", $scope.grades[idx]
+        analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
         $rootScope.$broadcast "TargetGradeUpdated"
 
     $scope.taskCount = () ->
@@ -28,6 +28,10 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
     updateTaskCompletionStats = () ->
       $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
       $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
+
+    $scope.$watch "taskDetailsSelector.viewAll", () ->
+      if ! $scope.taskDetailsSelector.viewAll
+        analyticsService.event 'Student Project View', "Show Top Tasks"
 
     $scope.$on 'TaskStatusUpdated', () ->
       updateTaskCompletionStats()
@@ -56,7 +60,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
           $scope.project.tutorial_id = project.tutorial_id
           $scope.project.tutorial = $scope.unit.tutorialFromId( $scope.project.tutorial_id )
           eventName = if id isnt -1 then "Changed tutorial" else "Withdrew from all tutorials"
-          analyticsService.event "Student Feedback View - Tutorials Tab", eventName
+          analyticsService.event "Student Project View - Tutorials Tab", eventName
           projectService.updateGroups($scope.project) #can be removed from groups by changing labs
         (response) -> alertService.add("danger", response.data.error, 6000)
       )

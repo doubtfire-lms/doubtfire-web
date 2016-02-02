@@ -55,7 +55,7 @@ angular.module('doubtfire.visualisations', [
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
 
     # Google tracking
-    analyticsService.event 'Visualisations', 'Created', visualisationName
+    analyticsService.event 'Visualisations', 'Create Visualisation', visualisationName
 
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 

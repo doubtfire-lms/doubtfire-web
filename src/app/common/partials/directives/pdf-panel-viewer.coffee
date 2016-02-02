@@ -10,7 +10,7 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
 
   controller: ($scope, $sce, analyticsService) ->
     $scope.downloadEvent = (type) ->
-      analyticsService.event 'Task Sheet', 'Downloaded #{type}'
+      analyticsService.event 'Task Sheet', "Downloaded #{type}"
 
     $scope.getGoogleDocsViewerUrl = ->
       $sce.trustAsResourceUrl "https://docs.google.com/gview?url=#{$scope.pdfUrl}&embedded=true"
