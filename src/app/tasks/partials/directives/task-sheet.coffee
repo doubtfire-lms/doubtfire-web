@@ -17,7 +17,7 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
     $scope.showTaskSheet = false
 
     $scope.downloadEvent = (type) ->
-      analyticsService.event 'Task Sheet', "Download Task #{type}"
+      analyticsService.event 'Task Sheet', "Downloaded Task #{type}"
 
     $scope.$watch 'project.selectedTask.task_definition_id', (newTaskDefId) ->
       $scope.alignments = $filter('taskFilter')($scope.unit.task_outcome_alignments, newTaskDefId)
@@ -26,7 +26,7 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
       $scope.task.definition.has_task_pdf
 
     $scope.toggleTaskSheet = () ->
-      analyticsService.event('Task Sheet', "#{ if $scope.showTaskSheet then 'Hide' else 'Show'} Task Sheet PDF Viewer")
+      analyticsService.event('Task Sheet', "#{ if $scope.showTaskSheet then 'Hid' else 'Showed'} Task Sheet PDF Viewer")
       $scope.showTaskSheet = ! $scope.showTaskSheet
 
     $scope.hasResources = () ->

@@ -55,14 +55,12 @@ angular.module('doubtfire.visualisations', [
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
 
     # Google tracking
-    analyticsService.event 'Visualisations', 'Create Visualisation', visualisationName
+    analyticsService.event 'Visualisations', 'Created Visualisation', visualisationName
 
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 
 
   Visualisation.refreshAll = ->
-    # Google tracking
-    analyticsService.event 'Visualisations', 'Refreshed All'
     $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
 
   Visualisation

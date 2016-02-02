@@ -12,14 +12,17 @@ angular.module('doubtfire.tasks.partials.view-alignment-directive', [])
     alignments: '=?'
     summaryOnly: '=?'
     hideVisualisation: '=?'
-  controller: ($scope, Visualisation, outcomeService) ->
+  controller: ($scope, Visualisation, outcomeService, analyticsService) ->
     $scope.hideVisualisation = if $scope.hideVisualisation? then $scope.hideVisualisation else false
     $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
 
     $scope.toggleExpanded = (align) ->
       align.expanded = !align.expanded
       if align.expanded
+        analyticsService.event('Student Project View', "Showed ILO Details")
         Visualisation.refreshAll()
+      else
+        analyticsService.event('Student Project View', "Hid ILO Details")
 
     $scope.alignments = $scope.unit.ilos unless $scope.alignments?
 

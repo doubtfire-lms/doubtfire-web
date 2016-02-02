@@ -50,7 +50,7 @@ angular.module("doubtfire.units", [
 # unit contexts.
 #
 .controller("TutorUnitViewRootCtrl", ($scope, $state, $stateParams, UnitRole, Visualisation, alertService, unitService, analyticsService) ->
-  analyticsService.event 'Teacher View', "Start Tutor Unit View", 'Feedback Tab'
+  analyticsService.event 'Teacher View', "Started Tutor Unit View", 'Feedback Tab'
 
   $scope.unitLoaded = false
   refreshCharts = Visualisation.refreshAll
@@ -140,7 +140,7 @@ angular.module("doubtfire.units", [
     )
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit, analyticsService) ->
-  analyticsService.event "Unit Admin", "List Units to Manage"
+  analyticsService.event "Unit Admin", "Listed Units to Manage"
   $scope.units = Unit.query { include_in_active: true }
 
   $scope.showUnit = (unit) ->
@@ -157,7 +157,7 @@ angular.module("doubtfire.units", [
 )
 
 .controller('EditUnitCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, headerService, alertService, analyticsService) ->
-  analyticsService.event 'Edit Unit View', "Start Edit Unit View", 'Unit Tab'
+  analyticsService.event 'Edit Unit View', "Started Edit Unit View", 'Unit Tab'
 
   unitService.getUnit $state.params.unitId, true, true, (unit) ->
     $scope.unit = unit
@@ -236,12 +236,12 @@ angular.module("doubtfire.units", [
 )
 
 .controller('AddUnitCtrl', ($scope, $modalInstance, alertService, units, Unit, analyticsService) ->
-  analyticsService.event 'Unit Admin', 'Create Unit Start'
+  analyticsService.event 'Unit Admin', 'Started to Create Unit'
 
   $scope.unit = new Unit { id: -1, active: true, code: "COS????", name: "Unit Name" }
   $scope.saveSuccess = (unit) ->
     alertService.add("success", "Unit created.", 2000)
     $modalInstance.close()
     units.push(unit)
-    analyticsService.event 'Unit Admin', 'Create Unit Save'
+    analyticsService.event 'Unit Admin', 'Saved New Unit'
 )

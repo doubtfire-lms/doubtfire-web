@@ -43,7 +43,7 @@ angular.module("doubtfire.projects", [
   )
 )
 .controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService, analyticsService) ->
-  analyticsService.event 'Student Project View', "Start Viewing Project"
+  analyticsService.event 'Student Project View', 'Started Viewing Project'
 
   if $stateParams.authToken?
     # $scope.message = $stateParams.authToken
@@ -85,7 +85,7 @@ angular.module("doubtfire.projects", [
         _.each $scope.project.tasks, (task) =>
           task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
         alertService.add("success", "Status updated.", 2000)
-        analyticsService.event 'Student Project View', "Transition Week End"
+        analyticsService.event 'Student Project View', "Transitioned Week End"
       (response) -> alertService.add("danger", response.data.error, 6000)
     )
 )

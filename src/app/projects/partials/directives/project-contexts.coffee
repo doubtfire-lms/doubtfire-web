@@ -31,7 +31,7 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
 
     $scope.$watch "taskDetailsSelector.viewAll", () ->
       if ! $scope.taskDetailsSelector.viewAll
-        analyticsService.event 'Student Project View', "Show Top Tasks"
+        analyticsService.event 'Student Project View', "Showed Top Tasks"
 
     $scope.$on 'TaskStatusUpdated', () ->
       updateTaskCompletionStats()

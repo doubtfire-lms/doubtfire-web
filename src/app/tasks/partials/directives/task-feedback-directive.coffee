@@ -87,7 +87,7 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
     # Loading the active task
     #
     $scope.setSelectedTask = (task) ->
-      analyticsService.event 'Student Project View', "Switch to Task", 'Task Feedback Page Dropdown'
+      analyticsService.event 'Student Project View', "Switched to Task", 'Task Feedback Page Dropdown'
       return if task == $scope.project.selectedTask
       $scope.project.selectedTask = task
 
