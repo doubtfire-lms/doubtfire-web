@@ -23,7 +23,13 @@ module.exports = {
     api: {
       src: ['build/src/app/api/api.js'],
       options: {
-	inline: true
+	     inline: true
+      }
+    },
+    app: {
+      src: ['build/src/app/app.js'],
+      options: {
+       inline: true
       }
     }
   },
@@ -105,7 +111,7 @@ module.exports = {
       'vendor/angular-markdown-filter/markdown.js',
       'vendor/angular-ui-select/dist/select.js',
       'vendor/angulartics/dist/angulartics.min.js',
-      'vendor/angulartics/dist/angulartics-debug.min.js',
+      // 'vendor/angulartics/dist/angulartics-debug.min.js',
       'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
     ],
     css: [

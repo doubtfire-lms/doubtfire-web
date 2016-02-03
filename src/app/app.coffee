@@ -25,7 +25,7 @@ angular.module("doubtfire", [
 
   # analytics
   "angulartics"
-  "angulartics.debug"
+  # "angulartics.debug"
   "angulartics.google.analytics"
 
   # doubtfire.*
@@ -63,8 +63,9 @@ angular.module("doubtfire", [
 .config((localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
 )
+.constant("devMode", '/* @echo DEV_MODE */') # Set in env.config.js
 # Routing Config
-.config(($urlRouterProvider, $httpProvider, $analyticsProvider) ->
+.config(($urlRouterProvider, $httpProvider, $analyticsProvider, devMode) ->
   # Catch bad URLs.
   $urlRouterProvider.otherwise "/not_found"
   $urlRouterProvider.when "", "/"
@@ -75,6 +76,9 @@ angular.module("doubtfire", [
 
   # Disable virtual page views for analytics
   $analyticsProvider.virtualPageviews(false)
+
+  if devMode == 'true'
+    $analyticsProvider.developerMode(true)
 )
 # Doubtfire run
 .run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
@@ -117,6 +121,7 @@ angular.module("doubtfire", [
 
   _.mixin(_.string.exports())
 )
+
 # Root application controller
 .controller("AppCtrl", ($rootScope, $state, $document, $filter) ->
 
