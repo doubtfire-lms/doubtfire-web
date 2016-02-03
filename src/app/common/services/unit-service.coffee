@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
   # The unit service object
   #
@@ -137,6 +137,19 @@ angular.module("doubtfire.services.units", [])
         { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[2]))},
         { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[3]))},
       ]
+
+      student.portfolioUrl = ->
+        PortfolioSubmission.getPortfolioUrl(student)
+
+      student.assignGrade = (score, rationale) ->
+        Project.update { id: student.project_id, grade: score, grade_rationale: rationale },
+          (project) ->
+            student.grade = project.grade
+            student.grade_rationale = project.grade_rationale
+            alertService.add("success", "Grade updated.", 2000)
+          (response) ->
+            alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
+
       projectService.updateTaskStats(student, student.stats)
       projectService.addTaskDetailsToProject(student, unit)
 

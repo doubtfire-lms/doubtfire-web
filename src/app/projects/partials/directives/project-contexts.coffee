@@ -4,7 +4,11 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/progress-info.tpl.html'
   controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
-    $scope.studentProjectId = $stateParams.projectId
+    if $stateParams.projectId?
+      $scope.studentProjectId = $stateParams.projectId
+    else if $scope.project?
+      $scope.studentProjectId = $scope.project.project_id
+
     $scope.grades = gradeService.grades
     $scope.gradeAcronyms = gradeService.gradeAcronyms
 

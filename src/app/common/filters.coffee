@@ -66,6 +66,22 @@ angular.module("doubtfire.filters", [])
       input
 )
 
+.filter('studentsWithPortfolio', ->
+  (input) ->
+    if input
+      _.filter  input, (student) -> (student?) && student.has_portfolio > 0
+    else
+      input
+)
+
+.filter('studentsWithTargetGrade', ->
+  (input, grade) ->
+    if input
+      _.filter  input, (student) -> (student?) && student.target_grade == grade
+    else
+      input
+)
+
 .filter('taskWithPlagiarism', ->
   (input) ->
     if input

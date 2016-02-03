@@ -6,7 +6,6 @@
         <task-definition-selector button-style="default" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
         <div>Show tasks that require some feedback from {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}</div>
       </div>
-      <div class="col-sm-5 text-right"></div>
         <div class="pull-right">
           <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
             <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>

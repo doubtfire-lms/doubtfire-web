@@ -12,6 +12,12 @@
         </tab-heading>
       </tab>
     </tabset><!--tabs-->
+    <div ng-hide="unitLoaded">
+      <div class="panel-body large-notice-block nothing-selected" ng-hide="task">
+        <i class="fa fa-2x fa-spinner fa-pulse"></i>
+        <p>Loading unit details</p>
+      </div>
+    </div>
     <div ng-if="unitLoaded">
       <tutor-task-feedback-view ng-if="activeTab === tabs.feedbackTab" unit="unit" context="'assess'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
       <tutor-student-list  ng-if="activeTab === tabs.studentsTab" unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>

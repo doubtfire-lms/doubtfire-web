@@ -27,14 +27,14 @@
         <button class="btn btn-danger" ng-click="deletePortfolio()">
           <i class="fa fa-trash-o" tooltip="Delete Portfolio"></i>
         </button>
-        <a href="{{portfolioUrl()}}" class="btn btn-success">
+        <a href="{{project.portfolioUrl()}}" class="btn btn-success">
           <i class="fa fa-download" tooltip="Download Portfolio"></i>
         </a>
       </div>
     </div>
     <pdf-panel-viewer
       ng-show="project.portfolio_available"
-      pdf-url="portfolioUrl()">
+      pdf-url="project.portfolioUrl()">
     </pdf-panel-viewer>
   </div>
 </div>

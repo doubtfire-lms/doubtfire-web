@@ -127,9 +127,6 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     #
     # PDF Local Funcs
     #
-    $scope.portfolioUrl = ->
-      PortfolioSubmission.getPortfolioUrl($scope.project)
-
     $scope.deletePortfolio = () ->
       $scope.fileUploader.api.delete {
         id: $scope.project.project_id
