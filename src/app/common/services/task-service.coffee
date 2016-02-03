@@ -281,7 +281,7 @@ angular.module("doubtfire.services.tasks", [])
     )
 
   taskService.recreatePDF = (task, success) ->
-    TaskFeedback.update { id: task.id },
+    TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project().project_id },
       (value) ->  #success
         if value.result == "false"
           alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
