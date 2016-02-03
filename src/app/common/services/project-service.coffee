@@ -138,7 +138,7 @@ angular.module("doubtfire.services.projects", [])
 
   projectService.tasksByStatus = (project, statusKey) ->
     tasksToConsider = projectService.tasksInTargetGrade(project)
-    _.where(tasksToConsider, {status: statusKey})
+    _.filter(tasksToConsider, {status: statusKey})
 
   projectService
 )

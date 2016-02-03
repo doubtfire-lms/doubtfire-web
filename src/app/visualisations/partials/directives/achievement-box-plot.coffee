@@ -16,7 +16,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
 
     iloValues = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
     iloMaxes = _.mapValues iloValues, (d, k) -> _.reduce d, ((memo, value) -> memo + value), 0
-    rangeMax = _.max iloMaxes
+    rangeMax = _.max _.values(iloMaxes)
 
     refreshData = (newData) ->
       isPct = ($scope.pctHolder? and $scope.pctHolder.pct)
@@ -29,7 +29,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
         max = iloMaxes[id]
         if (! max?) or max == 0 or ! isPct
           max = 1
-        label = _.findWhere($scope.unit.ilos, { id: +id }).abbreviation
+        label = _.find($scope.unit.ilos, { id: +id }).abbreviation
         {
           label: label,
           values: {

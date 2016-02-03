@@ -18,7 +18,7 @@
     "angular-ui-router": "0.2.7",
     "jquery": "2.1.4",
     "momentjs": "2.1.0",
-    "lodash": "3.10.1",
+    "lodash": "4.2.0",
     "underscore.string": "2.3.3",
     "angular-ui-calendar": "0.8.1",
     "angular-xeditable": "0.1.8",

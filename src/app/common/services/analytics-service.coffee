@@ -22,5 +22,15 @@ angular.module("doubtfire.services.analytics", [])
       value: value
     }
 
+  analyticsService.watchEvent = ( scope, toWatch, category, label) ->
+    scope.$watch toWatch, (newVal, oldVal) ->
+      if newVal? && newVal != oldVal
+        if _.isFunction label
+          analyticsService.event category, "Changed #{toWatch}", label(newVal)
+        else if _.isInteger newVal
+          analyticsService.event category, "Changed #{toWatch}", label, newVal
+        else
+          analyticsService.event category, "Changed #{toWatch}", newVal
+
   analyticsService
 ) # end factory

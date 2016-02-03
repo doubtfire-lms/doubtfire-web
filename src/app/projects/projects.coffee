@@ -83,7 +83,7 @@ angular.module("doubtfire.projects", [
         projectService.updateTaskStats($scope.project, project.stats)
         # Update the task stats
         _.each $scope.project.tasks, (task) =>
-          task.status = _.where(project.tasks, { task_definition_id: task.task_definition_id })[0].status
+          task.status = _.filter(project.tasks, { task_definition_id: task.task_definition_id })[0].status
         alertService.add("success", "Status updated.", 2000)
         analyticsService.event 'Student Project View', "Transitioned Week End"
       (response) -> alertService.add("danger", response.data.error, 6000)

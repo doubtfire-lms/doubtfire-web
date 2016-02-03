@@ -23,7 +23,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment-modal',[])
     data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
     LearningAlignments.delete(data,
       (response) ->
-        indexToDelete = $scope.source.task_outcome_alignments.indexOf _.findWhere $scope.source.task_outcome_alignments, { id: $scope.alignment.id }
+        indexToDelete = $scope.source.task_outcome_alignments.indexOf _.find $scope.source.task_outcome_alignments, { id: $scope.alignment.id }
         $scope.source.task_outcome_alignments.splice indexToDelete, 1
         $scope.alignment = undefined
         $rootScope.$broadcast('UpdateAlignmentChart', data, { remove: true })

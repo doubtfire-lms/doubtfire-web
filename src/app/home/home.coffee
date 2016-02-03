@@ -16,7 +16,9 @@ angular.module("doubtfire.home", [])
   )
 )
 
-.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, Unit, headerService, currentUser, unitService, projectService, $rootScope) ->
+.controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService) ->
+  analyticsService.event 'Home', 'Viewed Home page'
+
   hasRoles = false
   hasProjects = false
 
@@ -25,8 +27,10 @@ angular.module("doubtfire.home", [])
       return
     if $scope.unitRoles.length + $scope.projects.length == 1
       if $scope.projects.length == 1
+        analyticsService.event 'Home', 'Switched to project on single unit'
         $state.go 'projects#show', {projectId: $scope.projects[0].project_id}
       else if $scope.unitRoles.length == 1
+        analyticsService.event 'Home', 'Switched to unit on single unit'
         $state.go 'units#show', {unitRole: $scope.unitRoles[0].id}
 
   firstTimeUser     = currentUser.profile.has_run_first_time_setup is false
@@ -57,7 +61,7 @@ angular.module("doubtfire.home", [])
       $scope.units = units
 
   $scope.unit = (unitId) ->
-    _.findWhere($scope.units, {id: unitId})
+    _.find($scope.units, {id: unitId})
 
   headerService.clearMenus()
 
@@ -113,8 +117,8 @@ angular.module("doubtfire.home", [])
       }
     }
     # Alises to first and last step
-    $scope.firstStep = _.findWhere $scope.steps, { seq: 0 }
-    $scope.lastStep  = _.findWhere $scope.steps, { seq: _.keys($scope.steps).length - 1 }
+    $scope.firstStep = _.find $scope.steps, { seq: 0 }
+    $scope.lastStep  = _.find $scope.steps, { seq: _.keys($scope.steps).length - 1 }
     # Skip to opt in if opt in step only
     $scope.currentStep = if $scope.optInOnly then $scope.steps.optInToResearchStep else $scope.firstStep
     # If using opt in, we don't need a blank slate user, except ensure that
@@ -145,13 +149,13 @@ angular.module("doubtfire.home", [])
     $scope.moveStep = (skip) ->
       # if about to enter grade step and no grades? skip twice
       if $scope.projects.length is 0
-        stepBeforeTargetStep = _.findWhere $scope.steps, { seq: $scope.steps.targetGradeStep.seq - 1 }
-        stepAfterTargetStep = _.findWhere $scope.steps, { seq: $scope.steps.targetGradeStep.seq + 1 }
+        stepBeforeTargetStep = _.find $scope.steps, { seq: $scope.steps.targetGradeStep.seq - 1 }
+        stepAfterTargetStep = _.find $scope.steps, { seq: $scope.steps.targetGradeStep.seq + 1 }
         if skip is 1 and $scope.currentStep is stepBeforeTargetStep
           skip += 1
         else if skip is -1 and $scope.currentStep is stepAfterTargetStep
           skip -= 1
-      $scope.currentStep = _.findWhere $scope.steps, { seq: $scope.currentStep.seq + skip }
+      $scope.currentStep = _.find $scope.steps, { seq: $scope.currentStep.seq + skip }
     # Alises for grade step
     $scope.gradeAcronyms = gradeService.gradeAcronyms
     $scope.grades        = gradeService.grades

@@ -33,7 +33,7 @@ angular.module('doubtfire.units.partials.achievement-stats', [])
       $scope.data = _.chain($scope.data).map( (d, id) ->
         delete d.students
         [id, d]
-      ).object().value()
+      ).fromPairs().value()
 
     $scope.drillDown = ->
       $scope.dataModel.selectedType = 'tutorial'

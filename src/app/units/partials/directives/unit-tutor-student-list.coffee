@@ -15,7 +15,7 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
     unitLoaded: "=unitLoaded"
     fullscreen: '=?'
 
-  controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService) ->
+  controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService) ->
     $scope.studentFilter = 'myStudents' # Mine by default
 
     $scope.grades = gradeService.grades
@@ -30,11 +30,17 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
       if filteredStudents? && filteredStudents.length == 0
         $scope.studentFilter = 'allStudents'
 
+    analyticsService.watchEvent $scope, 'studentFilter', 'Teacher View - Students Tab'
+    analyticsService.watchEvent $scope, 'sortOrder', 'Teacher View - Students Tab'
+    analyticsService.watchEvent $scope, 'currentPage', 'Teacher View - Students Tab', 'Selected Page'
+    analyticsService.watchEvent $scope, 'fullscreen', 'Teacher View - Students Tab', (newVal) -> if newVal then 'Show Fullscreen' else 'Hide Fullscreen'
+
     $scope.switchToLab = (student, tutorial) ->
       if tutorial
         newId = tutorial.id
       else
         newId = -1
+      analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
       Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
         (project) ->
           student.tutorial_id = project.tutorial_id
@@ -52,6 +58,7 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
       result
 
     $scope.getCSVData = () ->
+      analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
       filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.studentFilter, $scope.tutorName), $scope.search)
       result = []
       angular.forEach(filteredStudents, (student) ->
@@ -78,7 +85,7 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
     # View a student
     #
     $scope.viewStudent = (student) ->
-      # console.log {projectId: student.project_id, unitRole: $scope.assessingUnitRole.id}
+      analyticsService.event 'Teacher View - Students Tab', 'Viewed Student'
       if $scope.fullscreen
         $scope.activeStudent = student
       else
@@ -107,10 +114,11 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
       projectService.updateTaskStats(project, response.stats)
       if project.tasks
         _.each project.tasks, (task) =>
-          task.status = _.where(response.tasks, { task_definition_id: task.task_definition_id })[0].status
+          task.status = _.filter(response.tasks, { task_definition_id: task.task_definition_id })[0].status
       alertService.add("success", "Status updated.", 2000)
 
     $scope.transitionWeekEnd = (project) ->
+      analyticsService.event 'Teacher View - Students Tab', 'Trigger Week End'
       Project.update({ id: project.project_id, trigger: "trigger_week_end" }
         (response) ->
           update_project_details(project, response)
@@ -122,6 +130,7 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
     $scope.assessingUnitRole = $scope.unitRole
 
     $scope.showEnrolModal = () ->
+      analyticsService.event 'Teacher View - Students Tab', 'Enrol Student'
       $modal.open
         templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
         controller: 'EnrolStudentModalCtrl'

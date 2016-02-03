@@ -6,6 +6,6 @@ angular.module('doubtfire.common.status-icon', [])
   scope:
     status: '='
   controller: ($scope, taskService) ->
-    $scope.statusIcon  = taskService.statusIcons[$scope.status]
-    $scope.statusLabel = taskService.statusLabels[$scope.status]
-    $scope.statusClass = taskService.statusClass $scope.status
+    $scope.statusIcon  = (status) -> taskService.statusIcons[status]
+    $scope.statusLabel = (status) -> taskService.statusLabels[status]
+    $scope.statusClass = (status) -> taskService.statusClass status

@@ -109,7 +109,7 @@ angular.module("doubtfire.projects.student-project-directive", [
       )
 
     selectProjectTask = (project) ->
-      filteredTasks = _.select project.tasks, (t) -> $scope.taskDefinition(t).target_grade <= project.target_grade
+      filteredTasks = _.filter project.tasks, (t) -> $scope.taskDefinition(t).target_grade <= project.target_grade
       filteredTasks = _.sortBy filteredTasks, (t) -> t.definition.seq
 
       $scope.projectLoaded = true

@@ -30,7 +30,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       #
       # sort tasks by start date
       #
-      sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.contains taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
+      sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.includes taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
       
       overdueTasks = _.filter sortedTasks, (task) ->
         taskService.daysOverdue(task) > 0
@@ -43,7 +43,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       else
         tutorialDay = "Monday"
 
-      tasksToDiscuss = _.filter overdueTasks, (task) -> _.contains taskService.statusToDiscuss, task.status
+      tasksToDiscuss = _.filter overdueTasks, (task) -> _.includes taskService.statusToDiscuss, task.status
       
       if tasksToDiscuss? && tasksToDiscuss.length > 0
         # Only add if the tasks are to be discussed today...
@@ -51,7 +51,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
           toAdd = _.map tasksToDiscuss, (task) -> { task: task, reason: "Discuss this task with your tutor in class today."}
           Array.prototype.push.apply result, toAdd
         return _.slice(result, 0, 5) if _.size(result) >= 5
-        overdueTasks = _.filter overdueTasks, (task) -> not _.contains tasksToDiscuss, task
+        overdueTasks = _.filter overdueTasks, (task) -> not _.includes tasksToDiscuss, task
 
       #
       # Step 2: select tasks not complete that are overdue
@@ -70,7 +70,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.map (_.filter sortedTasks, (task) -> _.contains(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) < 0), (task) ->
+      toAdd = _.map (_.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) < 0), (task) ->
         { task: task, reason: "This is one of the next tasks for you to complete." }
       Array.prototype.push.apply result, toAdd
 

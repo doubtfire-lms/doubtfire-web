@@ -36,7 +36,7 @@
         </div>
         <div class="panel-body">
           <form name="addStudentForm" ng-submit="addSelectedStudent(selectedStudent)" class="input-group" ng-show="selectedGroup">
-            <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.students | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
+            <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.active_students() | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
             <span class="input-group-btn">
               <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
                 <i class="fa fa-plus"></i>

@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService) ->
   #
   # The unit service object
   #
@@ -62,10 +62,10 @@ angular.module("doubtfire.services.units", [])
     unit.taskDef = (taskDef) ->
       if typeof taskDef isnt 'number'
         taskDef = taskDef.task_definition_id
-      result = _.findWhere unit.task_definitions, {id: taskDef}
+      result = _.find unit.task_definitions, {id: taskDef}
 
     unit.outcome = (outcomeId) ->
-      result = _.findWhere unit.ilos, {id: outcomeId}
+      result = _.find unit.ilos, {id: outcomeId}
 
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->
@@ -88,8 +88,12 @@ angular.module("doubtfire.services.units", [])
       _.find unit.students, (s) -> s.project_id == id
 
     unit.addStudent = (student) ->
+      analyticsService.event 'Unit Service', 'Added Student'
       unit.extendStudent(student)
       unit.students.push(student)
+
+    unit.active_students = () ->
+      _.filter unit.students, (student) -> student.enrolled
 
     unit.extendStudent = (student) ->
       # test is already extended...
@@ -162,7 +166,7 @@ angular.module("doubtfire.services.units", [])
     # Add any missing tasks and return the new collection
     #
     unit.fillWithUnStartedTasks = (tasks, task_def) ->
-      projs = _.select(unit.students, (s) -> s.target_grade >= task_def.target_grade)
+      projs = _.filter(unit.students, (s) -> s.target_grade >= task_def.target_grade)
 
       _.map projs, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == task_def.id

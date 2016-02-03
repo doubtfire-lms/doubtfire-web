@@ -265,16 +265,16 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
              .map( (value, status) ->
                # Calculate the sum of the 'num' field in each status
                sumOfStatuses = _.chain(value)
-                                .pluck('num')
+                                .map( (value) -> value.num )
                                 .reduce(((memo, num) -> memo + num), 0)
                                 .value()
                [status, sumOfStatuses]
             )
-            .object()
+            .fromPairs()
             .value()
           [taskDefId, statusesForThisTaskDefId]
         )
-        .object()
+        .fromPairs()
         .value()
 
     #

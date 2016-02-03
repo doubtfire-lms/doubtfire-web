@@ -48,7 +48,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
     $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     $scope.projectHasLearningSummaryReport = () ->
-      _.where($scope.project.portfolio_files, { idx: 0 }).length > 0
+      _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
 
     $scope.fileUploader = PortfolioSubmission.fileUploader($scope, $scope.project)
     $scope.clearUploads = () ->
@@ -88,7 +88,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   controller: ($scope) ->
     $scope.noTasksSelected = ->
       selectedTasks = _.filter $scope.project.tasks, (d) ->
-        d.include_in_portfolio and _.findWhere($scope.project.task_outcome_alignments, { task_id: d.id })?
+        d.include_in_portfolio and _.find($scope.project.task_outcome_alignments, { task_id: d.id })?
       selectedTasks.length is 0
 )
 

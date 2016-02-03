@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope, analyticsService) ->
   #
   # The unit service object
   #
@@ -222,6 +222,7 @@ angular.module("doubtfire.services.tasks", [])
         unit.task_definitions = _.without unit.task_definitions, task
         alertService.add("success", "Task Deleted", 2000)
         callback?(response)
+        analyticsService.event 'Task Service', 'Deleted Task Definition'
     ),
     (
       (response) ->
@@ -229,6 +230,7 @@ angular.module("doubtfire.services.tasks", [])
           alertService.add("danger", "Error: " + response.data.error, 6000)
         else
           alertService.add("danger", "Unexpected error connecting to Doubtfire.", 6000)
+        analyticsService.event 'Task Service', 'Failed to Delete Task Definition'
     )
 
   taskService.indexOf = (status) ->
@@ -270,10 +272,12 @@ angular.module("doubtfire.services.tasks", [])
       # Success
       (value) ->
         taskService.processTaskStatusChange unit, project, task, status, value
+        analyticsService.event 'Task Service', 'Updated Task Status', status
       # Fail
       (value) ->
         task.status = oldStatus
         alertService.add("danger", value.data.error, 6000)
+        analyticsService.event 'Task Service', 'Failed to Update Task Status', status
     )
 
   taskService.recreatePDF = (task, success) ->
@@ -281,14 +285,17 @@ angular.module("doubtfire.services.tasks", [])
       (value) ->  #success
         if value.result == "false"
           alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+          analyticsService.event 'Task Service', 'Failed to Recreate PDF'
         else
           task.processing_pdf = true
           alertService.add("info", "Task PDF will be recreated.", 2000)
+          analyticsService.event 'Task Service', 'Recreated PDF'
 
           if success
             success()
       (value) -> #fail
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+        analyticsService.event 'Task Service', 'Failed to Recreate PDF'
 
   taskService
 )

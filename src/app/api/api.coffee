@@ -240,7 +240,7 @@ angular.module("doubtfire.api", [
 
     fileUploader.onSuccessItem = (item, response)  ->
       alertService.add("success", "File uploaded successfully!", 2000)
-      if not _.findWhere(fileUploader.project.portfolio_files, response)
+      if not _.find(fileUploader.project.portfolio_files, response)
         fileUploader.project.portfolio_files.push(response)
       fileUploader.clearQueue()
 

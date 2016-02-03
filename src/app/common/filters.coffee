@@ -16,7 +16,7 @@ angular.module("doubtfire.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "myStudents"
-        _.where  input, { tutorial: {tutor_name: tutorName} }
+        _.filter  input, { tutorial: {tutor_name: tutorName} }
       else
         input
     else
@@ -27,7 +27,7 @@ angular.module("doubtfire.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "myStudents"
-        _.select  input, (t) -> (t?) && t.project().tutorName() == tutorName
+        _.filter  input, (t) -> (t?) && t.project().tutorName() == tutorName
       else
         input
     else

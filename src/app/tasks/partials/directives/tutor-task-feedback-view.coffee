@@ -9,15 +9,17 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
     context: "=context"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $filter, $modal, currentUser, Unit, alertService, gradeService, taskService) ->
+  controller: ($scope, $filter, $modal, currentUser, Unit, alertService, gradeService, taskService, analyticsService) ->
     if $scope.context == 'assess'
       $scope.title = "Tasks Requring Feedback"
       $scope.statusFilter = 'ready_to_mark'
       $scope.taskPageSize = 5
+      category = 'Teacher View - Feedback Tab'
     else
       $scope.title = "Selected Task"
       $scope.statusFilter = null
       $scope.taskPageSize = 10
+      category = 'Teacher View - Tasks Tab'
 
     $scope.search = ""
 
@@ -27,10 +29,28 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
       showClassify: true
     }
 
+    $scope.$watch "viewOptions.showPdf", (newVal, oldVal) ->
+      if newVal != oldVal
+        analyticsService.event category, "#{if $scope.viewOptions.showPdf then 'Showed' else 'Hid'} submission PDF"
+
+    $scope.$watch "viewOptions.showComments", (newVal, oldVal) ->
+      if newVal != oldVal
+        analyticsService.event category, "#{if $scope.viewOptions.showComments then 'Showed' else 'Hid'} Comments"
+
+    $scope.$watch "viewOptions.showClassify", (newVal, oldVal) ->
+      if newVal != oldVal
+        analyticsService.event category, "#{if $scope.viewOptions.showClassify then 'Showed' else 'Hid'} Classify Buttons"
+
+    analyticsService.watchEvent $scope, 'sortOrder', category
+    analyticsService.watchEvent $scope, 'statusFilter', category
+    analyticsService.watchEvent $scope, 'fullscreen', category, (newVal) -> if newVal then 'Show Fullscreen' else 'Hide Fullscreen'
+    analyticsService.watchEvent $scope, 'studentFilter', category
+    analyticsService.watchEvent $scope, 'taskCurrentPage', category, 'Selected Page'
+
     searchObj = (obj, value, searched) ->
       _.some(_.keys(obj), (key) ->
         if _.isObject(obj[key])
-          if _.contains(searched, obj[key])
+          if _.includes(searched, obj[key])
             return false
           searched.push obj[key]
 
@@ -73,6 +93,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
     $scope.statusIcon = (status) -> taskService.statusIcons[status]
 
     $scope.viewTask = (task) ->
+      analyticsService.event category, "Selected Task"
       $scope.activeTask = task
 
     $scope.onStatusUpdate = (status) ->
@@ -102,6 +123,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
       $scope.activeTask = null
       $scope.selectedDefinition = taskDef
       $scope.refreshTasksForSingleDef()
+      analyticsService.event category, 'Selected Task Definition'
 
     $scope.refreshTasksForFeedback = () ->
       $scope.refreshed = false
@@ -128,6 +150,7 @@ angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
       $scope.refreshTasks()
 
     $scope.showMarkOfflineModal = ->
+      analyticsService.event category, "Showed Offline Modal"
       $modal.open
         controller: 'SubmissionMarkingModal'
         templateUrl: 'units/partials/templates/submission-marking-context.tpl.html'
