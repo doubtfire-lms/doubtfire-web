@@ -22,7 +22,7 @@ angular.module('doubtfire.units.partials.unit-marking-portfolios-directive', [])
     # Pagination details
     $scope.currentPage = 1
     $scope.maxSize = 5
-    $scope.pageSize = 15
+    $scope.pageSize = 5
 
     $scope.filterOptions = {selectedGrade: 0}
     $scope.grades = gradeService.grades

@@ -78,6 +78,9 @@
           </tbody>
         </table>
       </div>
+      <div class="panel-footer clearfix">
+        <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
     </div>
     <div class="panel panel-default" ng-hide="selectedStudent">
       <div class="panel-heading clearfix">
