@@ -142,7 +142,7 @@ angular.module("doubtfire.services.units", [])
         PortfolioSubmission.getPortfolioUrl(student)
 
       student.assignGrade = (score, rationale) ->
-        Project.update { id: student.project_id, grade: score, grade_rationale: rationale },
+        Project.update { id: student.project_id, grade: score, old_grade:student.grade, grade_rationale: rationale },
           (project) ->
             student.grade = project.grade
             student.grade_rationale = project.grade_rationale
