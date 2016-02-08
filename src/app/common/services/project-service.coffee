@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.projects", [])
 
-.factory("projectService", ($filter, taskService, Project, $rootScope) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService) ->
   #
   # The unit service object
   #
@@ -21,8 +21,14 @@ angular.module("doubtfire.services.projects", [])
   projectService.getProjects = ( callback ) ->
     if ! projectService.loadedProjects?
       projectService.loadedProjects = []
-      Project.query (projects) ->
-        Array.prototype.push.apply projectService.loadedProjects, projects
+      Project.query(
+        (projects) ->
+          Array.prototype.push.apply projectService.loadedProjects, projects
+        (response) ->
+          msg = if ! response? then response.error else ''
+          alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
+        )
+
 
     if _.isFunction(callback)
       callback(projectService.loadedProjects)
