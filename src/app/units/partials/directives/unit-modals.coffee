@@ -11,6 +11,10 @@ angular.module('doubtfire.units.partials.modals', [])
     if tutorial.meeting_time.getHours
       save_data.meeting_time = tutorial.meeting_time.getHours() + ":" + tutorial.meeting_time.getMinutes()
 
+    if ! save_data.tutor_id?
+      alertService.add 'danger', 'Ensure that you select a tutor from those engaged in this unit.', 6000
+      return
+      
     if isNew
       save_data.unit_id = unit.id
       Tutorial.create( tutorial: save_data ).$promise.then (
