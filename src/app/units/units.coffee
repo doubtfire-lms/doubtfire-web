@@ -122,6 +122,7 @@ angular.module("doubtfire.units", [
   # Fetch the user's Unit Role
   UnitRole.get { id: $state.params.unitRole }, (unitRole) ->
     $scope.unitRole = unitRole # the selected unit role
+    $scope.assessingUnitRole = unitRole
 
     if unitRole
       unitService.getUnit unitRole.unit_id, true, false, (unit)->
@@ -133,11 +134,6 @@ angular.module("doubtfire.units", [
 
   # Unit Service allows access to typeahead data
   $scope.unitService = unitService
-
-  $scope.closeAllStudents = () ->
-    angular.forEach($scope.unit.students, (student) ->
-      student.open = false
-    )
 )
 .controller("AdminUnitsCtrl", ($scope, $state, $modal, Unit, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"

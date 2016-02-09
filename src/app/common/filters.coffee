@@ -118,7 +118,7 @@ angular.module("doubtfire.filters", [])
           input
       else  # student...
         if gs.keep_groups_in_same_class # match just those in this tutorial
-          _.filter input, (grp) -> grp.tutorial_id == project.tutorial.id
+          _.filter input, (grp) -> (project.tutorial?) && grp.tutorial_id == project.tutorial.id
         else # all
           input
     else
