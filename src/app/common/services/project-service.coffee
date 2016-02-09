@@ -6,14 +6,21 @@ angular.module("doubtfire.services.projects", [])
   #
   projectService = {}
 
-  projectService.progressKeys = [
-    'on_time',
-    'one_week_late',
-    'two_weeks_late',
-    'not_started'
-  ]
-
   projectService.loadedProjects = null
+
+  projectService.taskStatIndex = {
+    fail: 0,
+    not_started: 1,
+    fix_and_include: 2,
+    redo: 3,
+    need_help: 4,
+    working_on_it: 5,
+    fix_and_resubmit: 6,
+    ready_to_mark: 7,
+    discuss: 8,
+    demonstrate: 9,
+    complete: 10
+  }
 
   $rootScope.$on 'signOut', () ->
     projectService.loadedProjects = null
@@ -43,13 +50,10 @@ angular.module("doubtfire.services.projects", [])
   projectService.updateTaskStats = (project, new_stats_str) ->
     new_stats = project.task_stats
     for i, value of new_stats_str.split("|")
-      if i < project.task_stats.length
+      if i < new_stats.length
         new_stats[i].value = Math.round(100 * value)
       else
-        project.progress_stats[i - project.task_stats.length].value = Math.round(100 * value)
-    project.progress_sort = 0
-    for i, stat of project.progress_stats
-      project.progress_sort = Math.round(project.progress_sort + stat.value * 1000000 / (Math.pow(100, i)))
+        break
 
     project.task_stats = new_stats
 

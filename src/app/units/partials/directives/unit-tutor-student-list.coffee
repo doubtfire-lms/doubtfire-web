@@ -49,9 +49,6 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
 
     $scope.getCSVHeader = () ->
       result = ['student_code', 'name', 'email', 'portfolio', 'lab']
-      angular.forEach(projectService.progressKeys, (key) ->
-        result.push(key)
-      )
       angular.forEach(taskService.statusKeys, (key) ->
         result.push(key)
       )
@@ -71,9 +68,6 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [
           row['lab'] = student.tutorial.abbreviation
         else
           row['lab'] = ""
-        angular.forEach(student.progress_stats, (stat) ->
-          row[stat.type] = stat.value
-        )
         angular.forEach(student.task_stats, (stat) ->
           row[stat.type] = stat.value
         )

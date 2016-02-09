@@ -135,13 +135,12 @@ angular.module("doubtfire.services.units", [])
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[8]))}
         { value: 0, type: _.trim(_.dasherize(taskService.statusKeys[9]))}
       ]
-      student.progress_stats = [
-        # Progress stats
-        { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[0]))},
-        { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[1]))},
-        { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[2]))},
-        { value: 0, type: _.trim(_.dasherize(projectService.progressKeys[3]))},
-      ]
+
+      student.taskStatValue = (key) ->
+        student.task_stats[projectService.taskStatIndex[key]].value
+
+      student.progressSortOrder = () ->
+        student.taskStatValue('complete') + 0.5 * (student.taskStatValue('discuss') + student.taskStatValue('demonstrate')) + 0.1 * (student.taskStatValue('ready_to_mark'))
 
       student.portfolioUrl = ->
         PortfolioSubmission.getPortfolioUrl(student)
