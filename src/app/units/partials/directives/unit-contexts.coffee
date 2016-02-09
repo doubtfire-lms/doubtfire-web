@@ -20,8 +20,14 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       staff = $scope.selectedStaff
       $scope.selectedStaff = null
       $scope.unit.staff = [] unless $scope.unit.staff
-      tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }
-      $scope.unit.staff.push(tutorRole)
+
+      if staff.id?
+        tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' },
+          (response) -> $scope.unit.staff.push(tutorRole)
+          (response) ->
+            alertService.add('danger', "Unable to add staff member. #{response.data.error}", 6000)
+      else
+        alertService.add('danger', "Unable to add staff member. Ensure they have a tutor or convenor account in User admin first.", 6000)
 
     $scope.findStaffUser = (id) ->
       for staff in $scope.staff
