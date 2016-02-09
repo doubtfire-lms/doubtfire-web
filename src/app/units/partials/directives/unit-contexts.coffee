@@ -95,6 +95,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         name: "Task #{abbr}",
         abbreviation: abbr,
         description: "New Description",
+        start_date: new Date(),
         target_date: new Date(),
         upload_requirements: [],
         plagiarism_checks: []
@@ -108,10 +109,15 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
 
     # Watch for deletion
     $scope.$watch 'unit.task_definitions.length', (newLength, oldLength) ->
-      # Return if adding or equal
-      return if newLength >= oldLength
+      # Return if equal
+      return if newLength == oldLength
+
       if $scope.unit.task_definitions.length > 0
-        $scope.editTask _.first $scope.unit.task_definitions
+        # Delete
+        if newLength < oldLength
+          $scope.editTask _.first $scope.unit.task_definitions
+        else
+          $scope.editTask _.last $scope.unit.task_definitions
       else
         $scope.taskAdminData.selectedTask = null
 
