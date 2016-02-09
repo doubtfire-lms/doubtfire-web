@@ -180,6 +180,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
               description: $scope.unit.description
               start_date: $scope.unit.start_date
               end_date: $scope.unit.end_date
+              active: $scope.unit.active
             }
           }, (unit) ->
             alertService.add("success", "Unit updated.", 2000)
