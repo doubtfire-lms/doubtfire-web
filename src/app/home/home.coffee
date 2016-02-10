@@ -73,6 +73,17 @@ angular.module("doubtfire.home", [])
     unitRole.role == "Tutor"
   $scope.isConvenor = (unitRole) ->
     unitRole.role == "Convenor"
+
+  monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ]
+
+  $scope.showDate = (dateValue) ->
+    date = new Date(dateValue)
+    "#{monthNames[date.getMonth()]} #{date.getFullYear()}"
 )
 .directive('newUserWizard', ->
   restrict: 'E'

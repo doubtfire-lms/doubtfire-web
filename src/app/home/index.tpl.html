@@ -14,7 +14,7 @@
           <a ng-repeat="unitRole in unitRoles" ui-sref="units#show({unitRole: unitRole.id})" class="list-group-item clearfix">
             <div>
               <i class="fa fa-pencil"></i>
-              <h4 class="list-group-item-heading">{{unitRole.unit_name}}</h4>
+              <h4 class="list-group-item-heading">{{unitRole.unit_name}} <small>{{showDate(unitRole.start_date)}}</small></h4>
               <p class="list-group-item-text">
                 <label class="label label-info">{{unitRole.unit_code}}</label>
                 <label class="label label-primary">{{unitRole.role}}</label>
@@ -38,7 +38,7 @@
           <a ng-repeat="project in projects" ui-sref='projects#show({projectId: project.project_id})' class="list-group-item clearfix">
             <div>
               <i class="fa fa-university"></i>
-              <h4 class="list-group-item-heading">{{project.unit_name}}</h4>
+              <h4 class="list-group-item-heading">{{project.unit_name}} <small>{{showDate(project.start_date)}}</small></h4>
               <p class="list-group-item-text">
                 <label class="label label-info">{{project.unit_code}}</label>
               </p>
