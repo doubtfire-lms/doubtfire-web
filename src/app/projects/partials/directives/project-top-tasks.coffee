@@ -70,9 +70,12 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.map (_.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) < 0), (task) ->
-        { task: task, reason: "This is one of the next tasks for you to complete." }
-      Array.prototype.push.apply result, toAdd
+      toAdd = _.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) <= 0
+      # Add tasks by grade... pass is always done first!
+      for grade in gradeService.gradeValues
+        toAddGradeTasks = _.map (_.filter toAdd, (task) -> task.definition.target_grade == grade), (task) ->
+          { task: task, reason: "This is one of the next tasks for you to complete." }
+        Array.prototype.push.apply result, toAddGradeTasks
 
       return _.slice(result, 0, 5)
 
