@@ -119,7 +119,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
                 .on('mouseover', ->
                   dispatch.elementMouseover
                     value: measurez.median
-                    label: 'The most average student is here'
+                    label: 'The average student is here'
                     color: d3.select(this).style('fill')
                   return)
                 .on('mousemove', ->
