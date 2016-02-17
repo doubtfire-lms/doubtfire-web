@@ -175,28 +175,31 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
 
+      if $scope.unit.start_date && $scope.unit.start_date.getMonth
+        $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
+      if $scope.unit.end_date && $scope.unit.end_date.getMonth
+        $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
+
+      saveData = {
+        name: $scope.unit.name
+        code: $scope.unit.code
+        description: $scope.unit.description
+        start_date: $scope.unit.start_date
+        end_date: $scope.unit.end_date
+        active: $scope.unit.active
+      }
+
       if $scope.unit.id == -1
-        Unit.create { unit: $scope.unit },
+        Unit.create { unit: saveData },
           (unit) ->
             $scope.saveSuccess(unit)
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else
-        if $scope.unit.start_date && $scope.unit.start_date.getMonth
-          $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
-        if $scope.unit.end_date && $scope.unit.end_date.getMonth
-          $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
         Unit.update(
           {
             id: $scope.unit.id
-            unit: {
-              name: $scope.unit.name
-              code: $scope.unit.code
-              description: $scope.unit.description
-              start_date: $scope.unit.start_date
-              end_date: $scope.unit.end_date
-              active: $scope.unit.active
-            }
+            unit: saveData
           }, (unit) ->
             alertService.add("success", "Unit updated.", 2000)
           (response) ->
