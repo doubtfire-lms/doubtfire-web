@@ -102,7 +102,7 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
                                 .value()
           [gradeId, totalForThisGrade]
         )
-        .fromPairs()
+        .object()
         .value()
 
     #
@@ -117,11 +117,11 @@ angular.module('doubtfire.tasks.partials.target-grade-stats', [])
         .map( (tutorialInfo, tutorialId) ->
           gradeInfo = _ .chain(tutorialInfo)
                         .map((gradeInfo) -> [gradeInfo.grade, gradeInfo.num])
-                        .fromPairs()
+                        .object()
                         .value()
           [tutorialId, gradeInfo]
         )
-        .fromPairs()
+        .object()
         .value()
 
     #

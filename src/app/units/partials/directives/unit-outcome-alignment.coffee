@@ -41,10 +41,10 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
             d = _ .chain(d)
                   .groupBy('learning_outcome_id')
                   .map( (d, i) -> [i, d[0]] )
-                  .fromPairs()
+                  .object()
                   .value()
             [i, d]
-          .fromPairs()
+          .object()
           .value()
 
     $scope.showAlignmentModal = (task, ilo, alignment) ->
