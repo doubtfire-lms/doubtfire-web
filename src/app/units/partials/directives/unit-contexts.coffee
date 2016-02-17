@@ -131,6 +131,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchTaskUrl = ->
       Task.getTaskDefinitionBatchUploadUrl($scope.unit)
+    $scope.allResourceUrl = ->
+      Unit.allResourcesDownloadUrl($scope.unit)
+
     $scope.onBatchTaskSuccess = (response) ->
       csvResultService.show "Task CSV Upload Results", response
       if response.success.length > 0

@@ -46,6 +46,8 @@ angular.module("doubtfire.api", [
     "#{api}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_sheet?auth_token=#{currentUser.authenticationToken}"
   Unit.taskResourcesUploadUrl = (unit, taskDefinition) ->
     "#{api}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_resources?auth_token=#{currentUser.authenticationToken}"
+  Unit.allResourcesDownloadUrl = (unit) ->
+    "#{api}/units/#{unit.id}/all_resources?auth_token=#{currentUser.authenticationToken}"
   Unit.enrolStudentsCSVUrl = (unit) ->
     "#{api}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
