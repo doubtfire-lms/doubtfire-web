@@ -26,7 +26,7 @@
         <table class="table table-task-alignment col-sm-12">
           <thead>
             <tr>
-              <th class="task" colspan="{{showTaskName ? 3 : (source === project ? 2 : 1)}}">Task</th>
+              <th class="task" colspan="{{(showTaskName ? 3 : 2) - (source === unit ? 1 : 0)}}">Task</th>
               <th class="ilo text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
                 <label class="label label-info">{{ilo.abbreviation}}</label>
               </th>

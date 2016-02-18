@@ -46,6 +46,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
             [i, d]
           .fromPairs()
           .value()
+      alignments
 
     $scope.showAlignmentModal = (task, ilo, alignment) ->
       $modal.open

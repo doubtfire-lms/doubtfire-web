@@ -88,6 +88,8 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         else
           "#{last_abbr}1"
 
+    $scope.deleteTask = (task) ->
+      taskService.deleteTask task, $scope.unit, null
 
     $scope.createTask = ->
       abbr = guessTaskAbbreviation()

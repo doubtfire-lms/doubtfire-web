@@ -64,7 +64,9 @@
                 <a ng-click="taskAdminPager.sortOrder='restrict_status_updates'; taskAdminPager.reverse=!taskAdminPager.reverse">
                   <i class="fa fa-lock" tooltip="Are status updated locked to staff only?"></i> <i ng-show="taskAdminPager.sortOrder=='restrict_status_updates'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                 </a>
-
+              </th>
+              <th>
+                Actions
               </th>
             </tr>
           </thead>
@@ -79,6 +81,11 @@
               <td>{{task.upload_requirements.length}}</td>
               <td><i ng-show="task.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="task.hasPlagiarismCheck()" class="fa fa-times"></i></td>
               <td><i ng-show="task.restrict_status_updates" class="fa fa-check"></i><i ng-hide="task.restrict_status_updates" class="fa fa-times"></i></td>
+              <td>
+                <button class="btn btn-danger" ng-click="deleteTask(task)">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table><!--/task-table-->
