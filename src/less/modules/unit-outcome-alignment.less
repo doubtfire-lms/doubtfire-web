@@ -1,61 +1,50 @@
-.unit-oucome-alignment {
-  .popover-inner > .popover-content {
-    padding: 0;
-    .popver-content {
-      padding: 9px 14px;
-    }
-    .popover-footer {
-      padding: 8px 14px;
-      margin: 0;
-      font-size: 14px;
-      background-color: #f7f7f7;
-      border-top: 1px solid #ebebeb;
-      border-radius: 0 0 5px 5px;
-    }
+.unit-outcome-alignment {
+  .alignment-panels .panel-body {
+    overflow: scroll;
   }
-}
 
-table.table-task-alignment {
-  td.task-abbreviation    { width: 5ex;  }
-  td.task-status-icon     { width: 6em;  }
-  td.task-name            { width: 10ex; }
-  td.include-in-portfolio { width: 10ex; }
-  td.task-abbreviation label {
-    display: inline-block;
-    width: 100%;
-  }
-  td.include-in-portfolio {
-    button, .button-wrapper {
+  table.table-task-alignment {
+    td.task-abbreviation    { width: 5ex;  }
+    td.task-status-icon     { width: 6em;  }
+    td.task-name            { width: 10ex; }
+    td.include-in-portfolio { width: 10ex; }
+    td.task-abbreviation label {
+      display: inline-block;
       width: 100%;
-      height: 3em;
     }
-  }
-  td.ilo-alignment {
-    .alignment-circle {
-      width: 6em;
-      padding: 0.25em;
-      margin: 0 auto;
-      border: 1px solid transparent;
-      &:hover {
-        border: 1px dashed #5b8ce6;
-        border-radius: 1em;
+    td.include-in-portfolio {
+      button, .button-wrapper {
+        width: 100%;
+        height: 3em;
+      }
+    }
+    td.ilo-alignment {
+      .alignment-circle {
+        width: 6em;
+        padding: 0.25em;
+        margin: 0 auto;
+        border: 1px solid transparent;
+        &:hover {
+          border: 1px dashed #5b8ce6;
+          border-radius: 1em;
+        }
       }
     }
   }
-}
 
-.visualisation {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  z-index: 3;
-  opacity: 0.6;
-  margin: 0;
-  border-radius: 0;
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
+  .visualisation {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 3;
+    opacity: 0.6;
+    margin: 0;
+    border-radius: 0;
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
   }
 }
 
