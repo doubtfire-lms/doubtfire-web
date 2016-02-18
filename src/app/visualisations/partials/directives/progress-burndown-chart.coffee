@@ -77,6 +77,16 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'lineChart', 'Student Progress Burndown Chart', {
       useInteractiveGuideline: yes
+      interactiveLayer:
+        tooltip:
+          contentGenerator: (data) ->
+            # Need to generate this so as to not include NOW key
+            date = data.value
+            series = data.series
+            html = "<table class='col-sm-6'><thead><tr><td colspan='3'><strong class='x-value'>#{date}</strong></td></tr></thead><tbody>"
+            html += ("<tr><td class='legend-color-guide'><div style='background-color: #{d.color};'></div></td><td class='key'>#{d.key}</td><td class='value'>#{d.value * 100}%</td></tr><tr>" for d in series when d.key isnt 'NOW').join('')
+            html += "</tbody></table>"
+            html
       height: 440
       margin:
         left: 75
