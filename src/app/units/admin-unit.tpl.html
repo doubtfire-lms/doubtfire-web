@@ -7,11 +7,11 @@
   </ul><!--breadcrumbs-->
   <div class="root-view" ng-if="unit">
     <div>
-      <h3>
-        <span ng-hide="newUnit">Edit {{unit.name}}</span>
+      <h2>
+        <span ng-hide="newUnit">Edit {{unit.name}}</span> <small ng-hide="newUnit">{{unit.code}}</small>
         <span ng-show="newUnit">Create Unit</span>
         <p class="lead">Convenor View</p>
-      </h3>
+      </h2>
       <tabset class="tabset-icon" justified="true">
         <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
           <tab-heading>
