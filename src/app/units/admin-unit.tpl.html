@@ -6,43 +6,45 @@
       <li class="active">{{newUnit ? 'New Unit' : unit.name}}</li>
   </ul><!--breadcrumbs-->
   <div class="root-view" ng-if="unit">
-    <h3>
-      <span ng-hide="newUnit">Edit {{unit.name}}</span>
-      <span ng-show="newUnit">Create Unit</span>
-      <p class="lead">Convenor View</p>
-    </h3>
-    <tabset class="tabset-icon" justified="true">
-      <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
-        <tab-heading>
-          <i class="fa fa-2x {{tab.icon}}"></i> {{tab.title}}
-        </tab-heading>
-      </tab>
-    </tabset><!--tabs-->
-  </div><!--tabs-->
-  <div class="col-sm-8 col-sm-offset-2">
-    <div ng-if="activeTab === tabs.unitTab">
-      <admin-unit-context unit="unit"></admin-unit-context>
-    </div>
-    <div ng-if="activeTab === tabs.learningOutcomesTab">
-      <admin-unit-ilos></admin-unit-ilos>
-    </div>
-    <div ng-if="activeTab === tabs.staffTab">
-      <staff-admin-unit-context></staff-admin-unit-context>
-    </div>
-    <div ng-if="activeTab === tabs.tutorialsTab">
-      <tutorial-unit-context></tutorial-unit-context>
-    </div>
-    <div ng-if="activeTab === tabs.studentsTab">
-      <enrol-students-context></enrol-students-context>
-    </div>
-    <div ng-if="activeTab === tabs.tasksTab">
-      <task-admin-unit-context></task-admin-unit-context>
-    </div>
-    <div ng-if="activeTab === tabs.taskAlignmentTab">
-      <unit-outcome-alignment show-csv="true" unit="unit"></unit-outcome-alignment>
-    </div>
-    <div ng-if="activeTab === tabs.groupsTab">
-      <unit-admin-groupset-tab></unit-admin-groupset-tab>
-    </div>
-  </div><!--content-->
+    <div>
+      <h3>
+        <span ng-hide="newUnit">Edit {{unit.name}}</span>
+        <span ng-show="newUnit">Create Unit</span>
+        <p class="lead">Convenor View</p>
+      </h3>
+      <tabset class="tabset-icon" justified="true">
+        <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+          <tab-heading>
+            <i class="fa fa-2x {{tab.icon}}"></i> {{tab.title}}
+          </tab-heading>
+        </tab>
+      </tabset><!--tabs-->
+    </div><!--tabs-->
+    <div>
+      <div ng-if="activeTab === tabs.unitTab">
+        <admin-unit-context unit="unit"></admin-unit-context>
+      </div>
+      <div ng-if="activeTab === tabs.learningOutcomesTab">
+        <admin-unit-ilos></admin-unit-ilos>
+      </div>
+      <div ng-if="activeTab === tabs.staffTab">
+        <staff-admin-unit-context></staff-admin-unit-context>
+      </div>
+      <div ng-if="activeTab === tabs.tutorialsTab">
+        <tutorial-unit-context></tutorial-unit-context>
+      </div>
+      <div ng-if="activeTab === tabs.studentsTab">
+        <enrol-students-context></enrol-students-context>
+      </div>
+      <div ng-if="activeTab === tabs.tasksTab">
+        <task-admin-unit-context></task-admin-unit-context>
+      </div>
+      <div ng-if="activeTab === tabs.taskAlignmentTab">
+        <unit-outcome-alignment show-csv="true" unit="unit"></unit-outcome-alignment>
+      </div>
+      <div ng-if="activeTab === tabs.groupsTab">
+        <unit-admin-groupset-tab></unit-admin-groupset-tab>
+      </div>
+    </div><!--content-->
+  </div>
 </div>
