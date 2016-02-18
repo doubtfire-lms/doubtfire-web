@@ -3,7 +3,7 @@
   <div ng-show="selectedTooltip && !showTooltips && !compact" class="text-center rating-static-tooltip">
     <span class="rating-{{hoveringOver || ngModel.rating}} badge">{{tooltips[(hoveringOver || ngModel.rating) - 1]}}</span>
   </div>
-  <div ng-show="compact && readonly" class="compact-rating rating-{{ngModel.rating}}" tooltip="{{tooltips[ngModel.rating - 1]}}" tooltip-class="tooltip-rating-{{ngModel.rating}}">
+  <div ng-show="compact && readonly" class="compact-rating rating-{{ngModel.rating}}" tooltip="{{tooltips[ngModel.rating - 1]}}" tooltip-class="tooltip-rating-{{ngModel.rating}}" tooltip-append-to-body="true">
     {{ngModel.rating}}
   </div>
 </div>

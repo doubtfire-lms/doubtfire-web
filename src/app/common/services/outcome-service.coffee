@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.outcome-service", [])
 .factory("outcomeService", (gradeService, projectService, taskService) ->
-  
+
   outcomeService =
     unitTaskStatusFactor: () ->
       (task_definition_id) -> 1
