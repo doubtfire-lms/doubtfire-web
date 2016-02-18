@@ -6,7 +6,7 @@
   <div class="root-view">
     <h2>{{unit.name}} <small>{{unit.code}}</small><p class="lead"> Teacher View</p></h2>
     <tabset class="tabset-icon" justified="true" ng-if="unitLoaded">
-      <tab ng-repeat="tab in tabs | toArray | orderBy: seq" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
         <tab-heading>
           <i class="fa fa-2x {{tab.icon}}"></i> {{tab.title}}
         </tab-heading>

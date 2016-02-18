@@ -12,7 +12,7 @@
       <p class="lead">Convenor View</p>
     </h3>
     <tabset class="tabset-icon" justified="true">
-      <tab ng-repeat="tab in tabs | toArray | orderBy: seq" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
         <tab-heading>
           <i class="fa fa-2x {{tab.icon}}"></i> {{tab.title}}
         </tab-heading>
