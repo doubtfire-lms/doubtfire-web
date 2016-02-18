@@ -27,7 +27,7 @@ angular.module("doubtfire.services.analytics", [])
       if newVal? && newVal != oldVal
         if _.isFunction label
           analyticsService.event category, "Changed #{toWatch}", label(newVal)
-        else if _.isNumber newVal
+        else if _.isInteger newVal
           analyticsService.event category, "Changed #{toWatch}", label, newVal
         else
           analyticsService.event category, "Changed #{toWatch}", newVal
