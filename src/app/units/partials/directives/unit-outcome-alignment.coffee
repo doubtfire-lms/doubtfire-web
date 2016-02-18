@@ -64,7 +64,7 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
 
     $scope.disableInclude = (task) ->
       # if there are no ILOs, you can always include tasks
-      if $scope.unit.ilos > 0
+      if $scope.unit.ilos.length > 0
         alignments[task.definition.id] is undefined
       else
         false
