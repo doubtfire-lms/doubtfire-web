@@ -270,11 +270,11 @@ angular.module('doubtfire.tasks.partials.task-status-summary-stats', [])
                                 .value()
                [status, sumOfStatuses]
             )
-            .object()
+            .fromPairs()
             .value()
           [taskDefId, statusesForThisTaskDefId]
         )
-        .object()
+        .fromPairs()
         .value()
 
     #
