@@ -86,7 +86,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
   restrict: 'E'
   templateUrl: 'projects/partials/templates/portfolio-tasks.tpl.html'
   controller: ($scope) ->
-    $scope.unitHasILOs = $scope.unit.ilos > 0
+    $scope.unitHasILOs = $scope.unit.ilos.length > 0
     $scope.noTasksSelected = ->
       if $scope.unitHasILOs
         selectedTasks = _.filter $scope.project.tasks, (d) ->
