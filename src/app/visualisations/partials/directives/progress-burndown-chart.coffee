@@ -70,10 +70,34 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       if d[1] < 0.0 then 0 else d[1]
 
     #
-    # Finds max end range for chart defined as 2 weeks (12096e5 ms) after unit's end date
+    # Graph unit dates as moment.js dates
     #
-    lateEndDate = () ->
-      return new Date(+new Date($scope.unit.end_date) + 12096e5).getTime() / 1000
+    dates = {
+      start: moment($scope.unit.start_date)
+      # represent the graph as 2 weeks after the unit's end date
+      end:   moment($scope.unit.end_date).add(2, 'weeks')
+    }
+
+    #
+    # Converts a moment date to a Unix Time Stamp in seconds
+    #
+    toUTS = (momentDate) ->
+      +momentDate / 1000
+
+    #
+    # X domain is defined as the unit's start date to the unit's end date add two weeks
+    #
+    xDomain = [
+      toUTS(dates.start),
+      toUTS(dates.end)
+    ]
+    #
+    # X axis ticks is each week (weeks + 2)
+    #
+    #
+    weeksTotal = dates.end.diff(dates.start, 'weeks')
+
+    ticks = ( toUTS(moment(dates.start).add(i, 'weeks')) for i in [0..weeksTotal] )
 
     [$scope.options, $scope.config] = Visualisation 'lineChart', 'Student Progress Burndown Chart', {
       useInteractiveGuideline: yes
@@ -84,7 +108,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
             date = data.value
             series = data.series
             html = "<table class='col-sm-6'><thead><tr><td colspan='3'><strong class='x-value'>#{date}</strong></td></tr></thead><tbody>"
-            html += ("<tr><td class='legend-color-guide'><div style='background-color: #{d.color};'></div></td><td class='key'>#{d.key}</td><td class='value'>#{d.value * 100}%</td></tr><tr>" for d in series when d.key isnt 'NOW').join('')
+            html += ("<tr><td class='legend-color-guide'><div style='background-color: #{d.color};'></div></td><td class='key'>#{d.key}</td><td class='value'>#{d3.format(',%')(d.value)}</td></tr><tr>" for d in series when d.key isnt 'NOW').join('')
             html += "</tbody></table>"
             html
       height: 440
@@ -94,6 +118,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       xAxis:
         axisLabel: "Time"
         tickFormat: xAxisTickFormatDateFormat
+        tickValues: ticks
       yAxis:
         axisLabel: "Tasks Remaining"
         tickFormat: yAxisTickFormatPercentFormat
@@ -102,5 +127,5 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       x: xAxisClipNegBurndown
       y: yAxisClipNegBurndown
       yDomain: [0, 1]
-      xDomain: [+new Date($scope.unit.start_date).getTime() / 1000, lateEndDate()]
+      xDomain: xDomain
     }, {}
