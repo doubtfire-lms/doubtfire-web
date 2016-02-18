@@ -93,7 +93,7 @@ angular.module('doubtfire.projects.partials.portfolio', [])
           d.include_in_portfolio and _.find($scope.project.task_outcome_alignments, { task_id: d.id })?
         selectedTasks.length is 0
       else
-        selectedTasks = _.where $scope.project.tasks, { include_in_portfolio: true }
+        selectedTasks = _.filter $scope.project.tasks, (d) -> d.include_in_portfolio
         selectedTasks.length is 0
 )
 
