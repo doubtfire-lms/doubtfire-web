@@ -1,7 +1,7 @@
 ![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
 
 # Doubtfire Web
-            
+
 A modern, lightweight learning management system.
 
 ## Getting Started
@@ -52,7 +52,7 @@ You can then navigate to the Doubtfire web interface at **http://localhost:8000*
 
 Doubtfire Web is an [Angular](http://angularjs.org) application built using [Bootstrap](http://getbootstrap.com). It uses many Open Source libraries, which you can read up on:
 
-- [Underscore.js](http://underscorejs.org)
+- [Lodash](http://lodash.com/docs)
 - [Moment.js](http://momentjs.com)
 - [Font Awesome](http://fontawesome.io)
 - [UI Router](https://github.com/angular-ui/ui-router)
