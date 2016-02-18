@@ -16,7 +16,7 @@
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
     <button class="btn btn-primary pull-right" ng-disabled="noTasksSelected()" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
     <div class="help-block pull-right col-sm-4" ng-show="noTasksSelected()">
-      You need to select at least one task that is aligned to an ILO, otherwise your portfolio will be consist of no tasks.
+      You need to select at least one task {{unitHasILOs ? 'that is aligned to an ILO above' : 'above'}}, otherwise your portfolio will be consist of no tasks.
     </div>
   </div>
 </div>

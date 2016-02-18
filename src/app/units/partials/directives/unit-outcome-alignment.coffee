@@ -63,7 +63,11 @@ angular.module('doubtfire.units.partials.unit-outcome-alignment',[
       alignments[task.definition.id]?[ilo.id]
 
     $scope.disableInclude = (task) ->
-      alignments[task.definition.id] is undefined
+      # if there are no ILOs, you can always include tasks
+      if $scope.unit.ilos > 0
+        alignments[task.definition.id] is undefined
+      else
+        false
 
     $scope.includeTaskInPorfolio = (task) ->
       task.include_in_portfolio = !task.include_in_portfolio
