@@ -35,8 +35,8 @@
           </thead>
           <tbody>
             <tr ng-repeat="task in tasks | orderBy: 'definition.seq'">
-              <td class="task-abbreviation">
-                <label class="label label-info" tooltip="{{task.name}}">{{task.definition.abbreviation}}</label>
+              <td class="task-abbreviation" tooltip="{{task.definition.name}}" tooltip-append-to-body="true">
+                <label class="label label-info">{{task.definition.abbreviation}}</label>
               </td>
               <td class="task-status-icon" ng-if="source === project">
                 <status-icon status="task.status"></status-icon>
