@@ -136,6 +136,16 @@ module.exports = function ( grunt ) {
           }
         ]
       },
+      build_vendor_maps: {
+        files: [
+          {
+            src: [ '<%= vendor_copy_files.map %>' ],
+            dest: '<%= build_dir %>',
+            cwd: '.',
+            expand: true
+          }
+        ]
+      },
       prod_vendor_copy: {
         files: [
           {
@@ -632,7 +642,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee','less',
-    'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs',
+    'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendor_maps', 
     'index:build', 'preprocess'
   ]);
 

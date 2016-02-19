@@ -107,7 +107,6 @@ module.exports = {
       'vendor/codemirror/mode/markdown/markdown.js',
       'vendor/angular-ui-codemirror/ui-codemirror.js',
       'vendor/showdown/dist/showdown.js',
-      'vendor/showdown/dist/showdown.js.map',
       'vendor/angular-markdown-filter/markdown.js',
       'vendor/angular-ui-select/dist/select.js',
       'vendor/angulartics/dist/angulartics.min.js',
@@ -122,6 +121,9 @@ module.exports = {
       'vendor/pdfjs-bower/dist/compatibility.js',
       'vendor/pdfjs-bower/dist/pdf.js',
       'vendor/pdfjs-bower/dist/pdf.worker.js'
-    ]
+    ],
+    map: [
+      'vendor/showdown/dist/showdown.js.map'
+    ],
   }
 };
