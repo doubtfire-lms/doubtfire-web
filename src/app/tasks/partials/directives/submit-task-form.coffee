@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
     unit: '='
     assessingUnitRole: '=?'
   templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
-  controller: ($scope, Task, taskService, alertService, projectService, groupService, analyticsService) ->
+  controller: ($scope, $timeout, Task, taskService, alertService, projectService, groupService, analyticsService) ->
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
 
@@ -80,9 +80,11 @@ angular.module('doubtfire.tasks.partials.submit-task-form', [])
 
     # When upload is successful, update the task status on the back-end
     $scope.onSuccess = (response) ->
-      $scope.task.status = response.status
       # Update the project's task stats and burndown data
-      taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
+      updateTaskStatusFunc = ->
+        taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
+      # Perform as timeout to show 'Upload Complete'
+      $timeout updateTaskStatusFunc, 1500
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
       analyticsService.event 'Task Submit Form', "Updated Status as #{asUser}", taskService.statusLabels[$scope.task.status]
       analyticsService.event 'Task Submit Form', "Files Uploaded", undefined, $scope.numberOfFiles
