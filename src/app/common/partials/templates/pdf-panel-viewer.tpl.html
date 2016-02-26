@@ -1,6 +1,12 @@
-<div class="panel-body" style="height: 60vh;">
+<div class="panel-body">
   <div class="iframe-wrapper">
     <iframe ng-src="{{getGoogleDocsViewerUrl()}}"></iframe>
+    <div class="loading-icon">
+      <i class="fa fa-spinner fa-spin fa-2x"></i>
+      <p class="loading-text">
+        Loading PDF
+      </p>
+    </div>
   </div>
 </div><!--/panel-body-->
 <div class="panel-footer" ng-if="!hideFooter">
