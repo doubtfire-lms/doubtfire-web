@@ -4,8 +4,16 @@
 }
 
 .comment {
+  display: flex;
+  display: -webkit-flex;
+  margin-bottom: 2em;
   .comment-details {
-    padding-top: 8px;
+    .flex-center();
+    height: auto;
+    & > * {
+      width: 100%;
+      text-align: right;
+    }
     .comment-by, .comment-date {
       display: block;
     }
@@ -18,11 +26,14 @@
     }
   }
   .comment-text {
-    padding: 15px;
     background-color: #efefef;
-    border-left: 5px solid #ddd;
-    font-style: oblique;
-    margin-bottom: 20px;
+    border-radius: 1em;
+    padding: 1.5em;
+    font-size: 1.2em;
+    line-height: 1.5em;
+    .markdown-to-html > *:last-child {
+      margin-bottom: 0px;
+    }
     img {
       border-radius: 1em;
     }

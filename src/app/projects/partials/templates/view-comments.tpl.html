@@ -1,9 +1,9 @@
 <div class="panel-body comment-panel">
-  <div class="large-notice-block help-block" ng-show="(!task.comments) || task.comments.length == 0">
+  <div class="large-notice-block" ng-show="(!task.comments) || task.comments.length == 0">
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment col-sm-12" ng-repeat="comment in task.comments">
+  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments">
     <div class="comment-details col-md-2">
       <span class="comment-by">
         {{comment.comment_by}}
@@ -14,8 +14,8 @@
     </div>
     <div class="comment-text col-md-9">
       <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
-      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)">
-        <i class="fa fa-times-circle"></i>
+      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete comment" tooltip-placement="right">
+        <i class="fa fa-trash"></i>
       </div>
     </div>
   </div>
