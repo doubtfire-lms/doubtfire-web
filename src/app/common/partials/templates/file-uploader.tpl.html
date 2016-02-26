@@ -1,5 +1,5 @@
-<div class="file-upload-area">
-  <div ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones">
+<div class="file-uploader" ng-class="{ 'is-uploading': isUploading }">
+  <div ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones" class="file-drop-area">
     <h3 class="file-title">
       {{uploadZones.length == 1 ? '' : $index + 1 + ' -'}} {{upload.display.name}}
     </h3>
