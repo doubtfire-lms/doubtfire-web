@@ -74,7 +74,7 @@
 
                 <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to start this task." class="col-sm-3 control-label">Start Date</label>
-                  <div class="col-sm-8 input-group">
+                  <div class="col-sm-4 input-group">
                     <input datepicker-popup="yyyy-MM-dd" is-open="startPicker.open" type="text" class="form-control" ng-model="task.start_date" placeholder="yyyy-MM-dd" close-text="Close" />
                     <span class="input-group-btn">
                       <button class="btn btn-default" ng-click="open($event, startPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -84,7 +84,7 @@
 
                 <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Target Date</label>
-                  <div class="col-sm-8 input-group">
+                  <div class="col-sm-4 input-group">
                     <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
                     <span class="input-group-btn">
                       <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -94,7 +94,7 @@
 
                 <div class="form-group">
                   <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Due Date</label>
-                  <div class="col-sm-8 input-group">
+                  <div class="col-sm-4 input-group">
                     <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
                     <span class="input-group-btn">
                       <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
