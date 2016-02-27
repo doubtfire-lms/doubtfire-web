@@ -105,6 +105,12 @@ angular.module("doubtfire.services.units", [])
       if student.name?
         return
       student.open = false
+      
+      # projects can find tasks using their task definition ids
+      student.findTaskForDefinition = (taskDefId) ->
+        _.find student.tasks, (task) -> task.task_definition_id == taskDefId
+        
+      #TODO: change these to use functions...
       student.name = student.first_name + " " + student.last_name
       if student.has_portfolio
         student.portfolio_status = 1

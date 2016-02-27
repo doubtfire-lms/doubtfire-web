@@ -141,7 +141,7 @@ angular.module("doubtfire.services.projects", [])
     _.find project.groups, (grp) -> grp.group_set_id == task.definition.group_set.id
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
-    _.find project.tasks, (task) -> task.task_definition_id == task_definition_id
+    project.findTaskForDefinition(task_definition_id)
 
   projectService.tasksInTargetGrade = (project) ->
     $filter('byGrade')(project.tasks, project.target_grade)

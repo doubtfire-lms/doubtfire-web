@@ -267,7 +267,13 @@ angular.module("doubtfire.services.tasks", [])
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id)
           if proj?
+            # Update the other project's task status overview
             task.updateTaskStatus proj, details.new_stats
+            # Update the other project's task
+            other_task = proj.findTaskForDefinition(task.definition.id)
+            if other_task?
+              other_task.grade = response.grade
+              other_task.status = response.status
     else
       alertService.add("info", "Status change was not changed.", 4000)
 
@@ -276,11 +282,11 @@ angular.module("doubtfire.services.tasks", [])
     oldStatus = task.status
     updateFunc = ->
       Task.update { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status, grade: task.grade },
-      # Success
-      (value) ->
-        taskService.processTaskStatusChange unit, project, task, status, value
-        analyticsService.event 'Task Service', 'Updated Task Status', status
-        analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
+        # Success
+        (value) ->
+          taskService.processTaskStatusChange unit, project, task, status, value
+          analyticsService.event 'Task Service', 'Updated Task Status', status
+          analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
         # Fail
         (value) ->
           task.status = oldStatus
@@ -319,7 +325,7 @@ angular.module("doubtfire.services.tasks", [])
         analyticsService.event 'Task Service', 'Failed to Recreate PDF'
 
   taskService.taskIsGraded = (task) ->
-    task.definition.is_graded and task.grade?
+    task? and task.definition.is_graded and task.grade?
 
   taskService
 )
