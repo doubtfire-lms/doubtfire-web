@@ -12,7 +12,7 @@ A modern, lightweight learning management system.
 
 ## Getting Started
 
-Before you get started, make sure you have the [Doubtfire API](https://bitbucket.org/itig/doubtfire-api) up and running. You will need to do this before continuing.
+Before you get started, make sure you have the [Doubtfire API](https://github.com/doubtfire-lms/doubtfire-api) up and running. You will need to do this before continuing.
 
 Install [Node.js](http://nodejs.org/) either by [downloading it](http://nodejs.org/download/) and installing it manually, or via [Homebrew](http://brew.sh) on OS X:
 
