@@ -1,6 +1,6 @@
 angular.module("doubtfire.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope, analyticsService) ->
+.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService) ->
   #
   # The unit service object
   #
@@ -41,6 +41,12 @@ angular.module("doubtfire.services.tasks", [])
     'need_help'
     'demonstrate'
     'discuss'
+  ]
+
+  taskService.gradeableStatuses = [
+    'discuss'
+    'demonstrate'
+    'complete'
   ]
 
 
@@ -249,6 +255,7 @@ angular.module("doubtfire.services.tasks", [])
     task.times_assessed = response.times_assessed
     task.updateTaskStatus project, response.new_stats
     task.processing_pdf = response.processing_pdf
+    task.grade = response.grade
 
     if response.status == status
       $rootScope.$broadcast('UpdateAlignmentChart')
@@ -267,18 +274,32 @@ angular.module("doubtfire.services.tasks", [])
 
   taskService.updateTaskStatus = (unit, project, task, status) ->
     oldStatus = task.status
-    Task.update(
-      { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status }
+    updateFunc = ->
+      Task.update { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status, grade: task.grade },
       # Success
       (value) ->
         taskService.processTaskStatusChange unit, project, task, status, value
         analyticsService.event 'Task Service', 'Updated Task Status', status
-      # Fail
-      (value) ->
-        task.status = oldStatus
-        alertService.add("danger", value.data.error, 6000)
-        analyticsService.event 'Task Service', 'Failed to Update Task Status', status
-    )
+        analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
+        # Fail
+        (value) ->
+          task.status = oldStatus
+          alertService.add("danger", value.data.error, 6000)
+          analyticsService.event 'Task Service', 'Failed to Update Task Status', status
+    # Must provide grade if graded and in a final complete state
+    if task.definition.is_graded and status in ['complete', 'discuss', 'demonstrate']
+      GradeTaskModal.show(task).result.then(
+        # Grade was selected (modal closed with result)
+        (selectedGrade) ->
+          task.grade = selectedGrade
+          updateFunc()
+        # Grade was not selected (modal was dismissed)
+        () ->
+          task.status = oldStatus
+          alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
+      )
+    else
+      updateFunc()
 
   taskService.recreatePDF = (task, success) ->
     TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project().project_id },

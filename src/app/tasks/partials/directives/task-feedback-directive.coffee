@@ -86,6 +86,12 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
       $scope.taskIsGraded = taskService.taskIsGraded newTask
 
     #
+    # Watch grade for changes
+    #
+    $scope.$watch 'project.selectedTask.grade', ->
+      $scope.taskIsGraded = taskService.taskIsGraded $scope.project.selectedTask
+
+    #
     # Loading the active task
     #
     $scope.setSelectedTask = (task) ->

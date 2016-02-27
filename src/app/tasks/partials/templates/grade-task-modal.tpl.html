@@ -1,0 +1,21 @@
+<div>
+  <div class="modal-header">
+    <h3>Provide Grade</h3>
+  </div>
+  <div class="modal-body text-center">
+    <p>Please provide a grade to change the student's status for task <label class="label label-info">{{task.abbreviation}}</label>.</p>
+    <p class="btn-group">
+      <label ng-repeat="grade in grades" class="btn btn-default col-sm-3 text-center" ng-model="data.desiredGrade" btn-radio="{{$index}}">
+        <grade-icon grade="grade" tooltip="This student completed the task to a {{grade}} standard" tooltip-append-to-body="true"></grade-icon>
+      </label>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+    <button class="btn btn-primary" ng-click="close()" ng-disabled="data.desiredGrade == null">
+      <i class="fa fa-check"></i>
+    </button>
+  </div>
+</div>

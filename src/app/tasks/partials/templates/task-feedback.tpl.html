@@ -22,7 +22,7 @@
         <h3>{{project.selectedTask.definition.name}}</h3>
         <p class="help-block">{{activeStatusData().helpText}}</p>
         <div class="graded-task-mark text-danger" ng-if="taskIsGraded">
-          Your tutor has marked you on this task to a <grade-icon grade="{{project.selectedTask.grade}}"></grade-icon> standard.
+          Your tutor has marked you on this task to a <grade-icon grade="project.selectedTask.grade"></grade-icon> standard.
         </div>
       </div>
       <div class="col-sm-4 date-info">
