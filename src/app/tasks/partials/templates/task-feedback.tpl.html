@@ -18,16 +18,18 @@
         </ul>
     </div><!--/active-task-switcher-->
     <div class="task-header-info col-sm-10">
-      <div class="col-sm-7 task-description">
+      <div class="col-sm-8 task-status-summary">
         <h3>{{project.selectedTask.definition.name}}</h3>
         <p class="help-block">{{activeStatusData().helpText}}</p>
+        <div class="graded-task-mark text-danger" ng-if="taskIsGraded">
+          Your tutor has marked you on this task to a <grade-icon grade="{{project.selectedTask.grade}}"></grade-icon> standard.
+        </div>
       </div>
       <div class="col-sm-4 date-info">
         <div class="overdue label label-{{daysOverdue(project.selectedTask) > 5 ? 'danger' : 'warning'}}" ng-hide="daysOverdue(project.selectedTask) === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
           <i class="fa fa-exclamation-triangle"></i>
           Past Target By <br/> {{daysOverdue(project.selectedTask)}} day{{daysOverdue(project.selectedTask) > 1 ? 's' : ''}}
         </div>
-
         <p class="due-date" tooltip="You should aim to complete the task by this date" tooltip-placement="right">
           <label>Target:</label> {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
         </p>

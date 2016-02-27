@@ -82,6 +82,8 @@ angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
               $scope.setActiveTab($scope.tabs.taskSheet)
       else
         $scope.setActiveTab($scope.tabs.taskSheet)
+      # Update the task grade if applicable
+      $scope.taskIsGraded = taskService.taskIsGraded newTask
 
     #
     # Loading the active task

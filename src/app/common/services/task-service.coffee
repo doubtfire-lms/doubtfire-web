@@ -297,5 +297,8 @@ angular.module("doubtfire.services.tasks", [])
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
         analyticsService.event 'Task Service', 'Failed to Recreate PDF'
 
+  taskService.taskIsGraded = (task) ->
+    task.definition.is_graded and task.grade?
+
   taskService
 )
