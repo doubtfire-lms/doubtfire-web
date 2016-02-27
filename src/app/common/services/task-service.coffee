@@ -287,7 +287,7 @@ angular.module("doubtfire.services.tasks", [])
           alertService.add("danger", value.data.error, 6000)
           analyticsService.event 'Task Service', 'Failed to Update Task Status', status
     # Must provide grade if graded and in a final complete state
-    if task.definition.is_graded and status in ['complete', 'discuss', 'demonstrate']
+    if task.definition.is_graded and status in taskService.gradeableStatuses
       GradeTaskModal.show(task).result.then(
         # Grade was selected (modal closed with result)
         (selectedGrade) ->
