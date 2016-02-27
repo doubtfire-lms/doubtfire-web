@@ -4,6 +4,12 @@
 
 A modern, lightweight learning management system.
 
+## Table of Contents
+
+1. [Getting Started](#getting-started)
+2. [Resources](#resources)
+3. [Contributing](#contributing)
+
 ## Getting Started
 
 Before you get started, make sure you have the [Doubtfire API](https://bitbucket.org/itig/doubtfire-api) up and running. You will need to do this before continuing.
