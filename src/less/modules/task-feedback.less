@@ -8,10 +8,20 @@
 }
 
 .task-feedback .task-header-info {
-  .task-description {
+  margin-bottom: 1em;
+  .task-status-summary {
     float: left;
     h3 {
       margin: 0;
+    }
+    .graded-task-mark {
+      font-weight: bold;
+      .grade-icon {
+        display: inline-block;
+        text-align: center;
+        line-height: 2.25em;
+        margin: 0 0.5ex;
+      }
     }
   }
   .overdue.label {
@@ -29,7 +39,6 @@
     display: inline-block;
   }
   .date-info {
-    float: right;
     text-align: right;
     .due-date {
       margin: 0;

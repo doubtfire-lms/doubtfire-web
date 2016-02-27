@@ -7,8 +7,10 @@ angular.module('doubtfire.common.grade-icon', [])
   scope:
     inputGrade: '=?grade'
   controller: ($scope, gradeService) ->
-    $scope.grade = if _.isString($scope.inputGrade) then gradeService.grades.indexOf($scope.inputGrade) else $scope.inputGrade
-    $scope.gradeText = (grade) ->
-      if $scope.grade? then gradeService.grades[$scope.grade] or "Grade"
-    $scope.gradeLetter = (grade) ->
-      gradeService.gradeAcronyms[$scope.gradeText(grade)] or 'G'
+    $scope.$watch 'inputGrade', (newGrade) ->
+      return unless newGrade?
+      $scope.grade = if _.isString($scope.inputGrade) then gradeService.grades.indexOf($scope.inputGrade) else $scope.inputGrade
+      $scope.gradeText = (grade) ->
+        if $scope.grade? then gradeService.grades[$scope.grade] or "Grade"
+      $scope.gradeLetter = (grade) ->
+        gradeService.gradeAcronyms[$scope.gradeText(grade)] or 'G'
