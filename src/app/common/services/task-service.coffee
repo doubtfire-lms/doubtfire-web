@@ -262,7 +262,7 @@ angular.module("doubtfire.services.tasks", [])
       if project.updateBurndownChart?
         project.updateBurndownChart()
       alertService.add("success", "Status saved.", 2000)
-      $rootScope.$broadcast('TaskStatusUpdated')
+      $rootScope.$broadcast('TaskStatusUpdated', { status: response.status })
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id)
