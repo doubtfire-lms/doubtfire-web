@@ -163,9 +163,10 @@ Use the body (lines after the top line) to explain why and what and *not* how; k
 
 Don't use the `-m` switch. Use a text editor to write your commit message instead.
 
-If you are using the command line to write your commits, it is useful to set your git editor to make writing a commit body easier. You can use the following command to set your editor to `emacs`, `vim`, `atom`.
+If you are using the command line to write your commits, it is useful to set your git editor to make writing a commit body easier. You can use the following command to set your editor to `nano`, `emacs`, `vim`, `atom`.
 
 ```
+$ git config --global core.editor nano
 $ git config --global core.editor emacs
 $ git config --global core.editor vim
 $ git config --global core.editor "atom --wait"
