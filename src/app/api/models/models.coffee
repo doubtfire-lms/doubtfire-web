@@ -16,4 +16,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.group-set"
   "doubtfire.api.models.task-alignment"
   "doubtfire.api.models.task-feedback"
+  "doubtfire.api.models.task-similarity"
 ])

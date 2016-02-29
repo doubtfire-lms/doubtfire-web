@@ -6,12 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("TaskSimilarity", ($http, api, currentUser) ->
-  get: (task, match, callback) ->
-    url = "#{api}/tasks/#{task.id}/similarity/#{match}"
-    $http.get(url).success ( data ) ->
-      callback(data)
-)
 .factory("Students", (resourcePlus) ->
   resourcePlus "/students"
 )
