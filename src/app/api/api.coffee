@@ -6,15 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("IntendedLearningOutcome", (resourcePlus, api, currentUser) ->
-  IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
-
-  IntendedLearningOutcome.getOutcomeBatchUploadUrl = (unit) ->
-    "#{api}/units/#{unit.id}/outcomes/csv?auth_token=#{currentUser.authenticationToken}"
-
-  IntendedLearningOutcome
-)
-
 .factory("Task", (resourcePlus, api, currentUser) ->
   Task = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id", { project_id: "@project_id", task_definition_id: "@task_definition_id" }
 
