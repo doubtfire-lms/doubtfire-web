@@ -11,4 +11,7 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.task"
   "doubtfire.api.models.task-comment"
   "doubtfire.api.models.task-definition"
+  "doubtfire.api.models.group-member"
+
 ])
+g
