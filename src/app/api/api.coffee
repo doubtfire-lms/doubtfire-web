@@ -6,12 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("User", (resourcePlus, currentUser, api) ->
-  User = resourcePlus "/users/:id", { id: "@id" }
-  User.csvUrl = ->
-    "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
-  return User
-)
 .service("TaskCompletionCSV", (api, $window, currentUser) ->
   this.downloadFile = (unit) ->
     $window.open "#{api}/csv/units/#{unit.id}/task_completion.json?auth_token=#{currentUser.authenticationToken}", "_blank"

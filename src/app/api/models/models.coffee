@@ -18,4 +18,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.task-feedback"
   "doubtfire.api.models.task-similarity"
   "doubtfire.api.models.students"
+  "doubtfire.api.models.user"
 ])
