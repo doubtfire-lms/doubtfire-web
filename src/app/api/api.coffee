@@ -3,7 +3,8 @@ angular.module "doubtfire.api", [
   # Kill the above when you do each
   "doubtfire.api.api-url"
   "doubtfire.api.resource-plus"
-  
+  "doubtfire.api.models"
+
 ]
 
 .factory("Project", (resourcePlus) ->
