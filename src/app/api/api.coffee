@@ -6,9 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("Students", (resourcePlus) ->
-  resourcePlus "/students"
-)
 .factory("User", (resourcePlus, currentUser, api) ->
   User = resourcePlus "/users/:id", { id: "@id" }
   User.csvUrl = ->
