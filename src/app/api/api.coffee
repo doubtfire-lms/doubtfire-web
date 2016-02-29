@@ -1,9 +1,9 @@
-angular.module("doubtfire.api", [
-  "ngResource"
-  "ngFileUpload"
-])
-
-.constant("api", '/* @echo API_URL */') # Set in env.config.js
+angular.module "doubtfire.api", [
+  "ngResource"   # resourcePlus depends on this
+  "ngFileUpload" # PortfolioSubmission depends on this
+  # Kill the above when you do each
+  "doubtfire.api.api-url"
+]
 
 #
 # Resource "plus"
