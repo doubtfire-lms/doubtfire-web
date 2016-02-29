@@ -6,9 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("LearningAlignments", (resourcePlus) ->
-  resourcePlus "/units/:unit_id/learning_alignments/:id", { id: "@id", unit_id: "@unit_id" }
-)
 .factory("IntendedLearningOutcome", (resourcePlus, api, currentUser) ->
   IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
 

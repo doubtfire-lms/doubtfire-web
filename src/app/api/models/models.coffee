@@ -6,4 +6,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.convenor"
   "doubtfire.api.models.tutor"
   "doubtfire.api.models.tutorial"
+  "doubtfire.api.models.learning-alignments"
 ])
