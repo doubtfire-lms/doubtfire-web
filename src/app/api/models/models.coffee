@@ -19,4 +19,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.task-similarity"
   "doubtfire.api.models.students"
   "doubtfire.api.models.user"
+  "doubtfire.api.models.task-completion-CSV"
 ])

@@ -6,12 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.service("TaskCompletionCSV", (api, $window, currentUser) ->
-  this.downloadFile = (unit) ->
-    $window.open "#{api}/csv/units/#{unit.id}/task_completion.json?auth_token=#{currentUser.authenticationToken}", "_blank"
-
-  return this
-)
 .service("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
 
   this.getPortfolioUrl = (project) ->
