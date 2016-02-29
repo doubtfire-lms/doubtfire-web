@@ -6,9 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("TaskDefinition", (resourcePlus) ->
-  TaskDefinition = resourcePlus "/task_definitions/:id", { id: "@id" }
-)
 .factory("GroupMember", (resourcePlus) ->
   resourcePlus "/units/:unit_id/group_sets/:group_set_id/groups/:group_id/members/:id", { id: "@id", group_id: "@group_id", group_set_id: "@group_set_id", unit_id: "@unit_id" }
 )

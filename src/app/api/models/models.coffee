@@ -10,4 +10,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.intended-learning-outcome"
   "doubtfire.api.models.task"
   "doubtfire.api.models.task-comment"
+  "doubtfire.api.models.task-definition"
 ])
