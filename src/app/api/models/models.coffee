@@ -8,4 +8,5 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.tutorial"
   "doubtfire.api.models.learning-alignments"
   "doubtfire.api.models.intended-learning-outcome"
+  "doubtfire.api.models.task"
 ])
