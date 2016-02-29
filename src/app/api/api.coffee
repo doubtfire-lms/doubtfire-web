@@ -6,9 +6,6 @@ angular.module("doubtfire.api", [
   "doubtfire.api.models"
 ])
 
-.factory("UnitRole", (resourcePlus) ->
-  resourcePlus "/unit_roles/:id", { id: "@id" }
-)
 .factory("UserRole", (resourcePlus) ->
   resourcePlus "/user_roles/:id", { id: "@id" }
 )
