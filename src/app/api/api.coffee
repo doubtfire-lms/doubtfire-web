@@ -1,10 +1,10 @@
-angular.module "doubtfire.api", [
+angular.module("doubtfire.api", [
   "ngFileUpload" # PortfolioSubmission depends on this
   # Kill the above when you do each
   "doubtfire.api.api-url"
   "doubtfire.api.resource-plus"
   "doubtfire.api.models"
-]
+])
 
 .factory("UnitRole", (resourcePlus) ->
   resourcePlus "/unit_roles/:id", { id: "@id" }

@@ -1,6 +1,6 @@
-angular.module "doubtfire.api.resource-plus", [
+angular.module("doubtfire.api.resource-plus", [
   "ngResource"
-]
+])
 
 #
 # Resource "plus"

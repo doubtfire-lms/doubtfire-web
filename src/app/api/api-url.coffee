@@ -1,4 +1,4 @@
-angular.module "doubtfire.api.api-url", []
+angular.module("doubtfire.api.api-url", [])
 
 #
 # This sets where the Doubtfire API sits

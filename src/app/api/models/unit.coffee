@@ -1,4 +1,4 @@
-angular.module "doubtfire.api.models.unit", []
+angular.module("doubtfire.api.models.unit", [])
 
 .factory("Unit", (resourcePlus, currentUser, $window, api) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
