@@ -41,6 +41,8 @@ $ npm install
 $ npm install -g grunt-cli bower
 ```
 
+**Note:** You may need to install `grunt-cli` globally in Linux using `sudo`.
+
 Install bower dependencies from `bower.json`:
 
 ```
