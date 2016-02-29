@@ -7,9 +7,6 @@ angular.module "doubtfire.api", [
 
 ]
 
-.factory("Project", (resourcePlus) ->
-  resourcePlus "/projects/:id", { id: "@id" }
-)
 .factory("Unit", (resourcePlus, currentUser, $window, api) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
   Unit.getPortfoliosUrl = (unit) ->
