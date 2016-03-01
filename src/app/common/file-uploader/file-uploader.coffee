@@ -3,7 +3,7 @@ angular.module('doubtfire.common.file-uploader', [])
 .directive 'fileUploader', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'common/partials/templates/file-uploader.tpl.html'
+  templateUrl: 'common/file-uploader/file-uploader.tpl.html'
   scope:
     # Files map a key (file name to be uploaded) to a value (containing a
     # a display name, and the type of file that is to be accepted, where
