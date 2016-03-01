@@ -51,7 +51,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, csvResultService) ->
+  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, CSVResultModal) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -137,7 +137,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
       Unit.allResourcesDownloadUrl($scope.unit)
 
     $scope.onBatchTaskSuccess = (response) ->
-      csvResultService.show "Task CSV Upload Results", response
+      CSVResultModal.show "Task CSV Upload Results", response
       if response.success.length > 0
         $scope.unit.refresh()
 
@@ -253,7 +253,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, $modal, Unit, Project, alertService, csvResultService) ->
+  controller: ($scope, $modal, Unit, Project, alertService, CSVResultModal) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
     $scope.showEnrolModal = () ->
@@ -266,12 +266,12 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
-      csvResultService.show("Enrol Student CSV Results", response)
+      CSVResultModal.show("Enrol Student CSV Results", response)
       if response.success.length > 0
         $scope.unit.refreshStudents()
 
     onBatchWithdrawSuccess = (response) ->
-      csvResultService.show("Withdraw Student CSV Results", response)
+      CSVResultModal.show("Withdraw Student CSV Results", response)
       if response.success.length > 0
         alertService.add("success", "Withdrew #{response.success.length} students.", 2000)
         $scope.unit.refreshStudents()
