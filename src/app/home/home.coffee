@@ -1,5 +1,5 @@
 angular.module("doubtfire.home", [])
-.config((headerStateProvider) ->
+.config((headerServiceProvider) ->
   homeStateData =
     url: "/home?notifications"
     views:
@@ -9,7 +9,7 @@ angular.module("doubtfire.home", [])
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerStateProvider.state 'home', homeStateData
+  headerServiceProvider.state 'home', homeStateData
 )
 
 .controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService) ->

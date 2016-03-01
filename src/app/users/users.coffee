@@ -2,7 +2,7 @@ angular.module('doubtfire.users', [
   'doubtfire.users.modals'
 ])
 
-.config((headerStateProvider) ->
+.config((headerServiceProvider) ->
   userIndexStateData =
     url: "/admin/users"
     views:
@@ -12,7 +12,7 @@ angular.module('doubtfire.users', [
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  headerStateProvider.state "admin/users#index", userIndexStateData
+  headerServiceProvider.state "admin/users#index", userIndexStateData
 )
 
 .controller("AdminUsersCtrl", ($scope, $modal, User, alertService, CSVResultModal, UserSettingsModal) ->

@@ -2,7 +2,7 @@ angular.module("doubtfire.units", [
   'doubtfire.units.partials'
 ])
 
-.config((headerStateProvider) ->
+.config((headerServiceProvider) ->
   unitShowStateData =
     url: "/units?unitRole"
     views:
@@ -12,7 +12,7 @@ angular.module("doubtfire.units", [
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerStateProvider.state 'units#show', unitShowStateData
+  headerServiceProvider.state 'units#show', unitShowStateData
 
   unitAdminIndexStateData =
     url: "/admin/units"
@@ -23,7 +23,7 @@ angular.module("doubtfire.units", [
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  headerStateProvider.state "admin/units#index", unitAdminIndexStateData
+  headerServiceProvider.state "admin/units#index", unitAdminIndexStateData
 
   unitAdminEditStateData =
     url: "/admin/units/:unitId"
@@ -36,7 +36,7 @@ angular.module("doubtfire.units", [
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
 
-  headerStateProvider.state "admin/units#edit", unitAdminEditStateData
+  headerServiceProvider.state "admin/units#edit", unitAdminEditStateData
 )
 
 #

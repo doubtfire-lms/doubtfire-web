@@ -2,7 +2,7 @@ angular.module("doubtfire.projects", [
   'doubtfire.units.partials'
   'doubtfire.projects.partials'
 ])
-.config((headerStateProvider) ->
+.config((headerServiceProvider) ->
   projectsShowStateData =
     url: "/projects/:projectId?unitRole"
     views:
@@ -12,7 +12,7 @@ angular.module("doubtfire.projects", [
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerStateProvider.state "projects#show", projectsShowStateData
+  headerServiceProvider.state "projects#show", projectsShowStateData
 
   projectsProgressStateData =
     url: "/projects/:projectId/progress?authToken"
@@ -22,7 +22,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-progress.tpl.html"
     data:
       pageTitle: "_Home_"
-  headerStateProvider.state "projects#progress", projectsProgressStateData
+  headerServiceProvider.state "projects#progress", projectsProgressStateData
 
   projectsFeedbackStateData =
     url: "/projects/:projectId/:viewing/:showTaskId"
@@ -32,7 +32,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
     data:
       pageTitle: "_Home_"
-  headerStateProvider.state "projects#feedback", projectsFeedbackStateData
+  headerServiceProvider.state "projects#feedback", projectsFeedbackStateData
 )
 .controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService, analyticsService) ->
   analyticsService.event 'Student Project View', 'Started Viewing Project'
