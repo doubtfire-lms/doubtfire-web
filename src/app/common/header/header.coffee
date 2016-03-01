@@ -7,7 +7,7 @@ angular.module('doubtfire.common.header', [])
   'common/header/header.tpl.html'
 )
 
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, currentUser, headerService, unitService, projectService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService) ->
   $scope.menus = headerService.getMenus()
   $scope.currentUser = currentUser.profile
 
