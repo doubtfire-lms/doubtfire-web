@@ -23,7 +23,7 @@ angular.module('doubtfire.common.header', [])
     units.length == 1 || unit.role == "Tutor"
 
   $scope.openUserSettings = () ->
-    UserSettingsModal.show(user)
+    UserSettingsModal.show $scope.currentUser
 
   $scope.openNotificationSettings = ->
     UserNotificationSettingsModal.show $scope.currentUser
