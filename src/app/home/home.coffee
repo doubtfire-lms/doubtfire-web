@@ -1,5 +1,5 @@
 angular.module("doubtfire.home", [])
-.config(($stateProvider) ->
+.config(($stateProvider, headerTemplateUrl) ->
   $stateProvider.state("home",
     url: "/home?notifications"
     views:
@@ -8,7 +8,7 @@ angular.module("doubtfire.home", [])
         templateUrl: "home/index.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
 
     data:
       pageTitle: "_Home_"
@@ -40,9 +40,9 @@ angular.module("doubtfire.home", [])
   $scope.userHasNotOptedIn = userHasNotOptedIn and not firstTimeUser
 
   if $scope.showNewUserWizard
-    headerService.hideNav()
+    headerService.hideHeader()
   else
-    headerService.showNav()
+    headerService.showHeader()
 
   unitService.getUnitRoles (roles) ->
     $scope.unitRoles = roles

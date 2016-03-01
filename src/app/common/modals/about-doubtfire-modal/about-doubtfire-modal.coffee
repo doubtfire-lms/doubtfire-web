@@ -1,15 +1,18 @@
-angular.module("doubtfire.common.about-doubtfire-modal", [])
+angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
 
 #
-# Services for making alerts
+# Modal to show Doubtfire version info
 #
-.factory("aboutModalService", ($modal) ->
-  aboutService =
-    show: () ->
-      $modal.open
-        templateUrl: 'common/modals/templates/about-doubtfire-modal.tpl.html'
-        controller: 'AboutDoubtfireModalCtrl'
-        size: 'lg'
+.factory("AboutDoubtfireModal", ($modal) ->
+  AboutDoubtfireModal = {}
+
+  AboutDoubtfireModal.show = ->
+    $modal.open
+      templateUrl: 'common/modals/about-doubtfire-modal/about-doubtfire-modal.tpl.html'
+      controller: 'AboutDoubtfireModalCtrl'
+      size: 'lg'
+
+  AboutDoubtfireModal
 )
 
 .controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $modalInstance, $http, $q) ->

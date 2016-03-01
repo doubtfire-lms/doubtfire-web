@@ -1,4 +1,4 @@
-angular.module("doubtfire.services.tasks", [])
+angular.module("doubtfire.common.services.tasks", [])
 
 .factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService) ->
   #

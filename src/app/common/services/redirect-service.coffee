@@ -1,4 +1,4 @@
-angular.module("doubtfire.services.redirect", [])
+angular.module("doubtfire.common.services.redirect", [])
 
 .factory("redirectService", ($state, $stateParams) ->
   #

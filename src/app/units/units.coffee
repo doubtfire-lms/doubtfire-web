@@ -1,7 +1,8 @@
 angular.module("doubtfire.units", [
   'doubtfire.units.partials'
-]
-).config(($stateProvider) ->
+])
+
+.config(($stateProvider, headerTemplateUrl) ->
 
   $stateProvider.state("units#show",
     url: "/units?unitRole"
@@ -11,7 +12,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/tutor-home.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
 
     data:
       pageTitle: "_Home_"
@@ -25,7 +26,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/admin-home.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
@@ -38,7 +39,7 @@ angular.module("doubtfire.units", [
         templateUrl: "units/admin-unit.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']

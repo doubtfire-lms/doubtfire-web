@@ -1,9 +1,9 @@
-angular.module("doubtfire.services.projects", [])
+angular.module("doubtfire.common.services.projects", [])
 
+#
+# Service for handling projects
+#
 .factory("projectService", ($filter, taskService, Project, $rootScope, alertService) ->
-  #
-  # The unit service object
-  #
   projectService = {}
 
   projectService.loadedProjects = null

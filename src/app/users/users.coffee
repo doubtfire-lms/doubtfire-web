@@ -1,7 +1,8 @@
-angular.module("doubtfire.users", [
-  'doubtfire.users.partials'
-]
-).config(($stateProvider) ->
+angular.module('doubtfire.users', [
+  'doubtfire.users.modals'
+])
+
+.config(($stateProvider, headerTemplateUrl) ->
 
   $stateProvider.state("admin/users#index",
     url: "/admin/users"
@@ -11,39 +12,34 @@ angular.module("doubtfire.users", [
         templateUrl: "users/admin.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
   )
 )
-.controller("AdminUsersCtrl", ($scope, $modal, User, alertService, csvResultService) ->
+
+.controller("AdminUsersCtrl", ($scope, $modal, User, alertService, CSVResultModal, UserSettingsModal) ->
   $scope.file_data =
     onBatchUserSuccess: (response) ->
-      csvResultService.show "User CSV import results", response
+      CSVResultModal.show "User CSV import results", response
       $scope.users = User.query()
     batchUserUrl: User.csvUrl()
     batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }
 
-
   $scope.users = User.query()
+
   # Table sort details
   $scope.sortOrder = "id"
+
   # Pagination details
   $scope.currentPage = 1
   $scope.maxSize = 5
   $scope.pageSize = 15
-  $scope.showUserModal = (user) ->
-    userToShow = if user?
-      user
-    else
-      new User { }
 
-    $modal.open
-      templateUrl: 'users/partials/templates/user-modal-context.tpl.html'
-      controller: 'UserModalCtrl'
-      resolve:
-        user: -> userToShow
-        isNew: -> !user?
-        users: -> $scope.users
+  # User settings/create modal
+  $scope.showUserModal = (user) ->
+    # If we're given a user, show that user, else create a new one
+    userToShow = if user? then user else new User { }
+    UserSettingsModal.show userToShow
 )

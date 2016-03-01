@@ -1,25 +1,56 @@
-angular.module("doubtfire.services.header", [])
+angular.module("doubtfire.common.services.header", [])
+#
+# Service for handling the header
+#
 .factory("headerService", ($rootScope) ->
+  # Internal object that stores the menus
+  $rootScope.headerMenuData = [ ]
 
-  # use the menus here to inject non-global menus
-  # dynamically to a page (i.e., page-specific menus such as "role")
+  headerService = {}
 
-  # menuLinks = [ { class: 'active/nil', url: '/someUrl', name: 'Link Title' } ... ]
-  # menu      = { name: 'Menu Title', links: menuLinks, icon: 'icon' }
+  #
+  # Returns the current menus
+  #
+  headerService.getMenus = ->
+    $rootScope.headerMenuData
 
-  $rootScope.header_menu_data = [ ]
+  #
+  # Clears all menus in the header
+  #
+  headerService.clearMenus = ->
+    $rootScope.headerMenuData.length = 0
 
-  menus: () -> $rootScope.header_menu_data
-  clearMenus: ->
-    $rootScope.header_menu_data.length = 0
-  setMenus: (new_menus) ->
-    $rootScope.header_menu_data.length = 0
-    $rootScope.header_menu_data.push menu for menu in new_menus
-  push: (new_menu) ->
-    # push only if adding unique name
-    $rootScope.header_menu_data.push new_menu if (menu for menu in $rootScope.header_menu_data when menu.name is new_menu.name).length == 0
-  showNav: ->
-    $rootScope.removeNavbar = false
-  hideNav: ->
-    $rootScope.removeNavbar = true
+  #
+  # Set new menus where:
+  #
+  #   menuLinks = [ { class: 'active' or undefined, url: '/someUrl', name: 'Link Title' } ... ]
+  #   newMenus  = [{ name: 'Menu Title', links: menuLinks, icon: 'icon' } ... ]
+  #
+  headerService.setMenus = (newMenus) ->
+    $rootScope.headerMenuData = newMenus
+
+  #
+  # Push a new menu to the header where:
+  #
+  #   menuLinks = [ { class: 'active' or undefined, url: '/someUrl', name: 'Link Title' } ... ]
+  #   newMenu   = { name: 'Menu Title', links: menuLinks, icon: 'icon' }
+  #
+  headerService.pushMenu = (newMenu) ->
+    # Add the new menu only if it's unique (by name)
+    unless _.find $rootScope.headerMenuData, { 'name': newMenu.name } is undefined
+      $rootScope.headerMenuData.push newMenu
+
+  #
+  # Show the header
+  #
+  headerService.showHeader = ->
+    $rootScope.showHeader = true
+
+  #
+  # Hide the header
+  #
+  headerService.hideHeader = ->
+    $rootScope.showHeader = false
+
+  headerService
 )

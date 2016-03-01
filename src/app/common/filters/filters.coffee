@@ -1,4 +1,4 @@
-angular.module("doubtfire.filters", [])
+angular.module("doubtfire.common.filters", [])
 
 #
 # Paging filter - start from the indicated index

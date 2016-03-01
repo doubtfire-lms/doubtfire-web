@@ -168,7 +168,7 @@ angular.module("doubtfire.sessions", [
 
   # Return the auth object
   auth
-).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie, aboutModalService) ->
+).controller("SignInCtrl", ($scope, $state, $stateParams, userCookieName, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -202,7 +202,7 @@ angular.module("doubtfire.sessions", [
         logo.style.backgroundColor = 'inherit'
 
   $scope.openAboutModal = ->
-    aboutModalService.show()
+    AboutDoubtfireModal.show()
 
   if auth.isAuthenticated()
     redirectService.redirect "home", {}

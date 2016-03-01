@@ -2,7 +2,7 @@ angular.module("doubtfire.projects", [
   'doubtfire.units.partials'
   'doubtfire.projects.partials'
 ]
-).config(($stateProvider) ->
+).config(($stateProvider, headerTemplateUrl) ->
 
   $stateProvider.state("projects#show",
     url: "/projects/:projectId?unitRole"
@@ -12,7 +12,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
 
     data:
       pageTitle: "_Home_"
@@ -36,7 +36,7 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-show.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Home_"
       # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -54,7 +54,7 @@ angular.module("doubtfire.projects", [
     $scope.showTaskId = parseInt($stateParams.showTaskId, 10)
 
   $scope.unitRole = $stateParams.unitRole
-  
+
   if $scope.unitRole?
     # Bound to inner-directive
     UnitRole.get { id: $scope.unitRole },

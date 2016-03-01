@@ -1,7 +1,9 @@
-angular.module("doubtfire.errors", [
-  "ui.router"
-]).config(($stateProvider) ->
+#
+# Doubtfire errors module
+#
+angular.module("doubtfire.errors", [])
 
+.config(($stateProvider, headerTemplateUrl) ->
   $stateProvider.state("not_found",
     url: "/not_found"
     views:
@@ -10,7 +12,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/not_found.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Not Found_"
   ).state("unauthorised",
@@ -21,7 +23,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/unauthorised.tpl.html"
       header:
         controller: "BasicHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Unauthorised_"
   ).state("timeout",
@@ -32,7 +34,7 @@ angular.module("doubtfire.errors", [
         templateUrl: "errors/timeout.tpl.html"
       header:
         controller: "ErrorHeaderCtrl"
-        templateUrl: "common/partials/templates/header.tpl.html"
+        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Timeout_"
   )

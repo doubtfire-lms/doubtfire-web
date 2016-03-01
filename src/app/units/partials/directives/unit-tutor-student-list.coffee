@@ -1,5 +1,4 @@
-angular.module('doubtfire.units.partials.unit-tutor-student-list', [
-  'doubtfire.units.partials.modals', 'doubtfire.filters'])
+angular.module('doubtfire.units.partials.unit-tutor-student-list', [])
 
 #
 # The Tutor Student List view shows a list of students, with
