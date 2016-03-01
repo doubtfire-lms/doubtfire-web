@@ -5,24 +5,23 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
 
   UserSettingsModal.show = (user) ->
     $modal.open
-      templateUrl: 'users/modals/user-settings-modal/user-modal-context.tpl.html'
+      templateUrl: 'users/modals/user-settings-modal/user-settings-modal.tpl.html'
       controller: 'UserSettingsModalCtrl'
       resolve:
-        user: ->  $scope.currentUser
+        user: -> user
 
   UserSettingsModal
 )
 
 .controller('UserSettingsModalCtrl', ($scope, $modalInstance, alertService, analyticsService, currentUser, User, user, auth) ->
   $scope.user = user
-  $scope.isNew = user.id is undefined
+  $scope.isNew = user?.id is undefined
 
   if $scope.isNew
     $scope.users = User.query()
 
   $scope.currentUser = currentUser
 
-  $scope.isNew = isNew
   $scope.modalState = {}
 
   createNewUser = ->
