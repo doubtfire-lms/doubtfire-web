@@ -1,7 +1,7 @@
 angular.module("doubtfire.common.pdf-panel-viewer", [])
 .directive('pdfPanelViewer', ->
   restrict: 'E'
-  templateUrl: 'common/partials/templates/pdf-panel-viewer.tpl.html'
+  templateUrl: 'common/pdf-panel-viewer/pdf-panel-viewer.tpl.html'
   scope:
     pdfUrl: '='
     footerText: '@'

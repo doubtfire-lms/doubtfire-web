@@ -2,7 +2,7 @@ angular.module('doubtfire.common.status-icon', [])
 
 .directive 'statusIcon', ->
   restrict: 'E'
-  templateUrl: 'common/partials/templates/status-icon.tpl.html'
+  templateUrl: 'common/status-icon/status-icon.tpl.html'
   scope:
     status: '='
   controller: ($scope, taskService) ->

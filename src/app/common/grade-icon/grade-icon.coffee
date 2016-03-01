@@ -3,7 +3,7 @@ angular.module('doubtfire.common.grade-icon', [])
 .directive 'gradeIcon', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'common/partials/templates/grade-icon.tpl.html'
+  templateUrl: 'common/grade-icon/grade-icon.tpl.html'
   scope:
     inputGrade: '=?grade'
   controller: ($scope, gradeService) ->
