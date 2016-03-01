@@ -1,19 +1,15 @@
 angular.module("doubtfire.home", [])
-.config(($stateProvider, headerTemplateUrl) ->
-  $stateProvider.state("home",
+.config((headerStateProvider) ->
+  homeStateData =
     url: "/home?notifications"
     views:
       main:
         controller: "HomeCtrl"
         templateUrl: "home/index.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
-
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  )
+  headerStateProvider.state 'home', homeStateData
 )
 
 .controller("HomeCtrl", ($scope, $state, $stateParams, $modal, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService) ->

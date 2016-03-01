@@ -2,48 +2,41 @@ angular.module("doubtfire.units", [
   'doubtfire.units.partials'
 ])
 
-.config(($stateProvider, headerTemplateUrl) ->
-
-  $stateProvider.state("units#show",
+.config((headerStateProvider) ->
+  unitShowStateData =
     url: "/units?unitRole"
     views:
       main:
         controller: "TutorUnitViewRootCtrl"
         templateUrl: "units/tutor-home.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
-
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  )
-  .state("admin/units#index",
+  headerStateProvider.state 'units#show', unitShowStateData
+
+  unitAdminIndexStateData =
     url: "/admin/units"
     views:
       main:
         controller: "AdminUnitsCtrl"
         templateUrl: "units/admin-home.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  )
-  .state("admin/units#edit",
+  headerStateProvider.state "admin/units#index", unitAdminIndexStateData
+
+  unitAdminEditStateData =
     url: "/admin/units/:unitId"
     views:
       main:
         controller: "EditUnitCtrl"
         templateUrl: "units/admin-unit.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
+      controller: "BasicHeaderCtrl"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-   )
+
+  headerStateProvider.state "admin/units#edit", unitAdminEditStateData
 )
 
 #

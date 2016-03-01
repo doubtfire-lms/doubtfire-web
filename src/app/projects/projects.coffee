@@ -1,24 +1,20 @@
 angular.module("doubtfire.projects", [
   'doubtfire.units.partials'
   'doubtfire.projects.partials'
-]
-).config(($stateProvider, headerTemplateUrl) ->
-
-  $stateProvider.state("projects#show",
+])
+.config((headerStateProvider) ->
+  projectsShowStateData =
     url: "/projects/:projectId?unitRole"
     views:
       main:
         controller: "ProjectsShowCtrl"
         templateUrl: "projects/projects-show.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
-
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  )
-  $stateProvider.state("projects#progress",
+  headerStateProvider.state "projects#show", projectsShowStateData
+
+  projectsProgressStateData =
     url: "/projects/:projectId/progress?authToken"
     views:
       main:
@@ -26,21 +22,17 @@ angular.module("doubtfire.projects", [
         templateUrl: "projects/projects-progress.tpl.html"
     data:
       pageTitle: "_Home_"
-      # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  )
-  $stateProvider.state("projects#feedback",
+  headerStateProvider.state "projects#progress", projectsProgressStateData
+
+  projectsFeedbackStateData =
     url: "/projects/:projectId/:viewing/:showTaskId"
     views:
       main:
         controller: "ProjectsShowCtrl"
         templateUrl: "projects/projects-show.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Home_"
-      # roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  )
+  headerStateProvider.state "projects#feedback", projectsFeedbackStateData
 )
 .controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService, analyticsService) ->
   analyticsService.event 'Student Project View', 'Started Viewing Project'

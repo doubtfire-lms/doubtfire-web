@@ -2,21 +2,17 @@ angular.module('doubtfire.users', [
   'doubtfire.users.modals'
 ])
 
-.config(($stateProvider, headerTemplateUrl) ->
-
-  $stateProvider.state("admin/users#index",
+.config((headerStateProvider) ->
+  userIndexStateData =
     url: "/admin/users"
     views:
       main:
         controller: "AdminUsersCtrl"
         templateUrl: "users/admin.tpl.html"
-      header:
-        controller: "BasicHeaderCtrl"
-        templateUrl: headerTemplateUrl
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  )
+  headerStateProvider.state "admin/users#index", userIndexStateData
 )
 
 .controller("AdminUsersCtrl", ($scope, $modal, User, alertService, CSVResultModal, UserSettingsModal) ->

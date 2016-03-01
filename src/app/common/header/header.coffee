@@ -3,8 +3,16 @@
 #
 angular.module('doubtfire.common.header', [])
 
-.constant('headerTemplateUrl',
-  'common/header/header.tpl.html'
+.provider('headerState', ($stateProvider) ->
+  headerStateProvider = {}
+  headerStateProvider.$get = ->
+    return
+  headerStateProvider.state = (stateName, stateData, controller = 'BasicHeaderCtrl') ->
+    stateData.views.header =
+      controller: controller
+      templateUrl: 'common/header/header.tpl.html'
+    state = $stateProvider.state stateName, stateData
+  headerStateProvider
 )
 
 .controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService) ->
