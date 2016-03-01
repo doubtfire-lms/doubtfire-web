@@ -4,7 +4,7 @@ angular.module("doubtfire.common.services.header", [])
 #
 .factory("headerService", ($rootScope) ->
   # Internal object that stores the menus
-  $rootScope.headerMenuData = [ ]
+  $rootScope.headerMenuData = []
   # Internal object that stores the visbility of the header
   $rootScope.showHeader = true
 
@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.header", [])
   # Clears all menus in the header
   #
   headerService.clearMenus = ->
-    $rootScope.headerMenuData.length = 0
+    $rootScope.headerMenuData = []
 
   #
   # Set new menus where:
