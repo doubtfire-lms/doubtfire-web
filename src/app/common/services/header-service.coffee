@@ -5,6 +5,8 @@ angular.module("doubtfire.common.services.header", [])
 .factory("headerService", ($rootScope) ->
   # Internal object that stores the menus
   $rootScope.headerMenuData = [ ]
+  # Internal object that stores the visbility of the header
+  $rootScope.showHeader = true
 
   headerService = {}
 
