@@ -47,4 +47,6 @@ angular.module("doubtfire.common.services.alerts", [])
   #
   alertService.clearAll = ->
     $rootScope.alerts = []
+
+  alertService
 )
