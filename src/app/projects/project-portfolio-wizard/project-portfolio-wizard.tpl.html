@@ -38,12 +38,12 @@
         </div>
       </div>
     </div>
-    <portfolio-grade-select ng-if="activePortfolioTab == portfolioTabsData.gradeStep"></portfolio-grade-select>
-    <learning-summary-report ng-if="activePortfolioTab == portfolioTabsData.summaryStep"></learning-summary-report>
-    <portfolio-tasks ng-if="activePortfolioTab == portfolioTabsData.taskStep"></portfolio-tasks>
-    <portfolio-other ng-if="activePortfolioTab == portfolioTabsData.otherFilesStep"></portfolio-other>
-    <portfolio-compile ng-if="activePortfolioTab == portfolioTabsData.compileStep"></portfolio-compile>
-    <portfolio-review ng-if="activePortfolioTab == portfolioTabsData.reviewStep"></portfolio-review>
+    <portfolio-grade-select-step ng-if="activePortfolioTab == portfolioTabsData.gradeStep"></portfolio-grade-select-step>
+    <portfolio-learning-summary-report-step ng-if="activePortfolioTab == portfolioTabsData.summaryStep"></portfolio-learning-summary-report-step>
+    <portfolio-tasks-step ng-if="activePortfolioTab == portfolioTabsData.taskStep"></portfolio-tasks-step>
+    <portfolio-add-extra-files-step ng-if="activePortfolioTab == portfolioTabsData.otherFilesStep"></portfolio-add-extra-files-step>
+    <portfolio-compile-step ng-if="activePortfolioTab == portfolioTabsData.compileStep"></portfolio-compile-step>
+    <portfolio-review-step ng-if="activePortfolioTab == portfolioTabsData.reviewStep"></portfolio-review-step>
     <div ng-if="project.portfolio_files.length > 0 && activePortfolioTab.seq < portfolioTabsData.reviewStep.seq">
       <portfolio-files></portfolio-files>
     </div>

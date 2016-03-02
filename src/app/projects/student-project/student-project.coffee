@@ -1,10 +1,11 @@
-angular.module("doubtfire.projects.student-project-directive", [
-  'doubtfire.units.partials'
-  'doubtfire.projects.partials'
-])
+angular.module("doubtfire.projects.student-project", [])
+
+#
+# This directive shows a student's project
+#
 .directive("studentProject", ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/student-project-directive.tpl.html'
+  templateUrl: 'projects/student-project/student-project.tpl.html'
   scope:
     showTaskId: '=?' # pass in a task to initially show
     unitRole: '=?' # pass in a unitRole who is viewing this project
@@ -25,7 +26,7 @@ angular.module("doubtfire.projects.student-project-directive", [
       else if not task and $scope.project.selectedTask
         task = $scope.project.selectedTask
 
-      $scope.activeTab = $scope.tabs.tasksTab
+      $scope.setActiveTab $scope.tabs.tasksTab
       $scope.project.selectedTask = task
 
     #

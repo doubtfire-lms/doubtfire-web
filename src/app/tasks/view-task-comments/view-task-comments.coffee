@@ -1,11 +1,8 @@
-angular.module("doubtfire.projects.view-comments-directive", [
-  'doubtfire.units.partials'
-  'doubtfire.projects.partials'
-])
+angular.module("doubtfire.tasks.view-task-comments", [])
 
-.directive('viewComments', ->
+.directive('viewTaskComments', ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/view-comments.tpl.html'
+  templateUrl: 'projects/view-task-comments/view-task-comments.tpl.html'
   scope:
     project: "=project"
     task: "=task"

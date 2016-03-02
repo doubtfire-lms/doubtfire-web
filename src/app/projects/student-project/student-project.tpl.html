@@ -9,11 +9,11 @@
     </tab>
   </tabset><!--tabs-->
   <div ng-if="unitLoaded">
-    <progress-info ng-if="activeTab === tabs.progressTab"></progress-info>
+    <project-progress-dashboard ng-if="activeTab === tabs.progressTab"></project-progress-dashboard>
     <task-feedback ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-feedback>
     <student-group-tab ng-if="activeTab === tabs.groupTab"></student-group-tab>
-    <lab-list ng-if="activeTab === tabs.tutorialTab"></lab-list>
+    <project-lab-list ng-if="activeTab === tabs.tutorialTab"></project-lab-list>
     <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
-    <project-portfolio ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio>
+    <project-portfolio-wizard ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio-wizard>
   </div><!--/content-->
 </div>

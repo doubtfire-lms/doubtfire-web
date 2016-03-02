@@ -2,7 +2,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
 
 .directive("projectOutcomeAlignment", ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/project-outcome-alignment.tpl.html'
+  templateUrl: 'projects/project-outcome-alignment/project-outcome-alignment.tpl.html'
   controller: ($scope, $rootScope, $timeout, outcomeService, Unit, alertService, analyticsService, Visualisation) ->
     $scope.poaView = {
       activeTab: 'list'

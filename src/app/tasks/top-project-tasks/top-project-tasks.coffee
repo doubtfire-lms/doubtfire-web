@@ -1,8 +1,8 @@
-angular.module('doubtfire.projects.partials.projectTopTasks', [])
+angular.module('doubtfire.tasks.top-project-tasks', [])
 
-.directive('projectTopTasks', ->
+.directive('topProjectTasks', ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/project-top-tasks.tpl.html'
+  templateUrl: 'tasks/top-project-tasks/top-project-tasks.tpl.html'
   scope:
     project: "=project"
     onSelect: "="
@@ -31,7 +31,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
       # sort tasks by start date
       #
       sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.includes taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
-      
+
       overdueTasks = _.filter sortedTasks, (task) ->
         taskService.daysOverdue(task) > 0
 
@@ -44,7 +44,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
         tutorialDay = "Monday"
 
       tasksToDiscuss = _.filter overdueTasks, (task) -> _.includes taskService.statusToDiscuss, task.status
-      
+
       if tasksToDiscuss? && tasksToDiscuss.length > 0
         # Only add if the tasks are to be discussed today...
         if today == tutorialDay
@@ -64,7 +64,7 @@ angular.module('doubtfire.projects.partials.projectTopTasks', [])
           toAdd = _.map overdueGradeTasks, (task) -> { task: task, reason: "Complete this #{gradeService.grades[grade]} task to get back on track."}
           Array.prototype.push.apply result, toAdd
         break if result.length >= 5
-      
+
       return _.slice(result, 0, 5) if result.length >= 5
 
       #

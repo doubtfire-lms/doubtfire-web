@@ -1,8 +1,15 @@
-angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
+angular.module('doubtfire.projects.project-progress-dashboard',[])
 
-.directive('progressInfo', ->
+#
+# Progress tab for the student's project
+#
+# Basically a dashboard where students can see everything about their
+# project in one area including burndown chart, tasks to work on
+# and their target grade
+#
+.directive('projectProgressDashboard', ->
   restrict: 'E'
-  templateUrl: 'projects/partials/templates/progress-info.tpl.html'
+  templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
   controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
@@ -44,46 +51,4 @@ angular.module('doubtfire.projects.partials.contexts', ['doubtfire.tasks'])
       updateTaskCompletionStats()
 
     updateTaskCompletionStats()
-)
-.directive('taskList', ->
-  restrict: 'E'
-  templateUrl: 'projects/partials/templates/task-list.tpl.html'
-  controller: ($scope, $modal, User, Unit) ->
-    # TODO
-)
-.directive('labList', ->
-  restrict: 'E'
-  templateUrl: 'projects/partials/templates/lab-list.tpl.html'
-  controller: ($scope, $modal, User, Project, alertService, projectService, analyticsService) ->
-    # Todo, write...
-    $scope.sortOrder = 'abbreviation'
-    $scope.setTutorial = (id) ->
-      Project.update(
-        { id: $scope.project.project_id, tutorial_id: id }
-        (project) ->
-          $scope.project.tutorial_id = project.tutorial_id
-          $scope.project.tutorial = $scope.unit.tutorialFromId( $scope.project.tutorial_id )
-          eventName = if id isnt -1 then "Changed tutorial" else "Withdrew from all tutorials"
-          analyticsService.event "Student Project View - Tutorials Tab", eventName
-          projectService.updateGroups($scope.project) #can be removed from groups by changing labs
-        (response) -> alertService.add("danger", response.data.error, 6000)
-      )
-)
-.directive('viewSubmission', ->
-  restrict: 'E'
-  templateUrl: 'projects/partials/templates/view-submission.tpl.html'
-  scope:
-    project: "=project"
-    task: "=task"
-  controller: ($scope, TaskFeedback) ->
-    $scope.taskUrl = ->
-      TaskFeedback.getTaskUrl($scope.task)
-
-    #
-    # Exceptional scenarios
-    #
-    $scope.taskStillProcessing = () ->
-      $scope.task.processing_pdf
-    $scope.notSubmitted = () ->
-      not $scope.task.has_pdf and (not $scope.taskStillProcessing())
 )
