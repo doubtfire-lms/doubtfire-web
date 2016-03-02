@@ -1,0 +1,50 @@
+pdf-panel-viewer {
+  .panel-body {
+    padding: 0;
+    position: relative;;
+    overflow: inherit !important;
+    background-color: #d1d1d1;
+    height: 60vh;
+  }
+  .iframe-wrapper {
+    position: absolute;
+    top: 1px;
+    bottom: -1px;
+    left: 1px;
+    right: 0;
+  }
+  iframe {
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 100%;
+    border: none;
+    z-index: 1;
+  }
+  .loading-icon {
+    z-index: 0;
+    position: relative;
+    left: 436px;
+    top: 193px;
+    width: 300px;
+
+    p.loading-text {
+      font-size: 19px;
+      margin: 0.5em 0;
+    }
+
+    background-color: #4c494c;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+
+    color: #fff;
+    margin-bottom: 40px;
+    padding: 20px;
+    text-align: center;
+    -webkit-box-shadow: 0 10px 12px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 12px 5px rgba(0, 0, 0, 0.2)
+  }
+  .panel-footer {
+    height: 60px;
+  }
+}

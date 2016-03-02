@@ -1,4 +1,4 @@
-angular.module("doubtfire.services.units", [])
+angular.module("doubtfire.common.services.units", [])
 
 .factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #

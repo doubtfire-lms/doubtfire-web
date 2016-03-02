@@ -4,13 +4,13 @@ angular.module('doubtfire.units.partials.admin-unit-ilo-directive',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
-  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, csvResultService) ->
+  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CSVResultModal) ->
 
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchOutcomeUrl = ->
       IntendedLearningOutcome.getOutcomeBatchUploadUrl($scope.unit)
     $scope.onBatchOutcomeSuccess = (response) ->
-      csvResultService.show "Outcome CSV Upload Results", response
+      CSVResultModal.show "Outcome CSV Upload Results", response
       if response.success.length > 0
         $scope.unit.refresh()
 

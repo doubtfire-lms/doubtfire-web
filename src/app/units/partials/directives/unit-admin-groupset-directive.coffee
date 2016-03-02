@@ -9,7 +9,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-admin-groupset-tab.tpl.html'
 
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, csvResultService) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CSVResultModal) ->
 
     $scope.addGroupSet = () ->
       if $scope.unit.group_sets.length == 0
@@ -73,7 +73,7 @@ angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
     $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
-      csvResultService.show 'Group CSV upload results.', response
+      CSVResultModal.show 'Group CSV upload results.', response
       $scope.unit.refresh()
     $scope.onGroupCSVComplete = () ->
       $scope.isGroupCSVUploading = null
