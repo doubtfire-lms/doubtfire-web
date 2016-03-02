@@ -1,9 +1,12 @@
-angular.module('doubtfire.groups.partials.student-group-tab-directive', [])
+angular.module('doubtfire.groups.student-group-tab', [])
 
+#
+# Context for students to see and manage groups
+#
 .directive('studentGroupTab', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/student-group-tab.tpl.html'
-
+  templateUrl: 'groups/student-group-tab/student-group-tab.tpl.html'
+  replace: true
   controller: ($scope, Group, alertService, GroupMember, projectService) ->
     $scope.selectedGroup = null
 

@@ -1,8 +1,13 @@
-angular.module('doubtfire.groups.partials.group-member-contribution-directive', [])
+angular.module('doubtfire.groups.group-member-contribution-assigner', [])
 
-.directive('groupMemberContributions', ->
+#
+# Directive to rate each student's contributions
+# in a group task assessment
+#
+.directive('groupMemberContributionAssigner', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/group-member-contributions.tpl.html'
+  templateUrl: 'groups/group-member-contribution-assigner/group-member-contribution-assigner.tpl.html'
+  replace: true
   scope:
     task: '='
     project: '='

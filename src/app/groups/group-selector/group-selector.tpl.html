@@ -43,17 +43,17 @@
         <td class="actions" ng-show="assessingUnitRole">
           <form editable-form name="grpRowform" onbeforesave="saveGroup($data, grp.id)" ng-show="grpRowform.$visible" class="form-buttons form-inline" shown="inserted == grp">
             <button type="submit" ng-disabled="grpRowform.$waiting" class="btn btn-primary">
-              save
+              <i class="fa fa-floppy-o"></i>
             </button>
             <button type="button" ng-disabled="grpRowform.$waiting" ng-click="grpRowform.$cancel()" class="btn btn-default">
-              cancel
+              <i class="fa fa-times"></i>
             </button>
           </form>
-          <div class="btn-group" ng-show="!grpRowform.$visible">
-            <button ng-click="grpRowform.$show()" class="btn btn-primary col-sm-6">
+          <div ng-show="!grpRowform.$visible">
+            <button ng-click="grpRowform.$show()" class="btn btn-primary">
               <i class="fa fa-pencil"></i>
             </button>
-            <button ng-click="removeGroup(grp)" class="btn btn-danger col-sm-6">
+            <button ng-click="removeGroup(grp)" class="btn btn-danger">
               <i class="fa fa-trash-o"></i>
             </button>
           </div><!--/actions-->

@@ -28,7 +28,9 @@
       <tr ng-repeat="member in members | orderBy:memberSortOrder:reverse">
         <td class="student-id" ng-if="assessingUnitRole"><a href="#/projects/{{member.project_id}}?unitRole={{assessingUnitRole.id}}">{{member.student_id}}</a></td>
         <td class="student-name">{{member.student_name}}</td>
-        <td class="student-grade">{{gradeFor(member)}}</td>
+        <td class="student-grade">
+          <grade-icon grade="member.target_grade"></grade-icon>
+        </td>
         <td class="actions" ng-if="assessingUnitRole">
           <button ng-click="removeGroupMember(member)" class="btn btn-small btn-danger">
             <i class="fa fa-trash-o"></i>

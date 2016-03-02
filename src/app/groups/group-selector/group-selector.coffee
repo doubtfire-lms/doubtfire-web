@@ -1,9 +1,13 @@
-angular.module('doubtfire.groups.partials.group-selector-directive', [])
+angular.module('doubtfire.groups.group-selector', [])
 
+#
+# Allows tutors and students to select (and create if applicable)
+# new groups for teamwork
+#
 .directive('groupSelector', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/group-selector.tpl.html'
-
+  templateUrl: 'groups/group-selector/group-selector.tpl.html'
+  replace: true
   controller: ($scope, alertService, Group) ->
     # pagination of groups
     $scope.currentPage = 1

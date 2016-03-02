@@ -1,15 +1,15 @@
-angular.module('doubtfire.groups.partials.group-member-list-directive', [])
+angular.module('doubtfire.groups.group-member-list', [])
 
+#
+# Lists members in a group
+#
 .directive('groupMemberList', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/group-member-list.tpl.html'
+  templateUrl: 'groups/group-member-list/group-member-list.tpl.html'
 
   controller: ($scope, GroupMember, gradeService) ->
     $scope.memberSortOrder = 'student_name'
     $scope.members = []
-
-    $scope.gradeFor = (member) ->
-      gradeService.grades[member.target_grade]
 
     $scope.$watch "selectedGroupset", (newValue, oldValue) ->
       if newValue && $scope.selectedGroup && $scope.selectedGroupset

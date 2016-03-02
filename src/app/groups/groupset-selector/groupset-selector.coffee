@@ -1,13 +1,16 @@
-angular.module('doubtfire.groups.partials.groupset-selector', [])
+angular.module('doubtfire.groups.groupset-selector', [])
 
+#
+# Directive that can switch context of a specific groupset
+#
 .directive('groupsetSelector', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/groupset-selector.tpl.html'
+  templateUrl: 'groups/groupset-selector/groupset-selector.tpl.html'
+  replace: true
   # scope:
   #   unit: "="
   #   selectedGroupset: "="
-    # selectedGroup: "="
-
+  #   selectedGroup: "="
   controller: ($scope) ->
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupset = gs

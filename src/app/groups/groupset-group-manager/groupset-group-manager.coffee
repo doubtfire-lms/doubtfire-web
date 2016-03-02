@@ -1,13 +1,13 @@
-angular.module('doubtfire.groups.partials.groupset-manage-directive', [])
+angular.module('doubtfire.groups.groupset-group-manager', [])
 
-.directive('groupsetManage', ->
+#
+# Manager directive for tutors to add and remove group
+# members from a group within a group set context
+#
+.directive('groupsetGroupManager', ->
   restrict: 'E'
-  templateUrl: 'groups/partials/templates/groupset-manage-view.tpl.html'
-  # scope:
-  #   assessingUnitRole: "="
-  #   unit: "="
-  #   selectedGroupset: "="
-
+  templateUrl: 'groups/groupset-group-manager/groupset-group-manager.tpl.html'
+  replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, projectService) ->
     $scope.staffFilter = 'mine'
 
