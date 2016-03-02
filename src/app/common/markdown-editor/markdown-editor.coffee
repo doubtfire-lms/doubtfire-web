@@ -2,6 +2,7 @@ angular.module('doubtfire.common.markdown-editor', [])
 
 .directive 'markdownEditor', ->
   restrict: 'E'
+  replace: true
   templateUrl: 'common/markdown-editor/markdown-editor.tpl.html'
   scope:
     markdownText: '=ngModel'
