@@ -9,7 +9,7 @@ angular.module("doubtfire.errors.states.timeout", [])
     views:
       main:
         controller: "TimeoutCtrl"
-        templateUrl: "errors/timeout.tpl.html"
+        templateUrl: "errors/states/timeout/timeout.tpl.html"
     data:
       pageTitle: "_Timeout_"
   headerServiceProvider.state "timeout", stateData, 'ErrorHeaderCtrl'

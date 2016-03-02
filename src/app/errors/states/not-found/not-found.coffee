@@ -5,11 +5,11 @@ angular.module("doubtfire.errors.states.not-found", [])
 #
 .config((headerServiceProvider) ->
   stateData =
-    url: "/not_found"
+    url: "/not-found"
     views:
       main:
         controller: "NotFoundCtrl"
-        templateUrl: "errors/not_found.tpl.html"
+        templateUrl: "errors/states/not-found/not-found.tpl.html"
     data:
       pageTitle: "_Not Found_"
   headerServiceProvider.state 'not_found', stateData

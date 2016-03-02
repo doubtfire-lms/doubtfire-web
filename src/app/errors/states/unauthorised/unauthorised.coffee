@@ -9,7 +9,7 @@ angular.module("doubtfire.errors.states.unauthorised", [])
     views:
       main:
         controller: "UnauthorisedCtrl"
-        templateUrl: "errors/unauthorised.tpl.html"
+        templateUrl: "errors/states/unauthorised/unauthorised.tpl.html"
     data:
       pageTitle: "_Unauthorised_"
 
