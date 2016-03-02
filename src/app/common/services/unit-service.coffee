@@ -14,7 +14,7 @@ angular.module("doubtfire.common.services.units", [])
     unitService.loadedUnitRoles = null
 
   unitService.getUnitRoles = ( callback ) ->
-    if ! unitService.loadedUnitRoles?
+    unless unitService.loadedUnitRoles?
       unitService.loadedUnitRoles = []
       UnitRole.query(
         (roles) ->
@@ -105,11 +105,11 @@ angular.module("doubtfire.common.services.units", [])
       if student.name?
         return
       student.open = false
-      
+
       # projects can find tasks using their task definition ids
       student.findTaskForDefinition = (taskDefId) ->
         _.find student.tasks, (task) -> task.task_definition_id == taskDefId
-        
+
       #TODO: change these to use functions...
       student.name = student.first_name + " " + student.last_name
       if student.has_portfolio
