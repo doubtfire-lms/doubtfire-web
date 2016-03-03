@@ -1,0 +1,1 @@
+/task-plagiarism-file-view/task-plagiarism-file-view.coffee 
