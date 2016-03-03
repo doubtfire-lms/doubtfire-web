@@ -118,14 +118,14 @@
       <i class="fa fa-user"></i>
       <p>Click a student to view their status in detail</p>
     </div>
-    <student-project
+    <project-viewer
       ng-if="activeStudent"
       scope="student-project-scope"
       project="activeStudent"
       unit="unit"
       assessing-unit-role="assessingUnitRole"
       unit-role="assessingUnitRole.id"
-      fullscreen="fullscreen"></student-project>
+      fullscreen="fullscreen"></project-viewer>
   </div>
   <div class="panel-footer clearfix">
     <div class="pull-right">

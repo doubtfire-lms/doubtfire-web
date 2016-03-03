@@ -1,11 +1,12 @@
-angular.module("doubtfire.projects.student-project", [])
+angular.module("doubtfire.projects.project-viewer", [])
 
 #
-# This directive shows a student's project
+# This directive shows a student's project and has
+# can make all manipulations needed to a project
 #
-.directive("studentProject", ->
+.directive("projectViewer", ->
   restrict: 'E'
-  templateUrl: 'projects/student-project/student-project.tpl.html'
+  templateUrl: 'projects/project-viewer/project-viewer.tpl.html'
   scope:
     showTaskId: '=?' # pass in a task to initially show
     unitRole: '=?' # pass in a unitRole who is viewing this project
