@@ -1,8 +1,8 @@
-angular.module('doubtfire.tasks.top-project-tasks', [])
+angular.module('doubtfire.tasks.project-top-tasks-list', [])
 
-.directive('topProjectTasks', ->
+.directive('projectTopTasksList', ->
   restrict: 'E'
-  templateUrl: 'tasks/top-project-tasks/top-project-tasks.tpl.html'
+  templateUrl: 'tasks/project-top-tasks-list/project-top-tasks-list.tpl.html'
   scope:
     project: "=project"
     onSelect: "="
