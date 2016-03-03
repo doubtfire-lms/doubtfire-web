@@ -1,4 +1,8 @@
-angular.module('doubtfire.tasks.partials.modals.grade-task-modal', [])
+angular.module('doubtfire.tasks.modals.grade-task-modal', [])
+
+#
+# A modal to grade a graded task
+#
 .factory('GradeTaskModal', ($modal) ->
   GradeTaskModal = {}
 
@@ -7,7 +11,7 @@ angular.module('doubtfire.tasks.partials.modals.grade-task-modal', [])
   #
   GradeTaskModal.show = (task) ->
     $modal.open
-      templateUrl: 'tasks/partials/templates/grade-task-modal.tpl.html'
+      templateUrl: 'tasks/modals/grade-task-modal/grade-task-modal.tpl.html'
       controller: 'GradeTaskModal'
       resolve:
         task: -> task

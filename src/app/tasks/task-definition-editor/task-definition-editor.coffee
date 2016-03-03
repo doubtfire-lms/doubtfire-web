@@ -1,8 +1,12 @@
-angular.module('doubtfire.tasks.partials.task-admin', [])
-.directive('taskAdmin', ->
+angular.module('doubtfire.tasks.task-definition-editor', [])
+
+#
+# Allows the creation and modification of task definitions
+#
+.directive('taskDefinitionEditor', ->
   replace: false
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-admin.tpl.html'
+  templateUrl: 'tasks/task-definition-editor/task-definition-editor.tpl.html'
   scope:
     unit: "="
     task: "="

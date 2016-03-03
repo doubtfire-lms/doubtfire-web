@@ -1,8 +1,14 @@
-angular.module('doubtfire.tasks.partials.task-completion-stats', [])
+angular.module('doubtfire.tasks.stats.task-completion-stats', [])
+
+#
+# Stats directive that shows the completion statistics of tasks
+# throughout an entire unit, which can be broken down into a specific
+# task or tutorial
+#
 .directive('taskCompletionStats', ->
-  replace: false
+  replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-completion-stats.tpl.html'
+  templateUrl: 'tasks/stats/task-completion-stats/task-completion-stats.tpl.html'
   scope:
     unit: "="
   controller: ($scope, Unit) ->

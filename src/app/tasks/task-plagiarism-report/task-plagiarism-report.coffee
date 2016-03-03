@@ -1,14 +1,13 @@
-angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
+angular.module('doubtfire.tasks.task-plagiarism-report', [])
 
 #
 # Task Plagiarism Report shows how the task relates tasks submitted by
 # other students.
 #
-
 .directive('taskPlagiarismReport', ->
   replace: false
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-plagiarism-report.tpl.html'
+  templateUrl: 'tasks/task-plagiarism-report/task-plagiarism-report.tpl.html'
   scope:
     task: "=task"
 
@@ -46,14 +45,4 @@ angular.module('doubtfire.tasks.partials.task-plagiarism-report', [])
     if $scope.task?.similar_to_count > 0
       $scope.taskId = $scope.task.id
       $scope.fetchSimilarity($scope.task, $scope.match - 1)
-)
-
-.directive('taskPlagiarismFileView', ->
-  replace: true
-  restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-plagiarism-file-view.tpl.html'
-  scope:
-    match: "=match"
-
-  controller: ($scope) ->
 )

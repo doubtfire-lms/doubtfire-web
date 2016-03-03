@@ -1,8 +1,16 @@
-angular.module('doubtfire.tasks.partials.task-feedback-directive', [])
+angular.module('doubtfire.tasks.task-viewer', [])
 
-.directive('taskFeedback', ->
+#
+# Views all infomation related to a specific task including:
+#  - task definition and related task sheet
+#  - task submission wizard
+#  - task commenter
+#  - task plagiarism report
+#
+.directive('taskViewer', ->
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-feedback.tpl.html'
+  replace: true
+  templateUrl: 'tasks/task-viewer/task-viewer.tpl.html'
   scope:
     unit: '='
     project: '='

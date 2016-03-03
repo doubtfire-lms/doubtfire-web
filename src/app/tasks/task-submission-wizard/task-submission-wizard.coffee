@@ -1,16 +1,17 @@
-angular.module('doubtfire.tasks.partials.submit-task-form', [])
+angular.module('doubtfire.tasks.task-submission-wizard', [])
 
 #
-# Task uploader form
+# Wizard that helps new tasks to be uploaded
 #
-.directive('submitTaskForm', ->
+.directive('taskSubmissionWizard', ->
   restrict: 'E'
+  replace: true
   scope:
     task: '='
     project: '='
     unit: '='
     assessingUnitRole: '=?'
-  templateUrl: 'tasks/partials/templates/submit-task-form.tpl.html'
+  templateUrl: 'tasks/task-submission-wizard/task-submission-wizard.tpl.html'
   controller: ($scope, $timeout, Task, taskService, alertService, projectService, groupService, analyticsService) ->
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']

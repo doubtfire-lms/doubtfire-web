@@ -1,9 +1,14 @@
-angular.module('doubtfire.tasks.partials.tutor-task-feedback-view',[])
+angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
 
-.directive('tutorTaskFeedbackView', ->
+#
+# Shows multiple task feedback assessors as a list of students
+# in a specified context (i.e., show students who need to be assessed,
+# show all tasks of a specific task definition etc.)
+#
+.directive('taskFeedbackAssessorList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/tutor-task-feedback-view.tpl.html'
+  templateUrl: 'tasks/task-feedback-assessor-list/task-feedback-assessor-list.tpl.html'
   scope:
     unit: "=unit"
     context: "=context"

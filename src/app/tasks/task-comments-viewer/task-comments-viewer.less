@@ -1,4 +1,6 @@
-.comment-panel {
+@import (reference) "../../../less/main.less";
+
+.task-comments-viewer {
   overflow: scroll;
   height: 30vh;
   .no-comments {
@@ -6,7 +8,7 @@
   }
 }
 
-.comment {
+.task-comments-viewer .comment {
   display: flex;
   display: -webkit-flex;
   margin-bottom: 2em;
@@ -52,7 +54,7 @@
   }
 }
 
-.comment-submitter {
+.task-comments-viewer .comment-submitter {
   button {
     height: 59px;
   }

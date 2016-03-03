@@ -1,8 +1,11 @@
-angular.module('doubtfire.tasks.view-task-submission', [])
+angular.module('doubtfire.tasks.task-submission-viewer', [])
 
-.directive('viewTaskSubmission', ->
+#
+# Viewer for an uploaded task submission
+#
+.directive('taskSubmissionViewer', ->
   restrict: 'E'
-  templateUrl: 'projects/tasks/view-task-submission/view-task-submission.tpl.html'
+  templateUrl: 'projects/tasks/task-submission-viewer/task-submission-viewer.tpl.html'
   scope:
     project: "=project"
     task: "=task"

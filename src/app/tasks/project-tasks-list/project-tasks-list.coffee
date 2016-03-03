@@ -1,14 +1,14 @@
-angular.module('doubtfire.tasks.partials.student-unit-tasks', ['doubtfire.tasks.partials.modals'])
+angular.module('doubtfire.tasks.project-tasks-list', [])
 
 #
-# Student Unit Tasks
-# - display the tasks associated with a student in a unit
-# - shows in a box grid that can be used to update task status
+# Displays the tasks associated with a student's project which
+# when a task is clicked will automatically jump to the task viewer
+# of the task that was clicked
 #
-.directive('studentUnitTasks', ->
+.directive('projectTasksList', ->
   replace: false
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/student-unit-tasks.tpl.html'
+  templateUrl: 'tasks/project-tasks-list/project-tasks-list.tpl.html'
   scope:
     # student: "=student"
     project: "=project"

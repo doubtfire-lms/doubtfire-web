@@ -1,9 +1,14 @@
-angular.module('doubtfire.tasks.partials.provide-task-feedback',[])
+angular.module('doubtfire.tasks.task-feedback-assessor',[])
 
-.directive('provideTaskFeedback', ->
+#
+# Directive that allows input to provide feedback for a task.
+# It displays the task submission, shows a task comment viewer
+# and a task status selector
+#
+.directive('taskFeedbackAssessor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/provide-task-feedback.tpl.html'
+  templateUrl: 'tasks/task-feedback-assessor/task-feedback-assessor.tpl.html'
   scope:
     task: "=task"
     unit: "=unit"

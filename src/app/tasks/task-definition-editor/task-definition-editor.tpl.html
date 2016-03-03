@@ -1,4 +1,4 @@
-<div class="panel panel-primary">
+<div class="panel panel-primary task-definition-editor">
   <div class="panel-heading clearfix">
     <h3 class="panel-title">
       {{task ? (isNew ? "Create Task" : "Edit Task") : "Task Details"}}
@@ -11,7 +11,7 @@
   <div class="panel-body" ng-show="task">
     <form class="form-horizontal" role="form">
     <div class="task-admin-tabs">
-        <tabset class="task-admin-tab-selector pull-left col-md-2" vertical="true" type="pills">
+        <tabset class="pull-left col-md-2" vertical="true" type="pills">
           <tab ng-repeat="(tabKey, tab) in taskAdmin.tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
             <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
               <div class="text-center">

@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.partials.task-sheet', [])
+angular.module('doubtfire.tasks.task-sheet-viewer', [])
 
 #
 # Task sheet shows PDF and allows resources to be downloaded
@@ -6,7 +6,7 @@ angular.module('doubtfire.tasks.partials.task-sheet', [])
 .directive('taskSheet', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-sheet.tpl.html'
+  templateUrl: 'tasks/task-sheet-viewer/task-sheet-viewer.tpl.html'
   scope:
     task: '='
     unit: '='

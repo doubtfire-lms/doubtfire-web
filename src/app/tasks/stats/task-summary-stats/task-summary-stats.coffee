@@ -1,13 +1,12 @@
-angular.module('doubtfire.tasks.partials.task-summary-stats', [])
+angular.module('doubtfire.tasks.stats.task-summary-stats', [])
 
 #
-# Task summary stats
-# - 2d array of status vs task abbr --> counts
+# Shows a summary of task states as a scatter plot
 #
 .directive('taskSummaryStats', ->
-  replace: false
+  replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-summary-stats.tpl.html'
+  templateUrl: 'tasks/stats/task-summary-stats/task-summary-stats.tpl.html'
   scope:
     unit: "=unit"
 

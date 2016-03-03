@@ -1,9 +1,12 @@
-angular.module('doubtfire.tasks.partials.task-definition-selector',[])
+angular.module('doubtfire.tasks.task-definition-selector',[])
 
+#
+# A switch that that the selection of a specified task definition
+#
 .directive('taskDefinitionSelector', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/task-definition-selector.tpl.html'
+  templateUrl: 'tasks/task-definition-selector/task-definition-selector.tpl.html'
   scope:
     unit: "="
     onSelectDefinition: "="

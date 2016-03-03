@@ -1,4 +1,4 @@
-<ul class="project-task-bar">
+<ul class="project-tasks-list">
   <div ng-repeat="(groupSetId, relatedTasks) in project.tasks | groupBy: 'definition.group_set_id'" class="col-sm-12 groupset-tasks">
     <h5 class="groupset-name" ng-hide="hideGroupSetName">{{groupSetName(groupSetId)}}</h5>
     <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in relatedTasks | byGrade:project.target_grade | orderBy: 'definition.seq'">

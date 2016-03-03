@@ -1,0 +1,44 @@
+.task-status {
+  &.ready-to-mark     { .task-status-ready-to-mark;     }
+  &.not-started       { .task-status-not-started;       }
+  &.working-on-it     { .task-status-working-on-it;     }
+  &.need-help         { .task-status-need-help;         }
+  &.fix-and-resubmit  { .task-status-fix-and-resubmit;  }
+  &.fix-and-include   { .task-status-fix-and-include;   }
+  &.fail              { .task-status-fail;              }
+  &.redo              { .task-status-redo;              }
+  &.discuss           { .task-status-discuss;           }
+  &.demonstrate       { .task-status-demonstrate;       }
+  &.complete          { .task-status-complete;          }
+}
+
+.task-status {
+  .ready-to-mark,
+  .not-started,
+  .working-on-it,
+  .need-help,
+  .fix-and-resubmit,
+  .fix-and-include,
+  .fail,
+  .redo,
+  .discuss,
+  .demonstrate,
+  .complete { background-color: #F8F8F8; }
+
+  .ready-to-mark.active     { .task-status-ready-to-mark;     }
+  .not-started.active       { .task-status-not-started;       }
+  .working-on-it.active     { .task-status-working-on-it;     }
+  .need-help.active         { .task-status-need-help;         }
+  .fix-and-resubmit.active  { .task-status-fix-and-resubmit;  }
+  .fix-and-include.active   { .task-status-fix-and-include;   }
+  .fail.active              { .task-status-fail;              }
+  .redo.active              { .task-status-redo;              }
+  .discuss.active           { .task-status-discuss;           }
+  .demonstrate.active       { .task-status-demonstrate;       }
+  .complete.active          { .task-status-complete;          }
+}
+
+i.task-status-icon {
+  display: block;
+  margin-bottom: 7px;
+}

@@ -1,5 +1,10 @@
 angular.module('doubtfire.tasks.project-top-tasks-list', [])
 
+#
+# Similar to the project-tasks-list directive, however
+# it only shows the 'top' tasks students need to do (i.e.,
+# tasks that are overdue, or upcoming)
+#
 .directive('projectTopTasksList', ->
   restrict: 'E'
   templateUrl: 'tasks/project-top-tasks-list/project-top-tasks-list.tpl.html'

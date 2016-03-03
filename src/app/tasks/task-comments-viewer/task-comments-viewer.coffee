@@ -1,8 +1,12 @@
-angular.module("doubtfire.tasks.view-task-comments", [])
+angular.module("doubtfire.tasks.task-comments-viewer", [])
 
-.directive('viewTaskComments', ->
+#
+# View's the comments for a specific task, and allows new
+# comments to be made on a task
+#
+.directive('taskCommentsViewer', ->
   restrict: 'E'
-  templateUrl: 'projects/view-task-comments/view-task-comments.tpl.html'
+  templateUrl: 'projects/task-comments-viewer/task-comments-viewer.tpl.html'
   scope:
     project: "=project"
     task: "=task"

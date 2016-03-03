@@ -1,9 +1,9 @@
-angular.module('doubtfire.tasks.partials.status-switcher',[])
+angular.module('doubtfire.tasks.task-status-selector',[])
 
-.directive('statusSwitcher', ->
+.directive('taskStatusSelector', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/partials/templates/status-switcher.tpl.html'
+  templateUrl: 'tasks/task-status-selector/task-status-selector.tpl.html'
   scope:
     task: "=task"
     assessingUnitRole: "=assessingUnitRole"
