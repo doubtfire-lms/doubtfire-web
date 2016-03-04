@@ -124,9 +124,5 @@ angular.module('doubtfire.units.partials.unit-tutor-student-list', [])
 
     $scope.showEnrolModal = () ->
       analyticsService.event 'Teacher View - Students Tab', 'Enrol Student'
-      $modal.open
-        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
-        controller: 'EnrolStudentModalCtrl'
-        resolve:
-          unit: -> $scope.unit
+      UnitStudentEnrolmentModal.show $scope.unit
 )

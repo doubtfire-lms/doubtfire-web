@@ -4,7 +4,7 @@ angular.module('doubtfire.units.partials.admin-unit-ilo-directive',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
-  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CSVResultModal) ->
+  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CSVResultModal, UnitILOEditModal) ->
 
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchOutcomeUrl = ->
@@ -14,16 +14,9 @@ angular.module('doubtfire.units.partials.admin-unit-ilo-directive',[])
       if response.success.length > 0
         $scope.unit.refresh()
 
-
     $scope.editILO = (ilo) ->
-      $modal.open
-        controller: 'IloModalCtrl'
-        templateUrl: 'units/partials/templates/admin-unit-ilo-modal.tpl.html'
-        resolve: {
-          ilo: -> ilo || { name: null, description: null, abbreviation: null }
-          isNew: -> not ilo?
-          unit: -> $scope.unit
-        }
+      UnitILOEditModal.show $scope.unit, ilo
+
     $scope.createILO = ->
       $scope.editILO()
 

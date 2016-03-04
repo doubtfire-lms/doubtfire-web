@@ -14,7 +14,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
     context: "=context"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $filter, $modal, currentUser, Unit, alertService, gradeService, taskService, analyticsService) ->
+  controller: ($scope, $filter, Unit, UnitMarkSubmissionsOfflineModal, currentUser, alertService, gradeService, taskService, analyticsService) ->
     if $scope.context == 'assess'
       $scope.title = "Tasks Requring Feedback"
       $scope.statusFilter = 'ready_to_mark'
@@ -156,9 +156,5 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
 
     $scope.showMarkOfflineModal = ->
       analyticsService.event category, "Showed Offline Modal"
-      $modal.open
-        controller: 'SubmissionMarkingModal'
-        templateUrl: 'units/partials/templates/submission-marking-context.tpl.html'
-        resolve:
-          unit: -> $scope.unit
+      UnitMarkSubmissionsOfflineModal.show $scope.unit
 )

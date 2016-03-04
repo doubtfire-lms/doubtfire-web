@@ -212,17 +212,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, alertService) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
     $scope.editTutorial = (tutorial) ->
-      $modal.open
-        controller: 'TutorialModalCtrl'
-        templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
-        resolve: {
-          tutorial: -> tutorial
-          isNew: -> false
-          tutors: -> $scope.unit.staff
-          unit: -> $scope.unit
-        }
+      UnitTutorialEditModal.show $scope.unit, tutorial
 
     $scope.deleteTutorial = (tutorial) ->
       Tutorial.delete { id: tutorial.id },
@@ -233,35 +225,18 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           alertService.add("danger", response.data.error)
 
     $scope.createTutorial = ->
-      d = new Date()
-      d.setHours(8)
-      d.setMinutes(30)
-
-      tutorial = { abbreviation: "LA1-??", meeting_day: "Monday", meeting_time: d, meeting_location: "ATC???" }
-      $modal.open
-        controller: 'TutorialModalCtrl'
-        templateUrl: 'units/partials/templates/tutorial-modal.tpl.html'
-        resolve: {
-          tutorial: -> tutorial
-          isNew: -> true
-          tutors: -> $scope.unit.staff
-          unit: -> $scope.unit
-        }
+      UnitTutorialEditModal.show $scope.unit
 
 )
 .directive('enrolStudentsContext', ->
   replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
-  controller: ($scope, $modal, Unit, Project, alertService, CSVResultModal) ->
+  controller: ($scope, Unit, Project, CSVResultModal, UnitStudentEnrolmentModal, alertService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
     $scope.showEnrolModal = () ->
-      $modal.open
-        templateUrl: 'units/partials/templates/enrol-student-modal.tpl.html'
-        controller: 'EnrolStudentModalCtrl'
-        resolve:
-          unit: -> $scope.unit
+      UnitStudentEnrolmentModal.show $scope.unit
 
     onBatchEnrolSuccess = (response) ->
       newStudents = response
@@ -309,24 +284,3 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
     $scope.maxSize = 5
     $scope.pageSize = 15
 )
-# .directive('tutorMarkingContext', ->
-#   replace: true
-#   restrict: 'E'
-#   templateUrl: 'units/partials/templates/tutor-marking-context.tpl.html'
-#   controller: ($scope, $sce, $stateParams) ->
-#     $scope.activeContext = 'submissions'
-#     $scope.assessingUnitRole = $stateParams.unitRole
-#     $scope.setActiveContext = (context) ->
-#       return if context is $scope.activeContext
-#       $scope.activeContext = context
-#     $scope.contexts =
-#       submissions:
-#         title: 'Mark Submissions Offline'
-#         subtitle: 'Download student submissions that are Ready to Mark, and upload the marked work here'
-#         icon: 'file'
-#       portfolios:
-#         title: 'Mark Portfolios'
-#         subtitle: 'Download all submitted portfolios here for marking'
-#         icon: 'book'
-#       # potentially tests here too?
-# )
