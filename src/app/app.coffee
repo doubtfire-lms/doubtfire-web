@@ -7,6 +7,7 @@
 #
 angular.module('doubtfire', [
   'doubtfire.config'
+  'doubtfire.api'
   'doubtfire.sessions'
   'doubtfire.common'
   'doubtfire.errors'

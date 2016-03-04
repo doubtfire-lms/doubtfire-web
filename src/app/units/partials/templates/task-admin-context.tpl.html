@@ -120,12 +120,14 @@
                 Download all tasks for the unit.
             </div>
             <div class="panel-body text-center">
-                <a tooltip="Download a CSV with details of all tasks" target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary btn-download">
-                    <i class="fa fa-download"></i> Download CSV
+              <div class="btn-group col-sm-12">
+                <a tooltip="Download a CSV with details of all tasks" tooltip-append-to-body="true" target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary col-sm-6">
+                  <i class="fa fa-download"></i> <i class="fa fa-file-excel-o"></i> CSV
                 </a>
-                <a tooltip="Download task resources and task sheets for all tasks" target="_blank" ng-href="{{allResourceUrl()}}" class="btn btn-info btn-download">
-                    <i class="fa fa-download"></i> Download ZIP
+                <a tooltip="Download task resources and task sheets for all tasks" tooltip-append-to-body="true" target="_blank" ng-href="{{allResourceUrl()}}" class="btn btn-info col-sm-6">
+                  <i class="fa fa-download"></i> <i class="fa fa-file-zip-o"></i> Zip
                 </a>
+              </div>
             </div>
             <div class="panel-heading">
                 <h4 class="panel-title">Upload All Task PDFs</h4>
