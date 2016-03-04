@@ -288,7 +288,7 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
         batchFiles: { file: { name: 'Withdraw CSV Data', type: 'csv'  } }
         onSuccess: onBatchWithdrawSuccess
 
-    change_enrolment = (student, value) ->
+    changeEnrolment = (student, value) ->
       Project.update { id: student.project_id, enrolled: value },
         (project) ->
           if value == project.enrolled
@@ -300,9 +300,9 @@ angular.module('doubtfire.units.partials.contexts', ['doubtfire.units.partials.m
           alertService.add("danger", response.data.error, 5000)
 
     $scope.withdraw = (student) ->
-      change_enrolment(student, false)
+      changeEnrolment(student, false)
     $scope.enrol = (student) ->
-      change_enrolment(student, true)
+      changeEnrolment(student, true)
 
     # Pagination details
     $scope.currentPage = 1

@@ -25,7 +25,7 @@ angular.module('doubtfire.units.partials.unit-plagiarism',[])
         studentFilter = "myStudents"
       else
         studentFilter = "allStudents"
-    
+
     $scope.activeStudent = null
     $scope.activeTask = null
 

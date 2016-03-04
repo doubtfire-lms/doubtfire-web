@@ -1,18 +1,17 @@
-
-<div>
-	<form class="form-horizontal" ng-submit="saveTutorial()" role="form">
-  	<div class="modal-header">
-  		<h3>{{isNew ? "Create Tutorial" : "Edit Tutorial"}}</h3>
-  	</div>
-  	<div class="modal-body">
-  	  <div class="form-group" required>
-  	    <label class="col-sm-3 control-label">Abbreviation</label>
+<div class="unit-tutorial-edit-modal">
+  <form class="form-horizontal" ng-submit="saveTutorial()" role="form">
+    <div class="modal-header">
+      <h3>{{isNew ? "Create Tutorial" : "Edit Tutorial"}}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Abbreviation</label>
         <input type="text" class="form-control col-sm-7"
         ng-model="tutorial.abbreviation"/>
-  	  </div>
+      </div>
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Location</label>
-        <input type="input" class="form-control col-sm-7" 
+        <input type="input" class="form-control col-sm-7"
         ng-model="tutorial.meeting_location">
       </div>
       <div class="form-group" required>
@@ -34,9 +33,9 @@
         <label class="col-sm-3 control-label">Tutor</label>
         <input type="text" class="form-control col-sm-7" ng-model="tutorial.tutor" typeahead="tutor as tutor.name for tutor in tutors | filter: $viewValue">
       </div>
-  	</div>
-		<div class="modal-footer text-right">
-			<input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
-		</div>
-	</form>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
+    </div>
+  </form>
 </div>
