@@ -1,0 +1,118 @@
+<div class="unit-outcome-alignment">
+  <div class="alignment-panels" ng-class="{'col-sm-8': showCsv}">
+    <div class="{{hidePanel ? '' : 'panel panel-primary'}}">
+      <div ng-hide="hidePanel" class="panel-heading clearfix">
+        <h3 class="panel-title">
+          {{showIncludeTasks ? 'Select Tasks' : 'Intended Learning Outcome Alignment'}}
+        </h3>
+        <div class="col-sm-8 pull-left" style="padding-left: 0;">
+          <div ng-show="showIncludeTasks" >
+            Select tasks to include and showcase in your portfolio that demonstrates your
+            understanding of each Indended Learning Outcome.
+          </div>
+          <div ng-hide="showIncludeTasks">
+            Align tasks to an Intended Learning Outcome by selecting the red circle and choosing a rating,
+            providing an optional rational to justify why that task is related to the outcome selected.
+          </div>
+        </div>
+        <div class="btn-group pull-right">
+          <button class="btn btn-default" ng-model="showGraph" btn-radio="true" uncheckable>
+            <i class="fa fa-bar-chart"></i>
+          </button>
+        </div>
+      </div><!--/heading-->
+
+      <div class="panel-body">
+        <table class="table table-task-alignment col-sm-12">
+          <thead>
+            <tr>
+              <th class="task" colspan="{{(showTaskName ? 3 : 2) - (source === unit ? 1 : 0)}}">Task</th>
+              <th class="ilo text-center" ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" tooltip="{{ilo.name}}" tooltip-append-to-body="true">
+                <label class="label label-info">{{ilo.abbreviation}}</label>
+              </th>
+              <th ng-if="showIncludeTasks" class="include-in-portfolio">Include</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="task in tasks | orderBy: 'definition.seq'">
+              <td class="task-abbreviation" tooltip="{{task.definition.name}}" tooltip-append-to-body="true">
+                <label class="label label-info">{{task.definition.abbreviation}}</label>
+              </td>
+              <td class="task-status-icon" ng-if="source === project">
+                <status-icon status="task.status"></status-icon>
+              </td>
+              <td class="task-name" ng-show="showTaskName">
+                {{task.definition.name}}
+              </td>
+              <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="ilo-alignment text-center">
+                {{alignment = alignmentForTaskAndIlo(task, ilo); ''}}
+                <button ng-click="showAlignmentModal(task, ilo, alignment)" class="btn btn-sm btn-default btn-alignment">
+                  <outcome-alignment-rating ng-if="alignment" ng-model="alignment" compact="true"></outcome-alignment-rating>
+                  <i ng-hide="alignment" class="fa fa-circle-o fa-3x text-danger" tooltip-append-to-body="true" tooltip="You decided {{task.definition.abbreviation}} is not aligned to {{ilo.abbreviation}}"></i>
+                </button>
+              </td>
+              <td ng-if="showIncludeTasks" class="include-in-portfolio">
+                <div
+                  tooltip-enable="disableInclude(task)"
+                  tooltip="You cannot select this task as it is not aligned to any ILOs"
+                  tooltip-placement="left"
+                  tooltip-append-to-body="true"
+                  class="button-wrapper">
+                  <button
+                    class="btn btn-sm btn-{{task.include_in_portfolio ? 'success' : 'default'}} col-sm-6 text-center"
+                    ng-click="includeTaskInPorfolio(task)"
+                    ng-if="!disableInclude(task)">
+                    <i class="fa fa-{{task.include_in_portfolio ? 'check' : 'times'}}"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-warning col-sm-6 text-center"
+                    ng-disabled="disableInclude(task)"
+                    ng-show="disableInclude(task)">
+                    <i class="fa fa-question"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!--/select-panel-body-->
+    </div><!--/select-panel-->
+    <div class="panel panel-default visualisation" ng-if="showGraph">
+      <div class="panel-heading clearfix">
+          <h4 class="panel-title pull-left">Visualisation</h4>
+          <button class="pull-right close" ng-click="closeGraph()">&times;</button>
+      </div>
+      <div class="panel-body">
+        <alignment-bar-chart unit="unit" project="project" source="source" task-status-factor="taskStatusFactor"></alignment-bar-chart>
+      </div>
+      <div class="panel-footer text-center">
+        Hover over this panel to highlight
+      </div>
+    </div><!--/visualisation-->
+  </div><!--/main-panels-->
+  <div class="col-sm-4" ng-if="showCsv">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Import Task Outcome Alignments</h3>
+        Import links between tasks and outcomes from a CSV containing: unit_code, learning_outcome, task_abbr, rating.
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          files="taskAlignmentCSV"
+          url="taskAlignmentCSVUploadUrl()"
+          is-uploading="isTaskAlignmentCSVUploading"
+          on-success="onTaskAlignmentCSVSuccess"
+          on-complete="onTaskAlignmentCSVComplete"></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Export Task Outcome Alignments</h3>
+        Download a CSV of task outcome alignment details.
+      </div>
+      <div class="panel-body text-center">
+        <button class="btn btn-primary btn-download" ng-click="downloadTaskAlignmentCSV()">
+          <i class="fa fa-download"></i> Download
+        </button>
+      </div>
+    </div><!--/csv-import-export-->
+  </div><!--/csv-panels-->
+</div>
