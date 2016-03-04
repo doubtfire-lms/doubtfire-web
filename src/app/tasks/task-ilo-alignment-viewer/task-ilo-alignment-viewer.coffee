@@ -4,7 +4,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment-viewer', [])
 # Views the alignment between a task and an ILO, with descriptive
 # text of the alignment and ILO
 #
-.directive('taskILOAlignmentViewer', ->
+.directive('taskIloAlignmentViewer', ->
   restrict: 'E'
   replace: true
   templateUrl: 'tasks/task-ilo-alignment-viewer/task-ilo-alignment-viewer.tpl.html'

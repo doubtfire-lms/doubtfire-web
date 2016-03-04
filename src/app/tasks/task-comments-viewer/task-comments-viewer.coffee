@@ -6,7 +6,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 #
 .directive('taskCommentsViewer', ->
   restrict: 'E'
-  templateUrl: 'projects/task-comments-viewer/task-comments-viewer.tpl.html'
+  templateUrl: 'tasks/task-comments-viewer/task-comments-viewer.tpl.html'
   scope:
     project: "=project"
     task: "=task"

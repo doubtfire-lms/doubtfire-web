@@ -10,6 +10,18 @@
   &.discuss           { .task-status-discuss;           }
   &.demonstrate       { .task-status-demonstrate;       }
   &.complete          { .task-status-complete;          }
+
+  &.ready-to-mark:hover     { background: darken(@task-color-ready-to-mark, 10%); }
+  &.not-started:hover       { background: darken(@task-color-not-started, 10%); }
+  &.working-on-it:hover     { background: darken(@task-color-working-on-it, 10%); }
+  &.need-help:hover         { background: darken(@task-color-need-help, 10%); }
+  &.fix-and-resubmit:hover  { background: darken(@task-color-fix-and-resubmit, 10%); }
+  &.fix-and-include:hover   { background: darken(@task-color-fix-and-include, 10%); }
+  &.fail:hover              { background: darken(@task-color-fail, 10%); }
+  &.redo:hover              { background: darken(@task-color-redo, 10%); }
+  &.discuss:hover           { background: darken(@task-color-discuss, 10%); }
+  &.demonstrate:hover       { background: darken(@task-color-demonstrate, 10%); }
+  &.complete:hover          { background: darken(@task-color-complete, 20%); }
 }
 
 .task-status {

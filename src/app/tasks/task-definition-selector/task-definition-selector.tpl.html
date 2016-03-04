@@ -1,10 +1,17 @@
 <div class="btn-group task-definition-selector dropdown" dropdown>
   <button class="btn btn-{{buttonStyle}} dropdown-toggle col-sm-12" type="button" dropdown-toggle>
-    <span ng-show="selectedDefinition">Task <label class="label label-info" ng-show="selectedDefinition" tooltip="{{selectedDefinition.name}}">{{selectedDefinition.abbreviation}}</label></span>
+    <span ng-show="selectedDefinition">
+      Task
+      <label class="label label-info" ng-show="selectedDefinition" tooltip="{{selectedDefinition.name}}" tooltip-append-to-body="true">
+        {{selectedDefinition.abbreviation}}
+      </label>
+    </span>
     <span ng-hide="selectedDefinition">Select Task</span>
-    <div class="pull-right"><span class="caret" style="margin-right:0.5em"></span></div>
+    <div class="pull-right">
+      <span class="caret"></span>
+    </div>
   </button><!--/dropdown-button-->
-  <ul class="dropdown-menu project-task-bar">
+  <ul class="dropdown-menu project-tasks-list">
     <div ng-repeat="(groupSetId, relatedTaskDefs) in unit.task_definitions | groupBy: 'group_set_id'" class="col-sm-12">
       <h5 class="groupset-name" ng-hide="hideGroupSetName">
         {{groupSetName(groupSetId)}}

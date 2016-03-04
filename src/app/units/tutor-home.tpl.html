@@ -19,9 +19,9 @@
       </div>
     </div>
     <div ng-if="unitLoaded">
-      <tutor-task-feedback-view ng-if="activeTab === tabs.feedbackTab" unit="unit" context="'assess'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
+      <task-feedback-assessor-list ng-if="activeTab === tabs.feedbackTab" unit="unit" context="'assess'" assessing-unit-role="assessingUnitRole"></task-feedback-assessor-list>
       <tutor-student-list  ng-if="activeTab === tabs.studentsTab" unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
-      <tutor-task-feedback-view  ng-if="activeTab === tabs.tasksTab" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></tutor-task-feedback-view>
+      <task-feedback-assessor-list  ng-if="activeTab === tabs.tasksTab" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></task-feedback-assessor-list>
       <tutor-group-tab ng-if="activeTab === tabs.groupsTab"></tutor-group-tab>
       <unit-plagiarism-tab  ng-if="activeTab === tabs.plagiarismTab"></unit-plagiarism-tab>
       <unit-analytics  ng-if="activeTab === tabs.analyticsTab"></unit-analytics>

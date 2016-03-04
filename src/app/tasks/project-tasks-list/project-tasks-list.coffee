@@ -6,17 +6,14 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
 # of the task that was clicked
 #
 .directive('projectTasksList', ->
-  replace: false
+  replace: true
   restrict: 'E'
   templateUrl: 'tasks/project-tasks-list/project-tasks-list.tpl.html'
   scope:
-    # student: "=student"
-    project: "=project"
-    onChange: "=onChange"
-    studentProjectId: "=studentProjectId"
-    unit: "=unit"
-    onSelect: "=onSelect"
-    assessingUnitRole: "=assessingUnitRole"
+    unit: "="
+    project: "="
+    onSelect: "="
+    inMenu: '@'
 
   controller: ($scope, $modal, taskService, groupService, analyticsService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"

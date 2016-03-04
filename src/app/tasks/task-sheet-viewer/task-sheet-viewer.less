@@ -1,7 +1,7 @@
 @import (reference) "../task-viewer/task-viewer.less";
 .task-sheet-viewer {
   .panel-body.task-description, .panel-body.task-view-alignment-panel {
-    height: auto;
+    height: auto !important; // need to override changes from .task-viewer
   }
 
   .panel-body.ng-hide {

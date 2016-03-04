@@ -1,5 +1,6 @@
-angular.module("doubtfire.units", [
+angular.module('doubtfire.units', [
   'doubtfire.units.partials'
+  'doubtfire.units.stats'
 ])
 
 .config((headerServiceProvider) ->

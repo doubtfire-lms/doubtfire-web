@@ -2,14 +2,18 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
 
 #
 # A switch that that the selection of a specified task definition
+# Only handles task definition - not tasks in a project
 #
 .directive('taskDefinitionSelector', ->
   replace: true
   restrict: 'E'
   templateUrl: 'tasks/task-definition-selector/task-definition-selector.tpl.html'
   scope:
+    # Unit required
     unit: "="
+    # What to do when definition is changed
     onSelectDefinition: "="
+    # Provide a btn-style to force the colour to change`
     buttonStyle: '@'
   controller: ($scope, groupService) ->
     $scope.buttonStyle = if $scope.buttonStyle? then $scope.buttonStyle else 'primary'

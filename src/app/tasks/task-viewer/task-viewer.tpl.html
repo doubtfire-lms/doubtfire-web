@@ -1,22 +1,18 @@
-<div class="task-viewer" ng-if="project.selectedTask">
+<div class="task-viewer">
   <div class="task-viewer-toolbar clearfix">
-    <div class="btn-group dropdown status-switcher col-sm-1" dropdown>
+    <div class="btn-group dropdown active-task-selector col-sm-1" dropdown>
       <button class="btn task-status {{activeStatusData().class}} dropdown-toggle" dropdown-toggle>
         <label>{{project.selectedTask.definition.abbreviation}}</label>
         <span class="caret"></span>
       </button><!--/dropdown-button-->
-        <ul class="dropdown-menu project-task-bar">
-          <div ng-repeat="(groupSetId, relatedTasks) in project.tasks | groupBy: 'definition.group_set_id'" class="col-sm-12 groupset-tasks">
-            <h5 class="groupset-name" ng-hide="hideGroupSetName">
-            {{groupSetName(groupSetId)}}</h5>
-            <li class="col-xs-4 col-sm-3 col-md-2 col-lg-4" ng-repeat="task in relatedTasks | byGrade:project.target_grade | orderBy: 'definition.seq'">
-              <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-class="{'active' : task == project.selectedTask}" ng-click="setSelectedTask(task)" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.definition.name}}:</strong><br>{{task.status_txt()}}">
-                {{task.definition.abbreviation}} <i class="fa fa-eye" ng-show="task.similar_to_count > 0"></i>
-              </button>
-            </li>
-          </div>
-        </ul>
-    </div><!--/active-task-switcher-->
+      <project-tasks-list
+        class="dropdown-menu"
+        in-menu="true"
+        unit="unit"
+        project="project"
+        on-select="setSelectedTask"></project-tasks-list>
+    </div><!--/active-task-selector-->
+
     <div class="task-header-info col-sm-10">
       <div class="col-sm-8 task-status-summary">
         <h3>{{project.selectedTask.definition.name}}</h3>
@@ -39,7 +35,7 @@
       </div>
     </div><!--/task-header-info-->
 
-    <div tooltip-placement="left" tooltip="{{activeStatusData().label}}" tooltip-append-to-body="true" class="btn-group dropdown status-switcher col-sm-1 pull-right" dropdown>
+    <div tooltip-placement="left" tooltip="{{activeStatusData().label}}" tooltip-append-to-body="true" class="btn-group dropdown active-task-status-selector col-sm-1 pull-right" dropdown>
       <button type="button" class="btn task-status {{statusClass(project.selectedTask.status)}} dropdown-toggle" dropdown-toggle>
         <i class="{{activeStatusData().icon}} fa-2x"></i>
         <span class="caret"></span>
@@ -49,7 +45,7 @@
         assessing-unit-role="assessingUnitRole"
         in-menu="true"
         trigger-transition="triggerTransition"></task-status-selector>
-    </div><!--/active-task-status-switcher-->
+    </div><!--/active-task-status-selector-->
   </div><!--/task-toolbar-->
 
   <div class="task-viewer-tabs">
@@ -73,11 +69,11 @@
           {{activeTab.subtitle}}
         </div>
         <div class="task-viewer-tab-panel">
-          <task-sheet task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabs.taskSheet"></task-sheet>
-          <submit-task-form task="project.selectedTask" project="project" unit="unit" assessing-unit-role="assessingUnitRole" ng-if="activeTab == tabs.fileUpload"></submit-task-form>
-          <view-task-submission ng-show="activeTab == tabs.viewSubmission" project="project" task="project.selectedTask"></view-task-submission>
-          <view-task-comments ng-show="activeTab == tabs.viewComments" project="project" task="project.selectedTask"></view-task-comments>
-          <task-plagiarism-report task="project.selectedTask" ng-if="activeTab == tabs.plagiarismReport"></task-plagiarism-report>
+          <task-sheet-viewer task="project.selectedTask" project="project" unit="unit" ng-if="activeTab == tabs.taskSheet"></task-sheet-viewer>
+          <task-submission-wizard task="project.selectedTask" project="project" unit="unit" assessing-unit-role="assessingUnitRole" ng-if="activeTab == tabs.fileUpload"></task-submission-wizard>
+          <task-submission-viewer ng-show="activeTab == tabs.viewSubmission" project="project" task="project.selectedTask"></task-submission-viewer>
+          <task-comments-viewer ng-show="activeTab == tabs.viewComments" project="project" task="project.selectedTask"></task-comments-viewer>
+          <task-plagiarism-report-viewer task="project.selectedTask" ng-if="activeTab == tabs.plagiarismReport"></task-plagiarism-report-viewer>
         </div><!--/panel-body-area-->
       </div><!--/tab-contents-panel-->
     </div><!--/tab-contents-->

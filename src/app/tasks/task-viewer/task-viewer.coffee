@@ -70,6 +70,8 @@ angular.module('doubtfire.tasks.task-viewer', [])
       tab is $scope.activeTab
 
     $scope.$watch 'project.selectedTask', (newTask) ->
+      unless newTask?
+        newTask = _.first $scope.project.tasks
       # select initial tab
       if $stateParams.viewing == 'feedback'
         $scope.setActiveTab($scope.tabs.viewSubmission)

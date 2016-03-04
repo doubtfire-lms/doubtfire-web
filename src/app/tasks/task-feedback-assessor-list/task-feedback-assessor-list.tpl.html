@@ -4,7 +4,7 @@
       <div class="pull-left">
         <h4 class="panel-title" ng-hide="context=='task'">{{title}}</h4>
         <task-definition-selector button-style="default" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
-        <div>Show tasks that require some feedback from {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}</div>
+        <div ng-hide="context=='task'">Show tasks from {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}</div>
       </div>
         <div class="pull-right">
           <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
@@ -88,14 +88,14 @@
       </table>
     </div>
     <div class="panel-body project-show no-padding" ng-if="fullscreen">
-      <provide-task-feedback
+      <task-feedback-assessor
         scope="student-project-scope"
         task="activeTask"
         unit="unit"
         view-options="viewOptions"
         assessing-unit-role="assessingUnitRole"
         unit-role="assessingUnitRole.id"
-        on-status-update="onStatusUpdate"></provide-task-feedback>
+        on-status-update="onStatusUpdate"></task-feedback-assessor>
     </div>
     <div class="panel-footer clearfix">
       <div class="pull-right">
@@ -109,7 +109,7 @@
       <pagination total-items="filteredTasks.length" ng-model="taskCurrentPage" items-per-page="taskPageSize" max-size="taskMaxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
     </div>
   </div>
-  <provide-task-feedback
+  <task-feedback-assessor
     ng-if="!fullscreen"
     scope="student-project-scope"
     task="activeTask"
@@ -118,5 +118,5 @@
     assessing-unit-role="assessingUnitRole"
     unit-role="assessingUnitRole.id"
     fullscreen="fullscreen"
-    on-status-update="onStatusUpdate"></provide-task-feedback>
+    on-status-update="onStatusUpdate"></task-feedback-assessor>
 </div>

@@ -1,13 +1,13 @@
-angular.module('doubtfire.tasks.task-plagiarism-report', [])
+angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
 
 #
 # Task Plagiarism Report shows how the task relates tasks submitted by
 # other students.
 #
-.directive('taskPlagiarismReport', ->
-  replace: false
+.directive('taskPlagiarismReportViewer', ->
+  replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-plagiarism-report/task-plagiarism-report.tpl.html'
+  templateUrl: 'tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.tpl.html'
   scope:
     task: "=task"
 
@@ -23,6 +23,9 @@ angular.module('doubtfire.tasks.task-plagiarism-report', [])
 
     $scope.$watch 'match', ->
       $scope.fetchSimilarity()
+
+    $scope.noPlagiarismDetected = ->
+      $scope.tasks?.similar_to_count <= 0 || $scope.similarityData == null
 
     $scope.fetchSimilarity = () ->
       if $scope.task?.similar_to_count > 0

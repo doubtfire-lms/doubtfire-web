@@ -9,13 +9,13 @@
     Teaching staff believe that completing this task will help you achieve the outcomes listed below
   </div><!--view-alignment-panel-header-->
   <div class="panel-body task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
-    <view-alignment
+    <task-ilo-alignment-viewer
       project="project"
       task="task"
       unit="unit"
       alignments="alignments"
       summative="false"
-      hide-visualisation="true"></view-alignment>
+      hide-visualisation="true"></task-ilo-alignment-viewer>
   </div><!--view-alignment-panel-body-->
   <div class="panel-heading row-fluid task-download" ng-show="hasPDF() || hasResources()">
     <h3 class="panel-title">

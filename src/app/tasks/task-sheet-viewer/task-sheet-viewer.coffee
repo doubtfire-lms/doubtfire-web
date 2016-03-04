@@ -3,7 +3,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
 #
 # Task sheet shows PDF and allows resources to be downloaded
 #
-.directive('taskSheet', ->
+.directive('taskSheetViewer', ->
   replace: true
   restrict: 'E'
   templateUrl: 'tasks/task-sheet-viewer/task-sheet-viewer.tpl.html'

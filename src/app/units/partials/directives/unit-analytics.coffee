@@ -1,7 +1,7 @@
 angular.module('doubtfire.units.partials.unit-analytics', [])
 
 .directive('unitAnalytics', ->
-  replace: false
+  replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/unit-analytics.tpl.html'
   controller: ($scope, Unit) ->
@@ -29,7 +29,7 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
     # Active task tab group
     #
     $scope.tabsData =
-      taskStatusSummaryStats:
+      taskStatusStats:
         title: "Task Status Stats"
         subtitle: "View distribution of tasks by their current status either unit-wide or broken down into a specific tutorial or task"
         icons: ["fa-tasks"]
@@ -59,12 +59,6 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
         icons: ["fa-circle"]
         seq: 4
         active: false
-      # developer:
-      #   title: "Developer"
-      #   subtitle: "Developer tools"
-      #   icons: ["fa-code"]
-      #   seq: 5
-      #   active: false
 
     #
     # Sets the active tab
@@ -77,7 +71,7 @@ angular.module('doubtfire.units.partials.unit-analytics', [])
       $scope.activeTab = tab
       $scope.activeTab.active = true
 
-    $scope.setActiveTab($scope.tabsData.taskStatusSummaryStats)
+    $scope.setActiveTab($scope.tabsData.taskStatusStats)
 
     #
     # Checks if tab is the active tab

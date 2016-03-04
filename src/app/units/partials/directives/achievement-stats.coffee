@@ -1,6 +1,6 @@
 angular.module('doubtfire.units.partials.achievement-stats', [])
 .directive('achievementStats', ->
-  replace: false
+  replace: true
   restrict: 'E'
   templateUrl: 'units/partials/templates/achievement-stats.tpl.html'
   scope:

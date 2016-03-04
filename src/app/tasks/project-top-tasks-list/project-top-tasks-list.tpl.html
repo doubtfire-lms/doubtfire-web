@@ -1,5 +1,5 @@
-<div>
-  <div class="help-block text-center" style="margin: 5em 0;" ng-show="topTasks.length == 0">You have completed all of the tasks!</div>
+<div class="project-top-tasks-list">
+  <div class="help-block text-center all-completed" ng-show="topTasks.length == 0">You have completed all of the tasks!</div>
   <table ng-hide="topTasks.length == 0" class="table table-condensed table-hover table-pointer ">
     <thead>
       <tr>
@@ -22,7 +22,11 @@
     </thead>
     <tbody>
       <tr ng-repeat="data in topTasks" ng-click="onSelect(data.task, 'Top Task Select')">
-        <td ng-click="viewTask(data.task)"><label class="label label-info pointer" tooltip="{{data.task.definition.name}}" tooltip-append-to-body="true">{{data.task.definition.abbreviation}}</label></td>
+        <td ng-click="viewTask(data.task)">
+          <label class="label label-info pointer label-task-definition" tooltip="{{data.task.definition.name}}" tooltip-append-to-body="true">
+            {{data.task.definition.abbreviation}}
+          </label>
+        </td>
         <td ng-click="viewTask(data.task)">
           <status-icon status="data.task.status"></status-icon>
         </td>

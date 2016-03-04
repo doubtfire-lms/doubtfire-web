@@ -6,7 +6,6 @@ angular.module('doubtfire.tasks.stats.task-completion-stats', [])
 # task or tutorial
 #
 .directive('taskCompletionStats', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'tasks/stats/task-completion-stats/task-completion-stats.tpl.html'
   scope:
@@ -28,8 +27,6 @@ angular.module('doubtfire.tasks.stats.task-completion-stats', [])
 
     $scope.tutorialsForSelector = [overviewTutorial].concat($scope.unit.tutorials)
 
-    $scope.depth = 0
-
     $scope.switchToTutorial = (tutorial) ->
       return unless $scope.unit.analytics?.taskCompletionStats?
       $scope.dataModel.selectedTutorial = tutorial
@@ -48,6 +45,8 @@ angular.module('doubtfire.tasks.stats.task-completion-stats', [])
       selectedType: 'unit'
       selectedTutorial: overviewTutorial
     }
+
+    $scope.depth = 0
 
     $scope.$watch 'dataModel.selectedType', (newValue) ->
       if $scope.unit.analytics?.taskCompletionStats?

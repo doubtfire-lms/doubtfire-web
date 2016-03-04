@@ -10,7 +10,7 @@
   </tabset><!--tabs-->
   <div ng-if="unitLoaded">
     <project-progress-dashboard ng-if="activeTab === tabs.progressTab"></project-progress-dashboard>
-    <task-feedback ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-feedback>
+    <task-viewer ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-viewer>
     <student-group-tab ng-if="activeTab === tabs.groupTab"></student-group-tab>
     <project-lab-list ng-if="activeTab === tabs.tutorialTab"></project-lab-list>
     <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
