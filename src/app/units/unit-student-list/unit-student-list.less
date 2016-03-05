@@ -11,7 +11,7 @@
 /* !!! Use this for the number of flags you have !!! */
 @number-of-flags: 3;
 
-.tutor-student-list {
+.unit-student-list {
   table thead th {
     vertical-align: middle;
   }
@@ -71,7 +71,7 @@
     th.actions    { width: @actions-width;    }
   }
 }
-.tutor-student-list.fullscreen {
+.unit-student-list.fullscreen {
   border-radius: 0;
   position: fixed;
   top: 0;
@@ -137,6 +137,6 @@
     }
   }
 }
-.tutor-student-list:not(.fullscreen) .panel-body {
+.unit-student-list:not(.fullscreen) .panel-body {
   height: auto !important; // Needs to be important to override resize
 }

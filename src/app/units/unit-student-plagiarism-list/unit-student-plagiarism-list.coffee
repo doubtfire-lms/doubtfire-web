@@ -1,9 +1,12 @@
-angular.module('doubtfire.units.partials.unit-plagiarism',[])
+angular.module('doubtfire.units.partials.unit-student-plagiarism-list',[])
 
-.directive('unitPlagiarismTab', ->
+#
+# List of all possible plagiarism detected in student's work
+#
+.directive('unitStudentPlagiarismList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-plagiarism-tab.tpl.html'
+  templateUrl: 'units/unit-student-plagiarism-list/unit-student-plagiarism-list.tpl.html'
   controller: ($scope, $filter, currentUser, gradeService, projectService) ->
     $scope.grades = gradeService.grades
 

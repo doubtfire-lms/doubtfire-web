@@ -1,9 +1,13 @@
 angular.module('doubtfire.units.unit-staff-editor', [])
 
-.directive('staffAdminUnitContext', ->
+#
+# Editor for adding new staff to a unit and assigning those staff
+# members new unit roles within the unit
+#
+.directive('unitStaffEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/staff-admin-context.tpl.html'
+  templateUrl: 'unit/unit-staff-editor/unit-staff-editor.tpl.html'
   controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
     temp = []
     users = []

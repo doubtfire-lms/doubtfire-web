@@ -51,7 +51,7 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
 
     if $scope.isNew
       save_data.unit_id = unit.id
-      Tutorial.create( $scope.tutorial: save_data ).$promise.then (
+      Tutorial.create({ tutorial: save_data }).$promise.then (
         (response) ->
           $modalInstance.close(response)
           $scope.unit.tutorials.push(response)

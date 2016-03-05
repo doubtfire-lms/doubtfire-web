@@ -1,9 +1,12 @@
 angular.module('doubtfire.units.unit-tutorials-editor', [])
 
-.directive('tutorialUnitContext', ->
+#
+# Editor for modifying the tutorials in a unit
+#
+.directive('unitTutorialsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/tutorial-admin-context.tpl.html'
+  templateUrl: 'units/unit-tutorials-editor/unit-tutorials-editor.tpl.html'
   controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
     $scope.editTutorial = (tutorial) ->
       UnitTutorialEditModal.show $scope.unit, tutorial

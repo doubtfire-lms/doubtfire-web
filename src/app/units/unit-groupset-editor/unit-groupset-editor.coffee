@@ -1,14 +1,13 @@
-angular.module('doubtfire.units.partials.unit-admin-groupset-directive', [])
+angular.module('doubtfire.units.unit-groupset-editor', [])
 
 #
-# Task Plagiarism Report shows how the task relates tasks submitted by
-# other students.
+# Editor for editing a unit's groupsets. Can also add new groups to
+# newly created groupsets and then and add new members to those groups.
 #
-
-.directive('unitAdminGroupsetTab', ->
+.directive('unitGroupsetEditor', ->
   restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-admin-groupset-tab.tpl.html'
-
+  templateUrl: 'units/unit-groupset-editor/unit-groupset-editor.tpl.html'
+  replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CSVResultModal) ->
 
     $scope.addGroupSet = () ->

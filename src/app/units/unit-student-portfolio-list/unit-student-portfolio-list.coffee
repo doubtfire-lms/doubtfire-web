@@ -1,12 +1,12 @@
-angular.module('doubtfire.units.partials.unit-marking-portfolios-directive', [])
+angular.module('doubtfire.units.unit-student-portfolio-list', [])
 
 #
-# Marking portfolio context
+# List of all students who have portfolios and provides a marking
+# context for those portfolios
 #
-
-.directive('portfolioMarkingContext', ->
+.directive('unitStudentPortfolioList', ->
   restrict: 'E'
-  templateUrl: 'units/partials/templates/portfolio-marking-context.tpl.html'
+  templateUrl: 'units/unit-student-portfolio-list/unit-student-portfolio-list.tpl.html'
   controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser) ->
     $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
 

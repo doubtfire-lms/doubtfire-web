@@ -1,19 +1,19 @@
-angular.module('doubtfire.units.partials.unit-tutor-student-list', [])
+angular.module('doubtfire.units.unit-student-list', [])
 
 #
-# The Tutor Student List view shows a list of students, with
-# their tasks and progress.
+# The unit student list view shows a list of students in a unit, with
+# their tasks and progress. When unit role is a tutor unit role, will
+# only show students in the tutor's relevant tutorials.
 #
-.directive('tutorStudentList', ->
+.directive('unitStudentList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/tutor-student-list.tpl.html'
+  templateUrl: 'units/unit-student-list/unit-student-list.tpl.html'
   scope:
     unitRole: "=unitRole"
     unit: "=unit"
     unitLoaded: "=unitLoaded"
     fullscreen: '=?'
-
   controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService) ->
     $scope.studentFilter = 'myStudents' # Mine by default
 

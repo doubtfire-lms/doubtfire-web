@@ -1,9 +1,12 @@
 angular.module('doubtfire.units.unit-tasks-editor', [])
 
-.directive('taskAdminUnitContext', ->
+#
+# Editor for modifying the tasks in a unit
+#
+.directive('unitTasksEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/task-admin-context.tpl.html'
+  templateUrl: 'units/unit-tasks-editor/unit-tasks-editor.tpl.html'
   controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, CSVResultModal) ->
     $scope.grades = gradeService.grades
 
@@ -12,7 +15,6 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
       currentPage: 1
       maxSize: 5
       pageSize: 5
-
       search: ''
       sortOrder: 'seq'
       reverse: false

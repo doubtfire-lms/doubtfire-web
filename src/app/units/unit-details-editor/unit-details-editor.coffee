@@ -1,13 +1,14 @@
 angular.module('doubtfire.units.unit-details-editor', [])
 
-.directive('adminUnitContext', ->
+#
+# Editor for the basic details of a unit, such as the name, code
+# start and end dates etc.
+#
+.directive('unitDetailsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-admin-context.tpl.html'
+  templateUrl: 'units/unit-details-editor/unit-details-editor.tpl.html'
   controller: ($scope, $state, $rootScope, Unit, alertService, unitService) ->
-    $scope.format = 'yyyy-MM-dd'
-    $scope.initDate = new Date('2016-04-20')
-
     $scope.calOptions = {
       startOpened: false
       endOpened: false

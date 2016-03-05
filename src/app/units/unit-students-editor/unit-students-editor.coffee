@@ -1,9 +1,12 @@
 angular.module('doubtfire.units.unit-students-editor', [])
 
-.directive('enrolStudentsContext', ->
+#
+# Editor to enrol students into a unit
+#
+.directive('unitStudentsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/enrol-student-context.tpl.html'
+  templateUrl: 'units/unit-students-editor/unit-students-editor.tpl.html'
   controller: ($scope, Unit, Project, CSVResultModal, UnitStudentEnrolmentModal, alertService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 

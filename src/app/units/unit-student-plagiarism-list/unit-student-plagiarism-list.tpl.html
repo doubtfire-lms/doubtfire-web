@@ -1,3 +1,4 @@
+<!-- TODO: This needs to be refactored -->
 <div>
   <ul class="nav nav-pills nav-stacked col-sm-2">
     <li role="presentation" ng-class="{'active' : view == 'all-students' }"><a ng-click="setActiveView('all-students')">All Students</a></li>
@@ -10,7 +11,7 @@
         <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="500" autofocus />
         <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{allStudents.length}} students.</p>
         <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</p>
-      </form>  
+      </form>
       <div class="table-responsive">
         <table class="table table-condensed table-hover">
           <thead>

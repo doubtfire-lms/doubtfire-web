@@ -1,5 +1,5 @@
-.landing-page main {
-	width: 330px;
+#sign-in {
+  width: 330px;
   .slide-down(1s);
   h1.logo {
     .fade-in(1s);
@@ -36,17 +36,15 @@
   }
 }
 
-footer.about-doubtfire {
+#sign-in footer.about-doubtfire {
   width: 100%;
   a {
     color: #ccc;
   }
 }
 
-.no-ie {
-  main {
-    margin: 10% auto;
-  }
+#sign-in .no-ie {
+  margin: 10% auto;
   .logo a, a:hover {
     text-decoration: none;
   }
@@ -55,12 +53,32 @@ footer.about-doubtfire {
     text-align: center;
   }
 }
-.no-ie + .landing-page {
-  display: none;
-}
 
+#sign-in .form-signin {
+  .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+  }
 
-.center-full-screen {
-  .flex-center();
-  height: 100vh;
+  input[name="username"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  input[name="password"] {
+    margin-bottom: 10px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .remember-me { text-align: center; }
+  .remember-me label { padding-top: 3px; font-size: 0.9em;}
+
+  input { text-align: center; }
 }

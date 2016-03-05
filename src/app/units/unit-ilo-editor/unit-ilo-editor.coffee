@@ -1,11 +1,13 @@
-angular.module('doubtfire.units.partials.admin-unit-ilo-directive',[])
+angular.module('doubtfire.units.unit-ilo-editor',[])
 
-.directive('adminUnitIlos', ->
+#
+# Editor for modifying a unit's ILOs
+#
+.directive('unitIloEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/admin-unit-ilos.tpl.html'
+  templateUrl: 'units/unit-ilo-editor/unit-ilo-editor.tpl.html'
   controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CSVResultModal, UnitILOEditModal) ->
-
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchOutcomeUrl = ->
       IntendedLearningOutcome.getOutcomeBatchUploadUrl($scope.unit)

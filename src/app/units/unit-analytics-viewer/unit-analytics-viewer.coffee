@@ -1,30 +1,14 @@
-angular.module('doubtfire.units.partials.unit-analytics', [])
+angular.module('doubtfire.units.unit-analytics-viewer', [])
 
-.directive('unitAnalytics', ->
+#
+# Viewer that displays all analytics related to an entire unit (usually)
+# all stats where applicable
+#
+.directive('unitAnalyticsViewer', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-analytics.tpl.html'
+  templateUrl: 'units/unit-analytics-viewer/unit-analytics-viewer.tpl.html'
   controller: ($scope, Unit) ->
-    #
-    # We need to avoid hitting the server with these requests unless this is actually viewed...
-    # Store all analytics data in $scope.unit.analytics.
-    #
-
-    $scope.fetchTaskCompletionStats = () ->
-      Unit.taskCompletionStats.get {id: $scope.unit.id},
-        (response) ->
-          $scope.unit.analytics.taskCompletionStats = response
-
-    $scope.fetchLearningProgressClassDetails = () ->
-      Unit.learningProgressClassDetails.get {id: $scope.unit.id},
-        (response) ->
-          $scope.unit.analytics.learningProgressClassDetails = response
-
-    $scope.fetchTargetGradeStats = () ->
-      Unit.targetGradeStats.query {id: $scope.unit.id},
-        (response) ->
-          $scope.unit.analytics.targetGradeStats = response
-
     #
     # Active task tab group
     #

@@ -35,7 +35,7 @@
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
         </form>
     </div>
-    <div class="panel-body student-list">
+    <div class="panel-body unit-student-list">
       <div class="help-block text-center" style="margin: 5em 0;" ng-hide="refreshed">Refresh to view tasks.</div>
       <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredTasks.length == 0 && refreshed">No tasks found.</div>
         <table ng-hide="(!refreshed) || filteredTasks.length == 0" class="table table-condensed table-hover table-pointer ">

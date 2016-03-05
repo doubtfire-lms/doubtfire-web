@@ -6,7 +6,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
 .factory('TaskILOAlignmentModal', ($modal) ->
   TaskILOAlignmentModal = {}
 
-  TaskILOAlignmentModal.show = (task, ilo, alignment, unit, project, source)
+  TaskILOAlignmentModal.show = (task, ilo, alignment, unit, project, source) ->
     $modal.open
       controller: 'TaskILOAlignmentModalCtrl'
       templateUrl: 'tasks/task-ilo-alignment/modals/task-ilo-alignment-modal.tpl.html'

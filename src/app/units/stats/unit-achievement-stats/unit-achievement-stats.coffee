@@ -1,8 +1,12 @@
-angular.module('doubtfire.units.partials.achievement-stats', [])
-.directive('achievementStats', ->
+angular.module('doubtfire.units.stats.unit-achievement-stats', [])
+
+#
+# Student's overall achievement statistics over the entire unit
+#
+.directive('unitAchievementStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/achievement-stats.tpl.html'
+  templateUrl: 'units/stats/unit-achievement-stats/unit-achievement-stats.tpl.html'
   scope:
     unit: "="
   controller: ($scope, Unit) ->
