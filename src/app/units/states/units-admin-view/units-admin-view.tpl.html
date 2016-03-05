@@ -4,8 +4,8 @@
     <li class="active">Manage Units</li>
 </ul>
 <div class="root-view" id="admin-units">
-  <h2>Doubtfire Units <small>{{unit.code}}</small><p class="lead">Unit Administration View</p></h2>
-  <div class="col-sm-8 col-sm-offset-2">
+  <div class="col-sm-12">
+    <h2>Doubtfire Units <small>{{unit.code}}</small><p class="lead">Unit Administration View</p></h2>
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">Units</h4>
@@ -13,7 +13,7 @@
       </div>
       <div class="panel-body">
         <div class="callout callout-info" ng-hide="units.length > 0">No units have been registered with Doubtfire yet</div>
-        <table ng-show="units.length > 0" class="table table-condensed table-hover table-pointer">
+        <table ng-show="units.length > 0" class="table table-hover table-pointer">
          <thead>
            <tr>
              <th>Code</th>
