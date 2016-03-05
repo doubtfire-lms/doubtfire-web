@@ -14,7 +14,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
     context: "=context"
     assessingUnitRole: "=assessingUnitRole"
 
-  controller: ($scope, $filter, Unit, UnitMarkSubmissionsOfflineModal, currentUser, alertService, gradeService, taskService, analyticsService) ->
+  controller: ($scope, $filter, Unit, UnitMarkSubmissionsOfflineModal, currentUser, alertService, gradeService, taskService, unitService, analyticsService) ->
     if $scope.context == 'assess'
       $scope.title = "Tasks Requring Feedback"
       $scope.statusFilter = 'ready_to_mark'
@@ -27,6 +27,8 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
       category = 'Teacher View - Tasks Tab'
 
     $scope.search = ""
+
+    $scope.unitService = unitService
 
     $scope.viewOptions = {
       showPdf: true

@@ -31,7 +31,7 @@
           </label>
         </div>
         <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">
-          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autofocus />
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search"  typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"  ng-model="search" autofocus />
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
         </form>
     </div>
