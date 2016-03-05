@@ -3,12 +3,7 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Mark Portfolios</h4>
-        Assess student portfolios.
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-          <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
-        </button>
+        Assess student portfolios
       </div>
       <div class="btn-group pull-right" style="margin-left: 1ex">
         <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
@@ -18,16 +13,16 @@
           <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
         </label>
       </div>
-      <form role="search" class="col-sm-4 form-horizontal pull-right">
-        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
-        <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
-      </form>
       <div class="btn-group btn-group-sm pull-right">
         <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
           <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
         </label>
       </div>
-    </div>
+      <form role="search" class="col-sm-4 form-horizontal pull-right">
+        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+        <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+      </form>
+    </div><!--header-->
     <div class="panel-body unit-student-list">
       <div class="panel-body large-notice-block" ng-hide="filteredStudents.length > 0">
         <i class="fa fa-book"></i>
