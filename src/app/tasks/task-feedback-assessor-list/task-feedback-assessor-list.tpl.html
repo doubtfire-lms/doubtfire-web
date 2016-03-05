@@ -36,55 +36,61 @@
         </form>
     </div>
     <div class="panel-body unit-student-list">
-      <div class="help-block text-center" style="margin: 5em 0;" ng-hide="refreshed">Refresh to view tasks.</div>
-      <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredTasks.length == 0 && refreshed">No tasks found.</div>
-        <table ng-hide="(!refreshed) || filteredTasks.length == 0" class="table table-condensed table-hover table-pointer ">
-          <thead>
-            <tr>
-              <th class="task-abbr">
-                <a ng-click="sortOrder='project().student_id'; reverse=!reverse">
-                  Student ID <i ng-show="sortOrder=='project().student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                </a>
-              </th>
-              <th class="name">
-                <a ng-click="sortOrder='project().name'; reverse=!reverse">
-                  Name <i ng-show="sortOrder=='project().name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                </a>
-              </th>
-              <th class="task">
-                <a ng-click="sortOrder='definition.abbreviation'; reverse=!reverse">
-                  Task <i ng-show="sortOrder=='definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                </a>
-              </th>
-              <th class="status">
-                <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
-                  Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                </a>
-              </th>
-              <th class="times_assessed">
-                <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
-                  Times Assessed <i ng-show="sortOrder=='times_assessed'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-                </a>
-              </th>
-              <th class="tutorial">
-                <a ng-click="sortOrder='project().tutorial.abbreviation'; reverse=!reverse">
-                  <i ng-show="sortOrder=='project().tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
-                </a>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
-              <td>{{task.project().student_id}}</td>
-              <td>{{task.project().name}}</td>
-              <td><span class="label label-info" tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
-              <td>
-                <status-icon status="task.status"></status-icon>
-              </td>
-              <td>{{task.times_assessed}}</td>
-              <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
+      <div class="large-notice-block" ng-show="filteredTasks.length == 0 && ((selectedTask != null && context == 'task') || context == 'assess')">
+        <i class="fa fa-tasks"></i>
+        <p> No tasks found </p>
+      </div>
+      <div class="large-notice-block" ng-show="selectedTask == null && context == 'task'">
+        <i class="fa fa-tasks"></i>
+        <p> Select a task from the panel header </p>
+      </div>
+      <table ng-hide="(!refreshed) || filteredTasks.length == 0" class="table table-condensed table-hover table-pointer ">
+        <thead>
+          <tr>
+            <th class="task-abbr">
+              <a ng-click="sortOrder='project().student_id'; reverse=!reverse">
+                Student ID <i ng-show="sortOrder=='project().student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="name">
+              <a ng-click="sortOrder='project().name'; reverse=!reverse">
+                Name <i ng-show="sortOrder=='project().name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="task">
+              <a ng-click="sortOrder='definition.abbreviation'; reverse=!reverse">
+                Task <i ng-show="sortOrder=='definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="status">
+              <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
+                Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="times_assessed">
+              <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
+                Times Assessed <i ng-show="sortOrder=='times_assessed'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="tutorial">
+              <a ng-click="sortOrder='project().tutorial.abbreviation'; reverse=!reverse">
+                <i ng-show="sortOrder=='project().tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+              </a>
+            </th>
           </tr>
-          </tbody>
+        </thead>
+        <tbody>
+          <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+            <td>{{task.project().student_id}}</td>
+            <td>{{task.project().name}}</td>
+            <td><span class="label label-info" tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</span></td>
+            <td>
+              <status-icon status="task.status"></status-icon>
+            </td>
+            <td>{{task.times_assessed}}</td>
+            <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
+        </tr>
+        </tbody>
       </table>
     </div>
     <div class="panel-body project-show no-padding" ng-if="fullscreen">
