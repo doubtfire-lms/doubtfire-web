@@ -6,6 +6,7 @@ angular.module("doubtfire.projects.project-viewer", [])
 #
 .directive("projectViewer", ->
   restrict: 'E'
+  replace: true
   templateUrl: 'projects/project-viewer/project-viewer.tpl.html'
   scope:
     showTaskId: '=?' # pass in a task to initially show
