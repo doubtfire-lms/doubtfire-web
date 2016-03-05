@@ -23,7 +23,15 @@
       </div><!--/heading-->
 
       <div class="panel-body">
-        <table class="table table-task-alignment col-sm-12">
+        <div class="large-notice-block" ng-hide="tasks.length > 0">
+          <i class="fa fa-2x fa-tasks"></i>
+          <p>No tasks in this unit</p>
+        </div>
+        <div class="large-notice-block" ng-hide="unit.ilos.length > 0">
+          <i class="fa fa-2x fa-graduation-cap"></i>
+          <p>No learning outcomes in this unit</p>
+        </div>
+        <table class="table table-task-alignment col-sm-12" ng-hide="tasks.length == 0 || unit.ilos.length == 0">
           <thead>
             <tr>
               <th class="task" colspan="{{(showTaskName ? 3 : 2) - (source === unit ? 1 : 0)}}">Task</th>
