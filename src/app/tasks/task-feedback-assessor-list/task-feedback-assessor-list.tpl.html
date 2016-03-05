@@ -36,11 +36,11 @@
         </form>
     </div>
     <div class="panel-body unit-student-list">
-      <div class="large-notice-block" ng-show="filteredTasks.length == 0 && ((selectedTask != null && context == 'task') || context == 'assess')">
+      <div class="large-notice-block" ng-show="filteredTasks.length == 0 && ((selectedDefinition != null && context == 'task') || context == 'assess')">
         <i class="fa fa-tasks"></i>
         <p> No tasks found </p>
       </div>
-      <div class="large-notice-block" ng-show="selectedTask == null && context == 'task'">
+      <div class="large-notice-block" ng-show="selectedDefinition == null && context == 'task'">
         <i class="fa fa-tasks"></i>
         <p> Select a task from the panel header </p>
       </div>
