@@ -3,7 +3,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
 .directive('taskIloAlignmentEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/partials/templates/unit-outcome-alignment.tpl.html'
+  templateUrl: 'tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.tpl.html'
   scope:
     unit: "="
     project: "=?"
