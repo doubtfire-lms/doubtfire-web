@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [
 .directive('taskIloAlignmentViewer', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'tasks/task-ilo-alignment-viewer/task-ilo-alignment-viewer.tpl.html'
+  templateUrl: 'tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.tpl.html'
   scope:
     currentProgress: '=?'
     classStats: '=?'
