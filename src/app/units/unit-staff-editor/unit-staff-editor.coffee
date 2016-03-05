@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-staff-editor', [])
 .directive('unitStaffEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'unit/unit-staff-editor/unit-staff-editor.tpl.html'
+  templateUrl: 'units/unit-staff-editor/unit-staff-editor.tpl.html'
   controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
     temp = []
     users = []
