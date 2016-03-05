@@ -23,14 +23,17 @@
           <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
           <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
         </form>
-        <p class="btn-group pull-right">
+        <div class="btn-group btn-group-sm pull-right">
           <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
             <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
           </label>
-        </p>
+        </div>
       </div>
       <div class="panel-body unit-student-list">
-        <div class="help-block text-center" style="margin: 5em 0;" ng-show="filteredStudents.length == 0">No students found.</div>
+        <div class="panel-body large-notice-block" ng-hide="filteredStudents.length > 0">
+          <i class="fa fa-book"></i>
+          <p>No portfolios found</p>
+        </div>
         <table ng-hide="filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
           <thead>
             <tr>
@@ -90,8 +93,8 @@
         </div>
       </div>
       <div class="panel-body large-notice-block" ng-hide="selectedStudent">
-        <i class="fa fa-book fa-2x"></i>
-        <p>Select Student to view portfolio and assign grade.</p>
+        <i class="fa fa-book"></i>
+        <p>Select student to view portfolio and assign grade</p>
       </div>
     </div>
     <div ng-if="selectedStudent">
