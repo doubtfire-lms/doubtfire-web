@@ -9,7 +9,7 @@ angular.module('doubtfire.units.modals.unit-create-modal', [])
   UnitCreateModal.show = (units) ->
     $modal.open
       controller: 'UnitCreateModalCtrl'
-      templateUrl: 'units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.tpl.html'
+      templateUrl: 'units/modals/unit-create-modal/unit-create-modal.tpl.html'
       resolve:
         units: -> units
 
@@ -17,11 +17,17 @@ angular.module('doubtfire.units.modals.unit-create-modal', [])
 )
 .controller('UnitCreateModalCtrl', ($scope, $modalInstance, alertService, units, Unit, analyticsService) ->
   analyticsService.event 'Unit Admin', 'Started to Create Unit'
-
-  $scope.unit = new Unit { id: -1, active: true, code: "COS????", name: "Unit Name" }
-  $scope.saveSuccess = (unit) ->
-    alertService.add("success", "Unit created.", 2000)
-    $modalInstance.close()
-    units.push(unit)
-    analyticsService.event 'Unit Admin', 'Saved New Unit'
+  $scope.units = units
+  $scope.unit = { code: null, name: null }
+  $scope.saveUnit = ->
+    Unit.create(
+      { unit: $scope.unit }
+      (response) ->
+        alertService.add("success", "Unit created.", 2000)
+        $modalInstance.close()
+        $scope.units.push(response)
+        analyticsService.event 'Unit Admin', 'Saved New Unit'
+      (response) ->
+        alertService.add 'danger', "Error creating unit - #{response.data.error}"
+    )
 )
