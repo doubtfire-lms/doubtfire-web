@@ -40,7 +40,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
         a.href = "http://www.imdb.com/title/tt0107614/"
         a.title = "Mrs. Doubtfire (1993)"
         lead = document.createElement('P')
-        lead.appendChild(document.createTextNode('Happy April Fools Day!'))
+        lead.appendChild(document.createTextNode('Happy April Fools Day! 🎉'))
         h1.classList.add 'aprilfools'
         h1.appendChild a
         h1.appendChild lead
@@ -54,24 +54,35 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     redirectService.redirect "home", {}
   else
     $scope.signIn = ->
-      auth.signIn api + "/auth",
-        username: $scope.session.username
-        password: $scope.session.password
-        remember: $scope.session.remember_me
-      , ->
-        if $scope.session.remember_me
-          localStorageService.set(usernameCookie, currentUser)
-          localStorageService.set(rememberDoubtfireCredentialsCookie, true)
-          localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())
-        else
-          localStorageService.remove(usernameCookie)
-          localStorageService.set(rememberDoubtfireCredentialsCookie, false)
-          localStorageService.remove(doubtfireLoginTimeCookie)
-        redirectService.redirect "home", {}
-      , (response) ->
-        $scope.session.password = ''
-        if response.error
-          alertService.add("danger", "Login failed: " + response.error, 6000)
-        else
-          alertService.add("danger", "Login failed: Unable to connect to server", 6000)
+      $scope.signingIn = true
+      signInFunc = ->
+        signInCredentials =
+          username: $scope.session.username
+          password: $scope.session.password
+          remember: $scope.session.remember_me
+        auth.signIn(api + "/auth", signInCredentials,
+          (response) ->
+            if $scope.session.remember_me
+              localStorageService.set(usernameCookie, currentUser)
+              localStorageService.set(rememberDoubtfireCredentialsCookie, true)
+              localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())
+            else
+              localStorageService.remove(usernameCookie)
+              localStorageService.set(rememberDoubtfireCredentialsCookie, false)
+              localStorageService.remove(doubtfireLoginTimeCookie)
+            alertService.clearAll()
+            redirectService.redirect "home", {}
+          (response) ->
+            $scope.session.password = ''
+            $scope.signingIn = false
+            if response.error
+              $scope.invalidCredentials = true
+              resetInvalidCreds = ->
+                $scope.invalidCredentials = false
+              $timeout resetInvalidCreds, 300
+              alertService.add("danger", "Login failed: " + response.error, 6000)
+            else
+              alertService.add("danger", "Login failed: Unable to connect to server", 6000)
+        )
+      $timeout signInFunc, 100
 )

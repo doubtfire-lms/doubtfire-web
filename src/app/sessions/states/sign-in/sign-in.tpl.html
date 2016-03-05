@@ -1,37 +1,41 @@
 <div id="sign-in" class="center-full-screen container">
-  <div ng-if="isIE" class="no-ie">
+  <div ng-if="noIE" class="no-ie">
     <h1 class="logo">
       <p>
-        <a href="http://www.apple.com/safari/">
-          <i tooltip="Safari is compatible with Doubtfire" class="fa fa-safari text-primary"></i>
+        <a href="http://www.apple.com/safari/" tooltip="Safari is compatible with Doubtfire" tooltip-append-to-body="true">
+          <i class="fa fa-safari text-primary"></i>
         </a>
-        <a href="http://www.google.com/chrome">
-          <i tooltip="Chrome is compatible with Doubtfire" class="fa fa-chrome text-primary"></i>
+        <a href="http://www.google.com/chrome" tooltip="Chrome is compatible with Doubtfire" tooltip-append-to-body="true">
+          <i class="fa fa-chrome text-primary"></i>
         </a>
-        <a href="http://www.firefox.com/">
-          <i tooltip="Firefox is compatible with Doubtfire" class="fa fa-firefox text-primary"></i>
+        <a href="http://www.firefox.com/" tooltip="Firefox is compatible with Doubtfire" tooltip-append-to-body="true">
+          <i class="fa fa-firefox text-primary"></i>
         </a>
-        <a href="http://browsehappy.com">
-          <i tooltip="This version of Internet Explorer is not compatible with Doubtfire" class="fa fa-internet-explorer text-danger"></i>
+        <a href="http://browsehappy.com" tooltip="This version of Internet Explorer is not compatible with Doubtfire" tooltip-append-to-body="true">
+          <i class="fa fa-internet-explorer text-danger"></i>
         </a>
       </p>
       Doubtfire
     </h1>
     <p class="upgrade"> To use Doubtfire, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
   </div>
-  <div ng-if="!isIE">
+  <div ng-if="!noIE" class="login">
     <h1 class="logo">
       <i class="logo"></i> Doubtfire
+      <p class="lead">Learning Management System<p>
     </h1>
-    <form class="form-signin well" name="form" ng-submit="signIn()">
-      <input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
-      <input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
-      <div class="checkbox remember-me">
-        <label>
-          <input type="checkbox" ng-model="session.remember_me">Remember me</input>
-        </label>
+    <form name="form" ng-submit="signIn()">
+      <div class="username-password-entry" ng-class="{'invalid-credentials': invalidCredentials}">
+        <input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
+        <input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
       </div>
-      <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In" />
+      <button class="btn btn-lg btn-primary btn-block text-center" type="submit">
+        <span ng-hide="signingIn">Sign In</span>
+        <i class="fa fa-spinner fa-pulse" ng-show="signingIn"></i>
+      </button>
+      <label class="checkbox remember-me">
+        <input type="checkbox" ng-model="session.remember_me">Remember Me</input>
+      </label>
     </form>
   </div>
   <footer class="about-doubtfire text-center">

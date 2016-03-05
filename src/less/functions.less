@@ -50,6 +50,18 @@
          50% { transform: translateX(-5px); }
 }
 
+@-webkit-keyframes wobble-once {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(+5px); }
+  75% { transform: translateX(-5px); }
+}
+
+@keyframes wobble-once {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(+5px); }
+  75% { transform: translateX(-5px); }
+}
+
 .wobble() {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -63,54 +75,67 @@
   animation-name: wobble;
 }
 
+.wobble-once() {
+  -webkit-animation-duration: 0.15s;
+  animation-duration: 0.15s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 2;
+  -webkit-animation-iteration-count: 2;
+  -webkit-animation-name: wobble-once;
+  animation-name: wobble-once;
+}
+
 // Check bounce in
 @-webkit-keyframes bounce-in {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(.3);
-    }
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(.3);
+  }
 
-    50% {
-        opacity: 1;
-        -webkit-transform: scale(1.05);
-    }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.05);
+  }
 
-    70% {
-        -webkit-transform: scale(.9);
-    }
+  70% {
+    -webkit-transform: scale(.9);
+  }
 
-    100% {
-         -webkit-transform: scale(1);
-    }
+  100% {
+   -webkit-transform: scale(1);
+  }
 }
 
 @keyframes bounce-in {
-    0% {
-        opacity: 0;
-        transform: scale(.3);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(.3);
+  }
 
-    50% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 
-    70% {
-        transform: scale(.9);
-    }
+  70% {
+    transform: scale(.9);
+  }
 
-    100% {
-        transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .bounce-in() {
-    -webkit-animation-name: bounce-in;
-    animation-name: bounce-in;
-    -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
+  -webkit-animation-name: bounce-in;
+  animation-name: bounce-in;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 
 .flex-center() {
