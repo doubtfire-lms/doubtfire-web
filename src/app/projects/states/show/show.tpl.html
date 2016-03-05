@@ -1,8 +1,10 @@
 <ul class="breadcrumb">
   <li><a href="#/home">Home</a></li>
-  <li>
-    <a ng-if="assessingUnitRole" href="#/units?unitRole={{assessingUnitRole.id}}">{{unit.name}}</a>
-    <span ng-if="!assessingUnitRole">{{unit.name}}</span>
+  <li ng-if="!assessingUnitRole">
+    <a href="#/projects/{{project.project_id}}">{{unit.name}}</a>
+  </li>
+  <li ng-if="assessingUnitRole">
+    <a href="#/units?unitRole={{assessingUnitRole.id}}">{{unit.name}}</a>
   </li>
   <li class="active">{{project.student_name}}</li>
 </ul>
