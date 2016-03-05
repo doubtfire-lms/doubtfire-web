@@ -14,7 +14,7 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
 )
 
 .controller('UserSettingsModalCtrl', ($scope, $modalInstance, alertService, analyticsService, currentUser, User, user, auth) ->
-  $scope.user = user
+  $scope.user = user or new User { }
   $scope.isNew = user?.id is undefined
 
   if $scope.isNew
