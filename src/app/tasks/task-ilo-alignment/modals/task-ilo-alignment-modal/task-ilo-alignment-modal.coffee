@@ -68,7 +68,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
     $scope.alignment = data = {
       unit_id: $scope.unit.id
       learning_outcome_id: $scope.ilo.id
-      task_definition_id: $scope.task.id
+      task_definition_id: $scope.task.definition.id
       rating: $scope.alignment.rating
       description: null
     }
