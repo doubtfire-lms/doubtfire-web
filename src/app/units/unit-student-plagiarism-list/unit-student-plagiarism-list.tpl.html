@@ -1,5 +1,5 @@
-<!-- TODO: This needs to be refactored -->
 <div>
+  <!-- TODO: This needs to be refactored -->
   <ul class="nav nav-pills nav-stacked col-sm-2">
     <li role="presentation" ng-class="{'active' : view == 'all-students' }"><a ng-click="setActiveView('all-students')">All Students</a></li>
     <li role="presentation" ng-class="{'active' : view == 'my-students' }"><a ng-click="setActiveView('my-students')">My Students</a></li>
@@ -42,12 +42,12 @@
     </div> <!-- end students div -->
   </div>
   <div class="col-sm-12">
-  <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
-  </ul>
-  <div class="col-sm-12" ng-if="activeTask">
-    <task-plagiarism-report-viewer task="activeTask"></task-plagiarism-report-viewer>
-    <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
+    <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
+    </ul>
+    <div class="col-sm-12" ng-if="activeTask">
+      <task-plagiarism-report-viewer task="activeTask"></task-plagiarism-report-viewer>
+      <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
+    </div>
   </div>
-</div>
 </div>
