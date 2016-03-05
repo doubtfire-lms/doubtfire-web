@@ -4,6 +4,6 @@ angular.module('doubtfire.groups', [
   'doubtfire.groups.group-selector'
   'doubtfire.groups.groupset-group-manager'
   'doubtfire.groups.groupset-selector'
-  'doubtfire.groups.student-group-tab'
-  'doubtfire.groups.tutor-group-tab'
+  'doubtfire.groups.student-group-manager'
+  'doubtfire.groups.tutor-group-manager'
 ])

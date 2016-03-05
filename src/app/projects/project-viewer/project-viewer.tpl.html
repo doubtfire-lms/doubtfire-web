@@ -11,7 +11,7 @@
   <div ng-if="unitLoaded">
     <project-progress-dashboard ng-if="activeTab === tabs.progressTab"></project-progress-dashboard>
     <task-viewer ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-viewer>
-    <student-group-tab ng-if="activeTab === tabs.groupTab"></student-group-tab>
+    <student-group-manager ng-if="activeTab === tabs.groupTab"></student-group-manager>
     <project-lab-list ng-if="activeTab === tabs.tutorialTab"></project-lab-list>
     <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
     <project-portfolio-wizard ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio-wizard>

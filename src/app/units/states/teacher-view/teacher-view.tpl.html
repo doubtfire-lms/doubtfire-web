@@ -20,12 +20,12 @@
     </div>
     <div ng-if="unitLoaded">
       <task-feedback-assessor-list ng-if="activeTab === tabs.feedbackTab" unit="unit" context="'assess'" assessing-unit-role="assessingUnitRole"></task-feedback-assessor-list>
-      <tutor-student-list  ng-if="activeTab === tabs.studentsTab" unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></tutor-student-list>
+      <unit-student-list  ng-if="activeTab === tabs.studentsTab" unit-role="unitRole" unit="unit" unit-loaded="unitLoaded"></unit-student-list>
       <task-feedback-assessor-list  ng-if="activeTab === tabs.tasksTab" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></task-feedback-assessor-list>
-      <tutor-group-tab ng-if="activeTab === tabs.groupsTab"></tutor-group-tab>
-      <unit-plagiarism-tab  ng-if="activeTab === tabs.plagiarismTab"></unit-plagiarism-tab>
-      <unit-analytics  ng-if="activeTab === tabs.analyticsTab"></unit-analytics>
-      <portfolio-marking-context ng-if="activeTab === tabs.gradingTab"></portfolio-marking-context>
+      <tutor-group-manager ng-if="activeTab === tabs.groupsTab"></tutor-group-manager>
+      <unit-student-plagiarism-list  ng-if="activeTab === tabs.plagiarismTab"></unit-student-plagiarism-list>
+      <unit-analytics-viewer  ng-if="activeTab === tabs.analyticsTab"></unit-analytics-viewer>
+      <unit-student-portfolio-list ng-if="activeTab === tabs.gradingTab"></unit-student-portfolio-list>
     </div><!--content-->
   </div>
 </div>

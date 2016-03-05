@@ -22,28 +22,28 @@
     </div><!--tabs-->
     <div>
       <div ng-if="activeTab === tabs.unitTab">
-        <admin-unit-context unit="unit"></admin-unit-context>
+        <unit-details-editor unit="unit"></unit-details-editor>
       </div>
       <div ng-if="activeTab === tabs.learningOutcomesTab">
-        <admin-unit-ilos></admin-unit-ilos>
+        <unit-ilo-editor></unit-ilo-editor>
       </div>
       <div ng-if="activeTab === tabs.staffTab">
-        <staff-admin-unit-context></staff-admin-unit-context>
+        <unit-staff-editor></unit-staff-editor>
       </div>
       <div ng-if="activeTab === tabs.tutorialsTab">
-        <tutorial-unit-context></tutorial-unit-context>
+        <unit-tutorials-editor></unit-tutorials-editor>
       </div>
       <div ng-if="activeTab === tabs.studentsTab">
-        <enrol-students-context></enrol-students-context>
+        <unit-students-editor></unit-students-editor>
       </div>
       <div ng-if="activeTab === tabs.tasksTab">
-        <task-admin-unit-context></task-admin-unit-context>
+        <unit-task-editor></unit-task-editor>
       </div>
       <div ng-if="activeTab === tabs.taskAlignmentTab">
         <task-ilo-alignment-editor show-csv="true" unit="unit"></task-ilo-alignment-editor>
       </div>
       <div ng-if="activeTab === tabs.groupsTab">
-        <unit-admin-groupset-tab></unit-admin-groupset-tab>
+        <unit-groupset-editor></unit-groupset-editor>
       </div>
     </div><!--content-->
   </div>
