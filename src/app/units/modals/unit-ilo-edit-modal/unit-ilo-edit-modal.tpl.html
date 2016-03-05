@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="modal-footer text-right">
-      <input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
+      <input type="submit" class="btn btn-primary" ng-disabled="ilo.name == null || ilo.abbreviation == null || ilo.description == null" value="{{isNew ? 'Create' : 'Update'}}" />
     </div>
   </form>
 </div>
