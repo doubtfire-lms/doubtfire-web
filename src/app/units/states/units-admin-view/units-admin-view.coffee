@@ -12,7 +12,7 @@ angular.module('doubtfire.units.states.units-admin-view', [])
     views:
       main:
         controller: "UnitsAdminViewCtrl"
-        templateUrl: "units/admin-home.tpl.html"
+        templateUrl: "units/states/units-admin-view/units-admin-view.tpl.html"
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
