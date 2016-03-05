@@ -1,4 +1,4 @@
-doubtfire.module('doubtfire.units.states.edit-unit-view', [])
+angular.module('doubtfire.units.states.edit-unit-view', [])
 
 #
 # State for convenors to edit a particular unit
