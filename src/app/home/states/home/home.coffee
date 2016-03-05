@@ -16,6 +16,8 @@ angular.module('doubtfire.home.states.home', [])
 .controller("HomeCtrl", ($scope, $state, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
+  $scope.userFirstName = currentUser.profile.nickname or currentUser.profile.first_name
+
   hasRoles = false
   hasProjects = false
 

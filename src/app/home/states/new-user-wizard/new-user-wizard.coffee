@@ -125,4 +125,6 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       analyticsService.event "Doubtfire Analytics", "User opted in research" if $scope.user.opt_in_to_research
       auth.saveCurrentUser()
       $state.go('home')
+
+  $scope.userFirstName = currentUser.profile.first_name
 )

@@ -1,11 +1,15 @@
 <div class="root-view">
+  <div class="text-center welcome-to-doubtfire clearfix col-sm-12">
+    <i class="logo"></i>
+    <h1>Welcome to Doubtfire {{userFirstName}}</h1>
+    <p class="lead">To get you up and running, let us ask you a few questions</p>
+  </div>
   <div class="new-user-wizard clearfix">
     <div class="panel panel-primary text-center">
       <div class="panel-body">
         <i class="fa fa-5x {{step.icon}}"></i>
         <h3>{{currentStep.title}}</h3>
         <p class="lead">{{currentStep.subtitle}}</p>
-
         <div ng-show="currentStep == steps.nameStep" class="col-sm-12">
           <div class="form-group col-sm-6">
             <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.first_name">
