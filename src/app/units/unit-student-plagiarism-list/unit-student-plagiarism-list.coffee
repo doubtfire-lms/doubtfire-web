@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.partials.unit-student-plagiarism-list',[])
+angular.module('doubtfire.units.unit-student-plagiarism-list',[])
 
 #
 # List of all possible plagiarism detected in student's work
