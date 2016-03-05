@@ -9,7 +9,7 @@
       </button>
     <a class="navbar-brand" href="#">
       <i class="logo"></i>
-      <h1 class="sup logo">Doubtfire<small>3</small></h1>
+      <h1 class="logo">Doubtfire</h1>
     </a>
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -29,14 +29,14 @@
         <a role="button" class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-book"></span> Units <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
-  				<li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
+          <li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
             <a href="#/units?unitRole={{unitRole.id}}">{{unitRole.unit_name}}</a>
           </li>
           <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
           <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
-  				<li ng-repeat="project in projects">
-  				  <a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
-  				</li>
+          <li ng-repeat="project in projects">
+            <a href="#/projects/{{project.project_id}}">{{project.unit_name}}</a>
+          </li>
         </ul>
       </li>
 
