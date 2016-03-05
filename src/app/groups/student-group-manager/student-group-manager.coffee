@@ -3,7 +3,7 @@ angular.module('doubtfire.groups.student-group-manager', [])
 #
 # Context for students to see and manage groups
 #
-.directive('studentGroupTab', ->
+.directive('studentGroupManager', ->
   restrict: 'E'
   templateUrl: 'groups/student-group-manager/student-group-manager.tpl.html'
   replace: true
