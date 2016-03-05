@@ -33,7 +33,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     aprilFools =  today.getDate()   is 1 and # first day of the
                   today.getMonth()  is 3     # fourth month (April - zero-based)
     if aprilFools
-      h1   = document.querySelector('.landing-page h1.logo')
+      h1   = document.querySelector('#sign-in h1.logo')
       logo = h1?.querySelector('i')
       if logo? and h1?
         a = document.createElement('A')
