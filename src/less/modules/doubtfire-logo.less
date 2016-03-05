@@ -1,22 +1,14 @@
 @doubtfire-color: #da532c;
 
-h1.logo {
-  font-weight: lighter;
+.apply-logo-font-rendering {
+  -webkit-font-smoothing: antialiased;
   letter-spacing: -1px;
+  font-weight: 300;
+}
+
+h1.logo {
+  .apply-logo-font-rendering;
   font-size: 4em;
-  small {
-    font-weight: lighter;
-    text-align: right;
-    font-size: 0.5em;
-  }
-  &.full.logo small {
-    display: block;
-  }
-  &.sup.logo small {
-    vertical-align: super;
-    margin-left: 0.5ex;
-    color: #999;
-  }
 }
 i.logo {
   display: inline-block;
@@ -30,11 +22,21 @@ i.logo {
   border-radius: 10%;
 }
 
-i.logo + h1.logo {
-  margin-left: 1ex;
-  display: inline-block;
-}
-
 a:hover > i.logo {
   background-color: lighten(@doubtfire-color, 10%);
+}
+
+.welcome-to-doubtfire {
+  margin-top: 6em;
+  margin-bottom: 3em;
+  h1, p {
+    .apply-logo-font-rendering;
+  }
+  p.lead {
+    color: #666;
+  }
+  i.logo {
+    width: 10em;
+    height: 10em;
+  }
 }
