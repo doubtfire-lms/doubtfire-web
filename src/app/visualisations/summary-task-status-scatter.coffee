@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
 .directive 'summaryTaskStatusScatter', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     data: '='
     unit: '='

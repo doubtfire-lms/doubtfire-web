@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
 .directive 'achievementBoxPlot', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     rawData: '=data'
     type: '='

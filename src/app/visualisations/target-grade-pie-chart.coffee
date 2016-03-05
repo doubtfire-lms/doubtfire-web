@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
 .directive 'targetGradePieChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     rawData: '=data'
     showLegend: '=?'

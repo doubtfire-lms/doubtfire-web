@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
 .directive 'studentTaskStatusPieChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     project: '='
   controller: ($scope, taskService, projectService, Visualisation) ->

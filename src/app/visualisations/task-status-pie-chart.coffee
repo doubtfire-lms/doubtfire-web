@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
 .directive 'taskStatusPieChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     rawData: '=data'
     showLegend: '=?'

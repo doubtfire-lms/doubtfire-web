@@ -2,7 +2,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
 .directive 'alignmentBarChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/partials/templates/visualisation.tpl.html'
+  templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     project: '='
     unit: '='
