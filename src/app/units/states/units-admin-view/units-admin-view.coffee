@@ -26,6 +26,14 @@ angular.module('doubtfire.units.states.units-admin-view', [])
     unitToShow = if unit?
       $state.transitionTo "admin/units#edit", {unitId: unit.id}
 
+  # Table sort details
+  $scope.sortOrder = "id"
+
+  # Pagination details
+  $scope.currentPage = 1
+  $scope.maxSize = 5
+  $scope.pageSize = 15
+
   $scope.createUnit = ->
     UnitCreateModal.show $scope.units
 )

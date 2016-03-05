@@ -7,25 +7,36 @@
   <div class="col-sm-12">
     <h2>Doubtfire Units <small>{{unit.code}}</small><p class="lead">Unit Administration View</p></h2>
     <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h4 class="panel-title">Units</h4>
-        Modify units registered with Doubtfire
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">Units</h4>
+          Modify units registered with Doubtfire
+        </div>
+        <form role="search" class="pull-right form-horizontal">
+          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search.$" typeahead="unit.name for unit in units | filter:$viewValue | limitTo:8" />
+          <p ng-show="filteredUnits.length < students.length && filteredUnits.length != 0">Showing {{filteredUnits.length}} of {{users.length}} users.</p>
+          <p ng-show="filteredUnits.length < students.length && filteredUnits.length == 0">No students found.</p>
+        </form>
       </div>
       <div class="panel-body">
         <div class="callout callout-info" ng-hide="units.length > 0">No units have been registered with Doubtfire yet</div>
         <table ng-show="units.length > 0" class="table table-hover table-pointer">
          <thead>
            <tr>
-             <th>Code</th>
-             <th>Name</th>
-             <th>Start Date</th>
-             <th>End Date</th>
-             <th>Active</th>
+             <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code</a></th>
+             <th><a ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+             <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date</a></th>
+             <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date</a></th>
+             <th><a ng-click="sortOrder='active'; reverse=!reverse">Active</a></th>
            </tr>
          </thead>
          <tbody>
-         <tr ng-repeat="unit in units" ng-click="showUnit(unit)" >
-           <td>{{unit.code}}</td>
+         <tr ng-repeat="unit in filteredUnits = (units | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUnit(unit)" >
+           <td>
+             <label class="label label-info">
+               {{unit.code}}
+             </label>
+           </td>
            <td>{{unit.name}}</td>
            <td>{{unit.start_date | date: short }}</td>
            <td>{{unit.end_date | date: short }}</td>
