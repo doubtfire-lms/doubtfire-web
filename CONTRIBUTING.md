@@ -1,17 +1,12 @@
-
 # Contributing
+
+## Git Workflow
 
 We follow a [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
-## Forking
+## Workflow Process
 
-If you do not have direct write access, please fork this repository.
-
-When you are happy with your changes, submit a pull request for code review.
-
-## Branching
-
-### Gitflow Workflow
+### About the Gitflow Workflow
 
 ![Feature Branches](http://puu.sh/lP4eT/43f3131730.png)
 
@@ -88,11 +83,11 @@ Prefix     | Description                                                        
 `speed/`   | Performance-related improvements                                          | `speed/new-algorithm-to-process-foo`
 `test/`    | Test addition or enhancement                                              | `test/unit-tests-for-new-feature-x`
 
-## Commits
+### Writing Commit Messages
 
 When writing commits, try to follow this guide:
 
-### Prefix your commits message subjects with tags
+#### Prefix your commits message subjects with tags
 
 Each one of your commit messages should be prefixed with one of the following:
 
@@ -108,7 +103,7 @@ Tag        | Description                                                        
 `​SPEED`    | Performance-related improvements                                          | _**SPEED** Reduce time needed to batch process PDF submissions_
 `TEST`     | Test addition or enhancement                                              | _**TEST** Add unit tests for tutorial administration_
 
-### Formatting your messages
+#### Formatting your messages
 
 Capitalise your commit messages and do not end the subject line with a period
 
@@ -122,7 +117,7 @@ and not
 fix: change the behaviour of the logging system.
 ```
 
-### Use the imperative mood in your commit message subjects
+#### Use the imperative mood in your commit message subjects
 
 Write your commits in the imperative mood and not the indicative mood
 
@@ -143,7 +138,7 @@ and not
 > If applied, this commit will **sweet new API methods**
 
 
-### Subject and body lines
+#### Subject and body lines
 
 Write a commit subject, and explain that commit on a new line (if need be):
 
@@ -159,7 +154,7 @@ Keep the subject line (top line) concise; keep it **within 50 characters**.
 
 Use the body (lines after the top line) to explain why and what and *not* how; keep it **within 72 characters**.
 
-#### But how can I write new lines if I'm using `git commit -m "Message"`?
+##### But how can I write new lines if I'm using `git commit -m "Message"`?
 
 Don't use the `-m` switch. Use a text editor to write your commit message instead.
 
