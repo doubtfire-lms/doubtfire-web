@@ -1,0 +1,65 @@
+@import (reference) "../../../less/main.less";
+
+.task-comments-viewer {
+  overflow: scroll;
+  height: 30vh;
+  .no-comments {
+    height: 100%;
+  }
+}
+
+.task-comments-viewer .comment {
+  display: flex;
+  display: -webkit-flex;
+  margin-bottom: 2em;
+  .comment-details {
+    .flex-center();
+    height: auto;
+    & > * {
+      width: 100%;
+      text-align: right;
+    }
+    .comment-by, .comment-date {
+      display: block;
+    }
+    .comment-by {
+      font-weight: bolder;
+    }
+    .comment-date {
+      margin-top: -5px;
+      font-size: 0.8em;
+    }
+  }
+  .comment-text {
+    background-color: #efefef;
+    border-radius: 1em;
+    padding: 1.5em;
+    font-size: 1.2em;
+    line-height: 1.5em;
+    .markdown-to-html > *:last-child {
+      margin-bottom: 0px;
+    }
+    img {
+      border-radius: 1em;
+    }
+  }
+  .delete-comment {
+    font-style: normal;
+    color: #bbb;
+    font-size: 1.6em;
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
+}
+
+.task-comments-viewer + * .comment-submitter {
+  button {
+    height: 59px;
+  }
+  .markdown-editor {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}

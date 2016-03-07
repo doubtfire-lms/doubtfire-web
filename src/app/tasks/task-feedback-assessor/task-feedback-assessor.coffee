@@ -1,0 +1,27 @@
+angular.module('doubtfire.tasks.task-feedback-assessor',[])
+
+#
+# Directive that allows input to provide feedback for a task.
+# It displays the task submission, shows a task comment viewer
+# and a task status selector
+#
+.directive('taskFeedbackAssessor', ->
+  replace: true
+  restrict: 'E'
+  templateUrl: 'tasks/task-feedback-assessor/task-feedback-assessor.tpl.html'
+  scope:
+    task: "=task"
+    unit: "=unit"
+    assessingUnitRole: "=assessingUnitRole"
+    unitRole: "=unitRole"
+    onStatusUpdate: "=onStatusUpdate"
+    viewOptions: "="
+  controller: ($scope, taskService) ->
+
+    $scope.triggerTransition = (status) ->
+      taskService.updateTaskStatus($scope.unit, $scope.task.project(), $scope.task, status)
+
+    if $scope.onStatusUpdate? && _.isFunction($scope.onStatusUpdate)
+      $scope.$on 'TaskStatusUpdated', (event, args) ->
+        $scope.onStatusUpdate(args.status)
+)

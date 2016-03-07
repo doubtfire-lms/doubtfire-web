@@ -21,7 +21,7 @@ module.exports = {
    */
   preprocess: {
     api: {
-      src: ['build/src/app/api/api.js'],
+      src: ['build/src/app/api/api-url.js'],
       options: {
 	     inline: true
       }
@@ -55,7 +55,7 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    less: 'src/less/main.less'
+    less: [ 'src/less/main.less', 'src/app/**/*.less' ]
   },
 
   /**

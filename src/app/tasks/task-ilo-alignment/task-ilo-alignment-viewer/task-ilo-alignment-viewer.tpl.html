@@ -1,0 +1,86 @@
+<div class="task-ilo-alignment-viewer">
+  <div class="clearfix" ng-if="alignments.length > 0">
+    <ul class="list-group alignment-list">
+      <li ng-click="toggleExpanded(align)" ng-class="{expanded: align.expanded}" ng-repeat="align in alignments | orderBy: 'ilo_number'" class="list-group-item col-sm-12">
+        <header class="clearfix">
+          <div class="col-sm-6 pull-left header-item">
+            {{ilo = summaryOnly ? align : unit.outcome(align.learning_outcome_id); ''}}
+            <h3 class="list-group-item-heading outcome-heading col-sm-12" style="padding: 0;">
+              <span class="col-sm-3 label label-info pull-left">{{ilo.abbreviation}}</span>
+              <span class="col-sm-9 pull-left">{{ilo.name}}</span>
+            </h3>
+          </div>
+          <div class="col-sm-6 pull-right clearfix header-item">
+            <task-ilo-alignment-rater
+              ng-hide="summaryOnly"
+              readonly="true"
+              unit="unit"
+              ng-model="align"></task-ilo-alignment-rater>
+            <div ng-if="ilo && classStats && summaryOnly">
+              <alignment-bullet-chart
+                show-legend="false"
+                unit="unit"
+                project="project"
+                ilo="ilo"
+                targets="targets"
+                current-progress="currentProgress"
+                class-stats="classStats"></alignment-bullet-chart>
+            </div>
+            <div class="expand-icon text-muted text-{{align.expanded ? 'primary' : 'muted'}}">
+              <i class="fa fa-3x fa-chevron-circle-{{align.expanded ? 'up' : 'down'}}"></i>
+            </div>
+          </div>
+        </header><!--/alignment-header-->
+        <div class="list-group-item-text alignment-content col-sm-8" ng-show="align.expanded">
+          <div ng-show="ilo.description">
+            <h5>Description</h5>
+            <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
+          </div>
+          <div ng-if="ilo && classStats &&!hideVisualisation">
+            <h5>Visualisation</h5>
+            <alignment-bullet-chart
+              show-legend="false"
+              unit="unit"
+              project="project"
+              ilo="ilo"
+              targets="targets"
+              current-progress="currentProgress"
+              class-stats="classStats">
+            </alignment-bullet-chart>
+          </div>
+          <div ng-show="!summaryOnly && align.description">
+            <h5>Rationale</h5>
+            <div class="markdown-to-html" ng-bind-html="align.description | markdown"></div>
+          </div>
+          <div ng-show="summaryOnly">
+            <h5>Related Tasks</h5>
+            <div class="related-outcome-tasks">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
+                  <div class="clearfix">
+                    {{taskDef = unit.taskDef(align.task_definition_id); ''}}
+                    <task-ilo-alignment-rater
+                      class="pull-right"
+                      readonly="true"
+                      unit="unit"
+                      show-tooltips="true"
+                      ng-model="align">
+                    </task-ilo-alignment-rater>
+                    <div class="task-def-alignment-item">
+                      <label class="label label-info task-def-label pull-left">{{taskDef.abbreviation}}</label>
+                      <span class="col-sm-6">{{taskDef.name}}</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="large-notice-block" ng-hide="alignments.length > 0">
+    <i class="fa fa-2x fa-graduation-cap"></i>
+    <p>No alignments</p>
+  </div>
+</div>
