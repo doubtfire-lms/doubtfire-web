@@ -50,16 +50,15 @@
   </head>
   <body>
     <div ui-view="header"></div>
-    <div class="container-fluid">
-      <div class="row">
-        <div ui-view="main"></div>
-        <div class="alert-top">
-          <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">
-            <span ng-bind-html="alert.msg">
-            </span>
-          </alert>
-        </div>
-      </div>
+
+    <div ui-view="main" class="container-fluid"></div>
+
+    <div class="alert-top">
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">
+        <span ng-bind-html="alert.msg">
+        </span>
+      </alert>
     </div>
+
   </body>
 </html>
