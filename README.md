@@ -9,6 +9,7 @@ A modern, lightweight learning management system.
 1. [Getting Started](#getting-started)
 2. [Resources](#resources)
 3. [Contributing](#contributing)
+4. [License](#license)
 
 ## Getting Started
 
@@ -75,3 +76,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 ## Contributing
 
 Refer to CONTRIBUTING.md
+
+## License
+
+Licensed under GNU Affero General Public License (AGPL) v3
