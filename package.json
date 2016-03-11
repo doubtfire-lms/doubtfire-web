@@ -4,6 +4,9 @@
   "homepage": "http://doubtfire.ict.swin.edu.au",
   "description": "A modern, lightweight learning management system.",
   "dependencies": {},
+  "scripts": {
+    "start": "grunt watchsvr"
+  },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-bump": "0.0.6",
