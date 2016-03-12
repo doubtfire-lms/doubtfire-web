@@ -9,6 +9,12 @@ A modern, lightweight learning management system.
 1. [Getting Started](#getting-started)
 2. [Resources](#resources)
 3. [Contributing](#contributing)
+
+## Getting Started
+
+If you will be using [Docker](https://github.com/doubtfire-lms/doubtfire-api/#getting-started-via-docker), follow the instructions there.
+
+=======
 4. [License](#license)
 
 ## Getting Started
