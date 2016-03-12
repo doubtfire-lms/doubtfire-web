@@ -1,0 +1,45 @@
+.task-ilo-alignment-editor {
+  .alignment-panels .panel-body {
+    overflow: scroll;
+  }
+
+  table.table-task-alignment {
+    td.task-abbreviation    { width: 5ex;  }
+    td.task-status-icon     { width: 6em;  }
+    td.task-name            { width: 10ex; }
+    td.include-in-portfolio { width: 10ex; }
+    td.task-abbreviation label {
+      display: inline-block;
+      width: 100%;
+      padding: 0.55em; // to match height of status
+    }
+    td.include-in-portfolio {
+      button, .button-wrapper {
+        width: 100%;
+        height: 3em;
+      }
+    }
+    td.ilo-alignment {
+      .btn.btn-alignment {
+        width: 6em;
+        padding: 0.25em;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .visualisation {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 3;
+    opacity: 0.6;
+    margin: 0;
+    border-radius: 0;
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+}

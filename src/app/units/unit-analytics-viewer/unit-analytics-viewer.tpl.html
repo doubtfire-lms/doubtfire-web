@@ -1,0 +1,26 @@
+<div class="unit-analytics-viewer">
+  <tabset class="pull-left col-md-2" vertical="true" type="pills">
+    <tab ng-repeat="(tabKey, tab) in tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+        <div class="text-center">
+          <i class="fa fa-2x {{icon}}" ng-repeat="icon in tab.icons"></i>
+        </div>
+      </tab-heading>
+    </tab>
+  </tabset><!--/tab-selector-->
+  <div class="col-md-10 pull-right">
+    <div class="panel panel-primary">
+      <div class="panel-heading row-fluid">
+        <h3 class="panel-title">
+          {{activeTab.title}}
+        </h3>
+        {{activeTab.subtitle}}
+      </div>
+      <task-summary-stats unit="unit" ng-if="unit.students && activeTab === tabsData.taskSummaryStats"></task-summary-stats>
+      <task-status-stats unit="unit" ng-if="activeTab === tabsData.taskStatusStats"></task-status-stats>
+      <unit-target-grade-stats unit="unit" ng-if="activeTab === tabsData.targetGradeStats"></unit-target-grade-stats>
+      <task-completion-stats unit="unit" ng-if="activeTab === tabsData.taskCompletionStats"></task-completion-stats>
+      <unit-achievement-stats unit="unit" ng-if="activeTab === tabsData.achievementStats"></unit-achievement-stats>
+    </div><!--/tab-contents-panel-->
+  </div><!--/tab-contents-->
+</div>

@@ -277,7 +277,7 @@ module.exports = function ( grunt ) {
       },
       // target name
       files:
-        { dest: '<%= less.options.dest %>', src: 'src/less/main.less' }
+        { dest: '<%= less.options.dest %>', src: '<%= app_files.less %>' }
 
       // {
       //     expand: true,

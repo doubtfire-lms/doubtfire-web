@@ -14,6 +14,11 @@ A modern, lightweight learning management system.
 
 If you will be using [Docker](https://github.com/doubtfire-lms/doubtfire-api/#getting-started-via-docker), follow the instructions there.
 
+=======
+4. [License](#license)
+
+## Getting Started
+
 Before you get started, make sure you have the [Doubtfire API](https://github.com/doubtfire-lms/doubtfire-api) up and running. You will need to do this before continuing.
 
 Install [Node.js](http://nodejs.org/) either by [downloading it](http://nodejs.org/download/) and installing it manually, or via [Homebrew](http://brew.sh) on OS X:
@@ -77,3 +82,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 ## Contributing
 
 Refer to CONTRIBUTING.md
+
+## License
+
+Licensed under GNU Affero General Public License (AGPL) v3

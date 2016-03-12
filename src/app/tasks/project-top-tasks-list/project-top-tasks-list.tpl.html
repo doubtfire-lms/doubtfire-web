@@ -1,0 +1,37 @@
+<div class="project-top-tasks-list">
+  <div class="help-block text-center all-completed" ng-show="topTasks.length == 0">You have completed all of the tasks!</div>
+  <table ng-hide="topTasks.length == 0" class="table table-condensed table-hover table-pointer ">
+    <thead>
+      <tr>
+        <th class="task-abbreviation">
+          <a ng-click="sortOrder='task.definition.abbreviation'; reverse=!reverse">
+            Task <i ng-show="sortOrder=='task.definition.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+        <th class="status">
+          <a ng-click="sortOrder='statusSeq()'; reverse=!reverse">
+            Status <i ng-show="sortOrder=='statusSeq()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+        <th class="reason">
+          <a ng-click="sortOrder='reason'; reverse=!reverse">
+            Reason <i ng-show="sortOrder=='reason'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="data in topTasks" ng-click="onSelect(data.task, 'Top Task Select')">
+        <td ng-click="viewTask(data.task)">
+          <label class="label label-info pointer label-task-definition" tooltip="{{data.task.definition.name}}" tooltip-append-to-body="true">
+            {{data.task.definition.abbreviation}}
+          </label>
+        </td>
+        <td ng-click="viewTask(data.task)">
+          <status-icon status="data.task.status"></status-icon>
+        </td>
+        <td ng-click="viewTask(data.task)">{{data.reason}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

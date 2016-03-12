@@ -1,5 +1,7 @@
-angular.module("doubtfire.services.group-service", [  ])
-
+angular.module("doubtfire.common.services.group-service", [  ])
+#
+# Service for group-related functions
+#
 .factory("groupService", () ->
   #
   # The unit service object
