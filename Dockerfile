@@ -4,6 +4,7 @@ ADD . /doubtfire-web
 WORKDIR /doubtfire-web
 
 EXPOSE 8000
+EXPOSE 35729
 
 ENV NODE_ENV docker
 
