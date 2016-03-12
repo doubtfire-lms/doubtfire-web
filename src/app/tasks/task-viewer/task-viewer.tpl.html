@@ -1,5 +1,5 @@
 <div class="task-viewer">
-<div class="col-xs-12">
+<div class="col-sm-12">
   <div class="task-viewer-toolbar clearfix">
     <div class="btn-group dropdown active-task-selector col-sm-1" dropdown>
       <button class="btn task-status {{activeStatusData().class}} dropdown-toggle" dropdown-toggle>
@@ -41,11 +41,13 @@
         <i class="{{activeStatusData().icon}} fa-2x"></i>
         <span class="caret"></span>
       </button>
+
       <task-status-selector
         task="project.selectedTask"
         assessing-unit-role="assessingUnitRole"
         in-menu="true"
         trigger-transition="triggerTransition"></task-status-selector>
+
     </div><!--/active-task-status-selector-->
   </div><!--/task-toolbar-->
 </div>

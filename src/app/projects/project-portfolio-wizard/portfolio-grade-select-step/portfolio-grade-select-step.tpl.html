@@ -4,13 +4,13 @@
       In preparing your portfolio, you need to undertake a self assessment. Use the unit's assessment criteria to determine the grade your portfolio should be awarded.
   </div>
   <div class="panel-body">
-    <div class="col-xs-12">
       <div class="callout callout-warning">
         <h4>Assessment Criteria</h4>
         <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
       </div>
       <p>Select the <strong>grade</strong> you are applying for below:</p>
-      <div class="btn-group col-sm-12">
+
+      <div class="btn-group btn-group-justified">
         <label ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false" class="btn btn-default col-sm-3" ng-model="project.target_grade" btn-radio="{{$index}}">
           <h3>{{gradeAcronyms[grade]}}</h3>
           <p>{{grade}}</p>
@@ -19,7 +19,6 @@
       <p class="help-block text-center col-sm-12">
         Make sure this grade will be justified in the Learning Summary Report.
       </p>
-    </div>
   </div>
   <div class="panel-footer clearfix">
     <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
