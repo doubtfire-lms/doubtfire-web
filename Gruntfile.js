@@ -619,6 +619,11 @@ module.exports = function ( grunt ) {
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig, envConfig ) );
 
   /**
+   * Allow override for development env using NODE_ENV
+   */
+  gruntEnv = "env:" + (process.env.NODE_ENV || 'development');
+
+  /**
    * In order to make it safe to just compile or copy *only* what was changed,
    * we need to ensure we are starting from a clean, fresh build. So we rename
    * the `watch` task to `delta` (that's why the configuration var above is
@@ -626,15 +631,15 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'env:development', 'build', 'delta' ] );
-  grunt.registerTask( 'watchsvr', [ 'env:development', 'build', 'connect:watchserver', 'delta' ] );
+  grunt.registerTask( 'watch', [ gruntEnv, 'build', 'delta' ] );
+  grunt.registerTask( 'watchsvr', [ gruntEnv, 'build', 'connect:watchserver', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
   grunt.registerTask( 'deploy',      [ 'production', 'copy:to_api' ] );
   grunt.registerTask( 'production',  [ 'env:production', 'build', 'compile' ] );
-  grunt.registerTask( 'development', [ 'env:development', 'build' ]);
+  grunt.registerTask( 'development', [ gruntEnv, 'build' ]);
   grunt.registerTask( 'default',     [ 'development' ]);
 
   /**
