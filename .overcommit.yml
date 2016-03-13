@@ -16,8 +16,6 @@ CommitMsg:
     enabled: true
   TextWidth:
     enabled: true
-    max_subject_width: 50
-    max_body_width: 72
 PreCommit:
   AuthorEmail:
     enabled: true
