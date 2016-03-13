@@ -34,3 +34,5 @@ PreCommit:
 PreCommit:
   CoffeeLint:
     enabled: true
+  HtmlTidy:
+    enabled: true
