@@ -1,4 +1,4 @@
-<div ng-if="unitLoaded">
+<div ng-if="unitLoaded" class="project-progress-dashboard">
   <div class="col-lg-4 col-lg-push-8">
     <div class="row">
       <div class="col-sm-6 col-lg-12">
@@ -6,9 +6,12 @@
           <div class="panel-heading clearfix">
             <div class="pull-left">
               <h4 class="panel-title">Task List</h4>
-              <div ng-hide="taskDetailsSelector.viewAll">The tasks you need to focus on now.</div>
-              <div ng-show="taskDetailsSelector.viewAll">All of the tasks to achieve a
-                {{grades[project.target_grade]}}.</div>
+              <div ng-hide="taskDetailsSelector.viewAll">
+                The tasks you need to focus on now.
+              </div>
+              <div ng-show="taskDetailsSelector.viewAll">
+                All of the tasks to achieve a {{grades[project.target_grade]}}.
+              </div>
             </div>
             <div class="pull-right">
               <div class="btn-group pull-right">
