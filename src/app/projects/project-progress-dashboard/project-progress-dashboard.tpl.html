@@ -1,10 +1,7 @@
 <div ng-if="unitLoaded">
-
   <div class="col-lg-4 col-lg-push-8">
-
     <div class="row">
       <div class="col-sm-6 col-lg-12">
-
         <div class="panel panel-primary">
           <div class="panel-heading clearfix">
             <div class="pull-left">
@@ -28,8 +25,7 @@
             <project-tasks-list project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView" ng-if="taskDetailsSelector.viewAll"></project-tasks-list>
             <project-top-tasks-list on-select="showTaskView" project="project" ng-hide="taskDetailsSelector.viewAll"></project-top-tasks-list>
           </div>
-        </div>
-        <!--task-lists-->
+        </div><!--task-lists-->
       </div>
       <div class="col-sm-6 col-lg-12">
         <div class="panel panel-default">
@@ -51,9 +47,7 @@
         </div>
       </div>
     </div>
-
-  </div>
-  <!--right-hand-panel-->
+  </div><!--right-hand-panel-->
 
   <div class="col-lg-8 col-lg-pull-4">
     <div class="panel panel-default">
@@ -67,8 +61,7 @@
             <h3 class="panel-title">Task Summary Chart</h3>
             Summary of each of your task statuses
           </div>
-        </div>
-        <!--/headings-->
+        </div><!--/headings-->
         <div class="pull-right text-right">
           <div class="btn-group">
             <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
@@ -78,8 +71,7 @@
               <i class="fa fa-pie-chart"></i>
             </label>
           </div>
-        </div>
-        <!--/button-switch-->
+        </div><!--/button-switch-->
       </div>
       <div class="panel-body">
         <div class="burndown-chart" ng-if="currentVisualisation == 'burndown'">
@@ -107,7 +99,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <!--primary-panel-->
-
+  </div><!--primary-panel-->
 </div>

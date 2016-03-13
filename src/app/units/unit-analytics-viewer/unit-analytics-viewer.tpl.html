@@ -1,6 +1,4 @@
 <div class="row unit-analytics-viewer">
-
-
   <tabset class="col-md-2" vertical="true" type="pills">
     <tab ng-repeat="(tabKey, tab) in tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
       <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
@@ -11,8 +9,6 @@
     </tab>
     <br />
   </tabset><!--/tab-selector-->
-
-
   <div class="col-md-10">
     <div class="panel panel-primary">
       <div class="panel-heading row-fluid">
@@ -28,6 +24,4 @@
       <unit-achievement-stats unit="unit" ng-if="activeTab === tabsData.achievementStats"></unit-achievement-stats>
     </div><!--/tab-contents-panel-->
   </div><!--/tab-contents-->
-
-
 </div>

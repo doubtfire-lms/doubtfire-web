@@ -1,7 +1,4 @@
 <ul ng-class="{'dropdown-menu' :inMenu}" class="task-status-selector">
-
-
-
   <li ng-show="assessingUnitRole" class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
     <div class="row">
     <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" uncheckable>
