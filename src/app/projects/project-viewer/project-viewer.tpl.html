@@ -22,11 +22,13 @@
         </tab-heading>
       </tab>
     </tabset><!--tabs-->
-    <project-progress-dashboard ng-if="activeTab === tabs.progressTab"></project-progress-dashboard>
-    <task-viewer ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-viewer>
-    <student-group-manager ng-if="activeTab === tabs.groupTab"></student-group-manager>
-    <project-lab-list ng-if="activeTab === tabs.tutorialTab"></project-lab-list>
-    <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
-    <project-portfolio-wizard ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio-wizard>
+    <div class="row">
+      <project-progress-dashboard ng-if="activeTab === tabs.progressTab"></project-progress-dashboard>
+      <task-viewer ng-if="activeTab === tabs.tasksTab" unit="unit" project="project" assessing-unit-role="assessingUnitRole"></task-viewer>
+      <student-group-manager ng-if="activeTab === tabs.groupTab"></student-group-manager>
+      <project-lab-list ng-if="activeTab === tabs.tutorialTab"></project-lab-list>
+      <project-outcome-alignment ng-if="activeTab === tabs.learningOutcomeTab"></project-outcome-alignment>
+      <project-portfolio-wizard ng-if="activeTab === tabs.portfolioTab" project="project"></project-portfolio-wizard>
+    </div>
   </div><!--/content-->
 </div>

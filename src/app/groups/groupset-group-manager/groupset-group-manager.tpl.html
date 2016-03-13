@@ -1,4 +1,5 @@
 <div class="groupset-group-manager">
+
   <div class="group-listings col-sm-6">
     <div class="panel panel-primary">
       <div class="clearfix info-area panel-heading">
@@ -24,26 +25,37 @@
       </div>
     </div>
   </div>
-  <div class="group-memberships not-selected col-sm-6" ng-hide="selectedGroup">
-    <i class="fa fa-3x fa-chevron-circle-right"></i><i class="fa fa-3x fa-users"></i>
-    <p>Please select a group in the groups list on the left</p>
-  </div>
-  <div class="group-memberships col-sm-6" ng-show="selectedGroup">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">Members of <strong>{{selectedGroup.name}}</strong></h4>
+
+
+
+    <div class="col-sm-6" ng-hide="selectedGroup">
+      <div class="group-memberships not-selected" >
+        <i class="fa fa-3x fa-chevron-circle-right"></i><i class="fa fa-3x fa-users"></i>
+        <p>Please select a group in the groups list on the left</p>
       </div>
-      <div class="panel-body">
-        <form name="addStudentForm" ng-submit="addSelectedStudent(selectedStudent)" class="input-group" ng-show="selectedGroup">
-          <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.active_students() | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
-          <span class="input-group-btn">
-            <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
-              <i class="fa fa-plus"></i>
-            </button>
-          </span>
-        </form>
-        <group-member-list></group-member-list>
+    </div>
+
+
+  <div class="col-sm-6" ng-show="selectedGroup">
+    <div class="group-memberships">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Members of <strong>{{selectedGroup.name}}</strong></h4>
+        </div>
+        <div class="panel-body">
+          <form name="addStudentForm" ng-submit="addSelectedStudent(selectedStudent)" class="input-group" ng-show="selectedGroup">
+            <input class="form-control" id="students" placeholder="Add Student" ng-model="selectedStudent" typeahead="student as studentDetails(student) for student in unit.active_students() | studentsForGroup:selectedGroupset:selectedGroup:members | filter:$viewValue | limitTo:8" typeahead-wait-ms="200">
+            <span class="input-group-btn">
+              <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </form>
+          <group-member-list></group-member-list>
+        </div>
       </div>
     </div>
   </div>
+
+
 </div>
