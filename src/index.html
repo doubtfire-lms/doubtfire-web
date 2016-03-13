@@ -50,8 +50,9 @@
   </head>
   <body>
     <div ui-view="header"></div>
-
-    <div ui-view="main" class="container-fluid container-fluid-max-size"></div>
+    <div class="breadcrumb-container-wrapper">
+      <div ui-view="main" class="container-fluid container-fluid-max-size"></div>
+    </div>
 
     <div class="alert-top">
       <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">
