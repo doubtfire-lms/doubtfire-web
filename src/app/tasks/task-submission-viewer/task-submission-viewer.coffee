@@ -10,14 +10,9 @@ angular.module('doubtfire.tasks.task-submission-viewer', [])
     project: "=project"
     task: "=task"
   controller: ($scope, TaskFeedback) ->
-    $scope.taskUrl = ->
-      TaskFeedback.getTaskUrl($scope.task)
-
-    #
-    # Exceptional scenarios
-    #
-    $scope.taskStillProcessing = () ->
-      $scope.task.processing_pdf
-    $scope.notSubmitted = () ->
-      not $scope.task.has_pdf and (not $scope.taskStillProcessing())
+    $scope.$watch 'task', (newTask) ->
+      return unless newTask?
+      $scope.taskStillProcessing = newTask.processing_pdf
+      $scope.taskUrl = TaskFeedback.getTaskUrl newTask
+      $scope.notSubmitted = not newTask.has_pdf and (not newTask.processing_pdf)
 )
