@@ -1,5 +1,5 @@
 <div class="unit-groupset-editor row">
-  <div ng-class="{'col-sm-9': unit.group_sets.length > 0, 'col-sm-3': unit.group_sets.length == 0 }">
+  <div ng-class="{'col-sm-9': unit.group_sets.length > 0, 'col-sm-8 col-sm-offset-2': unit.group_sets.length == 0 }">
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-primary">
@@ -94,7 +94,7 @@
     </div>
   </div>
 
-  <div class="col-sm-3" ng-if="selectedGroupset">
+  <div class="col-sm-3" ng-if="selectedGroupset && unit.group_sets.length > 0">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Import to
