@@ -9,15 +9,11 @@ A modern, lightweight learning management system.
 1. [Getting Started](#getting-started)
 2. [Resources](#resources)
 3. [Contributing](#contributing)
+4. [License](#license)
 
 ## Getting Started
 
 If you will be using [Docker](https://github.com/doubtfire-lms/doubtfire-api/#getting-started-via-docker), follow the instructions there.
-
-=======
-4. [License](#license)
-
-## Getting Started
 
 Before you get started, make sure you have the [Doubtfire API](https://github.com/doubtfire-lms/doubtfire-api) up and running. You will need to do this before continuing.
 
@@ -37,9 +33,18 @@ $ sudo apt-get install -y nodejs
 Clone the web repository, and change to the root directory:
 
 ```
-$ git clone https://[user]@bitbucket.org/itig/doubtfire-web.git
+$ git clone https://github.com/doubtfire-lms/doubtfire-web.git
 $ cd ./doubtfire-web
 ```
+
+Set up [overcommit](https://github.com/brigade/overcommit) and install hooks:
+
+```
+$ gem install overcommit
+$ overcommit --install
+```
+
+If `gem` fails, you should read the Doubfire API README to install ruby.
 
 Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally.
 
