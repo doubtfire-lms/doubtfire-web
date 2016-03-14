@@ -27,12 +27,3 @@ PreCommit:
     enabled: true
   TrailingWhitespace:
     enabled: true
-
-#
-# Repo-Specific Overcommit Config
-#
-PreCommit:
-  CoffeeLint:
-    enabled: true
-  HtmlTidy:
-    enabled: true
