@@ -11,7 +11,7 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.taskStatIndex = {
     fail: 0,
     not_started: 1,
-    fix_and_include: 2,
+    do_not_resubmit: 2,
     redo: 3,
     need_help: 4,
     working_on_it: 5,
