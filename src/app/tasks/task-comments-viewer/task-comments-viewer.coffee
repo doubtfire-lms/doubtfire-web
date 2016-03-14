@@ -18,6 +18,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     $scope.pageSize = 3
     $scope.maxSize = 5
 
+    # Initialise scope comment text
+    $scope.comment = { text: "" }
+
     $scope.$watch 'task', (newTask) ->
       fetchTaskComments(newTask)
 
@@ -29,6 +32,13 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         (response) ->
           task.comments = response
           $scope.currentPage = 1
+
+    $scope.checkForEnterPress = ($event) ->
+      ENTER_KEY = 13
+      return if $event.which isnt ENTER_KEY or $event.shiftKey
+      if $scope.comment.text.trim().length isnt 0
+        $scope.addComment()
+      false
 
     $scope.addComment = () ->
       TaskComment.create { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, comment: $scope.comment.text },
