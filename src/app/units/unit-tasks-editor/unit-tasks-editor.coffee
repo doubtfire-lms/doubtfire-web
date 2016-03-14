@@ -60,6 +60,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
         target_grade: 0
         restrict_status_updates: false
         plagiarism_warn_pct: 80
+        is_graded: false
       }
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = true
