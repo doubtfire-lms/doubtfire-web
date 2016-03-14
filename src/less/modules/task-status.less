@@ -4,7 +4,7 @@
   &.working-on-it     { .task-status-working-on-it;     }
   &.need-help         { .task-status-need-help;         }
   &.fix-and-resubmit  { .task-status-fix-and-resubmit;  }
-  &.fix-and-include   { .task-status-fix-and-include;   }
+  &.do-not-resubmit   { .task-status-do-not-resubmit;   }
   &.fail              { .task-status-fail;              }
   &.redo              { .task-status-redo;              }
   &.discuss           { .task-status-discuss;           }
@@ -16,7 +16,7 @@
   &.working-on-it:hover     { background: darken(@task-color-working-on-it, 10%); }
   &.need-help:hover         { background: darken(@task-color-need-help, 10%); }
   &.fix-and-resubmit:hover  { background: darken(@task-color-fix-and-resubmit, 10%); }
-  &.fix-and-include:hover   { background: darken(@task-color-fix-and-include, 10%); }
+  &.do-not-resubmit:hover   { background: darken(@task-color-do-not-resubmit, 10%); }
   &.fail:hover              { background: darken(@task-color-fail, 10%); }
   &.redo:hover              { background: darken(@task-color-redo, 10%); }
   &.discuss:hover           { background: darken(@task-color-discuss, 10%); }
@@ -30,7 +30,7 @@
   .working-on-it,
   .need-help,
   .fix-and-resubmit,
-  .fix-and-include,
+  .do-not-resubmit,
   .fail,
   .redo,
   .discuss,
@@ -42,7 +42,7 @@
   .working-on-it.active     { .task-status-working-on-it;     }
   .need-help.active         { .task-status-need-help;         }
   .fix-and-resubmit.active  { .task-status-fix-and-resubmit;  }
-  .fix-and-include.active   { .task-status-fix-and-include;   }
+  .do-not-resubmit.active   { .task-status-do-not-resubmit;   }
   .fail.active              { .task-status-fail;              }
   .redo.active              { .task-status-redo;              }
   .discuss.active           { .task-status-discuss;           }
