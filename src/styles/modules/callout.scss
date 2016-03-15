@@ -1,0 +1,22 @@
+//
+// Callouts used for standout information
+//
+.callout-primary {
+  @include callout($brand-primary, lighten($brand-primary, 45%));
+}
+
+.callout-danger {
+  @include callout($brand-danger, lighten($brand-danger, 30%));
+}
+
+.callout-warning {
+  @include callout($brand-warning, lighten($brand-warning, 30%));
+}
+
+.callout-info {
+  @include callout($brand-info, lighten($brand-info, 30%));
+}
+
+.callout-success {
+  @include callout($brand-success, lighten($brand-success, 30%));
+}

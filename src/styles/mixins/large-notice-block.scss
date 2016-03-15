@@ -1,0 +1,22 @@
+//
+// A large notice block is a large text with an icon
+//
+@mixin large-notice-block {
+  @include flex-center;
+  font-size: 2em;
+  text-align: center;
+  font-weight: 300;
+  & > * {
+    display: block;
+    width: 100%;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+  &.panel-body {
+    padding: 30px;
+  }
+}
+
+.large-notice-block {
+  @include large-notice-block;
+}

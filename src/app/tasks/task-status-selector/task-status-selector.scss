@@ -1,0 +1,11 @@
+.task-status-selector {
+  // Constrict width when in dropdown menu
+  list-style:none;
+  &.dropdown-menu {
+    width: 500px;
+  }
+  padding: 7px;
+  li {
+    border: 7px solid white;
+  }
+}

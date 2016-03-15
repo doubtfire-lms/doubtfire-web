@@ -1,7 +1,10 @@
 *.sw*
 *~
+*.log
 .DS_Store
 build/
 bin/
 node_modules/
 vendor/
+.sass-cache*
+src/styles/main.tmp.scss

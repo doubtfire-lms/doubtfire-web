@@ -1,0 +1,11 @@
+//
+// Uses flex to align the div contents in the center
+//
+@mixin flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  height: 100%;
+}

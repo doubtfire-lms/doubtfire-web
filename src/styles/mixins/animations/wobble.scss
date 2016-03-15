@@ -1,0 +1,32 @@
+//
+// Animation to wobble an element side to side
+//
+@keyframes animation-wobble {
+    0%, 100% { transform: translateX(+5px); }
+    25%, 75% { transform: translateX(0); }
+         50% { transform: translateX(-5px); }
+}
+
+@mixin animation-wobble {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  animation-name: animation-wobble;
+}
+
+//
+// Animation to wobble an element side but only once
+//
+@keyframes animation-wobble-once {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(+5px); }
+  75% { transform: translateX(-5px); }
+}
+
+@mixin animation-wobble-once {
+  animation-duration: 0.15s;
+  animation-fill-mode: both;
+  animation-iteration-count: 2;
+  animation-name: animation-wobble-once;
+}

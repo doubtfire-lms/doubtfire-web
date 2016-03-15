@@ -1,0 +1,30 @@
+//
+// Text editor for rationale-providers
+//
+.rationale-wrapper {
+  display: table;
+  margin-top: 2em;
+}
+.rationale {
+  display: table-cell;
+  height: 200px;
+  overflow: scroll;
+  padding: 30px;
+  border-radius: 6px;
+  font-size: 1.5em;
+  cursor: pointer;
+  label {
+    font-size: 0.75em;
+    text-transform: uppercase;
+  }
+  &.no-rationale {
+    border: 1px dashed #aaa;
+    vertical-align: middle;
+    text-align: center;
+    color: #aaa;
+  }
+  &:hover {
+    border-color: #428bca;
+    color: #428bca;
+  }
+}

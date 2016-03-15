@@ -1,0 +1,12 @@
+//
+// Global overrides for tables
+//
+table.table-pointer {
+  tr {
+    cursor: pointer;
+  }
+}
+
+table td {
+  vertical-align: middle !important;
+}

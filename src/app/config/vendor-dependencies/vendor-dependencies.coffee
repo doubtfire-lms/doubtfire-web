@@ -16,7 +16,6 @@ angular.module('doubtfire.config.vendor-dependencies', [
   'ui.router'
   'ui.bootstrap'
   'ui.codemirror'
-  'ui.select'
 
   # other libraries
   'angularFileUpload'

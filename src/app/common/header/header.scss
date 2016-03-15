@@ -1,0 +1,37 @@
+.navbar {
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin-bottom:0;
+}
+
+a.navbar-brand {
+  display: flex;
+  align-items: center;
+  i.logo {
+    height: 1.6em;
+    width: 1.6em;
+    margin-right: 1ex;
+  }
+  h1.logo {
+    font-size: 1.3em;
+    margin: 0;
+  }
+}
+
+.alert-top {
+  position: fixed;
+
+  top: 20px;
+  right: 0px;
+
+  z-index: 5000;
+
+  outline: 0;
+  padding-right: 35px;
+
+  display: block;
+  box-sizing: border-box;
+  width: 30%;
+}

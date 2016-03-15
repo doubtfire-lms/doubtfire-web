@@ -1,0 +1,79 @@
+//
+// Colours for task statuses
+//
+// Task status colours must also be matched
+// in the task-service.coffee file
+//
+
+// Light and dark foreground colors
+$task-status-foreground-color-light:  #fff;
+$task-status-foreground-color-dark:   #444;
+
+$task-status-colors: (
+  ready-to-mark:(
+    base:  #0079D8,
+    dark:  darken(#0079D8, 15%),
+    light: lighten(#0079D8, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  not-started:(
+    base:  #CCCCCC,
+    dark:  darken(#CCCCCC, 15%),
+    light: lighten(#CCCCCC, 15%),
+    fore:  $task-status-foreground-color-dark
+  ),
+  working-on-it:(
+    base:  #EB8F06,
+    dark:  darken(#EB8F06, 15%),
+    light: lighten(#EB8F06, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  need-help:(
+    base:  #a48fce,
+    dark:  darken(#a48fce, 15%),
+    light: lighten(#a48fce, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  fix-and-resubmit:(
+    base:  #f2d85c,
+    dark:  darken(#f2d85c, 15%),
+    light: lighten(#f2d85c, 15%),
+    fore:  $task-status-foreground-color-dark
+  ),
+  do-not-resubmit:(
+    base:  #d46b54,
+    dark:  darken(#d46b54, 15%),
+    light: lighten(#d46b54, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  redo:(
+    base:  #804000,
+    dark:  darken(#804000, 15%),
+    light: lighten(#804000, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  discuss:(
+    base:  #31b0d5,
+    dark:  darken(#31b0d5, 15%),
+    light: lighten(#31b0d5, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  demonstrate:(
+    base:  #428bca,
+    dark:  darken(#428bca, 15%),
+    light: lighten(#428bca, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  complete:(
+    base:  #5BB75B,
+    dark:  darken(#5BB75B, 20%),
+    light: lighten(#5BB75B, 15%),
+    fore:  $task-status-foreground-color-light
+  ),
+  fail:(
+    base:  #d93713,
+    dark:  darken(#d93713, 15%),
+    light: lighten(#d93713, 15%),
+    fore:  $task-status-foreground-color-light
+  )
+);

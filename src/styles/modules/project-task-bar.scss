@@ -1,0 +1,65 @@
+//
+// Student's progress bar styling
+//
+.task-progress {
+  tr {
+    vertical-align: middle;
+  }
+
+  margin-bottom: 0px;
+}
+
+.progress-bar {
+  span {
+    font-size: 8pt;
+  }
+
+  &[aria-valuenow="1"],
+  &[aria-valuenow="2"] {
+    min-width: 0px;
+  }
+
+  &[aria-valuenow="0"] {
+    min-width: 0px;
+  }
+}
+
+.task-progress-bar {
+  min-width: 128px;
+  width: 360px;
+
+  .panel-group {
+    margin-bottom: 0px;
+  }
+}
+
+.task-progress-accordion, .progress-progress-bar {
+  .panel-heading {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.progress-bar-ready-to-mark     { @include task-status-color-ready-to-mark;     }
+.progress-bar-not-started       { @include task-status-color-not-started;       }
+.progress-bar-working-on-it     { @include task-status-color-working-on-it;     }
+.progress-bar-need-help         { @include task-status-color-need-help;         }
+.progress-bar-fix-and-resubmit  { @include task-status-color-fix-and-resubmit;  }
+.progress-bar-do-not-resubmit   { @include task-status-color-do-not-resubmit;   }
+.progress-bar-fail              { @include task-status-color-fail;              }
+.progress-bar-redo              { @include task-status-color-redo;              }
+.progress-bar-discuss           { @include task-status-color-discuss;           }
+.progress-bar-demonstrate       { @include task-status-color-demonstrate;       }
+.progress-bar-complete          { @include task-status-color-complete;          }
+
+.progress-bar-not-started       { @include task-status-color-not-started;       }
+.progress-bar-one-week-late     { @include task-status-color-working-on-it;     }
+.progress-bar-two-weeks-late    { @include task-status-color-fail;              }
+.progress-bar-on-time           { @include task-status-color-complete;          }
+
+.progress-progress-bar {
+  height: 30px;
+  margin-bottom: 0px;
+}

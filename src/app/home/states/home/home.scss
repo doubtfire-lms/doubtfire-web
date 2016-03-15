@@ -1,0 +1,81 @@
+#home .panel-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: stretch;
+  flex-wrap: wrap;
+  .panel-container {
+    // For keeping the panels in the centre of the screen
+    @media (min-width: 992px) {
+      &.col-md-4 {
+        width: calc(33.33333333% - 1px);
+        &:first-child:nth-last-child(2) {
+          margin-left: 16.66666667%;
+        }
+        &:first-child:last-child {
+          margin-left: 33.33333333%;
+        }
+      }
+    }
+    margin: 0 auto;
+    display: flex;
+    width: 100%;
+  }
+  .panel {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    .panel-heading {
+      width: 100%;
+      max-height: 38px;
+      display: flex;
+      align-items: center;
+    }
+    .list-group {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .no-content, .list-group {
+      flex: 1;
+    }
+    .no-content, .list-group-item {
+      display: flex;
+      align-items: center;
+      div {
+        width: 100%;
+      }
+    }
+    .list-group-item, .no-content, .panel-body, & {
+      width: 100%;
+    }
+  }
+}
+#home .panel-admin, #home .panel-project, #home .panel-teaching {
+  .list-group-item {
+    i {
+      float: left;
+      width: 12%;
+      text-align: left;
+      font-size: 2em;
+      padding-left: 0.33ex;
+      padding-top: 0.5em;
+    }
+    .list-group-item-heading, .list-group-item-text {
+      width: 88%;
+      float: right;
+    }
+    p {
+      margin: 0.75em 0 0.5em 0;
+      label {
+        font-size: 1em;
+      }
+    }
+  }
+  .no-content {
+    i {
+      display: block;
+      margin-bottom: 10px;
+    }
+    text-align:center;
+    padding: 100px inherit;
+  }
+}

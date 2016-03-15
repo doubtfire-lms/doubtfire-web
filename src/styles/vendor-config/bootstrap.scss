@@ -1,0 +1,13 @@
+//
+// This config file provides overrides for bootstrap and is injected before
+// bootstrap is imported
+//
+
+// Provide the font path to the glyphicons
+$icon-font-path: './fonts/bootstrap/';
+
+// (Re)definition of screen sizes
+$screen-xl: 1900px !default;
+$screen-xl-min: $screen-xl !default;
+$screen-lg: 1400px !default;
+$screen-lg-max: ($screen-xl-min - 1) !default;

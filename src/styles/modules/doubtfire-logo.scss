@@ -1,0 +1,38 @@
+//
+// Styles for the Doubtfire Logo
+//
+
+h1.logo {
+  @include logo-font-rendering;
+  font-size: 4em;
+}
+i.logo {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: $doubtfire-color;
+  background-image: url('/assets/images/doubtfire-logo-person-white.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10%;
+}
+
+a:hover > i.logo {
+  background-color: lighten($doubtfire-color, 10%);
+}
+
+.welcome-to-doubtfire {
+  margin-top: 6em;
+  margin-bottom: 3em;
+  h1, p {
+    @include logo-font-rendering;
+  }
+  p.lead {
+    color: #666;
+  }
+  i.logo {
+    width: 10em;
+    height: 10em;
+  }
+}

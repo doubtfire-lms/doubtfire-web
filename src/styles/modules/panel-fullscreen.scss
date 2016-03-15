@@ -1,0 +1,61 @@
+//
+// Fullscreen panel mode styles
+//
+.panel.fullscreen {
+  border-radius: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  z-index: 4;
+  border-bottom: none;
+
+  // Flex stuff
+  display: flex;
+  flex-direction: column;
+
+  .panel-heading {
+    border-radius: 0;
+  }
+
+  .panel-body.student-list {
+    height: 20vh;
+    resize: vertical;
+    max-height: 40vh;
+    overflow: scroll;
+    border-bottom: 2px solid #428bca;
+    box-shadow: 1px 1px 3px;
+  }
+  .panel-body.project-show {
+    overflow-y: scroll;
+    flex: 1;
+    position: relative;
+
+    &.no-padding {
+      padding: 0px;
+    }
+
+    .panel, .panel-heading {
+      border-radius: 0;
+    }
+
+    .nothing-selected {
+      @include large-notice-block;
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      font-size: 3em;
+      text-align: center;
+      font-weight: 300;
+      i, p {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.75em;
+      }
+    }
+  }
+}

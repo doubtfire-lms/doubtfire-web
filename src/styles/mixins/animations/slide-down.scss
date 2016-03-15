@@ -1,0 +1,10 @@
+//
+// Slide animation from -2em to initial top
+//
+@keyframes animation-slide-down {
+  from { margin-top: -2em; }
+  to   { margin-top: inherit; }
+}
+@mixin animation-slide-down($seconds) {
+  animation: animation-slide-down $seconds;
+}
