@@ -13,9 +13,12 @@
 
 @mixin task-status-color($status) {
   color: task-status-color($status, fore);
-  $linear-lower:  task-status-color($status, light);
-  $linear-higher: task-status-color($status, dark);
-  background-image: linear-gradient();
+  $base-color:  task-status-color($status);
+  background-color: $base-color;
+  @if $status == 'complete' {
+    $lighter-color: task-status-color($status, light);
+    @include gradient-vertical($lighter-color, $base-color);
+  }
 }
 
 @mixin task-status-color-ready-to-mark {
