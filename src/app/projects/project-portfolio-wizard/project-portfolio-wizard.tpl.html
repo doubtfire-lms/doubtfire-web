@@ -1,5 +1,5 @@
-<div>
-  <tabset class="pull-left col-md-2" vertical="true" type="pills">
+<div class="project-portfolio-wizard">
+  <tabset class="col-md-2" vertical="true" type="pills">
     <tab ng-repeat="(tabKey, tab) in portfolioTabsData | orderObjectBy: 'seq'" active="tab.active" select="setActivePortfolioTab(tab)">
       <tab-heading tooltip-html-unsafe="<strong>Step {{tab.seq}}</strong><br>{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
@@ -7,6 +7,7 @@
         </div>
       </tab-heading>
     </tab>
+    <br />
   </tabset><!--/tab-selector-->
   <div class="col-md-10">
     <div ng-if="activePortfolioTab == portfolioTabsData.welcomeStep">
@@ -16,7 +17,6 @@
             Welcome to the portfolio creation wizard
         </div>
         <div class="panel-body">
-          <div class="col-xs-12">
             <p>Preparing your portfolio involves 6 steps:</p>
             <ol>
               <li>Select your <strong>Grade</strong> you are applying for</li>
@@ -29,7 +29,6 @@
             <p>
               Once you have completed all of these steps, your portfolio will be prepared by Doubtfire and you will be notified when it is ready. You can then check your work, and if you want to make any corrections you can repeat these steps to create a new version of your portfolio.
             </p>
-          </div>
         </div>
         <div class="panel-footer">
           <div class="text-right">

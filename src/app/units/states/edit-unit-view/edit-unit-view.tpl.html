@@ -5,11 +5,11 @@
       <li><a href="#/admin/units">Manage Units</a></li>
       <li class="active">{{newUnit ? 'New Unit' : unit.name}}</li>
   </ul><!--breadcrumbs-->
-  <div ng-hide="unit" class="large-notice-block">
+  <div ng-if="!unit" class="large-notice-block">
     <i class="fa fa-2x fa-spinner fa-pulse"></i>
     <p>Loading...</p>
   </div><!--/loading-->
-  <div class="root-view" ng-if="unit">
+  <div ng-if="unit">
     <div>
       <h2>
         <span ng-hide="newUnit">Edit {{unit.name}}</span> <small ng-hide="newUnit">{{unit.code}}</small>

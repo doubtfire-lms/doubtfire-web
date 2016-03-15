@@ -8,6 +8,15 @@
   </li>
   <li class="active">{{project.student_name}}</li>
 </ul>
+<div id="projects-show">
+  <project-viewer
+    project-id="studentProjectId"
+    show-task-id="showTaskId"
+    unit-role="unitRole"
+    project="project"
+    unit="unit"
+    assessing-unit-role="assessingUnitRole"></project-viewer>
+</div>
 <div class="feedback-float-toolbar well" ng-if="assessingUnitRole && project">
   <label>Tutor Actions</label>
   <button ng-click="transitionWeekEnd()" class="btn btn-info">
@@ -19,12 +28,3 @@
     Student List
   </a>
 </div><!--/feedback-float-toolbar-->
-<div class="root-view" id="projects-show">
-  <project-viewer
-    project-id="studentProjectId"
-    show-task-id="showTaskId"
-    unit-role="unitRole"
-    project="project"
-    unit="unit"
-    assessing-unit-role="assessingUnitRole"></project-viewer>
-</div>

@@ -1,5 +1,6 @@
 <div>
-  <tabset class="task-feedback-tab-selector pull-left col-md-2" vertical="true" type="pills">
+  <div style="margin-bottom:15px;">
+  <tabset class="task-feedback-tab-selector col-md-2" vertical="true" type="pills">
     <tab ng-click="selectTab('progress')">
       <tab-heading tooltip="View learning progress" tooltip-placement="right" tooltip-popup-delay="200">
         <div class="text-center">
@@ -15,6 +16,8 @@
       </tab-heading>
     </tab>
   </tabset><!--/tab-selector-->
+</div>
+
   <div class="col-md-10">
     <div ng-show="poaView.activeTab == 'progress'">
       <div class="panel panel-primary">

@@ -1,6 +1,16 @@
+.breadcrumb-container-wrapper {
+  position:relative;
+}
+
 .breadcrumb {
-  margin-left: 15px;
-  margin-top: -20px;
+  //TODO move breadcrumbs out into app-wide directive under navbar not within ui-view. (also container-wrapper in common.less)
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  & + * {
+    margin-top:60px;
+  }
   li {
     font-size: 10px;
   }
