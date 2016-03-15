@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, taskService, gradeService, TaskDefinition, alertService, Unit, Task) ->
+  controller: ($scope, $filter, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
@@ -161,13 +161,16 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
 
       if $scope.isNew
+        ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.')
         TaskDefinition.create( { task_def: task } ).$promise.then (
           (response) ->
+            ProgressModal.close()
             $scope.unit.task_definitions.push(response)
             alertService.add("success", "#{response.name} Added", 2000)
         ),
         (
           (response) ->
+            ProgressModal.close()
             if response.data.error?
               alertService.add("danger", "Error: " + response.data.error, 6000)
         )
