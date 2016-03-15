@@ -11,7 +11,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
-  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
@@ -21,6 +21,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-env');
   grunt.loadNpmTasks('grunt-preprocess');
+  grunt.loadNpmTasks('grunt-sass-globbing');
 
   /**
    * Load in our build configuration file.
@@ -238,54 +239,39 @@ module.exports = function ( grunt ) {
     },
 
     /**
-     * `recess` handles our LESS compilation and uglification automatically.
-     * Only our `main.less` file is included in compilation; all other files
-     * must be imported from this file.
+     * Runs global imports on SASS directories. This will generate our
+     * main.scss for us which will be compiled by the `sass` task
      */
-    // recess: {
-    //   build: {
-    //     src: [ '<%= app_files.less %>' ],
-    //     dest: '<%= build_dir %>/assets/<%= pkg.name %>.css',
-    //     options: {
-    //       compile: true,
-    //       compress: false,
-    //       noUnderscores: false,
-    //       noIDs: false,
-    //       zeroUnits: false
-    //     }
-    //   },
-    //   compile: {
-    //     src: [ '<%= recess.build.dest %>' ],
-    //     dest: '<%= recess.build.dest %>',
-    //     options: {
-    //       compile: true,
-    //       compress: true,
-    //       noUnderscores: false,
-    //       noIDs: false,
-    //       zeroUnits: false
-    //     }
-    //   }
-    // },
+    sass_globbing: {
+      source: {
+        files: {
+          'src/styles/main.tmp.scss': [
+            'src/styles/vendor-config/**/*.scss',
+            '<%= vendor_files.scss %>',
+            '<%= app_files.scss %>'
+          ]
+        },
+        options: {
+          useSingleQuotes: false
+        }
+      }
+    },
 
     /**
-     * `less` compiles the less sources.
+     * `sass` compiles the SASS sources.
      */
-    less: {
-      options: {
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css',
-        paths: [ 'src/less', 'src/less/modules' ]
-      },
-      // target name
-      files:
-        { dest: '<%= less.options.dest %>', src: '<%= app_files.less %>' }
-
-      // {
-      //     expand: true,
-      //     cwd: 'src/less',
-      //     src: [ 'main.less' ],
-      //     dest: "<%= build_dir %>/assets/<%= pkg.name %>.css",
-      //     ext: ".css"
-      // }
+    sass: {
+      source: {
+        options: {
+          lineNumbers: true
+        },
+        cwd: '.',
+        src: [
+          'src/styles/main.tmp.scss',
+          '<%= vendor_files.css %>'
+        ],
+        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
+      }
     },
 
     /**
@@ -423,7 +409,6 @@ module.exports = function ( grunt ) {
      * and JS files co-exist here but they get split apart later.
      */
     index: {
-
       /**
        * During development, we don't want to have wait for compilation,
        * concatenation, minification, etc. So to avoid these steps, we simply
@@ -437,8 +422,7 @@ module.exports = function ( grunt ) {
           '<%= build_dir %>/src/**/*.js',
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
-          '<%= vendor_files.css %>',
-          '<%= less.options.dest %>'
+          '<%= sass.source.dest %>'
         ]
       },
 
@@ -452,8 +436,7 @@ module.exports = function ( grunt ) {
         src: [
           '<%= compile_dir %>/assets/**/*.js',
           '<%= concat.compile_js.dest %>',
-          '<%= vendor_files.css %>',
-          '<%= less.options.dest %>'
+          '<%= sass.source.dest %>'
         ]
       }
     },
@@ -515,7 +498,7 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.js %>'
         ],
-        tasks: [ 'jshint:src', 'copy:build_appjs' ] //'karma:unit:run',
+        tasks: [ 'jshint:src', 'copy:build_appjs' ]
       },
 
       /**
@@ -562,9 +545,9 @@ module.exports = function ( grunt ) {
       /**
        * When the CSS files change, we need to compile and minify them.
        */
-      less: {
-        files: [ 'src/**/*.less' ],
-        tasks: [ 'less' ]
+      styles: {
+        files: [ 'src/**/*.scss' ],
+        tasks: [ 'sass_globbing', 'sass' ]
       },
 
       /**
@@ -646,7 +629,7 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee','less',
+    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass_globbing', 'sass',
     'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendor_maps',
     'index:build', 'preprocess'
   ]);
@@ -656,8 +639,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    // 'less', 'copy:compile_assets', 'ngmin', 'concat', 'uglify', 'index:compile'
-    'less', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'uglify', 'index:compile'
+    'sass_globbing', 'sass', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'uglify', 'index:compile'
   ]);
 
   /**
