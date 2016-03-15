@@ -23,13 +23,13 @@ module.exports = {
     api: {
       src: ['build/src/app/api/api-url.js'],
       options: {
-	     inline: true
+        inline: true
       }
     },
     app: {
       src: ['build/src/app/app.js'],
       options: {
-       inline: true
+        inline: true
       }
     }
   },
@@ -37,25 +37,47 @@ module.exports = {
   /**
    * This is a collection of file patterns that refer to our app code (the
    * stuff in `src/`). These file paths are used in the configuration of
-   * build tasks. `js` is all project javascript, less tests. `ctpl` contains
+   * build tasks. `js` is all project javascript, sass tests. `ctpl` contains
    * our reusable components' (`src/common`) template HTML files, while
    * `atpl` contains the same, but for our app's code. `html` is just our
-   * main HTML file, `less` is our main stylesheet, and `unit` contains our
+   * main HTML file, `sass` is our main stylesheet, and `unit` contains our
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/**/*.js', '!src/**/*.spec.js' ],
-    jsunit: [ 'src/**/*.spec.js' ],
+    js: [
+      'src/**/*.js',
+      '!src/**/*.spec.js'
+    ],
+    jsunit: [
+      'src/**/*.spec.js'
+    ],
 
-    coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
+    coffee: [
+      'src/**/*.coffee',
+      '!src/**/*.spec.coffee'
+    ],
+    coffeeunit: [
+      'src/**/*.spec.coffee'
+    ],
 
-    coffeeunit: [ 'src/**/*.spec.coffee' ],
+    atpl: [
+      'src/app/**/*.tpl.html'
+    ],
+    ctpl: [
+      'src/common/**/*.tpl.html'
+    ],
 
-    atpl: [ 'src/app/**/*.tpl.html' ],
-    ctpl: [ 'src/common/**/*.tpl.html' ],
+    html: [
+      'src/index.html'
+    ],
 
-    html: [ 'src/index.html' ],
-    less: [ 'src/less/main.less', 'src/app/**/*.less' ]
+    scss: [
+      // Do not modify the order
+      'src/styles/mixins/**/*.scss',
+      'src/styles/common/**/*.scss',
+      'src/styles/modules/**/*.scss',
+      'src/app/**/*.scss'
+    ]
   },
 
   /**
@@ -112,10 +134,22 @@ module.exports = {
       'vendor/angulartics/dist/angulartics.min.js',
       'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
     ],
+    scss: [
+      'vendor/bootstrap-sass/**/_bootstrap.scss',
+      'vendor/font-awesome/**/font-awesome.scss'
+    ],
     css: [
+      "vendor/nvd3/build/nv.d3.css",
+      "vendor/angular-xeditable/dist/css/xeditable.css",
+      "vendor/codemirror/lib/codemirror.css",
+      "vendor/codemirror/theme/xq-light.css"
     ]
   },
 
+  /**
+   * Similar to vendor_files, however these files will be copied into the output
+   * directory rather than compiled in with the output file.
+   */
   vendor_copy_files: {
     js: [
       'vendor/pdfjs-bower/dist/compatibility.js',
