@@ -89,6 +89,10 @@ angular.module("doubtfire.common.services.units", [])
 
         unit.students = new_students
 
+    unit.studentEnrolled = (id) ->
+      student = unit.findStudent id
+      return student?.enrolled
+
     unit.findStudent = (id) ->
       _.find unit.students, (s) -> s.project_id == id
 

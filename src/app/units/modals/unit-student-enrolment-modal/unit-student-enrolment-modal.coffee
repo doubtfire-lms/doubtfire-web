@@ -24,9 +24,14 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
     # get tutorial_id from tutorial_name
     Project.create {unit_id: unit.id, student_num: student_id, tutorial_id: if tutorial then tutorial.id else null },
       (project) ->
-        unit.addStudent project
-        $modalInstance.close()
-        alertService.add("success", "Student enrolled", 2000)
+        if not unit.studentEnrolled project.project_id
+          unit.addStudent project
+          alertService.add("success", "Student enrolled", 2000)
+          $modalInstance.close()
+        else
+          alertService.add("danger", "Student is already enrolled", 2000)
+          $modalInstance.close()
+
       , (response) ->
         alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)
 )
