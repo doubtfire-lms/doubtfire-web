@@ -8,7 +8,7 @@ angular.module('doubtfire.groups.group-selector', [])
   restrict: 'E'
   templateUrl: 'groups/group-selector/group-selector.tpl.html'
   replace: true
-  controller: ($scope, alertService, Group) ->
+  controller: ($scope, alertService, Group, currentUser) ->
     # pagination of groups
     $scope.currentPage = 1
     $scope.maxSize = 5
@@ -23,7 +23,8 @@ angular.module('doubtfire.groups.group-selector', [])
       if $scope.project #in a student context
         tutorial_id = $scope.project.tutorial.id
       else #convenor/tutor
-        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == $scope.assessingUnitRole.name
+        tutorName = if $scope.assessingUnitRole? then $scope.assessingUnitRole.name else currentUser.profile.name
+        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == tutorName
         if not tutorial_id
           tutorial_id = $scope.unit.tutorials[0].id
           $scope.staffFilter = 'all'

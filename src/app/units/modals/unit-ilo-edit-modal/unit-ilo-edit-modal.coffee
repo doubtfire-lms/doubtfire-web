@@ -9,7 +9,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
   # Provide unit, and optionally a ILO. If no ILO is provided
   # it will assume you want to make a new ILO
   #
-  UnitILOEditModalCtrl.show = (unit, tutorial) ->
+  UnitILOEditModalCtrl.show = (unit, ilo) ->
     $modal.open
       controller: 'UnitILOEditModalCtrl'
       templateUrl: 'units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.tpl.html'
