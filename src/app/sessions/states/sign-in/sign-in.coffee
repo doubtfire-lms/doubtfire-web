@@ -80,7 +80,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
               resetInvalidCreds = ->
                 $scope.invalidCredentials = false
               $timeout resetInvalidCreds, 300
-              alertService.add("danger", "Login failed: " + response.error, 6000)
+              alertService.add("warning", "Login failed: " + response.error, 6000)
             else
               alertService.add("danger", "Login failed: Unable to connect to server", 6000)
         )

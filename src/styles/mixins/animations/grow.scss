@@ -21,8 +21,8 @@
   }
 }
 
-@mixin animation-grow {
+@mixin animation-grow($time: 0.5s) {
   animation-name: animation-grow;
-  animation-duration: 0.5s;
+  animation-duration: $time;
   animation-fill-mode: both;
 }
