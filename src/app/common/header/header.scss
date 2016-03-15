@@ -25,6 +25,7 @@ a.navbar-brand {
   top: 15px;
   right: 15px;
   left: 15px;
+
   z-index: 5000;
   outline: 0;
 
@@ -33,6 +34,8 @@ a.navbar-brand {
 
   .alert {
     @include animation-grow(0.25s);
+    transition: all 0.25s ease;
+    float: none;
     .alert-wrapper {
       display: flex;
     }
