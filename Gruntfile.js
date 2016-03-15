@@ -96,10 +96,15 @@ module.exports = function ( grunt ) {
     /**
      * The directories to delete when `grunt clean` is executed.
      */
-    clean: [
-      '<%= build_dir %>',
-      '<%= compile_dir %>'
-    ],
+    clean: {
+      build: [
+        '<%= build_dir %>',
+        '<%= compile_dir %>'
+      ],
+      styles: [
+        'src/styles/main.tmp.scss'
+      ]
+    },
 
     /**
      * The `copy` task just copies files from A to B. We use it here to copy
@@ -626,12 +631,26 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'default',     [ 'development' ]);
 
   /**
+   * Style tasks in one grunt task
+   */
+  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'clean:styles' ]);
+
+  /**
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass_globbing', 'sass',
-    'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendor_maps',
-    'index:build', 'preprocess'
+    'clean',
+    'html2js',
+    'jshint',
+    'coffeelint',
+    'coffee',
+    'styles',
+    'copy:build_assets',
+    'copy:build_appjs',
+    'copy:build_vendorjs',
+    'copy:build_vendor_maps',
+    'index:build',
+    'preprocess'
   ]);
 
   /**
@@ -639,7 +658,13 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'sass_globbing', 'sass', 'copy:compile_assets', 'copy:prod_vendor_copy', 'ngmin', 'concat', 'uglify', 'index:compile'
+    'styles',
+    'copy:compile_assets',
+    'copy:prod_vendor_copy',
+    'ngmin',
+    'concat',
+    'uglify',
+    'index:compile'
   ]);
 
   /**
