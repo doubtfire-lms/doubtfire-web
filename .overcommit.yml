@@ -9,7 +9,7 @@ CommitMsg:
     enabled: true
   MessageFormat:
     enabled: true
-    pattern: '(NEW|FIX|ENHANCE|LOOKS|SPEED|QUALITY|DOC|CONFIG|TEST): [A-Z].+'
+    pattern: '((NEW|FIX|ENHANCE|LOOKS|SPEED|QUALITY|DOC|CONFIG|TEST): [A-Z].+)|(Merge .+)'
     expected_pattern_message: '<NEW|FIX|ENHANCE|LOOKS|SPEED|QUALITY|DOC|CONFIG|TEST>: <Message Subject>'
     sample_message: 'CONFIG: Add overcommit to project'
   TraillingPeriod:
