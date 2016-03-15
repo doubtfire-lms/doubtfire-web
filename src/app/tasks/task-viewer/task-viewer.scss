@@ -48,14 +48,9 @@
     // help block is a large notice block
     @include large-notice-block;
     margin: 0;
-    color: #333;
     width: 100%;
+    height: 100%;
     text-align: center;
-    font-size: 2.1em;
-    font-weight: lighter;
-    i {
-      margin: 0.5em 0.5ex;
-    }
   }
 }
 
