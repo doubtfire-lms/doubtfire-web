@@ -15,7 +15,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
       templateUrl: 'units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.tpl.html'
       resolve: {
         ilo: -> ilo
-        unit: -> $scope.unit
+        unit: -> unit
       }
 
   UnitILOEditModalCtrl
@@ -27,7 +27,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
 
   $scope.saveILO = ->
     save_data = {
-      unit_id: $scope.unit.id
+      unit_id: unit.id
       name: $scope.ilo.name
       description: $scope.ilo.description
       abbreviation: $scope.ilo.abbreviation

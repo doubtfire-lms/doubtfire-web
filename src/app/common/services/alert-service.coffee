@@ -28,7 +28,7 @@ angular.module("doubtfire.common.services.alerts", [])
 
     # When a timeout is specified, call the close function of this alert
     # when the time is up
-    $timeout closeThisAlertFunc, timeout if _.isNumber timeout and timeout > 0
+    $timeout closeThisAlertFunc, timeout if _.isNumber(timeout) and timeout > 0
 
   #
   # Close a specific alert
