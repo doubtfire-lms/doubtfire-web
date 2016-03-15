@@ -71,7 +71,6 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.onTaskResourcesSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_resources = true
-      # $scope.filesUploaded = response
 
     $scope.resourceUrl = () ->
       Task.getTaskResourcesUrl($scope.unit, $scope.task)
@@ -161,16 +160,15 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
 
       if $scope.isNew
-        ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.')
-        TaskDefinition.create( { task_def: task } ).$promise.then (
+        promise = TaskDefinition.create( { task_def: task } ).$promise
+        ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
+        promise.then (
           (response) ->
-            ProgressModal.close()
             $scope.unit.task_definitions.push(response)
             alertService.add("success", "#{response.name} Added", 2000)
         ),
         (
           (response) ->
-            ProgressModal.close()
             if response.data.error?
               alertService.add("danger", "Error: " + response.data.error, 6000)
         )

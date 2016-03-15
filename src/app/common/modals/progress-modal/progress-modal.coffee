@@ -5,23 +5,26 @@ angular.module("doubtfire.common.modals.progress-modal", [])
 #
 .factory("ProgressModal", ($modal, $rootScope) ->
   ProgressModal = {}
-  sharedData = { closed: false }
+
   #
   # Show a progress modal for long running tasks.
   #
-  ProgressModal.show = (title, message) ->
-    sharedData.closed = false
-    $modal.open
+  # Provide an angular resource $promise and the
+  # modal will automatically close itself when the XHR
+  # request is complete
+  #
+  ProgressModal.show = (title, message, promise) ->
+    modalInstance = $modal.open
       templateUrl: 'common/modals/progress-modal/progress-modal.tpl.html'
       controller: 'ProgressModalCtrl'
       resolve:
         title: -> title
         message: -> message
-        sharedData: -> sharedData
-  
-  ProgressModal.close = () ->
-    sharedData.closed = true
-  
+    # If a promise was provided, then when the finally block is reached
+    # close the modal instance created
+    promise?.finally ->
+      modalInstance.close()
+
   ProgressModal
 )
 
@@ -31,12 +34,10 @@ angular.module("doubtfire.common.modals.progress-modal", [])
 .controller('ProgressModalCtrl', ($scope, $modalInstance, title, message, sharedData) ->
   $scope.title = title
   $scope.message = message
-  $scope.sharedData = sharedData
-  
-  $scope.$watch "sharedData.closed", () ->
-    if $scope.sharedData.closed
-      $modalInstance.dismiss()
-  
+  $scope.progressValue = 0
+  $scope.$watch 'sharedData.progress', (newValue) ->
+    $scope.progressValue = newValue
+
   $scope.close = ->
     $modalInstance.dismiss()
 )
