@@ -12,49 +12,63 @@
       <div class="panel-body">
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Code</label>
-          <input class="form-control col-sm-9" id="code" type="text" placeholder="COS1234567" ng-model="unit.code">
+          <div class="col-sm-9">
+            <input class="form-control" id="code" type="text" placeholder="COS1234567" ng-model="unit.code">
+          </div>
         </div><!--/code-date-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="name">Name</label>
-          <input id="name" type="text" class="form-control col-sm-9" ng-model="unit.name" placeholder="Introduction to Doubtfire">
+          <div class="col-sm-9">
+            <input id="name" type="text" class="form-control" ng-model="unit.name" placeholder="Introduction to Doubtfire">
+          </div>
         </div><!--/name-date-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="description">Description</label>
-          <textarea id="description" class="form-control col-sm-9" ng-model="unit.description"></textarea>
+          <div class="col-sm-9">
+            <textarea id="description" class="form-control" ng-model="unit.description"></textarea>
+          </div>
         </div><!--/description-date-->
 
         <div class="form-group">
           <label tooltip="Date for the start of teaching in the unit." class="col-sm-2 control-label" for="startdate">Start Date</label>
-          <div class="col-sm-4 input-group">
-            <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="unit.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-click="open($event,'start')"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="unit.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="open($event,'start')">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
           </div>
         </div><!--/start-date-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">End Date</label>
-          <div class="col-sm-4 input-group">
-            <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-click="open($event,'end')"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="open($event,'end')">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
           </div>
         </div><!--/end-date-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
-          <div class="col-sm-9 input-group">
+          <div class="col-sm-9">
             <div class="btn-group">
-                <label class="btn btn-{{unit.active ? 'success' : 'default'}}" ng-model="unit.active" btn-radio="true" uncheckable>
-                  <i class="glyphicon glyphicon-ok"></i>
-                </label>
-                <label class="btn btn-{{unit.active ? 'default' : 'danger'}}" ng-model="unit.active" btn-radio="false" uncheckable>
-                  <i class="glyphicon glyphicon-remove"></i>
-                </label>
+              <label class="btn btn-{{unit.active ? 'success' : 'default'}}" ng-model="unit.active" btn-radio="true" uncheckable>
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-{{unit.active ? 'default' : 'danger'}}" ng-model="unit.active" btn-radio="false" uncheckable>
+                <i class="fa fa-times"></i>
+              </label>
             </div>
           </div>
         </div><!--/active-->

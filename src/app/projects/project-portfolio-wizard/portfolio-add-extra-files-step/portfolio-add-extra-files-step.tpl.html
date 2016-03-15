@@ -49,10 +49,11 @@
         <p ng-show="fileUploader.queue.length == 1" class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
       </div>
       <div class="form-group">
-        <button type="submit" ng-disabled="fileUploader.isUploading || fileUploader.queue.length != 1" class="btn btn-success form-control col-sm-3 col-sm-offset-9">
-          <i class="fa fa-cloud-upload"></i> Upload
-        </button>
-        <br/>
+        <div class="col-sm-3 col-sm-offset-9">
+          <button type="submit" ng-disabled="fileUploader.isUploading || fileUploader.queue.length != 1" class="btn btn-success form-control">
+            <i class="fa fa-cloud-upload"></i> Upload
+          </button>
+        </div>
         <div ng-show="fileUploader.isUploading">
           <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
         </div>

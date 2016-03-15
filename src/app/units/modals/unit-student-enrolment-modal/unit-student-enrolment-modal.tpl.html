@@ -6,11 +6,15 @@
     <form class="form-horizontal">
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Student ID</label>
-        <input type="input" class="form-control col-sm-7" placeholder="Student ID" ng-model="student_id">
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Student ID" ng-model="student_id">
+        </div>
       </div>
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Tutorial</label>
-        <input id="searchbar" class="col-sm-7 form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials" />
+        <div class="col-sm-7">
+          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials" />
+        </div>
       </div>
     </form>
   </div>

@@ -33,82 +33,104 @@
               <div ng-show="activeTab == taskAdmin.tabsData.taskSheet">
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Name</label>
-                  <input type="text" class="form-control col-sm-8" ng-model="task.name">
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="task.name">
+                  </div>
                 </div><!--/name-->
 
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Abbreviation</label>
-                  <input type="text" class="form-control col-sm-8" ng-model="task.abbreviation"/>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="task.abbreviation"/>
+                  </div>
                 </div><!--/abbr-->
 
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Grade</label>
-                  <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
-                    <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
-                  </label>
+                  <div class="col-sm-7">
+                    <label ng-repeat="grade in grades" name="target-grade-{{grade}}" class="radio-inline" for="target-grade-{{grade}}">
+                      <input type="radio" id="target-grade-{{grade}}" value="{{$index}}" ng-model="task.target_grade"/>{{grade}}
+                    </label>
+                  </div>
                 </div><!--/grade-->
 
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Description</label>
-                  <textarea class="form-control col-sm-8" ng-model="task.description"></textarea>
+                  <div class="col-sm-8">
+                    <textarea class="form-control" ng-model="task.description"></textarea>
+                  </div>
                 </div><!--/desc-->
 
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Weighting</label>
-                  <input type="number" class="form-control col-sm-8" ng-model="task.weight" min="1"/>
+                  <div class="col-sm-8">
+                    <input type="number" class="form-control" ng-model="task.weight" min="1"/>
+                  </div>
                 </div><!--/weighting-->
 
                 <div class="form-group" ng-required="isNew" ng-show="unit.hasGroupwork()">
                   <label class="col-sm-3 control-label">Group Task</label>
-                  <select class="form-control col-sm-8" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
+                  <div class="col-sm-8">
+                    <select class="form-control" ng-model="task.group_set" ng-options="gs.name for gs in unit.group_sets track by gs.id"><option value="">None</option></select>
+                  </div>
                 </div><!--/group task-->
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Restricted</label>
-                  <button type="button" class="btn btn-default col-sm-1" ng-model="task.restrict_status_updates" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                    <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
-                  </button>
-                  <span class="help-block col-sm-6">
-                    If true, the status cannot be changed by students after it has been assigned by staff
-                  </span>
+                  <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" ng-model="task.restrict_status_updates" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                      <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
+                    </button>
+                    <span class="help-block">
+                      If true, the status cannot be changed by students after it has been assigned by staff
+                    </span>
+                  </div>
                 </div><!--/restricted-->
 
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Graded</label>
-                  <button type="button" class="btn btn-default col-sm-1" ng-model="task.is_graded" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                    <i class="fa fa-{{task.is_graded ? 'check' : 'times'}}"></i>
-                  </button>
-                  <span class="help-block col-sm-6">
-                    If true, the task will be assessed with a grade to a specific standard. For example, <em>the task was completed to a HD standard</em>.
-                  </span>
+                  <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" ng-model="task.is_graded" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                      <i class="fa fa-{{task.is_graded ? 'check' : 'times'}}"></i>
+                    </button>
+                    <span class="help-block">
+                      If true, the task will be assessed with a grade to a specific standard. For example, <em>the task was completed to a HD standard</em>.
+                    </span>
+                  </div>
                 </div><!--/graded-task-->
 
                 <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to start this task." class="col-sm-3 control-label">Start Date</label>
-                  <div class="col-sm-4 input-group">
-                    <input datepicker-popup="yyyy-MM-dd" is-open="startPicker.open" type="text" class="form-control" ng-model="task.start_date" placeholder="yyyy-MM-dd" close-text="Close" />
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" ng-click="open($event, startPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
+                  <div class="col-sm-7">
+                    <div class="col-sm-4 input-group">
+                      <input datepicker-popup="yyyy-MM-dd" is-open="startPicker.open" type="text" class="form-control" ng-model="task.start_date" placeholder="yyyy-MM-dd" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event, startPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </div>
                   </div>
                 </div><!--/start-date-->
 
                 <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Target Date</label>
-                  <div class="col-sm-4 input-group">
-                    <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
+                  <div class="col-sm-7">
+                    <div class="col-sm-4 input-group">
+                      <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </div>
                   </div>
                 </div><!--/target-date-->
 
                 <div class="form-group">
                   <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Due Date</label>
-                  <div class="col-sm-4 input-group">
-                    <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
+                  <div class="col-sm-7">
+                    <div class="col-sm-4 input-group">
+                      <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </div>
                   </div>
                 </div><!--/due-date-->
               </div>
@@ -118,22 +140,31 @@
                     <i class="fa fa-2x fa-upload"></i>
                     <p>Add Submission Requirements</p>
                   </div>
-                  <ul class="col-sm-offset-1 col-sm-10 list-group" style="padding: 0" ng-show="task.upload_requirements.length > 0">
-                    <li class="list-group-item" ng-repeat="upreq in task.upload_requirements">
-                      <input class="form-control" placeholder="Upload Name" type="text" required ng-model="upreq.name"/>
-                      <br/>
-                      <label name="upreq-type-{{upreq.key}}" class="radio-inline" for="upreq-type-{{upreq.key}}-code">
-                        <input type="radio" id="upreq-type-{{upreq.key}}-code" value="code" ng-model="upreq.type"/>Code
-                      </label>
-                      <label name="upreq-type-{{upreq.key}}" class="radio-inline" for="upreq-type-{{upreq.key}}-document">
-                        <input type="radio" id="upreq-type-{{upreq.key}}-document" value="document" ng-model="upreq.type"/>Document
-                      </label>
-                      <label name="upreq-type-{{upreq.key}}" class="radio-inline" for="upreq-type-{{upreq.key}}-image">
-                        <input type="radio" id="upreq-type-{{upreq.key}}-image" value="image" ng-model="upreq.type"/>Image
-                      </label>
-                      <i class="glyphicon glyphicon-remove pull-right" style="padding-top: 10px; cursor: pointer;" ng-click="removeUpReq(upreq)"></i>
-                    </li>
-                  </ul>
+                  <div ng-show="task.upload_requirements.length > 0">
+                    <div class="panel-body clearfix submission-requirement" ng-repeat="upreq in task.upload_requirements">
+                      <label class="col-sm-3 control-label">Requirement Name</label>
+                      <div class="col-sm-7 form-group">
+                        <input class="form-control" placeholder="Hello World Code" type="text" required ng-model="upreq.name"/>
+                      </div>
+                      <button tooltip="Remove this requirement" tooltip-append-to-body="true" class="btn btn-danger pull-right" ng-click="removeUpReq(upreq)">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                      <label class="col-sm-3 control-label">Requirement Type</label>
+                      <div class="col-sm-7 form-group">
+                        <div class="btn-group pull-left">
+                          <label name="upreq-type-{{upreq.key}}" class="btn btn-default" btn-radio="'code'" ng-model="upreq.type">
+                            <i class="fa fa-file-code-o"></i> Code
+                          </label>
+                          <label name="upreq-type-{{upreq.key}}" class="btn btn-default" btn-radio="'document'" ng-model="upreq.type">
+                            <i class="fa fa-file-pdf-o"></i> Document
+                          </label>
+                          <label name="upreq-type-{{upreq.key}}" class="btn btn-default" btn-radio="'image'" ng-model="upreq.type">
+                            <i class="fa fa-file-image-o"></i> Image
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div><!--/upload-requirements-->
               </div>
               <div ng-show="activeTab == taskAdmin.tabsData.taskResources">
@@ -170,39 +201,43 @@
                   </div>
                 </div>
               </div>
-              <div ng-show="activeTab == taskAdmin.tabsData.plagiarismChecks">
-                <div class="form-group" ng-required="isNew">
-                  <label class="col-sm-3 control-label" tooltip="At what percentage similarity should the system generate a warning?">Warn Percent</label>
-                  <input type="number" class="form-control col-sm-8" ng-model="task.plagiarism_warn_pct"/>
-                </div><!--/abbr-->
-                <div class="form-group" ng-required="isNew">
-                  <label class="col-sm-3 control-label">Checks</label>
-                  <div class="col-sm-8 form-control-static" ng-show="task.plagiarism_checks.length == 0">
-                    None
+              <div ng-show="activeTab == taskAdmin.tabsData.plagiarismChecks" class="form-group">
+                <div class="panel-body plagiarism-check" ng-required="isNew">
+                  <label class="col-sm-3 control-label">Warn Percent</label>
+                  <div class="col-sm-8">
+                    <input type="number" ng-disabled="task.plagiarism_checks.length == 0" class="form-control" ng-model="task.plagiarism_warn_pct"/>
+                    <p class="help-block">
+                      The percentage similarity where Doubtfire creates a warning
+                    </p>
                   </div>
-                  <ul class="col-sm-8 list-group" style="padding: 0" ng-show="task.plagiarism_checks.length > 0">
-                    <li class="list-group-item clearfix" ng-repeat="check in task.plagiarism_checks">
-                      <select class="form-control" ng-model="check.type">
-                        <option selected disabled value="">Select language</option>
-                        <option value="moss pascal">Pascal</option>
-                        <option value="moss c">C</option>
-                        <option value="moss csharp">C#</option>
-                        <option value="moss cc">C++</option>
-                        <option value="moss python">Python</option>
-                      </select>
-                      <p class="help-block">
-                        Doubtfire uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
-                      </p>
-
-                      <input class="form-control" placeholder="File patterns" type="text" required ng-model="check.pattern"/>
-                      <p class="help-block">
-                        Separate file patterns with a pipe symbol, e.g.: <code>*.c|*.h</code>
-                      </p>
-                      <i class="glyphicon glyphicon-remove pull-right" style="padding-top: 10px; cursor: pointer;" ng-click="removeCheck(check)"></i>
-                    </li>
-                  </ul>
-                </div><!--/plagiarism checks-->
-              </div>
+                </div><!--/check-perecent-->
+                <div ng-required="isNew" class="panel-body plagiarism-check clearfix" ng-show="task.plagiarism_checks.length > 0" ng-repeat="check in task.plagiarism_checks">
+                  <label class="col-sm-3 control-label">Detect Language</label>
+                  <div class="col-sm-7">
+                    <select class="form-control" ng-model="check.type">
+                      <option selected disabled value="">Select language</option>
+                      <option value="moss pascal">Pascal</option>
+                      <option value="moss c">C</option>
+                      <option value="moss csharp">C#</option>
+                      <option value="moss cc">C++</option>
+                      <option value="moss python">Python</option>
+                    </select>
+                    <p class="help-block">
+                      Doubtfire uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
+                    </p>
+                  </div>
+                  <button class="btn btn-danger pull-right" ng-click="removeCheck(check)">
+                    <i tooltip="Remove this check" tooltip-append-to-body="true" class="fa fa-trash-o"></i>
+                  </button>
+                  <label class="col-sm-3 control-label">File Patterns</label>
+                  <div class="col-sm-7">
+                    <input class="form-control" placeholder="*.c|*.h" type="text" required ng-model="check.pattern"/>
+                    <p class="help-block">
+                      Separate file patterns with a pipe symbol, e.g.: <code>*.c|*.h</code>
+                    </p>
+                  </div>
+                </div>
+              </div><!--/plagiarism checks-->
             </div><!--/panel-body-area-->
             <div class="panel-footer text-right" ng-show="activeTab == taskAdmin.tabsData.fileUpload">
               <button type="button" ng-click="addUpReq()" class="btn btn-success">

@@ -1,0 +1,10 @@
+.task-definition-editor {
+  .submission-requirement, .plagiarism-check {
+    &:not(:first-child) {
+      border-top: 1px solid #ccc;
+    }
+    .btn.btn-danger {
+      margin-right: 1ex;
+    }
+  }
+}
