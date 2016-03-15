@@ -202,14 +202,6 @@ module.exports = function ( grunt ) {
             }
             return src;
           }
-          /**,
-          process: function (src, filepath) {
-            if (filepath.indexOf("/pdfjs-bower/dist/pdf.js") > -1) {
-              src = src.replace(/Util.loadScript\(PDFJS.workerSrc\);/g,"//Util.loadScript(PDFJS.workerSrc);");
-              src = src.replace(/\/\/[#]if PRODUCTION [&][&] SINGLE_FILE\n\/\//g,"//#if PRODUCTION && SINGLE_FILE\n");
-            }
-            return src;
-          }*/
         },
         src: [
           '<%= vendor_files.js %>',
@@ -221,6 +213,17 @@ module.exports = function ( grunt ) {
           'module.suffix'
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
+      },
+      /**
+       * The `compile_vendor_css` compiles all vendor css files into the main
+       * css file
+       */
+      compile_vendor_css: {
+        src: [
+          '<%= build_dir %>/assets/<%= pkg.name %>.css',
+          '<%= vendor_files.css %>'
+        ],
+        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
       }
     },
 
@@ -288,10 +291,7 @@ module.exports = function ( grunt ) {
           lineNumbers: true
         },
         cwd: '.',
-        src: [
-          'src/styles/main.tmp.scss',
-          '<%= vendor_files.css %>'
-        ],
+        src: 'src/styles/main.tmp.scss',
         dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
       }
     },
@@ -650,7 +650,7 @@ module.exports = function ( grunt ) {
   /**
    * Style tasks in one grunt task
    */
-  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'postcss', 'clean:styles' ]);
+  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'postcss', 'concat:compile_vendor_css', 'clean:styles' ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
