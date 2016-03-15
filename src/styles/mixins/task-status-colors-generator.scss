@@ -1,0 +1,53 @@
+//
+// Mixins to use that helps color task statuses
+//
+
+@function task-status-color($status, $variant: null) {
+  // If variant isn't specified, we get the base by default
+  @if $variant == null {
+    @return map-get(map-get($task-status-colors, $status), base);
+  } @else {
+    @return map-get(map-get($task-status-colors, $status), $variant);
+  }
+}
+
+@mixin task-status-color($status) {
+  color: task-status-color($status, fore);
+  $linear-lower:  task-status-color($status, light);
+  $linear-higher: task-status-color($status, dark);
+  background-image: linear-gradient();
+}
+
+@mixin task-status-color-ready-to-mark {
+  @include task-status-color('ready-to-mark');
+}
+@mixin task-status-color-not-started {
+  @include task-status-color('not-started');
+}
+@mixin task-status-color-working-on-it {
+  @include task-status-color('working-on-it');
+}
+@mixin task-status-color-need-help {
+  @include task-status-color('need-help');
+}
+@mixin task-status-color-fix-and-resubmit {
+  @include task-status-color('fix-and-resubmit');
+}
+@mixin task-status-color-do-not-resubmit {
+  @include task-status-color('do-not-resubmit');
+}
+@mixin task-status-color-redo {
+  @include task-status-color('redo');
+}
+@mixin task-status-color-discuss {
+  @include task-status-color('discuss');
+}
+@mixin task-status-color-demonstrate {
+  @include task-status-color('demonstrate');
+}
+@mixin task-status-color-complete {
+  @include task-status-color('complete');
+}
+@mixin task-status-color-fail {
+  @include task-status-color('fail');
+}

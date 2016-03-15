@@ -1,0 +1,74 @@
+.task-viewer .task-viewer-toolbar {
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 2em;
+}
+
+.task-viewer .task-header-info {
+  margin-bottom: 1em;
+  .task-status-summary {
+    float: left;
+    h3 {
+      margin: 0;
+    }
+    .graded-task-mark {
+      font-weight: bold;
+      .grade-icon {
+        display: inline-block;
+        text-align: center;
+        line-height: 2.25em;
+        margin: 0 0.5ex;
+      }
+    }
+  }
+  .overdue.label {
+    i {
+      display: inline-block;
+      font-size: 2em;
+      float: left;
+      margin-right: 0.25ex;
+    }
+    font-size: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .date-info {
+    text-align: right;
+    .due-date {
+      margin: 0;
+    }
+  }
+}
+
+.task-viewer .task-viewer-tab-panel .panel-body {
+  height: $task-viewer-tab-content-height;
+  overflow: scroll;
+  .help-block {
+    // help block is a large notice block
+    @include large-notice-block;
+    margin: 0;
+    color: #333;
+    width: 100%;
+    text-align: center;
+    font-size: 2.1em;
+    font-weight: lighter;
+    i {
+      margin: 0.5em 0.5ex;
+    }
+  }
+}
+
+.task-viewer {
+  .active-task-selector, .active-task-status-selector {
+    @include dropdown-selector;
+  }
+}
+
+
+.task-viewer-tabs {
+  li {
+    text-align:center;
+    width:100%;
+  }
+}

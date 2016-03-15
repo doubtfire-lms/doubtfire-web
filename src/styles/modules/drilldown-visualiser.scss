@@ -1,0 +1,22 @@
+//
+// A drilldown for visualisations to click into graphs and see more
+// about those graphs
+//
+.drilldown-visualiser {
+  .overview-chart {
+    cursor: pointer;
+  }
+  .overview-charts .overview-chart {
+    height: 250px;
+    cursor: pointer;
+    .no-data-to-display {
+      height: 60%;
+      text-align: center;
+      padding-top: 30%;
+      border: 1px dashed #ddd;
+      color: #ddd;
+      border-radius: 1em;
+      margin: 10%;
+    }
+  }
+}

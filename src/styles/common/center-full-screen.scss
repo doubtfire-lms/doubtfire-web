@@ -1,0 +1,7 @@
+//
+// Ensures an element takes up the full screen and centered
+//
+.center-full-screen {
+  @include flex-center;
+  height: 100vh;
+}
