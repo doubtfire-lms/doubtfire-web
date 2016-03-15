@@ -8,7 +8,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.statusKeys = [
     'not_started'
-    'fix_and_include'
+    'do_not_resubmit'
     'redo'
     'need_help'
     'working_on_it'
@@ -56,7 +56,7 @@ angular.module("doubtfire.common.services.tasks", [])
     WRK: 'working_on_it'
     HLP: 'need_help'
     RDO: 'redo'
-    DNR: 'fix_and_include'
+    DNR: 'do_not_resubmit'
     FIX: 'fix_and_resubmit'
     DIS: 'discuss'
     DEM: 'demonstrate'
@@ -69,7 +69,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      0.0
     need_help:          0.0
     redo:               0.1
-    fix_and_include:    0.1
+    do_not_resubmit:    0.1
     fix_and_resubmit:   0.3
     ready_to_mark:      0.5
     discuss:            0.8
@@ -82,7 +82,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'WRK'
     need_help:          'HLP'
     redo:               'RDO'
-    fix_and_include:    "DNR"
+    do_not_resubmit:    "DNR"
     fix_and_resubmit:   'FIX'
     discuss:            'DIS'
     demonstrate:        'DEM'
@@ -95,7 +95,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'Working On It'
     need_help:          'Need Help'
     redo:               'Redo'
-    fix_and_include:    "Don't Resubmit"
+    do_not_resubmit:    "Don't Resubmit"
     fix_and_resubmit:   'Resubmit'
     discuss:            'Discuss'
     demonstrate:        'Demonstrate'
@@ -108,7 +108,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
-    fix_and_include:    'fa fa-book'
+    do_not_resubmit:    'fa fa-book'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-commenting'
     demonstrate:        'fa fa-commenting'
@@ -122,7 +122,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:     '#EB8F06'
     need_help:         '#a48fce'
     fix_and_resubmit:  '#f2d85c'
-    fix_and_include:   '#d46b54'
+    do_not_resubmit:   '#d46b54'
     redo:              '#804000'
     discuss:           '#31b0d5'
     demonstrate:       '#428bca'
@@ -132,7 +132,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.statusSeq =
     not_started:        1
     fail:               2
-    fix_and_include:    3
+    do_not_resubmit:    3
     redo:               4
     need_help:          5
     working_on_it:      6
@@ -153,7 +153,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'You are working on the task but would like some help to get it complete.'
     redo:
       'Your tutor wants you to start this task from scratch.'
-    fix_and_include:
+    do_not_resubmit:
       'Your tutor wants you to stop submitting this task and include it fixed in your portfolio.'
     fix_and_resubmit:
       'Your tutor wants you to fix something and resubmit it for review again.'
@@ -180,7 +180,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'demonstrate'
       'fix_and_resubmit'
       'redo'
-      'fix_and_include'
+      'do_not_resubmit'
       'fail'
     ]
 

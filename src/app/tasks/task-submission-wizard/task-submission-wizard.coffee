@@ -71,7 +71,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
         text: "new evidence for portfolio"
         class: 'btn-info'
         # Upload evidence only okay in a final state
-        hide: $scope.task.status not in ['demonstrate', 'discuss', 'fix_and_include', 'complete', 'fail']
+        hide: $scope.task.status not in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
 
     # Switch the status if the upload type matches a state
     $scope.setUploadType = (type) ->
