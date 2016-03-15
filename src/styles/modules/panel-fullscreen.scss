@@ -13,10 +13,8 @@
   border-bottom: none;
 
   // Flex stuff
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 
   .panel-heading {
     border-radius: 0;
@@ -32,8 +30,7 @@
   }
   .panel-body.project-show {
     overflow-y: scroll;
-    -webkit-flex: 1;
-            flex: 1;
+    flex: 1;
     position: relative;
 
     &.no-padding {

@@ -8,7 +8,6 @@
 
 .task-comments-viewer .comment {
   display: flex;
-  display: -webkit-flex;
   margin-bottom: 2em;
   .comment-details {
     @include flex-center;

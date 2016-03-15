@@ -40,13 +40,10 @@
     color: #333;
   }
   ul {
-    -webkit-padding-start: 0;
-    padding-left: 0;
+    @include remove-list-padding;
     list-style: none;
     display: flex;
-    display: -webkit-flex;
-    -webkit-flex-wrap: wrap;
-            flex-wrap: wrap;
+    flex-wrap: wrap;
     width: 85%;
     margin: 0 auto;
   }

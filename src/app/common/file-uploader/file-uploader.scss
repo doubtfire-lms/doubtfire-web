@@ -80,18 +80,14 @@
     .progress-area {
       .icons {
         width: 100%;
-        display: -webkit-flex;
         display: flex;
-        -webkit-justify-content: center;
-                justify-content: center;
+        justify-content: center;
       }
       i.fa-arrow-right {
         @include animation-wobble();
       }
       i {
-        -webkit-flex-basis: auto !important;
-                flex-basis: auto !important;
-        // float: left;
+        flex-basis: auto !important;
         margin-right: 1ex;
         font-size: 3em;
         margin-bottom: 1em;

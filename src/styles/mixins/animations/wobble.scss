@@ -1,12 +1,6 @@
 //
 // Animation to wobble an element side to side
 //
-@-webkit-keyframes animation-wobble {
-    0%, 100% { -webkit-transform: translateX(+5px); }
-    25%, 75% { -webkit-transform: translateX(0); }
-         50% { -webkit-transform: translateX(-5px); }
-}
-
 @keyframes animation-wobble {
     0%, 100% { transform: translateX(+5px); }
     25%, 75% { transform: translateX(0); }
@@ -14,27 +8,16 @@
 }
 
 @mixin animation-wobble {
-  -webkit-animation-duration: 1s;
   animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
   animation-iteration-count:infinite;
-  -webkit-animation-iteration-count:infinite;
-  -webkit-animation-name: animation-wobble;
   animation-name: animation-wobble;
 }
 
 //
 // Animation to wobble an element side but only once
 //
-@-webkit-keyframes animation-wobble-once {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(+5px); }
-  75% { transform: translateX(-5px); }
-}
-
 @keyframes animation-wobble-once {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(+5px); }
@@ -42,14 +25,8 @@
 }
 
 @mixin animation-wobble-once {
-  -webkit-animation-duration: 0.15s;
   animation-duration: 0.15s;
-  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-animation-timing-function: ease-out;
-  animation-timing-function: ease-out;
   animation-iteration-count: 2;
-  -webkit-animation-iteration-count: 2;
-  -webkit-animation-name: animation-wobble-once;
   animation-name: animation-wobble-once;
 }

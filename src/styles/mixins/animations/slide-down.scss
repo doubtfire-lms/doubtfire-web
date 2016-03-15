@@ -5,11 +5,6 @@
   from { margin-top: -2em; }
   to   { margin-top: inherit; }
 }
-@-webkit-keyframes animation-slide-down {
-  from { margin-top: -2em; }
-  to   { margin-top: inherit; }
-}
 @mixin animation-slide-down($seconds) {
-  -webkit-animation: animation-slide-down $seconds;
-          animation: animation-slide-down $seconds;
+  animation: animation-slide-down $seconds;
 }

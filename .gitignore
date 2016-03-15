@@ -1,5 +1,6 @@
 *.sw*
 *~
+*.log
 .DS_Store
 build/
 bin/

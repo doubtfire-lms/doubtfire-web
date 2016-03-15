@@ -22,6 +22,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-env');
   grunt.loadNpmTasks('grunt-preprocess');
   grunt.loadNpmTasks('grunt-sass-globbing');
+  grunt.loadNpmTasks('grunt-postcss');
 
   /**
    * Load in our build configuration file.
@@ -263,6 +264,22 @@ module.exports = function ( grunt ) {
     },
 
     /**
+     * Autoprefixes to handle browser vendor prefixes
+     */
+    postcss: {
+      options: {
+        map: true,
+        processors: [
+          require('autoprefixer')({ browsers: ['last 2 versions'] })
+        ]
+      },
+      source: {
+        src: '<%= build_dir %>/assets/<%= pkg.name %>.css',
+        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
+      }
+    },
+
+    /**
      * `sass` compiles the SASS sources.
      */
     sass: {
@@ -427,7 +444,7 @@ module.exports = function ( grunt ) {
           '<%= build_dir %>/src/**/*.js',
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
-          '<%= sass.source.dest %>'
+          '<%= postcss.source.dest %>'
         ]
       },
 
@@ -441,7 +458,7 @@ module.exports = function ( grunt ) {
         src: [
           '<%= compile_dir %>/assets/**/*.js',
           '<%= concat.compile_js.dest %>',
-          '<%= sass.source.dest %>'
+          '<%= postcss.source.dest %>'
         ]
       }
     },
@@ -633,7 +650,7 @@ module.exports = function ( grunt ) {
   /**
    * Style tasks in one grunt task
    */
-  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'clean:styles' ]);
+  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'postcss', 'clean:styles' ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.

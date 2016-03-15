@@ -28,22 +28,16 @@
 
   .panel-body.task-buttons-download-area {
     display: flex;
-    display: -webkit-flex;
     background: $brand-primary;
     height: $task-viewer-tab-content-height / 4;
     min-height: 130px;
     padding: 0;
-    -webkit-transition: all 0.3s ease-in;
-            transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
     .btn {
       flex: 1;
-      -webkit-flex: 1;
       display: flex;
-      display: -webkit-flex;
-      -webkit-justify-content: center;
-              justify-content: center;
-      -webkit-align-items: center;
-              align-items: center;
+      justify-content: center;
+      align-items: center;
       height: calc(~'100% - 1px');
       text-align: center;
       border-radius: 0;
@@ -70,7 +64,6 @@
     min-height: 50px;
     .btn:first-child {
       flex: 2;
-      -webkit-flex: 2;
     }
     .btn {
       font-size: 1.4em;

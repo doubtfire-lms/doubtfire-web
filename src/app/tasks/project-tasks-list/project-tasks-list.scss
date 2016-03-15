@@ -1,8 +1,6 @@
 .project-tasks-list {
+  @include remove-list-padding;
   text-align: center;
-
-  padding-left: 0px;
-  -webkit-padding-start: 0px;
 
   .groupset-name {
     color: #777;

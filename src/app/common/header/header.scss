@@ -7,10 +7,8 @@
 }
 
 a.navbar-brand {
-  display: -webkit-flex;
   display: flex;
-  -webkit-align-items: center;
-          align-items: center;
+  align-items: center;
   i.logo {
     height: 1.6em;
     width: 1.6em;

@@ -2,15 +2,10 @@
 // Uses flex to align the div contents in the center
 //
 @mixin flex-center {
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-align-items: center;
-          align-items: center;
-  -webkit-align-content: center;
-          align-content: center;
-  -webkit-justify-content: center;
-          justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
   height: 100%;
 }

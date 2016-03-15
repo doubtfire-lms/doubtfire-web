@@ -24,14 +24,11 @@ $number-of-flags: 3;
     }
   }
   a.sort-by-flag-anchor + .flag-sort-options {
-    display: -webkit-flex;
     display: flex;
     max-width: $flag-icon-width * $number-of-flags;
     margin: 0.5em 0;
-    -webkit-align-items: center;
-            align-items: center;
-    -webkit-justify-content: space-between;
-            justify-content: space-between;
+    align-items: center;
+    justify-content: space-between;
     .flag-sort {
       i, grade-icon {
         display: inline-block;
@@ -48,12 +45,9 @@ $number-of-flags: 3;
     td.flags-data {
       .flags {
         max-width: $flag-icon-width * $number-of-flags;
-        display: -webkit-flex;
         display: flex;
-        -webkit-align-items: center;
-                align-items: center;
-        -webkit-justify-content: space-between;
-                justify-content: space-between;
+        align-items: center;
+        justify-content: space-between;
       }
     }
     td.task-progress-bar {
@@ -83,10 +77,8 @@ $number-of-flags: 3;
   border-bottom: none;
 
   // Flex stuff
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 
   .panel-heading {
     border-radius: 0;
@@ -102,8 +94,7 @@ $number-of-flags: 3;
   }
   .panel-body.project-show {
     overflow-y: scroll;
-    -webkit-flex: 1;
-            flex: 1;
+    flex: 1;
     position: relative;
 
     &.no-padding {
@@ -115,14 +106,10 @@ $number-of-flags: 3;
     }
 
     .nothing-selected {
-      display: -webkit-flex;
       display: flex;
-      -webkit-align-items: center;
-              align-items: center;
-      -webkit-align-content: center;
-              align-content: center;
-      -webkit-flex-wrap: wrap;
-              flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      flex-wrap: wrap;
       position: absolute;
       height: 90%;
       width: 98%;
