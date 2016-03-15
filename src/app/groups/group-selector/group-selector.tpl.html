@@ -36,8 +36,10 @@
           </span>
         </td>
         <td ng-click="selectGroup(grp)" class="tutorial-id">
-          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials" tooltip-html-unsafe="<strong>{{tutorial.meeting_day}} {{tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{tutorial.meeting_location}} - {{tutorial.tutor_name}}">
-            {{ selectTutorial(grp.tutorial_id).abbreviation }}
+          <span editable-select="grp.tutorial_id" e-name="tutorial_id" e-form="grpRowform" e-ng-options="t.id as t.abbreviation for t in unit.tutorials">
+            <div tooltip-html-unsafe="<strong>{{selectTutorial(grp.tutorial_id).meeting_day}} {{selectTutorial(grp.tutorial_id).meeting_time | date: 'shortTime'}}</strong><br/> {{selectTutorial(grp.tutorial_id).meeting_location}} - {{selectTutorial(grp.tutorial_id).tutor_name}}">
+              {{ selectTutorial(grp.tutorial_id).abbreviation }}
+            </div>
           </span>
         </td>
         <td class="actions" ng-show="assessingUnitRole">

@@ -62,7 +62,8 @@ angular.module('doubtfire.groups.group-selector', [])
           }
         }, (response) ->
           alertService.add("info", "#{grp.name} was updated", 3000)
-        (response) -> alertService.add("danger", response.data.error, 6000)
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
       )
 
     $scope.removeGroup = (grp) ->
