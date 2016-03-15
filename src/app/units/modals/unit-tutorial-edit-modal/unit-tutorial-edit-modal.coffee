@@ -40,7 +40,7 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
 
   $scope.saveTutorial = ->
     save_data = _.omit($scope.tutorial, 'tutor', 'tutor_name', 'meeting_time', 'data')
-    save_data.tutor_id = $scope.tutorial.tutor.user_id
+    save_data.tutor_id = if $scope.tutorial.tutor.user_id then $scope.tutorial.tutor.user_id else $scope.tutorial.tutor.id
 
     if $scope.tutorial.meeting_time.getHours
       save_data.meeting_time = $scope.tutorial.meeting_time.getHours() + ":" + $scope.tutorial.meeting_time.getMinutes()
