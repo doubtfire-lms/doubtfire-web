@@ -30,12 +30,12 @@
         <ul class="dropdown-menu">
           <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
           <li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
-            <a href="#/units?unitRole={{unitRole.id}}"><label class="label label-info">{{unitRole.unit_code}}</label> {{unitRole.unit_name}}</a>
+            <a href="#/units?unitRole={{unitRole.id}}"><label class="label label-info">{{unitRole.unit_code}}</label> {{unitRole.start_date | date: short }} {{unitRole.unit_name}}</a>
           </li>
           <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
           <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
           <li ng-repeat="project in projects">
-            <a href="#/projects/{{project.project_id}}"><label class="label label-info">{{project.unit_code}}</label> {{project.unit_name}}</a>
+            <a href="#/projects/{{project.project_id}}"><label class="label label-info">{{project.unit_code}}</label> {{project.start_date | date: short }} {{project.unit_name}}</a>
           </li>
         </ul>
       </li>
