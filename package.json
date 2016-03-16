@@ -32,7 +32,8 @@
     "grunt-ngmin": "0.0.3",
     "grunt-postcss": "^0.8.0",
     "grunt-preprocess": "2.3.0",
-    "grunt-sass-globbing": "^1.4.0"
+    "grunt-sass-globbing": "^1.4.0",
+    "underscore": "^1.8.3"
   },
   "dependencies": {
     "postcss-scss": "^0.1.7"
