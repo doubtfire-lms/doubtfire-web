@@ -27,7 +27,7 @@ _or_ by using `apt-get` on Linux:
 
 ```
 $ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
+$ sudo apt-get install nodejs nodejs-legacy
 ```
 
 Clone the web repository, and change to the root directory:
