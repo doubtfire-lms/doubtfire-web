@@ -37,16 +37,28 @@ $ git clone https://github.com/doubtfire-lms/doubtfire-web.git
 $ cd ./doubtfire-web
 ```
 
-Set up [overcommit](https://github.com/brigade/overcommit) and install hooks:
+Install [overcommit](https://github.com/brigade/overcommit) and Ruby [SASS](http://sass-lang.org):
 
 ```
-$ gem install overcommit
+$ gem install overcommit sass
+```
+
+If `gem` fails, you should read the Doubfire API README to install ruby. If you are *not* using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
+
+If using `rbenv`, rehash to ensure each of the gems are on your `PATH`:
+
+```
+$ rbenv rehash
+```
+
+Install and sign the git hooks using `overcommit`:
+
+```
 $ overcommit --install
+$ overcommit --sign
 ```
 
-If `gem` fails, you should read the Doubfire API README to install ruby.
-
-Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally.
+Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally:
 
 ```
 $ npm install
