@@ -1,7 +1,7 @@
 <div class="progress-modal">
   <div class="modal-header clearfix">
     <h3 class="modal-title">
-      <i class="fa fa-file-excel-o fa-2x pull-left"></i>
+      <i class="fa fa-spinner fa-2x pull-left"></i>
       <div>{{title}}</div>
       <small>{{message}}</small>
     </h3>
@@ -11,11 +11,11 @@
       <i class="fa fa-3x fa-spinner fa-pulse"></i>
       <p>Processing...</p>
     </div>
+  </div>
+  <div class="modal-footer clearfix">
     <p class="help-block col-sm-6 col-sm-offset-3 text-center">
       You can close this modal and you will be alerted when processing has finished
     </p>
-  </div>
-  <div class="modal-footer clearfix">
     <button class="btn btn-primary pull-right" ng-click="close()">
       <i class="fa fa-check"></i>
     </button>

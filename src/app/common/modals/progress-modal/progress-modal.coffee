@@ -29,14 +29,11 @@ angular.module("doubtfire.common.modals.progress-modal", [])
 )
 
 #
-# Controller for CSV result modal
+# Controller for progress modal
 #
-.controller('ProgressModalCtrl', ($scope, $modalInstance, title, message, sharedData) ->
+.controller('ProgressModalCtrl', ($scope, $modalInstance, title, message) ->
   $scope.title = title
   $scope.message = message
-  $scope.progressValue = 0
-  $scope.$watch 'sharedData.progress', (newValue) ->
-    $scope.progressValue = newValue
 
   $scope.close = ->
     $modalInstance.dismiss()
