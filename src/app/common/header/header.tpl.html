@@ -33,7 +33,7 @@
             <a href="#/units?unitRole={{unitRole.id}}">
               <div>
                 <label class="label label-info small">{{unitRole.unit_code}}</label>
-                <small class="text-muted">{{unitRole.start_date | date: short }}</small>
+                <small class="text-muted">{{showDate(unitRole.start_date)}}</small>
               </div>
               {{unitRole.unit_name}}
             </a>
@@ -44,7 +44,7 @@
             <a href="#/projects/{{project.project_id}}">
               <div>
                 <label class="label label-info small">{{project.unit_code}}</label>
-                <small class="text-muted">{{project.start_date | date: short }}</small>
+                <small class="text-muted">{{showDate(project.start_date)}}</small>
               </div>
               {{project.unit_name}}
              </a>
