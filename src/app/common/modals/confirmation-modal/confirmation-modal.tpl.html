@@ -1,0 +1,24 @@
+<div class="confirmation-modal">
+  <div class="modal-header clearfix">
+    <h3 class="modal-title">
+      <i class="fa fa-question fa-2x pull-left"></i>
+      <div>{{title}}</div>
+      <small>Please confirm that you want to perform this action.</small>
+    </h3>
+  </div>
+  <div class="modal-body">
+    <div class="large-notice-block">
+      <p>
+        {{message}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <button class="btn btn-success pull-right" ng-click="confirmAction()">
+      <i class="fa fa-check"> Confirm </i>
+    </button>
+    <button class="btn btn-danger pull-right" ng-click="cancelAction()">
+      <i class="fa fa-times"> Cancel </i>
+    </button>
+  </div>
+</div>
