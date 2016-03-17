@@ -3,9 +3,10 @@
 #
 angular.module('doubtfire.common.header', [])
 
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService, dateService) ->
   $scope.menus = headerService.getMenus()
   $scope.currentUser = currentUser.profile
+  $scope.showDate = dateService.showDate
 
   # Global Units Menu
   unitService.getUnitRoles (roles) ->
