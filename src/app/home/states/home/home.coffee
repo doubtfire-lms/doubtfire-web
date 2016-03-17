@@ -13,10 +13,11 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService) ->
+.controller("HomeCtrl", ($scope, $state, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
   $scope.userFirstName = currentUser.profile.nickname or currentUser.profile.first_name
+  $scope.showDate = dateService.showDate
 
   hasRoles = false
   hasProjects = false
@@ -85,14 +86,4 @@ angular.module('doubtfire.home.states.home', [])
 
   $scope.currentUser = currentUser
 
-  monthNames = [
-    "Jan", "Feb", "Mar",
-    "Apr", "May", "Jun", "Jul",
-    "Aug", "Sep", "Oct",
-    "Nov", "Dec"
-  ]
-
-  $scope.showDate = (dateValue) ->
-    date = new Date(dateValue)
-    "#{monthNames[date.getMonth()]} #{date.getFullYear()}"
 )
