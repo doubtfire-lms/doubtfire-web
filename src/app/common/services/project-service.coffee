@@ -32,8 +32,9 @@ angular.module("doubtfire.common.services.projects", [])
         (projects) ->
           Array.prototype.push.apply projectService.loadedProjects, projects
         (response) ->
-          msg = if ! response? then response.error else ''
-          alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
+          if response?.status != 419
+            msg = if ! response? then response.error else ''
+            alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
         )
 
 

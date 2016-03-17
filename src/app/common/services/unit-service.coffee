@@ -19,9 +19,6 @@ angular.module("doubtfire.common.services.units", [])
       UnitRole.query(
         (roles) ->
           Array.prototype.push.apply unitService.loadedUnitRoles, roles
-        (response) ->
-          msg = if ! response? then response.error else ''
-          alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
         )
 
     if _.isFunction(callback)
