@@ -23,11 +23,11 @@
         <table ng-show="units.length > 0" class="table table-hover table-pointer">
          <thead>
            <tr>
-             <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code</a></th>
-             <th><a ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-             <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date</a></th>
-             <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date</a></th>
-             <th><a ng-click="sortOrder='active'; reverse=!reverse">Active</a></th>
+             <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+             <th><a ng-click="sortOrder='name'; reverse=!reverse">Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+             <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+             <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+             <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
            </tr>
          </thead>
          <tbody>
@@ -49,6 +49,7 @@
         </table>
       </div>
       <div class="panel-footer clearfix">
+        <pagination ng-show="filteredUnits.length > pageSize" total-items="filteredUnits.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
         <button class="btn btn-success pull-right" ng-click="createUnit()">
           <i class="fa fa-university"></i>
           <i class="fa fa-plus"></i>

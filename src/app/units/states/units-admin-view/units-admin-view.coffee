@@ -27,7 +27,8 @@ angular.module('doubtfire.units.states.units-admin-view', [])
       $state.transitionTo "admin/units#edit", {unitId: unit.id}
 
   # Table sort details
-  $scope.sortOrder = "id"
+  $scope.sortOrder = "start_date"
+  $scope.reverse = true
 
   # Pagination details
   $scope.currentPage = 1
