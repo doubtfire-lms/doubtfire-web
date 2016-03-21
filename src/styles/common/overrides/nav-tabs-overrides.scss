@@ -4,3 +4,13 @@
 .nav.nav-tabs + .tab-content {
   margin-top: 1.5em;
 }
+
+// Support badges in nav pills
+.nav.nav-pills tab-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .comment-count {
+    margin-left: 1ex;
+  }
+}
