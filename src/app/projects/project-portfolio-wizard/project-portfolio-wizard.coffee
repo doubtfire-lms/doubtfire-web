@@ -78,7 +78,4 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.statusText = taskService.statusText
     $scope.statusData = taskService.statusData
     $scope.statusClass = taskService.statusClass
-
-    $scope.hasPDF = (task) ->
-      task.has_pdf
 )

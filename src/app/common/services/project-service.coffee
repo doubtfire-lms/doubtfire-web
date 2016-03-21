@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task) ->
   projectService = {}
 
   projectService.loadedProjects = null
@@ -60,13 +60,39 @@ angular.module("doubtfire.common.services.projects", [])
 
   projectService.mapTask = ( task, unit, project ) ->
     td = unit.taskDef(task.task_definition_id)
+
+    # Lookup and return the existing projTask task object
+    projTask = project.findTaskForDefinition(td.id)
+    if projTask?
+      _.extend projTask, task
+      if projTask.definition?
+        return projTask
+      else
+        # Augment the existing project task
+        task = projTask
+
+    # Add in the related definition object
     task.definition = td
+
     # must be function to avoid cyclic structure
     task.project = () -> project
     task.status_txt = () -> taskService.statusLabels[task.status]
     task.statusSeq = () -> taskService.statusSeq[task.status]
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
+    task.needsSubmissionDetails = () ->
+      task.has_pdf == null || task.has_pdf == undefined
+    task.getSubmissionDetails = ( success, failure ) ->
+      if ! task.needsSubmissionDetails()
+        if _.isFunction(success) then success(task, {} )
+      else
+        Task.SubmissionDetails.get { id: project.project_id, task_definition_id: task.definition.id },
+          (response) ->
+            task.has_pdf = response.has_pdf
+            task.processing_pdf = response.processing_pdf
+            if _.isFunction(success) then success(task, response)
+          (response) ->
+            if _.isFunction(failure) then failure(task, response)
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
@@ -75,12 +101,13 @@ angular.module("doubtfire.common.services.projects", [])
         id: null
         status: "not_started"
         task_definition_id: td.id
-        processing_pdf: false
-        has_pdf: false
         include_in_portfolio: true
         pct_similar: 0
         similar_to_count: 0
         times_assessed: 0
+        # pdf details are loaded from Task.SubmissionDetails
+        # processing_pdf: null
+        # has_pdf: null
       }
 
       base = _.filter base, (task) -> ! _.find(project.tasks, (pt) -> pt.task_definition_id == task.task_definition_id)
