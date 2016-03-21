@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "homepage": "http://doubtfire.ict.swin.edu.au",
   "description": "A modern, lightweight learning management system.",
-  "license": "AGPL v3.0",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/doubtfire-lms/doubtfire-web.git"
