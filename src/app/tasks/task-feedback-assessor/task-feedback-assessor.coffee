@@ -18,8 +18,15 @@ angular.module('doubtfire.tasks.task-feedback-assessor',[])
     viewOptions: "="
   controller: ($scope, taskService) ->
 
+    $scope.comment = { text: "" }
+
     $scope.triggerTransition = (status) ->
-      taskService.updateTaskStatus($scope.unit, $scope.task.project(), $scope.task, status)
+      # Firstly, try to add a comment
+      taskService.addComment $scope.task, $scope.comment.text,
+        (success) ->
+          # If the comment was successful then reset text and trigger transition
+          $scope.comment.text = ""
+          taskService.updateTaskStatus $scope.unit, $scope.task.project(), $scope.task, status
 
     if $scope.onStatusUpdate? && _.isFunction($scope.onStatusUpdate)
       $scope.$on 'TaskStatusUpdated', (event, args) ->

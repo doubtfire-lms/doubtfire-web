@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService) ->
   #
   # The unit service object
   #
@@ -326,6 +326,19 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.taskIsGraded = (task) ->
     task? and task.definition.is_graded and task.grade?
+
+  taskService.addComment = (task, textString, success, failure) ->
+    TaskComment.create { project_id: task.project_id, task_definition_id: task.task_definition_id, comment: textString },
+      (response) ->
+        unless task.comments
+          task.comments = []
+        task.comments.unshift response
+        if success? and _.isFunction success
+          success(response)
+        analyticsService.event "View Task Comments", "Added new comment"
+      (response) ->
+        if failure? and _.isFunction failure
+          failure(response)
 
   taskService
 )
