@@ -52,14 +52,12 @@
     </div><!--/task-toolbar-->
   </div>
   <div class="col-sm-2 col-lg-1 task-viewer-tabs">
-
       <tabset vertical="false" type="pills">
         <tab ng-repeat="(tabKey, tab) in tabs | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
           <tab-heading class="text-center" tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
-
               <i class="fa fa-2x {{tab.icon}}"></i>
               <i class="fa fa-2x fa-warning" ng-class="{ 'text-warning': !isActiveTab(tab) }" ng-show="tab == tabs.plagiarismReport && project.selectedTask.similar_to_count > 0"></i>
-
+              <span class="badge" ng-show="tab == tabs.viewComments && project.selectedTask.comments.length > 0">{{project.selectedTask.comments.length}}</span>
           </tab-heading>
         </tab>
       </tabset>
