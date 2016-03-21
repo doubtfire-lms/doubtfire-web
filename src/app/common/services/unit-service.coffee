@@ -95,13 +95,15 @@ angular.module("doubtfire.common.services.units", [])
 
     unit.addStudent = (student) ->
       analyticsService.event 'Unit Service', 'Added Student'
-      unit.extendStudent(student)
-      if not unit.students[unit.students.indexOf(unit.findStudent(student.project_id))]?
-        #handles adding a newly enrolled student tutor view student list with enrol modal
-        unit.students.push(student)
+      foundStudent = unit.findStudent student.project_id
+      studentExists = foundStudent?
+      unless studentExists
+        # student doesn't exist - push it to the student list
+        unit.students.push student
       else
-        #handles not adding a new entry to the student list in the convenor view with enrol modal
-        unit.students[unit.students.indexOf(unit.findStudent(student.project_id))] = student
+        # student exists - extend the student 
+        student = _.extend foundStudent, student
+      unit.extendStudent student
 
     unit.active_students = () ->
       _.filter unit.students, (student) -> student.enrolled
