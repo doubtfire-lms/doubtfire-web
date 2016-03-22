@@ -5,12 +5,9 @@
   flex-wrap: wrap;
   .panel-container {
     // For keeping the panels in the centre of the screen
-    @media (min-width: 992px) {
+    @media (min-width: $screen-md) {
       &.col-md-4 {
         width: calc(33.33333333% - 1px);
-        &:first-child:nth-last-child(2) {
-          margin-left: 16.66666667%;
-        }
         &:first-child:last-child {
           margin-left: 33.33333333%;
         }
