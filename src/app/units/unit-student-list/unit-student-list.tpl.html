@@ -4,24 +4,25 @@
       <h4 class="panel-title">Students</h4>
       Students from {{studentFilter == 'myStudents' ? 'my tutorials' : 'every tutorial'}} and their current state
     </div>
-    <div class="col-sm-5 text-right"></div>
-      <div class="pull-right">
-        <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+    <div class="pull-right toolbar text-right">
+      <div class="buttons">
+        <button class="btn btn-default fullscreen-toggle" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
           <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
         </button>
-      </div>
-      <div class="btn-group pull-right" style="margin-left: 1ex">
-        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
-          <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
-        </label>
-        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-          <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
-        </label>
-      </div>
-      <form role="search" class="col-sm-4 form-horizontal pull-right">
+        <div class="btn-group pull-right">
+          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+            <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
+          </label>
+          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+            <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
+          </label>
+        </div>
+      </div><!--/buttons-->
+      <form role="search" class="form-horizontal pull-right">
         <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
         <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
-    </form>
+      </form><!--/search-->
+    </div><!--/toolbar-->
   </div>
   <div class="panel-body student-list">
     <div class="large-notice-block" ng-show="filteredStudents.length == 0">

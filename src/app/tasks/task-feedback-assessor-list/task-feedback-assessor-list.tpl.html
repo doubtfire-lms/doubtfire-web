@@ -6,34 +6,36 @@
         <task-definition-selector button-style="default" unit="unit" on-select-definition="onSelectDefinition" ng-show="context=='task'"></task-definition-selector>
         <div ng-hide="context=='task'">Show tasks from {{studentFilter == 'myStudents' ? 'my tutorials' : 'any tutorial'}}</div>
       </div>
-        <div class="pull-right">
-          <button class="btn btn-default" style="margin-left: 1ex;" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+      <div class="pull-right text-right toolbar">
+        <div class="buttons">
+          <div class="btn-group">
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+              <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks for all students"></i>
+            </label>
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+              <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Only show tasks for my students"></i>
+            </label>
+          </div>
+          <div class="btn-group" ng-show="context == 'assess'">
+            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
+              <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that are ready to mark."></i>
+            </label>
+            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
+              <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that need help."></i>
+            </label>
+            <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
+              <i class="fa fa-commenting" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks to discuss with students."></i>
+            </label>
+          </div>
+          <button class="btn btn-default fullscreen-toggle" ng-model="fullscreen" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
             <i class="fa" ng-class="{'fa-expand' : !fullscreen, 'fa-compress': fullscreen}"></i>
           </button>
-        </div>
-        <div class="btn-group pull-right" style="margin-left: 1ex">
-          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
-            <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks for all students"></i>
-          </label>
-          <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-            <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Only show tasks for my students"></i>
-          </label>
-        </div>
-        <div class="btn-group pull-right" style="margin-left: 1ex" ng-show="context == 'assess'">
-          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'ready_to_mark'">
-            <i class="fa fa-thumbs-up" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that are ready to mark."></i>
-          </label>
-          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'need_help'">
-            <i class="fa fa-question" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks that need help."></i>
-          </label>
-          <label class="btn btn-default" ng-model="statusFilter" btn-radio="'discuss'">
-            <i class="fa fa-commenting" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip-append-to-body="true" tooltip="Show tasks to discuss with students."></i>
-          </label>
-        </div>
-        <form role="search" class="col-sm-3 col-md-4 form-horizontal pull-right">
+        </div><!--buttons-->
+        <form role="search" class="form-horizontal">
           <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search"  typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200"  ng-model="search" autofocus />
           <p ng-show="filteredTasks.length < allTasks.length && filteredTasks.length != 0">Showing {{filteredTasks.length}} of {{allTasks.length}} tasks requiring feedback.</p>
-        </form>
+        </form><!--search-->
+      </div><!--/toolbar-->
     </div>
     <div class="panel-body unit-student-list">
       <div class="large-notice-block" ng-show="filteredTasks.length == 0 && ((selectedDefinition != null && context == 'task') || context == 'assess')">

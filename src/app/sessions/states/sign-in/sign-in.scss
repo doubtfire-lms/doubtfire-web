@@ -66,7 +66,7 @@ $btn-primary-border: $doubtfire-color;
 #sign-in .login {
   width: 350px;
 
-  @media (max-width: $screen-sm) {
+  @media (max-width: $screen-xs) {
     // No border radius on small
     label, input:not([type="checkbox"]), button {
       border-radius: 0;
