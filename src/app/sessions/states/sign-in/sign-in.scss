@@ -4,7 +4,6 @@ $btn-primary-border: $doubtfire-color;
 
 // Animations
 #sign-in {
-  width: 350px;
   @include animation-slide-down(1s);
   form, footer {
     @include animation-fade-in(3s);
@@ -65,7 +64,18 @@ $btn-primary-border: $doubtfire-color;
 
 // Login Form
 #sign-in .login {
-  width: 100%;
+  width: 350px;
+
+  @media (max-width: $screen-sm) {
+    // No border radius on small
+    label, input:not([type="checkbox"]), button {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      -webkit-appearance: none;
+    }
+    width: 95%;
+  }
 
   .btn-primary {
     @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
@@ -76,6 +86,7 @@ $btn-primary-border: $doubtfire-color;
   form {
     margin: 4.5em 0;
     text-align: center;
+
 
     .form-control {
       position: relative;

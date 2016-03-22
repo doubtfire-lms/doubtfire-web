@@ -32,36 +32,3 @@ a.navbar-brand {
     margin: 0;
   }
 }
-
-.alert-top {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  left: 15px;
-
-  z-index: 5000;
-  outline: 0;
-
-  display: block;
-  box-sizing: border-box;
-
-  .alert {
-    @include animation-grow(0.25s);
-    transition: all 0.25s ease;
-    float: none;
-    .alert-wrapper {
-      display: flex;
-    }
-    h4 {
-      margin-bottom: 4px;
-    }
-    .alert-content {
-      flex: 5;
-      padding-left: 1.5em;
-    }
-  }
-  .alert.alert-danger  i.fa:before { content: $fa-var-exclamation-circle; }
-  .alert.alert-info    i.fa:before { content: $fa-var-question-circle; }
-  .alert.alert-warning i.fa:before { content: $fa-var-exclamation-triangle; }
-  .alert.alert-success i.fa:before { content: $fa-var-check-circle; }
-}
