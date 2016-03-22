@@ -8,6 +8,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-sass');
@@ -22,7 +23,6 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-preprocess');
   grunt.loadNpmTasks('grunt-sass-globbing');
   grunt.loadNpmTasks('grunt-postcss');
-
   /**
    * Load in our build configuration file.
    */
@@ -497,25 +497,21 @@ module.exports = function ( grunt ) {
      */
     delta: {
       /**
-       * By default, we want the Live Reload to work for all tasks; this is
-       * overridden in some tasks (like this file) where browser resources are
-       * unaffected. It runs by default on port 35729, which your browser
-       * plugin should auto-detect.
+       * Disable livereload for delta; let the BrowserSync task handle this
+       * for us
        */
       options: {
-        livereload: true
+        livereload: false
       },
 
       /**
        * When the Gruntfile changes, we just want to lint it. In fact, when
-       * your Gruntfile changes, it will automatically be reloaded!
+       * your Gruntfile changes, it will automatically be reloaded! We also
+       * should rebuild in case we changed any vendor files
        */
       gruntfile: {
         files: 'Gruntfile.js',
-        tasks: [ 'jshint:gruntfile' ],
-        options: {
-          livereload: false
-        }
+        tasks: [ 'jshint:gruntfile', 'build' ]
       },
 
       /**
@@ -575,7 +571,7 @@ module.exports = function ( grunt ) {
        */
       styles: {
         files: [ 'src/**/*.scss' ],
-        tasks: [ 'sass_globbing', 'sass' ]
+        tasks: [ 'styles' ]
       },
 
       /**
@@ -586,10 +582,7 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.jsunit %>'
         ],
-        tasks: [ 'jshint:test', 'karma:unit:run' ],
-        options: {
-          livereload: false
-        }
+        tasks: [ 'jshint:test', 'karma:unit:run' ]
       },
 
       /**
@@ -600,32 +593,27 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.coffeeunit %>'
         ],
-        tasks: [ 'coffeelint:test', 'karma:unit:run' ],
-        options: {
-          livereload: false
-        }
+        tasks: [ 'coffeelint:test', 'karma:unit:run' ]
       }
     }, // end delta
 
-    connect: {
-      devserver: {
+    /**
+     * Use the browserSync task to reload our web browser on change
+     */
+    browserSync: {
+      dev: {
+        bsFiles: {
+          // Watch build directory
+          src: userConfig.build_dir + '/**/*.*'
+        },
         options: {
-          port: 8000,
-          base: '<%= build_dir %>',
-          keepalive: true,
-          debug: true,
-          livereload: true
-        }
-      },
-      watchserver: {
-        options: {
-          port: 8000,
-          base: '<%= build_dir %>',
-          livereload: true
+          watchTask: true,
+          server: '<%= build_dir %>',
+          port: 8000
         }
       }
-    } // end connect
-  }; //end task config
+    }
+  }; // end task config
 
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig, envConfig ) );
 
@@ -642,21 +630,25 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ gruntEnv, 'build', 'delta' ] );
-  grunt.registerTask( 'watchsvr', [ gruntEnv, 'build', 'connect:watchserver', 'delta' ] );
+  grunt.registerTask( 'watch', [ gruntEnv, 'build', 'browserSync', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
   grunt.registerTask( 'deploy',      [ 'production', 'copy:to_api' ] );
   grunt.registerTask( 'production',  [ 'env:production', 'build', 'compile' ] );
-  grunt.registerTask( 'development', [ gruntEnv, 'build' ]);
+  grunt.registerTask( 'development', [ 'watch' ]);
   grunt.registerTask( 'default',     [ 'development' ]);
 
   /**
    * Style tasks in one grunt task
    */
-  grunt.registerTask( 'styles', [ 'sass_globbing', 'sass', 'postcss', 'concat:compile_vendor_css', 'clean:styles' ]);
+  grunt.registerTask( 'styles', [
+    'sass_globbing',
+    'sass',
+    'postcss',
+    'clean:styles'
+  ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.

@@ -9,11 +9,12 @@
     "url": "https://github.com/doubtfire-lms/doubtfire-web.git"
   },
   "scripts": {
-    "start": "grunt watchsvr"
+    "start": "grunt"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "grunt": "~0.4.2",
+    "grunt-browser-sync": "^2.2.0",
     "grunt-bump": "0.0.6",
     "grunt-coffeelint": "0.0.6",
     "grunt-contrib-clean": "~0.4.1",
