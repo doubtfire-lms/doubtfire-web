@@ -1,5 +1,4 @@
 module.exports = function ( grunt ) {
-
   /**
    * Load required Grunt tasks. These are installed based on the versions listed
    * in `package.json` when you do `npm install` in this directory.
@@ -103,7 +102,7 @@ module.exports = function ( grunt ) {
         '<%= compile_dir %>'
       ],
       styles: [
-        'src/styles/main.tmp.scss'
+         '<%= temp_scss_file %>'
       ]
     },
 
@@ -123,7 +122,7 @@ module.exports = function ( grunt ) {
           }
        ]
       },
-      build_appjs: {
+      build_app_js: {
         files: [
           {
             src: [ '<%= app_files.js %>' ],
@@ -133,31 +132,51 @@ module.exports = function ( grunt ) {
           }
         ]
       },
-      build_vendorjs: {
+      build_vendor_js: {
         files: [
           {
-            src: [ '<%= vendor_files.js %>' ],
+            src: [ '<%= vendor_files.compile.js %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
             expand: true
           }
         ]
       },
-      build_vendor_maps: {
+      build_vendor_jsmap: {
         files: [
           {
-            src: [ '<%= vendor_copy_files.map %>' ],
+            src: [ '<%= vendor_files.compile.jsmap %>' ],
             dest: '<%= build_dir %>',
             cwd: '.',
             expand: true
           }
         ]
       },
-      prod_vendor_copy: {
+      copy_vendor_js: {
         files: [
           {
-            src: [ '<%= vendor_copy_files.js %>' ],
-            dest: '<%= compile_dir %>/assets',
+            src: [ '<%= vendor_files.copy.js %>' ],
+            dest: '<%= build_dir %>/assets',
+            cwd: '.',
+            expand: true
+          }
+        ]
+      },
+      copy_vendor_jsmap: {
+        files: [
+          {
+            src: [ '<%= vendor_files.copy.jsmap %>' ],
+            dest: '<%= build_dir %>/assets',
+            cwd: '.',
+            expand: true
+          }
+        ]
+      },
+      copy_vendor_css: {
+        files: [
+          {
+            src: [ '<%= vendor_files.copy.css %>' ],
+            dest: '<%= build_dir %>/assets',
             cwd: '.',
             expand: true
           }
@@ -195,35 +214,17 @@ module.exports = function ( grunt ) {
        */
       compile_js: {
         options: {
-          banner: '<%= meta.banner %>',
-          process: function (src, filepath) {
-            if (filepath.indexOf("/pdfjs-bower/dist/") > -1) {
-              src = "";
-            }
-            return src;
-          }
+          banner: '<%= meta.banner %>'
         },
         src: [
-          '<%= vendor_files.js %>',
+          '<%= vendor_files.compile.js %>',
           'module.prefix',
           '<%= build_dir %>/src/**/*.js',
           '<%= html2js.app.dest %>',
           '<%= html2js.common.dest %>',
-          '<%= vendor_files.js %>',
           'module.suffix'
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
-      },
-      /**
-       * The `compile_vendor_css` compiles all vendor css files into the main
-       * css file
-       */
-      compile_vendor_css: {
-        src: [
-          '<%= build_dir %>/assets/<%= pkg.name %>.css',
-          '<%= vendor_files.css %>'
-        ],
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
       }
     },
 
@@ -254,9 +255,9 @@ module.exports = function ( grunt ) {
     sass_globbing: {
       source: {
         files: {
-          'src/styles/main.tmp.scss': [
+          '<%= temp_scss_file %>': [
             'src/styles/vendor-config/**/*.scss',
-            '<%= vendor_files.scss %>',
+            '<%= vendor_files.compile.scss %>',
             '<%= app_files.scss %>'
           ]
         },
@@ -283,16 +284,19 @@ module.exports = function ( grunt ) {
     },
 
     /**
-     * `sass` compiles the SASS sources.
+     * `sass` compiles the SASS and CSS sources into the build path
      */
     sass: {
       source: {
         options: {
-          lineNumbers: true
+          lineNumbers: true,
+          sourcemap: 'none'
         },
-        cwd: '.',
-        src: 'src/styles/main.tmp.scss',
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
+        files: [{
+          cwd: '.',
+          src: [ '<%= temp_scss_file %>' ],
+          dest: '<%= build_dir %>/assets/<%= pkg.name %>.css'
+        }]
       }
     },
 
@@ -440,8 +444,10 @@ module.exports = function ( grunt ) {
       build: {
         dir: '<%= build_dir %>',
         src: [
-          '<%= vendor_files.js %>',
+          '<%= vendor_files.compile.js %>',
           '<%= build_dir %>/src/**/*.js',
+          '<%= build_dir %>/assets/vendor/**/*.css',
+          '<%= build_dir %>/assets/vendor/**/*.js',
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= postcss.source.dest %>'
@@ -456,9 +462,9 @@ module.exports = function ( grunt ) {
       compile: {
         dir: '<%= compile_dir %>',
         src: [
+          '<%= compile_dir %>/assets/**/*.css',
           '<%= compile_dir %>/assets/**/*.js',
-          '<%= concat.compile_js.dest %>',
-          '<%= postcss.source.dest %>'
+          '<%= concat.compile_js.dest %>'
         ]
       }
     },
@@ -471,7 +477,7 @@ module.exports = function ( grunt ) {
       unit: {
         dir: '<%= build_dir %>',
         src: [
-          '<%= vendor_files.js %>',
+          '<%= vendor_files.compile.js %>',
           '<%= html2js.app.dest %>',
           '<%= html2js.common.dest %>',
           'vendor/angular-mocks/angular-mocks.js'
@@ -520,7 +526,7 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.js %>'
         ],
-        tasks: [ 'jshint:src', 'copy:build_appjs' ]
+        tasks: [ 'jshint:src', 'copy:build_app_js' ]
       },
 
       /**
@@ -531,7 +537,7 @@ module.exports = function ( grunt ) {
         files: [
           '<%= app_files.coffee %>'
         ],
-        tasks: [ 'coffeelint:src', 'coffee:source', 'copy:build_appjs', 'preprocess' ] //'karma:unit:run',
+        tasks: [ 'coffeelint:src', 'coffee:source', 'copy:build_app_js', 'preprocess' ] //'karma:unit:run',
       },
 
       /**
@@ -663,9 +669,12 @@ module.exports = function ( grunt ) {
     'coffee',
     'styles',
     'copy:build_assets',
-    'copy:build_appjs',
-    'copy:build_vendorjs',
-    'copy:build_vendor_maps',
+    'copy:build_app_js',
+    'copy:build_vendor_js',
+    'copy:build_vendor_jsmap',
+    'copy:copy_vendor_js',
+    'copy:copy_vendor_jsmap',
+    'copy:copy_vendor_css',
     'index:build',
     'preprocess'
   ]);
@@ -677,7 +686,6 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'compile', [
     'styles',
     'copy:compile_assets',
-    'copy:prod_vendor_copy',
     'ngmin',
     'concat',
     'uglify',
