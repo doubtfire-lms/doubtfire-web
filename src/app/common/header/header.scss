@@ -4,6 +4,19 @@
   border-left: none;
   border-right: none;
   margin-bottom:0;
+
+  .dropdown-units {
+    li:not(.divider) a {
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
+    li:not(.divider):last-child a {
+      margin-bottom: 0.5em
+    }
+    li a .unit-name {
+      padding-left: 1.75ex;
+    }
+  }
 }
 
 a.navbar-brand {
