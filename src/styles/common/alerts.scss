@@ -24,7 +24,9 @@
     @include animation-grow(0.25s);
     @media (max-width: $screen-sm) {
       border-radius: 0;
-      border-top: none;
+      &:first-child {
+        border-top: none;
+      }
       border-left: none;
       border-right: none;
     }
