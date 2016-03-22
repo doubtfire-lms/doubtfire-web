@@ -328,7 +328,7 @@ angular.module("doubtfire.common.services.tasks", [])
     task? and task.definition.is_graded and task.grade?
 
   taskService.addComment = (task, textString, success, failure) ->
-    TaskComment.create { project_id: task.project_id, task_definition_id: task.task_definition_id, comment: textString },
+    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
       (response) ->
         unless task.comments
           task.comments = []

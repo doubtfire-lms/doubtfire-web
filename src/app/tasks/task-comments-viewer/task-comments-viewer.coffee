@@ -42,8 +42,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         $scope.addComment()
       false
 
-    $scope.addComment = () ->
-      taskService.addComment task, $scope.comment.text,
+    $scope.addComment = ->
+      console.log $scope.task, $scope.comment
+      taskService.addComment $scope.task, $scope.comment.text,
         (success) ->
           $scope.comment.text = ""
           analyticsService.event "View Task Comments", "Added new comment"
