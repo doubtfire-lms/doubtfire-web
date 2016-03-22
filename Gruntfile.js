@@ -284,7 +284,7 @@ module.exports = function ( grunt ) {
     },
 
     /**
-     * `sass` compiles the SASS and CSS sources into the build path
+     * `sass` compiles the SASS into the build path's CSS file
      */
     sass: {
       source: {
