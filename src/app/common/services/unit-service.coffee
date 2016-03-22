@@ -86,13 +86,24 @@ angular.module("doubtfire.common.services.units", [])
 
         unit.students = new_students
 
+    unit.studentEnrolled = (id) ->
+      student = unit.findStudent id
+      student?.enrolled
+
     unit.findStudent = (id) ->
       _.find unit.students, (s) -> s.project_id == id
 
     unit.addStudent = (student) ->
       analyticsService.event 'Unit Service', 'Added Student'
-      unit.extendStudent(student)
-      unit.students.push(student)
+      foundStudent = unit.findStudent student.project_id
+      studentExists = foundStudent?
+      unless studentExists
+        # student doesn't exist - push it to the student list
+        unit.students.push student
+      else
+        # student exists - extend the student 
+        student = _.extend foundStudent, student
+      unit.extendStudent student
 
     unit.active_students = () ->
       _.filter unit.students, (student) -> student.enrolled
