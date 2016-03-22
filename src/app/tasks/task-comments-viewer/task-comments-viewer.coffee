@@ -43,7 +43,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       false
 
     $scope.addComment = ->
-      console.log $scope.task, $scope.comment
+      # console.log $scope.task, $scope.comment
       taskService.addComment $scope.task, $scope.comment.text,
         (success) ->
           $scope.comment.text = ""
