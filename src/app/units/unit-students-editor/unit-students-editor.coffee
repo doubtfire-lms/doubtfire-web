@@ -13,6 +13,9 @@ angular.module('doubtfire.units.unit-students-editor', [])
     $scope.showEnrolModal = () ->
       UnitStudentEnrolmentModal.show $scope.unit
 
+    $scope.switchToLab = (student, tutorial) ->
+      student.switchToLab(tutorial)
+
     onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
