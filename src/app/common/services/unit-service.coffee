@@ -111,12 +111,31 @@ angular.module("doubtfire.common.services.units", [])
     unit.extendStudent = (student) ->
       # test is already extended...
       if student.name?
-        return
+        return student
+
       student.open = false
 
       # projects can find tasks using their task definition ids
       student.findTaskForDefinition = (taskDefId) ->
         _.find student.tasks, (task) -> task.task_definition_id == taskDefId
+
+      student.unit = () ->
+        unit
+
+      student.switchToLab = (tutorial) ->
+        if tutorial
+          newId = tutorial.id
+        else
+          newId = -1
+
+        analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
+        Project.update({ id: student.project_id, tutorial_id: newId },
+          (project) ->
+            student.tutorial_id = project.tutorial_id
+            student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
+          (response) ->
+            alertService.add "danger", "Failed to change tutorial. #{response?.data?.error}", 8000
+        )
 
       #TODO: change these to use functions...
       student.name = student.first_name + " " + student.last_name
