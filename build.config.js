@@ -144,7 +144,7 @@ module.exports = {
     },
     copy: {
       js: [
-        'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
+
       ],
       jsmap: [
         'vendor/showdown/dist/showdown.js.map'
