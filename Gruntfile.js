@@ -633,6 +633,13 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'watch', [ gruntEnv, 'build', 'browserSync', 'delta' ] );
 
   /**
+   * Grunt watchsvr no longer exists
+   */
+  grunt.registerTask( 'watchsvr', function () {
+    grunt.log.warn('`grunt watchsvr` has been deprecated. Just use `grunt` instead');
+  });
+
+  /**
    * The default task is to build and compile.
    */
   grunt.registerTask( 'deploy',      [ 'production', 'copy:to_api' ] );
