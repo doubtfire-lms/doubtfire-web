@@ -50,11 +50,16 @@
   .list-group-item {
     i {
       float: left;
-      width: 12%;
+      width: 10%;
       text-align: left;
       font-size: 2em;
-      padding-left: 0.33ex;
       padding-top: 0.5em;
+      @media (max-width: $screen-sm) {
+        font-size: 1.5em;
+      }
+      @media (min-width: $screen-lg) {
+        padding-left: 0.33ex;
+      }
     }
     .list-group-item-heading, .list-group-item-text {
       width: 88%;
