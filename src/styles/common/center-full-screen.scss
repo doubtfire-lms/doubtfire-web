@@ -3,5 +3,7 @@
 //
 .center-full-screen {
   @include flex-center;
-  height: 100vh;
+  @media (min-width: $screen-sm) {
+    height: 100vh;
+  }
 }
