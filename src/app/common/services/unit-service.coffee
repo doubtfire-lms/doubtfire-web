@@ -101,7 +101,7 @@ angular.module("doubtfire.common.services.units", [])
         # student doesn't exist - push it to the student list
         unit.students.push student
       else
-        # student exists - extend the student 
+        # student exists - extend the student
         student = _.extend foundStudent, student
       unit.extendStudent student
 
