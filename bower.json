@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "homepage": "http://doubtfire.ict.swin.edu.au",
   "description": "A modern, lightweight learning management system.",
   "devDependencies": {},
@@ -21,7 +21,6 @@
     "underscore.string": "2.3.3",
     "angular-ui-calendar": "0.8.1",
     "angular-xeditable": "0.1.8",
-    "pdfjs-bower": "1.0.233",
     "ng-csv": "0.2.3",
     "angular-file-upload": "1.0.3",
     "ng-file-upload": "~5.0.9",

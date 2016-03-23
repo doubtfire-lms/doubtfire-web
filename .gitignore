@@ -8,4 +8,4 @@ node_modules/
 vendor/
 .sass-cache*
 .bundle*
-src/styles/main.tmp.scss
+tmp.scss

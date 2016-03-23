@@ -33,6 +33,14 @@
     margin-top: 0px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    @media (max-width: $screen-sm) {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+    }
   }
 }
 

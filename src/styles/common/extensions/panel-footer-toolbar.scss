@@ -1,0 +1,32 @@
+.panel .panel-footer {
+  // With buttons in a small screen
+  @media (max-width: $screen-sm) {
+    // Increase tapping area
+    & > * {
+      width: 100%;
+    }
+    .btn-group, .btn, input {
+      height: 4em;
+      width: 100%;
+    }
+    .btn {
+      margin-top: 1em;
+    }
+    ul.pagination {
+      margin-top: 1em;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      li {
+        flex: 1;
+      }
+      li > a {
+        width: 100%;
+        height: 4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

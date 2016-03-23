@@ -11,6 +11,12 @@ $flag-icon-width: 35px;
 /* !!! Use this for the number of flags you have !!! */
 $number-of-flags: 3;
 
+.fullscreen-toggle {
+  @media (max-width: $screen-sm) {
+    display: none;
+  }
+}
+
 .unit-student-list {
   table thead th {
     vertical-align: middle;

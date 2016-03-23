@@ -15,7 +15,7 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown ng-repeat="menu in menus | orderBy:'name'">
+      <li class="dropdown dropdown-admin" dropdown ng-repeat="menu in menus | orderBy:'name'">
         <a class="dropdown-toggle" dropdown-toggle role="button"><span class="glyphicon glyphicon-{{menu.icon}}">{{menu.name}}</span><b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li ng-repeat="link in menu.links | orderBy:'name'"
@@ -25,28 +25,28 @@
         </ul>
       </li>
 
-      <li class="dropdown" dropdown ng-hide="projects.length == 0 && unitRoles.length == 0">
+      <li class="dropdown dropdown-units" dropdown ng-hide="projects.length == 0 && unitRoles.length == 0">
         <a role="button" class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-book"></span> Units <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
           <li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
-            <a href="#/units?unitRole={{unitRole.id}}" class="clearfix">
-                <small class="pull-left">
+            <a href="#/units?unitRole={{unitRole.id}}">
+                <small class="unit-info">
                   <label class="label label-info small">{{unitRole.unit_code}}</label>
                   <small class="text-muted">{{showDate(unitRole.start_date)}}</small>
                 </small>
-                <span class="pull-right">{{unitRole.unit_name}}</span>
+                <span class="unit-name">{{unitRole.unit_name}}</span>
               </a>
           </li>
           <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
           <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
           <li ng-repeat="project in projects">
-            <a href="#/projects/{{project.project_id}}" class="clearfix">
-              <small class="pull-left">
+            <a href="#/projects/{{project.project_id}}">
+              <small class="unit-info">
                 <label class="label label-info small">{{project.unit_code}}</label>
                 <small class="text-muted">{{showDate(project.start_date)}}</small>
               </small>
-              <span class="pull-right">{{project.unit_name}}</span>
+              <span class="unit-name">{{project.unit_name}}</span>
             </a>
             </a>
           </li>

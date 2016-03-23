@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "homepage": "http://doubtfire.ict.swin.edu.au",
   "description": "A modern, lightweight learning management system.",
   "license": "AGPL-3.0",
@@ -9,11 +9,12 @@
     "url": "https://github.com/doubtfire-lms/doubtfire-web.git"
   },
   "scripts": {
-    "start": "grunt watchsvr"
+    "start": "grunt"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "grunt": "~0.4.2",
+    "grunt-browser-sync": "^2.2.0",
     "grunt-bump": "0.0.6",
     "grunt-coffeelint": "0.0.6",
     "grunt-contrib-clean": "~0.4.1",
@@ -33,7 +34,8 @@
     "grunt-postcss": "^0.8.0",
     "grunt-preprocess": "2.3.0",
     "grunt-sass-globbing": "^1.4.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "ip": "^1.1.2"
   },
   "dependencies": {
     "postcss-scss": "^0.1.7"

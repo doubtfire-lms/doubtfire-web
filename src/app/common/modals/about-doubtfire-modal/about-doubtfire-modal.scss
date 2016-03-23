@@ -6,6 +6,9 @@
 
   h1.logo {
     @include logo-font-rendering;
+    @media (max-width: $screen-sm) {
+      font-size: 3em;
+    }
     small {
       text-align: right;
       font-size: 0.5em;
@@ -48,11 +51,18 @@
     margin: 0 auto;
   }
   li {
-    display: inline-block;
-    width: 15%;
-    margin: 3em 5% 3em 5%;
-    &:last-child {
-      margin-right: auto;
+    @media (max-width: $screen-sm) {
+      width: 80%;
+      margin: 0 auto;
+      margin-bottom: 2em;
+    }
+    @media (min-width: $screen-sm) {
+      display: inline-block;
+      width: 15%;
+      margin: 3em 5% 3em 5%;
+      &:last-child {
+        margin-right: auto;
+      }
     }
     a {
       display: block;

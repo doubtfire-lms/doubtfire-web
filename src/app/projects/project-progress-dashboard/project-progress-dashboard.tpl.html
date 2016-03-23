@@ -13,14 +13,16 @@
                 All of the tasks to achieve a {{grades[project.target_grade]}}.
               </div>
             </div>
-            <div class="pull-right">
-              <div class="btn-group pull-right">
-                <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
-                  <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
-                </label>
-                <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="true">
-                  <i tooltip="View all tasks" class="fa fa-list"></i>
-                </label>
+            <div class="pull-right toolbar">
+              <div class="buttons">
+                <div class="btn-group">
+                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
+                    <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
+                  </label>
+                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="true">
+                    <i tooltip="View all tasks" class="fa fa-list"></i>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -65,14 +67,16 @@
             Summary of each of your task statuses
           </div>
         </div><!--/headings-->
-        <div class="pull-right text-right">
-          <div class="btn-group">
-            <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
-              <i class="fa fa-line-chart"></i>
-            </label>
-            <label class="btn btn-default text-center" btn-radio="'taskSummary'" ng-model="currentVisualisation">
-              <i class="fa fa-pie-chart"></i>
-            </label>
+        <div class="pull-right text-right toolbar">
+          <div class="buttons">
+            <div class="btn-group">
+              <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
+                <i class="fa fa-line-chart"></i>
+              </label>
+              <label class="btn btn-default text-center" btn-radio="'taskSummary'" ng-model="currentVisualisation">
+                <i class="fa fa-pie-chart"></i>
+              </label>
+            </div>
           </div>
         </div><!--/button-switch-->
       </div>

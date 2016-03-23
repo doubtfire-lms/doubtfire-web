@@ -1,0 +1,55 @@
+// For all panel headings
+.panel .panel-heading {
+  // With buttons in a small screen
+  @media (max-width: $screen-sm) {
+    // Increase tapping area
+    & > * {
+      width: 100%;
+    }
+    .btn-group, .btn, input {
+      height: 4em;
+      width: 100%;
+    }
+  }
+  .toolbar {
+    @media (max-width: $screen-sm) {
+      margin: 1.5em auto;
+      width: 100%;
+      text-align: left;
+    }
+    .btn-group, .buttons > .btn {
+      @media (min-width: $screen-sm-max) {
+        margin-right: 1ex;
+      }
+    }
+    .buttons {
+      float: right;
+      @media (max-width: $screen-sm) {
+        width: 100%;
+        .btn-group {
+          margin-top: 1em;
+          display: flex;
+          float: left;
+          float: right;
+          clear: both;
+          .btn {
+            flex: 1
+          }
+          .btn {
+            @include flex-center;
+          }
+        }
+      }
+    }
+    form[role="search"] {
+      float: right;
+      margin-right: 1.5ex;
+      @media (max-width: $screen-sm) {
+        margin-right: 0;
+        width: 100%;
+        margin-top: 1em;
+        padding: 0 !important;
+      }
+    }
+  }
+}

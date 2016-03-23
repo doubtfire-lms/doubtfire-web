@@ -5,12 +5,9 @@
   flex-wrap: wrap;
   .panel-container {
     // For keeping the panels in the centre of the screen
-    @media (min-width: 992px) {
+    @media (min-width: $screen-md) {
       &.col-md-4 {
         width: calc(33.33333333% - 1px);
-        &:first-child:nth-last-child(2) {
-          margin-left: 16.66666667%;
-        }
         &:first-child:last-child {
           margin-left: 33.33333333%;
         }
@@ -53,11 +50,16 @@
   .list-group-item {
     i {
       float: left;
-      width: 12%;
+      width: 10%;
       text-align: left;
       font-size: 2em;
-      padding-left: 0.33ex;
       padding-top: 0.5em;
+      @media (max-width: $screen-sm) {
+        font-size: 1.5em;
+      }
+      @media (min-width: $screen-lg) {
+        padding-left: 0.33ex;
+      }
     }
     .list-group-item-heading, .list-group-item-text {
       width: 88%;

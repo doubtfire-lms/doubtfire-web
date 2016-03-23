@@ -5,23 +5,28 @@
         <h4 class="panel-title">Mark Portfolios</h4>
         Assess student portfolios
       </div>
-      <div class="btn-group pull-right">
-        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
-          <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
-        </label>
-        <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-          <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
-        </label>
-      </div>
-      <div class="btn-group btn-group-sm select-portfolio-grade pull-right">
-        <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
-          <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
-        </label>
-      </div>
-      <form role="search" class="col-sm-4 form-horizontal pull-right">
-        <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
-        <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
-      </form>
+      <div class="pull-right toolbar">
+        <div class="buttons">
+          <div class="btn-group">
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+              <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
+            </label>
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+              <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
+              <span class="tooltip">Show only my students</span>
+            </label>
+          </div>
+          <div class="btn-group btn-group-sm select-portfolio-grade">
+            <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
+              <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
+            </label>
+          </div>
+        </div><!--/buttons-->
+        <form role="search" class="form-horizontal">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+        </form><!--/search-->
+      </div><!--/toolbar-->
     </div><!--header-->
     <div class="panel-body unit-student-list">
       <div class="panel-body large-notice-block" ng-hide="filteredStudents.length > 0">

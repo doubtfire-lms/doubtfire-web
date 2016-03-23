@@ -10,6 +10,7 @@ module.exports = {
   build_dir: 'build',
   compile_dir: 'bin',
   api_dir: '../doubtfire-api',
+  temp_scss_file: 'tmp.scss',
 
   /**
    * This controls which files need preprocessing. This allows us to have
@@ -86,78 +87,74 @@ module.exports = {
    * process somewhere. While the `app_files` property ensures all
    * standardized files are collected for compilation, it is the user's job
    * to ensure non-standardized (i.e. vendor-related) files are handled
-   * appropriately in `vendor_files.js`.
+   * appropriately in `vendor_files`.
    *
-   * The `vendor_files.js` property holds files to be automatically
-   * concatenated and minified with our project source files.
+   * The `vendor_files.compile` holds files that will compile JavaScript
+   * or SCSS files into compile vendor files into `doubtfire.{js,css}`.
+   * These files are to be automatically concatenated and minified with
+   * our project source files.
    *
-   * The `vendor_files.css` property holds any CSS files to be automatically
-   * included in our app.
+   * Anything insider `vendor_files.copy` will copy files into the `assets/`
+   * directory under the same directory structure (i.e., under `vendor/.../`)
    */
   vendor_files: {
-    js: [
-      'vendor/jquery/jquery.js',
-      'vendor/angular/angular.js',
-      'vendor/angular-cookies/angular-cookies.js',
-      'vendor/angular-local-storage/angular-local-storage.js',
-      'vendor/angular-resource/angular-resource.js',
-      'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-      'vendor/angular-ui-router/release/angular-ui-router.js',
-      'vendor/d3/d3.js',
-      'vendor/angular-charts/dist/angular-charts.js',
-      'vendor/flashular/bin/flashular.js',
-      'vendor/ngprogress/ngProgress.js',
-      'vendor/lodash/lodash.js',
-      'vendor/underscore.string/dist/underscore.string.min.js',
-      'vendor/momentjs/moment.js',
-      'vendor/d3/d3.js',
-      'vendor/nvd3/build/nv.d3.js',
-      'vendor/angular-nvd3/dist/angular-nvd3.js',
-      'vendor/angular-file-upload/angular-file-upload.js',
-      'vendor/ng-file-upload/ng-file-upload-all.min.js',
-      'vendor/es5-shim/es5-shim.js',
-      'vendor/angular-pdf/dist/angular-pdf.js',
-      'vendor/pdfjs-bower/dist/compatibility.js',
-      'vendor/pdfjs-bower/dist/pdf.js',
-      'vendor/pdfjs-bower/dist/pdf.worker.js',
-      'vendor/angular-sanitize/angular-sanitize.js',
-      'vendor/ng-csv/build/ng-csv.js',
-      'vendor/angular-xeditable/dist/js/xeditable.js',
-      'vendor/angular-filter/dist/angular-filter.js',
-      'vendor/codemirror/lib/codemirror.js',
-      'vendor/codemirror/addon/display/placeholder.js',
-      'vendor/codemirror/mode/markdown/markdown.js',
-      'vendor/angular-ui-codemirror/ui-codemirror.js',
-      'vendor/showdown/dist/showdown.js',
-      'vendor/angular-markdown-filter/markdown.js',
-      'vendor/angular-ui-select/dist/select.js',
-      'vendor/angulartics/dist/angulartics.min.js',
-      'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
-    ],
-    scss: [
-      'vendor/bootstrap-sass/**/_bootstrap.scss',
-      'vendor/font-awesome/**/font-awesome.scss'
-    ],
-    css: [
-      "vendor/nvd3/build/nv.d3.css",
-      "vendor/angular-xeditable/dist/css/xeditable.css",
-      "vendor/codemirror/lib/codemirror.css",
-      "vendor/codemirror/theme/xq-light.css"
-    ]
-  },
+    compile: {
+      js: [
+        'vendor/jquery/jquery.js',
+        'vendor/angular/angular.js',
+        'vendor/angular-cookies/angular-cookies.js',
+        'vendor/angular-local-storage/angular-local-storage.js',
+        'vendor/angular-resource/angular-resource.js',
+        'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+        'vendor/angular-ui-router/release/angular-ui-router.js',
+        'vendor/d3/d3.js',
+        'vendor/angular-charts/dist/angular-charts.js',
+        'vendor/flashular/bin/flashular.js',
+        'vendor/ngprogress/ngProgress.js',
+        'vendor/lodash/lodash.js',
+        'vendor/underscore.string/dist/underscore.string.min.js',
+        'vendor/momentjs/moment.js',
+        'vendor/d3/d3.js',
+        'vendor/nvd3/build/nv.d3.js',
+        'vendor/angular-nvd3/dist/angular-nvd3.js',
+        'vendor/angular-file-upload/angular-file-upload.js',
+        'vendor/ng-file-upload/ng-file-upload-all.min.js',
+        'vendor/es5-shim/es5-shim.js',
+        'vendor/angular-sanitize/angular-sanitize.js',
+        'vendor/ng-csv/build/ng-csv.js',
+        'vendor/angular-xeditable/dist/js/xeditable.js',
+        'vendor/angular-filter/dist/angular-filter.js',
+        'vendor/codemirror/lib/codemirror.js',
+        'vendor/codemirror/addon/display/placeholder.js',
+        'vendor/codemirror/mode/markdown/markdown.js',
+        'vendor/angular-ui-codemirror/ui-codemirror.js',
+        'vendor/showdown/dist/showdown.js',
+        'vendor/angular-markdown-filter/markdown.js',
+        'vendor/angular-ui-select/dist/select.js',
+        'vendor/angulartics/dist/angulartics.min.js',
+        'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
+      ],
+      jsmap: [
+        'vendor/showdown/dist/showdown.js.map'
+      ],
+      scss: [
+        'vendor/bootstrap-sass/**/_bootstrap.scss',
+        'vendor/font-awesome/**/font-awesome.scss'
+      ],
+    },
+    copy: {
+      js: [
 
-  /**
-   * Similar to vendor_files, however these files will be copied into the output
-   * directory rather than compiled in with the output file.
-   */
-  vendor_copy_files: {
-    js: [
-      'vendor/pdfjs-bower/dist/compatibility.js',
-      'vendor/pdfjs-bower/dist/pdf.js',
-      'vendor/pdfjs-bower/dist/pdf.worker.js'
-    ],
-    map: [
-      'vendor/showdown/dist/showdown.js.map'
-    ],
+      ],
+      jsmap: [
+        'vendor/showdown/dist/showdown.js.map'
+      ],
+      css: [
+        "vendor/nvd3/build/nv.d3.css",
+        "vendor/angular-xeditable/dist/css/xeditable.css",
+        "vendor/codemirror/lib/codemirror.css",
+        "vendor/codemirror/theme/xq-light.css"
+      ]
+    }
   }
 };
