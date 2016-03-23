@@ -35,16 +35,7 @@ angular.module('doubtfire.units.unit-student-list', [])
     analyticsService.watchEvent $scope, 'fullscreen', 'Teacher View - Students Tab', (newVal) -> if newVal then 'Show Fullscreen' else 'Hide Fullscreen'
 
     $scope.switchToLab = (student, tutorial) ->
-      if tutorial
-        newId = tutorial.id
-      else
-        newId = -1
-      analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
-      Project.update({ id: student.project_id, tutorial_id: newId }).$promise.then (
-        (project) ->
-          student.tutorial_id = project.tutorial_id
-          student.tutorial = $scope.unit.tutorialFromId( student.tutorial_id )
-      )
+      student.switchToLab(tutorial)
 
     $scope.getCSVHeader = () ->
       result = ['student_code', 'name', 'email', 'portfolio', 'lab']
