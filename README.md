@@ -37,7 +37,7 @@ $ git clone https://github.com/doubtfire-lms/doubtfire-web.git
 $ cd ./doubtfire-web
 ```
 
-Install [overcommit](https://github.com/brigade/overcommit) and Ruby [SASS](http://sass-lang.org):
+Install [overcommit](https://github.com/brigade/overcommit) and Ruby [SASS](http://sass-lang.com):
 
 ```
 $ gem install overcommit sass
