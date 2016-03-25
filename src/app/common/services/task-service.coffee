@@ -253,6 +253,8 @@ angular.module("doubtfire.common.services.tasks", [])
     task.id = response.id
     task.status = response.status
     task.times_assessed = response.times_assessed
+    task.times_submitted = response.times_submitted
+    task.submisson_date = response.submisson_date
     task.updateTaskStatus project, response.new_stats
     task.processing_pdf = response.processing_pdf
     task.grade = response.grade
