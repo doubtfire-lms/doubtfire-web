@@ -55,6 +55,10 @@ angular.module('doubfire.foo.modals.create-foo-modal', [])
 ```
 
 - Always name non-anonymous controllers with a `Ctrl` suffix
+- Case correctly:
+  - `directiveName` should be camelCase - refer to this [Angular documentation](https://docs.angularjs.org/guide/directive#normalization)
+  - `ServiceName`, `ControllerNameCtrl` should be in PascalCase
+  - Regardless of abbreviations, stick to these conventions (e.g., `pdfPanelViewer` directive works, but `PDFPanelViewer` won't work as it needs to be camelCase)
 - Place modals and states in a `modals` and `states` folder under the root. All else can be in their own folders unless they are of a related concept (see the `project-portfolio-wizard` folder under `project`, `stats` under `tasks` and `units`)
 - The name of a module should follow the directory structure of where it has been placed (i.e., in the above example, the template file was at `foo/modals/create-foo-modal.tpl.html`, the CoffeeScript file was at `foo/modals/create-foo-modal.coffee`, and thus the module is `doubtfire.foo.modals.create-foo-modal`
 - Try to give a brief summary of what the directive, state or factory does. E.g., the comment in the example above for `CreateFooModal` is sufficient.
