@@ -22,31 +22,26 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     nameStep: {
       title:    "What's your name?"
       subtitle: "We will need a name to help identify you on Doubtfire."
-      icon:     'fa-pencil-square-o'
       seq:      0
     },
     nicknameStep: {
       title:    "Do you have a preferred name or nickname?"
       subtitle: "If you'll find it easier for your tutor to call you another name please let us know!"
-      icon:     'fa-smile-o'
       seq:      1
     },
     emailStep: {
       title:    "How would you like us to email you?"
       subtitle: "Based on your preferences, we will email you as frequently as you'd like us to."
-      icon:     'fa-envelope'
       seq:      2
     },
     targetGradeStep: {
       title:    "What grades are you aiming for?"
-      subtitle: "We noticed you are enrolled in the following subject(s). Select your target grade for each."
-      icon:     'fa-trophy'
+      subtitle: "We noticed you are enrolled in the following subject(s)."
       seq:      3
     },
     optInToResearchStep: {
       title:    "Would you like to help us make Doubtfire better?"
       subtitle: "We would like to anonymously use your Doubtfire usage for research in making Doubtfire better."
-      icon:     'fa-line-chart'
       seq:      4
     }
   }
