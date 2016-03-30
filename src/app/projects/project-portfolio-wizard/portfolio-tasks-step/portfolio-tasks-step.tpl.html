@@ -1,22 +1,15 @@
-<div id="panel" class="panel panel-primary">
-  <div class="panel-heading task-status row-fluid">
-    <h3 class="panel-title">Select Tasks</h3>
-    Select tasks to include and showcase in your portfolio that demonstrates your
-    understanding of each Indended Learning Outcome.
-  </div>
-  <div class="panel-body">
-    <task-ilo-alignment-editor
-      unit="unit"
-      project="project"
-      hide-panel="true"
-      hide-graph="true"
-      show-include-tasks="true"></task-ilo-alignment-editor>
-  </div>
-  <div class="panel-footer clearfix">
-    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <button class="btn btn-primary pull-right" ng-disabled="noTasksSelected()" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
-    <div class="help-block pull-right col-sm-4" ng-show="noTasksSelected()">
-      You need to select at least one task {{unitHasILOs ? 'that is aligned to an ILO above' : 'above'}}, otherwise your portfolio will be consist of no tasks.
-    </div>
+<div class="portfolio-tasks-step">
+  <task-ilo-alignment-editor
+    unit="unit"
+    project="project"
+    hide-panel="true"
+    hide-graph="true"
+    show-include-tasks="true"></task-ilo-alignment-editor>
+</div>
+<div class="panel-footer clearfix">
+  <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+  <button class="btn btn-primary pull-right" ng-disabled="noTasksSelected()" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+  <div class="help-block pull-right col-sm-4" ng-show="noTasksSelected()">
+    You need to select at least one task {{unitHasILOs ? 'that is aligned to an ILO above' : 'above'}}, otherwise your portfolio will be consist of no tasks.
   </div>
 </div>

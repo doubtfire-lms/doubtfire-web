@@ -5,6 +5,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
   'doubtfire.projects.project-portfolio-wizard.portfolio-learning-summary-report-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-review-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-tasks-step'
+  'doubtfire.projects.project-portfolio-wizard.portfolio-welcome-step'
 ])
 
 #
@@ -19,32 +20,39 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     #
     $scope.portfolioTabsData =
       welcomeStep:
-        title: "Welcome"
-        icon: "fa-smile-o"
+        title: "Portfolio Preparation"
+        icon: "fa-magic"
+        subtitle: "Welcome to the portfolio preparation wizard"
         seq: 0
       gradeStep:
         title: "Select Grade"
         icon: "fa-trophy"
+        subtitle: "In preparing your portfolio, you need to undertake a self assessment. Use the unit's assessment criteria to determine the grade your portfolio should be awarded"
         seq: 1
       summaryStep:
         title: "Learning Summary Report"
         icon: "fa-graduation-cap"
+        subtitle: "Upload the Learning Summary Report, the primary porfolio document which justifies your desired grade"
         seq: 2
       taskStep:
         title: "Align and Select Tasks"
         icon: "fa-tasks"
+        subtitle: "Select tasks to include and showcase in your portfolio that demonstrates your understanding of each Indended Learning Outcome"
         seq: 3
       otherFilesStep:
         title: "Upload Other Files"
-        icon: "fa-plus"
+        icon: "fa-upload"
+        subtitle: "Add extra files that justify your learning to your portfolio"
         seq: 4
       compileStep:
-        title: "Compile PDF"
+        title: "Compile Portfolio PDF"
         icon: "fa-file-pdf-o"
+        subtitle: "Submit your portfolio for compilation"
         seq: 5
       reviewStep:
         title: "Review Portfolio"
         icon: "fa-book"
+        subtitle: "Review your portfolio submission progress"
         seq: 6
     $scope.setActivePortfolioTab = (tab) ->
       $scope.activePortfolioTab = tab
