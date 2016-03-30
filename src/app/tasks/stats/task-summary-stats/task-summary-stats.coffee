@@ -10,7 +10,7 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
   scope:
     unit: "=unit"
 
-  controller: ($scope, $modal, Task, taskService, TaskCompletionCSV) ->
+  controller: ($scope, $modal, Task, taskService, TaskCompletionCsv) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
@@ -38,7 +38,7 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
       else ''
 
     $scope.fetchCSV = () ->
-      TaskCompletionCSV.downloadFile($scope.unit)
+      TaskCompletionCsv.downloadFile($scope.unit)
 
     $scope.fetchStats = () ->
       numStudents = $scope.unit.students.length
