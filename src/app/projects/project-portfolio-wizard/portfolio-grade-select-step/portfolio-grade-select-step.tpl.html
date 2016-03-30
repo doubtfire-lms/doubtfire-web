@@ -2,12 +2,12 @@
   <div class="read-assessment-criteria text-danger text-center">
     <h3><i class="fa fa-warning"></i> Have you read the Assessment Criteria?</h3>
     <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
-  </div>
+  </div><!--/read-assessment-criteria-->
   <hr>
   <div class="confirm-read-assessment-criteria text-center">
     <input type="checkbox" class="pointer" id="agree-read" ng-model="agreedToAssessmentCriteria">
     <label class="pointer" for="agree-read">I have read the Assessment Criteria for this unit</label>
-  </div>
+  </div><!--/confirm-read-assessment-criteria-->
   <div class="select-the-grade text-center" ng-show="agreedToAssessmentCriteria">
     <hr>
     <p>Select the <strong>grade</strong> you are applying for {{unit.name}} below</p>
@@ -17,9 +17,9 @@
       </label>
     </div>
     <p class="help-block text-center">
-      Make sure your <strong>Learning Summary Report</strong> justifies <strong>why you deserve a {{grades[project.target_grade]}}</strong>
+      Make sure your <strong>Learning Summary Report</strong> justifies <strong>why you deserve a {{targetGrade}}</strong>
     </p>
-  </div>
+  </div><!--/select-the-grade-->
 </div><!--/content-->
 <div class="panel-footer clearfix">
   <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>

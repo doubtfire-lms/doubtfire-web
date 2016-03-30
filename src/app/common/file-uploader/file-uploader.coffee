@@ -149,7 +149,9 @@ angular.module('doubtfire.common.file-uploader', [])
       form.append file.name, file.data for file in files
       # Append payload
       payload = ({ key: k; value: v } for k, v of $scope.payload)
-      form.append payloadItem.key, JSON.stringify(payloadItem.value) for payloadItem in payload
+      for payloadItem in payload
+        payloadItem.value = JSON.stringify(payloadItem.value) if _.isObject payloadItem.value
+        form.append payloadItem.key, payloadItem.value
       # Set the percent
       $scope.uploadingInfo =
         progress: 5

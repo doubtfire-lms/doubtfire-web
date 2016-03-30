@@ -14,7 +14,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
 .directive('projectPortfolioWizard', ->
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/project-portfolio-wizard.tpl.html'
-  controller: ($scope, taskService, PortfolioSubmission, analyticsService) ->
+  controller: ($scope, taskService, gradeService, PortfolioSubmission, analyticsService) ->
     #
     # Active task tab group
     #
@@ -68,10 +68,13 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.projectHasLearningSummaryReport = () ->
       _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
 
-    $scope.fileUploader = PortfolioSubmission.fileUploader($scope, $scope.project)
-    $scope.clearUploads = () ->
-      $scope.fileUploader.clearQueue()
+    $scope.portfolioSubmission = PortfolioSubmission($scope.project)
 
+    # Update targetGrade value on change
+    $scope.$watch 'project.target_grade', (newValue) ->
+      $scope.targetGrade = gradeService.grades[newValue]
+
+    # Jump to a step
     if $scope.project.portfolio_available
       $scope.activePortfolioTab = $scope.portfolioTabsData.reviewStep
     else if $scope.project.compile_portfolio
@@ -80,6 +83,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
       $scope.activePortfolioTab = $scope.portfolioTabsData.taskStep
     else
       $scope.activePortfolioTab = $scope.portfolioTabsData.welcomeStep
+
     #
     # Functions from taskService to get data
     #
