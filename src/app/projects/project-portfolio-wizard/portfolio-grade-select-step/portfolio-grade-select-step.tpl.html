@@ -1,22 +1,27 @@
 <div class="portfolio-grade-select-step">
-  <h4>Have you read the Assessment Criteria?</h4>
-  <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
-
-  <hr>
-
-  <p>Select the <strong>grade</strong> you are applying for below:</p>
-
-  <div class="btn-group btn-group-justified">
-    <label ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false" class="btn btn-default col-sm-3" ng-model="project.target_grade" btn-radio="{{$index}}">
-      <h3>{{gradeAcronyms[grade]}}</h3>
-      <p>{{grade}}</p>
-    </label>
+  <div class="read-assessment-criteria text-danger text-center">
+    <h3><i class="fa fa-warning"></i> Have you read the Assessment Criteria?</h3>
+    <p>Make sure that you have reviewed the <strong>Assessment Criteria</strong> for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</p>
   </div>
-  <p class="help-block text-center col-sm-12">
-    Make sure this grade will be justified in the Learning Summary Report.
-  </p>
+  <hr>
+  <div class="confirm-read-assessment-criteria text-center">
+    <input type="checkbox" class="pointer" id="agree-read" ng-model="agreedToAssessmentCriteria">
+    <label class="pointer" for="agree-read">I have read the Assessment Criteria for this unit</label>
+  </div>
+  <div class="select-the-grade text-center" ng-show="agreedToAssessmentCriteria">
+    <hr>
+    <p>Select the <strong>grade</strong> you are applying for {{unit.name}} below</p>
+    <div class="btn-group">
+      <label ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false" class="btn btn-default col-sm-3" ng-model="project.target_grade" btn-radio="{{$index}}">
+        <grade-icon grade="grade" class="text-{{project.target_grade == grades.indexOf(grade) ? 'success' : 'muted'}}"></grade-icon>
+      </label>
+    </div>
+    <p class="help-block text-center">
+      Make sure your <strong>Learning Summary Report</strong> justifies <strong>why you deserve a {{grades[project.target_grade]}}</strong>
+    </p>
+  </div>
 </div><!--/content-->
 <div class="panel-footer clearfix">
   <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-  <button class="btn btn-primary pull-right" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+  <button class="btn btn-primary pull-right" ng-disabled="!agreedToAssessmentCriteria" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
 </div>

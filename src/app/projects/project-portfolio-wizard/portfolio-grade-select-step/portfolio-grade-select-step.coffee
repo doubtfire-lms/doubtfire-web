@@ -7,9 +7,8 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-sele
 .directive('portfolioGradeSelectStep', ->
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/portfolio-grade-select-step/portfolio-grade-select-step.tpl.html'
-  controller: ($scope, Project, gradeService) ->
-    $scope.gradeAcronyms = gradeService.gradeAcronyms
-    $scope.grades        = gradeService.grades
+  controller: ($scope, Project, projectService, gradeService) ->
+    $scope.grades = gradeService.grades
 
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
