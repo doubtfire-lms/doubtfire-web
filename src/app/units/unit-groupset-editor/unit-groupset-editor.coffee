@@ -8,7 +8,7 @@ angular.module('doubtfire.units.unit-groupset-editor', [])
   restrict: 'E'
   templateUrl: 'units/unit-groupset-editor/unit-groupset-editor.tpl.html'
   replace: true
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CSVResultModal) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 
     $scope.addGroupSet = () ->
       if $scope.unit.group_sets.length == 0
@@ -72,7 +72,7 @@ angular.module('doubtfire.units.unit-groupset-editor', [])
     $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
-      CSVResultModal.show 'Group CSV upload results.', response
+      CsvResultModal.show 'Group CSV upload results.', response
       $scope.unit.refresh()
     $scope.onGroupCSVComplete = () ->
       $scope.isGroupCSVUploading = null

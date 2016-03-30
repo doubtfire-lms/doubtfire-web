@@ -16,10 +16,10 @@ angular.module('doubtfire.users.states.users-admin-view', [])
   headerServiceProvider.state "admin/users#index", usersAdminViewStateData
 )
 
-.controller("UsersAdminViewCtrl", ($scope, $modal, User, alertService, CSVResultModal, UserSettingsModal) ->
+.controller("UsersAdminViewCtrl", ($scope, $modal, User, alertService, CsvResultModal, UserSettingsModal) ->
   $scope.file_data =
     onBatchUserSuccess: (response) ->
-      CSVResultModal.show "User CSV import results", response
+      CsvResultModal.show "User CSV import results", response
       $scope.users = User.query()
     batchUserUrl: User.csvUrl()
     batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }

@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     hidePanel: '=?'
     # select tasks to include in portfolio
     showIncludeTasks: '=?'
-  controller: ($scope, $modal, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, Task, CSVResultModal, outcomeService, TaskILOAlignmentModal) ->
+  controller: ($scope, $modal, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, Task, CsvResultModal, outcomeService, TaskILOAlignmentModal) ->
     $scope.showTaskName = $scope.unit.ilos.length < 5
     $scope.showGraph = false
     $scope.closeGraph = ->
@@ -74,7 +74,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
         TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, null)
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
-      CSVResultModal.show 'Task CSV upload results.', response
+      CsvResultModal.show 'Task CSV upload results.', response
       $rootScope.$broadcast('UpdateAlignmentChart', response, { batch: true })
       if $scope.project?
         $scope.project.refresh($scope.unit)

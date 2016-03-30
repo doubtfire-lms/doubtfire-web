@@ -16,7 +16,7 @@ angular.module('doubtfire.units.modals.unit-mark-submissions-offline-modal', [])
 
   UnitMarkSubmissionsOfflineModal
 )
-.controller('UnitMarkSubmissionsOfflineModalCtrl', ($scope, $modalInstance, alertService, unit, Task, CSVResultModal) ->
+.controller('UnitMarkSubmissionsOfflineModalCtrl', ($scope, $modalInstance, alertService, unit, Task, CsvResultModal) ->
   $scope.unit = unit
   $scope.zipMarkingFiles = { file: { name: 'Zip of annotated task PDFs and marks.csv', type: 'zip' } }
   $scope.csvMarkingFiles = { file: { name: 'Modified marks.csv', type: 'csv' } }
@@ -27,7 +27,7 @@ angular.module('doubtfire.units.modals.unit-mark-submissions-offline-modal', [])
     csv: null
     zip: null
   $scope.onMarkingUploadSuccess = (response) ->
-    CSVResultModal.show "Marking CSV and ZIP upload", response
+    CsvResultModal.show "Marking CSV and ZIP upload", response
     $scope.unit.refreshStudents()
   $scope.closeModal = $modalInstance.dismiss
 )

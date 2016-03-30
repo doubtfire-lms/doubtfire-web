@@ -3,8 +3,8 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
 #
 # Services for making new modals
 #
-.factory("CSVResultModal", ($modal, alertService) ->
-  CSVResultModal = {}
+.factory("CsvResultModal", ($modal, alertService) ->
+  CsvResultModal = {}
 
   #
   # Show the results from a CSV upload with the provided title.
@@ -17,7 +17,7 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
   #     ignored: [ {row: ..., message:""}, ... ]
   #   }
   #
-  CSVResultModal.show = (title, response) ->
+  CsvResultModal.show = (title, response) ->
     if response.errors.length == 0
       alertService.add("success", "CSV uploaded. Success with #{response.success.length} rows.", 2000)
     else if response.success.length > 0
@@ -27,18 +27,18 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
 
     $modal.open
       templateUrl: 'common/modals/csv-result-modal/csv-result-modal.tpl.html'
-      controller: 'CSVResultModalCtrl'
+      controller: 'CsvResultModalCtrl'
       resolve:
         title: -> title
         response: -> response
 
-  CSVResultModal
+  CsvResultModal
 )
 
 #
 # Controller for CSV result modal
 #
-.controller('CSVResultModalCtrl', ($scope, $modalInstance, title, response) ->
+.controller('CsvResultModalCtrl', ($scope, $modalInstance, title, response) ->
   $scope.title = title
   $scope.response = response
 

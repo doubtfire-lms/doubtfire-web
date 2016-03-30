@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, CSVResultModal, ConfirmationModal, ProgressModal) ->
+  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, CsvResultModal, ConfirmationModal, ProgressModal) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -97,7 +97,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
       Unit.allResourcesDownloadUrl($scope.unit)
 
     $scope.onBatchTaskSuccess = (response) ->
-      CSVResultModal.show "Task CSV Upload Results", response
+      CsvResultModal.show "Task CSV Upload Results", response
       if response.success.length > 0
         $scope.unit.refresh()
 

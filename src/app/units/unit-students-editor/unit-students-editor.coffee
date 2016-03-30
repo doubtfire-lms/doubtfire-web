@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-students-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-students-editor/unit-students-editor.tpl.html'
-  controller: ($scope, Unit, Project, CSVResultModal, UnitStudentEnrolmentModal, alertService) ->
+  controller: ($scope, Unit, Project, CsvResultModal, UnitStudentEnrolmentModal, alertService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
     $scope.showEnrolModal = () ->
@@ -19,12 +19,12 @@ angular.module('doubtfire.units.unit-students-editor', [])
     onBatchEnrolSuccess = (response) ->
       newStudents = response
       # at least one student?
-      CSVResultModal.show("Enrol Student CSV Results", response)
+      CsvResultModal.show("Enrol Student CSV Results", response)
       if response.success.length > 0
         $scope.unit.refreshStudents()
 
     onBatchWithdrawSuccess = (response) ->
-      CSVResultModal.show("Withdraw Student CSV Results", response)
+      CsvResultModal.show("Withdraw Student CSV Results", response)
       if response.success.length > 0
         alertService.add("success", "Withdrew #{response.success.length} students.", 2000)
         $scope.unit.refreshStudents()
