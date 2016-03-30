@@ -26,12 +26,6 @@ module.exports = {
       options: {
         inline: true
       }
-    },
-    app: {
-      src: ['build/src/app/app.js'],
-      options: {
-        inline: true
-      }
     }
   },
 
