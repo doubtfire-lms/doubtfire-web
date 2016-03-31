@@ -44,7 +44,7 @@
     <portfolio-compile-step ng-if="activePortfolioTab == portfolioTabsData.compileStep"></portfolio-compile-step>
     <portfolio-review-step ng-if="activePortfolioTab == portfolioTabsData.reviewStep"></portfolio-review-step>
     <div ng-if="project.portfolio_files.length > 0 && activePortfolioTab.seq < portfolioTabsData.reviewStep.seq">
-      <portfolio-files></portfolio-files>
+      <portfolio-files-list></portfolio-files-list>
     </div>
   </div><!--/tabs-->
 </div>
