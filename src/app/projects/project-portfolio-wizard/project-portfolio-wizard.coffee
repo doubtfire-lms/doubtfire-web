@@ -5,6 +5,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
   'doubtfire.projects.project-portfolio-wizard.portfolio-learning-summary-report-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-review-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-tasks-step'
+  'doubtfire.projects.project-portfolio-wizard.portfolio-files-list'
 ])
 
 #
