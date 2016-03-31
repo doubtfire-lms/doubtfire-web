@@ -181,14 +181,24 @@ angular.module("doubtfire.sessions", [
   $scope.session = { remember_me: true }
 
   # April Fools Easter Egg :-)
-  today = new Date()
-  aprilFools =  today.getDate()   is 1 and # first day of the
-                today.getMonth()  is 3     # fourth month (April - zero-based)
-  if aprilFools
-    logo = document.querySelector('.landing-page h1.logo i')
-    logo?.style.backgroundImage = 'url("/assets/images/mrsdoubtfire.png")'
-    logo?.style.backgroundColor = 'inherit'
-    logo?.title = 'Happy April Fools Day!'
+  angular.element(document).ready ->
+    today = new Date()
+    aprilFools =  today.getDate()   is 1 and # first day of the
+                  today.getMonth()  is 3     # fourth month (April - zero-based)
+    if aprilFools
+      h1   = document.querySelector('.landing-page h1.logo')
+      logo = h1?.querySelector('i')
+      if logo? and h1?
+        a = document.createElement('A')
+        a.href = "http://www.imdb.com/title/tt0107614/"
+        a.title = "Mrs. Doubtfire (1993)"
+        lead = document.createElement('P')
+        lead.appendChild(document.createTextNode('Happy April Fools Day!'))
+        h1.classList.add 'aprilfools'
+        h1.appendChild a
+        h1.appendChild lead
+        logo.style.backgroundImage = 'url("/assets/images/mrsdoubtfire.png")'
+        logo.style.backgroundColor = 'inherit'
 
   $scope.openAboutModal = ->
     aboutModalService.show()
