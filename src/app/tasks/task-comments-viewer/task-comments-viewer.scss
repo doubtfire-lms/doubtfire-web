@@ -54,9 +54,15 @@
   }
 }
 
-.comment-submitter .send-button-wrapper {
-  padding-right: 0;
-  .btn {
-    width: 100%;
+.comment-submitter {
+  display: flex;
+  .markdown-editor {
+    padding: 0;
+  }
+  .send-button-wrapper {
+    padding-right: 0;
+    .btn {
+      width: 100%;
+    }
   }
 }
