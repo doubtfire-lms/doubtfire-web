@@ -34,8 +34,9 @@
   }
 
   .markdown-editor-preview {
-    overflow: scroll;
     display: relative;
+    overflow-y: hidden;
+    overflow-x: hidden;
     z-index: 1;
     min-height: 79px;
   }
