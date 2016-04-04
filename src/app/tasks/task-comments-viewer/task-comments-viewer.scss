@@ -11,6 +11,9 @@
   margin-bottom: 2em;
   .comment-details {
     @include flex-center;
+    align-items: flex-end;
+    align-content: flex-end;
+    height: 100%;
     height: auto;
     & > * {
       width: 100%;
@@ -29,7 +32,7 @@
   }
   .comment-text {
     background-color: #efefef;
-    border-radius: 1em;
+    border-radius: 1.0em 1.0em 1.0em 0em;
     padding: 1.5em;
     font-size: 1.2em;
     line-height: 1.5em;
@@ -53,10 +56,9 @@
 
 .task-comments-viewer + * .comment-submitter {
   button {
-    height: 59px;
+    height: 93px;
+    margin-left: 10px;
   }
   .markdown-editor {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
   }
 }
