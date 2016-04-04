@@ -54,11 +54,9 @@
   }
 }
 
-.task-comments-viewer + * .comment-submitter {
-  button {
-    height: 93px;
-    margin-left: 10px;
-  }
-  .markdown-editor {
+.comment-submitter .send-button-wrapper {
+  padding-right: 0;
+  .btn {
+    width: 100%;
   }
 }
