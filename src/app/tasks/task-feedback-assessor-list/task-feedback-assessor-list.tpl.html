@@ -60,8 +60,8 @@
               </a>
             </th>
             <th class="submisson_date">
-              <a ng-click="sortOrder='submisson_date'; reverse=!reverse">
-                Last Submission Date <i ng-show="sortOrder=='submisson_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              <a ng-click="sortOrder='submission_date'; reverse=!reverse">
+                Submitted On<i ng-show="sortOrder=='submission_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="task">
@@ -77,11 +77,6 @@
             <th class="times_assessed">
               <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
                 Times Assessed <i ng-show="sortOrder=='times_assessed'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
-              </a>
-            </th>
-            <th class="times_submitted">
-              <a ng-click="sortOrder='times_assessed'; reverse=!reverse">
-                Times Submitted <i ng-show="sortOrder=='times_submitted'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="tutorial">
@@ -101,7 +96,6 @@
               <status-icon status="task.status"></status-icon>
             </td>
             <td>{{task.times_assessed}}</td>
-            <td>{{task.times_submitted}}</td>
             <td><span tooltip-html-unsafe="<strong>{{task.project().tutorial.meeting_day}} {{task.project().tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{task.project().tutorial.meeting_location}} - {{task.project().tutorial.tutor_name}}">{{task.project().tutorial.abbreviation}}</span></td>
         </tr>
         </tbody>
