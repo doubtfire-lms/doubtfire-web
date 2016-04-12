@@ -92,7 +92,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | filter:searchIncProject) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
+          <tr class="task-progress-row" ng-repeat="task in filteredTasks = (allTasks = (tasksForFeedback | showTasks:studentFilter:tutorName | statusFilter:statusFilter) | taskFilter:search) | orderBy:sortOrder:reverse | startFrom:(taskCurrentPage - 1) * taskPageSize | limitTo: taskPageSize" ng-class="{'info': activeTask == task}" ng-click="viewTask(task)">
             <td>{{task.project().student_id}}</td>
             <td>{{task.project().name}}</td>
             <td>{{task.submission_date | date: short}}</td>

@@ -160,3 +160,12 @@ angular.module("doubtfire.common.filters", [])
     else
       input
 )
+
+.filter('taskFilter', ->
+  (input, text) ->
+    matchText = text.toLowerCase()
+    if input
+      _.filter  input, (task) -> (task?) && ( task.project().student_id.indexOf(matchText) >= 0 || task.project().name.toLowerCase().indexOf(matchText) >= 0 || task.project().tutorName().toLowerCase().indexOf(matchText) >= 0)
+    else
+      input
+)
