@@ -35,7 +35,7 @@
                   <label class="label label-info small">{{unitRole.unit_code}}</label>
                   <small class="text-muted">{{showDate(unitRole.start_date)}}</small>
                 </small>
-                <span class="unit-name pull-right">{{unitRole.unit_name}}</span>
+                <span class="unit-name">{{unitRole.unit_name}}</span>
               </a>
           </li>
           <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
@@ -46,7 +46,7 @@
                 <label class="label label-info small">{{project.unit_code}}</label>
                 <small class="text-muted">{{showDate(project.start_date)}}</small>
               </small>
-              <span class="unit-name pull-right">{{project.unit_name}}</span>
+              <span class="unit-name">{{project.unit_name}}</span>
             </a>
             </a>
           </li>
