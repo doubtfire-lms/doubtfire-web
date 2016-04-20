@@ -27,11 +27,12 @@
           <i class="fa fa-2x fa-tasks"></i>
           <p>No tasks in this unit</p>
         </div>
-        <div class="large-notice-block" ng-hide="unit.ilos.length > 0">
+        <div class="large-notice-block" ng-hide="unit.ilos.length > 0 || showIncludeTasks">
+          {{unit.ilos.length > 0 && ! showIncludeTasks}}
           <i class="fa fa-2x fa-graduation-cap"></i>
           <p>No learning outcomes in this unit</p>
         </div>
-        <table class="table table-task-alignment col-sm-12" ng-hide="tasks.length == 0 || unit.ilos.length == 0">
+        <table class="table table-task-alignment col-sm-12" ng-hide="tasks.length == 0 || (unit.ilos.length == 0 && ! showIncludeTasks)">
           <thead>
             <tr>
               <th class="task" colspan="{{(showTaskName ? 3 : 2) - (source === unit ? 1 : 0)}}">Task</th>
@@ -42,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="task in tasks | orderBy: 'definition.seq'">
+            <tr ng-repeat="task in tasks | taskForPortfolio: source === project | orderBy: 'definition.seq'">
               <td class="task-abbreviation" tooltip="{{task.definition.name}}" tooltip-append-to-body="true">
                 <label class="label label-info">{{task.definition.abbreviation}}</label>
               </td>

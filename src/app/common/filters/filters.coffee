@@ -178,3 +178,15 @@ angular.module("doubtfire.common.filters", [])
     else
       input
 )
+
+.filter('taskForPortfolio', (taskService) ->
+  (input, apply) ->
+    if (! apply) || (! input)
+      input
+    else
+      _.filter input, (task) ->
+        if task?
+          !_.includes(taskService.toBeWorkedOn, task.status)
+        else
+          false
+)
