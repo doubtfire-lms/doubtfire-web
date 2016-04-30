@@ -1,9 +1,12 @@
 .project-portfolio-wizard .panel-body .portfolio-review-step {
-  // override with !important to override mixins in project-portfolio-wizard.scss
-  margin: 0 auto !important;
-  width: 100% !important;
-  float: none !important;
-  padding: 0 !important;
+  &.expanded {
+    // override with !important to override mixins in project-portfolio-wizard.scss
+    margin: 0 auto !important;
+    width: 100% !important;
+    float: none !important;
+    padding: 0 !important;
+  }
+
   .pdf-panel-viewer {
     border-top: 1px solid $brand-primary;
     border-bottom: 1px solid $brand-primary;

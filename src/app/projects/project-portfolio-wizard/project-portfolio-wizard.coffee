@@ -91,11 +91,13 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.selectedTasks = ->
       if $scope.unitHasILOs
         # Filter by aligned tasks that are included
-        _.filter $scope.project.tasks, (t) ->
-          t.include_in_portfolio and _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
+        tasks = _.filter $scope.project.tasks, (t) ->
+          hasAlignmentsForTask = _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
+          t.include_in_portfolio and hasAlignmentsForTask
       else
         # Filter by included in portfolio
-        _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
+        tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
+      _.sortBy tasks, (t) -> t.definition.seq
 
     # Jump to a step
     if $scope.project.portfolio_available or $scope.project.compile_portfolio

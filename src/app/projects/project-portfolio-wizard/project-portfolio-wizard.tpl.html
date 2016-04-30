@@ -1,7 +1,7 @@
 <div class="project-portfolio-wizard">
   <tabset class="col-md-2" vertical="true" type="pills">
     <tab ng-repeat="(tabKey, tab) in portfolioTabsData | orderObjectBy: 'seq'" active="tab.active" select="setActivePortfolioTab(tab)">
-      <tab-heading tooltip-html-unsafe="<strong>Step {{tab.seq}}</strong><br>{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+      <tab-heading tooltip-html-unsafe="<strong>Step {{tab.seq}}</strong><br>{{tab.title}}" tooltip-placement="right" tooltip-append-to-body="true" tooltip-popup-delay="200">
         <div class="text-center">
           <i class="fa fa-2x {{tab.icon}}"></i>
         </div>

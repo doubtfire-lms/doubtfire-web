@@ -18,7 +18,8 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     $scope.toggleCompileProject = () ->
       $scope.project.compile_portfolio = not $scope.project.compile_portfolio
       Project.update { id: $scope.project.project_id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
-        alertService.add("success", "Project compile schedule changed.", 2000)
+        $scope.portfolioIsCompiling = true
+        $scope.canCompilePortfolio  = false
 
     #
     # PDF Local Funcs

@@ -9,5 +9,5 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-tasks-step
   templateUrl: 'projects/project-portfolio-wizard/portfolio-tasks-step/portfolio-tasks-step.tpl.html'
   controller: ($scope) ->
     $scope.noTasksSelected = ->
-      $scope.selectedTasks() is 0
+      $scope.selectedTasks().length is 0
 )
