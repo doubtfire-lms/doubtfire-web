@@ -23,37 +23,37 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
         title: "Portfolio Preparation"
         icon: "fa-magic"
         subtitle: "Welcome to the portfolio preparation wizard"
-        seq: 0
+        seq: 1
       gradeStep:
         title: "Select Grade"
         icon: "fa-trophy"
         subtitle: "In preparing your portfolio, you need to undertake a self assessment. Use the unit's assessment criteria to determine the grade your portfolio should be awarded"
-        seq: 1
+        seq: 2
       summaryStep:
         title: "Learning Summary Report"
         icon: "fa-graduation-cap"
         subtitle: "Upload the Learning Summary Report, the primary porfolio document which justifies your desired grade"
-        seq: 2
+        seq: 3
       taskStep:
         title: "Align and Select Tasks"
         icon: "fa-tasks"
         subtitle: "Select tasks to include and showcase in your portfolio that demonstrates your understanding of each Indended Learning Outcome"
-        seq: 3
+        seq: 4
       otherFilesStep:
         title: "Upload Other Files"
         icon: "fa-upload"
         subtitle: "Add extra files that justify your learning to your portfolio"
-        seq: 4
+        seq: 5
       compileStep:
         title: "Compile Portfolio PDF"
         icon: "fa-file-pdf-o"
         subtitle: "Submit your portfolio for compilation"
-        seq: 5
+        seq: 6
       reviewStep:
         title: "Review Portfolio"
         icon: "fa-book"
         subtitle: "Review your portfolio submission progress"
-        seq: 6
+        seq: 7
     $scope.setActivePortfolioTab = (tab) ->
       $scope.activePortfolioTab = tab
       analyticsService.event 'Portfolio Wizard', 'Switched to Step', "#{tab.title} Step"
@@ -65,7 +65,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
       $scope.activePortfolioTab = (tab for tabKey, tab of $scope.portfolioTabsData when tab.seq is newSeq)[0]
     $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
-    $scope.projectHasLearningSummaryReport = () ->
+    $scope.projectHasLearningSummaryReport = ->
       _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
 
     $scope.portfolioSubmission = PortfolioSubmission($scope.project)
