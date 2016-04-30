@@ -25,7 +25,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
         file0: { name: "Learning Summary Report", type: "document" }
       },
       payload: {
-        name: "learningSummaryReport"
+        name: "LearningSummaryReport" # DO NOT MODIFY - case senstitive on API
         kind: "document"
       }
     }
@@ -38,6 +38,11 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
   this.openPortfolio = (project) ->
     $window.open this.getTaskUrl(task), "_blank"
+
+  $scope.addNewFilesToPortfolio = (newFile) ->
+    $scope.project.portfolio_files.push newFile
+
+  # TODO: Kill below
 
   this.fileUploader = (scope, project) ->
     # per scope or task
