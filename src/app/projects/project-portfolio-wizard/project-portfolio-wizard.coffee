@@ -1,6 +1,5 @@
 angular.module('doubtfire.projects.project-portfolio-wizard', [
   'doubtfire.projects.project-portfolio-wizard.portfolio-add-extra-files-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-compile-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-grade-select-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-learning-summary-report-step'
   'doubtfire.projects.project-portfolio-wizard.portfolio-review-step'
@@ -44,21 +43,16 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
         icon: "fa-upload"
         subtitle: "Add extra files that justify your learning to your portfolio"
         seq: 5
-      compileStep:
-        title: "Compile Portfolio PDF"
-        icon: "fa-file-pdf-o"
-        subtitle: "Submit your portfolio for compilation"
-        seq: 6
       reviewStep:
         title: "Review Portfolio"
         icon: "fa-book"
-        subtitle: "Review your portfolio submission progress"
-        seq: 7
+        subtitle: "Compile and review your portfolio submission"
+        seq: 6
     $scope.setActivePortfolioTab = (tab) ->
       $scope.activePortfolioTab = tab
       analyticsService.event 'Portfolio Wizard', 'Switched to Step', "#{tab.title} Step"
     $scope.$watch 'activePortfolioTab', (newTab, oldTab) ->
-      newTab.active = true
+      newTab?.active = true
       oldTab?.active = false
     $scope.advanceActivePortfolioTab = (advanceBy) ->
       newSeq = $scope.activePortfolioTab.seq + advanceBy
@@ -90,11 +84,22 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
         # when f.idx is 0 it's the LSR
         f.idx isnt 0
 
+    # Gets whether the unit has ilos
+    $scope.unitHasILOs = $scope.unit.ilos.length > 0
+
+    # Gets selected tasks in the task selector
+    $scope.selectedTasks = ->
+      if $scope.unitHasILOs
+        # Filter by aligned tasks that are included
+        _.filter $scope.project.tasks, (t) ->
+          t.include_in_portfolio and _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
+      else
+        # Filter by included in portfolio
+        _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
+
     # Jump to a step
-    if $scope.project.portfolio_available
+    if $scope.project.portfolio_available or $scope.project.compile_portfolio
       $scope.setActivePortfolioTab $scope.portfolioTabsData.reviewStep
-    else if $scope.project.compile_portfolio
-      $scope.setActivePortfolioTab $scope.portfolioTabsData.compileStep
     else if $scope.projectHasLearningSummaryReport()
       $scope.setActivePortfolioTab $scope.portfolioTabsData.taskStep
     else
