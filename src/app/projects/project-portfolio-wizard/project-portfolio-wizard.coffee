@@ -63,6 +63,8 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.advanceActivePortfolioTab = (advanceBy) ->
       newSeq = $scope.activePortfolioTab.seq + advanceBy
       $scope.activePortfolioTab = (tab for tabKey, tab of $scope.portfolioTabsData when tab.seq is newSeq)[0]
+      if $scope.activePortfolioTab is $scope.portfolioTabsData.summaryStep and advanceBy > 0 and $scope.projectHasLearningSummaryReport()
+        $scope.advanceActivePortfolioTab 1
     $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     $scope.projectHasLearningSummaryReport = ->
