@@ -9,7 +9,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-sele
   templateUrl: 'projects/project-portfolio-wizard/portfolio-grade-select-step/portfolio-grade-select-step.tpl.html'
   controller: ($scope, Project, projectService, gradeService) ->
     $scope.grades = gradeService.grades
-
+    $scope.agreedToAssessmentCriteria = $scope.projectHasLearningSummaryReport()
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
