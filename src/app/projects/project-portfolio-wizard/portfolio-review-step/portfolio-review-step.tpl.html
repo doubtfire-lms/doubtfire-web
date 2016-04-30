@@ -68,24 +68,29 @@
       </p>
     </div>
   </div><!--/create-pdf-->
-<!-- <div class="callout callout-warning" ng-hide="project.portfolio_available">
-  <h4>Your portfolio not yet available</h4>
-  {{project.compile_portfolio ? "It is currently being processed. Check back soon." : "Please compile a portfolio first."}}
+
+  <div class="portfolio-preview" ng-show="project.portfolio_available">
+    <div class="text-center">
+      <i class="fa fa-book fa-3x"></i>
+      <h3>Portfolio Preview</h3>
+      This is the <strong>exact same document</strong> your assessor will see
+    </div>
+
+    <pdf-panel-viewer
+      pdf-url="project.portfolioUrl()"
+      hide-footer="true">
+    </pdf-panel-viewer>
+
+    <div class="portfolio-tool-buttons text-center">
+      <button class="btn btn-danger" ng-click="deletePortfolio()">
+        <i class="fa fa-trash-o"></i> Delete Portfolio
+      </button>
+      <a href="{{project.portfolioUrl()}}" target="_blank" class="btn btn-success">
+        <i class="fa fa-download"></i> Download Portfolio
+      </a>
+    </div>
+  </div><!--/portfolio-available-->
 </div>
-<p>You can download or review your portfolio online. Check that it includes all of the evidence you need to achieve the grade you are applying for. If needed, you can delete this version and repeat the process to create a new portolio.</p>
-<div class="pull-right" ng-show="project.portfolio_available">
-  <strong>This is the exact same document your unit assessor will see</strong>
-  <button class="btn btn-danger" ng-click="deletePortfolio()">
-    <i class="fa fa-trash-o" tooltip="Delete Portfolio"></i>
-  </button>
-  <a href="{{project.portfolioUrl()}}" class="btn btn-success">
-    <i class="fa fa-download" tooltip="Download Portfolio"></i>
-  </a>
-  <pdf-panel-viewer
-    pdf-url="project.portfolioUrl()">
-  </pdf-panel-viewer>
-</div> -->
-</div>
-<div class="panel-footer">
-<button class="btn btn-primary" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+<div class="panel-footer clearfix">
+  <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
 </div>

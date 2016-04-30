@@ -53,9 +53,10 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
     resource
 
-  return PortfolioSubmission
+  PortfolioSubmission.getPortfolioUrl = (project) ->
+    "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
 
-  this.getPortfolioUrl = (project) ->
+  return PortfolioSubmission
 
   this.openPortfolio = (project) ->
     $window.open this.getTaskUrl(task), "_blank"
@@ -64,7 +65,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
   this.fileUploader = (scope, project) ->
     # per scope or task
-    uploadUrl = "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+    uploadUrl =
     fileUploader = new FileUploader {
       scope: scope,
       url: uploadUrl
