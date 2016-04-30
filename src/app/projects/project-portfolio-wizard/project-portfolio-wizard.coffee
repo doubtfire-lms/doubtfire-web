@@ -65,12 +65,20 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
       $scope.activePortfolioTab = (tab for tabKey, tab of $scope.portfolioTabsData when tab.seq is newSeq)[0]
       if $scope.activePortfolioTab is $scope.portfolioTabsData.summaryStep and advanceBy > 0 and $scope.projectHasLearningSummaryReport()
         $scope.advanceActivePortfolioTab 1
-    $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     $scope.projectHasLearningSummaryReport = ->
       _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
 
+    # Portfolio submission object
     $scope.portfolioSubmission = PortfolioSubmission($scope.project)
+
+    # Called whenever a new file is added to the portfolio
+    $scope.addNewFilesToPortfolio = (newFile) ->
+      $scope.project.portfolio_files.push newFile
+
+    # Delete file from the portfolio
+    $scope.deleteFileFromPortfolio = (file) ->
+      $scope.portfolioSubmission.deleteFile($scope.project, file)
 
     # Update targetGrade value on change
     $scope.$watch 'project.target_grade', (newValue) ->
@@ -78,13 +86,13 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
 
     # Jump to a step
     if $scope.project.portfolio_available
-      $scope.activePortfolioTab = $scope.portfolioTabsData.reviewStep
+      $scope.setActivePortfolioTab $scope.portfolioTabsData.reviewStep
     else if $scope.project.compile_portfolio
-      $scope.activePortfolioTab = $scope.portfolioTabsData.compileStep
+      $scope.setActivePortfolioTab $scope.portfolioTabsData.compileStep
     else if $scope.projectHasLearningSummaryReport()
-      $scope.activePortfolioTab = $scope.portfolioTabsData.taskStep
+      $scope.setActivePortfolioTab $scope.portfolioTabsData.taskStep
     else
-      $scope.activePortfolioTab = $scope.portfolioTabsData.welcomeStep
+      $scope.setActivePortfolioTab $scope.portfolioTabsData.welcomeStep
 
     #
     # Functions from taskService to get data

@@ -30,6 +30,27 @@ angular.module("doubtfire.api.models.portfolio-submission", [
       }
     }
 
+    #
+    # Object that defines non-LSR extra files to be added
+    #
+    resource.otherFileFileUploadData = (type) ->
+      type: {
+        file0: { name: "Other", type: type }
+      },
+      payload: {
+        name: "Other"
+        kind: type
+      }
+
+    #
+    # Delete file from portfolio
+    #
+    resource.deleteFile = (project, file) ->
+      data = angular.extend file, { id: project.project_id }
+      successFn = ->
+        project.portfolio_files = _.without(project.portfolio_files, file)
+      resource.delete data, successFn
+
     resource
 
   return PortfolioSubmission

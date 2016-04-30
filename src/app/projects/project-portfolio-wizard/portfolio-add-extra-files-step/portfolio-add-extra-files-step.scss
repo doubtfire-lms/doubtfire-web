@@ -1,0 +1,10 @@
+.portfolio-add-extra-files-step {
+  a.clear-upload {
+    margin-left: 1ex;
+    &:hover i {
+      font-size: 1.15em;
+      color: $brand-danger;
+    }
+    display: inline-block;
+  }
+}
