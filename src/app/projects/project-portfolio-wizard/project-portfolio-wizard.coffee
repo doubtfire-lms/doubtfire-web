@@ -84,6 +84,12 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.$watch 'project.target_grade', (newValue) ->
       $scope.targetGrade = gradeService.grades[newValue]
 
+    # Get only extra files submitted
+    $scope.extraFiles = ->
+      _.filter $scope.project.portfolio_files, (f) ->
+        # when f.idx is 0 it's the LSR
+        f.idx isnt 0
+
     # Jump to a step
     if $scope.project.portfolio_available
       $scope.setActivePortfolioTab $scope.portfolioTabsData.reviewStep

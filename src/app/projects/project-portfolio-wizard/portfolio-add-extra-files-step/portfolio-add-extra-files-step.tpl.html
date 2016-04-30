@@ -8,15 +8,15 @@
       These files will be added at the end of your portfolio after your selected tasks from the previous step.
     </p>
     <hr>
-    <div class="more-files" ng-show="project.portfolio_files.length == 0">
+    <div class="more-files" ng-show="extraFiles().length == 0">
       <h3>No files to add?</h3>
       <p>If you do not have any files to add you can skip this step.</p>
     </div>
-    <div class="more-files" ng-show="project.portfolio_files.length > 0">
-      <h3>Extra file{{project.portfolio_files.length > 1 ? 's' : ''}} added</h3>
-      <p>{{project.portfolio_files.length > 1 ? 'The files you add will appear in the portfolio in the order shown below.' : ''}} If you want to delete a file, click the cross beside the file's name.</p>
+    <div class="more-files" ng-show="extraFiles().length > 0">
+      <h3>Extra file{{extraFiles().length > 1 ? 's' : ''}} added</h3>
+      <p>{{extraFiles().length > 1 ? 'The files you add will appear in the portfolio in the order shown below.' : ''}} If you want to delete a file, click the cross beside the file's name.</p>
       <ol>
-        <li ng-repeat="file in project.portfolio_files | removeWith: { idx: 0 }">
+        <li ng-repeat="file in extraFiles()">
           <i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}
           <a class="clear-upload text-muted" ng-click="deleteFileFromPortfolio(file)">
             <i class="fa fa-times"></i>

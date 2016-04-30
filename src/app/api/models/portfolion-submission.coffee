@@ -60,9 +60,6 @@ angular.module("doubtfire.api.models.portfolio-submission", [
   this.openPortfolio = (project) ->
     $window.open this.getTaskUrl(task), "_blank"
 
-  $scope.addNewFilesToPortfolio = (newFile) ->
-    $scope.project.portfolio_files.push newFile
-
   # TODO: Kill below
 
   this.fileUploader = (scope, project) ->
