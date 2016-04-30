@@ -151,6 +151,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     $scope.triggerTransition = (status) ->
       if (status == 'ready_to_mark' || status == 'need_help') and $scope.project.selectedTask.definition.upload_requirements.length > 0
         $scope.setActiveTab($scope.tabs.fileUpload)
+        $scope.project.selectedTask.status = status
         return # handle with the uploader...
       else
         taskService.updateTaskStatus($scope.unit, $scope.project, $scope.project.selectedTask, status)

@@ -20,14 +20,15 @@
     </div>
   </div>
 </div>
-<div class="panel-footer">
-  <form class="input-group comment-submitter" ng-submit="addComment()" role="form">
-    <markdown-editor ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment on this submission..." height="45"></markdown-editor>
-    <span class="input-group-btn">
-      <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
-        <i class="fa fa-paper-plane fa-2x"></i>
-        <p>Send</p>
-      </button>
-    </span>
-  </form>
-</div>
+
+  <div class="panel-footer">
+    <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
+      <markdown-editor class="editor col-sm-11" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment on this submission..." height="auto"></markdown-editor>
+      <div class="send-button-wrapper col-sm-1">
+        <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
+          <i class="fa fa-paper-plane fa-2x"></i>
+          <div>Send</div>
+        </button>
+      </div>
+    </form>
+  </div>

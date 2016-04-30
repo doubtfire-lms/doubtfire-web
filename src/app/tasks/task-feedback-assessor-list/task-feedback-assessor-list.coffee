@@ -23,7 +23,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
     else
       $scope.title = "Selected Task"
       $scope.statusFilter = null
-      $scope.taskPageSize = 10
+      $scope.taskPageSize = 5
       category = 'Teacher View - Tasks Tab'
 
     $scope.search = ""

@@ -8,4 +8,5 @@ angular.module("doubtfire.common", [
   'doubtfire.common.grade-icon'
   'doubtfire.common.status-icon'
   'doubtfire.common.markdown-editor'
+  'doubtfire.common.alert-list'
 ])

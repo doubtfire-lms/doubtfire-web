@@ -75,7 +75,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': fullscreen && activeStudent == student}">
+        <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': fullscreen && activeStudent == student}">
           <td ng-click="viewStudent(student)">{{student.student_id}}</td>
           <td ng-click="viewStudent(student)">{{student.name}}</td>
           <td ng-click="viewStudent(student)" class="task-progress-bar">

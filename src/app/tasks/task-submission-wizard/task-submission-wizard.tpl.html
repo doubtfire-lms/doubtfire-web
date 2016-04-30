@@ -1,15 +1,15 @@
 <div class="task-submission-wizard">
   <div class="panel-body">
-    <div class="help-block" ng-show="task.definition.upload_requirements.length == 0">
-      <i class="fa fa-upload fa-2x"></i>
-      <p>No files required for this task.</p>
+    <div class="large-notice-block" ng-show="task.definition.upload_requirements.length == 0">
+      <i class="fa fa-times fa-2x"></i>
+      <p>No files required for this task</p>
     </div><!--/no-files-required-->
-    <div class="help-block" ng-show="isGroupTask() && ! inGroupForTask()">
-      <i class="fa fa-upload fa-2x"></i>
-      <p>Join a {{task.definition.group_set.name}} group to submit this task.</p>
+    <div class="large-notice-block" ng-show="isGroupTask() && ! inGroupForTask()">
+      <i class="fa fa-users fa-2x"></i>
+      <p>Join a {{task.definition.group_set.name}} group to submit this task</p>
     </div><!--/no-detections-->
     <div class="large-notice-block" ng-hide="uploadType" ng-if="task.definition.upload_requirements.length > 0 && ((! isGroupTask()) || inGroupForTask())">
-      <div>
+      <div class="icons-for-files">
         <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
       </div>
       <h3>{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required</h3>

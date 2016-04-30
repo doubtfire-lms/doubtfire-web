@@ -1,5 +1,7 @@
 .task-sheet-viewer {
-  .panel-body.task-description, .panel-body.task-view-alignment-panel {
+  .panel-body.task-description,
+  .panel-body.task-view-alignment-panel,
+  .panel-body.task-buttons-download-area {
     height: auto !important; // need to override changes from .task-viewer
   }
 
