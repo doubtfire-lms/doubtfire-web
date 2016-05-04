@@ -33,6 +33,8 @@ angular.module('doubtfire.common.file-uploader', [])
     isUploading: '=?'
     # This value is bound to whether or not the uploader is ready to upload
     isReady: '=?'
+    # Shows the names of files to be uploaded (defaults to true)
+    showName: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -70,6 +72,11 @@ angular.module('doubtfire.common.file-uploader', [])
     #
     $scope.clearEnqueuedUpload = (upload) ->
       upload.model = null
+
+    #
+    # Default showName
+    #
+    $scope.showName = if $scope.showName? then $scope.showName else true
 
     #
     # When a file is dropped, if there has been rejected files
@@ -150,7 +157,9 @@ angular.module('doubtfire.common.file-uploader', [])
       form.append file.name, file.data for file in files
       # Append payload
       payload = ({ key: k; value: v } for k, v of $scope.payload)
-      form.append payloadItem.key, JSON.stringify(payloadItem.value) for payloadItem in payload
+      for payloadItem in payload
+        payloadItem.value = JSON.stringify(payloadItem.value) if _.isObject payloadItem.value
+        form.append payloadItem.key, payloadItem.value
       # Set the percent
       $scope.uploadingInfo =
         progress: 5
