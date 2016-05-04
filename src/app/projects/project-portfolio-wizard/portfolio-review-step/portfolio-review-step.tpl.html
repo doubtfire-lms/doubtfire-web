@@ -8,7 +8,7 @@
     <h3><i class="fa fa-tasks"></i> No Tasks Selected</h3>
     <p ng-show="unitHasILOs">
       Your portfolio <strong>must</strong> include tasks aligned to the unit's <strong>{{unit.ilos.length}} intended learning outcomes</strong>.
-      Please indicate which tasks you think align to the unit's indended learning outcomes before you schedule your portfolio to be compiled.
+      Please indicate which tasks you think align to the unit's learning outcomes before you schedule your portfolio to be compiled.
     </p>
     <p ng-hide="unitHasILOs">
       Your portfolio <strong>must</strong> include tasks that you have completed this semester.
@@ -26,19 +26,8 @@
   <div class="create-pdf"  ng-show="canCompilePortfolio">
     <h3>Create Your Portfolio</h3>
     <p>
-      Doubtfire will not create your portfolio until you are happy with your
+      Doubtfire will create your portfolio once you are happy with your
       submissions so far.
-    </p>
-    <p ng-show="selectedTasks().length > 0">
-      You have included <strong>{{selectedTasks().length}} tasks</strong> in your portfolio. If you wish to add or remove some of these tasks,
-      please review the <em>Align and Select Tasks</em> step to adjust your alignments of each
-      task to the unit's {{unit.ilos.length}} intended learning outcomes. Each task will be attached in the order below:
-      <ol>
-        <li ng-repeat="task in selectedTasks()">
-          <label class="label label-info">{{task.definition.abbreviation}}</label>
-          {{task.definition.name}}
-        </li>
-      </ol>
     </p>
     <p ng-show="extraFiles().length > 0">
       You have attached <strong>{{extraFiles().length}} extra file{{extraFiles().length > 1 ? 's' : ''}}</strong>
@@ -48,6 +37,17 @@
       <ol>
         <li ng-repeat="file in extraFiles()">
           <i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}
+        </li>
+      </ol>
+    </p>
+    <p ng-show="selectedTasks().length > 0">
+      You have included <strong>{{selectedTasks().length}} tasks</strong> in your portfolio. If you wish to add or remove some of these tasks,
+      please review the <em>Align and Select Tasks</em> step to adjust your alignments of each
+      task to the unit's learning outcomes. Each task will be attached in the order below:
+      <ol>
+        <li ng-repeat="task in selectedTasks()">
+          <label class="label label-info">{{task.definition.abbreviation}}</label>
+          {{task.definition.name}}
         </li>
       </ol>
     </p>

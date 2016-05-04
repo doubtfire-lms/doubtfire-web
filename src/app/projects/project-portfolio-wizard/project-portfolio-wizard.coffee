@@ -36,7 +36,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
       taskStep:
         title: "Align and Select Tasks"
         icon: "fa-tasks"
-        subtitle: "Select tasks to include and showcase in your portfolio that demonstrates your understanding of each Indended Learning Outcome"
+        subtitle: "Select tasks to include and showcase in your portfolio that demonstrates your understanding of each Learning Outcome"
         seq: 4
       otherFilesStep:
         title: "Upload Other Files"
@@ -97,6 +97,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
       else
         # Filter by included in portfolio
         tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
+      tasks = _.filter tasks, (t) -> !_.includes(taskService.toBeWorkedOn, t.status)
       _.sortBy tasks, (t) -> t.definition.seq
 
     # Jump to a step
