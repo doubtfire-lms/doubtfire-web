@@ -133,7 +133,7 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
-.filter('taskFilter', ->
+.filter('taskDefinitionFilter', ->
   (input, taskDefId) ->
     if input && taskDefId
       _.filter input, (item) -> item.task_definition_id == taskDefId
