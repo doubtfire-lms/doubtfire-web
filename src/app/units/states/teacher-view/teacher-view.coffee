@@ -43,13 +43,10 @@ angular.module('doubtfire.units.states.teacher-view', [])
       title: 'Groups'
       icon:  'fa-users'
       seq:   3
-    ###
-    Remove Plagiarism Tab until we fix the CSS for it
     plagiarismTab:
       title: 'Plagiarism'
       icon:  'fa-eye'
       seq:   4
-    ###
     analyticsTab:
       title: 'Analytics'
       icon:  'fa-bar-chart'
