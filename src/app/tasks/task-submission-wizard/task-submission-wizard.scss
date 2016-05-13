@@ -1,38 +1,45 @@
-.task-submission-wizard .upload-type-selected-state {
-  height: 100%;
-  .upload-assistant {
-    padding-bottom: 1.25em;
-    margin-bottom: 2em;
-    border-bottom: 1px solid #ddd;
-    h3 {
-      float: left;
-      font-size: 2em;
-      small {
-        margin-top: 0.5em;
-        font-weight: lighter;
-        display: block;
-      }
-    }
-    .upload-type-switcher {
-      float: right;
-      text-align: right;
-      p {
-        margin-top: 0.75em;
-      }
+.task-submission-wizard {
+  .large-notice-block .icons-for-files {
+    i {
+      margin: 0 0.25ex;
     }
   }
-
-  .file-uploader {
-    text-align: center;
-    &.is-uploading {
-      margin: 0;
-      height: 100%;
-      display: block;
-      @include flex-center;
+  .upload-type-selected-state {
+    height: 100%;
+    .upload-assistant {
+      padding-bottom: 1.25em;
+      margin-bottom: 2em;
+      border-bottom: 1px solid #ddd;
+      h3 {
+        float: left;
+        font-size: 2em;
+        small {
+          margin-top: 0.5em;
+          font-weight: lighter;
+          display: block;
+        }
+      }
+      .upload-type-switcher {
+        float: right;
+        text-align: right;
+        p {
+          margin-top: 0.75em;
+        }
+      }
     }
-    .file-drop-area, .upload-area, .result-area {
-      margin: 0 auto;
-      width: 50%;
+
+    .file-uploader {
+      text-align: center;
+      &.is-uploading {
+        margin: 0;
+        height: 100%;
+        display: block;
+        @include flex-center;
+      }
+      .file-drop-area, .upload-area, .result-area {
+        margin: 0 auto;
+        width: 50%;
+      }
     }
   }
 }

@@ -1,16 +1,21 @@
 <div class="panel-body task-submission-viewer">
-  <div ng-show="notSubmitted(task) || task.processing_pdf || loadingDetails(task)">
-    <div class="large-notice-block" ng-show="notSubmitted(task) && ! loadingDetails(task)">
+  <div class="large-notice-block" ng-show="notSubmitted(task) || task.processing_pdf || loadingDetails(task)">
+    <div ng-show="notSubmitted(task) && ! loadingDetails(task)">
       <i class="fa fa-upload fa-2x"></i>
-      <p>Upload submission before viewing.</p>
+      <p>Upload submission before viewing</p>
     </div><!--/no-pdf-->
-    <div class="large-notice-block" ng-show="task.processing_pdf && ! loadingDetails(task)">
+    <div ng-show="task.processing_pdf && ! loadingDetails(task)">
         <i class="fa fa-clock-o fa-2x"></i>
-        <p>Submission is being processed. Come back soon.</p>
+        <p>
+          Submission is still being processed
+          <p class="small text-muted">
+            Please check again shortly
+          </p>
+        </p>
     </div><!--/pdf-in-process-->
-    <div class="large-notice-block" ng-show="loadingDetails(task)">
+    <div ng-show="loadingDetails(task)">
         <i class="fa fa-spinner fa-pulse fa-2x"></i>
-        <p>Fetching Submission Details.</p>
+        <p>Fetching Submission Details</p>
     </div><!--/loading details-->
   </div>
   <div ng-if="task.has_pdf">

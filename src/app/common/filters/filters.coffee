@@ -133,7 +133,7 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
-.filter('taskFilter', ->
+.filter('taskDefinitionFilter', ->
   (input, taskDefId) ->
     if input && taskDefId
       _.filter input, (item) -> item.task_definition_id == taskDefId
@@ -163,27 +163,29 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('taskFilter', ->
   (input, text) ->
-    matchText = text.toLowerCase()
-    if input
-      _.filter  input, (task) ->
-        if task?
-          project = task.project()
-          (task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0) ||
-            (task.definition.name.toLowerCase().indexOf(matchText) >= 0) ||
-            (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0))))
-        else
-          false
-    else
-      input
+    if _.isString text
+      matchText = text.toLowerCase()
+      if input
+        _.filter  input, (task) ->
+          if task?
+            project = task.project()
+            (task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0) ||
+              (task.definition.name.toLowerCase().indexOf(matchText) >= 0) ||
+              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0))))
+          else
+            false
+      else
+        input
 )
 
 .filter('projectFilter', ->
   (input, text) ->
-    matchText = text.toLowerCase()
-    if input
-      _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0)) )
-    else
-      input
+    if _.isString text
+      matchText = text.toLowerCase()
+      if input
+        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0)) )
+      else
+        input
 )
 
 .filter('taskForPortfolio', (taskService) ->

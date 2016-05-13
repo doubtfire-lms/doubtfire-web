@@ -7,17 +7,9 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-add-extra-
 .directive('portfolioAddExtraFilesStep', ->
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/portfolio-add-extra-files-step/portfolio-add-extra-files-step.tpl.html'
-  controller: ($scope) ->
-    $scope.uploadType = 'code'
-    $scope.uploadDropdown = {
-      open: false
-    }
-
-    $scope.changeTo = (type) ->
-      $scope.uploadType = type
-      $scope.fileUploader.clearQueue()
-      $scope.uploadDropdown.open = false
-
-    $scope.submitOther = () ->
-      $scope.fileUploader.uploadPortfolioPart("Other", $scope.uploadType)
+  controller: ($scope, PortfolioSubmission) ->
+    $scope.uploadType = 'document'
+    $scope.$watch 'uploadType', (newType) ->
+      return unless newType?
+      $scope.uploadFileData = $scope.portfolioSubmission.otherFileFileUploadData newType
 )

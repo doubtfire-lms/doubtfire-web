@@ -1,68 +1,53 @@
-<div id="panel" class="panel panel-primary">
-  <div class="panel-heading task-status row-fluid">
-      <h3 class="panel-title">Add Extra Files</h3><!--/title-->
-      Add extra files that justify your learning to your portfolio.
-  </div>
-  <div class="panel-body">
-    <form ng-submit="submitOther()">
-      <div class="callout callout-info" ng-show="project.portfolio_files.length < 2">
-        <h4>No files to add?</h4>
-        <p>If you do not have any files to add you can skip this step.</p>
-      </div>
-      <div class="callout callout-info" ng-show="project.portfolio_files.length >= 2">
-        <h4>Adding Files</h4>
-        <p>The files you add will appear in the portfolio in the order shown.</p>
-      </div>
-      <p>
-        You can upload <i>other files</i> you want to include in your portfolio. These will be added at the end of your portfolio.
-      </p>
-      <p>
-        To select a new file to upload, select the <i>type</i> of file from the button switch below, and drag and drop the file in to
-        grey drop-zone. Then click upload.
-      </p>
-      <hr>
-      <h4 class="col-sm-12">Upload New File</h4>
-      <div class="col-sm-4">
-        <div class="btn-group col-sm-12">
-          <label class="btn btn-default col-sm-4" ng-click="changeTo('code')" ng-model="uploadType" btn-radio="'code'">
-            <i class="fa fa-file-code-o"></i>
-            <div>Code</div>
-          </label>
-          <label class="btn btn-default col-sm-4" ng-click="changeTo('document')" ng-model="uploadType" btn-radio="'document'">
-            <i class="fa fa-file-text-o"></i>
-            <div>Document</div>
-          </label>
-          <label class="btn btn-default col-sm-4" ng-click="changeTo('image')" ng-model="uploadType" btn-radio="'image'">
-            <i class="fa fa-file-image-o"></i>
-            <div>Image</div>
-          </label>
-        </div>
-      </div>
-
-      <div ng-hide="fileUploader.isUploading" class="col-sm-8">
-        <input ng-hide="fileUploader.isHTML5" options="{ alias: 'file0' }" type="file" uploader="fileUploader" ng-required="!fileUploader.isHTML5" nv-file-select />
-        <div uploader="fileUploader" ng-show="fileUploader.isHTML5 && fileUploader.queue.length == 0" class="drop well" over-class="file-over-hover" options="{ alias: 'file0' }" nv-file-drop nv-file-over filters="is_{{uploadType}}">
-          <p class="fa fa-file-{{uploadType == 'document' ? 'pdf' : uploadType}}-o fa-3x"></p>
-          <br/>
-          Drop {{uploadType}} here
-        </div>
-        <p ng-show="fileUploader.queue.length == 1" class="form-control-static">{{fileUploader.queue[0].file.name}} <span class="glyphicon glyphicon-file"></span></p>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-3 col-sm-offset-9">
-          <button type="submit" ng-disabled="fileUploader.isUploading || fileUploader.queue.length != 1" class="btn btn-success form-control">
-            <i class="fa fa-cloud-upload"></i> Upload
-          </button>
-        </div>
-        <div ng-show="fileUploader.isUploading">
-          <progressbar class="progress-striped active" value="fileUploader.progress"></progressbar>
-        </div>
-      </form>
-
+<div class="portfolio-add-extra-files-step">
+  <div class="add-some-more-files">
+    <h3>Add some more files</h3>
+    <p>
+      Now is your chance to upload extra files to include in your portfolio.
+    </p>
+    <p>
+      These files will be added at to your portfolio before your selected tasks from the previous step.
+    </p>
+    <hr>
+    <div class="more-files" ng-show="extraFiles().length == 0">
+      <h3>No files to add?</h3>
+      <p>If you do not have any files to add you can skip this step.</p>
     </div>
-  </div>
-  <div class="panel-footer clearfix">
-    <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
-    <button class="btn btn-primary pull-right" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
-  </div>
+    <div class="more-files" ng-show="extraFiles().length > 0">
+      <h3>Extra file{{extraFiles().length > 1 ? 's' : ''}} added</h3>
+      <p>{{extraFiles().length > 1 ? 'The files you add will appear in the portfolio in the order shown below.' : ''}} If you want to delete a file, click the cross beside the file's name.</p>
+      <ol>
+        <li ng-repeat="file in extraFiles()">
+          <i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}
+          <a class="clear-upload text-muted" ng-click="deleteFileFromPortfolio(file)">
+            <i class="fa fa-times"></i>
+          </a>
+        </li>
+      </ol>
+    </div>
+  </div><!--/add-some-more-files-->
+  <hr>
+  <div class="extra-files-uploader text-center">
+    <div class="form-group clearfix" ng-hide="isUploading">
+      <label class="col-sm-3 text-right">Select type of file:</label>
+      <div class="col-sm-7">
+        <select ng-model="uploadType" class="form-control input-lg">
+          <option value="document">
+            <i class="fa fa-file-pdf-o"></i> Document File</option>
+          <option value="code">Code File</option>
+          <option value="image">Image File</option>
+        </select>
+      </div>
+    </div>
+    <file-uploader
+      show-name="false"
+      files="uploadFileData.type"
+      payload="uploadFileData.payload"
+      is-uploading="isUploading"
+      url="portfolioSubmission.portfolioUrl"
+      on-success="addNewFilesToPortfolio"></file-uploader>
+  </div><!--/extra-files-uploader-->
+</div><!--/content-->
+<div class="panel-footer clearfix">
+  <button class="btn btn-primary pull-left" ng-click="advanceActivePortfolioTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+  <button class="btn btn-primary pull-right" ng-click="advanceActivePortfolioTab(1)">Next <i class="fa fa-arrow-right"></i></button>
 </div>
