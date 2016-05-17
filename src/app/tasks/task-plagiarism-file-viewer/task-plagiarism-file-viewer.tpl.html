@@ -5,7 +5,6 @@
       <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a></small>
     </h5>
   </div>
-  <div class="panel-body plagiarism-panel">
-    <code ng-class="match.name == '???' ? 'col-sm-12' : 'plagiarism-panel col-sm-12'" ng-bind-html="match.html"></code>
+  <div class="panel-body plagiarism-panel" ng-bind-html="match.html">
   </div>
 </div>

@@ -1,5 +1,5 @@
 <div class="task-plagiarism-report-viewer">
-  <div class="panel-body">
+  <div>
     <div class="large-notice-block" ng-show="noPlagiarismDetected()">
       <i class="fa fa-eye fa-2x"></i>
       <p>Doubtfire has detected no similarities for this work</p>
@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-  <div class="panel-footer" ng-hide="noPlagiarismDetected()">
+  <div ng-show="task.similar_to_count > 1">
     <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
   </div>
 </div>

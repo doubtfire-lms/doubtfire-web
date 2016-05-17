@@ -1,53 +1,107 @@
-<div>
-  <!-- TODO: This needs to be refactored -->
-  <ul class="nav nav-pills nav-stacked col-sm-2">
-    <li role="presentation" ng-class="{'active' : view == 'all-students' }"><a ng-click="setActiveView('all-students')">All Students</a></li>
-    <li role="presentation" ng-class="{'active' : view == 'my-students' }"><a ng-click="setActiveView('my-students')">My Students</a></li>
-    <li role="presentation" ng-class="{'active' : view == 'tasks' }"><a ng-click="setActiveView('tasks')">Tasks</a></li>
-  </ul>
-  <div class="col-sm-10">
-    <div ng-show="view == 'all-students' || view == 'my-students'">
-      <form role="search" class="pull-right form-horizontal" style="margin:-60px 0 20px 0;">
-        <input id="searchbar" class="input-md form-control" placeholder="Search students, tutors..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="500" autofocus />
-        <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{allStudents.length}} students.</p>
-        <p class="help-block" ng-show="filteredStudents.length < allStudents.length && filteredStudents.length == 0">No students found.</p>
-      </form>
-      <div class="table-responsive">
-        <table class="table table-condensed table-hover">
-          <thead>
-            <tr>
-              <th></th>
-              <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-              <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-              <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
-              <th><a href="" ng-click="sortOrder='tasks_with_similarities'; reverse=!reverse">Number Similar</a></th>
-              <th><a href="" ng-click="sortOrder='max_pct_copy'; reverse=!reverse">Max Pct Similar</a></th>
-              <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >
-              <td><a ng-show="activeStudent != student" href="" ng-click="selectStudent(student)">Select</a><a ng-hide="activeStudent != student" href="" ng-click="selectStudent(null)">Deselect</a></td>
-              <td><a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a></td>
-              <td>{{student.name}}</td>
-              <td>{{grades[student.target_grade]}}</td>
-              <td>{{student.tasks_with_similarities}}</td>
-              <td>{{student.max_pct_copy}}%</td>
-              <td><span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+<div class="unit-student-plagiarism-list">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Plagiarism Report</h4>
+        {{studentFilter}}
+        Students from {{studentFilter == 'myStudents' ? 'my tutorials' : 'every tutorial'}} that include tasks which appear similar to other student work
       </div>
-    </div> <!-- end students div -->
+      <div class="pull-right toolbar text-right">
+        <div class="buttons">
+          <!-- <div class="btn-group pull-right">
+            <label class="btn btn-default" ng-model="view" btn-radio="'students'">
+              <i class="fa fa-user" tooltip="Show students with similarities"></i>
+            </label>
+            <label class="btn btn-default" ng-model="view" btn-radio="'tasks'">
+              <i class="fa fa-tasks" tooltip="Show tasks with similarities"></i>
+            </label>
+          </div> -->
+          <div class="btn-group pull-right">
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+              <i class="fa fa-university" tooltip="Show all students"></i>
+            </label>
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+              <i class="fa fa-pencil" tooltip="Show only my students"></i>
+            </label>
+          </div>
+        </div><!--/buttons-->
+        <form role="search" class="form-horizontal pull-right">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+        </form><!--/search-->
+      </div><!--/toolbar-->
+    </div>
+
+    <div class="panel-body">
+      <div ng-show="view == 'students'">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover table-pointer">
+            <thead>
+              <tr>
+                <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
+                <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+                <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
+                <!-- <th><a href="" ng-click="sortOrder='similar_to_count'; reverse=!reverse">Tasks Similar</a></th> -->
+                <th><a href="" ng-click="sortOrder='max_pct_copy'; reverse=!reverse">Max Pct Similar</a></th>
+                <th><a href="" ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">Tutorial</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
+                <td>{{student.student_id}}</td>
+                <td>{{student.name}}</td>
+                <td>{{grades[student.target_grade]}}</td>
+                <!-- <td>{{student.similar_to_count}}</td> -->
+                <td>{{student.max_pct_copy}}%</td>
+                <td><span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+        </div>
+      </div> <!-- end students div -->
+    </div>
   </div>
-  <div class="col-sm-12">
-    <ul class="nav nav-tabs nav-justified">
-      <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in activeStudent.tasks | taskWithPlagiarism"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
-    </ul>
-    <div class="col-sm-12" ng-if="activeTask">
-      <task-plagiarism-report-viewer task="activeTask"></task-plagiarism-report-viewer>
-      <span><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.task.definition.name}}</a></span>
+
+  <!-- Panel with select student/task to view  -->
+  <div class="panel panel-default" ng-hide="activeStudent || task">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        View similarities
+      </h3>
+    </div>
+    <!-- Panel body with select message  -->
+    <div class="panel-body large-notice-block nothing-selected">
+      <i ng-class="view == 'tasks' ? 'fa fa-tasks' : 'fa fa-user'"></i>
+      <p>Select a {{ view == 'tasks' ? 'task' : 'student' }} to view similarities</p>
+    </div>
+  </div>
+
+  <!-- Panel body with task details  -->
+  <div class="panel panel-default" ng-show="activeStudent || task">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        View similarities
+      </h3>
+    </div>
+    <div class="panel-body" ng-show="activeStudent || task">
+      <div ng-show="loadingStudent">
+        <div class="large-notice-block">
+          <i class="fa fa-spinner fa-pulse fa-2x"></i>
+          <p>Loading...</p>
+        </div>
+      </div>
+      <div ng-hide="loadingStudent">
+        <ul class="nav nav-tabs nav-justified" ng-show="tasksToCheck.length > 1">
+          <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in tasksToCheck = (activeStudent.tasks | taskWithPlagiarism)"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
+        </ul>
+        <div class="col-sm-12" ng-if="activeTask">
+          <task-plagiarism-report-viewer task="activeTask"></task-plagiarism-report-viewer>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <span ng-if="activeTask"><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.definition.name}}</a></span>
     </div>
   </div>
 </div>

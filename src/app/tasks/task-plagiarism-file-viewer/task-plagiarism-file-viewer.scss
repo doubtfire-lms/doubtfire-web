@@ -1,4 +1,5 @@
 .task-plagiarism-file-viewer .plagiarism-panel {
   display: block;
-  height: 45vh;
+  max-height: 80vh;
+  overflow: scroll;
 }

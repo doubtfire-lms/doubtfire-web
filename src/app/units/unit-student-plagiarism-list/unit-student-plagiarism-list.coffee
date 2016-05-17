@@ -10,7 +10,7 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
   controller: ($scope, $filter, currentUser, gradeService, projectService) ->
     $scope.grades = gradeService.grades
 
-    $scope.view = "all-students"
+    $scope.view = "students"
     studentFilter = "allStudents"
 
     $scope.tutorName = currentUser.profile.name
@@ -18,25 +18,34 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
     $scope.reverse = false
     $scope.currentPage = 1
     $scope.maxSize = 5
-    $scope.pageSize = 15
+    $scope.pageSize = 5
 
     $scope.assessingUnitRole = $scope.unitRole
 
-    $scope.setActiveView = (kind) ->
-      $scope.view = kind
-      if kind == 'my-students'
-        studentFilter = "myStudents"
-      else
-        studentFilter = "allStudents"
+    $scope.studentFilter = 'allStudents'
+
+    $scope.$watch 'unit.students', (newUnit) ->
+      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
+      if filteredStudents? && filteredStudents.length == 0
+        $scope.studentFilter = 'allStudents'
+
+      # _.each $scope.unit.students, (student) ->
+      #   if student.max_pct_copy > 0
+      #     projectService.fetchDetailsForProject student, $scope.unit, (proj) ->
+      #       tasksWithCpy = _.filter proj.tasks, (t) -> t.pct_similar > 0
+      #       proj.similar_to_count = tasksWithCpy.length
 
     $scope.activeStudent = null
     $scope.activeTask = null
+    $scope.loadingStudent = true
 
     $scope.selectStudent = (student) ->
       $scope.activeStudent = student
+      $scope.loadingStudent = true
       if student
         projectService.fetchDetailsForProject student, $scope.unit, (project) ->
           $scope.activeTask = _.find(student.tasks, (task) -> task.similar_to_count > 0)
+          $scope.loadingStudent = false
 
     $scope.selectTask = (task) ->
       $scope.activeTask = task
