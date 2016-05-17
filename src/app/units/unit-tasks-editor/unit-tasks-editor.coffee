@@ -44,11 +44,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
           "#{last_abbr}1"
 
     $scope.deleteTask = (task) ->
-      ConfirmationModal.show "Delete Task #{task.abbreviation}",
-        'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
-        () ->
-          promise = taskService.deleteTask task, $scope.unit, null
-          ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
+      taskService.deleteTask task, $scope.unit, null
 
     $scope.createTask = ->
       abbr = guessTaskAbbreviation()

@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal) ->
   #
   # The unit service object
   #
@@ -222,7 +222,8 @@ angular.module("doubtfire.common.services.tasks", [])
     return false if diffDays <= 0
     diffDays
 
-  taskService.deleteTask = (task, unit, callback = null) ->
+
+  doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (
       (response) ->
         unit.task_definitions = _.without unit.task_definitions, task
@@ -238,6 +239,13 @@ angular.module("doubtfire.common.services.tasks", [])
           alertService.add("danger", "Unexpected error connecting to Doubtfire.", 6000)
         analyticsService.event 'Task Service', 'Failed to Delete Task Definition'
     )
+
+  taskService.deleteTask = (task, unit, callback = null) ->
+    ConfirmationModal.show "Delete Task #{task.abbreviation}",
+      'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
+      () ->
+        promise = doDeleteTask task, unit, null
+        ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
   taskService.indexOf = (status) ->
     _.indexOf(taskService.statusKeys, status)
