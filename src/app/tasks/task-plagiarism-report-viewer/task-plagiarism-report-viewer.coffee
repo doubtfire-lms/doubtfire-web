@@ -28,15 +28,17 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
       $scope.tasks?.similar_to_count <= 0 || $scope.similarityData == null
 
     $scope.emailStudentsPlagiarism = () ->
-      $scope.firstAddress = $scope.similarityData.student.username + "@student.swin.edu.au"
-      $scope.secondAddress = $scope.similarityData.other_student.username + "@student.swin.edu.au"
-      $scope.message = ""
-      $scope.subject = "Plagiarism%20Report%20for%20" + $scope.task.definition.abbreviation
 
-      $scope.mailtoString = "mailto:?BCC=" + $scope.firstAddress + "," + $scope.secondAddress + "&Subject=" + $scope.subject + "&body="+$scope.message
+      if $scope.similarityData?
+        $scope.firstAddress = $scope.similarityData.student.username + "@student.swin.edu.au"
+        $scope.secondAddress = $scope.similarityData.other_student.username + "@student.swin.edu.au"
+        $scope.message = ""
+        $scope.subject = "Plagiarism%20Report%20for%20" + $scope.task.definition.abbreviation
 
-      # This stops a new tab from being opened when executing the Mailto.
-      $window.location.href = $scope.mailtoString
+        $scope.mailtoString = "mailto:?BCC=" + $scope.firstAddress + "," + $scope.secondAddress + "&Subject=" + $scope.subject + "&body="+$scope.message
+
+        # This stops a new tab from being opened when executing the Mailto.
+        $window.location.href = $scope.mailtoString
 
     $scope.fetchSimilarity = () ->
       if $scope.task?.similar_to_count > 0

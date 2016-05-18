@@ -1,6 +1,9 @@
 <div class="panel panel-default task-plagiarism-file-viewer">
   <div class="panel-heading">
     <h5 class="panel-title">{{match.username}}: {{match.name}}
+      <!-- <button ng-click="emailStudentsPlagiarism()" class="btn btn-primary">
+        Email Student
+      </button> -->
       <br>
       <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a></small>
     </h5>
