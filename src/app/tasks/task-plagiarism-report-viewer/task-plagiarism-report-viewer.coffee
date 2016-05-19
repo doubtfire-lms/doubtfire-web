@@ -9,7 +9,8 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
   restrict: 'E'
   templateUrl: 'tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.tpl.html'
   scope:
-    task: "=task"
+    task: "="
+    assessingUnitRole: "="
 
   controller: ($scope, $window, TaskSimilarity) ->
     # functions from task service
@@ -17,6 +18,9 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
     $scope.match = 1
     #$scope.plagiarismPage = $sce.trustAsResourceUrl("#{api}/tasks/20/similarity/#{$scope.match}?auth_token=#{currentUser.authenticationToken}")
     $scope.similarityData = null
+
+    if _.isString $scope.assessingUnitRole?.role
+      $scope.canSendEmail = _.includes(["Tutor", "Convenor"], $scope.assessingUnitRole.role)
 
     $scope.$watch 'task', ->
       $scope.fetchSimilarity()

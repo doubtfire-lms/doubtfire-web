@@ -12,7 +12,7 @@
         <task-plagiarism-file-viewer match="similarityData.other_student"></task-plagiarism-file-viewer>
       </div>
     </div>
-    <button ng-click="emailStudentsPlagiarism()" class="btn btn-primary btn-block">
+    <button ng-if="canSendEmail" ng-click="emailStudentsPlagiarism()" class="btn btn-primary btn-block">
       Email Students
     </button>
   </div>
