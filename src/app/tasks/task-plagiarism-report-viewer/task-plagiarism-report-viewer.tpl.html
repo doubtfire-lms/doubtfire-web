@@ -12,6 +12,11 @@
         <task-plagiarism-file-viewer match="similarityData.other_student"></task-plagiarism-file-viewer>
       </div>
     </div>
+    <div class="col-sm-12 text-right">
+      <button ng-if="canSendEmail" ng-click="emailStudentsPlagiarism()" class="btn btn-primary">
+        <i class="fa fa-envelope"></i> Email Students
+      </button>
+    </div>
   </div>
   <div ng-show="task.similar_to_count > 1">
     <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>

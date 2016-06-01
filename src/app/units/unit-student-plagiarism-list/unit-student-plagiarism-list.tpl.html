@@ -3,7 +3,6 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Plagiarism Report</h4>
-        {{studentFilter}}
         Students from {{studentFilter == 'myStudents' ? 'my tutorials' : 'every tutorial'}} that include tasks which appear similar to other student work
       </div>
       <div class="pull-right toolbar text-right">
@@ -96,7 +95,7 @@
           <li role="presentation" ng-class="{'active' : activeTask == task }" ng-repeat="task in tasksToCheck = (activeStudent.tasks | taskWithPlagiarism)"><a href="" ng-click="selectTask(task)">{{task.definition.abbreviation}}</a></li>
         </ul>
         <div class="col-sm-12" ng-if="activeTask">
-          <task-plagiarism-report-viewer task="activeTask"></task-plagiarism-report-viewer>
+          <task-plagiarism-report-viewer task="activeTask" assessing-unit-role="assessingUnitRole"></task-plagiarism-report-viewer>
         </div>
       </div>
     </div>
