@@ -30,7 +30,7 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
       selectStudent:
         title: "Select Student"
         subtitle: "Select the student to assess"
-        icon: "fa-info"
+        icon: "fa-hand-o-right"
         seq: 0
         active: false
       viewProgress:
