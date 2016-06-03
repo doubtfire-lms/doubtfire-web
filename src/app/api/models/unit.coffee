@@ -2,6 +2,8 @@ angular.module("doubtfire.api.models.unit", [])
 
 .factory("Unit", (resourcePlus, currentUser, $window, api) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
+  Unit.getGradesUrl = (unit) ->
+    "#{api}/unit/#{unit?.id}/grades?auth_token=#{currentUser.authenticationToken}"
   Unit.getPortfoliosUrl = (unit) ->
     "#{api}/submission/unit/#{unit?.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
   Unit.taskUploadUrl = (unit) ->

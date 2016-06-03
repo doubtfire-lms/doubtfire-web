@@ -9,8 +9,9 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
   templateUrl: 'units/unit-student-portfolio-list/unit-student-portfolio-list.tpl.html'
   controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser) ->
     $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
+    $scope.gradeDownloadUrl = Unit.getGradesUrl $scope.unit
 
-    $scope.studentFilter = 'myStudents' # Mine by default
+    $scope.studentFilter = 'allStudents'
 
     $scope.grades = gradeService.grades
     $scope.unitService = unitService
