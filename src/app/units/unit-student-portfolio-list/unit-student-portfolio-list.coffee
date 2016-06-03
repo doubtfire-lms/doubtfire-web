@@ -13,6 +13,47 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
 
     $scope.studentFilter = 'allStudents'
 
+    #
+    # Sets the active tab
+    #
+    $scope.setActiveTab = (tab) ->
+      # Do nothing if we're switching to the same tab
+      return if tab is $scope.activeTab
+      $scope.activeTab?.active = false
+      $scope.activeTab = tab
+      $scope.activeTab.active = true
+
+    #
+    # Active task tab group
+    #
+    $scope.gradingTabs =
+      selectStudent:
+        title: "Select Student"
+        subtitle: "Select the student to assess"
+        icon: "fa-info"
+        seq: 0
+        active: false
+      viewProgress:
+        title: "View Progress"
+        subtitle: "See the progress of the student"
+        icon: "fa-line-chart"
+        seq: 1
+        active: false
+      viewPortfolio:
+        title: "View Portfolio"
+        subtitle: "See the portfolio of the student"
+        icon: "fa-book"
+        seq: 2
+        active: false
+      assessPortfolio:
+        title: "Assess Portfolio"
+        subtitle: "Enter a grade for the student"
+        icon: "fa-trophy"
+        seq: 3
+        active: false
+
+    $scope.setActiveTab($scope.gradingTabs.selectStudent)
+
     $scope.grades = gradeService.grades
     $scope.unitService = unitService
 
