@@ -7,10 +7,13 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/portfolio-review-step/portfolio-review-step.tpl.html'
   controller: ($scope, alertService, Project) ->
-    $scope.hasLSR = $scope.projectHasLearningSummaryReport()
-    $scope.hasTasksSelected = $scope.selectedTasks().length > 0
-    $scope.portfolioIsCompiling = $scope.project.compile_portfolio
-    $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
+
+    # Watch when portfolio value is changed to reassess
+    $scope.$watch 'project.portfolio_available', ->
+      $scope.hasLSR = $scope.projectHasLearningSummaryReport()
+      $scope.hasTasksSelected = $scope.selectedTasks().length > 0
+      $scope.portfolioIsCompiling = $scope.project.compile_portfolio
+      $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
 
     #
     # Compile portfolio
@@ -25,9 +28,9 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     # PDF Local Funcs
     #
     $scope.deletePortfolio = () ->
-      $scope.fileUploader.api.delete {
+      $scope.portfolioSubmission.delete {
         id: $scope.project.project_id
       }, (response) ->
-        $scope.activePortfolioTab = $scope.tabData.compileStep
         $scope.project.portfolio_available = false
+        alertService.add('info', "Portfolio has been deleted!", 5000)
 )
