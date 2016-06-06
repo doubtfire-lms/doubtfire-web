@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     $scope.hasLSR = $scope.projectHasLearningSummaryReport()
     $scope.hasTasksSelected = $scope.selectedTasks().length > 0
     $scope.portfolioIsCompiling = $scope.project.compile_portfolio
-    $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR
+    $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
 
     #
     # Compile portfolio
