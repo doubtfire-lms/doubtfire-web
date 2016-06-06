@@ -20,4 +20,5 @@ angular.module('doubtfire.tasks.task-submission-viewer', [])
       return unless newTask?
       newTask.getSubmissionDetails()
       $scope.taskUrl = TaskFeedback.getTaskUrl newTask
+      $scope.taskFilesURL = TaskFeedback.getTaskFilesUrl newTask
 )
