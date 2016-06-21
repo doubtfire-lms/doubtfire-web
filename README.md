@@ -76,7 +76,7 @@ $ bower install
 Lastly, to compile and run a watch server and web server, use `grunt`:
 
 ```
-$ grunt watchsvr
+$ grunt
 ```
 
 You can then navigate to the Doubtfire web interface at **http://localhost:8000**
