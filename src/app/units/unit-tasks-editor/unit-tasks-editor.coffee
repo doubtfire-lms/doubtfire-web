@@ -83,8 +83,9 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
     $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
 
     $scope.onTaskPDFSuccess = (response) ->
-      alertService.add("success", "Files uploaded", 2000)
-      $scope.filesUploaded = response
+      CsvResultModal.show "Task File Import Results", response
+      if response.success.length > 0
+        $scope.unit.refresh()
 
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchTaskUrl = ->
