@@ -18,7 +18,7 @@
         <td>{{member.student_name}}</td>
         <td>{{gradeFor(member)}}</td>
         <td ng-init="member.rating = initialStars">
-          <rating class="group-member-contribution-rating" ng-click="checkClearRating(member)" ng-model="member.rating" on-hover="hoveringOver(member, value)" on-leave="hoveringOver(member, null)" max="numStars"></rating>
+          <rating class="group-member-contribution-rating" ng-click="checkClearRating(member)" ng-model="member.rating" on-hover="hoveringOver(member, value)" on-leave="hoveringOver(member, null)" max="numStars" state-on="'fa fa-child icon-colorful'" state-off="'fa fa-child icon-disable'"></rating>
           <span class="label" ng-class="{'label-danger': member.percent==dangerPct, 'label-warning': member.percent>dangerPct && member.percent<infoPct,'label-info': member.percent>=infoPct && member.percent<successPct, 'label-success': member.percent>=successPct}" ng-show="member.overStar">{{member.percent}}%</span>
         </td>
       </tr>
