@@ -99,6 +99,16 @@
                 </div><!--/graded-task-->
 
                 <div class="form-group" ng-required="isNew">
+                  <label class="col-sm-3 control-label">Quality Points</label>
+                  <div class="col-sm-8">
+                    <input type="number" class="form-control" ng-model="task.max_quality_pts" min="0"/>
+                    <span class="help-block">
+                      Requires tutors to provide a quality rating based on a number of stars. The value set here determines the number of stars. 0 disables this rating.</em>.
+                    </span>
+                  </div>
+                </div><!--/quality points-->
+
+                <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to start this task." class="col-sm-3 control-label">Start Date</label>
                   <div class="col-sm-7">
                     <div class="col-sm-4 input-group">

@@ -112,7 +112,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
 
     $scope.mapTeamToPayload = () ->
       total = groupService.groupContributionSum $scope.team.members
-      _.map $scope.team.members, (member) -> { project_id: member.project_id, pct: (100 * member.rating / total).toFixed(0)  }
+      _.map $scope.team.members, (member) -> { project_id: member.project_id, pct: (100 * member.rating / total).toFixed(0), pts: member.rating  }
 
     $scope.onBeforeUpload = () ->
       if groupService.isGroupTask($scope.task)
