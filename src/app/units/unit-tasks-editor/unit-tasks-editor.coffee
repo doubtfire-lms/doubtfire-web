@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, CsvResultModal, ConfirmationModal, ProgressModal) ->
+  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -98,4 +98,5 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
       if response.success.length > 0
         $scope.unit.refresh()
 
+    $scope.groupSetName = (id) -> groupService.groupSetName(id, $scope.unit)
 )
