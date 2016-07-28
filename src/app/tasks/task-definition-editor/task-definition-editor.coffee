@@ -125,6 +125,8 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeCheck = (check) ->
       $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
 
+    $scope.allowedQualityPoints = [0..10]
+
     populate_task = (oldTask, newTask) ->
       _.extend(oldTask, newTask)
       if newTask.weighting

@@ -101,9 +101,11 @@
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Quality Points</label>
                   <div class="col-sm-8">
-                    <input type="number" class="form-control" ng-model="task.max_quality_pts" min="0"/>
+                    <div class="btn-group">
+                      <label ng-repeat="value in allowedQualityPoints" class="btn btn-sm btn-default" ng-model="task.max_quality_pts" btn-radio="{{value}}">{{value || 'Disabled'}}</label>
+                    </div>
                     <span class="help-block">
-                      Requires tutors to provide a quality rating based on a number of stars. The value set here determines the number of stars. 0 disables this rating.</em>.
+                      Requires tutors to provide a quality rating based on a number of stars. The value set here determines the maximum number of stars allowed.
                     </span>
                   </div>
                 </div><!--/quality points-->
