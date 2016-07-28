@@ -21,10 +21,13 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     $scope.team.members = []
     $scope.numStars = 5
     $scope.initialStars = 3
-    $scope.dangerPct = 0
-    $scope.warnPct = 25
-    $scope.infoPct = 50
-    $scope.successPct = 100
+
+    $scope.percentages = {
+      danger: 0,
+      warning: 25,
+      info: 50,
+      success: 100
+    }
 
     $scope.checkClearRating = (member) ->
       if member.confRating == 1 && member.overStar == 1 && member.rating == 1
@@ -44,9 +47,16 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     if $scope.selectedGroup && $scope.selectedGroupset
       GroupMember.query { unit_id: $scope.project.unit_id, group_set_id: $scope.selectedGroupset.id, group_id: $scope.selectedGroup.id }, (members) ->
         $scope.team.members = members
-        $scope.warnPct = (25 / members.length).toFixed()
-        $scope.infoPct = (50 / members.length).toFixed()
-        $scope.successPct = (95 / members.length).toFixed()
+        # Need the '+' to convert to number
+        $scope.percentages.warning = +(25 / members.length).toFixed()
+        $scope.percentages.info    = +(50 / members.length).toFixed()
+        $scope.percentages.success = +(95 / members.length).toFixed()
     else
       $scope.team.members = []
+
+    $scope.percentClass = (pct) ->
+      return 'label-success'  if pct >= $scope.percentages.success
+      return 'label-info'     if $scope.percentages.info    <= pct < $scope.percentages.success
+      return 'label-warning'  if $scope.percentages.warning <= pct < $scope.percentages.info
+      return 'label-danger'   if $scope.percentages.danger  <= pct < $scope.percentages.warning
 )
