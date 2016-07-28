@@ -26,6 +26,9 @@
       width: 60%;
       margin: 0 auto;
     }
+    .contribution-navigation {
+      margin-top: 3em;
+    }
   }
   .upload-files-state {
     .upload-assistant {
@@ -37,7 +40,6 @@
         }
       }
     }
-
     .file-uploader {
       text-align: center;
       &.is-uploading {
@@ -49,6 +51,9 @@
       .file-drop-area, .upload-area, .result-area {
         margin: 0 auto;
         width: 50%;
+      }
+      .upload-area .btn {
+        @extend .btn-lg;
       }
     }
   }
