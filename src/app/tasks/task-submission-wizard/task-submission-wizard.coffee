@@ -105,7 +105,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       analyticsService.event 'Task Submit Form', "Files Uploaded", undefined, $scope.numberOfFiles
 
     $scope.onComplete = ->
-      $scope.uploadType = null
+      $scope.state = $scope.states.initial
 
     #
     # When the scope leaves focus, revert all changes if need be
