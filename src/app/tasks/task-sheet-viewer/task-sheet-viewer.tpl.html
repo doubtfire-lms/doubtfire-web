@@ -8,11 +8,6 @@
     </h3>
     Details about your task assessment are given below
   </div><!--view-alignment-panel-header-->
-  <pre>
-shouldShowAssessmentPanel = {{shouldShowAssessmentPanel}}
-taskIsGraded = {{taskIsGraded}}
-qualityStars = {{qualityStars}}
-  </pre>
   <div class="panel-body assessment-details-alignment-panel" ng-if="shouldShowAssessmentPanel">
     <div class="assessment-item graded-task" ng-if="taskIsGraded">
       <aside>
@@ -21,8 +16,8 @@ qualityStars = {{qualityStars}}
       <div class="content">
         <h4> This task will be assigned a grade </h4>
         <p>
-          This task will be graded against a grade standard. Your tutor will
-          assess the task and assign a grade to the task according to a Pass,
+          This task will be graded against a grade standard. Your work will
+          be assessed and assigned a grade according to a Pass,
           Credit, Distinction or High Distinction standard.
         </p>
         <p class="callout callout-primary">
@@ -40,9 +35,8 @@ qualityStars = {{qualityStars}}
         <h4> This task will be assessed on a scale to {{qualityStars}} </h4>
         <p>
           This task will be graded against a quality scale from
-          <strong>0 to {{qualityStars}}</strong>. Your tutor will assess
-          the task and assign a star rating based on what they think of quality
-          of your submission.
+          <strong>0 to {{qualityStars}}</strong>. Your work will assessed
+          and assigned a star rating based on the quality of your submission.
         </p>
       </div>
     </div><!--/quality-star-details-->
