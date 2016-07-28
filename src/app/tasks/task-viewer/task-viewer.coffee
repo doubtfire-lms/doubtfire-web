@@ -94,6 +94,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
         $scope.setActiveTab($scope.tabs.taskSheet)
       # Update the task grade if applicable
       $scope.taskIsGraded = taskService.taskIsGraded newTask
+      $scope.numStars = newTask.definition.max_quality_pts
 
     #
     # Watch grade for changes

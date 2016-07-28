@@ -90,7 +90,7 @@ angular.module("doubtfire.common.services.tasks", [])
     fail:               'FAL'
 
   taskService.statusLabels =
-    ready_to_mark:      'Ready to Mark'
+    ready_to_mark:      'Ready for Feedback'
     not_started:        'Not Started'
     working_on_it:      'Working On It'
     need_help:          'Need Help'

@@ -127,7 +127,7 @@ angular.module("doubtfire.projects.project-viewer", [])
         else
           # Show the first interesting task
           if $scope.assessingUnitRole?
-            # Find first task that is Ready To Mark or Need Help
+            # Find first task that is Ready for Feedback or Need Help
             t = _.find filteredTasks, (t) -> t.status == 'need_help' || t.status == 'ready_to_mark'
             if not t? # else find discuss
               t = _.find filteredTasks, (t) -> t.status == 'discuss' || t.status == 'demonstrate'
