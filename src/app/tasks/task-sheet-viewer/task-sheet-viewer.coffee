@@ -13,35 +13,42 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     project: '='
 
   controller: ($scope, $filter, currentUser, Task, taskService, gradeService, analyticsService) ->
-
+    # Default for showing the task sheet
     $scope.showTaskSheet = false
 
+    # Alias for textual target project grade
     $scope.targetGrade  = gradeService.grades[$scope.project.target_grade]
-    $scope.taskIsGraded = $scope.task.definition.is_graded
-    $scope.qualityStars = $scope.task.definition.max_quality_pts
 
-    $scope.shouldShowAssessmentPanel = $scope.taskIsGraded or $scope.qualityStars
+    #
+    # Watch task for new changes
+    #
+    $scope.$watch 'task', (task) ->
+      return unless task?
+      $scope.taskIsGraded = task.definition.is_graded
+      $scope.qualityStars = task.definition.max_quality_pts
+      $scope.shouldShowAssessmentPanel = $scope.taskIsGraded or $scope.qualityStars
+      $scope.hasPDF = task.definition.has_task_pdf
+      $scope.hasResources = task.definition.has_task_resources
+      $scope.taskPDFUrl = Task.getTaskPDFUrl($scope.unit, task.definition)
+      $scope.resourceUrl = Task.getTaskResourcesUrl($scope.unit, task.definition)
 
-    $scope.downloadEvent = (type) ->
-      analyticsService.event 'Task Sheet', "Downloaded Task #{type}"
-
+    #
+    # Watch task defintiion for realignment visualisation
+    #
     $scope.$watch 'project.selectedTask.task_definition_id', (newTaskDefId) ->
       $scope.alignments = $filter('taskDefinitionFilter')($scope.unit.task_outcome_alignments, newTaskDefId)
 
-    $scope.hasPDF = () ->
-      $scope.task.definition.has_task_pdf
+    #
+    # Download event for analytics
+    #
+    $scope.downloadEvent = (type) ->
+      analyticsService.event 'Task Sheet', "Downloaded Task #{type}"
 
+    #
+    # Toggles the task sheet PDF viewer
+    #
     $scope.toggleTaskSheet = () ->
       analyticsService.event('Task Sheet', "#{ if $scope.showTaskSheet then 'Hid' else 'Showed'} Task Sheet PDF Viewer")
       $scope.showTaskSheet = ! $scope.showTaskSheet
-
-    $scope.hasResources = () ->
-      $scope.task.definition.has_task_resources
-
-    $scope.taskPDFUrl = () ->
-      Task.getTaskPDFUrl($scope.unit, $scope.task.definition)
-
-    $scope.resourceUrl = () ->
-      Task.getTaskResourcesUrl($scope.unit, $scope.task.definition)
 
 )
