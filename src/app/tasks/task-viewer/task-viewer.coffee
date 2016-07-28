@@ -92,9 +92,14 @@ angular.module('doubtfire.tasks.task-viewer', [])
               $scope.setActiveTab($scope.tabs.taskSheet)
       else
         $scope.setActiveTab($scope.tabs.taskSheet)
-      # Update the task grade if applicable
+      # Update the task grade and quality stars if applicable
       $scope.taskIsGraded = taskService.taskIsGraded newTask
-      $scope.numStars = newTask.definition.max_quality_pts
+      $scope.qualityStars = {
+        max: newTask.definition.max_quality_pts
+        assigned: newTask.quality_pts
+      }
+      # Only show the quality stars when the student has them
+      $scope.qualityStars.show = $scope.qualityStars.assigned > 0
 
     #
     # Watch grade for changes

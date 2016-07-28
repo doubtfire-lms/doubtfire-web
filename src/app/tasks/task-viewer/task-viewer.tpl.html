@@ -13,10 +13,8 @@
           project="project"
           on-select="setSelectedTask"></project-tasks-list>
       </div><!--/active-task-selector-->
-
       <div class="task-header-info col-sm-10">
         <div class="col-sm-8 task-status-summary">
-          <!-- Lachlan -->
           <div class="task-header-grade-icon">
             <grade-icon grade="project.selectedTask.definition.target_grade"></grade-icon>
           </div>
@@ -25,8 +23,16 @@
           <div class="graded-task-mark text-danger" ng-if="taskIsGraded">
             Your tutor has marked you on this task to a <grade-icon grade="project.selectedTask.grade"></grade-icon> standard.
           </div>
-          <div class="graded-task-quality text-danger" ng-if="project.selectedTask.definition.max_quality_pts > 0">
-            <rating class="task-quality-rating" ng-model="project.selectedTask.quality_pts" max="project.selectedTask.definition.max_quality_pts" state-on="'fa fa-star icon-colorful'" state-off="'fa fa-star icon-disable'" readonly="true"></rating>
+          <div class="graded-task-quality" ng-if="qualityStars.show">
+            <label>Quality Mark:</label>
+            <rating
+              class="task-quality-rating"
+              ng-model="qualityStars.assigned"
+              max="qualityStars.max"
+              state-on="'fa fa-star rating-outline'"
+              state-off="'fa fa-star rating-disabled'"
+              readonly="true">
+            </rating>
           </div>
         </div>
         <div class="col-sm-4 date-info">
@@ -59,15 +65,15 @@
     </div><!--/task-toolbar-->
   </div>
   <div class="col-sm-2 col-lg-1 task-viewer-tabs">
-      <tabset vertical="false" type="pills">
-        <tab ng-repeat="(tabKey, tab) in tabs | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
-          <tab-heading class="text-center" tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
-              <i class="fa fa-2x {{tab.icon}}"></i>
-              <i class="fa fa-2x fa-warning" ng-class="{ 'text-warning': !isActiveTab(tab) }" ng-show="tab == tabs.plagiarismReport && project.selectedTask.similar_to_count > 0"></i>
-              <strong class="comment-count" ng-show="tab == tabs.viewComments && project.selectedTask.comments.length > 0">{{project.selectedTask.comments.length}}</strong>
-          </tab-heading>
-        </tab>
-      </tabset>
+    <tabset vertical="false" type="pills">
+      <tab ng-repeat="(tabKey, tab) in tabs | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+        <tab-heading class="text-center" tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
+          <i class="fa fa-2x {{tab.icon}}"></i>
+          <i class="fa fa-2x fa-warning" ng-class="{ 'text-warning': !isActiveTab(tab) }" ng-show="tab == tabs.plagiarismReport && project.selectedTask.similar_to_count > 0"></i>
+          <strong class="comment-count" ng-show="tab == tabs.viewComments && project.selectedTask.comments.length > 0">{{project.selectedTask.comments.length}}</strong>
+        </tab-heading>
+      </tab>
+    </tabset>
   </div>
   <div class="col-sm-10 col-lg-11" class="class-viewer-tab-contents">
     <div class="panel panel-primary">

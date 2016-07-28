@@ -2,6 +2,46 @@
   <div class="panel-body task-description">
     <div class="markdown-to-pdf" ng-bind-html="project.selectedTask.definition.description | markdown"></div>
   </div><!--task-description-panel-body-->
+  <div class="panel-heading assessment-details-alignment-panel" ng-if="shouldShowAssessmentPanel">
+    <h3 class="panel-title">
+      Task Assessment
+    </h3>
+    Details about your task assessment are given below
+  </div><!--view-alignment-panel-header-->
+  <div class="panel-body assessment-details-alignment-panel" ng-if="shouldShowAssessmentPanel">
+    <div class="assessment-item graded-task" ng-show="taskIsGraded">
+      <aside>
+        <grade-icon></grade-icon>
+      </aside>
+      <div class="content">
+        <h4> This task will be assigned a grade </h4>
+        <p>
+          This task will be graded against a grade standard. Your tutor will
+          assess the task and assign a grade to the task according to a Pass,
+          Credit, Distinction or High Distinction standard.
+        </p>
+        <p class="callout callout-primary">
+          As you are attempting to achieve a {{targetGrade}} in this unit,
+          you should attempt to achieve a <strong>{{targetGrade}}</strong> grade
+          on this task.
+        </p>
+      </div>
+    </div><!--/graded-task-details-->
+    <div class="assessment-item quality-stars" ng-show="qualityStars">
+      <aside>
+        <i class="fa fa-star fa-2x"></i>
+      </aside>
+      <div class="content">
+        <h4> This task will be assessed on a scale to {{qualityStars}} </h4>
+        <p>
+          This task will be graded against a quality scale from
+          <strong>0 to {{qualityStars}}</strong>. Your tutor will assess
+          the task and assign a star rating based on what they think of quality
+          of your submission.
+        </p>
+      </div>
+    </div><!--/quality-star-details-->
+  </div><!--assessment-details-panel-body-->
   <div class="panel-heading task-view-alignment-panel" ng-hide="showTaskSheet" ng-if="alignments.length > 0">
     <h3 class="panel-title">
       Task Outcome Alignments

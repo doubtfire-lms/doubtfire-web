@@ -12,9 +12,15 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     unit: '='
     project: '='
 
-  controller: ($scope, $filter, currentUser, Task, analyticsService) ->
+  controller: ($scope, $filter, currentUser, Task, taskService, gradeService, analyticsService) ->
 
     $scope.showTaskSheet = false
+
+    $scope.targetGrade  = gradeService.grades[$scope.project.target_grade]
+    $scope.taskIsGraded = $scope.task.definition.is_graded
+    $scope.qualityStars = $scope.task.definition.max_quality_pts
+
+    $scope.shouldShowAssessmentPanel = $scope.taskIsGraded or $scope.qualityStars
 
     $scope.downloadEvent = (type) ->
       analyticsService.event 'Task Sheet', "Downloaded Task #{type}"

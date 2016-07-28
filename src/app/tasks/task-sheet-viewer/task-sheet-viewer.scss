@@ -83,4 +83,33 @@
       }
     }
   }
+
+  .panel-body.assessment-details-alignment-panel {
+    height: auto !important; // override
+    .assessment-item {
+      padding: 15px;
+      display: flex;
+    }
+    .assessment-item:not(:first-child) {
+      border-top: 1px dashed $text-muted;
+    }
+    aside, .content {
+      display: inline-block;
+    }
+    aside {
+      width: 3.5em;
+      margin-right: 2.5ex;
+      text-align: right;
+      padding-top: 1em;
+    }
+    .content {
+      font-size: 1.2em;
+      .callout {
+        display: inline-block;
+      }
+      p {
+        font-weight: lighter;
+      }
+    }
+  }
 }
