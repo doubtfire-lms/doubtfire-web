@@ -15,7 +15,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     unit: '='
     project: '='
     assessingUnitRole: '='
-  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $timeout, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
     #
     # Active task tab group
     #
@@ -112,6 +112,20 @@ angular.module('doubtfire.tasks.task-viewer', [])
       $scope.qualityStars.assigned = newPts
       # Only show the quality stars when the student has them
       $scope.qualityStars.show = $scope.qualityStars.assigned > 0
+
+    #
+    # Watch task definition's max_quality_pts. UI bootstrap doesn't allow for
+    # a watch'ed evaluation on the `max` value. So, to recompile the rating and,
+    # therefore update the rating we must destroy it with an `ng-if` and then
+    # recompile it again :(
+    #
+    $scope.$watch 'qualityStars.max', (newPts, oldPts) ->
+      # Only re-evaluate when needed (should show qualityStars and the new max
+      # points isnt the old max points)
+      if $scope.qualityStars.assigned and newPts isnt oldPts
+        $scope.qualityStars.show = false
+        $timeout ->
+          $scope.qualityStars.show = true
 
     #
     # Loading the active task
