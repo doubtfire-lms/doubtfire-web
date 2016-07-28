@@ -1,4 +1,7 @@
 .task-submission-wizard {
+  div[class$="-state"] {
+    height: 100%;
+  }
   .large-notice-block .icons-for-files {
     i {
       margin: 0 0.25ex;
@@ -25,7 +28,6 @@
     }
   }
   .upload-files-state {
-    height: 100%;
     .upload-assistant {
       .upload-type-switcher {
         float: right;
