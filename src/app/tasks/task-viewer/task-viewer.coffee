@@ -98,14 +98,20 @@ angular.module('doubtfire.tasks.task-viewer', [])
         max: newTask.definition.max_quality_pts
         assigned: newTask.quality_pts
       }
-      # Only show the quality stars when the student has them
-      $scope.qualityStars.show = $scope.qualityStars.assigned > 0
 
     #
-    # Watch grade for changes
+    # Watch grade for changes after modal asssmeent
     #
     $scope.$watch 'project.selectedTask.grade', ->
       $scope.taskIsGraded = taskService.taskIsGraded $scope.project.selectedTask
+
+    #
+    # Watch quality rating for changes after modal assessment
+    #
+    $scope.$watch 'project.selectedTask.quality_pts', (newPts) ->
+      $scope.qualityStars.assigned = newPts
+      # Only show the quality stars when the student has them
+      $scope.qualityStars.show = $scope.qualityStars.assigned > 0
 
     #
     # Loading the active task
