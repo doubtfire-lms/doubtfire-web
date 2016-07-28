@@ -95,7 +95,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'Working On It'
     need_help:          'Need Help'
     redo:               'Redo'
-    do_not_resubmit:    "Don't Resubmit"
+    do_not_resubmit:    'Feedback Exceeded'
     fix_and_resubmit:   'Resubmit'
     discuss:            'Discuss'
     demonstrate:        'Demonstrate'
@@ -108,7 +108,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
-    do_not_resubmit:    'fa fa-book'
+    do_not_resubmit:    'fa fa-low-vision'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-commenting'
     demonstrate:        'fa fa-commenting'
@@ -154,7 +154,7 @@ angular.module("doubtfire.common.services.tasks", [])
     redo:
       'Your tutor wants you to start this task from scratch.'
     do_not_resubmit:
-      'Your tutor wants you to stop submitting this task and include it fixed in your portfolio.'
+      'This work is not complete to an acceptable standard and your tutor will not reassess it. You should fix it and include a corrected version in your portfolio.'
     fix_and_resubmit:
       'Your tutor wants you to fix something and resubmit it for review again.'
     discuss:
