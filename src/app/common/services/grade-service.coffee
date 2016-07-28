@@ -45,7 +45,7 @@ angular.module("doubtfire.common.services.grades", [  ])
   }
 
   gradeService.gradeFor = (project) ->
-    gradeService.grades[project.target_grade]
+    gradeService.gradeNumbers[project.target_grade]
 
   gradeService
 )

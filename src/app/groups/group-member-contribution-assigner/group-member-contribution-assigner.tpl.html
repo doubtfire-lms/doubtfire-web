@@ -1,10 +1,4 @@
 <div class="group-member-contribution-assigner">
-  <h4>
-    Team Contribution<br/>
-    <small>
-      Please rate each team member's contribution to this work. To mark a <i>0% contribution</i>, click the first star twice.
-    </small>
-  </h4>
   <table class="table table-condensed table-hover">
     <thead>
       <tr>
@@ -16,7 +10,9 @@
     <tbody>
       <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
         <td>{{member.student_name}}</td>
-        <td>{{gradeFor(member)}}</td>
+        <td class="text-left">
+          <grade-icon grade="member.target_grade"></grade-icon>
+        </td>
         <td ng-init="member.rating = initialStars">
           <rating class="group-member-contribution-rating" ng-click="checkClearRating(member)" ng-model="member.rating" on-hover="hoveringOver(member, value)" on-leave="hoveringOver(member, null)" max="numStars" state-on="'fa fa-child icon-colorful'" state-off="'fa fa-child icon-disable'"></rating>
           <span class="label" ng-class="{'label-danger': member.percent==dangerPct, 'label-warning': member.percent>dangerPct && member.percent<infoPct,'label-info': member.percent>=infoPct && member.percent<successPct, 'label-success': member.percent>=successPct}" ng-show="member.overStar">{{member.percent}}%</span>

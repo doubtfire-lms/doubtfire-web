@@ -16,6 +16,13 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
 
+    # States in the Wizard
+    $scope.states = {
+      initial: 'initial',
+      uploadFiles: 'uploadFiles',
+      groupMemberContribution: 'groupMemberContribution'
+    }
+
     # Reverts changes to task state made during the upload
     revertChanges = (task) ->
       if task.definition.upload_requirements.length > 0 and $scope.uploadType? and $scope.uploadType in UPLOAD_STATUS_TYPES and $scope.oldStatus? and $scope.oldStatus isnt task.status
@@ -25,6 +32,8 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
 
     # Watch the task, and reinitialise oldStatus if it changes
     $scope.$watch 'task', (task, oldTask) ->
+      # Reset initial state
+      $scope.state = $scope.states.initial
       # Revert changes if need be
       revertChanges(oldTask)
       # Copy in the old status
@@ -39,6 +48,9 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       # Re-generate the submission URL and numberOfFiles
       $scope.url = Task.generateSubmissionUrl $scope.project, $scope.task
       $scope.numberOfFiles = task.definition.upload_requirements.length
+      # Set if in group task
+      $scope.isGroupTask = groupService.isGroupTask($scope.task)
+      $scope.inGroupForTask = projectService.getGroupForTask($scope.project, $scope.task)?
 
     # Watch the task's status and set it as the new upload type if it changes
     $scope.$watch 'task.status', (newStatus) ->
@@ -77,6 +89,8 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     $scope.setUploadType = (type) ->
       if type in UPLOAD_STATUS_TYPES
         $scope.task.status = type
+        # Progress to next state... depends on if it's a group task or not
+        $scope.state = if $scope.isGroupTask and $scope.state isnt $scope.states.uploadFiles then $scope.states.groupMemberContribution else $scope.states.uploadFiles
       $scope.uploadType = type
 
     # When upload is successful, update the task status on the back-end
@@ -123,11 +137,6 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       if $scope.uploadType == 'need_help'
         $scope.payload.trigger = 'need_help'
 
-
-
-    $scope.inGroupForTask = () ->
-      projectService.getGroupForTask($scope.project, $scope.task)?
-
-    $scope.isGroupTask = () ->
-      groupService.isGroupTask($scope.task)
+    $scope.setState = (newState) ->
+      $scope.state = newState
   )

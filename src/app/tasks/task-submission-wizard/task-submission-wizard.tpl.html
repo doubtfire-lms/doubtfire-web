@@ -1,45 +1,72 @@
 <div class="task-submission-wizard">
   <div class="panel-body">
-    <div class="large-notice-block" ng-show="task.definition.upload_requirements.length == 0">
-      <i class="fa fa-times fa-2x"></i>
-      <p>No files required for this task</p>
-    </div><!--/no-files-required-->
-    <div class="large-notice-block" ng-show="isGroupTask() && ! inGroupForTask()">
-      <i class="fa fa-users fa-2x"></i>
-      <p>Join a {{task.definition.group_set.name}} group to submit this task</p>
-    </div><!--/no-detections-->
-    <div class="large-notice-block" ng-hide="uploadType" ng-if="task.definition.upload_requirements.length > 0 && ((! isGroupTask()) || inGroupForTask())">
-      <div class="icons-for-files">
-        <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
+    <div class="initial-state" ng-show="state == states.initial">
+      <div class="large-notice-block" ng-show="task.definition.upload_requirements.length == 0">
+        <i class="fa fa-times fa-2x"></i>
+        <p>No files required for this task</p>
+      </div><!--/no-files-required-->
+      <div class="large-notice-block" ng-show="isGroupTask && !inGroupForTask">
+        <i class="fa fa-users fa-2x"></i>
+        <p>Join a {{task.definition.group_set.name}} group to submit this task</p>
+      </div><!--/no-detections-->
+      <div class="large-notice-block" ng-if="task.definition.upload_requirements.length > 0 && ((! isGroupTask) || inGroupForTask)">
+        <div class="icons-for-files">
+          <i ng-repeat="(k, file) in files" class="fa fa-2x fa-file-{{file.type == 'document' ? 'pdf' : file.type}}-o"></i>
+        </div>
+        <h3>{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required</h3>
+        <p class="lead">
+          <span ng-show="uploadType || helpLabel">
+          Upload as
+          </span>
+          {{helpLabel || "Please select upload type below"}}
+        </p>
+        <div class="text-center">
+          <div class="btn-group">
+            <button ng-repeat="(key, data) in uploadTypes"
+                class="btn btn-lg task-status {{data.class}}"
+                ng-click="setUploadType(key)"
+                ng-mouseover="setHelpLabel(data.text)"
+                ng-mouseout="setHelpLabel()"
+                ng-if="!data.hide"
+                ng-class="{active: uploadType == key}">
+              <i class="fa-2x {{data.icon}}"></i>
+            </button>
+          </div><!--/upload-type-buttons-->
+        </div>
+      </div><!--upload-header-->
+    </div><!--/initial-state-->
+    <div class="group-member-contribution-state" ng-show="state == states.groupMemberContribution && isGroupTask && !isUploading">
+      <div class="upload-assistant clearfix">
+        <h3>
+          Team Contribution
+          <small>
+            Please rate each team member's contribution to this work. To mark a <strong>0% contribution</strong>, click the first star twice.
+          </small>
+        </h3>
       </div>
-      <h3>{{numberOfFiles}} File{{numberOfFiles > 1 ? "s" : ""}} Required</h3>
-      <p class="lead">
-        <span ng-show="uploadType || helpLabel">
-        Upload as
-        </span>
-        {{helpLabel || "Please select upload type below"}}
-      </p>
+      <group-member-contribution-assigner task="task" project="project" team="team"></group-member-contribution-assigner>
       <div class="text-center">
-        <div class="btn-group">
-          <button ng-repeat="(key, data) in uploadTypes"
-              class="btn btn-lg task-status {{data.class}}"
-              ng-click="setUploadType(key)"
-              ng-mouseover="setHelpLabel(data.text)"
-              ng-mouseout="setHelpLabel()"
-              ng-if="!data.hide"
-              ng-class="{active: uploadType == key}">
-            <i class="fa-2x {{data.icon}}"></i>
-          </button>
-        </div><!--/upload-type-buttons-->
+        <button class="btn btn-lg btn-default"
+          ng-click="setState(states.initial)"> Back </button>
+        <button class="btn btn-lg btn-primary"
+          ng-click="setState(states.uploadFiles)"> Continue </button>
       </div>
-    </div><!--upload-header-->
-    <div class="upload-type-selected-state" ng-if="uploadType && task.definition.upload_requirements.length > 0">
+    </div><!--/group-member-contribution-->
+    <div class="upload-files-state" ng-show="state == states.uploadFiles && task.definition.upload_requirements.length > 0">
       <div class="upload-assistant clearfix" ng-if="!isUploading">
         <h3>
           Upload {{task.definition.name}}...
           <small>Select {{numberOfFiles}} file{{numberOfFiles > 1 ? "s" : ""}} below</small>
         </h3>
         <div class="upload-type-switcher">
+          <button
+            class="btn btn-default"
+            ng-click="setState(states.groupMemberContribution)"
+            ng-if="isGroupTask"
+            ng-mouseover="setHelpLabel('Configure Group Member Contributions')"
+            ng-mouseout="setHelpLabel()">
+            <i class="fa fa-2x fa-child"></i>
+          </button>
           <div class="btn-group">
             <button ng-repeat="(key, data) in uploadTypes"
                 class="btn task-status {{data.class}}"
@@ -52,15 +79,13 @@
             </button>
           </div><!--/upload-type-buttons-->
           <p class="">
-            <strong>Upload{{helpLabel == '' ? 'ing' : ''}} as</strong>
+            <strong ng-hide="helpLabel == 'Configure Group Member Contributions'">
+              Upload{{helpLabel == '' ? 'ing' : ''}} as
+            </strong>
             <span>{{helpLabel || uploadTypes[uploadType].text}}</span>
           </p>
         </div>
       </div><!--/upload-assistant-->
-      <div ng-if="isGroupTask()">
-        <group-member-contribution-assigner task="task" project="project" team="team"></group-member-contribution-assigner>
-        <hr>
-      </div>
       <file-uploader
         files="files"
         url="url"
