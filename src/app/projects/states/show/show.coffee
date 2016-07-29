@@ -57,7 +57,7 @@ angular.module('doubtfire.projects.states.show', [])
       (project) ->
         projectService.updateTaskStats($scope.project, project.stats)
         # Update the task stats
-        _.each $scope.project.tasks, (task) =>
+        _.each $scope.project.tasks, (task) ->
           task.status = _.filter(project.tasks, { task_definition_id: task.task_definition_id })[0].status
         alertService.add("success", "Status updated.", 2000)
         analyticsService.event 'Student Project View', "Transitioned Week End"

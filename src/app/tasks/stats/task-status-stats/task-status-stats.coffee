@@ -262,19 +262,18 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
         .map( (taskDef, taskDefId) ->
           # This task def id
           statusesForThisTaskDefId =
-            _.chain(taskDef)
-             # Grab out all the tutorials and flatten them, group by status
-             .values()
-             .flatten()
-             .groupBy('status')
-             # With each status grouped
-             .map( (value, status) ->
-               # Calculate the sum of the 'num' field in each status
-               sumOfStatuses = _.chain(value)
-                                .map( (value) -> value.num )
-                                .reduce(((memo, num) -> memo + num), 0)
-                                .value()
-               [status, sumOfStatuses]
+            # Grab out all the tutorials and flatten them, group by status
+            _.chain(taskDef).values()
+            .flatten()
+            .groupBy('status')
+            # With each status grouped
+            .map( (value, status) ->
+              # Calculate the sum of the 'num' field in each status
+              sumOfStatuses = _.chain(value)
+                              .map( (value) -> value.num )
+                              .reduce(((memo, num) -> memo + num), 0)
+                              .value()
+              [status, sumOfStatuses]
             )
             .fromPairs()
             .value()

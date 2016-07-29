@@ -347,9 +347,6 @@ module.exports = function ( grunt ) {
       src: [
         '<%= app_files.js %>'
       ],
-      test: [
-        '<%= app_files.jsunit %>'
-      ],
       gruntfile: [
         'Gruntfile.js'
       ],
@@ -362,7 +359,11 @@ module.exports = function ( grunt ) {
         boss: true,
         eqnull: true
       },
-      globals: {}
+      // No test or globals provided - comment out to silence warnings
+      // test: [
+      //   '<%= app_files.jsunit %>'
+      // ],
+      // globals: {}
     },
 
     /**

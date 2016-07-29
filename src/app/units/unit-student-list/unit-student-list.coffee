@@ -97,7 +97,7 @@ angular.module('doubtfire.units.unit-student-list', [])
     update_project_details = (project, response) ->
       projectService.updateTaskStats(project, response.stats)
       if project.tasks
-        _.each project.tasks, (task) =>
+        _.each project.tasks, (task) ->
           task.status = _.filter(response.tasks, { task_definition_id: task.task_definition_id })[0].status
       alertService.add("success", "Status updated.", 2000)
 
