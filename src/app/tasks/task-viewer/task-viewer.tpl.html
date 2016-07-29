@@ -14,55 +14,65 @@
           on-select="setSelectedTask"></project-tasks-list>
       </div><!--/active-task-selector-->
       <div class="task-header-info col-sm-10">
-        <div class="col-sm-8 task-status-summary">
+        <div class="col-sm-7 task-header-summary">
           <div class="task-header-grade-icon">
             <grade-icon grade="project.selectedTask.definition.target_grade"></grade-icon>
           </div>
           <h3>{{project.selectedTask.definition.name}}</h3>
-          <p class="help-block">{{activeStatusData().helpText}}</p>
-          <div class="graded-task-mark text-danger" ng-if="taskIsGraded">
-            Your tutor has marked you on this task to a <grade-icon grade="project.selectedTask.grade"></grade-icon> standard.
-          </div>
-          <div class="graded-task-quality" ng-if="qualityStars.show">
-            <label>Quality Mark:</label>
-            <rating
-              class="task-quality-rating"
-              ng-model="qualityStars.assigned"
-              max="qualityStars.max"
-              state-on="'fa fa-star rating-outline'"
-              state-off="'fa fa-star rating-disabled'"
-              readonly="true">
-            </rating>
-          </div>
         </div>
-        <div class="col-sm-4 date-info">
+        <div class="col-sm-5 task-date-info">
           <div class="overdue label label-{{daysOverdue(project.selectedTask) > 5 ? 'danger' : 'warning'}}" ng-hide="daysOverdue(project.selectedTask) === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
             <i class="fa fa-exclamation-triangle"></i>
             Past Target By <br/> {{daysOverdue(project.selectedTask)}} day{{daysOverdue(project.selectedTask) > 1 ? 's' : ''}}
           </div>
-          <p class="due-date" tooltip="You should aim to complete the task by this date" tooltip-placement="right">
-            <label>Target:</label> {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
-          </p>
-          <p class="due-date" ng-show="project.selectedTask.definition.due_date" tooltip="The task must be completed by this date" tooltip-placement="right">
-            <label>Deadline:</label> {{project.selectedTask.definition.due_date | date:'EEE MMM d'}}
-          </p>
+          <span class="label label-info" tooltip="You should aim to complete the task by this date" tooltip-placement="right" tooltip-append-to-body="true">
+            <i class="fa fa-clock-o"></i>
+            <div>
+              <label>Target Date</label>
+              {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
+            </div>
+          </span>
+          <span class="label label-warning" ng-if="project.selectedTask.definition.due_date" tooltip="The task must be completed by this date" tooltip-placement="right" tooltip-append-to-body="true">
+            <i class="fa fa-lock"></i>
+            <div>
+              <label>Deadline</label>
+              {{project.selectedTask.definition.due_date | date:'EEE MMM d'}}
+            </div>
+          </span>
         </div>
       </div><!--/task-header-info-->
-
       <div tooltip-placement="left" tooltip="{{activeStatusData().label}}" tooltip-append-to-body="true" class="btn-group dropdown active-task-status-selector col-sm-1 pull-right" dropdown>
         <button type="button" class="btn task-status {{statusClass(project.selectedTask.status)}} dropdown-toggle" dropdown-toggle>
           <i class="{{activeStatusData().icon}} fa-2x"></i>
           <span class="caret"></span>
         </button>
-
         <task-status-selector
           task="project.selectedTask"
           assessing-unit-role="assessingUnitRole"
           in-menu="true"
-          trigger-transition="triggerTransition"></task-status-selector>
-
+          trigger-transition="triggerTransition">
+        </task-status-selector>
       </div><!--/active-task-status-selector-->
-    </div><!--/task-toolbar-->
+    </div><!--/task-details-toolbar-->
+    <div class="task-viewer-toolbar clearfix task-feedback" ng-if="false">
+      <div class="col-sm-8 col-sm-offset-1">
+        <p class="help-block">{{activeStatusData().helpText}}</p>
+        <div class="graded-task-mark text-danger" ng-if="taskIsGraded">
+          Your tutor has marked you on this task to a <grade-icon grade="project.selectedTask.grade"></grade-icon> standard.
+        </div>
+        <div class="graded-task-quality" ng-if="qualityStars.show">
+          <label>Quality Mark:</label>
+          <rating
+            class="task-quality-rating"
+            ng-model="qualityStars.assigned"
+            max="qualityStars.max"
+            state-on="'fa fa-star rating-outline'"
+            state-off="'fa fa-star rating-disabled'"
+            readonly="true">
+          </rating>
+        </div>
+      </div>
+    </div><!--/task-feedback-toolbar-->
   </div>
   <div class="col-sm-2 col-lg-1 task-viewer-tabs">
     <tabset vertical="false" type="pills">
