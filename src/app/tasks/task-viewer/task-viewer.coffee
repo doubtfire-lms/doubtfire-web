@@ -100,46 +100,12 @@ angular.module('doubtfire.tasks.task-viewer', [])
       newTask = _.first $scope.project.tasks unless newTask?
       setInitialActiveTab(newTask)
       $scope.daysOverdue = taskService.daysOverdue(newTask)
-      # Update the task grade and quality stars if applicable
-      $scope.taskIsGraded = taskService.taskIsGraded newTask
-      $scope.qualityStars = {
-        max: newTask.definition.max_quality_pts
-        assigned: newTask.quality_pts
-      }
 
     #
     # Watch for changes when the active task status changes
     #
     $scope.$watch 'project.selectedTask.status', (newStatus) ->
       $scope.activeStatusData = $scope.statusData(newStatus)
-
-    #
-    # Watch grade for changes after modal asssmeent
-    #
-    $scope.$watch 'project.selectedTask.grade', ->
-      $scope.taskIsGraded = taskService.taskIsGraded $scope.project.selectedTask
-
-    #
-    # Watch quality rating for changes after modal assessment
-    #
-    $scope.$watch 'project.selectedTask.quality_pts', (newPts) ->
-      $scope.qualityStars.assigned = newPts
-      # Only show the quality stars when the student has them
-      $scope.qualityStars.show = $scope.qualityStars.assigned > 0
-
-    #
-    # Watch task definition's max_quality_pts. UI bootstrap doesn't allow for
-    # a watch'ed evaluation on the `max` value. So, to recompile the rating and,
-    # therefore update the rating we must destroy it with an `ng-if` and then
-    # recompile it again :(
-    #
-    $scope.$watch 'qualityStars.max', (newPts, oldPts) ->
-      # Only re-evaluate when needed (should show qualityStars and the new max
-      # points isnt the old max points)
-      if $scope.qualityStars.assigned and newPts isnt oldPts
-        $scope.qualityStars.show = false
-        $timeout ->
-          $scope.qualityStars.show = true
 
     #
     # Loading the active task

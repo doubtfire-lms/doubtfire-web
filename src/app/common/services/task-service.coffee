@@ -175,11 +175,11 @@ angular.module("doubtfire.common.services.tasks", [])
       reason: "Your tutor wants you to fix something with your submission."
       action: "You will need to discuss the task with your tutor, then fix and resubmit it for review again based on their suggestions."
     discuss:
-      detail: "Almost complete"
+      detail: "You're almost complete!"
       reason: "Your work looks good and your tutor is happy with your work."
       action: "To mark as complete, attend class and discuss it with your tutor."
     demonstrate:
-      detail: "Almost complete"
+      detail: "You're almost complete!"
       reason: "Your work looks good and your tutor is happy with your work."
       action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
     complete:

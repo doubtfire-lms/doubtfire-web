@@ -16,29 +16,9 @@
     h3 {
       margin: 0;
     }
-    .graded-task-mark {
-      font-weight: bold;
-      .grade-icon {
-        display: inline-block;
-        text-align: center;
-        line-height: 2.25em;
-        margin: 0 0.5ex;
-      }
-    }
-    .graded-task-quality {
-      font-weight: bold;
-      .task-quality-rating {
-        display: inline-block;
-        text-align: center;
-        line-height: 2.25em;
-        i {
-          margin: 0 0.25ex;
-        }
-      }
-    }
     .task-header-grade-icon {
       float: left;
-      margin-right: 1.5ex;
+      margin-right: 1.75ex;
     }
   }
   .task-date-info {
@@ -92,7 +72,6 @@
     height: 43px;
   }
 }
-
 
 .task-viewer-tabs {
   li {
