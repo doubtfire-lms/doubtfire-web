@@ -1,9 +1,8 @@
 .task-viewer .task-viewer-toolbar {
-  border-bottom: 1px dashed #ddd;
   display: flex;
   padding-bottom: 1em;
-  margin-bottom: 1em;
   &:last-child {
+    border-bottom: 1px dashed #ddd;
     margin-bottom: 1.5em;
   }
 }

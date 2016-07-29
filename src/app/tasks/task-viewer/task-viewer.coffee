@@ -69,19 +69,19 @@ angular.module('doubtfire.tasks.task-viewer', [])
     $scope.isActiveTab = (tab) ->
       tab is $scope.activeTab
 
-    $scope.$watch 'project.selectedTask', (newTask) ->
-      unless newTask?
-        newTask = _.first $scope.project.tasks
-      # select initial tab
-      if $stateParams.viewing == 'feedback'
+    #
+    # Determines which tab to select initially for the provided task
+    #
+    setInitialActiveTab = (task) ->
+      if $stateParams.viewing is 'feedback'
         $scope.setActiveTab($scope.tabs.viewSubmission)
-      else if $stateParams.viewing == 'submit'
+      else if $stateParams.viewing is 'submit'
         $scope.setActiveTab($scope.tabs.fileUpload)
-      else if $scope.project.selectedTask?
-        if $scope.project.selectedTask.similar_to_count > 0
+      else if task?
+        if task.similar_to_count > 0
           $scope.setActiveTab($scope.tabs.plagiarismReport)
         else
-          switch $scope.project.selectedTask.status
+          switch task.status
             when 'not_started'
               $scope.setActiveTab($scope.tabs.taskSheet)
             when 'ready_to_mark', 'complete', 'discuss', 'demonstrate'
@@ -92,12 +92,26 @@ angular.module('doubtfire.tasks.task-viewer', [])
               $scope.setActiveTab($scope.tabs.taskSheet)
       else
         $scope.setActiveTab($scope.tabs.taskSheet)
+
+    #
+    # All changes that occur when the selected task changes
+    #
+    $scope.$watch 'project.selectedTask', (newTask) ->
+      newTask = _.first $scope.project.tasks unless newTask?
+      setInitialActiveTab(newTask)
+      $scope.daysOverdue = taskService.daysOverdue(newTask)
       # Update the task grade and quality stars if applicable
       $scope.taskIsGraded = taskService.taskIsGraded newTask
       $scope.qualityStars = {
         max: newTask.definition.max_quality_pts
         assigned: newTask.quality_pts
       }
+
+    #
+    # Watch for changes when the active task status changes
+    #
+    $scope.$watch 'project.selectedTask.status', (newStatus) ->
+      $scope.activeStatusData = $scope.statusData(newStatus)
 
     #
     # Watch grade for changes after modal asssmeent
@@ -132,7 +146,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     #
     $scope.setSelectedTask = (task) ->
       analyticsService.event 'Student Project View', "Switched to Task", 'Task Feedback Page Dropdown'
-      return if task == $scope.project.selectedTask
+      return if task is $scope.project.selectedTask
       $scope.project.selectedTask = task
 
     #
@@ -142,17 +156,18 @@ angular.module('doubtfire.tasks.task-viewer', [])
     $scope.statusClass = taskService.statusClass
     $scope.daysOverdue = taskService.daysOverdue
 
-    $scope.daysOverdue = (task) ->
-      taskService.daysOverdue(task)
-
-    $scope.activeStatusData = ->
-      $scope.statusData($scope.project.selectedTask)
-
+    #
+    # Gets the group set name from the group set id provided
+    #
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)
 
+    # Determines if the group set name should be hidden (if there are none)
     $scope.hideGroupSetName = $scope.unit.group_sets.length is 0
 
+    #
+    # Recreates the PDF for the currently selected task
+    #
     $scope.recreatePDF = ->
       taskService.recreatePDF($scope.project.selectedTask, null)
 
@@ -161,21 +176,15 @@ angular.module('doubtfire.tasks.task-viewer', [])
     #
     $scope.studentStatuses  = taskService.switchableStates.student
     $scope.tutorStatuses    = taskService.switchableStates.tutor
-    $scope.taskEngagementConfig = {
-      studentTriggers: $scope.studentStatuses.map (status) ->
-        { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
-      tutorTriggers: $scope.tutorStatuses.map (status) ->
-        { status: status, label: taskService.statusLabels[status], iconClass: taskService.statusIcons[status], taskClass: _.trim(_.dasherize(status), '-'), helpText: taskService.helpText(status) }
-      }
+    $scope.taskEngagementConfig =
+      studentTriggers: $scope.studentStatuses.map taskService.statusData
+      tutorTriggers:   $scope.tutorStatuses.map taskService.statusData
 
-    $scope.activeClass = (status) ->
-      if status == $scope.project.selectedTask.status
-        "active"
-      else
-        ""
-
+    #
+    # Triggers the end of week transition  for the task
+    #
     $scope.triggerTransition = (status) ->
-      if (status == 'ready_to_mark' || status == 'need_help') and $scope.project.selectedTask.definition.upload_requirements.length > 0
+      if (status is 'ready_to_mark' or status is 'need_help') and $scope.project.selectedTask.definition.upload_requirements.length > 0
         $scope.setActiveTab($scope.tabs.fileUpload)
         $scope.project.selectedTask.status = status
         return # handle with the uploader...

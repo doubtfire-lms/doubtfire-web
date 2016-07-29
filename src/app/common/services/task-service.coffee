@@ -142,29 +142,54 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:       10
     complete:          11
 
-  taskService.helpTextDesc =
+  taskService.helpDescriptions =
+    # detail = in a brief context to the student
+    # reason = reason for this status
+    # action = action student can take
     ready_to_mark:
-      'You have completed the Task, and uploaded it for your tutor to assess.'
+      detail: "Submitted this task for feedback"
+      reason: "You have finished working on the task and have uploaded it for your tutor to assess."
+      action: "No further action is required. Your tutor will change this task status once they have assessed it."
     not_started:
-      'You have not yet started the Task.'
+      detail: "Task not started"
+      reason: "You have not yet started the Task."
+      action: "Depending on when the target date is, you should start this task soon."
     working_on_it:
-      'You are working on the task, but it is not yet ready to assess.'
+      detail: "Working on the task"
+      reason: "You are working on the task, but it is not yet ready to assess."
+      action: "Finish working on this task and then set it to ready for feedback."
     need_help:
-      'You are working on the task but would like some help to get it complete.'
+      detail: "Need help for the task"
+      reason: "You are working on the task but would like some help to get it complete."
+      action: "Upload the task with what you have completed so far and add a comment on what you would like help on."
     redo:
-      'Your tutor wants you to start this task from scratch.'
+      detail: "Start this task from scratch"
+      reason: "You have appeared to have misunderstand what was required in task, many deliverables were missing or the marking criteria largely not met."
+      action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor."
     do_not_resubmit:
-      'This work is not complete to an acceptable standard and your tutor will not reassess it. You should fix it and include a corrected version in your portfolio.'
+      detail: "Feedback will no longer be given"
+      reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
+      action: "You should fix it according to your tutor's prior feedback and include a corrected version in your portfolio."
     fix_and_resubmit:
-      'Your tutor wants you to fix something and resubmit it for review again.'
+      detail: "Something is wrong with your submission"
+      reason: "Your tutor wants you to fix something with your submission."
+      action: "You will need to discuss the task with your tutor, then fix and resubmit it for review again based on their suggestions."
     discuss:
-      'Your tutor is happy with your work. To mark as complete, attend class and discuss it with your tutor.'
+      detail: "Almost complete"
+      reason: "Your work looks good and your tutor is happy with your work."
+      action: "To mark as complete, attend class and discuss it with your tutor."
     demonstrate:
-      'Your work looks good. Attend class and demonstrate the task to your tutor to have it marked as Complete.'
+      detail: "Almost complete"
+      reason: "Your work looks good and your tutor is happy with your work."
+      action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
     complete:
-      'Your tutor is happy with your work and it has been discussed with them.'
+      detail: "You are finished with this task 🎉"
+      reason: "Your tutor is happy with your work and it has been discussed with them."
+      action: "No further action required. Move onto the next task, or go party if everything is done."
     fail:
-      'You have not successfully demonstrated the required learning for this task.'
+      detail: "You have failed this task"
+      reason: "You have not successfully demonstrated the required learning for this task. This may be due to plagiarism detection or assessment under testing conditions."
+      action: "You should discuss this with your tutor and/or the convenor."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -191,19 +216,22 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.statusText = (status) -> taskService.statusLabels[status]
 
   # This function gets the help text for the indicated status
-  taskService.helpText = (status) -> taskService.helpTextDesc[status]
+  taskService.helpDescription = (status) -> taskService.helpDescriptions[status]
 
   taskService.taskDefinitionFn = (unit) ->
     (task) ->
       unit.taskDef(task.task_definition_id)
 
   # Return an icon and label for the task
-  taskService.statusData = (task) ->
+  taskService.statusData = (data) ->
+    # provided a task not a status
+    status = if data.status? then data.status else data
     {
-      icon: taskService.statusIcons[task.status]
-      label: taskService.statusLabels[task.status]
-      class: taskService.statusClass(task.status)
-      helpText: taskService.helpText(task.status)
+      status: status
+      icon: taskService.statusIcons[status]
+      label: taskService.statusLabels[status]
+      class: taskService.statusClass(status)
+      help: taskService.helpDescription(status)
     }
 
   # Return number of days task is overdue, or false if not overdue
