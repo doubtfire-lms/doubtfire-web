@@ -164,23 +164,23 @@ angular.module("doubtfire.common.services.tasks", [])
       action: "Upload the task with what you have completed so far and add a comment on what you would like help on."
     redo:
       detail: "Start this task from scratch"
-      reason: "You have appeared to have misunderstand what was required in task, many deliverables were missing or the marking criteria largely not met."
-      action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor."
+      reason: "You appeared to have misunderstood what is required for this task, many deliverables were missing or the marking criteria was largely not met."
+      action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor and/or lecturer."
     do_not_resubmit:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
-      action: "You should fix it according to your tutor's prior feedback and include a corrected version in your portfolio."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete."
     fix_and_resubmit:
-      detail: "Something is wrong with your submission"
-      reason: "Your tutor wants you to fix something with your submission."
-      action: "You will need to discuss the task with your tutor, then fix and resubmit it for review again based on their suggestions."
+      detail: "Your submission requires some more work"
+      reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
+      action: "Review your submission and the feedback from your tutor. Fix the issues identified, and resubmit it to be reassessed. Make sure to check your submission thoroughly, and note any limit on the number of times each task can be reassessed."
     discuss:
       detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor is happy with your work."
+      reason: "Your work looks good and your tutor beleives it is complete."
       action: "To mark as complete, attend class and discuss it with your tutor."
     demonstrate:
       detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor is happy with your work."
+      reason: "Your work looks good and your tutor beleives it is complete."
       action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
     complete:
       detail: "You are finished with this task 🎉"

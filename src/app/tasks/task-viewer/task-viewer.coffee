@@ -73,25 +73,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     # Determines which tab to select initially for the provided task
     #
     setInitialActiveTab = (task) ->
-      if $stateParams.viewing is 'feedback'
-        $scope.setActiveTab($scope.tabs.viewSubmission)
-      else if $stateParams.viewing is 'submit'
-        $scope.setActiveTab($scope.tabs.fileUpload)
-      else if task?
-        if task.similar_to_count > 0
-          $scope.setActiveTab($scope.tabs.plagiarismReport)
-        else
-          switch task.status
-            when 'not_started'
-              $scope.setActiveTab($scope.tabs.taskSheet)
-            when 'ready_to_mark', 'complete', 'discuss', 'demonstrate'
-              $scope.setActiveTab($scope.tabs.viewSubmission)
-            when 'fix_and_resubmit', 'working_on_it', 'need_help', 'redo'
-              $scope.setActiveTab($scope.tabs.fileUpload)
-            else
-              $scope.setActiveTab($scope.tabs.taskSheet)
-      else
-        $scope.setActiveTab($scope.tabs.taskSheet)
+      $scope.setActiveTab($scope.tabs.taskSheet)
 
     #
     # All changes that occur when the selected task changes
