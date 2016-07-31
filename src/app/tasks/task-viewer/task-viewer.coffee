@@ -15,7 +15,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     unit: '='
     project: '='
     assessingUnitRole: '='
-  controller: ($scope, $modal, $state, $timeout, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
     #
     # Active task tab group
     #
