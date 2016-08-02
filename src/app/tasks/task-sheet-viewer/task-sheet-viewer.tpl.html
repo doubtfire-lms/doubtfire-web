@@ -98,7 +98,7 @@
     Begin task by {{hasPDF ? "viewing the task sheet" : ""}} {{hasPDF && hasResources ? "or" : ""}} {{hasResources ? "downloading task resources" : ""}}
   </div>
   <div class="panel-body task-buttons-download-area" ng-class="{ small: showTaskSheet }" ng-show="hasPDF || hasResources">
-    <a ng-class="{ active: showTaskSheet }" ng-click="toggleTaskSheet" ng-show="hasPDF" class="btn btn-lg btn-default">
+    <a ng-class="{ active: showTaskSheet }" ng-click="toggleTaskSheet()" ng-show="hasPDF" class="btn btn-lg btn-default">
       <div>
         <i class="fa fa-2x fa-file-pdf-o"></i>
         <p>View{{showTaskSheet ? "ing" : ''}} PDF</p>
