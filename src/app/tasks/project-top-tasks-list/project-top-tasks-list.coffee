@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.project-top-tasks-list', [])
+mod = angular.module('doubtfire.tasks.project-top-tasks-list', [])
 
 #
 # Similar to the project-tasks-list directive, however
@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
 #
 .directive('projectTopTasksList', ->
   restrict: 'E'
-  templateUrl: 'tasks/project-top-tasks-list/project-top-tasks-list.tpl.html'
+  template: require('./project-top-tasks-list.tpl.html')
   scope:
     project: "=project"
     onSelect: "="
@@ -94,3 +94,5 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
 
     refreshTopTasks()
 )
+
+module.exports = mod.name

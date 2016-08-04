@@ -1,4 +1,4 @@
-angular.module("doubtfire.sessions.current-user", [])
+mod = angular.module("doubtfire.sessions.current-user", [])
 #
 # Current user singleton
 #
@@ -9,3 +9,5 @@ angular.module("doubtfire.sessions.current-user", [])
     name: "Anonymous"
     nickname: "anon"
 )
+
+module.exports = mod.name

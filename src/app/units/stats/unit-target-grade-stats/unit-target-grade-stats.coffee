@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
+mod = angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
 
 #
 # Summary stats for students and their desired target grade
@@ -7,7 +7,7 @@ angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
 .directive('unitTargetGradeStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/stats/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
+  template: require('./unit-target-grade-stats.tpl.html')
   scope:
     unit: "="
   controller: ($scope, $filter, Unit, taskService) ->
@@ -134,3 +134,5 @@ angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
     $scope.reduceDataToTutorialWithId = (tutorial) ->
       $scope.reduceDataToTutorial()[tutorial.id]
 )
+
+module.exports = mod.name

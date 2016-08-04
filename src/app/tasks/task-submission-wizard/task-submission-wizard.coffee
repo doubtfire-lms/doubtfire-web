@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-submission-wizard', [])
+mod = angular.module('doubtfire.tasks.task-submission-wizard', [])
 
 #
 # Wizard that helps new tasks to be uploaded
@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     project: '='
     unit: '='
     assessingUnitRole: '=?'
-  templateUrl: 'tasks/task-submission-wizard/task-submission-wizard.tpl.html'
+  template: require('./task-submission-wizard.tpl.html')
   controller: ($scope, $timeout, Task, taskService, alertService, projectService, groupService, analyticsService) ->
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
@@ -140,3 +140,5 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     $scope.setState = (newState) ->
       $scope.state = newState
   )
+
+module.exports = mod.name

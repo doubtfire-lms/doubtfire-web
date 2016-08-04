@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.progress-burndown-chart', [])
+mod = angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 .directive 'progressBurndownChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     project: '='
     unit: '='
@@ -129,3 +129,5 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       yDomain: [0, 1]
       xDomain: xDomain
     }, {}
+
+module.exports = mod.name

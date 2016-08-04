@@ -1,4 +1,4 @@
-angular.module('doubtfire.home.states.new-user-wizard', [])
+mod = angular.module('doubtfire.home.states.new-user-wizard', [])
 
 .config(($stateProvider) ->
   newUserWizardStateData =
@@ -6,7 +6,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     views:
       main:
         controller: "NewUserWizardCtrl"
-        templateUrl: "home/states/new-user-wizard/new-user-wizard.tpl.html"
+        template: require('./new-user-wizard.tpl.html')
     data:
       pageTitle: "_Welcome to Doubtfire_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -123,3 +123,5 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
 
   $scope.userFirstName = currentUser.profile.first_name
 )
+
+module.exports = mod.name

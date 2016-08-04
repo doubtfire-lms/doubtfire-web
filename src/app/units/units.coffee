@@ -1,16 +1,18 @@
-angular.module('doubtfire.units', [
-  'doubtfire.units.modals'
-  'doubtfire.units.states'
-  'doubtfire.units.stats'
-  'doubtfire.units.unit-analytics-viewer'
-  'doubtfire.units.unit-details-editor'
-  'doubtfire.units.unit-groupset-editor'
-  'doubtfire.units.unit-ilo-editor'
-  'doubtfire.units.unit-staff-editor'
-  'doubtfire.units.unit-student-list'
-  'doubtfire.units.unit-student-plagiarism-list'
-  'doubtfire.units.unit-student-portfolio-list'
-  'doubtfire.units.unit-students-editor'
-  'doubtfire.units.unit-tasks-editor'
-  'doubtfire.units.unit-tutorials-editor'
+mod = angular.module('doubtfire.units', [
+  require('./modals/modals')
+  require('./states/states')
+  require('./stats/stats')
+  require('./unit-analytics-viewer/unit-analytics-viewer')
+  require('./unit-details-editor/unit-details-editor')
+  require('./unit-groupset-editor/unit-groupset-editor')
+  require('./unit-ilo-editor/unit-ilo-editor')
+  require('./unit-staff-editor/unit-staff-editor')
+  require('./unit-student-list/unit-student-list')
+  require('./unit-student-plagiarism-list/unit-student-plagiarism-list')
+  require('./unit-student-portfolio-list/unit-student-portfolio-list')
+  require('./unit-students-editor/unit-students-editor')
+  require('./unit-tasks-editor/unit-tasks-editor')
+  require('./unit-tutorials-editor/unit-tutorials-editor')
 ])
+
+module.exports = mod.name

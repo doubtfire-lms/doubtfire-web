@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.project-progress-dashboard',[])
+mod = angular.module('doubtfire.projects.project-progress-dashboard',[])
 
 #
 # Progress tab for the student's project
@@ -9,7 +9,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 #
 .directive('projectProgressDashboard', ->
   restrict: 'E'
-  templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
+  template: require('./project-progress-dashboard.tpl.html')
   controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
@@ -52,3 +52,5 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 
     updateTaskCompletionStats()
 )
+
+module.exports = mod.name

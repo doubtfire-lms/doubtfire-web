@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-students-editor', [])
+mod = angular.module('doubtfire.units.unit-students-editor', [])
 
 #
 # Editor to enrol students into a unit
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-students-editor', [])
 .directive('unitStudentsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-students-editor/unit-students-editor.tpl.html'
+  template: require('./unit-students-editor.tpl.html')
   controller: ($scope, Unit, Project, CsvResultModal, UnitStudentEnrolmentModal, alertService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
@@ -62,3 +62,5 @@ angular.module('doubtfire.units.unit-students-editor', [])
     $scope.maxSize = 5
     $scope.pageSize = 15
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.outcome-service", [])
+mod = angular.module("doubtfire.common.services.outcome-service", [])
 
 #
 # Services for handling Outcomes
@@ -133,3 +133,5 @@ angular.module("doubtfire.common.services.outcome-service", [])
 
   outcomeService
 )
+
+module.exports = mod.name

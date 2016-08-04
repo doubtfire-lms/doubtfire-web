@@ -1,7 +1,7 @@
-angular.module("doubtfire.common.pdf-panel-viewer", [])
+mod = angular.module("doubtfire.common.pdf-panel-viewer", [])
 .directive('pdfPanelViewer', ->
   restrict: 'E'
-  templateUrl: 'common/pdf-panel-viewer/pdf-panel-viewer.tpl.html'
+  template: require('./pdf-panel-viewer.tpl.html')
   replace: true
   scope:
     pdfUrl: '='
@@ -24,3 +24,5 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
         $scope.shouldShowIframe = true
       $scope.googleDocsUrl = $sce.trustAsResourceUrl "https://docs.google.com/gview?url=#{newUrl}&embedded=true"
 )
+
+module.exports = mod.name

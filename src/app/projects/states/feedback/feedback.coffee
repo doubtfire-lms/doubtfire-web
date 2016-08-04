@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.states.feedback', [])
+mod = angular.module('doubtfire.projects.states.feedback', [])
 
 #
 # Skips directly to feedback view (is a child of projects#show)
@@ -10,3 +10,5 @@ angular.module('doubtfire.projects.states.feedback', [])
     parent: 'projects#show'
   $stateProvider.state "projects#feedback", projectsFeedbackStateData
 )
+
+module.exports = mod.name

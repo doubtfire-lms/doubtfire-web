@@ -1,7 +1,9 @@
-angular.module('doubtfire.units.modals', [
-  'doubtfire.units.modals.unit-create-modal'
-  'doubtfire.units.modals.unit-ilo-edit-modal'
-  'doubtfire.units.modals.unit-student-enrolment-modal'
-  'doubtfire.units.modals.unit-tutorial-edit-modal'
-  'doubtfire.units.modals.unit-mark-submissions-offline-modal'
+mod = angular.module('doubtfire.units.modals', [
+  require('./unit-create-modal/unit-create-modal')
+  require('./unit-ilo-edit-modal/unit-ilo-edit-modal')
+  require('./unit-student-enrolment-modal/unit-student-enrolment-modal')
+  require('./unit-tutorial-edit-modal/unit-tutorial-edit-modal')
+  require('./unit-mark-submissions-offline-modal/unit-mark-submissions-offline-modal')
 ])
+
+module.exports = mod.name

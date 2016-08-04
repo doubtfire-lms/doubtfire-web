@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-definition-selector',[])
+mod = angular.module('doubtfire.tasks.task-definition-selector',[])
 
 #
 # A switch that that the selection of a specified task definition
@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
 .directive('taskDefinitionSelector', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-definition-selector/task-definition-selector.tpl.html'
+  template: require('./task-definition-selector.tpl.html')
   scope:
     # Unit required
     unit: "="
@@ -29,3 +29,5 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
       if $scope.onSelectDefinition? && _.isFunction($scope.onSelectDefinition)
         $scope.onSelectDefinition(taskDef)
 )
+
+module.exports = mod.name

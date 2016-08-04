@@ -1,4 +1,4 @@
-angular.module("doubtfire.projects.project-viewer", [])
+mod = angular.module("doubtfire.projects.project-viewer", [])
 
 #
 # This directive shows a student's project and has
@@ -7,7 +7,7 @@ angular.module("doubtfire.projects.project-viewer", [])
 .directive("projectViewer", ->
   restrict: 'E'
   replace: true
-  templateUrl: 'projects/project-viewer/project-viewer.tpl.html'
+  template: require('./project-viewer.tpl.html')
   scope:
     showTaskId: '=?' # pass in a task to initially show
     unitRole: '=?' # pass in a unitRole who is viewing this project
@@ -152,3 +152,5 @@ angular.module("doubtfire.projects.project-viewer", [])
         $scope.project.selectedTask = null
       # end if filtered tasks
 )
+
+module.exports = mod.name

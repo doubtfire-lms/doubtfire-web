@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-tutorials-editor', [])
+mod = angular.module('doubtfire.units.unit-tutorials-editor', [])
 
 #
 # Editor for modifying the tutorials in a unit
@@ -6,8 +6,8 @@ angular.module('doubtfire.units.unit-tutorials-editor', [])
 .directive('unitTutorialsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-tutorials-editor/unit-tutorials-editor.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
+  template: require('./unit-tutorials-editor.tpl.html')
+  controller: ($scope, $uibModal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
     $scope.editTutorial = (tutorial) ->
       UnitTutorialEditModal.show $scope.unit, tutorial
 
@@ -23,3 +23,5 @@ angular.module('doubtfire.units.unit-tutorials-editor', [])
       UnitTutorialEditModal.show $scope.unit
 
 )
+
+module.exports = mod.name

@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.task-status-pie-chart', [])
+mod = angular.module('doubtfire.visualisations.task-status-pie-chart', [])
 .directive 'taskStatusPieChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     rawData: '=data'
     showLegend: '=?'
@@ -45,3 +45,5 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
         keyFormatter: (d) ->
           d
     }, {}
+
+module.exports = mod.name

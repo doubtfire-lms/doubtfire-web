@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-definition-editor', [])
+mod = angular.module('doubtfire.tasks.task-definition-editor', [])
 
 #
 # Allows the creation and modification of task definitions
@@ -6,7 +6,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 .directive('taskDefinitionEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-definition-editor/task-definition-editor.tpl.html'
+  template: require('./task-definition-editor.tpl.html')
   scope:
     unit: "="
     task: "="
@@ -186,3 +186,5 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
               alertService.add("danger", "Error: " + response.data.error, 6000)
         )
 )
+
+module.exports = mod.name

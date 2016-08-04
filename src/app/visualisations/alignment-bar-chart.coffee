@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.alignment-bar-chart', [])
+mod = angular.module('doubtfire.visualisations.alignment-bar-chart', [])
 .directive 'alignmentBarChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     project: '='
     unit: '='
@@ -39,3 +39,5 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
     $scope.$on('UpdateAlignmentChart', () ->
       $scope.calculateAlignmentVisualisation($scope.source, $scope.taskStatusFactor)
     )
+
+module.exports = mod.name

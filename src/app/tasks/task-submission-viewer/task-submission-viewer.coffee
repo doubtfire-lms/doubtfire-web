@@ -1,11 +1,11 @@
-angular.module('doubtfire.tasks.task-submission-viewer', [])
+mod = angular.module('doubtfire.tasks.task-submission-viewer', [])
 
 #
 # Viewer for an uploaded task submission
 #
 .directive('taskSubmissionViewer', ->
   restrict: 'E'
-  templateUrl: 'tasks/task-submission-viewer/task-submission-viewer.tpl.html'
+  template: require('./task-submission-viewer.tpl.html')
   scope:
     project: "=project"
     task: "=task"
@@ -22,3 +22,5 @@ angular.module('doubtfire.tasks.task-submission-viewer', [])
       $scope.taskUrl = TaskFeedback.getTaskUrl newTask
       $scope.taskFilesURL = TaskFeedback.getTaskFilesUrl newTask
 )
+
+module.exports = mod.name

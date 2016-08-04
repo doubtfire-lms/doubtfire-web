@@ -1,4 +1,6 @@
-angular.module("doubtfire.api.models.portfolio-submission", [
+ngFileUpload = require('ng-file-upload')
+
+mod = angular.module("doubtfire.api.models.portfolio-submission", [
   "ngFileUpload"
 ])
 
@@ -58,3 +60,5 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
   PortfolioSubmission
 )
+
+module.exports = mod.name

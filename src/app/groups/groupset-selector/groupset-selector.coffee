@@ -1,11 +1,11 @@
-angular.module('doubtfire.groups.groupset-selector', [])
+mod = angular.module('doubtfire.groups.groupset-selector', [])
 
 #
 # Directive that can switch context of a specific groupset
 #
 .directive('groupsetSelector', ->
   restrict: 'E'
-  templateUrl: 'groups/groupset-selector/groupset-selector.tpl.html'
+  template: require('./groupset-selector.tpl.html')
   replace: true
   # scope:
   #   unit: "="
@@ -19,3 +19,5 @@ angular.module('doubtfire.groups.groupset-selector', [])
     if $scope.unit.group_sets.length > 0
       $scope.selectGroupSet($scope.unit.group_sets[0])
 )
+
+module.exports = mod.name

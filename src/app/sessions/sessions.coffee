@@ -1,6 +1,7 @@
-angular.module('doubtfire.sessions', [
-  'doubtfire.sessions.auth'
-  'doubtfire.sessions.cookies'
-  'doubtfire.sessions.current-user'
-  'doubtfire.sessions.states'
+mod = angular.module('doubtfire.sessions', [
+  require('./auth/auth')
+  require('./cookies/cookies')
+  require('./current-user/current-user')
+  require('./states/states')
 ])
+module.exports = mod.name

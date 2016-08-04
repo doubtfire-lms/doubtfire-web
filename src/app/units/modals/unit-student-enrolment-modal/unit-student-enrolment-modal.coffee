@@ -1,22 +1,22 @@
-angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
+mod = angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 #
 # Modal to enrol a student in the given tutorial
 #
-.factory('UnitStudentEnrolmentModal', ($modal) ->
+.factory('UnitStudentEnrolmentModal', ($uibModal) ->
   UnitStudentEnrolmentModal = {}
 
   # Must provide unit
   UnitStudentEnrolmentModal.show = (unit) ->
-    $modal.open
+    $uibModal.open
       controller: 'UnitStudentEnrolmentModalCtrl'
-      templateUrl: 'units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.tpl.html'
+      template: require('./unit-student-enrolment-modal.tpl.html')
       resolve: {
         unit: -> unit
       }
 
   UnitStudentEnrolmentModal
 )
-.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService) ->
+.controller('UnitStudentEnrolmentModalCtrl', ($scope, $uibModalInstance, Project, unit, alertService) ->
   $scope.unit = unit
   $scope.projects = unit.students
 
@@ -27,11 +27,13 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
         if not unit.studentEnrolled project.project_id
           unit.addStudent project
           alertService.add("success", "Student enrolled", 2000)
-          $modalInstance.close()
+          $uibModalInstance.close()
         else
           alertService.add("danger", "Student is already enrolled", 2000)
-          $modalInstance.close()
+          $uibModalInstance.close()
 
       , (response) ->
         alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)
 )
+
+module.exports = mod.name

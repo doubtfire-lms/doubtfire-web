@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.tasks", [])
+mod = angular.module("doubtfire.common.services.tasks", [])
 
 .factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal) ->
   #
@@ -380,3 +380,5 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService
 )
+
+module.exports = mod.name

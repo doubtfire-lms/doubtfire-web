@@ -1,12 +1,14 @@
-angular.module("doubtfire.common", [
-  'doubtfire.common.services'
-  'doubtfire.common.filters'
-  'doubtfire.common.modals'
-  'doubtfire.common.header'
-  'doubtfire.common.file-uploader'
-  'doubtfire.common.pdf-panel-viewer'
-  'doubtfire.common.grade-icon'
-  'doubtfire.common.status-icon'
-  'doubtfire.common.markdown-editor'
-  'doubtfire.common.alert-list'
+mod = angular.module("doubtfire.common", [
+  require('./services/services')
+  require('./filters/filters')
+  require('./modals/modals')
+  require('./header/header')
+  require('./file-uploader/file-uploader')
+  require('./pdf-panel-viewer/pdf-panel-viewer')
+  require('./grade-icon/grade-icon')
+  require('./status-icon/status-icon')
+  require('./markdown-editor/markdown-editor')
+  require('./alert-list/alert-list')
 ])
+
+module.exports = mod.name

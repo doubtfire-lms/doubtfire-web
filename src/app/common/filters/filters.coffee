@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.filters", [])
+mod = angular.module("doubtfire.common.filters", [])
 
 #
 # Paging filter - start from the indicated index
@@ -199,3 +199,5 @@ angular.module("doubtfire.common.filters", [])
         else
           false
 )
+
+module.exports = mod.name

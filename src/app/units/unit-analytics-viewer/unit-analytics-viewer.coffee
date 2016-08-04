@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-analytics-viewer', [])
+mod = angular.module('doubtfire.units.unit-analytics-viewer', [])
 
 #
 # Viewer that displays all analytics related to an entire unit (usually)
@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-analytics-viewer', [])
 .directive('unitAnalyticsViewer', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-analytics-viewer/unit-analytics-viewer.tpl.html'
+  template: require('./unit-analytics-viewer.tpl.html')
   controller: ($scope, Unit) ->
     #
     # Active task tab group
@@ -63,3 +63,5 @@ angular.module('doubtfire.units.unit-analytics-viewer', [])
     $scope.isActiveTab = (tab) ->
       tab is $scope.activeTab
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module("utilService", [])
+mod = angular.module("utilService", [])
 
 .filter "fromNow", () ->
   return (date) ->
@@ -21,3 +21,5 @@ angular.module("utilService", [])
       newVal = elem.val()
       ngModel.$setViewValue newVal if ngModel.$pristine and origVal isnt newVal
     ), 500
+
+module.exports = mod.name

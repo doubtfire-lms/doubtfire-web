@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
+mod = angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
 .directive 'achievementCustomBarChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     project: '='
     unit: '='
@@ -680,3 +680,5 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
     }, {}
 
     $scope.data = [ achievementData ]
+
+module.exports = mod.name

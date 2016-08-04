@@ -1,5 +1,7 @@
-angular.module("doubtfire.api.models.unit-role", [])
+mod = angular.module("doubtfire.api.models.unit-role", [])
 
 .factory("UnitRole", (resourcePlus) ->
   resourcePlus "/unit_roles/:id", { id: "@id" }
 )
+
+module.exports = mod.name

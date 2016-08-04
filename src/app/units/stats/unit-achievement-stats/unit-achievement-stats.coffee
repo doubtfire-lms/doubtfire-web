@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.stats.unit-achievement-stats', [])
+mod = angular.module('doubtfire.units.stats.unit-achievement-stats', [])
 
 #
 # Student's overall achievement statistics over the entire unit
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.stats.unit-achievement-stats', [])
 .directive('unitAchievementStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/stats/unit-achievement-stats/unit-achievement-stats.tpl.html'
+  template: require('./unit-achievement-stats.tpl.html')
   scope:
     unit: "="
   controller: ($scope, Unit) ->
@@ -67,3 +67,5 @@ angular.module('doubtfire.units.stats.unit-achievement-stats', [])
 
     $scope.$watch 'dataModel.selectedTutorial', $scope.switchToTutorial
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module('doubtfire.config.routing', [])
+mod = angular.module('doubtfire.config.routing', [])
 #
 # Configuration for angular routing
 #
@@ -11,3 +11,4 @@ angular.module('doubtfire.config.routing', [])
   # TODO: probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 )
+module.exports = mod.name

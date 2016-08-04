@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.states.teacher-view', [])
+mod = angular.module('doubtfire.units.states.teacher-view', [])
 
 #
 # View for teachers of a unit. They can see everything related
@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.teacher-view', [])
     views:
       main:
         controller: "TeacherViewCtrl"
-        templateUrl: "units/states/teacher-view/teacher-view.tpl.html"
+        template: require('./teacher-view.tpl.html')
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -103,3 +103,5 @@ angular.module('doubtfire.units.states.teacher-view', [])
   # Unit Service allows access to typeahead data
   $scope.unitService = unitService
 )
+
+module.exports = mod.name

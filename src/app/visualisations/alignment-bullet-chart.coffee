@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
+mod = angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 .directive 'alignmentBulletChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     project: '='
     unit: '='
@@ -590,3 +590,5 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
       if $scope.api
         $scope.api.update()
     )
+
+module.exports = mod.name

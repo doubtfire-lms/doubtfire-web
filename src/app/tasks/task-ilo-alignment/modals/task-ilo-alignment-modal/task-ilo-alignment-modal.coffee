@@ -1,15 +1,15 @@
-angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-modal', [])
-
 #
 # Shows a modal where users can align tasks to ILOs
 #
-.factory('TaskILOAlignmentModal', ($modal) ->
+mod = angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-modal', [])
+
+.factory('TaskILOAlignmentModal', ($uibModal) ->
   TaskILOAlignmentModal = {}
 
   TaskILOAlignmentModal.show = (task, ilo, alignment, unit, project, source) ->
-    $modal.open
+    $uibModal.open
       controller: 'TaskILOAlignmentModalCtrl'
-      templateUrl: 'tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.tpl.html'
+      template: require('./task-ilo-alignment-modal.tpl.html')
       resolve:
         task: -> task
         ilo: -> ilo
@@ -21,7 +21,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
   TaskILOAlignmentModal
 )
 
-.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $modalInstance, LearningAlignments, alertService, projectService, task, ilo, alignment, unit, project, source) ->
+.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $uibModalInstance, LearningAlignments, alertService, projectService, task, ilo, alignment, unit, project, source) ->
   $scope.source = source
   $scope.unit = unit
   $scope.task = task
@@ -95,5 +95,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
   $scope.closeModal = ->
     if $scope.editingRationale
       $scope.updateRating $scope.alignment
-    $modalInstance.close $scope.alignment
+    $uibModalInstance.close $scope.alignment
 )
+
+module.exports = mod.name

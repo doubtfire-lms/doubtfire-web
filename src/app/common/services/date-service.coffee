@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.dates", [])
+mod = angular.module("doubtfire.common.services.dates", [])
 #
 # Services for making alerts
 #
@@ -19,3 +19,5 @@ angular.module("doubtfire.common.services.dates", [])
 
   dateService
 )
+
+module.exports = mod.name

@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.task-completion-box-plot', [])
+mod = angular.module('doubtfire.visualisations.task-completion-box-plot', [])
 .directive 'taskCompletionBoxPlot', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     rawData: '=data'
     unit: '='
@@ -64,3 +64,5 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
       maxBoxWidth: 75
       yDomain: [0, Math.ceil($scope.unit.task_definitions.length/2) * 2] #round to nearest 2
     }, {}
+
+module.exports = mod.name

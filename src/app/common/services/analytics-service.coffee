@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.analytics", [])
+mod = angular.module("doubtfire.common.services.analytics", [])
 #
 # Services for analytics
 #
@@ -40,3 +40,5 @@ angular.module("doubtfire.common.services.analytics", [])
 
   analyticsService
 )
+
+module.exports = mod.name

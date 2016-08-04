@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-viewer', [])
+mod = angular.module('doubtfire.tasks.task-viewer', [])
 
 #
 # Views all infomation related to a specific task including:
@@ -10,12 +10,12 @@ angular.module('doubtfire.tasks.task-viewer', [])
 .directive('taskViewer', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'tasks/task-viewer/task-viewer.tpl.html'
+  template: require('./task-viewer.tpl.html')
   scope:
     unit: '='
     project: '='
     assessingUnitRole: '='
-  controller: ($scope, $modal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $uibModal, $state, $stateParams, TaskFeedback, Task, Project, taskService, groupService, alertService, projectService, analyticsService) ->
     #
     # Active task tab group
     #
@@ -141,3 +141,5 @@ angular.module('doubtfire.tasks.task-viewer', [])
         asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
         analyticsService.event 'Student Project View - Tasks Tab', "Updated Status as #{asUser}", taskService.statusLabels[status]
 )
+
+module.exports = mod.name

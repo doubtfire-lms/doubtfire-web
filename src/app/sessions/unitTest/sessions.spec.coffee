@@ -12,17 +12,18 @@ describe "Sessions module", ->
   http = null
   rootScope = null
 
-  beforeEach module "doubtfire.sessions"
+  beforeEach ->
+    angular.mock.module require('../sessions')
 
-  beforeEach inject (_auth_, _currentUser_, _api_, _$httpBackend_, _$http_, _$rootScope_) ->
-    auth = _auth_
-    currentUser = _currentUser_
-    defaultAnonymousUser = _.clone currentUser
-    api = _api_
-    authenticationUrl = api + "/auth"
-    httpBackend = _$httpBackend_
-    http = _$http_
-    rootScope = _$rootScope_
+    angular.mock.inject (_auth_, _currentUser_, _api_, _$httpBackend_, _$http_, _$rootScope_) ->
+      auth = _auth_
+      currentUser = _currentUser_
+      defaultAnonymousUser = _.clone currentUser
+      api = _api_
+      authenticationUrl = api + "/auth"
+      httpBackend = _$httpBackend_
+      http = _$http_
+      rootScope = _$rootScope_
 
   it "should change user when signing in and out", ->
     userCredentials = { username: "user", password: "abc123" }

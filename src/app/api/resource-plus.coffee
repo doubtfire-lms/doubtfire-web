@@ -1,13 +1,14 @@
-angular.module("doubtfire.api.resource-plus", [
-  "ngResource"
-])
-
-#
 # Resource "plus"
 # - base URL path
 # - the addition of the authentication token
 # - change save to use PUT for update and POST for create
 #
+ngResource = require('angular-resource')
+
+mod = angular.module("doubtfire.api.resource-plus", [
+  'ngResource'
+])
+
 .factory("resourcePlus", ($resource, api, currentUser) ->
   (url, paramDefaults, actions) ->
     # Prefix specified relative url with API endpoint.
@@ -29,3 +30,5 @@ angular.module("doubtfire.api.resource-plus", [
 
     return resource
 )
+
+module.exports = mod.name

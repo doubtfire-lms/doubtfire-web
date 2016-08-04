@@ -1,11 +1,13 @@
-angular.module('doubtfire.common.status-icon', [])
+mod = angular.module('doubtfire.common.status-icon', [])
 
 .directive 'statusIcon', ->
   restrict: 'E'
-  templateUrl: 'common/status-icon/status-icon.tpl.html'
+  template: require('./status-icon.tpl.html')
   scope:
     status: '='
   controller: ($scope, taskService) ->
     $scope.statusIcon  = (status) -> taskService.statusIcons[status]
     $scope.statusLabel = (status) -> taskService.statusLabels[status]
     $scope.statusClass = (status) -> taskService.statusClass status
+
+module.exports = mod.name

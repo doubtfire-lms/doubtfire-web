@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.project-lab-list', [])
+mod = angular.module('doubtfire.projects.project-lab-list', [])
 
 #
 # Allows students to change which lab they are in
@@ -6,8 +6,8 @@ angular.module('doubtfire.projects.project-lab-list', [])
 #
 .directive('projectLabList', ->
   restrict: 'E'
-  templateUrl: 'projects/project-lab-list/project-lab-list.tpl.html'
-  controller: ($scope, $modal, User, Project, alertService, projectService, analyticsService) ->
+  template: require('./project-lab-list.tpl.html')
+  controller: ($scope, $uibModal, User, Project, alertService, projectService, analyticsService) ->
     $scope.sortOrder = 'abbreviation'
     $scope.setTutorial = (id) ->
       Project.update(
@@ -21,3 +21,5 @@ angular.module('doubtfire.projects.project-lab-list', [])
         (response) -> alertService.add("danger", response.data.error, 6000)
       )
 )
+
+module.exports = mod.name

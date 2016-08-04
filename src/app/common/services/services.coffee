@@ -1,13 +1,15 @@
-angular.module("doubtfire.common.services", [
-  'doubtfire.common.services.alerts'
-  'doubtfire.common.services.grades'
-  'doubtfire.common.services.header'
-  'doubtfire.common.services.projects'
-  'doubtfire.common.services.redirect'
-  'doubtfire.common.services.tasks'
-  'doubtfire.common.services.units'
-  'doubtfire.common.services.group-service'
-  'doubtfire.common.services.outcome-service'
-  'doubtfire.common.services.analytics'
-  'doubtfire.common.services.dates'
+mod = angular.module("doubtfire.common.services", [
+  require('./alert-service')
+  require('./grade-service')
+  require('./header-service')
+  require('./project-service')
+  require('./redirect-service')
+  require('./task-service')
+  require('./unit-service')
+  require('./group-service')
+  require('./outcome-service')
+  require('./analytics-service')
+  require('./date-service')
 ])
+
+module.exports = mod.name

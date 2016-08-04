@@ -4,18 +4,18 @@
 # Doubtfire is modularised into many modules, as indicated by the directory
 # tree inside app/
 #
-#
+
 angular.module('doubtfire', [
-  'doubtfire.config'
-  'doubtfire.api'
-  'doubtfire.sessions'
-  'doubtfire.common'
-  'doubtfire.errors'
-  'doubtfire.home'
-  'doubtfire.units'
-  'doubtfire.tasks'
-  'doubtfire.projects'
-  'doubtfire.users'
-  'doubtfire.groups'
-  'doubtfire.visualisations'
+  require('./config/config')
+  require('./api/api')
+  require('./sessions/sessions')
+  require('./common/common')
+  require('./errors/errors')
+  require('./home/home')
+  require('./units/units')
+  require('./tasks/tasks')
+  require('./projects/projects')
+  require('./users/users')
+  require('./groups/groups')
+  require('./visualisations/visualisations')
 ])

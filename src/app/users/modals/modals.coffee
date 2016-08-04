@@ -1,4 +1,6 @@
-angular.module('doubtfire.users.modals', [
-  'doubtfire.users.modals.user-notification-settings-modal'
-  'doubtfire.users.modals.user-settings-modal'
+mod = angular.module('doubtfire.users.modals', [
+  require('./user-notification-settings-modal/user-notification-settings-modal')
+  require('./user-settings-modal/user-settings-modal')
 ])
+
+module.exports = mod.name

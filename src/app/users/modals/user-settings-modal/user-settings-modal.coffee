@@ -1,11 +1,11 @@
-angular.module('doubtfire.users.modals.user-settings-modal', [])
+mod = angular.module('doubtfire.users.modals.user-settings-modal', [])
 
-.factory('UserSettingsModal', ($modal) ->
+.factory('UserSettingsModal', ($uibModal) ->
   UserSettingsModal = {}
 
   UserSettingsModal.show = (user) ->
-    $modal.open
-      templateUrl: 'users/modals/user-settings-modal/user-settings-modal.tpl.html'
+    $uibModal.open
+      template: require('./user-settings-modal.tpl.html')
       controller: 'UserSettingsModalCtrl'
       resolve:
         user: -> user
@@ -13,7 +13,7 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
   UserSettingsModal
 )
 
-.controller('UserSettingsModalCtrl', ($scope, $modalInstance, alertService, analyticsService, currentUser, User, user, auth) ->
+.controller('UserSettingsModalCtrl', ($scope, $uibModalInstance, alertService, analyticsService, currentUser, User, user, auth) ->
   $scope.user = user or new User { }
   $scope.isNew = user?.id is undefined
 
@@ -27,7 +27,7 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
   createNewUser = ->
     User.create( user: $scope.user ).$promise.then (
       (response) ->
-        $modalInstance.close(response)
+        $uibModalInstance.close(response)
         if $scope.users
           $scope.users.push(response)
     ),
@@ -40,7 +40,7 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
   updateExistingUser = ->
     User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
       (response) ->
-        $modalInstance.close(response)
+        $uibModalInstance.close(response)
         user.name = user.first_name + " " + user.last_name
         if user == currentUser.profile
           auth.saveCurrentUser()
@@ -58,3 +58,5 @@ angular.module('doubtfire.users.modals.user-settings-modal', [])
     else
       updateExistingUser()
 )
+
+module.exports = mod.name

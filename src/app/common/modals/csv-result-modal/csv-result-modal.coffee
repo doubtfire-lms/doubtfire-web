@@ -1,9 +1,9 @@
-angular.module("doubtfire.common.modals.csv-result-modal", [])
+mod = angular.module("doubtfire.common.modals.csv-result-modal", [])
 
 #
 # Services for making new modals
 #
-.factory("CsvResultModal", ($modal, alertService) ->
+.factory("CsvResultModal", ($uibModal, alertService) ->
   CsvResultModal = {}
 
   #
@@ -25,8 +25,8 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
     else
       alertService.add("danger", "Data uploaded but #{response.errors.length} errors", 6000)
 
-    $modal.open
-      templateUrl: 'common/modals/csv-result-modal/csv-result-modal.tpl.html'
+    $uibModal.open
+      template: require('./csv-result-modal.tpl.html')
       controller: 'CsvResultModalCtrl'
       resolve:
         title: -> title
@@ -38,7 +38,7 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
 #
 # Controller for CSV result modal
 #
-.controller('CsvResultModalCtrl', ($scope, $modalInstance, title, response) ->
+.controller('CsvResultModalCtrl', ($scope, $uibModalInstance, title, response) ->
   $scope.title = title
   $scope.response = response
 
@@ -58,5 +58,7 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
     $scope.response[selector]
 
   $scope.close = ->
-    $modalInstance.dismiss()
+    $uibModalInstance.dismiss()
 )
+
+module.exports = mod.name

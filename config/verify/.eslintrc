@@ -1,0 +1,25 @@
+# START_CONFIT_GENERATED_CONTENT
+extends: standard
+
+env:
+  jasmine: true
+  node: true
+  browser: true
+  commonjs: true    # For Webpack, CommonJS
+  protractor: true
+  es6: true 
+
+confit-globals: &confit-globals
+  angular: true
+
+ecmaFeatures:
+  modules: true
+
+# END_CONFIT_GENERATED_CONTENT
+globals:
+  <<: *confit-globals
+
+rules:
+  max-len:
+    - 2       # Warning
+    - 200     # Line Length

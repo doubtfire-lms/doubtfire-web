@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.task-alignment", [])
+mod = angular.module("doubtfire.api.models.task-alignment", [])
 
 .factory("TaskAlignment", (resourcePlus, api, currentUser, $window) ->
   TaskAlignment = {}
@@ -15,3 +15,5 @@ angular.module("doubtfire.api.models.task-alignment", [])
       $window.open "#{api}/units/#{unit.id}/learning_alignments/csv.json?auth_token=#{currentUser.authenticationToken}", "_blank"
   return TaskAlignment
 )
+
+module.exports = mod.name

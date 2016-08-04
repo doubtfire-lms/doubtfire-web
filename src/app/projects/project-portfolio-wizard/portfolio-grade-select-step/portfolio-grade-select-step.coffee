@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-select-step', [])
+mod = angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-select-step', [])
 
 #
 # Allows students to select the target grade they are hoping
@@ -6,7 +6,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-sele
 #
 .directive('portfolioGradeSelectStep', ->
   restrict: 'E'
-  templateUrl: 'projects/project-portfolio-wizard/portfolio-grade-select-step/portfolio-grade-select-step.tpl.html'
+  template: require('./portfolio-grade-select-step.tpl.html')
   controller: ($scope, Project, projectService, gradeService) ->
     $scope.grades = gradeService.grades
     $scope.agreedToAssessmentCriteria = $scope.projectHasLearningSummaryReport()
@@ -15,3 +15,5 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-grade-sele
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
 )
+
+module.exports = mod.name

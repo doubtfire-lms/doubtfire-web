@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
+mod = angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
 
 #
 # Shows multiple task feedback assessors as a list of students
@@ -8,7 +8,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
 .directive('taskFeedbackAssessorList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-feedback-assessor-list/task-feedback-assessor-list.tpl.html'
+  template: require('./task-feedback-assessor-list.tpl.html')
   scope:
     unit: "=unit"
     context: "=context"
@@ -160,3 +160,5 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
       analyticsService.event category, "Showed Offline Modal"
       UnitMarkSubmissionsOfflineModal.show $scope.unit
 )
+
+module.exports = mod.name

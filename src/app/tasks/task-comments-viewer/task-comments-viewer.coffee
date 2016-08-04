@@ -1,4 +1,4 @@
-angular.module("doubtfire.tasks.task-comments-viewer", [])
+mod = angular.module("doubtfire.tasks.task-comments-viewer", [])
 
 #
 # View's the comments for a specific task, and allows new
@@ -6,12 +6,12 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 #
 .directive('taskCommentsViewer', ->
   restrict: 'E'
-  templateUrl: 'tasks/task-comments-viewer/task-comments-viewer.tpl.html'
+  template: require('./task-comments-viewer.tpl.html')
   scope:
     project: "="
     task: "="
     comment: "=?"
-  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $uibModal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     #
     # Comment code
     #
@@ -59,3 +59,5 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         (response) ->
           alertService.add("danger", response.data.error, 2000)
 )
+
+module.exports = mod.name

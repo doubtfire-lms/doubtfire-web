@@ -1,8 +1,8 @@
-angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
+mod = angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
 #
 # Modal to edit or create a new ILO
 #
-.factory('UnitILOEditModal', ($modal) ->
+.factory('UnitILOEditModal', ($uibModal) ->
   UnitILOEditModalCtrl = {}
 
   #
@@ -10,9 +10,9 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
   # it will assume you want to make a new ILO
   #
   UnitILOEditModalCtrl.show = (unit, ilo) ->
-    $modal.open
+    $uibModal.open
       controller: 'UnitILOEditModalCtrl'
-      templateUrl: 'units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.tpl.html'
+      template: require('./unit-ilo-edit-modal.tpl.html')
       resolve: {
         ilo: -> ilo
         unit: -> unit
@@ -20,7 +20,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
 
   UnitILOEditModalCtrl
 )
-.controller('UnitILOEditModalCtrl', ($scope, $modalInstance, ilo, unit, IntendedLearningOutcome, alertService) ->
+.controller('UnitILOEditModalCtrl', ($scope, $uibModalInstance, ilo, unit, IntendedLearningOutcome, alertService) ->
   prototypeIlo = { name: null, description: null, abbreviation: null }
   $scope.ilo = ilo or prototypeIlo
   $scope.isNew = !ilo?
@@ -36,7 +36,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
     if $scope.isNew
       IntendedLearningOutcome.create(save_data,
         (response) ->
-          $modalInstance.close(response)
+          $uibModalInstance.close(response)
           unit.ilos.push(response)
           alertService.add("success", "Intended Learning Outcome Added", 2000)
         (response) ->
@@ -47,7 +47,7 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
       save_data.id = $scope.ilo.id
       IntendedLearningOutcome.update(save_data).$promise.then (
         (response) ->
-          $modalInstance.close(response)
+          $uibModalInstance.close(response)
           alertService.add("success", "Intended Learning Outcome Updated", 2000)
       ),
       (
@@ -56,3 +56,5 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
             alertService.add("danger", "Error: " + response.data.error, 6000)
       )
 )
+
+module.exports = mod.name

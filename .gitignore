@@ -9,3 +9,6 @@ vendor/
 .sass-cache*
 .bundle*
 tmp.scss
+dist/
+dev/
+reports/

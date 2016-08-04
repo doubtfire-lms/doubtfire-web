@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.unit", [])
+mod = angular.module("doubtfire.api.models.unit", [])
 
 .factory("Unit", (resourcePlus, currentUser, $window, api) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
@@ -30,3 +30,5 @@ angular.module("doubtfire.api.models.unit", [])
 
   Unit
 )
+
+module.exports = mod.name

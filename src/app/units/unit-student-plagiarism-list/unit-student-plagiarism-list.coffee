@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-student-plagiarism-list',[])
+mod = angular.module('doubtfire.units.unit-student-plagiarism-list',[])
 
 #
 # List of all possible plagiarism detected in student's work
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
 .directive('unitStudentPlagiarismList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-student-plagiarism-list/unit-student-plagiarism-list.tpl.html'
+  template: require('./unit-student-plagiarism-list.tpl.html')
   controller: ($scope, $filter, currentUser, gradeService, projectService) ->
     $scope.grades = gradeService.grades
 
@@ -50,3 +50,5 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
     $scope.selectTask = (task) ->
       $scope.activeTask = task
 )
+
+module.exports = mod.name

@@ -1,7 +1,10 @@
 #
 # Runtime settings for when Doubtfire is about to launch
 #
-angular.module('doubtfire.config.runtime', [])
+_ = require('underscore')
+_.string = require('underscore.string')
+
+mod = angular.module('doubtfire.config.runtime', [])
 
 .run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
   editableOptions.theme = 'bs3'
@@ -40,6 +43,7 @@ angular.module('doubtfire.config.runtime', [])
   $rootScope.$on "unauthorisedRequestIntercepted", handleUnauthorised
   # Redirect the user if their token expires
   $rootScope.$on "tokenTimeout", handleTokenTimeout
-
   _.mixin(_.string.exports())
 )
+
+module.exports = mod.name

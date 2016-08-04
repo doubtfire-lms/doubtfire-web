@@ -1,21 +1,21 @@
-angular.module("doubtfire.sessions.states.sign-in", [])
-
 #
 # State for sign in
 #
+mod = angular.module("doubtfire.sessions.states.sign-in", [])
+
 .config(($stateProvider) ->
   signInStateData =
     url: "/sign_in?dest&params"
     views:
       main:
         controller: "SignInCtrl"
-        templateUrl: "sessions/states/sign-in/sign-in.tpl.html"
+        template: require('./sign-in.tpl.html')
     data:
       pageTitle: "_Sign In_"
 
   $stateProvider.state "sign_in", signInStateData
 )
-.controller("SignInCtrl", ($scope, $state, $stateParams, usernameCookie, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, usernameCookie, $timeout, $uibModal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
   ieVersion = ->
@@ -86,3 +86,5 @@ angular.module("doubtfire.sessions.states.sign-in", [])
         )
       $timeout signInFunc, 100
 )
+
+module.exports = mod.name

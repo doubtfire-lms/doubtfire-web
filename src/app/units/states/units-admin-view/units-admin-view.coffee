@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.states.units-admin-view', [])
+mod = angular.module('doubtfire.units.states.units-admin-view', [])
 
 #
 # Convenors of a unit(s) can see a list of all the units they convene
@@ -12,13 +12,13 @@ angular.module('doubtfire.units.states.units-admin-view', [])
     views:
       main:
         controller: "UnitsAdminViewCtrl"
-        templateUrl: "units/states/units-admin-view/units-admin-view.tpl.html"
+        template: require('./units-admin-view.tpl.html')
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units#index", unitsAdminViewStateData
 )
-.controller("UnitsAdminViewCtrl", ($scope, $state, $modal, Unit, UnitCreateModal, analyticsService) ->
+.controller("UnitsAdminViewCtrl", ($scope, $state, $uibModal, Unit, UnitCreateModal, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
   $scope.units = Unit.query { include_in_active: true }
 
@@ -38,3 +38,5 @@ angular.module('doubtfire.units.states.units-admin-view', [])
   $scope.createUnit = ->
     UnitCreateModal.show $scope.units
 )
+
+module.exports = mod.name

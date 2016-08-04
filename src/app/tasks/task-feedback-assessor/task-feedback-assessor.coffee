@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-feedback-assessor',[])
+mod = angular.module('doubtfire.tasks.task-feedback-assessor',[])
 
 #
 # Directive that allows input to provide feedback for a task.
@@ -8,7 +8,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor',[])
 .directive('taskFeedbackAssessor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-feedback-assessor/task-feedback-assessor.tpl.html'
+  template: require('./task-feedback-assessor.tpl.html')
   scope:
     task: "=task"
     unit: "=unit"
@@ -34,3 +34,5 @@ angular.module('doubtfire.tasks.task-feedback-assessor',[])
       $scope.$on 'TaskStatusUpdated', (event, args) ->
         $scope.onStatusUpdate(args.status)
 )
+
+module.exports = mod.name

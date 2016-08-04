@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.task-feedback", [])
+mod = angular.module("doubtfire.api.models.task-feedback", [])
 
 .factory("TaskFeedback", (api, currentUser, $window, resourcePlus) ->
   TaskFeedback = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id/submission", { task_definition_id: "@task_definition_id", project_id: "@project_id" }
@@ -14,3 +14,5 @@ angular.module("doubtfire.api.models.task-feedback", [])
 
   return TaskFeedback
 )
+
+module.exports = mod.name

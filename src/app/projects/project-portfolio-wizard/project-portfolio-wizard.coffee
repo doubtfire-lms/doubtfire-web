@@ -1,10 +1,10 @@
-angular.module('doubtfire.projects.project-portfolio-wizard', [
-  'doubtfire.projects.project-portfolio-wizard.portfolio-add-extra-files-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-grade-select-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-learning-summary-report-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-review-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-tasks-step'
-  'doubtfire.projects.project-portfolio-wizard.portfolio-welcome-step'
+mod = angular.module('doubtfire.projects.project-portfolio-wizard', [
+  require('./portfolio-add-extra-files-step/portfolio-add-extra-files-step')
+  require('./portfolio-grade-select-step/portfolio-grade-select-step')
+  require('./portfolio-learning-summary-report-step/portfolio-learning-summary-report-step')
+  require('./portfolio-review-step/portfolio-review-step')
+  require('./portfolio-tasks-step/portfolio-tasks-step')
+  require('./portfolio-welcome-step/portfolio-welcome-step')
 ])
 
 #
@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
 #
 .directive('projectPortfolioWizard', ->
   restrict: 'E'
-  templateUrl: 'projects/project-portfolio-wizard/project-portfolio-wizard.tpl.html'
+  template: require('./project-portfolio-wizard.tpl.html')
   controller: ($scope, taskService, gradeService, PortfolioSubmission, analyticsService) ->
     #
     # Active task tab group
@@ -115,3 +115,5 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     $scope.statusData = taskService.statusData
     $scope.statusClass = taskService.statusClass
 )
+
+module.exports = mod.name

@@ -1,8 +1,8 @@
-angular.module("doubtfire.projects.project-outcome-alignment", [])
+mod = angular.module("doubtfire.projects.project-outcome-alignment", [])
 
 .directive("projectOutcomeAlignment", ->
   restrict: 'E'
-  templateUrl: 'projects/project-outcome-alignment/project-outcome-alignment.tpl.html'
+  template: require('./project-outcome-alignment.tpl.html')
   controller: ($scope, $rootScope, $timeout, outcomeService, Unit, alertService, analyticsService, Visualisation) ->
     $scope.poaView = {
       activeTab: 'list'
@@ -49,3 +49,5 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
     )
 
 )
+
+module.exports = mod.name

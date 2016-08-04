@@ -6,7 +6,7 @@
  *
  */
 
-angular.module('localization', [])
+var mod = angular.module('localization', [])
 // localization service responsible for retrieving resource files from the server and
 // managing the translation dictionary
 .factory('localize', ['$http', '$rootScope', '$window', '$filter', function($http, $rootScope, $window, $filter) {
@@ -166,3 +166,5 @@ angular.module('localization', [])
 
   return i18NAttrDirective;
 }]);
+
+module.exports = mod.name;

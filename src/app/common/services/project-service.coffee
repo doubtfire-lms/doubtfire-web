@@ -1,8 +1,10 @@
-angular.module("doubtfire.common.services.projects", [])
-
 #
 # Service for handling projects
 #
+_ = require('underscore')
+
+mod = angular.module("doubtfire.common.services.projects", [])
+
 .factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task) ->
   projectService = {}
 
@@ -180,3 +182,5 @@ angular.module("doubtfire.common.services.projects", [])
 
   projectService
 )
+
+module.exports = mod.name

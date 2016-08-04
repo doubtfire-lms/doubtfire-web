@@ -1,5 +1,6 @@
-angular.module("doubtfire.api", [
-  "doubtfire.api.api-url"
-  "doubtfire.api.resource-plus"
-  "doubtfire.api.models"
+mod = angular.module("doubtfire.api", [
+  require('./api-url')
+  require('./resource-plus')
+  require('./models/models')
 ])
+module.exports = mod.name

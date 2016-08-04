@@ -1,11 +1,11 @@
-angular.module('doubtfire.groups.student-group-manager', [])
+mod = angular.module('doubtfire.groups.student-group-manager', [])
 
 #
 # Context for students to see and manage groups
 #
 .directive('studentGroupManager', ->
   restrict: 'E'
-  templateUrl: 'groups/student-group-manager/student-group-manager.tpl.html'
+  template: require('./student-group-manager.tpl.html')
   replace: true
   controller: ($scope, Group, alertService, GroupMember, projectService) ->
     $scope.selectedGroup = null
@@ -53,3 +53,5 @@ angular.module('doubtfire.groups.student-group-manager', [])
       $scope.selectedGroup = $scope.groupForSet(newValue)
       $scope.$digest #notify
 )
+
+module.exports = mod.name

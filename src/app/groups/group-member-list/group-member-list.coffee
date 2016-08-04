@@ -1,11 +1,11 @@
-angular.module('doubtfire.groups.group-member-list', [])
+mod = angular.module('doubtfire.groups.group-member-list', [])
 
 #
 # Lists members in a group
 #
 .directive('groupMemberList', ->
   restrict: 'E'
-  templateUrl: 'groups/group-member-list/group-member-list.tpl.html'
+  template: require('./group-member-list.tpl.html')
 
   controller: ($scope, GroupMember, gradeService) ->
     $scope.memberSortOrder = 'student_name'
@@ -34,3 +34,5 @@ angular.module('doubtfire.groups.group-member-list', [])
       if newValue != oldValue
         $scope.refreshGroupMembers()
 )
+
+module.exports = mod.name

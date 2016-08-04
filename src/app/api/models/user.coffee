@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.user", [])
+mod = angular.module("doubtfire.api.models.user", [])
 
 .factory("User", (resourcePlus, currentUser, api) ->
   User = resourcePlus "/users/:id", { id: "@id" }
@@ -6,3 +6,5 @@ angular.module("doubtfire.api.models.user", [])
     "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
   return User
 )
+
+module.exports = mod.name

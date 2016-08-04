@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.stats.task-summary-stats', [])
+mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
 
 #
 # Shows a summary of task states as a scatter plot
@@ -6,11 +6,11 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
 .directive('taskSummaryStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/stats/task-summary-stats/task-summary-stats.tpl.html'
+  template: require('./task-summary-stats.tpl.html')
   scope:
     unit: "=unit"
 
-  controller: ($scope, $modal, Task, taskService, TaskCompletionCsv) ->
+  controller: ($scope, $uibModal, Task, taskService, TaskCompletionCsv) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
@@ -106,3 +106,5 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
         $scope.scatterData = scatterData
     $scope.fetchStats()
 )
+
+module.exports = mod.name

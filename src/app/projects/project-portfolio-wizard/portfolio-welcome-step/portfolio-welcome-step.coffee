@@ -1,9 +1,11 @@
-angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-welcome-step', [])
+mod = angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-welcome-step', [])
 
 #
 # Welcome introductory step
 #
 .directive('portfolioWelcomeStep', ->
   restrict: 'E'
-  templateUrl: 'projects/project-portfolio-wizard/portfolio-welcome-step/portfolio-welcome-step.tpl.html'
+  template: require('./portfolio-welcome-step.tpl.html')
 )
+
+module.exports = mod.name

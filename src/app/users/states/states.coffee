@@ -1,3 +1,5 @@
-angular.module('doubtfire.users.states', [
-  'doubtfire.users.states.users-admin-view'
+mod = angular.module('doubtfire.users.states', [
+  require('./users-admin-view/users-admin-view')
 ])
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.task-similarity", [])
+mod = angular.module("doubtfire.api.models.task-similarity", [])
 
 .factory("TaskSimilarity", ($http, api, currentUser) ->
   get: (task, match, callback) ->
@@ -6,3 +6,5 @@ angular.module("doubtfire.api.models.task-similarity", [])
     $http.get(url).success ( data ) ->
       callback(data)
 )
+
+module.exports = mod.name

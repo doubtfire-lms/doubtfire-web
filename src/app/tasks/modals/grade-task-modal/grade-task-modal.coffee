@@ -1,31 +1,31 @@
-angular.module('doubtfire.tasks.modals.grade-task-modal', [])
-
 #
 # A modal to grade a graded task
 #
-.factory('GradeTaskModal', ($modal) ->
+mod = angular.module('doubtfire.tasks.modals.grade-task-modal', [])
+
+.factory('GradeTaskModal', ($uibModal) ->
   GradeTaskModal = {}
 
   #
   # Open a grade task modal with the provided task
   #
   GradeTaskModal.show = (task) ->
-    $modal.open
-      templateUrl: 'tasks/modals/grade-task-modal/grade-task-modal.tpl.html'
+    $uibModal.open
+      template: require('./grade-task-modal.tpl.html')
       controller: 'GradeTaskModal'
       resolve:
         task: -> task
 
   GradeTaskModal
 )
-.controller('GradeTaskModal', ($scope, $modalInstance, gradeService, task) ->
+.controller('GradeTaskModal', ($scope, $uibModalInstance, gradeService, task) ->
   $scope.task = task
   $scope.data = { desiredGrade: task.grade, rating: task.quality_pts || 1, overStar: 0, confRating: 0 }
   $scope.grades = gradeService.grades
-  $scope.dismiss = $modalInstance.dismiss
+  $scope.dismiss = $uibModalInstance.dismiss
   $scope.numStars = task.definition.max_quality_pts || 5
   $scope.close = ->
-    $modalInstance.close { qualityPts: $scope.data.rating, selectedGrade: $scope.data.desiredGrade}
+    $uibModalInstance.close { qualityPts: $scope.data.rating, selectedGrade: $scope.data.desiredGrade}
 
   $scope.hoveringOver = (value) ->
     $scope.data.overStar = value
@@ -38,3 +38,5 @@ angular.module('doubtfire.tasks.modals.grade-task-modal', [])
 
     $scope.data.confRating = $scope.data.rating
 )
+
+module.exports = mod.name

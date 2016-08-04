@@ -1,9 +1,9 @@
-angular.module('doubtfire.common.file-uploader', [])
+mod = angular.module('doubtfire.common.file-uploader', [])
 
 .directive 'fileUploader', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'common/file-uploader/file-uploader.tpl.html'
+  template: require('./file-uploader.tpl.html')
   scope:
     # Files map a key (file name to be uploaded) to a value (containing a
     # a display name, and the type of file that is to be accepted, where
@@ -200,3 +200,5 @@ angular.module('doubtfire.common.file-uploader', [])
       # Send it
       xhr.open $scope.method, $scope.url, true
       xhr.send form
+
+module.exports = mod.name

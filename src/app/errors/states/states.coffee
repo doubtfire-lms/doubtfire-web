@@ -1,5 +1,7 @@
-angular.module("doubtfire.errors.states", [
-  "doubtfire.errors.states.not-found"
-  "doubtfire.errors.states.timeout"
-  "doubtfire.errors.states.unauthorised"
+mod = angular.module("doubtfire.errors.states", [
+  require('./not-found/not-found')
+  require('./timeout/timeout')
+  require('./unauthorised/unauthorised')
 ])
+
+module.exports = mod.name

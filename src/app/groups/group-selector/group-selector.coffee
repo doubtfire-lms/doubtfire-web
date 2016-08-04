@@ -1,4 +1,4 @@
-angular.module('doubtfire.groups.group-selector', [])
+mod = angular.module('doubtfire.groups.group-selector', [])
 
 #
 # Allows tutors and students to select (and create if applicable)
@@ -6,7 +6,7 @@ angular.module('doubtfire.groups.group-selector', [])
 #
 .directive('groupSelector', ->
   restrict: 'E'
-  templateUrl: 'groups/group-selector/group-selector.tpl.html'
+  template: './group-selector.tpl.html'
   replace: true
   controller: ($scope, alertService, Group, currentUser) ->
     # pagination of groups
@@ -103,3 +103,5 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.getGroups newValue, (groups) ->
         $scope.groups = groups
 )
+
+module.exports = mod.name

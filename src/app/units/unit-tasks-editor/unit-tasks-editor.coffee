@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-tasks-editor', [])
+mod = angular.module('doubtfire.units.unit-tasks-editor', [])
 
 #
 # Editor for modifying the tasks in a unit
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
 .directive('unitTasksEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-tasks-editor/unit-tasks-editor.tpl.html'
+  template: require('./unit-tasks-editor.tpl.html')
   controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal) ->
     $scope.grades = gradeService.grades
 
@@ -101,3 +101,5 @@ angular.module('doubtfire.units.unit-tasks-editor', [])
 
     $scope.groupSetName = (id) -> groupService.groupSetName(id, $scope.unit)
 )
+
+module.exports = mod.name

@@ -1,6 +1,8 @@
-angular.module("doubtfire.common.modals", [
-  'doubtfire.common.modals.about-doubtfire-modal'
-  'doubtfire.common.modals.csv-result-modal'
-  'doubtfire.common.modals.progress-modal'
-  'doubtfire.common.modals.confirmation-modal'
+mod = angular.module("doubtfire.common.modals", [
+  require('./about-doubtfire-modal/about-doubtfire-modal')
+  require('./csv-result-modal/csv-result-modal')
+  require('./progress-modal/progress-modal')
+  require('./confirmation-modal/confirmation-modal')
 ])
+
+module.exports = mod.name

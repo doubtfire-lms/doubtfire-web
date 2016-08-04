@@ -1,3 +1,5 @@
-angular.module('doubtfire.home', [
-  'doubtfire.home.states'
+mod = angular.module('doubtfire.home', [
+  require('./states/states')
 ])
+
+module.exports = mod.name

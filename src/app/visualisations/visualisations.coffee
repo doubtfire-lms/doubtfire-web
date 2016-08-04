@@ -1,14 +1,14 @@
-angular.module('doubtfire.visualisations', [
-  'doubtfire.visualisations.summary-task-status-scatter'
-  'doubtfire.visualisations.progress-burndown-chart'
-  'doubtfire.visualisations.alignment-bar-chart'
-  'doubtfire.visualisations.alignment-bullet-chart'
-  'doubtfire.visualisations.student-task-status-pie-chart'
-  'doubtfire.visualisations.task-status-pie-chart'
-  'doubtfire.visualisations.target-grade-pie-chart'
-  'doubtfire.visualisations.task-completion-box-plot'
-  'doubtfire.visualisations.achievement-box-plot'
-  'doubtfire.visualisations.achievement-custom-bar-chart'
+mod = angular.module('doubtfire.visualisations', [
+  require('./summary-task-status-scatter')
+  require('./progress-burndown-chart')
+  require('./alignment-bar-chart')
+  require('./alignment-bullet-chart')
+  require('./student-task-status-pie-chart')
+  require('./task-status-pie-chart')
+  require('./target-grade-pie-chart')
+  require('./task-completion-box-plot')
+  require('./achievement-box-plot')
+  require('./achievement-custom-bar-chart')
 ])
 
 .factory('Visualisation', ($interval, analyticsService) ->
@@ -65,3 +65,5 @@ angular.module('doubtfire.visualisations', [
 
   Visualisation
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-sheet-viewer', [])
+mod = angular.module('doubtfire.tasks.task-sheet-viewer', [])
 
 #
 # Task sheet shows PDF and allows resources to be downloaded
@@ -6,7 +6,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
 .directive('taskSheetViewer', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-sheet-viewer/task-sheet-viewer.tpl.html'
+  template: require('./task-sheet-viewer.tpl.html')
   scope:
     task: '='
     unit: '='
@@ -112,3 +112,5 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
       $scope.showTaskSheet = ! $scope.showTaskSheet
 
 )
+
+module.exports = mod.name

@@ -1,8 +1,10 @@
-angular.module("doubtfire.sessions.auth.http-auth-injector", [])
 #
 # This module is responsible for injecting the auth credentials to
 # all
-#
+_ = require('underscore')
+
+mod = angular.module("doubtfire.sessions.auth.http-auth-injector", [])
+
 .config(($httpProvider) ->
   $httpProvider.interceptors.push ($q, $rootScope, api, currentUser) ->
     #
@@ -34,3 +36,5 @@ angular.module("doubtfire.sessions.auth.http-auth-injector", [])
       responseError: injectAuthForResponseWithError
     }
 )
+
+module.exports = mod.name

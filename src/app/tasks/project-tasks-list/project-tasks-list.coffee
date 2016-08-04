@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.project-tasks-list', [])
+mod = angular.module('doubtfire.tasks.project-tasks-list', [])
 
 #
 # Displays the tasks associated with a student's project which
@@ -8,14 +8,14 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
 .directive('projectTasksList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/project-tasks-list/project-tasks-list.tpl.html'
+  template: require('./project-tasks-list.tpl.html')
   scope:
     unit: "="
     project: "="
     onSelect: "="
     inMenu: '@'
 
-  controller: ($scope, $modal, taskService, groupService, analyticsService) ->
+  controller: ($scope, $uibModal, taskService, groupService, analyticsService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"
 
     # functions from task service
@@ -31,3 +31,5 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
 
     $scope.hideGroupSetName = $scope.unit.group_sets.length is 0
 )
+
+module.exports = mod.name

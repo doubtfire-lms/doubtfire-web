@@ -1,11 +1,11 @@
-angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-step', [])
+mod = angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-step', [])
 
 #
 # Step for students to view their portfolio and optionally delete it
 #
 .directive('portfolioReviewStep', ->
   restrict: 'E'
-  templateUrl: 'projects/project-portfolio-wizard/portfolio-review-step/portfolio-review-step.tpl.html'
+  template: require('./portfolio-review-step.tpl.html')
   controller: ($scope, alertService, Project) ->
 
     # Watch when portfolio value is changed to reassess
@@ -34,3 +34,5 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
         $scope.project.portfolio_available = false
         alertService.add('info', "Portfolio has been deleted!", 5000)
 )
+
+module.exports = mod.name

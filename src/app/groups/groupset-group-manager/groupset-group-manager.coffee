@@ -1,4 +1,4 @@
-angular.module('doubtfire.groups.groupset-group-manager', [])
+mod = angular.module('doubtfire.groups.groupset-group-manager', [])
 
 #
 # Manager directive for tutors to add and remove group
@@ -6,7 +6,7 @@ angular.module('doubtfire.groups.groupset-group-manager', [])
 #
 .directive('groupsetGroupManager', ->
   restrict: 'E'
-  templateUrl: 'groups/groupset-group-manager/groupset-group-manager.tpl.html'
+  template: require('./groupset-group-manager.tpl.html')
   replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, projectService) ->
     $scope.staffFilter = 'mine'
@@ -49,3 +49,5 @@ angular.module('doubtfire.groups.groupset-group-manager', [])
       else
         $scope.selectGroup(null)
 )
+
+module.exports = mod.name

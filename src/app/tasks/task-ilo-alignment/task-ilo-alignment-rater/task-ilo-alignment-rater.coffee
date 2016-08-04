@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
+mod = angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
 
 #
 # A star-based rater where the strength of an alignment between a
@@ -8,7 +8,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
 .directive('taskIloAlignmentRater', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.tpl.html'
+  template: require('./task-ilo-alignment-rater.tpl.html')
   scope:
     readonly: '=?'
     # pass in whole align object
@@ -54,3 +54,5 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
         if newValue? and newValue isnt oldValue
           $scope.onRatingChanged($scope.ngModel)
 )
+
+module.exports = mod.name

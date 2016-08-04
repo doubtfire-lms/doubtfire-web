@@ -1,12 +1,12 @@
-angular.module('doubtfire.groups.group-member-contribution-assigner', [])
-
 #
 # Directive to rate each student's contributions
 # in a group task assessment
 #
+mod = angular.module('doubtfire.groups.group-member-contribution-assigner', [])
+
 .directive('groupMemberContributionAssigner', ->
   restrict: 'E'
-  templateUrl: 'groups/group-member-contribution-assigner/group-member-contribution-assigner.tpl.html'
+  template: require('./group-member-contribution-assigner.tpl.html')
   replace: true
   scope:
     task: '='
@@ -60,3 +60,5 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
       return 'label-warning'  if $scope.percentages.warning <= pct < $scope.percentages.info
       return 'label-danger'   if $scope.percentages.danger  <= pct < $scope.percentages.warning
 )
+
+module.exports = mod.name

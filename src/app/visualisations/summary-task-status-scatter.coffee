@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
+mod = angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
 .directive 'summaryTaskStatusScatter', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     data: '='
     unit: '='
@@ -27,3 +27,5 @@ angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
       showDistX: yes
       showDistY: yes
     }, {}
+
+module.exports = mod.name

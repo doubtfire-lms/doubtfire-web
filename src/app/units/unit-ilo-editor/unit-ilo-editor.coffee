@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-ilo-editor',[])
+mod = angular.module('doubtfire.units.unit-ilo-editor',[])
 
 #
 # Editor for modifying a unit's ILOs
@@ -6,8 +6,8 @@ angular.module('doubtfire.units.unit-ilo-editor',[])
 .directive('unitIloEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-ilo-editor/unit-ilo-editor.tpl.html'
-  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CsvResultModal, UnitILOEditModal) ->
+  template: require('./unit-ilo-editor.tpl.html')
+  controller: ($scope, $uibModal, $rootScope, IntendedLearningOutcome, alertService, CsvResultModal, UnitILOEditModal) ->
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchOutcomeUrl = ->
       IntendedLearningOutcome.getOutcomeBatchUploadUrl($scope.unit)
@@ -30,3 +30,5 @@ angular.module('doubtfire.units.unit-ilo-editor',[])
         (response) ->
           alertService.add("danger", "Error: " + response.data.error, 6000)
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.stats.task-completion-stats', [])
+mod = angular.module('doubtfire.tasks.stats.task-completion-stats', [])
 
 #
 # Stats directive that shows the completion statistics of tasks
@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.stats.task-completion-stats', [])
 #
 .directive('taskCompletionStats', ->
   restrict: 'E'
-  templateUrl: 'tasks/stats/task-completion-stats/task-completion-stats.tpl.html'
+  template: require('./task-completion-stats.tpl.html')
   scope:
     unit: "="
   controller: ($scope, Unit) ->
@@ -57,3 +57,5 @@ angular.module('doubtfire.tasks.stats.task-completion-stats', [])
         $scope.depth = 0
     $scope.$watch 'dataModel.selectedTutorial', $scope.switchToTutorial
 )
+
+module.exports = mod.name

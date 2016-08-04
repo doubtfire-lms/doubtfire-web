@@ -1,28 +1,28 @@
-angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
+mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
 
 #
 # Modal to show Doubtfire version info
 #
-.factory("AboutDoubtfireModal", ($modal) ->
+.factory("AboutDoubtfireModal", ($uibModal) ->
   AboutDoubtfireModal = {}
 
   AboutDoubtfireModal.show = ->
-    $modal.open
-      templateUrl: 'common/modals/about-doubtfire-modal/about-doubtfire-modal.tpl.html'
+    $uibModal.open
+      template: require('./about-doubtfire-modal.tpl.html')
       controller: 'AboutDoubtfireModalCtrl'
       size: 'lg'
 
   AboutDoubtfireModal
 )
 
-.controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $modalInstance, $http, $q) ->
+.controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $uibModalInstance, $http, $q) ->
   contributors = DoubtfireContributors
   # initial data
   $scope.contributors = _.map contributors, (c) ->
     avatar:   '/assets/images/person-unknown.gif'
     handler:  c
   $scope.close = ->
-    $modalInstance.dismiss()
+    $uibModalInstance.dismiss()
   for handler, index in contributors
     do (handler, index) ->
       $http.get("https://api.github.com/users/#{handler}").then (response) ->
@@ -36,3 +36,5 @@ angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
           github:   data.html_url
           handler:  handler
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.task-completion-csv", [])
+mod = angular.module("doubtfire.api.models.task-completion-csv", [])
 
 .service("TaskCompletionCsv", (api, $window, currentUser) ->
   this.downloadFile = (unit) ->
@@ -6,3 +6,5 @@ angular.module("doubtfire.api.models.task-completion-csv", [])
 
   return this
 )
+
+module.exports = mod.name

@@ -1,19 +1,21 @@
-angular.module('doubtfire.tasks', [
-  'doubtfire.tasks.modals'
-  'doubtfire.tasks.stats'
-  'doubtfire.tasks.task-ilo-alignment'
-  'doubtfire.tasks.project-tasks-list'
-  'doubtfire.tasks.project-top-tasks-list'
-  'doubtfire.tasks.task-comments-viewer'
-  'doubtfire.tasks.task-definition-editor'
-  'doubtfire.tasks.task-definition-selector'
-  'doubtfire.tasks.task-feedback-assessor'
-  'doubtfire.tasks.task-feedback-assessor-list'
-  'doubtfire.tasks.task-plagiarism-file-viewer'
-  'doubtfire.tasks.task-plagiarism-report-viewer'
-  'doubtfire.tasks.task-sheet-viewer'
-  'doubtfire.tasks.task-status-selector'
-  'doubtfire.tasks.task-submission-viewer'
-  'doubtfire.tasks.task-submission-wizard'
-  'doubtfire.tasks.task-viewer'
+mod = angular.module('doubtfire.tasks', [
+  require('./modals/modals')
+  require('./stats/stats')
+  require('./task-ilo-alignment/task-ilo-alignment')
+  require('./project-tasks-list/project-tasks-list')
+  require('./project-top-tasks-list/project-top-tasks-list')
+  require('./task-comments-viewer/task-comments-viewer')
+  require('./task-definition-editor/task-definition-editor')
+  require('./task-definition-selector/task-definition-selector')
+  require('./task-feedback-assessor/task-feedback-assessor')
+  require('./task-feedback-assessor-list/task-feedback-assessor-list')
+  require('./task-plagiarism-file-viewer/task-plagiarism-file-viewer')
+  require('./task-plagiarism-report-viewer/task-plagiarism-report-viewer')
+  require('./task-sheet-viewer/task-sheet-viewer')
+  require('./task-status-selector/task-status-selector')
+  require('./task-submission-viewer/task-submission-viewer')
+  require('./task-submission-wizard/task-submission-wizard')
+  require('./task-viewer/task-viewer')
 ])
+
+module.exports = mod.name

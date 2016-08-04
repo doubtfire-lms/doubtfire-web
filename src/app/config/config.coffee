@@ -5,13 +5,14 @@
 # The order in which the modules load here is IMPORTANT so do not rearrange
 # them
 #
-angular.module('doubtfire.config', [
-  'doubtfire.config.vendor-dependencies'
-  'doubtfire.config.contributors'
-  'doubtfire.config.local-storage'
-  'doubtfire.config.routing'
-  'doubtfire.config.analytics'
-  'doubtfire.config.runtime'
-  'doubtfire.config.root-controller'
-  'doubtfire.config.debug'
+mod = angular.module('doubtfire.config', [
+  require('./vendor-dependencies/vendor-dependencies')
+  require('./contributors/contributors')
+  require('./local-storage/local-storage')
+  require('./routing/routing')
+  require('./analytics/analytics')
+  require('./runtime/runtime')
+  require('./root-controller/root-controller')
+  require('./debug/debug')
 ])
+module.exports = mod.name

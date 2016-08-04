@@ -1,6 +1,8 @@
 #
 # Doubtfire errors module
 #
-angular.module("doubtfire.errors", [
-  "doubtfire.errors.states"
+mod = angular.module("doubtfire.errors", [
+  require('./states/states')
 ])
+
+module.exports = mod.name

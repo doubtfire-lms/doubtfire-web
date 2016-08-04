@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.states.edit-unit-view', [])
+mod = angular.module('doubtfire.units.states.edit-unit-view', [])
 
 #
 # State for convenors to edit a particular unit
@@ -9,7 +9,7 @@ angular.module('doubtfire.units.states.edit-unit-view', [])
     views:
       main:
         controller: "EditUnitViewCtrl"
-        templateUrl: "units/states/edit-unit-view/edit-unit-view.tpl.html"
+        template: require('./edit-unit-view.tpl.html')
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
@@ -94,3 +94,5 @@ angular.module('doubtfire.units.states.edit-unit-view', [])
     )
   )
 )
+
+module.exports = mod.name

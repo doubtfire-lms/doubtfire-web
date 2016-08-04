@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
+mod = angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
 
 #
 # Task Plagiarism Report shows how the task relates tasks submitted by
@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
 .directive('taskPlagiarismReportViewer', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.tpl.html'
+  template: require('./task-plagiarism-report-viewer.tpl.html')
   scope:
     task: "="
     assessingUnitRole: "="
@@ -66,3 +66,5 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
       $scope.taskId = $scope.task.id
       $scope.fetchSimilarity($scope.task, $scope.match - 1)
 )
+
+module.exports = mod.name

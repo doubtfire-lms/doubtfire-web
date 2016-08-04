@@ -1,24 +1,26 @@
-angular.module("doubtfire.api.models", [
-  "doubtfire.api.models.project"
-  "doubtfire.api.models.unit"
-  "doubtfire.api.models.unit-role"
-  "doubtfire.api.models.user-role"
-  "doubtfire.api.models.convenor"
-  "doubtfire.api.models.tutor"
-  "doubtfire.api.models.tutorial"
-  "doubtfire.api.models.learning-alignments"
-  "doubtfire.api.models.intended-learning-outcome"
-  "doubtfire.api.models.task"
-  "doubtfire.api.models.task-comment"
-  "doubtfire.api.models.task-definition"
-  "doubtfire.api.models.group-member"
-  "doubtfire.api.models.group"
-  "doubtfire.api.models.group-set"
-  "doubtfire.api.models.task-alignment"
-  "doubtfire.api.models.task-feedback"
-  "doubtfire.api.models.task-similarity"
-  "doubtfire.api.models.students"
-  "doubtfire.api.models.user"
-  "doubtfire.api.models.task-completion-csv"
-  "doubtfire.api.models.portfolio-submission"
+mod = angular.module("doubtfire.api.models", [
+  require('./project')
+  require('./unit')
+  require('./unit-role')
+  require('./user-role')
+  require('./convenor')
+  require('./tutor')
+  require('./tutorial')
+  require('./learning-alignments')
+  require('./intended-learning-outcome')
+  require('./task')
+  require('./task-comment')
+  require('./task-definition')
+  require('./group-member')
+  require('./group')
+  require('./group-set')
+  require('./task-alignment')
+  require('./task-feedback')
+  require('./task-similarity')
+  require('./students')
+  require('./user')
+  require('./task-completion-csv')
+  require('./portfolio-submission')
 ])
+
+module.exports = mod.name

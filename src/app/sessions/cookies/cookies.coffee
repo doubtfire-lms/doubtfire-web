@@ -1,7 +1,9 @@
-angular.module("doubtfire.sessions.cookies", [])
+mod = angular.module("doubtfire.sessions.cookies", [])
 #
 # Cookies used in doubtfire auth
 #
 .constant("usernameCookie", "doubtfire_user")
 .constant("rememberDoubtfireCredentialsCookie", "remember_doubtfire_credentials_token")
 .constant("doubtfireLoginTimeCookie", "doubtfire_login_time")
+
+module.exports = mod.name

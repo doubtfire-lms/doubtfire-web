@@ -1,9 +1,9 @@
-angular.module('doubtfire.common.markdown-editor', [])
+mod = angular.module('doubtfire.common.markdown-editor', [])
 
 .directive 'markdownEditor', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'common/markdown-editor/markdown-editor.tpl.html'
+  template: require('./markdown-editor.tpl.html')
   scope:
     markdownText: '=ngModel'
     height: '@'
@@ -30,3 +30,5 @@ angular.module('doubtfire.common.markdown-editor', [])
       mode: 'markdown'
       theme: 'xq-light'
       placeholder: $scope.placeholder
+
+module.exports = mod.name

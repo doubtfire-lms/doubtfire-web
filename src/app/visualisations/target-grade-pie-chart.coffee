@@ -1,8 +1,8 @@
-angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
+mod = angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
 .directive 'targetGradePieChart', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'visualisations/visualisation.tpl.html'
+  template: require('./visualisation.tpl.html')
   scope:
     rawData: '=data'
     showLegend: '=?'
@@ -46,3 +46,5 @@ angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
         keyFormatter: (d) ->
           d
     }, {}
+
+module.exports = mod.name

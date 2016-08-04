@@ -1,4 +1,4 @@
-angular.module('doubtfire.config.contributors', [])
+mod = angular.module('doubtfire.config.contributors', [])
 #
 # Add contributors to Doubtfire here, which should be their GitHub usernames
 #
@@ -21,3 +21,4 @@ angular.module('doubtfire.config.contributors', [])
   # '???'                 # Angus Morton
   #
 ])
+module.exports = mod.name

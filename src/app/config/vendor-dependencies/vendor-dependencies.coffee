@@ -2,15 +2,32 @@
 # Use this module to define all third-party dependencies
 # that are used in Doubtfire
 #
-angular.module('doubtfire.config.vendor-dependencies', [
+ngCookies = require('angular-cookies')
+ngCsv = require('ng-csv')
+ngSanitize = require('angular-sanitize')
+
+uiRouter = require('angular-ui-router')
+uiBootstrap = require('angular-ui-bootstrap')
+uiCodemirror = require('angular-ui-codemirror')
+
+ngFileUpload = require('angular-file-upload')
+ngFilter = require('angular-filter')
+ngMarkdown = require('angular-markdown-filter')
+ngD3 = require('angular-nvd3')
+ngXeditable = require('angular-xeditable')
+ngLocalStorage = require('angular-local-storage')
+
+ngAngulartics = require('angulartics')
+ngAngularticsGoogleAnalytics = require('angulartics-google-analytics')
+
+localization = require('./libs/localization')
+utilsService = require('./libs/utilService')
+
+mod = angular.module('doubtfire.config.vendor-dependencies', [
   # ng*
   'ngCookies'
   'ngCsv'
   'ngSanitize'
-
-  # templates
-  'templates-app'
-  'templates-common'
 
   # ui.*
   'ui.router'
@@ -20,7 +37,6 @@ angular.module('doubtfire.config.vendor-dependencies', [
   # other libraries
   'angularFileUpload'
   'angular.filter'
-  'localization'
   'markdown'
   'nvd3'
   'xeditable'
@@ -29,4 +45,10 @@ angular.module('doubtfire.config.vendor-dependencies', [
   # analytics
   'angulartics'
   'angulartics.google.analytics'
+
+  # manually included libs
+  localization
+  utilsService
+
 ])
+module.exports = mod.name

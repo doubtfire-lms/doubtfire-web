@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.grades", [  ])
+mod = angular.module("doubtfire.common.services.grades", [  ])
 #
 # Service for grade-related data
 #
@@ -49,3 +49,5 @@ angular.module("doubtfire.common.services.grades", [  ])
 
   gradeService
 )
+
+module.exports = mod.name

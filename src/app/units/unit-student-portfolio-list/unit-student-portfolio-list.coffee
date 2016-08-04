@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-student-portfolio-list', [])
+mod = angular.module('doubtfire.units.unit-student-portfolio-list', [])
 
 #
 # List of all students who have portfolios and provides a marking
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
 #
 .directive('unitStudentPortfolioList', ->
   restrict: 'E'
-  templateUrl: 'units/unit-student-portfolio-list/unit-student-portfolio-list.tpl.html'
+  template: require('./unit-student-portfolio-list.tpl.html')
   controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser) ->
     $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
     $scope.gradeDownloadUrl = Unit.getGradesUrl $scope.unit
@@ -121,3 +121,5 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
       analyticsService.event 'Teacher View - Grading Tab', 'Selected Student'
 
 )
+
+module.exports = mod.name

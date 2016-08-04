@@ -1,4 +1,4 @@
-angular.module('doubtfire.home.states.home', [])
+mod = angular.module('doubtfire.home.states.home', [])
 
 .config((headerServiceProvider) ->
   homeStateData =
@@ -6,7 +6,7 @@ angular.module('doubtfire.home.states.home', [])
     views:
       main:
         controller: "HomeCtrl"
-        templateUrl: "home/states/home/home.tpl.html"
+        template: require('./home.tpl.html')
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -87,3 +87,5 @@ angular.module('doubtfire.home.states.home', [])
   $scope.currentUser = currentUser
 
 )
+
+module.exports = mod.name

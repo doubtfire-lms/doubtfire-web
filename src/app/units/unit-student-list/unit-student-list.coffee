@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-student-list', [])
+mod = angular.module('doubtfire.units.unit-student-list', [])
 
 #
 # The unit student list view shows a list of students in a unit, with
@@ -8,13 +8,13 @@ angular.module('doubtfire.units.unit-student-list', [])
 .directive('unitStudentList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-student-list/unit-student-list.tpl.html'
+  template: require('./unit-student-list.tpl.html')
   scope:
     unitRole: "=unitRole"
     unit: "=unit"
     unitLoaded: "=unitLoaded"
     fullscreen: '=?'
-  controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService, UnitStudentEnrolmentModal) ->
+  controller: ($scope, $rootScope, $uibModal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService, UnitStudentEnrolmentModal) ->
     $scope.studentFilter = 'myStudents' # Mine by default
 
     $scope.grades = gradeService.grades
@@ -117,3 +117,5 @@ angular.module('doubtfire.units.unit-student-list', [])
       analyticsService.event 'Teacher View - Students Tab', 'Enrol Student'
       UnitStudentEnrolmentModal.show $scope.unit
 )
+
+module.exports = mod.name

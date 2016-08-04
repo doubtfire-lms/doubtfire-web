@@ -1,8 +1,11 @@
-angular.module("doubtfire.sessions.auth.roles.if-role", [])
 #
 # Removes an element if the current user's authenticated role is
 # not present in the whitelist
 #
+_ = require('underscore')
+
+mod = angular.module("doubtfire.sessions.auth.roles.if-role", [])
+
 .directive("ifRole", (auth) ->
   restrict: "A"
   link: (scope, element, attrs) ->
@@ -10,3 +13,5 @@ angular.module("doubtfire.sessions.auth.roles.if-role", [])
     element.remove() if not auth.isAuthorised roleWhitelist
 
 )
+
+module.exports = mod.name

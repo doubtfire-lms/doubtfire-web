@@ -1,4 +1,6 @@
-angular.module("doubtfire.common.services.units", [])
+_ = require('underscore')
+
+mod = angular.module("doubtfire.common.services.units", [])
 
 .factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
@@ -253,3 +255,5 @@ angular.module("doubtfire.common.services.units", [])
 
   unitService
 )
+
+module.exports = mod.name

@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.redirect", [])
+mod = angular.module("doubtfire.common.services.redirect", [])
 
 .factory("redirectService", ($state, $stateParams) ->
   #
@@ -9,7 +9,8 @@ angular.module("doubtfire.common.services.redirect", [])
   #TODO: need to test multiple params and nested objects here...
   deserialize = (str, prefix) ->
     result = {}
-    parts = str.split "&"
+    console.log(str)
+    parts = str? str.split "&" : []
 
     for i, attr of parts
       kv = attr.split "="
@@ -31,3 +32,5 @@ angular.module("doubtfire.common.services.redirect", [])
 
   redirectService
 )
+
+module.exports = mod.name

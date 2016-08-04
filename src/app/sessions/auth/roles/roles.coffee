@@ -1,5 +1,5 @@
-angular.module("doubtfire.sessions.auth.roles", [
-  'doubtfire.sessions.auth.roles.if-role'
+mod = angular.module("doubtfire.sessions.auth.roles", [
+  require('./if-role')
 ])
 #
 # Authentication roles
@@ -11,3 +11,5 @@ angular.module("doubtfire.sessions.auth.roles", [
   "Convenor"
   "Admin"
 ])
+
+module.exports = mod.name

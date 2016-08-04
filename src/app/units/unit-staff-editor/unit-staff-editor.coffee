@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-staff-editor', [])
+mod = angular.module('doubtfire.units.unit-staff-editor', [])
 
 #
 # Editor for adding new staff to a unit and assigning those staff
@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-staff-editor', [])
 .directive('unitStaffEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-staff-editor/unit-staff-editor.tpl.html'
+  template: require('./unit-staff-editor.tpl.html')
   controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
     temp = []
     users = []
@@ -50,3 +50,5 @@ angular.module('doubtfire.units.unit-staff-editor', [])
       groupService.groupSetName(id, $scope.unit)
 
 )
+
+module.exports = mod.name

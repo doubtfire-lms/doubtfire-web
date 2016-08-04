@@ -1,4 +1,4 @@
-angular.module('doubtfire.projects.states.show', [])
+mod = angular.module('doubtfire.projects.states.show', [])
 
 #
 # Default state for a new project
@@ -9,7 +9,7 @@ angular.module('doubtfire.projects.states.show', [])
     views:
       main:
         controller: "ProjectsShowCtrl"
-        templateUrl: "projects/states/show/show.tpl.html"
+        template: require('./show.tpl.html')
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
@@ -64,3 +64,5 @@ angular.module('doubtfire.projects.states.show', [])
       (response) -> alertService.add("danger", response.data.error, 6000)
     )
 )
+
+module.exports = mod.name

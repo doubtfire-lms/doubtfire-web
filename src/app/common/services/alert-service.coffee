@@ -1,7 +1,10 @@
-angular.module("doubtfire.common.services.alerts", [])
 #
 # Services for making alerts
 #
+_ = require('underscore')
+
+mod = angular.module("doubtfire.common.services.alerts", [])
+
 .factory("alertService", ($rootScope, $timeout, $sce) ->
   # Underlying root alerts
   $rootScope.alerts = []
@@ -50,3 +53,5 @@ angular.module("doubtfire.common.services.alerts", [])
 
   alertService
 )
+
+module.exports = mod.name

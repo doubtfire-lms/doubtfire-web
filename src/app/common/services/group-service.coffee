@@ -1,4 +1,4 @@
-angular.module("doubtfire.common.services.group-service", [  ])
+mod = angular.module("doubtfire.common.services.group-service", [  ])
 #
 # Service for group-related functions
 #
@@ -27,3 +27,5 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   groupService
 )
+
+module.exports = mod.name

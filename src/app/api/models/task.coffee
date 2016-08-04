@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.task", [])
+mod = angular.module("doubtfire.api.models.task", [])
 
 .factory("Task", (resourcePlus, api, currentUser) ->
   Task = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id", { project_id: "@project_id", task_definition_id: "@task_definition_id" }
@@ -29,3 +29,5 @@ angular.module("doubtfire.api.models.task", [])
 
   Task
 )
+
+module.exports = mod.name

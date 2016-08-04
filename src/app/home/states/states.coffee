@@ -1,4 +1,6 @@
-angular.module('doubtfire.home.states', [
-  'doubtfire.home.states.home'
-  'doubtfire.home.states.new-user-wizard'
+mod = angular.module('doubtfire.home.states', [
+  require('./home/home')
+  require('./new-user-wizard/new-user-wizard')
 ])
+
+module.exports = mod.name

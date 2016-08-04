@@ -1,9 +1,9 @@
-angular.module('doubtfire.tasks.task-status-selector',[])
+mod = angular.module('doubtfire.tasks.task-status-selector',[])
 
 .directive('taskStatusSelector', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/task-status-selector/task-status-selector.tpl.html'
+  template: require('./task-status-selector.tpl.html')
   scope:
     task: "=task"
     assessingUnitRole: "=assessingUnitRole"
@@ -19,3 +19,5 @@ angular.module('doubtfire.tasks.task-status-selector',[])
       studentTriggers: $scope.studentStatuses.map taskService.statusData
       tutorTriggers:   $scope.tutorStatuses.map taskService.statusData
 )
+
+module.exports = mod.name

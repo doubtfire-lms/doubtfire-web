@@ -1,4 +1,4 @@
-angular.module("doubtfire.api.models.intended-learning-outcome", [])
+mod = angular.module("doubtfire.api.models.intended-learning-outcome", [])
 
 .factory("IntendedLearningOutcome", (resourcePlus, api, currentUser) ->
   IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
@@ -8,3 +8,5 @@ angular.module("doubtfire.api.models.intended-learning-outcome", [])
 
   IntendedLearningOutcome
 )
+
+module.exports = mod.name

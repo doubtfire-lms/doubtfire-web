@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-details-editor', [])
+mod = angular.module('doubtfire.units.unit-details-editor', [])
 
 #
 # Editor for the basic details of a unit, such as the name, code
@@ -7,7 +7,7 @@ angular.module('doubtfire.units.unit-details-editor', [])
 .directive('unitDetailsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-details-editor/unit-details-editor.tpl.html'
+  template: require('./unit-details-editor.tpl.html')
   controller: ($scope, $state, $rootScope, Unit, alertService, unitService) ->
     $scope.calOptions = {
       startOpened: false
@@ -67,3 +67,5 @@ angular.module('doubtfire.units.unit-details-editor', [])
             alertService.add("danger", "Failed to update unit. #{response.error}", 6000)
         )
 )
+
+module.exports = mod.name

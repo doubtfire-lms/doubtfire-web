@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [])
+mod = angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [])
 
 #
 # Views the alignment between a task and an ILO, with descriptive
@@ -7,7 +7,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [
 .directive('taskIloAlignmentViewer', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.tpl.html'
+  template: require('./task-ilo-alignment-viewer.tpl.html')
   scope:
     currentProgress: '=?'
     classStats: '=?'
@@ -36,3 +36,5 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [
       $scope.currentProgress = outcomeService.calculateTaskContribution($scope.unit, $scope.project, $scope.task)
 
 )
+
+module.exports = mod.name

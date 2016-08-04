@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-groupset-editor', [])
+mod = angular.module('doubtfire.units.unit-groupset-editor', [])
 
 #
 # Editor for editing a unit's groupsets. Can also add new groups to
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-groupset-editor', [])
 #
 .directive('unitGroupsetEditor', ->
   restrict: 'E'
-  templateUrl: 'units/unit-groupset-editor/unit-groupset-editor.tpl.html'
+  template: require('./unit-groupset-editor.tpl.html')
   replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 
@@ -80,3 +80,5 @@ angular.module('doubtfire.units.unit-groupset-editor', [])
     $scope.downloadGroupCSV = () ->
       GroupSet.downloadCSV($scope.unit, $scope.selectedGroupset)
 )
+
+module.exports = mod.name

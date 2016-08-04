@@ -1,4 +1,6 @@
-angular.module('doubtfire.projects.states', [
-  'doubtfire.projects.states.show'
-  'doubtfire.projects.states.feedback'
+mod = angular.module('doubtfire.projects.states', [
+  require('./show/show')
+  require('./feedback/feedback')
 ])
+
+module.exports = mod.name

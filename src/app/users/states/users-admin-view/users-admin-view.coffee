@@ -1,4 +1,4 @@
-angular.module('doubtfire.users.states.users-admin-view', [])
+mod = angular.module('doubtfire.users.states.users-admin-view', [])
 
 #
 # Administration panel for all doubtfire users
@@ -9,14 +9,14 @@ angular.module('doubtfire.users.states.users-admin-view', [])
     views:
       main:
         controller: "UsersAdminViewCtrl"
-        templateUrl: "users/states/users-admin-view/users-admin-view.tpl.html"
+        template: require('./users-admin-view.tpl.html')
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/users#index", usersAdminViewStateData
 )
 
-.controller("UsersAdminViewCtrl", ($scope, $modal, User, alertService, CsvResultModal, UserSettingsModal) ->
+.controller("UsersAdminViewCtrl", ($scope, $uibModal, User, alertService, CsvResultModal, UserSettingsModal) ->
   $scope.file_data =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
@@ -40,3 +40,5 @@ angular.module('doubtfire.users.states.users-admin-view', [])
     userToShow = if user? then user else new User { }
     UserSettingsModal.show userToShow
 )
+
+module.exports = mod.name

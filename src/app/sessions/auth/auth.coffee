@@ -1,11 +1,13 @@
-angular.module("doubtfire.sessions.auth", [
-  "doubtfire.sessions.auth.http-auth-injector"
-  "doubtfire.sessions.auth.roles"
-])
-
 #
 # Authentication factory object for checking all auth
 #
+_ = require('underscore')
+
+mod = angular.module("doubtfire.sessions.auth", [
+  require('./http-auth-injector')
+  require('./roles/roles')
+])
+
 .factory("auth", ($http, $cookieStore, $timeout, usernameCookie, currentUser, authRoles, localStorageService, doubtfireLoginTimeCookie, rememberDoubtfireCredentialsCookie, api, $rootScope) ->
 
   defaultAnonymousUser = _.clone currentUser
@@ -109,3 +111,5 @@ angular.module("doubtfire.sessions.auth", [
   # Return the auth object
   auth
 )
+
+module.exports = mod.name

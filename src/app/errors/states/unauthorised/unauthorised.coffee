@@ -1,15 +1,15 @@
-angular.module("doubtfire.errors.states.unauthorised", [])
-
 #
 # Define the unauthorised state
 #
+mod = angular.module("doubtfire.errors.states.unauthorised", [])
+
 .config((headerServiceProvider) ->
   stateData =
     url: "/unauthorised"
     views:
       main:
         controller: "UnauthorisedCtrl"
-        templateUrl: "errors/states/unauthorised/unauthorised.tpl.html"
+        template: require('./unauthorised.tpl.html')
     data:
       pageTitle: "_Unauthorised_"
 
@@ -17,3 +17,5 @@ angular.module("doubtfire.errors.states.unauthorised", [])
 )
 
 .controller("UnauthorisedCtrl", ($scope) ->)
+
+module.exports = mod.name
