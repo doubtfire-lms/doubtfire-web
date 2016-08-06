@@ -22,12 +22,13 @@ function pathRegEx(regEx) {
 
 
 function escapeStrRegEx(text) {
-  return text.replace(/[-[\]/{}()*+?.,\\^$|#\s]/g, "\\$&");
+  return text.replace(/[-[\]/{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
 
 function removeHash(parentObj, prop, regExMatcher) {
   let value = parentObj[prop];
   let matcher = regExMatcher || /\[(contentHash|hash).*?\]/;
+
   parentObj[prop] = value.replace(matcher, '');
 }

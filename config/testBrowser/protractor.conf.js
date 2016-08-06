@@ -35,6 +35,7 @@ var config = {
   reportWriters: [
     function jUnitReporter(confitFixtureFileName) {
       var JasmineReporters = require('jasmine-reporters');
+
       jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
         savePath: '../../reports/browser',
         filePrefix: 'junit-' + confitFixtureFileName + '-',
@@ -43,6 +44,7 @@ var config = {
     },
     function consoleReporter() {
       var SpecReporter = require('jasmine-spec-reporter');
+
       jasmine.getEnv().addReporter(new SpecReporter({
         displayStacktrace: true,
         displaySpecDuration: true

@@ -1,5 +1,5 @@
 # START_CONFIT_GENERATED_CONTENT
-extends: standard
+extends: defaults/configurations/google
 
 env:
   jasmine: true
@@ -7,7 +7,8 @@ env:
   browser: true
   commonjs: true    # For Webpack, CommonJS
   protractor: true
-  es6: true 
+  es6: true
+
 
 confit-globals: &confit-globals
   angular: true
@@ -20,6 +21,9 @@ globals:
   <<: *confit-globals
 
 rules:
+  dot-location:
+    - 2         # Error
+    - property  # dot on property line
   max-len:
-    - 2       # Warning
-    - 200     # Line Length
+    - 1         # Warning
+    - 200       # Line Length

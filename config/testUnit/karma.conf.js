@@ -13,15 +13,15 @@ function getConfitConfig(config) {
   // QUIRK: karma-webpack
   // Remove the CommonsChunk plugin, as it interferes with testing (and doesn't affect code execution)
   // https://github.com/webpack/karma-webpack/issues/24
-  commonConfig.webpack.plugins = commonConfig.webpack.plugins.filter(function (plugin) {
+  commonConfig.webpack.plugins = commonConfig.webpack.plugins.filter(function(plugin) {
     return !(plugin.ident && plugin.ident.indexOf('CommonsChunkPlugin'));
   });
 
 
   if (debugMode) {
     // Remove the coverage reporter, otherwise it runs against the instrumented code, making it difficult to debug the code.
-    commonConfig.webpack.module.preLoaders = commonConfig.webpack.module.preLoaders.filter(function (loader) {
-      return (loader.loader.indexOf('isparta-instrumenter-loader') === -1);
+    commonConfig.webpack.module.preLoaders = commonConfig.webpack.module.preLoaders.filter(function(loader) {
+      return loader.loader.indexOf('isparta-instrumenter-loader') === -1;
     });
   }
 

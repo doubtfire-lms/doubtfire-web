@@ -9,12 +9,12 @@ var basePath = process.cwd() + path.sep;
 
 // https://webpack.github.io/docs/configuration.html#resolve-extensions
 var jsExtensions = [
-      '',
-      '.webpack.js',
-      '.web.js',
-      '.js',
-      '.coffee'
-    ];
+  '',
+  '.webpack.js',
+  '.web.js',
+  '.js',
+  '.coffee'
+];
 var moduleDirectories = ['node_modules', 'bower_components'];
 
 var config = {
@@ -42,7 +42,7 @@ var config = {
     // https://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
     modulesDirectories: moduleDirectories,
     extensions: jsExtensions,
-    packageMains: ["webpack", "browser", "web", "browserify", ["jam", "main"], "main"]
+    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
   },
 
   // Output stats to provide more feedback when things go wrong:
@@ -72,6 +72,7 @@ var commonsChunkPlugin = new webpack.optimize.CommonsChunkPlugin({
   filename: 'vendor/[name].[hash:8].js',
   minChunks: Infinity
 });
+
 config.plugins.push(commonsChunkPlugin);
 
 /** Entry point END **/
@@ -83,6 +84,7 @@ var srcLoader = {
   loader: 'coffee-loader',
   exclude: ['node_modules'],    // There should be no need to exclude unit or browser tests because they should NOT be part of the source code dependency tree
 };
+
 config.module.loaders.push(srcLoader);
 /* **/
 
@@ -96,6 +98,7 @@ var fontLoader = {
   test: helpers.pathRegEx(/src.*\/assets\/fonts\/.*\.(eot|otf|svg|ttf|woff|woff2)(\?.*)?$/),
   loader: 'file-loader?name=/assets/fonts/[1].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/src.*/assets/fonts/(.*)([^.]*$|$)')
 };
+
 config.module.loaders.push(fontLoader);
 
 var vendorFontLoader = {
@@ -103,16 +106,15 @@ var vendorFontLoader = {
   test: helpers.pathRegEx(/node_modules\/.*\.(eot|otf|svg|ttf|woff|woff2)(\?.*)?$/),
   loader: 'file-loader?name=/assets/fonts/[1]/[2].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/node_modules/([^/]*).*/([^/]*)([^.]*$|$)')
 };
-config.module.loaders.push(vendorFontLoader);
 
+config.module.loaders.push(vendorFontLoader);
 var imageLoader = {
   $$name: 'imageLoader',
   test: helpers.pathRegEx(/src.*\/assets\/images\/.*\.(gif|ico|jpg|png|svg)(\?.*)?$/),
   loader: 'file-loader?name=/assets/images/[1].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/src.*/assets/images/(.*)([^.]*$|$)')
-
 };
-config.module.loaders.push(imageLoader);
 
+config.module.loaders.push(imageLoader);
 
 // Favicons
 var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
@@ -138,6 +140,7 @@ config.plugins.push(faviconsHtmlPlugin);
 
 /** CSS START **/
 var autoprefixer = require('autoprefixer');
+
 config.postcss = [
   autoprefixer({
     browsers: [
@@ -147,15 +150,16 @@ config.postcss = [
 ];
 
 var cssLoader = {
-  test: helpers.pathRegEx(/(src|node_modules)\/.*\.(sass|scss)$/),
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader')
+  test: helpers.pathRegEx(/\.(sass|scss)$/),
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?indentedSyntax=true')
 };
+
 config.module.loaders.push(cssLoader);
 
 // For any entry-point CSS file definitions, extract them as text files as well
-var extractCSSTextPlugin = new ExtractTextPlugin('css/[name].[contenthash:8].css', { allChunks: true });
-config.plugins.push(extractCSSTextPlugin);
+var extractCSSTextPlugin = new ExtractTextPlugin('css/[name].[contenthash:8].css', {allChunks: true});
 
+config.plugins.push(extractCSSTextPlugin);
 /* **/
 
 /** HTML START */
@@ -165,6 +169,7 @@ var htmlLoader = {
   loader: 'html-loader',
   exclude: /index-template.html$/
 };
+
 config.module.loaders.push(htmlLoader);
 
 // Configuration that works with Angular 2  :(
@@ -184,11 +189,12 @@ var indexHtmlPlugin = new HtmlWebpackPlugin({
 });
 
 config.plugins.push(indexHtmlPlugin);
-
 /* **/
 
 /** Server - DEV - START */
-var toolingConfig = require(path.join(process.cwd(), 'config/tooling.config.json'));
+var yaml = require('js-yaml');
+var fs = require('fs');
+var toolingConfig = yaml.load(fs.readFileSync(path.join(process.cwd(), 'config/tooling.config.yml')));
 
 config.devServer = {
   contentBase: config.output.path,  // We want to re-use this path
@@ -208,6 +214,7 @@ config.devServer = {
   }
 };
 /* **/
+
 
 // To remove content hashes, call helpers.removeHash(config.prop.parent, propertyName, regExMatcher (optional));
 // For example helpers.removeHash(config.output, 'fileName', /\[(contentHash|hash).*?\]/)

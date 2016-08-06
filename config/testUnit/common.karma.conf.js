@@ -65,11 +65,11 @@ var karmaConfig = {
   coverageReporter: {
     dir: 'reports/coverage',
     reporters: [
-      { type: 'cobertura', subdir: 'cobertura' },
-      { type: 'lcovonly', subdir: 'lcov' },
-      { type: 'html', subdir: 'html' },
-      { type: 'json', subdir: 'json' },
-      { type: 'text' }
+      {type: 'cobertura', subdir: 'cobertura'},
+      {type: 'lcovonly', subdir: 'lcov'},
+      {type: 'html', subdir: 'html'},
+      {type: 'json', subdir: 'json'},
+      {type: 'text'}
     ]
   },
 

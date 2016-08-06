@@ -12,5 +12,8 @@ require('angular-mocks');
 // Don't load any source code! The unit tests are responsible for loading the code-under-test.
 // Includes the *.spec.<ext> files in the unitTest directory. The '../../' is the relative path from where
 // this file is (config/testUnit/) to where the source folders are.
+
+/* global __karmaTestSpec */
 var testsContext = require.context('../../src/app', true, __karmaTestSpec);
+
 testsContext.keys().forEach(testsContext);
