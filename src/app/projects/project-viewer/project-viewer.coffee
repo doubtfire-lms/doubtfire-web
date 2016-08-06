@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # This directive shows a student's project and has

@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Paging filter - start from the indicated index

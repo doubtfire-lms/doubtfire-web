@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Wizard that helps new tasks to be uploaded

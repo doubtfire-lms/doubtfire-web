@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Context for students to see and manage groups

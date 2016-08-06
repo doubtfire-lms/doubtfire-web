@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Task sheet shows PDF and allows resources to be downloaded

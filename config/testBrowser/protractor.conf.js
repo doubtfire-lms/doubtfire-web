@@ -15,7 +15,7 @@ var config = {
   framework: 'jasmine2',
 
   // The default Base URL.  This can be overridden on the command line: --baseUrl=https://hostname:port/path
-  baseUrl: 'https://localhost:3000/',
+  baseUrl: 'https://localhost:8000/',
 
   // Selector for the element housing the angular app
   rootElement: 'html',

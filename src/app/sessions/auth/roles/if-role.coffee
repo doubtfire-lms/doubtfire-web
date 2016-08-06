@@ -2,7 +2,7 @@
 # Removes an element if the current user's authenticated role is
 # not present in the whitelist
 #
-_ = require('underscore')
+_ = require('lodash')
 
 mod = angular.module("doubtfire.sessions.auth.roles.if-role", [])
 

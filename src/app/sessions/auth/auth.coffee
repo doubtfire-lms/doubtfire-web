@@ -1,7 +1,7 @@
 #
 # Authentication factory object for checking all auth
 #
-_ = require('underscore')
+_ = require('lodash')
 
 mod = angular.module("doubtfire.sessions.auth", [
   require('./http-auth-injector')

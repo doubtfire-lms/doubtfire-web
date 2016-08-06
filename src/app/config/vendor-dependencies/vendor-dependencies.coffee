@@ -9,13 +9,17 @@ ngSanitize = require('angular-sanitize')
 uiRouter = require('angular-ui-router')
 uiBootstrap = require('angular-ui-bootstrap')
 
-codemirror = require('codemirror')
 uiCodemirror = require('angular-ui-codemirror')
 
 ngFileUpload = require('angular-file-upload')
 ngFilter = require('angular-filter')
+
 ngMarkdown = require('angular-markdown-filter')
-ngD3 = require('angular-nvd3')
+
+d3 = require('d3')
+nvd3 = require('nvd3')
+ngNvd3 = require('angular-nvd3')
+
 ngXeditable = require('angular-xeditable')
 ngLocalStorage = require('angular-local-storage')
 

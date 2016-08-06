@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Allows tutors and students to select (and create if applicable)
@@ -8,7 +8,7 @@ mod = angular.module('doubtfire.groups.group-selector', [])
 
 .directive('groupSelector', ->
   restrict: 'E'
-  template: './group-selector.tpl.html'
+  template: require('./group-selector.tpl.html')
   replace: true
   controller: ($scope, alertService, Group, currentUser) ->
     # pagination of groups

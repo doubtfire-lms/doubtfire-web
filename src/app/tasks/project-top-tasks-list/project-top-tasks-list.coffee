@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 #
 # Similar to the project-tasks-list directive, however
 # it only shows the 'top' tasks students need to do (i.e.,

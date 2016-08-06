@@ -12,6 +12,5 @@ ENV NODE_ENV docker
 RUN gem install sass
 
 RUN npm install
-RUN npm install -g grunt-cli bower
+RUN npm install -g grunt-cli
 RUN nodenv rehash
-RUN bower install --allow-root

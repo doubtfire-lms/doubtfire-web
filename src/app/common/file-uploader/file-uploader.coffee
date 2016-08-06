@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 mod = angular.module('doubtfire.common.file-uploader', [])
 

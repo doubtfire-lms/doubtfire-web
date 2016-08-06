@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Editor for editing a unit's groupsets. Can also add new groups to

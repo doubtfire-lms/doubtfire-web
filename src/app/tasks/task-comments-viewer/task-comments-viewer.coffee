@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 #
 # View's the comments for a specific task, and allows new
 # comments to be made on a task

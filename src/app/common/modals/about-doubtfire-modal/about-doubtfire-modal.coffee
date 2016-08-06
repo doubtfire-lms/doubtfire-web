@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Modal to show Doubtfire version info
@@ -21,7 +21,7 @@ mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
   contributors = DoubtfireContributors
   # initial data
   $scope.contributors = _.map contributors, (c) ->
-    avatar:   '/assets/images/person-unknown.gif'
+    avatar:   require('./assets/images/person-unknown.gif')
     handler:  c
   $scope.close = ->
     $uibModalInstance.dismiss()

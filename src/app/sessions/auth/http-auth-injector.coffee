@@ -1,7 +1,7 @@
 #
 # This module is responsible for injecting the auth credentials to
 # all
-_ = require('underscore')
+_ = require('lodash')
 
 mod = angular.module("doubtfire.sessions.auth.http-auth-injector", [])
 

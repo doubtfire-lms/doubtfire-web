@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 
 #
 # Task Plagiarism Report shows how the task relates tasks submitted by

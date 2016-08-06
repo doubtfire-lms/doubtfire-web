@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 #
 # Shows a modal where users can align tasks to ILOs
 #

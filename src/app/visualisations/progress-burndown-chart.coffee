@@ -1,4 +1,5 @@
-_ = require('underscore')
+_ = require('lodash')
+moment = require('moment')
 
 mod = angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 

@@ -54,12 +54,12 @@
   },
   "serverDev": {
     "hostname": "localhost",
-    "port": 3030,
+    "port": 8000,
     "protocol": "http"
   },
   "serverProd": {
     "hostname": "localhost",
-    "port": 3030,
+    "port": 8000,
     "protocol": "http"
   },
   "testUnit": {

@@ -1,9 +1,9 @@
+_ = require('lodash')
+_.string = require('underscore.string')
+
 #
 # Runtime settings for when Doubtfire is about to launch
 #
-_ = require('underscore')
-_.string = require('underscore.string')
-
 mod = angular.module('doubtfire.config.runtime', [])
 
 .run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
