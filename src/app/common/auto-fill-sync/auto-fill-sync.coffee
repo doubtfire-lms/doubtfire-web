@@ -1,19 +1,8 @@
 _ = require('lodash')
 
-mod = angular.module("utilService", [])
-
-.filter "fromNow", () ->
-  return (date) ->
-    return moment(new Date(date)).fromNow()
-
-.filter "titleize", ->
-  (input) -> _.string.titleize input
-
-.filter "humanize", ->
-  (input) -> _.string.humanize input
+mod = angular.module("doubtfire.common.auto-fill-sync", [])
 
 .directive "autoFillSync", ($timeout) ->
-
   # A directive to ensure browser form auto-fill works, since Angular doesn't support it.
   # See: http://stackoverflow.com/a/14966711
   require: "ngModel"

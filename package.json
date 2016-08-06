@@ -19,7 +19,7 @@
     "copyenv": "rm src/app/api/env.coffee && gulp copyenv",
     "release": "npm-run-all verify test:coverage build test:browser",
     "serve:dev": "echo Starting DEV server",
-    "serve:prod": "npm run serve:prod:https",
+    "serve:prod": "npm run serve:prod:http",
     "serve:prod:http": "serve -C -p 8000 dist/",
     "serve:prod:https": "serve-https -p 8000 -d dist/ --servername localhost",
     "start": "npm run dev",

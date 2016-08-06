@@ -26,8 +26,6 @@ ngLocalStorage = require('angular-local-storage')
 ngAngulartics = require('angulartics')
 ngAngularticsGoogleAnalytics = require('angulartics-google-analytics')
 
-utilsService = require('./libs/utilService')
-
 mod = angular.module('doubtfire.config.vendor-dependencies', [
   # ng*
   'ngCookies'
@@ -50,9 +48,6 @@ mod = angular.module('doubtfire.config.vendor-dependencies', [
   # analytics
   'angulartics'
   'angulartics.google.analytics'
-
-  # manually included libs
-  utilsService
 
 ])
 module.exports = mod.name

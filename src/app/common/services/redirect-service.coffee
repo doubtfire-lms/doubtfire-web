@@ -9,7 +9,7 @@ mod = angular.module("doubtfire.common.services.redirect", [])
   #TODO: need to test multiple params and nested objects here...
   deserialize = (str, prefix) ->
     result = {}
-    console.log(str)
+
     parts = str? str.split "&" : []
 
     for i, attr of parts
