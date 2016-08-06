@@ -46,8 +46,9 @@ module.exports = function (grunt) {
             'src/**/*.scss'
           ].map(pathJoin),
         tasks: [
-            'newer:eslint:all',
-            'newer:sasslint:all'
+            // 'newer:eslint:all',
+            // 'newer:coffeelint:all',
+            // 'newer:sasslint:all'
           ]
       }
     }
@@ -56,7 +57,7 @@ module.exports = function (grunt) {
   grunt.registerTask('verify', 'Run all the verify tasks', [
       // TODO: enable. we should lint js mainly for the config/
       // 'eslint:all',
-      'sasslint:all',
-      'coffeelint:all'
+      // 'sasslint:all',
+      // 'coffeelint:all'
     ]);
 };

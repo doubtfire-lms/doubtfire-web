@@ -5,6 +5,10 @@
 # tree inside app/
 #
 
+# Require the CSS file explicitly (or it could be defined as an entry-point too).
+require('../assets/styles/app.scss')
+
+# Initialize doubtfire application module
 angular.module('doubtfire', [
   require('./config/config')
   require('./api/api')

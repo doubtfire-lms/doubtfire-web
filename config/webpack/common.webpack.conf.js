@@ -90,21 +90,50 @@ config.module.loaders.push(srcLoader);
 /* **/
 
 /** Assets START **/
-// Output module-assets to: /assets/<moduleName>/img|font/<fileName>
-// Other assets (such as assets in Bootstrap) will need their own loaders
+
 var fontLoader = {
   $$name: 'fontLoader',
-  test: helpers.pathRegEx(/assets\/fonts\/.*\.(eot|otf|svg|ttf|woff|woff2)$/),
-  loader: 'file-loader?name=/assets/[1]/font/[2].[hash:8].[ext]&regExp=' + helpers.pathRegEx('modules/(.*)/assets/font/(.+?)(.[^.]*$|$)')
+  test: helpers.pathRegEx(/src.*\/assets\/fonts\/.*\.(eot|otf|svg|ttf|woff|woff2)(\?.*)?$/),
+  loader: 'file-loader?name=/assets/fonts/[1].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/src.*/assets/fonts/(.*)([^.]*$|$)')
 };
 config.module.loaders.push(fontLoader);
 
+var vendorFontLoader = {
+  $$name: 'vendorFontLoader',
+  test: helpers.pathRegEx(/node_modules\/.*\.(eot|otf|svg|ttf|woff|woff2)(\?.*)?$/),
+  loader: 'file-loader?name=/assets/fonts/[1]/[2].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/node_modules/([^/]*).*/([^/]*)([^.]*$|$)')
+};
+config.module.loaders.push(vendorFontLoader);
+
 var imageLoader = {
   $$name: 'imageLoader',
-  test: helpers.pathRegEx(/assets\/img\/.*\.(gif|ico|jpg|png|svg)$/),
-  loader: 'file-loader?name=/assets/[1]/img/[2].[hash:8].[ext]&regExp=' + helpers.pathRegEx('modules/(.*)/assets/img/(.+?)(.[^.]*$|$)')
+  test: helpers.pathRegEx(/src.*\/assets\/images\/.*\.(gif|ico|jpg|png|svg)(\?.*)?$/),
+  loader: 'file-loader?name=/assets/images/[1].[hash:8].[ext]&regExp=' + helpers.pathRegEx('/src.*/assets/images/(.*)([^.]*$|$)')
+
 };
 config.module.loaders.push(imageLoader);
+
+
+// Favicons
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+var faviconsHtmlPlugin = new FaviconsWebpackPlugin({
+  logo: path.join(basePath + 'src/assets/images/logo.png'),
+  prefix: 'assets/images/icons/[hash]-',
+  emitStats: false,
+  statsFilename: 'assets/images/icons/[hash].json',
+  // Generate a cache file with control hashes and
+  // don't rebuild the favicons until those hashes change
+  persistentCache: true,
+  // Inject the html into the html-webpack-plugin
+  inject: true,
+  // favicon background color (see https://github.com/haydenbleasel/favicons#usage)
+  background: '#fff',
+  // favicon app title (see https://github.com/haydenbleasel/favicons#usage)
+  title: 'Doubtfire'
+});
+
+config.plugins.push(faviconsHtmlPlugin);
+
 /* **/
 
 /** CSS START **/
@@ -118,14 +147,15 @@ config.postcss = [
 ];
 
 var cssLoader = {
-  test: helpers.pathRegEx(/\.(sass|scss)$/),
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?indentedSyntax=true')
+  test: helpers.pathRegEx(/(src|node_modules)\/.*\.(sass|scss)$/),
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader')
 };
 config.module.loaders.push(cssLoader);
 
 // For any entry-point CSS file definitions, extract them as text files as well
 var extractCSSTextPlugin = new ExtractTextPlugin('css/[name].[contenthash:8].css', { allChunks: true });
 config.plugins.push(extractCSSTextPlugin);
+
 /* **/
 
 /** HTML START */
@@ -154,6 +184,7 @@ var indexHtmlPlugin = new HtmlWebpackPlugin({
 });
 
 config.plugins.push(indexHtmlPlugin);
+
 /* **/
 
 /** Server - DEV - START */
@@ -177,7 +208,6 @@ config.devServer = {
   }
 };
 /* **/
-
 
 // To remove content hashes, call helpers.removeHash(config.prop.parent, propertyName, regExMatcher (optional));
 // For example helpers.removeHash(config.output, 'fileName', /\[(contentHash|hash).*?\]/)

@@ -3,8 +3,8 @@
 // bootstrap is imported
 //
 
-// Provide the font path to the glyphicons
-$icon-font-path: './fonts/bootstrap/';
+// $bootstrap-sass-asset-helper: true;
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
 
 // (Re)definition of screen sizes
 $screen-xl: 1900px !default;
