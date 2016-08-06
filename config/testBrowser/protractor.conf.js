@@ -1,11 +1,13 @@
 'use strict';
 
+// START_CONFIT_GENERATED_CONTENT
+
 var config = {
   // ChromeDriver location is used to help the standalone Selenium Server
   // find the chromedriver binary. This will be passed to the Selenium jar as
   // the system property webdriver.chrome.driver. If null, Selenium will
   // attempt to find ChromeDriver using PATH.
-  chromeDriver: '../../node_modules/protractor/selenium/chromedriver',
+  chromeDriver: '../../node_modules/protractor/selenium/chromedriver_2.21',
   directConnect: true,
 
   capabilities: {
@@ -15,7 +17,7 @@ var config = {
   framework: 'jasmine2',
 
   // The default Base URL.  This can be overridden on the command line: --baseUrl=https://hostname:port/path
-  baseUrl: 'https://localhost:8000/',
+  baseUrl: 'http://localhost:8000/',
 
   // Selector for the element housing the angular app
   rootElement: 'html',
@@ -29,7 +31,7 @@ var config = {
   // --suite=smoke,full only the patterns matched by the specified suites will
   // run.
   suites: {
-    app: '../../src/modules/**/browserTest/*.spec.js'
+    app: '../../src/**/browserTest/*.spec.js'
   },
 
   reportWriters: [
@@ -54,8 +56,9 @@ var config = {
 
 
   onPrepare: function() {
-    // Turn off the angular-sync part-of-Protractor, as we are using Protractor in a generic way
-    browser.ignoreSynchronization = true;
+
+    // Turn off the Angular-sync part-of-Protractor when not using AngularJS 1.x
+    browser.ignoreSynchronization = false;
 
     return browser.getProcessedConfig().then(function(config) {
       // Attach the reporters
@@ -93,5 +96,6 @@ var config = {
     print: function() {}
   }
 };
+// END_CONFIT_GENERATED_CONTENT
 
 exports.config = config;

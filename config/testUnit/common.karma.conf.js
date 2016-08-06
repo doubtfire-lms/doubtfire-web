@@ -46,8 +46,8 @@ var karmaConfig = {
     'karma-coverage',
     'karma-chrome-launcher',
     require('karma-webpack'),
-    'karma-spec-reporter',
-    'karma-sourcemap-loader'
+    'karma-sourcemap-loader',
+    'karma-threshold-reporter'
   ],
 
   files: [
@@ -60,7 +60,7 @@ var karmaConfig = {
   },
 
 
-  reporters: ['progress', 'junit', 'coverage'],
+  reporters: ['progress', 'junit', 'coverage', 'threshold'],
 
   coverageReporter: {
     dir: 'reports/coverage',
@@ -75,6 +75,13 @@ var karmaConfig = {
 
   junitReporter: {
     outputDir: 'reports/unit/'
+  },
+
+  thresholdReporter: {
+    statements: 80,
+    branches: 80,
+    functions: 80,
+    lines: 80
   },
 
 

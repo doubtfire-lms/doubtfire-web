@@ -4,6 +4,7 @@
 // START_CONFIT_GENERATED_CONTENT
 var commonConfig = require('./common.karma.conf.js');
 var debugMode = process.argv.indexOf('--debug') > -1;
+var noCoverage = process.argv.indexOf('--no-coverage') > -1;
 
 function getConfitConfig(config) {
   // level of logging
@@ -22,6 +23,17 @@ function getConfitConfig(config) {
     // Remove the coverage reporter, otherwise it runs against the instrumented code, making it difficult to debug the code.
     commonConfig.webpack.module.preLoaders = commonConfig.webpack.module.preLoaders.filter(function(loader) {
       return loader.loader.indexOf('isparta-instrumenter-loader') === -1;
+    });
+
+    // No point checking threshold if we removing the the coverage tool
+    commonConfig.reporters = commonConfig.reporters.filter(function(reporter) {
+      return reporter !== 'threshold' || reporter !== 'coverage';
+    });
+  }
+
+  if (noCoverage) {
+    commonConfig.reporters = commonConfig.reporters.filter(function(reporter) {
+      return reporter !== 'threshold';
     });
   }
 

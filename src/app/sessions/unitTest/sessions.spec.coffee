@@ -2,7 +2,7 @@
 # http://docs.angularjs.org/api/ngMock.$httpBackend
 # http://docs.angularjs.org/tutorial/step_05
 
-describe "Sessions module", ->
+xdescribe "Sessions module", ->
   _ = require('lodash')
   auth = null
   currentUser = null
