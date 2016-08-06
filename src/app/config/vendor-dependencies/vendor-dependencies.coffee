@@ -20,7 +20,6 @@ ngLocalStorage = require('angular-local-storage')
 ngAngulartics = require('angulartics')
 ngAngularticsGoogleAnalytics = require('angulartics-google-analytics')
 
-localization = require('./libs/localization')
 utilsService = require('./libs/utilService')
 
 mod = angular.module('doubtfire.config.vendor-dependencies', [
@@ -47,7 +46,6 @@ mod = angular.module('doubtfire.config.vendor-dependencies', [
   'angulartics.google.analytics'
 
   # manually included libs
-  localization
   utilsService
 
 ])
