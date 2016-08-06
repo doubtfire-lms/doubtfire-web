@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.tasks.task-sheet-viewer', [])
+_ = require('underscore')
 
 #
 # Task sheet shows PDF and allows resources to be downloaded
 #
+mod = angular.module('doubtfire.tasks.task-sheet-viewer', [])
+
 .directive('taskSheetViewer', ->
   replace: true
   restrict: 'E'

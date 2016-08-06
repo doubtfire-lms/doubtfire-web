@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.projects.states.show', [])
+_ = require('underscore')
 
 #
 # Default state for a new project
 #
+mod = angular.module('doubtfire.projects.states.show', [])
+
 .config((headerServiceProvider) ->
   projectsShowStateData =
     url: "/projects/:projectId?unitRole"

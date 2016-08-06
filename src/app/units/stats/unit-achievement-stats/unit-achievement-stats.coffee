@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.stats.unit-achievement-stats', [])
+_ = require('underscore')
 
 #
 # Student's overall achievement statistics over the entire unit
 #
+mod = angular.module('doubtfire.units.stats.unit-achievement-stats', [])
+
 .directive('unitAchievementStats', ->
   replace: true
   restrict: 'E'

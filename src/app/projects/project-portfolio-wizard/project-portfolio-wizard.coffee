@@ -1,3 +1,8 @@
+_ = require('underscore')
+
+#
+# A wizard to generate a portfolio from a project
+#
 mod = angular.module('doubtfire.projects.project-portfolio-wizard', [
   require('./portfolio-add-extra-files-step/portfolio-add-extra-files-step')
   require('./portfolio-grade-select-step/portfolio-grade-select-step')
@@ -7,9 +12,6 @@ mod = angular.module('doubtfire.projects.project-portfolio-wizard', [
   require('./portfolio-welcome-step/portfolio-welcome-step')
 ])
 
-#
-# A wizard to generate a portfolio from a project
-#
 .directive('projectPortfolioWizard', ->
   restrict: 'E'
   template: require('./project-portfolio-wizard.tpl.html')

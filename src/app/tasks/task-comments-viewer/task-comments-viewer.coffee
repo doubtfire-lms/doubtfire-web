@@ -1,9 +1,10 @@
-mod = angular.module("doubtfire.tasks.task-comments-viewer", [])
-
+_ = require('underscore')
 #
 # View's the comments for a specific task, and allows new
 # comments to be made on a task
 #
+mod = angular.module("doubtfire.tasks.task-comments-viewer", [])
+
 .directive('taskCommentsViewer', ->
   restrict: 'E'
   template: require('./task-comments-viewer.tpl.html')

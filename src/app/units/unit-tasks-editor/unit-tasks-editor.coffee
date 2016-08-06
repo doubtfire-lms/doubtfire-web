@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.unit-tasks-editor', [])
+_ = require('underscore')
 
 #
 # Editor for modifying the tasks in a unit
 #
+mod = angular.module('doubtfire.units.unit-tasks-editor', [])
+
 .directive('unitTasksEditor', ->
   replace: true
   restrict: 'E'

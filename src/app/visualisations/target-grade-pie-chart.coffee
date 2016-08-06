@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
+
 .directive 'targetGradePieChart', ->
   replace: true
   restrict: 'E'

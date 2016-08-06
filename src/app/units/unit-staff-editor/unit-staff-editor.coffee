@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.units.unit-staff-editor', [])
+_ = require('underscore')
 
 #
 # Editor for adding new staff to a unit and assigning those staff
 # members new unit roles within the unit
 #
+mod = angular.module('doubtfire.units.unit-staff-editor', [])
+
 .directive('unitStaffEditor', ->
   replace: true
   restrict: 'E'

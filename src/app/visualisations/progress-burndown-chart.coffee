@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.progress-burndown-chart', [])
+
 .directive 'progressBurndownChart', ->
   replace: true
   restrict: 'E'

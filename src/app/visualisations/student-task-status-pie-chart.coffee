@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
+
 .directive 'studentTaskStatusPieChart', ->
   replace: true
   restrict: 'E'

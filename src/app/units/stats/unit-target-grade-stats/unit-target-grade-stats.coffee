@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
+_ = require('underscore')
 
 #
 # Summary stats for students and their desired target grade
 # over the entire unit
 #
+mod = angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
+
 .directive('unitTargetGradeStats', ->
   replace: true
   restrict: 'E'

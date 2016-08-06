@@ -1,8 +1,10 @@
-mod = angular.module("doubtfire.common.services.outcome-service", [])
+_ = require('underscore')
 
 #
 # Services for handling Outcomes
 #
+mod = angular.module("doubtfire.common.services.outcome-service", [])
+
 .factory("outcomeService", (gradeService, projectService, taskService) ->
   outcomeService = {}
 

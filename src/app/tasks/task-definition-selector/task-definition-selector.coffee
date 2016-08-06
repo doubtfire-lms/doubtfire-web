@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.tasks.task-definition-selector',[])
+_ = require('underscore')
 
 #
 # A switch that that the selection of a specified task definition
 # Only handles task definition - not tasks in a project
 #
+mod = angular.module('doubtfire.tasks.task-definition-selector',[])
+
 .directive('taskDefinitionSelector', ->
   replace: true
   restrict: 'E'

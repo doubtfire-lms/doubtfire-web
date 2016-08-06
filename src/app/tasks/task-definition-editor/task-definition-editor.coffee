@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.tasks.task-definition-editor', [])
+_ = require('underscore')
 
 #
 # Allows the creation and modification of task definitions
 #
+mod = angular.module('doubtfire.tasks.task-definition-editor', [])
+
 .directive('taskDefinitionEditor', ->
   replace: true
   restrict: 'E'

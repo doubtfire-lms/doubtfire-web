@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.groups.student-group-manager', [])
+_ = require('underscore')
 
 #
 # Context for students to see and manage groups
 #
+mod = angular.module('doubtfire.groups.student-group-manager', [])
+
 .directive('studentGroupManager', ->
   restrict: 'E'
   template: require('./student-group-manager.tpl.html')

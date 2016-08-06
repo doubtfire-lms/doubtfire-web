@@ -1,8 +1,8 @@
+_ = require('underscore')
+
 #
 # Service for handling projects
 #
-_ = require('underscore')
-
 mod = angular.module("doubtfire.common.services.projects", [])
 
 .factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task) ->

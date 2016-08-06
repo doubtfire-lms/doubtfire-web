@@ -1,10 +1,11 @@
-mod = angular.module('doubtfire.tasks.project-top-tasks-list', [])
-
+_ = require('underscore')
 #
 # Similar to the project-tasks-list directive, however
 # it only shows the 'top' tasks students need to do (i.e.,
 # tasks that are overdue, or upcoming)
 #
+mod = angular.module('doubtfire.tasks.project-top-tasks-list', [])
+
 .directive('projectTopTasksList', ->
   restrict: 'E'
   template: require('./project-top-tasks-list.tpl.html')

@@ -1,4 +1,4 @@
-mod = angular.module('doubtfire.tasks.task-viewer', [])
+_ = require('underscore')
 
 #
 # Views all infomation related to a specific task including:
@@ -7,6 +7,8 @@ mod = angular.module('doubtfire.tasks.task-viewer', [])
 #  - task commenter
 #  - task plagiarism report
 #
+mod = angular.module('doubtfire.tasks.task-viewer', [])
+
 .directive('taskViewer', ->
   restrict: 'E'
   replace: true

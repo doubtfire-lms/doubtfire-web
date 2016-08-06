@@ -1,8 +1,9 @@
-mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
 
 #
 # Shows a summary of task states as a scatter plot
 #
+mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
+
 .directive('taskSummaryStats', ->
   replace: true
   restrict: 'E'

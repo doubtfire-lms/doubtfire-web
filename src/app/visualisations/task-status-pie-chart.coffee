@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.task-status-pie-chart', [])
+
 .directive 'taskStatusPieChart', ->
   replace: true
   restrict: 'E'

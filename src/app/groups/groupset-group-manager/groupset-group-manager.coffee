@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.groups.groupset-group-manager', [])
+_ = require('underscore')
 
 #
 # Manager directive for tutors to add and remove group
 # members from a group within a group set context
 #
+mod = angular.module('doubtfire.groups.groupset-group-manager', [])
+
 .directive('groupsetGroupManager', ->
   restrict: 'E'
   template: require('./groupset-group-manager.tpl.html')

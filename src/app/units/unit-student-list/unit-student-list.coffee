@@ -1,10 +1,12 @@
-mod = angular.module('doubtfire.units.unit-student-list', [])
+_ = require('underscore')
 
 #
 # The unit student list view shows a list of students in a unit, with
 # their tasks and progress. When unit role is a tutor unit role, will
 # only show students in the tutor's relevant tutorials.
 #
+mod = angular.module('doubtfire.units.unit-student-list', [])
+
 .directive('unitStudentList', ->
   replace: true
   restrict: 'E'

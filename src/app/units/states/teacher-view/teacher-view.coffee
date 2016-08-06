@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.units.states.teacher-view', [])
+_ = require('underscore')
 
 #
 # View for teachers of a unit. They can see everything related
 # to multiple students in the entire unit provided
 #
+mod = angular.module('doubtfire.units.states.teacher-view', [])
+
 .config((headerServiceProvider) ->
   teacherViewStateData =
     url: "/units?unitRole"

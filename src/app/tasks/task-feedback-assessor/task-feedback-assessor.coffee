@@ -1,10 +1,12 @@
-mod = angular.module('doubtfire.tasks.task-feedback-assessor',[])
+_ = require('underscore')
 
 #
 # Directive that allows input to provide feedback for a task.
 # It displays the task submission, shows a task comment viewer
 # and a task status selector
 #
+mod = angular.module('doubtfire.tasks.task-feedback-assessor',[])
+
 .directive('taskFeedbackAssessor', ->
   replace: true
   restrict: 'E'

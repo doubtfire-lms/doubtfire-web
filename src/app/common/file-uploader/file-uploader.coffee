@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.common.file-uploader', [])
 
 .directive 'fileUploader', ->

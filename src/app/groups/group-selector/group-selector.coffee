@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.groups.group-selector', [])
+_ = require('underscore')
 
 #
 # Allows tutors and students to select (and create if applicable)
 # new groups for teamwork
 #
+mod = angular.module('doubtfire.groups.group-selector', [])
+
 .directive('groupSelector', ->
   restrict: 'E'
   template: './group-selector.tpl.html'

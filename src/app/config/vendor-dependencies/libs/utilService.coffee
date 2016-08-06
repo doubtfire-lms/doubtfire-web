@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module("utilService", [])
 
 .filter "fromNow", () ->

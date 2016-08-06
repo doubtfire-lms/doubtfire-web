@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.task-completion-box-plot', [])
+
 .directive 'taskCompletionBoxPlot', ->
   replace: true
   restrict: 'E'

@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.alignment-bar-chart', [])
+
 .directive 'alignmentBarChart', ->
   replace: true
   restrict: 'E'

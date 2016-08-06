@@ -1,8 +1,10 @@
-mod = angular.module("doubtfire.common.filters", [])
+_ = require('underscore')
 
 #
 # Paging filter - start from the indicated index
 #
+mod = angular.module("doubtfire.common.filters", [])
+
 .filter('startFrom', ->
   (input, start) ->
     start = +start # parse to int

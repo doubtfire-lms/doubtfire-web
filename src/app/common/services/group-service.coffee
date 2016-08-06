@@ -1,7 +1,10 @@
-mod = angular.module("doubtfire.common.services.group-service", [  ])
+_ = require('underscore')
+
 #
 # Service for group-related functions
 #
+mod = angular.module("doubtfire.common.services.group-service", [  ])
+
 .factory("groupService", () ->
   #
   # The unit service object

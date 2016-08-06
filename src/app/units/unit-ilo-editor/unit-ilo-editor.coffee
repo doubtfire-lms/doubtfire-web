@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.unit-ilo-editor',[])
+_ = require('underscore')
 
 #
 # Editor for modifying a unit's ILOs
 #
+mod = angular.module('doubtfire.units.unit-ilo-editor',[])
+
 .directive('unitIloEditor', ->
   replace: true
   restrict: 'E'

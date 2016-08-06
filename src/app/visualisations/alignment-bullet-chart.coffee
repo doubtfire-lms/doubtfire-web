@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
+
 .directive 'alignmentBulletChart', ->
   replace: true
   restrict: 'E'

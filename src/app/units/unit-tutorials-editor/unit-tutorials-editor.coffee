@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.unit-tutorials-editor', [])
+_ = require('underscore')
 
 #
 # Editor for modifying the tutorials in a unit
 #
+mod = angular.module('doubtfire.units.unit-tutorials-editor', [])
+
 .directive('unitTutorialsEditor', ->
   replace: true
   restrict: 'E'

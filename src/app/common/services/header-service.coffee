@@ -1,8 +1,10 @@
-mod = angular.module("doubtfire.common.services.header", [])
+_ = require('underscore')
 
 #
 # Provider/Service for handling the header
 #
+mod = angular.module("doubtfire.common.services.header", [])
+
 .provider('headerService', ($stateProvider) ->
   headerServiceProvider = {}
 

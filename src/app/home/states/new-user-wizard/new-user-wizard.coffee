@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.home.states.new-user-wizard', [])
 
 .config(($stateProvider) ->

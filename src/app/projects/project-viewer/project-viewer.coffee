@@ -1,9 +1,11 @@
-mod = angular.module("doubtfire.projects.project-viewer", [])
+_ = require('underscore')
 
 #
 # This directive shows a student's project and has
 # can make all manipulations needed to a project
 #
+mod = angular.module("doubtfire.projects.project-viewer", [])
+
 .directive("projectViewer", ->
   restrict: 'E'
   replace: true

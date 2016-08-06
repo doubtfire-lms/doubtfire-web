@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module("doubtfire.projects.project-outcome-alignment", [])
 
 .directive("projectOutcomeAlignment", ->

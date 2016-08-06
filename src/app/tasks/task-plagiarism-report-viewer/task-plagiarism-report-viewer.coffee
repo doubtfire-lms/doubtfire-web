@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
+_ = require('underscore')
 
 #
 # Task Plagiarism Report shows how the task relates tasks submitted by
 # other students.
 #
+mod = angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
+
 .directive('taskPlagiarismReportViewer', ->
   replace: true
   restrict: 'E'

@@ -1,3 +1,4 @@
+_ = require('underscore')
 ngFileUpload = require('ng-file-upload')
 
 mod = angular.module("doubtfire.api.models.portfolio-submission", [

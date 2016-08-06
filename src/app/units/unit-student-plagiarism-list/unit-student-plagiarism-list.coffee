@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.unit-student-plagiarism-list',[])
+_ = require('underscore')
 
 #
 # List of all possible plagiarism detected in student's work
 #
+mod = angular.module('doubtfire.units.unit-student-plagiarism-list',[])
+
 .directive('unitStudentPlagiarismList', ->
   replace: true
   restrict: 'E'

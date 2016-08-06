@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.units.states.edit-unit-view', [])
+_ = require('underscore')
 
 #
 # State for convenors to edit a particular unit
 #
+mod = angular.module('doubtfire.units.states.edit-unit-view', [])
+
 .config((headerServiceProvider) ->
   editUnitViewStateData =
     url: "/admin/units/:unitId"

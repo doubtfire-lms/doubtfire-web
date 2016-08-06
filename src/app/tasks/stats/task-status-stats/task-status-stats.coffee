@@ -1,10 +1,12 @@
-mod = angular.module('doubtfire.tasks.stats.task-status-stats', [])
+_ = require('underscore')
 
 #
 # Stats directive that shows the status of tasks throughout
 # an entire unit, which can be broken down into a specific
 # task or tutorial
 #
+mod = angular.module('doubtfire.tasks.stats.task-status-stats', [])
+
 .directive('taskStatusStats', ->
   replace: true
   restrict: 'E'

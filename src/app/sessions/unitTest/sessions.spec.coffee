@@ -3,6 +3,7 @@
 # http://docs.angularjs.org/tutorial/step_05
 
 describe "Sessions module", ->
+  _ = require('underscore')
   auth = null
   currentUser = null
   defaultAnonymousUser = null

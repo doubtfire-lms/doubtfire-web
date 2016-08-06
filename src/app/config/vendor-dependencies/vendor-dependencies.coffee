@@ -8,6 +8,8 @@ ngSanitize = require('angular-sanitize')
 
 uiRouter = require('angular-ui-router')
 uiBootstrap = require('angular-ui-bootstrap')
+
+codemirror = require('codemirror')
 uiCodemirror = require('angular-ui-codemirror')
 
 ngFileUpload = require('angular-file-upload')

@@ -5,6 +5,7 @@
 # The order in which the modules load here is IMPORTANT so do not rearrange
 # them
 #
+
 mod = angular.module('doubtfire.config', [
   require('./vendor-dependencies/vendor-dependencies')
   require('./contributors/contributors')

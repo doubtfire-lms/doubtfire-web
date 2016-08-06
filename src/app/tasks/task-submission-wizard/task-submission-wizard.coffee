@@ -1,8 +1,10 @@
-mod = angular.module('doubtfire.tasks.task-submission-wizard', [])
+_ = require('underscore')
 
 #
 # Wizard that helps new tasks to be uploaded
 #
+mod = angular.module('doubtfire.tasks.task-submission-wizard', [])
+
 .directive('taskSubmissionWizard', ->
   restrict: 'E'
   replace: true

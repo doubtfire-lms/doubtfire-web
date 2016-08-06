@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.achievement-box-plot', [])
+
 .directive 'achievementBoxPlot', ->
   replace: true
   restrict: 'E'

@@ -1,9 +1,11 @@
-mod = angular.module('doubtfire.units.unit-groupset-editor', [])
+_ = require('underscore')
 
 #
 # Editor for editing a unit's groupsets. Can also add new groups to
 # newly created groupsets and then and add new members to those groups.
 #
+mod = angular.module('doubtfire.units.unit-groupset-editor', [])
+
 .directive('unitGroupsetEditor', ->
   restrict: 'E'
   template: require('./unit-groupset-editor.tpl.html')

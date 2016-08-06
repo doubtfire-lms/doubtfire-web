@@ -1,3 +1,4 @@
+_ = require('underscore')
 #
 # Shows a modal where users can align tasks to ILOs
 #

@@ -1,4 +1,7 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
+
 .directive 'achievementCustomBarChart', ->
   replace: true
   restrict: 'E'

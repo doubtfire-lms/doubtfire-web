@@ -1,7 +1,10 @@
-mod = angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
+_ = require('underscore')
+
 #
 # Modal to edit or create a new tutorial
 #
+mod = angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
+
 .factory('UnitTutorialEditModal', ($uibModal) ->
   UnitTutorialEditModal = {}
 

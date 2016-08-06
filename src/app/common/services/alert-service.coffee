@@ -1,8 +1,8 @@
+_ = require('underscore')
+
 #
 # Services for making alerts
 #
-_ = require('underscore')
-
 mod = angular.module("doubtfire.common.services.alerts", [])
 
 .factory("alertService", ($rootScope, $timeout, $sce) ->

@@ -1,8 +1,10 @@
-mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
+_ = require('underscore')
 
 #
 # Modal to show Doubtfire version info
 #
+mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
+
 .factory("AboutDoubtfireModal", ($uibModal) ->
   AboutDoubtfireModal = {}
 

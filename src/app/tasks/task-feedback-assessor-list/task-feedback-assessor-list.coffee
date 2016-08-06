@@ -1,10 +1,12 @@
-mod = angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
+_ = require('underscore')
 
 #
 # Shows multiple task feedback assessors as a list of students
 # in a specified context (i.e., show students who need to be assessed,
 # show all tasks of a specific task definition etc.)
 #
+mod = angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
+
 .directive('taskFeedbackAssessorList', ->
   replace: true
   restrict: 'E'

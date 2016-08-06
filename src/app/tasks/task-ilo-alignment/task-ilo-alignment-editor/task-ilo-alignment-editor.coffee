@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[])
 
 .directive('taskIloAlignmentEditor', ->

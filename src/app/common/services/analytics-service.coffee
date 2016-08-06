@@ -1,7 +1,10 @@
-mod = angular.module("doubtfire.common.services.analytics", [])
+_ = require('underscore')
+
 #
 # Services for analytics
 #
+mod = angular.module("doubtfire.common.services.analytics", [])
+
 .factory("analyticsService", ($analytics, currentUser) ->
   analyticsService = {}
 

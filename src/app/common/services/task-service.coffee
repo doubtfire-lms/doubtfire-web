@@ -1,3 +1,5 @@
+_ = require('underscore')
+
 mod = angular.module("doubtfire.common.services.tasks", [])
 
 .factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal) ->
