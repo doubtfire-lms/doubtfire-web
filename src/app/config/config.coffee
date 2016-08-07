@@ -7,7 +7,6 @@
 #
 
 mod = angular.module('doubtfire.config', [
-  require('./vendor-dependencies/vendor-dependencies')
   require('./contributors/contributors')
   require('./local-storage/local-storage')
   require('./routing/routing')
