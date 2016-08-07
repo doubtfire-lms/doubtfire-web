@@ -5,7 +5,7 @@ mod = angular.module("doubtfire.api.models.portfolio-submission", [
   "ngFileUpload"
 ])
 
-.factory("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
+.factory("PortfolioSubmission", (api, $window, currentUser, alertService, resourcePlus) ->
   #
   # Creates a new instance of a PortfolioSubmission object. Requires
   # a project object parameter.

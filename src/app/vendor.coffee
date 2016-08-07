@@ -14,7 +14,6 @@ uiBootstrap = require('angular-ui-bootstrap')
 window.CodeMirror = require('codemirror')
 uiCodemirror = require('angular-ui-codemirror')
 
-ngFileUpload = require('angular-file-upload')
 ngFilter = require('angular-filter')
 
 # angular-markdown-filter expects window.showdown to exist
@@ -43,7 +42,6 @@ mod = angular.module('doubtfire.vendor', [
   'ui.codemirror'
 
   # other libraries
-  'angularFileUpload'
   'angular.filter'
   'markdown'
   'nvd3'
