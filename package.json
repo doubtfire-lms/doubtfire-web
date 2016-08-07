@@ -30,11 +30,11 @@
     "test:unit:debug": "karma start ./config/testUnit/karma.conf.js --debug",
     "test:unit:once": "karma start --singleRun=true ./config/testUnit/karma.conf.js",
     "verify": "npm-run-all verify:coffee verify:css verify:js --silent",
-    "verify:css": "sass-lint -c config/verify/sasslint.yml --verbose  && echo ✅ verify:css success",
+    "verify:css": "sass-lint -c config/verify/sasslint.yml  && echo ✅ verify:css success",
     "verify:css:watch": "chokidar 'src/**/*.sass' 'src/**/*.scss' -c 'npm run verify:css' --initial --silent",
     "verify:js": "eslint -c config/verify/.eslintrc \"src/**/*.js\" \"unitTest/**/*.js\" \"config/**/*.js\" && echo ✅ verify:js success",
     "verify:js:watch": "chokidar 'src/**/*.js' 'unitTest/**/*.js' 'config/**/*.js' -c 'npm run verify:js' --initial --silent",
-    "verify:coffee": "gulp verify:coffee",
+    "verify:coffee": "coffeelint -q -c -f config/verify/coffeelint.json --reporter default src/**/*.coffee config/**/*.coffee&& echo ✅ verify:coffee success",
     "verify:coffee:watch": "chokidar 'src/**/*.coffee' 'unitTest/**/*.coffee' 'config/**/*.coffee' -c 'npm run verify:coffee' --initial --silent",
     "verify:watch": "npm-run-all --parallel verify:coffee:watch verify:css:watch verify:js:watch --silent",
     "postinstall": "./node_modules/protractor/bin/webdriver-manager update"
