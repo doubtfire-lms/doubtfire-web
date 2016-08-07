@@ -12,3 +12,4 @@ tmp.scss
 dist/
 dev/
 reports/
+src/app/api/env.coffee
