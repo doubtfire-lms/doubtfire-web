@@ -9,14 +9,14 @@
     "url": "https://github.com/doubtfire-lms/doubtfire-web.git"
   },
   "scripts": {
-    "build": "npm-run-all clean:prod build:prod",
+    "build": "npm-run-all copyenv clean:prod build:prod",
     "build:dev": "webpack-dev-server --progress --config config/webpack/dev.webpack.conf.js --hot",
     "build:prod": "webpack -p --progress --config config/webpack/prod.webpack.conf.js",
     "build:serve": "npm-run-all build serve:prod",
     "clean:dev": "rimraf dev/",
     "clean:prod": "rimraf dist/",
-    "dev": "npm-run-all clean:dev --parallel verify:watch build:dev serve:dev",
-    "copyenv": "rm src/app/api/env.coffee && gulp copyenv",
+    "dev": "npm-run-all copyenv clean:dev --parallel verify:watch build:dev serve:dev",
+    "copyenv": "gulp copyenv",
     "release": "npm-run-all verify test:coverage build test:browser",
     "serve:dev": "echo Starting DEV server",
     "serve:prod": "npm run serve:prod:http",
