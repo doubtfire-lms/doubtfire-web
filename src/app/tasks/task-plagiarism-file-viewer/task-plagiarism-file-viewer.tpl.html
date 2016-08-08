@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <h5 class="panel-title">{{match.username}}: {{match.name}}
       <br>
-      <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a></small>
+      <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a> <a ng-href="{{match.url}}" target="new">download</a></small>
     </h5>
   </div>
   <div class="panel-body plagiarism-panel" ng-bind-html="match.html">

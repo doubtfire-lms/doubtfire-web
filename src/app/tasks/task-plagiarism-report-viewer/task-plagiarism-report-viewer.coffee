@@ -60,7 +60,7 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
       if $scope.similarityData.other_student.name == '???'
         'col-xs-12'
       else
-        'col-lg-6 col-xs-12'
+        'col-md-6 col-xs-12'
 
     if $scope.task?.similar_to_count > 0
       $scope.taskId = $scope.task.id
