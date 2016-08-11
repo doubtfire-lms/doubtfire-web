@@ -11,7 +11,7 @@
   "scripts": {
     "build": "npm-run-all copyenv clean:prod build:prod",
     "build:dev": "webpack-dev-server --progress --config config/webpack/dev.webpack.conf.js --hot",
-    "build:prod": "webpack -p --progress --config config/webpack/prod.webpack.conf.js",
+    "build:prod": "webpack --progress --config config/webpack/prod.webpack.conf.js",
     "build:serve": "npm-run-all build serve:prod",
     "clean:dev": "rimraf dev/",
     "clean:prod": "rimraf dist/",
