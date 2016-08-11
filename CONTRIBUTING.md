@@ -23,11 +23,11 @@ angular.module('doubfire.foo.modals.create-foo-modal', [])
 #
 # Prompts the user to create a Foo using a bar and qux variable
 #
-.factory('CreateFooModal', ($uibModal) ->
+.factory('CreateFooModal', ($modal) ->
   CreateFooModal = {}
 
   CreateFooModal.show = (bar, qux) ->
-    $uibModal.open
+    $modal.open
       templateUrl: 'foo/modals/create-foo-modal.tpl.html'
       controller: 'CreateFooModalCtrl'
       resolve:

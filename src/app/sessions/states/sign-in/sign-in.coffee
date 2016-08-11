@@ -15,7 +15,7 @@ mod = angular.module("doubtfire.sessions.states.sign-in", [])
 
   $stateProvider.state "sign_in", signInStateData
 )
-.controller("SignInCtrl", ($scope, $state, $stateParams, usernameCookie, $timeout, $uibModal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, usernameCookie, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
   ieVersion = ->

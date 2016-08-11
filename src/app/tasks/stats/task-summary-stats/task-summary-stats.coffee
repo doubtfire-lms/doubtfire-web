@@ -11,7 +11,7 @@ mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
   scope:
     unit: "=unit"
 
-  controller: ($scope, $uibModal, Task, taskService, TaskCompletionCsv) ->
+  controller: ($scope, $modal, Task, taskService, TaskCompletionCsv) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText

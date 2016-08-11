@@ -3,11 +3,11 @@ mod = angular.module('doubtfire.units.modals.unit-create-modal', [])
 #
 # This modal allows administrators to quickly create new units
 #
-.factory('UnitCreateModal', ($uibModal) ->
+.factory('UnitCreateModal', ($modal) ->
   UnitCreateModal = {}
 
   UnitCreateModal.show = (units) ->
-    $uibModal.open
+    $modal.open
       controller: 'UnitCreateModalCtrl'
       template: require('./unit-create-modal.tpl.html')
       resolve:
@@ -15,7 +15,7 @@ mod = angular.module('doubtfire.units.modals.unit-create-modal', [])
 
   UnitCreateModal
 )
-.controller('UnitCreateModalCtrl', ($scope, $uibModalInstance, alertService, units, Unit, analyticsService) ->
+.controller('UnitCreateModalCtrl', ($scope, $modalInstance, alertService, units, Unit, analyticsService) ->
   analyticsService.event 'Unit Admin', 'Started to Create Unit'
   $scope.units = units
   $scope.unit = { code: null, name: null }
@@ -24,7 +24,7 @@ mod = angular.module('doubtfire.units.modals.unit-create-modal', [])
       { unit: $scope.unit }
       (response) ->
         alertService.add("success", "Unit created.", 2000)
-        $uibModalInstance.close()
+        $modalInstance.close()
         $scope.units.push(response)
         analyticsService.event 'Unit Admin', 'Saved New Unit'
       (response) ->

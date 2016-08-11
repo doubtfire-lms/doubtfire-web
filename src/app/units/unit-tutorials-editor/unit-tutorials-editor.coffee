@@ -9,7 +9,7 @@ mod = angular.module('doubtfire.units.unit-tutorials-editor', [])
   replace: true
   restrict: 'E'
   template: require('./unit-tutorials-editor.tpl.html')
-  controller: ($scope, $uibModal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
     $scope.editTutorial = (tutorial) ->
       UnitTutorialEditModal.show $scope.unit, tutorial
 

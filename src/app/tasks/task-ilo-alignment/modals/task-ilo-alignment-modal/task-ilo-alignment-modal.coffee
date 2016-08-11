@@ -4,11 +4,11 @@ _ = require('lodash')
 #
 mod = angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-modal', [])
 
-.factory('TaskILOAlignmentModal', ($uibModal) ->
+.factory('TaskILOAlignmentModal', ($modal) ->
   TaskILOAlignmentModal = {}
 
   TaskILOAlignmentModal.show = (task, ilo, alignment, unit, project, source) ->
-    $uibModal.open
+    $modal.open
       controller: 'TaskILOAlignmentModalCtrl'
       template: require('./task-ilo-alignment-modal.tpl.html')
       resolve:
@@ -22,7 +22,7 @@ mod = angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignme
   TaskILOAlignmentModal
 )
 
-.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $uibModalInstance, LearningAlignments, alertService, projectService, task, ilo, alignment, unit, project, source) ->
+.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $modalInstance, LearningAlignments, alertService, projectService, task, ilo, alignment, unit, project, source) ->
   $scope.source = source
   $scope.unit = unit
   $scope.task = task
@@ -96,7 +96,7 @@ mod = angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignme
   $scope.closeModal = ->
     if $scope.editingRationale
       $scope.updateRating $scope.alignment
-    $uibModalInstance.close $scope.alignment
+    $modalInstance.close $scope.alignment
 )
 
 module.exports = mod.name

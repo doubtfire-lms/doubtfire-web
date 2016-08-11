@@ -2,12 +2,12 @@ mod = angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 #
 # Modal to enrol a student in the given tutorial
 #
-.factory('UnitStudentEnrolmentModal', ($uibModal) ->
+.factory('UnitStudentEnrolmentModal', ($modal) ->
   UnitStudentEnrolmentModal = {}
 
   # Must provide unit
   UnitStudentEnrolmentModal.show = (unit) ->
-    $uibModal.open
+    $modal.open
       controller: 'UnitStudentEnrolmentModalCtrl'
       template: require('./unit-student-enrolment-modal.tpl.html')
       resolve: {
@@ -16,7 +16,7 @@ mod = angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 
   UnitStudentEnrolmentModal
 )
-.controller('UnitStudentEnrolmentModalCtrl', ($scope, $uibModalInstance, Project, unit, alertService) ->
+.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService) ->
   $scope.unit = unit
   $scope.projects = unit.students
 
@@ -27,10 +27,10 @@ mod = angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
         if not unit.studentEnrolled project.project_id
           unit.addStudent project
           alertService.add("success", "Student enrolled", 2000)
-          $uibModalInstance.close()
+          $modalInstance.close()
         else
           alertService.add("danger", "Student is already enrolled", 2000)
-          $uibModalInstance.close()
+          $modalInstance.close()
 
       , (response) ->
         alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)

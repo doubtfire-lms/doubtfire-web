@@ -13,7 +13,7 @@ mod = angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-edit
     hidePanel: '=?'
     # select tasks to include in portfolio
     showIncludeTasks: '=?'
-  controller: ($scope, $uibModal, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, Task, CsvResultModal, outcomeService, TaskILOAlignmentModal) ->
+  controller: ($scope, $modal, $rootScope, $filter, currentUser, unitService, alertService, gradeService, LearningAlignments, projectService, taskService, Visualisation, TaskAlignment, Task, CsvResultModal, outcomeService, TaskILOAlignmentModal) ->
     $scope.showTaskName = $scope.unit.ilos.length < 5
     $scope.showGraph = false
     $scope.closeGraph = ->

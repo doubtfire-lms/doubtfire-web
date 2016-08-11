@@ -16,7 +16,7 @@ mod = angular.module('doubtfire.units.unit-student-list', [])
     unit: "=unit"
     unitLoaded: "=unitLoaded"
     fullscreen: '=?'
-  controller: ($scope, $rootScope, $uibModal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService, UnitStudentEnrolmentModal) ->
+  controller: ($scope, $rootScope, $modal, $state, Project, $filter, currentUser, alertService, unitService, taskService, projectService, gradeService, analyticsService, UnitStudentEnrolmentModal) ->
     $scope.studentFilter = 'myStudents' # Mine by default
 
     $scope.grades = gradeService.grades

@@ -18,7 +18,7 @@ mod = angular.module('doubtfire.units.states.units-admin-view', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units#index", unitsAdminViewStateData
 )
-.controller("UnitsAdminViewCtrl", ($scope, $state, $uibModal, Unit, UnitCreateModal, analyticsService) ->
+.controller("UnitsAdminViewCtrl", ($scope, $state, $modal, Unit, UnitCreateModal, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
   $scope.units = Unit.query { include_in_active: true }
 

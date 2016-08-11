@@ -5,11 +5,11 @@ _ = require('lodash')
 #
 mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
 
-.factory("AboutDoubtfireModal", ($uibModal) ->
+.factory("AboutDoubtfireModal", ($modal) ->
   AboutDoubtfireModal = {}
 
   AboutDoubtfireModal.show = ->
-    $uibModal.open
+    $modal.open
       template: require('./about-doubtfire-modal.tpl.html')
       controller: 'AboutDoubtfireModalCtrl'
       size: 'lg'
@@ -17,14 +17,14 @@ mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
   AboutDoubtfireModal
 )
 
-.controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $uibModalInstance, $http, $q) ->
+.controller('AboutDoubtfireModalCtrl', ($scope, DoubtfireContributors, $modalInstance, $http, $q) ->
   contributors = DoubtfireContributors
   # initial data
   $scope.contributors = _.map contributors, (c) ->
     avatar:   require('./assets/images/person-unknown.gif')
     handler:  c
   $scope.close = ->
-    $uibModalInstance.dismiss()
+    $modalInstance.dismiss()
   for handler, index in contributors
     do (handler, index) ->
       $http.get("https://api.github.com/users/#{handler}").then (response) ->

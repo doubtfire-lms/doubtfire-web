@@ -12,7 +12,7 @@ mod = angular.module("doubtfire.tasks.task-comments-viewer", [])
     project: "="
     task: "="
     comment: "=?"
-  controller: ($scope, $uibModal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     #
     # Comment code
     #

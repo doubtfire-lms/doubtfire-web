@@ -7,7 +7,7 @@ mod = angular.module('doubtfire.projects.project-lab-list', [])
 .directive('projectLabList', ->
   restrict: 'E'
   template: require('./project-lab-list.tpl.html')
-  controller: ($scope, $uibModal, User, Project, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, User, Project, alertService, projectService, analyticsService) ->
     $scope.sortOrder = 'abbreviation'
     $scope.setTutorial = (id) ->
       Project.update(

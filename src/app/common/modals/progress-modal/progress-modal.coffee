@@ -3,7 +3,7 @@ mod = angular.module("doubtfire.common.modals.progress-modal", [])
 #
 # Services for making new modals
 #
-.factory("ProgressModal", ($uibModal, $rootScope) ->
+.factory("ProgressModal", ($modal, $rootScope) ->
   ProgressModal = {}
 
   #
@@ -14,7 +14,7 @@ mod = angular.module("doubtfire.common.modals.progress-modal", [])
   # request is complete
   #
   ProgressModal.show = (title, message, promise) ->
-    modalInstance = $uibModal.open
+    modalInstance = $modal.open
       template: require('./progress-modal.tpl.html')
       controller: 'ProgressModalCtrl'
       resolve:
@@ -31,12 +31,12 @@ mod = angular.module("doubtfire.common.modals.progress-modal", [])
 #
 # Controller for progress modal
 #
-.controller('ProgressModalCtrl', ($scope, $uibModalInstance, title, message) ->
+.controller('ProgressModalCtrl', ($scope, $modalInstance, title, message) ->
   $scope.title = title
   $scope.message = message
 
   $scope.close = ->
-    $uibModalInstance.dismiss()
+    $modalInstance.dismiss()
 )
 
 module.exports = mod.name

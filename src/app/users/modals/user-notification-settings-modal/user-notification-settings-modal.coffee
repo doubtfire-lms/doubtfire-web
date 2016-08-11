@@ -1,13 +1,13 @@
 mod = angular.module("doubtfire.users.modals.user-notification-settings-modal", [])
 
-.factory('UserNotificationSettingsModal', ($uibModal) ->
+.factory('UserNotificationSettingsModal', ($modal) ->
   UserNotificationSettingsModal = {}
 
   #
   # Show notification settings for the provided user
   #
   UserNotificationSettingsModal.show = (user) ->
-    $uibModal.open
+    $modal.open
       template: require('./user-notification-settings-modal.tpl.html')
       controller: 'UserNotificationSettingsModalCtrl'
       resolve:
@@ -16,7 +16,7 @@ mod = angular.module("doubtfire.users.modals.user-notification-settings-modal", 
   UserNotificationSettingsModal
 )
 
-.controller('UserNotificationSettingsModalCtrl', ($scope, $uibModalInstance, alertService, currentUser, User, user, auth) ->
+.controller('UserNotificationSettingsModalCtrl', ($scope, $modalInstance, alertService, currentUser, User, user, auth) ->
   $scope.user = user
   $scope.currentUser = currentUser
   $scope.modalState = {}
@@ -24,7 +24,7 @@ mod = angular.module("doubtfire.users.modals.user-notification-settings-modal", 
   $scope.saveNotifications = ->
     User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
       (response) ->
-        $uibModalInstance.close(response)
+        $modalInstance.close(response)
         user.name = user.first_name + " " + user.last_name
         if user == currentUser.profile
           auth.saveCurrentUser()
