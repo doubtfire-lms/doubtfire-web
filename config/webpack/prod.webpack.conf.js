@@ -13,7 +13,7 @@ _.merge(config, {
 config.plugins.push(new webpack.optimize.UglifyJsPlugin({
   compress: true,
   mangle: false
-}))
+}));
 
 // Merging of arrays is tricky - just push the item onto the existing array
 config.plugins.push(new webpack.DefinePlugin({

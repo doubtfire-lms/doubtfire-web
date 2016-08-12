@@ -3,7 +3,7 @@
 
 // START_CONFIT_GENERATED_CONTENT
 var DefinePlugin = require('webpack').DefinePlugin;   // Needed to pass the testFilesRegEx to test.files.js
-var testFilesRegEx = /unitTest\/.*spec\.(coffee)$/;
+var testFilesRegEx = /\^unit-test\/.*spec\.(coffee)$/;
 
 // Customise the testFilesRegEx to filter which files to test, if desired.
 // E.g.

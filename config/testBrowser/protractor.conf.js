@@ -31,7 +31,7 @@ var config = {
   // --suite=smoke,full only the patterns matched by the specified suites will
   // run.
   suites: {
-    app: '../../src/**/browserTest/*.spec.js'
+    app: '../../src/**/^browser-test/*.spec.js'
   },
 
   reportWriters: [
