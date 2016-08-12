@@ -151,7 +151,7 @@ config.postcss = [
 
 var cssLoader = {
   test: helpers.pathRegEx(/\.(sass|scss)$/),
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?indentedSyntax=true')
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?indentedSyntax=true!import-glob!')
 };
 
 config.module.loaders.push(cssLoader);

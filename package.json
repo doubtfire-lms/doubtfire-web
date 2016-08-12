@@ -91,6 +91,7 @@
     "gulp-replace": "^0.5.4",
     "html-loader": "0.4.3",
     "html-webpack-plugin": "2.7.1",
+    "import-glob-loader": "1.1.0",
     "isparta-instrumenter-loader": "1.0.0",
     "jasmine-core": "2.4.1",
     "jasmine-reporters": "2.1.1",
