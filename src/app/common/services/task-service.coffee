@@ -209,6 +209,19 @@ angular.module("doubtfire.common.services.tasks", [])
       'fail'
     ]
 
+  taskService.rejectFutureStates =
+      not_started: []
+      working_on_it: []
+      need_help: []
+      ready_to_mark: []
+      complete: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      discuss:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      demonstrate:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      fix_and_resubmit:  []
+      redo:  []
+      do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+
   # This function gets the status CSS class for the indicated status
   taskService.statusClass = (status) -> _.trim(_.dasherize(status))
 
