@@ -103,6 +103,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       # Update the project's task stats and burndown data
       updateTaskStatusFunc = ->
         taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
+        $scope.oldStatus = angular.copy $scope.task.status
       # Perform as timeout to show 'Upload Complete'
       $timeout updateTaskStatusFunc, 1500
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
