@@ -51,7 +51,7 @@ angular.module('doubtfire.common.file-uploader', [])
       code:
         extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java', 'py', 'js', 'html', 'coffee', 'rb', 'css',
                     'scss', 'yaml', 'yml', 'xml', 'json', 'ts',
-                    'vb', 'sql']
+                    'vb', 'sql', 'txt']
         icon:       'fa-file-code-o'
         name:       'code'
       image:

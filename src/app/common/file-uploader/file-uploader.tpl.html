@@ -15,7 +15,7 @@
         <p class="fa {{upload.display.icon}} fa-3x"></p>
         <p ng-show="upload.display.error">
           Invalid file provided
-          <small> Accepted files: <code>{{upload.accept}}</code> </small>
+          <small> Accepted files: <code>{{upload.accept.split(',').join(', ')}}</code> </small>
         </p>
         <p ng-show="dropSupported" ng-hide="upload.display.error">
           Drop {{upload.display.type}} file here
