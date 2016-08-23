@@ -10,6 +10,8 @@ angular.module('doubtfire.tasks.task-status-selector',[])
     inMenu: "=inMenu"
     triggerTransition: "=triggerTransition"
   controller: ($scope, taskService) ->
+    $scope.taskService = taskService
+
     #
     # Statuses tutors/students may change task to
     #

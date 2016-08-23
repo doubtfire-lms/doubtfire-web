@@ -82,6 +82,14 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.updateTaskStats(project, new_stats)
     task.needsSubmissionDetails = () ->
       task.has_pdf == null || task.has_pdf == undefined
+    task.statusClass = () ->
+      taskService.statusData(task.status).class
+    task.statusIcon = () ->
+      taskService.statusData(task.status).icon
+    task.statusLabel = () ->
+      taskService.statusData(task.status).label
+    task.filterFutureStates = (states) ->
+      _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
     task.getSubmissionDetails = ( success, failure ) ->
       if ! task.needsSubmissionDetails()
         if _.isFunction(success) then success(task, {} )
