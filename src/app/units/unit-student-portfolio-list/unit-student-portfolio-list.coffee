@@ -9,11 +9,15 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
   templateUrl: 'units/unit-student-portfolio-list/unit-student-portfolio-list.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser) ->
+    unitLoaded: "="
+  controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation) ->
     $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
     $scope.gradeDownloadUrl = Unit.getGradesUrl $scope.unit
 
     $scope.studentFilter = 'allStudents'
+    $scope.portfolioFilter = 'withPortfolio'
+
+    refreshCharts = Visualisation.refreshAll
 
     #
     # Sets the active tab
@@ -24,6 +28,9 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
       $scope.activeTab?.active = false
       $scope.activeTab = tab
       $scope.activeTab.active = true
+
+      if $scope.activeTab == $scope.gradingTabs.viewProgress
+        refreshCharts()
 
     #
     # Active task tab group
