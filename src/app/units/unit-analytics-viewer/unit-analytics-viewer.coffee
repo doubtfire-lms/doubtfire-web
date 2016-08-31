@@ -8,6 +8,8 @@ angular.module('doubtfire.units.unit-analytics-viewer', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-analytics-viewer/unit-analytics-viewer.tpl.html'
+  scope:
+    unit: "="
   controller: ($scope, Unit) ->
     #
     # Active task tab group

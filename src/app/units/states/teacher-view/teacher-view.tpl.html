@@ -22,8 +22,8 @@
       <task-feedback-assessor-list  ng-if="activeTab === tabs.tasksTab" unit="unit" context="'task'" assessing-unit-role="assessingUnitRole"></task-feedback-assessor-list>
       <tutor-group-manager ng-if="activeTab === tabs.groupsTab"></tutor-group-manager>
       <unit-student-plagiarism-list  ng-if="activeTab === tabs.plagiarismTab"></unit-student-plagiarism-list>
-      <unit-analytics-viewer  ng-if="activeTab === tabs.analyticsTab"></unit-analytics-viewer>
-      <unit-student-portfolio-list ng-if="activeTab === tabs.gradingTab"></unit-student-portfolio-list>
+      <unit-analytics-viewer unit="unit" ng-if="activeTab === tabs.analyticsTab"></unit-analytics-viewer>
+      <unit-student-portfolio-list unit="unit" ng-if="activeTab === tabs.gradingTab"></unit-student-portfolio-list>
     </div><!--content-->
   </div>
 </div>

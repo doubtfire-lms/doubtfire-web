@@ -7,6 +7,8 @@ angular.module('doubtfire.units.unit-student-portfolio-list', [])
 .directive('unitStudentPortfolioList', ->
   restrict: 'E'
   templateUrl: 'units/unit-student-portfolio-list/unit-student-portfolio-list.tpl.html'
+  scope:
+    unit: "="
   controller: ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser) ->
     $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
     $scope.gradeDownloadUrl = Unit.getGradesUrl $scope.unit
