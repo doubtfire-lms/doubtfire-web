@@ -49,6 +49,15 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
   ]
 
+  taskService.markedStatuses = [
+    'redo'
+    'fail'
+    'fix_and_resubmit'
+    'do_not_resubmit'
+    'discuss'
+    'demonstrate'
+    'complete'
+  ]
 
   taskService.acronymKey =
     RTM: 'ready_to_mark'
