@@ -17,6 +17,7 @@
         </h3>
         {{activeTab.subtitle}}
       </div>
+      <unit-stats-download unit="unit" ng-if="activeTab === tabsData.csvStatDownload"> </unit-stats-download>
       <task-summary-stats unit="unit" ng-if="unit.students && activeTab === tabsData.taskSummaryStats"></task-summary-stats>
       <task-status-stats unit="unit" ng-if="activeTab === tabsData.taskStatusStats"></task-status-stats>
       <unit-target-grade-stats unit="unit" ng-if="activeTab === tabsData.targetGradeStats"></unit-target-grade-stats>
