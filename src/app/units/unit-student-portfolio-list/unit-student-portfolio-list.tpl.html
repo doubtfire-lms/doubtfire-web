@@ -18,12 +18,19 @@
         <div class="pull-right toolbar">
           <div class="buttons">
             <div class="btn-group">
+              <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'allStudents'">
+                <i class="fa fa-globe" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students, even those without portfolios"></i>
+              </label>
+              <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'withPortfolio'">
+                <i class="fa fa-book" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only students with portfolios"></i>
+              </label>
+            </div>
+            <div class="btn-group">
               <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
                 <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
               </label>
               <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
                 <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
-                <span class="tooltip">Show only my students</span>
               </label>
             </div>
             <div class="btn-group btn-group-sm select-portfolio-grade">
@@ -59,18 +66,27 @@
               <th>Tutor</th>
               <th class="tutorial">
                 <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
-                  <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+                  Tutorial<i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th>
                 Target Grade
               </th>
               <th>Stats</th>
-              <th>Grade</th>
+              <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
+                 <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
+                   Portfolio?<i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="grade">
+                <a ng-click="sortOrder='grade'; reverse=!reverse">
+                  Grade<i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio | studentsWithTargetGrade:filterOptions.selectedGrade) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
+            <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithTargetGrade:filterOptions.selectedGrade) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
               <td>{{student.student_id}}</td>
               <td>{{student.name}}</td>
               <td>{{student.tutorial ? student.tutorial.tutor_name : 'None'}}</td>
@@ -85,6 +101,7 @@
                   </bar>
                 </progress>
               </td>
+              <td ng-show="portfolioFilter == 'allStudents'">{{student.has_portfolio ? "Yes" : "No"}}</td>
               <td>{{student.grade}}</td>
             </tr>
           </tbody>
@@ -133,6 +150,10 @@
             <h3 class="panel-title">Review Portfolio of {{selectedStudent.name}}</h3><!--/title-->
             View or download portfolio for assessment.
           </div>
+        </div>
+        <div class="panel-body large-notice-block" ng-hide="project.portfolio_available">
+          <i class="fa fa-book"></i>
+          <p>No Portfolio Submitted</p>
         </div>
         <pdf-panel-viewer
           ng-show="project.portfolio_available"

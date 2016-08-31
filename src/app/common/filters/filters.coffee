@@ -67,9 +67,9 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('studentsWithPortfolio', ->
-  (input) ->
+  (input, option) ->
     if input
-      _.filter  input, (student) -> (student?) && student.has_portfolio > 0
+      _.filter  input, (student) ->  option == 'allStudents' || ((student?) && student.has_portfolio > 0)
     else
       input
 )

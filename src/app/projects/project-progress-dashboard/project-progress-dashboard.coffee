@@ -21,7 +21,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 
     $scope.currentVisualisation = 'burndown'
 
-    $scope.taskDetailsSelector = { viewAll: false }
+    $scope.taskDetailsSelector = { viewAll: true }
 
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
