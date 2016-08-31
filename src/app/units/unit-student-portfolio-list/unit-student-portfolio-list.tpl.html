@@ -66,15 +66,23 @@
               <th>Tutor</th>
               <th class="tutorial">
                 <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
-                  <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i> Tutorial
+                  Tutorial<i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
                 </a>
               </th>
               <th>
                 Target Grade
               </th>
               <th>Stats</th>
-              <th ng-show="portfolioFilter == 'allStudents'">Portfolio?</th>
-              <th>Grade</th>
+              <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
+                 <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
+                   Portfolio?<i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
+              <th class="grade">
+                <a ng-click="sortOrder='grade'; reverse=!reverse">
+                  Grade<i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                </a>
+              </th>
             </tr>
           </thead>
           <tbody>
