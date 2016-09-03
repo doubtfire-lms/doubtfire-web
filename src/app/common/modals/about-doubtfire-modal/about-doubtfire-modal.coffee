@@ -33,7 +33,7 @@ mod = angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
           data.blog = 'http://' + data.blog unless data.blog.match /^[a-zA-Z]+:\/\//
         $scope.contributors[index] =
           name:     data.name
-          avatar:   data.avatar_url or '/assets/images/person-unknown.gif'
+          avatar:   data.avatar_url or require('./assets/images/person-unknown.gif')
           website:  data.blog or data.html_url
           github:   data.html_url
           handler:  handler

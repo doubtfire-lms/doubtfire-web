@@ -3,6 +3,7 @@
 /** Build START */
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
 var helpers = require('./webpackHelpers');
 var basePath = process.cwd() + path.sep;
@@ -80,6 +81,7 @@ config.plugins.push(commonsChunkPlugin);
 /** JS START */
 
 var srcLoader = {
+  $$name: 'srcLoader',
   test: helpers.pathRegEx(/src\/.*\.(coffee)$/),
   loader: 'coffee-loader',
   exclude: ['node_modules'],    // There should be no need to exclude unit or browser tests because they should NOT be part of the source code dependency tree
@@ -117,25 +119,14 @@ var imageLoader = {
 config.module.loaders.push(imageLoader);
 
 // Favicons
-var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-var faviconsHtmlPlugin = new FaviconsWebpackPlugin({
-  logo: path.join(basePath + 'src/assets/images/logo.png'),
-  prefix: 'assets/images/icons/[hash]-',
-  emitStats: false,
-  statsFilename: 'assets/images/icons/[hash].json',
-  // Generate a cache file with control hashes and
-  // don't rebuild the favicons until those hashes change
-  persistentCache: true,
-  // Inject the html into the html-webpack-plugin
-  inject: true,
-  // favicon background color (see https://github.com/haydenbleasel/favicons#usage)
-  background: '#fff',
-  // favicon app title (see https://github.com/haydenbleasel/favicons#usage)
-  title: 'Doubtfire'
-});
+// Copy favicon icons into the build folder manually because the config
+// for favicons is atypical and not easily handled through webpack
+var copyPlugin = new CopyWebpackPlugin([{
+  from: path.join(basePath, 'src/assets/images/icons/'),
+  to: 'assets/images/icons/'
+}]);
 
-config.plugins.push(faviconsHtmlPlugin);
-
+config.plugins.push(copyPlugin);
 /* **/
 
 /** CSS START **/
@@ -180,7 +171,6 @@ config.htmlLoader = {
   customAttrSurround: [ [/#/, /(?:)/], [/\*/, /(?:)/], [/\[?\(?/, /(?:)/] ],
   customAttrAssign: [ /\)?\]?=/ ]
 };
-
 
 var indexHtmlPlugin = new HtmlWebpackPlugin({
   filename: 'index.html',
