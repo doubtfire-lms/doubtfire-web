@@ -57,7 +57,7 @@
                 <i ng-show="sortOrder=='target_grade'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </span>
               <span class="flag-sort">
-                <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagarism" ng-class="{'text-primary' : sortOrder == 'tasks_with_similarities * 100 + max_pct_copy'}" ng-click="setFlagSort('tasks_with_similarities * 100 + max_pct_copy')"></i>
+                <i class="fa fa-eye fa-2x text-muted" tooltip="Sort by plagiarism" ng-class="{'text-primary' : sortOrder == 'max_pct_copy'}" ng-click="setFlagSort('max_pct_copy')"></i>
                 <i ng-show="sortOrder=='tasks_with_similarities * 100 + max_pct_copy'" class="text-primary fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </span>
               <span class="flag-sort">
@@ -90,7 +90,7 @@
               <span class="flag">
                 <grade-icon grade="student.target_grade"></grade-icon>
               </span>
-              <span ng-if="student.tasks_with_similarities > 0" class="flag">
+              <span ng-if="student.max_pct_copy > 0" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>
               </span>
               <span ng-if="student.has_portfolio" class="flag">
