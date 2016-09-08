@@ -1,7 +1,7 @@
 <div class="panel panel-default task-plagiarism-file-viewer">
   <div class="panel-heading">
     <h5 class="panel-title">{{match.username}}: {{match.name}}
-      <span class="info pull-right" ng-show="match.dismissed && ! canDismiss">Dismissed</span>
+      <span class="label label-info pull-right" ng-show="match.dismissed && ! canDismiss">Dismissed</span>
       <button class="btn btn-danger pull-right" ng-hide="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(true)">Dismiss</button>
       <button class="btn btn-info pull-right" ng-show="match.dismissed"  ng-if="canDismiss" ng-click="dismiss_similarity(false)">Activate</button>
       <br>

@@ -44,7 +44,7 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
       $scope.loadingStudent = true
       if student
         projectService.fetchDetailsForProject student, $scope.unit, (project) ->
-          $scope.activeTask = _.find(student.tasks, (task) -> task.similar_to_count > 0)
+          $scope.activeTask = _.find(student.tasks, (task) -> task.similar_to_count - task.similar_to_dismissed_count > 0)
           $scope.loadingStudent = false
 
     $scope.selectTask = (task) ->

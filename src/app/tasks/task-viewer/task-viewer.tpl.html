@@ -60,7 +60,7 @@
       <tab ng-repeat="(tabKey, tab) in tabs | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
         <tab-heading class="text-center" tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
           <i class="fa fa-2x {{tab.icon}}"></i>
-          <i class="fa fa-2x fa-warning" ng-class="{ 'text-warning': !isActiveTab(tab) }" ng-show="tab == tabs.plagiarismReport && project.selectedTask.similar_to_count > 0"></i>
+          <i class="fa fa-2x fa-warning" ng-class="{ 'text-warning': !isActiveTab(tab) }" ng-show="tab == tabs.plagiarismReport && project.selectedTask.similar_to_count - project.selectedTask.similar_to_dismissed_count > 0"></i>
           <strong class="comment-count" ng-show="tab == tabs.viewComments && project.selectedTask.comments.length > 0">{{project.selectedTask.comments.length}}</strong>
         </tab-heading>
       </tab>
@@ -79,7 +79,7 @@
         <task-submission-wizard task="project.selectedTask" project="project" unit="unit" assessing-unit-role="assessingUnitRole" ng-if="activeTab == tabs.fileUpload"></task-submission-wizard>
         <task-submission-viewer ng-show="activeTab == tabs.viewSubmission" project="project" task="project.selectedTask"></task-submission-viewer>
         <task-comments-viewer ng-show="activeTab == tabs.viewComments" project="project" task="project.selectedTask"></task-comments-viewer>
-        <task-plagiarism-report-viewer task="project.selectedTask" ng-if="activeTab == tabs.plagiarismReport"></task-plagiarism-report-viewer>
+        <task-plagiarism-report-viewer task="project.selectedTask" assessing-unit-role="assessingUnitRole" ng-if="activeTab == tabs.plagiarismReport"></task-plagiarism-report-viewer>
       </div><!--/panel-body-area-->
     </div><!--/tab-contents-panel-->
   </div>

@@ -112,6 +112,7 @@ angular.module("doubtfire.common.services.projects", [])
         include_in_portfolio: true
         pct_similar: 0
         similar_to_count: 0
+        similar_to_dismissed_count: 0
         times_assessed: 0
         # pdf details are loaded from Task.SubmissionDetails
         # processing_pdf: null

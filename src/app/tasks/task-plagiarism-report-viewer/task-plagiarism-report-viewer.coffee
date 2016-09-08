@@ -29,7 +29,7 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
       $scope.fetchSimilarity()
 
     $scope.noPlagiarismDetected = ->
-      $scope.tasks?.similar_to_count <= 0 || $scope.similarityData == null
+      $scope.tasks?.similar_to_count - $scope.task?.similar_to_dismissed_count <= 0 || $scope.similarityData == null
 
     $scope.emailStudentsPlagiarism = () ->
 
