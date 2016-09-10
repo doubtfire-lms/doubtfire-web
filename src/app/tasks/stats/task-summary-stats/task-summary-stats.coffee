@@ -11,7 +11,7 @@ mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
   scope:
     unit: "=unit"
 
-  controller: ($scope, $modal, Task, taskService, TaskCompletionCsv) ->
+  controller: ($scope, $modal, Task, taskService) ->
     # functions from task service
     $scope.statusClass = taskService.statusClass
     $scope.statusText = taskService.statusText
@@ -37,9 +37,6 @@ mod = angular.module('doubtfire.tasks.stats.task-summary-stats', [])
       else if count / numStudents > 0.5 then 'warning'
       else if count / numStudents > 0.25 then 'info'
       else ''
-
-    $scope.fetchCSV = () ->
-      TaskCompletionCsv.downloadFile($scope.unit)
 
     $scope.fetchStats = () ->
       numStudents = $scope.unit.students.length

@@ -34,7 +34,7 @@ mod = angular.module('doubtfire.tasks.task-sheet-viewer', [])
           active: _.isNumber($scope.task.grade)
         quality:
           show: $scope.qualityPoints.max? && $scope.qualityPoints.max > 0
-          active: $scope.qualityPoints.assigned > 0
+          active: $scope.qualityPoints.assigned > 0 || ($scope.task.status in taskService.markedStatuses)
       $scope.showAssessmentPanel = _.chain($scope.assessmentPanels)
                                     .map('show')
                                     .compact()

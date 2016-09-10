@@ -52,7 +52,8 @@ mod = angular.module('doubtfire.common.file-uploader', [])
         name:       'CSV'
       code:
         extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java', 'py', 'js', 'html', 'coffee', 'rb', 'css',
-                    'scss', 'yaml', 'yml', 'xml', 'json', 'ts']
+                    'scss', 'yaml', 'yml', 'xml', 'json', 'ts',
+                    'vb', 'sql', 'txt']
         icon:       'fa-file-code-o'
         name:       'code'
       image:

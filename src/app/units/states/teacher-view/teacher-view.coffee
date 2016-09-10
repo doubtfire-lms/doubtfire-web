@@ -62,15 +62,16 @@ mod = angular.module('doubtfire.units.states.teacher-view', [])
   $scope.setActiveTab = (tab) ->
     # Do nothing if we're switching to the same tab
     return if tab is $scope.activeTab
+
     # Actions to perform when changing tab
     $scope.activeTab?.active = false
     $scope.activeTab = tab
     $scope.activeTab.active = true
     # Actions to take when selecting this tab
-    switch tab
-      when $scope.tabs.analyticsTab
-        refreshCharts()
-    analyticsService.event 'Teacher View', "Switched Tab as #{$scope.unitRole.role}", "#{tab.title} Tab"
+    # switch tab
+    #   when $scope.tabs.analyticsTab
+    #     refreshCharts()
+    # analyticsService.event 'Teacher View', "Switched Tab as #{$scope.unitRole.role}", "#{tab.title} Tab"
 
   # Kill tabs that aren't applicable
   cleanupTabs = ->

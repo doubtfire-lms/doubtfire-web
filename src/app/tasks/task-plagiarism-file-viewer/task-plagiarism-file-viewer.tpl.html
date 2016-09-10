@@ -1,8 +1,11 @@
 <div class="panel panel-default task-plagiarism-file-viewer">
   <div class="panel-heading">
     <h5 class="panel-title">{{match.username}}: {{match.name}}
+      <span class="label label-info pull-right" ng-show="match.dismissed && ! canDismiss">Dismissed</span>
+      <button class="btn btn-danger pull-right" ng-hide="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(true)">Dismiss</button>
+      <button class="btn btn-info pull-right" ng-show="match.dismissed"  ng-if="canDismiss" ng-click="dismiss_similarity(false)">Activate</button>
       <br>
-      <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a></small>
+      <small>{{match.pct}}% {{match.tutor}} {{match.tutorial}} <a ng-show="match.lnk" ng-href="{{match.lnk}}" target="new">report</a> <a ng-href="{{match.url}}" target="new">download</a></small>
     </h5>
   </div>
   <div class="panel-body plagiarism-panel" ng-bind-html="match.html">

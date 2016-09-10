@@ -64,7 +64,7 @@ mod = angular.module('doubtfire.units.unit-details-editor', [])
           }, (unit) ->
             alertService.add("success", "Unit updated.", 2000)
           (response) ->
-            alertService.add("danger", "Failed to update unit. #{response.error}", 6000)
+            alertService.add("danger", "Failed to update unit. #{response.data.error}", 6000)
         )
 )
 

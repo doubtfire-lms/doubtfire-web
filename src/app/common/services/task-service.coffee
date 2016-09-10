@@ -51,6 +51,15 @@ mod = angular.module("doubtfire.common.services.tasks", [])
     'complete'
   ]
 
+  taskService.markedStatuses = [
+    'redo'
+    'fail'
+    'fix_and_resubmit'
+    'do_not_resubmit'
+    'discuss'
+    'demonstrate'
+    'complete'
+  ]
 
   taskService.acronymKey =
     RTM: 'ready_to_mark'
@@ -178,11 +187,11 @@ mod = angular.module("doubtfire.common.services.tasks", [])
       action: "Review your submission and the feedback from your tutor. Fix the issues identified, and resubmit it to be reassessed. Make sure to check your submission thoroughly, and note any limit on the number of times each task can be reassessed."
     discuss:
       detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor beleives it is complete."
+      reason: "Your work looks good and your tutor believes it is complete."
       action: "To mark as complete, attend class and discuss it with your tutor."
     demonstrate:
       detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor beleives it is complete."
+      reason: "Your work looks good and your tutor believes it is complete."
       action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
     complete:
       detail: "You are finished with this task 🎉"
@@ -210,6 +219,19 @@ mod = angular.module("doubtfire.common.services.tasks", [])
       'do_not_resubmit'
       'fail'
     ]
+
+  taskService.rejectFutureStates =
+      not_started: []
+      working_on_it: []
+      need_help: []
+      ready_to_mark: []
+      complete: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      discuss:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      demonstrate:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      fix_and_resubmit:  []
+      redo:  []
+      do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
   taskService.statusClass = (status) -> _.trim(_.dasherize(status))
