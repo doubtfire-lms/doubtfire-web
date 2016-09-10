@@ -6,6 +6,7 @@
 ngCookies = require('angular-cookies')
 ngCsv = require('ng-csv')
 ngSanitize = require('angular-sanitize')
+ngAnimate = require('angular-animate')
 
 uiRouter = require('angular-ui-router')
 uiBootstrap = require('angular-ui-bootstrap')
@@ -35,6 +36,7 @@ mod = angular.module('doubtfire.vendor', [
   'ngCookies'
   'ngCsv'
   'ngSanitize'
+  'ngAnimate'
 
   # ui.*
   'ui.router'

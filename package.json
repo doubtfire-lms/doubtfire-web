@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "npm-run-all copyenv clean:prod build:prod",
-    "build:dev": "webpack-dev-server --progress --config config/webpack/dev.webpack.conf.js --hot",
+    "build:dev": "webpack-dev-server --watch-poll --host 0.0.0.0 --progress --config config/webpack/dev.webpack.conf.js --hot",
     "build:prod": "webpack --progress --config config/webpack/prod.webpack.conf.js",
     "build:serve": "npm-run-all build serve:prod",
     "clean:dev": "rimraf dev/",
@@ -37,10 +37,11 @@
     "verify:coffee": "coffeelint -q -c -f config/verify/coffeelint.json --reporter default src/**/*.coffee config/**/*.coffee&& echo ✅ verify:coffee success",
     "verify:coffee:watch": "chokidar 'src/**/*.coffee' 'unitTest/**/*.coffee' 'config/**/*.coffee' -c 'npm run verify:coffee' --initial --silent",
     "verify:watch": "npm-run-all --parallel verify:coffee:watch verify:css:watch verify:js:watch --silent",
-    "postinstall": "./node_modules/protractor/bin/webdriver-manager update"
+    "postinstall": "./node_modules/protractor/bin/webdriver-manager update && npm rebuild node-sass"
   },
   "dependencies": {
     "angular": "1.3.19",
+    "angular-animate": "1.3.19",
     "angular-cookies": "1.2.28",
     "angular-filter": "0.4.9",
     "angular-local-storage": "0.1.3",

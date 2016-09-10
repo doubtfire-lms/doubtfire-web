@@ -1,4 +1,4 @@
-FROM noonat/ruby-node
+FROM node:6.3.1
 
 ADD . /doubtfire-web
 WORKDIR /doubtfire-web
@@ -8,9 +8,4 @@ EXPOSE 8080
 
 ENV NODE_ENV docker
 
-# Ruby required for SASS
-RUN gem install sass
-
-RUN npm install
-RUN npm install -g grunt-cli
-RUN nodenv rehash
+RUN npm install --unsafe-perm
