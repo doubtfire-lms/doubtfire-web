@@ -10,6 +10,12 @@ _.merge(config, {
   devtool: 'source-map'
 });
 
+// Adding this makes source-maps work in safari
+config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+  compress: false,
+  mangle: false
+}));
+
 // Merging of arrays is tricky - just push the item onto the existing array
 config.plugins.push(new webpack.DefinePlugin({
   __DEV__: true,
