@@ -9,7 +9,10 @@
         {{comment.comment_by}}
       </span>
       <span class="comment-date">
-        {{comment.created_at | date: 'd MMM yyyy'}}
+        <time datetime="{{comment.created_at}}">
+          {{comment.created_at | date: 'd MMM yyyy'}}<br />
+          {{comment.created_at | date: 'hh:mm a'}}
+        </time>
       </span>
     </div>
     <div class="comment-text col-md-9">
