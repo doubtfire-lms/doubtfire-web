@@ -10,6 +10,7 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
     hideFooter: '=?'
 
   controller: ($scope, $sce, $timeout, analyticsService) ->
+    $scope.isSafari = navigator.userAgent.indexOf("Safari") > 0 && navigator.userAgent.indexOf("Chrome") == -1
     $scope.downloadEvent = (type) ->
       analyticsService.event 'Task Sheet', "Downloaded #{type}"
 
