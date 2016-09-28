@@ -171,7 +171,7 @@ angular.module("doubtfire.common.filters", [])
             project = task.project()
             (task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0) ||
               (task.definition.name.toLowerCase().indexOf(matchText) >= 0) ||
-              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0))))
+              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0)))))
           else
             false
       else
@@ -183,7 +183,7 @@ angular.module("doubtfire.common.filters", [])
     if _.isString text
       matchText = text.toLowerCase()
       if input
-        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0)) )
+        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0))) )
       else
         input
 )
