@@ -6,3 +6,10 @@ angular.module("doubtfire.api.models.task-completion-csv", [])
 
   return this
 )
+
+.service("TutorAssessmentCsv", (api, $window, currentUser) ->
+  this.downloadFile = (unit) ->
+    $window.open "#{api}/csv/units/#{unit.id}/tutor_assessments.json?auth_token=#{currentUser.authenticationToken}", "_blank"
+
+  return this
+)
