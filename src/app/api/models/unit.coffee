@@ -6,6 +6,8 @@ angular.module("doubtfire.api.models.unit", [])
     "#{api}/units/#{unit?.id}/grades?auth_token=#{currentUser.authenticationToken}"
   Unit.getPortfoliosUrl = (unit) ->
     "#{api}/submission/unit/#{unit?.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+  Unit.getAllTaskSubmissionsUrl = (unit, td) ->
+    "#{api}/submission/unit/#{unit?.id}/task_definitions/#{td?.id}/download_submissions?auth_token=#{currentUser.authenticationToken}"
   Unit.taskUploadUrl = (unit) ->
     "#{api}/units/#{unit.id}/task_definitions/task_pdfs?auth_token=#{currentUser.authenticationToken}"
   Unit.taskSheetUploadUrl = (unit, taskDefinition) ->

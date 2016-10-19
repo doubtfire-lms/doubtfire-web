@@ -124,6 +124,8 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
         (response) ->
           alertService.add("danger", response.data.error, 6000)
 
+    $scope.downloadAllSubmissions = (td) ->
+      Unit.getAllTaskSubmissionsUrl($scope.unit, td)
 
     $scope.onSelectDefinition = (taskDef) ->
       return if taskDef == $scope.selectedDefinition

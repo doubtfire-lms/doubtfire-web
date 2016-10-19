@@ -113,6 +113,10 @@
     </div>
     <div class="panel-footer clearfix">
       <div class="pull-right">
+        <a type="button" ng-show="context=='task' && selectedDefinition" class="btn btn-info btn-download" href="{{downloadAllSubmissions(selectedDefinition)}}" tooltip-html-unsafe="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all submissions may take a long time" tooltip-append-to-body="true">
+          <i class="fa fa-download"></i> Download All
+        </a>
+
         <button type="button" class="btn btn-primary btn-download" ng-click="showMarkOfflineModal()">
           <i class="fa fa-laptop"></i> Mark Offline
         </button>
