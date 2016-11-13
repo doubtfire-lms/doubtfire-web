@@ -32,7 +32,7 @@
     <p ng-show="extraFiles().length > 0">
       You have attached <strong>{{extraFiles().length}} extra file{{extraFiles().length > 1 ? 's' : ''}}</strong>
       to your portfolio. You may add more files or remove {{extraFiles().length > 1 ? 'these' : 'this'}}
-      file{{extraFiles().length > 1 ? 's' : '0'}} in the previous step. Each file is listed
+      file{{extraFiles().length > 1 ? 's' : ''}} in the previous step. Each file is listed
       in order of attachment below:
       <ol>
         <li ng-repeat="file in extraFiles()">
