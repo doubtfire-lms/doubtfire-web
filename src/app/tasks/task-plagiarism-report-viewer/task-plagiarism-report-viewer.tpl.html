@@ -1,24 +1,33 @@
-<div class="task-plagiarism-report-viewer">
+<div class="task-plagiarism-report-viewer panel-body">
   <div>
     <div class="large-notice-block" ng-show="noPlagiarismDetected()">
       <i class="fa fa-eye fa-2x"></i>
       <p>Doubtfire has detected no similarities for this work</p>
     </div><!--/no-detections-->
     <div ng-if="task.similar_to_count > 0 && similarityData">
-      <div ng-class="classForViews()">
+      <div ng-class="{ 'col-md-6': canViewOther }" class="col-sm-12">
         <task-plagiarism-file-viewer task="task" match="similarityData.student" match-idx="match" other="false" assessing-unit-role="assessingUnitRole"></task-plagiarism-file-viewer>
       </div>
-      <div ng-class="classForViews()">
+      <div ng-class="{ 'col-md-6': canViewOther }" class="col-sm-12">
         <task-plagiarism-file-viewer task="task" match="similarityData.other_student" match-idx="match" other="true" assessing-unit-role="assessingUnitRole"></task-plagiarism-file-viewer>
       </div>
-    </div>
-    <div class="col-sm-12 text-right">
-      <button ng-if="canSendEmail" ng-click="emailStudentsPlagiarism()" class="btn btn-primary">
-        <i class="fa fa-envelope"></i> Email Students
-      </button>
+      <div class="col-sm-12 text-center">
+        <a ng-if="mailtoString" ng-href="{{mailtoString}}" class="btn btn-primary btn-lg">
+          <i class="fa fa-envelope"></i> Email Students
+        </a>
+      </div>
     </div>
   </div>
   <div ng-show="task.similar_to_count > 1">
-    <pagination ng-show="task.similar_to_count > 1" total-items="task.similar_to_count" ng-model="match" items-per-page="1" max-size="5" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <pagination
+      ng-show="task.similar_to_count > 1"
+      total-items="task.similar_to_count"
+      ng-model="match"
+      items-per-page="1"
+      max-size="5"
+      class="pagination-sm"
+      boundary-links="true"
+      rotate="false">
+    </pagination>
   </div>
 </div>

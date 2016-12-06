@@ -53,7 +53,7 @@
   }
 }
 
-.task-viewer .task-viewer-tab-panel .panel-body {
+.task-viewer .task-viewer-tab-panel > .panel-body {
   height: $task-viewer-tab-content-height;
   overflow: scroll;
   .help-block {
