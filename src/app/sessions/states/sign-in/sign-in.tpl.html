@@ -24,7 +24,7 @@
       <i class="logo"></i> Doubtfire
       <p class="lead">Learning Management System<p>
     </h1>
-    <form name="form" ng-submit="signIn()">
+    <form name="form" ng-submit="signIn()" ng-if="aafLogin === false">
       <div class="username-password-entry" ng-class="{'invalid-credentials': invalidCredentials}">
         <input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
         <input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
@@ -37,6 +37,11 @@
         <input type="checkbox" ng-model="session.remember_me"></input>
         <span>Remember Me</span>
       </label>
+    </form>
+    <form name="form" ng-if="aafLogin">
+      <a class="btn btn-lg btn-primary btn-block text-center" ng-href="{{aafLogin}}">
+        Click to Sign In...
+      </a>
     </form>
   </div>
   <footer class="about-doubtfire text-center">
