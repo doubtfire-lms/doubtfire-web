@@ -33,6 +33,8 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     # This is AAF and we just got an auth_token? Must request to sign in
     if $scope.aafLogin && $stateParams.authToken
       $scope.signIn({ auth_token: $stateParams.authToken })
+    else
+      $scope.authMethodLoaded = true
 
   # April Fools Easter Egg :-)
   angular.element(document).ready ->
