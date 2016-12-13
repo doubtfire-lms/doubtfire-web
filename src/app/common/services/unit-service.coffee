@@ -13,17 +13,13 @@ angular.module("doubtfire.common.services.units", [])
     unitService.loadedUnits = {}
     unitService.loadedUnitRoles = null
 
-  unitService.getUnitRoles = ( callback ) ->
+  unitService.getUnitRoles = (callback) ->
     unless unitService.loadedUnitRoles?
       unitService.loadedUnitRoles = []
-      UnitRole.query(
-        (roles) ->
-          Array.prototype.push.apply unitService.loadedUnitRoles, roles
-        )
-
+      UnitRole.query (roles) ->
+        Array.prototype.push.apply unitService.loadedUnitRoles, roles
     if _.isFunction(callback)
       callback(unitService.loadedUnitRoles)
-
     unitService.loadedUnitRoles
 
   unitService.getUnit = (unitId, loadStudents, allStudents, callback) ->
