@@ -28,13 +28,21 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.session = { remember_me: true }
 
   # Check for AAF login
-  $http.get("#{api}/auth/method").then (response) ->
+  $scope.api = api
+  timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
+  $http.get("#{api}/auth/method").then ((response) ->
     $scope.aafLogin = response.data.redirect_to || false
     # This is AAF and we just got an auth_token? Must request to sign in
     if $scope.aafLogin && $stateParams.authToken
       $scope.signIn({ auth_token: $stateParams.authToken })
     else
       $scope.authMethodLoaded = true
+      $timeout.cancel(timeoutPromise)
+    ), ((err) ->
+      $scope.authMethodFailed = true
+      $scope.error = err
+      $timeout.cancel(timeoutPromise)
+    )
 
   # April Fools Easter Egg :-)
   angular.element(document).ready ->
