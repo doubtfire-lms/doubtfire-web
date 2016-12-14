@@ -26,22 +26,19 @@ angular.module("doubtfire.common.services.projects", [])
     projectService.loadedProjects = null
 
   projectService.getProjects = ( callback ) ->
-    if ! projectService.loadedProjects?
-      projectService.loadedProjects = []
-      Project.query(
-        (projects) ->
-          Array.prototype.push.apply projectService.loadedProjects, projects
-        (response) ->
-          if response?.status != 419
-            msg = if ! response? then response.error else ''
-            alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
-        )
-
-
-    if _.isFunction(callback)
-      callback(projectService.loadedProjects)
-
-    projectService.loadedProjects
+    fireCallback = ->
+      callback(projectService.loadedProjects) if _.isFunction(callback)
+    unless projectService.loadedUnitRoles?
+      success = (projects) ->
+        projectService.loadedProjects = projects
+        fireCallback()
+      failure = (response) ->
+        if response?.status != 419
+          msg = if ! response? then response.error else ''
+          alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
+      Project.query(success, failure)
+    else
+      fireCallback()
 
   ###
   projects's can update their task stats

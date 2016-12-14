@@ -1,0 +1,23 @@
+<ul class="dropdown-menu dropdown-units" dropdown-menu>
+  <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
+  <li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
+    <a ui-sref="units.teacher({ unitCode: unitRole.unit_code })">
+        <small class="unit-info">
+          <label class="label label-unit small">{{unitRole.unit_code}}</label>
+          <small class="text-muted">{{showDate(unitRole.start_date)}}</small>
+        </small>
+        <span class="unit-name">{{unitRole.unit_name}}</span>
+    </a>
+  </li>
+  <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
+  <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
+  <li ng-repeat="project in projects">
+    <a ui-sref="units.student({ unitCode: project.unit_code })">
+      <small class="unit-info">
+        <label class="label label-unit small">{{project.unit_code}}</label>
+        <small class="text-muted">{{showDate(project.start_date)}}</small>
+      </small>
+      <span class="unit-name">{{project.unit_name}}</span>
+    </a>
+  </li>
+</ul>

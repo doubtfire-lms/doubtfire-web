@@ -4,3 +4,8 @@
 .label {
   font-size: 100% !important;
 }
+
+.label.label-unit {
+  @include label-variant($label-info-bg);
+  margin-right: 1ex;
+}
