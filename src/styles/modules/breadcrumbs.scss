@@ -15,11 +15,13 @@
   top: 0;
   left: 0;
   right: 0;
+  border-bottom: 1px solid #e7e7e7;
+  border-radius: 0;
   // Push down the margin of the sibling element
   & + * {
-    margin-top:60px;
+    margin-top: 60px;
   }
-  li {
+  & > li {
     font-size: 10px;
   }
 }
