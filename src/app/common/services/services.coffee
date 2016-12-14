@@ -10,4 +10,5 @@ angular.module("doubtfire.common.services", [
   'doubtfire.common.services.outcome-service'
   'doubtfire.common.services.analytics'
   'doubtfire.common.services.dates'
+  'doubtfire.common.services.configuration'
 ])

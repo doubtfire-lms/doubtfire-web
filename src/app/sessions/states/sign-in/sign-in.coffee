@@ -15,7 +15,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
   $stateProvider.state "sign_in", signInStateData
 )
-.controller("SignInCtrl", ($scope, $state, $stateParams, usernameCookie, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, configurationService, usernameCookie, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
   ieVersion = ->
@@ -26,6 +26,9 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.isIE = isIE() and ieVersion() < 11 # Support IE11
 
   $scope.session = { remember_me: true }
+
+  # Get the confugurable, external name of Doubtfire
+  $scope.externalName = configurationService.getExternalName()
 
   # April Fools Easter Egg :-)
   angular.element(document).ready ->

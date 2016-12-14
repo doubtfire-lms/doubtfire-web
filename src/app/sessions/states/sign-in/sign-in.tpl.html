@@ -21,7 +21,7 @@
   </div>
   <div ng-if="!noIE" class="login">
     <h1 class="logo">
-      <i class="logo"></i> Doubtfire
+      <i class="logo"></i> {{ externalName }}
       <p class="lead">Learning Management System<p>
     </h1>
     <form name="form" ng-submit="signIn()">
@@ -40,6 +40,6 @@
     </form>
   </div>
   <footer class="about-doubtfire text-center">
-    <a href="" ng-click="openAboutModal()">About Doubtfire</a>
+    <a href="" ng-click="openAboutModal()">About {{ externalName }}</a>
   </footer>
 </div>
