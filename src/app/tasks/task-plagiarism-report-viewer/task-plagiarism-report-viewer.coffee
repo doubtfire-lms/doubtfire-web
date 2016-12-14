@@ -12,12 +12,15 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
     task: "="
     assessingUnitRole: "="
 
-  controller: ($scope, $window, TaskSimilarity) ->
+  controller: ($scope, $window, TaskSimilarity, configurationService) ->
     # functions from task service
     #$scope.task = task
     $scope.match = 1
     #$scope.plagiarismPage = $sce.trustAsResourceUrl("#{api}/tasks/20/similarity/#{$scope.match}?auth_token=#{currentUser.authenticationToken}")
     $scope.similarityData = null
+
+    # Get the confugurable, external name of Doubtfire
+    $scope.externalName = configurationService.getExternalName()
 
     if _.isString $scope.assessingUnitRole?.role
       $scope.canSendEmail = _.includes(["Tutor", "Convenor"], $scope.assessingUnitRole.role)

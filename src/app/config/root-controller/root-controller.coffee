@@ -3,7 +3,10 @@ angular.module('doubtfire.config.root-controller', [])
 #
 # The Doubtfire root application controller
 #
-.controller("AppCtrl", ($rootScope, $state, $document, $filter) ->
+.controller("AppCtrl", ($rootScope, $state, $document, $filter, configurationService) ->
+
+  # Get the confugurable, external name of Doubtfire
+  $rootScope.externalName = configurationService.getExternalName()
 
   # Automatically localise page titles
   # TODO: consider putting this in a directive?

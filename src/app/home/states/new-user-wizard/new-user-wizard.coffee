@@ -13,7 +13,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
   $stateProvider.state 'new-user-wizard', newUserWizardStateData
 )
 
-.controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
+.controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, configurationService, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
   # Get projects for target grades
   projectService.getProjects (projects) ->
     $scope.projects = projects
@@ -122,4 +122,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       $state.go('home')
 
   $scope.userFirstName = currentUser.profile.first_name
+
+  # Get the confugurable, external name of Doubtfire
+  $scope.externalName = configurationService.getExternalName()
 )

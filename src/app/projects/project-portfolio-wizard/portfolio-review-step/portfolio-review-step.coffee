@@ -6,7 +6,10 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
 .directive('portfolioReviewStep', ->
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/portfolio-review-step/portfolio-review-step.tpl.html'
-  controller: ($scope, alertService, Project) ->
+  controller: ($scope, alertService, Project, configurationService) ->
+
+    # Get the confugurable, external name of Doubtfire
+    $scope.externalName = configurationService.getExternalName()
 
     # Watch when portfolio value is changed to reassess
     $scope.$watch 'project.portfolio_available', ->

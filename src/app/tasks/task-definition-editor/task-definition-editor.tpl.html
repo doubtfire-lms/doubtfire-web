@@ -219,7 +219,7 @@
                   <div class="col-sm-8">
                     <input type="number" ng-disabled="task.plagiarism_checks.length == 0" class="form-control" ng-model="task.plagiarism_warn_pct"/>
                     <p class="help-block">
-                      The percentage similarity where Doubtfire creates a warning
+                      The percentage similarity where {{ externalName }} creates a warning
                     </p>
                   </div>
                 </div><!--/check-perecent-->
@@ -235,7 +235,7 @@
                       <option value="moss python">Python</option>
                     </select>
                     <p class="help-block">
-                      Doubtfire uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
+                      {{ externalName }} uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
                     </p>
                   </div>
                   <button class="btn btn-danger pull-right" ng-click="removeCheck(check)">
