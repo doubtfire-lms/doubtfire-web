@@ -1,12 +1,14 @@
 angular.module("doubtfire.common.services.configuration", [])
+
+.constant('external_name', '/* @echo EXTERNAL_NAME */')
 #
 # Services for a configurable external name
 #
-.factory("configurationService", () ->
+.factory("configurationService", (external_name) ->
   configurationService = {}
 
   configurationService.getExternalName = () ->
-    return "CainFire"
+    return external_name
 
   configurationService
 )
