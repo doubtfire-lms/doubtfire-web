@@ -5,7 +5,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 #
 .config(($stateProvider) ->
   signInStateData =
-    url: "/sign_in?dest&params"
+    url: "/sign_in?dest&params&authToken"
     views:
       main:
         controller: "SignInCtrl"
@@ -15,7 +15,9 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
   $stateProvider.state "sign_in", signInStateData
 )
-.controller("SignInCtrl", ($scope, $state, $stateParams, configurationService, usernameCookie, $timeout, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+
+.controller("SignInCtrl", ($scope, $state, $stateParams, configurationService, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
   ieVersion = ->
@@ -29,6 +31,23 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = configurationService.getExternalName()
+
+  # Check for AAF login
+  $scope.api = api
+  timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
+  $http.get("#{api}/auth/method").then ((response) ->
+    $scope.aafLogin = response.data.redirect_to || false
+    # This is AAF and we just got an auth_token? Must request to sign in
+    if $scope.aafLogin && $stateParams.authToken
+      $scope.signIn({ auth_token: $stateParams.authToken })
+    else
+      $scope.authMethodLoaded = true
+      $timeout.cancel(timeoutPromise)
+    ), ((err) ->
+      $scope.authMethodFailed = true
+      $scope.error = err
+      $timeout.cancel(timeoutPromise)
+    )
 
   # April Fools Easter Egg :-)
   angular.element(document).ready ->
@@ -56,10 +75,10 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   if auth.isAuthenticated()
     redirectService.redirect "home", {}
   else
-    $scope.signIn = ->
+    $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
       signInFunc = ->
-        signInCredentials =
+        signInCredentials ?=
           username: $scope.session.username
           password: $scope.session.password
           remember: $scope.session.remember_me
