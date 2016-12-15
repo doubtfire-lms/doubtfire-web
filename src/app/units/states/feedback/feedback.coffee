@@ -1,4 +1,8 @@
-angular.module('doubtfire.units.states.feedback', [])
+angular.module('doubtfire.units.states.feedback', [
+  'doubtfire.units.states.feedback.tasks-list'
+  'doubtfire.units.states.feedback.task-commenter'
+  'doubtfire.units.states.feedback.task-submission'
+])
 
 #
 # Teacher child state for units
@@ -7,17 +11,17 @@ angular.module('doubtfire.units.states.feedback', [])
   $stateProvider.state 'units#feedback', {
     parent: 'units#index'
     title: "Give Student Feedback"
-    url: ''
+    url: '/feedback?task'
     views:
       unitIndex:
-        controller: "UnitFeedbackCtrl"
         templateUrl: "units/states/feedback/feedback.tpl.html"
+        controller: "UnitFeedbackCtrl"
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
 
-.controller("UnitFeedbackCtrl", ($scope, $state, $stateParams, UnitRole, unitService) ->
+.controller('UnitFeedbackCtrl', ($scope) ->
 
 )

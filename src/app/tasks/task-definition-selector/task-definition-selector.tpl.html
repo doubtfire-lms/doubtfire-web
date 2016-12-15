@@ -21,6 +21,10 @@
           {{taskDef.abbreviation}}
         </button>
       </li>
+      <li class="divider" ng-if="showClear"></li>
+      <li>
+        <button class="btn btn-default form-control" ng-if="showClear" ng-click="setSelectedDefinition(null)">Clear</button>
+      </li>
     </div>
   </ul>
 </div>

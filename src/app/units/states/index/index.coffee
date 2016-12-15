@@ -38,25 +38,25 @@ angular.module('doubtfire.units.states.index', [
   $scope.$watch 'unitId', (newId) ->
     # Check if switching to teaching unit
     unitService.getUnitRoles (unitRoles) ->
-      $scope.selectedUnitRole = _.find(unitRoles, { unit_id: newId })
+      $scope.unitRole = _.find(unitRoles, { unit_id: newId })
     # Check if switching to studying unit
     projectService.getProjects (projects) ->
-      $scope.selectedProject = _.find(projects, { unit_id: newId })
+      $scope.project = _.find(projects, { unit_id: newId })
 
   # Loads required data for a selected unit role or project
   loadRequiredData = ->
     # Load unit data if unitRole
-    if $scope.selectedUnitRole?
-      unitService.getUnit $scope.selectedUnitRole.unit_id, true, false, (unit)->
+    if $scope.unitRole?
+      unitService.getUnit $scope.unitRole.unit_id, true, false, (unit)->
         $scope.unit = unit
         # Unit is only "loaded" if all the students were loaded
         $scope.$watch 'unit.students', (newValue) ->
           $scope.unitLoaded = true if _.isArray(newValue)
     # Load student project if project
-    else if $scope.selectedProject?
+    else if $scope.project?
       console.log("???")
 
   # Load the unit role details whenever the ID changes
-  $scope.$watch 'selectedUnitRole.id', loadRequiredData
-  $scope.$watch 'selectedProject.id', loadRequiredData
+  $scope.$watch 'unitRole.id', loadRequiredData
+  $scope.$watch 'project.id', loadRequiredData
 )

@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
   # The unit service object
   #
@@ -72,6 +72,15 @@ angular.module("doubtfire.common.services.units", [])
 
     # Extend unit to know task count
     unit.taskCount = () -> unit.task_definitions.length
+
+    # Describes a tutorial
+    unit.tutorialDescription = (tutorial) ->
+      timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
+      "#{tutorial.abbreviation} - #{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+
+    # Returns all tutorials where the tutor id matches the user id provided
+    unit.tutorialsForUserId = (userId) ->
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutor.id is userId
 
     unit.refreshStudents = () ->
       # Fetch the students for the unit

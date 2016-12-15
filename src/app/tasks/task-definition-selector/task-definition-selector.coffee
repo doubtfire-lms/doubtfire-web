@@ -13,14 +13,18 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
     unit: "="
     # What to do when definition is changed
     onSelectDefinition: "="
+    # Use ng-model to select task
+    ngModel: '=?'
     # Provide a btn-style to force the colour to change`
     buttonStyle: '@'
+    # Clearable
+    showClear: '=?'
   controller: ($scope, groupService) ->
-    $scope.buttonStyle = if $scope.buttonStyle? then $scope.buttonStyle else 'primary'
+    $scope.buttonStyle ?= 'default'
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)
 
-    $scope.hideGroupSetName = $scope.unit.group_sets.length is 0
+    $scope.hideGroupSetName = $scope.unit.group_sets?.length is 0
 
     $scope.selectedDefinition = null
 
@@ -28,4 +32,6 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
       $scope.selectedDefinition = taskDef
       if $scope.onSelectDefinition? && _.isFunction($scope.onSelectDefinition)
         $scope.onSelectDefinition(taskDef)
+      if $scope.ngModel? && _.isObject($scope.ngModel)
+        $scope.ngModel = taskDef
 )

@@ -199,3 +199,32 @@ angular.module("doubtfire.common.filters", [])
         else
           false
 )
+
+# NEW FILTERS
+
+.filter('tasksOfTaskDefinition', ->
+  (tasks, taskDefinition) ->
+    return tasks unless (taskDefinition? && tasks?)
+    tasks = _.filter tasks, { task_definition_id: taskDefinition.id }
+)
+
+.filter('tasksWithStatuses', ->
+  (tasks, statusKeys) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty statusKeys
+    _.filter tasks, (task) -> _.includes(statusKeys, task.status)
+)
+
+.filter('tasksInTutorials', ->
+  (tasks, tutorialIds) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty tutorialIds
+    _.filter tasks, (task) -> _.includes(tutorialIds, task.tutorial_id)
+)
+
+.filter('tasksWithStudentName', ->
+  (tasks, searchName) ->
+    return tasks unless (searchName? && tasks?)
+    _.filter tasks, (task) ->
+      task.project().name.indexOf(searchName) >= 0
+)

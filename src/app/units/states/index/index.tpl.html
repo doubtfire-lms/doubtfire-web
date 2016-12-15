@@ -7,9 +7,9 @@
         <div class="btn-group" dropdown>
           <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
             <label class="label label-unit">
-              {{(selectedUnitRole || selectedProject).unit_code}}
+              {{(unitRole || project).unit_code}}
             </label>
-            <span class="unit-name">{{(selectedUnitRole || selectedProject).unit_name}}</span>
+            <span class="unit-name">{{(unitRole || project).unit_name}}</span>
             <span class="caret"></span>
           </button>
           <unit-dropdown></unit-dropdown>
@@ -21,17 +21,17 @@
             {{taskDropdownTitle}}
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu dropdown-tasks dropdown-tasks-" dropdown-menu ng-if="selectedProject">
+          <ul class="dropdown-menu dropdown-tasks dropdown-tasks-" dropdown-menu ng-if="project">
             <li>
-              <a ui-sref="projects#dashboard({projectId: selectedProject.id})">Dashboard</a>
+              <a ui-sref="projects#dashboard({projectId: project.id})">Dashboard</a>
             </li>
           </ul><!--/student-tasks-->
-          <ul class="dropdown-menu dropdown-tasks dropdown-tasks-" dropdown-menu ng-if="selectedUnitRole">
+          <ul class="dropdown-menu dropdown-tasks dropdown-tasks-" dropdown-menu ng-if="unitRole">
             <li>
-              <a ui-sref="units#feedback({unitId: selectedUnitRole.unit_id})">Give Student Feedback</a>
+              <a ui-sref="units#feedback({unitId: unitRole.unit_id})">Give Student Feedback</a>
             </li>
             <li if-role="Admin Convenor">
-              <a ui-sref="admin/units#edit({unitId: selectedUnitRole.unit_id})">Modify Unit Details</a>
+              <a ui-sref="admin/units#edit({unitId: unitRole.unit_id})">Modify Unit Details</a>
             </li>
           </ul><!--/teacher-tasks-->
         </div>
@@ -41,5 +41,7 @@
     <i class="fa fa-2x fa-spinner fa-pulse"></i>
     <p>Loading unit details...</p>
   </div><!--/loading-->
-  <div ui-view="unitIndex"></div>
+  <div class="content" ng-if="unit || project">
+    <div ui-view="unitIndex"></div>
+  </div>
 </div>
