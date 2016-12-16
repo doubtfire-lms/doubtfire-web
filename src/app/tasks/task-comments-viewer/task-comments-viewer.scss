@@ -36,10 +36,10 @@
     }
     .comment-by {
       display: block;
-      height: 40px;
-      min-width: 40px;
-      width: 40px;
-      line-height: 38px;
+      height: 38px;
+      min-width: 38px;
+      width: 38px;
+      line-height: 36px;
       float: right;
 
       -moz-border-radius: 30px;
@@ -71,7 +71,7 @@
     border-radius: 6px;
     font-size: 1.1em;
     padding: 1em;
-    line-height: 10px;
+    line-height: 1em;
 
     .markdown-to-html > *:last-child {
       margin-bottom: 0px;
@@ -87,6 +87,7 @@
       font-size: 0.8em;
     }
   .delete-comment {
+    padding-left: 10px;
     align-self: center;
     float: right;
     font-style: normal;
@@ -118,6 +119,7 @@
     padding-right: 0;
     padding-left: 0;
     .btn {
+      margin-top: 0;
       width: 100%;
       height: 100%;
       border-radius: 0px 0px 2px 0px;
