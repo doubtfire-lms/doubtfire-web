@@ -6,10 +6,22 @@
   }
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+                cursor:default;
+}
+
 .task-comments-viewer .comment {
   display: flex;
   margin-bottom: 2em;
   .comment-details {
+    position: relative;
     @include flex-center;
     align-items: flex-end;
     align-content: flex-end;
@@ -23,32 +35,79 @@
       display: block;
     }
     .comment-by {
+      display: block;
+      height: 60px;
+      min-width: 60px;
+      width: 60px;
+      line-height: 60px;
+      margin-right: 18px;
+
+      -moz-border-radius: 30px;
+      border-radius: 30px;
+
+      background: #1976D2; /* fallback for old browsers */
+      background: -webkit-linear-gradient(to left, #2196F3 , #1976D2); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      border: 1px solid #fff;
+      box-shadow: 0 0 0 1px #2196F3;
+
+      align-self: center;
+      color: white;
+      text-align: center;
+      font-size: 1.5em;
       font-weight: bolder;
     }
-    .comment-date {
-      margin-top: -5px;
-      font-size: 0.8em;
-    }
   }
-  .comment-text {
-    background-color: #efefef;
-    border-radius: 1.0em 1.0em 1.0em 0em;
-    padding: 1.5em;
-    font-size: 1.2em;
-    line-height: 1.5em;
+
+  .comment-text
+  {
+    position: relative;
+    padding: 16px;
+    background: #ECEFF1;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    padding: 1em;
+    line-height: 10px;
+
     .markdown-to-html > *:last-child {
       margin-bottom: 0px;
     }
+
     img {
       border-radius: 1em;
     }
   }
+
+  // the arrow
+  .comment-text:after 
+  {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 12px 16px 12px 0;
+    border-color: transparent #ECEFF1;
+    display: block;
+    width: 0;
+    z-index: 1;
+    left: -16px;
+    top: calc(50% - 12px);
+  }
+
+  .comment-text .comment-date {
+      margin-top: -5px;
+      font-size: 0.8em;
+    }
   .delete-comment {
+    align-self: center;
+    float: right;
     font-style: normal;
     color: #bbb;
     font-size: 1.6em;
     &:hover {
-      color: red;
+      color: #B71C1C;
       cursor: pointer;
     }
   }
