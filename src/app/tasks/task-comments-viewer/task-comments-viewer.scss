@@ -1,9 +1,13 @@
 .task-comments-viewer {
   overflow: scroll;
-  height: 30vh;
+  height: 300vh;
   .no-comments {
     height: 100%;
   }
+}
+
+.panel-header {
+  width: 60vh;
 }
 
 .noselect {
@@ -36,11 +40,11 @@
     }
     .comment-by {
       display: block;
-      height: 60px;
-      min-width: 60px;
-      width: 60px;
-      line-height: 60px;
-      margin-right: 18px;
+      height: 40px;
+      min-width: 40px;
+      width: 40px;
+      line-height: 40px;
+      float: right;
 
       -moz-border-radius: 30px;
       border-radius: 30px;
@@ -49,13 +53,13 @@
       background: -webkit-linear-gradient(to left, #2196F3 , #1976D2); /* Chrome 10-25, Safari 5.1-6 */
       background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-      border: 1px solid #fff;
+      border: 1px solid white;
       box-shadow: 0 0 0 1px #2196F3;
 
-      align-self: center;
+      align-self: bottom;
       color: white;
       text-align: center;
-      font-size: 1.5em;
+      font-size: 1.1em;
       font-weight: bolder;
     }
   }
@@ -81,21 +85,6 @@
     }
   }
 
-  // the arrow
-  .comment-text:after 
-  {
-    content: '';
-    position: absolute;
-    border-style: solid;
-    border-width: 12px 16px 12px 0;
-    border-color: transparent #ECEFF1;
-    display: block;
-    width: 0;
-    z-index: 1;
-    left: -16px;
-    top: calc(50% - 12px);
-  }
-
   .comment-text .comment-date {
       margin-top: -5px;
       font-size: 0.8em;
@@ -113,6 +102,16 @@
   }
 }
 
+.panel-footer {
+  padding: 0;
+}
+
+.markdown-editor .markdown-editor-inner-context {
+  border: 0;
+  box-shadow: 0;
+  border-radius: 0px 0px 0px 4px;
+}
+
 .comment-submitter {
   display: flex;
   .markdown-editor {
@@ -120,8 +119,12 @@
   }
   .send-button-wrapper {
     padding-right: 0;
+    padding-left: 0;
+    // padding-bottom: 10px;
     .btn {
       width: 100%;
+      height: 100%;
+      border-radius: 0px 0px 2px 0px;
     }
   }
 }
