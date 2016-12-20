@@ -41,9 +41,9 @@ angular.module('doubtfire.units.states.feedback.tasks-list', [])
       else if tutorialId == 'all'
         $scope.filters.tutorials = $scope.unit.tutorials
       else
-        $scope.filters.tutorials = $scope.unit.tutorialFromId(tutorialId)
+        $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map $scope.filters.tutorials, 'id'
-      console.log($scope.filters.tutorials)
+      console.log("$scope.filters.tutorials", $scope.filters.tutorials)
     $scope.$watch 'filters.taskDefinition.id', (td) ->
       console.log("$scope.filters.taskDefinition", $scope.filters.taskDefinition)
     # Tasks for feedback
