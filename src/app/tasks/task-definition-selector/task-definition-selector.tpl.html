@@ -21,9 +21,10 @@
           {{taskDef.abbreviation}}
         </button>
       </li>
-      <li class="divider" ng-if="showClear"></li>
-      <li>
-        <button class="btn btn-default form-control" ng-if="showClear" ng-click="setSelectedDefinition(null)">Clear</button>
+      <li class="col-xs-4 col-sm-3 pull-right" ng-if="showClear">
+        <button type="button" class="col-xs-12 btn btn-warning" ng-click="setSelectedDefinition(null)" tooltip="Clear selection" tooltip-popup-delay='200' tooltip-placement="bottom">
+          <i class="fa fa-times"></i>
+        </button>
       </li>
     </div>
   </ul>
