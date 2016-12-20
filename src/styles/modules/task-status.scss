@@ -28,17 +28,17 @@
 }
 
 .task-status {
-  .ready-to-mark,
-  .not-started,
-  .working-on-it,
-  .need-help,
-  .fix-and-resubmit,
-  .do-not-resubmit,
-  .fail,
-  .redo,
-  .discuss,
-  .demonstrate,
-  .complete { background-color: #F8F8F8; }
+  & > .ready-to-mark,
+  & > .not-started,
+  & > .working-on-it,
+  & > .need-help,
+  & > .fix-and-resubmit,
+  & > .do-not-resubmit,
+  & > .fail,
+  & > .redo,
+  & > .discuss,
+  & > .demonstrate,
+  & > .complete { background-color: #F8F8F8; }
 
   .ready-to-mark.active     { @include task-status-color-ready-to-mark;     }
   .not-started.active       { @include task-status-color-not-started;       }
