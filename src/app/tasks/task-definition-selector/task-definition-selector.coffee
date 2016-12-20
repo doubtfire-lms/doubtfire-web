@@ -30,8 +30,7 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
 
     $scope.setSelectedDefinition = (taskDef) ->
       $scope.selectedDefinition = taskDef
+      $scope.ngModel = taskDef
       if $scope.onSelectDefinition? && _.isFunction($scope.onSelectDefinition)
         $scope.onSelectDefinition(taskDef)
-      if $scope.ngModel? && _.isObject($scope.ngModel)
-        $scope.ngModel = taskDef
 )
