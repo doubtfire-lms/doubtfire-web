@@ -33,7 +33,7 @@
           <select ng-model="filters.tutorialIdSelected" class="form-control input-md">
             <option value="all">All tutorials</option>
             <option value="mine">Just my tutorials</option>
-            <option ng-repeat="tutorial in tutorialScopeOptions" value="{{tutorial.tutorial_id}}">
+            <option ng-repeat="tutorial in tutorialScopeOptions | orderBy:'abbreviation'" value="{{tutorial.tutorial_id}}">
               {{unit.tutorialDescription(tutorial)}}
             </option>
           </select>
