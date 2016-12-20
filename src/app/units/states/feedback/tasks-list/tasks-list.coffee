@@ -48,4 +48,7 @@ angular.module('doubtfire.units.states.feedback.tasks-list', [])
           $scope.tasks = $scope.unit.incorporateTasks response
         (response) ->
           alertService.add("danger", response.data.error, 6000)
+    # Selected task
+    $scope.setSelectedTask = (task) ->
+      $scope.selectedTask = task
 )

@@ -43,19 +43,28 @@
     </form>
   </div><!--/search-options-->
   <ul class="list-group">
-    <li class="list-group-item list-group-item-task"
+    <li class="list-group-item list-group-item-task clearfix"
+      ng-click="setSelectedTask(task)"
+      ng-class="{selected: selectedTask.id == task.id}"
       ng-repeat="task in tasks |
         tasksWithStudentName:filters.studentName |
         tasksWithStatuses:filters.statuses |
         tasksInTutorials:filters.tutorials |
-        tasksOfTaskDefinition:filters.taskDefinition">
-      <pre>Name = {{task.project().name}}</pre>
-      <pre>Status = {{task.status}}</pre>
-      <pre>Tutorial = {{task.project().tutorial.abbreviation}}</pre>
-      <pre>Task Def = {{task.definition.abbreviation}}</pre>
+        tasksOfTaskDefinition:filters.taskDefinition"
+      ng-init="$index == 0 && setSelectedTask(task)">
+      <div class="pull-left task-data">
+        <h4 class="list-group-item-heading">
+          {{task.project().name}}
+        </h4>
+        <p class="list-group-item-text">
+          {{task.definition.abbreviation}} - {{task.definition.name}}
+        </p>
+      </div>
+      <div class="pull-right task-status">
+        <status-icon status="task.status"></status-icon>
+      </div>
     </li><!--/task-->
   </ul>
   <div class="panel-footer">
-
   </div>
 </div>
