@@ -17,7 +17,7 @@
             <h4 class="panel-title">Units You Teach</h4>
           </div>
           <div class="list-group">
-            <a ng-repeat="unitRole in unitRoles" ui-sref="units#show({unitRole: unitRole.id})" class="list-group-item clearfix">
+            <a ng-repeat="unitRole in unitRoles" ui-sref="units#feedback({unitId: unitRole.unit_id})" class="list-group-item clearfix">
               <div>
                 <i class="fa fa-pencil"></i>
                 <h4 class="list-group-item-heading">{{unitRole.unit_name}} <small>{{showDate(unitRole.start_date)}}</small></h4>
