@@ -10,6 +10,7 @@ tasks-list {
     &:hover, &:focus {
       cursor: pointer;
       text-decoration: none;
+      background-color: $list-group-hover-bg;
       &.ready-to-mark     { border-right-color: lighten(task-status-color('ready-to-mark'), 15%); }
       &.not-started       { border-right-color: lighten(task-status-color('not-started'), 15%); }
       &.working-on-it     { border-right-color: lighten(task-status-color('working-on-it'), 15%); }
