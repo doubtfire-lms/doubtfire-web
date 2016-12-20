@@ -2,6 +2,21 @@ tasks-list {
   .panel-heading .form-control {
     height: 33px;
   }
+  .list-group .list-group-item-task {
+    transition: border-right 0.2s ease-out;
+    &:hover, &:focus {
+      cursor: pointer;
+      text-decoration: none;
+      border-right: 15px lighten($brand-info, 20%) solid;
+    }
+    &.selected {
+      border-right: 15px $brand-info solid;
+    }
+    .task-status {
+      width: 50px;
+      text-align: right;
+    }
+  }
   // .search-options .task-status {
   //   button {
   //     border: none;
