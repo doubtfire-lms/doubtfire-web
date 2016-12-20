@@ -49,7 +49,10 @@
         tasksWithStatuses:filters.statuses |
         tasksInTutorials:filters.tutorials |
         tasksOfTaskDefinition:filters.taskDefinition">
-      <pre>{{task|json}}</pre>
+      <pre>Name = {{task.project().name}}</pre>
+      <pre>Status = {{task.status}}</pre>
+      <pre>Tutorial = {{task.project().tutorial.abbreviation}}</pre>
+      <pre>Task Def = {{task.definition.abbreviation}}</pre>
     </li><!--/task-->
   </ul>
   <div class="panel-footer">
