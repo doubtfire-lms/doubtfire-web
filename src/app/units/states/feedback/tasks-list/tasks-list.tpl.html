@@ -43,7 +43,7 @@
     </form>
   </div><!--/search-options-->
   <ul class="list-group">
-    <li class="list-group-item list-group-item-task clearfix"
+    <li class="list-group-item list-group-item-task clearfix {{statusClass(task.status)}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: selectedTask.id == task.id}"
       ng-repeat="task in tasks |

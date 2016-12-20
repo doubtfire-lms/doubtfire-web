@@ -51,4 +51,5 @@ angular.module('doubtfire.units.states.feedback.tasks-list', [])
     # Selected task
     $scope.setSelectedTask = (task) ->
       $scope.selectedTask = task
+    $scope.statusClass = taskService.statusClass
 )

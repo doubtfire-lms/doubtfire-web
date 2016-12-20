@@ -4,13 +4,36 @@ tasks-list {
   }
   .list-group .list-group-item-task {
     transition: border-right 0.2s ease-out;
+    &:hover, &:focus, &.selected {
+      border-right: 15px solid;
+    }
     &:hover, &:focus {
       cursor: pointer;
       text-decoration: none;
-      border-right: 15px lighten($brand-info, 20%) solid;
+      &.ready-to-mark     { border-right-color: lighten(task-status-color('ready-to-mark'), 15%); }
+      &.not-started       { border-right-color: lighten(task-status-color('not-started'), 15%); }
+      &.working-on-it     { border-right-color: lighten(task-status-color('working-on-it'), 15%); }
+      &.need-help         { border-right-color: lighten(task-status-color('need-help'), 15%); }
+      &.fix-and-resubmit  { border-right-color: lighten(task-status-color('fix-and-resubmit'), 15%); }
+      &.do-not-resubmit   { border-right-color: lighten(task-status-color('do-not-resubmit'), 15%); }
+      &.fail              { border-right-color: lighten(task-status-color('fail'), 15%); }
+      &.redo              { border-right-color: lighten(task-status-color('redo'), 15%); }
+      &.discuss           { border-right-color: lighten(task-status-color('discuss'), 15%); }
+      &.demonstrate       { border-right-color: lighten(task-status-color('demonstrate'), 15%); }
+      &.complete          { border-right-color: lighten(task-status-color('complete'), 15%); }
     }
     &.selected {
-      border-right: 15px $brand-info solid;
+      &.ready-to-mark     { border-right-color: task-status-color('ready-to-mark'); }
+      &.not-started       { border-right-color: task-status-color('not-started'); }
+      &.working-on-it     { border-right-color: task-status-color('working-on-it'); }
+      &.need-help         { border-right-color: task-status-color('need-help'); }
+      &.fix-and-resubmit  { border-right-color: task-status-color('fix-and-resubmit'); }
+      &.do-not-resubmit   { border-right-color: task-status-color('do-not-resubmit'); }
+      &.fail              { border-right-color: task-status-color('fail'); }
+      &.redo              { border-right-color: task-status-color('redo'); }
+      &.discuss           { border-right-color: task-status-color('discuss'); }
+      &.demonstrate       { border-right-color: task-status-color('demonstrate'); }
+      &.complete          { border-right-color: task-status-color('complete'); }
     }
     .task-status {
       width: 50px;
