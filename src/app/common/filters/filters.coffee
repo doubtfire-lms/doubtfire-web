@@ -225,6 +225,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('tasksWithStudentName', ->
   (tasks, searchName) ->
     return tasks unless (searchName? && tasks?)
+    searchName = searchName.toLowerCase()
     _.filter tasks, (task) ->
-      task.project().name.indexOf(searchName) >= 0
+      task.project().name.toLowerCase().indexOf(searchName) >= 0
 )
