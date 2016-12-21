@@ -2,26 +2,26 @@
   <div ng-if="noIE" class="no-ie">
     <h1 class="logo">
       <p>
-        <a href="http://www.apple.com/safari/" tooltip="Safari is compatible with {{ externalName }}" tooltip-append-to-body="true">
+        <a href="http://www.apple.com/safari/" tooltip="Safari is compatible with {{externalName}}" tooltip-append-to-body="true">
           <i class="fa fa-safari text-primary"></i>
         </a>
-        <a href="http://www.google.com/chrome" tooltip="Chrome is compatible with {{ externalName }}" tooltip-append-to-body="true">
+        <a href="http://www.google.com/chrome" tooltip="Chrome is compatible with {{externalName}}" tooltip-append-to-body="true">
           <i class="fa fa-chrome text-primary"></i>
         </a>
-        <a href="http://www.firefox.com/" tooltip="Firefox is compatible with {{ externalName }}" tooltip-append-to-body="true">
+        <a href="http://www.firefox.com/" tooltip="Firefox is compatible with {{externalName}}" tooltip-append-to-body="true">
           <i class="fa fa-firefox text-primary"></i>
         </a>
-        <a href="http://browsehappy.com" tooltip="This version of Internet Explorer is not compatible with {{ externalName }}" tooltip-append-to-body="true">
+        <a href="http://browsehappy.com" tooltip="This version of Internet Explorer is not compatible with {{externalName}}" tooltip-append-to-body="true">
           <i class="fa fa-internet-explorer text-danger"></i>
         </a>
       </p>
-      {{ externalName }}
+      {{externalName}}
     </h1>
-    <p class="upgrade"> To use {{ externalName }}, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
+    <p class="upgrade"> To use {{externalName}}, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
   </div>
   <div ng-if="!noIE" class="login">
     <h1 class="logo">
-      <i class="logo"></i> {{ externalName }}
+      <i class="logo"></i> {{externalName}}
       <p class="lead">Learning Management System<p>
     </h1>
     <form name="form" ng-submit="signIn()" ng-if="aafLogin === false">
@@ -45,7 +45,7 @@
     </form>
   </div>
   <footer class="about-doubtfire text-center">
-    <a href="" ng-click="openAboutModal()">About {{ externalName }}</a>
+    <a href="" ng-click="openAboutModal()">About {{externalName}}</a>
   </footer>
 </div>
 <div class="center-full-screen">
