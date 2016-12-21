@@ -12,8 +12,8 @@
     </div>
 
     <!--comment bubble-->
-    <div class="comment-text col-md-11">
-      <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
+    <div class="comment-text col-md-12">
+      <div class="markdown-to-html wrapword col-md-12" ng-bind-html="comment.comment | markdown"></div>
       <!--Delete icon-->
       <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete this comment" tooltip-append-to-body="true">
         <i class="fa fa-trash"></i>
