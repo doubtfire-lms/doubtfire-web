@@ -1,7 +1,6 @@
 angular.module("doubtfire.common.services", [
   'doubtfire.common.services.alerts'
   'doubtfire.common.services.grades'
-  'doubtfire.common.services.header'
   'doubtfire.common.services.projects'
   'doubtfire.common.services.redirect'
   'doubtfire.common.services.tasks'
