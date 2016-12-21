@@ -83,8 +83,6 @@ angular.module('doubtfire.home.states.home', [])
   $scope.unit = (unitId) ->
     _.find($scope.units, {id: unitId})
 
-  headerService.clearMenus()
-
   $scope.currentUser = currentUser
 
 )
