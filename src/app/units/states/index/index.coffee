@@ -1,5 +1,5 @@
 angular.module('doubtfire.units.states.index', [
-  'doubtfire.units.states.feedback'
+  'doubtfire.units.states.task-inbox'
 ])
 
 #
