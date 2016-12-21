@@ -6,7 +6,7 @@
   <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments">
     <!--chat name icon-->
     <div class="comment-details col-md-1">
-      <span class="comment-by noselect" tooltip="Comment created by {{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-placement="right">
+      <span class="comment-by noselect" tooltip="Comment created by {{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-append-to-body="true">
         {{getInitials(comment.comment_by)}}
       </span>
     </div>
@@ -15,7 +15,7 @@
     <div class="comment-text col-md-11">
       <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
       <!--Delete icon-->
-      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete this comment" tooltip-placement="left">
+      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete this comment" tooltip-append-to-body="true">
         <i class="fa fa-trash"></i>
       </div>
     </div>
