@@ -36,9 +36,40 @@ tasks-list {
       &.demonstrate       { border-right-color: task-status-color('demonstrate'); }
       &.complete          { border-right-color: task-status-color('complete'); }
     }
-    .task-status {
+    .task-badges-item {
       width: 50px;
-      text-align: right;
+      display: inline-block;
+      .new-comments-badge {
+        display: inline-block;
+        border-radius: 1.75rem;
+        text-align: center;
+        background-color: $doubtfire-color;
+        width: 80%;
+        font-size: 1.7rem;
+        color: white;
+        font-weight: bold;
+      }
+    }
+    @media (max-width: $screen-xl) {
+      text-align: center;
+      .task-badges-item {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .task-data {
+        margin-bottom: 1em;
+      }
+    }
+    @media (min-width: $screen-xl) {
+      .task-data {
+        float: left;
+      }
+      .task-badges {
+        float: right;
+      }
+      .task-badges-item {
+        text-align: left;
+      }
     }
   }
   // .search-options .task-status {

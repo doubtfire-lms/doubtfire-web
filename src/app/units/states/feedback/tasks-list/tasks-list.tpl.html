@@ -52,17 +52,22 @@
         tasksInTutorials:filters.tutorials |
         tasksOfTaskDefinition:filters.taskDefinition"
       ng-init="$index == 0 && setSelectedTask(task)">
-      <div class="pull-left task-data">
+      <div class="task-data">
         <h4 class="list-group-item-heading">
           {{task.project().name}}
         </h4>
         <p class="list-group-item-text">
           {{task.definition.abbreviation}} - {{task.definition.name}}
         </p>
-      </div>
-      <div class="pull-right task-status">
-        <status-icon status="task.status"></status-icon>
-      </div>
+      </div><!--/task-data-->
+      <div class="task-badges">
+        <span class="task-badges-item">
+          <status-icon status="task.status"></status-icon>
+        </span><!--/task-status-->
+        <span class="task-badges-item" ng-show="task.num_new_comments > 0">
+          <span class="new-comments-badge" tooltip="You have {{task.num_new_comments}} new comment{{task.num_new_comments > 1 ? 's' : ''}}." tooltip-append-to-body="true" ng-bind="task.num_new_comments"></span>
+        </span><!--/new-comments-badge-->
+      </div><!--/badges-->
     </li><!--/task-->
   </ul>
   <div class="panel-footer">
