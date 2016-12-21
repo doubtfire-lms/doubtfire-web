@@ -3,7 +3,7 @@
 #
 angular.module('doubtfire.common.header', [])
 
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, configurationService, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService, dateService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, ExternalName, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService, dateService) ->
   $scope.menus = headerService.getMenus()
   $scope.currentUser = currentUser.profile
   $scope.showDate = dateService.showDate
@@ -29,7 +29,7 @@ angular.module('doubtfire.common.header', [])
     AboutDoubtfireModal.show()
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = configurationService.getExternalName()
+  $scope.externalName = ExternalName
 )
 
 .controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService) ->
