@@ -94,8 +94,8 @@ $markdown-editor-height: 15px;
     display: block;
     padding: 9.5px;
     margin: 0 0 10px;
-    font-size: 1em;
-    line-height: 1.42857143;
+    font-size: 0.9em;
+    line-height: 1.333;
     color: #333;
     word-break: break-all;
     word-wrap: break-word;
@@ -106,7 +106,7 @@ $markdown-editor-height: 15px;
 
   code {
     padding: 2px 4px;
-    font-size: 1.1em;
+    font-size: 0.9em;
     height: auto;
     color: #c7254e;
     background-color: #f9f2f4;
