@@ -107,23 +107,12 @@ task-comments-viewer .panel-footer {
 .markdown-editor .markdown-editor-inner-context {
   border: 0;
   box-shadow: none;
-  border-radius: 0px 0px 0px 4px;
+  border-radius: 0px 0px 4px 4px;
 }
 
 .comment-submitter {
   display: flex;
   .markdown-editor {
     padding: 0;
-  }
-  .send-button-wrapper {
-    padding-right: 0;
-    padding-left: 0;
-    .btn {
-      margin-top: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 0px 0px 2px 0px;
-      border-color: #337ab7;
-    }
   }
 }
