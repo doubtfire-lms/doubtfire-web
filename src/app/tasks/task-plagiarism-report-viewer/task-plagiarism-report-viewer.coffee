@@ -12,13 +12,13 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
     task: "="
     assessingUnitRole: "="
 
-  controller: ($scope, $window, TaskSimilarity, configurationService) ->
+  controller: ($scope, $window, TaskSimilarity, ExternalName) ->
     # functions from task service
     $scope.match = 1
     $scope.similarityData = null
 
     # Get the confugurable, external name of Doubtfire
-    $scope.externalName = configurationService.getExternalName()
+    $scope.externalName = ExternalName
 
     # Set up mail link
     if $scope.assessingUnitRole

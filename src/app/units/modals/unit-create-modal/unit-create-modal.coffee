@@ -15,7 +15,7 @@ angular.module('doubtfire.units.modals.unit-create-modal', [])
 
   UnitCreateModal
 )
-.controller('UnitCreateModalCtrl', ($scope, $modalInstance, configurationService, alertService, units, Unit, analyticsService) ->
+.controller('UnitCreateModalCtrl', ($scope, $modalInstance, ExternalName, alertService, units, Unit, analyticsService) ->
   analyticsService.event 'Unit Admin', 'Started to Create Unit'
   $scope.units = units
   $scope.unit = { code: null, name: null }
@@ -32,5 +32,5 @@ angular.module('doubtfire.units.modals.unit-create-modal', [])
     )
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = configurationService.getExternalName()
+  $scope.externalName = ExternalName
 )

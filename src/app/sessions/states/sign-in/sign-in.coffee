@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, configurationService, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, ExternalName, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -30,7 +30,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.session = { remember_me: true }
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = configurationService.getExternalName()
+  $scope.externalName = ExternalName
 
   # Check for AAF login
   $scope.api = api

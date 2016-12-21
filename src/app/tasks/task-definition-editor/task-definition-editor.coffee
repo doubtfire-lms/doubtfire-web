@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, configurationService, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
+  controller: ($scope, $filter, ExternalName, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
@@ -19,7 +19,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.startPicker = { open: false }
 
     # Get the confugurable, external name of Doubtfire
-    $scope.externalName = configurationService.getExternalName()
+    $scope.externalName = ExternalName
     
     #
     # Active task tab group

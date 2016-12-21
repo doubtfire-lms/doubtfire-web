@@ -18,7 +18,7 @@ angular.module('doubtfire.units.states.units-admin-view', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units#index", unitsAdminViewStateData
 )
-.controller("UnitsAdminViewCtrl", ($scope, $state, $modal, configurationService, Unit, UnitCreateModal, analyticsService) ->
+.controller("UnitsAdminViewCtrl", ($scope, $state, $modal, ExternalName, Unit, UnitCreateModal, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
   $scope.units = Unit.query { include_in_active: true }
 
@@ -36,7 +36,7 @@ angular.module('doubtfire.units.states.units-admin-view', [])
   $scope.pageSize = 15
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = configurationService.getExternalName()
+  $scope.externalName = ExternalName
 
   $scope.createUnit = ->
     UnitCreateModal.show $scope.units

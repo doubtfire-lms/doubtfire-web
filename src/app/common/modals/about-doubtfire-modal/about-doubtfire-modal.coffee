@@ -15,7 +15,7 @@ angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
   AboutDoubtfireModal
 )
 
-.controller('AboutDoubtfireModalCtrl', ($scope, configurationService, DoubtfireContributors, $modalInstance, $http, $q) ->
+.controller('AboutDoubtfireModalCtrl', ($scope, ExternalName, DoubtfireContributors, $modalInstance, $http, $q) ->
   contributors = DoubtfireContributors
   # initial data
   $scope.contributors = _.map contributors, (c) ->
@@ -37,5 +37,5 @@ angular.module("doubtfire.common.modals.about-doubtfire-modal", [])
           handler:  handler
   
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = configurationService.getExternalName()
+  $scope.externalName = ExternalName
 )

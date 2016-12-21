@@ -5,8 +5,8 @@ module.exports = {
     },
 
     development: {
-      API_URL  : 'http://localhost:3000/api',
-      DEV_MODE : 'true',
+      API_URL: 'http://localhost:3000/api',
+      DEV_MODE: 'true',
       EXTERNAL_NAME: 'Doubtfire'
     },
 
@@ -17,8 +17,8 @@ module.exports = {
     },
 
     docker: {
-      API_URL  : 'http://' + process.env.DOUBTFIRE_DOCKER_MACHINE_IP + ':3000/api',
-      DEV_MODE : 'true',
+      API_URL: 'http://' + process.env.DOUBTFIRE_DOCKER_MACHINE_IP + ':3000/api',
+      DEV_MODE: 'true',
       EXTERNAL_NAME: 'Doubtfire'
     }
   }
