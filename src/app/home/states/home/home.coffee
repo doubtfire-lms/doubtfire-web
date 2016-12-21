@@ -13,9 +13,12 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, User, Unit, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
+.controller("HomeCtrl", ($scope, $state, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
+  # Get the confugurable, external name of Doubtfire
+  $scope.externalName = ExternalName
+  
   $scope.userFirstName = currentUser.profile.nickname or currentUser.profile.first_name
   $scope.showDate = dateService.showDate
 

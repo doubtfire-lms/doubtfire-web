@@ -20,13 +20,13 @@
   <div class="compile-scheduled text-center text-success" ng-show="portfolioIsCompiling">
     <i class="fa fa-check-circle fa-3x"></i>
     <h3>Compile Scheduled</h3>
-    <p>Your portfolio compilation is scheduled with Doubtfire. This process will take some time, check back soon to see if your portfolio is available.
+    <p>Your portfolio compilation is scheduled with {{externalName}}. This process will take some time, check back soon to see if your portfolio is available.
   </div><!--/compile-schedule-->
 
   <div class="create-pdf"  ng-show="canCompilePortfolio">
     <h3>Create Your Portfolio</h3>
     <p>
-      Doubtfire will create your portfolio once you are happy with your
+      {{externalName}} will create your portfolio once you are happy with your
       submissions so far.
     </p>
     <p ng-show="extraFiles().length > 0">
@@ -53,7 +53,7 @@
     </p>
     <p>
       Once you click Create Portfolio, the construction of your portfolio will
-      be scheduled with Doubtfire. This process will take some time, and you
+      be scheduled with {{externalName}}. This process will take some time, and you
       will be emailed when your portfolio is ready to review if you have enabled
       portfolio notifications.
     </p>

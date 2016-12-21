@@ -8,11 +8,14 @@ angular.module('doubtfire.units.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, Unit, alertService, unitService) ->
+  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
+
+    # Get the confugurable, external name of Doubtfire
+    $scope.externalName = ExternalName
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->

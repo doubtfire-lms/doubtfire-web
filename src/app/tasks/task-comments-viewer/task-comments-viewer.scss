@@ -6,10 +6,22 @@
   }
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+                cursor:default;
+}
+
 .task-comments-viewer .comment {
   display: flex;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   .comment-details {
+    position: relative;
     @include flex-center;
     align-items: flex-end;
     align-content: flex-end;
@@ -23,35 +35,79 @@
       display: block;
     }
     .comment-by {
+      display: block;
+      height: 38px;
+      min-width: 38px;
+      width: 38px;
+      line-height: 36px;
+      float: right;
+
+      -moz-border-radius: 30px;
+      border-radius: 30px;
+
+      background: #1976D2; /* fallback for old browsers */
+      background: -webkit-linear-gradient(to left, #2196F3 , #1976D2); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      border: 1px solid white;
+      box-shadow: 0 0 0 1px #2196F3;
+
+      margin-bottom: 2px;
+      align-self: bottom;
+      color: white;
+      text-align: center;
+      font-size: 1.1em;
       font-weight: bolder;
     }
-    .comment-date {
-      margin-top: -5px;
-      font-size: 0.8em;
-    }
   }
-  .comment-text {
-    background-color: #efefef;
-    border-radius: 1.0em 1.0em 1.0em 0em;
-    padding: 1.5em;
-    font-size: 1.2em;
-    line-height: 1.5em;
+
+  .comment-text
+  {
+    position: relative;
+    padding: 16px;
+    background: #ECEFF1;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    padding: 1em;
+    line-height: 1em;
+
     .markdown-to-html > *:last-child {
       margin-bottom: 0px;
     }
+
     img {
       border-radius: 1em;
     }
   }
+
+  .comment-text .comment-date {
+      margin-top: -5px;
+      font-size: 0.8em;
+    }
   .delete-comment {
+    padding-left: 10px;
+    align-self: center;
+    float: right;
     font-style: normal;
     color: #bbb;
     font-size: 1.6em;
     &:hover {
-      color: red;
+      color: #B71C1C;
       cursor: pointer;
     }
   }
+}
+
+.panel-footer {
+  padding: 0;
+}
+
+.markdown-editor .markdown-editor-inner-context {
+  border: 0;
+  box-shadow: none;
+  border-radius: 0px 0px 0px 4px;
 }
 
 .comment-submitter {
@@ -61,8 +117,13 @@
   }
   .send-button-wrapper {
     padding-right: 0;
+    padding-left: 0;
     .btn {
+      margin-top: 0;
       width: 100%;
+      height: 100%;
+      border-radius: 0px 0px 2px 0px;
+      border-color: #337ab7;
     }
   }
 }

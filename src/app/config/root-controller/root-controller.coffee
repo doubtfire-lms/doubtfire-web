@@ -3,7 +3,7 @@ angular.module('doubtfire.config.root-controller', [])
 #
 # The Doubtfire root application controller
 #
-.controller("AppCtrl", ($rootScope, $state, $document, $filter) ->
+.controller("AppCtrl", ($rootScope, $state, $document, $filter, ExternalName) ->
 
   # Automatically localise page titles
   # TODO: consider putting this in a directive?
@@ -14,4 +14,8 @@ angular.module('doubtfire.config.root-controller', [])
   # $rootScope.$on "i18nReady", ->
   #   setPageTitle $state.current
   #   $rootScope.$on "$stateChangeSuccess", (evt, toState) -> setPageTitle toState
+
+  # Get the confugurable, external name of Doubtfire
+  $rootScope.externalName = ExternalName
+
 )
