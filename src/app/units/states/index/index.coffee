@@ -19,18 +19,15 @@ angular.module('doubtfire.units.states.index', [
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $state, UnitRole, unitService, projectService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService) ->
   #
   # Returns the state back home
   #
   goHome = -> $state.go 'home'
 
   # Error - required unitId is missing!
-  $scope.unitId = +$state.params.unitId
+  $scope.unitId = +$stateParams.unitId
   goHome() unless $scope.unitId
-
-  # Ensure each sub-state has a title
-  $scope.taskDropdownTitle = $state.current.title
 
   #
   # Fire whenever the unit code changes
@@ -39,9 +36,11 @@ angular.module('doubtfire.units.states.index', [
     # Check if switching to teaching unit
     unitService.getUnitRoles (unitRoles) ->
       $scope.unitRole = _.find(unitRoles, { unit_id: newId })
+      $rootScope.$broadcast 'UnitRoleChanged', { context: $scope.unitRole }
     # Check if switching to studying unit
     projectService.getProjects (projects) ->
       $scope.project = _.find(projects, { unit_id: newId })
+      $rootScope.$broadcast 'ProjectChanged', { context: $scope.project }
 
   # Loads required data for a selected unit role or project
   loadRequiredData = ->

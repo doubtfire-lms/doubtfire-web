@@ -9,13 +9,13 @@ angular.module('doubtfire.units.states.task-inbox', [
 .config(($stateProvider) ->
   $stateProvider.state 'units#tasks', {
     parent: 'units#index'
-    title: "Task Inbox"
     url: '/tasks/:taskId'
     views:
       unitIndex:
         templateUrl: "units/states/task-inbox/task-inbox.tpl.html"
         controller: "UnitTaskInboxFeedback"
     data:
+      task: "Task Inbox"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }

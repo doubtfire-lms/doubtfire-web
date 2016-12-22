@@ -6,3 +6,6 @@ body {
   font-size: 1.2em;
   line-height: 2;
 }
+body > [ui-view="main"] {
+  padding-top: 30px;
+}

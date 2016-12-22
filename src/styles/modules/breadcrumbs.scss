@@ -1,27 +1,27 @@
+// //
+// // Styling for Breadcrumbs
+// //
 //
-// Styling for Breadcrumbs
+// // We need to wrap the breadcrumb in a wrapper, which allows it to be
+// // positioned absolutely in the context of this wrapper
+// .breadcrumb-container-wrapper {
+//   position: relative;
+// }
 //
-
-// We need to wrap the breadcrumb in a wrapper, which allows it to be
-// positioned absolutely in the context of this wrapper
-.breadcrumb-container-wrapper {
-  position: relative;
-}
-
-.breadcrumb {
-  // TODO: Move breadcrumbs out into app-wide directive
-  // under navbar not within ui-view.
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  border-bottom: 1px solid #e7e7e7;
-  border-radius: 0;
-  // Push down the margin of the sibling element
-  & + * {
-    margin-top: 60px;
-  }
-  & > li {
-    font-size: 10px;
-  }
-}
+// .breadcrumb {
+//   // TODO: Move breadcrumbs out into app-wide directive
+//   // under navbar not within ui-view.
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   border-bottom: 1px solid #e7e7e7;
+//   border-radius: 0;
+//   // Push down the margin of the sibling element
+//   & + * {
+//     margin-top: 60px;
+//   }
+//   & > li {
+//     font-size: 10px;
+//   }
+// }

@@ -2,7 +2,7 @@
 # Controllers and providers related to the header/nav bar
 #
 angular.module('doubtfire.common.header', [])
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService, dateService) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, $modal, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser) ->
   $scope.currentUser = currentUser.profile
 
   #
@@ -22,4 +22,22 @@ angular.module('doubtfire.common.header', [])
   #
   $scope.openAboutModal = ->
     AboutDoubtfireModal.show()
+
+  #
+  # Updates the context of the selected unit
+  #
+  updateSelectedUnit = (event, data) ->
+    context = data.context
+    return unless context?
+    $scope.unit =
+      code: context.unit_code
+      name: context.unit_name
+    $scope[if context.role? then "unitRole" else "project"] = context
+
+  $scope.task = $state.current.data.task
+
+  $rootScope.$on '$stateChangeSuccess', (event, toState) ->
+    $scope.task = toState.data.task
+  $rootScope.$on 'UnitRoleChanged', updateSelectedUnit
+  $rootScope.$on 'ProjectChanged', updateSelectedUnit
 )
