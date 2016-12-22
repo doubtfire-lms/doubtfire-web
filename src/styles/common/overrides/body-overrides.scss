@@ -1,11 +1,16 @@
 //
 // Overrides for the body (i.e., global overrdies)
 //
+$main-view-top-padding: 30px;
+$main-view-bottom-padding: $main-view-top-padding;
+$main-view-max-height: calc(100vh - #{$navbar-height} - #{$main-view-top-padding} - #{$main-view-bottom-padding} - 2px);
+
 body {
   font-family: 'Roboto', Helvetica;
   font-size: 1.2em;
   line-height: 2;
 }
 body > [ui-view="main"] {
-  padding-top: 30px;
+  padding-top: $main-view-top-padding;
+  padding-bottom: $main-view-bottom-padding;
 }

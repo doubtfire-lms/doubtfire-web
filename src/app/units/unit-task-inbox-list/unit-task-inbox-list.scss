@@ -1,6 +1,13 @@
 unit-task-inbox-list {
+  .panel {
+    display: flex;
+    flex-direction: column;
+  }
   .panel-heading .form-control {
     height: 33px;
+  }
+  .list-group {
+    overflow: scroll;
   }
   .list-group .list-group-item-task {
     transition: border-right 0.2s ease-out;
