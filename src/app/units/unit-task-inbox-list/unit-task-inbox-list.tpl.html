@@ -46,11 +46,12 @@
     <li class="list-group-item list-group-item-task clearfix {{statusClass(task.status)}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: selectedTask.id == task.id}"
-      ng-repeat="task in tasks |
+      ng-repeat="task in filteredTasks = (tasks |
         tasksWithStudentName:filters.studentName |
         tasksWithStatuses:filters.statuses |
         tasksInTutorials:filters.tutorials |
-        tasksOfTaskDefinition:filters.taskDefinition"
+        tasksOfTaskDefinition:filters.taskDefinition
+      )"
       ng-init="$index == 0 && setSelectedTask(task)">
       <div class="task-data">
         <h4 class="list-group-item-heading">
@@ -69,5 +70,8 @@
         </span><!--/new-comments-badge-->
       </div><!--/badges-->
     </li><!--/task-->
+    <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
+      No tasks to display
+    </li>
   </ul>
 </div>
