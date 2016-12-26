@@ -13,5 +13,4 @@ angular.module('doubtfire.units', [
   'doubtfire.units.unit-students-editor'
   'doubtfire.units.unit-tasks-editor'
   'doubtfire.units.unit-tutorials-editor'
-  'doubtfire.units.unit-task-inbox-list'
 ])

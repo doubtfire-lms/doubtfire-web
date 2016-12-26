@@ -16,4 +16,6 @@ angular.module('doubtfire.tasks', [
   'doubtfire.tasks.task-submission-viewer'
   'doubtfire.tasks.task-submission-wizard'
   'doubtfire.tasks.task-viewer'
+  # New
+  'doubtfire.tasks.task-inbox-list'
 ])

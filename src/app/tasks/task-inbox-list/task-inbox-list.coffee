@@ -1,10 +1,10 @@
-angular.module('doubtfire.units.unit-task-inbox-list', [])
+angular.module('doubtfire.tasks.task-inbox-list', [])
 #
-# View a list of tasks
+# View a list of tasks in inbox
 #
-.directive('unitTaskInboxList', ->
+.directive('taskInboxList', ->
   restrict: 'E'
-  templateUrl: 'units/unit-task-inbox-list/unit-task-inbox-list.tpl.html'
+  templateUrl: 'tasks/task-inbox-list/task-inbox-list.tpl.html'
   scope:
     selectedTask: '='
     unit: '='
