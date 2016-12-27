@@ -45,7 +45,11 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       return unless newUnitId?
       Unit.tasksForTaskInbox.query { id: newUnitId },
         (response) ->
-          $scope.tasks = $scope.unit.incorporateTasks response
+          $scope.tasks = $scope.unit.incorporateTasks(response)
+          # Was provided selected task id? Load it now
+          if $scope.selectedTask?.id?
+            task = _.find($scope.tasks, {id: $scope.selectedTask.id})
+            $scope.setSelectedTask(task)
         (response) ->
           alertService.add("danger", response.data.error, 6000)
     # Selected task
