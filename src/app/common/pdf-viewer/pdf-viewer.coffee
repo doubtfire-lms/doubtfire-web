@@ -1,7 +1,10 @@
 angular.module("doubtfire.common.pdf-viewer", [])
+#
+# Basic PDF viewer
+#
 .directive('pdfViewer', ->
   restrict: 'E'
-  templateUrl: 'common/pdf-panel/pdf-panel.tpl.html'
+  templateUrl: 'common/pdf-viewer/pdf-viewer.tpl.html'
   scope:
     pdfUrl: '='
   controller: ($scope, $sce, $timeout) ->
