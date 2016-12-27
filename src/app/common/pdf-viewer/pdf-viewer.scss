@@ -1,10 +1,16 @@
 pdf-viewer {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  left: 0;
   .iframe-wrapper {
     position: absolute;
-    top: 1px;
-    bottom: -1px;
-    left: 1px;
+    top: 0;
+    bottom: 0;
+    left: 0;
     right: 0;
+    background-color: #d1d1d1;
   }
   iframe {
     position: absolute;
