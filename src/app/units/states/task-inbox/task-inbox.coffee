@@ -21,13 +21,17 @@ angular.module('doubtfire.units.states.task-inbox', [
 )
 
 .controller('UnitTaskInboxFeedback', ($scope, $state, $stateParams) ->
+  # Changes the task ID in the URL parameter
   setTaskIdUrlParm = (taskId) ->
     # Change URL of new task without notify
     $state.go('.', {taskId: taskId}, {notify: false})
 
-  if _.isNumber($stateParams.taskId)
-    $scope.selectedTask = _.find($scope.unit.tasks, {id: $stateParams.taskId})
+  # Load in Task ID
+  if $stateParams.taskId
+    # Temporary item used by task-inbox-list
+    $scope.selectedTask = {id: +$stateParams.taskId}
 
+  # Watch for when task has changed
   $scope.$watch 'selectedTask', (newTask) ->
     if newTask?
       setTaskIdUrlParm(newTask.id)
