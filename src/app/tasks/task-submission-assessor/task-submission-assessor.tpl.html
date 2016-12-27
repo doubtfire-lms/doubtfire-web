@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title" ng-hide="task">
+      No Task Selected
+    </div>
+    <div class="panel-title" ng-show="task">
+      {{task.definition.name}} by {{project.name}}
+    </div>
+  </div>
+  <div class="panel-body text-muted no-pdf" ng-hide="hasPdf">
+    <i class="fa fa-file-pdf-o"></i>
+    <span ng-show="showLoading">
+      Loading Task Details...
+    </span>
+    <span ng-show="task">
+      PDF Still Processing
+    </span>
+    <span ng-hide="task">
+      No Task Selected
+    </span>
+  </div>
+  <div class="panel-body has-pdf" ng-show="hasPdf">
+    <pdf-viewer pdf-url="taskPdfUrl"></pdf-viewer>
+  </div>
+  <div class="panel-footer">
+  </div>
+</div>
