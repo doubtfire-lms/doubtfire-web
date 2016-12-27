@@ -10,4 +10,6 @@ angular.module("doubtfire.common", [
   'doubtfire.common.markdown-editor'
   'doubtfire.common.alert-list'
   'doubtfire.common.unit-dropdown'
+  # New
+  'doubtfire.common.pdf-viewer'
 ])
