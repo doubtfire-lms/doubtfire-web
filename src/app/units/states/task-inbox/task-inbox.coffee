@@ -1,6 +1,5 @@
 angular.module('doubtfire.units.states.task-inbox', [
   # 'doubtfire.units.states.task-inbox.task-commenter'
-  # 'doubtfire.units.states.task-inbox.task-submission'
 ])
 
 #
@@ -21,6 +20,17 @@ angular.module('doubtfire.units.states.task-inbox', [
    }
 )
 
-.controller('UnitTaskInboxFeedback', ($scope) ->
+.controller('UnitTaskInboxFeedback', ($scope, $state, $stateParams) ->
+  setTaskIdUrlParm = (taskId) ->
+    # Change URL of new task without notify
+    $state.go('.', {taskId: taskId}, {notify: false})
 
+  if _.isNumber($stateParams.taskId)
+    $scope.selectedTask = _.find($scope.unit.tasks, {id: $stateParams.taskId})
+
+  $scope.$watch 'selectedTask', (newTask) ->
+    if newTask?
+      setTaskIdUrlParm(newTask.id)
+    else
+      setTaskIdUrlParm(null)
 )
