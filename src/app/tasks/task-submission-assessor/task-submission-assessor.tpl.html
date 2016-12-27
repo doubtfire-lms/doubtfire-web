@@ -23,7 +23,14 @@
     <pdf-viewer pdf-url="taskPdfUrl"></pdf-viewer>
   </div>
   <div class="panel-footer">
-    <div class="btn-group task-status">
+    <div class="hidden-md hidden-lg hidden-xl">
+      <select class="form-control input-lg" ng-model="task.status">
+        <option value="{{status}}" ng-repeat="status in taskStatusData.keys">
+          {{taskStatusData.labels[status]}}
+        </option>
+      </select>
+    </div>
+    <div class="btn-group task-status hidden-sm hidden-xs">
       <label
         ng-repeat="status in taskStatusData.keys"
         ng-model="task.status"

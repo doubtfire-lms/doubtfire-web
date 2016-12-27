@@ -22,25 +22,27 @@ task-submission-assessor {
       }
     }
   }
-  .panel-footer {
-    padding: 0;
-    height: 55px;
-    .btn-group {
-      display: flex;
-      height: 100%;
-    }
-    .btn {
-      @include flex-center;
-      font-size: 2em;
-      flex: 1;
-      border-radius: 0;
-      border-top-style: none;
-      border-bottom-style: none;
-      &:first-child {
-        border-left-style: none;
+  @media (min-width: $screen-md) {
+    .panel-footer {
+      padding: 0;
+      height: 55px;
+      .btn-group {
+        display: flex;
+        height: 100%;
       }
-      &:last-child {
-        border-right-style: none;
+      .btn {
+        @include flex-center;
+        font-size: 2em;
+        flex: 1;
+        border-radius: 0;
+        border-top-style: none;
+        border-bottom-style: none;
+        &:first-child {
+          border-left-style: none;
+        }
+        &:last-child {
+          border-right-style: none;
+        }
       }
     }
   }
