@@ -3,22 +3,44 @@ task-submission-assessor {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    .panel-body {
-      flex: 1;
-      align-content: center;
-      &.has-pdf {
-        padding: 0;
-        position: relative;
+  }
+  .panel-body {
+    flex: 1;
+    align-content: center;
+    &.has-pdf {
+      padding: 0;
+      position: relative;
+    }
+    &.no-pdf {
+      @include flex-center;
+      font-size: 2rem;
+      i {
+        font-size: 8rem;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
       }
-      &.no-pdf {
-        @include flex-center;
-        font-size: 2rem;
-        i {
-          font-size: 8rem;
-          width: 100%;
-          text-align: center;
-          margin-bottom: 15px;
-        }
+    }
+  }
+  .panel-footer {
+    padding: 0;
+    height: 55px;
+    .btn-group {
+      display: flex;
+      height: 100%;
+    }
+    .btn {
+      @include flex-center;
+      font-size: 2em;
+      flex: 1;
+      border-radius: 0;
+      border-top-style: none;
+      border-bottom-style: none;
+      &:first-child {
+        border-left-style: none;
+      }
+      &:last-child {
+        border-right-style: none;
       }
     }
   }

@@ -8,9 +8,16 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
   templateUrl: 'tasks/task-submission-assessor/task-submission-assessor.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $timeout, TaskFeedback, alertService) ->
+  controller: ($scope, $timeout, TaskFeedback, taskService, alertService) ->
     clearSelectedTask = ->
       $scope.task = null
+
+    $scope.taskStatusData =
+      keys:   taskService.statusKeys
+      help:   taskService.helpDescriptions
+      icons:  taskService.statusIcons
+      labels: taskService.statusLabels
+      class:  taskService.statusClass
 
     $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped

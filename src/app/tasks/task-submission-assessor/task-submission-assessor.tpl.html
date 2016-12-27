@@ -23,5 +23,16 @@
     <pdf-viewer pdf-url="taskPdfUrl"></pdf-viewer>
   </div>
   <div class="panel-footer">
+    <div class="btn-group task-status">
+      <label
+        ng-repeat="status in taskStatusData.keys"
+        ng-model="task.status"
+        class="btn btn-default {{taskStatusData.class(status)}}"
+        tooltip-html-unsafe="<h5>Mark as <strong>{{taskStatusData.labels[status]}}</strong></h5><hr><p>{{taskStatusData.help[status].reason}}</p>"
+        tooltip-append-to-body="true"
+        btn-radio="'{{status}}'">
+        <i class="fa {{taskStatusData.icons[status]}}"></i>
+      </label>
+    </div>
   </div>
 </div>
