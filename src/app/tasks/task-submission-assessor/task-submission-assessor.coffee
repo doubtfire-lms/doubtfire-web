@@ -13,7 +13,7 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
       $scope.task = null
 
     $scope.taskStatusData =
-      keys:   taskService.statusKeys
+      keys:   _.sortBy(taskService.markedStatuses, (s) -> taskService.statusSeq[s])
       help:   taskService.helpDescriptions
       icons:  taskService.statusIcons
       labels: taskService.statusLabels
