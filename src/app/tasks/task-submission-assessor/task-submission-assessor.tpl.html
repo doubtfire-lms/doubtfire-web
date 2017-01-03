@@ -24,8 +24,11 @@
   </div>
   <div class="panel-footer">
     <div class="hidden-md hidden-lg hidden-xl">
-      <select class="form-control input-lg" ng-model="task.status">
-        <option value="{{status}}" ng-repeat="status in taskStatusData.keys">
+      <select
+        ng-change="triggerTransition(status)"
+        ng-model="task.status"
+        class="form-control input-lg">
+        <option ng-repeat="status in taskStatusData.keys" value="{{status}}">
           {{taskStatusData.labels[status]}}
         </option>
       </select>
@@ -34,6 +37,7 @@
       <label
         ng-repeat="status in taskStatusData.keys"
         ng-model="task.status"
+        ng-change="triggerTransition(status)"
         class="btn btn-default {{taskStatusData.class(status)}}"
         tooltip-html-unsafe="<h5>Mark as <strong>{{taskStatusData.labels[status]}}</strong></h5><hr><p>{{taskStatusData.help[status].reason}}</p>"
         tooltip-append-to-body="true"

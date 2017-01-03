@@ -19,6 +19,10 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
       labels: taskService.statusLabels
       class:  taskService.statusClass
 
+    # Triggers a new update to the task status
+    $scope.triggerTransition = (status) ->
+      taskService.updateTaskStatus $scope.task.project().unit, $scope.task.project(), $scope.task, status
+
     $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped
       setDetails = ->
