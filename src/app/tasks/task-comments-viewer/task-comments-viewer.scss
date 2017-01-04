@@ -9,23 +9,13 @@ $comment-bubble-color: #f1f0f0;
 }
 
 .wrapword {
-  -ms-word-break: break-all;
   word-break: break-all;
-
-  /* Non standard for webkit */
   word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
   hyphens: auto;
 }
 
 .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* for future vendor support */
+  user-select: none;
   cursor:default;
 }
 
@@ -56,15 +46,13 @@ $comment-bubble-color: #f1f0f0;
       line-height: 36px;
       float: right;
 
-      -moz-border-radius: 30px;
       border-radius: 30px;
 
-      background: #1976D2; /* fallback for old browsers */
-      background: -webkit-linear-gradient(to left, #2196F3 , #1976D2); /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background: #78909C; /* fallback for old browsers */
+      background: linear-gradient(to left, #90A4AE , #78909C);
 
       border: 1px solid white;
-      box-shadow: 0 0 0 1px #2196F3;
+      box-shadow: 0 0 0 1px #90A4AE;
 
       margin-right: 20px;
       align-self: flex-end;
@@ -73,14 +61,19 @@ $comment-bubble-color: #f1f0f0;
       font-size: 1em;
       font-weight: bolder;
     }
+    .other-user {
+        background: #1976D2; /* fallback for old browsers */
+        background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+        border: 1px solid white;
+        box-shadow: 0 0 0 1px #2196F3;
+      }
   }
 
   .comment-text
   {
     position: relative;
     background: $comment-bubble-color;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
     border-radius: 6px;
     font-size: 1em;
     padding: 0.5em;
