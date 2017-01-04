@@ -37,6 +37,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map $scope.filters.tutorials, 'id'
+    $scope.tutorialIdChanged($scope.filters.tutorialIdSelected)
     # Task definition options
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit) if $scope.unit.group_sets.length > 0
@@ -44,6 +45,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       taskDefId = $scope.filters.taskDefinitionIdSelected
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
+    $scope.tutorialIdChanged($scope.filters.taskDefinitionIdSelected)
     # Tasks for feedback
     $scope.$watch 'unit.id', (newUnitId) ->
       return unless newUnitId?
