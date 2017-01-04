@@ -13,24 +13,11 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     # Search option filters ()
     $scope.filters = {
       studentName: null
-      statuses: []
-      statusesChecked: {}
-      taskDefinition: null
       tutorialIdSelected: 'mine'
       tutorials: []
     }
-    # Task status filter options
-    _.each taskService.statusToDiscuss, (status) ->
-      $scope.filters.statusesChecked[status] = true
-      $scope.filters.statuses.push(status)
-    $scope.taskStatuses = taskService.statusKeys
     # Tutorial options
     $scope.tutorialScopeOptions = $scope.unit.tutorials
-    $scope.updateStatusCheck = (toggleStatus) ->
-      if _.includes($scope.filters.statuses, toggleStatus)
-        $scope.filters.statuses = _.without($scope.filters.statuses, toggleStatus)
-      else
-        $scope.filters.statuses.push(toggleStatus)
     $scope.$watch 'filters.tutorialIdSelected', (tutorialId) ->
       return unless _.isString(tutorialId)
       if tutorialId == 'mine'
