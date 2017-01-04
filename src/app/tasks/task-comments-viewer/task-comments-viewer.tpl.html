@@ -3,7 +3,7 @@
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments">
+  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'+created_at'">
     <!--chat name icon-->
     <div class="comment-details col-md-1">
       <span class="comment-by noselect" tooltip="Created by {{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-append-to-body="true">
