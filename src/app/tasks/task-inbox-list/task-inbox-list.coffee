@@ -8,12 +8,13 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
   scope:
     selectedTask: '='
     unit: '='
+    unitRole: '='
   controller: ($scope, Unit, taskService, alertService, currentUser, groupService) ->
     $scope.showSearchOpts = false
-    # Search option filters ()
+    # Search option filters
     $scope.filters = {
       studentName: null
-      tutorialIdSelected: 'mine'
+      tutorialIdSelected: if $scope.unitRole.role == 'Tutor' then 'mine' else 'all'
       tutorials: []
       taskDefinitionIdSelected: null
       taskDefinition: null
