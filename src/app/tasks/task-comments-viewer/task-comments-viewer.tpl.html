@@ -6,7 +6,7 @@
   <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'+created_at'">
     <!--chat name icon-->
     <div class="comment-details col-md-1">
-      <span class="comment-by noselect" tooltip="Created by {{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-append-to-body="true">
+      <span class="comment-by noselect" tooltip="{{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-append-to-body="true" ng-class="{'other-user': isOtherUser(comment)}">
         {{getInitials(comment.comment_by)}}
       </span>
     </div>
