@@ -29,7 +29,6 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     )
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
-      return unless _.isString(tutorialId)
       if tutorialId == 'mine'
         $scope.filters.tutorials = $scope.unit.tutorialsForUserId(currentUser.id)
       else if tutorialId == 'all'
