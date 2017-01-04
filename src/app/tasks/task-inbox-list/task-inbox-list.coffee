@@ -42,8 +42,8 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       groupService.groupSetName(id, $scope.unit) if $scope.unit.group_sets.length > 0
     $scope.taskDefinitionIdChanged = ->
       taskDefId = $scope.filters.taskDefinitionIdSelected
-      return unless taskDefId?
-      $scope.filters.taskDefinition = unit.taskDef(+taskDefId)
+      taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
+      $scope.filters.taskDefinition = taskDef
     # Tasks for feedback
     $scope.$watch 'unit.id', (newUnitId) ->
       return unless newUnitId?
