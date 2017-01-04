@@ -3,18 +3,19 @@
     <i class="fa fa-2x fa-comments-o"></i>
     <p>No comments have yet been made</p>
   </div>
-  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments">
-    <div class="comment-details col-md-2">
-      <span class="comment-by">
-        {{comment.comment_by}}
-      </span>
-      <span class="comment-date">
-        {{comment.created_at | date: 'd MMM yyyy'}}
+  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'+created_at'">
+    <!--chat name icon-->
+    <div class="comment-details col-md-1">
+      <span class="comment-by noselect" tooltip="{{comment.comment_by}} on {{comment.created_at | date: 'MMM d'}}." tooltip-append-to-body="true" ng-class="{'other-user': isOtherUser(comment)}">
+        {{getInitials(comment.comment_by)}}
       </span>
     </div>
-    <div class="comment-text col-md-9">
-      <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
-      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete comment" tooltip-placement="right">
+
+    <!--comment bubble-->
+    <div class="comment-text col-md-12">
+      <div class="markdown-to-html wrapword col-md-12" ng-bind-html="comment.comment | markdown"></div>
+      <!--Delete icon-->
+      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete this comment" tooltip-append-to-body="true">
         <i class="fa fa-trash"></i>
       </div>
     </div>
@@ -23,12 +24,6 @@
 
   <div class="panel-footer">
     <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-      <markdown-editor class="editor col-sm-11" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment on this submission..." height="auto"></markdown-editor>
-      <div class="send-button-wrapper col-sm-1">
-        <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
-          <i class="fa fa-paper-plane fa-2x"></i>
-          <div>Send</div>
-        </button>
-      </div>
+      <markdown-editor class="editor col-sm-12" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment on this submission..." height="auto"></markdown-editor>
     </form>
   </div>

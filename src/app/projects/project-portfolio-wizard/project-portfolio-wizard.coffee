@@ -13,7 +13,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
 .directive('projectPortfolioWizard', ->
   restrict: 'E'
   templateUrl: 'projects/project-portfolio-wizard/project-portfolio-wizard.tpl.html'
-  controller: ($scope, taskService, gradeService, PortfolioSubmission, analyticsService) ->
+  controller: ($scope, ExternalName, taskService, gradeService, PortfolioSubmission, analyticsService) ->
     #
     # Active task tab group
     #
@@ -77,6 +77,9 @@ angular.module('doubtfire.projects.project-portfolio-wizard', [
     # Update targetGrade value on change
     $scope.$watch 'project.target_grade', (newValue) ->
       $scope.targetGrade = gradeService.grades[newValue]
+
+    # Get the confugurable, external name of Doubtfire
+    $scope.externalName = ExternalName
 
     # Get only extra files submitted
     $scope.extraFiles = ->
