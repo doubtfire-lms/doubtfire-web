@@ -1,5 +1,5 @@
 <div class="task-inbox">
   <task-inbox-list unit="unit" selected-task="selectedTask" class="col-xs-12 col-md-2"></task-inbox-list>
   <task-submission-assessor task="selectedTask" class="col-xs-12 col-md-7"></task-submission-assessor>
-  <task-commenter task="selectedTask" class="col-xs-12 col-md-3"></task-commenter>
+  <task-comments-viewer task="selectedTask" project="selectedTask.project()" class="col-xs-12 col-md-3" ng-if="selectedTask"></task-comments-viewer>
 </div>

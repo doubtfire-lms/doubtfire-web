@@ -1,28 +1,27 @@
-$comment-bubble-color: #f1f0f0;
+$comment-bubble-color: #2196F3;
+$comment-bubble-color-other-user: #f1f0f0;
 
-.task-comments-viewer {
-  overflow: scroll;
-  height: 30vh;
-  .no-comments {
-    height: 100%;
-  }
+task-comments-viewer .panel {
+  @include flex-panel;
 }
 
-.wrapword {
+task-comments-viewer .panel-body {
+  overflow: scroll;
+  height: 100%;
+  font-size: 15px;
+}
+
+task-comments-viewer .wrap-word {
   word-break: break-all;
   word-break: break-word;
   hyphens: auto;
 }
 
-.noselect {
-  user-select: none;
-  cursor:default;
-}
-
-.task-comments-viewer .comment {
+task-comments-viewer .comment {
   display: flex;
   margin-left: 0;
   width: 100%;
+  padding-right: 0;
   margin-bottom: 1em;
   .comment-details {
     position: relative;
@@ -45,15 +44,11 @@ $comment-bubble-color: #f1f0f0;
       width: 38px;
       line-height: 36px;
       float: right;
-
       border-radius: 30px;
-
-      background: #78909C; /* fallback for old browsers */
-      background: linear-gradient(to left, #90A4AE , #78909C);
-
+      background: #1976D2;
+      background: linear-gradient(to left, #2196F3 , #1976D2);
       border: 1px solid white;
-      box-shadow: 0 0 0 1px #90A4AE;
-
+      box-shadow: 0 0 0 1px #2196F3;
       margin-right: 20px;
       align-self: flex-end;
       color: white;
@@ -61,24 +56,17 @@ $comment-bubble-color: #f1f0f0;
       font-size: 1em;
       font-weight: bolder;
     }
-    .other-user {
-        background: #1976D2; /* fallback for old browsers */
-        background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-        border: 1px solid white;
-        box-shadow: 0 0 0 1px #2196F3;
-      }
   }
-
-  .comment-text
-  {
+  .comment-text {
     position: relative;
     background: $comment-bubble-color;
+    color: #fff;
     border-radius: 6px;
     font-size: 1em;
-    padding: 0.5em;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 0;
-    line-height: 1em;
+    line-height: 1.5em;
     align-items: center;
     display: inherit;
     height: 0%;
@@ -90,52 +78,72 @@ $comment-bubble-color: #f1f0f0;
     img {
       border-radius: 1em;
     }
-  }
 
-  .comment-text-highlight {
-    animation: assetAnim;
-    animation-duration: 5s;
+    .comment-text-highlight {
+      animation: assetAnim;
+      animation-duration: 5s;
 
-    @keyframes assetAnim {
-      0% { background: rgba(33, 150, 243, 0.4); }
-      0% { border: rgba(33, 150, 243, 1); }
-      0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
-      100% { background: $comment-bubble-color; }
-      100% { border: rgba(33, 150, 243, 0); }
-      100% { box-shadow: 0 0 0px rgba(33, 150, 243, 0); }
+      @keyframes assetAnim {
+        0% { background: rgba(33, 150, 243, 0.4); }
+        0% { border: rgba(33, 150, 243, 1); }
+        0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
+        100% { background: $comment-bubble-color; }
+        100% { border: rgba(33, 150, 243, 0); }
+        100% { box-shadow: 0 0 0px rgba(33, 150, 243, 0); }
+      }
     }
-  }
 
-  .comment-text .comment-date {
+    .comment-text .comment-date {
       margin-top: -5px;
       font-size: 0.8em;
     }
-  .delete-comment {
-    padding-left: 10px;
-    align-self: flex-end;
-    float: right;
-    font-style: normal;
-    color: #bbb;
-    font-size: 1.6em;
-    &:hover {
-      color: #B71C1C;
-      cursor: pointer;
+
+    .delete-comment {
+      padding-left: 10px;
+      align-self: flex-end;
+      float: right;
+      font-style: normal;
+      font-size: 1.6em;
+      margin-bottom: 8px;
+      &:hover {
+        color: lighten(#B71C1C, 15%);
+        cursor: pointer;
+      }
     }
+  }
+}
+
+task-comments-viewer .comment .comment-by-other-user {
+   .comment-details .comment-by {
+    background: #78909C;
+    background: linear-gradient(to left, #90A4AE , #78909C);
+    border: 1px solid white;
+    box-shadow: 0 0 0 1px #90A4AE;
+  }
+
+  .comment-text {
+    background: $comment-bubble-color-other-user;
+  }
+
+  .delete-comment {
+    color: #bbb;
   }
 }
 
 task-comments-viewer .panel-footer {
   padding: 0;
+  font-size: 15px;
 }
 
-.markdown-editor .markdown-editor-inner-context {
+task-comments-viewer .markdown-editor .markdown-editor-inner-context {
   border: 0;
   width: 100%;
   box-shadow: none;
   border-radius: 0px 0px 4px 4px;
+  min-height: 54px;
 }
 
-.comment-submitter {
+task-comments-viewer .comment-submitter {
   display: flex;
   .markdown-editor {
     padding: 0;

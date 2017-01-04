@@ -8,57 +8,59 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
   restrict: 'E'
   templateUrl: 'tasks/task-comments-viewer/task-comments-viewer.tpl.html'
   scope:
-    project: "="
-    task: "="
-    comment: "=?"
+    task: '='
+    comment: '=?'
   controller: ($scope, $modal, $state, $timeout, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
-    #
-    # Comment code
-    #
-    $scope.currentPage = 1
-    $scope.pageSize = 3
-    $scope.maxSize = 5
-
     # Initialise scope comment text
     unless _.isString $scope.comment?.text
       $scope.comment = { text: "" }
 
+    # Watch for initial task
     $scope.$watch 'task', (newTask) ->
-      fetchTaskComments(newTask)
+      return unless newTask?.project? # Must have project for task to be mapped
+      $scope.project = newTask.project()
+      # Once project is loaded fetch task comments
+      TaskComment.query {
+        project_id: $scope.project.project_id,
+        task_definition_id: $scope.task.task_definition_id
+      }, (response) ->
+        $scope.task.comments = response
 
-    #
-    # Comment text area enter to submit comment
-    #
-    fetchTaskComments = (task) ->
-      TaskComment.query {project_id: $scope.project.project_id, task_definition_id: task.task_definition_id},
-        (response) ->
-          task.comments = response
-          $scope.currentPage = 1
+    # Automatically scroll the inner div to the bottom of comments
+    scrollDown = ->
+      $timeout ->
+        objDiv = document.querySelector("task-comments-viewer .panel-body")
+        wrappedResult = angular.element(objDiv)
+        wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
+    # Checks for enter keydown
     $scope.checkForEnterPress = ($event) ->
       ENTER_KEY = 13
       return if $event.which isnt ENTER_KEY or $event.shiftKey
-      if $scope.comment.text.trim().length isnt 0
-        $scope.addComment()
+      $scope.addComment() if $scope.comment.text.trim().length isnt 0
       false
 
+    # Return the initials on a given comment
     $scope.getInitials = (text) ->
       initials = text.match(/\b\w/g) || []
       return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
 
+    # Checks if the comment is not made by the current user
     $scope.isOtherUser = (comment) ->
       return comment.comment_by != currentUser.profile.name
 
+    # Submits a new comment
     $scope.addComment = ->
-      # console.log $scope.task, $scope.comment
+      $scope.comment.text = $scope.comment.text.trim()
       taskService.addComment $scope.task, $scope.comment.text,
         (success) ->
           $scope.comment.text = ""
           analyticsService.event "View Task Comments", "Added new comment"
-          $scope.scrollDown()
+          scrollDown()
         (response) ->
           alertService.add("danger", response.data.error, 2000)
 
+    # Deletes existing comment
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
         (response) ->
@@ -66,11 +68,4 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           analyticsService.event "View Task Comments", "Deleted existing comment"
         (response) ->
           alertService.add("danger", response.data.error, 2000)
-
-    $scope.scrollDown = () ->
-      $timeout (->
-        objDiv = document.getElementsByClassName("task-comments-viewer")
-        wrappedResult = angular.element(objDiv)
-        wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
-      )
 )

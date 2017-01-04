@@ -1,17 +1,11 @@
 task-submission-assessor {
   .panel {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-  }
-  .panel-body {
-    flex: 1;
-    align-content: center;
-    &.has-pdf {
+    @include flex-panel;
+    .panel-body.has-pdf {
       padding: 0;
       position: relative;
     }
-    &.no-pdf {
+    .panel-body.no-pdf {
       @include flex-center;
       font-size: 2rem;
       i {

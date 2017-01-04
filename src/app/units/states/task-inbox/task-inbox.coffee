@@ -1,6 +1,4 @@
-angular.module('doubtfire.units.states.task-inbox', [
-  # 'doubtfire.units.states.task-inbox.task-commenter'
-])
+angular.module('doubtfire.units.states.task-inbox', [])
 
 #
 # Teacher child state for units
