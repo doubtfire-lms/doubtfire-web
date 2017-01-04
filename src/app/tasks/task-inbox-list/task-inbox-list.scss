@@ -79,10 +79,7 @@ task-inbox-list {
       }
     }
   }
-  // .search-options .task-status {
-  //   button {
-  //     border: none;
-  //     border-radius: 0;
-  //   }
-  // }
+  .search-options {
+    background-color: lighten($gray-lighter, 2%);
+  }
 }
