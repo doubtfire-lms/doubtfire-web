@@ -17,8 +17,16 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       tutorials: []
     }
     # Tutorial options
-    $scope.tutorialScopeOptions = $scope.unit.tutorials
-    $scope.$watch 'filters.tutorialIdSelected', (tutorialId) ->
+    tutorials = $scope.unit.tutorials.concat([
+      { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
+      { id: 'mine', description: 'Just my tutorials', abbreviation: '__mine' }
+    ])
+    $scope.tutorialScopeOptions = _.map(tutorials, (t) ->
+      t.description = $scope.unit.tutorialDescription(t) unless t.description?
+      t
+    )
+    $scope.tutorialIdChanged = ->
+      tutorialId = $scope.filters.tutorialIdSelected
       return unless _.isString(tutorialId)
       if tutorialId == 'mine'
         $scope.filters.tutorials = $scope.unit.tutorialsForUserId(currentUser.id)

@@ -20,13 +20,12 @@
       </div><!--/task-definition-->
       <div class="form-group tutorial">
         <label>Tutorials</label>
-        <div class="input-group">
-          <select ng-model="filters.tutorialIdSelected" class="form-control input-md">
-            <option value="all">All tutorials</option>
-            <option value="mine">Just my tutorials</option>
-            <option ng-repeat="tutorial in tutorialScopeOptions | orderBy:'abbreviation'" value="{{tutorial.id}}">
-              {{unit.tutorialDescription(tutorial)}}
-            </option>
+        <div class="input-group col-sm-12">
+          <select
+            ng-model="filters.tutorialIdSelected"
+            ng-options="t.id as t.description for t in tutorialScopeOptions | orderBy:'abbreviation'"
+            ng-change="tutorialIdChanged()"
+            class="form-control input-md">
           </select>
         </div>
         <p class="help-block">You can choose to display submissions from all tutorials or just your tutorials.</p>
