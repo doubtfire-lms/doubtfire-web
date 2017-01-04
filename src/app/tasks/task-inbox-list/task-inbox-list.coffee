@@ -8,13 +8,15 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
   scope:
     selectedTask: '='
     unit: '='
-  controller: ($scope, Unit, taskService, alertService, currentUser) ->
+  controller: ($scope, Unit, taskService, alertService, currentUser, groupService) ->
     $scope.showSearchOpts = false
     # Search option filters ()
     $scope.filters = {
       studentName: null
       tutorialIdSelected: 'mine'
       tutorials: []
+      taskDefinitionIdSelected: null
+      taskDefinition: null
     }
     # Tutorial options
     tutorials = $scope.unit.tutorials.concat([
@@ -35,6 +37,13 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map $scope.filters.tutorials, 'id'
+    # Task definition options
+    $scope.groupSetName = (id) ->
+      groupService.groupSetName(id, $scope.unit) if $scope.unit.group_sets.length > 0
+    $scope.taskDefinitionIdChanged = ->
+      taskDefId = $scope.filters.taskDefinitionIdSelected
+      return unless taskDefId?
+      $scope.filters.taskDefinition = unit.taskDef(+taskDefId)
     # Tasks for feedback
     $scope.$watch 'unit.id', (newUnitId) ->
       return unless newUnitId?

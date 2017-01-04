@@ -13,8 +13,14 @@
     <form>
       <div class="form-group task-definition">
         <label>Task Definition</label>
-        <div class="input-group">
-          <task-definition-selector show-clear="true" unit="unit" button-style="default" ng-model="filters.taskDefinition"></task-definition-selector>
+        <div class="input-group col-sm-12">
+          <select
+            ng-model="filters.taskDefinitionIdSelected"
+            ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
+            ng-change="taskDefinitionIdChanged()"
+            class="form-control input-md">
+            <option value="">All task definitions</option>
+          </select>
         </div>
         <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
       </div><!--/task-definition-->
