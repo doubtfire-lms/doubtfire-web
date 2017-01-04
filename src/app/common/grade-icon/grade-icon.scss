@@ -28,7 +28,7 @@ a .grade-icon:hover {
   height: 2.25em;
   font-weight: 100;
   font-size: 1em;
-  cursor: pointer;
+  @include no-select;
   margin: 0 auto;
   display: flex;
   align-items: center;
