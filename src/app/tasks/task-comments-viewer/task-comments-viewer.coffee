@@ -19,6 +19,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped
       $scope.project = newTask.project()
+      $scope.rangeOfNewComments = []
       # Once project is loaded fetch task comments
       TaskComment.query {
         project_id: $scope.project.project_id,
@@ -27,7 +28,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         $scope.task.comments = response
         # Add mock "is new" to highlight these comments
         indexOfLastComment = $scope.task.comments.length - 1
-        indexOfNewComments = indexOfLastComment - $scope.task.num_new_comments
+        indexOfNewComments = indexOfLastComment - $scope.task.num_new_comments + 1
         $scope.rangeOfNewComments = [indexOfLastComment..indexOfNewComments]
         $scope.task.num_new_comments = 0
         scrollDown()
