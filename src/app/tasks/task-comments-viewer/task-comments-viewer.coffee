@@ -11,7 +11,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     project: "="
     task: "="
     comment: "=?"
-  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $timeout, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     #
     # Comment code
     #
@@ -55,6 +55,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         (success) ->
           $scope.comment.text = ""
           analyticsService.event "View Task Comments", "Added new comment"
+          $scope.scrollDown()
         (response) ->
           alertService.add("danger", response.data.error, 2000)
 
@@ -65,4 +66,11 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           analyticsService.event "View Task Comments", "Deleted existing comment"
         (response) ->
           alertService.add("danger", response.data.error, 2000)
+
+    $scope.scrollDown = () ->
+      $timeout (->
+        objDiv = document.getElementsByClassName("task-comments-viewer")
+        wrappedResult = angular.element(objDiv)
+        wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+      )
 )
