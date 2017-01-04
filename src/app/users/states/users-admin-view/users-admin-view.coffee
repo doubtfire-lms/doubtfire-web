@@ -16,7 +16,7 @@ angular.module('doubtfire.users.states.users-admin-view', [])
   headerServiceProvider.state "admin/users#index", usersAdminViewStateData
 )
 
-.controller("UsersAdminViewCtrl", ($scope, $modal, User, alertService, CsvResultModal, UserSettingsModal) ->
+.controller("UsersAdminViewCtrl", ($scope, $modal, User, ExternalName, alertService, CsvResultModal, UserSettingsModal) ->
   $scope.file_data =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
@@ -33,6 +33,9 @@ angular.module('doubtfire.users.states.users-admin-view', [])
   $scope.currentPage = 1
   $scope.maxSize = 5
   $scope.pageSize = 15
+
+  # Get the confugurable, external name of Doubtfire
+  $scope.externalName = ExternalName
 
   # User settings/create modal
   $scope.showUserModal = (user) ->
