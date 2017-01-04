@@ -46,6 +46,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       initials = text.match(/\b\w/g) || []
       return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
 
+    $scope.isOtherUser = (comment) ->
+      return comment.comment_by != currentUser.profile.name
+
     $scope.addComment = ->
       # console.log $scope.task, $scope.comment
       taskService.addComment $scope.task, $scope.comment.text,
