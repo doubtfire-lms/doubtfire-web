@@ -22,7 +22,7 @@
   <div class="panel-body has-pdf" ng-show="hasPdf">
     <pdf-viewer pdf-url="taskPdfUrl"></pdf-viewer>
   </div>
-  <div class="panel-footer">
+  <div class="panel-footer" ng-if="task">
     <div class="hidden-md hidden-lg hidden-xl">
       <select
         ng-change="triggerTransition(status)"
