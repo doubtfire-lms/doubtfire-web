@@ -23,6 +23,19 @@ task-comments-viewer .comment {
   width: 100%;
   padding-right: 0;
   margin-bottom: 1em;
+  &.new-comment .comment-text {
+    animation: assetAnim;
+    animation-duration: 5s;
+
+    @keyframes assetAnim {
+      0% { background: rgba(33, 150, 243, 0.4); }
+      0% { border: rgba(33, 150, 243, 1); }
+      0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
+      100% { background: $comment-bubble-color; }
+      100% { border: rgba(33, 150, 243, 0); }
+      100% { box-shadow: 0 0 0px rgba(33, 150, 243, 0); }
+    }
+  }
   .comment-details {
     position: relative;
     @include flex-center;
@@ -77,25 +90,6 @@ task-comments-viewer .comment {
 
     img {
       border-radius: 1em;
-    }
-
-    .comment-text-highlight {
-      animation: assetAnim;
-      animation-duration: 5s;
-
-      @keyframes assetAnim {
-        0% { background: rgba(33, 150, 243, 0.4); }
-        0% { border: rgba(33, 150, 243, 1); }
-        0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
-        100% { background: $comment-bubble-color; }
-        100% { border: rgba(33, 150, 243, 0); }
-        100% { box-shadow: 0 0 0px rgba(33, 150, 243, 0); }
-      }
-    }
-
-    .comment-text .comment-date {
-      margin-top: -5px;
-      font-size: 0.8em;
     }
 
     .delete-comment {

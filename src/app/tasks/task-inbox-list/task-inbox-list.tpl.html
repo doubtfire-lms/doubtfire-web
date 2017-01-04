@@ -61,7 +61,9 @@
           <status-icon status="task.status"></status-icon>
         </span><!--/task-status-->
         <span class="task-badges-item" ng-show="task.num_new_comments > 0">
-          <span class="new-comments-badge" tooltip="You have {{task.num_new_comments}} new comment{{task.num_new_comments > 1 ? 's' : ''}}" tooltip-append-to-body="true" ng-bind="task.num_new_comments"></span>
+          <span class="new-comments-badge" tooltip="You have {{task.num_new_comments}} new comment{{task.num_new_comments > 1 ? 's' : ''}}" tooltip-append-to-body="true">
+            {{task.num_new_comments}}
+          </span>
         </span><!--/new-comments-badge-->
       </div><!--/badges-->
     </li><!--/task-->
