@@ -1,11 +1,11 @@
 #
 # Dropdown listing all units studied
 #
-angular.module('doubtfire.common.unit-dropdown', [])
+angular.module('doubtfire.common.header.unit-dropdown', [])
 .directive 'unitDropdown', ->
   restrict: 'E'
   replace: true
-  templateUrl: 'common/unit-dropdown/unit-dropdown.tpl.html'
+  templateUrl: 'common/header/unit-dropdown/unit-dropdown.tpl.html'
   controller: ($scope, unitService, projectService, dateService) ->
     $scope.showDate = dateService.showDate
     $scope.isUniqueUnitRole = (unit) ->

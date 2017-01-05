@@ -1,7 +1,7 @@
 <ul class="dropdown-menu dropdown-units" dropdown-menu>
   <li ng-hide="unitRoles.length == 0" class="dropdown-header">Units You Teach</li>
   <li ng-repeat="unitRole in unitRoles | filter:isUniqueUnitRole">
-    <a ui-sref="units#tasks({ unitId: unitRole.unit_id })">
+    <a ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
         <small class="unit-info">
           <label class="label label-unit small">{{unitRole.unit_code}}</label>
           <small class="text-muted">{{showDate(unitRole.start_date)}}</small>

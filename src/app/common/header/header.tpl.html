@@ -43,7 +43,10 @@
             </ul><!--/student-tasks-->
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="unitRole">
               <li>
-                <a ui-sref="units#tasks({unitId: unitRole.unit_id})">Give Student Feedback</a>
+                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})">Task Inbox</a>
+              </li>
+              <li>
+                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})">Task Inbox</a>
               </li>
               <li if-role="Admin Convenor">
                 <a ui-sref="admin/units#edit({unitId: unitRole.unit_id})">Modify Unit Details</a>

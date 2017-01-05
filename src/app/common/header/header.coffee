@@ -1,7 +1,9 @@
 #
 # Controllers and providers related to the header/nav bar
 #
-angular.module('doubtfire.common.header', [])
+angular.module('doubtfire.common.header', [
+  'doubtfire.common.header.unit-dropdown'
+])
 .controller("BasicHeaderCtrl", ($scope, $state, $rootScope, $modal, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser) ->
   $scope.currentUser = currentUser.profile
 
