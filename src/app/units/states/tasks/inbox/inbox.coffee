@@ -18,5 +18,4 @@ angular.module('doubtfire.units.states.tasks.inbox', [])
 
 .controller('TaskInboxStateCtrl', ($scope, Unit) ->
   $scope.taskSource = Unit.tasksForTaskInbox
-  console.log("Set dataSource to ", $scope.dataSource)
 )
