@@ -9,8 +9,13 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     selectedTask: '='
     unit: '='
     unitRole: '='
-  controller: ($scope, Unit, taskService, alertService, currentUser, groupService) ->
+    # The source from which data comes from, either Unit.tasksForTaskInbox
+    # or Unit.tasksRequiringFeedback
+    taskSource: '='
+  controller: ($scope, taskService, alertService, currentUser, groupService) ->
     $scope.showSearchOpts = false
+    return unless _.isFunction($scope.taskSource)
+      throw Error "Invalid task source for task inbox list; supply one of Unit.tasksForTaskInbox or Unit.tasksRequiringFeedback"
     # Search option filters
     $scope.filters = {
       studentName: null
@@ -46,10 +51,10 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
     $scope.tutorialIdChanged($scope.filters.taskDefinitionIdSelected)
-    # Tasks for feedback
+    # Tasks for feedback or tasks for task inbox, depending on the data source
     $scope.$watch 'unit.id', (newUnitId) ->
       return unless newUnitId?
-      Unit.tasksForTaskInbox.query { id: newUnitId },
+      $scope.taskSource.query { id: newUnitId },
         (response) ->
           $scope.tasks = $scope.unit.incorporateTasks(response)
           # Was provided selected task id? Load it now

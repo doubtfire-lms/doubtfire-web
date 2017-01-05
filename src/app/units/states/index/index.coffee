@@ -1,12 +1,12 @@
 angular.module('doubtfire.units.states.index', [
-  'doubtfire.units.states.task-inbox'
+  'doubtfire.units.states.tasks'
 ])
 
 #
 # Root state for units
 #
 .config((headerServiceProvider) ->
-  headerServiceProvider.state 'units#index', {
+  headerServiceProvider.state 'units/index', {
     url: "/units/:unitId"
     abstract: true
     views:

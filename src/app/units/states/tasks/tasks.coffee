@@ -1,24 +1,25 @@
-angular.module('doubtfire.units.states.task-inbox', [])
+angular.module('doubtfire.units.states.tasks', [
+  'doubtfire.units.states.tasks.inbox'
+  'doubtfire.units.states.tasks.feedback'
+])
 
 #
-# Teacher child state for units
+# Teacher child state for units for task-related activites
 #
 .config(($stateProvider) ->
-  $stateProvider.state 'units#tasks', {
-    parent: 'units#index'
-    url: '/tasks/:taskId'
-    views:
-      unitIndex:
-        templateUrl: "units/states/task-inbox/task-inbox.tpl.html"
-        controller: "UnitTaskInboxFeedback"
+  $stateProvider.state 'units/tasks', {
+    abstract: true
+    parent: 'units/index'
+    url: '/tasks'
+    controller: 'UnitsTasksStateCtrl'
+    template: '<ui-view/>'
     data:
-      task: "Task Inbox"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
 
-.controller('UnitTaskInboxFeedback', ($scope, $state, $stateParams) ->
+.controller('UnitsTasksStateCtrl', ($scope, $state, $stateParams) ->
   # Changes the task ID in the URL parameter
   setTaskIdUrlParm = (taskId) ->
     # Change URL of new task without notify
