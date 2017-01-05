@@ -25,15 +25,15 @@ angular.module('doubtfire.units.states.tasks', [
     # Change URL of new task without notify
     $state.go('.', {taskId: taskId}, {notify: false})
 
-  # Load in Task ID
-  if $stateParams.taskId
-    # Temporary item used by task-inbox-list
-    $scope.selectedTask = {id: +$stateParams.taskId}
+  # Child states will use taskId to notify what task has been
+  # selected by the child
+  taskId = +$state.$current.locals.globals.$stateParams.taskId
+
+  # Set temporary item used by task-inbox-list
+  $scope.selectedTask = {id: taskId} if taskId
 
   # Watch for when task has changed
-  $scope.$watch 'selectedTask', (newTask) ->
-    if newTask?
-      setTaskIdUrlParm(newTask.id)
-    else
-      setTaskIdUrlParm(null)
+  $scope.$on 'TaskInboxSelectedTaskChanged', ($event, args) ->
+    setTaskIdUrlParm(args.selectedTask?.id)
+    $event.stopPropagation()
 )

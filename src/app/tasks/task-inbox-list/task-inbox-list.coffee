@@ -66,5 +66,6 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     # Selected task
     $scope.setSelectedTask = (task) ->
       $scope.selectedTask = task
+      $scope.$emit('TaskInboxSelectedTaskChanged', { selectedTask: task })
     $scope.statusClass = taskService.statusClass
 )
