@@ -97,6 +97,8 @@ angular.module("doubtfire.common.services.units", [])
       student?.enrolled
 
     unit.findStudent = (id) ->
+      unless unit.students?
+        throw Error "Students not yet mapped to unit (unit.students is undefined)"
       _.find unit.students, (s) -> s.project_id == id
 
     unit.addStudent = (student) ->
