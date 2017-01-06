@@ -18,5 +18,5 @@ angular.module('doubtfire.units.states.tasks.feedback', [])
 )
 
 .controller('TaskFeedbackStateCtrl', ($scope, Unit) ->
-  $scope.taskSource = Unit.tasksRequiringFeedback
+  $scope.taskData.source = Unit.tasksRequiringFeedback
 )

@@ -41,13 +41,12 @@
   <ul class="list-group">
     <li class="list-group-item list-group-item-task clearfix {{statusClass(task.status)}}"
       ng-click="setSelectedTask(task)"
-      ng-class="{selected: selectedTask.id == task.id}"
+      ng-class="{selected: isSelectedTask(task)}"
       ng-repeat="task in filteredTasks = (tasks |
         tasksWithStudentName:filters.studentName |
         tasksInTutorials:filters.tutorials |
         tasksOfTaskDefinition:filters.taskDefinition
-      )"
-      ng-init="$index == 0 && setSelectedTask(task)">
+      )">
       <div class="task-data">
         <h4 class="list-group-item-heading">
           {{task.project().name}}

@@ -17,5 +17,5 @@ angular.module('doubtfire.units.states.tasks.inbox', [])
 )
 
 .controller('TaskInboxStateCtrl', ($scope, Unit) ->
-  $scope.taskSource = Unit.tasksForTaskInbox
+  $scope.taskData.source = Unit.tasksForTaskInbox
 )

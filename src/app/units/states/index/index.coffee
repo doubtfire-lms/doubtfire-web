@@ -20,6 +20,10 @@ angular.module('doubtfire.units.states.index', [
 )
 
 .controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService) ->
+  # Cleanup
+  listeners = []
+  $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+
   #
   # Returns the state back home
   #
@@ -32,7 +36,7 @@ angular.module('doubtfire.units.states.index', [
   #
   # Fire whenever the unit code changes
   #
-  $scope.$watch 'unitId', (newId) ->
+  listeners.push $scope.$watch 'unitId', (newId) ->
     # Check if switching to teaching unit
     unitService.getUnitRoles (unitRoles) ->
       $scope.unitRole = _.find(unitRoles, { unit_id: newId })
@@ -56,6 +60,6 @@ angular.module('doubtfire.units.states.index', [
       console.log("???")
 
   # Load the unit role details whenever the ID changes
-  $scope.$watch 'unitRole.id', loadRequiredData
-  $scope.$watch 'project.id', loadRequiredData
+  listeners.push $scope.$watch 'unitRole.id', loadRequiredData
+  listeners.push $scope.$watch 'project.id', loadRequiredData
 )
