@@ -26,10 +26,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
         $scope.task.comments = response
-        # Add mock "is new" to highlight these comments
-        indexOfLastComment = $scope.task.comments.length - 1
-        indexOfNewComments = indexOfLastComment - $scope.task.num_new_comments + 1
-        $scope.rangeOfNewComments = [indexOfLastComment..indexOfNewComments]
         $scope.task.num_new_comments = 0
         scrollDown()
 

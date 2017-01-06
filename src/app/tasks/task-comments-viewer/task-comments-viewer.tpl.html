@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="panel-body">
-    <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'+created_at'" ng-class="{'comment-by-other-user': isOtherUser(comment), 'new-comment': rangeOfNewComments.indexOf($index) > -1}">
+    <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'-created_at'" ng-class="{'comment-by-other-user': isOtherUser(comment), 'new-comment': comment.is_new}">
       <div class="comment-details col-md-1">
         <span class="comment-by" tooltip="{{comment.comment_by}} on {{comment.created_at | date: 'short'}}" tooltip-append-to-body="true" tooltip-popover-delay="500">
           {{getInitials(comment.comment_by)}}
