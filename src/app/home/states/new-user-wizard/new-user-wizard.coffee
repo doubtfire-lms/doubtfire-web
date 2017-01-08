@@ -109,7 +109,6 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     user = if user? then user else $scope.user
     promises = []
     errorFn = (response) ->
-      console.log response
       alertService.add("danger", "Error: " + response.data.error, 6000)
     # update projects
     for project in $scope.projects

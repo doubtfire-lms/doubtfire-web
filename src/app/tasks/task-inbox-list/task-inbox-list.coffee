@@ -59,15 +59,10 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     findTaskForId = (id) -> _.find($scope.tasks, {id: id})
     # Watch for changes in unit ID
     listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
-      console.log "[2] unit.id watch fired"
-      if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
-        console.log "[3a] conditions not met to make changes!"
-        return
-      console.log "[3b] Querying task source..."
+      return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
       # Tasks for feedback or tasks for task inbox, depending on the data source
       $scope.taskData.source.query { id: newUnitId },
         (response) ->
-          console.log "[4] Response made, setting $scope.tasks"
           $scope.tasks = $scope.unit.incorporateTasks(response)
           # Load initial set task, either the first in the list of tasks or if
           # provided (URL) selected task id then load actual task in now
@@ -76,7 +71,6 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new temporaryTaskId
           listeners.push $scope.$watch 'taskData.temporaryTaskId', (newId, oldId) ->
-            console.log "[x] LISTENING!", newId
             return if newId == oldId
             $scope.taskData.selectedTask = findTaskForId(newId)
         (response) ->
@@ -85,7 +79,6 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     $scope.setSelectedTask = (task) ->
       # Must call on next cycle
       $scope.taskData.selectedTask = task
-      console.log "[888] Set selected task to", task
       $scope.taskData.onSelectedTaskChange?(task)
     $scope.isSelectedTask = (task) ->
       ($scope.taskData.selectedTask?.id || $scope.taskData.temporaryTaskId) == task.id

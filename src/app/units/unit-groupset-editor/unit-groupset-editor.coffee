@@ -42,7 +42,6 @@ angular.module('doubtfire.units.unit-groupset-editor', [])
       )
 
     $scope.removeGroupSet = (gs) ->
-      # console.log GroupSet
       GroupSet.delete(
         { unit_id: $scope.unit.id, id: gs.id },
         (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
