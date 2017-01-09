@@ -13,6 +13,8 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
     listeners = []
     $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
 
+    $scope.clearSelectedTask = -> $scope.task = null
+
     $scope.taskStatusData =
       keys:   _.sortBy(taskService.markedStatuses, (s) -> taskService.statusSeq[s])
       help:   taskService.helpDescriptions
