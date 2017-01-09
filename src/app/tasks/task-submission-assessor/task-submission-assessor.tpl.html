@@ -28,7 +28,7 @@
         ng-change="triggerTransition(status)"
         ng-model="task.status"
         class="form-control input-lg">
-        <option ng-repeat="status in taskStatusData.keys" value="{{status}}">
+        <option ng-repeat="status in taskStatusData.keys" value="{{taskStatusData.keys[$index]}}">
           {{taskStatusData.labels[status]}}
         </option>
       </select>
