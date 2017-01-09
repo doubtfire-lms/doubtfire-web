@@ -10,7 +10,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
   scope:
     task: '='
     comment: '=?'
-    autofocus: '=?'
+    autofocus: '@?'
     refocusOnTaskChange: '@?'
   controller: ($scope, $modal, $state, $timeout, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup

@@ -6,9 +6,9 @@ angular.module('doubtfire.common.markdown-editor', [])
   templateUrl: 'common/markdown-editor/markdown-editor.tpl.html'
   scope:
     markdownText: '=ngModel'
-    height: '@'
-    placeholder: '@'
-    autofocus: "=?"
+    height: '@?'
+    placeholder: '@?'
+    autofocus: "@?"
     focus: '=?'
   controller: ($scope, $timeout) ->
     DEFAULT_HEIGHT = 300
