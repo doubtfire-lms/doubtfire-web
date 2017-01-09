@@ -33,8 +33,9 @@ angular.module('doubtfire.units.states.tasks', [
     source: null,
     selectedTask: null,
     onSelectedTaskChange: (task) ->
-      $scope.taskData.temporaryTaskId = task.id
-      setTaskIdUrlParm(task?.id)
+      taskId = task?.id
+      $scope.taskData.temporaryTaskId = taskId
+      setTaskIdUrlParm(taskId)
   }
 
   # Changes the task ID in the URL parameter
