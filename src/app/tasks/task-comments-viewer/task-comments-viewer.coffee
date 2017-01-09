@@ -10,13 +10,19 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
   scope:
     task: '='
     comment: '=?'
+    autofocus: '=?'
+    refocusOnTaskChange: '@?'
   controller: ($scope, $modal, $state, $timeout, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+    # Cleanup
+    listeners = []
+    $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+
     # Initialise scope comment text
     unless _.isString $scope.comment?.text
       $scope.comment = { text: "" }
 
     # Watch for initial task
-    $scope.$watch 'task', (newTask) ->
+    listeners.push $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped
       $scope.project = newTask.project()
       $scope.rangeOfNewComments = []
@@ -28,6 +34,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         $scope.task.comments = response
         $scope.task.num_new_comments = 0
         scrollDown()
+        $scope.focus() if $scope.refocusOnTaskChange
 
     # Automatically scroll the inner div to the bottom of comments
     scrollDown = ->

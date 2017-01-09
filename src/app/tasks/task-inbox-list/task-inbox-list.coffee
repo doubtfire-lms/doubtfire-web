@@ -10,7 +10,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     unitRole: '='
     # Special taskData object
     taskData: '='
-  controller: ($scope, taskService, alertService, currentUser, groupService) ->
+  controller: ($scope, Unit, taskService, alertService, currentUser, groupService) ->
     # Cleanup
     listeners = []
     $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
