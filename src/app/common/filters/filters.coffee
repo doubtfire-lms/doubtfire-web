@@ -219,7 +219,7 @@ angular.module("doubtfire.common.filters", [])
   (tasks, tutorialIds) ->
     return tasks unless tasks?
     return [] if _.isEmpty tutorialIds
-    _.filter tasks, (task) -> _.includes(tutorialIds, task.tutorial_id)
+    _.filter tasks, (task) -> _.includes(tutorialIds, task.project().tutorial_id)
 )
 
 .filter('tasksWithStudentName', ->
