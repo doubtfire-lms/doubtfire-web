@@ -9,8 +9,9 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
   scope:
     task: '='
   controller: ($scope, $timeout, TaskFeedback, taskService, alertService) ->
-    clearSelectedTask = ->
-      $scope.task = null
+    # Cleanup
+    listeners = []
+    $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
 
     $scope.taskStatusData =
       keys:   _.sortBy(taskService.markedStatuses, (s) -> taskService.statusSeq[s])
@@ -23,11 +24,10 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
     $scope.triggerTransition = (status) ->
       taskService.updateTaskStatus $scope.task.project().unit, $scope.task.project(), $scope.task, status
 
-    $scope.$watch 'task', (newTask) ->
+    listeners.push $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped
       setDetails = ->
         $scope.hasPdf = newTask.has_pdf
-        $scope.project = newTask.project()
         $scope.taskPdfUrl = TaskFeedback.getTaskUrl(newTask)
         $scope.taskFilesUrl = TaskFeedback.getTaskFilesUrl(newTask)
       if newTask.needsSubmissionDetails()

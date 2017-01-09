@@ -4,7 +4,7 @@
       No Task Selected
     </div>
     <div class="panel-title" ng-show="task">
-      {{task.definition.name}} by {{project.name}}
+      {{task.definition.name}} by {{task.project().name}}
     </div>
   </div>
   <div class="panel-body text-muted no-pdf" ng-hide="hasPdf">
