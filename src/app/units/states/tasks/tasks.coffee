@@ -34,7 +34,6 @@ angular.module('doubtfire.units.states.tasks', [
     selectedTask: null,
     onSelectedTaskChange: (task) ->
       $scope.taskData.temporaryTaskId = task.id
-      $scope.focusCommentsTextarea?()
       setTaskIdUrlParm(task?.id)
   }
 
@@ -64,6 +63,4 @@ angular.module('doubtfire.units.states.tasks', [
     # unnecessarily; doing so will cause a re-request in the task
     # list which is not required.
     $event.preventDefault() if fromState == toState
-
-  $scope.focusCommentsTextarea = null
 )
