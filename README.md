@@ -93,7 +93,22 @@ Lastly, to compile and run a watch server and web server, use `grunt`:
 $ grunt
 ```
 
-You can then navigate to the Doubtfire web interface at **http://localhost:8000**
+You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
+
+To compile the front-end, ensure `doubtfire-api` is placed as a sibling directory to `doubtfire-web`, then run:
+
+```
+$ cd /path/to/repos
+$ ls
+doubtfire-api    doubtfire-web
+$ cd ./doubtfire-api
+$ grunt deploy
+```
+
+You may prefix this command with the following environment variables:
+
+* `DF_API_URL` - the URL of the API (e.g., `https://doubtfire.com/api`). This will default to `window.location.host` if not set and dynamically generate a URL.
+* `DF_EXTERNAL_NAME` - a new name that removes references to the _Doubtfire_ name should you so want to not use such its original name (😢).
 
 ## Resources
 
