@@ -337,7 +337,7 @@ angular.module("doubtfire.common.services.tasks", [])
       alertService.add("info", "Status change was not changed.", 4000)
 
 
-  taskService.updateTaskStatus = (unit, project, task, status) ->
+  taskService.updateTaskStatus = (unit, project, task, status, success, failure) ->
     oldStatus = task.status
     updateFunc = ->
       Task.update { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status, grade: task.grade, quality_pts: task.quality_pts },
@@ -346,11 +346,13 @@ angular.module("doubtfire.common.services.tasks", [])
           taskService.processTaskStatusChange unit, project, task, status, value
           analyticsService.event 'Task Service', 'Updated Task Status', status
           analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
+          success?()
         # Fail
         (value) ->
           task.status = oldStatus
           alertService.add("danger", value.data.error, 6000)
           analyticsService.event 'Task Service', 'Failed to Update Task Status', status
+          failure?()
     # Must provide grade if graded and in a final complete state
     if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
       GradeTaskModal.show(task).result.then(
