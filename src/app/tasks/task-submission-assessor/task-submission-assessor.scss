@@ -20,6 +20,7 @@ task-submission-assessor {
     .panel-footer {
       padding: 0;
       height: 55px;
+      border-radius: $border-radius-base;
       .btn-group {
         display: flex;
         height: 100%;
@@ -33,9 +34,11 @@ task-submission-assessor {
         border-bottom-style: none;
         &:first-child {
           border-left-style: none;
+          border-bottom-left-radius: $border-radius-base;
         }
         &:last-child {
           border-right-style: none;
+          border-bottom-right-radius: $border-radius-base;
         }
       }
     }
