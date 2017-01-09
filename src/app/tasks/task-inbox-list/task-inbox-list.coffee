@@ -61,13 +61,17 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
       return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
       # Tasks for feedback or tasks for task inbox, depending on the data source
-      $scope.taskData.source.query { id: newUnitId },
+      $scope.taskData.source.query { id: newUnitId, task_def_id: $scope.filters.taskDefinitionIdSelected },
         (response) ->
           $scope.tasks = $scope.unit.incorporateTasks(response)
           # Load initial set task, either the first in the list of tasks or if
           # provided (URL) selected task id then load actual task in now
           task = findTaskForId($scope.taskData.temporaryTaskId) || _.first($scope.tasks)
           $scope.setSelectedTask(task)
+          # If loading via task definitions, fill
+          if $scope.taskData == Unit.tasksForDefinition
+            unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.selectedDefinition)
+            _.extend($scope.tasks, unstartedTasks)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new temporaryTaskId
           listeners.push $scope.$watch 'taskData.temporaryTaskId', (newId, oldId) ->
