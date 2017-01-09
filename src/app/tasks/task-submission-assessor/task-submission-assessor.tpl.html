@@ -26,8 +26,11 @@
     <span ng-show="showLoading">
       Loading Task Details...
     </span>
-    <span ng-show="task">
+    <span ng-show="task && task.processing_pdf">
       PDF Still Processing
+    </span>
+    <span ng-show="task && !task.processing_pdf">
+      No Submission Uploaded
     </span>
     <span ng-hide="task">
       No Task Selected
