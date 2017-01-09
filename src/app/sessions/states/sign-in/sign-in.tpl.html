@@ -52,10 +52,10 @@
   <i class="fa fa-spinner fa-pulse fa-5x" ng-if="!authMethodLoaded && waitingAWhile && !authMethodFailed"></i>
   <div class="panel panel-danger" ng-if="authMethodFailed">
     <div class="panel-heading">
-      <h3 class="panel-title">Doubtfire Down</h3>
+      <h3 class="panel-title">{{externalName}} Down</h3>
     </div>
     <div class="panel-body">
-      <p>Doubtfire cannot connect to the server.</p>
+      <p>{{externalName}} cannot connect to the server.</p>
       <p>Please check that <a href="{{api}}"><code>{{api}}</code></a> is up and running or try again in a while.</p>
     </div>
   </div>
