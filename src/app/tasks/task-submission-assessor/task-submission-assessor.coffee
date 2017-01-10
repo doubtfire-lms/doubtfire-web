@@ -10,6 +10,7 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
     task: '='
     nextTask: '=onClickNextTask'
     previousTask: '=onClickPreviousTask'
+    onChangeTask: '='
   controller: ($scope, $timeout, TaskFeedback, taskService, alertService) ->
     # Cleanup
     listeners = []
@@ -26,9 +27,11 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
 
     $scope.goToNextTask = ->
       $scope.task = $scope.nextTask() if $scope.hasNextTask
+      $scope.onChangeTask?($scope.task)
 
     $scope.goToPreviousTask = ->
       $scope.task = $scope.previousTask() if $scope.hasPreviousTask
+      $scope.onChangeTask?($scope.task)
 
     # Triggers a new update to the task status
     $scope.triggerTransition = (status) ->
