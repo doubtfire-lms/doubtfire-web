@@ -389,6 +389,26 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.taskIsGraded = (task) ->
     task? and task.definition.is_graded and task.grade?
 
+  taskService.taskKeyFromString = (taskKeyString) ->
+    taskKeyComponents = taskKeyString?.split('/')
+    if taskKeyComponents
+      studentId = _.isString(_.first(taskKeyComponents))
+      taskDefAbbr = _.isString(_.last(taskKeyComponents))
+    {
+      studentId: studentId
+      taskDefAbbr: taskDefAbbr
+    }
+
+  taskService.taskKeyToString = (task) ->
+    key = task.taskKey()
+    "#{key.studentId}/#{key.taskDefAbbr}"
+
+  taskService.taskKey = (task) ->
+    {
+      studentId: task.project().student_id
+      taskDefAbbr: task.definition.abbreviation
+    }
+
   taskService.addComment = (task, textString, success, failure) ->
     TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
       (response) ->

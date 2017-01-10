@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.tasks.definition', [])
 .config(($stateProvider) ->
   $stateProvider.state 'units/tasks/definition', {
     parent: 'units/tasks'
-    url: '/definition/:taskId'
+    url: '/definition/{taskKey:any}'
     # We can recycle the task inbox, switching the data source scope variable
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskDefinitionStateCtrl"

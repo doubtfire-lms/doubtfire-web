@@ -108,11 +108,11 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
-          task = findTaskForId($scope.taskData.temporaryTaskId) || _.first($scope.filteredTasks)
+          task = findTaskForId($scope.taskData.taskKey) || _.first($scope.filteredTasks)
           $scope.setSelectedTask(task)
           # For when URL has been manually changed, set the selected task
-          # using new array of tasks loaded from the new temporaryTaskId
-          listeners.push $scope.$watch 'taskData.temporaryTaskId', (newId, oldId) ->
+          # using new array of tasks loaded from the new taskKey
+          listeners.push $scope.$watch 'taskData.taskKey', (newId, oldId) ->
             return if newId == oldId
             $scope.taskData.selectedTask = findTaskForId(newId)
         (response) ->
@@ -130,7 +130,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       # Non-null tasks
       if task.id != null
         # Compare ID directly
-        ($scope.taskData.selectedTask?.id || $scope.taskData.temporaryTaskId) == task.id
+        ($scope.taskData.selectedTask?.id || $scope.taskData.taskKey) == task.id
       else
         # Compare project IDs (based on student)
         $scope.taskData.selectedTask?.project().project_id == task.project().project_id

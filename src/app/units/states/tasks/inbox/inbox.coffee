@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.tasks.inbox', [])
 .config(($stateProvider) ->
   $stateProvider.state 'units/tasks/inbox', {
     parent: 'units/tasks'
-    url: '/inbox/:taskId'
+    url: '/inbox/{taskKey:any}'
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskInboxStateCtrl"
     data:

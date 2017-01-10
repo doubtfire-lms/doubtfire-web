@@ -85,6 +85,12 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).icon
     task.statusLabel = () ->
       taskService.statusData(task.status).label
+    task.taskKey = ->
+      taskService.taskKey(task)
+    task.taskKeyToString = ->
+      taskService.taskKeyToString(task)
+    task.taskKeyFromString = (taskKeyString) ->
+      taskService.taskKeyFromString(taskKeyString)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
     task.getSubmissionDetails = ( success, failure ) ->

@@ -20,46 +20,46 @@ angular.module('doubtfire.units.states.tasks', [
    }
 )
 
-.controller('UnitsTasksStateCtrl', ($scope, $state) ->
+.controller('UnitsTasksStateCtrl', ($scope, $state, taskService) ->
   # Cleanup
   listeners = []
   $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
 
   # Task data wraps:
-  #  * the URL task ID sourced from the URL,
+  #  * the URL task composite key (project username + task def abbreviation) sourced from the URL,
   #  * the task source used for the task inbox list,
   #  * the actual selectedTask reference
   #  * the callback for when a task is updated (accepts the new task)
   $scope.taskData = {
-    temporaryTaskId: null
+    taskKey: null
     source: null
     selectedTask: null
     onSelectedTaskChange: (task) ->
-      taskId = task?.id
-      $scope.taskData.temporaryTaskId = taskId
-      setTaskIdUrlParm(taskId)
+      taskKey = task?.taskKey()
+      $scope.taskData.taskKey = taskKey
+      setTaskKeyAsUrlParams(task)
   }
 
-  # Changes the task ID in the URL parameter
-  setTaskIdUrlParm = (taskId) ->
+  # Sets URL parameters for the task key
+  setTaskKeyAsUrlParams = (task) ->
     # Change URL of new task without notify
-    $state.go($state.$current, {taskId: taskId}, {notify: false})
+    $state.go($state.$current, {taskKey: task?.taskKeyToString()}, {notify: false})
 
-  # Sets a URL task id to be used by task-inbox-list
-  setTemporaryTaskId = (taskId) ->
+  # Sets task key from URL parameters
+  setTaskKeyFromUrlParams = (taskKeyString) ->
     # Propagate selected task change downward to search for actual task
     # inside the task inbox list
-    $scope.taskData.temporaryTaskId = if !taskId? || _.isEmpty(taskId.trim()) then null else +taskId
+    $scope.taskData.taskKey = taskService.taskKeyFromString(taskKeyString)
 
-  # Child states will use taskId to notify what task has been
+  # Child states will use taskKey to notify what task has been
   # selected by the child on first load.
-  taskId = $state.$current.locals.globals.$stateParams.taskId
-  setTemporaryTaskId(taskId)
+  taskKey = $state.$current.locals.globals.$stateParams.taskKey
+  setTaskKeyFromUrlParams(taskKey)
 
-  # Whenever the state is changed, we look at the task ID and
-  # see if we can set it
+  # Whenever the state is changed, we look at the taskKey in the URL params
+  # see if we can set it as an actual taskKey object
   listeners.push $scope.$on '$stateChangeStart', ($event, toState, toParams, fromState, fromParams) ->
-    setTemporaryTaskId(toParams.taskId)
+    setTaskKeyFromUrlParams(toParams.taskKey)
     # Use preventDefault to prevent destroying the child state's
     # scope if they are the same states. Otherwise, if they are
     # the same, we destroy the state's scope and recreate it again
