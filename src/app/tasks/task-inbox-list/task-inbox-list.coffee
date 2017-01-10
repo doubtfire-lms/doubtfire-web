@@ -91,8 +91,8 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     # Student Name options
     $scope.studentNameChanged = ->
       applyFilters()
-    # Finds a task (or null) given its ID
-    findTaskForId = (id) -> _.find($scope.tasks, {id: id})
+    # Finds a task (or null) given its task key
+    findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
     # Callback to refresh data from the task source
     refreshData = ->
       # Tasks for feedback or tasks for task inbox, depending on the data source
@@ -108,13 +108,13 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
-          task = findTaskForId($scope.taskData.taskKey) || _.first($scope.filteredTasks)
+          task = findTaskForTaskKey($scope.taskData.taskKey) || _.first($scope.filteredTasks)
           $scope.setSelectedTask(task)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey
           listeners.push $scope.$watch 'taskData.taskKey', (newId, oldId) ->
             return if newId == oldId
-            $scope.taskData.selectedTask = findTaskForId(newId)
+            $scope.taskData.selectedTask = findTaskForTaskKey(newId)
         (response) ->
           alertService.add("danger", response.data.error, 6000)
     # Watch for changes in unit ID

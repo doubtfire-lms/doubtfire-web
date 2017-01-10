@@ -392,8 +392,9 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.taskKeyFromString = (taskKeyString) ->
     taskKeyComponents = taskKeyString?.split('/')
     if taskKeyComponents
-      studentId = _.isString(_.first(taskKeyComponents))
-      taskDefAbbr = _.isString(_.last(taskKeyComponents))
+      studentId = _.first(taskKeyComponents)
+      taskDefAbbr = _.last(taskKeyComponents)
+      return unless _.isString(studentId) && _.isString(taskDefAbbr)
     {
       studentId: studentId
       taskDefAbbr: taskDefAbbr
@@ -408,6 +409,9 @@ angular.module("doubtfire.common.services.tasks", [])
       studentId: task.project().student_id
       taskDefAbbr: task.definition.abbreviation
     }
+
+  taskService.hasTaskKey = (task, key) ->
+    task?.taskKey().studentId == key?.studentId && task?.taskKey().taskDefAbbr == key?.taskDefAbbr
 
   taskService.addComment = (task, textString, success, failure) ->
     TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
