@@ -411,7 +411,7 @@ angular.module("doubtfire.common.services.tasks", [])
     }
 
   taskService.hasTaskKey = (task, key) ->
-    task?.taskKey().studentId == key?.studentId && task?.taskKey().taskDefAbbr == key?.taskDefAbbr
+    _.isEqual(task?.taskKey(), key)
 
   taskService.addComment = (task, textString, success, failure) ->
     TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },

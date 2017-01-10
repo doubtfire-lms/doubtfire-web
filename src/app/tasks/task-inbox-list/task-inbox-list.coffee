@@ -112,9 +112,9 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           $scope.setSelectedTask(task)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey
-          listeners.push $scope.$watch 'taskData.taskKey', (newId, oldId) ->
-            return if newId == oldId
-            $scope.taskData.selectedTask = findTaskForTaskKey(newId)
+          listeners.push $scope.$watch 'taskData.taskKey', (newKey, oldKey) ->
+            return if _.isEqual(newKey, oldKey) || !newKey?
+            $scope.setSelectedTask(findTaskForTaskKey(newKey))
         (response) ->
           alertService.add("danger", response.data.error, 6000)
     # Watch for changes in unit ID
