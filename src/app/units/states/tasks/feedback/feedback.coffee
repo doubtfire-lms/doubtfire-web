@@ -1,7 +1,7 @@
 angular.module('doubtfire.units.states.tasks.feedback', [])
 
 #
-# Feedback for students
+# Give feedback when on one-to-one for students (i.e., tasksRequiringFeedback)
 #
 .config(($stateProvider) ->
   $stateProvider.state 'units/tasks/feedback', {

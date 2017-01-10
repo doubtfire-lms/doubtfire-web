@@ -3,13 +3,13 @@
     <div class="input-group">
       <input type="text" class="form-control" ng-model="filters.studentName" placeholder="Search students...">
       <span class="input-group-btn">
-        <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOpts" btn-checkbox>
-          <i class="fa fa-chevron-{{showSearchOpts ? 'up' : 'down'}}"></i>
+        <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOptions" btn-checkbox>
+          <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
         </button>
       </span><!--/search-options-toggle-->
     </div><!--/search-->
   </div>
-  <div class="panel-body search-options" ng-show="showSearchOpts">
+  <div class="panel-body search-options" ng-show="showSearchOptions">
     <form>
       <div class="form-group task-definition">
         <label>Task Definition</label>
@@ -18,8 +18,9 @@
             ng-model="filters.taskDefinitionIdSelected"
             ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
             ng-change="taskDefinitionIdChanged()"
+            autofocus="{{autofocus.onTaskDefinitionSelect}}"
             class="form-control input-md">
-            <option value="">All task definitions</option>
+            <option value="" ng-if="!isTaskDefMode">All task definitions</option>
           </select>
         </div>
         <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
@@ -39,7 +40,7 @@
     </form>
   </div><!--/search-options-->
   <ul class="list-group">
-    <li class="list-group-item list-group-item-task clearfix {{statusClass(task.status)}}"
+    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
       ng-repeat="task in filteredTasks = (tasks |

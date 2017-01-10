@@ -1,6 +1,7 @@
 angular.module('doubtfire.units.states.tasks', [
   'doubtfire.units.states.tasks.inbox'
   'doubtfire.units.states.tasks.feedback'
+  'doubtfire.units.states.tasks.definition'
 ])
 
 #
@@ -47,7 +48,7 @@ angular.module('doubtfire.units.states.tasks', [
   setTemporaryTaskId = (taskId) ->
     # Propagate selected task change downward to search for actual task
     # inside the task inbox list
-    $scope.taskData.temporaryTaskId = if _.isEmpty(taskId.trim()) then null else +taskId
+    $scope.taskData.temporaryTaskId = if !taskId? || _.isEmpty(taskId.trim()) then null else +taskId
 
   # Child states will use taskId to notify what task has been
   # selected by the child on first load.

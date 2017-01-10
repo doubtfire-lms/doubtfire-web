@@ -48,7 +48,12 @@
               <li>
                 <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})">Give Student Feedback</a>
               </li>
-              <li if-role="Admin Convenor">
+              <li>
+                <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})">Mark By Definition</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li ng-if="unitRole.role == 'Convenor'">
                 <a ui-sref="admin/units#edit({unitId: unitRole.unit_id})">Modify Unit Details</a>
               </li>
             </ul><!--/teaching-tasks-->

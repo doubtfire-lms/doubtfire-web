@@ -6,11 +6,13 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
   restrict: 'E'
   templateUrl: 'tasks/task-inbox-list/task-inbox-list.tpl.html'
   scope:
-    unit: '='
-    unitRole: '='
     # Special taskData object
     taskData: '='
-  controller: ($scope, Unit, taskService, alertService, currentUser, groupService) ->
+    unit: '='
+    unitRole: '='
+    filters: '=?'
+    showSearchOptions: '=?'
+  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService) ->
     # Cleanup
     listeners = []
     $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
@@ -19,15 +21,24 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     unless $scope.taskData?.source?
       throw Error "Invalid taskData.source provided for task inbox list; supply one of Unit.tasksForTaskInbox or Unit.tasksRequiringFeedback"
     # Search option filters
-    $scope.showSearchOpts = false
-    $scope.statusClass = taskService.statusClass
-    $scope.filters = {
+    $scope.filters = _.extend({
       studentName: null
       tutorialIdSelected: if $scope.unitRole.role == 'Tutor' then 'mine' else 'all'
       tutorials: []
       taskDefinitionIdSelected: null
       taskDefinition: null
-    }
+    }, $scope.filters)
+    # Let's call having a source of tasksForDefinition plus having a task definition
+    # auto-selected with the search options open task def mode -- i.e., the mode
+    # for selecting tasks by task definitions
+    $scope.isTaskDefMode = $scope.taskData.source == Unit.tasksForDefinition && $scope.filters?.taskDefinitionIdSelected? && $scope.showSearchOptions?
+    openTaskDefs = ->
+      # Automatically "open" the task definition select element if in task def mode
+      if $scope.isTaskDefMode
+        selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
+        selectEl.size = 10
+        selectEl.focus()
+    $timeout openTaskDefs, 500
     # Tutorial options
     tutorials = $scope.unit.tutorials.concat([
       { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
@@ -54,19 +65,19 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       taskDefId = $scope.filters.taskDefinitionIdSelected
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
+      refreshData() if $scope.isTaskDefMode
     $scope.tutorialIdChanged($scope.filters.taskDefinitionIdSelected)
     # Finds a task (or null) given its ID
     findTaskForId = (id) -> _.find($scope.tasks, {id: id})
-    # Watch for changes in unit ID
-    listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
-      return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
+    # Callback to refresh data from the task source
+    refreshData = ->
       # Tasks for feedback or tasks for task inbox, depending on the data source
-      $scope.taskData.source.query { id: newUnitId, task_def_id: $scope.filters.taskDefinitionIdSelected },
+      $scope.taskData.source.query { id: $scope.unit.id, task_def_id: $scope.filters.taskDefinitionIdSelected },
         (response) ->
           $scope.tasks = $scope.unit.incorporateTasks(response)
           # If loading via task definitions, fill
-          if $scope.taskData == Unit.tasksForDefinition
-            unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.selectedDefinition)
+          if $scope.isTaskDefMode
+            unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.filters.taskDefinitionIdSelected)
             _.extend($scope.tasks, unstartedTasks)
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
@@ -85,11 +96,22 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
             $scope.taskData.selectedTask = findTaskForId(newId)
         (response) ->
           alertService.add("danger", response.data.error, 6000)
+    # Watch for changes in unit ID
+    listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
+      return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
+      refreshData()
     # UI call to change currently selected task
     $scope.setSelectedTask = (task) ->
       # Must call on next cycle
       $scope.taskData.selectedTask = task
       $scope.taskData.onSelectedTaskChange?(task)
     $scope.isSelectedTask = (task) ->
-      ($scope.taskData.selectedTask?.id || $scope.taskData.temporaryTaskId) == task.id
+      # Non-null tasks
+      if task.id != null
+        # Compare ID directly
+        ($scope.taskData.selectedTask?.id || $scope.taskData.temporaryTaskId) == task.id
+      else
+        # Compare project IDs (based on student)
+        $scope.taskData.selectedTask?.project().project_id == task.project().project_id
+
 )
