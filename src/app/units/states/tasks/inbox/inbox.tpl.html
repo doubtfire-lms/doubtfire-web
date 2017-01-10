@@ -5,10 +5,14 @@
     task-data="taskData"
     unit="unit"
     unit-role="unitRole"
+    get-next-task="getNextTask"
+    get-previous-task="getPreviousTask"
     class="col-xs-12 col-md-2"><!--/panel-1-->
   </task-inbox-list>
   <task-submission-assessor
     task="taskData.selectedTask"
+    on-click-next-task="getNextTask"
+    on-click-previous-task="getPreviousTask"
     class="col-xs-12 col-md-7">
   </task-submission-assessor><!--/panel-2-->
   <task-comments-viewer

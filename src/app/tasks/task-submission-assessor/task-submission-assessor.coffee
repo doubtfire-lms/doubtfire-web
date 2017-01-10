@@ -8,6 +8,8 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
   templateUrl: 'tasks/task-submission-assessor/task-submission-assessor.tpl.html'
   scope:
     task: '='
+    nextTask: '=onClickNextTask'
+    previousTask: '=onClickPreviousTask'
   controller: ($scope, $timeout, TaskFeedback, taskService, alertService) ->
     # Cleanup
     listeners = []
@@ -22,6 +24,12 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
       labels: taskService.statusLabels
       class:  taskService.statusClass
 
+    $scope.goToNextTask = ->
+      $scope.task = $scope.nextTask() if $scope.hasNextTask
+
+    $scope.goToPreviousTask = ->
+      $scope.task = $scope.previousTask() if $scope.hasPreviousTask
+
     # Triggers a new update to the task status
     $scope.triggerTransition = (status) ->
       taskService.updateTaskStatus $scope.task.project().unit, $scope.task.project(), $scope.task, status
@@ -32,6 +40,8 @@ angular.module('doubtfire.tasks.task-submission-assessor', [])
         $scope.hasPdf = newTask.has_pdf
         $scope.taskPdfUrl = TaskFeedback.getTaskUrl(newTask)
         $scope.taskFilesUrl = TaskFeedback.getTaskFilesUrl(newTask)
+        $scope.hasNextTask = $scope.nextTask()?
+        $scope.hasPreviousTask = $scope.previousTask()?
       if newTask.needsSubmissionDetails()
         $scope.showLoading = $scope.loadedDetails = false
         showLoadingTimeout = $timeout((-> $scope.showLoading = true), 1000)

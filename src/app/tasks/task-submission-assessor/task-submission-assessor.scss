@@ -25,10 +25,15 @@ task-submission-assessor {
         display: flex;
         height: 100%;
       }
+      .btn-previous-task, .btn-next-task {
+        flex: 1;
+      }
+      .btn-status {
+        flex: 2;
+      }
       .btn {
         @include flex-center;
         font-size: 2em;
-        flex: 1;
         border-radius: 0;
         border-top-style: none;
         border-bottom-style: none;

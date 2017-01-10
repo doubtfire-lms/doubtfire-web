@@ -25,14 +25,15 @@ angular.module('doubtfire.units.states.tasks', [
   listeners = []
   $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
 
-  # Task data wraps the URL task ID sourced from the URL,
-  # the task source used for the task inbox list, the
-  # actual selectedTask reference and the callback for
-  # when a task is updated (accepts the new task)
+  # Task data wraps:
+  #  * the URL task ID sourced from the URL,
+  #  * the task source used for the task inbox list,
+  #  * the actual selectedTask reference
+  #  * the callback for when a task is updated (accepts the new task)
   $scope.taskData = {
-    temporaryTaskId: null,
-    source: null,
-    selectedTask: null,
+    temporaryTaskId: null
+    source: null
+    selectedTask: null
     onSelectedTaskChange: (task) ->
       taskId = task?.id
       $scope.taskData.temporaryTaskId = taskId

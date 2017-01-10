@@ -12,6 +12,8 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
+    getNextTask: '=?'
+    getPreviousTask: '=?'
   controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService) ->
     # Cleanup
     listeners = []
