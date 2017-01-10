@@ -28,6 +28,23 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       taskDefinitionIdSelected: null
       taskDefinition: null
     }, $scope.filters)
+    # Sets the new filteredTasks variable
+    applyFilters = ->
+      filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
+      filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
+      filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
+      $scope.filteredTasks = filteredTasks
+    # Next/previous task funcs
+    $scope.getNextTask = ->
+      idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
+      idx = if idx == -1 then 0 else idx + 1
+      console.log "The next index is #{idx}"
+      $scope.filteredTasks[idx]
+    $scope.getPreviousTask = ->
+      idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
+      idx = if idx == -1 then 0 else idx - 1
+      console.log "The previous index is #{idx}"
+      $scope.filteredTasks[idx]
     # Let's call having a source of tasksForDefinition plus having a task definition
     # auto-selected with the search options open task def mode -- i.e., the mode
     # for selecting tasks by task definitions
@@ -57,6 +74,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map $scope.filters.tutorials, 'id'
+      applyFilters()
     $scope.tutorialIdChanged($scope.filters.tutorialIdSelected)
     # Task definition options
     $scope.groupSetName = (id) ->
@@ -66,7 +84,11 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
       refreshData() if $scope.isTaskDefMode
+      applyFilters()
     $scope.tutorialIdChanged($scope.filters.taskDefinitionIdSelected)
+    # Student Name options
+    $scope.studentNameChanged = ->
+      applyFilters()
     # Finds a task (or null) given its ID
     findTaskForId = (id) -> _.find($scope.tasks, {id: id})
     # Callback to refresh data from the task source
@@ -79,15 +101,12 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           if $scope.isTaskDefMode
             unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.filters.taskDefinitionIdSelected)
             _.extend($scope.tasks, unstartedTasks)
+          # Apply initial filters
+          applyFilters()
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
-          task = findTaskForId($scope.taskData.temporaryTaskId)
-          unless task?
-            filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
-            filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
-            filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
-            task = _.first(filteredTasks)
+          task = findTaskForId($scope.taskData.temporaryTaskId) || _.first($scope.filteredTasks)
           $scope.setSelectedTask(task)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new temporaryTaskId
@@ -113,5 +132,4 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       else
         # Compare project IDs (based on student)
         $scope.taskData.selectedTask?.project().project_id == task.project().project_id
-
 )

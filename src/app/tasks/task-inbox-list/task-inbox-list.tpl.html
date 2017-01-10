@@ -1,7 +1,7 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <div class="input-group">
-      <input type="text" class="form-control" ng-model="filters.studentName" placeholder="Search students...">
+      <input type="text" class="form-control" ng-model="filters.studentName" ng-change="studentNameChanged()" placeholder="Search students...">
       <span class="input-group-btn">
         <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOptions" btn-checkbox>
           <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
@@ -43,11 +43,7 @@
     <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks = (tasks |
-        tasksWithStudentName:filters.studentName |
-        tasksInTutorials:filters.tutorials |
-        tasksOfTaskDefinition:filters.taskDefinition
-      )">
+      ng-repeat="task in filteredTasks">
       <div class="task-data">
         <h4 class="list-group-item-heading">
           {{task.project().name}}
