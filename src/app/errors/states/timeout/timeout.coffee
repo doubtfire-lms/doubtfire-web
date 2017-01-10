@@ -3,7 +3,7 @@ angular.module("doubtfire.errors.states.timeout", [])
 #
 # Define the timeout state
 #
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   stateData =
     url: "/timeout?dest&params"
     views:
@@ -12,7 +12,7 @@ angular.module("doubtfire.errors.states.timeout", [])
         templateUrl: "errors/states/timeout/timeout.tpl.html"
     data:
       pageTitle: "_Timeout_"
-  headerServiceProvider.state "timeout", stateData, 'TimeoutCtrl'
+  $stateProvider.state "timeout", stateData, 'TimeoutCtrl'
 )
 .controller("TimeoutCtrl", ($scope, $timeout, api, auth, redirectService, currentUser) ->
   doRedirect = -> redirectService.redirect "home", {}

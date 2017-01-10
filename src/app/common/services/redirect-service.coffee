@@ -10,23 +10,19 @@ angular.module("doubtfire.common.services.redirect", [])
   deserialize = (str, prefix) ->
     result = {}
     parts = str.split "&"
-
     for i, attr of parts
       kv = attr.split "="
       k = kv[0]
       v = kv[1]
       result[k] = v
-
     result
 
   redirectService.redirect = (defaultState, defaultParams) ->
     destState = defaultState
     destParams = defaultParams
-
-    if $stateParams["dest"]
+    if $stateParams["dest"] && $stateParams["dest"] isnt 'not_found'
       destState = $stateParams["dest"]
-      destParams = deserialize $stateParams["params"]
-
+      destParams = deserialize $stateParams["params"] if $stateParams["params"]?
     $state.go destState, destParams
 
   redirectService
