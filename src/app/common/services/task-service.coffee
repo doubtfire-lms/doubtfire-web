@@ -400,9 +400,13 @@ angular.module("doubtfire.common.services.tasks", [])
       taskDefAbbr: taskDefAbbr
     }
 
-  taskService.taskKeyToString = (task) ->
+  taskService.taskKeyToUrlString = (task) ->
     key = task.taskKey()
     "#{key.studentId}/#{key.taskDefAbbr}"
+
+  taskService.taskKeyToIdString = (task) ->
+    key = task.taskKey()
+    "task-key-#{key.studentId}-#{key.taskDefAbbr}"
 
   taskService.taskKey = (task) ->
     {

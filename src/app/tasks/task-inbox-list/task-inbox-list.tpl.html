@@ -41,6 +41,7 @@
   </div><!--/search-options-->
   <ul class="list-group">
     <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
+      id="{{task.taskKeyToIdString()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
       ng-repeat="task in filteredTasks">

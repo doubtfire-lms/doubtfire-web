@@ -87,8 +87,10 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).label
     task.taskKey = ->
       taskService.taskKey(task)
-    task.taskKeyToString = ->
-      taskService.taskKeyToString(task)
+    task.taskKeyToUrlString = ->
+      taskService.taskKeyToUrlString(task)
+    task.taskKeyToIdString = ->
+      taskService.taskKeyToIdString(task)
     task.taskKeyFromString = (taskKeyString) ->
       taskService.taskKeyFromString(taskKeyString)
     task.hasTaskKey = (key) ->

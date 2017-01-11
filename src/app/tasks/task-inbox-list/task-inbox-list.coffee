@@ -57,7 +57,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
         selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
         selectEl.size = 10
         selectEl.focus()
-    $timeout openTaskDefs, 500
+    $timeout openTaskDefs
     # Tutorial options
     tutorials = $scope.unit.tutorials.concat([
       { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
@@ -109,7 +109,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
           # then load actual task in now or the first task that applies
           # to the given set of filters.
           task = findTaskForTaskKey($scope.taskData.taskKey) || _.first($scope.filteredTasks)
-          $scope.setSelectedTask(task)
+          $timeout((-> $scope.setSelectedTask(task)), 500)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey
           listeners.push $scope.$watch 'taskData.taskKey', (newKey, oldKey) ->
@@ -123,9 +123,15 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       refreshData()
     # UI call to change currently selected task
     $scope.setSelectedTask = (task) ->
-      # Must call on next cycle
       $scope.taskData.selectedTask = task
       $scope.taskData.onSelectedTaskChange?(task)
+      scrollToTaskInList(task)
+    scrollToTaskInList = (task) ->
+      taskEl = document.querySelector("task-inbox-list ##{task.taskKeyToIdString()}")
+      return unless taskEl?
+      funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
+      return unless funcName?
+      taskEl[funcName]({behavior: 'smooth', block: 'top'})
     $scope.isSelectedTask = (task) ->
       # Non-null tasks
       if task.id != null

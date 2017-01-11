@@ -43,7 +43,7 @@ angular.module('doubtfire.units.states.tasks', [
   # Sets URL parameters for the task key
   setTaskKeyAsUrlParams = (task) ->
     # Change URL of new task without notify
-    $state.go($state.$current, {taskKey: task?.taskKeyToString()}, {notify: false})
+    $state.go($state.$current, {taskKey: task?.taskKeyToUrlString()}, {notify: false})
 
   # Sets task key from URL parameters
   setTaskKeyFromUrlParams = (taskKeyString) ->
