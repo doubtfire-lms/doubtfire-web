@@ -1,4 +1,6 @@
-angular.module('doubtfire.units.states.tasks.feedback', [])
+angular.module('doubtfire.units.states.tasks.feedback', [
+  'doubtfire.units.states.tasks.inbox.directives'
+])
 
 #
 # Give feedback when on one-to-one for students (i.e., tasksRequiringFeedback)

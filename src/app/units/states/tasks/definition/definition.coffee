@@ -1,4 +1,6 @@
-angular.module('doubtfire.units.states.tasks.definition', [])
+angular.module('doubtfire.units.states.tasks.definition', [
+  'doubtfire.units.states.tasks.inbox.directives'
+])
 
 #
 # Mark tasks by task definition ID

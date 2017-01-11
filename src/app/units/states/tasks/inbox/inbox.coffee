@@ -1,4 +1,6 @@
-angular.module('doubtfire.units.states.tasks.inbox', [])
+angular.module('doubtfire.units.states.tasks.inbox', [
+  'doubtfire.units.states.tasks.inbox.directives'
+])
 
 #
 # Task inbox for tasks for tutors to deal with (i.e., tasksForTaskInbox)

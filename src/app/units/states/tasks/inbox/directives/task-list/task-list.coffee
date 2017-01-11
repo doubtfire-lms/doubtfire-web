@@ -1,10 +1,10 @@
-angular.module('doubtfire.tasks.task-inbox-list', [])
+angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
 #
-# View a list of tasks in inbox
+# View a list of tasks
 #
-.directive('taskInboxList', ->
+.directive('taskList', ->
   restrict: 'E'
-  templateUrl: 'tasks/task-inbox-list/task-inbox-list.tpl.html'
+  templateUrl: 'units/states/tasks/inbox/directives/task-list/task-list.tpl.html'
   scope:
     # Special taskData object
     taskData: '='
@@ -21,7 +21,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     $scope.onSelectedTaskChange = $scope.onSelectedTaskChange() if $scope.onSelectedTaskChange?
     # Check taskSource exists
     unless $scope.taskData?.source?
-      throw Error "Invalid taskData.source provided for task inbox list; supply one of Unit.tasksForTaskInbox or Unit.tasksRequiringFeedback"
+      throw Error "Invalid taskData.source provided for task list; supply one of Unit.tasksForTaskInbox, Unit.tasksRequiringFeedback, Unit.taskByTaskDefinition"
     # Search option filters
     $scope.filteredTasks = []
     $scope.filters = _.extend({
@@ -41,12 +41,11 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     $scope.getNextTask = ->
       idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
       idx = if idx == -1 then 0 else idx + 1
-      $scope.filteredTasks[idx]
+      $scope.filteredTasks?[idx]
     $scope.getPreviousTask = ->
       idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
       idx = if idx == -1 then 0 else idx - 1
-      console.log "The previous index is #{idx}"
-      $scope.filteredTasks[idx]
+      $scope.filteredTasks?[idx]
     # Let's call having a source of tasksForDefinition plus having a task definition
     # auto-selected with the search options open task def mode -- i.e., the mode
     # for selecting tasks by task definitions
@@ -95,7 +94,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
     # Callback to refresh data from the task source
     refreshData = ->
-      # Tasks for feedback or tasks for task inbox, depending on the data source
+      # Tasks for feedback or tasks for task, depending on the data source
       $scope.taskData.source.query { id: $scope.unit.id, task_def_id: $scope.filters.taskDefinitionIdSelected },
         (response) ->
           $scope.tasks = $scope.unit.incorporateTasks(response)
@@ -127,7 +126,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
       $scope.taskData.onSelectedTaskChange?(task)
       scrollToTaskInList(task) if task?
     scrollToTaskInList = (task) ->
-      taskEl = document.querySelector("task-inbox-list ##{task.taskKeyToIdString()}")
+      taskEl = document.querySelector("task-list ##{task.taskKeyToIdString()}")
       funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})

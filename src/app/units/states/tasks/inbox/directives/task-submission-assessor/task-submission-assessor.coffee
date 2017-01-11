@@ -1,11 +1,11 @@
-angular.module('doubtfire.tasks.task-submission-assessor', [])
+angular.module('doubtfire.units.states.tasks.inbox.directives.task-submission-assessor', [])
 #
 # View a student's submission of a task and allow assessment of status
 # triggering
 #
 .directive('taskSubmissionAssessor', ->
   restrict: 'E'
-  templateUrl: 'tasks/task-submission-assessor/task-submission-assessor.tpl.html'
+  templateUrl: 'units/states/tasks/inbox/directives/task-submission-assessor/task-submission-assessor.tpl.html'
   scope:
     task: '='
     nextTask: '=onClickNextTask'
