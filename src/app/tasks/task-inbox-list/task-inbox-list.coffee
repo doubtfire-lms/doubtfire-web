@@ -41,7 +41,6 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     $scope.getNextTask = ->
       idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
       idx = if idx == -1 then 0 else idx + 1
-      console.log "The next index is #{idx}"
       $scope.filteredTasks[idx]
     $scope.getPreviousTask = ->
       idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
