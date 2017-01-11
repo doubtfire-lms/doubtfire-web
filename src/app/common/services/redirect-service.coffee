@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.redirect", [])
   redirectService.redirect = (defaultState, defaultParams) ->
     destState = defaultState
     destParams = defaultParams
-    if $stateParams["dest"] && $stateParams["dest"] isnt 'not_found'
+    if $stateParams["dest"] && !_.includes(['not_found', 'unauthorised'], $stateParams["dest"])
       destState = $stateParams["dest"]
       destParams = deserialize $stateParams["params"] if $stateParams["params"]?
     $state.go destState, destParams
