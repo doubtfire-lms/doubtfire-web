@@ -17,6 +17,24 @@
   padding-right: 0 !important; // Override for col-sm-*
 }
 
+.panel-row {
+  display: flex;
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-body {
+    flex: 1;
+  }
+  .panel-heading, .panel-body, .panel-footer {
+    width: 100%;
+  }
+  .panel + .panel {
+    margin-left: $panel-body-padding;
+  }
+}
+
 .panel-marking-context {
   padding: 0;
   .panel {
