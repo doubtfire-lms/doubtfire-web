@@ -125,10 +125,9 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     $scope.setSelectedTask = (task) ->
       $scope.taskData.selectedTask = task
       $scope.taskData.onSelectedTaskChange?(task)
-      scrollToTaskInList(task)
+      scrollToTaskInList(task) if task?
     scrollToTaskInList = (task) ->
       taskEl = document.querySelector("task-inbox-list ##{task.taskKeyToIdString()}")
-      return unless taskEl?
       funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})

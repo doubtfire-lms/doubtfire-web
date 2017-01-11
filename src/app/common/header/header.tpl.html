@@ -54,7 +54,7 @@
               <li class="divider">
               </li>
               <li ng-if="unitRole.role == 'Convenor'">
-                <a ui-sref="admin/units#edit({unitId: unitRole.unit_id})">Modify Unit Details</a>
+                <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>
             </ul><!--/teaching-tasks-->
           </div>
@@ -65,8 +65,8 @@
       <li class="dropdown" dropdown if-role="Admin Convenor">
         <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a ui-sref="admin/units#index">Manage Units</a></li>
-          <li><a ui-sref="admin/users#index">Manage Users</a></li>
+          <li><a ui-sref="admin/units">Manage Units</a></li>
+          <li><a ui-sref="admin/users">Manage Users</a></li>
         </ul>
       </li><!--/administration-->
       <li class="dropdown" dropdown>
