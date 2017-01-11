@@ -23,6 +23,7 @@ angular.module('doubtfire.tasks.task-inbox-list', [])
     unless $scope.taskData?.source?
       throw Error "Invalid taskData.source provided for task inbox list; supply one of Unit.tasksForTaskInbox or Unit.tasksRequiringFeedback"
     # Search option filters
+    $scope.filteredTasks = []
     $scope.filters = _.extend({
       studentName: null
       tutorialIdSelected: if $scope.unitRole.role == 'Tutor' then 'mine' else 'all'
