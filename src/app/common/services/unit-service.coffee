@@ -61,12 +61,13 @@ angular.module("doubtfire.common.services.units", [])
 
     # Allow the caller to fetch a task definition from the unit based on its id
     unit.taskDef = (taskDef) ->
-      if typeof taskDef isnt 'number'
-        taskDef = taskDef.task_definition_id
-      result = _.find unit.task_definitions, {id: taskDef}
+      unless _.isObject(taskDef) || _.isNumber(taskDef)
+        throw Error "Task def must be a number or task definition object"
+      taskDefId = if _.isObject(taskDef) then taskDef.task_definition_id else taskDef
+      _.find unit.task_definitions, {id: taskDefId}
 
     unit.outcome = (outcomeId) ->
-      result = _.find unit.ilos, {id: outcomeId}
+      _.find unit.ilos, {id: outcomeId}
 
     # Allow the caller to fetch a tutorial from the unit based on its id
     unit.tutorialFromId = (tuteId) ->
@@ -96,7 +97,7 @@ angular.module("doubtfire.common.services.units", [])
     unit.findStudent = (id) ->
       unless unit.students?
         throw Error "Students not yet mapped to unit (unit.students is undefined)"
-      _.find unit.students, (s) -> s.project_id == id
+      _.find(unit.students, {project_id: id})
 
     unit.addStudent = (student) ->
       analyticsService.event 'Unit Service', 'Added Student'
@@ -122,7 +123,7 @@ angular.module("doubtfire.common.services.units", [])
 
       # projects can find tasks using their task definition ids
       student.findTaskForDefinition = (taskDefId) ->
-        _.find student.tasks, (task) -> task.task_definition_id == taskDefId
+        _.find(student.tasks, {task_definition_id: taskDefId})
 
       student.unit = ->
         unit

@@ -126,7 +126,7 @@ angular.module("doubtfire.common.services.projects", [])
         # has_pdf: null
       }
 
-      base = _.filter base, (task) -> ! _.find(project.tasks, (pt) -> pt.task_definition_id == task.task_definition_id)
+      base = _.filter base, (task) -> ! _.find(project.tasks, {task_definition_id: task.task_definition_id})
 
       project.tasks = [] unless project.tasks?
       Array.prototype.push.apply project.tasks, base
@@ -144,13 +144,11 @@ angular.module("doubtfire.common.services.projects", [])
     project.incorporateTask = (newTask) ->
       unless project.tasks?
         project.tasks = []
-
-      currentTask = _.find project.tasks, (t) -> t.task_definition_id == newTask.task_definition_id
-
+      currentTask = _.find(project.tasks, {task_definition_id: newTask.task_definition_id})
       if currentTask?
-        currentTask = _.extend currentTask, newTask
+        currentTask = _.extend(currentTask, newTask)
       else
-        project.tasks.push projectService.mapTask(newTask, unit, project)
+        project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
       currentTask
 

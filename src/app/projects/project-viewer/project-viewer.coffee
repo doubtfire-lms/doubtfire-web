@@ -121,7 +121,7 @@ angular.module("doubtfire.projects.project-viewer", [])
       if filteredTasks.length > 0
         # Show task if in url
         if $scope.showTaskId?
-          task = _.find filteredTasks, (task) -> task.id == $scope.showTaskId
+          task = _.find(filteredTasks, {id: $scope.showTaskId})
           if task?
             $scope.project.selectedTask = task
         else
