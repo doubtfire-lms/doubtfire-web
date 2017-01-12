@@ -5,91 +5,118 @@
         <h3 class="panel-title">
           Group Sets
         </h3>
-        A group set is a set of related group-work. A unit can have multiple group sets for various kinds of group work which has multiple teams
-      </div>
+      </div><!--/panel-heading-->
       <div class="groupset-selector panel-body">
-        <div ng-hide="unit.group_sets.length > 0">
-          <div class="callout callout-info">
-            This unit has no group sets
-          </div>
-        </div>
-        <table ng-show="unit.group_sets.length > 0" class="table table-condensed table-hover table-pointer groupsets">
-          <thead>
-            <tr>
-              <th>
-                <span tooltip="Name of the group set">Name</span>
-              </th>
-              <th>
-                <span tooltip="Who can create groups?">Create Groups</span>
-              </th>
-              <th>
-                <span tooltip="Who can manage groups?">Manage Groups</span>
-              </th>
-              <th>
-                <span tooltip="Are groups restricted to tutorials?">Restrict to Tutorials</span>
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupset}" ng-click="selectGroupSet(gs)">
-              <td class="col-sm-3">
-                <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
-                  {{ gs.name || 'empty' }}
-                </span>
-              </td>
-              <td>
-                <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
-                  {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
-                </span>
-              </td>
-              <td>
-                <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
-                  {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
-                </span>
-              </td>
-              <td>
-                <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
-                  {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
-                </span>
-              </td>
-              <td>
-                <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
-                  <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
-                    <i class="fa fa-floppy-o"></i>
-                  </button>
-                  <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </form>
-                <div ng-show="!gsRowform.$visible">
-                  <button ng-click="gsRowform.$show()" class="btn btn-primary">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                  <button ng-click="removeGroupSet(gs)" class="btn btn-danger">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                </div>
-                <!--/actions-->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <p>
+          A group set is a set of related group-work. A unit can have multiple
+          group sets for various kinds of group work which has multiple teams.
+          <a ng-click="showHelp = true"><strong>Read more about group sets</strong></a>.
+        </p><!--/basic-help-->
+        <div ng-show="showHelp" class="callout callout-info">
+          <a class="pull-right" ng-click="showHelp = false">
+            <i class="fa fa-times fa-2x"></i>
+          </a>
+          <h4> About Group Sets </h4>
+          <p>
+            Once a group set has been created, you may wish to restrict certain
+            permissions such as creating and managing groups to staff only, instead
+            of staff and students. If you restrict this to staff only, then tutors
+            and convenors will only be allowed to create groups, and manage them
+            (i.e., assign students to groups). Otherwise, you assume that students
+            will be able to self-manage themselves in that particular group set.
+          </p>
+          <p>
+            You may also decide that groups can only be restricted to students in
+            the same tutorial, otheriwse students for a given group can be from
+            any tutorial.
+          </p>
+          <p>
+            Click the pencil icon to modify these details.
+          </p>
+        </div><!--/extended-help-->
+        <div ng-hide="unit.group_sets.length > 0" class="callout callout-primary">
+          <h4> No Group Sets Created </h4>
+          <p>
+            This unit has no group sets. Click the create group set button below to create one.
+          </p>
+        </div><!--/no-group-sets-created-->
+      </div><!--/panel-body-->
+      <table ng-show="unit.group_sets.length > 0" class="table table-hover table-pointer groupsets">
+        <thead>
+          <tr>
+            <th>
+              <span tooltip="Name of the group set">Name</span>
+            </th>
+            <th>
+              <span tooltip="Who can create groups?">Create Groups</span>
+            </th>
+            <th>
+              <span tooltip="Who can manage groups?">Manage Groups</span>
+            </th>
+            <th>
+              <span tooltip="Are groups restricted to tutorials?">Restrict to Tutorials</span>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupset}" ng-click="selectGroupSet(gs)">
+            <td class="col-sm-3">
+              <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
+                {{ gs.name || 'empty' }}
+              </span>
+            </td>
+            <td>
+              <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+              </span>
+            </td>
+            <td>
+              <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+              </span>
+            </td>
+            <td>
+              <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
+                {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
+              </span>
+            </td>
+            <td>
+              <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
+                <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
+                  <i class="fa fa-floppy-o"></i>
+                </button>
+                <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
+                  <i class="fa fa-times"></i>
+                </button>
+              </form>
+              <div ng-show="!gsRowform.$visible">
+                <button ng-click="gsRowform.$show()" class="btn btn-primary">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button ng-click="removeGroupSet(gs)" class="btn btn-danger">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </div>
+              <!--/actions-->
+            </td>
+          </tr>
+        </tbody>
+      </table><!--/group-set-table-->
       <div class="panel-footer clearfix">
         <button class="btn pull-right btn-success" ng-click="addGroupSet()">
           <i class="fa fa-users"></i>
           <i class="fa fa-plus"></i>
           New Group Set
         </button>
-      </div>
-    </div>
+      </div><!--/panel-footer-->
+    </div><!--/panel-->
   </div><!--/group-sets-->
   <div class="clearfix">
     <groupset-group-manager ng-show="selectedGroupset && unit.group_sets.length > 0"></groupset-group-manager>
   </div>
-  <hr>
   <div class="file-io col-sm-12" ng-if="selectedGroupset && unit.group_sets.length > 0">
+    <hr>
     <div class="panel-row">
       <div class="panel panel-default">
         <div class="panel-heading">
