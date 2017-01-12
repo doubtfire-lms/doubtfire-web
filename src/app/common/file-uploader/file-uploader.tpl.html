@@ -40,7 +40,7 @@
       </a>
     </div><!--/actual-file-->
   </div><!--/drop-zones-->
-  <div ng-show="showUploader" class="upload-commit-actions">
+  <div ng-show="showUploader && !isUploading" class="upload-commit-actions">
     <button ng-show="readyToUpload() && uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary btn-upload">
       <i class="fa fa-upload"></i> Start Upload
     </button><!--/upload-button-->
@@ -58,16 +58,19 @@
       <progressbar class="progress-striped active" value="uploadingInfo.progress"></progressbar>
     </div><!--/progress-area-->
     <div ng-if="uploadingInfo.complete" class="result-area">
-      <i class="fa {{uploadingInfo.success === true ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'}} fa-4x"></i>
-      <h3>Upload {{uploadingInfo.success === true ? 'Successful' : 'Failed'}}</h3>
+      <p class="result-text">
+        <i class="fa {{uploadingInfo.success === true ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'}} fa-2x"></i>
+        <strong>File Upload {{uploadingInfo.success === true ? 'Successful' : 'Failed'}}</strong>
+      </p>
       <div class="error-message-area" ng-hide="uploadingInfo.success === true">
+        <hr>
         <p>
           <strong>Error Message: </strong>
           {{uploadingInfo.error}}
         </p>
         <p class="retry-options">
-          <a href='' ng-click="initiateUpload()">Retry Upload</a>
-          <a href='' ng-click="resetUploader()">Cancel</a>
+          <a ng-click="initiateUpload()">Retry Upload</a>
+          <a ng-click="resetUploader()">Cancel</a>
         </p><!--/error-message-area-->
       </div>
     </div><!--/result-area-->
