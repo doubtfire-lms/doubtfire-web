@@ -12,6 +12,13 @@
   $ban-icon:      $fa-var-ban;
   $download-icon: $fa-var-download;
 
+  .upload-commit-actions {
+    margin-top: 1em;
+    .btn-upload {
+      margin-right: 1.5ex;
+    }
+  }
+
   .well.drop {
     border: 3px #bbb dotted;
     font-size: larger;
@@ -60,7 +67,7 @@
     font-weight: bold;
     color: #555;
   }
-  p.file-registered {
+  .file-registered {
     font-size: 1.2em;
     display: inline-block;
     i {
