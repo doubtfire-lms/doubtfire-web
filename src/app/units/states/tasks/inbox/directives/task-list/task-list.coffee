@@ -58,14 +58,10 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
         selectEl.focus()
     $timeout openTaskDefs
     # Tutorial options
-    tutorials = $scope.unit.tutorials.concat([
+    $scope.tutorials = $scope.unit.tutorials.concat([
       { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
       { id: 'mine', description: 'Just my tutorials', abbreviation: '__mine' }
     ])
-    $scope.tutorialScopeOptions = _.map(tutorials, (t) ->
-      t.description = $scope.unit.tutorialDescription(t) unless t.description?
-      t
-    )
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
       if tutorialId == 'mine'
@@ -79,7 +75,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
     $scope.tutorialIdChanged($scope.filters.tutorialIdSelected)
     # Task definition options
     $scope.groupSetName = (id) ->
-      groupService.groupSetName(id, $scope.unit) if $scope.unit.group_sets.length > 0
+      groupService.groupSetName(id, $scope.unit) if $scope.unit.hasGroupwork()
     $scope.taskDefinitionIdChanged = ->
       taskDefId = $scope.filters.taskDefinitionIdSelected
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?

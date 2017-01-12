@@ -43,16 +43,19 @@ angular.module("doubtfire.common.services.units", [])
       Unit.get({ id: unitId }, (new_unit) ->
         _.extend unit, new_unit
 
-        # Add a sequence from the order fetched from server
-        _.each(unit.task_definitions, (td, index, list) ->
-          td.seq = index
-          if td.group_set_id
-            td.group_set = _.find(unit.group_sets, (gs) -> td.group_set_id == gs.id)
-          td.hasPlagiarismCheck = () -> td.plagiarism_checks.length > 0
+        # Map extra utility to tutorials
+        unit.tutorials = _.map(unit.tutorials, (tutorial) ->
+          tutorial.description = unitService.tutorialDescription(tutorial)
+          tutorial
         )
 
-        if unit.loadStudents
-          unit.refreshStudents()
+        # Add a sequence from the order fetched from server
+        unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
+          taskDef.seq = index
+          taskDef.group_set = _.find(unit.group_sets, {group_set_id: gs.id}) if taskDef.group_set_id
+          taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
+          taskDef
+        )
 
         # Refresh as needed
         unit.refreshStudents() if unit.loadStudents
@@ -201,11 +204,15 @@ angular.module("doubtfire.common.services.units", [])
       projectService.updateTaskStats(student, student.stats)
       projectService.addTaskDetailsToProject(student, unit)
 
-    unit.getGroups = (group_set, group_callback) ->
-      return unless group_set
-      Group.query { unit_id: unit.id, group_set_id: group_set.id }, (groups) ->
-        if group_callback?
-          group_callback(groups)
+    unit.getGroups = (groupSetId, callback) ->
+      throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
+      Group.query { unit_id: unit.id, group_set_id: groupSetId }, (groups) ->
+        groups = _.map(groups, (group) ->
+          # Returns the tutorial object for a group
+          group.tutorial = -> unit.tutorialFromId(group.tutorial_id)
+          group
+        )
+        callback?(groups)
 
     unit.hasGroupwork = ->
       unit.group_sets?.length > 0
@@ -256,6 +263,14 @@ angular.module("doubtfire.common.services.units", [])
     )
     result = _.uniq(result, (item) -> item )
     result
+
+  #
+  # Tutorial description
+  #
+  unitService.tutorialDescription = (tutorial) ->
+    timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
+    "#{tutorial.abbreviation} - #{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+
 
   unitService
 )
