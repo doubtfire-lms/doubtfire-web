@@ -12,15 +12,15 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
 
     $scope.refreshCharts = Visualisation.refreshAll
 
-    refreshAlignmentData = () ->
+    refreshAlignmentData = ->
       $scope.currentProgress.length = 0
       $scope.currentProgress = _.extend $scope.currentProgress, outcomeService.calculateProgress($scope.unit, $scope.project)
 
-    $scope.$watch 'project', () ->
+    $scope.$watch 'project', ->
       refreshAlignmentData()
       $rootScope.$broadcast('ProgressUpdated')
 
-    $scope.$watch 'project.tasks', () ->
+    $scope.$watch 'project.tasks', ->
       refreshAlignmentData()
       $rootScope.$broadcast('ProgressUpdated')
 
@@ -43,7 +43,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
     # Default tab
     $scope.selectTab('progress')
 
-    $scope.$on('UpdateAlignmentChart', () ->
+    $scope.$on('UpdateAlignmentChart', ->
       refreshAlignmentData()
       $rootScope.$broadcast('ProgressUpdated')
     )

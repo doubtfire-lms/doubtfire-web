@@ -37,14 +37,14 @@ angular.module('doubtfire.units.unit-student-list', [])
     $scope.switchToLab = (student, tutorial) ->
       student.switchToLab(tutorial)
 
-    $scope.getCSVHeader = () ->
+    $scope.getCSVHeader = ->
       result = ['student_code', 'name', 'email', 'portfolio', 'lab']
       angular.forEach(taskService.statusKeys, (key) ->
         result.push(key)
       )
       result
 
-    $scope.getCSVData = () ->
+    $scope.getCSVData = ->
       analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
       filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.studentFilter, $scope.tutorName), $scope.search)
       result = []
@@ -113,7 +113,7 @@ angular.module('doubtfire.units.unit-student-list', [])
     # The assessingUnitRole is accessed in student views loaded from this view
     $scope.assessingUnitRole = $scope.unitRole
 
-    $scope.showEnrolModal = () ->
+    $scope.showEnrolModal = ->
       analyticsService.event 'Teacher View - Students Tab', 'Enrol Student'
       UnitStudentEnrolmentModal.show $scope.unit
 )

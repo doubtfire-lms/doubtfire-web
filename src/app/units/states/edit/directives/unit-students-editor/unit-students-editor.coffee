@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-students-editor', []
   controller: ($scope, Unit, Project, CsvResultModal, UnitStudentEnrolmentModal, alertService) ->
     $scope.activeBatchStudentType = 'enrol' # Enrol by default
 
-    $scope.showEnrolModal = () ->
+    $scope.showEnrolModal = ->
       UnitStudentEnrolmentModal.show $scope.unit
 
     $scope.switchToLab = (student, tutorial) ->

@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.dates", [])
 #
 # Services for making alerts
 #
-.factory("dateService", () ->
+.factory("dateService", ->
 
   dateService = {}
 

@@ -107,7 +107,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     #
     # Toggles the task sheet PDF viewer
     #
-    $scope.toggleTaskSheet = () ->
+    $scope.toggleTaskSheet = ->
       analyticsService.event('Task Sheet', "#{ if $scope.showTaskSheet then 'Hid' else 'Showed'} Task Sheet PDF Viewer")
       $scope.showTaskSheet = ! $scope.showTaskSheet
 

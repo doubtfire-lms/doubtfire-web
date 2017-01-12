@@ -10,7 +10,7 @@ angular.module('doubtfire.common.header', [
   #
   # Opens the user settings modal
   #
-  $scope.openUserSettings = () ->
+  $scope.openUserSettings = ->
     UserSettingsModal.show $scope.currentUser
 
   #

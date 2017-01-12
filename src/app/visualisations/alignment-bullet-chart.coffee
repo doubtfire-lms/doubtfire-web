@@ -346,7 +346,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
 
       # Chart design based on NVD3 bullet chart.
-      nv.models.iloChart = () ->
+      nv.models.iloChart = ->
         #============================================================
         # Public Variables with Default Settings
         #------------------------------------------------------------
@@ -383,7 +383,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             availableHeight = height - margin.top - margin.bottom
             that = this
 
-            chart.update = () -> chart(selection)
+            chart.update = -> chart(selection)
             chart.container = this
 
             # Display No Data message if there's nothing to show.
@@ -521,24 +521,24 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
         chart._options = Object.create({}, {
           # simple options, just get/set the necessary values
-          ranges:  {get: (() -> ranges), set: ((_)-> ranges=_) }, # ranges (bad, satisfactory, good)
-          rangeLabels:  {get: (() -> rangeLabels), set: ((_)-> rangeLabels=_) }, # ranges (bad, satisfactory, good)
-          markers:     {get: (() -> markers), set: ((_) -> markers=_) }, # markers (previous, goal)
-          measures: {get: (() -> measures), set: ((_) -> measures=_) }, # measures (actual, forecast)
-          width:    {get: (() -> width), set: ((_) -> width=_) },
-          height:    {get: (() -> height), set: ((_) -> height=_) },
-          tickFormat:    {get: (() -> tickFormat), set: ((_) -> tickFormat=_) },
-          ticks:    {get: (() -> ticks), set: ((_) -> ticks=_) },
-          noData:    {get: (() -> noData), set: ((_) -> noData=_) },
+          ranges:  {get: (-> ranges), set: ((_)-> ranges=_) }, # ranges (bad, satisfactory, good)
+          rangeLabels:  {get: (-> rangeLabels), set: ((_)-> rangeLabels=_) }, # ranges (bad, satisfactory, good)
+          markers:     {get: (-> markers), set: ((_) -> markers=_) }, # markers (previous, goal)
+          measures: {get: (-> measures), set: ((_) -> measures=_) }, # measures (actual, forecast)
+          width:    {get: (-> width), set: ((_) -> width=_) },
+          height:    {get: (-> height), set: ((_) -> height=_) },
+          tickFormat:    {get: (-> tickFormat), set: ((_) -> tickFormat=_) },
+          ticks:    {get: (-> ticks), set: ((_) -> ticks=_) },
+          noData:    {get: (-> noData), set: ((_) -> noData=_) },
 
           # options that require extra logic in the setter
-          margin: {get: (() -> margin), set: (_) ->
+          margin: {get: (-> margin), set: (_) ->
             margin.top    = if _.top? then _.top else margin.top
             margin.right  = if _.right? then _.right  else margin.right
             margin.bottom = if _.bottom? then _.bottom else margin.bottom
             margin.left   = if _.left? then _.left else margin.left
           },
-          orient: {get: (() -> orient), set: (_) -> # left, right, top, bottom
+          orient: {get: (-> orient), set: (_) -> # left, right, top, bottom
             orient = _
             reverse = orient == 'right' || orient == 'bottom'
           }
@@ -573,7 +573,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     if $scope.classStats? && $scope.classStats.title?
       $scope.data.measureLabels[0] = $scope.classStats.title
 
-    updateProgress = () ->
+    updateProgress = ->
       if $scope.currentProgress?
         _.each $scope.currentProgress, (d, i) ->
           $scope.data.markers[i] = $scope.currentProgress[i][$scope.ilo.id]
@@ -584,7 +584,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     updateProgress()
 
-    $scope.$on('ProgressUpdated', () ->
+    $scope.$on('ProgressUpdated', ->
       updateProgress()
 
       if $scope.api

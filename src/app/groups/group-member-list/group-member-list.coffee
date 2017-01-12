@@ -19,7 +19,7 @@ angular.module('doubtfire.groups.group-member-list', [])
         else
           $scope.refreshGroupMembers()
 
-    $scope.refreshGroupMembers = () ->
+    $scope.refreshGroupMembers = ->
       if $scope.selectedGroup && $scope.selectedGroupset
         if $scope.selectedGroupset.id == $scope.selectedGroup.group_set_id
           GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: $scope.selectedGroup.id }, (members) ->

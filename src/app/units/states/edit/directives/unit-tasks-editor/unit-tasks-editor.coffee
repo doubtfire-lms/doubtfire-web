@@ -30,7 +30,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = false
 
-    guessTaskAbbreviation = () ->
+    guessTaskAbbreviation = ->
       unit = $scope.unit
       if unit.task_definitions.length == 0
         "1.1P"

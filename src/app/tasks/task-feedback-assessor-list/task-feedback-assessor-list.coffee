@@ -110,7 +110,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
 
     $scope.selectedDefinition = null
 
-    $scope.refreshTasksForSingleDef = () ->
+    $scope.refreshTasksForSingleDef = ->
       $scope.refreshed = false
       return unless $scope.selectedDefinition?
       Unit.tasksForDefinition.query { id: $scope.unit.id, task_def_id: $scope.selectedDefinition.id },
@@ -134,7 +134,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
       $scope.refreshTasksForSingleDef()
       analyticsService.event category, 'Selected Task Definition'
 
-    $scope.refreshTasksForFeedback = () ->
+    $scope.refreshTasksForFeedback = ->
       $scope.refreshed = false
       Unit.tasksRequiringFeedback.query { id: $scope.unit.id },
         (response) ->
@@ -146,7 +146,7 @@ angular.module('doubtfire.tasks.task-feedback-assessor-list',[])
         (response) ->
           alertService.add("danger", response.data.error, 6000)
 
-    $scope.refreshTasks = () ->
+    $scope.refreshTasks = ->
       if $scope.context == 'assess'
         $scope.refreshTasksForFeedback()
       else

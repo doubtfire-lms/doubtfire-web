@@ -212,7 +212,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
     # becomes
     #   { tutorial_id: { task_definition_id: { status, num }, task_definition_id: { status, num } ... }
     #
-    $scope.switchToTasksForTutorial = () ->
+    $scope.switchToTasksForTutorial = ->
       result = {}
       result[''] = {}
       _.each $scope.unit.task_definitions, (td) ->
@@ -236,7 +236,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
     # becomes
     #   { task_definition_id: { tutorial_id: { status: num, status: num, ... }, tutorial_id: { status, num } ... }
     #
-    $scope.switchToTutorialsForTask = () ->
+    $scope.switchToTutorialsForTask = ->
       result = {}
       _.each $scope.unit.task_definitions, (td) ->
         result[td.id] = {}

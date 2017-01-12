@@ -25,11 +25,11 @@ angular.module("doubtfire.common.modals.confirmation-modal", [])
   $scope.title = title
   $scope.message = message
 
-  $scope.confirmAction = () ->
+  $scope.confirmAction = ->
     action()
     $modalInstance.dismiss()
 
-  $scope.cancelAction = () ->
+  $scope.cancelAction = ->
     alertService.add 'info', "#{title} action cancelled", 3000
     $modalInstance.dismiss()
 )

@@ -67,7 +67,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     # CSV stuff
     $scope.csvImportResponse = {}
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
-    $scope.taskAlignmentCSVUploadUrl = () ->
+    $scope.taskAlignmentCSVUploadUrl = ->
       if $scope.project?
         TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, $scope.project.project_id)
       else
@@ -80,10 +80,10 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
         $scope.project.refresh($scope.unit)
       else
         $scope.unit.refresh()
-    $scope.onTaskAlignmentCSVComplete = () ->
+    $scope.onTaskAlignmentCSVComplete = ->
       $scope.isTaskCSVUploading = null
 
-    $scope.downloadTaskAlignmentCSV = () ->
+    $scope.downloadTaskAlignmentCSV = ->
       if $scope.project?
         TaskAlignment.downloadCSV($scope.unit, $scope.project.project_id)
       else

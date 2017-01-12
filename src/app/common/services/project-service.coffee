@@ -22,7 +22,7 @@ angular.module("doubtfire.common.services.projects", [])
     complete: 10
   }
 
-  $rootScope.$on 'signOut', () ->
+  $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
   projectService.getProjects = ( callback ) ->
@@ -72,18 +72,18 @@ angular.module("doubtfire.common.services.projects", [])
     task.definition = td
 
     # must be function to avoid cyclic structure
-    task.project = () -> project
-    task.status_txt = () -> taskService.statusLabels[task.status]
-    task.statusSeq = () -> taskService.statusSeq[task.status]
+    task.project = -> project
+    task.status_txt = -> taskService.statusLabels[task.status]
+    task.statusSeq = -> taskService.statusSeq[task.status]
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
-    task.needsSubmissionDetails = () ->
+    task.needsSubmissionDetails = ->
       task.has_pdf == null || task.has_pdf == undefined
-    task.statusClass = () ->
+    task.statusClass = ->
       taskService.statusData(task.status).class
-    task.statusIcon = () ->
+    task.statusIcon = ->
       taskService.statusData(task.status).icon
-    task.statusLabel = () ->
+    task.statusLabel = ->
       taskService.statusData(task.status).label
     task.taskKey = ->
       taskService.taskKey(task)
@@ -137,7 +137,7 @@ angular.module("doubtfire.common.services.projects", [])
     project
 
   projectService.addProjectMethods = (project, unit) ->
-    project.updateBurndownChart = () ->
+    project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
         project.burndown_chart_data = response.burndown_chart_data
 
@@ -152,7 +152,6 @@ angular.module("doubtfire.common.services.projects", [])
       else
         project.tasks.push projectService.mapTask(newTask, unit, project)
         currentTask = newTask
-
       currentTask
 
     project.refresh = (unit_obj) ->

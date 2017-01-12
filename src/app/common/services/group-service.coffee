@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
 #
 # Service for group-related functions
 #
-.factory("groupService", () ->
+.factory("groupService", ->
   #
   # The unit service object
   #

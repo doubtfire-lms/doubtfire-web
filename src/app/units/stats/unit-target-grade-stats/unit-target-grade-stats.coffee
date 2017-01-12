@@ -83,7 +83,7 @@ angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
           $scope.dataModel.selectedTutorial = $scope.overviewSelectors.tutorial
        drillDown()
 
-    $scope.drillDown = () ->
+    $scope.drillDown = ->
       switch $scope.dataModel.selectedType
         when 'unit'
           $scope.dataModel.selectedType = 'tutorial'

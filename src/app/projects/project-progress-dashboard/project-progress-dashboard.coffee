@@ -31,23 +31,23 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
         analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
         $rootScope.$broadcast "TargetGradeUpdated"
 
-    $scope.taskCount = () ->
+    $scope.taskCount = ->
       $scope.unit.task_definitions.length
 
     $scope.taskStats = {}
 
-    updateTaskCompletionStats = () ->
+    updateTaskCompletionStats = ->
       $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
       $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
 
-    $scope.$watch "taskDetailsSelector.viewAll", () ->
-      if ! $scope.taskDetailsSelector.viewAll
+    $scope.$watch "taskDetailsSelector.viewAll", ->
+      unless $scope.taskDetailsSelector.viewAll
         analyticsService.event 'Student Project View', "Showed Top Tasks"
 
-    $scope.$on 'TaskStatusUpdated', () ->
+    $scope.$on 'TaskStatusUpdated', ->
       updateTaskCompletionStats()
 
-    $scope.$on 'TargetGradeUpdated', () ->
+    $scope.$on 'TargetGradeUpdated', ->
       updateTaskCompletionStats()
 
     updateTaskCompletionStats()

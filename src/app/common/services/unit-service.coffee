@@ -9,7 +9,7 @@ angular.module("doubtfire.common.services.units", [])
   unitService.loadedUnits = {}
   unitService.loadedUnitRoles = null
 
-  $rootScope.$on 'signOut', () ->
+  $rootScope.$on 'signOut', ->
     unitService.loadedUnits = {}
     unitService.loadedUnitRoles = null
 
@@ -38,9 +38,9 @@ angular.module("doubtfire.common.services.units", [])
     #
     # Refresh the unit with data from the server...
     #
-    unit.refresh = (refresh_callback) ->
+    unit.refresh = (refreshCallback) ->
       # get the unit...
-      Unit.get { id: unitId }, (new_unit) ->
+      Unit.get({ id: unitId }, (new_unit) ->
         _.extend unit, new_unit
 
         # Add a sequence from the order fetched from server
@@ -54,8 +54,10 @@ angular.module("doubtfire.common.services.units", [])
         if unit.loadStudents
           unit.refreshStudents()
 
-        if refresh_callback?
-          refresh_callback(unit)
+        # Refresh as needed
+        unit.refreshStudents() if unit.loadStudents
+        refreshCallback?(unit)
+    )
 
     # Allow the caller to fetch a task definition from the unit based on its id
     unit.taskDef = (taskDef) ->
@@ -71,18 +73,13 @@ angular.module("doubtfire.common.services.units", [])
       _.find unit.tutorials, { id: +tuteId }
 
     # Extend unit to know task count
-    unit.taskCount = () -> unit.task_definitions.length
-
-    # Describes a tutorial
-    unit.tutorialDescription = (tutorial) ->
-      timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-      "#{tutorial.abbreviation} - #{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+    unit.taskCount = -> unit.task_definitions.length
 
     # Returns all tutorials where the tutor id matches the user id provided
     unit.tutorialsForUserId = (userId) ->
       _.filter unit.tutorials, (tutorial) -> tutorial.tutor.id is userId
 
-    unit.refreshStudents = () ->
+    unit.refreshStudents = ->
       # Fetch the students for the unit
       Students.query { unit_id: unit.id, all: unit.allStudents }, (students) ->
         # extend the students with their tutorial data
@@ -113,8 +110,8 @@ angular.module("doubtfire.common.services.units", [])
         student = _.extend foundStudent, student
       unit.extendStudent student
 
-    unit.active_students = () ->
-      _.filter unit.students, (student) -> student.enrolled
+    unit.activeStudents = ->
+      _.filter(unit.students, {enrolled: true})
 
     unit.extendStudent = (student) ->
       # test is already extended...
@@ -127,7 +124,7 @@ angular.module("doubtfire.common.services.units", [])
       student.findTaskForDefinition = (taskDefId) ->
         _.find student.tasks, (task) -> task.task_definition_id == taskDefId
 
-      student.unit = () ->
+      student.unit = ->
         unit
 
       student.switchToLab = (tutorial) ->
@@ -154,11 +151,11 @@ angular.module("doubtfire.common.services.units", [])
       else
         student.portfolio_status = 0
 
-      student.activeTasks = () ->
+      student.activeTasks = ->
         _.filter student.tasks, (task) -> task.definition.target_grade <= student.target_grade
 
-      student.tutorial = unit.tutorialFromId( student.tutorial_id )
-      student.tutorName = () ->
+      student.tutorial = unit.tutorialFromId(student.tutorial_id)
+      student.tutorName = ->
         if student.tutorial?
           student.tutorial.tutor_name
         else
@@ -180,14 +177,13 @@ angular.module("doubtfire.common.services.units", [])
       student.taskStatValue = (key) ->
         student.task_stats[projectService.taskStatIndex[key]].value
 
-      student.progressSortOrder = () ->
+      student.progressSortOrder = ->
         20 * student.taskStatValue('complete') +
         15 * (student.taskStatValue('discuss') + student.taskStatValue('demonstrate')) +
         10 * (student.taskStatValue('ready_to_mark')) +
         5 * (student.taskStatValue('fix_and_resubmit')) +
         2 * (student.taskStatValue('working_on_it')) +
         1 * (student.taskStatValue('need_help'))
-
 
       student.portfolioUrl = ->
         PortfolioSubmission.getPortfolioUrl(student)
@@ -210,8 +206,8 @@ angular.module("doubtfire.common.services.units", [])
         if group_callback?
           group_callback(groups)
 
-    unit.hasGroupwork = () ->
-      unit.group_sets? && unit.group_sets.length > 0
+    unit.hasGroupwork = ->
+      unit.group_sets?.length > 0
 
     #
     # Push all of the tasks downloaded into the existing student projects

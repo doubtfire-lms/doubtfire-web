@@ -30,7 +30,7 @@ angular.module('doubtfire.tasks.modals.grade-task-modal', [])
   $scope.hoveringOver = (value) ->
     $scope.data.overStar = value
 
-  $scope.checkClearRating = () ->
+  $scope.checkClearRating = ->
     if $scope.data.confRating == 1 && $scope.data.rating == 1 && $scope.data.overStar == 1
       $scope.data.rating = 0
     else if $scope.data.confRating == 1 && $scope.data.overStar == 1 && $scope.data.rating == 0

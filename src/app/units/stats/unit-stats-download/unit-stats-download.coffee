@@ -10,9 +10,9 @@ angular.module('doubtfire.units.stats.unit-stats-download', [])
   scope:
     unit: "="
   controller: ($scope, TaskCompletionCsv, TutorAssessmentCsv) ->
-    $scope.fetchTaskCompletionStats = () ->
+    $scope.fetchTaskCompletionStats = ->
       TaskCompletionCsv.downloadFile($scope.unit)
-    $scope.fetchTutorAssessmentStats = () ->
+    $scope.fetchTutorAssessmentStats = ->
       TutorAssessmentCsv.downloadFile($scope.unit)
 
 )

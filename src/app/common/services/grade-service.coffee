@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.grades", [  ])
 #
 # Service for grade-related data
 #
-.factory("gradeService", () ->
+.factory("gradeService", ->
   #
   # The unit service object
   #

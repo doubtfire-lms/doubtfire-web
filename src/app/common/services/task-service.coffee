@@ -293,7 +293,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.deleteTask = (task, unit, callback = null) ->
     ConfirmationModal.show "Delete Task #{task.abbreviation}",
       'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
-      () ->
+      ->
         promise = doDeleteTask task, unit, null
         ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
@@ -301,7 +301,7 @@ angular.module("doubtfire.common.services.tasks", [])
     _.indexOf(taskService.statusKeys, status)
 
   # Return a list of all the the status values and icons
-  taskService.allStatusData = () ->
+  taskService.allStatusData = ->
     result = []
     angular.forEach taskService.statusKeys, (sk) ->
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
@@ -362,7 +362,7 @@ angular.module("doubtfire.common.services.tasks", [])
           task.quality_pts = response.qualityPts
           updateFunc()
         # Grade was not selected (modal was dismissed)
-        () ->
+        ->
           task.status = oldStatus
           alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
       )

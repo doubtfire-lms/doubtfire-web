@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-groupset-editor', []
   replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 
-    $scope.addGroupSet = () ->
+    $scope.addGroupSet = ->
       if $scope.unit.group_sets.length == 0
         GroupSet.create(
           { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }
@@ -73,9 +73,9 @@ angular.module('doubtfire.units.states.edit.directives.unit-groupset-editor', []
     $scope.onGroupCSVSuccess = (response) ->
       CsvResultModal.show 'Group CSV upload results.', response
       $scope.unit.refresh()
-    $scope.onGroupCSVComplete = () ->
+    $scope.onGroupCSVComplete = ->
       $scope.isGroupCSVUploading = null
 
-    $scope.downloadGroupCSV = () ->
+    $scope.downloadGroupCSV = ->
       GroupSet.downloadCSV($scope.unit, $scope.selectedGroupset)
 )

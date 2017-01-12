@@ -37,7 +37,7 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
       else if count / numStudents > 0.25 then 'info'
       else ''
 
-    $scope.fetchStats = () ->
+    $scope.fetchStats = ->
       numStudents = $scope.unit.students.length
       if numStudents == 0
         return
