@@ -103,7 +103,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       $event.preventDefault()
       $event.stopPropagation()
 
-      if ! pickerData.open
+      unless pickerData.open
         # Close both
         $scope.targetPicker.open = false
         $scope.duePicker.open = false

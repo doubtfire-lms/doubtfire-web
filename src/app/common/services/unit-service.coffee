@@ -216,7 +216,7 @@ angular.module("doubtfire.common.services.units", [])
       _.map tasks, (t) ->
         project = unit.findStudent(t.project_id)
         if project?
-          if ! project.incorporateTask?
+          unless project.incorporateTask?
             projectService.mapTask t, unit, project
             projectService.addProjectMethods(project, unit)
 
@@ -231,7 +231,7 @@ angular.module("doubtfire.common.services.units", [])
 
       _.map projs, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
-        if ! t?
+        unless t?
           _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
         else
           t

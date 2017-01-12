@@ -34,7 +34,7 @@ angular.module("doubtfire.common.services.projects", [])
         fireCallback()
       failure = (response) ->
         if response?.status != 419
-          msg = if ! response? then response.error else ''
+          msg = unless response? then response.error else ''
           alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
       Project.query(success, failure)
     else
@@ -98,7 +98,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
     task.getSubmissionDetails = ( success, failure ) ->
-      if ! task.needsSubmissionDetails()
+      unless task.needsSubmissionDetails()
         if _.isFunction(success) then success(task, {} )
       else
         Task.SubmissionDetails.get { id: project.project_id, task_definition_id: task.definition.id },
@@ -142,7 +142,7 @@ angular.module("doubtfire.common.services.projects", [])
         project.burndown_chart_data = response.burndown_chart_data
 
     project.incorporateTask = (newTask) ->
-      if ! project.tasks?
+      unless project.tasks?
         project.tasks = []
 
       currentTask = _.find project.tasks, (t) -> t.task_definition_id == newTask.task_definition_id

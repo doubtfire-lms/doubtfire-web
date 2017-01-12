@@ -9,7 +9,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
 
   controller: ($scope, Visualisation, outcomeService, gradeService) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
-    if ! nv.models.achievementBar?
+    unless nv.models.achievementBar?
       nv.models.achievementBar = ->
         chart = (selection) ->
           renderWatch.reset()
@@ -516,7 +516,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
         #------------------------------------------------------------
         achievementbar.dispatch.on 'elementMouseover.tooltip', (evt) ->
           key = chart.x()(evt.data)
-          if ! key?
+          unless key?
             key = "#{evt.data} task range"
           else
             key = "Your progress with #{key}"

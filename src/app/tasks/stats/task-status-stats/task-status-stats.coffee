@@ -63,7 +63,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
     userChangeType = true
 
     $scope.$watch 'dataModel.selectedType', (newValue) ->
-      if ! userChangeType
+      unless userChangeType
         userChangeType = true
         return
       $scope.dataModel.selectedTutorial = null
@@ -81,7 +81,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
 
     $scope.$watch 'dataModel.selectedTutorial', (newValue) ->
       return unless newValue?
-      if ! userChange
+      unless userChange
         userChange = true
         return
       if newValue.id >= 0
@@ -101,7 +101,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
 
     $scope.$watch 'dataModel.selectedTask', (newValue) ->
       return unless newValue?
-      if ! userChange
+      unless userChange
         userChange = true
         return
       if newValue.id >= 0

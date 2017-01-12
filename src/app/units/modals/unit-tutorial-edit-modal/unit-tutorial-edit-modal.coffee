@@ -45,7 +45,7 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
     if $scope.tutorial.meeting_time.getHours
       save_data.meeting_time = $scope.tutorial.meeting_time.getHours() + ":" + $scope.tutorial.meeting_time.getMinutes()
 
-    if ! save_data.tutor_id?
+    unless save_data.tutor_id?
       alertService.add 'danger', 'Ensure that you select a tutor from those engaged in this unit.', 6000
       return
 

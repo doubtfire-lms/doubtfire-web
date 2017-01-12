@@ -14,7 +14,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
   controller: ($scope, gradeService, Visualisation) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
-    if ! nv.models.iloBullet?
+    unless nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
       # based on the work of Clint Ivy, Jamie Love, and Jason Davies.
       # http://projects.instantcognition.com/protovis/bulletchart/
