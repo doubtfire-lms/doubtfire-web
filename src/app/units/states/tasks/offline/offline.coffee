@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.modals.unit-mark-submissions-offline-modal', [])
+angular.module('doubtfire.units.states.tasks.offline', [])
 
 #
 # Marking context for offline batch download
