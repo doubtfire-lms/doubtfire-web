@@ -38,6 +38,7 @@
           files="zipMarkingFiles"
           is-uploading="isUploading"
           is-ready="isReady.zip"
+          as-button="true"
           on-success="onMarkingUploadSuccess">
         </file-uploader>
       </div>
@@ -62,13 +63,14 @@
           files="csvMarkingFiles"
           is-uploading="isUploading"
           is-ready="isReady.csv"
+          as-button="true"
           on-success="onMarkingUploadSuccess">
         </file-uploader>
       </div>
     </div><!--/upload-zip-->
   </div><!--/top-panels-->
-  <hr>
   <div class="panel panel-default" ng-show="taskUploadResults && taskUploadResults.length > 0">
+    <hr>
     <div class="panel-heading">
       <h4 class="panel-title">
         Upload Results
@@ -100,6 +102,7 @@
       </tr>
     </table>
   </div><!--/upload-results-->
+  <hr>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">How to mark offline</h4>
