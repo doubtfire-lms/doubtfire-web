@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
   # The unit service object
   #
@@ -121,22 +121,14 @@ angular.module("doubtfire.common.services.units", [])
       # test is already extended...
       if student.name?
         return student
-
       student.open = false
-
       # projects can find tasks using their task definition ids
       student.findTaskForDefinition = (taskDefId) ->
         _.find(student.tasks, {task_definition_id: taskDefId})
-
       student.unit = ->
         unit
-
       student.switchToLab = (tutorial) ->
-        if tutorial
-          newId = tutorial.id
-        else
-          newId = -1
-
+        newId = tutorial?.id || -1
         analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
         Project.update({ id: student.project_id, tutorial_id: newId },
           (project) ->
@@ -204,16 +196,35 @@ angular.module("doubtfire.common.services.units", [])
       projectService.updateTaskStats(student, student.stats)
       projectService.addTaskDetailsToProject(student, unit)
 
-    unit.getGroups = (groupSetId, callback) ->
-      throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
-      Group.query { unit_id: unit.id, group_set_id: groupSetId }, (groups) ->
-        groups = _.map(groups, (group) ->
-          # Returns the tutorial object for a group
-          group.tutorial = -> unit.tutorialFromId(group.tutorial_id)
-          group
-        )
-        callback?(groups)
+    # Return a group set given its ID
+    unit.findGroupSet = (id) ->
+      _.find(unit.group_sets, {id: +id})
 
+    # Maps unit-related information to a group
+    unit.mapGroupToUnit = (group) ->
+      unitService.mapGroupToUnit(unit, group)
+
+    # Queries the unit for all groups
+    unit.getGroups = (groupSetId, onSuccess, onFailure) ->
+      groupService.getGroups(unit, groupSetId, onSuccess, onFailure)
+
+    # Adds a group to this unit
+    unit.addGroup = (groupSetId, name, tutorialId, onSuccess, onFailure) ->
+      groupService.addGroup(unit, groupSetId, name, tutorialId, onSuccess, onFailure)
+
+    # Updates a group in this unit
+    unit.updateGroup = (group, onSuccess, onFailure) ->
+      if group.unit().id != unit.id
+        throw Error "Cannot update group -- #{group.id} does not exist under unit #{unit.id}"
+      groupService.updateGroup(group, onSuccess, onFailure)
+
+    # Deletes a group in this unit
+    unit.deleteGroup = (group, groupSet, onSuccess, onFailure) ->
+      if group.unit().id != unit.id
+        throw Error "Cannot delete group -- #{group.id} does not exist under unit #{unit.id}"
+      groupService.deleteGroup(unit, group, groupSet, onSuccess, onFailure)
+
+    # Returns if the unit has groupwork enabled
     unit.hasGroupwork = ->
       unit.group_sets?.length > 0
 
@@ -269,8 +280,15 @@ angular.module("doubtfire.common.services.units", [])
   #
   unitService.tutorialDescription = (tutorial) ->
     timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-    "#{tutorial.abbreviation} - #{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+    "#{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
 
+  #
+  # Adds additional unit-related functionality to groups
+  #
+  unitService.mapGroupToUnit = (unit, group) ->
+    group.tutorial = -> unit.tutorialFromId(group.tutorial_id)
+    group.unit = -> unit
+    group
 
   unitService
 )

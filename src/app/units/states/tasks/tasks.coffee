@@ -66,5 +66,5 @@ angular.module('doubtfire.units.states.tasks', [
     # the same, we destroy the state's scope and recreate it again
     # unnecessarily; doing so will cause a re-request in the task
     # list which is not required.
-    $event.preventDefault() if fromState == toState
+    $event.preventDefault() if fromState == toState && fromParams.unitId == toParams.unitId
 )

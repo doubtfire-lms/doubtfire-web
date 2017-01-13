@@ -54,8 +54,11 @@
               <li>
                 <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})">Mark Tasks Offline</a>
               </li>
-              <li class="divider">
+              <li class="divider"></li>
+              <li>
+                <a ui-sref="units/groups({unitId: unitRole.unit_id})">Student Groups</a>
               </li>
+              <li class="divider"></li>
               <li ng-if="unitRole.role == 'Convenor'">
                 <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>

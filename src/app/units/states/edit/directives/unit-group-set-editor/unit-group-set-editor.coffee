@@ -1,12 +1,12 @@
-angular.module('doubtfire.units.states.edit.directives.unit-groupset-editor', [])
+angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [])
 
 #
-# Editor for editing a unit's groupsets. Can also add new groups to
-# newly created groupsets and then and add new members to those groups.
+# Editor for editing a unit's group sets. Can also add new groups to
+# newly created group sets and then and add new members to those groups.
 #
-.directive('unitGroupsetEditor', ->
+.directive('unitGroupSetEditor', ->
   restrict: 'E'
-  templateUrl: 'units/states/edit/directives/unit-groupset-editor/unit-groupset-editor.tpl.html'
+  templateUrl: 'units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.tpl.html'
   replace: true
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 

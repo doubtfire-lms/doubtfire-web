@@ -7,99 +7,97 @@ angular.module('doubtfire.groups.group-selector', [])
 .directive('groupSelector', ->
   restrict: 'E'
   templateUrl: 'groups/group-selector/group-selector.tpl.html'
-  replace: true
+  scope:
+    unit: "="
+    # Use project for student context
+    project: "=?"
+    # Use unit role for tutor context
+    unitRole: "=?"
+    # Pass in a groupset to set the groupset context
+    selectedGroupSet: '='
+    # Bind the selected group for switching
+    selectedGroup: '=?'
+    # Callback for group change
+    onSelectedGroupChange: '=?'
+    # Callback for group set change
+    onSelectedGroupSetChange: '=?'
   controller: ($scope, alertService, Group, currentUser) ->
-    # pagination of groups
-    $scope.currentPage = 1
-    $scope.maxSize = 5
-    $scope.pageSize = 5
+    # Unit role or project should be included in $scope
+    if !$scope.unitRole? && !$scope.project? || $scope.unitRole? && $scope.project?
+      throw Error "Group selector must have exactly one unit role or one project"
 
-    # initial sort orders
+    # Pagination details
+    $scope.pagination =
+      currentPage: 1
+      maxSize: 10
+      pageSize: 10
+
+    # Group set selector
+    $scope.selectedGroupSet = _.first($scope.unit.group_sets)
+    $scope.unit.getGroups($scope.selectedGroupSet.id)
+    $scope.showGroupSetSelector = $scope.unit.group_sets.length > 1
+    $scope.selectGroupSet = (groupSet) ->
+      $scope.unit.getGroups(groupSet.id)
+      $scope.onSelectedGroupSetChange(groupSet)
+
+    # Can only create groups if unitRole provided and selectedGroupSet
+    $scope.canCreateGroups = $scope.unitRole? || $scope.selectedGroupSet?.allow_students_to_create_groups
+
+    # Initial sort orders
     $scope.groupSortOrder = 'name'
 
+    # Load groups if not loaded
+    $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
+
+    # Staff filter options (convenor should see all)
+    $scope.staffFilter = {
+      Convenor: 'all',
+      Tutor: 'mine'
+    }[$scope.unitRole.role]
+
+    # Sets the placeholder text (useful to know named
+    # groups are technically optional)
+    resetAddGroup = () ->
+      if _.isEmpty($scope.groups)
+        $scope.newGroupNamePlaceholder = "Group 0"
+      else if _.last($scope.groups)?.name.match(/\d+$/)?
+        $scope.newGroupNamePlaceholder = "Group #{$scope.groups.length}"
+      else
+        $scope.newGroupNamePlaceholder = "Enter New Group Name..."
+      $scope.newGroupName = null
+    resetAddGroup()
+
+    # Adds a group to the unit
     $scope.addGroup = (name) ->
       if $scope.unit.tutorials.length == 0
         alertService.add("danger", "Please ensure there is at least one tutorial before groups are created", 6000)
-      if $scope.project #in a student context
-        tutorial_id = $scope.project.tutorial.id
-      else #convenor/tutor
-        tutorName = if $scope.assessingUnitRole? then $scope.assessingUnitRole.name else currentUser.profile.name
-        tutorial_id = _.find $scope.unit.tutorials, (tutorial) -> tutorial.tutor_name == tutorName
-        if not tutorial_id
-          tutorial_id = $scope.unit.tutorials[0].id
-          $scope.staffFilter = 'all'
-        else
-          tutorial_id = tutorial_id.id
-
-      Group.create(
-        {
-          unit_id: $scope.unit.id,
-          group_set_id: $scope.selectedGroupset.id
-          group:
-            {
-              name: name
-              tutorial_id: tutorial_id
-            }
-        },
-        (grp) ->
-          $scope.groups.push(grp)
-          $scope.selectGroup(grp) if $scope.selectedGroup is null
-          alertService.add("success", "#{grp.name} was created!", 3000)
-
-          addGroupForm.reset()
-        (response) -> alertService.add("danger", response.data.error, 6000)
-      )
-
-    $scope.saveGroup = (grp, id) ->
-      Group.update(
-        {
-          unit_id: $scope.unit.id,
-          group_set_id:$scope.selectedGroupset.id,
-          id: id,
-          group: {
-            name: grp.name,
-            tutorial_id: grp.tutorial_id,
-          }
-        }, (response) ->
-          alertService.add("info", "#{grp.name} was updated", 3000)
-        (response) ->
-          alertService.add("danger", response.data.error, 6000)
-      )
-
-    $scope.removeGroup = (grp) ->
-      $scope.selectGroup(null) if grp is $scope.selectedGroup
-      Group.delete(
-        {
-          unit_id: $scope.unit.id,
-          group_set_id:$scope.selectedGroupset.id,
-          id: grp.id
-        },
-          (response) ->
-            $scope.groups = _.filter($scope.groups, (grp1) -> grp.id != grp1.id )
-            alertService.add("info", "#{grp.name} was deleted", 3000)
-          (response) ->
-            alertService.add("danger", response.data.error, 3000)
-        )
-
-    $scope.selectGroup = (grp) ->
-      if grp
-        $scope.selectedGroup = grp
+      # Student context
+      if $scope.project
+        tutorialId = $scope.project.tutorial.id
+      # Convenor or Tutor
       else
-        $scope.selectedGroup = null
+        tutorName = $scope.unitRole?.name || currentUser.profile.name
+        tutorialId = _.find($scope.unit.tutorials, {tutor_name: tutorName})?.id
+        # Default to first tutorial if can't find
+        tutorialId ?= _.first($scope.unit.tutorials).id
+      $scope.unit.addGroup($scope.selectedGroupSet, name, tutorialId,
+        (newGroup) ->
+          resetAddGroup()
+          $scope.selectedGroup = newGroup
+      )
 
-      if $scope.onSelectGroup
-        $scope.onSelectGroup(grp)
+    # Update group function
+    $scope.updateGroup = $scope.unit.updateGroup
 
-      $scope.$digest #notify
+    # Remove group function
+    $scope.removeGroup = (group) ->
+      $scope.unit.removeGroup(group,
+        (success) ->
+          $scope.selectedGroup = null if group.id == $scope.selectedGroup.id
+      )
 
-    if $scope.selectedGroupset
-      $scope.unit.getGroups $scope.selectedGroupset, (groups) ->
-        $scope.groups = groups
-
-    $scope.selectTutorial = (id) ->
-      _.find($scope.unit.tutorials, (t) -> t.id is id)
-
-    $scope.$watch 'selectedGroupset', (newValue, oldValue) ->
-      $scope.unit.getGroups newValue, (groups) ->
-        $scope.groups = groups
+    # Select group function
+    $scope.selectGroup = (group) ->
+      $scope.selectedGroup = group
+      $scope.onSelectedGroupChange?(group)
 )

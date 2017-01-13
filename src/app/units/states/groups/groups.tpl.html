@@ -1,0 +1,22 @@
+<div class="container" ng-if="unit.hasGroupwork()">
+  <group-set-manager
+    class="row"
+    unit="unit"
+    unit-role="unitRole"
+    selected-group-set="selectedGroupSet">
+  </group-set-manager>
+</div><!--/has-groupwork-->
+<div class="container" ng-hide="unit.hasGroupwork()">
+  <div class="large-notice-block">
+    <i class="fa fa-2x fa-users"></i>
+    <p>No Groupwork Enabled</p>
+  </div>
+  <div class="text-center col-sm-12 col-md-6 col-md-offset-3">
+    <p class="text-muted">
+      There is no group work enabled for this unit. Convenors should create at
+      least one group set first for groups to be created. This can be found under
+      the groups tab in the unit administration settings.
+    </p>
+    <a class="btn btn-default" ui-sref="units/admin({unitId: unit.id})">Unit Administration</a>
+  </div>
+</div><!--/no-groupwork-->

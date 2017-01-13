@@ -179,7 +179,7 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.getGroupForTask = (project, task) ->
     return null if not task.definition.group_set
 
-    _.find project.groups, (grp) -> grp.group_set_id == task.definition.group_set.id
+    _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
     project.findTaskForDefinition(task_definition_id)

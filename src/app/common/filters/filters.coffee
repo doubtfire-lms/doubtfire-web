@@ -91,10 +91,10 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('studentsForGroup', ->
-  (input, gs, grp, members) ->
+  (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.tutorial_id == group.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else
@@ -113,12 +113,12 @@ angular.module("doubtfire.common.filters", [])
     if input
       if assessingUnitRole && ! project # staff only... so tutorial is ignored!
         if kind == 'mine'
-          _.filter input, (grp) -> unit.tutorialFromId(grp.tutorial_id).tutor_name == assessingUnitRole.name
+          _.filter input, (group) -> unit.tutorialFromId(group.tutorial_id).tutor_name == assessingUnitRole.name
         else # just all
           input
       else  # student...
         if gs.keep_groups_in_same_class # match just those in this tutorial
-          _.filter input, (grp) -> (project.tutorial?) && grp.tutorial_id == project.tutorial.id
+          _.filter input, (group) -> (project.tutorial?) && group.tutorial_id == project.tutorial.id
         else # all
           input
     else

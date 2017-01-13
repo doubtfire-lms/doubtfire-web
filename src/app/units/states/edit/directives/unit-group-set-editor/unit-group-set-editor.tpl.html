@@ -1,4 +1,4 @@
-<div class="unit-groupset-editor row">
+<div class="unit-group-set-editor row">
   <div class="col-sm-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -6,7 +6,7 @@
           Group Sets
         </h3>
       </div><!--/panel-heading-->
-      <div class="groupset-selector panel-body">
+      <div class="panel-body">
         <p>
           A group set is a set of related group-work. A unit can have multiple
           group sets for various kinds of group work which has multiple teams.
@@ -41,7 +41,7 @@
           </p>
         </div><!--/no-group-sets-created-->
       </div><!--/panel-body-->
-      <table ng-show="unit.group_sets.length > 0" class="table table-hover table-pointer groupsets">
+      <table ng-show="unit.group_sets.length > 0" class="table table-hover table-pointer group-sets">
         <thead>
           <tr>
             <th>
@@ -113,7 +113,7 @@
     </div><!--/panel-->
   </div><!--/group-sets-->
   <div class="clearfix">
-    <groupset-group-manager ng-show="selectedGroupset && unit.group_sets.length > 0"></groupset-group-manager>
+    <group-set-group-manager ng-show="selectedGroupset && unit.group_sets.length > 0"></group-set-group-manager>
   </div>
   <div class="file-io col-sm-12" ng-if="selectedGroupset && unit.group_sets.length > 0">
     <hr>
