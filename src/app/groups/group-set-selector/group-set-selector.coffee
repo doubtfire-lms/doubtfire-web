@@ -9,11 +9,10 @@ angular.module('doubtfire.groups.group-set-selector', [])
   scope:
     unit: '='
     selectedGroupSet: '=ngModel'
-    onSelectGroupSet: '=?'
+    onSelectGroupSet: '=onChange'
   controller: ($scope) ->
     unless $scope.unit?
       throw Error "Unit not supplied to group set selector"
-    $scope.selectGroupSet = (gs) ->
-      $scope.selectedGroupSet = gs
-      $scope.onSelectGroupSet?(gs)
+    $scope.selectGroupSet = ->
+      $scope.onSelectGroupSet?($scope.selectedGroupSet)
 )

@@ -37,8 +37,7 @@
   <div class="callout callout-primary row" ng-hide="filteredGroups.length > 0">
     <h4>No Groups To Show</h4>
     <p>
-      The {{selectedGroupSet.name}} group set has no groups
-      {{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? "in this tutorial." : "."}}
+      The {{selectedGroupSet.name}} group set has no groups{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in this tutorial." : "."}}
     </p>
   </div>
 </div>
