@@ -26,6 +26,20 @@ angular.module("doubtfire.common.services.group-service", [  ])
   groupService.groupSetName = (id, unit) ->
     unit.findGroupSet(id)?.name || "Individual Work"
 
+  # Maps additional functionality to a group
+  groupService.mapFuncsToGroup = (group, index, unit, groupSet) ->
+    group = unit.mapGroupToUnit(group)
+    group.groupSet = -> groupSet
+    group.addMember = (member, onSuccess, onFailure) ->
+      groupService.addMemberToGroup(group, member, onSuccess, onFailure)
+    group.removeMember = (member, onSuccess, onFailure) ->
+      groupService.removeMemberFromGroup(group, member, onSuccess, onFailure)
+    group.getMembers = (onSuccess, onFailure) ->
+      groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
+    group.number = index + 1
+    group
+
+
   # Queries a unit's groupset for the given ID, returning the groups for that group
   groupService.getGroups = (unit, groupSetId, onSuccess, onFailure) ->
     throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
@@ -33,17 +47,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
     return onSuccess?(groupSet.groups) if groupSet?.groups?
     Group.query({ unit_id: unit.id, group_set_id: groupSetId },
       (success) ->
-        groupSet.groups = _.map(success, (group) ->
-          # Map additional functionality to groups
-          group = unit.mapGroupToUnit(group)
-          group.groupSet = -> groupSet
-          group.addMember = (member, onSuccess, onFailure) ->
-            groupService.addMemberToGroup(group, member, onSuccess, onFailure)
-          group.removeMember = (member, onSuccess, onFailure) ->
-            groupService.removeMemberFromGroup(group, member, onSuccess, onFailure)
-          group.getMembers = (onSuccess, onFailure) ->
-            groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
-          group
+        groupSet.groups = _.map(success, (group, idx) ->
+          groupService.mapFuncsToGroup(group, idx, unit, groupSet)
         )
         onSuccess?(groupSet.groups)
       (failure) ->
@@ -60,12 +65,12 @@ angular.module("doubtfire.common.services.group-service", [  ])
         unit_id: unit.id,
         group_set_id: groupSet.id
         group: {
-          name: name
+          name: name || "Group #{groupSet.groups.length + 1}"
           tutorial_id: tutorialId
         }
       }
       (success) ->
-        newGroup = unit.mapGroupToUnit(success)
+        newGroup = groupService.mapFuncsToGroup(success, groupSet.groups.length, unit, groupSet)
         groupSet.groups.push(newGroup)
         alertService.add("success", "#{newGroup.name} was created!", 3000)
         onSuccess?(newGroup)

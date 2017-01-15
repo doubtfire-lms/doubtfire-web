@@ -5,7 +5,6 @@
       {{selectedGroupSet.name}}
     </strong>
     <group-set-selector
-      style="max-width: 50%; padding-left: 1ex; display: inline-block;"
       ng-show="showGroupSetSelector"
       unit="unit"
       ng-model="selectedGroupSet"
@@ -34,7 +33,7 @@
       </span>
     </form><!--/group-name-create-->
   </div>
-  <div class="callout callout-primary row" ng-hide="filteredGroups.length > 0">
+  <div class="callout callout-primary row" ng-hide="filteredGroups.length > 0" ng-show="loaded">
     <h4>No Groups To Show</h4>
     <p>
       The {{selectedGroupSet.name}} group set has no groups{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in this tutorial." : "."}}
@@ -45,12 +44,17 @@
   <thead>
     <tr>
       <th>
-        <a href="" ng-click="groupSortOrder='name'; groupReverse=!groupReverse">
-          Group Name <i ng-show="groupSortOrder == 'name'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
+        <a ng-click="groupSortOrder='index'; groupReverse=!groupReverse">
+          Number <i ng-show="groupSortOrder == 'index'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th>
-        <a href="" ng-click="groupSortOrder='tutorial_id'; groupReverse=!groupReverse">
+        <a ng-click="groupSortOrder='name'; groupReverse=!groupReverse">
+          Name <i ng-show="groupSortOrder == 'name'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
+        </a>
+      </th>
+      <th>
+        <a ng-click="groupSortOrder='tutorial_id'; groupReverse=!groupReverse">
           Tutorial <i ng-show="groupSortOrder == 'tutorial_id'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
@@ -66,12 +70,15 @@
         orderBy:groupSortOrder:groupReverse |
         startFrom:(pagination.currentPage - 1) * pagination.pageSize |
         limitTo: pagination.pageSize">
+      <td class="group-number">
+        {{ group.number }}
+      </td>
       <td class="group-name">
         <span editable-text="group.name" e-name="name" e-form="groupRowform" e-required>
           {{ group.name || 'Not Set' }}
         </span>
       </td>
-      <td class="tutorial-id">
+      <td class="tutorial">
         <span editable-select="group.tutorial_id" e-name="tutorial_id" e-form="groupRowform" e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials">
           <span tooltip="{{group.tutorial().description}}" tooltip-popover-delay="200" tooltip-append-to-body="true">
             {{group.tutorial().abbreviation}}
@@ -79,21 +86,23 @@
         </span>
       </td>
       <td class="actions" ng-show="unitRole">
-        <form editable-form name="groupRowform" onbeforesave="saveGroup($data, group.id)" ng-show="groupRowform.$visible" class="form-buttons form-inline" shown="inserted == group">
-          <button type="submit" ng-disabled="groupRowform.$waiting" class="btn btn-primary">
-            <i class="fa fa-floppy-o"></i>
+        <form editable-form name="groupRowform" onbeforesave="saveGroup($data, group.id)" ng-show="groupRowform.$visible" shown="inserted == group">
+          <button type="submit" ng-disabled="groupRowform.$waiting" class="btn btn-primary btn-sm">
+            <i class="fa fa-floppy-o"></i> Save
           </button>
-          <button type="button" ng-disabled="groupRowform.$waiting" ng-click="groupRowform.$cancel()" class="btn btn-default">
-            <i class="fa fa-times"></i>
+          <button type="button" ng-disabled="groupRowform.$waiting" ng-click="groupRowform.$cancel()" class="btn btn-default btn-sm">
+            <i class="fa fa-times"></i> Cancel
           </button>
         </form>
         <div ng-hide="groupRowform.$visible">
-          <button ng-click="groupRowform.$show()" class="btn btn-primary">
-            <i class="fa fa-pencil"></i>
-          </button>
-          <button ng-click="removeGroup(group)" class="btn btn-danger">
-            <i class="fa fa-trash-o"></i>
-          </button>
+          <div>
+            <button ng-click="groupRowform.$show()" class="btn btn-primary btn-sm">
+              <i class="fa fa-pencil"></i> Edit
+            </button>
+            <button ng-click="removeGroup(group)" class="btn btn-danger btn-sm">
+              <i class="fa fa-trash-o"></i> Delete
+            </button>
+          </div>
         </div><!--/actions-->
       </td>
     </tr>

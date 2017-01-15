@@ -17,10 +17,6 @@ angular.module('doubtfire.groups.group-selector', [])
     selectedGroupSet: '='
     # Bind the selected group for switching
     selectedGroup: '=?'
-    # Callback for group change
-    onSelectedGroupChange: '=?'
-    # Callback for group set change
-    onSelectedGroupSetChange: '=?'
   controller: ($scope, alertService, Group, currentUser) ->
     # Unit role or project should be included in $scope
     if !$scope.unitRole? && !$scope.project? || $scope.unitRole? && $scope.project?
@@ -32,19 +28,26 @@ angular.module('doubtfire.groups.group-selector', [])
       maxSize: 10
       pageSize: 10
 
+    # Loading
+    startLoading  = -> $scope.loaded = false
+    finishLoading = -> $scope.loaded = true
+
     # Group set selector
-    $scope.selectedGroupSet = _.first($scope.unit.group_sets)
-    $scope.unit.getGroups($scope.selectedGroupSet.id)
+    $scope.selectedGroupSet ?= _.first($scope.unit.group_sets)
     $scope.showGroupSetSelector = $scope.unit.group_sets.length > 1
     $scope.selectGroupSet = (groupSet) ->
-      $scope.unit.getGroups(groupSet.id)
-      $scope.onSelectedGroupSetChange(groupSet)
+      startLoading()
+      $scope.unit.getGroups(groupSet.id, ->
+        finishLoading()
+        resetAddGroup()
+      , finishLoading)
+    $scope.selectGroupSet($scope.selectedGroupSet)
 
     # Can only create groups if unitRole provided and selectedGroupSet
     $scope.canCreateGroups = $scope.unitRole? || $scope.selectedGroupSet?.allow_students_to_create_groups
 
     # Initial sort orders
-    $scope.groupSortOrder = 'name'
+    $scope.groupSortOrder = 'index'
 
     # Load groups if not loaded
     $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
@@ -58,14 +61,13 @@ angular.module('doubtfire.groups.group-selector', [])
     # Sets the placeholder text (useful to know named
     # groups are technically optional)
     resetAddGroup = () ->
-      if _.isEmpty($scope.groups)
-        $scope.newGroupNamePlaceholder = "Group 0"
-      else if _.last($scope.groups)?.name.match(/\d+$/)?
-        $scope.newGroupNamePlaceholder = "Group #{$scope.groups.length}"
+      if _.isEmpty($scope.selectedGroupSet.groups)
+        $scope.newGroupNamePlaceholder = "Group 1"
+      else if _.last($scope.selectedGroupSet.groups)?.name.match(/\d+$/)?
+        $scope.newGroupNamePlaceholder = "Group #{$scope.selectedGroupSet.groups.length}"
       else
         $scope.newGroupNamePlaceholder = "Enter New Group Name..."
       $scope.newGroupName = null
-    resetAddGroup()
 
     # Adds a group to the unit
     $scope.addGroup = (name) ->

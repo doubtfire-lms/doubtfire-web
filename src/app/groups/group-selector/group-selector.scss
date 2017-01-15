@@ -1,5 +1,11 @@
-.group-selector table td {
-  &.group-name  { width: 40%; }
-  &.tutorial-id { width: 25%; }
-  &.actions     { width: 35%; }
+group-selector table {
+  td.group-number, tr.group-number { width: 15%; }
+  td.group-name, tr.group-name { width: 30%; }
+  td.tutorial, tr.tutorial { width: 25%; }
+  td.actions, tr.actions { width: 30%; }
+}
+group-selector .panel-title > group-set-selector {
+  display: inline-block;
+  max-width: 50%;
+  padding-left: 1ex;
 }
