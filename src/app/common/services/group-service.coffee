@@ -51,7 +51,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         )
         onSuccess?(groupSet.groups)
       (failure) ->
-        alertService.add("danger", failure.data.error, 6000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
     )
 
@@ -74,7 +74,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         alertService.add("success", "#{newGroup.name} was created!", 3000)
         onSuccess?(newGroup)
       (failure) ->
-        alertService.add("danger", failure.data.error, 6000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
     )
 
@@ -89,7 +89,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         alertService.add("info", "#{group.name} was updated", 3000)
         onSuccess?(success)
       (failure) ->
-        alertService.add("danger", failure.data.error, 6000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
     )
 
@@ -103,7 +103,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         alertService.add("info", "#{group.name} was deleted", 3000)
         onSuccess?(unit.groups)
       (failure) ->
-        alertService.add("danger", failure.data.error, 3000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 3000)
         onFailure?(failure)
     )
 
@@ -140,7 +140,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         else
           group.getMembers(onSuccess, onFailure)
       (failure) ->
-        alertService.add("danger", failure.data.error, 6000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
     )
 
@@ -161,7 +161,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         else
           group.getMembers(onSuccess, onFailure)
       (failure) ->
-        alertService.add("danger", failure.data.error, 6000)
+        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
     )
 
