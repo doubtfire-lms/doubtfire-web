@@ -85,7 +85,7 @@ angular.module('doubtfire.groups.group-selector', [])
       if _.isEmpty($scope.selectedGroupSet.groups)
         $scope.newGroupNamePlaceholder = "Group 1"
       else if _.last($scope.selectedGroupSet.groups)?.name.match(/\d+$/)?
-        $scope.newGroupNamePlaceholder = "Group #{$scope.selectedGroupSet.groups.length}"
+        $scope.newGroupNamePlaceholder = "Group #{_.last($scope.selectedGroupSet.groups).number + 1}"
       else
         $scope.newGroupNamePlaceholder = "Enter New Group Name..."
       $scope.newGroupName = null
