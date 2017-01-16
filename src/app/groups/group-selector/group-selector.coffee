@@ -17,16 +17,39 @@ angular.module('doubtfire.groups.group-selector', [])
     selectedGroupSet: '='
     # Bind the selected group for switching
     selectedGroup: '=?'
-  controller: ($scope, alertService, Group, currentUser) ->
+  controller: ($scope, $filter, alertService, Group, currentUser) ->
     # Unit role or project should be included in $scope
     if !$scope.unitRole? && !$scope.project? || $scope.unitRole? && $scope.project?
       throw Error "Group selector must have exactly one unit role or one project"
 
-    # Pagination details
+    # Filtering
+    applyFilters = ->
+      if $scope.unitRole? # apply staff filter
+        filteredGroups = $filter('groupsInTutorials')($scope.selectedGroupSet.groups, $scope.unitRole, $scope.staffFilter)
+      else # apply project filter
+        filteredGroups = $filter('groupsForStudent')($scope.selectedGroupSet.groups, $scope.project, $scope.selectedGroupSet)
+      # Apply remaining filters
+      $scope.filteredGroups = $filter('paginateAndSort')(filteredGroups, $scope.pagination, $scope.tableSort)
+
+    # Pagination values
     $scope.pagination =
       currentPage: 1
       maxSize: 10
       pageSize: 10
+      totalSize: null
+      show: false
+      onChange: applyFilters
+
+    # Initial sort orders
+    $scope.tableSort =
+      order: 'number'
+      reverse: false
+
+    # Table sorting
+    $scope.sortTableBy = (header) ->
+      $scope.tableSort.order = header
+      $scope.tableSort.reverse = !$scope.tableSort.reverse
+      applyFilters()
 
     # Loading
     startLoading  = -> $scope.loaded = false
@@ -40,14 +63,12 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.getGroups(groupSet.id, ->
         finishLoading()
         resetAddGroup()
+        applyFilters()
       , finishLoading)
     $scope.selectGroupSet($scope.selectedGroupSet)
 
     # Can only create groups if unitRole provided and selectedGroupSet
     $scope.canCreateGroups = $scope.unitRole? || $scope.selectedGroupSet?.allow_students_to_create_groups
-
-    # Initial sort orders
-    $scope.groupSortOrder = 'index'
 
     # Load groups if not loaded
     $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
@@ -69,6 +90,9 @@ angular.module('doubtfire.groups.group-selector', [])
         $scope.newGroupNamePlaceholder = "Enter New Group Name..."
       $scope.newGroupName = null
 
+    # Changing staff filter reapplies filter
+    $scope.onChangeStaffFilter = applyFilters
+
     # Adds a group to the unit
     $scope.addGroup = (name) ->
       if $scope.unit.tutorials.length == 0
@@ -85,17 +109,22 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.addGroup($scope.selectedGroupSet, name, tutorialId,
         (newGroup) ->
           resetAddGroup()
+          applyFilters()
           $scope.selectedGroup = newGroup
       )
 
     # Update group function
-    $scope.updateGroup = $scope.unit.updateGroup
+    $scope.updateGroup = (data, groupId) ->
+      group = _.find($scope.selectedGroupSet.groups, {id: groupId})
+      group = _.extend(group, data)
+      $scope.unit.updateGroup(group, applyFilters)
 
     # Remove group function
-    $scope.removeGroup = (group) ->
-      $scope.unit.removeGroup(group,
+    $scope.deleteGroup = (group) ->
+      $scope.unit.deleteGroup(group, $scope.selectedGroupSet,
         (success) ->
           $scope.selectedGroup = null if group.id == $scope.selectedGroup.id
+          applyFilters()
       )
 
     # Select group function

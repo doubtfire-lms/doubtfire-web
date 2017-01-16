@@ -14,17 +14,17 @@
 </div><!--/panel-heading-->
 <div class="panel-body">
   <div class="clearfix">
-    <div class="input-group col-sm-6 pull-left">
+    <div class="input-group pull-left" ng-class="{'col-sm-6': unitRole}">
       <div class="btn-group">
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'all'">
+        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'all'">
           <i class="fa fa-university"></i> All Tutorials
         </label>
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'mine'">
+        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'mine'">
           <i class="fa fa-pencil"></i> My Tutorials
         </label>
       </div>
     </div><!--/staff-filter-button-group-->
-    <form class="input-group col-sm-6 pull-right" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)">
+    <form class="input-group pull-right" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)" ng-class="{'col-sm-6': unitRole}">
       <input class="form-control" placeholder="{{newGroupNamePlaceholder}}" ng-model="newGroupName">
       <span class="input-group-btn">
         <button type="submit" class="btn btn-success">
@@ -33,73 +33,82 @@
       </span>
     </form><!--/group-name-create-->
   </div>
-  <div class="callout callout-primary row" ng-hide="filteredGroups.length > 0" ng-show="loaded">
+  <div class="text-center text-muted" ng-show="!loaded">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div><!--/loading-spinner-->
+  <div class="callout callout-primary row" ng-show="loaded && filteredGroups.length == 0">
     <h4>No Groups To Show</h4>
     <p>
       The {{selectedGroupSet.name}} group set has no groups{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in this tutorial." : "."}}
     </p>
-  </div>
-</div>
+  </div><!--/no-groups-->
+</div><!--/panel-body-->
 <table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
-      <th>
-        <a ng-click="groupSortOrder='index'; groupReverse=!groupReverse">
-          Number <i ng-show="groupSortOrder == 'index'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
+      <th class="number">
+        <a ng-click="sortTableBy('number')">
+          Number <i ng-show="tableSort.order == 'number'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th>
-        <a ng-click="groupSortOrder='name'; groupReverse=!groupReverse">
-          Name <i ng-show="groupSortOrder == 'name'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
+      <th class="name">
+        <a ng-click="sortTableBy('name')">
+          Name <i ng-show="tableSort.order == 'name'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th>
-        <a ng-click="groupSortOrder='tutorial_id'; groupReverse=!groupReverse">
-          Tutorial <i ng-show="groupSortOrder == 'tutorial_id'" class="fa fa-caret-{{groupReverse ? 'up' : 'down'}}"></i>
+      <th class="tutorial">
+        <a ng-click="sortTableBy('tutorial_id')">
+          Tutorial <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th ng-show="unitRole">Actions</th>
+      <th class="actions" ng-show="unitRole">
+        Actions
+      </th>
     </tr>
-  </thead>
+  </thead><!--/header-->
   <tbody>
     <tr
       ng-class="{info: group == selectedGroup}"
       ng-click="selectGroup(group)"
-      ng-repeat="group in
-        filteredGroups = (selectedGroupSet.groups | groupFilter:project:unitRole:staffFilter) |
-        orderBy:groupSortOrder:groupReverse |
-        startFrom:(pagination.currentPage - 1) * pagination.pageSize |
-        limitTo: pagination.pageSize">
-      <td class="group-number">
+      ng-repeat="group in filteredGroups">
+      <th>
         {{ group.number }}
-      </td>
-      <td class="group-name">
-        <span editable-text="group.name" e-name="name" e-form="groupRowform" e-required>
+      </th><!--/group-number-->
+      <th>
+        <span
+          editable-text="group.name"
+          e-name="name"
+          e-form="groupRowForm"
+          e-required>
           {{ group.name || 'Not Set' }}
         </span>
-      </td>
-      <td class="tutorial">
-        <span editable-select="group.tutorial_id" e-name="tutorial_id" e-form="groupRowform" e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials">
-          <span tooltip="{{group.tutorial().description}}" tooltip-popover-delay="200" tooltip-append-to-body="true">
+      </th><!--/group-name-->
+      <td>
+        <span
+          editable-select="group.tutorial_id"
+          e-name="tutorial_id"
+          e-form="groupRowForm"
+          e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials | orderBy: 'abbreviation'">
+          <span tooltip="{{group.tutorial().description}}" tooltip-popup-delay="200" tooltip-append-to-body="true">
             {{group.tutorial().abbreviation}}
           </span>
         </span>
-      </td>
-      <td class="actions" ng-show="unitRole">
-        <form editable-form name="groupRowform" onbeforesave="saveGroup($data, group.id)" ng-show="groupRowform.$visible" shown="inserted == group">
-          <button type="submit" ng-disabled="groupRowform.$waiting" class="btn btn-primary btn-sm">
+      </td><!--/group-tutorial-->
+      <td ng-show="unitRole">
+        <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
+          <button type="submit" ng-disabled="groupRowForm.$waiting" class="btn btn-default btn-sm">
             <i class="fa fa-floppy-o"></i> Save
           </button>
-          <button type="button" ng-disabled="groupRowform.$waiting" ng-click="groupRowform.$cancel()" class="btn btn-default btn-sm">
+          <button type="button" ng-disabled="groupRowForm.$waiting" ng-click="groupRowForm.$cancel()" class="btn btn-default btn-sm">
             <i class="fa fa-times"></i> Cancel
           </button>
         </form>
-        <div ng-hide="groupRowform.$visible">
+        <div ng-hide="groupRowForm.$visible">
           <div>
-            <button ng-click="groupRowform.$show()" class="btn btn-primary btn-sm">
+            <button ng-click="groupRowForm.$show()" class="btn btn-default btn-sm">
               <i class="fa fa-pencil"></i> Edit
             </button>
-            <button ng-click="removeGroup(group)" class="btn btn-danger btn-sm">
+            <button ng-click="deleteGroup(group)" class="btn btn-danger btn-sm">
               <i class="fa fa-trash-o"></i> Delete
             </button>
           </div>
@@ -108,9 +117,10 @@
     </tr>
   </tbody>
 </table>
-<div class="panel-footer text-center" ng-show="filteredGroups.length > pagination.pageSize">
+<div class="panel-footer text-center" ng-show="pagination.show">
   <pagination
-    total-items="filteredGroups.length"
+    total-items="pagination.totalSize"
+    ng-change="pagination.onChange()"
     ng-model="pagination.currentPage"
     items-per-page="pagination.pageSize"
     max-size="pagination.maxSize"
@@ -118,5 +128,4 @@
     boundary-links="true"
     rotate="false">
   </pagination>
-</div>
 </div>
