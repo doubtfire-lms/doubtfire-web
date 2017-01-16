@@ -65,7 +65,7 @@
         ng-model="task.status"
         ng-change="triggerTransition(status)"
         class="btn btn-default btn-status {{taskStatusData.class(status)}}"
-        tooltip-html-unsafe="<h5>Mark as <strong>{{taskStatusData.labels[status]}}</strong></h5><hr><p>{{taskStatusData.help[status].reason}}</p>"
+        tooltip-html="<h5>Mark as <strong>{{taskStatusData.labels[status]}}</strong></h5><hr><p>{{taskStatusData.help[status].reason}}</p>"
         tooltip-popup-delay="500"
         tooltip-append-to-body="true"
         btn-radio="'{{status}}'">
