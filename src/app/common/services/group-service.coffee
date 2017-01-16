@@ -80,10 +80,15 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   # Updates the given group
   groupService.updateGroup = (group, onSuccess, onFailure) ->
-    group.$update(
+    Group.update(
       {
-        name: group.name,
-        tutorial_id: group.tutorial_id,
+        unit_id: group.unit().id,
+        group_set_id: group.groupSet().id,
+        id: group.id,
+        group: {
+          name: group.name,
+          tutorial_id: group.tutorial_id,
+        }
       }
       (success) ->
         alertService.add("info", "#{group.name} was updated", 3000)
@@ -95,9 +100,18 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   # Deletes an entire group from the given groupset & unit
   groupService.deleteGroup = (unit, group, groupSet, onSuccess, onFailure) ->
-    if group.group_set_id != groupSetId.id
+    if group.group_set_id != groupSet.id
       throw Error "Cannot delete group -- group's group_set_id does not match groupSet specified"
-    group.$delete(
+    Group.delete(
+      {
+        unit_id: group.unit().id,
+        group_set_id: group.groupSet().id,
+        id: group.id,
+        group: {
+          name: group.name,
+          tutorial_id: group.tutorial_id,
+        }
+      },
       (success) ->
         groupSet.groups = _.without(groupSet.groups, group)
         alertService.add("info", "#{group.name} was deleted", 3000)
