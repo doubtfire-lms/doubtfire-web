@@ -8,7 +8,7 @@ angular.module("doubtfire.admin.modals.user-notification-settings-modal", [])
   #
   UserNotificationSettingsModal.show = (user) ->
     $modal.open
-      templateUrl: 'users/modals/user-notification-settings-modal/user-notification-settings-modal.tpl.html'
+      templateUrl: 'admin/modals/user-notification-settings-modal/user-notification-settings-modal.tpl.html'
       controller: 'UserNotificationSettingsModalCtrl'
       resolve:
         user: ->  user

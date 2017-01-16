@@ -5,7 +5,7 @@ angular.module('doubtfire.admin.modals.user-settings-modal', [])
 
   UserSettingsModal.show = (user) ->
     $modal.open
-      templateUrl: 'users/modals/user-settings-modal/user-settings-modal.tpl.html'
+      templateUrl: 'admin/modals/user-settings-modal/user-settings-modal.tpl.html'
       controller: 'UserSettingsModalCtrl'
       resolve:
         user: -> user
