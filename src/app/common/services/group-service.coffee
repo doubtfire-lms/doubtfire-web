@@ -36,7 +36,6 @@ angular.module("doubtfire.common.services.group-service", [  ])
       groupService.removeMemberFromGroup(group, member, onSuccess, onFailure)
     group.getMembers = (onSuccess, onFailure) ->
       groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
-    group.number = index + 1
     group
 
 
