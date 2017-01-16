@@ -69,12 +69,11 @@
   <tbody>
     <tr
       ng-class="{info: group == selectedGroup}"
-      ng-click="selectGroup(group)"
       ng-repeat="group in filteredGroups">
-      <th>
+      <th ng-click="selectGroup(group)">
         {{ group.number }}
       </th><!--/group-number-->
-      <th>
+      <th ng-click="selectGroup(group)">
         <span
           editable-text="group.name"
           e-name="name"
@@ -83,7 +82,7 @@
           {{ group.name || 'Not Set' }}
         </span>
       </th><!--/group-name-->
-      <td>
+      <td ng-click="selectGroup(group)">
         <span
           editable-select="group.tutorial_id"
           e-name="tutorial_id"

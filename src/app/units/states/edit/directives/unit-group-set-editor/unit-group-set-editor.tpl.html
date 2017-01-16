@@ -60,42 +60,42 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupset}" ng-click="selectGroupSet(gs)">
-            <td class="col-sm-3">
+          <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupSet}">
+            <td ng-click="selectGroupSet(gs)" class="col-sm-3">
               <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
-                {{ gs.name || 'empty' }}
+                {{ gs.name || 'No Name Set' }}
               </span>
             </td>
-            <td>
+            <td ng-click="selectGroupSet(gs)">
               <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
                 {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
               </span>
             </td>
-            <td>
+            <td ng-click="selectGroupSet(gs)">
               <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
                 {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
               </span>
             </td>
-            <td>
+            <td ng-click="selectGroupSet(gs)">
               <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
                 {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
               </span>
             </td>
             <td>
               <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
-                <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-primary">
-                  <i class="fa fa-floppy-o"></i>
+                <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-default btn-sm">
+                  <i class="fa fa-floppy-o"></i> Save
                 </button>
-                <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default">
-                  <i class="fa fa-times"></i>
+                <button type="button" ng-disabled="gsRowform.$waiting" ng-click="gsRowform.$cancel()" class="btn btn-default btn-sm">
+                  <i class="fa fa-times"></i> Cancel
                 </button>
               </form>
               <div ng-show="!gsRowform.$visible">
-                <button ng-click="gsRowform.$show()" class="btn btn-primary">
-                  <i class="fa fa-pencil"></i>
+                <button ng-click="gsRowform.$show()" class="btn btn-default btn-sm">
+                  <i class="fa fa-pencil"></i> Edit
                 </button>
-                <button ng-click="removeGroupSet(gs)" class="btn btn-danger">
-                  <i class="fa fa-trash-o"></i>
+                <button ng-click="removeGroupSet(gs)" class="btn btn-danger btn-sm">
+                  <i class="fa fa-trash-o"></i> Delete
                 </button>
               </div>
               <!--/actions-->
