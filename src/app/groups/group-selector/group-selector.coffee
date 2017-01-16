@@ -17,7 +17,12 @@ angular.module('doubtfire.groups.group-selector', [])
     selectedGroupSet: '='
     # Bind the selected group for switching
     selectedGroup: '=?'
-  controller: ($scope, $filter, alertService, Group, currentUser) ->
+    # Shows the groupset selector
+    showGroupSetSelector: '=?'
+  controller: ($scope, $filter, alertService, Group, currentUser, listenerService) ->
+    # Cleanup
+    listeners = listenerService.listenTo($scope)
+
     # Unit role or project should be included in $scope
     if !$scope.unitRole? && !$scope.project? || $scope.unitRole? && $scope.project?
       throw Error "Group selector must have exactly one unit role or one project"

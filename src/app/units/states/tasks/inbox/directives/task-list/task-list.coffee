@@ -14,10 +14,9 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
     showSearchOptions: '=?'
     getNextTask: '=?'
     getPreviousTask: '=?'
-  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService) ->
+  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService) ->
     # Cleanup
-    listeners = []
-    $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+    listeners = listenerService.listenTo($scope)
     $scope.onSelectedTaskChange = $scope.onSelectedTaskChange() if $scope.onSelectedTaskChange?
     # Check taskSource exists
     unless $scope.taskData?.source?

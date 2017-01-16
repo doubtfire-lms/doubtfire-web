@@ -19,10 +19,9 @@ angular.module('doubtfire.units.states.index', [
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
   # Cleanup
-  listeners = []
-  $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+  listeners = listenerService.listenTo($scope)
 
   #
   # Returns the state back home

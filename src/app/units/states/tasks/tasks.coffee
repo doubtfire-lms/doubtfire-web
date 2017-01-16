@@ -21,10 +21,9 @@ angular.module('doubtfire.units.states.tasks', [
    }
 )
 
-.controller('UnitsTasksStateCtrl', ($scope, $state, taskService) ->
+.controller('UnitsTasksStateCtrl', ($scope, $state, taskService, listenerService) ->
   # Cleanup
-  listeners = []
-  $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+  listeners = listenerService.listenTo($scope)
 
   # Task data wraps:
   #  * the URL task composite key (project username + task def abbreviation) sourced from the URL,

@@ -11,10 +11,9 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-submission-as
     nextTask: '=onClickNextTask'
     previousTask: '=onClickPreviousTask'
     onChangeTask: '='
-  controller: ($scope, $timeout, TaskFeedback, taskService, alertService) ->
+  controller: ($scope, $timeout, TaskFeedback, taskService, alertService, listenerService) ->
     # Cleanup
-    listeners = []
-    $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+    listeners = listenerService.listenTo($scope)
 
     $scope.clearSelectedTask = -> $scope.task = null
 

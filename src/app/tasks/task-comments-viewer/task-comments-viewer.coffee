@@ -12,10 +12,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     comment: '=?'
     autofocus: '@?'
     refocusOnTaskChange: '@?'
-  controller: ($scope, $modal, $state, $timeout, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
-    listeners = []
-    $scope.$on '$destroy', -> _.each(listeners, (l) -> l())
+    listeners = listenerService.listenTo($scope)
 
     # Initialise scope comment text
     unless _.isString $scope.comment?.text
