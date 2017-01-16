@@ -124,6 +124,7 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.deleteGroup(group, $scope.selectedGroupSet,
         (success) ->
           $scope.selectedGroup = null if group.id == $scope.selectedGroup.id
+          resetAddGroup()
           applyFilters()
       )
 
