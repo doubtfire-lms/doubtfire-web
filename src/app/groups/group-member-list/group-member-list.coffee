@@ -22,8 +22,8 @@ angular.module('doubtfire.groups.group-member-list', [])
       reverse: false
 
     # Table sorting
-    $scope.sortTableBy = (header) ->
-      $scope.tableSort.order = header
+    $scope.sortTableBy = (column) ->
+      $scope.tableSort.order = column
       $scope.tableSort.reverse = !$scope.tableSort.reverse
 
     # Loading
