@@ -108,14 +108,15 @@ angular.module('doubtfire.units.states.students', [])
       else
         row['lab'] = ""
       angular.forEach(student.task_stats, (stat) ->
-        row[stat.type] = stat.value
+        row[stat.key] = stat.value
       )
       result.push row
     )
     result
 
-  # Expose the status labels for the bar stats
-  $scope.statusLabels = taskService.statusLabels
+  # Expose the status labels and classes for the bar stats
+  $scope.statusClass = taskService.statusClass
+  $scope.statusText = taskService.statusText
 
   # View a student
   $scope.viewStudent = (student) ->

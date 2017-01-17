@@ -88,8 +88,8 @@
               <bar
                 ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
                 value="bar.value"
-                type="{{bar.type}}"
-                tooltip="{{bar.value}}% {{statusLabels[bar.type]}}">
+                type="{{statusClass(bar.key)}}"
+                tooltip="{{bar.value}}% {{statusText(bar.key)}}">
                 <span ng-hide="bar.value < 10">{{bar.value}}%</span>
               </bar>
             </progress>
