@@ -11,18 +11,16 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 
     $scope.addGroupSet = ->
-      if $scope.unit.group_sets.length == 0
-        GroupSet.create(
-          { unit_id: $scope.unit.id, group_set: { name: "Group Work" } }
-          (gs) -> $scope.selectGroupSet(gs); $scope.unit.group_sets.push(gs)
-          (response) -> alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
-        )
-      else
-        GroupSet.create(
-          { unit_id: $scope.unit.id, group_set: { name: "More Group Work" } }
-          (gs) -> $scope.unit.group_sets.push(gs)
-          (response) -> alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
-        )
+      gsCount = $scope.unit.group_sets.length
+      name = if gsCount == 0 then "Group Work" else "Group Work Set #{gsCount + 1}"
+      GroupSet.create(
+        { unit_id: $scope.unit.id, group_set: { name: name } }
+        (gs) ->
+          $scope.unit.group_sets.push(gs)
+          alertService.add("success", "Group set created.", 2000)
+        (response) ->
+          alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
+      )
 
     $scope.saveGroupSet = (data, id) ->
       GroupSet.update(
@@ -44,14 +42,19 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
     $scope.removeGroupSet = (gs) ->
       GroupSet.delete(
         { unit_id: $scope.unit.id, id: gs.id },
-        (response) -> $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
-        (response) -> alertService.add("danger", "Failed to delete group set. #{response.data.error}", 6000)
+        (response) ->
+          $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
+          newGs = $scope.unit.group_sets[$scope.unit.group_sets.indexOf(gs) - 1]
+          $scope.selectGroupSet(newGs) if gs is $scope.selectedGroupSet
+          alertService.add("success", "Group set deleted.", 2000)
+        (response) ->
+          alertService.add("danger", "Failed to delete group set. #{response.data.error}", 6000)
       )
-      $scope.selectGroupSet(null) if gs is $scope.selectedGroupset
 
     $scope.selectGroupSet = (gs) ->
-      $scope.selectedGroupset = gs
-      $scope.$digest #notify
+      $scope.selectedGroupSet = gs
+      # Notify children of updates
+      $scope.$broadcast 'UnitGroupSetEditor/SelectedGroupSetChanged', { id: gs?.id }
 
     $scope.studentStaffOptions = [
       { value: true, text: "Staff and Students" }
@@ -68,7 +71,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
 
     $scope.csvImportResponse = {}
     $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
-    $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupset)
+    $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupSet)
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
       CsvResultModal.show 'Group CSV upload results.', response
@@ -77,5 +80,5 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
       $scope.isGroupCSVUploading = null
 
     $scope.downloadGroupCSV = ->
-      GroupSet.downloadCSV($scope.unit, $scope.selectedGroupset)
+      GroupSet.downloadCSV($scope.unit, $scope.selectedGroupSet)
 )

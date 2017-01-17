@@ -113,18 +113,24 @@
     </div><!--/panel-->
   </div><!--/group-sets-->
   <div class="clearfix">
-    <group-set-group-manager ng-show="selectedGroupset && unit.group_sets.length > 0"></group-set-group-manager>
+    <group-set-manager
+      ng-show="selectedGroupSet && unit.group_sets.length > 0"
+      unit="unit"
+      selected-groupset="selectedGroupSet"
+      show-group-set-selector="false"
+      unit-role="unitRole"
+      class="col-sm-12"></group-set-manager>
   </div>
-  <div class="file-io col-sm-12" ng-if="selectedGroupset && unit.group_sets.length > 0">
+  <div class="file-io col-sm-12" ng-if="selectedGroupSet && unit.group_sets.length > 0">
     <hr>
     <div class="panel-row">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4 class="panel-title">Batch Import to <strong>{{selectedGroupset.name}}</strong></h4>
+          <h4 class="panel-title">Batch Import to <strong>{{selectedGroupSet.name}}</strong></h4>
         </div>
         <div class="panel-body">
           <p>
-            Import groups into the group set named <strong>{{selectedGroupset.name}}</strong>
+            Import groups into the group set named <strong>{{selectedGroupSet.name}}</strong>
             with a CSV containing the following column headings:
           </p>
           <ul>
@@ -148,12 +154,12 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            Batch Export <strong>{{selectedGroupset.name}}</strong>
+            Batch Export <strong>{{selectedGroupSet.name}}</strong>
           </h3>
         </div>
         <div class="panel-body">
           <p>
-            Download a CSV of all teams in group set named <strong>{{selectedGroupset.name}}</strong>.
+            Download a CSV of all teams in group set named <strong>{{selectedGroupSet.name}}</strong>.
             Data is listed under the following column headings:
           </p>
           <ul>
