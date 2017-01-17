@@ -13,8 +13,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-students-editor', []
     $scope.showEnrolModal = ->
       UnitStudentEnrolmentModal.show $scope.unit
 
-    $scope.switchToLab = (student, tutorial) ->
-      student.switchToLab(tutorial)
+    $scope.switchToTutorial = (student, tutorial) ->
+      student.switchToTutorial(tutorial)
 
     onBatchEnrolSuccess = (response) ->
       newStudents = response

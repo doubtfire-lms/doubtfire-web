@@ -1,0 +1,54 @@
+#students-list {
+  table thead th {
+    vertical-align: middle;
+  }
+  a.sort-by-flag-anchor {
+    &:hover {
+      text-decoration: none;
+      .show-link {
+        text-decoration: underline;
+      }
+    }
+  }
+  a.sort-by-flag-anchor + .flag-sort-options {
+    display: flex;
+    max-width: $flag-icon-width * $number-of-flags;
+    margin: 0.5em 0;
+    align-items: center;
+    justify-content: space-between;
+    .flag-sort {
+      i, grade-icon {
+        display: inline-block;
+      }
+    }
+    .flag-sort > i:hover {
+      color: $link-hover-color;
+    }
+    .flag-sort > grade-icon:hover span {
+      background-color: $link-hover-color;
+    }
+  }
+  table {
+    td.flags-data {
+      .flags {
+        max-width: $flag-icon-width * $number-of-flags;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    td.task-progress-bar {
+      padding-right: 3ex;
+      .progress {
+        border-radius: 10px;
+      }
+    }
+
+    th.student-id { width: $student-id-width; }
+    th.name       { width: $name-width;       }
+    th.stats      { width: $stats-width;      }
+    th.flags      { width: $flags-width;      }
+    th.tutorial   { width: $tutorial-width;   }
+    th.actions    { width: $actions-width;    }
+  }
+}

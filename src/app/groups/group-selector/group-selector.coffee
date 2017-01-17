@@ -109,6 +109,9 @@ angular.module('doubtfire.groups.group-selector', [])
     # Changing staff filter reapplies filter
     $scope.onChangeStaffFilter = applyFilters
 
+    # Search text reapplies filter
+    $scope.searchTextChanged = applyFilters
+
     # Adds a group to the unit
     $scope.addGroup = (name) ->
       if $scope.unit.tutorials.length == 0

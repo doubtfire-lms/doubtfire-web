@@ -127,11 +127,12 @@ angular.module("doubtfire.common.services.units", [])
         _.find(student.tasks, {task_definition_id: taskDefId})
       student.unit = ->
         unit
-      student.switchToLab = (tutorial) ->
-        newId = tutorial?.id || -1
+      student.switchToTutorial = (tutorial) ->
+        newId = if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id
         analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
         Project.update({ id: student.project_id, tutorial_id: newId },
           (project) ->
+            alertService.add "info", "Tutorial updated for #{student.name}", 3000
             student.tutorial_id = project.tutorial_id
             student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
           (response) ->

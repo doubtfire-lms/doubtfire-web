@@ -94,7 +94,7 @@ angular.module('doubtfire.units.unit-student-list', [])
     # Initially not full screen
     $scope.fullscreen = false
 
-    update_project_details = (project, response) ->
+    updateProjectDetails = (project, response) ->
       projectService.updateTaskStats(project, response.stats)
       if project.tasks
         _.each project.tasks, (task) ->
@@ -105,7 +105,7 @@ angular.module('doubtfire.units.unit-student-list', [])
       analyticsService.event 'Teacher View - Students Tab', 'Trigger Week End'
       Project.update({ id: project.project_id, trigger: "trigger_week_end" }
         (response) ->
-          update_project_details(project, response)
+          updateProjectDetails(project, response)
         (response) ->
           alertService.add("danger", response.data.error, 6000)
       )
