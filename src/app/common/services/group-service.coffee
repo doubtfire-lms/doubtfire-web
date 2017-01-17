@@ -64,7 +64,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         unit_id: unit.id,
         group_set_id: groupSet.id
         group: {
-          name: name || "Group #{groupSet.groups.length + 1}"
+          name: name
           tutorial_id: tutorialId
         }
       }
