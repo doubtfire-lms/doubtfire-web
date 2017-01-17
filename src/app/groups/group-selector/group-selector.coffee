@@ -19,7 +19,9 @@ angular.module('doubtfire.groups.group-selector', [])
     selectedGroup: '=?'
     # Shows the groupset selector
     showGroupSetSelector: '=?'
-  controller: ($scope, $filter, alertService, Group, currentUser, listenerService) ->
+    # On change of a group
+    onSelect: '=?'
+  controller: ($scope, $filter, $timeout, alertService, Group, currentUser, listenerService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -58,16 +60,36 @@ angular.module('doubtfire.groups.group-selector', [])
 
     # Loading
     startLoading  = -> $scope.loaded = false
-    finishLoading = -> $scope.loaded = true
+    finishLoading = -> $timeout((-> $scope.loaded = true), 500)
+
+    # Select group function
+    $scope.selectGroup = (group) ->
+      $scope.selectedGroup = group
+      $scope.onSelect?(group)
+
+    # Sets the placeholder text (useful to know named
+    # groups are technically optional)
+    resetNewGroupForm = () ->
+      @newGroupForm?.reset()
+      if _.isEmpty($scope.selectedGroupSet.groups)
+        $scope.newGroupNamePlaceholder = "Group 1"
+      else if _.last($scope.selectedGroupSet.groups)?.name.match(/\d+$/)?
+        $scope.newGroupNamePlaceholder = "Group #{_.last($scope.selectedGroupSet.groups).number + 1}"
+      else
+        $scope.newGroupNamePlaceholder = "Enter New Group Name..."
 
     # Group set selector
     $scope.selectedGroupSet ?= _.first($scope.unit.group_sets)
-    $scope.showGroupSetSelector = $scope.unit.group_sets.length > 1
+    $scope.showGroupSetSelector ?= $scope.unit.group_sets.length > 1
     $scope.selectGroupSet = (groupSet) ->
+      return unless groupSet?
       startLoading()
-      $scope.unit.getGroups(groupSet.id, ->
+      $scope.selectGroup(null)
+      $scope.unit.getGroups(groupSet.id, (groups) ->
+        $scope.selectedGroupSet = groupSet
+        groupSet.groups = groups
         finishLoading()
-        resetAddGroup()
+        resetNewGroupForm()
         applyFilters()
       , finishLoading)
     $scope.selectGroupSet($scope.selectedGroupSet)
@@ -83,17 +105,6 @@ angular.module('doubtfire.groups.group-selector', [])
       Convenor: 'all',
       Tutor: 'mine'
     }[$scope.unitRole.role]
-
-    # Sets the placeholder text (useful to know named
-    # groups are technically optional)
-    resetAddGroup = () ->
-      if _.isEmpty($scope.selectedGroupSet.groups)
-        $scope.newGroupNamePlaceholder = "Group 1"
-      else if _.last($scope.selectedGroupSet.groups)?.name.match(/\d+$/)?
-        $scope.newGroupNamePlaceholder = "Group #{_.last($scope.selectedGroupSet.groups).number + 1}"
-      else
-        $scope.newGroupNamePlaceholder = "Enter New Group Name..."
-      $scope.newGroupName = null
 
     # Changing staff filter reapplies filter
     $scope.onChangeStaffFilter = applyFilters
@@ -113,7 +124,7 @@ angular.module('doubtfire.groups.group-selector', [])
         tutorialId ?= _.first($scope.unit.tutorials).id
       $scope.unit.addGroup($scope.selectedGroupSet, name, tutorialId,
         (newGroup) ->
-          resetAddGroup()
+          resetNewGroupForm()
           applyFilters()
           $scope.selectedGroup = newGroup
       )
@@ -128,13 +139,14 @@ angular.module('doubtfire.groups.group-selector', [])
     $scope.deleteGroup = (group) ->
       $scope.unit.deleteGroup(group, $scope.selectedGroupSet,
         (success) ->
-          $scope.selectedGroup = null if group.id == $scope.selectedGroup.id
-          resetAddGroup()
+          $scope.selectedGroup = null if group.id == $scope.selectedGroup?.id
+          resetNewGroupForm()
           applyFilters()
       )
 
-    # Select group function
-    $scope.selectGroup = (group) ->
-      $scope.selectedGroup = group
-      $scope.onSelectedGroupChange?(group)
+    # Watch selected group set changes
+    listeners.push $scope.$on 'UnitGroupSetEditor/SelectedGroupSetChanged', (evt, args) ->
+      newGroupSet = $scope.unit.findGroupSet(args.id)
+      return if newGroupSet == $scope.selectedGroupSet
+      $scope.selectGroupSet(newGroupSet)
 )

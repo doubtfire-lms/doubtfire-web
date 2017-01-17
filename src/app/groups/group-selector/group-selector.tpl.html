@@ -12,9 +12,9 @@
     </group-set-selector>
   </h4>
 </div><!--/panel-heading-->
-<div class="panel-body">
+<div class="panel-body panel-toolbar" ng-show="loaded">
   <div class="clearfix">
-    <div class="input-group pull-left" ng-class="{'col-sm-6': unitRole}">
+    <div class="input-group pull-left col-md-6 staff-filter">
       <div class="btn-group">
         <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'all'">
           <i class="fa fa-university"></i> All Tutorials
@@ -24,7 +24,7 @@
         </label>
       </div>
     </div><!--/staff-filter-button-group-->
-    <form class="input-group pull-right" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)" ng-class="{'col-sm-6': unitRole}">
+    <form name="newGroupForm" class="input-group pull-right col-md-6" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)">
       <input class="form-control" placeholder="{{newGroupNamePlaceholder}}" ng-model="newGroupName">
       <span class="input-group-btn">
         <button type="submit" class="btn btn-success">
@@ -33,17 +33,19 @@
       </span>
     </form><!--/group-name-create-->
   </div>
-  <div class="text-center text-muted" ng-show="!loaded">
-    <i class="fa fa-spinner fa-spin"></i>
-  </div><!--/loading-spinner-->
-  <div class="callout callout-primary row" ng-show="loaded && filteredGroups.length == 0">
+</div><!--/creation-options-->
+<div class="panel-body panel-loading" ng-show="!loaded">
+  <i class="fa fa-spinner fa-pulse"></i> Loading Groups...
+</div><!--/loading-spinner-->
+<div class="panel-body" ng-show="loaded && filteredGroups.length == 0">
+  <div class="callout callout-primary row">
     <h4>No Groups To Show</h4>
     <p>
       The <strong>{{selectedGroupSet.name}}</strong> group set has no groups{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : "."}}
     </p>
-  </div><!--/no-groups-->
-</div><!--/panel-body-->
-<table ng-show="filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
+  </div>
+</div><!--/no-groups-->
+<table ng-show="loaded && filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
       <th class="number">

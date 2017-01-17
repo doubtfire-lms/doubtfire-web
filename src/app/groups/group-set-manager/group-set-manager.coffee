@@ -11,7 +11,17 @@ angular.module('doubtfire.groups.group-set-manager', [])
     unit: '='
     unitRole: '='
     selectedGroupSet: '='
+    showGroupSetSelector: '=?'
   controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, projectService) ->
     if !$scope.unitRole?
       throw Error "Group set group manager must have exactly one unit role"
+    # Reset member panel toolbar visibility
+    $scope.newGroupSelected = -> $scope.showMemberPanelToolbar = false
+    $scope.groupMembersLoaded = -> $scope.showMemberPanelToolbar = true
+    resetAddMemberForm = ->
+      @addMemberForm.reset()
+      @addMemberForm.querySelector('input[type="text"]').focus()
+    # Add new member to the group
+    $scope.addMember = (member) ->
+      $scope.selectedGroup.addMember(member, resetAddMemberForm)
 )

@@ -1,3 +1,6 @@
+group-selector {
+  display: block;
+}
 group-selector table {
   th.number { width: 15%; }
   th.name { width: 30%; }
@@ -8,4 +11,15 @@ group-selector .panel-title > group-set-selector {
   display: inline-block;
   max-width: 50%;
   padding-left: 1ex;
+}
+@media (max-width: $screen-md) {
+  group-selector .input-group.staff-filter {
+    margin-bottom: 1em;
+    &, .btn-group {
+      width: 100%;
+    }
+    .btn {
+      width: 50%;
+    }
+  }
 }

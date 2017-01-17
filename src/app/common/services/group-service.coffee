@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
 #
 # Service for group-related functions
 #
-.factory("groupService", (Group, alertService) ->
+.factory("groupService", (Group, GroupMember, alertService) ->
   #
   # The unit service object
   #
@@ -150,9 +150,13 @@ angular.module("doubtfire.common.services.group-service", [  ])
         # Loaded group members?
         if group.members?
           group.members.push(success)
+          alertService.add("info", "#{member.name} was added to '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
-          group.getMembers(onSuccess, onFailure)
+          group.getMembers((->
+            alertService.add("info", "#{member.name} was added to '#{group.name}'", 3000)
+            onSuccess?()
+          ), onFailure)
       (failure) ->
         alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
@@ -165,15 +169,19 @@ angular.module("doubtfire.common.services.group-service", [  ])
         unit_id: group.unit().id,
         group_set_id: group.groupSet().id,
         group_id: group.id
-        project_id: member.project_id
+        id: member.project_id # ID maps to student's project_id!
       }
       (success) ->
         # Loaded group members?
         if group.members?
-          group.members = _.without(group.members, {project_id: member.project_id})
+          group.members = _.without(group.members, member)
+          alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
-          group.getMembers(onSuccess, onFailure)
+          group.getMembers((->
+            alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
+            onSuccess?()
+          ), onFailure)
       (failure) ->
         alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
         onFailure?(failure)
