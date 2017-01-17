@@ -85,7 +85,11 @@
           </td><!--/name-column-->
           <td ng-click="viewStudent(student)" class="task-progress-bar">
             <progress class="task-progress" animate="true">
-              <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}" tooltip="{{bar.value}}% {{statusName(bar.type)}}">
+              <bar
+                ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                value="bar.value"
+                type="{{bar.type}}"
+                tooltip="{{bar.value}}% {{statusLabels[bar.type]}}">
                 <span ng-hide="bar.value < 10">{{bar.value}}%</span>
               </bar>
             </progress>
@@ -106,9 +110,9 @@
           <td>
             <select
               class="form-control input-sm"
-              ng-model="student.tutorial.id"
+              ng-model="studentsTutorials[student.project_id]"
               ng-options="tutorial.id as (tutorial.abbreviation + ' - ' + tutorial.description) for tutorial in unit.tutorials | orderBy:'abbreviation'"
-              ng-change="switchToTutorial(student, student.tutorial.id)">
+              ng-change="switchToTutorial(student, studentsTutorials[student.project_id])">
               <option value="">None</option>
             </select>
           </td><!--/tutorial-column-->
