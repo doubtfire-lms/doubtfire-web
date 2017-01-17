@@ -51,7 +51,7 @@ angular.module('doubtfire.units.states.index', [
       $scope.unit = unit
       # Unit is only "loaded" if all the students were loaded
       $scope.$watch 'unit.students', (newValue) ->
-        $scope.unitLoaded = true if _.isArray(newValue)
+        $scope.unitLoaded = _.isArray(newValue)
 
   # Load the unit role details whenever the ID changes
   listeners.push $scope.$watch 'unitRole.id', loadRequiredData
