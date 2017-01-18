@@ -9,7 +9,7 @@ angular.module('doubtfire.admin.states.users', [])
     views:
       main:
         controller: "AdministerUsersCtrl"
-        templateUrl: "users/states/users/users.tpl.html"
+        templateUrl: "admin/states/users/users.tpl.html"
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
