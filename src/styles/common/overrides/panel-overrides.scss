@@ -49,6 +49,7 @@
   @include panel-row();
 }
 
+// New panel loading panel
 .panel-body.panel-loading {
   @extend .text-muted;
   @extend .text-center;
@@ -59,6 +60,11 @@
   i {
     margin-right: 0.9ex;
   }
+}
+
+// Search options panel
+.panel-body.panel-collapseable {
+  background-color: lighten($gray-lighter, 2%);
 }
 
 // Two panel bodies next to eachother (include those with one nested in custom element)

@@ -22,14 +22,19 @@
         </div>
       </h4>
     </div><!--/search-header-->
-    <div class="panel-body" ng-show="showSearchOptions">
-      <div class="btn-group">
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="staffFilterChanged()" btn-radio="'all'">
-          <i class="fa fa-university"></i> Show All Tutorials
-        </label>
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="staffFilterChanged()" btn-radio="'mine'">
-          <i class="fa fa-pencil"></i> Show My Tutorials
-        </label>
+    <form class="panel-body panel-collapseable search-options" ng-show="showSearchOptions">
+      <div class="form-group staff-filter">
+        <label>Show Students From...</label>
+        <div class="input-group">
+          <div class="btn-group">
+            <button class="btn btn-default col-sm-6" ng-model="staffFilter" ng-click="staffFilterChanged('all')" btn-radio="'all'">
+              <i class="fa fa-university"></i> All Tutorials
+            </button>
+            <button class="btn btn-default col-sm-6" ng-model="staffFilter" ng-click="staffFilterChanged('mine')" btn-radio="'mine'">
+              <i class="fa fa-pencil"></i> My Tutorials
+            </button>
+          </div>
+        </div>
       </div><!--/staff-filter-button-group-->
     </div><!--/search-options-->
     <div class="panel-body" ng-show="filteredStudents.length == 0">

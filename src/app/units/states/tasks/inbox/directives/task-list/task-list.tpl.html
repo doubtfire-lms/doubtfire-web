@@ -9,36 +9,34 @@
       </span><!--/search-options-toggle-->
     </div><!--/search-->
   </div>
-  <div class="panel-body search-options" ng-show="showSearchOptions">
-    <form>
-      <div class="form-group task-definition">
-        <label>Task Definition</label>
-        <div class="input-group col-sm-12">
-          <select
-            ng-model="filters.taskDefinitionIdSelected"
-            ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
-            ng-change="taskDefinitionIdChanged()"
-            autofocus="{{autofocus.onTaskDefinitionSelect}}"
-            class="form-control input-md">
-            <option value="" ng-if="!isTaskDefMode">All task definitions</option>
-          </select>
-        </div>
-        <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
-      </div><!--/task-definition-->
-      <div class="form-group tutorial">
-        <label>Tutorials</label>
-        <div class="input-group col-sm-12">
-          <select
-            ng-model="filters.tutorialIdSelected"
-            ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in tutorials | orderBy:'abbreviation'"
-            ng-change="tutorialIdChanged()"
-            class="form-control input-md">
-          </select>
-        </div>
-        <p class="help-block">You can choose to display submissions from all tutorials or just your tutorials.</p>
-      </div><!--/tutorial-->
-    </form>
-  </div><!--/search-options-->
+  <form class="panel-body panel-collapseable search-options" ng-show="showSearchOptions">
+    <div class="form-group task-definition">
+      <label>Task Definition</label>
+      <div class="input-group col-sm-12">
+        <select
+          ng-model="filters.taskDefinitionIdSelected"
+          ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
+          ng-change="taskDefinitionIdChanged()"
+          autofocus="{{autofocus.onTaskDefinitionSelect}}"
+          class="form-control input-md">
+          <option value="" ng-if="!isTaskDefMode">All task definitions</option>
+        </select>
+      </div>
+      <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
+    </div><!--/task-definition-->
+    <div class="form-group tutorial">
+      <label>Tutorials</label>
+      <div class="input-group col-sm-12">
+        <select
+          ng-model="filters.tutorialIdSelected"
+          ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in tutorials | orderBy:'abbreviation'"
+          ng-change="tutorialIdChanged()"
+          class="form-control input-md">
+        </select>
+      </div>
+      <p class="help-block">You can choose to display submissions from all tutorials or just your tutorials.</p>
+    </div><!--/tutorial-->
+  </form><!--/search-options-->
   <ul class="list-group">
     <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
       id="{{task.taskKeyToIdString()}}"
