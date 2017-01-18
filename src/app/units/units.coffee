@@ -3,7 +3,6 @@ angular.module('doubtfire.units', [
   'doubtfire.units.states'
   'doubtfire.units.stats'
   'doubtfire.units.unit-analytics-viewer'
-  'doubtfire.units.unit-student-list'
   'doubtfire.units.unit-student-plagiarism-list'
   'doubtfire.units.unit-student-portfolio-list'
 ])
