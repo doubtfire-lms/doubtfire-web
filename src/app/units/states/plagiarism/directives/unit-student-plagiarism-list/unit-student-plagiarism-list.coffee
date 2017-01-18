@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.unit-student-plagiarism-list',[])
+angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagiarism-list',[])
 
 #
 # List of all possible plagiarism detected in student's work
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
 .directive('unitStudentPlagiarismList', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/unit-student-plagiarism-list/unit-student-plagiarism-list.tpl.html'
+  templateUrl: 'units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.tpl.html'
   scope:
     unit: '='
     unitRole: '='
