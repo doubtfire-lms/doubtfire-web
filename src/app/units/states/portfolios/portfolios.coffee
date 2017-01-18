@@ -15,7 +15,7 @@ angular.module('doubtfire.units.states.portfolios', [])
    }
 )
 .controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation) ->
-  # TODO: Break this down into smaller directives
+  # TODO: (@alexcu) Break this down into smaller directives/substates
 
   $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
   $scope.gradeDownloadUrl = Unit.getGradesUrl $scope.unit

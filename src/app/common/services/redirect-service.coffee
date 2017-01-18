@@ -6,7 +6,7 @@ angular.module("doubtfire.common.services.redirect", [])
   #
   redirectService = {}
 
-  #TODO: need to test multiple params and nested objects here...
+  # TODO: (@alexcu) need to test multiple params and nested objects here...
   deserialize = (str, prefix) ->
     result = {}
     parts = str.split "&"

@@ -17,5 +17,5 @@ angular.module('doubtfire.units.states.plagiarism', [
    }
 )
 .controller("UnitPlagiarismStateCtrl", ($scope) ->
-  # TODO: Refactor plagiarism viewer directive into scope
+  # TODO: (@alexcu) Refactor plagiarism viewer directive into scope
 )

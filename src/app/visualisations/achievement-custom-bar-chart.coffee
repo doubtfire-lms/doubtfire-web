@@ -68,7 +68,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
             g = wrap.select('g')
             gEnter.append('g').attr 'class', 'nv-groups'
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
-            #TODO: by definition, the discrete bar should not have multiple groups, will modify/remove later
+            # TODO: (@macite) by definition, the discrete bar should not have multiple groups, will modify/remove later
             groups = wrap.select('.nv-groups').selectAll('.nv-group').data(((d) ->
               d
             ), (d) ->
@@ -158,7 +158,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
             barsEnter = bars.enter().append('g').attr('transform', (d, i, j) ->
               'translate(' + x(getX(d, i)) + x.rangeBand() * .25 + ', ' + y(0) + ')'
             ).on('mouseover', (d, i) ->
-              #TODO: figure out why j works above, but not here
+              # TODO: (@macite) figure out why j works above, but not here
               d3.select(this).classed 'hover', true
               dispatch.elementMouseover
                 data: d

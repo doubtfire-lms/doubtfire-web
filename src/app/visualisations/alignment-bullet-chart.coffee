@@ -354,7 +354,8 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
         bullet = nv.models.iloBullet()
         tooltip = nv.models.tooltip()
 
-        orient = 'left' # TODO top & bottom
+        # TODO: (@macite) top & bottom
+        orient = 'left'
         reverse = false
         margin = if $scope.legend then { top: 5, right: 40, bottom: 5, left: 120 } else { top: 5, right: 5, bottom: 5, left: 5 }
 
@@ -409,8 +410,9 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             wrap.attr('transform', 'translate(' + (if $scope.legend then margin.left else 10) + ',' + margin.top + ')')
 
             # Compute the new x-scale.
+            # TODO: (@macite) need to allow forceX and forceY, and xDomain, yDomain
             x1 = d3.scale.linear()
-              .domain([0, Math.max(rangez[0], (markerz[0] || 0), measurez[0])])  # TODO: need to allow forceX and forceY, and xDomain, yDomain
+              .domain([0, Math.max(rangez[0], (markerz[0] || 0), measurez[0])])
               .range(if reverse then [availableWidth, 0] else [0, availableWidth])
 
             # Retrieve the old x-scale, if this is an update.
@@ -421,7 +423,8 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
             # Stash the new scale.
             this.__chart__ = x1
 
-            w0 = (d) -> Math.abs(x0(d) - x0(0)) # TODO: could optimize by precalculating x0(0) and x1(0)
+            # TODO: (@macite) could optimize by precalculating x0(0) and x1(0)
+            w0 = (d) -> Math.abs(x0(d) - x0(0))
             w1 = (d) -> Math.abs(x1(d) - x1(0))
 
             if $scope.legend

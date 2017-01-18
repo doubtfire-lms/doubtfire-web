@@ -139,7 +139,7 @@ angular.module("doubtfire.common.services.units", [])
             alertService.add "danger", "Failed to change tutorial. #{response?.data?.error}", 8000
         )
 
-      #TODO: change these to use functions...
+      # TODO: (@alexcu) change these to use functions...
       student.name = student.first_name + " " + student.last_name
       if student.has_portfolio
         student.portfolio_status = 1

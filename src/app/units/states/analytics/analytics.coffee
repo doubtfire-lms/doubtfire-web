@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.analytics', [
    }
 )
 .controller("UnitAnalyticsStateCtrl", ($scope) ->
-  # TODO: Refactor directives into sub states
+  # TODO: (@alexcu) Refactor directives into sub states
 
   #
   # Active task tab group

@@ -8,6 +8,6 @@ angular.module('doubtfire.config.routing', [])
   $urlRouterProvider.when "", "/"
 
   # Map root/home URL to a default state of our choosing.
-  # TODO: probably change it to map to /dashboard at some point.
+  # TODO: (@alexcu) probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 )
