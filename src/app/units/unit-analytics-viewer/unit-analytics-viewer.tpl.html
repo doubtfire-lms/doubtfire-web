@@ -1,20 +1,17 @@
 <div class="row unit-analytics-viewer">
-  <tabset class="col-md-2" vertical="true" type="pills">
-    <tab ng-repeat="(tabKey, tab) in tabsData | orderObjectBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
-      <tab-heading tooltip="{{tab.title}}" tooltip-placement="right" tooltip-popup-delay="200">
-        <div class="text-center">
-          <i class="fa fa-2x {{icon}}" ng-repeat="icon in tab.icons"></i>
-        </div>
-      </tab-heading>
+  <tabset class="tabset-icon">
+    <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab-heading>{{tab.title}}</tab-heading>
     </tab>
-    <br />
-  </tabset><!--/tab-selector-->
+  </tabset><!--/tabs-->
   <div class="col-md-10">
     <div class="panel panel-primary">
-      <div class="panel-heading row-fluid">
+      <div class="panel-heading">
         <h3 class="panel-title">
           {{activeTab.title}}
         </h3>
+      </div>
+      <div class="panel-body">
         {{activeTab.subtitle}}
       </div>
       <unit-stats-download unit="unit" ng-if="activeTab === tabsData.csvStatDownload"> </unit-stats-download>

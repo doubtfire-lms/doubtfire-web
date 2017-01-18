@@ -65,6 +65,9 @@
                 <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})">Student Plagiarism</a>
               </li>
               <li class="divider"></li><!--/student-related-->
+              <li>
+                <a ui-sref="units/analytics({unitId: unitRole.unit_id})">Unit Analytics</a>
+              </li>
               <li ng-if="unitRole.role == 'Convenor'">
                 <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>
