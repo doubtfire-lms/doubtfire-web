@@ -28,8 +28,8 @@ angular.module('doubtfire.units.states.students', [])
   # Pagination values
   $scope.pagination =
     currentPage: 1
-    maxSize: 10
-    pageSize: 10
+    maxSize: 15
+    pageSize: 15
     totalSize: null
     show: false
     onChange: applyFilters
