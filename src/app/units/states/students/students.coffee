@@ -52,13 +52,22 @@ angular.module('doubtfire.units.states.students', [])
   applyFilters()
 
   # Table sorting
-  $scope.sortTableBy = (header) ->
-    $scope.tableSort.order = header
+  $scope.sortTableBy = (column) ->
+    if column == 'flags'
+      $scope.showSearchOptions = true
+      $timeout(->
+        document.querySelector('#students-list .panel-body.search-options .form-group.flag-sort button:first-child').focus()
+      , 500)
+      $scope.tableSort.reverse = !$scope.tableSort.reverse if $scope.tableSort.order == column
+      return
+    $scope.tableSort.order = column
     $scope.tableSort.reverse = !$scope.tableSort.reverse
     applyFilters()
 
   # Changing staff filter reapplies filter
-  $scope.staffFilterChanged = applyFilters
+  $scope.staffFilterChanged = (newFilter) ->
+    $scope.staffFilter = newFilter
+    applyFilters()
 
   # Changing search text reapplies filter
   $scope.searchTextChanged = applyFilters

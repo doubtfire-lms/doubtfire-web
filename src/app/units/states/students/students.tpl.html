@@ -36,7 +36,26 @@
           </div>
         </div>
       </div><!--/staff-filter-button-group-->
-    </div><!--/search-options-->
+      <div class="form-group flag-sort">
+        <label>Sort Flags By...</label>
+        <div class="input-group">
+          <div class="btn-group">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('target_grade')" btn-radio="'target_grade'">
+              <i class="fa fa-check"></i> Grade
+            </button>
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('tasks_with_similarities * 100 + max_pct_copy')" btn-radio="'tasks_with_similarities * 100 + max_pct_copy'">
+              <i class="fa fa-eye"></i> Plagiarism
+            </button>
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolio_status')" btn-radio="'portfolio_status'">
+              <i class="fa fa-book"></i> Portfolio Status
+            </button>
+          </div>
+        </div>
+        <p class="help-block">
+          Click the button twice to reverse the sort ordering.
+        </p>
+      </div><!--/flag-sort-button-group-->
+    </form><!--/search-options-->
     <div class="panel-body" ng-show="filteredStudents.length == 0">
       <div class="callout callout-primary">
         <h4>No students found</h4>
@@ -64,7 +83,7 @@
             </a>
           </th><!--/stats-column-header-->
           <th class="flags">
-            <a class="sort-by-flag-anchor">
+            <a ng-click="sortTableBy('flags')">
               Flags
               <i ng-show="
                 tableSort.order == 'tasks_with_similarities * 100 + max_pct_copy' ||
