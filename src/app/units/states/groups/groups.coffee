@@ -3,9 +3,9 @@ angular.module('doubtfire.units.states.groups', [])
 # State for convenors/students assessing ]student groups
 #
 .config(($stateProvider) ->
-  $stateProvider.state 'units/groups', {
+  $stateProvider.state 'units/students/groups', {
     parent: 'units/index'
-    url: '/groups'
+    url: '/students/groups'
     templateUrl: "units/states/groups/groups.tpl.html"
     controller: "UnitGroupsStateCtrl"
     data:
