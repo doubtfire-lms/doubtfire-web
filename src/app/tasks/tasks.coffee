@@ -1,6 +1,5 @@
 angular.module('doubtfire.tasks', [
   'doubtfire.tasks.modals'
-  'doubtfire.tasks.stats'
   'doubtfire.tasks.task-ilo-alignment'
   'doubtfire.tasks.project-tasks-list'
   'doubtfire.tasks.project-top-tasks-list'

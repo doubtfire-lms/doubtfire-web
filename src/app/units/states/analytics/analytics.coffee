@@ -1,4 +1,6 @@
-angular.module('doubtfire.units.states.analytics', [])
+angular.module('doubtfire.units.states.analytics', [
+  'doubtfire.units.states.analytics.directives'
+])
 #
 # State for unit analytics
 #
@@ -15,6 +17,8 @@ angular.module('doubtfire.units.states.analytics', [])
    }
 )
 .controller("UnitAnalyticsStateCtrl", ($scope) ->
+  # TODO: Refactor directives into sub states
+
   #
   # Active task tab group
   #

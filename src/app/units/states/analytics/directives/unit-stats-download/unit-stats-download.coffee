@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.stats.unit-stats-download', [])
+angular.module('doubtfire.units.states.analytics.directives.unit-stats-download', [])
 
 #
 # Student's overall achievement statistics over the entire unit
@@ -6,7 +6,7 @@ angular.module('doubtfire.units.stats.unit-stats-download', [])
 .directive('unitStatsDownload', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/stats/unit-stats-download/unit-stats-download.tpl.html'
+  templateUrl: 'units/states/analytics/directives/unit-stats-download/unit-stats-download.tpl.html'
   scope:
     unit: "="
   controller: ($scope, TaskCompletionCsv, TutorAssessmentCsv) ->

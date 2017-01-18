@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.stats.task-status-stats', [])
+angular.module('doubtfire.units.states.analytics.directives.task-status-stats', [])
 
 #
 # Stats directive that shows the status of tasks throughout
@@ -8,7 +8,7 @@ angular.module('doubtfire.tasks.stats.task-status-stats', [])
 .directive('taskStatusStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/stats/task-status-stats/task-status-stats.tpl.html'
+  templateUrl: 'units/states/analytics/directives/task-status-stats/task-status-stats.tpl.html'
   scope:
     unit: "="
   controller: ($scope, $filter, Unit, taskService) ->

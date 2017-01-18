@@ -1,4 +1,4 @@
-angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
+angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-stats', [])
 
 #
 # Summary stats for students and their desired target grade
@@ -7,7 +7,7 @@ angular.module('doubtfire.units.stats.unit-target-grade-stats', [])
 .directive('unitTargetGradeStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/stats/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
+  templateUrl: 'units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
   scope:
     unit: "="
   controller: ($scope, $filter, Unit, taskService) ->

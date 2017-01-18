@@ -1,4 +1,4 @@
-angular.module('doubtfire.tasks.stats.task-summary-stats', [])
+angular.module('doubtfire.units.states.analytics.directives.task-summary-stats', [])
 
 #
 # Shows a summary of task states as a scatter plot
@@ -6,7 +6,7 @@ angular.module('doubtfire.tasks.stats.task-summary-stats', [])
 .directive('taskSummaryStats', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'tasks/stats/task-summary-stats/task-summary-stats.tpl.html'
+  templateUrl: 'units/states/analytics/directives/task-summary-stats/task-summary-stats.tpl.html'
   scope:
     unit: "=unit"
 
