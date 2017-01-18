@@ -115,9 +115,9 @@
           <td>
             <select
               class="form-control input-sm"
-              ng-model="studentsTutorials[student.project_id]"
+              ng-model="student.tutorial_id"
               ng-options="tutorial.id as (tutorial.abbreviation + ' - ' + tutorial.description) for tutorial in unit.tutorials | orderBy:'abbreviation'"
-              ng-change="switchToTutorial(student, studentsTutorials[student.project_id])">
+              ng-change="switchToTutorial(student, student.tutorial_id)">
               <option value="">None</option>
             </select>
           </td><!--/tutorial-column-->

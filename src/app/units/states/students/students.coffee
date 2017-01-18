@@ -14,19 +14,8 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService) ->
-  # There is an issue with Angular binding ng-model of the tutorial <select>
-  # element to student.tutorial.id -- on changing the tutorial from the element
-  # multiple tutorials are changed even though the ng-model is for a different
-  # student. To combat this, introduce a studentsTutorials hash which maps the
-  # student's project_id key to their tutorial_id pair
-  zipTutorials = ->
-    $scope.studentsTutorials = _.zipObject(
-      _.map($scope.filteredStudents, 'project_id'),
-      _.map($scope.filteredStudents, 'tutorial_id')
-    )
-
- # Filtering
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService) ->
+  # Filtering
   applyFilters = ->
     filteredStudents = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
     # At this point know the length of all students
@@ -35,8 +24,6 @@ angular.module('doubtfire.units.states.students', [])
     filteredStudents = $filter('projectFilter')(filteredStudents, $scope.searchText) if $scope.searchText?.trim().length > 0
     # Paginate and sort
     $scope.filteredStudents = $filter('paginateAndSort')(filteredStudents, $scope.pagination, $scope.tableSort)
-    # Tutorial fix
-    zipTutorials()
 
   # Pagination values
   $scope.pagination =
@@ -81,7 +68,7 @@ angular.module('doubtfire.units.states.students', [])
 
   # Switches the student's tutorial
   $scope.switchToTutorial = (student, tutorial) ->
-    student.switchToTutorial(tutorial, zipTutorials)
+    student.switchToTutorial(tutorial)
 
   # CSV header func
   $scope.getCSVHeader = ->
