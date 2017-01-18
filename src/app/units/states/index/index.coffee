@@ -1,6 +1,4 @@
-angular.module('doubtfire.units.states.index', [
-  'doubtfire.units.states.tasks'
-])
+angular.module('doubtfire.units.states.index', [])
 
 #
 # Root state for units

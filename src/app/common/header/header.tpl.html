@@ -54,14 +54,17 @@
               <li>
                 <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})">Mark Tasks Offline</a>
               </li>
-              <li class="divider"></li>
+              <li class="divider"></li><!--/task-related-->
               <li>
                 <a ui-sref="units/students/list({unitId: unitRole.unit_id})">Student List</a>
               </li>
               <li>
                 <a ui-sref="units/students/groups({unitId: unitRole.unit_id})">Student Groups</a>
               </li>
-              <li class="divider"></li>
+              <li>
+                <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})">Student Plagiarism</a>
+              </li>
+              <li class="divider"></li><!--/student-related-->
               <li ng-if="unitRole.role == 'Convenor'">
                 <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>

@@ -7,6 +7,9 @@ angular.module('doubtfire.units.unit-student-plagiarism-list',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/unit-student-plagiarism-list/unit-student-plagiarism-list.tpl.html'
+  scope:
+    unit: '='
+    unitRole: '='
   controller: ($scope, $filter, currentUser, gradeService, projectService) ->
     $scope.grades = gradeService.grades
 
