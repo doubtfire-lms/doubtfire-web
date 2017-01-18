@@ -33,7 +33,6 @@ angular.module('doubtfire.units.states.students', [])
     allStudentsLength = filteredStudents.length
     # Apply filter for projects and determine to show CSV button
     filteredStudents = $filter('projectFilter')(filteredStudents, $scope.searchText) if $scope.searchText?.trim().length > 0
-    $scope.showCSV = filteredStudents.length < allStudentsLength && filteredStudents.length == 0
     # Paginate and sort
     $scope.filteredStudents = $filter('paginateAndSort')(filteredStudents, $scope.pagination, $scope.tableSort)
     # Tutorial fix
