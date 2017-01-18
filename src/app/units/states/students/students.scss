@@ -1,4 +1,7 @@
 #students-list {
+  // Flag icons
+  $flag-icon-width: 35px;
+  $number-of-flags: 3;
   table thead th {
     vertical-align: middle;
   }
@@ -43,12 +46,10 @@
         border-radius: 10px;
       }
     }
-
-    th.student-id { width: $student-id-width; }
-    th.name       { width: $name-width;       }
-    th.stats      { width: $stats-width;      }
-    th.flags      { width: $flags-width;      }
-    th.tutorial   { width: $tutorial-width;   }
-    th.actions    { width: $actions-width;    }
+    th.student-id { width: 10%; }
+    th.name       { width: 15%; }
+    th.stats      { width: 30%; }
+    th.flags      { width: 15%; }
+    th.tutorial   { width: 30%; }
   }
 }
