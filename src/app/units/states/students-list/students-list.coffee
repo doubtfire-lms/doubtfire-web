@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.students', [])
   $stateProvider.state 'units/students', {
     parent: 'units/index'
     url: '/students'
-    templateUrl: "units/states/students/students.tpl.html"
+    templateUrl: "units/states/students-list/students-list.tpl.html"
     controller: "UnitStudentsStateCtrl"
     data:
       task: "Student List"
