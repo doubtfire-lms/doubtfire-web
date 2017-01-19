@@ -230,3 +230,8 @@ angular.module("doubtfire.common.filters", [])
     input = $filter('limitTo')(input, pagination.pageSize)
     input
 )
+
+.filter('lcfirst', ->
+  (input) ->
+    input[0].toLowerCase() + input.substring(1)
+)
