@@ -20,6 +20,7 @@ angular.module('doubtfire.config.vendor-dependencies', [
   # other libraries
   'angularFileUpload'
   'angular.filter'
+  'angularMoment'
   'localization'
   'markdown'
   'nvd3'

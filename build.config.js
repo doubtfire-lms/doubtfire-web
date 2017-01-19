@@ -126,7 +126,8 @@ module.exports = {
         'vendor/angular-markdown-filter/markdown.js',
         'vendor/angular-ui-select/dist/select.js',
         'vendor/angulartics/dist/angulartics.min.js',
-        'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js'
+        'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js',
+        'vendor/angular-moment/angular-moment.js'
       ],
       jsmap: [
         'vendor/showdown/dist/showdown.js.map'
