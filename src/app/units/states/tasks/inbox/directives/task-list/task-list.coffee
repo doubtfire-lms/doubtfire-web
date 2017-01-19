@@ -51,11 +51,10 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
     $scope.isTaskDefMode = $scope.taskData.source == Unit.tasksForDefinition && $scope.filters?.taskDefinitionIdSelected? && $scope.showSearchOptions?
     openTaskDefs = ->
       # Automatically "open" the task definition select element if in task def mode
-      if $scope.isTaskDefMode
-        selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
-        selectEl.size = 10
-        selectEl.focus()
-    $timeout openTaskDefs
+      selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
+      selectEl.size = 10
+      selectEl.focus()
+    $timeout openTaskDefs if $scope.isTaskDefMode
     # Tutorial options
     $scope.tutorials = _.map($scope.unit.tutorials.concat([
       { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
@@ -73,9 +72,10 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
         $scope.filters.tutorials = $scope.unit.tutorials
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
-      $scope.filters.tutorials = _.map $scope.filters.tutorials, 'id'
+      $scope.filters.tutorials = _.map($scope.filters.tutorials, 'id')
       applyFilters()
-    $scope.tutorialIdChanged($scope.filters.tutorialIdSelected)
+    # Set initial tutorial scope
+    $scope.tutorialIdChanged()
     # Task definition options
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit) if $scope.unit.hasGroupwork()
@@ -85,12 +85,20 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
       $scope.filters.taskDefinition = taskDef
       refreshData() if $scope.isTaskDefMode
       applyFilters()
-    $scope.tutorialIdChanged($scope.filters.taskDefinitionIdSelected)
+    # Set new taskDefinitionIdSelected if task def mode and taskDefAbbr set
+    setTaskDefFromTaskKey = (taskKey) ->
+      # Only applicable in taskDefMode
+      return unless $scope.isTaskDefMode
+      taskDef = _.find($scope.unit.task_definitions, {abbreviation: taskKey.taskDefAbbr}) || _.first($scope.unit.task_definitions)
+      $scope.filters.taskDefinitionIdSelected = taskDef.id
+      $scope.filters.taskDefinition = taskDef
+    setTaskDefFromTaskKey($scope.taskData.taskKey)
     # Student Name options
-    $scope.studentNameChanged = ->
-      applyFilters()
+    $scope.studentNameChanged = applyFilters
     # Finds a task (or null) given its task key
     findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
+    # Initially not watching the task key
+    watchingTaskKey = false
     # Callback to refresh data from the task source
     refreshData = ->
       # Tasks for feedback or tasks for task, depending on the data source
@@ -110,9 +118,17 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
           $timeout((-> $scope.setSelectedTask(task)), 500)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey
-          listeners.push $scope.$watch 'taskData.taskKey', (newKey, oldKey) ->
-            return if _.isEqual(newKey, oldKey) || !newKey?
-            $scope.setSelectedTask(findTaskForTaskKey(newKey))
+          unless watchingTaskKey
+            watchingTaskKey = true
+            listeners.push $scope.$watch 'taskData.taskKey', (newKey, oldKey) ->
+              return if _.isEqual(newKey, oldKey) || !newKey?
+              # Task def mode and key assignment change? Reload data with new key
+              if $scope.isTaskDefMode && newKey.taskDefAbbr != oldKey?.taskDefAbbr
+                setTaskDefFromTaskKey($scope.taskData.taskKey)
+                refreshData()
+              else
+                # Set initial filters if not taskDefMode to set correct task def
+                $scope.setSelectedTask(findTaskForTaskKey(newKey))
         (response) ->
           alertService.add("danger", response.data.error, 6000)
     # Watch for changes in unit ID
@@ -126,6 +142,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
       scrollToTaskInList(task) if task?
     scrollToTaskInList = (task) ->
       taskEl = document.querySelector("task-list ##{task.taskKeyToIdString()}")
+      return unless taskEl?
       funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})

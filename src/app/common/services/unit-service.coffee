@@ -247,9 +247,9 @@ angular.module("doubtfire.common.services.units", [])
     #
     unit.fillWithUnStartedTasks = (tasks, taskDef) ->
       taskDef = unit.taskDef(taskDef)
-      projs = _.filter(unit.students, (s) -> s.target_grade >= taskDef.target_grade)
-
-      _.map projs, (p) ->
+      #projs = _.filter(unit.students, (s) -> s.target_grade >= taskDef.target_grade)
+      # TODO: (@alexcu) Fix this -- unit.students is sometimes empty
+      _.map unit.students, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
           _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
