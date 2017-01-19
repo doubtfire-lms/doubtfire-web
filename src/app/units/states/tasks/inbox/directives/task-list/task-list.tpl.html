@@ -29,7 +29,7 @@
       <div class="input-group col-sm-12">
         <select
           ng-model="filters.tutorialIdSelected"
-          ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in tutorials | orderBy:'abbreviation'"
+          ng-options="t.id as t.description for t in tutorials | orderBy:'abbreviation'"
           ng-change="tutorialIdChanged()"
           class="form-control input-md">
         </select>

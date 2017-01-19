@@ -57,10 +57,14 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
         selectEl.focus()
     $timeout openTaskDefs
     # Tutorial options
-    $scope.tutorials = $scope.unit.tutorials.concat([
+    $scope.tutorials = _.map($scope.unit.tutorials.concat([
       { id: 'all',  description: 'All tutorials',     abbreviation: '__all'  }
       { id: 'mine', description: 'Just my tutorials', abbreviation: '__mine' }
-    ])
+    ]), (tutorial) ->
+      unless _.includes(['all', 'mine'], tutorial.id)
+        tutorial.description = tutorial.abbreviation + ' - ' + tutorial.description
+      tutorial
+    )
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
       if tutorialId == 'mine'
