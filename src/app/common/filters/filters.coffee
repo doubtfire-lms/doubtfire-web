@@ -233,5 +233,6 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('lcfirst', ->
   (input) ->
+    return if !input? || input.length == 0
     input[0].toLowerCase() + input.substring(1)
 )
