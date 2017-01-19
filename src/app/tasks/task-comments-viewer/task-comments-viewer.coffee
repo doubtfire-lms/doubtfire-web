@@ -24,13 +24,12 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     listeners.push $scope.$watch 'task', (newTask) ->
       return unless newTask?.project? # Must have project for task to be mapped
       $scope.project = newTask.project()
-      $scope.rangeOfNewComments = []
       # Once project is loaded fetch task comments
       TaskComment.query {
         project_id: $scope.project.project_id,
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
-        $scope.task.comments = response
+        $scope.task.comments = _.map(response, taskService.mapComment)
         $scope.task.num_new_comments = 0
         scrollDown()
         $scope.focus() if $scope.refocusOnTaskChange
@@ -48,15 +47,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       return if $event.which isnt ENTER_KEY or $event.shiftKey
       $scope.addComment() if $scope.comment.text.trim().length isnt 0
       false
-
-    # Return the initials on a given comment
-    $scope.getInitials = (text) ->
-      initials = text.match(/\b\w/g) || []
-      return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
-
-    # Checks if the comment is not made by the current user
-    $scope.isOtherUser = (comment) ->
-      return comment.comment_by != currentUser.profile.name
 
     # Submits a new comment
     $scope.addComment = ->

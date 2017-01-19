@@ -5,20 +5,33 @@
     </div>
   </div>
   <div class="panel-body">
-    <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments | orderBy:'-created_at'" ng-class="{'comment-by-other-user': isOtherUser(comment), 'new-comment': comment.is_new}">
-      <div class="comment-details col-md-1">
-        <span class="comment-by" tooltip="{{comment.comment_by}} on {{comment.created_at | date: 'short'}}" tooltip-append-to-body="true" tooltip-popover-delay="500">
-          {{getInitials(comment.comment_by)}}
-        </span>
+    <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
+      <div
+        class="author-bubble"
+        ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
+        tooltip="{{comment.author.name}} {{comment.created_at | amCalendar}}"
+        tooltip-append-to-body="true"
+        tooltip-popover-delay="500"
+        tooltip-placement="left">
+          {{comment.initials}}
       </div><!--/comment-details-->
-      <div class="comment-text col-md-12">
-        <div class="markdown-to-html wrap-word col-md-12" ng-bind-html="comment.comment | markdown"></div>
-        <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete this comment" tooltip-append-to-body="true">
+      <div class="comment-bubble">
+        <div class="comment-text">
+          <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+        </div>
+        <div
+          class="delete-comment"
+          ng-click="deleteComment(comment.id)"
+          tooltip="Delete comment"
+          tooltip-append-to-body="true">
           <i class="fa fa-trash"></i>
         </div><!--/delete-comment-->
-      </div><!--/comment-text-->
-    </div>
-  </div>
+      </div><!--/comment-bubble-->
+      <div class="read-receipt" ng-show="$index == task.comments.length - 1 && comment.author_is_me && comment.recipient_read_time">
+        Read {{comment.recipient_read_time | amCalendar | lcfirst}} by {{comment.recipient.name}}
+      </div>
+    </div><!--/comment-->
+  </div><!--/comment-list-->
   <div class="panel-footer">
     <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
       <markdown-editor focus="focus" autofocus="autofocus" class="editor col-sm-12" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment..." height="auto"></markdown-editor>

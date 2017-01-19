@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, currentUser) ->
   #
   # The unit service object
   #
@@ -417,12 +417,19 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.hasTaskKey = (task, key) ->
     _.isEqual(task?.taskKey(), key)
 
+  # Map extra front-end details to comment
+  taskService.mapComment = (comment) ->
+    initials = comment.author.name.split(" ")
+    comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
+    comment.author_is_me = comment.author.id == currentUser.profile.id
+    comment
+
   taskService.addComment = (task, textString, success, failure) ->
     TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
       (response) ->
-        unless task.comments
+        unless task.comments?
           task.comments = []
-        task.comments.unshift response
+        task.comments.unshift(taskService.mapComment(response))
         if success? and _.isFunction success
           success(response)
         analyticsService.event "View Task Comments", "Added new comment"
