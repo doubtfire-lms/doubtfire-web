@@ -34,7 +34,15 @@
   </div><!--/comment-list-->
   <div class="panel-footer">
     <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-      <markdown-editor focus="focus" autofocus="autofocus" class="editor col-sm-12" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment..." height="auto"></markdown-editor>
+      <markdown-editor
+        focus="focus"
+        autofocus="autofocus"
+        class="editor col-sm-12"
+        ng-model="comment.text"
+        on-enter="enterDown"
+        placeholder="Make a comment..."
+        height="auto">
+      </markdown-editor>
     </form>
   </div>
 </div>
