@@ -45,11 +45,10 @@ angular.module('doubtfire.units.states.index', [])
 
   # Loads required data for a selected unit role or project
   loadRequiredData = ->
-    unitService.getUnit ($scope.unitRole?.unit_id || $scope.unitId), true, false, (unit)->
+    unitId = $scope.unitRole?.unit_id || $scope.unitId
+    unitService.getUnit(unitId, {loadOnlyEnrolledStudents: true}, (unit)->
       $scope.unit = unit
-      # Unit is only "loaded" if all the students were loaded
-      $scope.$watch 'unit.students', (newValue) ->
-        $scope.unitLoaded = _.isArray(newValue)
+    )
 
   # Load the unit role details whenever the ID changes
   listeners.push $scope.$watch 'unitRole.id', loadRequiredData

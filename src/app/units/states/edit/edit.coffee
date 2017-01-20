@@ -20,7 +20,7 @@ angular.module('doubtfire.units.states.edit', [
 .controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, headerService, alertService, analyticsService) ->
   analyticsService.event 'Edit Unit View', "Started Edit Unit View", 'Unit Tab'
 
-  unitService.getUnit $state.params.unitId, true, true, (unit) ->
+  unitService.getUnit $state.params.unitId, {loadAllStudents: true}, (unit) ->
     $scope.unit = unit
     $scope.newUnit = $scope.unit.id == -1
     $scope.currentStaff = $scope.unit.staff
