@@ -344,7 +344,7 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
     # Call projectService update functions to update stats and task details
-    projectService.updateTaskStats(student, student.stats)
+    projectService.updateTaskStats(student, student.stats) if student.stats?
     projectService.addTaskDetailsToProject(student, unit)
 
     # Return the mapped student

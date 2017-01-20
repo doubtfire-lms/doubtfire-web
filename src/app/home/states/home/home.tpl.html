@@ -41,7 +41,7 @@
             <h4 class="panel-title">Units You Study</h4>
           </div>
           <div class="list-group">
-            <a ng-repeat="project in projects" ui-sref='projects#show({projectId: project.project_id})' class="list-group-item clearfix">
+            <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item clearfix">
               <div>
                 <i class="fa fa-university"></i>
                 <h4 class="list-group-item-heading">{{project.unit_name}} <small>{{showDate(project.start_date)}}</small></h4>

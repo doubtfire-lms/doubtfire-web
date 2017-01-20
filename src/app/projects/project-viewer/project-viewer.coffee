@@ -97,7 +97,7 @@ angular.module("doubtfire.projects.project-viewer", [])
     #
     $scope.$watch 'project', (newId) ->
       # $scope.projectLoaded = false
-      projectService.fetchDetailsForProject($scope.project, $scope.unit, (project) ->
+      projectService.getProject($scope.project, $scope.unit, (project) ->
         if project && ! $scope.unit?
           unitService.getUnit project.unit_id, (unit) ->
             $scope.unit = unit # the unit related to the role

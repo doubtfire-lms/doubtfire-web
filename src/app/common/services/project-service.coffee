@@ -136,7 +136,7 @@ angular.module("doubtfire.common.services.projects", [])
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
     project
 
-  projectService.addProjectMethods = (project, unit) ->
+  projectService.addProjectMethods = (project) ->
     project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
         project.burndown_chart_data = response.burndown_chart_data
@@ -158,17 +158,16 @@ angular.module("doubtfire.common.services.projects", [])
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
 
-  projectService.fetchDetailsForProject = (project, unit, callback) ->
+  projectService.getProject = (project, unit, callback) ->
+    projectId = if _.isNumber(project) then project else project?.project_id
+    throw Error "No project id given to getProject" unless projectId?
     if project.burndown_chart_data?
       callback(project)
     else
-      Project.get { id: project.project_id }, (project_response) ->
-        _.extend project, project_response
-
-        projectService.addProjectMethods(project, unit)
-
-        if unit
-          projectService.addTaskDetailsToProject(project, unit)
+      Project.get { id: projectId }, (response) ->
+        project = _.extend(project, response)
+        projectService.addProjectMethods(project)
+        projectService.addTaskDetailsToProject(project, unit) if unit?
         callback(project)
 
   projectService.updateGroups = (project) ->
