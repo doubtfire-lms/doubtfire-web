@@ -1,1 +1,16 @@
-{{taskAbbr}}
+<div class="panel-full-screen">
+  <student-task-list
+    project="project"
+    class="col-xs-12 col-md-2"><!--/panel-1-->
+  </staff-task-list>
+  <div
+    class="col-xs-12 col-md-7">
+  </div><!--/panel-2-->
+  <task-comments-viewer
+    task="selectedTask"
+    project="project"
+    class="col-xs-12 col-md-3"
+    refocus-on-task-change="true"
+    ng-if="selectedTask">
+  </task-comments-viewer><!--/panel-3-->
+</div>

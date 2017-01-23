@@ -79,6 +79,14 @@
   margin-bottom: 0;
 }
 
+// Full screen set of panels
+.panel-full-screen {
+  height: $main-view-max-height;
+  & > *, & > * > .panel {
+    height: 100%;
+  }
+}
+
 .panel-marking-context {
   padding: 0;
   .panel {
