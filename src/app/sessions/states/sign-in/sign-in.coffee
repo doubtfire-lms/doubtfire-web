@@ -51,6 +51,8 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
   # April Fools Easter Egg :-)
   angular.element(document).ready ->
+    # This would make absolutely no sense unless the external name is Doubtfire!
+    return if ExternalName isnt 'Doubtfire'
     today = new Date()
     aprilFools =  today.getDate()   is 1 and # first day of the
                   today.getMonth()  is 3     # fourth month (April - zero-based)
