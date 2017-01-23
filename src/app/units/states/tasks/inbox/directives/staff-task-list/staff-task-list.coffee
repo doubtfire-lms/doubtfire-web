@@ -1,10 +1,10 @@
-angular.module('doubtfire.units.states.tasks.inbox.directives.task-list', [])
+angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', [])
 #
 # View a list of tasks
 #
-.directive('taskList', ->
+.directive('staffTaskList', ->
   restrict: 'E'
-  templateUrl: 'units/states/tasks/inbox/directives/task-list/task-list.tpl.html'
+  templateUrl: 'units/states/tasks/inbox/directives/staff-task-list/staff-task-list.tpl.html'
   scope:
     # Special taskData object
     taskData: '='

@@ -1,4 +1,4 @@
-task-list {
+@mixin task-list {
   .panel {
     display: flex;
     flex-direction: column;
@@ -82,4 +82,8 @@ task-list {
       }
     }
   }
+}
+
+staff-task-list {
+  @include task-list();
 }
