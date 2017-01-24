@@ -9,7 +9,7 @@
       <div
         class="author-bubble"
         ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
-        tooltip="{{comment.author.name}} {{comment.created_at | amCalendar}}"
+        tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}"
         tooltip-append-to-body="true"
         tooltip-popover-delay="500"
         tooltip-placement="left">
@@ -28,7 +28,7 @@
         </div><!--/delete-comment-->
       </div><!--/comment-bubble-->
       <div class="read-receipt" ng-show="$index == task.comments.length - 1 && comment.author_is_me && comment.recipient_read_time">
-        Read {{comment.recipient_read_time | amCalendar | lcfirst}} by {{comment.recipient.name}}
+        Read {{comment.recipient_read_time | humanizedDate}} by {{comment.recipient.name}}
       </div>
     </div><!--/comment-->
   </div><!--/comment-list-->
