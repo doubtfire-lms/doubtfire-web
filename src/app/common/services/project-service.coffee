@@ -121,6 +121,7 @@ angular.module("doubtfire.common.services.projects", [])
         similar_to_count: 0
         similar_to_dismissed_count: 0
         times_assessed: 0
+        num_new_comments: 0
         # pdf details are loaded from Task.SubmissionDetails
         # processing_pdf: null
         # has_pdf: null

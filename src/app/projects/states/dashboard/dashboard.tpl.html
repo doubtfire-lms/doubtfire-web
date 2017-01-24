@@ -3,15 +3,17 @@
     task-data="taskData"
     project="project"
     class="col-xs-12 col-md-2"><!--/panel-1-->
-  </staff-task-list>
-  <div
-    class="col-xs-12 col-md-7">
-  </div><!--/panel-2-->
+  </student-task-list>
+  <progress-dashboard
+    project="project"
+    class="col-xs-12 col-md-7"
+    ng-hide="taskData.selectedTask">
+  </progress-dashboard>
   <task-comments-viewer
-    task="selectedTask"
+    task="taskData.selectedTask"
     project="project"
     class="col-xs-12 col-md-3"
     refocus-on-task-change="true"
-    ng-if="selectedTask">
+    ng-if="taskData.selectedTask">
   </task-comments-viewer><!--/panel-3-->
 </div>

@@ -1,0 +1,60 @@
+<div class="panel panel-default panel-scrollable">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Progress Dashboard
+    </h4>
+  </div><!--/panel-heading-->
+  <div class="panel-body">
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-lg card-burndown">
+        <div class="card-heading">
+          <h4>Progress Burndown</h4>
+          <div class="text-muted">
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </div>
+        </div><!--/burndown-heading-->
+        <div class="card-body">
+          <progress-burndown-chart project="project" unit="project.unit()"></progress-burndown-chart>
+        </div><!--/burndown-body-->
+        <div class="card-footer">
+          Aim to keep your
+          <strong style="color: #e01b5d">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-muted">Target</strong>
+          line to keep on track.
+        </div><!--/burndown-footer-->
+      </div>
+    </div><!--/burndown-column-->
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-lg card-pie-chart">
+        <div class="card-heading">
+          <h4>Task Statuses</h4>
+          <div class="text-muted">
+            Breakdown summary of each of your task statuses.
+          </div>
+        </div><!--/pie-chart-heading-->
+        <div class="card-body">
+          <student-task-status-pie-chart project="project"></student-task-status-pie-chart>
+        </div><!--/pie-chart-body-->
+        <div class="card-footer">
+          You have completed
+          <strong>{{numberOfTasks.completed}}</strong>
+          tasks and have
+          <strong>{{numberOfTasks.remaining}}</strong>
+          left to complete to achieve a
+          <strong>{{gradeNames[project.target_grade]}}</strong>.
+        </div><!--/pie-chart-footer-->
+      </div>
+    </div><!--/pie-chart-column-->
+    <div class="col-sm-12 col-xl-6 col-xl-offset-6">
+      <div class="card card-sm card-pie-chart">
+        <div class="card-heading">
+          <h4>Target Grade</h4>
+        </div><!--/target-grade-heading-->
+        <div class="card-body">
+          <select class="form-control input-lg"></select>
+        </div><!--/target-grade-body-->
+      </div>
+    </div><!--/target-grade-->
+  </div><!--/panel-body-->
+</div>

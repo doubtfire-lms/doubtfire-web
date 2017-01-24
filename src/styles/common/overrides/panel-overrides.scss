@@ -62,6 +62,15 @@
   }
 }
 
+.panel.panel-scrollable {
+  overflow: hidden;
+  .panel-body {
+    overflow: scroll;
+    height: 100%;
+    padding-bottom: $panel-body-padding * 2;
+  }
+}
+
 // Search options panel
 .panel-body.panel-collapseable {
   background-color: lighten($gray-lighter, 2%);
