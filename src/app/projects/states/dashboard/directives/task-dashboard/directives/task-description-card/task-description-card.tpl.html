@@ -5,21 +5,24 @@
   <div class="card-body">
     <div class="markdown-to-pdf" ng-bind-html="task.definition.description | markdown"></div>
     <hr>
-    <dl class="dl-horizontal">
-      <dt>
-        {{grades.acronyms[task.definition.target_grade]}} Task
-      </dt>
-      <dd>
-        This task is a <strong>{{grade.names[task.definition.target_grade]}}</strong> task, and will be
-        required to achieve a {{grade.names[task.definition.target_grade]}} grade in the unit.
-      </dd>
-      <dt>
-        Target Date
-      </dt>
-      <dd>
-        You should aim to have this task completed by {{task.definition.target_date | date:'EEE MMM d'}}.
-      </dd>
-    </dl>
+    <h5>Key Information</h5>
+    <ul>
+      <li>
+        <strong>{{grades.names[task.definition.target_grade]}} Task</strong>
+        &mdash;
+        This task is a <strong>{{grades.names[task.definition.target_grade] | lcfirst}}</strong> task.
+      </li>
+      <li>
+        <strong>Target Date</strong>
+        &mdash;
+        You should aim to have this task completed by <strong>{{task.definition.target_date | humanizedDate}}</strong>.
+      </li>
+      <li ng-show="task.definition.due_date">
+        <strong>Due Date</strong>
+        &mdash;
+        You must complete this task by <strong>{{task.definition.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
+      </li>
+    </ul>
   </div><!--/description-body-->
   <div class="card-footer" ng-show="task.definition.has_task_pdf || task.definition.has_task_resources">
     <a
