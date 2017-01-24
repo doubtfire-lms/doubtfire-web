@@ -231,6 +231,17 @@ angular.module("doubtfire.common.filters", [])
     input
 )
 
+.filter('tasksWithName', ->
+  (tasks, searchName) ->
+    return tasks unless (searchName? && input?)
+    searchName = searchName.toLowerCase()
+    _.filter(tasks, (task) ->
+      # Search using name or abbreviation
+      task.definition.name.toLowerCase().indexOf(searchName) >= 0 ||
+      task.definition.abbreviation.toLowerCase().indexOf(searchName) >= 0
+    )
+)
+
 .filter('lcfirst', ->
   (input) ->
     return if !input? || input.length == 0
