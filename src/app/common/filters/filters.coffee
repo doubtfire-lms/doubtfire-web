@@ -233,7 +233,7 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('tasksWithName', ->
   (tasks, searchName) ->
-    return tasks unless (searchName? && input?)
+    return tasks unless (searchName? && tasks?)
     searchName = searchName.toLowerCase()
     _.filter(tasks, (task) ->
       # Search using name or abbreviation
