@@ -242,6 +242,18 @@ angular.module("doubtfire.common.filters", [])
     )
 )
 
+.filter('humanizedDate', ($filter) ->
+  (input) ->
+    moment(input).calendar(null, {
+      sameDay: '',
+      nextDay: '[tomorrow]',
+      nextWeek: '[this] dddd',
+      lastDay: '[yesterday]',
+      lastWeek: '[last] dddd',
+      sameElse: 'DD/MM/YYYY'
+    })
+)
+
 .filter('lcfirst', ->
   (input) ->
     return if !input? || input.length == 0
