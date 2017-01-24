@@ -48,6 +48,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     # Clips x values to be at the y = 0 intercept if y < 0
     #
     xAxisClipNegBurndown = (d) ->
+      return d[0]
       if d[1] < 0.0
         # find the x intercept at y = 0
         # know originX is the origin date of the graph (i.e. burnoff is still 100%)
@@ -112,6 +113,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       xAxis:
         axisLabel: "Time"
         tickFormat: xAxisTickFormatDateFormat
+        ticks: 8
       yAxis:
         axisLabel: "Tasks Remaining"
         tickFormat: yAxisTickFormatPercentFormat

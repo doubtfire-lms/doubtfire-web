@@ -34,7 +34,10 @@
           </div>
         </div><!--/pie-chart-heading-->
         <div class="card-body">
-          <student-task-status-pie-chart project="project"></student-task-status-pie-chart>
+          <student-task-status-pie-chart
+            project="project"
+            update-data="renderTaskStatusPieChart">
+          </student-task-status-pie-chart>
         </div><!--/pie-chart-body-->
         <div class="card-footer">
           You have completed
@@ -42,7 +45,7 @@
           tasks and have
           <strong>{{numberOfTasks.remaining}}</strong>
           left to complete to achieve a
-          <strong>{{gradeNames[project.target_grade]}}</strong>.
+          <strong>{{grades.names[project.target_grade]}}</strong>.
         </div><!--/pie-chart-footer-->
       </div>
     </div><!--/pie-chart-column-->
@@ -52,7 +55,11 @@
           <h4>Target Grade</h4>
         </div><!--/target-grade-heading-->
         <div class="card-body">
-          <select class="form-control input-lg"></select>
+          <select
+            class="form-control input-lg"
+            ng-model="project.target_grade"
+            ng-options="grade as grades.names[grade] for grade in grades.values"
+            ng-change="updateTargetGrade(project.target_grade)"></select>
         </div><!--/target-grade-body-->
       </div>
     </div><!--/target-grade-->

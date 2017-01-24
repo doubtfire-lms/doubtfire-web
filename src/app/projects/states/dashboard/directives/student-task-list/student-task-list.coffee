@@ -7,6 +7,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
   templateUrl: 'projects/states/dashboard/directives/student-task-list/student-task-list.tpl.html'
   scope:
     project: '='
+    # Function to invoke to refresh tasks
+    refreshTasks: '=?'
     # Special taskData object (wraps the selectedTask)
     taskData: '='
   controller: ($scope, $filter, gradeService) ->
@@ -26,6 +28,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
       $scope.filteredTasks = filteredTasks
     # Apply filters first-time
     applyFilters()
+    # When refreshing tasks, we are just reloading the active tasks
+    $scope.refreshTasks = applyFilters
     # Expose grade service names
     $scope.gradeNames = gradeService.grades
     # On task name change, reapply filters

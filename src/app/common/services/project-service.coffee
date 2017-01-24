@@ -40,6 +40,16 @@ angular.module("doubtfire.common.services.projects", [])
     else
       fireCallback()
 
+  projectService.updateProject = (id, data, onSuccess, onFailure) ->
+    data = _.extend({ id: id }, data)
+    Project.update(data,
+      (success) ->
+        onSuccess?(success)
+      (failure) ->
+        onFailure?(failure)
+    )
+
+
   ###
   projects's can update their task stats
   converts the | delimited stats to its component arrays

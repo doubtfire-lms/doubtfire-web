@@ -2,11 +2,13 @@
   <student-task-list
     task-data="taskData"
     project="project"
+    refresh-tasks="targetGradeUpdated"
     class="col-xs-12 col-md-2"><!--/panel-1-->
   </student-task-list>
   <progress-dashboard
     project="project"
     class="col-xs-12 col-md-7"
+    on-update-target-grade="targetGradeUpdated"
     ng-hide="taskData.selectedTask">
   </progress-dashboard>
   <task-comments-viewer

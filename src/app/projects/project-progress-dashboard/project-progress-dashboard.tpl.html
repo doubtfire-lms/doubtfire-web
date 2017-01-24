@@ -10,7 +10,7 @@
                 The tasks you need to focus on now.
               </div>
               <div ng-show="taskDetailsSelector.viewAll">
-                All of the tasks to achieve a {{grades[project.target_grade]}}.
+                All of the tasks to achieve a {{grades.names[project.target_grade]}}.
               </div>
             </div>
             <div class="pull-right toolbar">
@@ -46,7 +46,7 @@
             </p>
             <p class="help-block">
               You target grade is
-              <strong>{{grades[project.target_grade]}}</strong>.
+              <strong>{{grade.names[project.target_grade]}}</strong>.
             </p>
           </div>
         </div>
@@ -95,7 +95,7 @@
           tasks and have
           <strong>{{taskStats.numberOfTasksRemaining}}</strong>
           left to complete to achieve a
-          <strong>{{grades[project.target_grade]}}</strong>.
+          <strong>{{grade.names[project.target_grade]}}</strong>.
         </div>
         <div ng-show="currentVisualisation == 'burndown'">
           Aim to keep your

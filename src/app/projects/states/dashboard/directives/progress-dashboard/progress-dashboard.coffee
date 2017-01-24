@@ -8,12 +8,31 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
   templateUrl: 'projects/states/dashboard/directives/progress-dashboard/progress-dashboard.tpl.html'
   scope:
     project: '='
-  controller: ($scope, projectService, taskService, gradeService) ->
+    onUpdateTargetGrade: '='
+  controller: ($scope, projectService, taskService, gradeService, analyticsService, alertService) ->
     # Number of tasks completed and remaining
-    completedTasks = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
-    $scope.numberOfTasks =
-      completed: completedTasks
-      remaining: projectService.tasksInTargetGrade($scope.project).length - completedTasks
-    # Expose grade names
-    $scope.gradeNames = gradeService.grades
+    updateTaskCompletionValues  = ->
+      completedTasks = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
+      $scope.numberOfTasks =
+        completed: completedTasks
+        remaining: projectService.tasksInTargetGrade($scope.project).length - completedTasks
+    updateTaskCompletionValues()
+    # Expose grade names and values
+    $scope.grades =
+      names: gradeService.grades
+      values: gradeService.gradeValues
+    $scope.updateTargetGrade = (newGrade) ->
+      projectService.updateProject($scope.project.project_id, { target_grade: newGrade },
+        (project) ->
+          $scope.project.burndown_chart_data = project.burndown_chart_data
+          projectService.updateTaskStats($scope.project, project.stats)
+          # Update task completions and re-render task status graph
+          updateTaskCompletionValues()
+          $scope.renderTaskStatusPieChart?()
+          $scope.onUpdateTargetGrade?()
+          analyticsService.event("Student Project View - Progress Dashboard", "Grade Changed", $scope.grades.names[newGrade])
+          alertService.add("info", "Updated target grade successfully", 2000)
+        (failure) ->
+          alertService.add("danger", "Failed to update target grade", 4000)
+      )
 )
