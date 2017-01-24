@@ -11,6 +11,7 @@
   }
   .list-group {
     overflow: scroll;
+    height: 100%;
   }
   .list-group .list-group-item-task {
     transition: border-right 0.2s ease-out;
