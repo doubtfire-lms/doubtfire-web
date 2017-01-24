@@ -96,6 +96,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysOverdue(task)
     task.daysFromTarget = ->
       taskService.daysFromTarget(task)
+    task.triggerTransition = (status, unitRole) ->
+      taskService.triggerTransition(task, status, unitRole)
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
     task.needsSubmissionDetails = ->

@@ -1,0 +1,14 @@
+task-status-card .card .card-heading.task-trigger-dropdown {
+  padding: 12px 20px;
+  .form-control {
+    font-size: 18px;
+    i {
+      margin-right: 0.75ex;
+      margin-left: 0.5ex;
+    }
+  }
+  status-icon {
+    width: 60px;
+    display: inline-block;
+  }
+}

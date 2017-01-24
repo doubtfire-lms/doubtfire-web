@@ -4,7 +4,8 @@
   </div><!--/description-heading-->
   <div class="card-body">
     <div class="markdown-to-pdf" ng-bind-html="task.definition.description | markdown"></div>
-    <hr>
+  </div><!--/description-body-->
+  <div class="card-footer">
     <h5>Key Information</h5>
     <ul>
       <li>
@@ -23,7 +24,7 @@
         You must complete this task by <strong>{{task.definition.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
       </li>
     </ul>
-  </div><!--/description-body-->
+  </div><!--/key-info-footer-->
   <div class="card-footer" ng-show="task.definition.has_task_pdf || task.definition.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"

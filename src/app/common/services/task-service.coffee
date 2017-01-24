@@ -272,6 +272,18 @@ angular.module("doubtfire.common.services.tasks", [])
     return false if diffDays <= 0
     diffDays
 
+  # Trigger for new status
+  taskService.triggerTransition = (task, status, unitRole) ->
+    throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
+    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
+    if requiresFileUpload
+      task.status = status
+      # TODO: (@alexcu) Show the modal upload
+      console.error("TODO: Present upload modal")
+    else
+      taskService.updateTaskStatus(task.unit(), task.project(), task, status)
+      asUser = if unitRole? then unitRole.role else 'Student'
+      analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
   doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (

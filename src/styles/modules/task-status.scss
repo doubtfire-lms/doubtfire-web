@@ -43,7 +43,7 @@
   &.ready-to-mark     { background-color: lighten(task-status-color('ready-to-mark'), 15%);     }
   &.not-started       { background-color: lighten(task-status-color('not-started'), 15%);       }
   &.working-on-it     { background-color: lighten(task-status-color('working-on-it'), 15%);     }
-  &.need-help         { background-color: lighten(task-status-color('need-help'), 15%);         }
+  &.need-help         { background-color: lighten(task-status-color('need-help'), 10%);         }
   &.fix-and-resubmit  { background-color: lighten(task-status-color('fix-and-resubmit'), 15%);  }
   &.do-not-resubmit   { background-color: lighten(task-status-color('do-not-resubmit'), 15%);   }
   &.fail              { background-color: lighten(task-status-color('fail'), 15%);              }

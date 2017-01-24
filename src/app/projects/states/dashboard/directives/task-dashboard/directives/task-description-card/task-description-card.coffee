@@ -4,7 +4,6 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 #
 .directive('taskDescriptionCard', ->
   restrict: 'E'
-  replace: true
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.tpl.html'
   scope:
     task: '='
