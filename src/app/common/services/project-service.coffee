@@ -86,6 +86,16 @@ angular.module("doubtfire.common.services.projects", [])
     task.unit = project.unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
+    task.isDueSoon = ->
+      task.daysFromTarget() <= 7
+    task.isOverdue = ->
+      task.daysOverdue() > 0
+    task.isDueToday = ->
+      task.daysFromTarget() == 0
+    task.daysOverdue = ->
+      taskService.daysOverdue(task)
+    task.daysFromTarget = ->
+      taskService.daysFromTarget(task)
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
     task.needsSubmissionDetails = ->

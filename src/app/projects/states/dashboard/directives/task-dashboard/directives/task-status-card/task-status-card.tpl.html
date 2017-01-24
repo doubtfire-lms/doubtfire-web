@@ -1,0 +1,28 @@
+<div class="card card-sm card-{{task.statusClass()}}">
+  <div class="card-heading">
+    <h4>
+      {{task.statusLabel()}}
+    </h4>
+  </div><!--/status-heading-->
+  <div class="card-body">
+
+  </div><!--/status-body-->
+  <div class="card-footer">
+    <div class="task-status" dropdown>
+      <button
+        type="button"
+        class="btn btn-default form-control {{task.statusClass()}}"
+        dropdown-toggle>
+        <span class="pull-left">
+          <i class="{{task.statusIcon()}}"></i> {{task.statusLabel()}}
+        </span>
+        <span class="pull-right">
+          <i class="fa fa-caret-down"></i>
+        </span>
+      </button>
+      <ul class="dropdown-menu" dropdown-menu>
+
+      </ul>
+    </div>
+  </div><!--/status-footer-->
+</div>
