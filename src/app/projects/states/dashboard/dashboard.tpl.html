@@ -7,10 +7,16 @@
   </student-task-list>
   <progress-dashboard
     project="project"
-    class="col-xs-12 col-md-7"
     on-update-target-grade="targetGradeUpdated"
+    class="col-xs-12 col-md-7"
     ng-hide="taskData.selectedTask">
-  </progress-dashboard>
+  </progress-dashboard><!--/panel-2-->
+  <task-dashboard
+    project="project"
+    task="taskData.selectedTask"
+    class="col-xs-12 col-md-7"
+    ng-show="taskData.selectedTask">
+  </task-dashboard><!--/panel-2-->
   <task-comments-viewer
     task="taskData.selectedTask"
     project="project"

@@ -28,6 +28,10 @@ angular.module("doubtfire.common.services.grades", [  ])
     'Credit': 'C'
     'Distinction': 'D'
     'High Distinction': 'HD'
+    0: 'P'
+    1: 'C'
+    2: 'D'
+    3: 'HD'
 
   gradeService.gradeColors = {
     # Pass

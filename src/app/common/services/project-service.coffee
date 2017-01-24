@@ -83,6 +83,7 @@ angular.module("doubtfire.common.services.projects", [])
 
     # must be function to avoid cyclic structure
     task.project = -> project
+    task.unit = project.unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.updateTaskStatus = (project, new_stats) ->
@@ -169,17 +170,22 @@ angular.module("doubtfire.common.services.projects", [])
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
 
-  projectService.getProject = (project, unit, callback) ->
+  projectService.getProject = (project, unit, onSuccess, onFailure) ->
     projectId = if _.isNumber(project) then project else project?.project_id
     throw Error "No project id given to getProject" unless projectId?
     if project.burndown_chart_data?
-      callback(project)
+      onSuccess?(project)
     else
-      Project.get { id: projectId }, (response) ->
-        project = _.extend(project, response)
-        projectService.addProjectMethods(project)
-        projectService.addTaskDetailsToProject(project, unit) if unit?
-        callback(project)
+      Project.get({ id: projectId },
+        (response) ->
+          project = _.extend(project, response)
+          projectService.addProjectMethods(project)
+          projectService.addTaskDetailsToProject(project, unit) if unit?
+          onSuccess?(project)
+        (failure) ->
+          alertService.add("danger", "#{failure.data.error || "Unable to load project"}", 6000)
+          onFailure?(failure)
+      )
 
   projectService.updateGroups = (project) ->
     if project.groups?
