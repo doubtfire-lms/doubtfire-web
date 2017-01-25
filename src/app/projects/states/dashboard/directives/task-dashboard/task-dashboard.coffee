@@ -8,7 +8,6 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
   restrict: 'E'
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/task-dashboard.tpl.html'
   scope:
-    project: '='
     task: '='
   controller: ($scope, Task, listenerService) ->
 

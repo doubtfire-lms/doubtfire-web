@@ -1,0 +1,103 @@
+<div class="card card-sm card-status">
+  <div class="card-heading task-trigger-dropdown" ng-show="triggers.length > 0">
+    <div class="task-status hidden-sm hidden-xs" dropdown>
+      <button
+        type="button"
+        class="btn btn-default form-control input-lg {{task.statusClass()}}"
+        dropdown-toggle>
+        <span class="pull-left">
+          <i class="{{task.statusIcon()}}"></i> {{task.statusLabel()}}
+        </span>
+        <span class="pull-right">
+          <i class="fa fa-caret-down"></i>
+        </span>
+      </button><!--/select-button-->
+      <ul class="dropdown-menu" dropdown-menu>
+        <li
+          ng-repeat="trigger in triggers"
+          tooltip="{{trigger.help.reason}}"
+          tooltip-append-to-body="true"
+          tooltip-popup-delay="1000"
+          tooltip-placement="right">
+          <a ng-click="triggerTransition(trigger.status)">
+            <status-icon status="trigger.status" show-tooltip="false"></status-icon>
+            {{trigger.label}}
+          </a>
+        </li>
+      </ul><!--/select-options-->
+    </div><!--/desktop-dropdown-->
+    <select
+      class="form-control input-lg visible-sm visible-xs"
+      ng-options="trigger.status as trigger.label for trigger in triggers"
+      ng-model="task.status"
+      ng-change="triggerTransition(trigger.status)">
+    </select>
+  </div><!--/trigger-heading-->
+  <div class="card-heading static-task-status" ng-hide="triggers.length > 0">
+    <status-icon class="pull-right" status="task.status" show-tooltip="false"></status-icon>
+    <h4>{{task.statusLabel()}}</h4>
+  </div><!--/static-status-label-->
+  <div class="card-body">
+    <p>{{task.statusHelp().reason}} {{task.statusHelp().action}}</p>
+  </div><!--/status-body-->
+</div><!--/status-card-->
+<div class="card card-sm card-assessment" ng-show="assessmentCards.isGradedTask || assessmentCards.isQualityStarTask">
+  <div class="card-heading">
+    <h4>Assessment Information</h4>
+  </div>
+  <div class="card-body">
+    <div ng-show="assessmentCards.isGradedTask">
+      <h5>This task {{assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
+      <div ng-hide="assessmentCards.hasBeenGraded">
+        <p>
+          This task will be graded against a grade standard. Your work will
+          be assessed and assigned a grade according to a Pass, Credit,
+          Distinction or High Distinction standard.
+        </p>
+        <div class="callout callout-primary">
+          <h5>Advice for achieving a {{gradeNames[task.project().target_grade]}}</h5>
+          <p>
+            As you are attempting to achieve a {{gradeNames[task.project().target_grade]}} in this unit,
+            you should attempt to achieve a <strong>{{gradeNames[task.project().target_grade]}}</strong> grade
+            on this task. Ask your tutor to find out more on what they are looking for when they are assessing
+            this work to a specific grade.
+          </p>
+        </div>
+      </div><!--/graded-task-is-not-graded-->
+      <div ng-show="assessmentCards.hasBeenGraded">
+        Your tutor has marked you on this task to a <strong>{{gradeNames[task.grade]}}</strong> standard.
+      </div><!--/graded-task-is-graded-->
+    </div><!--/graded-task-->
+    <hr ng-show="assessmentCards.isGradedTask && assessmentCards.isQualityStarTask">
+    <div ng-show="assessmentCards.isQualityStarTask">
+      <h5>
+        <span ng-hide="assessmentCards.hasBeenGivenStars">
+          This task will be assessed on a scale to {{task.definition.max_quality_pts}}
+        </span>
+        <span ng-show="assessmentCards.hasBeenGivenStars">
+          This task has been assessed for quality
+        </span>
+      </h5>
+      <p ng-hide="assessmentCards.hasBeenGivenStars">
+        This task will be graded against a quality scale from
+        <strong>0 to {{task.definition.max_quality_pts}}</strong>. Your work will assessed
+        and assigned a star rating based on the quality of your submission.
+      </p>
+      <div ng-show="assessmentCards.hasBeenGivenStars">
+        <rating
+          class="task-quality-rating"
+          ng-model="task.quality_pts"
+          max="task.definition.max_quality_pts"
+          state-on="'fa fa-star rating-outline'"
+          state-off="'fa fa-star rating-disabled'"
+          readonly="true">
+        </rating>
+        <p>
+          You have been awarded out
+          <strong>{{task.quality_pts}} of {{task.definition.max_quality_pts}}</strong>
+          avaliable points for this task.
+        </p>
+      </div>
+    </div><!--/quality-star-task-->
+  </div><!--/assessment-body-->
+</div><!--/assessment-card-->
