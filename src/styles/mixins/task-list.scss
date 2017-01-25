@@ -50,6 +50,9 @@
     .task-badges-item {
       width: 50px;
       display: inline-block;
+      status-icon {
+        width: 100%;
+      }
       .new-comments-badge {
         display: inline-block;
         border-radius: 1.75rem;

@@ -108,6 +108,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).icon
     task.statusLabel = ->
       taskService.statusData(task.status).label
+    task.statusHelp = ->
+      taskService.statusData(task.status).help
     task.taskKey = ->
       taskService.taskKey(task)
     task.taskKeyToUrlString = ->
