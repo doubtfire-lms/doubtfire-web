@@ -91,7 +91,11 @@
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
-                <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value" type="{{bar.type}}" tooltip="{{bar.value}}% {{statusName(bar.type)}}">
+                <bar
+                  ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                  value="bar.value"
+                  type="{{statusClass(bar.key)}}"
+                  tooltip="{{bar.value}}% {{statusText(bar.key)}}">
                   <span ng-hide="bar.value < 10">{{bar.value}}%</span>
                 </bar>
               </progress>
