@@ -12,7 +12,7 @@
   <li ng-hide="unitRoles.length == 0 || projects.length == 0" class="divider"></li>
   <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
   <li ng-repeat="project in projects">
-    <a ui-sref="projects#show({ unitId: project.unit_id })">
+    <a ui-sref="projects#show({ projectId: project.project_id })">
       <small class="unit-info">
         <label class="label label-unit small">{{project.unit_code}}</label>
         <small class="text-muted">{{showDate(project.start_date)}}</small>
