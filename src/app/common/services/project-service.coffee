@@ -112,6 +112,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).help
     task.taskKey = ->
       taskService.taskKey(task)
+    task.recreateSubmissionPdf = (onSuccess, onFailure) ->
+      taskService.recreateSubmissionPdf(task, onSuccess, onFailure)
     task.taskKeyToUrlString = ->
       taskService.taskKeyToUrlString(task)
     task.taskKeyToIdString = ->
@@ -122,17 +124,17 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.hasTaskKey(task, key)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
-    task.getSubmissionDetails = ( success, failure ) ->
-      unless task.needsSubmissionDetails()
-        if _.isFunction(success) then success(task, {} )
-      else
-        Task.SubmissionDetails.get { id: project.project_id, task_definition_id: task.definition.id },
-          (response) ->
-            task.has_pdf = response.has_pdf
-            task.processing_pdf = response.processing_pdf
-            if _.isFunction(success) then success(task, response)
-          (response) ->
-            if _.isFunction(failure) then failure(task, response)
+    task.getSubmissionDetails = (onSuccess, onFailure) ->
+      return onSuccess?(task) unless task.needsSubmissionDetails()
+      Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },
+        (response) ->
+          task.has_pdf = response.has_pdf
+          task.processing_pdf = response.processing_pdf
+          task.submission_date = response.submission_date
+          onSuccess?(task)
+        (response) ->
+          onFailure?(response)
+      )
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->

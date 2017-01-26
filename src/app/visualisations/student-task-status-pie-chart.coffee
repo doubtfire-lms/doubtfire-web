@@ -19,8 +19,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
       if $scope.api
         $scope.api.update()
 
-    $scope.$on 'TaskStatusUpdated', ->
-      updateData()
+    $scope.$on 'TaskStatusUpdated', $scope.updateData
 
     $scope.updateData()
 

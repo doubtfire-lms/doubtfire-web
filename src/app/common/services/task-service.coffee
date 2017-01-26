@@ -49,6 +49,14 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
   ]
 
+  taskService.terminalStatuses = [
+    'demonstrate'
+    'discuss'
+    'do_not_resubmit'
+    'complete'
+    'fail'
+  ]
+
   taskService.markedStatuses = [
     'redo'
     'fail'
@@ -381,7 +389,7 @@ angular.module("doubtfire.common.services.tasks", [])
     else
       updateFunc()
 
-  taskService.recreatePDF = (task, success) ->
+  taskService.recreateSubmissionPdf = (task, onSuccess, onFailure) ->
     TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project().project_id },
       (value) ->  #success
         if value.result == "false"
@@ -391,12 +399,11 @@ angular.module("doubtfire.common.services.tasks", [])
           task.processing_pdf = true
           alertService.add("info", "Task PDF will be recreated.", 2000)
           analyticsService.event 'Task Service', 'Recreated PDF'
-
-          if success
-            success()
+          onSuccess?()
       (value) -> #fail
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
         analyticsService.event 'Task Service', 'Failed to Recreate PDF'
+        onFailure?()
 
   taskService.taskIsGraded = (task) ->
     task? and task.definition.is_graded and task.grade?
