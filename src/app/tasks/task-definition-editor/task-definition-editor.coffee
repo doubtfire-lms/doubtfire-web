@@ -20,7 +20,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = ExternalName
-    
+
     #
     # Active task tab group
     #
@@ -55,27 +55,27 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # The task sheet uploader...
     #
     $scope.taskSheet = { file: { name: 'Task Sheet', type: 'document'  } }
-    $scope.taskSheetUploadUrl = () -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
+    $scope.taskSheetUploadUrl = -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskSheetSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_pdf = true
       # $scope.filesUploaded = response
 
-    $scope.taskPDFUrl = () ->
+    $scope.taskPDFUrl = ->
       Task.getTaskPDFUrl($scope.unit, $scope.task)
 
     #
     # The task resources uploader...
     #
     $scope.taskResources = { file: { name: 'Task Resources', type: 'zip'  } }
-    $scope.taskResourcesUploadUrl = () -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
+    $scope.taskResourcesUploadUrl = -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskResourcesSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_resources = true
 
-    $scope.resourceUrl = () ->
+    $scope.resourceUrl = ->
       Task.getTaskResourcesUrl($scope.unit, $scope.task)
 
 
@@ -103,7 +103,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       $event.preventDefault()
       $event.stopPropagation()
 
-      if ! pickerData.open
+      unless pickerData.open
         # Close both
         $scope.targetPicker.open = false
         $scope.duePicker.open = false
@@ -112,7 +112,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       # Toggle one
       pickerData.open = ! pickerData.open
 
-    $scope.addUpReq = () ->
+    $scope.addUpReq = ->
       newLength = $scope.task.upload_requirements.length + 1
       newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
       $scope.task.upload_requirements.push newUpReq
@@ -120,7 +120,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeUpReq = (upReq) ->
       $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
 
-    $scope.addCheck = () ->
+    $scope.addCheck = ->
       newLength = $scope.task.plagiarism_checks.length + 1
       newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
       $scope.task.plagiarism_checks.push newCheck
@@ -135,10 +135,10 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       if newTask.weighting
         oldTask.weight = newTask.weighting
 
-    $scope.deleteTask = () ->
+    $scope.deleteTask = ->
       taskService.deleteTask $scope.task, $scope.unit, null
 
-    $scope.saveTask = () ->
+    $scope.saveTask = ->
       # Map the task to upload to the appropriate fields
       task = {}
       _.extend(task, $scope.task)

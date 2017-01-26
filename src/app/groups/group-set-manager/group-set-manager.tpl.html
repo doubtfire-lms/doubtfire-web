@@ -1,0 +1,46 @@
+<group-selector
+  unit="unit"
+  unit-role="unitRole"
+  selected-group="selectedGroup"
+  selected-group-set="selectedGroupSet"
+  show-group-set-selector="showGroupSetSelector"
+  on-select="newGroupSelected"
+  class="panel panel-primary">
+</group-selector>
+<div class="panel panel-default panel-group-memberships" ng-show="selectedGroup">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Members of <strong>{{selectedGroup.name}}</strong>
+    </h4>
+  </div><!--/panel-heading-->
+  <div class="panel-body panel-toolbar" ng-show="showMemberPanelToolbar">
+    <form
+      name="addMemberForm"
+      ng-submit="addMember(selectedStudent)"
+      class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Enter student name or username..."
+        ng-model="selectedStudent"
+        typeahead="
+          student as (student.username + ' ' + student.name)
+          for student in unit.activeStudents() |
+          studentsForGroup:selectedGroupSet:selectedGroup:members |
+          filter:$viewValue |
+          limitTo:8"
+        typeahead-wait-ms="200">
+      <div class="input-group-btn">
+        <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
+          <i class="fa fa-plus"></i> Add Member
+        </button>
+      </div>
+    </form>
+  </div><!--/panel-body-->
+  <group-member-list
+    unit="unit"
+    unit-role="unitRole"
+    selected-group="selectedGroup"
+    on-members-loaded="groupMembersLoaded">
+  </group-member-list>
+</div><!--/panel-group-memberships-->

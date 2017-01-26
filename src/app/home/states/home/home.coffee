@@ -69,6 +69,7 @@ angular.module('doubtfire.home.states.home', [])
     testForStateChanges()
 
   checkEnrolled = ->
+    return if !$scope.unitRoles? or !$scope.projects?
     $scope.notEnrolled = ->
       # Not enrolled if a tutor and no unitRoles
       ($scope.unitRoles.length is 0 and currentUser.role is 'Tutor') or
@@ -84,8 +85,6 @@ angular.module('doubtfire.home.states.home', [])
 
   $scope.unit = (unitId) ->
     _.find($scope.units, {id: unitId})
-
-  headerService.clearMenus()
 
   $scope.currentUser = currentUser
 

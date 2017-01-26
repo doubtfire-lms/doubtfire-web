@@ -1,0 +1,26 @@
+<div class="task-inbox">
+  <task-list
+    show-search-options="showSearchOptions"
+    filters="filters"
+    task-data="taskData"
+    unit="unit"
+    unit-role="unitRole"
+    get-next-task="getNextTask"
+    get-previous-task="getPreviousTask"
+    class="col-xs-12 col-md-2"><!--/panel-1-->
+  </task-list>
+  <task-submission-assessor
+    task="taskData.selectedTask"
+    on-click-next-task="getNextTask"
+    on-click-previous-task="getPreviousTask"
+    on-change-task="taskData.onSelectedTaskChange"
+    class="col-xs-12 col-md-7">
+  </task-submission-assessor><!--/panel-2-->
+  <task-comments-viewer
+    task="taskData.selectedTask"
+    project="taskData.selectedTask.project()"
+    class="col-xs-12 col-md-3"
+    refocus-on-task-change="true"
+    ng-if="taskData.selectedTask">
+  </task-comments-viewer><!--/panel-3-->
+</div>

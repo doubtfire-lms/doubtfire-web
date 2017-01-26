@@ -1,6 +1,6 @@
 angular.module("utilService", [])
 
-.filter "fromNow", () ->
+.filter "fromNow", ->
   return (date) ->
     return moment(new Date(date)).fromNow()
 

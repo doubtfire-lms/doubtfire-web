@@ -6,7 +6,7 @@ angular.module('doubtfire.config.root-controller', [])
 .controller("AppCtrl", ($rootScope, $state, $document, $filter, ExternalName) ->
 
   # Automatically localise page titles
-  # TODO: consider putting this in a directive?
+  # TODO: (@alexcu) consider putting this in a directive?
   suffix = $document.prop "title"
   setPageTitle = (state) ->
     $document.prop "title", $filter("i18n")(state.data.pageTitle) + " | " + suffix

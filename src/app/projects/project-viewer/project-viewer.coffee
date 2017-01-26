@@ -99,9 +99,9 @@ angular.module("doubtfire.projects.project-viewer", [])
       # $scope.projectLoaded = false
       projectService.fetchDetailsForProject($scope.project, $scope.unit, (project) ->
         if project && ! $scope.unit?
-          unitService.getUnit project.unit_id, false, false, (unit) ->
+          unitService.getUnit project.unit_id, (unit) ->
             $scope.unit = unit # the unit related to the role
-            unit.extendStudent project
+            unit.mapStudentToUnit project
 
             $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
             selectProjectTask(project)
@@ -121,7 +121,7 @@ angular.module("doubtfire.projects.project-viewer", [])
       if filteredTasks.length > 0
         # Show task if in url
         if $scope.showTaskId?
-          task = _.find filteredTasks, (task) -> task.id == $scope.showTaskId
+          task = _.find(filteredTasks, {id: $scope.showTaskId})
           if task?
             $scope.project.selectedTask = task
         else

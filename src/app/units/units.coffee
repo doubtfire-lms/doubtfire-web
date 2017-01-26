@@ -1,16 +1,4 @@
 angular.module('doubtfire.units', [
   'doubtfire.units.modals'
   'doubtfire.units.states'
-  'doubtfire.units.stats'
-  'doubtfire.units.unit-analytics-viewer'
-  'doubtfire.units.unit-details-editor'
-  'doubtfire.units.unit-groupset-editor'
-  'doubtfire.units.unit-ilo-editor'
-  'doubtfire.units.unit-staff-editor'
-  'doubtfire.units.unit-student-list'
-  'doubtfire.units.unit-student-plagiarism-list'
-  'doubtfire.units.unit-student-portfolio-list'
-  'doubtfire.units.unit-students-editor'
-  'doubtfire.units.unit-tasks-editor'
-  'doubtfire.units.unit-tutorials-editor'
 ])

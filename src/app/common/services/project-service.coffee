@@ -22,26 +22,23 @@ angular.module("doubtfire.common.services.projects", [])
     complete: 10
   }
 
-  $rootScope.$on 'signOut', () ->
+  $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
   projectService.getProjects = ( callback ) ->
-    if ! projectService.loadedProjects?
-      projectService.loadedProjects = []
-      Project.query(
-        (projects) ->
-          Array.prototype.push.apply projectService.loadedProjects, projects
-        (response) ->
-          if response?.status != 419
-            msg = if ! response? then response.error else ''
-            alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
-        )
-
-
-    if _.isFunction(callback)
-      callback(projectService.loadedProjects)
-
-    projectService.loadedProjects
+    fireCallback = ->
+      callback(projectService.loadedProjects) if _.isFunction(callback)
+    unless projectService.loadedUnitRoles?
+      success = (projects) ->
+        projectService.loadedProjects = projects
+        fireCallback()
+      failure = (response) ->
+        if response?.status != 419
+          msg = unless response? then response.error else ''
+          alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
+      Project.query(success, failure)
+    else
+      fireCallback()
 
   ###
   projects's can update their task stats
@@ -75,23 +72,33 @@ angular.module("doubtfire.common.services.projects", [])
     task.definition = td
 
     # must be function to avoid cyclic structure
-    task.project = () -> project
-    task.status_txt = () -> taskService.statusLabels[task.status]
-    task.statusSeq = () -> taskService.statusSeq[task.status]
+    task.project = -> project
+    task.status_txt = -> taskService.statusLabels[task.status]
+    task.statusSeq = -> taskService.statusSeq[task.status]
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
-    task.needsSubmissionDetails = () ->
+    task.needsSubmissionDetails = ->
       task.has_pdf == null || task.has_pdf == undefined
-    task.statusClass = () ->
+    task.statusClass = ->
       taskService.statusData(task.status).class
-    task.statusIcon = () ->
+    task.statusIcon = ->
       taskService.statusData(task.status).icon
-    task.statusLabel = () ->
+    task.statusLabel = ->
       taskService.statusData(task.status).label
+    task.taskKey = ->
+      taskService.taskKey(task)
+    task.taskKeyToUrlString = ->
+      taskService.taskKeyToUrlString(task)
+    task.taskKeyToIdString = ->
+      taskService.taskKeyToIdString(task)
+    task.taskKeyFromString = (taskKeyString) ->
+      taskService.taskKeyFromString(taskKeyString)
+    task.hasTaskKey = (key) ->
+      taskService.hasTaskKey(task, key)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
     task.getSubmissionDetails = ( success, failure ) ->
-      if ! task.needsSubmissionDetails()
+      unless task.needsSubmissionDetails()
         if _.isFunction(success) then success(task, {} )
       else
         Task.SubmissionDetails.get { id: project.project_id, task_definition_id: task.definition.id },
@@ -119,7 +126,7 @@ angular.module("doubtfire.common.services.projects", [])
         # has_pdf: null
       }
 
-      base = _.filter base, (task) -> ! _.find(project.tasks, (pt) -> pt.task_definition_id == task.task_definition_id)
+      base = _.filter base, (task) -> ! _.find(project.tasks, {task_definition_id: task.task_definition_id})
 
       project.tasks = [] unless project.tasks?
       Array.prototype.push.apply project.tasks, base
@@ -130,22 +137,19 @@ angular.module("doubtfire.common.services.projects", [])
     project
 
   projectService.addProjectMethods = (project, unit) ->
-    project.updateBurndownChart = () ->
+    project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
         project.burndown_chart_data = response.burndown_chart_data
 
     project.incorporateTask = (newTask) ->
-      if ! project.tasks?
+      unless project.tasks?
         project.tasks = []
-
-      currentTask = _.find project.tasks, (t) -> t.task_definition_id == newTask.task_definition_id
-
+      currentTask = _.find(project.tasks, {task_definition_id: newTask.task_definition_id})
       if currentTask?
-        currentTask = _.extend currentTask, newTask
+        currentTask = _.extend(currentTask, newTask)
       else
-        project.tasks.push projectService.mapTask(newTask, unit, project)
+        project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
-
       currentTask
 
     project.refresh = (unit_obj) ->
@@ -175,7 +179,7 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.getGroupForTask = (project, task) ->
     return null if not task.definition.group_set
 
-    _.find project.groups, (grp) -> grp.group_set_id == task.definition.group_set.id
+    _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
     project.findTaskForDefinition(task_definition_id)

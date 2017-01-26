@@ -1,0 +1,9 @@
+@mixin flex-panel {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  .panel-body {
+    flex: 1;
+    align-content: center;
+  }
+}

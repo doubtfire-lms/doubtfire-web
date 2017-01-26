@@ -61,7 +61,7 @@ angular.module('doubtfire.visualisations', [
 
 
   Visualisation.refreshAll = ->
-    $interval (() -> window.dispatchEvent(new Event('resize'))), 50, 1
+    $interval (-> window.dispatchEvent(new Event('resize'))), 50, 1
 
   Visualisation
 )

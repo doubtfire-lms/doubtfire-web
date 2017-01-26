@@ -13,11 +13,4 @@ angular.module('doubtfire.config.contributors', [])
   'joostfunkekupper'    # Joost Funke Kupper
   'rohanliston'         # Rohan Liston
   'lukehorvat'          # Luke Horvat
-
-  #
-  # TODO: Find out account names for...
-  # '???'                 # Jake Renzella
-  # '???'                 # Reuben Wilson
-  # '???'                 # Angus Morton
-  #
 ])

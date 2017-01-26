@@ -1,0 +1,176 @@
+<div id="students-list" class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="input-group">
+        <input
+          class="form-control input-lg"
+          placeholder="Search for students or tutors..."
+          type="search"
+          ng-model="searchText"
+          ng-change="searchTextChanged()"
+          typeahead="text for text in
+            unitTypeAheadData(unit) |
+            filter:$viewValue |
+            limitTo:8"
+          typeahead-wait-ms="200"
+          autofocus><!--/search-text-->
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-lg" type="button" ng-model="showSearchOptions" btn-checkbox>
+              <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
+            </button>
+          </span><!--/search-options-toggle-->
+        </div>
+      </h4>
+    </div><!--/search-header-->
+    <form class="panel-body panel-collapseable search-options" ng-show="showSearchOptions">
+      <div class="form-group staff-filter">
+        <label>Show Students From...</label>
+        <div class="input-group">
+          <div class="btn-group">
+            <button class="btn btn-default col-sm-6" ng-model="staffFilter" ng-click="staffFilterChanged('all')" btn-radio="'all'">
+              <i class="fa fa-university"></i> All Tutorials
+            </button>
+            <button class="btn btn-default col-sm-6" ng-model="staffFilter" ng-click="staffFilterChanged('mine')" btn-radio="'mine'">
+              <i class="fa fa-pencil"></i> My Tutorials
+            </button>
+          </div>
+        </div>
+      </div><!--/staff-filter-button-group-->
+      <div class="form-group flag-sort">
+        <label>Sort Flags By...</label>
+        <div class="input-group">
+          <div class="btn-group">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('target_grade')" btn-radio="'target_grade'">
+              <i class="fa fa-check"></i> Grade
+            </button>
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('tasks_with_similarities * 100 + max_pct_copy')" btn-radio="'tasks_with_similarities * 100 + max_pct_copy'">
+              <i class="fa fa-eye"></i> Plagiarism
+            </button>
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolio_status')" btn-radio="'portfolio_status'">
+              <i class="fa fa-book"></i> Portfolio Status
+            </button>
+          </div>
+        </div>
+        <p class="help-block">
+          Click the button twice to reverse the sort ordering.
+        </p>
+      </div><!--/flag-sort-button-group-->
+    </form><!--/search-options-->
+    <div class="panel-body" ng-show="filteredStudents.length == 0">
+      <div class="callout callout-primary">
+        <h4>No students found</h4>
+        <p>
+          No students were found using the filters specified.
+        </p>
+      </div>
+    </div><!--/no-students-found-->
+    <table ng-show="filteredStudents.length > 0" class="table table-condensed table-hover table-pointer">
+      <thead>
+        <tr>
+          <th class="student-id">
+            <a ng-click="sortTableBy('student_id')">
+              Student ID <i ng-show="tableSort.order == 'student_id'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/id-column-header-->
+          <th class="name">
+            <a ng-click="sortTableBy('name')">
+              Name <i ng-show="tableSort.order == 'name'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/name-column-header-->
+          <th class="stats">
+            <a ng-click="sortTableBy('progressSortOrder()')">
+              Stats <i ng-show="tableSort.order == 'progressSortOrder()'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/stats-column-header-->
+          <th class="flags">
+            <a ng-click="sortTableBy('flags')">
+              Flags
+              <i ng-show="
+                tableSort.order == 'tasks_with_similarities * 100 + max_pct_copy' ||
+                tableSort.order == 'target_grade' ||
+                tableSort.order == 'portfolio_status'"
+                class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/flags-column-header-->
+          <th class="tutorial">
+            <a ng-click="sortTableBy('tutorial.abbreviation')">
+              Tutorial <i ng-show="tableSort.order == 'tutorial.abbreviation'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/tutorial-column-header-->
+        </tr><!--/column-headers-row-->
+      </thead>
+      <tbody>
+        <tr class="task-progress-row" ng-repeat="student in filteredStudents">
+          <td ng-click="viewStudent(student)">
+            {{student.student_id || "N/A"}}
+          </td><!--/student-id-column-->
+          <td ng-click="viewStudent(student)">
+            {{student.name}}
+          </td><!--/name-column-->
+          <td ng-click="viewStudent(student)" class="task-progress-bar">
+            <progress class="task-progress" animate="true">
+              <bar
+                ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                value="bar.value"
+                type="{{statusClass(bar.key)}}"
+                tooltip="{{bar.value}}% {{statusText(bar.key)}}">
+                <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+              </bar>
+            </progress>
+          </td><!--/progress-column-->
+          <td class="text-left" ng-click="viewStudent(student)">
+            <span class="flags">
+              <span class="flag">
+                <grade-icon grade="student.target_grade"></grade-icon>
+              </span>
+              <span ng-show="student.max_pct_copy > 0" class="flag">
+                <i class="fa fa-eye fa-2x" ></i>
+              </span>
+              <span ng-show="student.has_portfolio" class="flag">
+                <i class="fa fa-book fa-2x" ng-class="{'text-muted': student.compile_portfolio}"></i>
+              </span>
+            </span>
+          </td><!--/flags-column-->
+          <td>
+            <select
+              class="form-control input-sm"
+              ng-model="student.tutorial_id"
+              ng-options="tutorial.id as (tutorial.abbreviation + ' - ' + tutorial.description) for tutorial in unit.tutorials | orderBy:'abbreviation'"
+              ng-change="switchToTutorial(student, student.tutorial_id)">
+              <option value="">None</option>
+            </select>
+          </td><!--/tutorial-column-->
+        </tr><!--/student-row-->
+      </tbody>
+    </table><!--/student-table-->
+    <div class="panel-footer">
+      <div class="pull-right">
+        <button
+          type="button"
+          class="btn btn-default"
+          ng-csv="getCSVData"
+          lazy-load="true"
+          csv-header="getCSVHeader()"
+          filename="student-project-export.csv"
+          target="_blank">
+          <i class="fa fa-file-excel-o"></i>
+          <i class="fa fa-download"></i> Export CSV
+        </button>
+        <button type="button" class="btn btn-default" ng-click="showEnrolModal()">
+          <i class="fa fa-user"></i>
+          <i class="fa fa-plus"></i> Enrol Student
+        </button>
+      </div><!--/export-buttons-->
+      <pagination
+        total-items="pagination.totalSize"
+        ng-change="pagination.onChange()"
+        ng-model="pagination.currentPage"
+        items-per-page="pagination.pageSize"
+        max-size="pagination.maxSize"
+        class="pagination-sm"
+        boundary-links="true"
+        rotate="false">
+      </pagination><!--/pagination-->
+    </div><!--/panel-footer-->
+  </div>
+</div>

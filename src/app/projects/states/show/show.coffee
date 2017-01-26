@@ -49,7 +49,7 @@ angular.module('doubtfire.projects.states.show', [])
   #
   # Batch Discuss button
   #
-  $scope.transitionWeekEnd = () ->
+  $scope.transitionWeekEnd = ->
     # Reject if there is no project
     return unless $scope.project?
     Project.update(

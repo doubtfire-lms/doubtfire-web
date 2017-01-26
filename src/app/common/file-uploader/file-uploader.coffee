@@ -35,6 +35,8 @@ angular.module('doubtfire.common.file-uploader', [])
     isReady: '=?'
     # Shows the names of files to be uploaded (defaults to true)
     showName: '=?'
+    # Shows initially as button
+    asButton: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -77,7 +79,17 @@ angular.module('doubtfire.common.file-uploader', [])
     #
     # Default showName
     #
-    $scope.showName = if $scope.showName? then $scope.showName else true
+    $scope.showName ?= true
+
+    #
+    # Default asButton
+    #
+    $scope.asButton ?= false
+
+    #
+    # Only initially show uploader if not presenting as button
+    #
+    $scope.showUploader = !$scope.asButton
 
     #
     # When a file is dropped, if there has been rejected files
@@ -142,6 +154,7 @@ angular.module('doubtfire.common.file-uploader', [])
       # No upload info and we're not uploading
       $scope.uploadingInfo = null
       $scope.isUploading = false
+      $scope.showUploader = !$scope.asButton
       for upload in $scope.uploadZones
         $scope.clearEnqueuedUpload(upload)
     $scope.resetUploader()

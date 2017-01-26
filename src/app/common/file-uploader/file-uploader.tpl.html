@@ -1,5 +1,10 @@
 <div class="file-uploader" ng-class="{ 'is-uploading': isUploading }">
-  <div ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones" class="file-drop-area">
+  <div ng-hide="showUploader">
+    <button class="btn btn-success form-control" ng-click="showUploader = true">
+      <i class="fa fa-upload"></i> Begin Upload
+    </button>
+  </div><!--begin-upload-button-->
+  <div ng-show="showUploader" ng-if="uploadingInfo == null" ng-repeat="upload in uploadZones" class="file-drop-area">
     <h3 class="file-title" ng-show="showName">
       {{uploadZones.length == 1 ? '' : $index + 1 + ' -'}} {{upload.display.name}}
     </h3>
@@ -26,20 +31,24 @@
         </p>
       </div><!--/drop-zone-->
     <div ng-hide="upload.model == null || upload.model.length == 0">
-      <p class="file-registered">
+      <div class="file-registered">
         <i class="fa {{upload.display.icon}}"></i>
         {{upload.model[0].name}}
-      </p>
+      </div>
       <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
         <i class="fa fa-times"></i>
       </a>
-      </p>
     </div><!--/actual-file-->
   </div><!--/drop-zones-->
-  <div ng-show="readyToUpload()" class="upload-area text-center clearfix">
-    <button ng-show="uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary btn-download">
-      <i class="fa fa-upload"></i> Upload
+  <div ng-show="showUploader && !isUploading" class="upload-commit-actions">
+    <button ng-show="readyToUpload() && uploadingInfo == null" ng-click="initiateUpload()" class="btn btn-primary btn-upload">
+      <i class="fa fa-upload"></i> Start Upload
     </button><!--/upload-button-->
+    <button ng-show="asButton" ng-click="resetUploader()" class="btn btn-danger btn-cancel">
+      <i class="fa fa-times"></i> Cancel Upload
+    </button><!--/cancel-button-->
+  </div>
+  <div ng-show="showUploader && readyToUpload()" class="upload-area text-center clearfix">
     <div ng-hide="uploadingInfo == null || uploadingInfo.complete" class="progress-area">
       <div class="icons">
         <i ng-repeat="upload in uploadZones" class="fa {{upload.display.icon}}"></i>
@@ -49,16 +58,19 @@
       <progressbar class="progress-striped active" value="uploadingInfo.progress"></progressbar>
     </div><!--/progress-area-->
     <div ng-if="uploadingInfo.complete" class="result-area">
-      <i class="fa {{uploadingInfo.success === true ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'}} fa-4x"></i>
-      <h3>Upload {{uploadingInfo.success === true ? 'Successful' : 'Failed'}}</h3>
+      <p class="result-text">
+        <i class="fa {{uploadingInfo.success === true ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'}} fa-2x"></i>
+        <strong>File Upload {{uploadingInfo.success === true ? 'Successful' : 'Failed'}}</strong>
+      </p>
       <div class="error-message-area" ng-hide="uploadingInfo.success === true">
+        <hr>
         <p>
           <strong>Error Message: </strong>
           {{uploadingInfo.error}}
         </p>
         <p class="retry-options">
-          <a href='' ng-click="initiateUpload()">Retry Upload</a>
-          <a href='' ng-click="resetUploader()">Cancel</a>
+          <a ng-click="initiateUpload()">Retry Upload</a>
+          <a ng-click="resetUploader()">Cancel</a>
         </p><!--/error-message-area-->
       </div>
     </div><!--/result-area-->

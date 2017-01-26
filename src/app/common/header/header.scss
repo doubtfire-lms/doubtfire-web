@@ -3,35 +3,32 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  margin-bottom:0;
-
-  .dropdown-units {
-    li:not(.divider) a {
-      padding-top: 0.5em;
-      padding-bottom: 0.5em;
-      display: flex;
-    }
-    li:not(.divider):last-child a {
-      margin-bottom: 0.5em
-    }
-    li a .unit-name {
-      padding-left: 1.75ex;
-      flex: 1;
-      text-align: right;
-    }
-  }
+  margin-bottom: 0;
 }
 
-a.navbar-brand {
+.navbar ul.breadcrumb {
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
   display: flex;
-  align-items: center;
-  i.logo {
-    height: 1.6em;
-    width: 1.6em;
-    margin-right: 1ex;
+  & > li {
+    height: 33px;
   }
-  h1.logo {
-    font-size: 1.3em;
-    margin: 0;
+  & > li + li:before {
+    padding-left: 10px;
+  }
+  .home i.logo {
+    height: 33px;
+    width: 33px;
+  }
+  .dropdown-menu {
+    margin-top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  button.dropdown-toggle[aria-expanded="true"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 0;
   }
 }

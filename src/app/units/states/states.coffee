@@ -1,5 +1,10 @@
 angular.module('doubtfire.units.states', [
-  'doubtfire.units.states.edit-unit-view'
-  'doubtfire.units.states.teacher-view'
-  'doubtfire.units.states.units-admin-view'
+  'doubtfire.units.states.index'
+  'doubtfire.units.states.edit'
+  'doubtfire.units.states.tasks'
+  'doubtfire.units.states.groups'
+  'doubtfire.units.states.students'
+  'doubtfire.units.states.plagiarism'
+  'doubtfire.units.states.analytics'
+  'doubtfire.units.states.portfolios'
 ])

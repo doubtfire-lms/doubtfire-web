@@ -5,17 +5,13 @@ angular.module("doubtfire.common.filters", [])
 #
 .filter('startFrom', ->
   (input, start) ->
-    start = +start # parse to int
-    if input
-      input.slice(start)
-    else
-      input
+    input?.slice(+start)
 )
 
 .filter('showStudents', ->
   (input, kind, tutorName) ->
     if input
-      if kind == "myStudents"
+      if kind == "mine"
         _.filter  input, { tutorial: {tutor_name: tutorName} }
       else
         input
@@ -26,7 +22,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('showTasks', ->
   (input, kind, tutorName) ->
     if input
-      if kind == "myStudents"
+      if kind == "mine"
         _.filter  input, (t) -> (t?) && t.project().tutorName() == tutorName
       else
         input
@@ -91,36 +87,12 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('studentsForGroup', ->
-  (input, gs, grp, members) ->
+  (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.tutorial_id == group.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
-    else
-      input
-)
-
-#
-# Filter groups for students and in group admin pages
-#   gs: group set to determine if keep to class
-#   project: nil for admin pages, otherwise student
-#   assessingUnitRole: nil for student, otherwise staff details
-#   kind: 'all' | 'mine'
-#
-.filter('groupFilter', ->
-  (input, unit, gs, project, assessingUnitRole, kind) ->
-    if input
-      if assessingUnitRole && ! project # staff only... so tutorial is ignored!
-        if kind == 'mine'
-          _.filter input, (grp) -> unit.tutorialFromId(grp.tutorial_id).tutor_name == assessingUnitRole.name
-        else # just all
-          input
-      else  # student...
-        if gs.keep_groups_in_same_class # match just those in this tutorial
-          _.filter input, (grp) -> (project.tutorial?) && grp.tutorial_id == project.tutorial.id
-        else # all
-          input
     else
       input
 )
@@ -198,4 +170,69 @@ angular.module("doubtfire.common.filters", [])
           !_.includes(taskService.toBeWorkedOn, task.status)
         else
           false
+)
+
+# NEW FILTERS
+
+.filter('tasksOfTaskDefinition', ->
+  (tasks, taskDefinition) ->
+    return tasks unless (taskDefinition? && tasks?)
+    tasks = _.filter tasks, { task_definition_id: taskDefinition.id }
+)
+
+.filter('tasksWithStatuses', ->
+  (tasks, statusKeys) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty statusKeys
+    _.filter tasks, (task) -> _.includes(statusKeys, task.status)
+)
+
+.filter('tasksInTutorials', ->
+  (tasks, tutorialIds) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty tutorialIds
+    _.filter tasks, (task) -> _.includes(tutorialIds, task.project().tutorial_id)
+)
+
+.filter('tasksWithStudentName', ->
+  (tasks, searchName) ->
+    return tasks unless (searchName? && tasks?)
+    searchName = searchName.toLowerCase()
+    _.filter tasks, (task) ->
+      task.project().name.toLowerCase().indexOf(searchName) >= 0
+)
+
+.filter('groupsInTutorials', ->
+  (input, unitRole, kind) ->
+    return unless input? && unitRole? && kind?
+    return input if kind == 'all'
+    if kind == 'mine'
+      _.filter(input, (group) -> group.tutorial().tutor_name == unitRole.name)
+)
+
+.filter('groupsForStudent', ->
+  (input, project, groupSet) ->
+    # Filter by tutorial if keep groups in same class
+    return unless input? && groupSet? && project?
+    return input unless groupSet.keep_groups_in_same_class
+    if groupSet.keep_groups_in_same_class
+      _.filter(input, (group) -> group.tutorial_id == project.tutorial?.id)
+)
+
+.filter('paginateAndSort', ($filter) ->
+  (input, pagination, tableSort) ->
+    return unless input? && tableSort? && pagination?
+    return input if input.length == 0
+    pagination.show = input.length > pagination.pageSize
+    pagination.totalSize = input.length
+    input = $filter('orderBy')(input, tableSort.order, tableSort.reverse)
+    input = $filter('startFrom')(input, (pagination.currentPage - 1) * pagination.pageSize)
+    input = $filter('limitTo')(input, pagination.pageSize)
+    input
+)
+
+.filter('lcfirst', ->
+  (input) ->
+    return if !input? || input.length == 0
+    input[0].toLowerCase() + input.substring(1)
 )

@@ -1,129 +1,139 @@
-.task-comments-viewer {
+$comment-bubble-color: #2196F3;
+$comment-bubble-color-darker: darken($comment-bubble-color, 10%);
+$comment-bubble-color-other-user: #e5e5ea;
+$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
+$comment-author-bubble-size: 38px;
+$comment-text-padding: 15px;
+
+task-comments-viewer .panel {
+  @include flex-panel;
+}
+
+task-comments-viewer .panel-body {
   overflow: scroll;
-  height: 30vh;
-  .no-comments {
-    height: 100%;
-  }
+  height: 100%;
+  font-size: 15px;
 }
 
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-     -khtml-user-select: none; /* Konqueror */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  not supported by any browser */
-                cursor:default;
-}
-
-.task-comments-viewer .comment {
+// Primary comment div
+task-comments-viewer .comment {
   display: flex;
+  width: 100%;
   margin-bottom: 1em;
-  .comment-details {
-    position: relative;
-    @include flex-center;
-    align-items: flex-end;
-    align-content: flex-end;
-    height: 100%;
-    height: auto;
-    & > * {
-      width: 100%;
-      text-align: right;
-    }
-    .comment-by, .comment-date {
-      display: block;
-    }
-    .comment-by {
-      display: block;
-      height: 38px;
-      min-width: 38px;
-      width: 38px;
-      line-height: 36px;
-      float: right;
-
-      -moz-border-radius: 30px;
-      border-radius: 30px;
-
-      background: #1976D2; /* fallback for old browsers */
-      background: -webkit-linear-gradient(to left, #2196F3 , #1976D2); /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(to left, #2196F3 , #1976D2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-      border: 1px solid white;
-      box-shadow: 0 0 0 1px #2196F3;
-
-      margin-bottom: 2px;
-      align-self: bottom;
-      color: white;
-      text-align: center;
-      font-size: 1.1em;
-      font-weight: bolder;
+  flex-wrap: wrap;
+  &.new-comment .comment-bubble {
+    animation: fade-in-comment-animation;
+    animation-duration: 5s;
+    @keyframes fade-in-comment-animation {
+      0% { background: rgba(33, 150, 243, 0.4); }
+      0% { border: rgba(33, 150, 243, 1); }
+      0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
+      100% { border: rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
     }
   }
-
-  .comment-text
-  {
-    position: relative;
-    padding: 16px;
-    background: #ECEFF1;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    font-size: 1.1em;
-    padding: 1em;
-    line-height: 1em;
-
-    .markdown-to-html > *:last-child {
-      margin-bottom: 0px;
-    }
-
-    img {
-      border-radius: 1em;
-    }
-  }
-
-  .comment-text .comment-date {
-      margin-top: -5px;
-      font-size: 0.8em;
-    }
-  .delete-comment {
-    padding-left: 10px;
-    align-self: center;
-    float: right;
-    font-style: normal;
-    color: #bbb;
-    font-size: 1.6em;
-    &:hover {
-      color: #B71C1C;
-      cursor: pointer;
-    }
+  &.comment-by-other-user {
+    flex-direction: row-reverse;
   }
 }
 
-.panel-footer {
-  padding: 0;
+// Author Bubble
+task-comments-viewer .comment .author-bubble {
+  display: inline-block;
+  align-self: flex-end;
+  height: $comment-author-bubble-size;
+  width: $comment-author-bubble-size;
+  line-height: $comment-author-bubble-size - 2px;
+  border-radius: 100%;
+  background: $comment-bubble-color-darker;
+  background: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 1px $comment-bubble-color;
+  margin-right: $comment-text-padding;
+  color: #fff;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+}
+task-comments-viewer .comment.comment-by-other-user .author-bubble {
+  background: $comment-bubble-color-other-user;
+  background: linear-gradient(to left, $comment-bubble-color-other-user , $comment-bubble-color-other-user-darker);
+  box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
+  color: $text-color;
+}
+task-comments-viewer .comment.comment-by-other-user .author-bubble {
+  margin-left: $comment-text-padding;
+  margin-right: 0;
 }
 
-.markdown-editor .markdown-editor-inner-context {
-  border: 0;
-  box-shadow: none;
-  border-radius: 0px 0px 0px 4px;
-}
-
-.comment-submitter {
+// Comment bubble
+task-comments-viewer .comment .comment-bubble {
   display: flex;
+  flex: 1;
+  background: $comment-bubble-color;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  line-height: 1.5em;
+  .comment-text {
+    margin: 0 auto 0 $comment-text-padding;
+    padding-right: $comment-text-padding;
+  }
+  .markdown-to-html > *:last-child {
+    margin-bottom: 0px;
+  }
+  img {
+    border-radius: 1em;
+  }
+  .delete-comment {
+    align-self: flex-start;
+    font-style: normal;
+    font-size: 1.6em;
+    margin-right: $comment-text-padding;
+  }
+}
+task-comments-viewer .comment.comment-by-other-user .comment-bubble {
+  background: $comment-bubble-color-other-user;
+  &, .delete-comment {
+    color: $text-color;
+  }
+}
+task-comments-viewer .comment .comment-bubble .delete-comment:hover {
+  color: lighten(#B71C1C, 15%);
+  cursor: pointer;
+}
+
+// Read receipts
+task-comments-viewer .comment .read-receipt {
+  @extend .small;
+  @extend .text-muted;
+  @extend .text-right;
+  width: 100%;
+}
+
+// Footer
+task-comments-viewer .panel-footer {
+  padding: 0;
+  font-size: 15px;
+}
+
+// Editor & submitter
+task-comments-viewer .markdown-editor .markdown-editor-inner-context {
+  border: 0;
+  width: 100%;
+  box-shadow: none;
+  border-radius: 0px 0px 4px 4px;
+  min-height: 54px;
+}
+task-comments-viewer .comment-submitter {
+  display: flex;
+  word-break: break-all;
+  hyphens: auto;
   .markdown-editor {
     padding: 0;
-  }
-  .send-button-wrapper {
-    padding-right: 0;
-    padding-left: 0;
-    .btn {
-      margin-top: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 0px 0px 2px 0px;
-      border-color: #337ab7;
-    }
+    width: 100%;
   }
 }

@@ -1,0 +1,69 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="input-group">
+      <input type="text" class="form-control" ng-model="filters.studentName" ng-change="studentNameChanged()" placeholder="Search students...">
+      <span class="input-group-btn">
+        <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOptions" btn-checkbox>
+          <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
+        </button>
+      </span><!--/search-options-toggle-->
+    </div><!--/search-->
+  </div>
+  <form class="panel-body panel-collapseable search-options" ng-show="showSearchOptions">
+    <div class="form-group task-definition">
+      <label>Task Definition</label>
+      <div class="input-group col-sm-12">
+        <select
+          ng-model="filters.taskDefinitionIdSelected"
+          ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
+          ng-change="taskDefinitionIdChanged()"
+          autofocus="{{autofocus.onTaskDefinitionSelect}}"
+          class="form-control input-md">
+          <option value="" ng-hide="!isTaskDefMode">All task definitions</option>
+        </select>
+      </div>
+      <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
+    </div><!--/task-definition-->
+    <div class="form-group tutorial">
+      <label>Tutorials</label>
+      <div class="input-group col-sm-12">
+        <select
+          ng-model="filters.tutorialIdSelected"
+          ng-options="t.id as t.description for t in tutorials | orderBy:'abbreviation'"
+          ng-change="tutorialIdChanged()"
+          class="form-control input-md">
+        </select>
+      </div>
+      <p class="help-block">You can choose to display submissions from all tutorials or just your tutorials.</p>
+    </div><!--/tutorial-->
+  </form><!--/search-options-->
+  <ul class="list-group">
+    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
+      id="{{task.taskKeyToIdString()}}"
+      ng-click="setSelectedTask(task)"
+      ng-class="{selected: isSelectedTask(task)}"
+      ng-repeat="task in filteredTasks">
+      <div class="task-data">
+        <h4 class="list-group-item-heading">
+          {{task.project().name}}
+        </h4>
+        <p class="list-group-item-text">
+          {{task.definition.abbreviation}} - {{task.definition.name}}
+        </p>
+      </div><!--/task-data-->
+      <div class="task-badges">
+        <span class="task-badges-item">
+          <status-icon status="task.status"></status-icon>
+        </span><!--/task-status-->
+        <span class="task-badges-item" ng-show="task.num_new_comments > 0">
+          <span class="new-comments-badge" tooltip="You have {{task.num_new_comments}} new comment{{task.num_new_comments > 1 ? 's' : ''}}" tooltip-append-to-body="true">
+            {{task.num_new_comments}}
+          </span>
+        </span><!--/new-comments-badge-->
+      </div><!--/badges-->
+    </li><!--/task-->
+    <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
+      No tasks to display.
+    </li>
+  </ul>
+</div>

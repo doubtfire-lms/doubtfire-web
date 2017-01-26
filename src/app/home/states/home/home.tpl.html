@@ -1,4 +1,4 @@
-<div id="home">
+<div id="home" class="container-fixed-lg">
   <div class="text-center welcome-to-doubtfire clearfix">
     <i class="logo"></i>
     <h1> {{externalName}}</h1>
@@ -17,7 +17,7 @@
             <h4 class="panel-title">Units You Teach</h4>
           </div>
           <div class="list-group">
-            <a ng-repeat="unitRole in unitRoles" ui-sref="units#show({unitRole: unitRole.id})" class="list-group-item clearfix">
+            <a ng-repeat="unitRole in unitRoles" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item clearfix">
               <div>
                 <i class="fa fa-pencil"></i>
                 <h4 class="list-group-item-heading">{{unitRole.unit_name}} <small>{{showDate(unitRole.start_date)}}</small></h4>
@@ -64,14 +64,14 @@
             <h4 class="panel-title">Administration</h4>
           </div>
           <div class="list-group">
-            <a href="#/admin/units" class="list-group-item clearfix">
+            <a ui-sref="admin/units" class="list-group-item clearfix">
               <div>
                 <i class="fa fa-university"></i>
                 <h4 class="list-group-item-heading">Manage Units</h4>
                 <p class="list-group-item-text">Add new units, or modify existing units you have convenor access to.</p>
               </div>
             </a>
-            <a href="#/admin/users" class="list-group-item clearfix">
+            <a ui-sref="admin/users" class="list-group-item clearfix">
               <div>
                 <i class="fa fa-user"></i>
                 <h4 class="list-group-item-heading">Manage Users</h4>

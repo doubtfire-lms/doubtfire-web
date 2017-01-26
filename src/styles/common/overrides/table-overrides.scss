@@ -7,6 +7,8 @@ table.table-pointer {
   }
 }
 
-table td {
-  vertical-align: middle !important;
+table > tbody > tr {
+  & > td, & > th {
+    vertical-align: middle !important;
+  }
 }

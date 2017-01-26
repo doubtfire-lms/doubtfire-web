@@ -48,14 +48,9 @@
   </head>
   <body>
     <div ui-view="header"></div>
-    <div class="breadcrumb-container-wrapper">
-      <div ui-view="main" class="container-fluid container-fixed-lg"></div>
-    </div>
-
+    <div ui-view="main" class="container-fluid"></div>
     <alert-list> </alert-list>
-
     <!-- compiled JS --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
-
   </body>
 </html>

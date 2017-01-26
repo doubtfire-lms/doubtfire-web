@@ -1,38 +1,45 @@
 #
 # Controllers and providers related to the header/nav bar
 #
-angular.module('doubtfire.common.header', [])
-
-.controller("BasicHeaderCtrl", ($scope, $state, $modal, User, ExternalName, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser, headerService, unitService, projectService, dateService) ->
-  $scope.menus = headerService.getMenus()
+angular.module('doubtfire.common.header', [
+  'doubtfire.common.header.unit-dropdown'
+])
+.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, $modal, AboutDoubtfireModal, UserNotificationSettingsModal, UserSettingsModal, currentUser) ->
   $scope.currentUser = currentUser.profile
-  $scope.showDate = dateService.showDate
 
-  # Global Units Menu
-  unitService.getUnitRoles (roles) ->
-    $scope.unitRoles = roles
-  projectService.getProjects (projects) ->
-    $scope.projects = projects
-
-  $scope.isUniqueUnitRole = (unit) ->
-    units = (item for item in $scope.unitRoles when item.unit_id is unit.unit_id)
-    # teaching userRoles will default to tutor role if both convenor and tutor
-    units.length == 1 || unit.role == "Tutor"
-
-  $scope.openUserSettings = () ->
+  #
+  # Opens the user settings modal
+  #
+  $scope.openUserSettings = ->
     UserSettingsModal.show $scope.currentUser
 
+  #
+  # Opens the notification settings modal
+  #
   $scope.openNotificationSettings = ->
     UserNotificationSettingsModal.show $scope.currentUser
 
+  #
+  # Opens the about DF modal
+  #
   $scope.openAboutModal = ->
     AboutDoubtfireModal.show()
 
-  # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
-)
+  #
+  # Updates the context of the selected unit
+  #
+  updateSelectedUnit = (event, data) ->
+    context = data.context
+    return unless context?
+    $scope.unit =
+      code: context.unit_code
+      name: context.unit_name
+    $scope[if context.role? then "unitRole" else "project"] = context
 
-.controller("ErrorHeaderCtrl", ($scope, $state, $modal, currentUser, headerService) ->
-  $scope.menus = headerService.getMenus()
-  $scope.currentUser = currentUser.profile
+  $scope.task = $state.current.data.task
+
+  $rootScope.$on '$stateChangeSuccess', (event, toState) ->
+    $scope.task = toState.data.task
+  $rootScope.$on 'UnitRoleChanged', updateSelectedUnit
+  $rootScope.$on 'ProjectChanged', updateSelectedUnit
 )

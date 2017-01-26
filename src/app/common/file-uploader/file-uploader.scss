@@ -12,6 +12,13 @@
   $ban-icon:      $fa-var-ban;
   $download-icon: $fa-var-download;
 
+  .upload-commit-actions {
+    margin-top: 1em;
+    .btn-upload {
+      margin-right: 1.5ex;
+    }
+  }
+
   .well.drop {
     border: 3px #bbb dotted;
     font-size: larger;
@@ -60,7 +67,7 @@
     font-weight: bold;
     color: #555;
   }
-  p.file-registered {
+  .file-registered {
     font-size: 1.2em;
     display: inline-block;
     i {
@@ -78,6 +85,9 @@
   // Upload area/result
   .upload-area {
     .progress-area {
+      .progress {
+        margin-bottom: 0;
+      }
       .icons {
         width: 100%;
         display: flex;
@@ -89,14 +99,22 @@
       i {
         flex-basis: auto !important;
         margin-right: 1ex;
-        font-size: 3em;
-        margin-bottom: 1em;
+        font-size: 2em;
+        margin-bottom: 0.5em;
       }
     }
     .result-area {
+      .result-text {
+        margin-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 34px;
+      }
       i {
-        font-size: 6em;
+        font-size: 2em;
         @include animation-grow;
+        margin-right: 1ex;
       }
       .retry-options {
         font-weight: bolder;

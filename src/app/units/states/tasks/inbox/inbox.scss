@@ -1,0 +1,6 @@
+.task-inbox {
+  height: $main-view-max-height;
+  & > *, & > * > .panel {
+    height: 100%;
+  }
+}

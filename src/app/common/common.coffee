@@ -9,4 +9,6 @@ angular.module("doubtfire.common", [
   'doubtfire.common.status-icon'
   'doubtfire.common.markdown-editor'
   'doubtfire.common.alert-list'
+  # New
+  'doubtfire.common.pdf-viewer'
 ])

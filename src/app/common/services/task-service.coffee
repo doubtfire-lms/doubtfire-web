@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, currentUser) ->
   #
   # The unit service object
   #
@@ -293,7 +293,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.deleteTask = (task, unit, callback = null) ->
     ConfirmationModal.show "Delete Task #{task.abbreviation}",
       'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
-      () ->
+      ->
         promise = doDeleteTask task, unit, null
         ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
@@ -301,7 +301,7 @@ angular.module("doubtfire.common.services.tasks", [])
     _.indexOf(taskService.statusKeys, status)
 
   # Return a list of all the the status values and icons
-  taskService.allStatusData = () ->
+  taskService.allStatusData = ->
     result = []
     angular.forEach taskService.statusKeys, (sk) ->
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
@@ -337,7 +337,7 @@ angular.module("doubtfire.common.services.tasks", [])
       alertService.add("info", "Status change was not changed.", 4000)
 
 
-  taskService.updateTaskStatus = (unit, project, task, status) ->
+  taskService.updateTaskStatus = (unit, project, task, status, success, failure) ->
     oldStatus = task.status
     updateFunc = ->
       Task.update { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status, grade: task.grade, quality_pts: task.quality_pts },
@@ -346,11 +346,13 @@ angular.module("doubtfire.common.services.tasks", [])
           taskService.processTaskStatusChange unit, project, task, status, value
           analyticsService.event 'Task Service', 'Updated Task Status', status
           analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
+          success?()
         # Fail
         (value) ->
           task.status = oldStatus
           alertService.add("danger", value.data.error, 6000)
           analyticsService.event 'Task Service', 'Failed to Update Task Status', status
+          failure?()
     # Must provide grade if graded and in a final complete state
     if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
       GradeTaskModal.show(task).result.then(
@@ -360,7 +362,7 @@ angular.module("doubtfire.common.services.tasks", [])
           task.quality_pts = response.qualityPts
           updateFunc()
         # Grade was not selected (modal was dismissed)
-        () ->
+        ->
           task.status = oldStatus
           alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
       )
@@ -387,12 +389,47 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.taskIsGraded = (task) ->
     task? and task.definition.is_graded and task.grade?
 
+  taskService.taskKeyFromString = (taskKeyString) ->
+    taskKeyComponents = taskKeyString?.split('/')
+    if taskKeyComponents
+      studentId = _.first(taskKeyComponents)
+      taskDefAbbr = _.last(taskKeyComponents)
+      return unless _.isString(studentId) && _.isString(taskDefAbbr)
+    {
+      studentId: studentId
+      taskDefAbbr: taskDefAbbr
+    }
+
+  taskService.taskKeyToUrlString = (task) ->
+    key = task.taskKey()
+    "#{key.studentId}/#{key.taskDefAbbr}"
+
+  taskService.taskKeyToIdString = (task) ->
+    key = task.taskKey()
+    "task-key-#{key.studentId}-#{key.taskDefAbbr}"
+
+  taskService.taskKey = (task) ->
+    {
+      studentId: task.project().student_id
+      taskDefAbbr: task.definition.abbreviation
+    }
+
+  taskService.hasTaskKey = (task, key) ->
+    _.isEqual(task?.taskKey(), key)
+
+  # Map extra front-end details to comment
+  taskService.mapComment = (comment) ->
+    initials = comment.author.name.split(" ")
+    comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
+    comment.author_is_me = comment.author.id == currentUser.profile.id
+    comment
+
   taskService.addComment = (task, textString, success, failure) ->
     TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
       (response) ->
-        unless task.comments
+        unless task.comments?
           task.comments = []
-        task.comments.unshift response
+        task.comments.unshift(taskService.mapComment(response))
         if success? and _.isFunction success
           success(response)
         analyticsService.event "View Task Comments", "Added new comment"

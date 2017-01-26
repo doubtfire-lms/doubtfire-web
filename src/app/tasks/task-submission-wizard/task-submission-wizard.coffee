@@ -120,7 +120,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       revertChanges($scope.task)
 
     # Allow upload
-    $scope.recreateTask = () ->
+    $scope.recreateTask = ->
       # No callback
       taskService.recreatePDF $scope.task, null
 
@@ -130,11 +130,11 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     $scope.team = {members: []}
     $scope.payload = { }
 
-    $scope.mapTeamToPayload = () ->
+    $scope.mapTeamToPayload = ->
       total = groupService.groupContributionSum $scope.team.members
       _.map $scope.team.members, (member) -> { project_id: member.project_id, pct: (100 * member.rating / total).toFixed(0), pts: member.rating  }
 
-    $scope.onBeforeUpload = () ->
+    $scope.onBeforeUpload = ->
       if groupService.isGroupTask($scope.task)
         $scope.payload.contributions =  $scope.mapTeamToPayload()
       else

@@ -1,0 +1,23 @@
+<div class="container">
+  <tabset class="tabset-icon">
+    <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab-heading>{{tab.title}}</tab-heading>
+    </tab>
+  </tabset><!--/tabs-->
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        {{activeTab.title}}
+      </h3>
+    </div>
+    <div class="panel-body">
+      {{activeTab.subtitle}}
+    </div>
+    <unit-stats-download unit="unit" ng-if="activeTab === tabs.csvStatDownload"> </unit-stats-download>
+    <task-summary-stats unit="unit" ng-if="unit.students && activeTab === tabs.taskSummaryStats"></task-summary-stats>
+    <task-status-stats unit="unit" ng-if="activeTab === tabs.taskStatusStats"></task-status-stats>
+    <unit-target-grade-stats unit="unit" ng-if="activeTab === tabs.targetGradeStats"></unit-target-grade-stats>
+    <task-completion-stats unit="unit" ng-if="activeTab === tabs.taskCompletionStats"></task-completion-stats>
+    <unit-achievement-stats unit="unit" ng-if="activeTab === tabs.achievementStats"></unit-achievement-stats>
+  </div><!--/tab-contents-panel-->
+</div>

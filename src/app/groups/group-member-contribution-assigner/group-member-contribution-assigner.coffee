@@ -14,7 +14,7 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     team: '=' #out parameter
 
   controller: ($scope, gradeService, projectService, groupService, GroupMember) ->
-    $scope.selectedGroupset = $scope.task.definition.group_set
+    $scope.selectedGroupSet = $scope.task.definition.group_set
     $scope.selectedGroup = projectService.getGroupForTask $scope.project, $scope.task
 
     $scope.memberSortOrder = 'student_name'
@@ -44,8 +44,8 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
 
     $scope.gradeFor = gradeService.gradeFor
 
-    if $scope.selectedGroup && $scope.selectedGroupset
-      GroupMember.query { unit_id: $scope.project.unit_id, group_set_id: $scope.selectedGroupset.id, group_id: $scope.selectedGroup.id }, (members) ->
+    if $scope.selectedGroup && $scope.selectedGroupSet
+      GroupMember.query { unit_id: $scope.project.unit_id, group_set_id: $scope.selectedGroupSet.id, group_id: $scope.selectedGroup.id }, (members) ->
         $scope.team.members = members
         # Need the '+' to convert to number
         $scope.percentages.warning = +(25 / members.length).toFixed()

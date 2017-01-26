@@ -21,7 +21,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     #
     # Compile portfolio
     #
-    $scope.toggleCompileProject = () ->
+    $scope.toggleCompileProject = ->
       $scope.project.compile_portfolio = not $scope.project.compile_portfolio
       Project.update { id: $scope.project.project_id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
         $scope.portfolioIsCompiling = true
@@ -30,7 +30,7 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     #
     # PDF Local Funcs
     #
-    $scope.deletePortfolio = () ->
+    $scope.deletePortfolio = ->
       $scope.portfolioSubmission.delete {
         id: $scope.project.project_id
       }, (response) ->

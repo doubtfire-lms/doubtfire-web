@@ -85,7 +85,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       return _.slice(result, 0, 5)
 
     $scope.topTasks = []
-    refreshTopTasks = () ->
+    refreshTopTasks = ->
       $scope.topTasks.length = 0
       $scope.topTasks = calculateTopTasks($scope.project.activeTasks())
 
