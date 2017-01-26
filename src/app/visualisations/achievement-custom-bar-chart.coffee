@@ -656,7 +656,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
       iloTargets[0] = { offset: 0, height: targets[ilo.id][0], color: gradeService.gradeColors.P }
       iloTargets[1] = { offset: iloTargets[0].offset + iloTargets[0].height, height: targets[ilo.id][1], color: gradeService.gradeColors.C  }
       iloTargets[2] = { offset: iloTargets[1].offset + iloTargets[1].height, height: targets[ilo.id][2], color: gradeService.gradeColors.D  }
-      iloTargets[3] = { offset: iloTargets[2].offset + iloTargets[2].height, height: targets[ilo.id][2], color: gradeService.gradeColors.HD }
+      iloTargets[3] = { offset: iloTargets[2].offset + iloTargets[2].height, height: targets[ilo.id][3], color: gradeService.gradeColors.HD }
 
       if iloTargets[3].offset + iloTargets[3].height  > max
         max = iloTargets[3].offset + iloTargets[3].height
