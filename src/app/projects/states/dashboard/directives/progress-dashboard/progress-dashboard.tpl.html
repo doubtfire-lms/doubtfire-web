@@ -6,6 +6,18 @@
   </div><!--/panel-heading-->
   <div class="panel-body">
     <div class="col-sm-12 col-xl-6">
+      <div class="card card-sm card-target-grade">
+        <div class="card-heading">
+          <h4>Target Grade</h4>
+        </div><!--/target-grade-heading-->
+        <div class="card-body">
+          <select
+            class="form-control input-lg"
+            ng-model="project.target_grade"
+            ng-options="grade as grades.names[grade] for grade in grades.values"
+            ng-change="updateTargetGrade(project.target_grade)"></select>
+        </div><!--/target-grade-body-->
+      </div><!--/target-grade-card-->
       <div class="card card-lg card-burndown">
         <div class="card-heading">
           <h4>Progress Burndown</h4>
@@ -23,7 +35,7 @@
           <strong class="text-muted">Target</strong>
           line to keep on track.
         </div><!--/burndown-footer-->
-      </div>
+      </div><!--/burndown-card-->
     </div><!--/burndown-column-->
     <div class="col-sm-12 col-xl-6">
       <div class="card card-lg card-pie-chart">
@@ -47,21 +59,7 @@
           left to complete to achieve a
           <strong>{{grades.names[project.target_grade]}}</strong>.
         </div><!--/pie-chart-footer-->
-      </div>
+      </div><!--/pie-chart-card-->
     </div><!--/pie-chart-column-->
-    <div class="col-sm-12 col-xl-6 col-xl-offset-6">
-      <div class="card card-sm card-pie-chart">
-        <div class="card-heading">
-          <h4>Target Grade</h4>
-        </div><!--/target-grade-heading-->
-        <div class="card-body">
-          <select
-            class="form-control input-lg"
-            ng-model="project.target_grade"
-            ng-options="grade as grades.names[grade] for grade in grades.values"
-            ng-change="updateTargetGrade(project.target_grade)"></select>
-        </div><!--/target-grade-body-->
-      </div>
-    </div><!--/target-grade-->
   </div><!--/panel-body-->
 </div>
