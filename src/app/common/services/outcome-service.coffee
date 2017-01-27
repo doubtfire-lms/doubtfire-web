@@ -17,6 +17,14 @@ angular.module("doubtfire.common.services.outcome-service", [])
       else
         0
 
+  outcomeService.alignmentLabels = [
+    "The task is slightly related to this outcome",
+    "The task is related to this outcome",
+    "The task is a reasonable example for this outcome",
+    "The task is a strong example of this outcome",
+    "The task is the best example of this outcome",
+  ]
+
   outcomeService.individualTaskStatusFactor = (project, task) ->
     (task_definition_id) ->
       if task.definition.id == task_definition_id
