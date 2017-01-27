@@ -43,7 +43,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     # Checks for enter keydown
     $scope.enterDown = (editor) ->
-
+      $scope.addComment()
       return CodeMirror.Pass
 
     # Submits a new comment
