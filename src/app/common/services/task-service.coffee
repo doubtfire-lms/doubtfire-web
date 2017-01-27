@@ -271,20 +271,29 @@ angular.module("doubtfire.common.services.tasks", [])
       help: taskService.helpDescription(status)
     }
 
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysFromTarget = (task) ->
-    dueDate = new Date(task.definition.target_date)
-    now = new Date()
-    diffTime = now.getTime() - dueDate.getTime()
-    diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
+  # Return number of days until task hits target date, or false if already
+  # completed
+  taskService.daysUntilTargetDate = (task) ->
+    return false if task.status == 'complete'
+    moment(task.definition.target_date).diff(moment(), 'days')
+
+  # Return number of days until task is due, or false if already completed
+  taskService.daysUntilDueDate = (task) ->
+    return false if !task.definition.due_date? || task.status == 'complete'
+    moment(task.definition.due_date).diff(moment(), 'days')
+
+  # Return number of days task is overdue from target, or false if not
+  taskService.daysPastTargetDate = (task) ->
+    return false if task.status == 'complete'
+    diffDays = moment().diff(moment(task.definition.target_date), 'days')
+    return false if !diffDays? || diffDays <= 0
     diffDays
 
-
   # Return number of days task is overdue, or false if not overdue
-  taskService.daysOverdue = (task) ->
-    return false if task.status == 'complete'
-    diffDays = taskService.daysFromTarget(task)
-    return false if diffDays <= 0
+  taskService.daysPastDueDate = (task) ->
+    return false if task.status == 'complete' || !task.definition.due_date?
+    diffDays = moment().diff(moment(task.definition.due_date), 'days')
+    return false if !diffDays? || diffDays <= 0
     diffDays
 
   # Trigger for new status

@@ -86,16 +86,24 @@ angular.module("doubtfire.common.services.projects", [])
     task.unit = project.unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
+    task.isToBeCompletedSoon = ->
+      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() > 0
     task.isDueSoon = ->
-      task.daysFromTarget() <= 7
+      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() > 0
     task.isOverdue = ->
-      task.daysOverdue() > 0
+      task.daysPastDueDate() > 0
+    task.isPastTargetDate = ->
+      task.daysPastTargetDate() > 0
     task.isDueToday = ->
-      task.daysFromTarget() == 0
-    task.daysOverdue = ->
-      taskService.daysOverdue(task)
-    task.daysFromTarget = ->
-      taskService.daysFromTarget(task)
+      task.daysUntilDueDate() == 0
+    task.daysPastDueDate = ->
+      taskService.daysPastDueDate(task)
+    task.daysPastTargetDate = ->
+      taskService.daysPastTargetDate(task)
+    task.daysUntilDueDate = ->
+      taskService.daysUntilDueDate(task)
+    task.daysUntilTargetDate = ->
+      taskService.daysUntilTargetDate(task)
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
     task.updateTaskStatus = (project, new_stats) ->

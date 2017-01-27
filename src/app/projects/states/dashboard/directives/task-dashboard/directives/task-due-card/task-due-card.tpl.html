@@ -1,0 +1,62 @@
+<div class="card card-sm" ng-show="task.isDueSoon()">
+  <div class="card-heading text-danger">
+    <h4>Due Soon</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      This task's due date is {{task.definition.due_date | date}}.
+      You must complete this task before then, otherwise your tutor may not assess
+      your work.
+    </p>
+    <p class="text-muted">
+      Tasks are only considered <strong>Completed</strong> once your tutor has
+      <strong>Discussed</strong> your work with you.
+    </p>
+  </div>
+</div><!--/due-card-->
+<div class="card card-sm" ng-show="task.isToBeCompletedSoon()">
+  <div class="card-heading">
+    <h4>Aim To Complete Soon</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      This task's target completion date is {{task.definition.target_date | date}}.
+      You should aim to complete this task before then to keep your progress on track.
+    </p>
+    <p class="text-muted">
+      Tasks are only considered <strong>completed</strong> once your tutor has
+      <strong>discussed</strong> your work with you.
+    </p>
+  </div>
+</div><!--/target-card-->
+<div class="card card-sm" ng-show="task.isPastTargetDate()">
+  <div class="card-heading text-danger">
+    <h4>Past Target By {{task.daysPastTargetDate()}} Day{{task.daysPastTargetDate() > 1 ? 's' : ''}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      You should have completed this task by {{task.definition.target_date | date}}.
+      Try and finish it as soon as possible by focusing on this task and completing it
+      to not fall behind.
+    </p>
+    <p class="text-muted">
+      Tasks are only considered <strong>completed</strong> once your tutor has
+      <strong>discussed</strong> your work with you.
+    </p>
+  </div>
+</div><!--/past-target-card-->
+<div class="card card-sm" ng-show="task.isOverdue()">
+  <div class="card-heading text-danger">
+    <h4>Overdue By {{task.daysPastDueDate()}} Day{{task.daysPastDueDate() > 1 ? 's' : ''}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      You should have completed this task by {{task.definition.due_date | date}}.
+      As this task is overdue, there is no guarantee that your tutor will assess your work.
+    </p>
+    <p class="text-muted">
+      Tasks are only considered <strong>Completed</strong> once your tutor has
+      <strong>Discussed</strong> your work with you.
+    </p>
+  </div>
+</div><!--/overdue-card-->
