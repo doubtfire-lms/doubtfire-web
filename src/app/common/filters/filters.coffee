@@ -244,6 +244,7 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('humanizedDate', ($filter) ->
   (input) ->
+    return unless input?
     moment(input).calendar(null, {
       sameDay: '',
       nextDay: '[tomorrow]',
