@@ -57,6 +57,13 @@ angular.module("doubtfire.common.services.tasks", [])
     'fail'
   ]
 
+  taskService.pdfRegeneratableStatuses = [
+    'demonstrate'
+    'ready_to_mark'
+    'discuss'
+    'complete'
+  ]
+
   taskService.markedStatuses = [
     'redo'
     'fail'

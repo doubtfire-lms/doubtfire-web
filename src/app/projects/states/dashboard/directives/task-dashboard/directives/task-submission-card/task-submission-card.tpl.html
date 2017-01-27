@@ -6,49 +6,48 @@
     </h4>
   </div><!--/card-heading-->
   <div class="card-body" >
-    <p>
-      <span ng-show="submission.isUploaded">
-        You can choose to download your submission PDF and submitted files using the
-        following buttons below.
-      </span>
-      <span ng-show="submission.isProcessing">
-        Your submission is being processed and will be avaliable to view soon. You will also
-        be able to download your most recently submitted files.
-      </span>
-      You uploaded this submission {{task.submission_date | humanizedDate}}.
+    <p ng-show="submission.isProcessing">
+      Your submission is being processed and will be avaliable to view soon. You will also
+      be able to download your most recently submitted files.
+    </p>
+    <p ng-show="submission.isUploaded">
+      You can choose to download your <em ng-show="submission.isProcessing">previous</em>
+      submission or the files you uploaded below.
+    </p>
+    <p ng-show="submission.isUploaded">
+      You uploaded this submission <strong>{{task.submission_date | humanizedDate}}</strong>.
     </p>
     <p ng-show="canRegeneratePdf">
       If you feel there has been an error in your submission, you can request Doubtfire to
-      regenerate your submission under the "Options" dropdown menu.
+      regenerate your submission under the "Actions" dropdown menu.
     </p>
     <p ng-show="canReuploadEvidence">
       If you would like to submit alternate evidence for use in your portfolio, you can
-      upload alternate files under the "Options" dropdown menu.
+      upload alternate files under the "Actions" dropdown menu.
     </p>
   </div><!--/card-body-->
   <div class="card-footer clearfix">
-    <a
-      href="{{urls.pdf}}"
-      ng-show="!submission.isProcessing && submission.isUploaded"
-      target="_blank"
-      class="btn btn-primary">
-      <i class="fa fa-file-pdf-o"></i>
-      <i class="fa fa-download"></i>
-      Download PDF
-    </a><!--/pdf-download-button-->
-    <a
-      href="{{urls.files}}"
-      ng-show="!submission.isProcessing && submission.isUploaded"
-      target="_blank"
-      class="btn btn-primary">
-      <i class="fa fa-file-zip-o"></i>
-      <i class="fa fa-download"></i>
-      Download Files
-    </a><!--/file-download-button-->
-    <div class="task-status pull-right" dropdown>
+    <div class="btn-group" ng-show="submission.isUploaded" dropdown>
+      <a href="{{urls.pdf}}" target="_blank" class="btn btn-primary">
+        <i class="fa fa-file-pdf-o"></i>
+        <i class="fa fa-download"></i>
+        Download Submission
+      </a>
+      <button class="btn btn-primary" dropdown-toggle>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="{{urls.files}}" target="_blank">
+            Download Uploaded Files
+          </a>
+        </li>
+      </ul>
+    </div><!--/download-submission-->
+    <div class="task-status pull-right" ng-show="canReuploadEvidence || canRegeneratePdf" dropdown>
       <button type="button" class="btn btn-default" dropdown-toggle>
-        Options <span class="caret"></span>
-      </button><!--/select-button-->
+        Actions <span class="caret"></span>
+      </button>
       <ul class="dropdown-menu" dropdown-menu>
         <li ng-show="canReuploadEvidence">
           <a>Upload Alternate Files</a>
@@ -56,7 +55,7 @@
         <li ng-show="canRegeneratePdf">
           <a>Regenerate PDF</a>
         </li>
-      </ul><!--/select-options-->
+      </ul>
     </div><!--/more-dropdown-->
   </div><!--/card-footer-->
 </div><!--/card-->

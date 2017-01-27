@@ -14,10 +14,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     reapplySubmissionData = ->
       $scope.task.getSubmissionDetails(->
         $scope.canReuploadEvidence = _.includes(taskService.terminalStatuses, $scope.task.status)
-        $scope.canRegeneratePdf = $scope.canReuploadEvidence && $scope.task.has_pdf
+        $scope.canRegeneratePdf = _.includes(taskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.has_pdf
         $scope.submission = {
-          isProcessing: !$scope.task.has_pdf && $scope.task.processing_pdf
-          isUploaded: $scope.task.has_pdf && !$scope.task.processing_pdf
+          isProcessing: $scope.task.processing_pdf
+          isUploaded: $scope.task.has_pdf
         }
         $scope.urls = {
           pdf: TaskFeedback.getTaskUrl($scope.task)

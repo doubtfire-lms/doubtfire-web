@@ -19,8 +19,10 @@ task-status-card .card .card-heading {
         margin-right: 1ex;
       }
       ul {
-        width: 90%;
         margin-top: -1px;
+      }
+      ul li a {
+        line-height: 250%;
       }
     }
   }
