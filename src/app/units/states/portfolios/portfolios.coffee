@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation, taskService) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
 
   $scope.portfolioDownloadUrl = Unit.getPortfoliosUrl $scope.unit
@@ -22,6 +22,9 @@ angular.module('doubtfire.units.states.portfolios', [])
 
   $scope.studentFilter = 'allStudents'
   $scope.portfolioFilter = 'withPortfolio'
+
+  $scope.statusClass = taskService.statusClass
+  $scope.statusText = taskService.statusText
 
   refreshCharts = Visualisation.refreshAll
 

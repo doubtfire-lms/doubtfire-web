@@ -239,7 +239,7 @@ angular.module("doubtfire.common.services.units", [])
   #
   unitService.tutorialDescription = (tutorial) ->
     timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-    "#{tutorial.meeting_day}s at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+    "#{tutorial.meeting_day.slice(0,3)} at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
 
   #
   # Adds additional unit-related functionality to groups
