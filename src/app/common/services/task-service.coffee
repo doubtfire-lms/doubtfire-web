@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, currentUser) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser) ->
   #
   # The unit service object
   #
@@ -62,6 +62,11 @@ angular.module("doubtfire.common.services.tasks", [])
     'ready_to_mark'
     'discuss'
     'complete'
+  ]
+
+  taskService.submittableStatuses = [
+    'ready_to_mark'
+    'need_help'
   ]
 
   taskService.markedStatuses = [
@@ -301,13 +306,26 @@ angular.module("doubtfire.common.services.tasks", [])
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
     requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
     if requiresFileUpload
+      oldStatus = task.status
       task.status = status
-      # TODO: (@alexcu) Show the modal upload
-      console.error("TODO: Present upload modal")
+      UploadSubmissionModal.show(task).result.then(
+        # Grade was selected (modal closed with result)
+        (response) ->
+          # TODO: (@alexcu) Do something on success
+          null
+        # Grade was not selected (modal was dismissed)
+        (dismissed) ->
+          task.status = oldStatus
+          alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
+      )
     else
       taskService.updateTaskStatus(task.unit(), task.project(), task, status)
       asUser = if unitRole? then unitRole.role else 'Student'
       analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
+
+  # Whether or not new submissions can be made on a task
+  taskService.canReuploadEvidence = (task) ->
+    _.includes(taskService.terminalStatuses, task.status)
 
   doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (

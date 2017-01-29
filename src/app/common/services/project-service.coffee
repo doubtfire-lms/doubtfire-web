@@ -86,6 +86,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.unit = project.unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
+    task.canReuploadEvidence = ->
+      taskService.canReuploadEvidence(task)
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() > 0
     task.isDueSoon = ->

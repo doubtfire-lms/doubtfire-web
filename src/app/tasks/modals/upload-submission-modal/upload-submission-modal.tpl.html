@@ -1,0 +1,30 @@
+<div class="upload-submission-modal">
+  <div class="modal-header">
+    <h3>Submit
+      <strong>{{task.definition.abbreviation}}</strong> as
+      <select
+        class="form-control input-lg submission-type"
+        ng-change="submissionTypeChanged()"
+        ng-model="submissionType"
+        ng-options="type.id as type.label for type in submissionTypes">
+      </select>
+    </h3>
+  </div>
+  <div class="modal-body">
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger pull-left" ng-click="$dismiss()">
+      <i class="fa fa-times"></i> Cancel Submission
+    </button>
+    <button class="btn btn-default" ng-click="goToNextState()">
+      <i class="fa fa-arrow-left"></i> Back
+    </button>
+    <button class="btn btn-default" ng-click="goToPreviousState()">
+      Next <i class="fa fa-arrow-right"></i>
+    </button>
+    <button class="btn btn-success" ng-click="$close()">
+      <i class="fa fa-upload"></i> Upload Submission
+    </button>
+  </div>
+</div>
