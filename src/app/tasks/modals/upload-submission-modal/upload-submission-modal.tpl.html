@@ -9,22 +9,61 @@
         ng-options="type.id as type.label for type in submissionTypes">
       </select>
     </h3>
-  </div>
+  </div><!--/modal-header-->
   <div class="modal-body">
-
-  </div>
+    <div
+      class="state state-group"
+      ng-class="{'state-hidden-left': isHidden('group').left,
+                 'state-hidden-right': isHidden('group').right}">
+      Group
+    </div><!--/state-group-->
+    <div
+      class="state state-files"
+      ng-class="{'state-hidden-left': isHidden('files').left,
+                 'state-hidden-right': isHidden('files').right}">
+      Files
+    </div><!--/state-files-->
+    <div
+      class="state state-alignment"
+      ng-class="{'state-hidden-left': isHidden('alignment').left,
+                 'state-hidden-right': isHidden('alignment').right}">
+      alignment
+    </div><!--/state-alignment-->
+    <div
+      class="state state-comments"
+      ng-class="{'state-hidden-left': isHidden('comments').left,
+                 'state-hidden-right': isHidden('comments').right}">
+      comments
+    </div><!--/state-comments-->
+  </div><!--/modal-body-->
   <div class="modal-footer">
-    <button class="btn btn-danger pull-left" ng-click="$dismiss()">
+    <button
+      class="btn btn-danger pull-left"
+      ng-click="$dismiss()"
+      ng-disabled="shouldDisableBtn.cancel()"
+      ng-show="shouldShowBtn.cancel()">
       <i class="fa fa-times"></i> Cancel Submission
-    </button>
-    <button class="btn btn-default" ng-click="goToNextState()">
+    </button><!--/cancel-button-->
+    <button
+      class="btn btn-default"
+      ng-click="goToState.previous()"
+      ng-disabled="shouldDisableBtn.back()"
+      ng-show="shouldShowBtn.back()">
       <i class="fa fa-arrow-left"></i> Back
-    </button>
-    <button class="btn btn-default" ng-click="goToPreviousState()">
+    </button><!--/back-button-->
+    <button
+      class="btn btn-default"
+      ng-click="goToState.next()"
+      ng-disabled="shouldDisableBtn.next()"
+      ng-show="shouldShowBtn.next()">
       Next <i class="fa fa-arrow-right"></i>
-    </button>
-    <button class="btn btn-success" ng-click="$close()">
+    </button><!--/next-button-->
+    <button
+      class="btn btn-success"
+      ng-click="$close()"
+      ng-disabled="shouldDisableBtn.upload()"
+      ng-show="shouldShowBtn.upload()">
       <i class="fa fa-upload"></i> Upload Submission
-    </button>
-  </div>
+    </button><!--/upload-button-->
+  </div><!--/modal-footer-->
 </div>

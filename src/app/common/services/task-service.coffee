@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -276,6 +276,28 @@ angular.module("doubtfire.common.services.tasks", [])
       help: taskService.helpDescription(status)
     }
 
+  # Return whether task is a group task
+  taskService.isGroupTask = (task) ->
+    groupService.isGroupTask(task)
+
+  # Return whether student is in a group for this group task
+  taskService.inAGroupForTask = (task) ->
+    taskService.groupForTask(task)?
+
+  # Return the group allocated to this task
+  taskService.groupForTask = (task) ->
+    projectService.getGroupForTask(task.project(), task)
+
+  # Returns the alignments for this task
+  taskService.staffAlignmentsForTask = (task) ->
+    filteredAlignments = $filter('taskDefinitionFilter')(task.unit().task_outcome_alignments, task.definition.id)
+    _.chain(filteredAlignments).map((a) ->
+      a.ilo = task.unit().outcome(a.learning_outcome_id)
+      a
+    )
+    .sortBy((a) -> a.ilo.ilo_number)
+    .value()
+
   # Return number of days until task hits target date, or false if already
   # completed
   taskService.daysUntilTargetDate = (task) ->
@@ -409,7 +431,7 @@ angular.module("doubtfire.common.services.tasks", [])
           failure?()
     # Must provide grade if graded and in a final complete state
     if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
-      GradeTaskModal.show(task).result.then(
+      GradeTaskModal.show(task)?.result.then(
         # Grade was selected (modal closed with result)
         (response) ->
           task.grade = response.selectedGrade
