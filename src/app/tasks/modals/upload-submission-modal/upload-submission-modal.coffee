@@ -118,7 +118,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       (states.length - 1) == activeStateIdx()
   }
 
-  # Team for group state
+  # Team for group state (populated by assignment rater)
   $scope.team = { members: [] }
 
   # Maps team data to payload data

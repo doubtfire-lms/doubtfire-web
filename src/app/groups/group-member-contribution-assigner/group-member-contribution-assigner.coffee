@@ -18,7 +18,6 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     $scope.selectedGroup = projectService.getGroupForTask $scope.project, $scope.task
 
     $scope.memberSortOrder = 'student_name'
-    $scope.team.members = []
     $scope.numStars = 5
     $scope.initialStars = 3
 
