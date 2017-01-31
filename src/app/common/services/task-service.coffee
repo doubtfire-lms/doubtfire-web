@@ -322,7 +322,12 @@ angular.module("doubtfire.common.services.tasks", [])
     if requiresFileUpload
       oldStatus = task.status
       task.status = status
-      UploadSubmissionModal.show(task).result.then(
+      modal = UploadSubmissionModal.show(task)
+      # Modal failed to present
+      unless modal?
+        task.status = oldStatus
+        return
+      modal.result.then(
         # Grade was selected (modal closed with result)
         (response) ->
           # TODO: (@alexcu) Do something on success
