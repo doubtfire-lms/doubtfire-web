@@ -280,14 +280,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.isGroupTask = (task) ->
     groupService.isGroupTask(task)
 
-  # Return whether student is in a group for this group task
-  taskService.inAGroupForTask = (task) ->
-    taskService.groupForTask(task)?
-
-  # Return the group allocated to this task
-  taskService.groupForTask = (task) ->
-    projectService.getGroupForTask(task.project(), task)
-
   # Returns the alignments for this task
   taskService.staffAlignmentsForTask = (task) ->
     filteredAlignments = $filter('taskDefinitionFilter')(task.unit().task_outcome_alignments, task.definition.id)

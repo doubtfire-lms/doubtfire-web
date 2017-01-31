@@ -91,9 +91,9 @@ angular.module("doubtfire.common.services.projects", [])
     task.isGroupTask = ->
       taskService.isGroupTask(task)
     task.studentInAGroup = ->
-      taskService.inAGroupForTask(task)
+      task.group()?
     task.group = ->
-      taskService.groupForTask(task)
+      projectService.getGroupForTask(task.project(), task)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.isToBeCompletedSoon = ->
