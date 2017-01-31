@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   UploadSubmissionModal.show = (task) ->
     # Refuse to open modal if group task and not in a group
     if task.isGroupTask() && !task.studentInAGroup()
-      alertService.add('alert', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
+      alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
       return null
     $modal.open
       templateUrl: 'tasks/modals/upload-submission-modal/upload-submission-modal.tpl.html'
