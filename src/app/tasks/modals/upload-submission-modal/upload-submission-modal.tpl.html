@@ -21,7 +21,18 @@
       class="state state-files"
       ng-class="{'state-hidden-left': isHidden('files').left,
                  'state-hidden-right': isHidden('files').right}">
-      Files
+      <file-uploader
+        files="uploader.files"
+        url="uploader.url"
+        payload="uploader.payload"
+        single-drop-zone="true"
+        show-upload-button="false"
+        is-ready="uploader.isReady"
+        initiate-upload="uploader.initiateUpload"
+        on-before-upload="uploader.onBeforeUpload"
+        is-uploading="uploader.isUploading"
+        on-success="uploader.onSuccess"
+        on-complete="uploader.onComplete"></file-uploader>
     </div><!--/state-files-->
     <div
       class="state state-alignment"
@@ -61,8 +72,8 @@
     <button
       class="btn btn-success"
       ng-click="$close()"
-      ng-disabled="shouldDisableBtn.upload()"
-      ng-show="shouldShowBtn.upload()">
+      ng-disabled="shouldDisableBtn.submit()"
+      ng-show="shouldShowBtn.submit()">
       <i class="fa fa-upload"></i> Upload Submission
     </button><!--/upload-button-->
   </div><!--/modal-footer-->

@@ -41,11 +41,18 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   $scope.submissionType = _.find(submissionTypes, { id: idToLoad }).id
 
   # Upload files
-  $scope.upload = {
+  $scope.uploader = {
     url: Task.generateSubmissionUrl($scope.task.project(), $scope.task)
     files: _.each(task.definition.upload_requirements, (file) ->
       { name: file.name, type: file.type }
     )
+    payload: {}
+    isUploading: null # initialised by uploader
+    isReady: null # initialised by uploader
+    initiateUpload: null # initialised by uploader
+    onBeforeUpload: ->
+    onSuccess: ->
+    onFailure: ->
   }
 
   # Each 'state' or 'step' in the wizard
@@ -87,7 +94,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
           false
         # Disable files if no files made
         files: ->
-          false
+          !$scope.uploader.isReady
       }
       shouldDisableByState[activeState]?() || false
     back: ->
@@ -95,7 +102,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     submit: ->
       false
     cancel: ->
-      true # TODO: false if is uploading
+      false # TODO: false if is uploading
   }
 
   # Whether or not we should show this button
@@ -108,7 +115,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       states[activeStateIdx() - 1]?
     submit: ->
       # Show submit only if last state
-      _.last(states) == activeState
+      (states.length - 1) == activeStateIdx()
   }
 
 )

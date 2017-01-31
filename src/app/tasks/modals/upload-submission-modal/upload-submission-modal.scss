@@ -7,12 +7,11 @@
   }
   .modal-body {
     min-height: 500px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   .state {
     position: absolute;
-    top: $panel-body-padding;
-    bottom: $panel-body-padding;
     left: $panel-body-padding;
     right: $panel-body-padding;
     transition: 0.25s ease-in left, 0.25s ease-in right;
@@ -23,6 +22,11 @@
     &.state-hidden-right {
       left: 999px;
       right: 999px;
+    }
+  }
+  .state.state-files {
+    .file-uploader {
+      margin: 0;
     }
   }
 }
