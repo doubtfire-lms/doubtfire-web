@@ -88,10 +88,10 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       shouldDisableByState = {
         # Disable group if group members not allocated anything
         group: ->
-          false
+          _.chain($scope.team.members).map('confRating').compact().value().length == 0
         # Disable alignment if no alignments made (need at least 1)
         alignment: ->
-          false
+          _.chain($scope.alignments).map('rating').compact().value().length == 0
         # Disable files if no files made
         files: ->
           !$scope.uploader.isReady
@@ -132,4 +132,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       }
     )
 
+  # ILO alignment defaults
+  $scope.alignments = _.chain(task.unit().ilos)
+    .map((ilo) ->
+      [ilo.id, {description: null, rating: 0}]
+    )
+    .fromPairs()
+    .value()
 )

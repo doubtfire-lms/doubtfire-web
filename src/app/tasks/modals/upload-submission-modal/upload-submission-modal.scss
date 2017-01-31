@@ -29,4 +29,15 @@
       margin: 0;
     }
   }
+  .state.state-alignment {
+    table th {
+      width: 50%;
+    }
+    table td .panel {
+      margin-top: 1em;
+    }
+    .task-ilo-alignment-rater {
+      height: 55px;
+    }
+  }
 }

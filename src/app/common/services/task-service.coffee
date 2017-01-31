@@ -318,6 +318,7 @@ angular.module("doubtfire.common.services.tasks", [])
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
+    return if task.status == status
     requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
     if requiresFileUpload
       oldStatus = task.status

@@ -28,10 +28,16 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
     hideLabels: '=?'
     # Compact version
     compact: '=?'
+    # Expose label outwards
+    label: '=?'
+    # Show the zero label
+    showZeroRating: '=?'
   controller: ($scope, outcomeService) ->
     $scope.max = 5
 
     $scope.hideLabels ?= false
+
+    $scope.showZeroRating ?= false
 
     $scope.readonly = true if $scope.compact
 
@@ -40,6 +46,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
     $scope.setHoverValue = (value) ->
       return $scope.ngModel if $scope.readonly and not $scope.showTooltips
       $scope.hoveringOver = value
+      $scope.label = $scope.tooltips[value - 1]
 
     # Set defaults
     for property in ['tooltips', 'colorful', 'selectedTooltip']
