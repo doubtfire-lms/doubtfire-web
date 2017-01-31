@@ -30,7 +30,7 @@
       class="form-control input-lg visible-sm visible-xs"
       ng-options="trigger.status as trigger.label for trigger in triggers"
       ng-model="task.status"
-      ng-change="triggerTransition(trigger.status)">
+      ng-change="triggerTransition(task.status)">
     </select>
   </div><!--/trigger-heading-->
   <div class="card-heading static-task-status" ng-hide="triggers.length > 0">
