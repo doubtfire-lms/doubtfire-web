@@ -27,7 +27,12 @@
           <span
             class="label {{percentClass(member.percent)}}"
             ng-show="member.overStar">
-            {{member.percent || 'No'}} effort
+            <span ng-show="member.percent > 0">
+              {{member.percent}} % effort
+            </span>
+            <span ng-hide="member.percent > 0">
+              No effort
+            </span>
           </span>
         </td>
       </tr>

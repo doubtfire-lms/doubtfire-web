@@ -118,4 +118,18 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       (states.length - 1) == activeStateIdx()
   }
 
+  # Team for group state
+  $scope.team = { members: [] }
+
+  # Maps team data to payload data
+  mapTeamToPayload = ->
+    total = groupService.groupContributionSum($scope.team.members)
+    _.map($scope.team.members,
+      (member) -> {
+        project_id: member.project_id,
+        pct: (100 * member.rating / total).toFixed(0),
+        pts: member.rating
+      }
+    )
+
 )

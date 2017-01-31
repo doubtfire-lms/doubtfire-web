@@ -30,9 +30,8 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     }
 
     $scope.checkClearRating = (member) ->
-      if member.confRating == 1 && member.overStar == 1 && member.rating == 1
-        member.rating = 0
-        member.percent = 0
+      if member.confRating == 1 && member.overStar == 1 && member.rating == 0
+        member.rating = member.percent = 0
       else if member.confRating == 1 && member.overStar == 1 && member.rating == 0
         member.rating = 1
 

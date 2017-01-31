@@ -15,7 +15,24 @@
       class="state state-group"
       ng-class="{'state-hidden-left': isHidden('group').left,
                  'state-hidden-right': isHidden('group').right}">
-      Group
+      <h4>
+        Team Contribution
+      </h4>
+      <p>
+        Please rate each team member's effort on working on {{task.definition.name}}
+        by clicking on a <i class="fa fa-child"></i> icon that represents their
+        assigned effort.
+      </p>
+      <p class="text-muted">
+        To mark a team member as contributing <strong> no effort </strong> click
+        on a <i class="fa fa-child"></i> icon twice.
+      </p>
+      <group-member-contribution-assigner
+        task="task"
+        class="well"
+        project="task.project()"
+        team="team">
+      </group-member-contribution-assigner>
     </div><!--/state-group-->
     <div
       class="state state-files"
@@ -38,7 +55,40 @@
       class="state state-alignment"
       ng-class="{'state-hidden-left': isHidden('alignment').left,
                  'state-hidden-right': isHidden('alignment').right}">
-      alignment
+      <div class="list-group">
+        <button
+          class="clearfix list-group-item"
+          ng-repeat="alignment in alignments"
+          ng-click="alignment.collapsed = !alignment.collapsed">
+          <heading>
+            <div>
+              <h4>
+                <strong>{{alignment.ilo.abbreviation}}</strong>
+                <small>{{alignment.ilo.name}}</small>
+              </h4>
+              <p>{{alignment.label}}. Click to expand.</p>
+            </div><!--/alignment-label-->
+            <task-ilo-alignment-rater
+              readonly="true"
+              hide-labels="true"
+              unit="task.unit()"
+              ng-model="alignment">
+            </task-ilo-alignment-rater><!--/alignment-rater-->
+          </heading>
+          <div class="panel panel-default" collapse="!alignment.collapsed">
+            <div class="panel-body">
+              <p>
+                <h5>Outcome Description</h5>
+                <div class="markdown-to-html" ng-bind-html="alignment.ilo.description | markdown"></div>
+              </p>
+              <p>
+                <h5>Rationale</h5>
+                <div class="markdown-to-html" ng-bind-html="alignment.description | markdown"></div>
+              </p>
+            </div>
+          </div>
+        </button>
+      </div>
     </div><!--/state-alignment-->
     <div
       class="state state-comments"
