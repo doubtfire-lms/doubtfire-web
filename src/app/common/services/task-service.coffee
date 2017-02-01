@@ -321,27 +321,29 @@ angular.module("doubtfire.common.services.tasks", [])
     return if task.status == status
     requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
     if requiresFileUpload
-      oldStatus = task.status
-      task.status = status
-      modal = UploadSubmissionModal.show(task)
-      # Modal failed to present
-      unless modal?
-        task.status = oldStatus
-        return
-      modal.result.then(
-        # Grade was selected (modal closed with result)
-        (response) ->
-          # TODO: (@alexcu) Do something on success
-          null
-        # Grade was not selected (modal was dismissed)
-        (dismissed) ->
-          task.status = oldStatus
-          alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
-      )
+      taskService.presentTaskSubmissionModal(task, status)
     else
       taskService.updateTaskStatus(task.unit(), task.project(), task, status)
       asUser = if unitRole? then unitRole.role else 'Student'
       analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
+
+  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence) ->
+    oldStatus = task.status
+    task.status = status
+    modal = UploadSubmissionModal.show(task, reuploadEvidence)
+    # Modal failed to present
+    unless modal?
+      task.status = oldStatus
+      return
+    modal.result.then(
+      # Grade was selected (modal closed with result)
+      (response) ->
+        null
+      # Grade was not selected (modal was dismissed)
+      (dismissed) ->
+        task.status = oldStatus
+        alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
+    )
 
   # Whether or not new submissions can be made on a task
   taskService.canReuploadEvidence = (task) ->

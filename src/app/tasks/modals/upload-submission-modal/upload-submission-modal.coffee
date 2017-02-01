@@ -9,7 +9,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   #
   # Open a grade task modal with the provided task
   #
-  UploadSubmissionModal.show = (task) ->
+  UploadSubmissionModal.show = (task, reuploadEvidence) ->
     # Refuse to open modal if group task and not in a group
     if task.isGroupTask() && !task.studentInAGroup()
       alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
@@ -22,7 +22,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       backdrop: 'static'
       resolve:
         task: -> task
-        reuploadEvidence: -> if reuploadEvidence? then reuploadEvidence else false
+        reuploadEvidence: -> reuploadEvidence
 
   UploadSubmissionModal
 )
