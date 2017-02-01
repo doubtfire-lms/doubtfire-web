@@ -58,4 +58,10 @@ angular.module('doubtfire.projects.states.dashboard', [
       $event.preventDefault()
       # Need to call this to change the URL parameter!
       setTaskAbbrAsUrlParams(taskAbbr)
+
+  # Task complete
+  listeners.push $scope.$on('TaskSubmissionUploadComplete', ($event) ->
+    # Go back to the dashboard
+    $scope.taskData.selectedTask = null
+  )
 )

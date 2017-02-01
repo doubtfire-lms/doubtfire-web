@@ -18,47 +18,63 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       templateUrl: 'tasks/modals/upload-submission-modal/upload-submission-modal.tpl.html'
       controller: 'UploadSubmissionModalCtrl'
       size: 'lg'
+      keyboard: false
+      backdrop: 'static'
       resolve:
         task: -> task
         reuploadEvidence: -> if reuploadEvidence? then reuploadEvidence else false
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService) ->
   # Expose task to scope
   $scope.task = task
 
   # Set up submission types
-  submissionTypes = _.map(taskService.submittableStatuses, (status) ->
-    { id: status, label: taskService.statusLabels[status] }
-  )
+  submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
+    [ status, taskService.statusLabels[status] ]
+  ).fromPairs().value()
   if $scope.task.canReuploadEvidence()
-    submissionTypes.concat({ id: 'reupload_evidence', label: 'New Evidence' })
+    submissionTypes['reupload_evidence'] = 'New Evidence'
   $scope.submissionTypes = submissionTypes
 
   # Load in submission type
-  idToLoad = if reuploadEvidence then 'reupload_evidence' else $scope.task.status
-  $scope.submissionType = _.find(submissionTypes, { id: idToLoad }).id
+  $scope.submissionType = if reuploadEvidence then 'reupload_evidence' else $scope.task.status
 
   # Upload files
   $scope.uploader = {
     url: Task.generateSubmissionUrl($scope.task.project(), $scope.task)
-    files: _.each(task.definition.upload_requirements, (file) ->
-      { name: file.name, type: file.type }
-    )
+    files: _.chain(task.definition.upload_requirements).map((file) ->
+      [file.key, { name: file.name, type: file.type }]
+    ).fromPairs().value()
     payload: {}
     isUploading: null # initialised by uploader
     isReady: null # initialised by uploader
-    initiateUpload: null # initialised by uploader
+    start: null # initialised by uploader
     onBeforeUpload: ->
-    onSuccess: ->
-    onFailure: ->
+      $scope.uploader.payload.contributions = mapTeamToPayload() if _.includes(states.shown, 'group')
+      $scope.uploader.payload.alignment_data = mapAlignmentDataToPayload() if _.includes(states.shown, 'alignment')
+      $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
+    onSuccess: (response) ->
+      $scope.uploader.response = response
+    onFailureCancel: $modalInstance.dismiss
+    onComplete: ->
+      $modalInstance.close(task)
+      # Add comment if requested
+      task.addComment($scope.comment) if $scope.comment.trim().length > 0
+      # Broadcast that upload is complete
+      $rootScope.$broadcast('TaskSubmissionUploadComplete', task)
+      # Perform as timeout to show 'Upload Complete'
+      $timeout((->
+        response = $scope.uploader.response
+        taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
+      ), 1500)
   }
 
   # States functionality
   states = {
     # All possible states
-    all: ['group', 'files', 'alignment', 'comments']
+    all: ['group', 'files', 'alignment', 'comments', 'uploading']
     # Only states which are shown (populated in initialise)
     shown: []
     # The currently active state (set in initialise)
@@ -76,26 +92,28 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       left: states.shown.indexOf(state) < states.activeIdx(),
       right: states.shown.indexOf(state) > states.activeIdx()
     }
+    # Conditions on which to remove specific states
+    removed: ->
+      # Only show some states if RTM
+      isRtm = $scope.submissionType == 'ready_to_mark'
+      removed = []
+      # Remove group and alignment states
+      removed.push('group') if !isRtm || !task.isGroupTask()
+      removed.push('alignment') if !isRtm || !task.unit().ilos.length > 0
+      removed
     # Initialises the states
     initialise: ->
       # Each 'state' or 'step' in the wizard
-      states.shown = states.all
-      # Only show some states if RTM
-      isRtm = $scope.submissionType == 'ready_to_mark'
-      # Remove group and alignment states
-      removeGroupState = !isRtm || !task.isGroupTask()
-      removeAlignState = !isRtm || !task.unit().ilos.length > 0
-      states.shown = _.without(states.shown, 'group') if removeGroupState
-      states.shown = _.without(states.shown, 'alignment') if removeAlignState
+      states.shown = _.difference(states.all, states.removed())
       states.setActive(_.first(states.shown))
   }
   states.initialise()
 
   # If the submission type changes, then modify status (if applicable) and
   # reinitialise states
-  $scope.submissionTypeChanged = ->
+  $scope.submissionTypeChanged = (newType) ->
     # Only change status if not reuploading evidence
-    $scope.task.status = $scope.submissionType unless $scope.submissionType == 'reupload_evidence'
+    $scope.task.status = newType unless newType == 'reupload_evidence'
     states.initialise()
 
   # Whether to apply ng-hide to state
@@ -130,21 +148,35 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       # Disable if no comment is supplied with need_help
       $scope.comment.trim().length == 0 && $scope.submissionType == 'need_help'
     cancel: ->
-      false # TODO: false if is uploading
+      # Can't cancel whilst uploading
+      $scope.uploader.isUploading
   }
 
   # Whether or not we should show this button
   $scope.shouldShowBtn = {
     cancel: ->
-      true # TODO: false if is uploading
+      # Can't cancel whilst uploading
+      !$scope.uploader.isUploading
     next: ->
-      states.shown[states.activeIdx() + 1]?
+      nextState = states.shown[states.activeIdx() + 1]
+      nextState? && nextState != 'uploading'
     back: ->
-      states.shown[states.activeIdx() - 1]?
+      prevState = states.shown[states.activeIdx() - 1]
+      prevState? && prevState != 'uploading'
     submit: ->
-      # Show submit only if last state
-      (states.shown.length - 1) == states.activeIdx()
+      # Show submit only if state before uploading
+      states.activeIdx() == states.shown.indexOf('uploading') - 1
   }
+
+  # Click upload on UI
+  $scope.uploadButtonClicked = ->
+    # Move files to the end to simulate as though state move
+    states.shown = _.without(states.shown, 'files')
+    states.shown.push('files')
+    $timeout((->
+      states.setActive('files')
+      $scope.uploader.start()
+    ), 251)
 
   # Team for group state (populated by assignment rater)
   $scope.team = { members: [] }
@@ -167,6 +199,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   mapAlignmentDataToPayload = ->
     _.map($scope.alignments, (alignment) ->
       alignment.rationale = $scope.alignmentsRationale
+      alignment
     )
 
   # ILO alignment defaults

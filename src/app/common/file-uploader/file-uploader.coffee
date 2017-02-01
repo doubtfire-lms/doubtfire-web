@@ -47,6 +47,10 @@ angular.module('doubtfire.common.file-uploader', [])
     # Sets this scope variable to a function that can then be triggered externally
     # from outside the scope
     initiateUpload: '=?'
+    # What happens when we click cancel on failure
+    onClickFailureCancel: '=?'
+    # Whether we should reset after upload
+    resetAfterUpload: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -108,6 +112,11 @@ angular.module('doubtfire.common.file-uploader', [])
     $scope.showUploader = !$scope.asButton
 
     #
+    # Default resetAfterUpload to true
+    #
+    $scope.resetAfterUpload ?= true
+
+    #
     # When a file is dropped, if there has been rejected files
     # warn the user that that file is not okay
     #
@@ -118,7 +127,6 @@ angular.module('doubtfire.common.file-uploader', [])
         $timeout (-> upload.display.error = no), 4000
         return true
       false
-
 
     # Called when the model has changed
     $scope.modelChanged = (newFiles, upload) ->
@@ -209,6 +217,12 @@ angular.module('doubtfire.common.file-uploader', [])
     $scope.resetUploader()
 
     #
+    # Override on click failure cancel if not set to just reset uploader
+    #
+    $scope.onClickFailureCancel ?= $scope.resetUploader
+
+
+    #
     # Initiates the upload
     #
     $scope.initiateUpload = ->
@@ -246,7 +260,11 @@ angular.module('doubtfire.common.file-uploader', [])
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
               $scope.uploadingInfo.success = true
-              $timeout (-> $scope.onComplete?(); $scope.resetUploader()), 2500
+              $timeout((->
+                $scope.onComplete?()
+                if $scope.resetAfterUpload
+                  $scope.resetUploader()
+              ), 2500)
             # Fail
             else
               $scope.onFailure?(response)

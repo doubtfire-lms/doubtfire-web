@@ -4,10 +4,14 @@
       <strong>{{task.definition.abbreviation}}</strong> as
       <select
         class="form-control input-lg submission-type"
-        ng-change="submissionTypeChanged()"
+        ng-if="!uploader.isUploading"
+        ng-change="submissionTypeChanged(submissionType)"
         ng-model="submissionType"
-        ng-options="type.id as type.label for type in submissionTypes">
+        ng-options="id as label for (id, label) in submissionTypes">
       </select>
+      <span ng-show="uploader.isUploading">
+        {{submissionTypes[submissionType]}}
+      </span>
     </h3>
   </div><!--/modal-header-->
   <div class="modal-body">
@@ -41,9 +45,10 @@
     <div
       class="state state-files"
       ng-class="{'state-hidden-left': isHidden('files').left,
-                 'state-hidden-right': isHidden('files').right}">
-      <div class="card">
-        <div class="card-heading">
+                 'state-hidden-right': isHidden('files').right,
+                 'state-files-uploading': uploader.isUploading}">
+      <div ng-class="{'card': !uploader.isUploading}">
+        <div class="card-heading" ng-hide="uploader.isUploading">
           <h4>
             Select {{submissionType == 'need_help' ? 'files' : 'evidence'}} to upload
           </h4>
@@ -64,10 +69,12 @@
             payload="uploader.payload"
             single-drop-zone="true"
             show-upload-button="false"
+            reset-after-upload="false"
             is-ready="uploader.isReady"
-            initiate-upload="uploader.initiateUpload"
-            on-before-upload="uploader.onBeforeUpload"
             is-uploading="uploader.isUploading"
+            initiate-upload="uploader.start"
+            on-click-failure-cancel="uploader.onFailureCancel"
+            on-before-upload="uploader.onBeforeUpload"
             on-success="uploader.onSuccess"
             on-complete="uploader.onComplete"></file-uploader>
         </div>
@@ -168,7 +175,7 @@
       </div><!--/card-comments-->
     </div><!--/state-comments-->
   </div><!--/modal-body-->
-  <div class="modal-footer">
+  <div class="modal-footer" ng-hide="uploader.isUploading">
     <button
       class="btn btn-danger pull-left"
       ng-click="$dismiss()"
@@ -192,7 +199,7 @@
     </button><!--/next-button-->
     <button
       class="btn btn-success"
-      ng-click="$close()"
+      ng-click="uploadButtonClicked()"
       ng-disabled="shouldDisableBtn.submit()"
       ng-show="shouldShowBtn.submit()">
       <i class="fa fa-upload"></i> Upload Submission

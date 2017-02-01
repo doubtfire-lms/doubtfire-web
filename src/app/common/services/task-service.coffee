@@ -389,13 +389,9 @@ angular.module("doubtfire.common.services.tasks", [])
     task.updateTaskStatus project, response.new_stats
     task.processing_pdf = response.processing_pdf
     task.grade = response.grade
-
     if response.status == status
-      $rootScope.$broadcast('UpdateAlignmentChart')
-      if project.updateBurndownChart?
-        project.updateBurndownChart()
+      project.updateBurndownChart?()
       alertService.add("success", "Status saved.", 2000)
-      $rootScope.$broadcast('TaskStatusUpdated', { status: response.status })
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id)
