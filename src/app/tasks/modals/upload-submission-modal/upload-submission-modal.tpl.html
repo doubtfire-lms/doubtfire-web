@@ -5,7 +5,7 @@
       <select
         class="form-control input-lg submission-type"
         ng-if="!uploader.isUploading"
-        ng-change="submissionTypeChanged(submissionType)"
+        ng-change="onSelectNewSubmissionType(submissionType)"
         ng-model="submissionType"
         ng-options="id as label for (id, label) in submissionTypes">
       </select>

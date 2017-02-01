@@ -30,6 +30,9 @@
   .state.state-files {
     .file-uploader {
       margin: 0;
+      .error-message-area {
+        font-size: $font-size-base;
+      }
     }
     &.state-files-uploading {
       top: 40%;

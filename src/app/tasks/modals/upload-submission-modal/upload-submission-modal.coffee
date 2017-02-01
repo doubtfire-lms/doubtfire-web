@@ -111,9 +111,10 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # If the submission type changes, then modify status (if applicable) and
   # reinitialise states
-  $scope.submissionTypeChanged = (newType) ->
+  $scope.onSelectNewSubmissionType = (newType) ->
     # Only change status if not reuploading evidence
     $scope.task.status = newType unless newType == 'reupload_evidence'
+    $scope.submissionType = newType
     states.initialise()
 
   # Whether to apply ng-hide to state
@@ -197,10 +198,16 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Maps the alignment data to payload data
   mapAlignmentDataToPayload = ->
-    _.map($scope.alignments, (alignment) ->
+    _.chain($scope.alignments)
+    .map((alignment, key) ->
       alignment.rationale = $scope.alignmentsRationale
+      alignment.ilo_id = +key
       alignment
     )
+    .filter((alignment) ->
+      alignment.rating > 0
+    )
+    .value()
 
   # ILO alignment defaults
   $scope.alignmentsRationale = ""
