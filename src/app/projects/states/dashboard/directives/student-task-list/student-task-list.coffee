@@ -11,7 +11,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
     refreshTasks: '=?'
     # Special taskData object (wraps the selectedTask)
     taskData: '='
-  controller: ($scope, $filter, gradeService) ->
+  controller: ($scope, $timeout, $filter, gradeService) ->
     # Check taskSource exists
     unless $scope.taskData?
       throw Error "Invalid taskData provided. Must wrap the selectedTask and selectedTaskAbbr"
@@ -47,7 +47,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
       funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})
+    $timeout ->
+      scrollToTaskInList($scope.taskData.selectedTask) if $scope.taskData.selectedTask?
     $scope.isSelectedTask = (task) ->
       # Compare by definition
       task.definition.id == $scope.taskData?.selectedTask?.definition.id
+
 )
