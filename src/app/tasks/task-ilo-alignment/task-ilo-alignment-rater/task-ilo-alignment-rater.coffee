@@ -46,7 +46,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
     $scope.setHoverValue = (value) ->
       return $scope.ngModel if $scope.readonly and not $scope.showTooltips
       $scope.hoveringOver = value
-      $scope.label = $scope.tooltips[value - 1]
+      $scope.label = $scope.tooltips[value]
 
     # Set defaults
     for property in ['tooltips', 'colorful', 'selectedTooltip']

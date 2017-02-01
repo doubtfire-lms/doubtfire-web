@@ -18,6 +18,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
         0
 
   outcomeService.alignmentLabels = [
+    "The task is not related to this outcome at all",
     "The task is slightly related to this outcome",
     "The task is related to this outcome",
     "The task is a reasonable example for this outcome",

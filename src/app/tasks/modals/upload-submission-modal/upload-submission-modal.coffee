@@ -24,7 +24,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService) ->
   # Expose task to scope
   $scope.task = task
 
@@ -55,31 +55,56 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     onFailure: ->
   }
 
-  # Each 'state' or 'step' in the wizard
-  states = ['group', 'files', 'alignment', 'comments']
+  # States functionality
+  states = {
+    # All possible states
+    all: ['group', 'files', 'alignment', 'comments']
+    # Only states which are shown (populated in initialise)
+    shown: []
+    # The currently active state (set in initialise)
+    active: null
+    # Current index of the active state
+    activeIdx: -> states.shown.indexOf(states.active)
+    # Sets the active state
+    setActive: (state) -> states.active = state
+    # Sets the active state to the next state that should be shown
+    next: -> states.setActive(states.shown[states.activeIdx() + 1])
+    # Sets the active state to the previous state that should be shown
+    previous: -> states.setActive(states.shown[states.activeIdx() - 1])
+    # Decides whether this state is hidden to the left or right of the active state
+    isHidden: (state) -> {
+      left: states.shown.indexOf(state) < states.activeIdx(),
+      right: states.shown.indexOf(state) > states.activeIdx()
+    }
+    # Initialises the states
+    initialise: ->
+      # Each 'state' or 'step' in the wizard
+      states.shown = states.all
+      # Only show some states if RTM
+      isRtm = $scope.submissionType == 'ready_to_mark'
+      # Remove group and alignment states
+      removeGroupState = !isRtm || !task.isGroupTask()
+      removeAlignState = !isRtm || !task.unit().ilos.length > 0
+      states.shown = _.without(states.shown, 'group') if removeGroupState
+      states.shown = _.without(states.shown, 'alignment') if removeAlignState
+      states.setActive(_.first(states.shown))
+  }
+  states.initialise()
 
-  # Remove any states we should not show
-  states = _.without(states, 'group') unless task.isGroupTask()
-  states = _.without(states, 'alignment') unless task.unit().task_outcome_alignments.length > 0
-
-  # State index and active state set
-  activeStateIdx = ->
-    states.indexOf(activeState)
-  activeState = null
-  setActiveState = (state) ->
-    activeState = state
-  setActiveState(_.first(states))
+  # If the submission type changes, then modify status (if applicable) and
+  # reinitialise states
+  $scope.submissionTypeChanged = ->
+    # Only change status if not reuploading evidence
+    $scope.task.status = $scope.submissionType unless $scope.submissionType == 'reupload_evidence'
+    states.initialise()
 
   # Whether to apply ng-hide to state
-  $scope.isHidden = (state) ->
-    { left: states.indexOf(state) < activeStateIdx(), right: states.indexOf(state) > activeStateIdx() }
+  $scope.isHidden = states.isHidden
 
   # Go to next or previous state
   $scope.goToState = {
-    next: ->
-      setActiveState(states[activeStateIdx() + 1])
-    previous: ->
-      setActiveState(states[activeStateIdx() - 1])
+    next: states.next
+    previous: states.previous
   }
 
   # Whether or not we should disable this button
@@ -89,18 +114,21 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
         # Disable group if group members not allocated anything
         group: ->
           _.chain($scope.team.members).map('confRating').compact().value().length == 0
-        # Disable alignment if no alignments made (need at least 1)
+        # Disable alignment if no alignments made (need at least 1) and
+        # if description is blank
         alignment: ->
-          _.chain($scope.alignments).map('rating').compact().value().length == 0
+          _.chain($scope.alignments).map('rating').compact().value().length == 0 ||
+          $scope.alignmentsRationale.trim().length == 0
         # Disable files if no files made
         files: ->
           !$scope.uploader.isReady
       }
-      shouldDisableByState[activeState]?() || false
+      shouldDisableByState[states.active]?() || false
     back: ->
       false
     submit: ->
-      false
+      # Disable if no comment is supplied with need_help
+      $scope.comment.trim().length == 0 && $scope.submissionType == 'need_help'
     cancel: ->
       false # TODO: false if is uploading
   }
@@ -110,12 +138,12 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     cancel: ->
       true # TODO: false if is uploading
     next: ->
-      states[activeStateIdx() + 1]?
+      states.shown[states.activeIdx() + 1]?
     back: ->
-      states[activeStateIdx() - 1]?
+      states.shown[states.activeIdx() - 1]?
     submit: ->
       # Show submit only if last state
-      (states.length - 1) == activeStateIdx()
+      (states.shown.length - 1) == states.activeIdx()
   }
 
   # Team for group state (populated by assignment rater)
@@ -132,10 +160,29 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       }
     )
 
+  # Comment on the task
+  $scope.comment = ""
+
+  # Maps the alignment data to payload data
+  mapAlignmentDataToPayload = ->
+    _.map($scope.alignments, (alignment) ->
+      alignment.rationale = $scope.alignmentsRationale
+    )
+
   # ILO alignment defaults
+  $scope.alignmentsRationale = ""
+  staffAlignments = $scope.task.staffAlignments()
+  $scope.ilos = _.map(task.unit().ilos, (ilo) ->
+    staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
+    staffAlignment ?= {}
+    staffAlignment.rating ?= 0
+    staffAlignment.label = outcomeService.alignmentLabels[staffAlignment.rating]
+    ilo.staffAlignment = staffAlignment
+    ilo
+  )
   $scope.alignments = _.chain(task.unit().ilos)
     .map((ilo) ->
-      [ilo.id, {description: null, rating: 0}]
+      [ilo.id, {rating: 0}]
     )
     .fromPairs()
     .value()
