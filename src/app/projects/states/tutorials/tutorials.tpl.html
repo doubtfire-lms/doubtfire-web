@@ -1,0 +1,68 @@
+<div class="container" id="tutorials-state">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Select a Tutorial</h4>
+    </div>
+    <div class="panel-body">
+      <p>
+        Click the plus on the specific tutorial to enrol in that tutorial, or click
+        the minus icon to withdraw from your current tutorial.
+      </p>
+      <p>
+        You are currently enrolled in
+        <strong ng-show="project.tutorial">
+          {{project.tutorial.abbreviation}}.
+        </strong>
+        <strong ng-hide="project.tutorial">
+          no tutorial.
+        </strong>
+    </div>
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="code">
+            <a ng-click="sortOrder='abbreviation'; reverse=!reverse">Code</a>
+          </th>
+          <th class="day">
+            <a ng-click="sortOrder='meeting_day'; reverse=!reverse">Day</a>
+          </th>
+          <th class="time">
+            <a ng-click="sortOrder='meeting_time'; reverse=!reverse">Time</a>
+          </th>
+          <th class="room">
+            <a ng-click="sortOrder='meeting_location'; reverse=!reverse">Room</a>
+          </th>
+          <th class="tutor">
+            <a ng-click="sortOrder='tutor_name'; reverse=!reverse">Tutor</a>
+          </th>
+          <th class="actions">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse"
+          ng-class="{'info': tutorial == project.tutorial}">
+          <td>{{tutorial.abbreviation}}</td>
+          <td>{{tutorial.meeting_day}}</td>
+          <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
+          <td>{{tutorial.meeting_location}}</td>
+          <td>{{tutorial.tutor_name}}</td>
+          <td>
+            <button
+              class="btn btn-default btn-sm"
+              ng-click ="setTutorial(tutorial.id)"
+              ng-hide="project.tutorial_id == tutorial.id">
+              <i class="fa fa-plus"></i> Enrol
+            </button>
+            <button
+              ng-show="project.tutorial_id == tutorial.id"
+              class="btn btn-danger btn-sm"
+              ng-click="setTutorial(-1)">
+              <i class="fa fa-minus"></i> Withdraw
+            </button>
+          </td>
+      </tbody>
+    </table>
+  </div>
+</div>
