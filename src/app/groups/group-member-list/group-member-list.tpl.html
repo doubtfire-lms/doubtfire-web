@@ -42,7 +42,9 @@
       </td>
       <td class="actions" ng-if="canRemoveMembers">
         <button ng-click="removeMember(member)" class="btn btn-sm btn-danger">
-          <i class="fa fa-times"></i> Remove
+          <i class="fa fa-minus"></i>
+          <span ng-hide="member.project_id == project.project_id">Kick</span>
+          <span ng-show="member.project_id == project.project_id">Leave</span>
         </button>
       </td>
     </tr>

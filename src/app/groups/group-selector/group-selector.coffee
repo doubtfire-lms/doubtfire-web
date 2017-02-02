@@ -131,6 +131,20 @@ angular.module('doubtfire.groups.group-selector', [])
           $scope.selectedGroup = newGroup
       )
 
+    # Join or leave group as project
+    $scope.projectInGroup = (group) ->
+      _.find($scope.project?.groups, {id: group.id})?
+
+    $scope.joinGroup = (group) ->
+      return unless $scope.project?
+      partOfGroup = $scope.projectInGroup(group)
+      return alertService.add("danger", "You are already member of this group") if partOfGroup
+      group.addMember($scope.project,
+        () ->
+          $scope.selectedGroup = group
+        () ->
+      )
+
     # Update group function
     $scope.updateGroup = (data, groupId) ->
       group = _.find($scope.selectedGroupSet.groups, {id: groupId})

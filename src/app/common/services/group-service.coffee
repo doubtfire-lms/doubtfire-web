@@ -146,10 +146,10 @@ angular.module("doubtfire.common.services.group-service", [  ])
         project_id: member.project_id
       }
       (success) ->
+        member.groups?.push(group) # If member is actually a project!
         # Loaded group members?
         if group.members?
           group.members.push(success)
-          member.groups?.push(group)
           alertService.add("info", "#{success.student_name} was added to '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
@@ -175,7 +175,6 @@ angular.module("doubtfire.common.services.group-service", [  ])
         # Loaded group members?
         if group.members?
           group.members = _.without(group.members, member)
-          member.groups = _.without(member.groups, group) if member.groups?
           alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
           onSuccess?(group.members)
         else

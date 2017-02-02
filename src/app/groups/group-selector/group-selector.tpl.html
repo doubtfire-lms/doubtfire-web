@@ -97,11 +97,8 @@
       </td><!--/group-tutorial-->
       <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         <div ng-show="project">
-          <button ng-click="group.addMember(project)" class="btn btn-success btn-sm">
+          <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm">
             <i class="fa fa-plus"></i> Join
-          </button>
-          <button ng-click="group.removeMember(project)" class="btn btn-danger btn-sm">
-            <i class="fa fa-minus"></i> Leave
           </button>
         </div>
         <div ng-show="unitRole">

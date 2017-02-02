@@ -38,7 +38,13 @@ angular.module('doubtfire.groups.group-member-list', [])
 
     # Remove group members
     $scope.removeMember = (member) ->
-      $scope.selectedGroup.removeMember(member)
+      $scope.selectedGroup.removeMember(member,
+        # Remove from member's group if exists
+        () ->
+          if member.project_id == $scope.project?.project_id
+            $scope.project.groups = _.without($scope.project.groups, $scope.selectedGroup)
+            $scope.selectedGroup = null
+      )
 
     # Listen for changes to group
     listeners.push $scope.$watch "selectedGroup.id", (newGroupId) ->
