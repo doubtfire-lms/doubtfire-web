@@ -373,6 +373,9 @@ angular.module("doubtfire.common.services.tasks", [])
         promise = doDeleteTask task, unit, null
         ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
+  taskService.plagiarismDetected = (task) ->
+    task.similar_to_count > 0
+
   taskService.indexOf = (status) ->
     _.indexOf(taskService.statusKeys, status)
 

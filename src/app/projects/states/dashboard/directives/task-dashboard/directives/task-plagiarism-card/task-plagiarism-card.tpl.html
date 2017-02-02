@@ -1,0 +1,14 @@
+<div class="card card-sm" ng-show="task.plagiarismDetected()">
+  <div class="card-heading text-danger">
+    <h4>Plagiarism Detected!</h4>
+  </div><!--/description-heading-->
+  <div class="card-body">
+    Plagiarism has been detected on your submission. View the plagiarism report
+    by clicking the button below.
+  </div><!--/description-body-->
+  <div class="card-footer">
+    <button class="btn btn-danger" ng-click="viewReport()">
+      View Plagiarism Report
+    </button>
+  </div><!--/description-footer-->
+</div>
