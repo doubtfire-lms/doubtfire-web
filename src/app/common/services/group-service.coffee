@@ -38,7 +38,6 @@ angular.module("doubtfire.common.services.group-service", [  ])
       groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
     group
 
-
   # Queries a unit's groupset for the given ID, returning the groups for that group
   groupService.getGroups = (unit, groupSetId, onSuccess, onFailure) ->
     throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
@@ -150,11 +149,12 @@ angular.module("doubtfire.common.services.group-service", [  ])
         # Loaded group members?
         if group.members?
           group.members.push(success)
-          alertService.add("info", "#{member.name} was added to '#{group.name}'", 3000)
+          member.groups?.push(group)
+          alertService.add("info", "#{success.student_name} was added to '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
           group.getMembers((->
-            alertService.add("info", "#{member.name} was added to '#{group.name}'", 3000)
+            alertService.add("info", "#{success.student_name} was added to '#{group.name}'", 3000)
             onSuccess?()
           ), onFailure)
       (failure) ->
@@ -175,6 +175,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         # Loaded group members?
         if group.members?
           group.members = _.without(group.members, member)
+          member.groups = _.without(member.groups, group) if member.groups?
           alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
           onSuccess?(group.members)
         else

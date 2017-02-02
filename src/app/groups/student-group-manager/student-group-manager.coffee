@@ -8,6 +8,7 @@ angular.module('doubtfire.groups.student-group-manager', [])
   templateUrl: 'groups/student-group-manager/student-group-manager.tpl.html'
   replace: true
   controller: ($scope, Group, alertService, GroupMember, projectService) ->
+    $scope.selectedGroupSet = _.first($scope.unit.group_sets)
     $scope.selectedGroup = null
 
     $scope.groupForSet = (gs) ->

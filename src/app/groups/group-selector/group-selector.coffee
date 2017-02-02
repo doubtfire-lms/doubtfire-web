@@ -85,6 +85,8 @@ angular.module('doubtfire.groups.group-selector', [])
       return unless groupSet?
       startLoading()
       $scope.selectGroup(null)
+      # Can only create groups if unitRole provided and selectedGroupSet
+      $scope.canCreateGroups = $scope.unitRole? || groupSet?.allow_students_to_create_groups
       $scope.unit.getGroups(groupSet.id, (groups) ->
         $scope.selectedGroupSet = groupSet
         groupSet.groups = groups
@@ -94,9 +96,6 @@ angular.module('doubtfire.groups.group-selector', [])
       , finishLoading)
     $scope.selectGroupSet($scope.selectedGroupSet)
 
-    # Can only create groups if unitRole provided and selectedGroupSet
-    $scope.canCreateGroups = $scope.unitRole? || $scope.selectedGroupSet?.allow_students_to_create_groups
-
     # Load groups if not loaded
     $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
 
@@ -104,7 +103,7 @@ angular.module('doubtfire.groups.group-selector', [])
     $scope.staffFilter = {
       Convenor: 'all',
       Tutor: 'mine'
-    }[$scope.unitRole.role]
+    }[$scope.unitRole.role] if $scope.unitRole?
 
     # Changing staff filter reapplies filter
     $scope.onChangeStaffFilter = applyFilters

@@ -12,9 +12,9 @@
     </group-set-selector>
   </h4>
 </div><!--/panel-heading-->
-<div class="panel-body panel-toolbar" ng-show="loaded">
+<div class="panel-body panel-toolbar" ng-show="loaded && canCreateGroups">
   <div class="clearfix">
-    <div class="input-group pull-left col-md-6 staff-filter">
+    <div class="input-group pull-left col-md-6 staff-filter" ng-if="unitRole">
       <div class="btn-group">
         <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'all'">
           <i class="fa fa-university"></i> All Tutorials
@@ -63,7 +63,7 @@
           Tutorial <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th class="actions" ng-show="unitRole">
+      <th class="actions" ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         Actions
       </th>
     </tr>
@@ -95,25 +95,33 @@
           </span>
         </span>
       </td><!--/group-tutorial-->
-      <td ng-show="unitRole">
-        <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
-          <button type="submit" ng-disabled="groupRowForm.$waiting" class="btn btn-default btn-sm">
-            <i class="fa fa-floppy-o"></i> Save
+      <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
+        <div ng-show="project">
+          <button ng-click="group.addMember(project)" class="btn btn-success btn-sm">
+            <i class="fa fa-plus"></i> Join
           </button>
-          <button type="button" ng-disabled="groupRowForm.$waiting" ng-click="groupRowForm.$cancel()" class="btn btn-default btn-sm">
-            <i class="fa fa-times"></i> Cancel
+          <button ng-click="group.removeMember(project)" class="btn btn-danger btn-sm">
+            <i class="fa fa-minus"></i> Leave
           </button>
-        </form>
-        <div ng-hide="groupRowForm.$visible">
-          <div>
+        </div>
+        <div ng-show="unitRole">
+          <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
+            <button type="submit" ng-disabled="groupRowForm.$waiting" class="btn btn-default btn-sm">
+              <i class="fa fa-floppy-o"></i> Save
+            </button>
+            <button type="button" ng-disabled="groupRowForm.$waiting" ng-click="groupRowForm.$cancel()" class="btn btn-default btn-sm">
+              <i class="fa fa-times"></i> Cancel
+            </button>
+          </form>
+          <div ng-hide="groupRowForm.$visible">
             <button ng-click="groupRowForm.$show()" class="btn btn-default btn-sm">
               <i class="fa fa-pencil"></i> Edit
             </button>
             <button ng-click="deleteGroup(group)" class="btn btn-danger btn-sm">
               <i class="fa fa-trash-o"></i> Delete
             </button>
-          </div>
-        </div><!--/actions-->
+          </div><!--/actions-->
+        </div>
       </td>
     </tr>
   </tbody>
