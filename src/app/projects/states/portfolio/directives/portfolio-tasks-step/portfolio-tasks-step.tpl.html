@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+  <div class="panel-heading" ng-show="unitHasILOs">
+    <h3 class="panel-title"> Relate ILOs to Tasks </h3>
+  </div>
+  <div class="panel-heading" ng-hide="unitHasILOs">
+    <h3 class="panel-title"> Select tasks to include </h3>
+  </div>
+  <div class="panel-body">
+    <p ng-show="unitHasILOs">
+      For each task, please indicate whether you think this task is related to one
+      or more of the unit's <strong>{{unit.ilos.length}} learning outcomes</strong>.
+      You may provide a rationale for each task selected, which will be noted in
+      your portfolio.
+    </p>
+    <p ng-hide="unitHasILOs">
+      Please indicate which tasks you would like to include in your portfolio.
+    </p>
+  </div>
+  <task-ilo-alignment-editor
+    unit="unit"
+    class="card-body"
+    project="project"
+    hide-panel="true"
+    hide-graph="true"
+    show-include-tasks="true"></task-ilo-alignment-editor>
+  <div class="panel-footer clearfix">
+    <button class="btn btn-primary pull-left" ng-click="advanceActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-right" ng-disabled="noTasksSelected()" ng-click="advanceActiveTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="help-block pull-right col-sm-4" ng-show="noTasksSelected()">
+      You need to select at least one task {{unitHasILOs ? 'that is aligned to an ILO above' : 'above'}}, otherwise your portfolio will be consist of no tasks.
+    </div>
+  </div>
+</div>

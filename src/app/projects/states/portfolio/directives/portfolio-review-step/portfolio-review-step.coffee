@@ -1,12 +1,13 @@
-angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-step', [])
+angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-step', [])
 
 #
 # Step for students to view their portfolio and optionally delete it
 #
 .directive('portfolioReviewStep', ->
   restrict: 'E'
-  templateUrl: 'projects/project-portfolio-wizard/portfolio-review-step/portfolio-review-step.tpl.html'
-  controller: ($scope, alertService, Project, ExternalName) ->
+  replace: true
+  templateUrl: 'projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.tpl.html'
+  controller: ($scope, alertService, Project, ExternalName, ConfirmationModal) ->
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = ExternalName
@@ -31,9 +32,11 @@ angular.module('doubtfire.projects.project-portfolio-wizard.portfolio-review-ste
     # PDF Local Funcs
     #
     $scope.deletePortfolio = ->
-      $scope.portfolioSubmission.delete {
-        id: $scope.project.project_id
-      }, (response) ->
-        $scope.project.portfolio_available = false
-        alertService.add('info', "Portfolio has been deleted!", 5000)
+      doDelete = ->
+        $scope.portfolioSubmission.delete {
+          id: $scope.project.project_id
+        }, (response) ->
+          $scope.project.portfolio_available = false
+          alertService.add('info', "Portfolio has been deleted!", 5000)
+      ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
 )
