@@ -20,7 +20,7 @@ angular.module('doubtfire.projects.states.index', [])
 .controller("ProjectsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
   # Error - required projectId is missing!
   projectId = +$stateParams.projectId
-  return $state.go('home') unless projectId?
+  return $state.go('home') unless projectId
 
   # Load in project
   projectService.getProject(projectId, null,
