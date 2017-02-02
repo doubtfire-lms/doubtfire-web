@@ -22,10 +22,17 @@ angular.module('doubtfire.projects.states.tutorials', [])
     Project.update(
       { id: $scope.project.project_id, tutorial_id: id }
       (project) ->
+        oldTutorialAbbr = $scope.unit.tutorialFromId($scope.project.tutorial_id)?.abbreviation
         $scope.project.tutorial_id = project.tutorial_id
         $scope.project.tutorial = $scope.unit.tutorialFromId( $scope.project.tutorial_id )
-        eventName = if id isnt -1 then "Changed tutorial" else "Withdrew from all tutorials"
-        analyticsService.event "Student Project View - Tutorials Tab", eventName
+        if id == -1
+          eventName = "Withdrew from all tutorials"
+          successMsg = "Withdrew from #{oldTutorialAbbr}"
+        else
+          eventName = "Changed tutorial"
+          successMsg = "Enrolled in #{$scope.project.tutorial.abbreviation}"
+        analyticsService.event("Student Project View - Tutorials Tab", eventName)
+        alertService.add("success", successMsg, 3000)
         projectService.updateGroups($scope.project) #can be removed from groups by changing labs
       (response) -> alertService.add("danger", response.data.error, 6000)
     )
