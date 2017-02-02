@@ -35,10 +35,10 @@
         </p>
       </div><!--/drop-zone-->
       <div ng-show="!singleDropZone && upload.model.length > 0" class="selected-files">
-        <div class="selected-file">
+        <span class="selected-file">
           <i class="file-type fa {{upload.display.icon}}"></i>
           {{upload.model[0].name}}
-        </div>
+        </span>
         <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
           <i class="fa fa-times"></i>
         </a>

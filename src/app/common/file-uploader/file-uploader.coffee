@@ -112,6 +112,11 @@ angular.module('doubtfire.common.file-uploader', [])
     $scope.showUploader = !$scope.asButton
 
     #
+    # Default show upload button
+    #
+    $scope.showUploadButton ?= true
+
+    #
     # Default resetAfterUpload to true
     #
     $scope.resetAfterUpload ?= true
