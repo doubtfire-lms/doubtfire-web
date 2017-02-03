@@ -38,18 +38,19 @@
             </button>
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="project">
               <li>
-                <a ui-sref="projects/dashboard({projectId: project.project_id})">Task Dashboard</a>
+                <a ui-sref="projects/dashboard({projectId: project.project_id})">Dashboard</a>
               </li>
+              <li class="divider"></li>
               <li>
-                <a ui-sref="projects/groups({projectId: project.project_id})">Groups Manager</a>
-              </li>
-              <li>
-                <a ui-sref="projects/outcomes({projectId: project.project_id})">Learning Outcome Alignment</a>
+                <a ui-sref="projects/outcomes({projectId: project.project_id})">Learning Outcomes</a>
               </li>
               <li>
                 <a ui-sref="projects/portfolio({projectId: project.project_id})">Portfolio Creation</a>
               </li>
               <li class="divider"></li>
+              <li>
+                <a ui-sref="projects/groups({projectId: project.project_id})">Groups List</a>
+              </li>
               <li>
                 <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a>
               </li>

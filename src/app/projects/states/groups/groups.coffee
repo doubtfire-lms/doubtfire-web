@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.states.groups', [])
     controller: 'ProjectsGroupsStateCtrl'
     templateUrl: 'projects/states/groups/groups.tpl.html'
     data:
-      task: "Groups Manager"
+      task: "Groups List"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student']
    }

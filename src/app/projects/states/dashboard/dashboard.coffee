@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.dashboard', [
     controller: 'ProjectsDashboardStateCtrl'
     templateUrl: 'projects/states/dashboard/dashboard.tpl.html'
     data:
-      task: "Task Dashboard"
+      task: "Dashboard"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student']
    }
