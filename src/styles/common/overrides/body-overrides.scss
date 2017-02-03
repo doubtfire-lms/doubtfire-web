@@ -10,7 +10,7 @@ body {
   font-size: 1.2em;
   line-height: 2;
 }
-body > [ui-view="main"] {
+body > [ui-view="header"]:not(:empty) + [ui-view="main"] {
   padding-top: $main-view-top-padding;
   padding-bottom: $main-view-bottom-padding;
 }
