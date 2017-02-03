@@ -18,7 +18,7 @@ angular.module('doubtfire.home.states.home', [])
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = ExternalName
-  
+
   $scope.userFirstName = currentUser.profile.nickname or currentUser.profile.first_name
   $scope.showDate = dateService.showDate
 
@@ -39,6 +39,8 @@ angular.module('doubtfire.home.states.home', [])
     if showNewUserWizard
       $state.go 'new-user-wizard', { optInOnly: userHasNotOptedIn }
 
+    showNewUserWizard
+
   #
   # If there is a single project role, then automatically
   # switch the user to the project view for that role
@@ -49,14 +51,14 @@ angular.module('doubtfire.home.states.home', [])
     if $scope.unitRoles.length + $scope.projects.length == 1
       if $scope.projects.length == 1
         analyticsService.event 'Home', 'Switched to project on single unit'
-        $state.go 'projects#show', {projectId: $scope.projects[0].project_id}
+        $state.go 'projects/dashboard', {projectId: $scope.projects[0].project_id}
       else if $scope.unitRoles.length == 1
         analyticsService.event 'Home', 'Switched to unit on single unit'
-        $state.go 'units#show', {unitRole: $scope.unitRoles[0].id}
+        $state.go 'units/tasks/inbox', {unitRole: $scope.unitRoles[0].id}
 
   testForStateChanges = ->
-    testForNewUserWizard()
-    testSingleProjectRole()
+    showingWizard = testForNewUserWizard()
+    testSingleProjectRole() unless showingWizard
 
   unitService.getUnitRoles (roles) ->
     $scope.unitRoles = roles
