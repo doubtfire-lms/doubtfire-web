@@ -150,7 +150,7 @@ angular.module('doubtfire.common.file-uploader', [])
     refreshShownUploadZones = ->
       if $scope.singleDropZone
         # Find the first-most empty model in each zone
-        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model?)
+        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
         if firstEmptyZone?
           $scope.shownUploadZones = [firstEmptyZone]
         else

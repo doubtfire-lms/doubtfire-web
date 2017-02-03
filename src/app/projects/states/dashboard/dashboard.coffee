@@ -8,7 +8,7 @@ angular.module('doubtfire.projects.states.dashboard', [
 .config(($stateProvider) ->
   $stateProvider.state 'projects/dashboard', {
     parent: 'projects/index'
-    url: '/dashboard/:taskAbbr'
+    url: '/dashboard/:taskAbbr?tutor'
     controller: 'ProjectsDashboardStateCtrl'
     templateUrl: 'projects/states/dashboard/dashboard.tpl.html'
     data:

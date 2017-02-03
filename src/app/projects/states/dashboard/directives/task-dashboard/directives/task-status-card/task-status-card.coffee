@@ -7,18 +7,17 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-    unitRole: '=?'
-  controller: ($scope, taskService, listenerService) ->
+  controller: ($scope, $stateParams, taskService, listenerService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
     reapplyTriggers = ->
-      studentTriggers = _.map(taskService.switchableStates.student, taskService.statusData)
-      filteredStudentTriggers = $scope.task.filterFutureStates(studentTriggers)
-      $scope.triggers = filteredStudentTriggers
-      return unless $scope.unitRole?
-      tutorTriggers = _.map(taskService.switchableStates.tutor, taskService.statusData)
-      $scope.triggers.concat(tutorTriggers)
+      if $stateParams.tutor
+        $scope.triggers = _.map(taskService.statusKeys, taskService.statusData)
+      else
+        studentTriggers = _.map(taskService.switchableStates.student, taskService.statusData)
+        filteredStudentTriggers = $scope.task.filterFutureStates(studentTriggers)
+        $scope.triggers = filteredStudentTriggers
     # Required changes when task changes
     listeners.push $scope.$watch('task.id', ->
       return unless $scope.task?
