@@ -23,64 +23,69 @@
           <input class="form-control text-center input-lg" placeholder="Nickname or Preferred Name"  ng-model="user.nickname">
           <p class="help-block col-sm-12 text-center">You can choose to leave this blank</p>
         </div><!--/nickname-step-->
+        <div ng-show="currentStep == steps.studentIdStep">
+          <input class="form-control text-center input-lg" placeholder="Student ID" ng-model="user.student_id">
+        </div><!--/nickname-step-->
         <div ng-show="currentStep == steps.emailStep">
           <div class="form-group">
             <input class="form-control input-lg text-center" placeholder="Email Address"  ng-model="user.email">
           </div>
-          <hr>
-          <div class="form-group clearfix">
-            <div class="col-sm-12">
-              <label>Task Notifications</label>
-              <p class="help-block">
-                Recieve email notifications when new tasks become avaliable
-              </p>
-            </div>
-            <div class="col-sm-12">
-              <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
-                  <i class="fa fa-check"></i>
-                </label>
-                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
-                  <i class="fa fa-close"></i>
-                </label>
+          <div ng-hide="isStaff">
+            <hr>
+            <div class="form-group clearfix">
+              <div class="col-sm-12">
+                <label>Task Notifications</label>
+                <p class="help-block">
+                  Recieve email notifications when new tasks become avaliable
+                </p>
+              </div>
+              <div class="col-sm-12">
+                <div class="btn-group">
+                  <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
+                    <i class="fa fa-check"></i>
+                  </label>
+                  <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
+                    <i class="fa fa-close"></i>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-          <hr>
-          <div class="form-group clearfix">
-            <div class="col-sm-12">
-              <label>Feedback Notifications</label>
-              <p class="help-block">
-                Recieve email notifications when your tutor has feedback for you
-              </p>
-            </div>
-            <div class="col-sm-12">
-              <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
-                  <i class="fa fa-check"></i>
-                </label>
-                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
-                  <i class="fa fa-close"></i>
-                </label>
+            <hr>
+            <div class="form-group clearfix">
+              <div class="col-sm-12">
+                <label>Feedback Notifications</label>
+                <p class="help-block">
+                  Recieve email notifications when your tutor has feedback for you
+                </p>
+              </div>
+              <div class="col-sm-12">
+                <div class="btn-group">
+                  <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
+                    <i class="fa fa-check"></i>
+                  </label>
+                  <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
+                    <i class="fa fa-close"></i>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-          <hr>
-          <div class="form-group clearfix">
-            <div class="col-sm-12">
-              <label>Portfolio Notifications</label>
-              <p class="help-block">
-                Recieve email notifications when your portfolio is ready to mark
-              </p>
-            </div>
-            <div class="col-sm-12">
-              <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
-                  <i class="fa fa-check"></i>
-                </label>
-                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
-                  <i class="fa fa-close"></i>
-                </label>
+            <hr>
+            <div class="form-group clearfix">
+              <div class="col-sm-12">
+                <label>Portfolio Notifications</label>
+                <p class="help-block">
+                  Recieve email notifications when your portfolio is ready to mark
+                </p>
+              </div>
+              <div class="col-sm-12">
+                <div class="btn-group">
+                  <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
+                    <i class="fa fa-check"></i>
+                  </label>
+                  <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
+                    <i class="fa fa-close"></i>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
