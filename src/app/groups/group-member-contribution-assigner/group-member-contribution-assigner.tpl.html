@@ -13,7 +13,7 @@
         <td class="text-left">
           <grade-icon grade="member.target_grade"></grade-icon>
         </td>
-        <td ng-init="member.rating = initialStars">
+        <td>
           <rating
             class="group-member-contribution-rating"
             ng-click="checkClearRating(member)"
@@ -27,7 +27,12 @@
           <span
             class="label {{percentClass(member.percent)}}"
             ng-show="member.overStar">
-            {{member.percent || 'No'}} effort
+            <span ng-show="member.percent > 0">
+              {{member.percent}} % effort
+            </span>
+            <span ng-hide="member.percent > 0">
+              No effort
+            </span>
           </span>
         </td>
       </tr>

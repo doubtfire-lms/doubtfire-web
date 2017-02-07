@@ -10,6 +10,7 @@ angular.module('doubtfire.common.markdown-editor', [])
     placeholder: '@?'
     autofocus: "@?"
     focus: '=?'
+    onEnter: '=?'
   controller: ($scope, $timeout) ->
     DEFAULT_HEIGHT = 300
     $scope.isEditing = true
@@ -17,19 +18,16 @@ angular.module('doubtfire.common.markdown-editor', [])
     $scope.codemirrorLoaded = (editor) ->
       $scope.editor = editor
       $scope.editor.setSize("100%", $scope.height)
-      focusEditor() if $scope.autofocus
-    $scope.focus = focusEditor = ->
-      $timeout ->
-        $scope.editor.focus()
-        doc = $scope.editor.getDoc()
-        doc.setValue($scope.markdownText) if $scope.markdownText?.length > 0
-        lineCount = doc.lineCount()
-        lastChar = doc.getLine(lineCount - 1).length
-        doc.setCursor({line: lineCount, ch: lastChar})
-    $scope.heightStyle = ->
-      "height:  #{$scope.height or DEFAULT_HEIGHT}px"
+    $scope.focus = ->
+      $scope.editor.focus()
+    $scope.heightStyle = -> "height: #{$scope.height}px"
     $scope.editorOpts =
       lineWrapping : true
       mode: 'markdown'
       theme: 'xq-light'
       placeholder: $scope.placeholder
+      autofocus: $scope.autofocus
+    if $scope.onEnter?
+      $scope.editorOpts.extraKeys = {
+        Enter: $scope.onEnter
+      }

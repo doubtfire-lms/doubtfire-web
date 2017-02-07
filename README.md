@@ -118,7 +118,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 - [Moment.js](http://momentjs.com)
 - [Font Awesome](http://fontawesome.io)
 - [UI Router](https://github.com/angular-ui/ui-router)
-- [UI Bootstrap](http://angular-ui.github.io/bootstrap/)
+- [UI Bootstrap](http://angular-ui.github.io/bootstrap/versioned-docs/0.13.4/)
 - [UI Select](https://github.com/angular-ui/ui-select)
 - [NVD3 Charts](http://krispo.github.io/angular-nvd3/#/)
 - [Angular X-Editable](http://vitalets.github.io/angular-xeditable/)

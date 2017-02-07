@@ -74,7 +74,7 @@ angular.module("doubtfire.common.services.units", [])
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
           taskDef.seq = index
-          taskDef.group_set = _.find(unit.group_sets, {group_set_id: gs.id}) if taskDef.group_set_id
+          taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
           taskDef
         )
@@ -344,7 +344,7 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
     # Call projectService update functions to update stats and task details
-    projectService.updateTaskStats(student, student.stats)
+    projectService.updateTaskStats(student, student.stats) if student.stats?
     projectService.addTaskDetailsToProject(student, unit)
 
     # Return the mapped student

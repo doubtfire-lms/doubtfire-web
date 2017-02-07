@@ -126,7 +126,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.selectStudent = (student) ->
     $scope.selectedStudent = student
     $scope.project = null
-    projectService.fetchDetailsForProject student, $scope.unit, (project) ->
+    projectService.getProject student, $scope.unit, (project) ->
       $scope.project = project
     analyticsService.event 'Teacher View - Grading Tab', 'Selected Student'
 

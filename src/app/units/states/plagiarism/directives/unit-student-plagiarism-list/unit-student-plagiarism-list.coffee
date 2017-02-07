@@ -34,7 +34,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
 
       # _.each $scope.unit.students, (student) ->
       #   if student.max_pct_copy > 0
-      #     projectService.fetchDetailsForProject student, $scope.unit, (proj) ->
+      #     projectService.getProject student, $scope.unit, (proj) ->
       #       tasksWithCpy = _.filter proj.tasks, (t) -> t.pct_similar > 0
       #       proj.similar_to_count = tasksWithCpy.length
 
@@ -46,7 +46,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
       $scope.activeStudent = student
       $scope.loadingStudent = true
       if student
-        projectService.fetchDetailsForProject student, $scope.unit, (project) ->
+        projectService.getProject student, $scope.unit, (project) ->
           $scope.activeTask = _.find(student.tasks, (task) -> task.similar_to_count - task.similar_to_dismissed_count > 0)
           $scope.loadingStudent = false
 

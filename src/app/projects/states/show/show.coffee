@@ -5,7 +5,7 @@ angular.module('doubtfire.projects.states.show', [])
 #
 .config((headerServiceProvider) ->
   projectsShowStateData =
-    url: "/projects/:projectId?unitRole"
+    url: "/old/projects/:projectId?unitRole"
     views:
       main:
         controller: "ProjectsShowCtrl"
@@ -13,7 +13,7 @@ angular.module('doubtfire.projects.states.show', [])
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerServiceProvider.state "projects#show", projectsShowStateData
+  headerServiceProvider.state "old/projects#show", projectsShowStateData
 )
 
 .controller("ProjectsShowCtrl", ($scope, $stateParams, currentUser, UnitRole, Project, projectService, alertService, analyticsService) ->

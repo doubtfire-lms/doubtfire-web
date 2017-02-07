@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, currentUser) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -47,6 +47,26 @@ angular.module("doubtfire.common.services.tasks", [])
     'discuss'
     'demonstrate'
     'complete'
+  ]
+
+  taskService.terminalStatuses = [
+    'demonstrate'
+    'discuss'
+    'do_not_resubmit'
+    'complete'
+    'fail'
+  ]
+
+  taskService.pdfRegeneratableStatuses = [
+    'demonstrate'
+    'ready_to_mark'
+    'discuss'
+    'complete'
+  ]
+
+  taskService.submittableStatuses = [
+    'ready_to_mark'
+    'need_help'
   ]
 
   taskService.markedStatuses = [
@@ -256,22 +276,78 @@ angular.module("doubtfire.common.services.tasks", [])
       help: taskService.helpDescription(status)
     }
 
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysFromTarget = (task) ->
-    dueDate = new Date(task.definition.target_date)
-    now = new Date()
-    diffTime = now.getTime() - dueDate.getTime()
-    diffDays = Math.floor(diffTime / (1000 * 3600 * 24))
-    diffDays
+  # Return whether task is a group task
+  taskService.isGroupTask = (task) ->
+    groupService.isGroupTask(task)
 
+  # Returns the alignments for this task
+  taskService.staffAlignmentsForTask = (task) ->
+    filteredAlignments = $filter('taskDefinitionFilter')(task.unit().task_outcome_alignments, task.definition.id)
+    _.chain(filteredAlignments).map((a) ->
+      a.ilo = task.unit().outcome(a.learning_outcome_id)
+      a
+    )
+    .sortBy((a) -> a.ilo.ilo_number)
+    .value()
 
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysOverdue = (task) ->
+  # Return number of days until task hits target date, or false if already
+  # completed
+  taskService.daysUntilTargetDate = (task) ->
     return false if task.status == 'complete'
-    diffDays = taskService.daysFromTarget(task)
-    return false if diffDays <= 0
+    moment(task.definition.target_date).diff(moment(), 'days')
+
+  # Return number of days until task is due, or false if already completed
+  taskService.daysUntilDueDate = (task) ->
+    return false if !task.definition.due_date? || task.status == 'complete'
+    moment(task.definition.due_date).diff(moment(), 'days')
+
+  # Return number of days task is overdue from target, or false if not
+  taskService.daysPastTargetDate = (task) ->
+    return false if task.status == 'complete'
+    diffDays = moment().diff(moment(task.definition.target_date), 'days')
+    return false if !diffDays? || diffDays <= 0
     diffDays
 
+  # Return number of days task is overdue, or false if not overdue
+  taskService.daysPastDueDate = (task) ->
+    return false if task.status == 'complete' || !task.definition.due_date?
+    diffDays = moment().diff(moment(task.definition.due_date), 'days')
+    return false if !diffDays? || diffDays <= 0
+    diffDays
+
+  # Trigger for new status
+  taskService.triggerTransition = (task, status, unitRole) ->
+    throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
+    return if task.status == status
+    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
+    if requiresFileUpload
+      taskService.presentTaskSubmissionModal(task, status)
+    else
+      taskService.updateTaskStatus(task.unit(), task.project(), task, status)
+      asUser = if unitRole? then unitRole.role else 'Student'
+      analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
+
+  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence) ->
+    oldStatus = task.status
+    task.status = status
+    modal = UploadSubmissionModal.show(task, reuploadEvidence)
+    # Modal failed to present
+    unless modal?
+      task.status = oldStatus
+      return
+    modal.result.then(
+      # Grade was selected (modal closed with result)
+      (response) ->
+        null
+      # Grade was not selected (modal was dismissed)
+      (dismissed) ->
+        task.status = oldStatus
+        alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
+    )
+
+  # Whether or not new submissions can be made on a task
+  taskService.canReuploadEvidence = (task) ->
+    _.includes(taskService.terminalStatuses, task.status)
 
   doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (
@@ -297,6 +373,9 @@ angular.module("doubtfire.common.services.tasks", [])
         promise = doDeleteTask task, unit, null
         ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
+  taskService.plagiarismDetected = (task) ->
+    task.similar_to_count > 0
+
   taskService.indexOf = (status) ->
     _.indexOf(taskService.statusKeys, status)
 
@@ -315,13 +394,9 @@ angular.module("doubtfire.common.services.tasks", [])
     task.updateTaskStatus project, response.new_stats
     task.processing_pdf = response.processing_pdf
     task.grade = response.grade
-
     if response.status == status
-      $rootScope.$broadcast('UpdateAlignmentChart')
-      if project.updateBurndownChart?
-        project.updateBurndownChart()
+      project.updateBurndownChart?()
       alertService.add("success", "Status saved.", 2000)
-      $rootScope.$broadcast('TaskStatusUpdated', { status: response.status })
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id)
@@ -355,7 +430,7 @@ angular.module("doubtfire.common.services.tasks", [])
           failure?()
     # Must provide grade if graded and in a final complete state
     if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
-      GradeTaskModal.show(task).result.then(
+      GradeTaskModal.show(task)?.result.then(
         # Grade was selected (modal closed with result)
         (response) ->
           task.grade = response.selectedGrade
@@ -369,7 +444,7 @@ angular.module("doubtfire.common.services.tasks", [])
     else
       updateFunc()
 
-  taskService.recreatePDF = (task, success) ->
+  taskService.recreateSubmissionPdf = (task, onSuccess, onFailure) ->
     TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project().project_id },
       (value) ->  #success
         if value.result == "false"
@@ -379,12 +454,11 @@ angular.module("doubtfire.common.services.tasks", [])
           task.processing_pdf = true
           alertService.add("info", "Task PDF will be recreated.", 2000)
           analyticsService.event 'Task Service', 'Recreated PDF'
-
-          if success
-            success()
+          onSuccess?()
       (value) -> #fail
         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
         analyticsService.event 'Task Service', 'Failed to Recreate PDF'
+        onFailure?()
 
   taskService.taskIsGraded = (task) ->
     task? and task.definition.is_graded and task.grade?

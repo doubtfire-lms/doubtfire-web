@@ -48,7 +48,7 @@
     <a href="" ng-click="openAboutModal()">About {{externalName}}</a>
   </footer>
 </div>
-<div class="center-full-screen">
+<div class="center-full-screen" ng-show="authMethodFailed || waitingAWhile">
   <i class="fa fa-spinner fa-pulse fa-5x" ng-if="!authMethodLoaded && waitingAWhile && !authMethodFailed"></i>
   <div class="panel panel-danger" ng-if="authMethodFailed">
     <div class="panel-heading">

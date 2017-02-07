@@ -1,0 +1,110 @@
+// From https://gist.github.com/juukie/d71133e69877b46f060e
+
+$screen-xl:                  1560px !default;
+$screen-xl-min:              $screen-xl !default;
+$screen-xl-desktop:          $screen-xl-min !default;
+$screen-lg-max:              ($screen-xl-min - 1) !default;
+$container-xlarge-desktop:   (1530px + $grid-gutter-width) !default;
+$container-xl:               $container-xlarge-desktop !default;
+
+.container {
+  // @include container-fixed; No need for, already done.
+  @media (min-width: $screen-xl-min) {
+    width: $container-xl;
+  }
+}
+
+// xLarge grid
+//
+// Columns, offsets, pushes, and pulls for the large desktop device range.
+
+@media (min-width: $screen-xl-min) {
+  @include make-grid(xl);
+}
+
+// Generate the xlarge columns
+@mixin make-xl-column($columns, $gutter: $grid-gutter-width) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+
+  @media (min-width: $screen-xl-min) {
+    float: left;
+    width: percentage(($columns / $grid-columns));
+  }
+}
+@mixin make-xl-column-offset($columns) {
+  @media (min-width: $screen-xl-min) {
+    margin-left: percentage(($columns / $grid-columns));
+  }
+}
+@mixin make-xl-column-push($columns) {
+  @media (min-width: $screen-xl-min) {
+    left: percentage(($columns / $grid-columns));
+  }
+}
+@mixin make-xl-column-pull($columns) {
+  @media (min-width: $screen-xl-min) {
+    right: percentage(($columns / $grid-columns));
+  }
+}
+
+@mixin make-grid-columns($i: 1, $list: ".col-xl-#{$i}") {
+  @for $i from (1 + 1) through $grid-columns {
+    $list: "#{$list}, .col-xl-#{$i}";
+  }
+  #{$list} {
+    position: relative;
+    // Prevent columns from collapsing when empty
+    min-height: 1px;
+    // Inner gutter via padding
+    padding-left:  ($grid-gutter-width / 2);
+    padding-right: ($grid-gutter-width / 2);
+  }
+}
+
+@include make-grid-columns;
+
+@include responsive-invisibility('.visible-xl');
+
+.visible-xl-block,
+.visible-xl-inline,
+.visible-xl-inline-block {
+  display: none !important;
+}
+
+@media (min-width: $screen-xl-min) {
+  @include responsive-invisibility('.visible-lg');
+  @include responsive-visibility('.visible-xl');
+}
+.visible-xl-block {
+  @media (min-width: $screen-xl-min) {
+    display: block !important;
+  }
+}
+.visible-xl-inline {
+  @media (min-width: $screen-xl-min) {
+    display: inline !important;
+  }
+}
+.visible-xl-inline-block {
+  @media (min-width: $screen-xl-min) {
+    display: inline-block !important;
+  }
+}
+
+@media (min-width: $screen-lg-min) and (max-width: $screen-lg-max) {
+  @include responsive-invisibility('.hidden-lg');
+}
+
+@media (min-width: $screen-xl-min) {
+  @include responsive-invisibility('.hidden-xl');
+  @include responsive-visibility('.hidden-lg');
+
+  .visible-lg-block,
+  .visible-lg-inline,
+  .visible-lg-inline-block {
+    display: none !important;
+  }
+}

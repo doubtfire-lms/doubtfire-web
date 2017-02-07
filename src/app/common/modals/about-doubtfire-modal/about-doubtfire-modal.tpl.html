@@ -3,8 +3,11 @@
     <i class="logo"></i>
     <h1 class="full logo">
       {{externalName}}
-      <small>
-        Version 4
+      <small ng-hide="externalName == 'Doubtfire'">
+        Powered By Doubtfire
+      </small>
+      <small ng-show="externalName == 'Doubtfire'">
+        Version 5
       </small>
     </h1>
   </div>
@@ -20,12 +23,12 @@
       </li>
     </ul>
     <p class="text-muted text-center">
-      &copy; 2012&ndash;2016. Made in Melbourne.
+      &copy; 2012&ndash;2017. Made in Melbourne.
     </p>
     <p class="text-muted text-center logo-smallprint">
-      {{externalName}} is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us on <a href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!
+      Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us on <a href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!
       <br>
-      The {{externalName}} Logo adapted under Creative Commons from "Progress" by Creative Stall from the <a href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
+      The Doubtfire Logo adapted under Creative Commons from "Progress" by Creative Stall from the <a href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
     </p>
   </div>
   <div class="modal-footer">

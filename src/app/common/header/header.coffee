@@ -32,8 +32,8 @@ angular.module('doubtfire.common.header', [
     context = data.context
     return unless context?
     $scope.unit =
-      code: context.unit_code
-      name: context.unit_name
+      code: context.unit_code || context.unit().code
+      name: context.unit_name || context.unit().name
     $scope[if context.role? then "unitRole" else "project"] = context
 
   $scope.task = $state.current.data.task

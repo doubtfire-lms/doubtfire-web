@@ -85,6 +85,8 @@ angular.module('doubtfire.groups.group-selector', [])
       return unless groupSet?
       startLoading()
       $scope.selectGroup(null)
+      # Can only create groups if unitRole provided and selectedGroupSet
+      $scope.canCreateGroups = $scope.unitRole? || groupSet?.allow_students_to_create_groups
       $scope.unit.getGroups(groupSet.id, (groups) ->
         $scope.selectedGroupSet = groupSet
         groupSet.groups = groups
@@ -94,9 +96,6 @@ angular.module('doubtfire.groups.group-selector', [])
       , finishLoading)
     $scope.selectGroupSet($scope.selectedGroupSet)
 
-    # Can only create groups if unitRole provided and selectedGroupSet
-    $scope.canCreateGroups = $scope.unitRole? || $scope.selectedGroupSet?.allow_students_to_create_groups
-
     # Load groups if not loaded
     $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
 
@@ -104,7 +103,7 @@ angular.module('doubtfire.groups.group-selector', [])
     $scope.staffFilter = {
       Convenor: 'all',
       Tutor: 'mine'
-    }[$scope.unitRole.role]
+    }[$scope.unitRole.role] if $scope.unitRole?
 
     # Changing staff filter reapplies filter
     $scope.onChangeStaffFilter = applyFilters
@@ -130,6 +129,20 @@ angular.module('doubtfire.groups.group-selector', [])
           resetNewGroupForm()
           applyFilters()
           $scope.selectedGroup = newGroup
+      )
+
+    # Join or leave group as project
+    $scope.projectInGroup = (group) ->
+      _.find($scope.project?.groups, {id: group.id})?
+
+    $scope.joinGroup = (group) ->
+      return unless $scope.project?
+      partOfGroup = $scope.projectInGroup(group)
+      return alertService.add("danger", "You are already member of this group") if partOfGroup
+      group.addMember($scope.project,
+        () ->
+          $scope.selectedGroup = group
+        () ->
       )
 
     # Update group function

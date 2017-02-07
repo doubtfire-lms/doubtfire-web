@@ -32,7 +32,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         $scope.task.comments = _.map(response, taskService.mapComment)
         $scope.task.num_new_comments = 0
         scrollDown()
-        $scope.focus() if $scope.refocusOnTaskChange
+        $scope.focus?() if $scope.refocusOnTaskChange
 
     # Automatically scroll the inner div to the bottom of comments
     scrollDown = ->
@@ -42,11 +42,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
     # Checks for enter keydown
-    $scope.checkForEnterPress = ($event) ->
-      ENTER_KEY = 13
-      return if $event.which isnt ENTER_KEY or $event.shiftKey
-      $scope.addComment() if $scope.comment.text.trim().length isnt 0
-      false
+    $scope.enterDown = (editor) ->
+      $scope.addComment()
+      return CodeMirror.Pass
 
     # Submits a new comment
     $scope.addComment = ->

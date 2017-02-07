@@ -12,7 +12,7 @@ angular.module('doubtfire.groups.group-member-list', [])
     unitRole: '='
     selectedGroup: '='
     onMembersLoaded: '=?'
-  controller: ($scope, $timeout, GroupMember, gradeService, listenerService) ->
+  controller: ($scope, $timeout, GroupMember, gradeService, alertService, listenerService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -38,14 +38,26 @@ angular.module('doubtfire.groups.group-member-list', [])
 
     # Remove group members
     $scope.removeMember = (member) ->
-      $scope.selectedGroup.removeMember(member)
+      $scope.selectedGroup.removeMember(member,
+        # Remove from member's group if exists
+        () ->
+          if member.project_id == $scope.project?.project_id
+            $scope.project.groups = _.without($scope.project.groups, $scope.selectedGroup)
+            $scope.selectedGroup = null
+      )
 
     # Listen for changes to group
     listeners.push $scope.$watch "selectedGroup.id", (newGroupId) ->
       return unless newGroupId?
       startLoading()
       $scope.canRemoveMembers = $scope.unitRole || $scope.selectedGroup.groupSet().allow_students_to_manage_groups
-      $scope.selectedGroup.getMembers((members) ->
-        finishLoading()
+      $scope.selectedGroup.getMembers(
+        (members) ->
+          finishLoading()
+        (failure) ->
+          $timeout((->
+            alertService.add("danger", "Unauthorised to view members in this group", 3000)
+            $scope.selectedGroup = null
+          ), 1000)
       )
 )

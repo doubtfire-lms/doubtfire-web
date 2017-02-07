@@ -1,0 +1,20 @@
+<div class="panel panel-default panel-scrollable">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      {{task.definition.name}}
+    </h4>
+  </div><!--/panel-heading-->
+  <div class="panel-body">
+    <div class="col-sm-12 col-xl-6">
+      <task-plagiarism-card task="task"></task-plagiarism-card>
+      <task-due-card task="task"></task-due-card>
+      <task-description-card task="task"></task-description-card>
+      <task-outcomes-card task="task"></task-outcomes-card>
+    </div><!--/task-description-column-->
+    <div class="col-sm-12 col-xl-6">
+      <task-status-card task="task"></task-status-card>
+      <task-assessment-card task="task"></task-assessment-card>
+      <task-submission-card task="task"></task-submission-card>
+    </div><!--/task-description-column-->
+  </div><!--/panel-body-->
+</div>

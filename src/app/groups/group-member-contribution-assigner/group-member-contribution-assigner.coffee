@@ -18,7 +18,6 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     $scope.selectedGroup = projectService.getGroupForTask $scope.project, $scope.task
 
     $scope.memberSortOrder = 'student_name'
-    $scope.team.members = []
     $scope.numStars = 5
     $scope.initialStars = 3
 
@@ -30,23 +29,29 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     }
 
     $scope.checkClearRating = (member) ->
-      if member.confRating == 1 && member.overStar == 1 && member.rating == 1
-        member.rating = 0
-        member.percent = 0
+      if member.confRating == 1 && member.overStar == 1 && member.rating == 0
+        member.rating = member.percent = 0
       else if member.confRating == 1 && member.overStar == 1 && member.rating == 0
         member.rating = 1
-
       member.confRating = member.rating
+
+    memberPercentage = (member, rating) ->
+      (100 * (rating / groupService.groupContributionSum($scope.team.members, member, rating))).toFixed()
 
     $scope.hoveringOver = (member, value) ->
       member.overStar = value
-      member.percent = (100 * (value / groupService.groupContributionSum($scope.team.members, member, value))).toFixed()
+      member.percent = memberPercentage(member, value)
 
     $scope.gradeFor = gradeService.gradeFor
 
+    # TODO: (@alexcu) Supply group members
     if $scope.selectedGroup && $scope.selectedGroupSet
       GroupMember.query { unit_id: $scope.project.unit_id, group_set_id: $scope.selectedGroupSet.id, group_id: $scope.selectedGroup.id }, (members) ->
-        $scope.team.members = members
+        $scope.team.members = _.map(members, (member) ->
+          member.rating = member.confRating = $scope.initialStars
+          member.percent = memberPercentage(member, member.rating)
+          member
+        )
         # Need the '+' to convert to number
         $scope.percentages.warning = +(25 / members.length).toFixed()
         $scope.percentages.info    = +(50 / members.length).toFixed()

@@ -37,6 +37,20 @@ angular.module('doubtfire.common.file-uploader', [])
     showName: '=?'
     # Shows initially as button
     asButton: '=?'
+    # Exposed files that are in the zone
+    filesSelected: '=?'
+    # Whether we have one or many drop zones (default is false)
+    singleDropZone: '=?'
+    # Whether or not we show the upload button or do we hide it allowing an
+    # external trigger to upload (default is true)
+    showUploadButton: '=?'
+    # Sets this scope variable to a function that can then be triggered externally
+    # from outside the scope
+    initiateUpload: '=?'
+    # What happens when we click cancel on failure
+    onClickFailureCancel: '=?'
+    # Whether we should reset after upload
+    resetAfterUpload: '=?'
   controller: ($scope, $timeout) ->
     #
     # Accepted upload types with associated data
@@ -75,11 +89,17 @@ angular.module('doubtfire.common.file-uploader', [])
     #
     $scope.clearEnqueuedUpload = (upload) ->
       upload.model = null
+      refreshShownUploadZones()
 
     #
     # Default showName
     #
     $scope.showName ?= true
+
+    #
+    # Default singleDropZone
+    #
+    $scope.singleDropZone ?= false
 
     #
     # Default asButton
@@ -92,14 +112,49 @@ angular.module('doubtfire.common.file-uploader', [])
     $scope.showUploader = !$scope.asButton
 
     #
+    # Default show upload button
+    #
+    $scope.showUploadButton ?= true
+
+    #
+    # Default resetAfterUpload to true
+    #
+    $scope.resetAfterUpload ?= true
+
+    #
     # When a file is dropped, if there has been rejected files
     # warn the user that that file is not okay
     #
-    $scope.checkForError = (upload) ->
+    checkForError = (upload) ->
       if upload.rejects?.length > 0
         upload.display.error = yes
         upload.rejects = null
         $timeout (-> upload.display.error = no), 4000
+        return true
+      false
+
+    # Called when the model has changed
+    $scope.modelChanged = (newFiles, upload) ->
+      return unless newFiles.length > 0 || upload.rejects.length > 0
+      gotError = checkForError(upload)
+      unless gotError
+        $scope.filesSelected = _.flatten(_.map($scope.uploadZones, 'model'))
+        if $scope.singleDropZone
+          $scope.selectedFiles = $scope.uploadZones
+          refreshShownUploadZones()
+
+    #
+    # Will refresh which shown drop zones are shown
+    # Only changes if showing one drop zone
+    #
+    refreshShownUploadZones = ->
+      if $scope.singleDropZone
+        # Find the first-most empty model in each zone
+        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
+        if firstEmptyZone?
+          $scope.shownUploadZones = [firstEmptyZone]
+        else
+          $scope.shownUploadZones = []
 
     #
     # Whether or not drop is supported by this browser - assume
@@ -110,42 +165,49 @@ angular.module('doubtfire.common.file-uploader', [])
     #
     # Data required for each upload zone
     #
-    updateUploadZones = (files) -> _.map files, (uploadData, uploadName) ->
-      type = uploadData.type
-      typeData = ACCEPTED_TYPES[type]
-      # No typeData found?
-      unless typeData?
-        throw Error "Invalid type provided to File Uploader #{type}"
-      zone =
-        name:     uploadName
-        model:    null
-        accept:   "'." + typeData.extensions.join(',.') + "'"
-        # Rejected files
-        rejects:  null
-        display:
-          name:   uploadData.name
-          # Font awesome supports PDF (from Document),
-          # CSV, Code and Image icons
-          icon:   typeData.icon
-          type:   typeData.name
-          # Whether or not a reject error is shown
-          error:  false
-      zone
-
-    $scope.uploadZones = updateUploadZones $scope.files
+    createUploadZones = (files) ->
+      zones = _.map(files, (uploadData, uploadName) ->
+        type = uploadData.type
+        typeData = ACCEPTED_TYPES[type]
+        # No typeData found?
+        unless typeData?
+          throw Error "Invalid type provided to File Uploader #{type}"
+        zone =
+          name:     uploadName
+          model:    null
+          accept:   "'." + typeData.extensions.join(',.') + "'"
+          # Rejected files
+          rejects:  null
+          display:
+            name:   uploadData.name
+            # Font awesome supports PDF (from Document),
+            # CSV, Code and Image icons
+            icon:   typeData.icon
+            type:   typeData.name
+            # Whether or not a reject error is shown
+            error:  false
+        zone
+      )
+      # Remove all but the active drop zone
+      if $scope.singleDropZone
+        $scope.shownUploadZones = [_.first(zones)]
+      else
+        $scope.shownUploadZones = zones
+      $scope.uploadZones = zones
+    createUploadZones($scope.files)
 
     #
     # Watch for changes in the files, and recreate the zones when
     # they do change
     #
     $scope.$watch 'files', (files, oldFiles) ->
-      $scope.uploadZones = updateUploadZones files
+      createUploadZones(files)
 
     #
     # Checks if okay to upload (i.e., file models exist for each drop zone)
     #
     $scope.readyToUpload = ->
-      return $scope.isReady = _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
+      $scope.isReady = _.compact(_.flatten (upload.model for upload in $scope.uploadZones)).length is _.keys($scope.files).length
 
     #
     # Resets the uploader and call it
@@ -160,9 +222,16 @@ angular.module('doubtfire.common.file-uploader', [])
     $scope.resetUploader()
 
     #
+    # Override on click failure cancel if not set to just reset uploader
+    #
+    $scope.onClickFailureCancel ?= $scope.resetUploader
+
+
+    #
     # Initiates the upload
     #
     $scope.initiateUpload = ->
+      return unless $scope.readyToUpload()
       $scope.onBeforeUpload?()
       xhr   = new XMLHttpRequest()
       form  = new FormData()
@@ -196,7 +265,11 @@ angular.module('doubtfire.common.file-uploader', [])
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
               $scope.uploadingInfo.success = true
-              $timeout (-> $scope.onComplete?(); $scope.resetUploader()), 2500
+              $timeout((->
+                $scope.onComplete?()
+                if $scope.resetAfterUpload
+                  $scope.resetUploader()
+              ), 2500)
             # Fail
             else
               $scope.onFailure?(response)

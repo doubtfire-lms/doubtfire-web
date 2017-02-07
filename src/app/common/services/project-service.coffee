@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation) ->
   projectService = {}
 
   projectService.loadedProjects = null
@@ -40,6 +40,16 @@ angular.module("doubtfire.common.services.projects", [])
     else
       fireCallback()
 
+  projectService.updateProject = (id, data, onSuccess, onFailure) ->
+    data = _.extend({ id: id }, data)
+    Project.update(data,
+      (success) ->
+        onSuccess?(success)
+      (failure) ->
+        onFailure?(failure)
+    )
+
+
   ###
   projects's can update their task stats
   converts the | delimited stats to its component arrays
@@ -73,8 +83,43 @@ angular.module("doubtfire.common.services.projects", [])
 
     # must be function to avoid cyclic structure
     task.project = -> project
+    task.unit = project.unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
+    task.canReuploadEvidence = ->
+      taskService.canReuploadEvidence(task)
+    task.plagiarismDetected = ->
+      taskService.plagiarismDetected(task)
+    task.isGroupTask = ->
+      taskService.isGroupTask(task)
+    task.studentInAGroup = ->
+      task.group()?
+    task.group = ->
+      projectService.getGroupForTask(task.project(), task)
+    task.addComment = (textString, success, failure) ->
+      taskService.addComment(task, textString, success, failure)
+    task.staffAlignments = ->
+      taskService.staffAlignmentsForTask(task)
+    task.isToBeCompletedSoon = ->
+      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() > 0
+    task.isDueSoon = ->
+      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() > 0
+    task.isOverdue = ->
+      task.daysPastDueDate() > 0
+    task.isPastTargetDate = ->
+      task.daysPastTargetDate() > 0
+    task.isDueToday = ->
+      task.daysUntilDueDate() == 0
+    task.daysPastDueDate = ->
+      taskService.daysPastDueDate(task)
+    task.daysPastTargetDate = ->
+      taskService.daysPastTargetDate(task)
+    task.daysUntilDueDate = ->
+      taskService.daysUntilDueDate(task)
+    task.daysUntilTargetDate = ->
+      taskService.daysUntilTargetDate(task)
+    task.triggerTransition = (status, unitRole) ->
+      taskService.triggerTransition(task, status, unitRole)
     task.updateTaskStatus = (project, new_stats) ->
       projectService.updateTaskStats(project, new_stats)
     task.needsSubmissionDetails = ->
@@ -85,8 +130,12 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).icon
     task.statusLabel = ->
       taskService.statusData(task.status).label
+    task.statusHelp = ->
+      taskService.statusData(task.status).help
     task.taskKey = ->
       taskService.taskKey(task)
+    task.recreateSubmissionPdf = (onSuccess, onFailure) ->
+      taskService.recreateSubmissionPdf(task, onSuccess, onFailure)
     task.taskKeyToUrlString = ->
       taskService.taskKeyToUrlString(task)
     task.taskKeyToIdString = ->
@@ -97,17 +146,17 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.hasTaskKey(task, key)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
-    task.getSubmissionDetails = ( success, failure ) ->
-      unless task.needsSubmissionDetails()
-        if _.isFunction(success) then success(task, {} )
-      else
-        Task.SubmissionDetails.get { id: project.project_id, task_definition_id: task.definition.id },
-          (response) ->
-            task.has_pdf = response.has_pdf
-            task.processing_pdf = response.processing_pdf
-            if _.isFunction(success) then success(task, response)
-          (response) ->
-            if _.isFunction(failure) then failure(task, response)
+    task.getSubmissionDetails = (onSuccess, onFailure) ->
+      return onSuccess?(task) unless task.needsSubmissionDetails()
+      Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },
+        (response) ->
+          task.has_pdf = response.has_pdf
+          task.processing_pdf = response.processing_pdf
+          task.submission_date = response.submission_date
+          onSuccess?(task)
+        (response) ->
+          onFailure?(response)
+      )
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
@@ -121,6 +170,7 @@ angular.module("doubtfire.common.services.projects", [])
         similar_to_count: 0
         similar_to_dismissed_count: 0
         times_assessed: 0
+        num_new_comments: 0
         # pdf details are loaded from Task.SubmissionDetails
         # processing_pdf: null
         # has_pdf: null
@@ -136,10 +186,11 @@ angular.module("doubtfire.common.services.projects", [])
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
     project
 
-  projectService.addProjectMethods = (project, unit) ->
+  projectService.addProjectMethods = (project) ->
     project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
-        project.burndown_chart_data = response.burndown_chart_data
+        project.burndown_chart_data.length = response.burndown_chart_data
+        Visualisation.refreshAll()
 
     project.incorporateTask = (newTask) ->
       unless project.tasks?
@@ -158,18 +209,22 @@ angular.module("doubtfire.common.services.projects", [])
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
 
-  projectService.fetchDetailsForProject = (project, unit, callback) ->
+  projectService.getProject = (project, unit, onSuccess, onFailure) ->
+    projectId = if _.isNumber(project) then project else project?.project_id
+    throw Error "No project id given to getProject" unless projectId?
     if project.burndown_chart_data?
-      callback(project)
+      onSuccess?(project)
     else
-      Project.get { id: project.project_id }, (project_response) ->
-        _.extend project, project_response
-
-        projectService.addProjectMethods(project, unit)
-
-        if unit
-          projectService.addTaskDetailsToProject(project, unit)
-        callback(project)
+      Project.get({ id: projectId },
+        (response) ->
+          project = _.extend(project, response)
+          projectService.addProjectMethods(project)
+          projectService.addTaskDetailsToProject(project, unit) if unit?
+          onSuccess?(project)
+        (failure) ->
+          alertService.add("danger", "#{failure.data.error || "Unable to load project"}", 6000)
+          onFailure?(failure)
+      )
 
   projectService.updateGroups = (project) ->
     if project.groups?

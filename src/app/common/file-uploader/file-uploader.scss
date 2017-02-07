@@ -61,17 +61,26 @@
     }
   }
 
-  // File headers
-  .file-title {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #555;
-  }
-  .file-registered {
-    font-size: 1.2em;
-    display: inline-block;
-    i {
-      margin-right: 1ex;
+  // File header
+  .selected-files {
+    &:not(.list-group) {
+      display: inline-block;
+    }
+    .selected-file {
+      font-size: 1.2em;
+      i.file-type {
+        margin-right: 1ex;
+        font-size: 1.2em;
+      }
+      &.highlight {
+        animation: highlight-selected-file-animation;
+        animation-duration: 0.75s;
+        @keyframes highlight-selected-file-animation {
+          0% { background: rgba(33, 150, 243, 0.4); }
+          0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
+          100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+        }
+      }
     }
   }
   a.clear-upload {

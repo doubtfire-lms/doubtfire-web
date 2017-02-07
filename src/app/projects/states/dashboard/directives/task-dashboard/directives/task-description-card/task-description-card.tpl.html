@@ -1,0 +1,50 @@
+<div class="card card-sm">
+  <div class="card-heading">
+    <h4>Description</h4>
+  </div><!--/description-heading-->
+  <div class="card-body">
+    <div class="markdown-to-pdf" ng-bind-html="task.definition.description | markdown"></div>
+  </div><!--/description-body-->
+  <div class="card-footer">
+    <h5>Key Information</h5>
+    <ul>
+      <li>
+        <strong>{{grades.names[task.definition.target_grade]}} Task</strong>
+        &mdash;
+        This task is a <strong>{{grades.names[task.definition.target_grade] | lcfirst}}</strong> task.
+      </li>
+      <li>
+        <strong>Target Date</strong>
+        &mdash;
+        You should aim to have this task completed by <strong>{{task.definition.target_date | humanizedDate}}</strong>.
+      </li>
+      <li ng-show="task.definition.due_date">
+        <strong>Due Date</strong>
+        &mdash;
+        You must complete this task by <strong>{{task.definition.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
+      </li>
+    </ul>
+  </div><!--/key-info-footer-->
+  <div class="card-footer" ng-show="task.definition.has_task_pdf || task.definition.has_task_resources">
+    <a
+      ng-click="downloadEvent('PDF')"
+      href="{{urls.taskSheet}}"
+      ng-show="task.definition.has_task_pdf"
+      target="_blank"
+      class="btn btn-primary">
+      <i class="fa fa-file-pdf-o"></i>
+      <i class="fa fa-download"></i>
+      Download Task Sheet
+    </a>
+    <a
+      ng-click="downloadEvent('Resources')"
+      href="{{urls.resources}}"
+      ng-show="task.definition.has_task_resources"
+      target="_blank"
+      class="btn btn-primary">
+      <i class="fa fa-file-zip-o"></i>
+      <i class="fa fa-download"></i>
+      Download Task Resources
+    </a>
+  </div><!--/description-footer-->
+</div>
