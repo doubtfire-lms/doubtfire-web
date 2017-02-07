@@ -15,6 +15,12 @@
 
   .card-heading {
     padding: $card-header-padding;
+    background-color: #607D8B;
+    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
+    color: white;
+    .text-muted {
+      color: white;
+    }
   }
   .card-body {
     padding: $card-body-padding;
@@ -23,11 +29,6 @@
     position: relative;
     background-color: inherit;
     padding: $card-footer-padding;
-  }
-  .card-heading {
-    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-  }
-  .card-footer {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
   }
 
