@@ -46,15 +46,15 @@ angular.module('doubtfire.home.states.home', [])
   # switch the user to the project view for that role
   #
   testSingleProjectRole = ->
-    if not (hasRoles && hasProjects)
-      return
-    if $scope.unitRoles.length + $scope.projects.length == 1
-      if $scope.projects.length == 1
-        analyticsService.event 'Home', 'Switched to project on single unit'
-        $state.go 'projects/dashboard', {projectId: $scope.projects[0].project_id}
-      else if $scope.unitRoles.length == 1
-        analyticsService.event 'Home', 'Switched to unit on single unit'
-        $state.go 'units/tasks/inbox', {unitRole: $scope.unitRoles[0].id}
+    # if not (hasRoles && hasProjects)
+    #   return
+    # if $scope.unitRoles.length + $scope.projects.length == 1
+    #   if $scope.projects.length == 1
+    #     analyticsService.event 'Home', 'Switched to project on single unit'
+    #     $state.go 'projects/dashboard', {projectId: $scope.projects[0].project_id}
+    #   else if $scope.unitRoles.length == 1
+    #     analyticsService.event 'Home', 'Switched to unit on single unit'
+    #     $state.go 'units/tasks/inbox', {unitRole: $scope.unitRoles[0].id}
 
   testForStateChanges = ->
     showingWizard = testForNewUserWizard()
