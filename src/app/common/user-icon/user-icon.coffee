@@ -8,12 +8,14 @@ angular.module('doubtfire.common.user-icon', [])
   scope:
     user: '=?'
     size: '=?'
+    email: '=?'
   templateUrl: 'common/user-icon/user-icon.tpl.html'
   controller: ($scope, $http, currentUser, md5) ->
     $scope.user ?= currentUser.profile
     $scope.size ?= 100
+    $scope.email ?= $scope.user.email
     # Gravatar hash
-    hash = md5.createHash($scope.user.email.trim().toLowerCase())
+    hash = md5.createHash($scope.email.trim().toLowerCase())
     backgroundUrl = "https://www.gravatar.com/avatar/#{hash}.png?default=blank&size=#{$scope.size}"
     $scope.userBackgroundStyle = "background-image: url('#{backgroundUrl}')"
     $scope.initials = (->

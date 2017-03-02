@@ -3,8 +3,8 @@
   align-self: flex-end;
   border-radius: 100%;
   font-size: inherit;
-  width: 2em;
-  height: 2em;
+  width: 2.25em;
+  height: 2.25em;
   position: relative;
 }
 .user-icon > .user-icon-wrapper {
@@ -23,6 +23,7 @@
   &.user-icon-gravatar {
     z-index: 1;
     background-size: cover;
+    border: 1px solid #eee;
   }
   &.user-icon-initials {
     color: #fff;

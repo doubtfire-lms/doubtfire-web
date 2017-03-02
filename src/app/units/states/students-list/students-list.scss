@@ -46,6 +46,15 @@
         border-radius: 10px;
       }
     }
+    td.avatar {
+      text-align: right;
+      .user-icon {
+        margin-right: 1ex;
+        width: 2.5em;
+        height: 2.5em;
+      }
+    }
+    th.avatar     { width: 05%; }
     th.student-id { width: 10%; }
     th.name       { width: 15%; }
     th.stats      { width: 30%; }

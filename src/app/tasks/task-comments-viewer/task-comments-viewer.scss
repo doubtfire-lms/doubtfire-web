@@ -47,10 +47,10 @@ task-comments-viewer .comment .user-icon {
   margin-right: $comment-text-padding;
   .user-icon-gravatar {
     // To hide blue border
-    top: -1px;
-    right: -1px;
-    bottom: -1px;
-    left: -1px;
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
   }
   .user-icon-initials {
     color: #fff;
