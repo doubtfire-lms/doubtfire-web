@@ -25,7 +25,13 @@
         </div><!--/nickname-step-->
         <div ng-show="currentStep == steps.studentIdStep">
           <input class="form-control text-center input-lg" placeholder="Student ID" ng-model="user.student_id">
-        </div><!--/nickname-step-->
+        </div><!--/student-id-step-->
+        <div ng-show="currentStep == steps.avatarStep">
+          <user-icon size="60" style="width: 60px; height: 60px; font-size: 2em"></user-icon>
+          <p style="margin-top: 1.5em;">
+            <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank" class="btn btn-lg btn-default">Change Avatar</a>
+          </p>
+        </div><!--/avatar-step-->
         <div ng-show="currentStep == steps.emailStep">
           <div class="form-group">
             <input class="form-control input-lg text-center" placeholder="Email Address"  ng-model="user.email">

@@ -42,20 +42,25 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       subtitle: "Please enter your Student ID number that is allocated by your institution."
       seq:      2
     }
+    avatarStep: {
+      title:    "Give yourself an avatar"
+      subtitle: "Set your avatar using Gravatar to help you be identified on Doubtfire."
+      seq:      3
+    }
     emailStep: {
       title:    "How would you like us to email you?"
       subtitle: "Based on your preferences, we will email you as frequently as you'd like us to."
-      seq:      3
+      seq:      4
     },
     targetGradeStep: {
       title:    "What grades are you aiming for?"
       subtitle: "We noticed you are enrolled in the following subject(s)."
-      seq:      4
+      seq:      5
     },
     optInToResearchStep: {
       title:    "Would you like to help us make Doubtfire better?"
       subtitle: "We would like to anonymously use your Doubtfire usage for research in making Doubtfire better."
-      seq:      5
+      seq:      6
     }
   }
   # Alises to first and last step
@@ -108,7 +113,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     switch $scope.currentStep
       when $scope.steps.nameStep
         state = $scope.user.first_name?.trim().length > 0 and $scope.user.last_name?.trim().length > 0
-      when $scope.steps.nicknameStep, $scope.steps.targetGradeStep
+      when $scope.steps.nicknameStep, $scope.steps.targetGradeStep, $scope.steps.avatarStep
         state = true
       when $scope.steps.studentIdStep
         state = $scope.user.student_id.trim().length > 0
