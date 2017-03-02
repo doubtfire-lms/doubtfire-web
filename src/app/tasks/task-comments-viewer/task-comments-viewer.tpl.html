@@ -6,15 +6,14 @@
   </div>
   <div class="panel-body">
     <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
-      <div
-        class="author-bubble"
+      <user-icon
+        user="comment.author"
         ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
         tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}"
         tooltip-append-to-body="true"
         tooltip-popover-delay="500"
         tooltip-placement="left">
-          {{comment.initials}}
-      </div><!--/comment-details-->
+      </user-icon><!--/user-icon-->
       <div class="comment-bubble">
         <div class="comment-text">
           <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
