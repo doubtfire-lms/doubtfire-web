@@ -17,11 +17,16 @@
     padding: $card-header-padding;
     background-color: #607D8B;
     border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-    color: white;
+    color: #fff;
     .text-muted {
-      color: white;
+      color: darken(#fff, 1%);
     }
+    &.card-danger  { background-color: $state-danger-bg; }
+    &.card-success { background-color: $state-success-bg; }
+    &.card-warning { background-color: $state-warning-bg; }
+    &.card-info    { background-color: $state-info-bg; }
   }
+  .card-heading
   .card-body {
     padding: $card-body-padding;
   }
