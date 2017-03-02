@@ -26,13 +26,13 @@
       learnt in the unit, and how your knowledge and skills have developed.
     </p>
     <div class="card">
-      <div class="card-heading text-success" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
+      <div class="card-heading card-success" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
         <h4>
           <i class="fa fa-check"></i> Learning Summary Report Submitted
         </h4>
         Click <a ng-click="forceLSRSubmit = true">here</a> to re-upload a new Learning Summary Report
       </div><!--/lsr-uploaded-->
-      <div class="card-heading text-danger" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
+      <div class="card-heading card-danger" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
         <h4>
           <i class="fa fa-warning"></i> Before you submit the Learning Summary Report...
         </h4>
