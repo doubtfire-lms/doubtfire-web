@@ -1,13 +1,12 @@
-.user-icon-bubble {
+.user-icon {
   display: inline-block;
   align-self: flex-end;
   border-radius: 100%;
-  background-size: cover;
   font-size: inherit;
   width: 2em;
   height: 2em;
 }
-.user-icon-bubble > .user-icon-bubble-initials {
+.user-icon > .user-icon-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,6 +16,7 @@
   font-weight: bold;
   font-size: inherit;
   padding-bottom: 2px;
-  background: #777;
+  background-color: #777;
+  background-size: cover;
   border-radius: 100%;
 }
