@@ -67,6 +67,7 @@
     <table ng-show="filteredStudents.length > 0" class="table table-condensed table-hover table-pointer">
       <thead>
         <tr>
+          <th class="avatar"></th>
           <th class="student-id">
             <a ng-click="sortTableBy('student_id')">
               Student ID <i ng-show="tableSort.order == 'student_id'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
@@ -101,6 +102,9 @@
       </thead>
       <tbody>
         <tr class="task-progress-row" ng-repeat="student in filteredStudents">
+          <td class="avatar" ng-click="viewStudent(student)">
+            <user-icon user="student" email="student.student_email"></user-icon>
+          </td>
           <td ng-click="viewStudent(student)">
             {{student.student_id || "N/A"}}
           </td><!--/student-id-column-->

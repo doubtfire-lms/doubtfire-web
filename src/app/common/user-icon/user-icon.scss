@@ -1,0 +1,32 @@
+.user-icon {
+  display: inline-block;
+  align-self: flex-end;
+  border-radius: 100%;
+  font-size: inherit;
+  width: 2.25em;
+  height: 2.25em;
+  position: relative;
+}
+.user-icon > .user-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  font-weight: bold;
+  font-size: inherit;
+  padding-bottom: 2px;
+  border-radius: 100%;
+  &.user-icon-gravatar {
+    z-index: 1;
+    background-size: cover;
+    border: 1px solid #eee;
+  }
+  &.user-icon-initials {
+    color: #fff;
+    background-color: #777;
+  }
+}
