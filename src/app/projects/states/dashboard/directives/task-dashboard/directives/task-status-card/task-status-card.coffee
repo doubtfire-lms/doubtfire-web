@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
     reapplyTriggers = ->
-      if $stateParams.tutor
+      if $stateParams.tutor?
         $scope.triggers = _.map(taskService.statusKeys, taskService.statusData)
       else
         studentTriggers = _.map(taskService.switchableStates.student, taskService.statusData)
