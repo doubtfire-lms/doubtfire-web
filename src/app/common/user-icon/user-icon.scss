@@ -16,14 +16,16 @@
   bottom: 0;
   left: 0;
   position: absolute;
-  color: #fff;
   font-weight: bold;
   font-size: inherit;
   padding-bottom: 2px;
-  background-color: #777;
-  background-size: cover;
   border-radius: 100%;
   &.user-icon-gravatar {
     z-index: 1;
+    background-size: cover;
+  }
+  &.user-icon-initials {
+    color: #fff;
+    background-color: #777;
   }
 }
