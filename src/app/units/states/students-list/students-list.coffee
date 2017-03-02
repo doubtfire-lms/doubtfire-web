@@ -119,7 +119,7 @@ angular.module('doubtfire.units.states.students', [])
     if $scope.fullscreen
       $scope.activeStudent = student
     else
-      $state.go "projects#show", {projectId: student.project_id, unitRole: $scope.unitRole.id}
+      $state.go("projects/dashboard", {projectId: student.project_id, tutor: true})
 
   # Sets the flag sorting
   $scope.sortTableByFlag = (flag) ->
