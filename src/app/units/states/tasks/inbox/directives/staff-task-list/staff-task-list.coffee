@@ -146,11 +146,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})
     $scope.isSelectedTask = (task) ->
-      # Non-null tasks
-      if task.id != null
-        # Compare ID directly
-        ($scope.taskData.selectedTask?.id || $scope.taskData.taskKey) == task.id
-      else
-        # Compare project IDs (based on student)
-        $scope.taskData.selectedTask?.project().project_id == task.project().project_id
+      sameProject = $scope.taskData.selectedTask?.project().project_id == task.project().project_id
+      sameTaskDef = $scope.taskData.selectedTask?.task_definition_id == task.task_definition_id
+      sameProject && sameTaskDef
 )
