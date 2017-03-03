@@ -19,13 +19,19 @@
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">First Name</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Fred" ng-model="user.first_name">
+          <input type="input" class="form-control" placeholder="Frederick" ng-model="user.first_name">
         </div>
       </div>
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Last Name</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Derf" ng-model="user.last_name">
+          <input type="input" class="form-control" placeholder="Derfson" ng-model="user.last_name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Preferred Name</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Freddy" ng-model="user.nickname">
         </div>
       </div>
       <div class="form-group" ng-required="isNew">
@@ -34,16 +40,20 @@
           <input type="email" class="form-control" placeholder="fred@university.edu" ng-model="user.email">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Nickname</label>
+      <hr>
+      <div class="form-group" ng-show="user.system_role == 'Student'">
+        <label class="col-sm-3 control-label">Student ID</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Freddy McDerfson" ng-model="user.nickname">
+          <input type="input" class="form-control" placeholder="1744070" ng-model="user.student_id">
+          <p class="help-block">
+            Please ensure your institution's student identification number matches this value
+          </p>
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-3 control-label">Avatar</label>
         <div class="col-sm-7">
-          <user-icon size="50" user="user" style="width: 50px; height: 50px"></user-icon>
+          <user-icon size="50" user="user" style="max-width: 50px; max-height: 50px; font-size: 18px;"></user-icon>
           <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank" class="btn btn-sm btn-default pull-right"> Change Avatar </a>
           <p class="help-block">
             Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a> and associate your email above to your account to give yourself an avatar
