@@ -22,10 +22,12 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       $scope.isStaff = true
       $scope.user.student_id = null
       delete $scope.steps.studentIdStep
-      for step in ['emailStep', 'targetGradeStep', 'optInToResearchStep']
+      # NOTE: Must add step to below
+      for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
         $scope.steps[step].seq -= 1
       $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
   # Define steps for wizard
+  # MUST ADD TO ABOVE NOTE!
   $scope.steps = {
     nameStep: {
       title:    "What's your name?"
