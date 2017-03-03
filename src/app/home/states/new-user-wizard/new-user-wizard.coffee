@@ -116,7 +116,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       when $scope.steps.nicknameStep, $scope.steps.targetGradeStep, $scope.steps.avatarStep
         state = true
       when $scope.steps.studentIdStep
-        state = $scope.user.student_id.trim().length > 0
+        state = $scope.user.student_id?.trim().length > 0
       when $scope.steps.emailStep
         state = $scope.user.email?.trim().length > 0
         if $scope.projects.length > 0
