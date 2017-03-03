@@ -21,3 +21,15 @@
 #home .welcome-to-doubtfire {
   margin-top: 1em;
 }
+#home .spinner {
+  position: fixed;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

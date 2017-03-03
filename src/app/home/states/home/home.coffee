@@ -13,7 +13,7 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
+.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
   # Get the confugurable, external name of Doubtfire
@@ -60,15 +60,17 @@ angular.module('doubtfire.home.states.home', [])
     showingWizard = testForNewUserWizard()
     testSingleProjectRole() unless showingWizard
 
+  timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
   unitService.getUnitRoles (roles) ->
     $scope.unitRoles = roles
     hasRoles = true
-    testForStateChanges()
-
-  projectService.getProjects (projects) ->
-    $scope.projects = projects
-    hasProjects = true
-    testForStateChanges()
+    projectService.getProjects (projects) ->
+      $scope.projects = projects
+      $scope.showSpinner = false
+      $scope.dataLoaded = true
+      hasProjects = true
+      testForStateChanges()
+      $timeout.cancel(timeoutPromise)
 
   checkEnrolled = ->
     return if !$scope.unitRoles? or !$scope.projects?
