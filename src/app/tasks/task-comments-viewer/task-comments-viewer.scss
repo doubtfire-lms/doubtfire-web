@@ -86,6 +86,7 @@ task-comments-viewer .comment .comment-bubble {
   .comment-text {
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
+    word-break: break-word;f
   }
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
