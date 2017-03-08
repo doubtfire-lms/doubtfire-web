@@ -7,12 +7,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, Task, listenerService, gradeService) ->
+  controller: ($scope, Task, listenerService, analyticsService, gradeService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
     listeners.push $scope.$watch('task.id', ->
-      return unless task?
+      return unless $scope.task?
       # Resource download URLs
       $scope.urls =
         taskSheet: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
