@@ -8,10 +8,16 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   scope:
     task: '='
   controller: ($scope, Task, listenerService, gradeService) ->
-    # Resource download URLs
-    $scope.urls =
-      taskSheet: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
-      resources: Task.getTaskResourcesUrl($scope.task.unit(), $scope.task.definition)
+    # Cleanup
+    listeners = listenerService.listenTo($scope)
+    # Required changes when task changes
+    listeners.push $scope.$watch('task.id', ->
+      return unless task?
+      # Resource download URLs
+      $scope.urls =
+        taskSheet: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
+        resources: Task.getTaskResourcesUrl($scope.task.unit(), $scope.task.definition)
+    )
     # Analytics event for when task resource is downloaded
     $scope.downloadEvent = (type) ->
       analyticsService.event 'Task Sheet', "Downloaded Task #{type}"
