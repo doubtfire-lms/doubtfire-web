@@ -48,7 +48,7 @@
                  'state-hidden-right': isHidden('files').right,
                  'state-files-uploading': uploader.isUploading}">
       <div ng-class="{'card': !uploader.isUploading}">
-        <div class="card-heading" ng-hide="uploader.isUploading">
+        <div class="card-heading card-default" ng-hide="uploader.isUploading">
           <h4>
             Select {{submissionType == 'need_help' ? 'files' : 'evidence'}} to upload
           </h4>
