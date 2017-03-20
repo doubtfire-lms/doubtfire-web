@@ -107,8 +107,8 @@ angular.module("doubtfire.common.services.units", [])
     unit.taskCount = -> unit.task_definitions.length
 
     # Returns all tutorials where the tutor name matches the user name provided
-    unit.tutorialsForUserName = (userId) ->
-      _.filter unit.tutorials, (tutorial) -> tutorial.tutor?.id is userId
+    unit.tutorialsForUserName = (userName) ->
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutor_name is userName
 
     # Refresh callback for reloading students
     unit.refreshStudents = (onSuccess, onFailure) ->
