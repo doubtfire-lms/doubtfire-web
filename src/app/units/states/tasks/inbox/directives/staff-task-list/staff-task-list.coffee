@@ -66,7 +66,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
       if tutorialId == 'mine'
-        $scope.filters.tutorials = $scope.unit.tutorialsForUserId(currentUser.id)
+        $scope.filters.tutorials = $scope.unit.tutorialsForUserName(currentUser.profile.name)
       else if tutorialId == 'all'
         # Students not in tutorials but submitting work
         $scope.filters.tutorials = _.concat($scope.unit.tutorials, [{id: null}])
