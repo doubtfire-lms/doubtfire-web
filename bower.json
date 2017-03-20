@@ -36,6 +36,7 @@
   },
   "resolutions": {
     "angular": "1.4.7",
-    "showdown": "1.3.0"
+    "showdown": "1.3.0",
+    "codemirror": "5.24.2"
   }
 }
