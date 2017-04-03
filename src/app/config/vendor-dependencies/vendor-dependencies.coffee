@@ -25,6 +25,7 @@ angular.module('doubtfire.config.vendor-dependencies', [
   'nvd3'
   'xeditable'
   'LocalStorageModule'
+  'angular-md5'
 
   # analytics
   'angulartics'

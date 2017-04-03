@@ -6,7 +6,7 @@
   </div>
   <div class="panel-body">
     <div class="card" ng-hide="hasLSR && hasTasksSelected">
-      <div class="card-heading text-danger">
+      <div class="card-heading card-danger">
         <h4>
           <i class="fa fa-warning"></i> There are issues with your portfolio
         </h4>
@@ -33,7 +33,7 @@
       </div>
     </div><!--/warnings-->
     <div class="card" ng-show="portfolioIsCompiling">
-      <div class="card-heading">
+      <div class="card-heading card-default">
         <h4>Portfolio Processing</h4>
       </div>
       <div class="card-body">
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="card" ng-show="canCompilePortfolio">
-      <div class="card-heading">
+      <div class="card-heading card-default">
         <h4>Create Your Portfolio</h4>
       </div>
       <div class="card-body">
@@ -99,7 +99,7 @@
       </div>
     </div><!--/create-portfolio-->
     <div class="card" ng-show="project.portfolio_available">
-      <div class="card-heading">
+      <div class="card-heading card-default">
         <h4>Download Portfolio</h4>
       </div>
       <div class="card-body">

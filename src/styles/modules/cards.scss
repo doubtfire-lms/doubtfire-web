@@ -15,11 +15,18 @@
 
   .card-heading {
     padding: $card-header-padding;
-    background-color: #607D8B;
     border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-    color: white;
-    .text-muted {
-      color: white;
+    &.card-default  { background-color: $panel-default-heading-bg; }
+    &.card-primary  { background-color: $brand-primary; }
+    &.card-danger   { background-color: $brand-danger; }
+    &.card-success  { background-color: $brand-success; }
+    &.card-warning  { background-color: $brand-warning; }
+    &.card-info     { background-color: $brand-info; }
+    &.card-danger, &.card-success, &.card-warning, &.card-info, &.card-primary {
+      color: #fff;
+      .text-muted {
+        color: darken(#fff, 1%);
+      }
     }
   }
   .card-body {

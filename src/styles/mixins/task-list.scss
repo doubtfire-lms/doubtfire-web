@@ -15,6 +15,7 @@
   }
   .list-group .list-group-item-task {
     transition: border-right 0.2s ease-out;
+    display: flex;
     &:hover, &:focus, &.selected {
       border-right: 15px solid;
     }
@@ -64,26 +65,27 @@
         font-weight: bold;
       }
     }
-    @media (max-width: $screen-xl) {
-      text-align: center;
-      .task-badges-item {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .task-data {
-        margin-bottom: 1em;
-      }
+    .user-icon {
+      font-size: 1.5em;
+      margin-right: 1.5ex;
     }
-    @media (min-width: $screen-xl) {
-      .task-data {
-        float: left;
-      }
-      .task-badges {
-        float: right;
-      }
-      .task-badges-item {
-        text-align: left;
-      }
+    .task-badges {
+      margin-left: 1.5ex;
+    }
+    .task-data {
+      flex: 1;
+    }
+    .task-badges, .user-icon {
+      align-self: center;
+    }
+    .task-data {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .task-data > * {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }

@@ -66,9 +66,10 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
       if tutorialId == 'mine'
-        $scope.filters.tutorials = $scope.unit.tutorialsForUserId(currentUser.id)
+        $scope.filters.tutorials = $scope.unit.tutorialsForUserName(currentUser.profile.name)
       else if tutorialId == 'all'
-        $scope.filters.tutorials = $scope.unit.tutorials
+        # Students not in tutorials but submitting work
+        $scope.filters.tutorials = _.concat($scope.unit.tutorials, [{id: null}])
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map($scope.filters.tutorials, 'id')
@@ -146,11 +147,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       return unless funcName?
       taskEl[funcName]({behavior: 'smooth', block: 'top'})
     $scope.isSelectedTask = (task) ->
-      # Non-null tasks
-      if task.id != null
-        # Compare ID directly
-        ($scope.taskData.selectedTask?.id || $scope.taskData.taskKey) == task.id
-      else
-        # Compare project IDs (based on student)
-        $scope.taskData.selectedTask?.project().project_id == task.project().project_id
+      sameProject = $scope.taskData.selectedTask?.project().project_id == task.project().project_id
+      sameTaskDef = $scope.taskData.selectedTask?.task_definition_id == task.task_definition_id
+      sameProject && sameTaskDef
 )

@@ -1,5 +1,5 @@
 <div class="card card-sm" ng-show="task.isDueSoon()">
-  <div class="card-heading text-danger">
+  <div class="card-heading card-danger">
     <h4>Due Soon</h4>
   </div>
   <div class="card-body">
@@ -15,7 +15,7 @@
   </div>
 </div><!--/due-card-->
 <div class="card card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDueSoon()">
-  <div class="card-heading">
+  <div class="card-heading card-default">
     <h4>Aim To Complete Soon</h4>
   </div>
   <div class="card-body">
@@ -30,7 +30,7 @@
   </div>
 </div><!--/target-card-->
 <div class="card card-sm" ng-show="task.isPastTargetDate() && !task.isDueSoon()">
-  <div class="card-heading text-danger">
+  <div class="card-heading card-danger">
     <h4>Past Target By {{task.daysPastTargetDate()}} Day{{task.daysPastTargetDate() > 1 ? 's' : ''}}</h4>
   </div>
   <div class="card-body">
@@ -46,7 +46,7 @@
   </div>
 </div><!--/past-target-card-->
 <div class="card card-sm" ng-show="task.isOverdue()">
-  <div class="card-heading text-danger">
+  <div class="card-heading card-danger">
     <h4>Overdue By {{task.daysPastDueDate()}} Day{{task.daysPastDueDate() > 1 ? 's' : ''}}</h4>
   </div>
   <div class="card-body">

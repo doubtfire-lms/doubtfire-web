@@ -38,30 +38,35 @@ task-comments-viewer .comment {
 }
 
 // Author Bubble
-task-comments-viewer .comment .author-bubble {
+task-comments-viewer .comment .user-icon {
   display: inline-block;
   align-self: flex-end;
   height: $comment-author-bubble-size;
   width: $comment-author-bubble-size;
   line-height: $comment-author-bubble-size - 2px;
-  border-radius: 100%;
-  background: $comment-bubble-color-darker;
-  background: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
-  border: 1px solid #fff;
-  box-shadow: 0 0 0 1px $comment-bubble-color;
   margin-right: $comment-text-padding;
-  color: #fff;
-  text-align: center;
-  font-size: 1em;
-  font-weight: bold;
+  .user-icon-gravatar {
+    // To hide blue border
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
+  }
+  .user-icon-initials {
+    color: #fff;
+    border: 1px solid #fff;
+    box-shadow: 0 0 0 1px $comment-bubble-color;
+    background-color: $comment-bubble-color-darker;
+    background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
+  }
 }
-task-comments-viewer .comment.comment-by-other-user .author-bubble {
+task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {
+  box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
   background: $comment-bubble-color-other-user;
   background: linear-gradient(to left, $comment-bubble-color-other-user , $comment-bubble-color-other-user-darker);
-  box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
   color: $text-color;
 }
-task-comments-viewer .comment.comment-by-other-user .author-bubble {
+task-comments-viewer .comment.comment-by-other-user .user-icon {
   margin-left: $comment-text-padding;
   margin-right: 0;
 }
@@ -81,6 +86,7 @@ task-comments-viewer .comment .comment-bubble {
   .comment-text {
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
+    word-break: break-word;
   }
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
