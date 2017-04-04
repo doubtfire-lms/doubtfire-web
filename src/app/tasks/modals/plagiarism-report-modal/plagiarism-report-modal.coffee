@@ -20,5 +20,6 @@ angular.module('doubtfire.tasks.modals.plagiarism-report-modal', [])
   PlagiarismReportModal
 )
 
-.controller('PlagiarismReportModalCtrl', ($scope) ->
+.controller('PlagiarismReportModalCtrl', ($scope, task) ->
+  $scope.task = task
 )
