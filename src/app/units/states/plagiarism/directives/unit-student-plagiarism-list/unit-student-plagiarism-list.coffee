@@ -1,7 +1,7 @@
 angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagiarism-list',[])
 
 #
-# List of all possible plagiarism detected in student's work
+# List of all possible Similarities detected in student's work
 #
 .directive('unitStudentPlagiarismList', ->
   replace: true
