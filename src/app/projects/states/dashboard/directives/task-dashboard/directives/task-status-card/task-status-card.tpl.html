@@ -1,5 +1,5 @@
-<div class="card card-sm card-status">
-  <div class="card-heading card-default task-trigger-dropdown" ng-show="triggers.length > 0">
+<div class="card card-default card-sm card-status">
+  <div class="card-heading task-trigger-dropdown" ng-show="triggers.length > 0">
     <div class="task-status hidden-sm hidden-xs" dropdown>
       <button
         type="button"
@@ -33,7 +33,7 @@
       ng-change="triggerTransition(task.status)">
     </select>
   </div><!--/trigger-heading-->
-  <div class="card-heading card-default static-task-status" ng-hide="triggers.length > 0">
+  <div class="card-heading static-task-status" ng-hide="triggers.length > 0">
     <status-icon class="pull-right" status="task.status" show-tooltip="false"></status-icon>
     <h4>{{task.statusLabel()}}</h4>
   </div><!--/static-status-label-->

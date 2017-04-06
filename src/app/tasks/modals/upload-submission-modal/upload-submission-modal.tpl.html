@@ -19,8 +19,8 @@
       class="state state-group"
       ng-class="{'state-hidden-left': isHidden('group').left,
                  'state-hidden-right': isHidden('group').right}">
-      <div class="card">
-        <div class="card-heading card-default">
+      <div class="card card-default">
+        <div class="card-heading">
           <h4>
             Team Contribution
           </h4>
@@ -47,8 +47,8 @@
       ng-class="{'state-hidden-left': isHidden('files').left,
                  'state-hidden-right': isHidden('files').right,
                  'state-files-uploading': uploader.isUploading}">
-      <div ng-class="{'card': !uploader.isUploading}">
-        <div class="card-heading card-default" ng-hide="uploader.isUploading">
+      <div ng-class="{'card card-default': !uploader.isUploading}">
+        <div class="card-heading" ng-hide="uploader.isUploading">
           <h4>
             Select {{submissionType == 'need_help' ? 'files' : 'evidence'}} to upload
           </h4>
@@ -84,8 +84,8 @@
       class="state state-alignment"
       ng-class="{'state-hidden-left': isHidden('alignment').left,
                  'state-hidden-right': isHidden('alignment').right}">
-      <div class="card">
-        <div class="card-heading card-default">
+      <div class="card card-default">
+        <div class="card-heading">
           <h4>
             Learning Outcome Alignment
           </h4>
@@ -147,8 +147,8 @@
       class="state state-comments"
       ng-class="{'state-hidden-left': isHidden('comments').left,
                  'state-hidden-right': isHidden('comments').right}">
-      <div class="card">
-        <div class="card-heading card-default">
+      <div class="card card-default">
+        <div class="card-heading">
           <h4 ng-show="submissionType == 'need_help'">
             What do you need help with?
           </h4>
