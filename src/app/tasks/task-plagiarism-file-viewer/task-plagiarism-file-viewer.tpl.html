@@ -1,5 +1,5 @@
-<div class="panel panel-default task-plagiarism-file-viewer">
-  <div class="panel-heading clearfix">
+<div class="card card-default task-plagiarism-file-viewer">
+  <div class="card-heading clearfix">
     <div class="pull-left">
       <h5 class="panel-title">
         <strong>{{match.username || "Other Student"}}</strong>
@@ -12,17 +12,22 @@
         Similarities detected in your work.
       </span>
     </div>
-    <div class="pull-right">
-      <a class="btn btn-default" ng-show="match.url" ng-href="{{match.url}}" target="new">View Report</a>
-      <span class="label label-info" ng-show="match.dismissed && !canDismiss">Dismissed</span>
-      <button class="btn btn-danger" ng-hide="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(true)">Dismiss</button>
-      <button class="btn btn-info" ng-show="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(false)">Activate</button>
-    </div>
   </div>
-  <div class="panel-body plagiarism-panel" ng-bind-html="match.html" ng-show="match.html">
+  <div class="card-body plagiarism-panel" ng-bind-html="match.html" ng-show="match.html">
   </div>
-  <div class="panel-body plagiarism-panel text-center strong" ng-hide="match.html">
+  <div class="card-body plagiarism-panel text-center strong" ng-hide="match.html">
     <i class="fa fa-low-vision fa-2x"></i>
     <p>Match data hidden</p>
+  </div>
+  <div class="card-footer text-right">
+    <a class="btn btn-default" ng-show="match.url" ng-href="{{match.url}}" target="new">
+      <i class="fa fa-file-text-o"></i> View Report
+    </a>
+    <button class="btn btn-danger" ng-hide="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(true)">
+      <i class="fa fa-check-square-o"></i> Mark as Resolved
+    </button>
+    <button class="btn btn-danger" ng-show="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(false)">
+      <i class="fa fa-square-o"></i> Mark as Unresolved
+    </button>
   </div>
 </div>
