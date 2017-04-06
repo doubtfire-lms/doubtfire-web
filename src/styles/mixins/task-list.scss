@@ -48,21 +48,38 @@
       &.demonstrate       { border-right-color: task-status-color('demonstrate'); }
       &.complete          { border-right-color: task-status-color('complete'); }
     }
-    .task-badges-item {
+    .task-badges {
       width: 50px;
       display: inline-block;
+      position: relative;
       status-icon {
         width: 100%;
       }
+      .task-superscript-badges {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        & > .task-superscript-badge {
+          border-radius: 100%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          color: white;
+          float: right;
+          font-weight: bold;
+          & + .task-superscript-badge {
+            margin-right: -6px;
+          }
+        }
+      }
       .new-comments-badge {
-        display: inline-block;
-        border-radius: 1.75rem;
-        text-align: center;
         background-color: $doubtfire-color;
-        width: 80%;
-        font-size: 1.7rem;
-        color: white;
-        font-weight: bold;
+      }
+      .plagiarism-detected-badge {
+        background-color: darkred;
       }
     }
     .user-icon {

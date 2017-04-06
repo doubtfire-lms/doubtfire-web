@@ -57,14 +57,15 @@
         </p>
       </div><!--/task-data-->
       <div class="task-badges">
-        <span class="task-badges-item">
-          <status-icon status="task.status"></status-icon>
-        </span><!--/task-status-->
-        <span class="task-badges-item" ng-show="task.num_new_comments > 0">
-          <span class="new-comments-badge" tooltip="You have {{task.num_new_comments}} new comment{{task.num_new_comments > 1 ? 's' : ''}}" tooltip-append-to-body="true">
+        <status-icon status="task.status"></status-icon>
+        <div class="task-superscript-badges">
+          <span class="task-superscript-badge new-comments-badge" ng-show="task.num_new_comments > 0">
             {{task.num_new_comments}}
           </span>
-        </span><!--/new-comments-badge-->
+          <span class="task-superscript-badge plagiarism-detected-badge" ng-show="task.plagiarismDetected()">
+            <i class="fa fa-eye"></i>
+          </span>
+        </div>
       </div><!--/badges-->
     </li><!--/task-->
     <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
