@@ -8,8 +8,8 @@
     </p>
   </div>
   <div class="cards" ng-hide="notEntrolled()">
-    <div class="card" if-role="Tutor Convenor Admin">
-      <div class="card-heading card-primary">
+    <div class="card card-primary" if-role="Tutor Convenor Admin">
+      <div class="card-heading">
         <h4>Units You Teach</h4>
       </div>
       <div class="list-group" ng-show="unitRoles.length > 0">
@@ -28,8 +28,8 @@
         You do not teach any units
       </div>
     </div><!--/units-taught-->
-    <div class="card" ng-show="projects.length > 0">
-      <div class="card-heading card-primary">
+    <div class="card card-primary" ng-show="projects.length > 0">
+      <div class="card-heading">
         <h4>Units You Study</h4>
       </div>
       <div class="list-group">
@@ -44,8 +44,8 @@
         </a>
       </div>
     </div><!--/units-taught-->
-    <div class="card" if-role="Admin Convenor">
-      <div class="card-heading card-primary">
+    <div class="card card-primary" if-role="Admin Convenor">
+      <div class="card-heading">
         <h4>Administration</h4>
       </div>
       <div class="list-group">
