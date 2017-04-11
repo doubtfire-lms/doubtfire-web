@@ -58,7 +58,7 @@
       .task-superscript-badges {
         position: absolute;
         top: -7px;
-        right: -7px;
+        right: -12px;
         & > .task-superscript-badge {
           border-radius: 100%;
           width: 20px;
@@ -71,15 +71,20 @@
           float: right;
           font-weight: bold;
           & + .task-superscript-badge {
-            margin-right: -6px;
+            margin-right: -3px;
+          }
+          &.new-comments-badge {
+            background-color: $doubtfire-color;
+          }
+          &.plagiarism-detected-badge {
+            background-color: darken($brand-danger, 15%);
+          }
+          // Only shown child? Push down a bit as it looks a bit weird
+          &:only-child {
+            margin-right: 4px;
+            margin-top: 2px;
           }
         }
-      }
-      .new-comments-badge {
-        background-color: $doubtfire-color;
-      }
-      .plagiarism-detected-badge {
-        background-color: darkred;
       }
     }
     .user-icon {

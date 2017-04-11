@@ -19,10 +19,10 @@
       <div class="task-badges">
         <status-icon status="task.status"></status-icon>
         <div class="task-superscript-badges">
-          <span class="task-superscript-badge new-comments-badge" ng-show="task.num_new_comments > 0">
+          <span class="task-superscript-badge new-comments-badge" ng-if="task.num_new_comments > 0">
             {{task.num_new_comments}}
           </span>
-          <span class="task-superscript-badge plagiarism-detected-badge" ng-show="task.plagiarismDetected()">
+          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.plagiarismDetected()">
             <i class="fa fa-eye"></i>
           </span>
         </div>
