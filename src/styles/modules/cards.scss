@@ -13,21 +13,23 @@
               0 1px 5px 0 rgba(0, 0, 0, 0.12),
               0 3px 1px -2px rgba(0, 0, 0, 0.2);
 
-  .card-heading {
-    padding: $card-header-padding;
-    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-    &.card-default  { background-color: $panel-default-heading-bg; }
-    &.card-primary  { background-color: $brand-primary; }
-    &.card-danger   { background-color: $brand-danger; }
-    &.card-success  { background-color: $brand-success; }
-    &.card-warning  { background-color: $brand-warning; }
-    &.card-info     { background-color: $brand-info; }
-    &.card-danger, &.card-success, &.card-warning, &.card-info, &.card-primary {
+  &.card-default > .card-heading { background-color: $panel-default-heading-bg; }
+  &.card-primary > .card-heading { background-color: $brand-primary; }
+  &.card-danger  > .card-heading { background-color: $brand-danger; }
+  &.card-success > .card-heading { background-color: $brand-success; }
+  &.card-warning > .card-heading { background-color: $brand-warning; }
+  &.card-info    > .card-heading { background-color: $brand-info; }
+  &.card-danger, &.card-success, &.card-warning, &.card-info, &.card-primary {
+    .card-heading {
       color: #fff;
       .text-muted {
         color: darken(#fff, 1%);
       }
     }
+  }
+  .card-heading {
+    padding: $card-header-padding;
+    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
   }
   .card-body {
     padding: $card-body-padding;

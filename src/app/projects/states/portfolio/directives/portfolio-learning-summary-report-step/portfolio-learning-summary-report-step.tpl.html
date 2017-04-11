@@ -25,14 +25,14 @@
       Your <strong>reflections</strong> are a personal comment on what you have
       learnt in the unit, and how your knowledge and skills have developed.
     </p>
-    <div class="card">
-      <div class="card-heading card-success" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
+    <div class="card card-success" ng-class="{'card-danger': 'projectHasLearningSummaryReport() && !forceLSRSubmit', 'card-success': '!(projectHasLearningSummaryReport() && !forceLSRSubmit)'}">
+      <div class="card-heading" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
         <h4>
           <i class="fa fa-check"></i> Learning Summary Report Submitted
         </h4>
         Click <a ng-click="forceLSRSubmit = true">here</a> to re-upload a new Learning Summary Report
       </div><!--/lsr-uploaded-->
-      <div class="card-heading card-danger" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
+      <div class="card-heading" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
         <h4>
           <i class="fa fa-warning"></i> Before you submit the Learning Summary Report...
         </h4>

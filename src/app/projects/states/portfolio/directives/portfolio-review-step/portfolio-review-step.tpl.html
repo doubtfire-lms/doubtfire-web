@@ -5,8 +5,8 @@
     </h3>
   </div>
   <div class="panel-body">
-    <div class="card" ng-hide="hasLSR && hasTasksSelected">
-      <div class="card-heading card-danger">
+    <div class="card card-danger" ng-hide="hasLSR && hasTasksSelected">
+      <div class="card-heading">
         <h4>
           <i class="fa fa-warning"></i> There are issues with your portfolio
         </h4>
@@ -32,8 +32,8 @@
         </p>
       </div>
     </div><!--/warnings-->
-    <div class="card" ng-show="portfolioIsCompiling">
-      <div class="card-heading card-default">
+    <div class="card card-default" ng-show="portfolioIsCompiling">
+      <div class="card-heading">
         <h4>Portfolio Processing</h4>
       </div>
       <div class="card-body">
@@ -76,8 +76,8 @@
         </ol>
       </div>
     </div>
-    <div class="card" ng-show="canCompilePortfolio">
-      <div class="card-heading card-default">
+    <div class="card card-default" ng-show="canCompilePortfolio">
+      <div class="card-heading">
         <h4>Create Your Portfolio</h4>
       </div>
       <div class="card-body">
@@ -98,8 +98,8 @@
         </button>
       </div>
     </div><!--/create-portfolio-->
-    <div class="card" ng-show="project.portfolio_available">
-      <div class="card-heading card-default">
+    <div class="card card-default" ng-show="project.portfolio_available">
+      <div class="card-heading">
         <h4>Download Portfolio</h4>
       </div>
       <div class="card-body">

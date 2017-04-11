@@ -48,21 +48,43 @@
       &.demonstrate       { border-right-color: task-status-color('demonstrate'); }
       &.complete          { border-right-color: task-status-color('complete'); }
     }
-    .task-badges-item {
+    .task-badges {
       width: 50px;
       display: inline-block;
+      position: relative;
       status-icon {
         width: 100%;
       }
-      .new-comments-badge {
-        display: inline-block;
-        border-radius: 1.75rem;
-        text-align: center;
-        background-color: $doubtfire-color;
-        width: 80%;
-        font-size: 1.7rem;
-        color: white;
-        font-weight: bold;
+      .task-superscript-badges {
+        position: absolute;
+        top: -7px;
+        right: -12px;
+        & > .task-superscript-badge {
+          border-radius: 100%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          color: white;
+          float: right;
+          font-weight: bold;
+          & + .task-superscript-badge {
+            margin-right: -3px;
+          }
+          &.new-comments-badge {
+            background-color: $doubtfire-color;
+          }
+          &.plagiarism-detected-badge {
+            background-color: darken($brand-danger, 15%);
+          }
+          // Only shown child? Push down a bit as it looks a bit weird
+          &:only-child {
+            margin-right: 6px;
+            margin-top: 3px;
+          }
+        }
       }
     }
     .user-icon {
