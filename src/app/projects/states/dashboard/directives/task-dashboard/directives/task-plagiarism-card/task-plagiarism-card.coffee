@@ -8,5 +8,5 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   scope:
     task: '='
   controller: ($scope, PlagiarismReportModal) ->
-    $scope.viewReport = -> PlagiarismReportModal.show
+    $scope.viewReport = -> PlagiarismReportModal.show($scope.task)
 )
