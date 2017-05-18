@@ -81,7 +81,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     $scope.$watch 'project.selectedTask', (newTask) ->
       newTask = _.first $scope.project.tasks unless newTask?
       setInitialActiveTab(newTask)
-      $scope.daysOverdue = taskService.daysOverdue(newTask)
+      $scope.daysPastTargetDate = taskService.daysPastTargetDate(newTask)
 
     #
     # Watch for changes when the active task status changes
@@ -102,7 +102,7 @@ angular.module('doubtfire.tasks.task-viewer', [])
     #
     $scope.statusData  = taskService.statusData
     $scope.statusClass = taskService.statusClass
-    $scope.daysOverdue = taskService.daysOverdue
+    $scope.daysPastTargetDate = taskService.daysPastTargetDate
 
     #
     # Gets the group set name from the group set id provided

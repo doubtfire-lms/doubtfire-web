@@ -38,7 +38,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.includes taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
 
       overdueTasks = _.filter sortedTasks, (task) ->
-        taskService.daysOverdue(task) > 0
+        taskService.daysPastTargetDate(task) > 0
 
       #
       # Step 1: if today is the tutorial day... show tasks to discuss with tutor
