@@ -75,7 +75,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) <= 0
+      toAdd = _.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysUntilTargetDate(task) >= 0
       # Add tasks by grade... pass is always done first!
       for grade in gradeService.gradeValues
         toAddGradeTasks = _.map (_.filter toAdd, (task) -> task.definition.target_grade == grade), (task) ->
