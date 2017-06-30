@@ -17,5 +17,9 @@ angular.module("doubtfire.common.services.dates", [])
     date = new Date(dateValue)
     "#{monthNames[date.getMonth()]} #{date.getFullYear()}"
 
+  dateService.showFullDate = (dateValue) ->
+    date = new Date(dateValue)
+    "#{date.getDate()} #{monthNames[date.getMonth()]} #{date.getFullYear()}"
+
   dateService
 )
