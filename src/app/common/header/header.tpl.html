@@ -57,35 +57,35 @@
             </ul><!--/student-tasks-->
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="unitRole">
               <li>
-                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})">Task Inbox</a>
+                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task Inbox</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})">Give Student Feedback</a>
+                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Give Student Feedback</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})">Mark By Definition</a>
+                <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark By Definition</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})">Mark Tasks Offline</a>
+                <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark Tasks Offline</a>
               </li>
-              <li class="divider"></li><!--/task-related-->
+              <li class="divider" ng-if="unitRole.role != 'Admin'"></li><!--/task-related-->
               <li>
-                <a ui-sref="units/students/list({unitId: unitRole.unit_id})">Student List</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/groups({unitId: unitRole.unit_id})">Student Groups</a>
+                <a ui-sref="units/students/list({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student List</a>
               </li>
               <li>
-                <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})">Student Plagiarism</a>
+                <a ui-sref="units/students/groups({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Groups</a>
               </li>
               <li>
-                <a ui-sref="units/students/portfolios({unitId: unitRole.unit_id})">Student Portfolios</a>
+                <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Plagiarism</a>
               </li>
-              <li class="divider"></li><!--/student-related-->
               <li>
-                <a ui-sref="units/analytics({unitId: unitRole.unit_id})">Unit Analytics</a>
+                <a ui-sref="units/students/portfolios({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Portfolios</a>
               </li>
-              <li ng-if="unitRole.role == 'Convenor'">
+              <li class="divider" ng-if="unitRole.role != 'Admin'"></li><!--/student-related-->
+              <li>
+                <a ui-sref="units/analytics({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Unit Analytics</a>
+              </li>
+              <li ng-if="unitRole.role == 'Convenor' || unitRole.role == 'Admin'">
                 <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>
             </ul><!--/teaching-tasks-->

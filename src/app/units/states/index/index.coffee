@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.index', [])
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService, currentUser) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
@@ -25,6 +25,14 @@ angular.module('doubtfire.units.states.index', [])
   # Load assessing unit role
   unitService.getUnitRoles (unitRoles) ->
     $scope.unitRole = _.find(unitRoles, { unit_id: unitId })
+    if (! $scope.unitRole?) && ( currentUser.role == "Admin" )
+      $scope.unitRole = {
+        role: 'Admin',
+        unit_id: unitId,
+        name: currentUser.Name,
+        unit_name: 'Unit admin mode',
+        unit_code: '---'
+      }
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?
     $rootScope.$broadcast('UnitRoleChanged', { context: $scope.unitRole })
