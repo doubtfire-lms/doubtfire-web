@@ -57,7 +57,7 @@
         </p>
         <div class="list-group-item-text-extended" ng-show="isSelectedTask(task)"> 
           <p>
-            Tutorial {{task.project().tutorial.meeting_location}}
+            {{task.project().shortTutorialDescription()}}
           </p>
           <p>
             Submitted {{showDate(task.submission_date)}}
