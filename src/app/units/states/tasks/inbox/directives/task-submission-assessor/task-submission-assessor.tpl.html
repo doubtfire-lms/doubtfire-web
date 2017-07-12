@@ -52,15 +52,6 @@
     </div><!--/mobile-select-task-status-->
     <div class="btn-group task-status hidden-sm hidden-xs">
       <label
-        class="btn btn-default btn-next-task"
-        tooltip="Previous Task"
-        tooltip-popup-delay="500"
-        tooltip-append-to-body="true"
-        ng-disabled="!hasPreviousTask"
-        ng-click="goToPreviousTask()">
-        <i class="fa fa-chevron-left"></i>
-      </label>
-      <label
         ng-repeat="status in taskStatusData.keys"
         ng-model="task.status"
         ng-change="triggerTransition(status)"
@@ -70,15 +61,6 @@
         tooltip-append-to-body="true"
         btn-radio="'{{status}}'">
         <i class="fa {{taskStatusData.icons[status]}}"></i>
-      </label>
-      <label
-        class="btn btn-default btn-previous-task"
-        tooltip="Next Task"
-        tooltip-popup-delay="500"
-        tooltip-append-to-body="true"
-        ng-disabled="!hasNextTask"
-        ng-click="goToNextTask()">
-        <i class="fa fa-chevron-right"></i>
       </label>
     </div><!--/desktop-select-task-status-->
   </div><!--/panel-footer-->
