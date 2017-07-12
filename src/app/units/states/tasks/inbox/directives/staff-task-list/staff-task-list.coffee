@@ -14,12 +14,14 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     showSearchOptions: '=?'
     getNextTask: '=?'
     getPreviousTask: '=?'
-  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService) ->
+  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Check taskSource exists
     unless $scope.taskData?.source?
       throw Error "Invalid taskData.source provided for task list; supply one of Unit.tasksForTaskInbox, Unit.tasksRequiringFeedback, Unit.taskByTaskDefinition"
+    # showDate from date-service
+    $scope.showDate = dateService.showFullDate
     # Search option filters
     $scope.filteredTasks = []
     $scope.filters = _.extend({
