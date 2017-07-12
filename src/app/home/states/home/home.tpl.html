@@ -8,12 +8,12 @@
     </p>
   </div>
   <div class="cards" ng-hide="notEntrolled()">
-    <div class="card card-primary" if-role="Tutor Convenor Admin">
+    <div class="card card-primary" if-role="Tutor Convenor Admin" >
       <div class="card-heading">
         <h4>Units You Teach</h4>
       </div>
-      <div class="list-group" ng-show="unitRoles.length > 0">
-        <a ng-repeat="unitRole in unitRoles" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item">
+      <div class="list-group" ng-show="filteredUnitRoles.length > 0">
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item">
           <header>
             {{unitRole.unit_name}}
           </header>
@@ -24,8 +24,8 @@
           </p>
         </a>
       </div>
-      <div class="card-body" ng-hide="unitRoles.length > 0">
-        You do not teach any units
+      <div class="card-body" ng-hide="filteredUnitRoles.length > 0">
+        You do not teach any active units
       </div>
     </div><!--/units-taught-->
     <div class="card card-primary" ng-show="projects.length > 0">

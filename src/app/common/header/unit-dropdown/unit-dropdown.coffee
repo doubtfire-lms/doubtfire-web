@@ -13,9 +13,6 @@ angular.module('doubtfire.common.header.unit-dropdown', [])
       # teaching userRoles will default to tutor role if both convenor and tutor
       units.length == 1 || unit.role == "Tutor"
 
-    $scope.isActiveUnitRole = (unitRole) ->
-      unitRole? && unitRole.active == true
-
     # Global Units Menu
     unitService.getUnitRoles (roles) ->
       $scope.unitRoles = roles

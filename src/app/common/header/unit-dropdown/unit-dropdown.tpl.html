@@ -1,6 +1,6 @@
 <ul class="dropdown-menu dropdown-units" dropdown-menu>
-  <li ng-hide="filteredUnitRoles.length == 0" class="dropdown-header">Units You Teach</li>
-  <li ng-repeat="unitRole in (filteredUnitRoles = unitRoles | filter:isActiveUnitRole) | filter:isUniqueUnitRole ">
+  <li ng-hide="filteredUnitRoles.length == 0" class="dropdown-header">Units You Teach {{filteredUnitRoles.length}}</li>
+  <li ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole) | filter:isUniqueUnitRole ">
     <a ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
         <small class="unit-info">
           <label class="label label-unit small">{{unitRole.unit_code}}</label>
