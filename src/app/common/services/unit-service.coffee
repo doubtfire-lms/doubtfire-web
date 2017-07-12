@@ -238,8 +238,11 @@ angular.module("doubtfire.common.services.units", [])
   # Tutorial description
   #
   unitService.tutorialDescription = (tutorial) ->
-    timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-    "#{tutorial.meeting_day.slice(0,3)} at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+    if (tutorial?)
+      timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
+      "#{tutorial.meeting_day.slice(0,3)} at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+    else
+      "No Tutorial"
 
   #
   # Adds additional unit-related functionality to groups
@@ -262,6 +265,17 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns the unit for this student
     student.unit = -> unit
+
+    # Add a tutorial description
+    student.tutorialDescription = () ->
+      unitService.tutorialDescription(student.tutorial)
+
+    student.shortTutorialDescription = () ->
+      if student.tutorial?
+        timeDesc = $filter('date')(student.tutorial.meeting_time, 'shortTime')
+        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor_name.split(' ')[0]} - #{student.tutorial.meeting_location}"
+      else
+        'No Tutorial'
 
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.

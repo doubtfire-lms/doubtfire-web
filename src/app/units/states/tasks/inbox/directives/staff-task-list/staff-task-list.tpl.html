@@ -55,6 +55,17 @@
         <p class="list-group-item-text">
           {{task.definition.abbreviation}} - {{task.definition.name}}
         </p>
+        <div class="list-group-item-text-extended" ng-show="isSelectedTask(task)"> 
+          <p>
+            {{task.project().shortTutorialDescription()}}
+          </p>
+          <p>
+            Submitted {{showDate(task.submission_date)}}
+          </p>
+          <p ng-show="task.times_assessed > 0">
+            Assessed {{task.times_assessed}} time{{task.times_assessed == 1 ? "" : "s"}}
+          </p>
+        </div>
       </div><!--/task-data-->
       <div class="task-badges">
         <status-icon status="task.status"></status-icon>
