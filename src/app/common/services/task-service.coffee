@@ -480,7 +480,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.taskKeyToIdString = (task) ->
     key = task.taskKey()
-    "task-key-#{key.studentId}-#{key.taskDefAbbr}"
+    "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(".", "")
 
   taskService.taskKey = (task) ->
     {
