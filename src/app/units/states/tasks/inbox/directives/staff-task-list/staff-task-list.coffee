@@ -22,11 +22,13 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       throw Error "Invalid taskData.source provided for task list; supply one of Unit.tasksForTaskInbox, Unit.tasksRequiringFeedback, Unit.taskByTaskDefinition"
     # showDate from date-service
     $scope.showDate = dateService.showFullDate
+    # Does the current user have any tutorials?
+    $scope.userHasTutorials = $scope.unit.tutorialsForUserName(currentUser.profile.name)?.length > 0
     # Search option filters
     $scope.filteredTasks = []
     $scope.filters = _.extend({
       studentName: null
-      tutorialIdSelected: if $scope.unitRole.role == 'Tutor' then 'mine' else 'all'
+      tutorialIdSelected: if ($scope.unitRole.role == 'Tutor' || 'Convenor') && $scope.userHasTutorials then 'mine' else 'all'
       tutorials: []
       taskDefinitionIdSelected: null
       taskDefinition: null
