@@ -1,1 +1,13 @@
-<p>lol</p>
+<div class="panel-full-screen">
+  <unit-task-list
+    filters="filters"
+    task-data="taskData"
+    unit='unit'
+    task="taskData.selectedTask"
+    class="col-xs-12 col-md-3"><!--/panel-1-->
+  </unit-task-list>
+  <unit-task-sheet-viewer
+    task="taskData.selectedTask"
+    class="col-xs-12 col-md-6">
+  </unit-task-sheet-viewer><!--/panel-2-->
+</div>

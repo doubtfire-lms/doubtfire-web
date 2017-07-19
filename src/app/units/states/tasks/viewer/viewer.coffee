@@ -13,12 +13,12 @@ angular.module('doubtfire.units.states.tasks.viewer', [
     templateUrl: "units/states/tasks/viewer/viewer.tpl.html"
     controller: "TaskViewerStateCtrl"
     data:
-      task: "View Task Sheets"
+      task: "Task Sheet Viewer"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
 
 .controller('TaskViewerStateCtrl', ($scope, Unit) ->
-  $scope.taskSheetData.source = Unit.task_definitions
+  $scope.taskData.source = $scope.unit.task_definitions
 )
