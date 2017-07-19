@@ -7,12 +7,9 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     unit: '='
     # Function to invoke to refresh tasks
     refreshTasks: '=?'
-    # Special taskData object (wraps the selectedTask)
-    taskData: '='
+    unitTasks: '='
+    selectedTask: '='
   controller: ($scope, $timeout, $filter, gradeService, taskService) ->
-    # Check taskSource exists
-    unless $scope.taskData?
-      throw Error "Invalid taskData provided. Must wrap the selectedTask and selectedTaskAbbr"
     # Set up initial filtered tasks
     $scope.filteredTasks = []
     # Set up filters
@@ -22,7 +19,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     }
     # Sets new filteredTasks variable
     applyFilters = ->
-      filteredTasks = $filter('tasksOfTaskDefinition')($scope.taskData.source, $scope.filters.taskDefinition)
+      filteredTasks = $filter('tasksOfTaskDefinition')($scope.unitTasks, $scope.filters.taskDefinition)
       filteredTasks = $filter('orderBy')(filteredTasks, 'task.seq')
       $scope.filteredTasks = filteredTasks
     # Apply filters first-time
@@ -37,18 +34,10 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     $scope.setSelectedTask = (task) ->
       # Clicking on already selected task will disable that selection
       task = null if $scope.isSelectedTask(task)
-      $scope.taskData.selectedTask = task
-      scrollToTaskInList(task) if task?
-    scrollToTaskInList = (task) ->
-      taskEl = document.querySelector("unit-task-list ##{task.taskKeyToIdString()}")
-      return unless taskEl?
-      funcName = if taskEl.scrollIntoViewIfNeeded? then 'scrollIntoViewIfNeeded' else if taskEl.scrollIntoView? then 'scrollIntoView'
-      return unless funcName?
-      taskEl[funcName]({behavior: 'smooth', block: 'top'})
-    $timeout ->
-      scrollToTaskInList($scope.taskData.selectedTask) if $scope.taskData.selectedTask?
+      $scope.selectedTask = task
+
     $scope.isSelectedTask = (task) ->
       # Compare by definition
-      task.id == $scope.taskData?.selectedTask?.id
+      task.id == $scope.selectedTask?.id
 
 )
