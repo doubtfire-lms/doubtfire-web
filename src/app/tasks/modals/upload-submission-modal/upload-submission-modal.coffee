@@ -209,8 +209,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     )
     .value()
 
+  # Get initial alignment data...
+  initialAlignments = task.project().task_outcome_alignments.filter( (a) -> a.task_definition_id == task.definition.id )
+
   # ILO alignment defaults
-  $scope.alignmentsRationale = ""
+  $scope.alignmentsRationale = if initialAlignments.length > 0 then initialAlignments[0].description else ""
   staffAlignments = $scope.task.staffAlignments()
   $scope.ilos = _.map(task.unit().ilos, (ilo) ->
     staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
@@ -222,7 +225,9 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   )
   $scope.alignments = _.chain(task.unit().ilos)
     .map((ilo) ->
-      [ilo.id, {rating: 0}]
+      value = initialAlignments.filter((a) -> a.learning_outcome_id == ilo.id)?[0]?.rating
+      value ?= 0
+      [ilo.id, {rating: value }]
     )
     .fromPairs()
     .value()
