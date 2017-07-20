@@ -1,0 +1,28 @@
+<div class="card card-default card-sm" ng-show="task">
+  <div class="card-heading">
+    <h4>Description</h4>
+  </div><!--/description-heading-->
+  <div class="card-body">
+    <div class="markdown-to-pdf" ng-bind-html="task.description | markdown"></div>
+  </div><!--/description-body-->
+  <div class="card-footer">
+    <h5>Key Information</h5>
+    <ul>
+      <li>
+        <strong>{{grades.names[task.target_grade]}} Task</strong>
+        &mdash;
+        This task is a <strong>{{grades.names[task.target_grade] | lcfirst}}</strong> task.
+      </li>
+      <li>
+        <strong>Target Date</strong>
+        &mdash;
+        You should aim to have this task completed by <strong>{{task.target_date | humanizedDate}}</strong>.
+      </li>
+      <li ng-show="task.due_date">
+        <strong>Due Date</strong>
+        &mdash;
+        You must complete this task by <strong>{{task.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
+      </li>
+    </ul>
+  </div><!--/key-info-footer-->
+</div>

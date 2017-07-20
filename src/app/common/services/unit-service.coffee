@@ -213,6 +213,17 @@ angular.module("doubtfire.common.services.units", [])
         else
           t
 
+    
+    unit.staffAlignmentsForTaskDefinition = (td) ->
+      return if ! td?
+      filteredAlignments = $filter('taskDefinitionFilter')(unit.task_outcome_alignments, td.id)
+      _.chain(filteredAlignments).map((a) ->
+        a.ilo = unit.outcome(a.learning_outcome_id)
+        a
+      )
+      .sortBy((a) -> a.ilo.ilo_number)
+      .value()
+
     # Actually make the request to refresh and load unit data
     unit.refresh(onSuccess, onFailure)
     unit
