@@ -9,7 +9,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
   scope:
     project: '='
     onUpdateTargetGrade: '='
-  controller: ($scope, projectService, taskService, gradeService, analyticsService, alertService) ->
+  controller: ($scope, $stateParams, projectService, taskService, gradeService, analyticsService, alertService) ->
+    # Is the current user a tutor?
+    $scope.tutor = $stateParams.tutor
     # Number of tasks completed and remaining
     updateTaskCompletionValues  = ->
       completedTasks = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
