@@ -1,10 +1,10 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <div class="panel-title" ng-hide="task">
+    <div class="panel-title" ng-hide="taskDef">
       No Task Selected
     </div>
-    <div class="panel-title" ng-show="task">
-      {{task.name}}
+    <div class="panel-title" ng-show="taskDef">
+      {{taskDef.name}}
       <div class="dropdown pull-right" dropdown>
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
           <i class="fa fa-download"></i>
@@ -26,13 +26,13 @@
     <span ng-show="showLoading">
       Loading Task Details...
     </span>
-    <span ng-show="task && task.processing_pdf">
+    <span ng-show="taskDef && taskDef.processing_pdf">
       PDF Still Processing
     </span>
-    <span ng-show="task && !task.processing_pdf">
+    <span ng-show="taskDef && !taskDef.processing_pdf">
       No Submission Uploaded
     </span>
-    <span ng-hide="task">
+    <span ng-hide="taskDef">
       No Task Selected
     </span>
   </div><!--/panel-body-without-pdf-->

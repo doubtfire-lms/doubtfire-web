@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-details-view
   restrict: 'E'
   templateUrl: 'units/states/tasks/viewer/directives/task-details-view/task-details-view.tpl.html'
   scope:
-    task: '='
+    taskDef: '='
     unit: '='
   controller: ($scope, Task, listenerService) ->
 

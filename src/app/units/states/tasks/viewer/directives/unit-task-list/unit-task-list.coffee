@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     # Function to invoke to refresh tasks
     refreshTasks: '=?'
     unitTasks: '='
-    selectedTask: '='
+    selectedTaskDef: '='
   controller: ($scope, $timeout, $filter, gradeService, taskService) ->
     # Set up initial filtered tasks
     $scope.filteredTasks = []
@@ -34,10 +34,10 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     $scope.setSelectedTask = (task) ->
       # Clicking on already selected task will disable that selection
       task = null if $scope.isSelectedTask(task)
-      $scope.selectedTask = task
+      $scope.selectedTaskDef = task
 
     $scope.isSelectedTask = (task) ->
       # Compare by definition
-      task.id == $scope.selectedTask?.id
+      task.id == $scope.selectedTaskDef?.id
 
 )
