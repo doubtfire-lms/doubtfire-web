@@ -6,18 +6,18 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   restrict: 'E'
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.tpl.html'
   scope:
-    task: '='
+    taskDef: '='
     unit: '='
   controller: ($scope, Task, listenerService, analyticsService, gradeService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
-    listeners.push $scope.$watch('task.id', ->
-      return unless $scope.task?
+    listeners.push $scope.$watch('taskDef.id', ->
+      return unless $scope.taskDef?
       # Resource download URLs
       $scope.urls =
-        taskSheet: Task.getTaskPDFUrl($scope.unit, $scope.task)
-        resources: Task.getTaskResourcesUrl($scope.unit, $scope.task)
+        taskSheet: Task.getTaskPDFUrl($scope.unit, $scope.taskDef)
+        resources: Task.getTaskResourcesUrl($scope.unit, $scope.taskDef)
     )
     # Analytics event for when task resource is downloaded
     $scope.downloadEvent = (type) ->

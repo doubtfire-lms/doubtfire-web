@@ -3,33 +3,33 @@
     <h4>Description</h4>
   </div><!--/description-heading-->
   <div class="card-body">
-    <div class="markdown-to-pdf" ng-bind-html="task.description | markdown"></div>
+    <div class="markdown-to-pdf" ng-bind-html="taskDef.description | markdown"></div>
   </div><!--/description-body-->
   <div class="card-footer">
     <h5>Key Information</h5>
     <ul>
       <li>
-        <strong>{{grades.names[task.target_grade]}} Task</strong>
+        <strong>{{grades.names[taskDef.target_grade]}} Task</strong>
         &mdash;
-        This task is a <strong>{{grades.names[task.target_grade] | lcfirst}}</strong> task.
+        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> taskDef.
       </li>
       <li>
         <strong>Target Date</strong>
         &mdash;
-        You should aim to have this task completed by <strong>{{task.target_date | humanizedDate}}</strong>.
+        You should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
       </li>
-      <li ng-show="task.due_date">
+      <li ng-show="taskDef.due_date">
         <strong>Due Date</strong>
         &mdash;
-        You must complete this task by <strong>{{task.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
+        You must complete this task by <strong>{{taskDef.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show="task.has_task_pdf || task.has_task_resources">
+  <div class="card-footer" ng-show="taskDef.has_task_pdf || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
-      ng-show="task.has_task_pdf"
+      ng-show="taskDef.has_task_pdf"
       target="_blank"
       class="btn btn-primary">
       <i class="fa fa-file-pdf-o"></i>
@@ -39,7 +39,7 @@
     <a
       ng-click="downloadEvent('Resources')"
       href="{{urls.resources}}"
-      ng-show="task.has_task_resources"
+      ng-show="taskDef.has_task_resources"
       target="_blank"
       class="btn btn-primary">
       <i class="fa fa-file-zip-o"></i>
