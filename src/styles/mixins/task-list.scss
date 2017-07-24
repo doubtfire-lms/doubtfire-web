@@ -23,7 +23,7 @@
     display: flex;
     &:hover, &:focus, &.selected {
       padding-right: 30px;
-      @include custom-box-shadow(#444);
+      @include custom-box-shadow(task-status-color('ready-to-mark'));
     }
 
     &:hover, &:focus {
