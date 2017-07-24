@@ -7,9 +7,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.tpl.html'
   scope:
     task: '='
+    unit: '='
   controller: ($scope, $filter, listenerService, outcomeService) ->
     listeners = listenerService.listenTo($scope)
     listeners.push $scope.$watch('task.id', ->
-      $scope.alignments = $scope.task.unit().staffAlignmentsForTaskDefinition($scope.task.definition)
+      $scope.alignments = $scope.unit.staffAlignmentsForTaskDefinition($scope.task)
     )
 )
