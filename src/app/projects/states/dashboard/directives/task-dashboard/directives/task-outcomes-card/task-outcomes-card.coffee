@@ -10,10 +10,6 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   controller: ($scope, $filter, listenerService, outcomeService) ->
     listeners = listenerService.listenTo($scope)
     listeners.push $scope.$watch('task.id', ->
-      filteredAlignments = _.map($scope.task.staffAlignments(), (alignment) ->
-        alignment.label = outcomeService.alignmentLabels[alignment.rating]
-        alignment
-      )
-      $scope.alignments = filteredAlignments
+      $scope.alignments = $scope.task.unit().staffAlignmentsForTaskDefinition($scope.task.definition)
     )
 )
