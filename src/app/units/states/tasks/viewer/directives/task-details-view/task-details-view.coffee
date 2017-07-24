@@ -1,6 +1,4 @@
-angular.module('doubtfire.units.states.tasks.viewer.directives.task-details-view', [
-  'doubtfire.units.states.tasks.viewer.directives.task-details-view.directives'
-])
+angular.module('doubtfire.units.states.tasks.viewer.directives.task-details-view', [])
 #
 # Dashboard of task-related info
 #
