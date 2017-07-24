@@ -13,7 +13,7 @@ angular.module('doubtfire.units.states.tasks.viewer', [
     templateUrl: "units/states/tasks/viewer/viewer.tpl.html"
     controller: "TaskViewerStateCtrl"
     data:
-      task: "Task Sheet Viewer"
+      task: "Task List"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
