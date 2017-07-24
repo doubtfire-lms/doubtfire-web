@@ -9,17 +9,17 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     refreshTasks: '=?'
     unitTasks: '='
     selectedTaskDef: '='
-  controller: ($scope, $timeout, $filter, gradeService, taskService) ->
+  controller: ($scope, $timeout, $filter, gradeService, taskService, listenerService) ->
+    listeners = listenerService.listenTo($scope)
     # Set up initial filtered tasks
     $scope.filteredTasks = []
     # Set up filters
     $scope.filters = {
-      taskDefinition: null,
-      taskName:null
+      taskSearch:null
     }
     # Sets new filteredTasks variable
     applyFilters = ->
-      filteredTasks = $filter('tasksOfTaskDefinition')($scope.unitTasks, $scope.filters.taskDefinition)
+      filteredTasks = $filter('taskDefinitionName')($scope.unitTasks, $scope.filters.taskSearch)
       filteredTasks = $filter('orderBy')(filteredTasks, 'task.seq')
       $scope.filteredTasks = filteredTasks
     # Apply filters first-time
@@ -35,9 +35,9 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
       # Clicking on already selected task will disable that selection
       task = null if $scope.isSelectedTask(task)
       $scope.selectedTaskDef = task
+    
 
     $scope.isSelectedTask = (task) ->
       # Compare by definition
       task.id == $scope.selectedTaskDef?.id
-
 )
