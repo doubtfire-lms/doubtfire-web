@@ -242,6 +242,18 @@ angular.module("doubtfire.common.filters", [])
     )
 )
 
+.filter('taskDefinitionName', ->
+  (taskDefinitions, searchName) ->
+    return taskDefinitions unless (searchName? && taskDefinitions?)
+    searchName = searchName.toLowerCase()
+    _.filter(taskDefinitions, (td) ->
+      # Search using name or abbreviation
+      td.name.toLowerCase().indexOf(searchName) >= 0 ||
+      td.abbreviation.toLowerCase().indexOf(searchName) >= 0 ||
+      td.targetGrade().toLowerCase().indexOf(searchName) >= 0
+    )
+)
+
 .filter('humanizedDate', ($filter) ->
   (input) ->
     return unless input?

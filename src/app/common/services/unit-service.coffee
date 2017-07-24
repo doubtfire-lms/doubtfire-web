@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
   # The unit service object
   #
@@ -76,6 +76,7 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.seq = index
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
+          taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback
