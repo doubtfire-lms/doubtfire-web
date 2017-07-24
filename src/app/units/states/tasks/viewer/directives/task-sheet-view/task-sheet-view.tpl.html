@@ -5,20 +5,6 @@
     </div>
     <div class="panel-title" ng-show="taskDef">
       {{taskDef.name}}
-      <div class="dropdown pull-right" dropdown>
-        <button class="btn btn-default dropdown-toggle" dropdown-toggle>
-          <i class="fa fa-download"></i>
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a href="{{taskPdfUrl}}">Download PDF</a>
-          </li>
-          <li>
-            <a href="{{taskFilesUrl}}">Download Submitted Files</a>
-          </li>
-        </ul>
-      </div><!--/download-dropdown-->
     </div>
   </div><!--/panel-header-->
   <div class="panel-body text-muted no-pdf" ng-hide="hasPdf">
