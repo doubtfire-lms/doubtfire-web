@@ -32,8 +32,6 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     $scope.taskNameChanged = applyFilters
     # UI call to change currently selected task
     $scope.setSelectedTask = (task) ->
-      # Clicking on already selected task will disable that selection
-      task = null if $scope.isSelectedTask(task)
       $scope.selectedTaskDef = task
     
 
