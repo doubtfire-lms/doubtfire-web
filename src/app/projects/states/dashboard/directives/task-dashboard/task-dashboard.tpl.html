@@ -1,17 +1,24 @@
 <div class="panel panel-default panel-scrollable">
-  <div ng-show="true" class="panel-heading">
+  <div class="panel-heading">
     <div class="panel-title">
       {{task.definition.name}}
-      <div class="dashboard-view-options pull-right">
-        <button class="btn btn-default" ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">
-          <i class="fa fa-file-pdf-o"></i> View Task Submission
+
+      <div class="dropdown pull-right" dropdown>
+        <button class="btn btn-default dropdown-toggle" dropdown-toggle>
+          <i class="fa fa-folder-o"></i>
+          <span class="caret"></span>
         </button>
-        <button class="btn btn-default" ng-click="setSelectedDashboardView('task')">
-          <i class="fa fa-file-pdf-o"></i> View Task Sheet
-        </button>
-        <button class="btn btn-default" ng-click="setSelectedDashboardView('details')">
-          <i class="fa fa-file-pdf-o"></i> View Task Details
-        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">View Submission</a>
+          </li>
+          <li>
+            <a ng-click="setSelectedDashboardView('task')" ng-show="task.has_pdf">Task Sheet</a>
+          </li>
+          <li>
+            <a ng-click="setSelectedDashboardView('details')" ng-show="task.has_pdf">Task Details</a>
+          </li>
+        </ul>
       </div><!--/download-dropdown-->
     </div>
   </div><!--/panel-header-->
