@@ -33,6 +33,6 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     $scope.uploadAlternateFiles = ->
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
     $scope.regeneratePdf = ->
-      taskService.recreatePDF($scope.task, null)
+      $scope.task.recreateSubmissionPdf()
 
 )

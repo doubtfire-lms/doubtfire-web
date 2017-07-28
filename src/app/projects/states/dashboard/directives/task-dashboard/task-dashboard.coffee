@@ -9,6 +9,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/task-dashboard.tpl.html'
   scope:
     task: '='
-  controller: ($scope, Task, listenerService) ->
-
+  controller: ($scope, $stateParams, Task, listenerService, projectService) ->
+    # Is the current user a tutor?
+    $scope.tutor = $stateParams.tutor
+    
 )

@@ -37,6 +37,15 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="project">
+              <li ng-show="tutor" class="dropdown-header">Return to:</li>
+              <li ng-show="tutor">
+                <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
+              </li>
+              <li ng-show="tutor">
+                <a ui-sref="units/students/list({unitId: project.unit_id})">Student List</a>
+              </li>
+              <li class="divider" ng-show="tutor"></li>
+              <li ng-show="tutor" class="dropdown-header">Student Views:</li>
               <li>
                 <a ui-sref="projects/dashboard({projectId: project.project_id})">Dashboard</a>
               </li>

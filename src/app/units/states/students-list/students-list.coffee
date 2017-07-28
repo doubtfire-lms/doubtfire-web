@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService) ->
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService, projectService) ->
   # Filtering
   applyFilters = ->
     filteredStudents = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
@@ -102,8 +102,8 @@ angular.module('doubtfire.units.states.students', [])
         row['lab'] = student.tutorial.abbreviation
       else
         row['lab'] = ""
-      angular.forEach(student.task_stats, (stat) ->
-        row[stat.key] = stat.value
+      angular.forEach(taskService.statusKeys, (key) ->
+        row[key] = student.task_stats[projectService.taskStatIndex[key]].value
       )
       result.push row
     )
