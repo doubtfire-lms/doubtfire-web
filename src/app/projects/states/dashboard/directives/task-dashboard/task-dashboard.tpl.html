@@ -1,11 +1,11 @@
-<div class="panel panel-default panel-scrollable">
+<div class="panel panel-pdf panel-default panel-scrollable">
   <div class="panel-heading">
     <div class="panel-title">
       {{task.definition.name}}
 
       <div class="dropdown pull-right" dropdown>
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
-          <i class="fa fa-folder-o"></i>
+          <i class="fa fa-search"></i>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
@@ -13,16 +13,16 @@
             <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">View Submission</a>
           </li>
           <li>
-            <a ng-click="setSelectedDashboardView('task')" ng-show="task.has_pdf">Task Sheet</a>
+            <a ng-click="setSelectedDashboardView('task')">Task Sheet</a>
           </li>
           <li>
-            <a ng-click="setSelectedDashboardView('details')" ng-show="task.has_pdf">Task Details</a>
+            <a ng-click="setSelectedDashboardView('details')">Task Details</a>
           </li>
         </ul>
       </div><!--/download-dropdown-->
     </div>
   </div><!--/panel-header-->
-  <div class="panel-body" ng-show="isCurrentView('details')">
+  <div class="panel-body no-pdf" ng-show="isCurrentView('details')">
     <div class="col-sm-12 col-xl-6">
       <task-plagiarism-card task="task"></task-plagiarism-card>
       <task-status-card task="task"></task-status-card>
@@ -35,10 +35,10 @@
       <task-outcomes-card task-def="task.definition" unit="task.unit()"></task-outcomes-card>
     </div><!--/task-description-column-->
   </div><!--/panel-body-->
-  <div class="panel-body" ng-show="isCurrentView('task')">
+  <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
     <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
-  <div class="panel-body" ng-show="isCurrentView('submission')">
+  <div class="panel-body has-pdf" ng-if="isCurrentView('submission')">
     <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
 </div>
