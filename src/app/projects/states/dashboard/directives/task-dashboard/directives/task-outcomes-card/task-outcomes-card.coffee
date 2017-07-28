@@ -6,14 +6,11 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   restrict: 'E'
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.tpl.html'
   scope:
-    task: '='
+    taskDef: '='
+    unit: '='
   controller: ($scope, $filter, listenerService, outcomeService) ->
     listeners = listenerService.listenTo($scope)
-    listeners.push $scope.$watch('task.id', ->
-      filteredAlignments = _.map($scope.task.staffAlignments(), (alignment) ->
-        alignment.label = outcomeService.alignmentLabels[alignment.rating]
-        alignment
-      )
-      $scope.alignments = filteredAlignments
+    listeners.push $scope.$watch('taskDef.id', ->
+      $scope.alignments = $scope.unit.staffAlignmentsForTaskDefinition($scope.taskDef)
     )
 )

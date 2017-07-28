@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
   #
   # The unit service object
   #
@@ -76,6 +76,7 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.seq = index
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
+          taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback
@@ -212,6 +213,17 @@ angular.module("doubtfire.common.services.units", [])
           _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
         else
           t
+
+    
+    unit.staffAlignmentsForTaskDefinition = (td) ->
+      return if ! td?
+      filteredAlignments = $filter('taskDefinitionFilter')(unit.task_outcome_alignments, td.id)
+      _.chain(filteredAlignments).map((a) ->
+        a.ilo = unit.outcome(a.learning_outcome_id)
+        a
+      )
+      .sortBy((a) -> a.ilo.ilo_number)
+      .value()
 
     # Actually make the request to refresh and load unit data
     unit.refresh(onSuccess, onFailure)

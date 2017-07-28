@@ -282,13 +282,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   # Returns the alignments for this task
   taskService.staffAlignmentsForTask = (task) ->
-    filteredAlignments = $filter('taskDefinitionFilter')(task.unit().task_outcome_alignments, task.definition.id)
-    _.chain(filteredAlignments).map((a) ->
-      a.ilo = task.unit().outcome(a.learning_outcome_id)
-      a
-    )
-    .sortBy((a) -> a.ilo.ilo_number)
-    .value()
+    task.unit().staffAlignmentsForTaskDefinition(task.definition)
 
   # Return number of days until task hits target date, or false if already
   # completed

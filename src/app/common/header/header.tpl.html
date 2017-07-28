@@ -77,6 +77,9 @@
               <li>
                 <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark Tasks Offline</a>
               </li>
+              <li>
+                <a ui-sref="units/tasks/viewer({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task List</a>
+              </li>
               <li class="divider" ng-if="unitRole.role != 'Admin'"></li><!--/task-related-->
               <li>
                 <a ui-sref="units/students/list({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student List</a>

@@ -1,20 +1,44 @@
-<div class="panel panel-default panel-scrollable">
+<div class="panel panel-pdf panel-default panel-scrollable">
   <div class="panel-heading">
-    <h4 class="panel-title">
+    <div class="panel-title">
       {{task.definition.name}} <span ng-show="tutor">by {{task.project().student_name}}</span>
-    </h4>
-  </div><!--/panel-heading-->
-  <div class="panel-body">
+
+      <div class="dropdown pull-right" dropdown>
+        <button class="btn btn-default dropdown-toggle" dropdown-toggle>
+          <i class="fa fa-search"></i>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ng-click="setSelectedDashboardView('details')">View Task Details</a>
+          </li>
+          <li>
+            <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">View Submission</a>
+          </li>
+          <li>
+            <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
+          </li>
+        </ul>
+      </div><!--/download-dropdown-->
+    </div>
+  </div><!--/panel-header-->
+  <div class="panel-body no-pdf" ng-show="isCurrentView('details')">
     <div class="col-sm-12 col-xl-6">
       <task-plagiarism-card task="task"></task-plagiarism-card>
       <task-status-card task="task"></task-status-card>
       <task-due-card task="task"></task-due-card>
-      <task-description-card task="task"></task-description-card>
+      <task-description-card task-def="task.definition" unit="task.unit()"></task-description-card>
     </div><!--/task-description-column-->
     <div class="col-sm-12 col-xl-6">
       <task-assessment-card task="task"></task-assessment-card>
       <task-submission-card task="task"></task-submission-card>
-      <task-outcomes-card task="task"></task-outcomes-card>
+      <task-outcomes-card task-def="task.definition" unit="task.unit()"></task-outcomes-card>
     </div><!--/task-description-column-->
+  </div><!--/panel-body-->
+  <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
+    <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
+  </div><!--/panel-body-->
+  <div class="panel-body has-pdf" ng-if="isCurrentView('submission')">
+    <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
 </div>

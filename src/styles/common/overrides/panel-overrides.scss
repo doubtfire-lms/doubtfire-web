@@ -108,3 +108,11 @@
     padding: 60px;
   }
 }
+
+.panel.panel-pdf {
+  @include flex-panel;
+  .panel-body.has-pdf {
+    padding: 0;
+    position: relative;
+  }
+}
