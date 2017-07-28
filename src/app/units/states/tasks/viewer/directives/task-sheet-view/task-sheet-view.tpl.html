@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-pdf panel-default">
   <div class="panel-heading">
     <div class="panel-title" ng-hide="taskDef">
       No Task Selected
@@ -7,16 +7,13 @@
       {{taskDef.name}}
     </div>
   </div><!--/panel-header-->
-  <div class="panel-body text-muted no-pdf" ng-hide="hasPdf">
-    <i class="fa fa-file-pdf-o"></i>
-    <span ng-show="showLoading">
-      Loading Task Details...
-    </span>
-    <span ng-hide="taskDef">
-      No Task Selected
+  <div class="panel-body no-pdf" ng-hide="hasPdf">
+    <i class="fa fa-question-circle"></i>
+    <span>
+      This task has no task sheet
     </span>
   </div><!--/panel-body-without-pdf-->
-  <div class="panel-body has-pdf" ng-show="taskPdfUrl">
+  <div class="panel-body has-pdf" ng-show="hasPdf">
     <pdf-viewer pdf-url="taskPdfUrl"></pdf-viewer>
   </div><!--/panel-body-with-pdf-->
 </div>

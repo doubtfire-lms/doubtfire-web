@@ -1,19 +1,12 @@
 task-sheet-view {
-  .panel {
-    @include flex-panel;
-    .panel-body.has-pdf {
-      padding: 0;
-      position: relative;
-    }
-    .panel-body.no-pdf {
-      @include flex-center;
-      font-size: 2rem;
-      i {
-        font-size: 8rem;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 15px;
-      }
+  .panel.panel-pdf .panel-body.no-pdf {
+    @include flex-center;
+    font-size: 2rem;
+    i {
+      font-size: 8rem;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 15px;
     }
   }
   @media (min-width: $screen-md) {
