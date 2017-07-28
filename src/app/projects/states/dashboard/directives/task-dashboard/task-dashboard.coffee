@@ -9,7 +9,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/task-dashboard.tpl.html'
   scope:
     task: '='
-  controller: ($scope, Task, TaskFeedback, listenerService) ->
+  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService) ->
+    # Is the current user a tutor?
+    $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
     $scope.dashboardViews = ["details", "submission", "task"]
     # set the current dashboard view to details by default

@@ -1,7 +1,7 @@
 <div class="panel panel-pdf panel-default panel-scrollable">
   <div class="panel-heading">
     <div class="panel-title">
-      {{task.definition.name}}
+      {{task.definition.name}} <span ng-show="tutor">by {{task.project().student_name}}</span>
 
       <div class="dropdown pull-right" dropdown>
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
@@ -10,13 +10,13 @@
         </button>
         <ul class="dropdown-menu">
           <li>
-            <a ng-click="setSelectedDashboardView('details')" ng-show="!isCurrentView('details')">View Task Details</a>
+            <a ng-click="setSelectedDashboardView('details')">View Task Details</a>
           </li>
           <li>
-            <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf && !isCurrentView('submission')">View Submission</a>
+            <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">View Submission</a>
           </li>
           <li>
-            <a ng-click="setSelectedDashboardView('task')" ng-show="!isCurrentView('task')">View Task Sheet</a>
+            <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
           </li>
         </ul>
       </div><!--/download-dropdown-->

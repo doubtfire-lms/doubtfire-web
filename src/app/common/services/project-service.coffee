@@ -189,7 +189,7 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.addProjectMethods = (project) ->
     project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
-        project.burndown_chart_data.length = response.burndown_chart_data
+        project.burndown_chart_data = response.burndown_chart_data
         Visualisation.refreshAll()
 
     project.incorporateTask = (newTask) ->
