@@ -3,7 +3,7 @@
     <div class="panel-title">
       {{task.definition.name}} <span ng-show="tutor">by {{task.project().student_name}}</span>
 
-      <div class="dropdown pull-right" dropdown>
+      <div class="dropdown pull-right" dropdown ng-show="task.has_pdf || task.definition.has_task_pdf">
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
           <i class="fa fa-search"></i>
           <span class="caret"></span>
@@ -16,7 +16,7 @@
             <a ng-click="setSelectedDashboardView('submission')" ng-show="task.has_pdf">View Submission</a>
           </li>
           <li>
-            <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
+            <a ng-click="setSelectedDashboardView('task')" ng-show="task.definition.has_task_pdf">View Task Sheet</a>
           </li>
         </ul>
       </div><!--/download-dropdown-->
@@ -39,6 +39,6 @@
     <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission')">
-    <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
+    <pdf-viewer pdf-url="urls.taskSubmissionPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
 </div>
