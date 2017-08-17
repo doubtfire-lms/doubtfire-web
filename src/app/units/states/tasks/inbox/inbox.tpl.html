@@ -5,17 +5,14 @@
     task-data="taskData"
     unit="unit"
     unit-role="unitRole"
-    get-next-task="getNextTask"
-    get-previous-task="getPreviousTask"
     class="col-xs-12 col-md-3"><!--/panel-1-->
   </staff-task-list>
-  <task-submission-assessor
+  <task-dashboard
     task="taskData.selectedTask"
-    on-click-next-task="getNextTask"
-    on-click-previous-task="getPreviousTask"
-    on-change-task="taskData.onSelectedTaskChange"
+    show-footer="true"
+    show-submission="true"
     class="col-xs-12 col-md-6">
-  </task-submission-assessor><!--/panel-2-->
+  </task-dashboard><!--/panel-2-->
   <task-comments-viewer
     task="taskData.selectedTask"
     project="taskData.selectedTask.project()"

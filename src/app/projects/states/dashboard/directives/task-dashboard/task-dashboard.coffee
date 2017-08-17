@@ -9,13 +9,23 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/task-dashboard.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService) ->
+    showFooter: '@?'
+    showSubmission: '@?'
+  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService) ->
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
     $scope.dashboardViews = ["details", "submission", "task"]
+    
     # set the current dashboard view to details by default
-    $scope.currentView = $scope.dashboardViews[0]
+    updateCurrentView = ->
+      if $scope.showSubmission
+        $scope.currentView = $scope.dashboardViews[1]
+      else
+        $scope.currentView = $scope.dashboardViews[0]
+    
+    updateCurrentView()
+
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
@@ -25,8 +35,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       $scope.urls = {
         taskSheetPdfUrl: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
         taskSubmissionPdfUrl: TaskFeedback.getTaskUrl($scope.task)
+        taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
       }
-      $scope.currentView = $scope.dashboardViews[0]
+      updateCurrentView()
     )
     
     # Set the selected dashboard view
@@ -36,4 +47,19 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Is the current view?
     $scope.isCurrentView = (view) ->
       return $scope.currentView == view
+
+    # Now also load in the assessment details
+    if $scope.showFooter
+      $scope.taskStatusData =
+        keys:   _.sortBy(taskService.markedStatuses, (s) -> taskService.statusSeq[s])
+        help:   taskService.helpDescriptions
+        icons:  taskService.statusIcons
+        labels: taskService.statusLabels
+        class:  taskService.statusClass
+
+      # Triggers a new update to the task status
+      $scope.triggerTransition = (status) ->
+        taskService.updateTaskStatus $scope.task.project().unit, $scope.task.project(), $scope.task, status
+
+
 )

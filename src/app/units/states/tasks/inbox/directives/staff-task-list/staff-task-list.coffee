@@ -12,8 +12,6 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
-    getNextTask: '=?'
-    getPreviousTask: '=?'
   controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
@@ -39,15 +37,6 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
       filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
       $scope.filteredTasks = filteredTasks
-    # Next/previous task funcs
-    $scope.getNextTask = ->
-      idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
-      idx = if idx == -1 then 0 else idx + 1
-      $scope.filteredTasks?[idx]
-    $scope.getPreviousTask = ->
-      idx = _.findIndex($scope.filteredTasks, (t) -> $scope.isSelectedTask(t))
-      idx = if idx == -1 then 0 else idx - 1
-      $scope.filteredTasks?[idx]
     # Let's call having a source of tasksForDefinition plus having a task definition
     # auto-selected with the search options open task def mode -- i.e., the mode
     # for selecting tasks by task definitions

@@ -9,6 +9,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     taskDef: '='
     unit: '='
   controller: ($scope, $filter, listenerService, outcomeService) ->
+    return unless $scope.unit?
     listeners = listenerService.listenTo($scope)
     listeners.push $scope.$watch('taskDef.id', ->
       $scope.alignments = $scope.unit.staffAlignmentsForTaskDefinition($scope.taskDef)
