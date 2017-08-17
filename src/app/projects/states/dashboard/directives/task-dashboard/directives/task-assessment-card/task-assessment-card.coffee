@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     $scope.gradeNames = gradeService.grades
 
     $scope.hasBeenGivenStars = (t) ->
-      t.quality_pts > 0 || _.includes(taskService.markedStatuses, t.status)
+      t.quality_pts > 0 || _.includes(taskService.gradeableStatuses, t.status)
 
     $scope.hasBeenGraded = (t) ->
       _.isNumber(t.grade)
