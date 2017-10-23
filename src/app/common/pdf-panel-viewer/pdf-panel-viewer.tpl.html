@@ -12,7 +12,7 @@
         <a ng-click="downloadEvent('Resources')" ng-href="{{resourcesUrl}}" class="btn btn-primary" ng-if="resourcesUrl">
         <i class="fa fa-download"></i><span> Resources</span>
       </a>
-        <a ng-click="downloadEvent('PDF')" ng-href="{{pdfUrl}}" class="btn btn-success">
+        <a ng-click="downloadEvent('PDF')" ng-href="{{pdfUrl}}&as_attachment=true" class="btn btn-success">
         <i class="fa fa-download"></i><span ng-show="resourcesUrl"> PDF</span>
       </a>
     </div>
