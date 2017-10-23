@@ -1,10 +1,1 @@
-<object ng-if="isSafari" data="{{pdfUrl}}" type="application/pdf" width="100%" height="100%"></object>
-<div class="iframe-wrapper" ng-if="!isSafari">
-  <iframe ng-if="shouldShowIframe" ng-src="{{googleDocsUrl}}"></iframe>
-  <div class="loading-icon">
-    <i class="fa fa-spinner fa-pulse fa-2x"></i>
-    <p class="loading-text">
-      Loading PDF...
-    </p>
-  </div>
-</div>
+<object data="{{pdfUrl}}" type="application/pdf"></object>
