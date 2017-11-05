@@ -16,7 +16,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       return unless $scope.taskDef?
       # Resource download URLs
       $scope.urls =
-        taskSheet: Task.getTaskPDFUrl($scope.unit, $scope.taskDef)
+        taskSheet: "#{Task.getTaskPDFUrl($scope.unit, $scope.taskDef)}&as_attachment=true"
         resources: Task.getTaskResourcesUrl($scope.unit, $scope.taskDef)
     )
     # Analytics event for when task resource is downloaded

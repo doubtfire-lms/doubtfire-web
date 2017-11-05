@@ -1,30 +1,20 @@
 <div class="pdf-panel-viewer">
-  <div class="panel-body">
-    <div class="iframe-wrapper" ng-if="isSafari">
-      <object data="{{pdfUrl}}" type="application/pdf" width="100%" height="100%">
-      </object>
+    <div class="panel-body">
+        <pdf-viewer ng-if="showViewer" pdf-url="pdfUrl"></pdf-viewer>
     </div>
-    <div class="iframe-wrapper" ng-if="!isSafari">
-      <iframe ng-if="shouldShowIframe" ng-src="{{googleDocsUrl}}"></iframe>
-      <div class="loading-icon">
-        <i class="fa fa-spinner fa-pulse fa-2x"></i>
-        <p class="loading-text">
-          Loading PDF
-        </p>
-      </div>
+    <!--/panel-body-->
+    <div class="panel-footer" ng-if="!hideFooter">
+        <div class="pull-left text-muted" ng-show="footerText">
+            <strong>Note:</strong> {{footerText}}
+        </div>
+        <div class="pull-right btn-group">
+            <a ng-click="downloadEvent('Resources')" ng-href="{{resourcesUrl}}" class="btn btn-primary" ng-if="resourcesUrl">
+            <i class="fa fa-download"></i><span> Resources</span>
+        </a>
+            <a ng-click="downloadEvent('PDF')" ng-href="{{pdfUrl}}&as_attachment=true" class="btn btn-success">
+            <i class="fa fa-download"></i><span ng-show="resourcesUrl"> PDF</span>
+        </a>
+        </div>
     </div>
-  </div><!--/panel-body-->
-  <div class="panel-footer" ng-if="!hideFooter">
-    <div class="pull-left text-muted" ng-show="footerText">
-      <strong>Note:</strong> {{footerText}}
-    </div>
-    <div class="pull-right btn-group">
-      <a ng-click="downloadEvent('Resources')" ng-href="{{resourcesUrl}}" class="btn btn-primary" ng-if="resourcesUrl">
-        <i class="fa fa-download"></i><span> Resources</span>
-      </a>
-      <a ng-click="downloadEvent('PDF')" ng-href="{{pdfUrl}}" class="btn btn-success">
-        <i class="fa fa-download"></i><span ng-show="resourcesUrl"> PDF</span>
-      </a>
-    </div>
-  </div><!--/panel-footer-->
+    <!--/panel-footer-->
 </div>

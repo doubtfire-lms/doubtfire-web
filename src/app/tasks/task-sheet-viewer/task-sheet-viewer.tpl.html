@@ -104,7 +104,7 @@
         <p>View{{showTaskSheet ? "ing" : ''}} PDF</p>
       </div>
     </a>
-    <a ng-click="downloadEvent('PDF')" href="{{taskPDFUrl}}" ng-show="hasPDF" target="_blank" class="btn btn-lg btn-info">
+    <a ng-click="downloadEvent('PDF')" href="{{taskPDFUrl}}&as_attachment=true" ng-show="hasPDF" target="_blank" class="btn btn-lg btn-info">
       <div>
         <i class="fa fa-2x fa-file-pdf-o"></i>
         <i class="fa fa-2x fa-download"></i>

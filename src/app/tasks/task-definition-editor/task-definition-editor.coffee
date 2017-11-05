@@ -63,7 +63,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       # $scope.filesUploaded = response
 
     $scope.taskPDFUrl = ->
-      Task.getTaskPDFUrl($scope.unit, $scope.task)
+      "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
 
     #
     # The task resources uploader...

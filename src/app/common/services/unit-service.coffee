@@ -214,7 +214,7 @@ angular.module("doubtfire.common.services.units", [])
         else
           t
 
-    
+
     unit.staffAlignmentsForTaskDefinition = (td) ->
       return if ! td?
       filteredAlignments = $filter('taskDefinitionFilter')(unit.task_outcome_alignments, td.id)
@@ -358,6 +358,9 @@ angular.module("doubtfire.common.services.units", [])
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->
       PortfolioSubmission.getPortfolioUrl(student)
+
+    student.portfolioUrlAsAttachment = ->
+      PortfolioSubmission.getPortfolioUrl(student, true)
 
     # Assigns a grade to a student
     student.assignGrade = (score, rationale) ->

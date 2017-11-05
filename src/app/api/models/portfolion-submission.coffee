@@ -17,6 +17,9 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     resource.portfolioUrl =
       "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
 
+    resource.portfolioUrlAsAttachment =
+      resource.portfolioUrl + "&as_attachment=true"
+
     #
     # Object that defines file upload requirements of an LSR
     #
@@ -53,8 +56,10 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
     resource
 
-  PortfolioSubmission.getPortfolioUrl = (project) ->
-    "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+  PortfolioSubmission.getPortfolioUrl = (project, asAttachment = false) ->
+    url = "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+    url += "&as_attachment=true" if asAttachment
+    url
 
   PortfolioSubmission
 )

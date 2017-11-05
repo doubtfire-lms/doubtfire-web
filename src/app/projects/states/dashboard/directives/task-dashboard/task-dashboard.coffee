@@ -16,14 +16,14 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
     $scope.dashboardViews = ["details", "submission", "task"]
-    
+
     # set the current dashboard view to details by default
     updateCurrentView = ->
       if $scope.showSubmission
         $scope.currentView = $scope.dashboardViews[1]
       else
         $scope.currentView = $scope.dashboardViews[0]
-    
+
     updateCurrentView()
 
     # Cleanup
@@ -35,11 +35,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       $scope.urls = {
         taskSheetPdfUrl: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
         taskSubmissionPdfUrl: TaskFeedback.getTaskUrl($scope.task)
+        taskSubmissionPdfAttachmentUrl: TaskFeedback.getTaskUrl($scope.task, true)
         taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
       }
       updateCurrentView()
     )
-    
+
     # Set the selected dashboard view
     $scope.setSelectedDashboardView = (view) ->
       if view in $scope.dashboardViews
