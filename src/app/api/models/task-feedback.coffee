@@ -5,7 +5,7 @@ angular.module("doubtfire.api.models.task-feedback", [])
 
   TaskFeedback.getTaskUrl = (task, asAttachment = false) ->
     url = "#{api}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
-    url += "&as_attachment=true"
+    url += "&as_attachment=true" if asAttachment
     url
 
   TaskFeedback.getTaskFilesUrl = (task) ->
