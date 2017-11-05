@@ -10,9 +10,11 @@ angular.module("doubtfire.common.pdf-panel-viewer", [])
     hideFooter: '=?'
 
   controller: ($scope, analyticsService) ->
+    $scope.showViewer = false
+    
     $scope.downloadEvent = (type) ->
       analyticsService.event 'Task Sheet', "Downloaded #{type}"
     # Watch the URL, and hide the view if it hasn't loaded
     $scope.$watch 'pdfUrl', (newUrl) ->
-      return unless newUrl?
+      $scope.showViewer = newUrl?
 )

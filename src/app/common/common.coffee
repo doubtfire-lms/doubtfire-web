@@ -11,5 +11,6 @@ angular.module("doubtfire.common", [
   'doubtfire.common.alert-list'
   # New
   'doubtfire.common.pdf-viewer'
+  'doubtfire.common.pdf-panel-viewer'
   'doubtfire.common.user-icon'
 ])
