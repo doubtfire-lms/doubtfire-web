@@ -109,7 +109,7 @@
     <div class="panel-footer clearfix">
       <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       <div class="pull-right">
-        <a class="btn btn-info" href="{{portfolioDownloadUrl}}" target="_blank" tooltip-html="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all portfolios may take a long time" tooltip-append-to-body="true">
+        <a class="btn btn-info" href="{{portfolioDownloadUrl}}" target="_blank" tooltip-html-unsafe="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all portfolios may take a long time" tooltip-append-to-body="true">
           <i class="fa fa-download"></i> Download All Portfolios
         </a>
         <a class="btn btn-success" href="{{gradeDownloadUrl}}" target="_blank">
