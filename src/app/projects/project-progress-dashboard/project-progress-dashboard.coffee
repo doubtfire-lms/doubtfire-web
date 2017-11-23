@@ -27,7 +27,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
-        projectService.updateTaskStats $scope.project, project.stats
+        $scope.project.updateTaskStats project.stats
         analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
         $rootScope.$broadcast "TargetGradeUpdated"
 

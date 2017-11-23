@@ -382,10 +382,9 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
     task.id = response.id
-    task.status = response.status
     task.times_assessed = response.times_assessed
     task.submisson_date = response.submisson_date
-    task.updateTaskStatus project, response.new_stats
+    task.updateTaskStatus response.status, response.new_stats
     task.processing_pdf = response.processing_pdf
     task.grade = response.grade
     if response.status == status
@@ -396,7 +395,7 @@ angular.module("doubtfire.common.services.tasks", [])
           proj = unit.findStudent(details.id)
           if proj?
             # Update the other project's task status overview
-            task.updateTaskStatus proj, details.new_stats
+            task.updateTaskStatus response.status, details.new_stats
             # Update the other project's task
             other_task = proj.findTaskForDefinition(task.definition.id)
             if other_task?

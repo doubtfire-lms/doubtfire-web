@@ -27,7 +27,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
       projectService.updateProject($scope.project.project_id, { target_grade: newGrade },
         (project) ->
           $scope.project.burndown_chart_data = project.burndown_chart_data
-          projectService.updateTaskStats($scope.project, project.stats)
+          $scope.project.updateTaskStats(project.stats)
           # Update task completions and re-render task status graph
           updateTaskCompletionValues()
           $scope.renderTaskStatusPieChart?()

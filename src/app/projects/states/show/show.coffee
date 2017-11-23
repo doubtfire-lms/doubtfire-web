@@ -55,7 +55,7 @@ angular.module('doubtfire.projects.states.show', [])
     Project.update(
       { id: $scope.project.project_id, trigger: "trigger_week_end" }
       (project) ->
-        projectService.updateTaskStats($scope.project, project.stats)
+        $scope.project.updateTaskStats(project.stats)
         # Update the task stats
         _.each $scope.project.tasks, (task) ->
           task.status = _.filter(project.tasks, { task_definition_id: task.task_definition_id })[0].status
