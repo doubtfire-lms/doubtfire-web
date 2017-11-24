@@ -92,7 +92,7 @@ angular.module('doubtfire.home.states.home', [])
 
   $scope.currentUser = currentUser
 
-  if $state.params?.notifications?
+  if $state.params?.notifications? && $state.params?.notifications == "true"
     UserNotificationSettingsModal.show currentUser?.profile
 
 )
