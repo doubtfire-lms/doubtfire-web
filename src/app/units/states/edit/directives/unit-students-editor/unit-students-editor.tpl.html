@@ -46,7 +46,7 @@
                     <a href="mailto:{{student.email}}">{{student.student_email}}</a>
                   </td>
                   <td>
-                    <span tooltip-html="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
+                    <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
                       <div class="btn-group dropdown" dropdown is-open="status.isopen">
                         <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
                           {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
