@@ -22,7 +22,7 @@ var audioCtx = new (window.AudioContext || webkitAudioContext)();
 var canvasCtx = canvas.getContext("2d");
 
 // Global references
-var deleteButton, downloadButton;
+var deleteButton, downloadButton, clipContainer;
 var audio, audioURL;
 
 // canvas variables
@@ -44,7 +44,6 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             controlAudioRecording(stream, mediaRecorder),
             
             mediaRecorder.ondataavailable = function (e) {
-                console.log("data available");
                     
                 // Create HTML for an audio player that uses the recorded audio as a source
                 audio = addHTMLElements();
@@ -64,7 +63,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 }
 
                 // Prepare for download
-                prepareDownloadWAV(data, "test.blob");
+                prepareDownloadWAV(e.data, "test.blob");
             }
         },
         
@@ -116,88 +115,50 @@ function controlAudioRecording(stream, mediaRecorder) {
 /*
 * Prepare wav file for download 
 */
-function prepareDownloadWAV(blob, filename) {
+function prepareDownloadWAV(data, filename) {
 
-    var size = blob.size;
-    var type = blob.type;
+    var audioFileURL = window.URL.createObjectURL(data);
 
-    var reader = new FileReader();
-    console.log("Here");
+    console.log("Inside prepare method");
+    fetch(audioFileURL).then(function(result) {
+        result.blob().then(function(blob) {
 
-    //Serialize the data to localStorage...
-    var base64FileData = blob.toString();
-
-    var mediaFile = {
-        fileUrl: audioURL,
-        size: blob.size,
-        type: blob.type,
-        src: base64FileData
-    };
-                
-    var audioBlob = new Blob([mediaFile], {type: 'audio/wav'});
-        
-    //var wavFile = new Blob([mediaFile], {type: 'audio/wav'});
-    var downloadAudio = window.URL.createObjectURL(audioBlob);
-
-    var link = document.getElementById('downloadRec');
-    link.href = downloadAudio;
-
-    return;
-}
-
-
-/*
-* Download functions
-* downloadButton.onClick
-*/
-function prepareDownloadWAV123() {
-    
-    audio.src = null;
-        
-    fetch(audioURL).then(function (res) {
-
-        res.blob().then(function (blob) {
             var size = blob.size;
             var type = blob.type;
 
-            var reader = new FileReader();
-            reader.addEventListener("loadend", function () {
+            console.log("Inside Fetch\n Blob size : " + size + "\n Blob type : " + type);
 
-                console.log('reader.result:', reader.result);
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(blob);
 
-                //play the base64 encoded data directly works
-                audio.src = reader.result;
+            fileReader.addEventListener("loadend", function() {
+                console.log("Reader result : " + fileReader.result);
 
-                //Serialize the data to localStorage and read it back then play...
-                var base64FileData = reader.result.toString();
+                var fileData = fileReader.result.toString();
 
+                // Create media block
                 var mediaFile = {
                     fileUrl: audioURL,
                     size: blob.size,
                     type: blob.type,
-                    src: base64FileData
+                    mediaContent: fileData
                 };
-                        
-                var audioBlob = new Blob([mediaFile], {type: 'audio/wav'});
-                var wavFile = new File(audioBlob, 'test.wav');
-                
-                //var wavFile = new Blob([mediaFile], {type: 'audio/wav'});
-                var downloadAudio = window.URL.createObjectURL(wavFile);
 
-                var link = document.getElementById('downloadRec');
-                link.href = downloadAudio;
-                console.log("Wav Done")
+                console.log("\n\nRe-Fetched data : " + mediaFile.mediaContent);
 
-                //save the file info to localStorage
-                localStorage.setItem('myTest', JSON.stringify(mediaFile));  
+                //var downloadMediaContent = new Blob([JSON.stringify(mediaFile)], {'type' : 'audio/webm'});
+                var downloadMediaContent = new Blob([JSON.stringify(mediaFile)], {'type' : 'audio/wav'});
+                var downloadLink = document.getElementById("downloadRec");
+                var mediaUrl = window.URL.createObjectURL(downloadMediaContent);
+                downloadLink.href = mediaUrl;
+                downloadLink = filename;
 
-                //read out the file info from localStorage again
-                var reReadItem = JSON.parse(localStorage.getItem('myTest'));
-                audio.src = reReadItem.src;
-                console.log("Downloaded"); 
+                // Test add another player with this data
+                var audio1 = document.createElement("audio");
+                audio1.setAttribute('controls', '');
+                audio1.src = mediaFile.mediaContent;
+                clipContainer.appendChild(audio1);
             });
-
-            reader.readAsDataURL(blob);
         });
     });
 }
@@ -208,7 +169,7 @@ function prepareDownloadWAV123() {
 */
 function addHTMLElements() {
 
-    var clipContainer = document.createElement('article');
+    clipContainer = document.createElement('article');
     var clipLabel = document.createElement('p');
     var audio = document.createElement('audio');
     deleteButton = document.createElement('button');
