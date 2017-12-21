@@ -134,30 +134,12 @@ function prepareDownloadWAV(data, filename) {
             fileReader.addEventListener("loadend", function() {
                 console.log("Reader result : " + fileReader.result);
 
-                var fileData = fileReader.result.toString();
-
-                // Create media block
-                var mediaFile = {
-                    fileUrl: audioURL,
-                    size: blob.size,
-                    type: blob.type,
-                    mediaContent: fileData
-                };
-
-                console.log("\n\nRe-Fetched data : " + mediaFile.mediaContent);
-
-                //var downloadMediaContent = new Blob([JSON.stringify(mediaFile)], {'type' : 'audio/webm'});
-                var downloadMediaContent = new Blob([JSON.stringify(mediaFile)], {'type' : 'audio/wav'});
+                var fileData = fileReader.result;
+                var downloadMediaContent = new Blob([fileData], {'type': type});
                 var downloadLink = document.getElementById("downloadRec");
                 var mediaUrl = window.URL.createObjectURL(downloadMediaContent);
                 downloadLink.href = mediaUrl;
                 downloadLink = filename;
-
-                // Test add another player with this data
-                var audio1 = document.createElement("audio");
-                audio1.setAttribute('controls', '');
-                audio1.src = mediaFile.mediaContent;
-                clipContainer.appendChild(audio1);
             });
         });
     });
