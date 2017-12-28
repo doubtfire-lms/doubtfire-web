@@ -22,7 +22,7 @@ $markdown-editor-height: 15px;
     }
   }
 
-.markdown-editor .markdown-editor-inner-context {
+.markdown-editor, .markdown-editor-inner-context-text, .markdown-editor-inner-context-audio {
   position: relative;
   cursor: text;
   padding: 6px 12px;
@@ -137,3 +137,8 @@ $markdown-editor-height: 15px;
   text-align: center;
 }
 
+// Additional style for audio comment editor
+.markdown-editor-inner-context-audio {
+  height: 60px;
+  background-color: rgb(231, 101, 101);
+}
