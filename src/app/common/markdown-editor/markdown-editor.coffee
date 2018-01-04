@@ -13,6 +13,10 @@ angular.module('doubtfire.common.markdown-editor', [])
     onEnter: '=?'
   controller: ($scope, $timeout) ->
     DEFAULT_HEIGHT = 300
+
+    $scope.commentType = {TEXT : 0, AUDIO : 1} # Enum for keeping track of comment type
+    $scope.currentCommentType = $scope.commentType.TEXT # Current value of comment type
+
     $scope.isEditing = true
     $scope.height = $scope.height or DEFAULT_HEIGHT
     $scope.codemirrorLoaded = (editor) ->
