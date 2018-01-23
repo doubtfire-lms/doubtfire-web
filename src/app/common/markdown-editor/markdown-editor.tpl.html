@@ -1,19 +1,48 @@
 <div class="markdown-editor">
-  <!-- Text comment editor --> 
+  <!-- Text comment editor -->
   <div class="markdown-editor-inner-context-text" ng-show="currentCommentType == commentType.TEXT">
     <div ng-show="isEditing" ui-codemirror="{ onLoad : codemirrorLoaded }" ui-codemirror-opts="editorOpts" ui-refresh="true"
-      ng-model="markdownText"></div>    
+      ng-model="markdownText"></div>
     <div style="{{heightStyle()}}" class="markdown-editor-preview markdown-to-html" ng-hide="isEditing">
       <div ng-bind-html="markdownText | markdown"></div>
     </div>
   </div>
- <!-- Audio comment editor -->
-  <div class="markdown-editor-inner-context-audio" ng-show="currentCommentType == commentType.AUDIO">
-    <div>
-       <!-- POC comes here -->
-    </div>   
+
+  <!-- Image comment editor -->
+  <div class="markdown-editor-inner-context-image {{upload.display.error ? 'file-rejected' : ''}}" ng-show="currentCommentType == commentType.IMAGE">
+    <div ngf-select ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
+      ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
+      ngf-drop-available="dropSupported">
+      <br>
+      <p class="fa fa-file-image-o fa-2x"></p>
+      <p ng-show="upload.display.error">
+        Invalid file type!
+      </p>
+      <p ng-show="dropSupported" ng-hide="upload.display.error">
+        <small>Drop image file or click to select.</small>
+      </p>
+      <p ng-hide="dropSupported || upload.display.error">
+        Click to select image file
+      </p>
+    </div>
+    <!--/drop-zone-->
   </div>
-  
+
+  <!-- Audio comment editor -->
+  <div class="markdown-editor-inner-context-audio container" ng-show="currentCommentType == commentType.AUDIO">
+   <!-- <div class="row"> -->
+      <!-- POC comes here -->
+      <audio id='audioPlayer'></audio>
+
+      <img class="audio-button col-sm-2" id='btnRecord' src="/assets/icons/record.png">
+      <img class="audio-button col-sm-2 disabled" id='btnPlay' src="/assets/icons/play.png">
+
+      <canvas class="col-sm-6" id="audio-visualiser"></canvas>
+      
+      <img class="audio-button col-sm-2 disabled" id='btnSend' src="/assets/icons/send.png">
+   <!-- </div> -->
+  </div>
+
   <div class="markdown-editor-actions">
     <!-- PREVIEW COMMENT -->
     <span ng-click="isEditing = !isEditing" class="markdown-editor-action fa-stack fa-lg" tooltip="{{isEditing ? 'View preview' : 'Continue editing'}}">
@@ -23,8 +52,8 @@
     <a href="https://en.support.wordpress.com/markdown-quick-reference/" target="_blank" class="markdown-editor-action fa-stack fa-lg"
       tooltip="Markdown guide">
       <i class="fa fa-question fa-stack-1x"></i>
-    </a>  
-    <!-- COMMENT TYPE SELECTOR ICONS --> 
+    </a>
+    <!-- COMMENT TYPE SELECTOR ICONS -->
     <font color="#cecece">|</font>
     <!-- Text -->
     <!-- Clicking on the span changes the value of the comment type enum -->
@@ -32,9 +61,14 @@
       <i class="fa fa-font commenttype-selector"></i>
     </span>
     <!-- Audio -->
-    <span ng-click="currentCommentType = commentType.AUDIO" class="markdown-editor-action fa-stack fa-lg" tooltip="Audio comment">
+    <span ng-click="currentCommentType = commentType.AUDIO;" onclick="BigTest()" class="markdown-editor-action fa-stack fa-lg"
+      tooltip="Audio comment">
       <i class="fa fa-microphone commenttype-selector"></i>
-    </span>    
+    </span>
+    <!-- Image -->
+    <span ng-click="currentCommentType = commentType.IMAGE" class="markdown-editor-action fa-stack fa-lg" tooltip="Image comment">
+      <i class="fa fa-image commenttype-selector"></i>
+    </span>
   </div>
 
 </div>

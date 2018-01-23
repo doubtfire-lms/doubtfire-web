@@ -35,8 +35,36 @@ $markdown-editor-height: 15px;
 
   // Additional style for audio comment editor
   .markdown-editor-inner-context-audio {
-    height: 60px;
-    background-color: rgb(231, 101, 101);
+    cursor: auto;
+    padding: 0px;
+    background-color: #f5f5f5;
+    width: 100%;
+    height: 52px;
+  }
+
+  // Style for Image comment drop zone - add a dotted border to show the 
+  // image drop zone
+  .markdown-editor-inner-context-image {
+    height:150px;
+    border: 2px #bbb dotted;
+    font-size: larger;
+    font-weight: bold;
+    color: #aaa;
+    text-align: center;
+    &, i {
+      @include transition(all 0.25s ease);
+    }
+    p small {
+      display: block;
+    }
+    &:hover {
+      cursor: pointer;
+      border-color: rgb(65, 65, 65);
+      color: rgb(148, 148, 148);
+      p small {
+        text-decoration: underline;
+      }
+    }
   }
   
   .markdown-editor-preview {
@@ -143,3 +171,35 @@ $markdown-editor-height: 15px;
   text-align: center;
 }
 
+.audio-button{
+  padding: 0%;
+  height: auto;
+  width: 10%;
+  max-width: 40px;
+  border-radius: 70%;
+  vertical-align: middle;
+}
+.audio-button:hover { 
+  background-color: rgb(255, 94, 0);
+}
+
+.audio-button:disabled { 
+  opacity: 0.3;
+  filter: alpha(opacity=30); /* msie */
+  background-color: #000;
+}
+
+#audio-visualiser {
+  //position: absolute;
+  padding: 0%;
+  height: 75%;
+  width: 70%;
+  background: rgb(206, 206, 206);
+  //vertical-align: middle;
+}
+
+.disabled{  
+  opacity: 0.3;
+  filter: alpha(opacity=30); /* msie */
+  background-color: #000;
+}
