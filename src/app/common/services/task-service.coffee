@@ -492,8 +492,8 @@ angular.module("doubtfire.common.services.tasks", [])
     comment.author_is_me = comment.author.id == currentUser.profile.id
     comment
 
-  taskService.addComment = (task, textString, success, failure) ->
-    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
+  taskService.addComment = (task, textString, commentType, success, failure) ->
+    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType },
       (response) ->
         unless task.comments?
           task.comments = []
@@ -504,6 +504,36 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) ->
         if failure? and _.isFunction failure
           failure(response)
+
+
+  taskService.addMediaComment = (task, mediaBlobURL, commentType, success, failure) ->
+    
+    form = new FormData()
+
+    taskService.data = undefined
+    taskService.payload = undefined
+
+    xhr = new XMLHttpRequest()
+    xhr.open 'GET', mediaBlobURL, true
+    xhr.responseType = 'blob'
+    xhr.onload = (e) ->
+      taskService.data = this.response
+      
+      form.append 'type', commentType
+      form.append 'project_id', task.project().project_id
+      form.append 'task_definition_id', task.task_definition_id
+      form.append 'attachment', taskService.data, 'a-comment.webm'
+
+      xhr2 = new XMLHttpRequest()
+      taskService.uploadCommentUrl = Task.generateCommentsUrl(task)
+      console.log 'Upload URL : ' + taskService.uploadCommentUrl
+
+      xhr2.open 'POST', taskService.uploadCommentUrl, true
+      xhr2.send form
+      
+    # To fetch audio blob
+    xhr.send()
+    
 
   taskService
 )

@@ -12,7 +12,8 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     comment: '=?'
     autofocus: '@?'
     refocusOnTaskChange: '@?'
-  controller: ($scope, $modal, $state, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+    test:'='
+  controller: ($scope, $rootScope, $modal, $state, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -33,6 +34,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         $scope.task.num_new_comments = 0
         scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
+        $rootScope.currentTask = $scope.task
 
     # Automatically scroll the inner div to the bottom of comments
     scrollDown = ->
@@ -48,14 +50,33 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     # Submits a new comment
     $scope.addComment = ->
-      $scope.comment.text = $scope.comment.text.trim()
-      taskService.addComment $scope.task, $scope.comment.text,
+
+      textComment = ->
+        $scope.comment.text = $scope.comment.text.trim()
+        taskService.addComment $scope.task, $scope.comment.text, $rootScope.commentTypeValue,
         (success) ->
           $scope.comment.text = ""
           analyticsService.event "View Task Comments", "Added new comment"
           scrollDown()
         (response) ->
           alertService.add("danger", response.data.error, 2000)
+
+      audioComment = ->
+        console.log "audio posted"
+        # alert $scope.commentData
+        $scope.comment.text = $scope.commentData
+        textComment()
+
+      imageComment = ->
+        console.log "image posted"
+
+      console.log "Value: " + $rootScope.commentTypeValue
+
+      switch $rootScope.commentTypeValue
+        when "text" then textComment()
+        when "audio" then audioComment()
+        when "image" then imageComment()
+        else console.log "Failed Post"
 
     # Deletes existing comment
     $scope.deleteComment = (id) ->
@@ -65,4 +86,5 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           analyticsService.event "View Task Comments", "Deleted existing comment"
         (response) ->
           alertService.add("danger", response.data.error, 2000)
+       
 )
