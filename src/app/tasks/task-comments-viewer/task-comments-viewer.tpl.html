@@ -16,8 +16,17 @@
         tooltip-placement="left">
       </user-icon><!--/user-icon-->
       <div class="comment-bubble">
-        <div class="comment-text">
+        <!--<div class="comment-text">
           <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+        </div>-->
+        <div ng-show="comment.type == 'text'" class="comment-text">
+          <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+        </div>
+        <div ng-if="comment.type == 'audio'" class="comment-text">
+          <audio controls src="{{getCommentImage(comment)}}"/>
+        </div>
+        <div ng-if="comment.type == 'image'" class="comment-text">
+          <img src="{{getCommentImage(comment)}}" width="100" height="100"/>
         </div>
         <div
           class="delete-comment"

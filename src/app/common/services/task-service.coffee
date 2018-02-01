@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -505,13 +505,47 @@ angular.module("doubtfire.common.services.tasks", [])
         if failure? and _.isFunction failure
           failure(response)
 
+  taskService.urlForCommentAttachment = (task, project, comment) ->
+    Task.generateCommentsAttachmentUrl(task, project, comment)
+
+  scrollDown = ->
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+
+  taskService.uploadImageComment = (task, imageSource, commentType) ->
+    form = new FormData()
+    form.append 'type', commentType
+    form.append 'project_id', task.project().project_id
+    form.append 'task_definition_id', task.task_definition_id
+    form.append 'attachment', imageSource[0]
+
+    xhr = new XMLHttpRequest()
+    
+    xhr.onreadystatechange = ->
+      if xhr.readyState is 4
+        if xhr.status is 201
+          console.log 'Inside alert : ' + alertService
+          alertService.add("info", "Image comment posted successfully!", 2000)
+        else
+          alertService.add("danger", "Image comment could not be posted!", 2000)
+      return
+
+    xhr.open 'POST', Task.generateCommentsUrl(task), true
+    xhr.send form
+    #alertService.add("info", "Image comment posted successfully!", 2000)
+
 
   taskService.addMediaComment = (task, mediaBlobURL, commentType, success, failure) ->
     
     form = new FormData()
-
     taskService.data = undefined
     taskService.payload = undefined
+
+    if "image" == commentType
+      taskService.uploadImageComment task, mediaBlobURL, commentType
+      return
 
     xhr = new XMLHttpRequest()
     xhr.open 'GET', mediaBlobURL, true

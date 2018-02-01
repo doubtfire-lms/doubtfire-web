@@ -13,7 +13,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
     test:'='
-  controller: ($scope, $rootScope, $modal, $state, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $rootScope, $modal, $state, $sce, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -30,11 +30,21 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         project_id: $scope.project.project_id,
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
+        console.log JSON.stringify(response)
+
         $scope.task.comments = _.map(response, taskService.mapComment)
         $scope.task.num_new_comments = 0
         scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
         $rootScope.currentTask = $scope.task
+
+    $scope.getCommentMedia = (commentId) ->
+      TaskComment.query {
+        project_id: $scope.project_id,
+        task_definition_id: $scope.task.task_definition_id,
+        id: commentId
+      }, (response) ->
+        response
 
     # Automatically scroll the inner div to the bottom of comments
     scrollDown = ->
@@ -47,6 +57,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     $scope.enterDown = (editor) ->
       $scope.addComment()
       return CodeMirror.Pass
+
+    $scope.getCommentImage = (comment) ->
+      $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
 
     # Submits a new comment
     $scope.addComment = ->

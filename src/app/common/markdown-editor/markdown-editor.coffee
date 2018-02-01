@@ -56,8 +56,14 @@ angular.module('doubtfire.common.markdown-editor', [])
         Enter: $scope.onEnter
       }
 
+    #
+    # Upload image files as comments to a given task
+    #
     $scope.postImageComment = ->
-      alert 'File Name : ' + $scope.upload.model[0].name
+      console.log 'File Name : ' + $scope.upload.model[0].name
+      taskService.addMediaComment($rootScope.currentTask, $scope.upload.model, $scope.currentCommentType)
+      $scope.clearEnqueuedUpload($scope.upload)
+
 
     $scope.clearEnqueuedUpload = (upload) ->
       upload.model = null
