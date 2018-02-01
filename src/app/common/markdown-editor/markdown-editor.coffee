@@ -83,9 +83,8 @@ angular.module('doubtfire.common.markdown-editor', [])
           $scope.shownUploadZones = []
 
     $scope.audioSetup = ->
-      console.log "Big Test"
+    
       # Support multiple browsers
-
       navigator.getUserMedia = navigator.getUserMedia or navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.msGetUserMedia
 
       audioURL = undefined
@@ -112,7 +111,7 @@ angular.module('doubtfire.common.markdown-editor', [])
       # Needed for audio visualise
       audioSource = audioCtx.createMediaElementSource(audio)
 
-      # ========================================================
+      # ==============================================================================================================
       # Sets up all the elements that will be used for recording
       initElements = ->
 
@@ -123,57 +122,42 @@ angular.module('doubtfire.common.markdown-editor', [])
         btnRecord.onclick = ->
           if !isRecording
 
-            #function that performs the recoding tasks
-            startRecording = ->
-              tracks = streamRef.getTracks()[0]
-              if !tracks.enabled
-                tracks.enabled = true
-              
-              # Update buttons
-              btnRecord.src = "/assets/icons/record_active.png"
-              btnPlay.disabled = true
-              btnPlay.classList.add("disabled")
-              btnSend.disabled = true
-              btnSend.classList.add("disabled")
-            
-              # Start recording
-              mediaRecorderRef.start()
+            streamRef.getTracks()[0].enabled = true
 
-              isRecording = true
-              audio.removeAttribute('src')
-              console.log "Is Recording: " + isRecording
+            # Update buttons
+            btnRecord.src = "/assets/icons/record_active.png"
+            btnPlay.disabled = true
+            btnSend.disabled = true
+          
+            # Start recording
+            mediaRecorderRef.start()
 
-              # Show visualisation
-              prepareVisualise streamRef, true
-              startDrawing()
-              return
+            isRecording = true
+            audio.removeAttribute('src')
+            console.log "Is Recording: " + isRecording
 
-            #Check if there is an active track, if there isnt then create one
-            if !activeTrack
-              initRecording()
-
-            #set a timeout in order to give the callback function in initRecording time to set variables
-            setTimeout startRecording, 10
+            # Show visualisation
+            prepareVisualise streamRef, true
+            startDrawing()
           else
               
             # Update buttons
             btnRecord.src = "/assets/icons/record.png"
             btnPlay.disabled = false
-            btnPlay.classList.remove("disabled")
+            #btnPlay.classList.remove("disabled")
             btnSend.disabled = false
-            btnSend.classList.remove("disabled")
+            #btnSend.classList.remove("disabled")
 
             # Stop recording audio
             mediaRecorderRef.stop()
-            tracks = streamRef.getTracks()[0]
-            tracks.enabled = false
+            streamRef.getTracks()[0].enabled = false
 
             isRecording = false
             console.log "Is Recording: " + isRecording
 
             # Clear visualisation
             stopDrawing()
-          return
+          return false
 
         # Play button
         btnPlay.onclick = ->
@@ -186,16 +170,14 @@ angular.module('doubtfire.common.markdown-editor', [])
             audio.volume = 0.75
             audio.play()
             startDrawing()
-          return
+          return false
 
         # Send button
         btnSend.onclick = ->
-          tracks = streamRef.getTracks()[0]
-          tracks.stop()
-          activeTrack = false
+          streamRef.getTracks()[0].enabled = false
           # prepare audio for sending
           prepareRecordedAudio(dataRef)
-          return
+          return false
 
         audio.onplay = ->
           btnPlay.src = "/assets/icons/stop.png"
@@ -228,13 +210,11 @@ angular.module('doubtfire.common.markdown-editor', [])
         clearInterval drawTimer
         clearGraph()
         drawTimer = setInterval draw, 0.1
-        #console.log "Start draw timer"
         return
 
       stopDrawing = ->
         clearInterval drawTimer
         clearGraph()
-        #console.log "Stop draw timer"
         return
 
       clearGraph = ->
@@ -315,6 +295,7 @@ angular.module('doubtfire.common.markdown-editor', [])
             #set refs to be used in buttons
             mediaRecorderRef = mediaRecorder
             streamRef = stream
+            streamRef.getTracks()[0].enabled = false
 
             mediaRecorder.ondataavailable = (e) ->
               data = e.data
@@ -339,6 +320,7 @@ angular.module('doubtfire.common.markdown-editor', [])
 
 
       initElements()
+      initRecording()
       return
     
 
