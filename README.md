@@ -9,7 +9,8 @@ A modern, lightweight learning management system.
 1. [Getting Started](#getting-started)
 2. [Resources](#resources)
 3. [Contributing](#contributing)
-4. [License](#license)
+4. [Deployment](#deployment)
+5. [License](#license)
 
 ## Getting Started
 
@@ -94,6 +95,8 @@ $ grunt
 ```
 
 You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
+
+## Deployment
 
 To compile the front-end, ensure `doubtfire-api` is placed as a sibling directory to `doubtfire-web`, then run:
 
