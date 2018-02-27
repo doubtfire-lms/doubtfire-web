@@ -3,7 +3,7 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Units</h4>
-        Modify units registered with {{externalName}}
+        Modify units registered with {{externalName.value}}
       </div>
       <form role="search" class="pull-right form-horizontal">
         <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search.$" typeahead="unit.name for unit in units | filter:$viewValue | limitTo:8" />
@@ -12,7 +12,7 @@
       </form>
     </div>
     <div class="panel-body">
-      <div class="callout callout-info" ng-hide="units.length > 0">No units have been registered with {{externalName}} yet</div>
+      <div class="callout callout-info" ng-hide="units.length > 0">No units have been registered with {{externalName.value}} yet</div>
       <table ng-show="units.length > 0" class="table table-hover table-pointer">
        <thead>
          <tr>

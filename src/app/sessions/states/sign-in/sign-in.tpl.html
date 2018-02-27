@@ -2,26 +2,26 @@
   <div ng-if="noIE" class="no-ie">
     <h1 class="logo">
       <p>
-        <a href="http://www.apple.com/safari/" tooltip="Safari is compatible with {{externalName}}" tooltip-append-to-body="true">
+        <a href="http://www.apple.com/safari/" tooltip="Safari is compatible with {{externalName.value}}" tooltip-append-to-body="true">
           <i class="fa fa-safari text-primary"></i>
         </a>
-        <a href="http://www.google.com/chrome" tooltip="Chrome is compatible with {{externalName}}" tooltip-append-to-body="true">
+        <a href="http://www.google.com/chrome" tooltip="Chrome is compatible with {{externalName.value}}" tooltip-append-to-body="true">
           <i class="fa fa-chrome text-primary"></i>
         </a>
-        <a href="http://www.firefox.com/" tooltip="Firefox is compatible with {{externalName}}" tooltip-append-to-body="true">
+        <a href="http://www.firefox.com/" tooltip="Firefox is compatible with {{externalName.value}}" tooltip-append-to-body="true">
           <i class="fa fa-firefox text-primary"></i>
         </a>
-        <a href="http://browsehappy.com" tooltip="This version of Internet Explorer is not compatible with {{externalName}}" tooltip-append-to-body="true">
+        <a href="http://browsehappy.com" tooltip="This version of Internet Explorer is not compatible with {{externalName.value}}" tooltip-append-to-body="true">
           <i class="fa fa-internet-explorer text-danger"></i>
         </a>
       </p>
-      {{externalName}}
+      {{externalName.value}}
     </h1>
-    <p class="upgrade"> To use {{externalName}}, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
+    <p class="upgrade"> To use {{externalName.value}}, you should <a href="http://browsehappy.com/">upgrade your browser</a></p>
   </div>
   <div ng-if="!noIE" class="login">
     <h1 class="logo">
-      <i class="logo"></i> {{externalName}}
+      <i class="logo"></i> {{externalName.value}}
       <p class="lead">Learning Management System<p>
     </h1>
     <form name="form" ng-submit="signIn()" ng-if="aafLogin === false">
@@ -45,17 +45,17 @@
     </form>
   </div>
   <footer class="about-doubtfire text-center">
-    <a href="" ng-click="openAboutModal()">About {{externalName}}</a>
+    <a href="" ng-click="openAboutModal()">About {{externalName.value}}</a>
   </footer>
 </div>
 <div class="center-full-screen" ng-show="authMethodFailed || waitingAWhile">
   <i class="fa fa-spinner fa-pulse fa-5x" ng-if="!authMethodLoaded && waitingAWhile && !authMethodFailed"></i>
   <div class="panel panel-danger" ng-if="authMethodFailed">
     <div class="panel-heading">
-      <h3 class="panel-title">{{externalName}} Down</h3>
+      <h3 class="panel-title">{{externalName.value}} Down</h3>
     </div>
     <div class="panel-body">
-      <p>{{externalName}} cannot connect to the server.</p>
+      <p>{{externalName.value}} cannot connect to the server.</p>
       <p>Please check that <a href="{{api}}"><code>{{api}}</code></a> is up and running or try again in a while.</p>
     </div>
   </div>

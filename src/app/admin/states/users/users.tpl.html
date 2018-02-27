@@ -4,7 +4,7 @@
 </div><!--/loading-->
 <div ng-if="users != null">
   <h2>
-    {{externalName}} Users
+    {{externalName.value}} Users
     <p class="lead">Users Administration View</p>
   </h2>
   <div class="col-sm-9">
@@ -12,9 +12,9 @@
       <div class="panel-heading clearfix">
         <div class="pull-left">
           <h4 class="panel-title">
-            {{externalName}} Users
+            {{externalName.value}} Users
           </h4>
-          Modify users registered with {{externalName}}
+          Modify users registered with {{externalName.value}}
         </div>
         <form role="search" class="pull-right form-horizontal">
           <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search" ng-model="search.$" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
@@ -23,7 +23,7 @@
         </form>
       </div>
       <div class="panel-body">
-        <div class="callout callout-info" ng-hide="users.length > 0">No users have been registered with {{externalName}} yet</div>
+        <div class="callout callout-info" ng-hide="users.length > 0">No users have been registered with {{externalName.value}} yet</div>
         <table class="table table-condensed table-hover">
           <thead>
             <tr>
@@ -73,7 +73,7 @@
       </div>
       <div class="panel-heading">
         <h4 class="panel-title">Batch Export Users</h4>
-        Download a CSV of all users registered with {{externalName}}.
+        Download a CSV of all users registered with {{externalName.value}}.
       </div>
       <div class="panel-body text-center">
         <a href="batchUserUrl" class="btn btn-primary btn-download">
