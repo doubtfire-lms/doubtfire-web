@@ -30,22 +30,55 @@
             <unit-dropdown></unit-dropdown>
           </div>
         </li><!--/selected-unit-->
-        <li ng-if="task">
+        <li ng-if="task && tutor">
+          <div class="btn-group" dropdown>
+            <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+              <span>Staff Tasks</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-tasks" dropdown-menu>
+              <li>
+                <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
+              </li>
+              <li>
+                <a ui-sref="units/tasks/feedback({unitId: project.unit_id})">Give Student Feedback</a>
+              </li>
+              <li>
+                <a ui-sref="units/tasks/definition({unitId: project.unit_id})">Mark By Definition</a>
+              </li>
+              <li>
+                <a ui-sref="units/tasks/offline({unitId: project.unit_id})">Mark Tasks Offline</a>
+              </li>
+              <li>
+                <a ui-sref="units/tasks/viewer({unitId: project.unit_id})">Task List</a>
+              </li>
+              <li class="divider"></li><!--/task-related-->
+              <li>
+                <a ui-sref="units/students/list({unitId: project.unit_id})">Student List</a>
+              </li>
+              <li>
+                <a ui-sref="units/students/groups({unitId: project.unit_id})">Student Groups</a>
+              </li>
+              <li>
+                <a ui-sref="units/students/plagiarism({unitId: project.unit_id})">Student Plagiarism</a>
+              </li>
+              <li>
+                <a ui-sref="units/students/portfolios({unitId: project.unit_id})">Student Portfolios</a>
+              </li>
+              <li class="divider"></li><!--/student-related-->
+              <li>
+                <a ui-sref="units/analytics({unitId: project.unit_id})">Unit Analytics</a>
+              </li>
+            </ul><!--/teaching-tasks-->
+          <div>
+        </li>
+        <li ng-if="task" ng-if="tutor">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <span ng-bind="task"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="project">
-              <li ng-show="tutor" class="dropdown-header">Return to:</li>
-              <li ng-show="tutor">
-                <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
-              </li>
-              <li ng-show="tutor">
-                <a ui-sref="units/students/list({unitId: project.unit_id})">Student List</a>
-              </li>
-              <li class="divider" ng-show="tutor"></li>
-              <li ng-show="tutor" class="dropdown-header">Student Views:</li>
               <li>
                 <a ui-sref="projects/dashboard({projectId: project.project_id})">Dashboard</a>
               </li>
