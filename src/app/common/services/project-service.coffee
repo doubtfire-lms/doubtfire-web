@@ -155,6 +155,8 @@ angular.module("doubtfire.common.services.projects", [])
     project.tasks = project.tasks.map (task) ->
       projectService.mapTask task, unit, project
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
+    project.target_tasks = () ->
+      projectService.tasksInTargetGrade(project)
     project
 
   projectService.addProjectMethods = (project) ->
