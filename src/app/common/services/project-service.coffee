@@ -8,20 +8,6 @@ angular.module("doubtfire.common.services.projects", [])
 
   projectService.loadedProjects = null
 
-  projectService.taskStatIndex = {
-    fail: 0,
-    not_started: 1,
-    do_not_resubmit: 2,
-    redo: 3,
-    need_help: 4,
-    working_on_it: 5,
-    fix_and_resubmit: 6,
-    ready_to_mark: 7,
-    discuss: 8,
-    demonstrate: 9,
-    complete: 10
-  }
-
   $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 

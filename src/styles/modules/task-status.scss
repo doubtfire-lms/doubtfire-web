@@ -13,6 +13,7 @@
   &.discuss           { @include task-status-color-discuss;           }
   &.demonstrate       { @include task-status-color-demonstrate;       }
   &.complete          { @include task-status-color-complete;          }
+  &.time-exceeded     { @include task-status-color-time-exceeded;     }
 
   &.ready-to-mark:hover     { background-color: task-status-color('ready-to-mark');      }
   &.not-started:hover       { background-color: task-status-color('not-started');        }
@@ -25,6 +26,7 @@
   &.discuss:hover           { background-color: task-status-color('discuss');            }
   &.demonstrate:hover       { background-color: task-status-color('demonstrate');        }
   &.complete:hover          { background-color: task-status-color('complete');           }
+  &.time-exceeded:hover     { background-color: task-status-color('time-exceeded');      }
 }
 
 .task-status > .btn-default {
@@ -39,6 +41,7 @@
   &.discuss,           &.discuss.active,          &.discuss:hover           { @include task-status-color-discuss;          }
   &.demonstrate,       &.demonstrate.active,      &.demonstrate:hover       { @include task-status-color-demonstrate;      }
   &.complete,          &.complete.active,         &.complete:hover          { @include task-status-color-complete;         }
+  &.time-exceeded,     &.time-exceeded.active,    &.time-exceeded:hover     { @include task-status-color-time-exceeded;    }
 
   &.ready-to-mark     { background-color: lighten(task-status-color('ready-to-mark'), 15%);     }
   &.not-started       { background-color: lighten(task-status-color('not-started'), 15%);       }
@@ -51,6 +54,7 @@
   &.discuss           { background-color: lighten(task-status-color('discuss'), 15%);           }
   &.demonstrate       { background-color: lighten(task-status-color('demonstrate'), 15%);       }
   &.complete          { background-color: lighten(task-status-color('complete'), 15%);          }
+  &.time-exceeded     { background-color: lighten(task-status-color('time-exceeded'), 15%);          }
 }
 
 i.task-status-icon {

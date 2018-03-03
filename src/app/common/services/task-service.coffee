@@ -18,6 +18,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'demonstrate'
     'complete'
     'fail'
+    'time_exceeded'
   ]
 
   taskService.validTopTask = [
@@ -55,6 +56,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'do_not_resubmit'
     'complete'
     'fail'
+    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -91,6 +93,7 @@ angular.module("doubtfire.common.services.tasks", [])
     DEM: 'demonstrate'
     COM: 'complete'
     FAL: 'fail'
+    TIE: 'time_exceeded'
 
   taskService.learningWeight =
     fail:               0.0
@@ -104,6 +107,7 @@ angular.module("doubtfire.common.services.tasks", [])
     discuss:            0.8
     demonstrate:        0.8
     complete:           1.0
+    time_exceeded:      0.3
 
   taskService.statusAcronym =
     ready_to_mark:      'RTM'
@@ -117,6 +121,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'DEM'
     complete:           'COM'
     fail:               'FAL'
+    time_exceeded:      'TIE'
 
   taskService.statusLabels =
     ready_to_mark:      'Ready for Feedback'
@@ -130,6 +135,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'Demonstrate'
     complete:           'Complete'
     fail:               'Fail'
+    time_exceeded:      'Time Exceeded'
 
   taskService.statusIcons =
     ready_to_mark:      'fa fa-thumbs-o-up'
@@ -143,6 +149,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'fa fa-commenting'
     complete:           'fa fa-check'
     fail:               'fa fa-times'
+    time_exceeded:      'fa fa-clock-o'
 
   taskService.statusColors =
     # Please make sure this matches task-status-colors.less
@@ -157,19 +164,22 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:       '#428bca'
     complete:          '#5BB75B'
     fail:              '#d93713'
+    time_exceeded:     '#d93713'
 
   taskService.statusSeq =
     not_started:        1
     fail:               2
     do_not_resubmit:    3
-    redo:               4
-    need_help:          5
-    working_on_it:      6
-    ready_to_mark:      7
-    fix_and_resubmit:   8
-    discuss:            9
-    demonstrate:       10
-    complete:          11
+    time_exceeded:      4
+    redo:               5
+    need_help:          6
+    working_on_it:      7
+    ready_to_mark:      8
+    fix_and_resubmit:   9
+    discuss:           10
+    demonstrate:       11
+    complete:          12
+
 
   taskService.helpDescriptions =
     # detail = in a brief context to the student
@@ -198,7 +208,7 @@ angular.module("doubtfire.common.services.tasks", [])
     do_not_resubmit:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
-      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
     fix_and_resubmit:
       detail: "Your submission requires some more work"
       reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
@@ -219,6 +229,10 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "You have failed this task"
       reason: "You have not successfully demonstrated the required learning for this task. This may be due to plagiarism detection or assessment under testing conditions."
       action: "You should discuss this with your tutor and/or the convenor."
+    time_exceeded:
+      detail: "Time limit exceeded"
+      reason: "This work was submitted after the deadline, having missed the target and due dates."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -249,6 +263,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      time_exceeded: []
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status

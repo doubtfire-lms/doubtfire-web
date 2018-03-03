@@ -54,3 +54,6 @@
 @mixin task-status-color-fail {
   @include task-status-color('fail');
 }
+@mixin task-status-color-time-exceeded {
+  @include task-status-color('time-exceeded');
+}

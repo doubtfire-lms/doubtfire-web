@@ -331,20 +331,14 @@ angular.module("doubtfire.common.services.units", [])
     student.task_stats = [
       { value: 0, key: taskService.statusKeys[10] }
       { value: 0, key: taskService.statusKeys[0]  }
-      { value: 0, key: taskService.statusKeys[1]  }
-      { value: 0, key: taskService.statusKeys[2]  }
-      { value: 0, key: taskService.statusKeys[3]  }
       { value: 0, key: taskService.statusKeys[4]  }
-      { value: 0, key: taskService.statusKeys[5]  }
       { value: 0, key: taskService.statusKeys[6]  }
-      { value: 0, key: taskService.statusKeys[7]  }
-      { value: 0, key: taskService.statusKeys[8]  }
       { value: 0, key: taskService.statusKeys[9]  }
     ]
 
     # Returns the task statistic value for the provided key
     student.taskStatValue = (key) ->
-      student.task_stats[projectService.taskStatIndex[key]].value
+      student.task_stats[taskService.statusSeq[key]].value
 
     # Returns the student's progress sorting order
     student.progressSortOrder = ->

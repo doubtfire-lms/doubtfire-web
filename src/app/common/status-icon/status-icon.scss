@@ -24,6 +24,7 @@ status-icon {
     &.need-help         { @include status-icon('need-help');        }
     &.fix-and-resubmit  { @include status-icon('fix-and-resubmit'); }
     &.do-not-resubmit   { @include status-icon('do-not-resubmit');  }
+    &.time-exceeded     { @include status-icon('time-exceeded');    }
     &.redo              { @include status-icon('redo');             }
     &.discuss           { @include status-icon('discuss');          }
     &.demonstrate       { @include status-icon('demonstrate');      }
