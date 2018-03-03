@@ -407,7 +407,7 @@ angular.module("doubtfire.common.services.tasks", [])
       alertService.add("success", "Status saved.", 2000)
       if response.other_projects?
         _.each response.other_projects, (details) ->
-          proj = unit.findStudent(details.id)
+          proj = unit.findStudent(details.id) if unit.students?
           if proj?
             # Update the other project's task status overview
             task.updateTaskStatus response.status, details.new_stats
