@@ -292,11 +292,11 @@ angular.module("doubtfire.common.services.units", [])
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
-      newId = if tutorial == null then -1 else if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id
+      newId = if tutorial? then (if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id) else -1
       analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
       Project.update({ id: student.project_id, tutorial_id: newId },
         (project) ->
-          alertService.add "info", "Tutorial updated for #{student.name}", 3000
+          alertService.add "success", "Tutorial updated for #{student.name}", 3000
           student.tutorial_id = project.tutorial_id
           student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
         (response) ->
