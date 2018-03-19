@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state) ->
   #
   # The unit service object
   #
@@ -342,6 +342,10 @@ angular.module("doubtfire.common.services.units", [])
       20 * student.task_stats[4].value +
       7 * student.task_stats[3].value +
       student.task_stats[2].value
+
+    # Enable the student/project to be able to switch to its view
+    student.viewProject = (as_tutor) ->
+      $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor})
 
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->

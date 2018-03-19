@@ -72,7 +72,7 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('studentsWithTargetGrade', ->
   (input, grade) ->
-    if input
+    if input && grade > -1
       _.filter  input, (student) -> (student?) && student.target_grade == grade
     else
       input

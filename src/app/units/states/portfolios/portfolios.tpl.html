@@ -29,7 +29,12 @@
             </label>
           </div>
           <div class="btn-group btn-group-sm select-portfolio-grade">
-            <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
+              <label class="btn btn-default text-center" ng-model="filterOptions.selectedGrade" btn-radio="-1">
+                  <span class="grade-icon" tooltip="Show all portfolios" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}">All</span>
+              </label>
+          </div>
+          <div class="btn-group btn-group-sm select-portfolio-grade">
+            <label ng-repeat="grade in grades" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
               <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
             </label>
           </div>

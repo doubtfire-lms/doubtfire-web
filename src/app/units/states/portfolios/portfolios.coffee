@@ -76,7 +76,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.maxSize = 5
   $scope.pageSize = 5
 
-  $scope.filterOptions = {selectedGrade: 0}
+  $scope.filterOptions = {selectedGrade: -1}
   $scope.grades = gradeService.grades
   $scope.gradeAcronyms = gradeService.gradeAcronyms
 
