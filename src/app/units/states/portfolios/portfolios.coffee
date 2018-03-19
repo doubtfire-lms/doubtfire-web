@@ -80,9 +80,6 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.grades = gradeService.grades
   $scope.gradeAcronyms = gradeService.gradeAcronyms
 
-  # Initially not full screen
-  $scope.fullscreen = false
-
   $scope.selectedStudent = null
 
   $scope.gradeResults = [
@@ -121,7 +118,6 @@ angular.module('doubtfire.units.states.portfolios', [])
   analyticsService.watchEvent $scope, 'studentFilter', 'Teacher View - Grading Tab'
   analyticsService.watchEvent $scope, 'sortOrder', 'Teacher View - Grading Tab'
   analyticsService.watchEvent $scope, 'currentPage', 'Teacher View - Grading Tab', 'Selected Page'
-  analyticsService.watchEvent $scope, 'fullscreen', 'Teacher View - Grading Tab', (newVal) -> if newVal then 'Show Fullscreen' else 'Hide Fullscreen'
 
   $scope.selectStudent = (student) ->
     $scope.selectedStudent = student
