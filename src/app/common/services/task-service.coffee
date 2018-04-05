@@ -231,7 +231,7 @@ angular.module("doubtfire.common.services.tasks", [])
       action: "You should discuss this with your tutor and/or the convenor."
     time_exceeded:
       detail: "Time limit exceeded"
-      reason: "This work was submitted after the deadline, having missed the target and deadline."
+      reason: "This work was submitted after the deadline, having missed both the target and deadline."
       action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
 
   # Statuses students/tutors can switch tasks to
