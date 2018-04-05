@@ -12,7 +12,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
-  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService) ->
+  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Check taskSource exists
@@ -97,7 +97,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       # Tasks for feedback or tasks for task, depending on the data source
       $scope.taskData.source.query { id: $scope.unit.id, task_def_id: $scope.filters.taskDefinitionIdSelected },
         (response) ->
-          $scope.tasks = $scope.unit.incorporateTasks(response)
+          $scope.tasks = $scope.unit.incorporateTasks(response, applyFilters)
           # If loading via task definitions, fill
           if $scope.isTaskDefMode
             unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.filters.taskDefinitionIdSelected)

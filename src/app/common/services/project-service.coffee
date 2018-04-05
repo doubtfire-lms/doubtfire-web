@@ -172,13 +172,13 @@ angular.module("doubtfire.common.services.projects", [])
         else
           break
       project.task_stats = updated_stats
-    
+
     project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
         project.burndown_chart_data = response.burndown_chart_data
         Visualisation.refreshAll()
 
-    project.incorporateTask = (newTask) ->
+    project.incorporateTask = (newTask, callback) ->
       unless project.tasks?
         project.tasks = []
       currentTask = _.find(project.tasks, {task_definition_id: newTask.task_definition_id})
@@ -187,6 +187,8 @@ angular.module("doubtfire.common.services.projects", [])
       else
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
+      if currentTask.isGroupTask() and !currentTask.groups?
+        projectService.getGroup(currentTask.project(), callback)
       currentTask
 
     project.refresh = (unit_obj) ->
@@ -214,14 +216,18 @@ angular.module("doubtfire.common.services.projects", [])
           onFailure?(failure)
       )
 
+  projectService.getGroup = (project, onSuccess) ->
+    Project.get { id: project.project_id }, (response) ->
+      project.groups = response.groups
+      onSuccess?(project)
+
   projectService.updateGroups = (project) ->
     if project.groups?
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
 
   projectService.getGroupForTask = (project, task) ->
-    return null if not task.definition.group_set
-
+    return null unless task.definition.group_set
     _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
