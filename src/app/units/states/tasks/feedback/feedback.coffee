@@ -13,7 +13,7 @@ angular.module('doubtfire.units.states.tasks.feedback', [
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskFeedbackStateCtrl"
     data:
-      task: "In-Class Feedback"
+      task: "Give Student Feedback"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
