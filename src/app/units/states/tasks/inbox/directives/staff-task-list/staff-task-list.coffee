@@ -53,7 +53,8 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       { id: 'mine', description: 'Just my tutorials', abbreviation: '__mine' }
     ]), (tutorial) ->
       unless _.includes(['all', 'mine'], tutorial.id)
-        tutorial.description = tutorial.abbreviation + ' - ' + tutorial.description
+        if tutorial.description.indexOf(tutorial.abbreviation) == -1
+          tutorial.description = tutorial.abbreviation + ' - ' + tutorial.description
       tutorial
     )
     $scope.tutorialIdChanged = ->
