@@ -11,17 +11,17 @@
       <li>
         <strong>{{grades.names[taskDef.target_grade]}} Task</strong>
         &mdash;
-        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> taskDef.
+        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> task.
       </li>
       <li>
         <strong>Target Date</strong>
         &mdash;
-        You should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
+        The date the task considered to be due, you should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
       </li>
       <li ng-show="taskDef.due_date">
         <strong>Deadline</strong>
         &mdash;
-        You must complete this task by <strong>{{taskDef.due_date | humanizedDate}}</strong>. Submitting after this date means your tutor will not provide feedback for your submission, but that it will be checked in your portfolio.
+        Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | humanizedDate}}</strong>. Your work will be checked in your portfolio.
       </li>
     </ul>
   </div><!--/key-info-footer-->
