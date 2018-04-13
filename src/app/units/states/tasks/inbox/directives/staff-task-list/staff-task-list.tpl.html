@@ -19,7 +19,7 @@
           ng-change="taskDefinitionIdChanged()"
           autofocus="{{autofocus.onTaskDefinitionSelect}}"
           class="form-control input-md">
-          <option disabled value="" ng-hide="!isTaskDefMode">Task Definitions</option>
+          <option value="" ng-if="!isTaskDefMode">Task Definitions</option>
         </select>
       </div>
       <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
