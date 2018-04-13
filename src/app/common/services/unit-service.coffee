@@ -213,7 +213,7 @@ angular.module("doubtfire.common.services.units", [])
           t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
         # If a group task but group data not loaded, go fetch it
         if t.isGroupTask() and !t.group()?
-          projectService.getGroup(t.project())
+          projectService.updateGroups(t.project(), null, true)
         t
 
 

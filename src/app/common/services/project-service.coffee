@@ -188,7 +188,8 @@ angular.module("doubtfire.common.services.projects", [])
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
       if currentTask.isGroupTask() and !currentTask.groups?
-        projectService.getGroup(currentTask.project(), callback)
+        projectService.updateGroups(currentTask.project(), callback, true)
+      callback?()
       currentTask
 
     project.refresh = (unit_obj) ->
@@ -216,15 +217,11 @@ angular.module("doubtfire.common.services.projects", [])
           onFailure?(failure)
       )
 
-  projectService.getGroup = (project, onSuccess) ->
-    Project.get { id: project.project_id }, (response) ->
-      project.groups = response.groups
-      onSuccess?(project)
-
-  projectService.updateGroups = (project) ->
-    if project.groups?
+  projectService.updateGroups = (project, onSuccess, force = false) ->
+    if project.groups? or force
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
+        onSuccess?(project)
 
   projectService.getGroupForTask = (project, task) ->
     return null unless task.definition.group_set
