@@ -40,4 +40,15 @@
   <div class="card-body">
     <p>{{task.statusHelp().reason}} {{task.statusHelp().action}}</p>
   </div><!--/status-body-->
+  <div class="card-footer clearfix" ng-show="task.inFinalState() || task.status == 'ready_to_mark'">
+    <a
+      ng-click="updateFilesInSubmission()"
+      class="btn btn-primary pull-right"
+      tooltip="This allows you to update files for your portfolio, but does not update the task status."
+      tooltip-popup-delay="250"
+      tooltip-append-to-body="true">
+      <i class="fa fa-upload"></i>
+      Upload new files for submission
+    </a>
+  </div><!--/status-footer-->
 </div><!--/status-card-->
