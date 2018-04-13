@@ -65,4 +65,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           analyticsService.event "View Task Comments", "Deleted existing comment"
         (response) ->
           alertService.add("danger", response.data.error, 2000)
+
+    # Watch for changes to the task status and if non-empty comment then add that comment
+    listeners.push $scope.$watch "task.status", ->
+      if $scope.comment.text.trim().length > 0
+        $scope.addComment()
 )
