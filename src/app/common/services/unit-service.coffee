@@ -190,15 +190,15 @@ angular.module("doubtfire.common.services.units", [])
     #
     # Push all of the tasks downloaded into the existing student projects
     #
-    unit.incorporateTasks = (tasks) ->
+    unit.incorporateTasks = (tasks, callback) ->
       _.map tasks, (t) ->
         project = unit.findStudent(t.project_id)
         if project?
           unless project.incorporateTask?
             projectService.mapTask t, unit, project
             projectService.addProjectMethods(project, unit)
+          project.incorporateTask(t, callback)
 
-          project.incorporateTask(t)
 
     #
     # Add any missing tasks and return the new collection
@@ -210,9 +210,11 @@ angular.module("doubtfire.common.services.units", [])
       _.map unit.students, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
-          _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
-        else
-          t
+          t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
+        # If a group task but group data not loaded, go fetch it
+        if t.isGroupTask() and !t.group()?
+          projectService.updateGroups(t.project(), null, true)
+        t
 
 
     unit.staffAlignmentsForTaskDefinition = (td) ->
