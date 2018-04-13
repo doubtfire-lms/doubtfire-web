@@ -44,6 +44,13 @@ angular.module("doubtfire.common.services.tasks", [])
     'discuss'
   ]
 
+  taskService.finalStatuses = [
+    'complete'
+    'fail'
+    'time_exceeded'
+    'do_not_resubmit'
+  ]
+
   taskService.gradeableStatuses = [
     'discuss'
     'demonstrate'
@@ -263,7 +270,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: []
+      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
@@ -302,24 +309,24 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return number of days until task hits target date, or false if already
   # completed
   taskService.daysUntilTargetDate = (task) ->
-    return false if task.status == 'complete'
+    return false if task.status in taskService.finalStatuses
     moment(task.definition.target_date).diff(moment(), 'days')
 
   # Return number of days until task is due, or false if already completed
   taskService.daysUntilDueDate = (task) ->
-    return false if !task.definition.due_date? || task.status == 'complete'
+    return false if !task.definition.due_date? || task.status in taskService.finalStatuses
     moment(task.definition.due_date).diff(moment(), 'days')
 
   # Return number of days task is overdue from target, or false if not
   taskService.daysPastTargetDate = (task) ->
-    return false if task.status == 'complete'
+    return false if task.status in taskService.finalStatuses
     diffDays = moment().diff(moment(task.definition.target_date), 'days')
     return false if !diffDays? || diffDays <= 0
     diffDays
 
   # Return number of days task is overdue, or false if not overdue
   taskService.daysPastDueDate = (task) ->
-    return false if task.status == 'complete' || !task.definition.due_date?
+    return false if task.status in taskService.finalStatuses || !task.definition.due_date?
     diffDays = moment().diff(moment(task.definition.due_date), 'days')
     return false if !diffDays? || diffDays <= 0
     diffDays

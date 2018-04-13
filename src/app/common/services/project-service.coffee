@@ -88,6 +88,10 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
+
+    task.inFinalState = ->
+      task.status in taskService.finalStatuses
+
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
     task.updateTaskStatus = (status, new_stats) ->

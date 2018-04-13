@@ -26,4 +26,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     # Triggers a new task status
     $scope.triggerTransition = (trigger) ->
       $scope.task.triggerTransition(trigger, $scope.unitRole)
+
+    # Allow upload of new files for an updated submission
+    $scope.updateFilesInSubmission = ->
+      taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
+
 )
