@@ -163,6 +163,18 @@ angular.module("doubtfire.common.services.units", [])
     unit.mapGroupToUnit = (group) ->
       unitService.mapGroupToUnit(unit, group)
 
+    # Refresh the groups within the unit
+    unit.refreshGroups = () ->
+      return unless unit.groups?
+      # Query the groups within the unit.
+      Unit.groups.query( {id: unit.id} ,
+        (success) ->
+          # Save the result as the unit's groups
+          unit.groups = success
+        (failure) ->
+          alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
+      )
+    
     # Queries the unit for all groups
     unit.getGroups = (groupSetId, onSuccess, onFailure) ->
       groupService.getGroups(unit, groupSetId, onSuccess, onFailure)
@@ -204,9 +216,12 @@ angular.module("doubtfire.common.services.units", [])
     # Add any missing tasks and return the new collection
     #
     unit.fillWithUnStartedTasks = (tasks, taskDef) ->
+      return unless unit.students?
+
+      # Make sure the task definition is a task definition object from the unit
       taskDef = unit.taskDef(taskDef)
-      #projs = _.filter(unit.students, (s) -> s.target_grade >= taskDef.target_grade)
-      # TODO: (@alexcu) Fix this -- unit.students is sometimes empty
+
+      # Now fill for the students in the unit
       _.map unit.students, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
