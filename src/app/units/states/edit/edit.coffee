@@ -81,16 +81,10 @@ angular.module('doubtfire.units.states.edit', [
 
   $scope.activeTab = $scope.tabs.unitTab
 
-  Convenor.query().$promise.then( (convenors) ->
-    Tutor.query().$promise.then( (tutors) ->
-      staff = _.union(convenors,tutors)
-      staff = _.map(staff, (convenor) ->
-        return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
+  Tutor.query(
+    (tutors) ->
+      $scope.staff = _.map(tutors, (tutor) ->
+        return { id: tutor.id, full_name: tutor.first_name + ' ' + tutor.last_name }
       )
-      staff = _.uniq(staff, (item) ->
-        return item.id
-      )
-      $scope.staff = staff
-    )
   )
 )
