@@ -191,7 +191,7 @@ angular.module("doubtfire.common.services.projects", [])
       else
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
-      if currentTask.isGroupTask() and !currentTask.groups?
+      if currentTask.isGroupTask() and !currentTask.group()?
         projectService.updateGroups(currentTask.project(), callback, true)
       callback?()
       currentTask
@@ -222,14 +222,17 @@ angular.module("doubtfire.common.services.projects", [])
       )
 
   projectService.updateGroups = (project, onSuccess, force = false) ->
+    # Only update if the project has groups, or we are forced to update
     if project.groups? or force
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
         onSuccess?(project)
+      project.unit().refreshGroups()
 
   projectService.getGroupForTask = (project, task) ->
     return null unless task.definition.group_set
-    _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
+    result = _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
+    result || _.find project.unit().groups, (group) -> group.group_set_id == task.definition.group_set.id && project.project_id in group.projects
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
     project.findTaskForDefinition(task_definition_id)
