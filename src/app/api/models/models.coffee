@@ -17,6 +17,7 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.task-alignment"
   "doubtfire.api.models.task-feedback"
   "doubtfire.api.models.task-similarity"
+  "doubtfire.api.models.teaching-period"
   "doubtfire.api.models.students"
   "doubtfire.api.models.user"
   "doubtfire.api.models.task-completion-csv"

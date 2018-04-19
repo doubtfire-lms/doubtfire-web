@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService) ->
+  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
@@ -16,6 +16,9 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = ExternalName
+
+    # get the teaching periods- gets an object with the loaded teaching periods
+    $scope.teachingPeriods = TeachingPeriod.query()
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->
@@ -35,7 +38,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     }
     $scope.unitTypeAheadData = unitService.unitTypeAheadData
     $scope.studentSearch = ""
-
+    
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
 
@@ -43,11 +46,12 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
-
+      
       saveData = {
         name: $scope.unit.name
         code: $scope.unit.code
         description: $scope.unit.description
+        teaching_period_id: $scope.unit.teaching_period_id
         start_date: $scope.unit.start_date
         end_date: $scope.unit.end_date
         active: $scope.unit.active
@@ -60,6 +64,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else
+        console.log "hi"
         Unit.update(
           {
             id: $scope.unit.id
