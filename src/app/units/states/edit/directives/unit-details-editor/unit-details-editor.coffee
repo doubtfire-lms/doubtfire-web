@@ -64,7 +64,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else
-        console.log "hi"
         Unit.update(
           {
             id: $scope.unit.id
