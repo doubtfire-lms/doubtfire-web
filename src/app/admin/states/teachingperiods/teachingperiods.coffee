@@ -15,7 +15,7 @@ angular.module('doubtfire.admin.states.teachingperiods', [])
         templateUrl: "admin/states/teachingperiods/teachingperiods.tpl.html"
     data:
       pageTitle: "_Teaching-Period Administration_"
-      roleWhitelist: ['Admin', 'Convenor']
+      roleWhitelist: ['Admin']
   headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
 )
 .controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, ExternalName, Unit, CreateUnitModal, currentUser, unitService, alertService, analyticsService, TeachingPeriod) ->
