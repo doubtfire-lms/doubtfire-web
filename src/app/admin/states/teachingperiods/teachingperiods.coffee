@@ -18,9 +18,8 @@ angular.module('doubtfire.admin.states.teachingperiods', [])
       roleWhitelist: ['Admin']
   headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
 )
-.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, ExternalName, Unit, CreateUnitModal, currentUser, unitService, alertService, analyticsService, TeachingPeriod) ->
-  analyticsService.event "Unit Admin", "Listed Units to Manage"
-
+.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, ExternalName, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal) ->
+  
   $scope.teachingPeriods = TeachingPeriod.query()
 
   # Table sort details
@@ -35,6 +34,9 @@ angular.module('doubtfire.admin.states.teachingperiods', [])
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = ExternalName
   
-  $scope.createUnit = ->
-    CreateUnitModal.show $scope.units
+  # User settings/create modal
+  $scope.showTeachingPeriodModal = (teachingPeriod) ->
+    # If we're given a user, show that user, else create a new one
+    teachingPeriodToShow = if teachingPeriod? then teachingPeriod else { }
+    TeachingPeriodSettingsModal.show teachingPeriodToShow
 )

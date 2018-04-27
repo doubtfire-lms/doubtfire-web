@@ -22,7 +22,7 @@
                  </tr>
              </thead>
              <tbody>
-             <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" >               
+             <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showTeachingPeriodModal(teachingperiod)" >               
                <td>{{teachingperiod.period}}</td>
                <td>{{teachingperiod.start_date | date: short}}</td>
                <td>{{teachingperiod.end_date | date: short}}</td>               
@@ -31,6 +31,11 @@
             </table>
           </div>
           <div class="panel-footer clearfix">
+            <a href class="btn btn-success pull-right" ng-click="showTeachingPeriodModal()">
+              <i class="fa fa-user"></i>
+              <i class="fa fa-plus"></i>
+              Add New Teaching Period
+            </a>
             <pagination ng-show="filteredTeachingPeriods.length > pageSize" total-items="filteredTeachingPeriods.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>            
           </div>
         </div>
