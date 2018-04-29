@@ -16,6 +16,13 @@ angular.module("doubtfire.api.models.teaching-period", [])
             alertService.add("danger", "Failed to load teaching periods. #{response?.data?.error}", 6000)
         )
       data
+    
+    create: ( { period: period, start_date: start_date, end_date: end_date } ) ->
+      resource.create( { period: period, start_date: start_date, end_date: end_date } )
+
+    update: ( { id: id, teaching_period: teachingperiod } ) ->
+      resource.update( { id: id, teaching_period: teachingperiod } )
+    
   }
 
   TeachingPeriod
