@@ -30,12 +30,13 @@
     <br>
     <span class="selected-file" stype="{font-size: 12px}">
       <i class="file-type fa fa-file-image-o"></i>
-      {{upload.model[0].name}}
+      {{formatImageName(upload.model[0].name)}}    
     </span>
     <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
       <i class="fa fa-times"></i>
     </a>
      <!-- Buttons experiment -->
+     <br>
     <input type="button"
       ng-click="postImageComment()"
       class="btn btn-primary btn-upload" value="Post Comment">

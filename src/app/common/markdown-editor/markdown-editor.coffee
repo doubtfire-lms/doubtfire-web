@@ -22,7 +22,7 @@ angular.module('doubtfire.common.markdown-editor', [])
     singleDropZone: '=?'
     showUploadButton: '=?'
     initiateUpload: '=?'
-  controller: ($scope, $rootScope, $timeout, taskService) ->
+  controller: ($scope, $timeout, CommentResourceService, taskService) ->
     DEFAULT_HEIGHT = 300
 
     ACCEPTED_TYPES =
@@ -35,7 +35,7 @@ angular.module('doubtfire.common.markdown-editor', [])
     $scope.currentCommentType = $scope.commentType.TEXT # Current value of comment type
 
     $scope.$watch 'currentCommentType', ->
-      $rootScope.commentTypeValue = $scope.currentCommentType
+      CommentResourceService.setCommentType($scope.currentCommentType)
       
     $scope.isEditing = true
     $scope.height = $scope.height or DEFAULT_HEIGHT
@@ -56,23 +56,35 @@ angular.module('doubtfire.common.markdown-editor', [])
         Enter: $scope.onEnter
       }
 
-    #
-    # Upload image files as comments to a given task
-    #
-    $scope.postImageComment = ->
-      console.log 'File Name : ' + $scope.upload.model[0].name
-      taskService.addMediaComment($rootScope.currentTask, $scope.upload.model, $scope.currentCommentType)
-      $scope.clearEnqueuedUpload($scope.upload)
+    #============================================================================
+    # This function formats the name of the image
+    # It limits the length of the name to be 20 characters and always displays the type
 
+    $scope.formatImageName = (imageName) ->
+      index = imageName.indexOf(".")
+      nameString = imageName.substring(0,index)
+      typeString = imageName.substring(index)
 
+      if nameString.length > 20
+        nameString = nameString.substring(0,20) + ".."
+      
+      finalString = nameString + typeString
+      finalString
+
+    #============================================================================
     $scope.clearEnqueuedUpload = (upload) ->
       upload.model = null
       refreshShownUploadZones()
 
-    #
+    #============================================================================
+    # Upload image files as comments to a given task
+    $scope.postImageComment = ->
+      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, $scope.currentCommentType)
+      $scope.clearEnqueuedUpload($scope.upload)
+
+    #============================================================================
     # Will refresh which shown drop zones are shown
     # Only changes if showing one drop zone
-    #
     refreshShownUploadZones = ->
       if $scope.singleDropZone
         # Find the first-most empty model in each zone
@@ -82,6 +94,7 @@ angular.module('doubtfire.common.markdown-editor', [])
         else
           $scope.shownUploadZones = []
 
+    #============================================================================
     $scope.audioSetup = ->
     
       # Support multiple browsers
@@ -111,7 +124,7 @@ angular.module('doubtfire.common.markdown-editor', [])
       # Needed for audio visualise
       audioSource = audioCtx.createMediaElementSource(audio)
 
-      # ==============================================================================================================
+      #---------------------------------------------
       # Sets up all the elements that will be used for recording
       initElements = ->
 
@@ -198,10 +211,9 @@ angular.module('doubtfire.common.markdown-editor', [])
 
         return
 
-      ### =====================================================================
-      * Visualise audio
-      * Takes input (either stream or audio)
-      ###
+      #---------------------------------------------
+      # Visualise audio
+      # Takes input (either stream or audio)
 
       #Draw timer
       drawTimer = undefined
@@ -259,7 +271,7 @@ angular.module('doubtfire.common.markdown-editor', [])
         
         return
 
-      # =====================================================================
+      #---------------------------------------------
 
       prepareRecordedAudio = (data) ->
         audioFileURL = window.URL.createObjectURL(data)
@@ -277,12 +289,12 @@ angular.module('doubtfire.common.markdown-editor', [])
               downloadLink = document.getElementById('btnSend')
               mediaUrl = window.URL.createObjectURL(downloadMediaContent)
               downloadLink.href = mediaUrl
-              taskService.addMediaComment($rootScope.currentTask, mediaUrl, $scope.currentCommentType)
+              taskService.addMediaComment CommentResourceService.task, mediaUrl, $scope.currentCommentType
               return
             return
           return
 
-      #=============================================
+      #---------------------------------------------
       initRecording = ->
 
         if navigator.mediaDevices and navigator.mediaDevices.getUserMedia
@@ -316,7 +328,7 @@ angular.module('doubtfire.common.markdown-editor', [])
 
         return
 
-      #=============================================
+      #---------------------------------------------
 
 
       initElements()

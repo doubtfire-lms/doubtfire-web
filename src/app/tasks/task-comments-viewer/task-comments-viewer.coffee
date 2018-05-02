@@ -13,7 +13,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
     test:'='
-  controller: ($scope, $rootScope, $modal, $state, $sce, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -30,21 +30,12 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         project_id: $scope.project.project_id,
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
-        console.log JSON.stringify(response)
-
-        $scope.task.comments = _.map(response, taskService.mapComment)
+        $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
         $scope.task.num_new_comments = 0
         scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
-        $rootScope.currentTask = $scope.task
 
-    $scope.getCommentMedia = (commentId) ->
-      TaskComment.query {
-        project_id: $scope.project_id,
-        task_definition_id: $scope.task.task_definition_id,
-        id: commentId
-      }, (response) ->
-        response
+        CommentResourceService.setTask($scope.task)
 
     # Automatically scroll the inner div to the bottom of comments
     scrollDown = ->
@@ -53,44 +44,43 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         wrappedResult = angular.element(objDiv)
         wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
+    $scope.openCommentsModal = (comment)->
+      imageUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      CommentResourceService.setImageUrl(imageUrl)
+      CommentsModal.show()
+
     # Checks for enter keydown
     $scope.enterDown = (editor) ->
       $scope.addComment()
       return CodeMirror.Pass
 
-    $scope.getCommentImage = (comment) ->
-      $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+    #===========================================================================================
+    $scope.canUserEdit = (comment) ->
+      console.log "Is author me - " + comment.author_is_me + " : Role - " + currentUser.role
+      canEdit = false
+      if comment.author_is_me || currentUser.role == "Admin"
+        canEdit = true
+      canEdit
 
+    #===========================================================================================
+    $scope.getCommentAttachment = (comment) ->
+      mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      console.log "getCommentAttachment: " + JSON.stringify(comment)
+      mediaURL
+
+    #===========================================================================================
     # Submits a new comment
     $scope.addComment = ->
+      $scope.comment.text = $scope.comment.text.trim()
+      taskService.addComment $scope.task, $scope.comment.text, CommentResourceService.commentType,
+      (success) ->
+        $scope.comment.text = ""
+        analyticsService.event "View Task Comments", "Added new comment"
+        scrollDown()
+      (failure) -> #changed from response to failure
+        alertService.add("danger", response.data.error, 2000)
 
-      textComment = ->
-        $scope.comment.text = $scope.comment.text.trim()
-        taskService.addComment $scope.task, $scope.comment.text, $rootScope.commentTypeValue,
-        (success) ->
-          $scope.comment.text = ""
-          analyticsService.event "View Task Comments", "Added new comment"
-          scrollDown()
-        (response) ->
-          alertService.add("danger", response.data.error, 2000)
-
-      audioComment = ->
-        console.log "audio posted"
-        # alert $scope.commentData
-        $scope.comment.text = $scope.commentData
-        textComment()
-
-      imageComment = ->
-        console.log "image posted"
-
-      console.log "Value: " + $rootScope.commentTypeValue
-
-      switch $rootScope.commentTypeValue
-        when "text" then textComment()
-        when "audio" then audioComment()
-        when "image" then imageComment()
-        else console.log "Failed Post"
-
+    #===========================================================================================
     # Deletes existing comment
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },

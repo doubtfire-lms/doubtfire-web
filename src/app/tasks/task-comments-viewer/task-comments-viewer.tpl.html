@@ -15,23 +15,29 @@
         tooltip-popover-delay="500"
         tooltip-placement="left">
       </user-icon><!--/user-icon-->
+
+      <!--=========================================== -->
+      <!-- COMMENT BUBBLE -->
+
       <div class="comment-bubble">
-        <!--<div class="comment-text">
-          <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
-        </div>-->
+
         <div ng-show="comment.type == 'text'" class="comment-text">
           <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
         </div>
+
         <div ng-if="comment.type == 'audio'" class="comment-text">
-          <audio controls src="{{getCommentImage(comment)}}"/>
+          <audio controls src="{{getCommentAttachment(comment)}}"/>
         </div>
+        
         <div ng-if="comment.type == 'image'" class="comment-text">
-          <img src="{{getCommentImage(comment)}}" width="100" height="100"/>
+          <a ng-click="openCommentsModal(comment)"><img src="{{getCommentAttachment(comment)}}" width="100%" height="100%"/></a>
         </div>
+
         <div
           class="delete-comment"
           ng-click="deleteComment(comment.id)"
           tooltip="Delete comment"
+          ng-show="{{canUserEdit(comment)}}" 
           tooltip-append-to-body="true">
           <i class="fa fa-trash"></i>
         </div><!--/delete-comment-->
