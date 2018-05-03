@@ -34,11 +34,10 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
           <div class="col-sm-9">
-              <select ng-model="unit.teaching_period_id">
-                <option value="">Custom Period</option>            
-                <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}</option>                
-               </select>
-            <textarea id="teachingperiod" class="form-control" ng-model="unit.teaching_period_id"></textarea>
+            <select class="form-control" ng-model="unit.teaching_period_id">
+              <option value="">Custom Period</option>            
+              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}</option>                
+            </select>
           </div>
         </div><!--/teaching-period-date-->
 
