@@ -26,4 +26,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     $scope.grades =
       names: gradeService.grades
       acronyms: gradeService.gradeAcronyms
+
+    $scope.should_show_deadline = () ->
+      # Returns true if there is a due date, and we are past it.
+      now = new Date()
+      $scope.taskDef.due_date? && now >= new Date($scope.taskDef.target_date)
 )
