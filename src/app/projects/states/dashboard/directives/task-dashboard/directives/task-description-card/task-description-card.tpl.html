@@ -14,11 +14,11 @@
         This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> task.
       </li>
       <li>
-        <strong>Target Date</strong>
+        <strong>Due Date</strong>
         &mdash;
         The date the task considered to be due, you should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
       </li>
-      <li ng-show="taskDef.due_date">
+      <li ng-show="should_show_deadline()">
         <strong>Deadline</strong>
         &mdash;
         Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | humanizedDate}}</strong>. Your work will be checked in your portfolio.

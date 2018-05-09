@@ -23,12 +23,12 @@
         <div class="col-sm-5 task-date-info">
           <div class="overdue label label-{{daysPastTargetDate > 5 ? 'danger' : 'warning'}}" ng-hide="daysPastTargetDate === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
             <i class="fa fa-exclamation-triangle"></i>
-            Past Target By <br/> {{daysPastTargetDate}} day{{daysPastTargetDate > 1 ? 's' : ''}}
+            Past Due Date By <br/> {{daysPastTargetDate}} day{{daysPastTargetDate > 1 ? 's' : ''}}
           </div>
           <span class="label label-info" tooltip="You should aim to complete the task by this date" tooltip-placement="right" tooltip-append-to-body="true">
             <i class="fa fa-clock-o"></i>
             <div>
-              <label>Target Date</label>
+              <label>Due Date</label>
               {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
             </div>
           </span>
