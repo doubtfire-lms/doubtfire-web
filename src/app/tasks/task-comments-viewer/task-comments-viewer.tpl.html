@@ -26,7 +26,7 @@
         </div>
 
         <div ng-if="comment.type == 'audio'" class="comment-text">
-          <audio controls src="{{getCommentAttachment(comment)}}"/>
+          <a ng-click="openAudioModal(comment)">Audio Comment</a>
         </div>
         
         <div ng-if="comment.type == 'image'" class="comment-text">

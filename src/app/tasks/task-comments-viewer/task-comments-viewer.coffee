@@ -13,7 +13,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
     test:'='
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, AudioModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -49,6 +49,11 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       CommentResourceService.setImageUrl(imageUrl)
       CommentsModal.show()
 
+    $scope.openAudioModal = (comment)->
+      audioUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      CommentResourceService.setAudioUrl(audioUrl)
+      AudioModal.show()
+
     # Checks for enter keydown
     $scope.enterDown = (editor) ->
       $scope.addComment()
@@ -56,7 +61,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     #===========================================================================================
     $scope.canUserEdit = (comment) ->
-      console.log "Is author me - " + comment.author_is_me + " : Role - " + currentUser.role
       canEdit = false
       if comment.author_is_me || currentUser.role == "Admin"
         canEdit = true
@@ -65,7 +69,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     #===========================================================================================
     $scope.getCommentAttachment = (comment) ->
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      console.log "getCommentAttachment: " + JSON.stringify(comment)
       mediaURL
 
     #===========================================================================================

@@ -7,12 +7,17 @@ angular.module("doubtfire.common.services.comments", [])
   CommentResourceService = {}
 
   commentImageUrl = ""
+  commentAudioUrl = ""
   commentType = ""
   task = ""
 
   CommentResourceService.setImageUrl = (imageURL) ->
     if (imageURL?)
       CommentResourceService.commentImageUrl = imageURL
+
+  CommentResourceService.setAudioUrl = (audioURL) ->
+    if(audioURL?)
+      CommentResourceService.commentAudioUrl = audioURL
 
   CommentResourceService.setCommentType = (commentType) ->
     if (commentType?)
