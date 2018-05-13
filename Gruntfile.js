@@ -357,7 +357,8 @@ module.exports = function ( grunt ) {
         noarg: true,
         sub: true,
         boss: true,
-        eqnull: true
+        eqnull: true,
+        esversion: 6
       },
       // No test or globals provided - comment out to silence warnings
       // test: [

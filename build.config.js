@@ -49,7 +49,8 @@ module.exports = {
 
     coffee: [
       'src/**/*.coffee',
-      '!src/**/*.spec.coffee'
+      '!src/**/*.spec.coffee',
+      '!src/**/*.old.coffee'
     ],
     coffeeunit: [
       'src/**/*.spec.coffee'
