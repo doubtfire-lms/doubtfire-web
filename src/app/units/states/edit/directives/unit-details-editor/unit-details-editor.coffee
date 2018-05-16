@@ -47,15 +47,26 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
       
-      saveData = {
-        name: $scope.unit.name
-        code: $scope.unit.code
-        description: $scope.unit.description
-        teaching_period_id: $scope.unit.teaching_period_id
-        start_date: $scope.unit.start_date
-        end_date: $scope.unit.end_date
-        active: $scope.unit.active
-      }
+      if $scope.unit.teaching_period_id
+        saveData = {
+          name: $scope.unit.name
+          code: $scope.unit.code
+          description: $scope.unit.description
+          teaching_period_id: $scope.unit.teaching_period_id
+          start_date: null
+          end_date: null
+          active: $scope.unit.active
+        }
+      else
+        saveData = {
+          name: $scope.unit.name
+          code: $scope.unit.code
+          description: $scope.unit.description
+          teaching_period_id: $scope.unit.teaching_period_id
+          start_date: $scope.unit.start_date
+          end_date: $scope.unit.end_date
+          active: $scope.unit.active
+        }
 
       if $scope.unit.id == -1
         Unit.create { unit: saveData },
