@@ -13,7 +13,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
           (success) ->
             data.loadedPeriods = success
           (failure) ->
-            alertService.add("danger", "Failed to load teaching periods. #{response?.data?.error}", 6000)
+            alertService.add("danger", "Failed to load teaching periods. #{failure?.data?.error}", 6000)
         )
       data
     
@@ -23,6 +23,21 @@ angular.module("doubtfire.api.models.teaching-period", [])
     update: ( { id: id, teaching_period: teachingperiod } ) ->
       resource.update( { id: id, teaching_period: teachingperiod } )
     
+    get: (id, onSuccess, onFailure) ->
+      resource.get(
+        {id: id}
+        (success) ->
+          match = _.find data.loadedPeriods.id == success.id
+
+          if match?
+            _.extend match, success
+            onSuccess match
+          else
+            data.loadedPeriods << success
+            onSuccess success
+        (error) ->
+          onFailure error
+      )
   }
 
   TeachingPeriod
