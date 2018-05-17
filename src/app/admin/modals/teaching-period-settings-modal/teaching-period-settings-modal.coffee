@@ -74,6 +74,11 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     )
 
   $scope.saveTeachingPeriod = ->
+    if $scope.teachingperiod.start_date && $scope.teachingperiod.start_date.getMonth
+      $scope.teachingperiod.start_date = "#{$scope.teachingperiod.start_date.getFullYear()}-#{$scope.teachingperiod.start_date.getMonth() + 1}-#{$scope.teachingperiod.start_date.getDate()}"
+    if $scope.teachingperiod.end_date && $scope.teachingperiod.end_date.getMonth
+      $scope.teachingperiod.end_date = "#{$scope.teachingperiod.end_date.getFullYear()}-#{$scope.teachingperiod.end_date.getMonth() + 1}-#{$scope.teachingperiod.end_date.getDate()}"
+
     if $scope.isNew
       createNewTeachingPeriod()
     else
