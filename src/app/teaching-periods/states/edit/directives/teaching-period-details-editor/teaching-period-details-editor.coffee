@@ -47,9 +47,9 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
       }
 
       if $scope.teachingPeriod.id == -1
-        TeachingPeriod.create { unit: saveData },
-          (unit) ->
-            $scope.saveSuccess(unit)
+        TeachingPeriod.create { teaching_period: saveData },
+          (teachingPeriod) ->
+            $scope.saveSuccess(teachingPeriod)
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else

@@ -50,7 +50,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   }
 
   createNewTeachingPeriod = ->
-    TeachingPeriod.create( { period: $scope.teachingperiod.period, start_date: $scope.teachingperiod.start_date, end_date: $scope.teachingperiod.end_date } ).$promise.then (
+    TeachingPeriod.create( { teaching_period: $scope.teachingperiod } ).$promise.then (
       (response) ->
         $modalInstance.close(response)
         if $scope.teachingperiods

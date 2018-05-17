@@ -17,8 +17,8 @@ angular.module("doubtfire.api.models.teaching-period", [])
         )
       data
     
-    create: ( { period: period, start_date: start_date, end_date: end_date } ) ->
-      resource.create( { period: period, start_date: start_date, end_date: end_date } )
+    create: ( { teaching_period: teachingperiod } ) ->
+      resource.create( { teaching_period: teachingperiod } )
 
     update: ( { id: id, teaching_period: teachingperiod } ) ->
       resource.update( { id: id, teaching_period: teachingperiod } )
