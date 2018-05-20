@@ -50,13 +50,14 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
 
       if $scope.teachingPeriod.id == -1
         TeachingPeriod.create { teaching_period: saveData },
-          (teachingPeriod) ->
-            $scope.saveSuccess(teachingPeriod)
+          (createdTeachingPeriod) ->
+            $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
+            alertService.add("success", "Teaching Period created.", 2000)
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else
         TeachingPeriod.update( { id: $scope.teachingPeriod.id, teaching_period: saveData } ).$promise.then (
-          (teachingPeriod) ->
+          (updatedTeachingPeriod) ->
             alertService.add("success", "Teaching Period updated.", 2000)
         ),
         (response) ->
