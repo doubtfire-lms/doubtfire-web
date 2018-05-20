@@ -51,10 +51,11 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
 
   createNewTeachingPeriod = ->
     TeachingPeriod.create( { teaching_period: $scope.teachingperiod } ).$promise.then (
-      (response) ->
-        $modalInstance.close(response)
+      (createdTeachingPeriod) ->
+        $modalInstance.close(createdTeachingPeriod)
         if $scope.teachingperiods
-          $scope.teachingperiods.loadedPeriods.push(response)
+          $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
+          alertService.add("success", "Teaching Period created.", 2000)
     ),
     (
       (response) ->
@@ -64,8 +65,9 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   
   updateExistingTeachingPeriod = ->
     TeachingPeriod.update( { id: $scope.teachingperiod.id, teaching_period: $scope.teachingperiod } ).$promise.then (
-      (response) ->
-        $modalInstance.close(response)
+      (updatedTeachingPeriod) ->
+        $modalInstance.close(updatedTeachingPeriod)
+        alertService.add("success", "Teaching Period updated.", 2000)
     ),
     (
       (response) ->
