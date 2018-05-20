@@ -21,7 +21,15 @@ angular.module("doubtfire.api.models.teaching-period", [])
       resource.create( { teaching_period: teachingperiod } )
 
     update: ( { id: id, teaching_period: teachingperiod } ) ->
-      resource.update( { id: id, teaching_period: teachingperiod } )
+      resource.update(
+        { id: id, teaching_period: teachingperiod }
+        (teachingPeriod) ->
+          indexOfTeachingPeriods = 0
+          for teachingperiod in data.loadedPeriods
+            if teachingperiod.id == teachingPeriod.id
+              data.loadedPeriods[indexOfTeachingPeriods] = teachingPeriod
+            indexOfTeachingPeriods++
+      )
     
     get: (id, onSuccess, onFailure) ->
       resource.get(

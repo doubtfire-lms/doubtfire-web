@@ -13,6 +13,8 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
       startOpened: false
       endOpened: false
     }
+
+    TeachingPeriod.query()
     
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = ExternalName
@@ -53,13 +55,11 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
           (response) ->
             alertService.add("danger", response.data.error, 6000)
       else
-        TeachingPeriod.update(
-          {
-            id: $scope.teachingPeriod.id
-            teaching_period: saveData
-          }, (teachingPeriod) ->
+        TeachingPeriod.update( { id: $scope.teachingPeriod.id, teaching_period: saveData } ).$promise.then (
+          (teachingPeriod) ->
             alertService.add("success", "Teaching Period updated.", 2000)
-          (response) ->
-            alertService.add("danger", "Failed to update teaching period. #{response.data.error}", 6000)
-          )
+        ),
+        (response) ->
+          alertService.add("danger", "Failed to update teaching period. #{response.data.error}", 6000)
+        
 )
