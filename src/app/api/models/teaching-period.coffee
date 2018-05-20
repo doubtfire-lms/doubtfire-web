@@ -35,14 +35,15 @@ angular.module("doubtfire.api.models.teaching-period", [])
       resource.get(
         {id: id}
         (success) ->
-          match = _.find data.loadedPeriods.id == success.id
-
-          if match?
-            _.extend match, success
-            onSuccess match
-          else
-            data.loadedPeriods << success
-            onSuccess success
+          indexOfTeachingPeriods = 0
+          for teachingperiod in data.loadedPeriods
+            if teachingperiod.id == success.id
+              onSuccess data.loadedPeriods[indexOfTeachingPeriods]
+            else
+              data.loadedPeriods << success
+              onSuccess success
+        
+            indexOfTeachingPeriods++
         (error) ->
           onFailure error
       )
