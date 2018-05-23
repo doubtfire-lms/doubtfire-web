@@ -26,9 +26,9 @@
         </div>
 
         <div ng-if="comment.type == 'audio'" class="comment-text">
-          <a ng-click="openAudioModal(comment)">Audio Comment</a>
+          <audio-player></audio-player>
         </div>
-        
+
         <div ng-if="comment.type == 'image'" class="comment-text">
           <a ng-click="openCommentsModal(comment)"><img src="{{getCommentAttachment(comment)}}" width="100%" height="100%"/></a>
         </div>
@@ -37,7 +37,7 @@
           class="delete-comment"
           ng-click="deleteComment(comment.id)"
           tooltip="Delete comment"
-          ng-show="{{canUserEdit(comment)}}" 
+          ng-show="{{canUserEdit(comment)}}"
           tooltip-append-to-body="true">
           <i class="fa fa-trash"></i>
         </div><!--/delete-comment-->

@@ -13,7 +13,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
     test:'='
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, AudioModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -48,11 +48,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       imageUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
       CommentResourceService.setImageUrl(imageUrl)
       CommentsModal.show()
-
-    $scope.openAudioModal = (comment)->
-      audioUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      CommentResourceService.setAudioUrl(audioUrl)
-      AudioModal.show()
 
     # Checks for enter keydown
     $scope.enterDown = (editor) ->

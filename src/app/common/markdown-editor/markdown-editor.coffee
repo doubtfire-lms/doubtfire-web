@@ -67,7 +67,7 @@ angular.module('doubtfire.common.markdown-editor', [])
 
       if nameString.length > 20
         nameString = nameString.substring(0,20) + ".."
-      
+
       finalString = nameString + typeString
       finalString
 
@@ -95,20 +95,23 @@ angular.module('doubtfire.common.markdown-editor', [])
           $scope.shownUploadZones = []
 
     #============================================================================
+    $scope.hasBeenSetup = false
+
     $scope.audioSetup = ->
     
+      if $scope.hasBeenSetup
+        return
+
+      $scope.hasBeenSetup = true
+
       # Support multiple browsers
       navigator.getUserMedia = navigator.getUserMedia or navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.msGetUserMedia
 
       audioURL = undefined
-
       streamRef = undefined
       mediaRecorderRef = undefined
       dataRef = undefined
-
       activeTrack = false
-      
-      # Track the visualiser
       isPlaying = false
       
       btnRecord = document.getElementById('btnRecord')
@@ -118,11 +121,22 @@ angular.module('doubtfire.common.markdown-editor', [])
       canvas = document.getElementById('audio-visualiser')
       audio = document.getElementById('audioPlayer')
 
-      audioCtx = new ((window.AudioContext or webkitAudioContext))
+      CommentResourceService.setupAudioContext()
+      audioCtx = CommentResourceService.audioContext
+
       canvasCtx = canvas.getContext('2d')
 
       # Needed for audio visualise
       audioSource = audioCtx.createMediaElementSource(audio)
+
+      StartRecord = ->
+        streamRef.getTracks()[0].enabled = true
+        # Start recording
+        mediaRecorderRef.start()
+
+        # Show visualisation
+        prepareVisualise streamRef, true
+        startDrawing()
 
       #---------------------------------------------
       # Sets up all the elements that will be used for recording
@@ -134,40 +148,22 @@ angular.module('doubtfire.common.markdown-editor', [])
         #Record button
         btnRecord.onclick = ->
           if !isRecording
-
-            streamRef.getTracks()[0].enabled = true
-
+            initRecording()
             # Update buttons
             btnRecord.src = "/assets/icons/record_active.png"
             btnPlay.disabled = true
             btnSend.disabled = true
-          
-            # Start recording
-            mediaRecorderRef.start()
-
             isRecording = true
             audio.removeAttribute('src')
-            console.log "Is Recording: " + isRecording
-
-            # Show visualisation
-            prepareVisualise streamRef, true
-            startDrawing()
           else
-              
             # Update buttons
             btnRecord.src = "/assets/icons/record.png"
             btnPlay.disabled = false
-            #btnPlay.classList.remove("disabled")
             btnSend.disabled = false
-            #btnSend.classList.remove("disabled")
-
             # Stop recording audio
             mediaRecorderRef.stop()
             streamRef.getTracks()[0].enabled = false
-
             isRecording = false
-            console.log "Is Recording: " + isRecording
-
             # Clear visualisation
             stopDrawing()
           return false
@@ -268,19 +264,16 @@ angular.module('doubtfire.common.markdown-editor', [])
         source.connect analyser
         if !isStream
           analyser.connect audioCtx.destination
-        
         return
 
       #---------------------------------------------
-
       prepareRecordedAudio = (data) ->
         audioFileURL = window.URL.createObjectURL(data)
         fetch(audioFileURL).then (result) ->
           result.blob().then (blob) ->
             size = blob.size
             type = blob.type
-            console.log '[INFO] Inside Fetch\n Blob size : ' + size + '\n Blob type : ' + type
-            
+
             fileReader = new FileReader
             fileReader.readAsDataURL blob
             fileReader.addEventListener 'loadend', ->
@@ -293,8 +286,8 @@ angular.module('doubtfire.common.markdown-editor', [])
               return
             return
           return
-
       #---------------------------------------------
+      # pass initRecording a cb to call when stream is ready
       initRecording = ->
 
         if navigator.mediaDevices and navigator.mediaDevices.getUserMedia
@@ -308,31 +301,27 @@ angular.module('doubtfire.common.markdown-editor', [])
             mediaRecorderRef = mediaRecorder
             streamRef = stream
             streamRef.getTracks()[0].enabled = false
-
+            
             mediaRecorder.ondataavailable = (e) ->
               data = e.data
               audioURL = window.URL.createObjectURL(data)
               audio.src = audioURL
-
               #set ref to be used in buttons
               dataRef = data
-            
               prepareVisualise audio, false
               return
+            StartRecord()
 
           ), (err) ->
             console.log 'The following gUM error occured: ' + err
           return
         else
           console.log 'getUserMedia is not supported on your browser!'
-
         return
-
       #---------------------------------------------
 
-
       initElements()
-      initRecording()
+      #initRecording()
       return
     
 

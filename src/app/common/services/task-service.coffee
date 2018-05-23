@@ -519,26 +519,6 @@ angular.module("doubtfire.common.services.tasks", [])
   #ADD MEDIA COMMENT
   taskService.addMediaComment = (task, mediaURL, commentType) ->
 
-    ### NEW
-    form = new FormData()
-    form.append 'type', commentType
-    form.append 'project_id', task.project().project_id
-    form.append 'task_definition_id', task.task_definition_id
-    console.log mediaURL
-
-    if commentType == "image"
-      form.append 'attachment', mediaURL[0]
-    else if commentType == "audio"
-      form.append 'attachment', mediaURL
-
-    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
-      (response) -> #success
-        unless task.comments?
-          task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
-      (response) -> #failure
-        #here
-###
     form = new FormData()
     form.append 'type', commentType
     form.append 'project_id', task.project().project_id
@@ -565,30 +545,6 @@ angular.module("doubtfire.common.services.tasks", [])
         task.comments.unshift(taskService.mapComment(response))
       (response) -> #failure
         #here
-
-    ### OLD
-    if commentType == "image"
-      return
-    
-    form = new FormData()
-
-    xhr = new XMLHttpRequest()
-    xhr.open 'GET', mediaURL, true
-    xhr.responseType = 'blob'
-    xhr.onload = (e) ->
-      taskService.data = this.response
-      
-      form.append 'type', commentType
-      form.append 'project_id', task.project().project_id
-      form.append 'task_definition_id', task.task_definition_id
-      form.append 'attachment', taskService.data, 'a-comment.webm'
-      console.log "[DATA]"
-      console.log taskService.data
-
-    # To fetch audio blob
-    xhr.send()
-
-    ###
 
   taskService
 )

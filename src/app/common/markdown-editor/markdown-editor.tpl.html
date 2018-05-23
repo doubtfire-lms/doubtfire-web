@@ -26,7 +26,7 @@
     </p>
   </div>
   <!--/drop-zone-->
-  <div ng-show="!singleDropZone && upload.model.length > 0" class="selected-files">
+  <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
     <br>
     <span class="selected-file" stype="{font-size: 12px}">
       <i class="file-type fa fa-file-image-o"></i>
@@ -46,20 +46,26 @@
 
   <!-- Audio comment editor -->
   <div class="markdown-editor-inner-context-audio container" ng-show="currentCommentType == commentType.AUDIO">
-   <!-- <div class="row"> -->
-      <!-- POC comes here -->
+
       <audio id='audioPlayer'></audio>
 
-      <!-- <img class="audio-button col-sm-2" id='btnRecord' src="/assets/icons/record.png"> -->
-      <input type="image" class="audio-button col-sm-2" id='btnRecord' src="/assets/icons/record.png"/>
-      <!--<img class="audio-button col-sm-2 disabled" id='btnPlay' src="/assets/icons/play.png">-->
-      <input type="image" class="audio-button col-sm-2" id='btnPlay' src="/assets/icons/play.png" disabled/>
+      <table>
+          <tr>
+            <td>
+              <input type="image" class="audio-button" id='btnRecord' src="/assets/icons/record.png"/>
+            </td>
+            <td>
+              <input type="image" class="audio-button" id='btnPlay' src="/assets/icons/play.png" disabled/>
+            </td>
+            <td>
+              <canvas class="audio-visualiser" id="audio-visualiser"></canvas>
+            </td>
+            <td>
+              <input type="image" class="audio-button" id='btnSend' src="/assets/icons/send.png" disabled/>
+            </td>
+          </tr>  
+      </table>    
 
-      <canvas class="col-sm-6" id="audio-visualiser"></canvas>
-      
-      <!--<img class="audio-button col-sm-2 disabled" id='btnSend' src="/assets/icons/send.png">-->
-      <input type="image" class="audio-button col-sm-2" id='btnSend' src="/assets/icons/send.png" disabled/>
-   <!-- </div> -->
   </div>
 
   <div class="markdown-editor-actions">

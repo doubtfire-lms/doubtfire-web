@@ -1,0 +1,16 @@
+<div class="audio-comment-container">
+  <div>
+    <table>
+      <tr>
+        <td>
+            <input type="image" class="audio-button" ng-show="!loadPlayer" ng-click="audioPlayerSetup($index, comment)" src="/assets/icons/play.png"/>
+            <input type="image" class="audio-button" ng-show="loadPlayer" ng-attr-id="{{'btnPlay-' + $index}}" src="/assets/icons/play.png"/>
+        </td>
+        <td>
+            <canvas class="audio-visualiser"  ng-attr-id="{{'audio-visualiser-' + $index}}"></canvas>
+        </td>
+      </tr>
+    </table>
+    <audio ng-attr-id="{{'audio-element-' + $index}}"></audio>
+  </div>
+</div>

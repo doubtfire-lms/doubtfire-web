@@ -7,17 +7,23 @@ angular.module("doubtfire.common.services.comments", [])
   CommentResourceService = {}
 
   commentImageUrl = ""
-  commentAudioUrl = ""
+  #commentAudioUrl = ""
   commentType = ""
   task = ""
+  audioContext = ""
 
   CommentResourceService.setImageUrl = (imageURL) ->
     if (imageURL?)
       CommentResourceService.commentImageUrl = imageURL
 
+  ###
   CommentResourceService.setAudioUrl = (audioURL) ->
     if(audioURL?)
       CommentResourceService.commentAudioUrl = audioURL
+  ###
+  CommentResourceService.setupAudioContext = ->
+    if (CommentResourceService.audioContext == undefined)
+      CommentResourceService.audioContext = new ((window.AudioContext or webkitAudioContext))
 
   CommentResourceService.setCommentType = (commentType) ->
     if (commentType?)
@@ -26,6 +32,6 @@ angular.module("doubtfire.common.services.comments", [])
   CommentResourceService.setTask = (task) ->
     if (task?)
       CommentResourceService.task = task
-    
+
   CommentResourceService
 )
