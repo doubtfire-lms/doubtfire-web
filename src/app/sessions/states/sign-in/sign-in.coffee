@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, ExternalName, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, ExternalName, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -37,13 +37,13 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
   $http.get("#{api}/auth/method").then ((response) ->
     $scope.aafLogin = response.data.redirect_to || false
-    
+
     if $scope.aafLogin
       if $stateParams.authToken
         # This is AAF and we just got an auth_token? Must request to sign in
         $scope.signIn({ auth_token: $stateParams.authToken })
       else
-        # We are AAF and no auth token so we can just redirect
+        # We are AAF and no auth token so we can must redirect to AAF login provider
         window.location.assign($scope.aafLogin)
     else
       $scope.authMethodLoaded = true
@@ -80,7 +80,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     AboutDoubtfireModal.show()
 
   if auth.isAuthenticated()
-    redirectService.redirect "home", {}
+    $state.go "home"
   else
     $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
@@ -100,7 +100,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
               localStorageService.set(rememberDoubtfireCredentialsCookie, false)
               localStorageService.remove(doubtfireLoginTimeCookie)
             alertService.clearAll()
-            redirectService.redirect "home", {}
+            $state.go "home", {}
           (response) ->
             $scope.session.password = ''
             $scope.signingIn = false

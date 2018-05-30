@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="doubtfire" ng-controller="AppCtrl">
+<html ng-controller="AppCtrl">
   <head>
     <title ng-bind="externalName.value"> Loading... </title>
 
@@ -52,5 +52,10 @@
     <alert-list> </alert-list>
     <!-- compiled JS --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
+    <script type="text/javascript" src="runtime.js"></script>
+    <script type="text/javascript" src="polyfills.js"></script>
+    <!-- <script type="text/javascript" src="styles.js"></script> -->
+    <script type="text/javascript" src="vendor.js"></script>
+    <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
