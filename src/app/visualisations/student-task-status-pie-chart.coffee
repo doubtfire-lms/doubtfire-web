@@ -32,7 +32,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
       tooltip:
         valueFormatter: (d) ->
           fixed = d.toFixed()
-          pct   = Math.round((d / $scope.project.tasks.length) * 100)
+          pct   = Math.round((d / $scope.project.target_tasks().length) * 100)
           task  = if fixed is "1" then "task" else "tasks"
           "#{fixed} #{task} (#{pct}%)"
         keyFormatter: (d) ->

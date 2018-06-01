@@ -2,7 +2,7 @@
   <div>
     <div class="large-notice-block" ng-show="noPlagiarismDetected()">
       <i class="fa fa-eye fa-2x"></i>
-      <p>{{externalName}} has detected no similarities for this work</p>
+      <p>{{externalName.value}} has detected no similarities for this work</p>
     </div><!--/no-detections-->
     <div ng-if="task.similar_to_count > 0 && similarityData">
       <div ng-class="{ 'col-md-6': canViewOther }" class="col-sm-12">

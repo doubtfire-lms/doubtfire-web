@@ -52,7 +52,7 @@
                 <td>{{grades[student.target_grade]}}</td>
                 <!-- <td>{{student.similar_to_count}}</td> -->
                 <td>{{student.max_pct_copy}}%</td>
-                <td><span tooltip-html="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</span></td>
+                <td><span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</span></td>
               </tr>
             </tbody>
           </table>

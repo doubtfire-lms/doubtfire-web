@@ -72,7 +72,7 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('studentsWithTargetGrade', ->
   (input, grade) ->
-    if input
+    if input && grade > -1
       _.filter  input, (student) -> (student?) && student.target_grade == grade
     else
       input
@@ -191,7 +191,14 @@ angular.module("doubtfire.common.filters", [])
   (tasks, tutorialIds) ->
     return tasks unless tasks?
     return [] if _.isEmpty tutorialIds
-    _.filter tasks, (task) -> _.includes(tutorialIds, task.project().tutorial_id)
+    # If task is group task, then use group tutorial, else use project tutorial
+    _.filter tasks, (task) ->
+      if task.isGroupTask()
+        if task.group()?
+          _.includes(tutorialIds, task.group().tutorial_id)
+      else
+        _.includes(tutorialIds, task.project().tutorial_id)
+
 )
 
 .filter('tasksWithStudentName', ->

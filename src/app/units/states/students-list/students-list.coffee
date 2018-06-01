@@ -103,7 +103,7 @@ angular.module('doubtfire.units.states.students', [])
       else
         row['lab'] = ""
       angular.forEach(taskService.statusKeys, (key) ->
-        row[key] = student.task_stats[projectService.taskStatIndex[key]].value
+        row[key] = student.task_stats[taskService.statusSeq[key]].value
       )
       result.push row
     )
@@ -116,10 +116,7 @@ angular.module('doubtfire.units.states.students', [])
   # View a student
   $scope.viewStudent = (student) ->
     analyticsService.event 'Teacher View - Students Tab', 'Viewed Student'
-    if $scope.fullscreen
-      $scope.activeStudent = student
-    else
-      $state.go("projects/dashboard", {projectId: student.project_id, tutor: true})
+    student.viewProject(true)
 
   # Sets the flag sorting
   $scope.sortTableByFlag = (flag) ->

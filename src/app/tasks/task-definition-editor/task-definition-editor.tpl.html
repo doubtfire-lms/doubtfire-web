@@ -113,7 +113,7 @@
                 <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to start this task." class="col-sm-3 control-label">Start Date</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="startPicker.open" type="text" class="form-control" ng-model="task.start_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, startPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -123,9 +123,9 @@
                 </div><!--/start-date-->
 
                 <div class="form-group" ng-required="isNew">
-                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Target Date</label>
+                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Due Date</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -135,9 +135,9 @@
                 </div><!--/target-date-->
 
                 <div class="form-group">
-                  <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Due Date</label>
+                  <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Deadline</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -219,7 +219,7 @@
                   <div class="col-sm-8">
                     <input type="number" ng-disabled="task.plagiarism_checks.length == 0" class="form-control" ng-model="task.plagiarism_warn_pct"/>
                     <p class="help-block">
-                      The percentage similarity where {{externalName}} creates a warning
+                      The percentage similarity where {{externalName.value}} creates a warning
                     </p>
                   </div>
                 </div><!--/check-perecent-->
@@ -235,7 +235,7 @@
                       <option value="moss python">Python</option>
                     </select>
                     <p class="help-block">
-                      {{externalName}} uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
+                      {{externalName.value}} uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
                     </p>
                   </div>
                   <button class="btn btn-danger pull-right" ng-click="removeCheck(check)">

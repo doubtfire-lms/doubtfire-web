@@ -2,7 +2,7 @@ angular.module('doubtfire.home.states.home', [])
 
 .config((headerServiceProvider) ->
   homeStateData =
-    url: "/home"
+    url: "/home?notifications"
     views:
       main:
         controller: "HomeCtrl"
@@ -13,7 +13,7 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService) ->
+.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService, UserNotificationSettingsModal) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
   # Get the confugurable, external name of Doubtfire
@@ -91,5 +91,8 @@ angular.module('doubtfire.home.states.home', [])
     _.find($scope.units, {id: unitId})
 
   $scope.currentUser = currentUser
+
+  if $state.params?.notifications? && $state.params?.notifications == "true"
+    UserNotificationSettingsModal.show currentUser?.profile
 
 )

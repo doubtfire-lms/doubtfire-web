@@ -60,7 +60,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
 
       # Triggers a new update to the task status
       $scope.triggerTransition = (status) ->
-        taskService.updateTaskStatus $scope.task.project().unit, $scope.task.project(), $scope.task, status
+        taskService.updateTaskStatus $scope.task.project().unit(), $scope.task.project(), $scope.task, status
 
 
 )

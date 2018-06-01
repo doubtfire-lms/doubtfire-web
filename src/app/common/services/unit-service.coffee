@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state) ->
   #
   # The unit service object
   #
@@ -190,15 +190,15 @@ angular.module("doubtfire.common.services.units", [])
     #
     # Push all of the tasks downloaded into the existing student projects
     #
-    unit.incorporateTasks = (tasks) ->
+    unit.incorporateTasks = (tasks, callback) ->
       _.map tasks, (t) ->
         project = unit.findStudent(t.project_id)
         if project?
           unless project.incorporateTask?
             projectService.mapTask t, unit, project
             projectService.addProjectMethods(project, unit)
+          project.incorporateTask(t, callback)
 
-          project.incorporateTask(t)
 
     #
     # Add any missing tasks and return the new collection
@@ -210,9 +210,11 @@ angular.module("doubtfire.common.services.units", [])
       _.map unit.students, (p) ->
         t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
-          _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
-        else
-          t
+          t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
+        # If a group task but group data not loaded, go fetch it
+        if t.isGroupTask() and !t.group()?
+          projectService.updateGroups(t.project(), null, true)
+        t
 
 
     unit.staffAlignmentsForTaskDefinition = (td) ->
@@ -292,11 +294,11 @@ angular.module("doubtfire.common.services.units", [])
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
-      newId = if tutorial == null then -1 else if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id
+      newId = if tutorial? then (if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id) else -1
       analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
       Project.update({ id: student.project_id, tutorial_id: newId },
         (project) ->
-          alertService.add "info", "Tutorial updated for #{student.name}", 3000
+          alertService.add "success", "Tutorial updated for #{student.name}", 3000
           student.tutorial_id = project.tutorial_id
           student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
         (response) ->
@@ -331,29 +333,21 @@ angular.module("doubtfire.common.services.units", [])
     student.task_stats = [
       { value: 0, key: taskService.statusKeys[10] }
       { value: 0, key: taskService.statusKeys[0]  }
-      { value: 0, key: taskService.statusKeys[1]  }
-      { value: 0, key: taskService.statusKeys[2]  }
-      { value: 0, key: taskService.statusKeys[3]  }
       { value: 0, key: taskService.statusKeys[4]  }
-      { value: 0, key: taskService.statusKeys[5]  }
       { value: 0, key: taskService.statusKeys[6]  }
-      { value: 0, key: taskService.statusKeys[7]  }
-      { value: 0, key: taskService.statusKeys[8]  }
       { value: 0, key: taskService.statusKeys[9]  }
     ]
 
-    # Returns the task statistic value for the provided key
-    student.taskStatValue = (key) ->
-      student.task_stats[projectService.taskStatIndex[key]].value
-
     # Returns the student's progress sorting order
     student.progressSortOrder = ->
-      20 * student.taskStatValue('complete') +
-      15 * (student.taskStatValue('discuss') + student.taskStatValue('demonstrate')) +
-      10 * (student.taskStatValue('ready_to_mark')) +
-      5 * (student.taskStatValue('fix_and_resubmit')) +
-      2 * (student.taskStatValue('working_on_it')) +
-      1 * (student.taskStatValue('need_help'))
+      -1 * student.task_stats[0].value +
+      20 * student.task_stats[4].value +
+      7 * student.task_stats[3].value +
+      student.task_stats[2].value
+
+    # Enable the student/project to be able to switch to its view
+    student.viewProject = (as_tutor) ->
+      $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor})
 
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->
@@ -373,7 +367,8 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
     # Call projectService update functions to update stats and task details
-    projectService.updateTaskStats(student, student.stats) if student.stats?
+    projectService.addProjectMethods(student)
+    student.updateTaskStats(student.stats) if student.stats?
     projectService.addTaskDetailsToProject(student, unit)
 
     # Return the mapped student

@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?
@@ -27,7 +27,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
-        projectService.updateTaskStats $scope.project, project.stats
+        $scope.project.updateTaskStats project.stats
         analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
         $rootScope.$broadcast "TargetGradeUpdated"
 

@@ -8,20 +8,6 @@ angular.module("doubtfire.common.services.projects", [])
 
   projectService.loadedProjects = null
 
-  projectService.taskStatIndex = {
-    fail: 0,
-    not_started: 1,
-    do_not_resubmit: 2,
-    redo: 3,
-    need_help: 4,
-    working_on_it: 5,
-    fix_and_resubmit: 6,
-    ready_to_mark: 7,
-    discuss: 8,
-    demonstrate: 9,
-    complete: 10
-  }
-
   $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
@@ -48,22 +34,6 @@ angular.module("doubtfire.common.services.projects", [])
       (failure) ->
         onFailure?(failure)
     )
-
-
-  ###
-  projects's can update their task stats
-  converts the | delimited stats to its component arrays
-  @param  student [Student|Project] The student's stats to update
-  ###
-  projectService.updateTaskStats = (project, new_stats_str) ->
-    new_stats = project.task_stats
-    for i, value of new_stats_str.split("|")
-      if i < new_stats.length
-        new_stats[i].value = Math.round(100 * value)
-      else
-        break
-
-    project.task_stats = new_stats
 
   projectService.mapTask = ( task, unit, project ) ->
     td = unit.taskDef(task.task_definition_id)
@@ -118,10 +88,15 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
+
+    task.inFinalState = ->
+      task.status in taskService.finalStatuses
+
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
-    task.updateTaskStatus = (project, new_stats) ->
-      projectService.updateTaskStats(project, new_stats)
+    task.updateTaskStatus = (status, new_stats) ->
+      task.status = status
+      task.project().updateTaskStats(new_stats)
     task.needsSubmissionDetails = ->
       task.has_pdf == null || task.has_pdf == undefined
     task.statusClass = ->
@@ -184,15 +159,30 @@ angular.module("doubtfire.common.services.projects", [])
     project.tasks = project.tasks.map (task) ->
       projectService.mapTask task, unit, project
     project.tasks = _.sortBy(project.tasks, (t) -> t.definition.abbreviation).reverse()
+    project.target_tasks = () ->
+      projectService.tasksInTargetGrade(project)
     project
 
   projectService.addProjectMethods = (project) ->
+    return project if project.updateTaskStats?
+    #
+    # Update the project's task stats from a new stats string
+    #
+    project.updateTaskStats = (new_stats) ->
+      updated_stats = project.task_stats
+      for i, value of new_stats.split("|")
+        if i < updated_stats.length
+          updated_stats[i].value = Math.round(100 * value)
+        else
+          break
+      project.task_stats = updated_stats
+
     project.updateBurndownChart = ->
       Project.get { id: project.project_id }, (response) ->
         project.burndown_chart_data = response.burndown_chart_data
         Visualisation.refreshAll()
 
-    project.incorporateTask = (newTask) ->
+    project.incorporateTask = (newTask, callback) ->
       unless project.tasks?
         project.tasks = []
       currentTask = _.find(project.tasks, {task_definition_id: newTask.task_definition_id})
@@ -201,6 +191,9 @@ angular.module("doubtfire.common.services.projects", [])
       else
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
+      if currentTask.isGroupTask() and !currentTask.groups?
+        projectService.updateGroups(currentTask.project(), callback, true)
+      callback?()
       currentTask
 
     project.refresh = (unit_obj) ->
@@ -208,6 +201,8 @@ angular.module("doubtfire.common.services.projects", [])
         _.extend project, response
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
+
+    project
 
   projectService.getProject = (project, unit, onSuccess, onFailure) ->
     projectId = if _.isNumber(project) then project else project?.project_id
@@ -226,14 +221,14 @@ angular.module("doubtfire.common.services.projects", [])
           onFailure?(failure)
       )
 
-  projectService.updateGroups = (project) ->
-    if project.groups?
+  projectService.updateGroups = (project, onSuccess, force = false) ->
+    if project.groups? or force
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
+        onSuccess?(project)
 
   projectService.getGroupForTask = (project, task) ->
-    return null if not task.definition.group_set
-
+    return null unless task.definition.group_set
     _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->

@@ -38,31 +38,31 @@
               <tbody>
                 <tr ng-repeat="student in filteredStudents = (unit.students | filter:studentSearch) | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
                   <td>
-                    <a href="#/projects/{{student.project_id}}?unitRole={{assessingUnitRole.id}}">{{student.student_id}}</a>
+                    <a ng-click="student.viewProject(true)">{{student.student_id}}</a>
                   </td>
                   <td>{{student.first_name}}</td>
                   <td>{{student.last_name}}</td>
                   <td>
-                    <a href="mailto:{{student.email}}">{{student.student_email}}</a>
+                    <a href="mailto:{{student.student_email}}">{{student.student_email}}</a>
                   </td>
                   <td>
-                    <span tooltip-html="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
-                      <div class="btn-group dropdown" dropdown is-open="status.isopen">
+                    <div class="btn-group dropdown" dropdown is-open="status.isopen">
+                      <span tooltip-html-unsafe="<strong>{{student.tutorial.meeting_day}} {{student.tutorial.meeting_time | date: 'shortTime'}}</strong><br/> {{student.tutorial.meeting_location}} - {{student.tutorial.tutor_name}}">
                         <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
                           {{student.tutorial ? student.tutorial.abbreviation : 'None'}} <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
-                          <li><a ng-click="switchToTutorial(student, nil); status.isopen = false">None</a></li>
-                          <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToTutorial(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
-                        </ul>
-                      </div>
-                    </span>
+                      </span>
+                      <ul class="dropdown-menu">
+                        <li><a ng-click="switchToTutorial(student, nil); status.isopen = false">None</a></li>
+                        <li ng-repeat="tutorial in unit.tutorials | orderBy:'abbreviation'"><a ng-click="switchToTutorial(student, tutorial); status.isopen = false" ng-hide="tutorial == student.tutorial">{{tutorial.abbreviation}}</a></li>
+                      </ul>
+                    </div>
                   </td>
                   <td>
-                    <button ng-show="student.enrolled" class="btn col-sm-6 btn-success" ng-click="withdraw(student)">
+                    <button ng-show="student.enrolled" class="btn col-sm-8 btn-success" ng-click="withdraw(student)">
                       <i class="fa fa-check" tooltip="Click to withdraw {{student.first_name}}"></i>
                     </button>
-                    <button ng-hide="student.enrolled" class="btn col-sm-6 btn-danger" ng-click="enrol(student)">
+                    <button ng-hide="student.enrolled" class="btn col-sm-8 btn-danger" ng-click="enrol(student)">
                       <i class="fa fa-times" tooltip="Click to enrol {{student.first_name}}"></i>
                     </button>
                   </td>

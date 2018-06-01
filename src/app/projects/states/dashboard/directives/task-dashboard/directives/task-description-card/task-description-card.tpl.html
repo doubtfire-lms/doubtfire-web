@@ -11,17 +11,17 @@
       <li>
         <strong>{{grades.names[taskDef.target_grade]}} Task</strong>
         &mdash;
-        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> taskDef.
+        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> task.
       </li>
       <li>
-        <strong>Target Date</strong>
-        &mdash;
-        You should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
-      </li>
-      <li ng-show="taskDef.due_date">
         <strong>Due Date</strong>
         &mdash;
-        You must complete this task by <strong>{{taskDef.due_date | humanizedDate}}</strong> or your tutor may not assess your work.
+        The date the task considered to be due, you should aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
+      </li>
+      <li ng-show="should_show_deadline()">
+        <strong>Deadline</strong>
+        &mdash;
+        Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | humanizedDate}}</strong>. Your work will be checked in your portfolio.
       </li>
     </ul>
   </div><!--/key-info-footer-->
@@ -32,7 +32,6 @@
       ng-show="taskDef.has_task_pdf"
       target="_blank"
       class="btn btn-primary">
-      <i class="fa fa-file-pdf-o"></i>
       <i class="fa fa-download"></i>
       Download Task Sheet
     </a>
@@ -42,7 +41,6 @@
       ng-show="taskDef.has_task_resources"
       target="_blank"
       class="btn btn-primary">
-      <i class="fa fa-file-zip-o"></i>
       <i class="fa fa-download"></i>
       Download Task Resources
     </a>

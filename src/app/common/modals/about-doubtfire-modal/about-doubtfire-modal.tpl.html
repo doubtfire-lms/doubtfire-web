@@ -2,11 +2,11 @@
   <div class="modal-header">
     <i class="logo"></i>
     <h1 class="full logo">
-      {{externalName}}
-      <small ng-hide="externalName == 'Doubtfire'">
+      {{externalName.value}}
+      <small ng-hide="externalName.value == 'Doubtfire'">
         Powered By Doubtfire
       </small>
-      <small ng-show="externalName == 'Doubtfire'">
+      <small ng-show="externalName.value == 'Doubtfire'">
         Version 5
       </small>
     </h1>
@@ -23,7 +23,7 @@
       </li>
     </ul>
     <p class="text-muted text-center">
-      &copy; 2012&ndash;2017. Made in Melbourne.
+      &copy; 2012&ndash;2018. Made in Melbourne.
     </p>
     <p class="text-muted text-center logo-smallprint">
       Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us on <a href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!

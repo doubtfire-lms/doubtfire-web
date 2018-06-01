@@ -61,7 +61,7 @@ angular.module('doubtfire.common.file-uploader', [])
         icon:       'fa-file-pdf-o'
         name:       'PDF'
       csv:
-        extensions: ['csv']
+        extensions: ['csv','xls','xlsx']
         icon:       'fa-file-excel-o'
         name:       'CSV'
       code:
@@ -71,7 +71,7 @@ angular.module('doubtfire.common.file-uploader', [])
         icon:       'fa-file-code-o'
         name:       'code'
       image:
-        extensions: ['png', 'gif', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+        extensions: ['png', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
         name:       'image'
         icon:       'fa-file-image-o'
       zip:

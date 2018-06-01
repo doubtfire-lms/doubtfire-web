@@ -14,22 +14,27 @@
         <div class="buttons">
           <div class="btn-group">
             <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'allStudents'">
-              <i class="fa fa-globe" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students, even those without portfolios"></i>
+              <i class="fa fa-globe" tooltip-placement="top" tooltip="Show all students, even those without portfolios"></i>
             </label>
             <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'withPortfolio'">
-              <i class="fa fa-book" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only students with portfolios"></i>
+              <i class="fa fa-book" tooltip-placement="top" tooltip="Show only students with portfolios"></i>
             </label>
           </div>
           <div class="btn-group">
             <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
-              <i class="fa fa-university" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show all students"></i>
+              <i class="fa fa-university" tooltip-placement="top" tooltip="Show all students"></i>
             </label>
             <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
-              <i class="fa fa-pencil" tooltip-placement="{{ fullscreen ? 'bottom' : 'top' }}" tooltip="Show only my students"></i>
+              <i class="fa fa-pencil" tooltip-placement="top" tooltip="Show only my students"></i>
             </label>
           </div>
           <div class="btn-group btn-group-sm select-portfolio-grade">
-            <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
+              <label class="btn btn-default text-center" ng-model="filterOptions.selectedGrade" btn-radio="-1">
+                  <span class="grade-icon" tooltip="Show all portfolios" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}">All</span>
+              </label>
+          </div>
+          <div class="btn-group btn-group-sm select-portfolio-grade">
+            <label ng-repeat="grade in grades" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
               <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
             </label>
           </div>
@@ -94,8 +99,7 @@
                 <bar
                   ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
                   value="bar.value"
-                  type="{{statusClass(bar.key)}}"
-                  tooltip="{{bar.value}}% {{statusText(bar.key)}}">
+                  type="{{statusClass(bar.key)}}">
                   <span ng-hide="bar.value < 10">{{bar.value}}%</span>
                 </bar>
               </progress>

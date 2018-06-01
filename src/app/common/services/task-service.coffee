@@ -18,6 +18,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'demonstrate'
     'complete'
     'fail'
+    'time_exceeded'
   ]
 
   taskService.validTopTask = [
@@ -43,6 +44,13 @@ angular.module("doubtfire.common.services.tasks", [])
     'discuss'
   ]
 
+  taskService.finalStatuses = [
+    'complete'
+    'fail'
+    'time_exceeded'
+    'do_not_resubmit'
+  ]
+
   taskService.gradeableStatuses = [
     'discuss'
     'demonstrate'
@@ -55,6 +63,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'do_not_resubmit'
     'complete'
     'fail'
+    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -91,6 +100,7 @@ angular.module("doubtfire.common.services.tasks", [])
     DEM: 'demonstrate'
     COM: 'complete'
     FAL: 'fail'
+    TIE: 'time_exceeded'
 
   taskService.learningWeight =
     fail:               0.0
@@ -104,6 +114,7 @@ angular.module("doubtfire.common.services.tasks", [])
     discuss:            0.8
     demonstrate:        0.8
     complete:           1.0
+    time_exceeded:      0.3
 
   taskService.statusAcronym =
     ready_to_mark:      'RTM'
@@ -117,6 +128,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'DEM'
     complete:           'COM'
     fail:               'FAL'
+    time_exceeded:      'TIE'
 
   taskService.statusLabels =
     ready_to_mark:      'Ready for Feedback'
@@ -130,6 +142,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'Demonstrate'
     complete:           'Complete'
     fail:               'Fail'
+    time_exceeded:      'Time Exceeded'
 
   taskService.statusIcons =
     ready_to_mark:      'fa fa-thumbs-o-up'
@@ -143,6 +156,7 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:        'fa fa-commenting'
     complete:           'fa fa-check'
     fail:               'fa fa-times'
+    time_exceeded:      'fa fa-clock-o'
 
   taskService.statusColors =
     # Please make sure this matches task-status-colors.less
@@ -157,19 +171,22 @@ angular.module("doubtfire.common.services.tasks", [])
     demonstrate:       '#428bca'
     complete:          '#5BB75B'
     fail:              '#d93713'
+    time_exceeded:     '#d93713'
 
   taskService.statusSeq =
     not_started:        1
     fail:               2
     do_not_resubmit:    3
-    redo:               4
-    need_help:          5
-    working_on_it:      6
-    ready_to_mark:      7
-    fix_and_resubmit:   8
-    discuss:            9
-    demonstrate:       10
-    complete:          11
+    time_exceeded:      4
+    redo:               5
+    need_help:          6
+    working_on_it:      7
+    ready_to_mark:      8
+    fix_and_resubmit:   9
+    discuss:           10
+    demonstrate:       11
+    complete:          12
+
 
   taskService.helpDescriptions =
     # detail = in a brief context to the student
@@ -198,7 +215,7 @@ angular.module("doubtfire.common.services.tasks", [])
     do_not_resubmit:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
-      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
     fix_and_resubmit:
       detail: "Your submission requires some more work"
       reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
@@ -219,6 +236,10 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "You have failed this task"
       reason: "You have not successfully demonstrated the required learning for this task. This may be due to plagiarism detection or assessment under testing conditions."
       action: "You should discuss this with your tutor and/or the convenor."
+    time_exceeded:
+      detail: "Time limit exceeded"
+      reason: "This work was submitted after the deadline, having missed both the target date and deadline."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -249,6 +270,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
@@ -287,24 +309,24 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return number of days until task hits target date, or false if already
   # completed
   taskService.daysUntilTargetDate = (task) ->
-    return false if task.status == 'complete'
+    return false if task.status in taskService.finalStatuses
     moment(task.definition.target_date).diff(moment(), 'days')
 
   # Return number of days until task is due, or false if already completed
   taskService.daysUntilDueDate = (task) ->
-    return false if !task.definition.due_date? || task.status == 'complete'
+    return false if !task.definition.due_date? || task.status in taskService.finalStatuses
     moment(task.definition.due_date).diff(moment(), 'days')
 
   # Return number of days task is overdue from target, or false if not
   taskService.daysPastTargetDate = (task) ->
-    return false if task.status == 'complete'
+    return false if task.status in taskService.finalStatuses
     diffDays = moment().diff(moment(task.definition.target_date), 'days')
     return false if !diffDays? || diffDays <= 0
     diffDays
 
   # Return number of days task is overdue, or false if not overdue
   taskService.daysPastDueDate = (task) ->
-    return false if task.status == 'complete' || !task.definition.due_date?
+    return false if task.status in taskService.finalStatuses || !task.definition.due_date?
     diffDays = moment().diff(moment(task.definition.due_date), 'days')
     return false if !diffDays? || diffDays <= 0
     diffDays
@@ -382,10 +404,9 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
     task.id = response.id
-    task.status = response.status
     task.times_assessed = response.times_assessed
     task.submisson_date = response.submisson_date
-    task.updateTaskStatus project, response.new_stats
+    task.updateTaskStatus response.status, response.new_stats
     task.processing_pdf = response.processing_pdf
     task.grade = response.grade
     if response.status == status
@@ -393,10 +414,10 @@ angular.module("doubtfire.common.services.tasks", [])
       alertService.add("success", "Status saved.", 2000)
       if response.other_projects?
         _.each response.other_projects, (details) ->
-          proj = unit.findStudent(details.id)
+          proj = unit.findStudent(details.id) if unit.students?
           if proj?
             # Update the other project's task status overview
-            task.updateTaskStatus proj, details.new_stats
+            task.updateTaskStatus response.status, details.new_stats
             # Update the other project's task
             other_task = proj.findTaskForDefinition(task.definition.id)
             if other_task?
@@ -474,7 +495,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.taskKeyToIdString = (task) ->
     key = task.taskKey()
-    "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(".", "")
+    "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(/[.#]/g, "-")
 
   taskService.taskKey = (task) ->
     {
