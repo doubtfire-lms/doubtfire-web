@@ -523,7 +523,6 @@ angular.module("doubtfire.common.services.tasks", [])
     form.append 'type', commentType
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id
-    console.log mediaURL
 
     if commentType == "image"
       form.append 'attachment', mediaURL[0]
@@ -534,8 +533,6 @@ angular.module("doubtfire.common.services.tasks", [])
       xhr.onload = (e) ->
         taskService.data = this.response
         form.append 'attachment', taskService.data, 'a-comment.webm'
-        console.log "[DATA]"
-        console.log taskService.data
       xhr.send()
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
