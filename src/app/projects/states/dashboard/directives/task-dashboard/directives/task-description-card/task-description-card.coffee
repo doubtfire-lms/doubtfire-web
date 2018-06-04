@@ -29,6 +29,5 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 
     $scope.should_show_deadline = () ->
       # Returns true if there is a due date, and we are past it.
-      now = new Date()
-      $scope.taskDef.due_date? && now >= new Date($scope.taskDef.target_date)
+      $scope.taskDef?.due_date? && new Date() >= new Date($scope.taskDef.target_date)
 )
