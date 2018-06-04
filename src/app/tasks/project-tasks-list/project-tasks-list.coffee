@@ -35,10 +35,16 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
       result = task.definition.abbreviation
 
       if task.definition.is_graded
-        result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
+        if task.grade?
+          result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
+        else
+          result += " (?)"
       
       if task.definition.max_quality_pts > 0
-        result += " (" + task.quality_pts + "/" + task.definition.max_quality_pts + ")"
+        if task.quality_pts?
+          result += " (" + task.quality_pts + "/" + task.definition.max_quality_pts + ")"
+        else
+          result += " (?/" + task.definition.max_quality_pts + ")"
       
       result
 )
