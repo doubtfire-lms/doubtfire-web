@@ -71,6 +71,11 @@ angular.module("doubtfire.common.services.tasks", [])
     'ready_to_mark'
     'discuss'
     'complete'
+    'time_exceeded'
+    'fail'
+    'fix_and_resubmit'
+    'do_not_resubmit'
+    'redo'
   ]
 
   taskService.submittableStatuses = [
