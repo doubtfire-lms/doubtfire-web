@@ -16,8 +16,13 @@
       <li>
         <strong>Due Date</strong>
         &mdash;
-        Aim to have this task completed by <strong>{{taskDef.target_date | humanizedDate}}</strong>.
+        Aim to have this task completed by <strong>{{dueDate() | humanizedDate}}</strong>.
       </li>
+      <li ng-show="task && task.extensions > 0">
+          <strong>Number of extensions</strong>
+          &mdash;
+          you have requested <strong>{{task.extensions}}</strong> extensions for this task.
+        </li>
       <li ng-show="should_show_deadline()">
         <strong>Deadline</strong>
         &mdash;
@@ -25,7 +30,13 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show="taskDef.has_task_pdf || taskDef.has_task_resources">
+  <div class="card-footer" ng-show="task || taskDef.has_task_pdf || taskDef.has_task_resources">
+    <a
+      ng-click="applyForExtension()"
+      class="btn btn-success">
+      <i class="fa fa-medkit"></i>
+      Request Extension
+    </a>
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"

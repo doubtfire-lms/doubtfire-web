@@ -1,11 +1,16 @@
 angular.module("doubtfire.api.models.task", [])
 
-.factory("Task", (resourcePlus, api, currentUser) ->
+.factory("Task", (resourcePlus, api, currentUser, $http) ->
   Task = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id", { project_id: "@project_id", task_definition_id: "@task_definition_id" }
 
   Task.SubmissionDetails = resourcePlus "/projects/:id/task_def_id/:task_definition_id/submission_details"
 
   Task.summaryData = resourcePlus "/tasks/:id", { id: "@id" }
+
+  Task.applyForExtension = (task, onSuccess, onError) ->
+    $http.post("#{api}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/extension", { }).then(
+      (data) -> onSuccess(data)
+      (response) -> onError(response))
 
   #
   # Generates a url for the given task

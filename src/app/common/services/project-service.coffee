@@ -68,6 +68,8 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
       taskService.addComment(task, textString, success, failure)
+    task.applyForExtension = (onSuccess, onError) ->
+      taskService.applyForExtension(task, onSuccess, onError)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.isToBeCompletedSoon = ->
