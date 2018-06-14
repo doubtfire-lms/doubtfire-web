@@ -31,8 +31,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     $scope.dueDate = () ->
       if $scope.task?.due_date?
         return $scope.task.due_date
+      else if $scope.taskDef?
+        return $scope.taskDef?.target_date
       else
-        return $scope.taskDef.target_date
+        return new Date()
 
     $scope.should_show_deadline = () ->
       # Returns true if we are within 2 weeks of deadline (ms * s * m * h * days = 1,209,600,000)
