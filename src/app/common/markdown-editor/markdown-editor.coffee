@@ -255,7 +255,6 @@ angular.module('doubtfire.common.markdown-editor', [])
           source = audioCtx.createMediaStreamSource(input)
         else
           source = audioSource
-
         # Initialise analyser
         analyser = audioCtx.createAnalyser()
         analyser.fftSize = 2048
@@ -273,7 +272,6 @@ angular.module('doubtfire.common.markdown-editor', [])
           result.blob().then (blob) ->
             size = blob.size
             type = blob.type
-
             fileReader = new FileReader
             fileReader.readAsDataURL blob
             fileReader.addEventListener 'loadend', ->
@@ -282,16 +280,14 @@ angular.module('doubtfire.common.markdown-editor', [])
               downloadLink = document.getElementById('btnSend')
               mediaUrl = window.URL.createObjectURL(downloadMediaContent)
               downloadLink.href = mediaUrl
-              taskService.addMediaComment CommentResourceService.task, mediaUrl, $scope.currentCommentType
+              taskService.addMediaComment CommentResourceService.task, downloadMediaContent, $scope.currentCommentType
               return
             return
           return
       #---------------------------------------------
       # pass initRecording a cb to call when stream is ready
       initRecording = ->
-
         if navigator.mediaDevices and navigator.mediaDevices.getUserMedia
-          console.log 'getUserMedia supported.'
           navigator.getUserMedia {
             audio: true
           }, ((stream) ->
@@ -311,7 +307,6 @@ angular.module('doubtfire.common.markdown-editor', [])
               prepareVisualise audio, false
               return
             StartRecord()
-
           ), (err) ->
             console.log 'The following gUM error occured: ' + err
           return
@@ -321,7 +316,6 @@ angular.module('doubtfire.common.markdown-editor', [])
       #---------------------------------------------
 
       initElements()
-      #initRecording()
       return
     
 

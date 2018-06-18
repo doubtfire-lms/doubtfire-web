@@ -544,17 +544,12 @@ angular.module("doubtfire.common.services.tasks", [])
     form.append 'type', commentType
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id
+    console.log(mediaURL)
 
     if commentType == "image"
       form.append 'attachment', mediaURL[0]
     else if commentType == "audio"
-      xhr = new XMLHttpRequest()
-      xhr.open 'GET', mediaURL, true
-      xhr.responseType = 'blob'
-      xhr.onload = (e) ->
-        taskService.data = this.response
-        form.append 'attachment', taskService.data, 'a-comment.webm'
-      xhr.send()
+      form.append 'attachment', mediaURL, 'a-comment.webm'
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
