@@ -47,7 +47,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.finalStatuses = [
     'complete'
     'fail'
-    'time_exceeded'
     'do_not_resubmit'
   ]
 
@@ -63,7 +62,6 @@ angular.module("doubtfire.common.services.tasks", [])
     'do_not_resubmit'
     'complete'
     'fail'
-    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -537,6 +535,7 @@ angular.module("doubtfire.common.services.tasks", [])
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
+      task.project().updateBurndownChart()
       onSuccess(response)
 
     Task.applyForExtension(task, interceptSuccess, onError)
