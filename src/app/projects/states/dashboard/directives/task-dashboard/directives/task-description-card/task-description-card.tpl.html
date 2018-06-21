@@ -30,13 +30,7 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show="task || taskDef.has_task_pdf || taskDef.has_task_resources">
-    <a
-      ng-click="applyForExtension()"
-      class="btn btn-success">
-      <i class="fa fa-medkit"></i>
-      Request Extension
-    </a>
+  <div class="card-footer" ng-show=" (!task.inTerminalState()) || taskDef.has_task_pdf || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
@@ -54,6 +48,13 @@
       class="btn btn-primary">
       <i class="fa fa-download"></i>
       Download Resources
+    </a>
+    <a
+      ng-click="applyForExtension()"
+      ng-hide="task.inTerminalState()"
+      class="btn btn-success">
+      <i class="fa fa-medkit"></i>
+      Request Extension
     </a>
   </div><!--/description-footer-->
 </div>

@@ -93,6 +93,8 @@ angular.module("doubtfire.common.services.projects", [])
 
     task.inFinalState = ->
       task.status in taskService.finalStatuses
+    task.inTerminalState = ->
+      task.status in taskService.terminalStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
