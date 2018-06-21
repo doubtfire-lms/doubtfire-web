@@ -77,6 +77,11 @@
             <i class="fa fa-eye"></i>
           </span>
         </div>
+        <div class="task-subscript-badges">
+          <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
+            {{task.gradeDesc()}}
+          </span>
+        </div>
       </div><!--/badges-->
     </li><!--/task-->
     <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
