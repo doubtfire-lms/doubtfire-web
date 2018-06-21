@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService) ->
   projectService = {}
 
   projectService.loadedProjects = null
@@ -121,6 +121,10 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.hasTaskKey(task, key)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
+    task.gradeDesc = () ->
+      gradeService.gradeAcronyms[task.grade]
+    task.hasGrade = () ->
+      task.grade?
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },

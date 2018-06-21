@@ -64,6 +64,35 @@
       status-icon {
         width: 100%;
       }
+      .task-subscript-badges {
+        position: absolute;
+        top: 1.5em;
+        right: -12px;
+        & > .task-subscript-badge {
+          border-radius: 100%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          color: white;
+          float: right;
+          font-weight: bold;
+          & + .task-subscript-badge {
+            margin-right: -3px;
+          }
+          &.grade-badge {
+            background-color: #000000;
+            color: white;
+          }
+          // Only shown child? Push down a bit as it looks a bit weird
+          &:only-child {
+            margin-right: 6px;
+            margin-top: 3px;
+          }
+        }
+      }
       .task-superscript-badges {
         position: absolute;
         top: -7px;
