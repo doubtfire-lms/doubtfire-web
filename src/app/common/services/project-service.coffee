@@ -58,6 +58,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->
       taskService.canReuploadEvidence(task)
+    task.requiresFileUpload = ->
+      task.definition.upload_requirements.length > 0
     task.plagiarismDetected = ->
       taskService.plagiarismDetected(task)
     task.isGroupTask = ->
