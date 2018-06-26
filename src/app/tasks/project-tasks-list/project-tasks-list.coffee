@@ -15,7 +15,7 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     onSelect: "="
     inMenu: '@'
 
-  controller: ($scope, $modal, taskService, groupService, analyticsService) ->
+  controller: ($scope, $modal, taskService, groupService, analyticsService, gradeService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"
 
     # functions from task service
@@ -30,4 +30,21 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
       groupService.groupSetName(id, $scope.unit)
 
     $scope.hideGroupSetName = $scope.unit.group_sets.length is 0
+
+    $scope.taskText = (task) ->
+      result = task.definition.abbreviation
+
+      if task.definition.is_graded
+        if task.grade?
+          result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
+        else
+          result += " (?)"
+      
+      if task.definition.max_quality_pts > 0
+        if task.quality_pts?
+          result += " (" + task.quality_pts + "/" + task.definition.max_quality_pts + ")"
+        else
+          result += " (?/" + task.definition.max_quality_pts + ")"
+      
+      result
 )

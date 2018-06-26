@@ -57,15 +57,22 @@ angular.module('doubtfire.units.states.edit', [
     groupsTab:
       title: "Groups"
       seq:   6
+      deselect: () -> $scope.unit.refreshGroups()
 
   # Set the active tab
   $scope.setActiveTab = (tab) ->
     # Do nothing if we're switching to the same tab
     return if tab is $scope.activeTab
+    
     # Actions to perform when changing tab
-    $scope.activeTab?.active = false
-    $scope.activeTab = tab
-    $scope.activeTab.active = true
+    $scope.activeTab?.active = false  # Deactivate original tab
+    
+    # run de-select actions...
+    $scope.activeTab.deselect?()
+
+    $scope.activeTab = tab            # Switch tabs
+    $scope.activeTab.active = true    # Make it active
+    
     # Actions to take when selecting this tab
     if $scope.assessingUnitRole?
       analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
@@ -74,16 +81,10 @@ angular.module('doubtfire.units.states.edit', [
 
   $scope.activeTab = $scope.tabs.unitTab
 
-  Convenor.query().$promise.then( (convenors) ->
-    Tutor.query().$promise.then( (tutors) ->
-      staff = _.union(convenors,tutors)
-      staff = _.map(staff, (convenor) ->
-        return { id: convenor.id, full_name: convenor.first_name + ' ' + convenor.last_name }
+  Tutor.query(
+    (tutors) ->
+      $scope.staff = _.map(tutors, (tutor) ->
+        return { id: tutor.id, full_name: tutor.first_name + ' ' + tutor.last_name }
       )
-      staff = _.uniq(staff, (item) ->
-        return item.id
-      )
-      $scope.staff = staff
-    )
   )
 )

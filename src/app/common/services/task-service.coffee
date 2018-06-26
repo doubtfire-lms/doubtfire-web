@@ -47,7 +47,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.finalStatuses = [
     'complete'
     'fail'
-    'time_exceeded'
     'do_not_resubmit'
   ]
 
@@ -63,7 +62,6 @@ angular.module("doubtfire.common.services.tasks", [])
     'do_not_resubmit'
     'complete'
     'fail'
-    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -71,6 +69,11 @@ angular.module("doubtfire.common.services.tasks", [])
     'ready_to_mark'
     'discuss'
     'complete'
+    'time_exceeded'
+    'fail'
+    'fix_and_resubmit'
+    'do_not_resubmit'
+    'redo'
   ]
 
   taskService.submittableStatuses = [
@@ -335,7 +338,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
     return if task.status == status
-    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
+    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.requiresFileUpload()
     if requiresFileUpload
       taskService.presentTaskSubmissionModal(task, status)
     else
@@ -408,6 +411,8 @@ angular.module("doubtfire.common.services.tasks", [])
     task.submisson_date = response.submisson_date
     task.updateTaskStatus response.status, response.new_stats
     task.processing_pdf = response.processing_pdf
+    task.due_date = response.due_date
+    task.extensions = response.extensions
     task.grade = response.grade
     if response.status == status
       project.updateBurndownChart?()
@@ -558,6 +563,14 @@ angular.module("doubtfire.common.services.tasks", [])
         task.comments.unshift(taskService.mapComment(response))
       (response) -> #failure
         #here
+  taskService.applyForExtension = (task, onSuccess, onError) ->
+    interceptSuccess = (response) ->
+      task.due_date = response.data.due_date
+      task.extensions = response.data.extensions
+      task.project().updateBurndownChart()
+      onSuccess(response)
+
+    Task.applyForExtension(task, interceptSuccess, onError)
 
   taskService
 )
