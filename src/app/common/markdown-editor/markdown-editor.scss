@@ -7,21 +7,6 @@ $markdown-editor-height: 15px;
   }
 }
 
-  .markdown-editor-actions {
-    bottom: 0.5em;
-    right: 1em;
-    z-index: 2;
-  }
-
-  .markdown-editor-action {
-    color: grey;
-    font-size: 1em;
-    cursor: pointer;
-    &:hover {
-      color: $brand-primary;
-    }
-  }
-
 .markdown-editor, .markdown-editor-inner-context-text {
   position: relative;
   cursor: text;
@@ -164,7 +149,7 @@ $markdown-editor-height: 15px;
 // Style for comment type selector icons
 .commenttype-selector  { 
   line-height: inherit;
-  font-size: 85%; 
+  font-size: 85%;
   position: absolute;
   left: 0;
   width: 100%;

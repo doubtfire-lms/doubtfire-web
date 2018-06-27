@@ -12,4 +12,5 @@ angular.module("doubtfire.common.services", [
   'doubtfire.common.services.dates'
   'doubtfire.common.services.listener'
   'doubtfire.common.services.comments'
+  'doubtfire.common.services.media-service'
 ])

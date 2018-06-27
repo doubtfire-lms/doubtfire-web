@@ -1,0 +1,24 @@
+<form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
+  <markdown-editor focus="focus" autofocus="autofocus" class="editor col-sm-12" ng-model="comment.text" on-enter="enterDown"
+    placeholder="Make a comment..." height="auto">
+  </markdown-editor>
+
+  <!-- Audio -->
+  <div class="markdown-editor-actions">
+    <span class="markdown-editor-action fa-stack fa-lg" popover-template="audioPopover">
+      <i class="fa fa-microphone commenttype-selector"></i>
+    </span>
+
+    <!-- Image -->
+    <span ng-click="currentCommentType = commentType.IMAGE" class="markdown-editor-action fa-stack fa-lg" tooltip="Image comment">
+      <i class="fa fa-image commenttype-selector"></i>
+    </span>
+  </div>
+</form>
+
+<!-- The HTML which will be injected into the audio popover -->
+<script type="text/ng-template" id="audioRecorderPopover.html">
+  <div>
+    <audio-recorder></audio-recorder>
+  </div>
+</script>

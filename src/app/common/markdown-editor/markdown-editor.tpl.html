@@ -9,91 +9,38 @@
   </div>
 
   <!-- Image comment editor -->
- <div class="markdown-editor-inner-context-image {{upload.display.error ? 'file-rejected' : ''}}" ng-show="currentCommentType == commentType.IMAGE">
-  <div ngf-select ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
-    ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
-    ngf-drop-available="dropSupported">
-    <br>
-    <p class="fa fa-file-image-o fa-2x"></p>
-    <p ng-show="upload.display.error">
-      Invalid file type!
-    </p>
-    <p ng-show="dropSupported" ng-hide="upload.display.error">
-      <small>Drop image file or click to select.</small>
-    </p>
-    <p ng-hide="dropSupported || upload.display.error">
-      Click to select image file
-    </p>
+  <div class="markdown-editor-inner-context-image {{upload.display.error ? 'file-rejected' : ''}}" ng-show="currentCommentType == commentType.IMAGE">
+    <div ngf-select ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
+      ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
+      ngf-drop-available="dropSupported">
+      <br>
+      <p class="fa fa-file-image-o fa-2x"></p>
+      <p ng-show="upload.display.error">
+        Invalid file type!
+      </p>
+      <p ng-show="dropSupported" ng-hide="upload.display.error">
+        <small>Drop image file or click to select.</small>
+      </p>
+      <p ng-hide="dropSupported || upload.display.error">
+        Click to select image file
+      </p>
+    </div>
+    <!--/drop-zone-->
+    <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
+      <br>
+      <span class="selected-file" stype="{font-size: 12px}">
+        <i class="file-type fa fa-file-image-o"></i>
+        {{formatImageName(upload.model[0].name)}}
+      </span>
+      <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
+        <i class="fa fa-times"></i>
+      </a>
+      <!-- Buttons experiment -->
+      <br>
+      <input type="button" ng-click="postImageComment()" class="btn btn-primary btn-upload" value="Post Comment">
+      </input>
+      <!--/upload-button-->
+    </div>
+    <!--/selected-file-->
   </div>
-  <!--/drop-zone-->
-  <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
-    <br>
-    <span class="selected-file" stype="{font-size: 12px}">
-      <i class="file-type fa fa-file-image-o"></i>
-      {{formatImageName(upload.model[0].name)}}    
-    </span>
-    <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
-      <i class="fa fa-times"></i>
-    </a>
-     <!-- Buttons experiment -->
-     <br>
-    <input type="button"
-      ng-click="postImageComment()"
-      class="btn btn-primary btn-upload" value="Post Comment">
-  </input><!--/upload-button-->
-  </div><!--/selected-file-->
-</div>
-
-  <!-- Audio comment editor -->
-  <div class="markdown-editor-inner-context-audio container" ng-show="currentCommentType == commentType.AUDIO">
-
-      <audio id='audioPlayer'></audio>
-
-      <table>
-          <tr>
-            <td>
-              <input type="image" class="audio-button" id='btnRecord' src="/assets/icons/record.png"/>
-            </td>
-            <td>
-              <input type="image" class="audio-button" id='btnPlay' src="/assets/icons/play.png" disabled/>
-            </td>
-            <td>
-              <canvas class="audio-visualiser" id="audio-visualiser"></canvas>
-            </td>
-            <td>
-              <input type="image" class="audio-button" id='btnSend' src="/assets/icons/send.png" disabled/>
-            </td>
-          </tr>  
-      </table>    
-
-  </div>
-
-  <div class="markdown-editor-actions">
-    <!-- PREVIEW COMMENT -->
-    <span ng-click="isEditing = !isEditing" class="markdown-editor-action fa-stack fa-lg" tooltip="{{isEditing ? 'View preview' : 'Continue editing'}}">
-      <i class="fa fa-{{isEditing ? 'eye' : 'pencil'}} fa-stack-1x"></i>
-    </span>
-    <!-- MARKDOWN GUIDE -->
-    <a href="https://en.support.wordpress.com/markdown-quick-reference/" target="_blank" class="markdown-editor-action fa-stack fa-lg"
-      tooltip="Markdown guide">
-      <i class="fa fa-question fa-stack-1x"></i>
-    </a>
-    <!-- COMMENT TYPE SELECTOR ICONS -->
-    <font color="#cecece">|</font>
-    <!-- Text -->
-    <!-- Clicking on the span changes the value of the comment type enum -->
-    <span ng-click="currentCommentType = commentType.TEXT" class="markdown-editor-action fa-stack fa-lg" tooltip="Text comment">
-      <i class="fa fa-font commenttype-selector"></i>
-    </span>
-    <!-- Audio -->
-    <span ng-click="currentCommentType = commentType.AUDIO; audioSetup()" class="markdown-editor-action fa-stack fa-lg"
-      tooltip="Audio comment">
-      <i class="fa fa-microphone commenttype-selector"></i>
-    </span>
-    <!-- Image -->
-    <span ng-click="currentCommentType = commentType.IMAGE" class="markdown-editor-action fa-stack fa-lg" tooltip="Image comment">
-      <i class="fa fa-image commenttype-selector"></i>
-    </span>
-  </div>
-
 </div>

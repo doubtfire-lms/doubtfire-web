@@ -21,9 +21,6 @@ angular.module("doubtfire.common.services.comments", [])
     if(audioURL?)
       CommentResourceService.commentAudioUrl = audioURL
   ###
-  CommentResourceService.setupAudioContext = ->
-    if (CommentResourceService.audioContext == undefined)
-      CommentResourceService.audioContext = new ((window.AudioContext or webkitAudioContext))
 
   CommentResourceService.setCommentType = (commentType) ->
     if (commentType?)

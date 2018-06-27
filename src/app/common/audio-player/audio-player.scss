@@ -1,18 +1,17 @@
 .audio-button{
     width: 30px;
     border-radius: 70%;
+    background-color: #f03d25;
+  }
+.audio-button:hover {
+  }
 
-  }
-.audio-button:hover { 
-    background-color: rgb(255, 94, 0);
-  }
-  
-.audio-button:disabled { 
+.audio-button:disabled {
     opacity: 0.3;
     filter: alpha(opacity=30); /* msie */
     background-color: #000;
   }
-  
+
 .audio-visualiser {
     height: 26px;
     width: 100%;

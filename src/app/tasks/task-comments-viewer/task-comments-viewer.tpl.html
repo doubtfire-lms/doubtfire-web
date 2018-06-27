@@ -14,10 +14,7 @@
         tooltip-append-to-body="true"
         tooltip-popover-delay="500"
         tooltip-placement="left">
-      </user-icon><!--/user-icon-->
-
-      <!--=========================================== -->
-      <!-- COMMENT BUBBLE -->
+      </user-icon>
 
       <div class="comment-bubble">
 
@@ -48,16 +45,6 @@
     </div><!--/comment-->
   </div><!--/comment-list-->
   <div class="panel-footer">
-    <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-      <markdown-editor
-        focus="focus"
-        autofocus="autofocus"
-        class="editor col-sm-12"
-        ng-model="comment.text"
-        on-enter="enterDown"
-        placeholder="Make a comment..."
-        height="auto">
-      </markdown-editor>
-    </form>
+    <task-comment-composer task="task"></task-comment-composer>
   </div>
 </div>

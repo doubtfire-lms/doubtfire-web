@@ -1,16 +1,12 @@
 <div class="audio-comment-container">
   <div>
-    <table>
-      <tr>
-        <td>
-            <input type="image" class="audio-button" ng-show="!loadPlayer" ng-click="audioPlayerSetup($index, comment)" src="/assets/icons/play.png"/>
-            <input type="image" class="audio-button" ng-show="loadPlayer" ng-attr-id="{{'btnPlay-' + $index}}" src="/assets/icons/play.png"/>
-        </td>
-        <td>
-            <canvas class="audio-visualiser"  ng-attr-id="{{'audio-visualiser-' + $index}}"></canvas>
-        </td>
-      </tr>
-    </table>
+    <button class="audio-button" ng-attr-id="{{'btnPlay-' + $index}}">
+      <i class="fa fa-play-circle"></i>
+    </button>
+     <!-- <i ng-class="toggle ? 'fa-check-square-o' : 'square-o'"></i> -->
+
+    <canvas class="audio-visualiser" ng-attr-id="{{'audio-player-visualiser-' + $index}}"></canvas>
+
     <audio ng-attr-id="{{'audio-element-' + $index}}"></audio>
   </div>
 </div>

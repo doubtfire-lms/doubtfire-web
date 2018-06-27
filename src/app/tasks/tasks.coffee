@@ -3,6 +3,7 @@ angular.module('doubtfire.tasks', [
   'doubtfire.tasks.task-ilo-alignment'
   'doubtfire.tasks.project-tasks-list'
   'doubtfire.tasks.project-top-tasks-list'
+  'doubtfire.tasks.task-comment-composer'
   'doubtfire.tasks.task-comments-viewer'
   'doubtfire.tasks.task-definition-editor'
   'doubtfire.tasks.task-definition-selector'

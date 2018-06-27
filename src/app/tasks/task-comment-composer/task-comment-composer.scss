@@ -1,0 +1,38 @@
+.markdown-editor-actions {
+  bottom: 0.5em;
+  right: 1em;
+  z-index: 2;
+}
+
+.markdown-editor-action {
+  color: grey;
+  font-size: 1em;
+  cursor: pointer;
+  &:hover {
+    color: $brand-primary;
+  }
+}
+
+.popup {
+  position: absolute;
+  left: 0;
+  top: -60px;
+  transform: translate3d(0, -50%, 0);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  background: none;
+  border-radius: 100px;
+  width: 100%;
+}
+
+.popup:after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  transform: rotate(-45deg);
+  background: #fff;
+  position: absolute;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  bottom: -10px;
+  left: calc(50% - 10px);
+}
