@@ -5,23 +5,19 @@ angular.module('doubtfire.common.audio-recorder', [])
   replace: true
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
-  controller: ($scope, taskService, CommentResourceService, mediaService, Task, $sce, $q) ->
+  controller: ($scope, taskService, mediaService) ->
 
     angular.element(document).ready( ->
       $scope.audioSetup()
     )
 
     $scope.audioSetup = ->
-      console.info("Setting up audiosetup")
-      # Support multiple browsers
       navigator.getUserMedia = navigator.getUserMedia or navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.msGetUserMedia
 
       audioURL = undefined
       streamRef = undefined
       mediaRecorderRef = undefined
       dataRef = undefined
-      activeTrack = false
-      isPlaying = false
 
       btnRecord = document.getElementById('btnRecord')
       btnPlay = document.getElementById('btnPlay')
@@ -30,47 +26,48 @@ angular.module('doubtfire.common.audio-recorder', [])
       canvas = document.getElementById('audio-recorder-visualiser')
       audio = document.getElementById('audioPlayer')
 
-      console.info("setup recorder media object")
       mediaObject = mediaService.createContext(audio, canvas)
 
-      console.info(mediaObject)
-
       StartRecord = ->
+        mediaObject.analyser.connect(mediaObject.audioCtx.destination)
+        mediaObject.audioSource.connect(mediaObject.analyser)
         streamRef.getTracks()[0].enabled = true
         mediaRecorderRef.start()
-        mediaObject.prepareVisualise(streamRef)
-        # mediaObject.startDrawing()
+        # console.info(mediaObject)
+        # source = mediaObject.audioCtx.createMediaStreamSource(streamRef)
+        # mediaObject.prepareVisualise(streamRef)
+        # audioSource = audioCtx.createMediaElementSource(audio)
+
+        mediaObject.startDrawing()
         return
 
       #---------------------------------------------
       # Sets up all the elements that will be used for recording
       initElements = ->
-
         isRecording = false
-        localStream = undefined
 
         #Record button
         btnRecord.onclick = ->
           if !isRecording
             initRecording()
-            # Update buttons
             btnRecord.src = "/assets/icons/record_active.png"
             btnPlay.disabled = true
             btnSend.disabled = true
             isRecording = true
             audio.removeAttribute('src')
           else
-            # Update buttons
+            mediaObject.analyser.disconnect()
+            mediaObject.audioSource.disconnect()
             btnRecord.src = "/assets/icons/record.png"
             btnPlay.disabled = false
             btnSend.disabled = false
             # Stop recording audio
             mediaRecorderRef.stop()
-            streamRef.getTracks()[0].enabled = false
+            # streamRef.getTracks()[0].enabled = false
             isRecording = false
             # Clear visualisation
             mediaObject.stopDrawing()
-          return false
+          return
 
         # Play button
         btnPlay.onclick = ->
@@ -84,7 +81,7 @@ angular.module('doubtfire.common.audio-recorder', [])
         #   downloadMediaContent = mediaService.prepareRecordedAudio(dataRef)
         #   console.info("POST AUDIO")
         #   console.info(downloadMediaContent)
-        #   taskService.addMediaComment(CommentResourceService.task, downloadMediaContent, "audio")
+        #   taskService.addMediaComment.task, downloadMediaContent, "audio")
         #   return false
 
         # audio.onplay = ->
@@ -117,9 +114,8 @@ angular.module('doubtfire.common.audio-recorder', [])
             audio: true
           }, ((stream) ->
             mediaRecorder = new MediaRecorder(stream)
-
-            #set refs to be used in buttons
             mediaRecorderRef = mediaRecorder
+            # mediaObject.prepareVisualise)
             streamRef = stream
             streamRef.getTracks()[0].enabled = false
 
@@ -128,7 +124,7 @@ angular.module('doubtfire.common.audio-recorder', [])
               audioURL = window.URL.createObjectURL(data)
               audio.src = audioURL
               dataRef = data
-              mediaObject.prepareVisualise(audio)
+              # mediaObject.prepareVisualise(audio)
               return
             StartRecord()
           ), (err) ->
@@ -137,6 +133,6 @@ angular.module('doubtfire.common.audio-recorder', [])
         else
           console.log 'getUserMedia is not supported on your browser!'
         return
-      #---------------------------------------------
+
       initElements()
       return

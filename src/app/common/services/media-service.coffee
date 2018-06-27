@@ -12,15 +12,22 @@ angular.module("doubtfire.common.services.media-service", [])
       globalAudioContext = new ((window.AudioContext or webkitAudioContext))
     globalAudioContext
 
+  createAnalyser = () ->
+    analyser = mediaService.fetchContext().createAnalyser()
+    analyser.fftSize = 2048
+    console.info("Created Analyser: " + analyser)
+    analyser
+
   mediaService.createContext = (audioElement, canvasVisualiserElement) ->
     audioElement.crossOrigin = "anonymous"
     mediaObject = {
       audioCtx:                 mediaService.fetchContext(),
       audioSource:              mediaService.fetchContext().createMediaElementSource(audioElement),
+      recorderSource:           undefined,
       audioElement:             audioElement,
       canvasVisualiserElement:  canvasVisualiserElement,
       canvasCtx:                canvasVisualiserElement.getContext('2d'),
-      analyser:                 mediaService.fetchContext().createAnalyser(),
+      analyser:                 createAnalyser(),
       drawTimer:                undefined,
       dataArray:                undefined
 
@@ -75,15 +82,10 @@ angular.module("doubtfire.common.services.media-service", [])
       prepareVisualise: (stream = null) ->
         if stream instanceof MediaStream
           mediaObject.audioSource = mediaObject.audioCtx.createMediaStreamSource(stream)
-        mediaObject.analyser = mediaObject.audioCtx.createAnalyser()
-        mediaObject.analyser.fftSize = 2048
-        bufferLength = mediaObject.analyser.frequencyBinCount
-        mediaObject.dataArray = new Uint8Array(bufferLength)
         # mediaObject.audioSource.connect(mediaObject.analyser)
         # if not (stream instanceof MediaStream)
           # mediaObject.analyser.connect(mediaObject.audioCtx.destination)
         return
-
 
         # prepareVisualise = ->
           # # Initialise analyser
@@ -112,17 +114,16 @@ angular.module("doubtfire.common.services.media-service", [])
         #   analyser.connect(audioCtx.destination)
         # return
     }
+    mediaObject.dataArray = new Uint8Array(mediaObject.analyser.frequencyBinCount)
 
     mediaObject.audioElement.onplay = ->
       return
 
     mediaObject.audioElement.onended = ->
-      console.info("ended")
       mediaObject.stop()
       return
 
     mediaObject.audioElement.onpause = ->
-      console.info("paused playing")
       mediaObject.stopDrawing()
 
     mediaObject
