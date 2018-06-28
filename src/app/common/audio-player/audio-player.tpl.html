@@ -1,12 +1,12 @@
 <div class="audio-comment-container">
   <div>
-    <button class="audio-button" ng-attr-id="{{'btnPlay-' + $index}}">
+    <!-- <button class="audio-button" ng-attr-id="{{'btnPlay-' + $index}}">
       <i class="fa fa-play-circle"></i>
-    </button>
+    </button> -->
      <!-- <i ng-class="toggle ? 'fa-check-square-o' : 'square-o'"></i> -->
 
-    <canvas class="audio-visualiser" ng-attr-id="{{'audio-player-visualiser-' + $index}}"></canvas>
+    <!-- <canvas class="audio-visualiser" ng-attr-id="{{'audio-player-visualiser-' + $index}}"></canvas> -->
 
-    <audio ng-attr-id="{{'audio-element-' + $index}}"></audio>
+    <audio controls autoplay="false" preload="none" ng-attr-id="{{'audio-element-' + $index}}"></audio>
   </div>
 </div>
