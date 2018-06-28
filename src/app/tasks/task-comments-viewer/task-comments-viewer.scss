@@ -77,13 +77,14 @@ task-comments-viewer .comment .comment-bubble {
   flex: 1;
   background: $comment-bubble-color;
   color: #fff;
-  border-radius: 6px;
+  border-radius: 24px;
   font-size: 1em;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 0;
   line-height: 1.5em;
   .comment-text {
+    width: 100%;
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
     word-break: break-word;

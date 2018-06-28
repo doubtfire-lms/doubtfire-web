@@ -1,12 +1,9 @@
 <div class="audio-comment-container">
-  <div>
-    <!-- <button class="audio-button" ng-attr-id="{{'btnPlay-' + $index}}">
-      <i class="fa fa-play-circle"></i>
-    </button> -->
-     <!-- <i ng-class="toggle ? 'fa-check-square-o' : 'square-o'"></i> -->
-
-    <!-- <canvas class="audio-visualiser" ng-attr-id="{{'audio-player-visualiser-' + $index}}"></canvas> -->
-
-    <audio controls autoplay="false" preload="none" ng-attr-id="{{'audio-element-' + $index}}"></audio>
-  </div>
+  <button class="play-button" ng-attr-id="{{'playButton-' + $index}}">
+    <i id="playButton" class="play-button fa" ng-class="isPlaying ? 'fa-stop-circle' : 'fa-play-circle'"></i>
+  </button>
+  <progressbar class="progress-bar-container" ng-attr-id="{{'seekObj-' + $index}}" max="max" value="audioProgress"></progressbar>
+  <!-- Remove until endpoint returns ffile length due to audio bug in standard
+  <p id="duration">{{duration}}</p> -->
+  <audio src="" id="audio" autoplay="false" preload="none" ng-attr-id="{{'audio-element-' + $index}}"></audio>
 </div>

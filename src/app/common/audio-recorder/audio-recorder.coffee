@@ -89,14 +89,14 @@ angular.module('doubtfire.common.audio-recorder', [])
           requestAnimationFrame draw
           analyser.getByteTimeDomainData(dataArray)
           analyser.getByteFrequencyData(dataArray)
-          canvasCtx.fillstyle = '#000000'
+          canvasCtx.fillstyle = '#2196F3'
 
           bars = 100 * WIDTH/100
           canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
           i = 0
+          bar_width = 2
           while i < bars
             bar_x = i * 3
-            bar_width = 2
             bar_height = -(dataArray[i] / 4) + 1
             canvasCtx.fillRect bar_x, HEIGHT / 2, bar_width, bar_height
             canvasCtx.fillRect bar_x, HEIGHT / 2 - bar_height, bar_width, bar_height
