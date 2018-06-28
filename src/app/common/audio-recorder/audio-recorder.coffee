@@ -6,19 +6,11 @@ angular.module('doubtfire.common.audio-recorder', [])
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
   controller: ($scope, taskService, mediaService) ->
-
     angular.element(document).ready( ->
-      $scope.audioSetup()
+      audioSetup()
     )
 
-    $scope.audioSetup = ->
-      navigator.getUserMedia = navigator.getUserMedia or navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.msGetUserMedia
-
-      audioURL = undefined
-      streamRef = undefined
-      mediaRecorderRef = undefined
-      dataRef = undefined
-
+    audioSetup = ->
       btnRecord = document.getElementById('btnRecord')
       btnPlay = document.getElementById('btnPlay')
       btnSend = document.getElementById('btnSend')
@@ -26,113 +18,96 @@ angular.module('doubtfire.common.audio-recorder', [])
       canvas = document.getElementById('audio-recorder-visualiser')
       audio = document.getElementById('audioPlayer')
 
-      mediaObject = mediaService.createContext(audio, canvas)
+      audioCtx = mediaService.audioCtx
+      canvasCtx = canvas.getContext("2d")
 
-      StartRecord = ->
-        mediaObject.analyser.connect(mediaObject.audioCtx.destination)
-        mediaObject.audioSource.connect(mediaObject.analyser)
-        streamRef.getTracks()[0].enabled = true
-        mediaRecorderRef.start()
-        # console.info(mediaObject)
-        # source = mediaObject.audioCtx.createMediaStreamSource(streamRef)
-        # mediaObject.prepareVisualise(streamRef)
-        # audioSource = audioCtx.createMediaElementSource(audio)
+      if (navigator.mediaDevices.getUserMedia)
+        console.log('getUserMedia supported.')
+        constraints =
+          audio: true
+          mimeType: 'audio/wav'
+        chunks = []
+        blob = {}
 
-        mediaObject.startDrawing()
-        return
+        onSuccess = (stream) ->
+          mediaRecorder = new MediaRecorder(stream)
 
-      #---------------------------------------------
-      # Sets up all the elements that will be used for recording
-      initElements = ->
-        isRecording = false
+          visualise(stream)
 
-        #Record button
-        btnRecord.onclick = ->
-          if !isRecording
-            initRecording()
-            btnRecord.src = "/assets/icons/record_active.png"
-            btnPlay.disabled = true
-            btnSend.disabled = true
-            isRecording = true
-            audio.removeAttribute('src')
-          else
-            mediaObject.analyser.disconnect()
-            mediaObject.audioSource.disconnect()
-            btnRecord.src = "/assets/icons/record.png"
-            btnPlay.disabled = false
-            btnSend.disabled = false
-            # Stop recording audio
-            mediaRecorderRef.stop()
-            # streamRef.getTracks()[0].enabled = false
-            isRecording = false
-            # Clear visualisation
-            mediaObject.stopDrawing()
+          btnRecord.onclick = ->
+            console.log(mediaRecorder.state)
+            if (mediaRecorder.state == "inactive")
+              mediaRecorder.start()
+              $scope.$apply( () ->
+                $scope.isRecording = true
+              )
+            else if (mediaRecorder.state == "recording")
+              mediaRecorder.stop()
+              $scope.$apply( () ->
+                $scope.isRecording = false
+              )
+
+          btnSend.onclick = ->
+            fileReader = new FileReader()
+            fileReader.readAsDataURL(blob)
+            fileReader.addEventListener 'loadend', ->
+              audioRecording = new Blob([ fileReader.result ], 'type': 'audio/wav')
+              taskService.addMediaComment($scope.task, audioRecording, "audio")
+            blob = {}
+            return
+
+          mediaRecorder.onstop = (e) ->
+            audio.controls = true
+            blob = new Blob(chunks, { 'type' : 'audio/wav' })
+            chunks = []
+            audioURL = window.URL.createObjectURL(blob)
+            audio.src = audioURL
+
+          mediaRecorder.ondataavailable = (e) ->
+            chunks.push(e.data)
+
+        onError = (err) ->
+          console.log('The following error occured: ' + err)
+
+        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)
+      else
+        console.log('getUserMedia not supported on your browser!')
+
+
+      stopRecording = ->
+        mediaRecorder.stop()
+        stop.disabled = true
+        btnRecord.disabled = false
+
+      visualise = (stream) ->
+        source = audioCtx.createMediaStreamSource(stream)
+        analyser = audioCtx.createAnalyser()
+
+        draw = ->
+          WIDTH = canvas.width
+          HEIGHT = canvas.height
+          requestAnimationFrame draw
+          analyser.getByteTimeDomainData(dataArray)
+          analyser.getByteFrequencyData(dataArray)
+          canvasCtx.fillstyle = '#000000'
+
+          bars = 100 * WIDTH/100
+          canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
+          i = 0
+          while i < bars
+            bar_x = i * 3
+            bar_width = 2
+            bar_height = -(dataArray[i] / 4) + 1
+            canvasCtx.fillRect bar_x, HEIGHT / 2, bar_width, bar_height
+            canvasCtx.fillRect bar_x, HEIGHT / 2 - bar_height, bar_width, bar_height
+            i++
           return
 
-        # Play button
-        btnPlay.onclick = ->
-          mediaObject.playAudio()
-          return
-
-        # Send button
-        # btnSend.onclick = ->
-        #   streamRef.getTracks()[0].enabled = false
-        #   # prepare audio for sending
-        #   downloadMediaContent = mediaService.prepareRecordedAudio(dataRef)
-        #   console.info("POST AUDIO")
-        #   console.info(downloadMediaContent)
-        #   taskService.addMediaComment.task, downloadMediaContent, "audio")
-        #   return false
-
-        # audio.onplay = ->
-        #   console.info("Playing")
-        #   btnPlay.src = "/assets/icons/stop.png"
-        #   isPlaying = true
-        #   return
-
-        # audio.onended = ->
-        #   console.info("Ended")
-        #   btnPlay.src = "/assets/icons/play.png"
-        #   isPlaying = false
-        #   # mediaObject.stopDrawing()
-        #   return
-
-        # audio.onpause = ->
-        #   console.info("Paused")
-        #   btnPlay.src = "/assets/icons/play.png"
-        #   isPlaying = false
-        #   # mediaObject.stopDrawing()
-        #   return
-
+        source = audioCtx.createMediaStreamSource(stream)
+        analyser = audioCtx.createAnalyser()
+        analyser.fftSize = 2048
+        bufferLength = analyser.frequencyBinCount
+        dataArray = new Uint8Array(bufferLength)
+        source.connect analyser
+        draw()
         return
-
-      #---------------------------------------------
-      # pass initRecording a cb to call when stream is ready
-      initRecording = ->
-        if navigator.mediaDevices and navigator.mediaDevices.getUserMedia
-          navigator.getUserMedia {
-            audio: true
-          }, ((stream) ->
-            mediaRecorder = new MediaRecorder(stream)
-            mediaRecorderRef = mediaRecorder
-            # mediaObject.prepareVisualise)
-            streamRef = stream
-            streamRef.getTracks()[0].enabled = false
-
-            mediaRecorder.ondataavailable = (e) ->
-              data = e.data
-              audioURL = window.URL.createObjectURL(data)
-              audio.src = audioURL
-              dataRef = data
-              # mediaObject.prepareVisualise(audio)
-              return
-            StartRecord()
-          ), (err) ->
-            console.log 'The following error occured: ' + err
-          return
-        else
-          console.log 'getUserMedia is not supported on your browser!'
-        return
-
-      initElements()
-      return
