@@ -52,7 +52,8 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     # Checks for enter keydown
     $scope.enterDown = (editor) ->
       $scope.addComment()
-      return CodeMirror.Pass
+      return
+      # return CodeMirror.Pass
 
     #===========================================================================================
     $scope.canUserEdit = (comment) ->
@@ -63,8 +64,25 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     #===========================================================================================
     $scope.getCommentAttachment = (comment) ->
+      # mediaURL = $sce.trustAsResourceUrl(Task.downloadCommentAttachment($scope.project, $scope.task, comment)
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      mediaURL
+      # mediaURL = {}
+      # Task.downloadCommentAttachment($scope.project, $scope.task, comment,
+      #   (successResponse) ->
+      #     mediaURL = successResponse.data
+      #   (errorResponse) ->
+      #     console.log(errorResponse)
+      # )
+      # mediaURL
+      # Task.downloadCommentAttachment($scope.project, $scope.task, comment,
+      # (successResponse) ->
+      #   console.info(successResponse)
+      #   mediaURL = $sce.trustAsResourceUrl(successResponse)
+      #   # return $sce.trustAsResourceUrl(successResponse.data)
+      # (errorResponse) ->
+      #   console.log(errorResponse)
+      # )
+
 
     #===========================================================================================
     # Submits a new comment
