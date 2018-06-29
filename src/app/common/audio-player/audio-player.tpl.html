@@ -1,9 +1,7 @@
 <div class="audio-comment-container">
-  <button class="play-button" ng-attr-id="{{'playButton-' + $index}}">
+  <button class="play-button" ng-click="playAudio()">
     <i id="playButton" class="play-button fa" ng-class="isPlaying ? 'fa-stop-circle' : 'fa-play-circle'"></i>
   </button>
-  <progressbar class="progress-bar-container" ng-attr-id="{{'seekObj-' + $index}}" max="max" value="audioProgress"></progressbar>
-  <!-- Remove until endpoint returns ffile length due to audio bug in standard
-  <p id="duration">{{duration}}</p> -->
-  <audio src="" id="audio" autoplay="false" preload="none" ng-attr-id="{{'audio-element-' + $index}}"></audio>
+  <progressbar class="progress-bar-container" max="max" value="audioProgress"></progressbar>
+   <!-- <p id="currentTime">{{currentTime}}s</p> -->
 </div>

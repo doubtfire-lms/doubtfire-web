@@ -11,54 +11,47 @@ angular.module('doubtfire.common.audio-player', [])
     $scope.isPlaying = false
     $scope.audioProgress = 0
     $scope.max = 1
+    $scope.currentTime = 0
+    audio = document.createElement("AUDIO")
 
-    # Remove until endpoint returns file lenfth
-    # $scope.duration = ""
-
-    angular.element(document).ready( ->
-      index = $scope.$parent.$index
-      audio = document.getElementById('audio-element-' + index)
-      playBtn = document.getElementById('playButton-' + index)
-      progressbar = document.getElementById('seekObj' + index)
-
-      audio.ontimeupdate = ->
-        $scope.$apply( () ->
-          $scope.audioProgress = if isNaN(audio.currentTime / audio.duration) then 0 else (audio.currentTime / audio.duration)
-        )
-        return
-
-      audio.loadedmetadata = ->
-        console.info("Can play through now so wil play")
-        audio.play()
-        return
-
-      audio.onended = ->
-        $scope.$apply( () ->
-          $scope.isPlaying = false
-        )
-        return
-
-      playBtn.onclick = ->
-        if not $scope.isLoaded
-          getAudioComment($scope.$parent.comment, audio)
+    $scope.playAudio = () ->
+      if not $scope.isLoaded
+        $scope.isLoaded = true
+        getAudioComment($scope.$parent.comment)
+      else
         if audio.paused
           audio.play()
-          $scope.$apply( () ->
-            $scope.isPlaying = true
-          )
+          $scope.isPlaying = true
         else
           audio.pause()
           audio.currentTime = 0
-          $scope.$apply( () ->
-            $scope.isPlaying = false
-          )
-        return
-    )
-
-    getAudioComment = (comment, audio) ->
-      audioUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      $http({url: audioUrl, method: "get", withCredentials: true, params: ""}, responseType: "text").then (response) ->
-        audio.src = $sce.trustAsResourceUrl(response.data)
-        $scope.isLoaded = true
+          $scope.isPlaying = false
         return
 
+    audio.ontimeupdate = ->
+      val = audio.currentTime / audio.duration
+
+      # minutes = audio.currentTime.toString().split('.')[0]
+      # seconds = audio.currentTime.toString().split('.')[1].substr('0','1')
+      # $scope.currentTime = seconds
+
+      $scope.audioProgress = if isNaN(val) then 0 else val
+      $scope.$apply()
+      return
+
+    audio.onended = ->
+      $scope.isPlaying = false
+      $scope.$apply()
+      return
+
+
+    getAudioComment = (comment) ->
+      Task.downloadCommentAttachment($scope.project, $scope.task, comment,
+        (successResponse) ->
+          audio.src = successResponse.data
+          audio.play()
+          $scope.isPlaying = true
+        (errorResponse) ->
+          console.log(errorResponse)
+      )
+      return
