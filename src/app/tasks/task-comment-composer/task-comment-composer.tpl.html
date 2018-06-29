@@ -7,8 +7,8 @@
     ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
     ngf-drop-available="dropSupported">
 
-    <textArea ng-keyup="keyUp($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image..."></textArea>
-
+    <!-- <textArea id="textField" rows="1" class="autoheight" ng-keyup="keyUp($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image..."></textArea> -->
+    <div id="textField" contenteditable ng-keydown="keyDown($event)" ng-keyup="keyUp($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image..."></div>
     <!-- <p class="fa fa-file-image-o fa-2x"></p> -->
     <p ng-show="upload.display.error">
       Invalid file type!

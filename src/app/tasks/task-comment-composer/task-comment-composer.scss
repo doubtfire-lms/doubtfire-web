@@ -1,11 +1,25 @@
-textarea {
+#textField {
   box-shadow: none;
   border: none;
-  height: auto;
   width: 100%;
-  height: 100%;
+  height: auto;
   resize: none;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+
+  padding: 8px;
+  min-height:2em;
+  line-height:2em;
+  margin:0px auto;
+  -webkit-font-smoothing: antialiased;
+  max-height: 200px;
 }
+
+[contenteditable=true]:empty::before {
+  content: attr(placeholder);
+}
+
 
 .markdown-editor-actions {
   bottom: 0.5em;

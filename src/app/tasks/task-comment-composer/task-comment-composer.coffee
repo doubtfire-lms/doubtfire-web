@@ -20,13 +20,14 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
 
     $scope.audioPopover = 'audioRecorderPopover.html'
 
+    # Don't insert a newline character when sending a comment
+    $scope.keyDown = (e) ->
+      if (e.key.toLowerCase() == "enter" && !e.shiftKey)
+        e.preventDefault()
+
     $scope.keyUp = (e) ->
-      if e.key.toLowerCase() == "enter"
-        if e.shiftKey
-          # console.info($scope.comment.text)
-          # Add new line
-        else
-          $scope.addComment()
+      if e.key.toLowerCase() == "enter" && !e.shiftKey
+        $scope.addComment()
 
     $scope.formatImageName = (imageName) ->
       index = imageName.indexOf(".")
@@ -62,8 +63,6 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
         else
           $scope.shownUploadZones = []
 
-    #===========================================================================================
-    # Submits a new comment
     $scope.addComment = ->
       $scope.comment.text = $scope.comment.text.trim()
       taskService.addComment $scope.task, $scope.comment.text, "text",
