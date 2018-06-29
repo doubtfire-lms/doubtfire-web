@@ -1,9 +1,9 @@
-$comment-bubble-color: #2196F3;
+$comment-bubble-color: #0084ff;
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
 $comment-author-bubble-size: 38px;
-$comment-text-padding: 10px;
+$comment-text-padding: 15px;
 
 // Leave the 1.9 if you want amazing border radii
 $border-width: 0.8em;
@@ -108,6 +108,10 @@ task-comments-viewer .comment .comment-bubble {
     padding-right: $comment-text-padding;
     word-break: break-word;
     -webkit-font-smoothing: antialiased;
+  }
+
+  .comment-audio {
+    width: 200px;
   }
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
