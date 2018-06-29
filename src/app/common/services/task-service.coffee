@@ -312,27 +312,19 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return number of days until task hits target date, or false if already
   # completed
   taskService.daysUntilTargetDate = (task) ->
-    return false if task.status in taskService.finalStatuses
-    moment(task.definition.target_date).diff(moment(), 'days')
+    moment(task.targetDate()).diff(moment(), 'days')
 
   # Return number of days until task is due, or false if already completed
   taskService.daysUntilDueDate = (task) ->
-    return false if !task.definition.due_date? || task.status in taskService.finalStatuses
     moment(task.definition.due_date).diff(moment(), 'days')
 
   # Return number of days task is overdue from target, or false if not
   taskService.daysPastTargetDate = (task) ->
-    return false if task.status in taskService.finalStatuses
-    diffDays = moment().diff(moment(task.definition.target_date), 'days')
-    return false if !diffDays? || diffDays <= 0
-    diffDays
+    moment().diff(moment(task.targetDate()), 'days')
 
   # Return number of days task is overdue, or false if not overdue
   taskService.daysPastDueDate = (task) ->
-    return false if task.status in taskService.finalStatuses || !task.definition.due_date?
-    diffDays = moment().diff(moment(task.definition.due_date), 'days')
-    return false if !diffDays? || diffDays <= 0
-    diffDays
+    moment().diff(moment(task.definition.due_date), 'days')
 
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->

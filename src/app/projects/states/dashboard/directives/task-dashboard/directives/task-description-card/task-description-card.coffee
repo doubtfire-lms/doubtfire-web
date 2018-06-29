@@ -29,8 +29,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       acronyms: gradeService.gradeAcronyms
 
     $scope.dueDate = () ->
-      if $scope.task?.due_date?
-        return $scope.task.due_date
+      if $scope.task?
+        return $scope.task.targetDate()
       else if $scope.taskDef?
         return $scope.taskDef?.target_date
       else
