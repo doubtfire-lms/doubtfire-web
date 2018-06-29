@@ -3,7 +3,7 @@ $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
 $comment-author-bubble-size: 38px;
-$comment-text-padding: 15px;
+$comment-text-padding: 10px;
 
 task-comments-viewer .panel {
   @include flex-panel;
@@ -20,7 +20,7 @@ task-comments-viewer .comment {
   display: flex;
   // width: 100%;
   margin-bottom: 1em;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   &.new-comment .comment-bubble {
     animation: fade-in-comment-animation;
     animation-duration: 5s;
@@ -41,8 +41,8 @@ task-comments-viewer .comment {
 task-comments-viewer .comment .user-icon {
   display: inline-block;
   align-self: flex-end;
-  height: $comment-author-bubble-size;
-  width: $comment-author-bubble-size;
+  // height: $comment-author-bubble-size;
+  // width: $comment-author-bubble-size;
   line-height: $comment-author-bubble-size - 2px;
   margin-right: $comment-text-padding;
   .user-icon-gravatar {
@@ -88,7 +88,7 @@ img {
 }
 task-comments-viewer .comment .comment-bubble {
   display: flex;
-  flex: 1;
+  // flex: 1;
   background: $comment-bubble-color;
   color: #fff;
   border-radius: 1.3em;
