@@ -1,15 +1,5 @@
-<div class="markdown-editor">
-  <!-- Text comment editor -->
-  <div class="markdown-editor-inner-context-text" ng-show="currentCommentType == commentType.TEXT">
-    <div ng-show="isEditing" ui-codemirror="{ onLoad : codemirrorLoaded }" ui-codemirror-opts="editorOpts" ui-refresh="true"
-      ng-model="markdownText"></div>
-    <div style="{{heightStyle()}}" class="markdown-editor-preview markdown-to-html" ng-hide="isEditing">
-      <div ng-bind-html="markdownText | markdown"></div>
-    </div>
-  </div>
-
-  <!-- Image comment editor -->
-  <div class="markdown-editor-inner-context-image {{upload.display.error ? 'file-rejected' : ''}}" ng-show="currentCommentType == commentType.IMAGE">
+<!-- <div class="markdown-editor">
+  <div class="markdown-editor-inner-context-image {{upload.display.error ? 'file-rejected' : ''}}" >
     <div ngf-select ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
       ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
       ngf-drop-available="dropSupported">
@@ -25,7 +15,6 @@
         Click to select image file
       </p>
     </div>
-    <!--/drop-zone-->
     <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
       <br>
       <span class="selected-file" stype="{font-size: 12px}">
@@ -35,12 +24,9 @@
       <a class="clear-upload text-muted" ng-click="clearEnqueuedUpload(upload)">
         <i class="fa fa-times"></i>
       </a>
-      <!-- Buttons experiment -->
       <br>
       <input type="button" ng-click="postImageComment()" class="btn btn-primary btn-upload" value="Post Comment">
       </input>
-      <!--/upload-button-->
     </div>
-    <!--/selected-file-->
   </div>
-</div>
+</div> -->

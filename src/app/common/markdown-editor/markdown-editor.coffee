@@ -5,12 +5,11 @@ angular.module('doubtfire.common.markdown-editor', [])
   replace: true
   templateUrl: 'common/markdown-editor/markdown-editor.tpl.html'
   scope:
-    markdownText: '=ngModel'
     height: '@?'
     placeholder: '@?'
     autofocus: "@?"
     focus: '=?'
-    onEnter: '=?'
+    # onEnter: '=?'
     files: '='
     url: '='
     isUploading: '=?'
@@ -36,63 +35,62 @@ angular.module('doubtfire.common.markdown-editor', [])
 
     $scope.$watch 'currentCommentType', ->
       CommentResourceService.setCommentType($scope.currentCommentType)
-      
+
     $scope.isEditing = true
     $scope.height = $scope.height or DEFAULT_HEIGHT
-    $scope.codemirrorLoaded = (editor) ->
-      $scope.editor = editor
-      $scope.editor.setSize("100%", $scope.height)
+    # $scope.codemirrorLoaded = (editor) ->
+    #   $scope.editor = editor
+    #   $scope.editor.setSize("100%", $scope.height)
     $scope.focus = ->
       $scope.editor.focus()
     $scope.heightStyle = -> "height: #{$scope.height}px"
-    $scope.editorOpts =
-      lineWrapping : true
-      mode: 'markdown'
-      theme: 'xq-light'
-      placeholder: $scope.placeholder
-      autofocus: $scope.autofocus
-    if $scope.onEnter?
-      $scope.editorOpts.extraKeys = {
-        Enter: $scope.onEnter
-      }
+    # $scope.editorOpts =
+    #   lineWrapping : true
+    #   mode: 'markdown'
+    #   theme: 'xq-light'
+    #   placeholder: $scope.placeholder
+    #   autofocus: $scope.autofocus
+    # if $scope.onEnter?
+    #   $scope.editorOpts.extraKeys = {
+    #     Enter: $scope.onEnter
+    #   }
 
     #============================================================================
     # This function formats the name of the image
     # It limits the length of the name to be 20 characters and always displays the type
+    # $scope.formatImageName = (imageName) ->
+    #   index = imageName.indexOf(".")
+    #   nameString = imageName.substring(0,index)
+    #   typeString = imageName.substring(index)
 
-    $scope.formatImageName = (imageName) ->
-      index = imageName.indexOf(".")
-      nameString = imageName.substring(0,index)
-      typeString = imageName.substring(index)
+    #   if nameString.length > 20
+    #     nameString = nameString.substring(0,20) + ".."
 
-      if nameString.length > 20
-        nameString = nameString.substring(0,20) + ".."
+    #   finalString = nameString + typeString
+    #   finalString
 
-      finalString = nameString + typeString
-      finalString
+    # #============================================================================
+    # $scope.clearEnqueuedUpload = (upload) ->
+    #   upload.model = null
+    #   refreshShownUploadZones()
 
-    #============================================================================
-    $scope.clearEnqueuedUpload = (upload) ->
-      upload.model = null
-      refreshShownUploadZones()
+    # #============================================================================
+    # # Upload image files as comments to a given task
+    # $scope.postImageComment = ->
+    #   taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, "image")
+    #   $scope.clearEnqueuedUpload($scope.upload)
 
-    #============================================================================
-    # Upload image files as comments to a given task
-    $scope.postImageComment = ->
-      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, $scope.currentCommentType)
-      $scope.clearEnqueuedUpload($scope.upload)
-
-    #============================================================================
-    # Will refresh which shown drop zones are shown
-    # Only changes if showing one drop zone
-    refreshShownUploadZones = ->
-      if $scope.singleDropZone
-        # Find the first-most empty model in each zone
-        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
-        if firstEmptyZone?
-          $scope.shownUploadZones = [firstEmptyZone]
-        else
-          $scope.shownUploadZones = []
+    # #============================================================================
+    # # Will refresh which shown drop zones are shown
+    # # Only changes if showing one drop zone
+    # refreshShownUploadZones = ->
+    #   if $scope.singleDropZone
+    #     # Find the first-most empty model in each zone
+    #     firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
+    #     if firstEmptyZone?
+    #       $scope.shownUploadZones = [firstEmptyZone]
+    #     else
+    #       $scope.shownUploadZones = []
 
     #============================================================================
     $scope.hasBeenSetup = false

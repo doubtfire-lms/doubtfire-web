@@ -9,12 +9,11 @@ $markdown-editor-height: 15px;
 
 .markdown-editor, .markdown-editor-inner-context-text {
   position: relative;
-  cursor: text;
-  padding: 6px 12px;
+  // padding: 6px 12px;
   height: auto;
-  min-height: 30px;
-  border: 1px solid #cccccc;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  min-height: 60px;
+  // border: 1px solid #cccccc;
+  // box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   font-size: 1em;
   background-color: #fff;
 
@@ -29,57 +28,57 @@ $markdown-editor-height: 15px;
 
   // Style for Image comment drop zone - add a dotted border to show the 
   // image drop zone
-  .markdown-editor-inner-context-image {
-    height:150px;
-    border: 2px #bbb dotted;
-    font-size: larger;
-    font-weight: bold;
-    color: #aaa;
-    text-align: center;
-    &, i {
-      @include transition(all 0.25s ease);
-    }
-    p small {
-      display: block;
-    }
-    &:hover {
-      cursor: pointer;
-      border-color: rgb(65, 65, 65);
-      color: rgb(148, 148, 148);
-      p small {
-        text-decoration: underline;
-      }
-    }
-  }
-  
-  .markdown-editor-preview {
-    display: relative;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    z-index: 1;
-    min-height: $markdown-editor-height;
-  }
+  // .markdown-editor-inner-context-image {
+  //   height:150px;
+  //   border: 2px #bbb dotted;
+  //   font-size: larger;
+  //   font-weight: bold;
+  //   color: #aaa;
+  //   text-align: center;
+  //   &, i {
+  //     @include transition(all 0.25s ease);
+  //   }
+  //   p small {
+  //     display: block;
+  //   }
+  //   &:hover {
+  //     cursor: pointer;
+  //     border-color: rgb(65, 65, 65);
+  //     color: rgb(148, 148, 148);
+  //     p small {
+  //       text-decoration: underline;
+  //     }
+  //   }
+  // }
 
-  .CodeMirror {
-    font-family: Roboto, Monaco, monospace;
-    display: relative;
-    z-index: 1;
-    .CodeMirror-placeholder {
-      color: grey;
-      opacity: 0.3;
-    }
-    width: 80%;
-  }
+  // .markdown-editor-preview {
+  //   display: relative;
+  //   overflow-y: hidden;
+  //   overflow-x: hidden;
+  //   z-index: 1;
+  //   min-height: $markdown-editor-height;
+  // }
 
-  .CodeMirror-scroll {
-    height: auto;
-    max-height: 400px;
-    min-height: $markdown-editor-height;
-  }
+  // .CodeMirror {
+  //   font-family: Roboto, Monaco, monospace;
+  //   display: relative;
+  //   z-index: 1;
+  //   .CodeMirror-placeholder {
+  //     color: grey;
+  //     opacity: 0.3;
+  //   }
+  //   width: 80%;
+  // }
 
-  .CodeMirror-vscrollbar {
-    display: none;
-  }
+  // .CodeMirror-scroll {
+  //   height: auto;
+  //   max-height: 400px;
+  //   min-height: $markdown-editor-height;
+  // }
+
+  // .CodeMirror-vscrollbar {
+  //   display: none;
+  // }
 }
 
 // Text that has been converted from markdown to html
@@ -147,14 +146,14 @@ $markdown-editor-height: 15px;
 }
 
 // Style for comment type selector icons
-.commenttype-selector  { 
-  line-height: inherit;
-  font-size: 85%;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  text-align: center;
-}
+// .commenttype-selector {
+//   line-height: inherit;
+//   font-size: 85%;
+//   position: absolute;
+//   left: 0;
+//   width: 100%;
+//   text-align: center;
+// }
 
 /*
 .audio-button{
@@ -169,9 +168,9 @@ $markdown-editor-height: 15px;
   background-color: rgb(255, 94, 0);
 }
 
-.audio-button:disabled { 
+.audio-button:disabled {
   opacity: 0.3;
-  filter: alpha(opacity=30); 
+  filter: alpha(opacity=30);
   background-color: #000;
 }
 
