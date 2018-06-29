@@ -21,7 +21,7 @@
       <li ng-show="task && task.extensions > 0">
           <strong>Number of extensions</strong>
           &mdash;
-          you have requested <strong>{{task.extensions}}</strong> extensions for this task.
+          you have requested <strong>{{task.extensions}}</strong> one week extension{{task.extensions > 1 ? "s"}} for this task.
         </li>
       <li ng-show="should_show_deadline()">
         <strong>Deadline</strong>
