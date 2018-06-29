@@ -32,28 +32,16 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       }, (response) ->
         $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
         $scope.task.num_new_comments = 0
-        scrollDown()
+        taskService.scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
 
         CommentResourceService.setTask($scope.task)
 
-    # Automatically scroll the inner div to the bottom of comments
-    scrollDown = ->
-      $timeout ->
-        objDiv = document.querySelector("task-comments-viewer .panel-body")
-        wrappedResult = angular.element(objDiv)
-        wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
     $scope.openCommentsModal = (comment)->
       imageUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
       CommentResourceService.setImageUrl(imageUrl)
       CommentsModal.show()
-
-    # Checks for enter keydown
-    $scope.enterDown = (editor) ->
-      $scope.addComment()
-      return
-      # return CodeMirror.Pass
 
     #===========================================================================================
     $scope.canUserEdit = (comment) ->
@@ -64,40 +52,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     #===========================================================================================
     $scope.getCommentAttachment = (comment) ->
-      # mediaURL = $sce.trustAsResourceUrl(Task.downloadCommentAttachment($scope.project, $scope.task, comment)
+      # TODO: Refactor to use other Task method
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      # mediaURL = {}
-      # Task.downloadCommentAttachment($scope.project, $scope.task, comment,
-      #   (successResponse) ->
-      #     mediaURL = successResponse.data
-      #   (errorResponse) ->
-      #     console.log(errorResponse)
-      # )
-      # mediaURL
-      # Task.downloadCommentAttachment($scope.project, $scope.task, comment,
-      # (successResponse) ->
-      #   console.info(successResponse)
-      #   mediaURL = $sce.trustAsResourceUrl(successResponse)
-      #   # return $sce.trustAsResourceUrl(successResponse.data)
-      # (errorResponse) ->
-      #   console.log(errorResponse)
-      # )
 
-
-    #===========================================================================================
-    # Submits a new comment
-    $scope.addComment = ->
-      $scope.comment.text = $scope.comment.text.trim()
-      taskService.addComment $scope.task, $scope.comment.text, CommentResourceService.commentType,
-      (success) ->
-        $scope.comment.text = ""
-        analyticsService.event "View Task Comments", "Added new comment"
-        scrollDown()
-      (failure) -> #changed from response to failure
-        alertService.add("danger", response.data.error, 2000)
-
-    #===========================================================================================
-    # Deletes existing comment
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
         (response) ->

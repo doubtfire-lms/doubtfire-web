@@ -66,11 +66,11 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     # Submits a new comment
     $scope.addComment = ->
       $scope.comment.text = $scope.comment.text.trim()
-      taskService.addComment $scope.task, $scope.comment.text, CommentResourceService.commentType,
+      taskService.addComment $scope.task, $scope.comment.text, "text",
       (success) ->
         $scope.comment.text = ""
         analyticsService.event "View Task Comments", "Added new comment"
-        scrollDown()
+        taskService.scrollDown()
       (failure) -> #changed from response to failure
         alertService.add("danger", response.data.error, 2000)
 )
