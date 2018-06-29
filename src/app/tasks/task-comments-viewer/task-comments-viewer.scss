@@ -3,7 +3,7 @@ $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
 $comment-author-bubble-size: 38px;
-$comment-text-padding: 15px;
+$comment-text-padding: 12px;
 
 // Leave the 1.9 if you want amazing border radii
 $border-width: 0.8em;
@@ -22,9 +22,7 @@ task-comments-viewer .panel-body {
 // Primary comment div
 task-comments-viewer .comment {
   display: flex;
-  // width: 100%;
-  margin-bottom: 1em;
-  // flex-wrap: wrap;
+  margin-bottom: 0.6em;
   &.new-comment .comment-bubble {
     animation: fade-in-comment-animation;
     animation-duration: 5s;
@@ -45,8 +43,6 @@ task-comments-viewer .comment {
 task-comments-viewer .comment .user-icon {
   display: inline-block;
   align-self: flex-end;
-  // height: $comment-author-bubble-size;
-  // width: $comment-author-bubble-size;
   line-height: $comment-author-bubble-size - 2px;
   margin-right: $comment-text-padding;
   .user-icon-gravatar {
@@ -75,8 +71,6 @@ task-comments-viewer .comment.comment-by-other-user .user-icon {
   margin-right: 0;
 }
 
-// Comment bubble
-
 .delete-comment {
   align-self: flex-start;
   padding-left: 6px;
@@ -92,7 +86,6 @@ img {
 }
 task-comments-viewer .comment .comment-bubble {
   display: flex;
-  // flex: 1;
   background: $comment-bubble-color;
   color: #fff;
   border-radius: $comment-border-radius;
@@ -119,13 +112,8 @@ task-comments-viewer .comment .comment-bubble {
 }
 task-comments-viewer .comment .image-bubble {
   display: flex;
-  flex: 1;
   background: transparent;
   border-radius: $comment-border-radius;
-  padding-left: 0;
-  // color: #F5F5F5;
-  // border-style: solid;
-  // border-width: 1px;
 }
 
 task-comments-viewer .comment.comment-by-other-user .comment-bubble,
