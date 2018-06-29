@@ -9,6 +9,7 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
   templateUrl: 'tasks/task-comment-composer/task-comment-composer.tpl.html'
   scope:
     task: '='
+    comment: '=ngModel'
   controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
 
     # Initialise comment
@@ -19,10 +20,47 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
 
     $scope.audioPopover = 'audioRecorderPopover.html'
 
-    # Checks for enter keydown
-    $scope.enterDown = (editor) ->
-      $scope.addComment()
-      return CodeMirror.Pass
+    $scope.keyUp = (e) ->
+      if e.key.toLowerCase() == "enter"
+        if e.shiftKey
+          # console.info($scope.comment.text)
+          # Add new line
+        else
+          $scope.addComment()
+
+    $scope.formatImageName = (imageName) ->
+      index = imageName.indexOf(".")
+      nameString = imageName.substring(0,index)
+      typeString = imageName.substring(index)
+
+      if nameString.length > 20
+        nameString = nameString.substring(0,20) + ".."
+
+      finalString = nameString + typeString
+      finalString
+
+    #============================================================================
+    $scope.clearEnqueuedUpload = (upload) ->
+      upload.model = null
+      refreshShownUploadZones()
+
+    #============================================================================
+    # Upload image files as comments to a given task
+    $scope.postImageComment = ->
+      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, "image")
+      $scope.clearEnqueuedUpload($scope.upload)
+
+    #============================================================================
+    # Will refresh which shown drop zones are shown
+    # Only changes if showing one drop zone
+    refreshShownUploadZones = ->
+      if $scope.singleDropZone
+        # Find the first-most empty model in each zone
+        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
+        if firstEmptyZone?
+          $scope.shownUploadZones = [firstEmptyZone]
+        else
+          $scope.shownUploadZones = []
 
     #===========================================================================================
     # Submits a new comment
