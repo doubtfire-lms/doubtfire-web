@@ -54,10 +54,12 @@ task-comments-viewer .comment .user-icon {
   }
   .user-icon-initials {
     color: #fff;
-    border: 1px solid #fff;
-    box-shadow: 0 0 0 1px $comment-bubble-color;
-    background-color: $comment-bubble-color-darker;
-    background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
+    // border: 2px solid #fff;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    // box-shadow: 0 0 0 1px $comment-bubble-color;
+    background-color: $comment-bubble-color;
+    // background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
   }
 }
 task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {

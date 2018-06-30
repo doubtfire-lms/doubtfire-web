@@ -29,13 +29,15 @@ angular.module('doubtfire.common.audio-recorder', [])
     if (navigator.mediaDevices.getUserMedia)
       constraints =
         audio: true
-        mimeType: 'audio/wav'
+        mimeType: 'audio/webm'
       chunks = []
       blob = {}
 
       onSuccess = (stream) ->
-        mediaRecorder = new MediaRecorder(stream)
+        mediaRecorder = new MediaRecorder(stream, {mimeType:'audio/webm'})
 
+        # When the element is removed from the
+        # view, stop all recording and tracks
         $scope.$on('$destroy', () ->
           stream.getTracks().forEach (track) ->
             track.stop()
@@ -47,16 +49,16 @@ angular.module('doubtfire.common.audio-recorder', [])
           if (mediaRecorder.state == "inactive")
             mediaRecorder.start()
             $scope.isRecording = true
-
           else if (mediaRecorder.state == "recording")
             mediaRecorder.stop()
             $scope.isRecording = false
+          return
 
         btnSend.onclick = ->
           fileReader = new FileReader()
           fileReader.readAsDataURL(blob)
           fileReader.addEventListener 'loadend', ->
-            audioRecording = new Blob([ fileReader.result ], 'type': 'audio/wav')
+            audioRecording = new Blob([ fileReader.result ], 'type': 'audio/webm')
             taskService.addMediaComment($scope.task, audioRecording, "audio")
           blob = {}
           $scope.recordingAvailable = false
@@ -64,7 +66,7 @@ angular.module('doubtfire.common.audio-recorder', [])
           return
 
         mediaRecorder.onstop = (e) ->
-          blob = new Blob(chunks, { 'type' : 'audio/wav' })
+          blob = new Blob(chunks, { 'type' : 'audio/webm' })
           chunks = []
           audioURL = window.URL.createObjectURL(blob)
           audio.src = audioURL
