@@ -16,10 +16,12 @@
   max-height: 200px;
 }
 
-[contenteditable=true]:empty::before {
-  content: attr(placeholder);
+#textField[placeholder]:empty::before {
+    -webkit-font-smoothing: antialiased;
+    content: attr(placeholder);
+    color: #555;
+    cursor: text;
 }
-
 
 .markdown-editor-actions {
   bottom: 0.5em;
