@@ -10,8 +10,10 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
   scope:
     task: '='
     comment: '=ngModel'
+    singleDropZone: '=?'
   controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
 
+    $scope.isRecorderOpen = false
     # Initialise comment
     $scope.comment = {
       text: ""
