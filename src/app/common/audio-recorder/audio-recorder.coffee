@@ -6,108 +6,113 @@ angular.module('doubtfire.common.audio-recorder', [])
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
   controller: ($scope, taskService, mediaService) ->
-    angular.element(document).ready( ->
-      audioSetup()
-    )
 
-    audioSetup = ->
-      btnRecord = document.getElementById('btnRecord')
-      btnPlay = document.getElementById('btnPlay')
-      btnSend = document.getElementById('btnSend')
-      btnDelete = document.getElementById('btnDelete')
-      canvas = document.getElementById('audio-recorder-visualiser')
-      audio = document.getElementById('audioPlayer')
+    $scope.recordingAvailable = false
 
-      audioCtx = mediaService.audioCtx
-      canvasCtx = canvas.getContext("2d")
+    # Need to get non-angular bindable components
+    canvas = document.getElementById('audio-recorder-visualiser')
+    audio = document.getElementById('audioPlayer')
 
-      if (navigator.mediaDevices.getUserMedia)
-        console.log('getUserMedia supported.')
-        constraints =
-          audio: true
-          mimeType: 'audio/wav'
-        chunks = []
-        blob = {}
+    audioCtx = mediaService.audioCtx
+    canvasCtx = canvas.getContext("2d")
 
-        onSuccess = (stream) ->
-          mediaRecorder = new MediaRecorder(stream)
-
-          visualise(stream)
-
-          btnRecord.onclick = ->
-            console.log(mediaRecorder.state)
-            if (mediaRecorder.state == "inactive")
-              mediaRecorder.start()
-              $scope.$apply( () ->
-                $scope.isRecording = true
-              )
-            else if (mediaRecorder.state == "recording")
-              mediaRecorder.stop()
-              $scope.$apply( () ->
-                $scope.isRecording = false
-              )
-
-          btnSend.onclick = ->
-            fileReader = new FileReader()
-            fileReader.readAsDataURL(blob)
-            fileReader.addEventListener 'loadend', ->
-              audioRecording = new Blob([ fileReader.result ], 'type': 'audio/wav')
-              taskService.addMediaComment($scope.task, audioRecording, "audio")
-            blob = {}
-            return
-
-          mediaRecorder.onstop = (e) ->
-            audio.controls = true
-            blob = new Blob(chunks, { 'type' : 'audio/wav' })
-            chunks = []
-            audioURL = window.URL.createObjectURL(blob)
-            audio.src = audioURL
-
-          mediaRecorder.ondataavailable = (e) ->
-            chunks.push(e.data)
-
-        onError = (err) ->
-          console.log('The following error occured: ' + err)
-
-        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)
+    $scope.playStop = () ->
+      if audio.paused
+        audio.play()
+        $scope.isPlaying = true
       else
-        console.log('getUserMedia not supported on your browser!')
+        audio.pause()
+        audio.currentTime = 0
+        $scope.isPlaying = false
+      return
 
+    if (navigator.mediaDevices.getUserMedia)
+      constraints =
+        audio: true
+        mimeType: 'audio/wav'
+      chunks = []
+      blob = {}
 
-      stopRecording = ->
-        mediaRecorder.stop()
-        stop.disabled = true
-        btnRecord.disabled = false
+      onSuccess = (stream) ->
+        mediaRecorder = new MediaRecorder(stream)
 
-      visualise = (stream) ->
-        source = audioCtx.createMediaStreamSource(stream)
-        analyser = audioCtx.createAnalyser()
+        $scope.$on('$destroy', () ->
+          stream.getTracks().forEach (track) ->
+            track.stop()
+        )
 
-        draw = ->
-          WIDTH = canvas.width
-          HEIGHT = canvas.height
-          requestAnimationFrame draw
-          analyser.getByteTimeDomainData(dataArray)
-          analyser.getByteFrequencyData(dataArray)
-          canvasCtx.fillstyle = '#2196F3'
+        visualise(stream)
 
-          bars = 100 * WIDTH/100
-          canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
-          i = 0
-          bar_width = 2
-          while i < bars
-            bar_x = i * 3
-            bar_height = -(dataArray[i] / 4) + 1
-            canvasCtx.fillRect bar_x, HEIGHT / 2, bar_width, bar_height
-            canvasCtx.fillRect bar_x, HEIGHT / 2 - bar_height, bar_width, bar_height
-            i++
+        $scope.recordingToggle = () ->
+          if (mediaRecorder.state == "inactive")
+            mediaRecorder.start()
+            $scope.isRecording = true
+
+          else if (mediaRecorder.state == "recording")
+            mediaRecorder.stop()
+            $scope.isRecording = false
+
+        btnSend.onclick = ->
+          fileReader = new FileReader()
+          fileReader.readAsDataURL(blob)
+          fileReader.addEventListener 'loadend', ->
+            audioRecording = new Blob([ fileReader.result ], 'type': 'audio/wav')
+            taskService.addMediaComment($scope.task, audioRecording, "audio")
+          blob = {}
+          $scope.recordingAvailable = false
+          taskService.scrollDown()
           return
 
-        source = audioCtx.createMediaStreamSource(stream)
-        analyser = audioCtx.createAnalyser()
-        analyser.fftSize = 2048
-        bufferLength = analyser.frequencyBinCount
-        dataArray = new Uint8Array(bufferLength)
-        source.connect analyser
-        draw()
+        mediaRecorder.onstop = (e) ->
+          blob = new Blob(chunks, { 'type' : 'audio/wav' })
+          chunks = []
+          audioURL = window.URL.createObjectURL(blob)
+          audio.src = audioURL
+          $scope.$apply( () ->
+            $scope.recordingAvailable = true
+          )
+          return
+
+        mediaRecorder.ondataavailable = (e) ->
+          chunks.push(e.data)
+          return
+
+      onError = (err) ->
+        console.log('The following error occured: ' + err)
+
+      navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)
+    else
+      console.log('getUserMedia not supported on your browser!')
+
+    visualise = (stream) ->
+      source = audioCtx.createMediaStreamSource(stream)
+      analyser = audioCtx.createAnalyser()
+
+      draw = ->
+        WIDTH = canvas.width
+        HEIGHT = canvas.height
+        requestAnimationFrame draw
+        analyser.getByteTimeDomainData(dataArray)
+        analyser.getByteFrequencyData(dataArray)
+        canvasCtx.fillstyle = '#2196F3'
+
+        canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
+        i = 0
+        bar_width = 1
+        while i < WIDTH
+          bar_x = i * 10
+          bar_y = HEIGHT / 2
+          bar_height = -(dataArray[i] / 4) + 1
+          canvasCtx.fillRect bar_x, bar_y, bar_width, bar_height
+          canvasCtx.fillRect bar_x, bar_y - bar_height, bar_width, bar_height
+          i++
         return
+
+      source = audioCtx.createMediaStreamSource(stream)
+      analyser = audioCtx.createAnalyser()
+      analyser.fftSize = 2048
+      bufferLength = analyser.frequencyBinCount
+      dataArray = new Uint8Array(bufferLength)
+      source.connect analyser
+      draw()
+      return
