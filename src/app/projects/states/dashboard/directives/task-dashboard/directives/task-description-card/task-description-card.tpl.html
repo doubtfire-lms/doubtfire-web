@@ -30,11 +30,11 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show=" (!task.inTerminalState() && !task.isOverdue()) || taskDef.has_task_pdf || taskDef.has_task_resources">
+  <div class="card-footer" ng-show=" (!task.inTerminalState() && !task.isOverdue()) || taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
-      ng-show="taskDef.has_task_pdf"
+      ng-show="taskDef.has_task_sheet"
       target="_blank"
       class="btn btn-primary">
       <i class="fa fa-download"></i>

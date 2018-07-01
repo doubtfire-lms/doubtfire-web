@@ -3,7 +3,7 @@
     <div class="panel-title">
       {{task.definition.name}} <span ng-show="tutor || showFooter">by {{task.project().student_name}}</span>
 
-      <div class="dropdown pull-right" dropdown ng-show="task.has_pdf || task.definition.has_task_pdf">
+      <div class="dropdown pull-right" dropdown ng-show="task.has_pdf || task.definition.has_task_sheet">
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
           <i class="fa fa-search"></i>
           <span class="caret"></span>
@@ -15,7 +15,7 @@
           <li ng-show="task.has_pdf">
             <a ng-click="setSelectedDashboardView('submission')">View Submission</a>
           </li>
-          <li ng-show="task.definition.has_task_pdf">
+          <li ng-show="task.definition.has_task_sheet">
             <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
           </li>
           <li class="divider" ng-show="task.has_pdf"></li>
