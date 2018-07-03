@@ -17,41 +17,24 @@ angular.module('doubtfire.common.audio-player', [])
     $scope.playAudio = () ->
       if not $scope.isLoaded
         $scope.isLoaded = true
-        getAudioComment($scope.$parent.comment)
+        audio.src = Task.generateCommentsAttachmentUrl($scope.project, $scope.task, $scope.$parent.comment)
+
+      if audio.paused
+        audio.play()
+        $scope.isPlaying = true
       else
-        if audio.paused
-          audio.play()
-          $scope.isPlaying = true
-        else
-          audio.pause()
-          audio.currentTime = 0
-          $scope.isPlaying = false
-        return
+        audio.pause()
+        audio.currentTime = 0
+        $scope.isPlaying = false
+      return
 
     audio.ontimeupdate = ->
-      val = audio.currentTime / audio.duration
-
-      # minutes = audio.currentTime.toString().split('.')[0]
-      # seconds = audio.currentTime.toString().split('.')[1].substr('0','1')
-      # $scope.currentTime = seconds
-
-      $scope.audioProgress = if isNaN(val) then 0 else val
+      percentagePlayed = audio.currentTime / audio.duration
+      $scope.audioProgress = if isNaN(percentagePlayed) then 0 else percentagePlayed
       $scope.$apply()
       return
 
     audio.onended = ->
       $scope.isPlaying = false
       $scope.$apply()
-      return
-
-
-    getAudioComment = (comment) ->
-      Task.downloadCommentAttachment($scope.project, $scope.task, comment,
-        (successResponse) ->
-          audio.src = successResponse.data
-          audio.play()
-          $scope.isPlaying = true
-        (errorResponse) ->
-          console.log(errorResponse)
-      )
       return
