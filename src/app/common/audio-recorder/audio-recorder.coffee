@@ -7,13 +7,25 @@ angular.module('doubtfire.common.audio-recorder', [])
 
   controller: ($scope, taskService, mediaService) ->
 
+    constraints =
+      audio: true
+      video: false
+
+    if !MediaRecorder?
+      $scope.canRecord = false
+      console.info("Browser nor supported")
+      return
+
+    $scope.canRecord = true
     $scope.recordingAvailable = false
+    $scope.isRecording = false
+    mediaRecorder = {}
 
     # Need to get non-angular bindable components
     canvas = document.getElementById('audio-recorder-visualiser')
     audio = document.getElementById('audioPlayer')
 
-    audioCtx = mediaService.audioCtx
+    audioCtx = new (window.AudioContext || webkitAudioContext)()
     canvasCtx = canvas.getContext("2d")
 
     $scope.playStop = () ->
@@ -26,65 +38,56 @@ angular.module('doubtfire.common.audio-recorder', [])
         $scope.isPlaying = false
       return
 
-    if (navigator.mediaDevices.getUserMedia)
-      constraints =
-        audio: true
-        mimeType: 'audio/webm'
-      chunks = []
-      blob = {}
+    chunks = []
+    blob = {}
 
-      onSuccess = (stream) ->
-        mediaRecorder = new MediaRecorder(stream, {mimeType:'audio/webm'})
+    onSuccess = (stream) ->
+      options =
+        audioBitsPerSecond : 16000,
+        mimeType : mediaService.getMimeType()
+      mediaRecorder = new MediaRecorder(stream, options)
+      visualise(stream)
 
-        # When the element is removed from the
-        # view, stop all recording and tracks
-        $scope.$on('$destroy', () ->
-          stream.getTracks().forEach (track) ->
-            track.stop()
+      $scope.$on('$destroy', () ->
+        stream.getTracks().forEach (track) ->
+          track.stop()
+      )
+
+      $scope.recordingToggle = () ->
+        if (!$scope.isRecording)
+          mediaRecorder.start()
+          $scope.isRecording = true
+        else if ($scope.isRecording)
+          mediaRecorder.stop()
+          $scope.isRecording = false
+        return
+
+      mediaRecorder.ondataavailable = (e) ->
+        chunks.push(e.data)
+        return
+
+      mediaRecorder.onstop = (e) ->
+        blob = new Blob(chunks, 'type': options.mimeType)
+        chunks = []
+        audioURL = window.URL.createObjectURL(blob)
+        audio.src = audioURL
+        audio.load()
+        $scope.$apply( () ->
+          $scope.recordingAvailable = true
         )
+        return
 
-        visualise(stream)
+      btnSend.onclick = ->
+        taskService.addMediaComment($scope.task, blob, "audio")
+        blob = {}
+        $scope.recordingAvailable = false
+        taskService.scrollDown()
+        return
 
-        $scope.recordingToggle = () ->
-          if (mediaRecorder.state == "inactive")
-            mediaRecorder.start()
-            $scope.isRecording = true
-          else if (mediaRecorder.state == "recording")
-            mediaRecorder.stop()
-            $scope.isRecording = false
-          return
+    onError = (err) ->
+      console.log('The following error occured: ' + err)
 
-        btnSend.onclick = ->
-          fileReader = new FileReader()
-          fileReader.readAsDataURL(blob)
-          fileReader.addEventListener 'loadend', ->
-            audioRecording = new Blob([ fileReader.result ], 'type': 'audio/webm')
-            taskService.addMediaComment($scope.task, audioRecording, "audio")
-          blob = {}
-          $scope.recordingAvailable = false
-          taskService.scrollDown()
-          return
-
-        mediaRecorder.onstop = (e) ->
-          blob = new Blob(chunks, { 'type' : 'audio/webm' })
-          chunks = []
-          audioURL = window.URL.createObjectURL(blob)
-          audio.src = audioURL
-          $scope.$apply( () ->
-            $scope.recordingAvailable = true
-          )
-          return
-
-        mediaRecorder.ondataavailable = (e) ->
-          chunks.push(e.data)
-          return
-
-      onError = (err) ->
-        console.log('The following error occured: ' + err)
-
-      navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)
-    else
-      console.log('getUserMedia not supported on your browser!')
+    navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)
 
     visualise = (stream) ->
       source = audioCtx.createMediaStreamSource(stream)
@@ -118,3 +121,4 @@ angular.module('doubtfire.common.audio-recorder', [])
       source.connect analyser
       draw()
       return
+    return

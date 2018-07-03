@@ -5,12 +5,18 @@ angular.module("doubtfire.common.services.media-service", [])
 .factory("mediaService", ($rootScope, $timeout, $sce) ->
   mediaService = {}
 
-  mediaService.audioCtx = audioCtx? || (new (window.AudioContext || webkitAudioContext)())
+  mediaService.audioCtx = mediaService.audioCtx? || (new (window.AudioContext || webkitAudioContext)())
 
-  mediaService.fetchContext = () ->
-    if !globalAudioContext?
-      globalAudioContext = new ((window.AudioContext or webkitAudioContext))
-    globalAudioContext
+  mediaService.getMimeType = () ->
+    mimeType = 'audio/webm'
+    if !MediaRecorder.isTypeSupported(mimeType)
+      console.log mimeType + ' is not Supported'
+      if navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+        console.log("Using Firefox")
+        mimeType = 'audio/ogg'
+      else
+        mimeType = ''
+    mimeType
 
   mediaService
 )

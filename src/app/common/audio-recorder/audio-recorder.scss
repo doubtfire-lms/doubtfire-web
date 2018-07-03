@@ -30,13 +30,29 @@
 }
 
 .btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.42857;
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  background-color: transparent;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+  border: 1px solid #BDBDBD;
+  box-shadow: 0.5px 0.5px 1px #BDBDBD;
+}
+
+.btn-circle:disabled {
+  opacity: 0.2;
+  border: none;
+}
+
+.btn-circle:active {
+  box-shadow: 0px 0px 0px #BDBDBD;
+}
+
+.btn-circle:focus {
+  outline: 0;
 }
 
 #button-wrapper {
