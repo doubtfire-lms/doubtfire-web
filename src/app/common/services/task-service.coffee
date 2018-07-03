@@ -552,7 +552,7 @@ angular.module("doubtfire.common.services.tasks", [])
     if commentType == "image"
       form.append 'attachment', mediaURL[0]
     else if commentType == "audio"
-      form.append 'attachment', mediaURL, 'a-comment.wav'
+      form.append 'attachment', mediaURL, 'a-comment'
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
