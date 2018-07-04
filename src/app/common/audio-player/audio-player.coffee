@@ -18,7 +18,6 @@ angular.module('doubtfire.common.audio-player', [])
       if not $scope.isLoaded
         $scope.isLoaded = true
         audio.src = Task.generateCommentsAttachmentUrl($scope.project, $scope.task, $scope.$parent.comment)
-
       if audio.paused
         audio.play()
         $scope.isPlaying = true

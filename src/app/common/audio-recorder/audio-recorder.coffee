@@ -57,13 +57,12 @@ angular.module('doubtfire.common.audio-recorder', [])
         requestAnimationFrame(draw)
         analyser.getByteTimeDomainData(dataArray)
         analyser.getByteFrequencyData(dataArray)
-        # canvasCtx.fillstyle = '#2196F3'
 
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
         i = 0
         bar_width = 1
         while i < WIDTH
-          bar_x = i * 14
+          bar_x = i * 10
           bar_y = HEIGHT / 2
           bar_height = -(dataArray[i] / 4) + 1
           canvasCtx.fillRect bar_x, bar_y, bar_width, bar_height
@@ -90,7 +89,6 @@ angular.module('doubtfire.common.audio-recorder', [])
       return
 
     $scope.sendRecording = () ->
-      blob.type = blob.mimeType
       taskService.addMediaComment($scope.task, blob, "audio")
       blob = {}
       $scope.recordingAvailable = false
