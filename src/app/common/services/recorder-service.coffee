@@ -98,7 +98,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
             event.data = e.data
           else
             event.data = new Blob(e.data, {type: that.encoderMimeType})
-            console.log("Safari Blob created: " + event.data)
+            # console.log("Safari Blob created: " + event.data)
           that._onDataAvailable(event)
         )
 
