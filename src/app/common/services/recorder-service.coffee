@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
 #
 # Services for working with media Recording APIs
 #
-.factory("recorderService", ($rootScope, $timeout, $sce, WavEncoder) ->
+.factory("recorderService", ($rootScope, $timeout, $sce) ->
   return class RecorderService
     constructor: () ->
       window.AudioContext = window.AudioContext || window.webkitAudioContext
@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
 
       @config =
         broadcastAudioProcessEvents: false,
-        createAnalyserNode: false,
+        createAnalyserNode: true,
         createDynamicsCompressorNode: false,
         forceScriptProcessor: false,
         manualEncoderId: 'wav',
@@ -87,16 +87,18 @@ angular.module("doubtfire.common.services.recorder-service", [])
           # encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: mediaRecorder.audioCtx.sampleRate}])
           # encoderMimeType = 'audio/ogg'
         else
-          @encoderWorker = @createWorker(WavEncoder)
+          # @encoderWorker = new Worker(WavEncoder)
+          @encoderWorker = new Worker('/assets/wav-worker.js') #@createWorker('/assets/wav-worker.js')
           @encoderMimeType = 'audio/wav'
 
         that = this
         @encoderWorker.addEventListener('message', (e) ->
           event = new Event('dataavailable')
-          if (@config.manualEncoderId == 'ogg')
+          if (that.config.manualEncoderId == 'ogg')
             event.data = e.data
           else
-            event.data = new Blob(e.data, {type: @encoderMimeType})
+            event.data = new Blob(e.data, {type: that.encoderMimeType})
+            console.log("Safari Blob created: " + event.data)
           that._onDataAvailable(event)
         )
 
@@ -271,6 +273,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
         blobUrl: blobUrl,
         mimeType: blob.type,
         size: blob.size
+        blob: blob
       }
 
       @chunks = []

@@ -6,16 +6,93 @@ angular.module('doubtfire.common.audio-recorder', [])
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
   controller: ($scope, taskService, recorderService) ->
-    # recorderSrvc = mediaRecorder
-    # mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = cleanupWhenFinished
-    # mediaRecorder.config.createDynamicsCompressorNode = addDynamicsCompressor
+
+    if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
+      $canRecord = false
+      return
+    $scope.canRecord = true
+
     mediaRecorder = new recorderService()
-    # console.log("Starting recording")
-    mediaRecorder.startRecording()
-    setTimeout(() ->
-      console.log("Stopping Recording")
-      mediaRecorder.stopRecording()
-    , 4000)
-    # mediaRecorder.startRecording()
-    # console.log("Started recording")
+    mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true
+    mediaRecorder.config.createAnalyserNode = true
+    mediaRecorder.em.addEventListener('recording', (evt) -> onNewRecording(evt))
+    $scope.recordingAvailable = false
+    $scope.isRecording = false
+
+    chunks = []
+    blob = {}
+
+    # Need to get non-angular bindable components
+    canvas = document.getElementById('audio-recorder-visualiser')
+    audio = document.getElementById('audioPlayer')
+
+    audioCtx = new (window.AudioContext || webkitAudioContext)()
+    canvasCtx = canvas.getContext("2d")
+
+    $scope.playStop = () ->
+      if audio.paused
+        audio.play()
+        $scope.isPlaying = true
+      else
+        audio.pause()
+        audio.currentTime = 0
+        $scope.isPlaying = false
+      return
+
+    onNewRecording = (evt) ->
+      blob = evt.detail.recording.blob
+      audio.src = evt.detail.recording.blobUrl
+      audio.load()
+      $scope.$apply( () ->
+        $scope.recordingAvailable = true
+      )
+      return
+
+    visualise = () ->
+      draw = ->
+        WIDTH = canvas.width
+        HEIGHT = canvas.height
+        requestAnimationFrame draw
+        analyser.getByteTimeDomainData(dataArray)
+        analyser.getByteFrequencyData(dataArray)
+        canvasCtx.fillstyle = '#2196F3'
+
+        canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
+        i = 0
+        bar_width = 1
+        while i < WIDTH
+          bar_x = i * 10
+          bar_y = HEIGHT / 2
+          bar_height = -(dataArray[i] / 4) + 1
+          canvasCtx.fillRect bar_x, bar_y, bar_width, bar_height
+          canvasCtx.fillRect bar_x, bar_y - bar_height, bar_width, bar_height
+          i++
+        return
+
+      source = mediaRecorder.inputStreamNode
+      analyser = mediaRecorder.analyserNode
+      analyser.fftSize = 2048
+      bufferLength = analyser.frequencyBinCount
+      dataArray = new Uint8Array(bufferLength)
+      draw()
+      return
+
+    $scope.recordingToggle = () ->
+      if (!$scope.isRecording)
+        mediaRecorder.startRecording()
+        visualise()
+        $scope.isRecording = true
+      else if ($scope.isRecording)
+        mediaRecorder.stopRecording()
+        $scope.isRecording = false
+      return
+
+    $scope.sendRecording = () ->
+      blob.type = blob.mimeType
+      taskService.addMediaComment($scope.task, blob, "audio")
+      blob = {}
+      $scope.recordingAvailable = false
+      taskService.scrollDown()
+      return
+
     return

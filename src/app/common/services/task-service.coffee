@@ -543,16 +543,16 @@ angular.module("doubtfire.common.services.tasks", [])
 
   #============================================================================
   #ADD MEDIA COMMENT
-  taskService.addMediaComment = (task, mediaURL, commentType) ->
+  taskService.addMediaComment = (task, media, commentType) ->
     form = new FormData()
     form.append 'type', commentType
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id
 
     if commentType == "image"
-      form.append 'attachment', mediaURL[0]
+      form.append 'attachment', media[0]
     else if commentType == "audio"
-      form.append 'attachment', mediaURL, 'a-comment'
+      form.append 'attachment', media, "a-comment.webm"
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
