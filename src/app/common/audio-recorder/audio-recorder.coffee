@@ -13,8 +13,12 @@ angular.module('doubtfire.common.audio-recorder', [])
     $scope.canRecord = true
 
     mediaRecorder = new recorderService()
+
+    # Required for recording multiple times
     mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true
+    # Required for visualising the stream
     mediaRecorder.config.createAnalyserNode = true
+
     mediaRecorder.em.addEventListener('recording', (evt) -> onNewRecording(evt))
     $scope.recordingAvailable = false
     $scope.isRecording = false
@@ -25,8 +29,6 @@ angular.module('doubtfire.common.audio-recorder', [])
     # Need to get non-angular bindable components
     canvas = document.getElementById('audio-recorder-visualiser')
     audio = document.getElementById('audioPlayer')
-
-    audioCtx = new (window.AudioContext || webkitAudioContext)()
     canvasCtx = canvas.getContext("2d")
 
     $scope.playStop = () ->
@@ -52,16 +54,16 @@ angular.module('doubtfire.common.audio-recorder', [])
       draw = ->
         WIDTH = canvas.width
         HEIGHT = canvas.height
-        requestAnimationFrame draw
+        requestAnimationFrame(draw)
         analyser.getByteTimeDomainData(dataArray)
         analyser.getByteFrequencyData(dataArray)
-        canvasCtx.fillstyle = '#2196F3'
+        # canvasCtx.fillstyle = '#2196F3'
 
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
         i = 0
         bar_width = 1
         while i < WIDTH
-          bar_x = i * 10
+          bar_x = i * 14
           bar_y = HEIGHT / 2
           bar_height = -(dataArray[i] / 4) + 1
           canvasCtx.fillRect bar_x, bar_y, bar_width, bar_height
