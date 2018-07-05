@@ -535,7 +535,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   #============================================================================
   #ADD MEDIA COMMENT
-  taskService.addMediaComment = (task, media, commentType) ->
+  taskService.addMediaComment = (task, media, commentType, onSuccess, onError) ->
     form = new FormData()
     form.append 'type', commentType
     form.append 'project_id', task.project().project_id
@@ -551,8 +551,9 @@ angular.module("doubtfire.common.services.tasks", [])
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
+        onSuccess(response)
       (response) -> #failure
-        #here
+        onError(response)
   taskService.applyForExtension = (task, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
