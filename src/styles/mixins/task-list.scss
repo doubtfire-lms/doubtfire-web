@@ -26,6 +26,12 @@
       @include custom-box-shadow(task-status-color('ready-to-mark'));
     }
 
+    .due-time {
+      padding-left: 6px;
+      font-size: 10px;
+      font-weight: lighter;
+    }
+
     &:hover, &:focus {
       cursor: pointer;
       text-decoration: none;
@@ -84,7 +90,14 @@
           }
           &.grade-badge {
             background-color: #000000;
-            color: white;
+            font-size: 9px;
+          }
+          &.soon-badge {
+            background-color: lighten(#EB8F06, 15%);
+            color: black;
+          }
+          &.due-badge {
+            background-color: $doubtfire-color;
           }
           // Only shown child? Push down a bit as it looks a bit weird
           &:only-child {
@@ -115,7 +128,7 @@
             background-color: $doubtfire-color;
           }
           &.plagiarism-detected-badge {
-            background-color: darken($brand-danger, 15%);
+            background-color: $doubtfire-color;
           }
           // Only shown child? Push down a bit as it looks a bit weird
           &:only-child {

@@ -21,7 +21,7 @@
       <li ng-show="task && task.extensions > 0">
           <strong>Number of extensions</strong>
           &mdash;
-          you have requested <strong>{{task.extensions}}</strong> extensions for this task.
+          you have requested <strong>{{task.extensions}}</strong> one week extension{{task.extensions > 1 ? "s" : ""}} for this task.
         </li>
       <li ng-show="should_show_deadline()">
         <strong>Deadline</strong>
@@ -30,11 +30,11 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show=" (!task.inTerminalState()) || taskDef.has_task_pdf || taskDef.has_task_resources">
+  <div class="card-footer" ng-show=" (!task.inTerminalState() && !task.isOverdue()) || taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
-      ng-show="taskDef.has_task_pdf"
+      ng-show="taskDef.has_task_sheet"
       target="_blank"
       class="btn btn-primary">
       <i class="fa fa-download"></i>
@@ -51,7 +51,7 @@
     </a>
     <a
       ng-click="applyForExtension()"
-      ng-hide="task.inTerminalState()"
+      ng-hide="task.inTerminalState() || task.isOverdue()"
       class="btn btn-success">
       <i class="fa fa-medkit"></i>
       Request Extension

@@ -74,16 +74,30 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.applyForExtension(task, onSuccess, onError)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
+    task.timeToDue = ->
+      if task.daysUntilTargetDate() < 0
+        return ""
+      else
+        days = task.daysUntilTargetDate()
+        if days < 7
+          return "#{days}d"
+        else
+          return "#{Math.floor(days/7)}w"
+    task.targetDate = ->
+      if task.due_date?
+        return task.due_date
+      else
+        return task.definition.target_date
     task.isToBeCompletedSoon = ->
-      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() > 0
+      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() >= 0 && ! task.inFinalState()
     task.isDueSoon = ->
-      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() > 0
+      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() >= 0 && ! task.inFinalState()
     task.isOverdue = ->
-      task.daysPastDueDate() > 0
+      task.daysPastDueDate() > 0 && ! task.inFinalState()
     task.isPastTargetDate = ->
-      task.daysPastTargetDate() > 0
+      task.daysPastTargetDate() > 0 && ! task.inFinalState()
     task.isDueToday = ->
-      task.daysUntilDueDate() == 0
+      task.daysUntilDueDate() == 0 && ! task.inFinalState()
     task.daysPastDueDate = ->
       taskService.daysPastDueDate(task)
     task.daysPastTargetDate = ->

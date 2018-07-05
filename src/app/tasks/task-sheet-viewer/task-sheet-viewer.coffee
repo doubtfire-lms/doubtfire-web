@@ -55,7 +55,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
       # don't switch the ordering
       evaluateQualityPoints()
       evaluateAssessmentPanels()
-      $scope.hasPDF = task.definition.has_task_pdf
+      $scope.hasPDF = task.definition.has_task_sheet
       $scope.hasResources = task.definition.has_task_resources
       $scope.taskPDFUrl = Task.getTaskPDFUrl($scope.unit, task.definition)
       $scope.resourceUrl = Task.getTaskResourcesUrl($scope.unit, task.definition)
