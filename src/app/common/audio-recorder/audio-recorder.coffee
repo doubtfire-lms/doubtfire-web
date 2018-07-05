@@ -5,7 +5,7 @@ angular.module('doubtfire.common.audio-recorder', [])
   replace: true
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
-  controller: ($scope, taskService, recorderService) ->
+  controller: ($scope, taskService, recorderService, alertService) ->
 
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
       $canRecord = false
@@ -89,7 +89,12 @@ angular.module('doubtfire.common.audio-recorder', [])
       return
 
     $scope.sendRecording = () ->
-      taskService.addMediaComment($scope.task, blob, "audio")
+      taskService.addMediaComment($scope.task, blob, "audio",
+        (success) ->
+          taskService.scrollDown()
+        (failure) ->
+          alertService.add('danger', "Failed to post audio. #{failure.data?.error}")
+      )
       blob = {}
       $scope.recordingAvailable = false
       taskService.scrollDown()

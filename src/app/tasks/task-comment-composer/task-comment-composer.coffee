@@ -47,7 +47,12 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     #============================================================================
     # Upload image files as comments to a given task
     $scope.postImageComment = ->
-      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, "image")
+      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, "image",
+        (success) ->
+          taskService.scrollDown()
+        (failure) ->
+          alertService.add('danger', "Failed to post image. #{failure.data?.error}")
+      )
       $scope.clearEnqueuedUpload($scope.upload)
 
     #============================================================================
@@ -65,10 +70,10 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     $scope.addComment = ->
       $scope.comment.text = $scope.comment.text.trim()
       taskService.addComment $scope.task, $scope.comment.text, "text",
-      (success) ->
-        $scope.comment.text = ""
-        analyticsService.event "View Task Comments", "Added new comment"
-        taskService.scrollDown()
-      (failure) -> #changed from response to failure
-        alertService.add("danger", response.data.error, 2000)
+        (success) ->
+          $scope.comment.text = ""
+          analyticsService.event "View Task Comments", "Added new comment"
+          taskService.scrollDown()
+        (failure) -> #changed from response to failure
+          alertService.add("danger", failure.data.error, 2000)
 )
