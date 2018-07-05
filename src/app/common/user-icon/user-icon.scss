@@ -1,10 +1,12 @@
 .user-icon {
   display: inline-block;
   align-self: flex-end;
-  border-radius: 100%;
+  border-radius: 50%;
   font-size: inherit;
-  min-width: 2.25em;
-  min-height: 2.25em;
+  min-width: 2.5em;
+  min-height: 2.5em;
+  width: 2.5em;
+  height: 2.5em;
   position: relative;
 }
 .user-icon > .user-icon-wrapper {
@@ -19,11 +21,10 @@
   font-weight: bold;
   font-size: inherit;
   padding-bottom: 2px;
-  border-radius: 100%;
+  border-radius: 50%;
   &.user-icon-gravatar {
     z-index: 1;
     background-size: cover;
-    border: 1px solid #eee;
   }
   &.user-icon-initials {
     color: #fff;

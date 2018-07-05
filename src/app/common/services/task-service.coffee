@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -510,8 +510,10 @@ angular.module("doubtfire.common.services.tasks", [])
     comment.author_is_me = comment.author.id == currentUser.profile.id
     comment
 
-  taskService.addComment = (task, textString, success, failure) ->
-    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
+  #============================================================================
+  #ADD COMMENT
+  taskService.addComment = (task, textString, commentType, success, failure) ->
+    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType},
       (response) ->
         unless task.comments?
           task.comments = []
@@ -523,6 +525,34 @@ angular.module("doubtfire.common.services.tasks", [])
         if failure? and _.isFunction failure
           failure(response)
 
+  #============================================================================
+  #SCROLL DOWN
+  taskService.scrollDown = ->
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+
+  #============================================================================
+  #ADD MEDIA COMMENT
+  taskService.addMediaComment = (task, media, commentType) ->
+    form = new FormData()
+    form.append 'type', commentType
+    form.append 'project_id', task.project().project_id
+    form.append 'task_definition_id', task.task_definition_id
+
+    if commentType == "image"
+      form.append 'attachment', media[0]
+    else if commentType == "audio"
+      form.append 'attachment', media, "a-comment.webm"
+
+    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
+      (response) -> #success
+        unless task.comments?
+          task.comments = []
+        task.comments.unshift(taskService.mapComment(response))
+      (response) -> #failure
+        #here
   taskService.applyForExtension = (task, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date

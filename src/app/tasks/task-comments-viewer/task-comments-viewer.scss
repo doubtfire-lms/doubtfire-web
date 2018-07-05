@@ -1,9 +1,13 @@
-$comment-bubble-color: #2196F3;
+$comment-bubble-color: #0084ff;
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
 $comment-author-bubble-size: 38px;
-$comment-text-padding: 15px;
+$comment-text-padding: 12px;
+
+// Leave the 1.9 if you want amazing border radii
+$border-width: 0.8em;
+$comment-border-radius: $border-width * 1.9;
 
 task-comments-viewer .panel {
   @include flex-panel;
@@ -18,9 +22,7 @@ task-comments-viewer .panel-body {
 // Primary comment div
 task-comments-viewer .comment {
   display: flex;
-  width: 100%;
-  margin-bottom: 1em;
-  flex-wrap: wrap;
+  margin-bottom: 0.6em;
   &.new-comment .comment-bubble {
     animation: fade-in-comment-animation;
     animation-duration: 5s;
@@ -41,8 +43,6 @@ task-comments-viewer .comment {
 task-comments-viewer .comment .user-icon {
   display: inline-block;
   align-self: flex-end;
-  height: $comment-author-bubble-size;
-  width: $comment-author-bubble-size;
   line-height: $comment-author-bubble-size - 2px;
   margin-right: $comment-text-padding;
   .user-icon-gravatar {
@@ -54,10 +54,12 @@ task-comments-viewer .comment .user-icon {
   }
   .user-icon-initials {
     color: #fff;
-    border: 1px solid #fff;
-    box-shadow: 0 0 0 1px $comment-bubble-color;
-    background-color: $comment-bubble-color-darker;
-    background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
+    // border: 2px solid #fff;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    // box-shadow: 0 0 0 1px $comment-bubble-color;
+    background-color: $comment-bubble-color;
+    // background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
   }
 }
 task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {
@@ -71,49 +73,66 @@ task-comments-viewer .comment.comment-by-other-user .user-icon {
   margin-right: 0;
 }
 
-// Comment bubble
+.delete-comment {
+  align-self: flex-start;
+  padding-left: 6px;
+  font-style: normal;
+  font-size: 1.6em;
+  margin-right: $comment-text-padding;
+}
+img {
+  border-radius: $comment-border-radius;
+  color: #EEEEEE;
+  border-style: solid;
+  border-width: 1px;
+}
 task-comments-viewer .comment .comment-bubble {
   display: flex;
-  flex: 1;
   background: $comment-bubble-color;
   color: #fff;
-  border-radius: 6px;
+  border-radius: $comment-border-radius;
   font-size: 1em;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 0;
   line-height: 1.5em;
+
   .comment-text {
+    width: 100%;
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
     word-break: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .comment-audio {
+    width: 200px;
   }
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
   }
-  img {
-    border-radius: 1em;
-  }
-  .delete-comment {
-    align-self: flex-start;
-    font-style: normal;
-    font-size: 1.6em;
-    margin-right: $comment-text-padding;
-  }
 }
-task-comments-viewer .comment.comment-by-other-user .comment-bubble {
+task-comments-viewer .comment .image-bubble {
+  display: flex;
+  background: transparent;
+  border-radius: $comment-border-radius;
+}
+
+task-comments-viewer .comment.comment-by-other-user .comment-bubble,
+task-comments-viewer .comment.comment-by-other-user .image-bubble {
   background: $comment-bubble-color-other-user;
   &, .delete-comment {
     color: $text-color;
   }
 }
-task-comments-viewer .comment .comment-bubble .delete-comment:hover {
+task-comments-viewer .comment .comment-bubble .delete-comment:hover,
+task-comments-viewer .comment .image-bubble .delete-comment:hover {
   color: lighten(#B71C1C, 15%);
   cursor: pointer;
 }
 
 // Read receipts
-task-comments-viewer .comment .read-receipt {
+task-comments-viewer .read-receipt {
   @extend .small;
   @extend .text-muted;
   @extend .text-right;
@@ -124,6 +143,7 @@ task-comments-viewer .comment .read-receipt {
 task-comments-viewer .panel-footer {
   padding: 0;
   font-size: 15px;
+  background-color: white;
 }
 
 // Editor & submitter
@@ -131,7 +151,7 @@ task-comments-viewer .markdown-editor .markdown-editor-inner-context {
   border: 0;
   width: 100%;
   box-shadow: none;
-  border-radius: 0px 0px 4px 4px;
+  border-radius: none;
   min-height: 54px;
 }
 task-comments-viewer .comment-submitter {

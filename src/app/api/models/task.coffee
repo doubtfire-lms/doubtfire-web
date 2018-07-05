@@ -10,11 +10,18 @@ angular.module("doubtfire.api.models.task", [])
   Task.applyForExtension = (task, onSuccess, onError) ->
     $http.post("#{api}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/extension", { }).then(
       (data) -> onSuccess(data)
-      (response) -> onError(response))
+      (response) -> onError(response)
+    )
 
   #
   # Generates a url for the given task
   #
+  Task.generateCommentsUrl = (task) ->
+    "#{api}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/comments?auth_token=#{currentUser.authenticationToken}"
+
+  Task.generateCommentsAttachmentUrl = (project, task, comment) ->
+    "#{api}/projects/#{project.project_id}/task_def_id/#{task.task_definition_id}/comments/#{comment.id}?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
+
   Task.generateSubmissionUrl = (project, task) ->
     "#{api}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
 

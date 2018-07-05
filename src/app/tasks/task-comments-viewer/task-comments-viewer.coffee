@@ -12,7 +12,8 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     comment: '=?'
     autofocus: '@?'
     refocusOnTaskChange: '@?'
-  controller: ($scope, $modal, $state, $timeout, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -29,35 +30,32 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         project_id: $scope.project.project_id,
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
-        $scope.task.comments = _.map(response, taskService.mapComment)
+        $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
+        $scope.lastComment = $scope.task.comments.slice(-1)[0]
         $scope.task.num_new_comments = 0
-        scrollDown()
+        taskService.scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
 
-    # Automatically scroll the inner div to the bottom of comments
-    scrollDown = ->
-      $timeout ->
-        objDiv = document.querySelector("task-comments-viewer .panel-body")
-        wrappedResult = angular.element(objDiv)
-        wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+        CommentResourceService.setTask($scope.task)
 
-    # Checks for enter keydown
-    $scope.enterDown = (editor) ->
-      $scope.addComment()
-      return CodeMirror.Pass
 
-    # Submits a new comment
-    $scope.addComment = ->
-      $scope.comment.text = $scope.comment.text.trim()
-      taskService.addComment $scope.task, $scope.comment.text,
-        (success) ->
-          $scope.comment.text = ""
-          analyticsService.event "View Task Comments", "Added new comment"
-          scrollDown()
-        (response) ->
-          alertService.add("danger", response.data.error, 2000)
+    $scope.openCommentsModal = (comment)->
+      imageUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      CommentResourceService.setImageUrl(imageUrl)
+      CommentsModal.show()
 
-    # Deletes existing comment
+    #===========================================================================================
+    $scope.canUserEdit = (comment) ->
+      canEdit = false
+      if comment.author_is_me || currentUser.role == "Admin"
+        canEdit = true
+      canEdit
+
+    #===========================================================================================
+    $scope.getCommentAttachment = (comment) ->
+      # TODO: Refactor to use other Task method
+      mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
         (response) ->
@@ -65,9 +63,4 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           analyticsService.event "View Task Comments", "Deleted existing comment"
         (response) ->
           alertService.add("danger", response.data.error, 2000)
-
-    # Watch for changes to the task status and if non-empty comment then add that comment
-    listeners.push $scope.$watch "task.status", ->
-      if $scope.comment.text.trim().length > 0
-        $scope.addComment()
 )

@@ -1,0 +1,42 @@
+<form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
+  <!--
+  <button type="button" >
+    <i class="fa fa-microphone"></i>
+  </button> -->
+
+  <button class="btn-recorder" type="button" popover-template="audioPopover" ng-click="isRecorderOpen = !isRecorderOpen">
+    <span class="fa fa-microphone"></span>
+  </button>
+
+  <div class="image-uploader" ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
+    ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
+    ngf-drop-available="dropSupported">
+
+    <div id="textField" contenteditable ng-keydown="keyDown($event)" ng-keyup="keyUp($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image..."></div>
+
+    <p ng-show="upload.display.error">
+      Invalid file type!
+    </p>
+
+    <p ng-hide="dropSupported || upload.display.error">
+      Click to select image file
+    </p>
+  </div>
+  <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
+    <span class="selected-file">
+      <i class="file-type fa fa-file-image-o"></i>
+      {{formatImageName(upload.model[0].name)}}
+    </span>
+    <a class="clear-upload" ng-click="clearEnqueuedUpload(upload)">
+      <i class="clear-upload fa fa-times"></i>
+    </a>
+    <a class="send-upload" ng-click="postImageComment()">
+      <i class="fa fa-paper-plane"></i>
+    </a>
+  </div>
+</form>
+
+<!-- The HTML which will be injected into the audio popover -->
+<script type="text/ng-template" id="audioRecorderPopover.html">
+  <audio-recorder ng-if="isRecorderOpen"></audio-recorder>
+</script>
