@@ -1,16 +1,17 @@
+# Parts adapted from https://github.com/kaliatech/web-audio-recording-tests
+
 angular.module("doubtfire.common.services.recorder-service", [])
 #
-# Services for working with media Recording APIs
+# Services for working with cross-platform, media Recording APIs
 #
 .factory("recorderService", ($rootScope, $timeout, $sce) ->
   return class RecorderService
     constructor: () ->
       window.AudioContext = window.AudioContext || window.webkitAudioContext
+
       @em = document.createDocumentFragment()
       @state = 'inactive'
-
       @audioCtx = {}
-
       @chunks = []
       @chunkType = ''
 
@@ -18,7 +19,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
 
       @encoderMimeType = 'audio/wav'
 
-      @config =
+      @config = {
         broadcastAudioProcessEvents: false,
         createAnalyserNode: true,
         createDynamicsCompressorNode: false,
@@ -27,19 +28,14 @@ angular.module("doubtfire.common.services.recorder-service", [])
         micGain: 1.0,
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
-        userMediaConstraints:
+        userMediaConstraints: {
           audio: true
+        }
+      }
       return
 
-    createWorker: (fn) ->
-      js = fn
-        .toString()
-        .replace(/^function\s*\(\)\s*{/, '')
-        .replace(/}$/, '')
-      blob = new Blob([js])
-      return new Worker(URL.createObjectURL(blob))
-
-    startRecording: (timeslice) ->
+    # Called once when the recording is initated
+    startRecording: () ->
       if (@state != 'inactive')
         return
 
@@ -73,23 +69,10 @@ angular.module("doubtfire.common.services.recorder-service", [])
       else
         @destinationNode = @audioCtx.destination
 
-
       #  Create web worker for doing the encoding
       if (!@usingMediaRecorder)
-        if (@config.manualEncoderId == 'mp3')
-          #  This also works and avoids weirdness imports with workers
-          #  encoderWorker = new Worker(BASE_URL + '/workers/encoder-ogg-worker.js')
-          # encoderWorker = createWorker(EncoderMp3)
-          # encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: mediaRecorder.audioCtx.sampleRate}])
-          # encoderMimeType = 'audio/mpeg'
-        else if (@config.manualEncoderId == 'ogg')
-          # encoderWorker = createWorker(EncoderOgg)
-          # encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: mediaRecorder.audioCtx.sampleRate}])
-          # encoderMimeType = 'audio/ogg'
-        else
-          # @encoderWorker = new Worker(WavEncoder)
-          @encoderWorker = new Worker('/assets/wav-worker.js') #@createWorker('/assets/wav-worker.js')
-          @encoderMimeType = 'audio/wav'
+        @encoderWorker = new Worker('/assets/wav-worker.js')
+        @encoderMimeType = 'audio/wav'
 
         that = this
         @encoderWorker.addEventListener('message', (e) ->
@@ -97,8 +80,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
           if (that.config.manualEncoderId == 'ogg')
             event.data = e.data
           else
-            event.data = new Blob(e.data, {type: that.encoderMimeType})
-            # console.log("Safari Blob created: " + event.data)
+            event.data = new Blob(e.data, { type: that.encoderMimeType })
           that._onDataAvailable(event)
         )
 
@@ -106,10 +88,10 @@ angular.module("doubtfire.common.services.recorder-service", [])
       that = this
       return navigator.mediaDevices.getUserMedia(@config.userMediaConstraints)
         .then((stream) ->
-          that._startRecordingWithStream(stream, timeslice)
+          that._startRecordingWithStream(stream)
         )
         .catch((error) ->
-          console.log('Error with getUserMedia: ' + error.message) # temp: helps when testing for strange issues on ios/safari
+          console.log('Error with getUserMedia: ' + error.message)
           console.log(error)
           return
         )
@@ -121,13 +103,13 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @micGainNode.gain.setValueAtTime(newGain, @audioCtx.currentTime)
       return
 
-    _startRecordingWithStream: (stream, timeslice) ->
+    _startRecordingWithStream: (stream) ->
       @micAudioStream = stream
       @inputStreamNode = @audioCtx.createMediaStreamSource(@micAudioStream)
       @audioCtx = @inputStreamNode.context
 
       #  Kind-of a hack to allow hooking in to audioGraph mediaRecorder.inputStreamNode
-      if (@onGraphSetupWithInputStream) # use ?
+      if (@onGraphSetupWithInputStream)
         @onGraphSetupWithInputStream(@inputStreamNode)
 
       @inputStreamNode.connect(@micGainNode)
@@ -149,10 +131,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
         nextNode.connect(@outputGainNode)
 
       if (@analyserNode)
-        # TODO: If we want the analyser node to receive the @processorNode's output, this needs to be changed _and_
-        #       processor node needs to be modified to copy input to output. It currently doesn't because it's not
-        #       needed when doing manual encoding.
-        # @processorNode.connect(@analyserNode)
         nextNode.connect(@analyserNode)
 
       @outputGainNode.connect(@destinationNode)
@@ -163,34 +141,12 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @mediaRecorder.addEventListener('dataavailable', (evt) -> that._onDataAvailable(evt))
         @mediaRecorder.addEventListener('error', (evt) -> @_onError(evt))
 
-        @mediaRecorder.start(timeslice)
+        @mediaRecorder.start()
       else
-        # Output gain to zero to prevent feedback. Seems to matter only on Edge, though seems like should matter
-        # on iOS too.  Matters on chrome when connecting graph to directly to mediaRecorder.audioCtx.destination, but we are
-        # not able to do that when using MediaRecorder.
         @outputGainNode.gain.setValueAtTime(0, @audioCtx.currentTime)
-        # mediaRecorder.outputGainNode.gain.value = 0
-
-        # Todo: Note that time mediaRecorder.slicing with manual wav encoderWav won't work. To allow it would require rewriting the encoderWav
-        # to assemble all chunks at end instead of adding header to each chunk.
-        if (timeslice) # USE ?
-          console.log('Time slicing without MediaRecorder is not yet supported. The resulting recording will not be playable.')
-          @slicing = setInterval( () ->
-            if (@state == 'recording')
-              @encoderWorker.postMessage(['dump', @context.sampleRate])
-          ,timeslice)
       return
 
     _onAudioProcess: (e) ->
-      # console.log('onaudioprocess', e)
-      # inputBuffer = e.inputBuffer
-      # outputBuffer = e.outputBuffer
-      # console.log(micAudioStream)
-      # console.log(mediaRecorder.audioCtx)
-      # console.log(micAudioStream.getTracks().forEach((track) -> console.log(track)))
-
-      # onAudioEm.dispatch(new Event('onaudioprocess', {inputBuffer:inputBuffer,outputBuffer:outputBuffer}))
-
       if (@config.broadcastAudioProcessEvents)
         @em.dispatchEvent(new CustomEvent('onaudioprocess', {
           detail: {
@@ -198,38 +154,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
             outputBuffer: e.outputBuffer
           }
         }))
-
-      # # Example handling:
-      # inputBuffer = e.inputBuffer
-      # outputBuffer = e.outputBuffer
-      # # Each channel (usually only one)
-      # for (channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-      #   inputData = inputBuffer.getChannelData(channel)
-      #   outputData = outputBuffer.getChannelData(channel)
-      #
-      #   # Each sample
-      #   for (sample = 0; sample < inputBuffer.length; sample++) {
-      #     # Make output equal to the same as the input (thus processor is doing nothing at this time)
-      #     outputData[sample] = inputData[sample]
-      #   }
-      # }
-
-      # When manually encoding (safari/edge), there's no reason to copy data to output buffer.  We set the output
-      # gain to 0 anyways (which is required on Edge if we did copy data to output). However, if using a MediaRecorder
-      # and a processor (all other browsers), then it would be required to copy the data otherwise the graph would
-      # generate no data for the MediaRecorder to consume.
-      # if (forceScriptProcessor) {
-
-      # # Copy input to output
-      # inputBuffer = e.inputBuffer
-      # outputBuffer = e.outputBuffer
-      # # This doesn't work on iOS/Safari. Guessing it doesn't have copyToChannel support, but haven't verified.
-      # for (channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-      #   outputBuffer.copyToChannel(inputBuffer.getChannelData(channel), channel)
-      # }
-
-      # Safari and Edge require manual encoding via web worker. Single channel only for now.
-      # Example stereo encoderWav: https:#github.com/MicrosoftEdge/Demos/blob/master/microphone/scripts/recorderworker.js
       if (!@usingMediaRecorder)
         if (@state == 'recording')
           if (@config.broadcastAudioProcessEvents)
@@ -238,6 +162,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
             @encoderWorker.postMessage(['encode', e.inputBuffer.getChannelData(0)])
       return
 
+    # Called once when the recording has been stopped
     stopRecording: () ->
       if (@state == 'inactive')
         return
@@ -248,25 +173,17 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @state = 'inactive'
         @encoderWorker.postMessage(['dump', @audioCtx.sampleRate])
         clearInterval(@slicing)
-
-        # TODO: There should be a more robust way to handle this
-        # Without something like this, I think  the last recorded sample could be lost due to timing
-        # setTimeout(() -> {
-        #   state = 'inactive'
-        #   mediaRecorder.encoderWorker.postMessage(['dump', audioCtx.sampleRate])
-        # }, 100)
       return
 
+    # Called each time a chunk of recording becomes available
     _onDataAvailable: (evt) ->
-      # console.log('state', mediaRecorder.state)
-      # console.log('evt.data', evt.data)
       @chunks.push(evt.data)
       @chunkType = evt.data.type
 
       if (@state != 'inactive')
         return
 
-      blob = new Blob(@chunks, {'type': @chunkType})
+      blob = new Blob(@chunks, { 'type': @chunkType })
       blobUrl = URL.createObjectURL(blob)
       recording = {
         ts: new Date().getTime(),
@@ -279,6 +196,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
       @chunks = []
       @chunkType = null
 
+      # cleanup
       if (@destinationNode)
         @destinationNode.disconnect()
         @destinationNode = null
@@ -312,12 +230,11 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @audioCtx.close()
         @audioCtx = null
 
-      @em.dispatchEvent(new CustomEvent('recording', {detail: {recording: recording}}))
+      @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
       return
 
     _onError: (evt) ->
       console.log('error', evt)
       @em.dispatchEvent(new Event('error'))
-      alert('error:' + evt) # for debugging purposes
       return
 )
