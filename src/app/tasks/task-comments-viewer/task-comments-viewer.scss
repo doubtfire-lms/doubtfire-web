@@ -132,7 +132,7 @@ task-comments-viewer .comment .image-bubble .delete-comment:hover {
 }
 
 // Read receipts
-task-comments-viewer .comment .read-receipt {
+task-comments-viewer .read-receipt {
   @extend .small;
   @extend .text-muted;
   @extend .text-right;

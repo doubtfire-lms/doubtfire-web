@@ -31,6 +31,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
         $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
+        $scope.lastComment = $scope.task.comments.slice(-1)[0]
         $scope.task.num_new_comments = 0
         taskService.scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
