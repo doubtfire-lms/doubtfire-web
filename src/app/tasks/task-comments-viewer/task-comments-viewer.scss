@@ -156,7 +156,7 @@ task-comments-viewer .markdown-editor .markdown-editor-inner-context {
 }
 task-comments-viewer .comment-submitter {
   display: flex;
-  word-break: break-all;
+  word-wrap: break-word;
   hyphens: auto;
   .markdown-editor {
     padding: 0;
