@@ -19,6 +19,6 @@
     </form>
   </div>
   <div class="modal-footer text-right">
-    <input type="button" ng-click="enrolStudent(student_id, tutorial)" class="btn btn-primary" value="Save" />
+    <input ng-disabled="tutorial.trim().length == 0" type="button" ng-click="enrolStudent(student_id, tutorial)" class="btn btn-primary" value="Save" />
   </div>
 </div>
