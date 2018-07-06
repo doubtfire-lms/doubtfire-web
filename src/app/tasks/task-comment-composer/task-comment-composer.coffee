@@ -23,12 +23,9 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     $scope.audioPopover = 'audioRecorderPopover.html'
 
     # Don't insert a newline character when sending a comment
-    $scope.keyDown = (e) ->
+    $scope.keyPress = (e) ->
       if (e.key.toLowerCase() == "enter" && !e.shiftKey)
         e.preventDefault()
-
-    $scope.keyUp = (e) ->
-      if e.key.toLowerCase() == "enter" && !e.shiftKey
         $scope.addComment()
 
     $scope.formatImageName = (imageName) ->
