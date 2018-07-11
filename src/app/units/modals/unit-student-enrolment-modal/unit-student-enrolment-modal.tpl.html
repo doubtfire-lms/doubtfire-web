@@ -16,6 +16,7 @@
           <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials" />
         </div>
       </div>
+      <p class="help-block" style="padding-left: 5em" ng-show="tutorial.trim().length == 0">Student will be enrolled without a tutorial assigned.</p>
     </form>
   </div>
   <div class="modal-footer text-right">
