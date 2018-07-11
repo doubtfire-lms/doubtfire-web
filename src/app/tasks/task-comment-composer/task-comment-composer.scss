@@ -9,10 +9,11 @@
   box-shadow: none;
 
   padding: 8px;
-  line-height:2em;
-  margin:0px auto;
+  line-height: 1.5em;
+  margin: 0px auto;
   -webkit-font-smoothing: antialiased;
   max-height: 200px;
+
 }
 
 .selected-files {
@@ -26,12 +27,14 @@
   }
 }
 
-
 #textField[placeholder]:empty::before {
-    -webkit-font-smoothing: antialiased;
-    content: attr(placeholder);
-    color: #555;
-    cursor: text;
+  -webkit-font-smoothing: antialiased;
+  content: attr(placeholder);
+  color: #555;
+  cursor: text;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .markdown-editor-actions {

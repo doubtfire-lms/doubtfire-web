@@ -18,10 +18,11 @@ angular.module("doubtfire.common.services.alerts", [])
     closeThisAlertFunc = ->
       alertService.closeAlert(this)
 
-    alertData =
+    alertData = {
       type: type
       msg: $sce.trustAsHtml(msg)
       close: closeThisAlertFunc
+    }
 
     # Push to the root alerts
     $rootScope.alerts.unshift(alertData)
