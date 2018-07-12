@@ -38,7 +38,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     }
     $scope.unitTypeAheadData = unitService.unitTypeAheadData
     $scope.studentSearch = ""
-    
+
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
 
@@ -46,15 +46,13 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
-      
+
       if $scope.unit.teaching_period_id
         saveData = {
           name: $scope.unit.name
           code: $scope.unit.code
           description: $scope.unit.description
           teaching_period_id: $scope.unit.teaching_period_id
-          start_date: null
-          end_date: null
           active: $scope.unit.active
         }
       else
@@ -62,7 +60,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           name: $scope.unit.name
           code: $scope.unit.code
           description: $scope.unit.description
-          teaching_period_id: $scope.unit.teaching_period_id
           start_date: $scope.unit.start_date
           end_date: $scope.unit.end_date
           active: $scope.unit.active
