@@ -13,7 +13,10 @@
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Tutorial</label>
         <div class="col-sm-7">
-          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials" />
+          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials"
+          typeahead-select-on-exact="true"
+          typeahead-editable="false"
+          autocomplete="off"/>
         </div>
       </div>
     </form>

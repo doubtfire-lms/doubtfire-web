@@ -38,6 +38,9 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
 
   $scope.tutors = $scope.unit.staff
 
+  $scope.validForm = () ->
+    $scope.tutorial.tutor? && $scope.tutorial.abbreviation? && $scope.tutorial.meeting_location?
+
   $scope.saveTutorial = ->
     save_data = _.omit($scope.tutorial, 'tutor', 'tutor_name', 'meeting_time', 'data')
     save_data.tutor_id = if $scope.tutorial.tutor.user_id then $scope.tutorial.tutor.user_id else $scope.tutorial.tutor.id

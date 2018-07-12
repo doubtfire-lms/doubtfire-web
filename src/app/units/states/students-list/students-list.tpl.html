@@ -8,6 +8,7 @@
           type="search"
           ng-model="searchText"
           ng-change="searchTextChanged()"
+          typeahead-on-select="searchTextChanged()"
           typeahead="text for text in
             unitTypeAheadData(unit) |
             filter:$viewValue |
