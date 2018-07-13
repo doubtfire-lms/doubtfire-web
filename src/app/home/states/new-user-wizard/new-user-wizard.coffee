@@ -90,10 +90,10 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       nickname: null
       email: email
       student_id: studentId
-      receive_feedback_notifications: null
-      receive_portfolio_notifications: null
-      receive_task_notifications: null
-      opt_in_to_research: null
+      receive_feedback_notifications: true
+      receive_portfolio_notifications: true
+      receive_task_notifications: true
+      opt_in_to_research: true
       has_run_first_time_setup: true
     }
   # Progress through wizard
