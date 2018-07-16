@@ -29,6 +29,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 .controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService) ->
   # Expose task to scope
   $scope.task = task
+  $scope.plagiarismCollapse = true
 
   # Set up submission types
   submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
@@ -74,7 +75,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   # States functionality
   states = {
     # All possible states
-    all: ['group', 'files', 'alignment', 'comments', 'uploading']
+    all: ['group', 'files', 'alignment', 'comments', 'policy', 'uploading']
     # Only states which are shown (populated in initialise)
     shown: []
     # The currently active state (set in initialise)
