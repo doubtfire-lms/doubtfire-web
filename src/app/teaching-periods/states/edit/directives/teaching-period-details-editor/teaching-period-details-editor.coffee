@@ -15,10 +15,10 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
     }
 
     TeachingPeriod.query()
-    
+
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = ExternalName
-    
+
     # Datepicker opener
     $scope.open = ($event, pickerData) ->
       $event.preventDefault()
@@ -35,13 +35,13 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
       formatYear: 'yy',
       startingDay: 1
     }
-      
+
     $scope.saveTeachingPeriod = ->
       if $scope.teachingPeriod.start_date && $scope.teachingPeriod.start_date.getMonth
         $scope.teachingPeriod.start_date = "#{$scope.teachingPeriod.start_date.getFullYear()}-#{$scope.teachingPeriod.start_date.getMonth() + 1}-#{$scope.teachingPeriod.start_date.getDate()}"
       if $scope.teachingPeriod.end_date && $scope.teachingPeriod.end_date.getMonth
         $scope.teachingPeriod.end_date = "#{$scope.teachingPeriod.end_date.getFullYear()}-#{$scope.teachingPeriod.end_date.getMonth() + 1}-#{$scope.teachingPeriod.end_date.getDate()}"
-        
+
       saveData = {
         period: $scope.teachingPeriod.period
         start_date: $scope.teachingPeriod.start_date
@@ -62,5 +62,4 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
         ),
         (response) ->
           alertService.add("danger", "Failed to update teaching period. #{response.data.error}", 6000)
-        
 )

@@ -19,7 +19,7 @@ angular.module('doubtfire.admin.states.teachingperiods', [])
   headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
 )
 .controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, ExternalName, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal) ->
-  
+
   $scope.teachingPeriods = TeachingPeriod.query()
 
   # Table sort details
@@ -33,7 +33,7 @@ angular.module('doubtfire.admin.states.teachingperiods', [])
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = ExternalName
-  
+
   # User settings/create modal
   $scope.showTeachingPeriodModal = (teachingPeriod) ->
     # If we're given a user, show that user, else create a new one

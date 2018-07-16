@@ -22,7 +22,7 @@ angular.module('doubtfire.teaching-periods.states.edit', [
     (success) ->
       $scope.teachingPeriod = success
       $scope.newTeachingPeriod = $scope.teachingPeriod.id == -1
-    
+
     (failure) -> alertService.add("danger", "Failed to load teaching period. #{failure?.data?.error}", 6000)
   )
 )

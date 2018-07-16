@@ -16,7 +16,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
             alertService.add("danger", "Failed to load teaching periods. #{failure?.data?.error}", 6000)
         )
       data
-    
+
     create: ( { teaching_period: teachingperiod } ) ->
       resource.create( { teaching_period: teachingperiod } )
 
@@ -30,7 +30,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
               data.loadedPeriods[indexOfTeachingPeriods] = updatedTeachingPeriod
             indexOfTeachingPeriods++
       )
-    
+
     get: (id, onSuccess, onFailure) ->
       resource.get(
         {id: id}
@@ -42,7 +42,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
             else
               data.loadedPeriods << success
               onSuccess success
-        
+
             indexOfTeachingPeriods++
         (error) ->
           onFailure error

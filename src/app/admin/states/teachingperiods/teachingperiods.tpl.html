@@ -22,10 +22,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="teaching-periods/admin({teachingPeriodId: teachingperiod.id})" >               
+            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="teaching-periods/admin({teachingPeriodId: teachingperiod.id})" >
               <td>{{teachingperiod.period}}</td>
               <td>{{teachingperiod.start_date | date: short}}</td>
-              <td>{{teachingperiod.end_date | date: short}}</td>               
+              <td>{{teachingperiod.end_date | date: short}}</td>
             </tr>
           </tbody>
         </table>
@@ -36,9 +36,8 @@
           <i class="fa fa-plus"></i>
           Add New Teaching Period
         </a>
-        <pagination ng-show="filteredTeachingPeriods.length > pageSize" total-items="filteredTeachingPeriods.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>            
+        <pagination ng-show="filteredTeachingPeriods.length > pageSize" total-items="filteredTeachingPeriods.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       </div>
     </div>
   </div>
 </div>
-      
