@@ -9,5 +9,8 @@ angular.module("doubtfire.api.models.task-definition", [])
   TaskDefinition.getSubmissionsUrl = (unit_id, task_def_id) ->
     "#{api}/submission/unit/#{unit_id}/task_definitions/#{task_def_id}/download_submissions?auth_token=#{currentUser.authenticationToken}"
 
+  TaskDefinition.getSubmissionsPdfsUrl = (unit_id, task_def_id) ->
+    "#{api}/submission/unit/#{unit_id}/task_definitions/#{task_def_id}/student_pdfs?auth_token=#{currentUser.authenticationToken}"
+
   TaskDefinition
 )

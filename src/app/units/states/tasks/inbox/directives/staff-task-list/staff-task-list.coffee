@@ -43,6 +43,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     $scope.isTaskDefMode = $scope.taskData.source == Unit.tasksForDefinition && $scope.filters?.taskDefinitionIdSelected? && $scope.showSearchOptions?
     if $scope.isTaskDefMode
       $scope.submissionsUrl = TaskDefinition.getSubmissionsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
+      $scope.submissionsPdfsUrl = TaskDefinition.getSubmissionsPdfsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
     openTaskDefs = ->
       # Automatically "open" the task definition select element if in task def mode
       selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
@@ -77,6 +78,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       groupService.groupSetName(id, $scope.unit) if $scope.unit.hasGroupwork()
     $scope.taskDefinitionIdChanged = ->
       $scope.submissionsUrl = TaskDefinition.getSubmissionsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
+      $scope.submissionsPdfsUrl = TaskDefinition.getSubmissionsPdfsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
       taskDefId = $scope.filters.taskDefinitionIdSelected
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef

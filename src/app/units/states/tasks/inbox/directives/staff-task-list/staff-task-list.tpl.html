@@ -17,9 +17,9 @@
         <label>Task Definition</label>
         <i ng-if="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle" style="cursor:pointer; padding-top: 8px; padding-right: 8px;" dropdown-toggle></i>
         <ul class="dropdown-menu pull-right">
-          <!-- <li>
-            <a ng-click="downloadPdfs()">Bulk Export Submission PDFs</a>
-          </li> -->
+          <li>
+            <a ng-href="{{submissionsPdfsUrl}}">Bulk Export Submission PDFs</a>
+          </li>
           <li>
             <a ng-href="{{submissionsUrl}}">Bulk Export Submission Files</a>
           </li>
