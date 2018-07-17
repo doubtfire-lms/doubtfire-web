@@ -72,7 +72,6 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           alertService.add("success", "Deleted task sheet", 2000)
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
-      
 
     $scope.removeTaskResources = (task) ->
       TaskDefinition.taskResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
@@ -86,7 +85,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     #
     # The task resources uploader...
     #
-    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip'  } }
+    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip' } }
     $scope.taskResourcesUploadUrl = -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskResourcesSuccess = (response) ->
