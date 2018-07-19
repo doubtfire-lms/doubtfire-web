@@ -26,7 +26,8 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     $scope.keyPress = (e) ->
       if (e.key.toLowerCase() == "enter" && !e.shiftKey)
         e.preventDefault()
-        $scope.addComment()
+        if $scope.comment.text.trim() != ""
+          $scope.addComment()
 
     $scope.formatImageName = (imageName) ->
       index = imageName.indexOf(".")
