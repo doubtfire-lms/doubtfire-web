@@ -17,6 +17,7 @@
           <thead>
             <tr>
               <th><a ng-click="sortOrder='period'; reverse=!reverse">Name <i ng-show="sortOrder=='period'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='year'; reverse=!reverse">Year <i ng-show="sortOrder=='year'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             </tr>
@@ -24,6 +25,7 @@
           <tbody>
             <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="teaching-periods/admin({teachingPeriodId: teachingperiod.id})" >
               <td>{{teachingperiod.period}}</td>
+              <td>{{teachingperiod.year}}</td>
               <td>{{teachingperiod.start_date | date: short}}</td>
               <td>{{teachingperiod.end_date | date: short}}</td>
             </tr>
