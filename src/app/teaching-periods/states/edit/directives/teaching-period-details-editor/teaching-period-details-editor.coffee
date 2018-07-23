@@ -44,6 +44,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
 
       saveData = {
         period: $scope.teachingPeriod.period
+        year: $scope.teachingPeriod.year
         start_date: $scope.teachingPeriod.start_date
         end_date: $scope.teachingPeriod.end_date
       }
