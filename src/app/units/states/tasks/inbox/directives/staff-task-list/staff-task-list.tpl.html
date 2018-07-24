@@ -6,12 +6,25 @@
         <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOptions" btn-checkbox>
           <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
         </button>
-      </span><!--/search-options-toggle-->
-    </div><!--/search-->
+      </span>
+      <!--/search-options-toggle-->
+    </div>
+    <!--/search-->
   </div>
   <form class="panel-body panel-collapseable search-options" ng-show="showSearchOptions">
     <div class="form-group task-definition">
-      <label>Task Definition</label>
+      <div class="dropdown" dropdown>
+        <label>Task Definition</label>
+        <i ng-if="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle" style="cursor:pointer; padding-top: 8px; padding-right: 8px;" dropdown-toggle></i>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            <a ng-href="{{submissionsPdfsUrl}}">Bulk Export Submission PDFs</a>
+          </li>
+          <li>
+            <a ng-href="{{submissionsUrl}}">Bulk Export Submission Files</a>
+          </li>
+        </ul>
+      </div>
       <div class="input-group col-sm-12">
         <select
           ng-model="filters.taskDefinitionIdSelected"
@@ -19,34 +32,28 @@
           ng-change="taskDefinitionIdChanged()"
           autofocus="{{autofocus.onTaskDefinitionSelect}}"
           class="form-control input-md">
-          <option value="" ng-hide="!isTaskDefMode">All task definitions</option>
+          <option value="" ng-hide="isTaskDefMode">All task definitions</option>
         </select>
       </div>
       <p class="help-block">You can choose to display submissions of a specific task definition here.</p>
-    </div><!--/task-definition-->
+    </div>
+    <!--/task-definition-->
     <div class="form-group tutorial">
       <label>Tutorials</label>
       <div class="input-group col-sm-12">
-        <select
-          ng-model="filters.tutorialIdSelected"
-          ng-options="t.id as t.description for t in tutorials | orderBy:'abbreviation'"
-          ng-change="tutorialIdChanged()"
-          class="form-control input-md">
+        <select ng-model="filters.tutorialIdSelected" ng-options="t.id as t.description for t in tutorials | orderBy:'abbreviation'"
+          ng-change="tutorialIdChanged()" class="form-control input-md">
         </select>
       </div>
       <p class="help-block">You can choose to display submissions from all tutorials or just your tutorials.</p>
-    </div><!--/tutorial-->
-  </form><!--/search-options-->
+    </div>
+    <!--/tutorial-->
+  </form>
+  <!--/search-options-->
   <ul class="list-group">
-    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
-      id="{{task.taskKeyToIdString()}}"
-      ng-click="setSelectedTask(task)"
-      ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks">
-      <user-icon
-        user="task.project()"
-        email="task.project().student_email"
-        size="50">
+    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}" id="{{task.taskKeyToIdString()}}" ng-click="setSelectedTask(task)"
+      ng-class="{selected: isSelectedTask(task)}" ng-repeat="task in filteredTasks">
+      <user-icon user="task.project()" email="task.project().student_email" size="50">
       </user-icon>
       <div class="task-data">
         <h4 class="list-group-item-heading">
@@ -55,7 +62,7 @@
         <p class="list-group-item-text">
           {{task.definition.abbreviation}} - {{task.definition.name}}
         </p>
-        <div class="list-group-item-text-extended" ng-show="isSelectedTask(task)"> 
+        <div class="list-group-item-text-extended" ng-show="isSelectedTask(task)">
           <p>
             {{task.project().shortTutorialDescription()}}
           </p>
@@ -66,7 +73,8 @@
             Assessed {{task.times_assessed}} time{{task.times_assessed == 1 ? "" : "s"}}
           </p>
         </div>
-      </div><!--/task-data-->
+      </div>
+      <!--/task-data-->
       <div class="task-badges">
         <status-icon status="task.status"></status-icon>
         <div class="task-superscript-badges">
@@ -82,8 +90,10 @@
             {{task.gradeDesc()}}
           </span>
         </div>
-      </div><!--/badges-->
-    </li><!--/task-->
+      </div>
+      <!--/badges-->
+    </li>
+    <!--/task-->
     <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
       No tasks to display.
     </li>
