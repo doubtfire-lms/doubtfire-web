@@ -170,7 +170,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         task.group_set_id = -1
 
       if (Date.parse(task.start_date) > Date.parse(task.target_date)) || (Date.parse(task.target_date) > Date.parse(task.due_date))
-        alertService.add("danger", "Invalid task dates, unit not saved", 5000)
+        alertService.add("danger", "Invalid task dates, unit not saved. Ensure start date is before due date, and due date is before deadline.", 5000)
       else
         if task.target_date && task.target_date.getMonth
           tgt = task.target_date
