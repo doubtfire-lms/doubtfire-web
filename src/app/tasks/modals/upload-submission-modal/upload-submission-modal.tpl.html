@@ -149,54 +149,30 @@
     <!--/state-comments-->
     <div class="state state-policy" ng-class="{'state-hidden-left': isHidden('policy').left, 'state-hidden-right': isHidden('policy').right}">
       <div id="policyText">
-        <h3>Declaration</h3>
-        <p>By clicking on the Upload button, I certify that the attached work is entirely my own (or where submitted to meet
-          the requirements of an approved group assignment is the work of the group), except where work quoted or paraphrased
-          is acknowledged in the text. I also certify that it has not been previously submitted for assessment in this or
-          any other unit or course unless permission for this has been granted by the Unit Chair of this unit. I agree that
-          Deakin University may make and retain copies of this work for the purposes of marking and review, and may submit
-          this work to an external plagiarism and collusion detection service who may retain a copy for future plagiarism
-          and collusion detection but will not release it or use it for any other purpose.</p>
-
-        <div collapse="plagiarismCollapse">
-          <h3>Plagiarism and collusion</h3>
-          <p>Plagiarism and collusion constitute extremely serious academic misconduct. They are forms of cheating, and severe
-            penalties are associated with them, including cancellation of marks for a specific assignment, for a specific
-            unit or even exclusion from the course. If you are ever in doubt about how to cite a reference properly, consult
-            your lecturer or the Study Support website Plagiarism occurs when a student passes off as the student’s own work,
-            or copies without acknowledgement as to its authorship, the work of any other person. Collusion occurs when a
-            student obtains the agreement of another person for a fraudulent purpose, with the intent of obtaining an advantage
-            in submitting an assignment or other work. Work submitted may be reproduced and/or communicated by the university
-            for the purpose of detecting plagiarism and collusion. Students are reminded that assessment work, or parts of
-            assessment work, cannot be re-submitted for a different assessment task in the same unit or any other unit, without
-            the approval of the Unit Chair of this unit. This includes work submitted for assessment at another academic
-            institution. If students wish to reuse or extend parts of previously submitted work then they should discuss
-            this with the Unit Chair prior to the submission date. Depending on the nature of the task, the Unit Chair may
-            permit or decline the request.</p>
-        </div>
-        <a ng-click="plagiarismCollapse = !plagiarismCollapse">{{plagiarismCollapse && 'What is plagiarism?' || 'Read Less'}}</a>
+        <p>{{privacyPolicy.value}}</p>
       </div>
     </div>
   </div>
-  <!--/modal-body-->
-  <div class="modal-footer" ng-hide="uploader.isUploading">
-    <button class="btn btn-danger pull-left" ng-click="$dismiss()" ng-disabled="shouldDisableBtn.cancel()" ng-show="shouldShowBtn.cancel()">
-      <i class="fa fa-times"></i> Cancel Submission
-    </button>
-    <!--/cancel-button-->
-    <button class="btn btn-default" ng-click="goToState.previous()" ng-disabled="shouldDisableBtn.back()" ng-show="shouldShowBtn.back()">
-      <i class="fa fa-arrow-left"></i> Back
-    </button>
-    <!--/back-button-->
-    <button class="btn btn-default" ng-click="goToState.next()" ng-disabled="shouldDisableBtn.next()" ng-show="shouldShowBtn.next()">
-      Next
-      <i class="fa fa-arrow-right"></i>
-    </button>
-    <!--/next-button-->
-    <button class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
-      <i class="fa fa-upload"></i> Upload Submission
-    </button>
-    <!--/upload-button-->
-  </div>
-  <!--/modal-footer-->
+</div>
+<!--/modal-body-->
+<div class="modal-footer" ng-hide="uploader.isUploading">
+  <button class="btn btn-danger pull-left" ng-click="$dismiss()" ng-disabled="shouldDisableBtn.cancel()" ng-show="shouldShowBtn.cancel()">
+    <i class="fa fa-times"></i> Cancel Submission
+  </button>
+  <!--/cancel-button-->
+  <button class="btn btn-default" ng-click="goToState.previous()" ng-disabled="shouldDisableBtn.back()" ng-show="shouldShowBtn.back()">
+    <i class="fa fa-arrow-left"></i> Back
+  </button>
+  <!--/back-button-->
+  <button class="btn btn-default" ng-click="goToState.next()" ng-disabled="shouldDisableBtn.next()" ng-show="shouldShowBtn.next()">
+    Next
+    <i class="fa fa-arrow-right"></i>
+  </button>
+  <!--/next-button-->
+  <button class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
+    <i class="fa fa-upload"></i> Upload Submission
+  </button>
+  <!--/upload-button-->
+</div>
+<!--/modal-footer-->
 </div>
