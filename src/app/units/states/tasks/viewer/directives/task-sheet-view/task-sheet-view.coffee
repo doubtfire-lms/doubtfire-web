@@ -18,7 +18,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-sheet-view',
     listeners.push $scope.$watch 'taskDef', (newTask) ->
       setDetails = ->
         if newTask?
-          $scope.hasPdf = newTask.has_task_pdf
+          $scope.hasPdf = newTask.has_task_sheet
           $scope.urls.taskPdfUrl = Task.getTaskPDFUrl($scope.unit, $scope.taskDef)
       setDetails()
 )

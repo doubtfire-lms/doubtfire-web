@@ -13,7 +13,7 @@
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Location</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" ng-model="tutorial.meeting_location" placeholder="Location eg. ATC101">
+          <input type="input" class="form-control" ng-model="tutorial.meeting_location" placeholder="Room Number">
         </div>
       </div>
       <div class="form-group" required>
@@ -37,12 +37,21 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">Tutor</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" ng-model="tutorial.tutor" placeholder="Freddy McDerfson" typeahead="tutor as tutor.name for tutor in tutors | filter: $viewValue">
+          <input
+            type="text"
+            class="form-control"
+            ng-model="tutorial.tutor"
+            placeholder="Staff Name"
+            autocomplete="off"
+            typeahead="tutor as tutor.name for tutor in tutors | filter: $viewValue"
+            typeahead-select-on-exact="true"
+            typeahead-editable="false"
+            typeahead-wait-ms="200">
         </div>
       </div>
     </div>
     <div class="modal-footer text-right">
-      <input type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
+      <input ng-disabled="!validForm()" type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
     </div>
   </form>
 </div>

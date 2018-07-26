@@ -40,7 +40,7 @@
           </div>
         </div><!--/buttons-->
         <form role="search" class="form-horizontal">
-          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
           <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
         </form><!--/search-->
       </div><!--/toolbar-->
@@ -55,7 +55,7 @@
           <tr>
             <th class="student-id">
               <a ng-click="sortOrder='student_id'; reverse=!reverse">
-                Student ID <i ng-show="sortOrder=='student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Student <i ng-show="sortOrder=='student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="name">
@@ -63,24 +63,34 @@
                 Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
-            <th>Tutor</th>
+            <th>
+              <a ng-click="sortOrder='tutorial.tutor_name'; reverse=!reverse">
+                Tutor <i ng-show="sortOrder=='tutorial.tutor_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
             <th class="tutorial">
               <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
-                Tutorial<i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Tutorial <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th>
-              Target Grade
+              <a ng-click="sortOrder='target_grade'; reverse=!reverse">
+                Target <i ng-show="sortOrder=='target_grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
             </th>
-            <th>Stats</th>
+            <th>
+              <a ng-click="sortOrder='orderScale'; reverse=!reverse">
+                Stats<i ng-show="sortOrder=='orderScale'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
             <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
                 <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
-                  Portfolio?<i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                  Portfolio? <i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="grade">
               <a ng-click="sortOrder='grade'; reverse=!reverse">
-                Grade<i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Grade <i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
           </tr>
@@ -181,12 +191,13 @@
             <div class="small" ng-hide="project.grade_rationale">Click to add one</div>
           </div>
           <div ng-if="editingRationale" class="clearfix">
-            <markdown-editor
+            <!-- <markdown-editor
               height="200"
               ng-model="project.grade_rationale"
               placeholder="Edit rationale..."
               autofocus="true">
-            </markdown-editor>
+            </markdown-editor> -->
+            <div contenteditable ng-model="project.grade_rationale" placeholder="Edit rationale here..." style="border-style: solid; border-width: thin; height: 200px"></div>
             <a ng-click="toggleEditRationale(alignment)" class="pull-right">Done Editing</a>
           </div>
         </div>

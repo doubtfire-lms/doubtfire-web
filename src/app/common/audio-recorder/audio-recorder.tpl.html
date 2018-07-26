@@ -1,0 +1,22 @@
+<div class="audio-recorder">
+  <p ng-hide="canRecord">Audio recording
+    <br> only supported in Chrome and Firefox.</p>
+  <div ng-show="canRecord">
+    <button type="button" id='btnRecord' ng-click="recordingToggle()" class="btn-circle-xl">
+      <p ng-show="!isRecording"> record</p>
+      <i ng-show="isRecording" class="fa fa-square"></i>
+    </button>
+
+    <div id="button-wrapper">
+      <button type="button" id='btnSend' ng-click="sendRecording()" ng-disabled="!recordingAvailable" class="btn-circle">
+        <i class="fa fa-paper-plane"></i>
+      </button>
+      <button type="button" id='btnPlay' ng-disabled="!recordingAvailable" ng-click="playStop()" class="btn-circle">
+        <i class="fa fa-play"></i>
+      </button>
+    </div>
+
+    <audio id='audioPlayer'></audio>
+    <canvas class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
+  </div>
+</div>

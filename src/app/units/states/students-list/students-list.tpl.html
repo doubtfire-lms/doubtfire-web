@@ -8,6 +8,7 @@
           type="search"
           ng-model="searchText"
           ng-change="searchTextChanged()"
+          typeahead-on-select="searchTextChanged()"
           typeahead="text for text in
             unitTypeAheadData(unit) |
             filter:$viewValue |
@@ -79,8 +80,8 @@
             </a>
           </th><!--/name-column-header-->
           <th class="stats">
-            <a ng-click="sortTableBy('progressSortOrder()')">
-              Stats <i ng-show="tableSort.order == 'progressSortOrder()'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            <a ng-click="sortTableBy('orderScale')">
+              Stats <i ng-show="tableSort.order == 'orderScale'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/stats-column-header-->
           <th class="flags">
@@ -114,7 +115,7 @@
           <td ng-click="viewStudent(student)" class="task-progress-bar">
             <progress class="task-progress" animate="true">
               <bar
-                ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                ng-repeat="bar in student.task_stats"
                 value="bar.value"
                 type="{{statusClass(bar.key)}}">
                 <span ng-hide="bar.value < 10">{{bar.value}}%</span>

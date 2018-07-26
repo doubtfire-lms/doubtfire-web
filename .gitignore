@@ -9,3 +9,5 @@ vendor/
 .sass-cache*
 .bundle*
 tmp.scss
+.vscode/
+a.env

@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -47,7 +47,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.finalStatuses = [
     'complete'
     'fail'
-    'time_exceeded'
     'do_not_resubmit'
   ]
 
@@ -63,7 +62,6 @@ angular.module("doubtfire.common.services.tasks", [])
     'do_not_resubmit'
     'complete'
     'fail'
-    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -71,6 +69,11 @@ angular.module("doubtfire.common.services.tasks", [])
     'ready_to_mark'
     'discuss'
     'complete'
+    'time_exceeded'
+    'fail'
+    'fix_and_resubmit'
+    'do_not_resubmit'
+    'redo'
   ]
 
   taskService.submittableStatuses = [
@@ -270,7 +273,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      time_exceeded: []
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
@@ -309,33 +312,25 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return number of days until task hits target date, or false if already
   # completed
   taskService.daysUntilTargetDate = (task) ->
-    return false if task.status in taskService.finalStatuses
-    moment(task.definition.target_date).diff(moment(), 'days')
+    moment(task.targetDate()).diff(moment(), 'days')
 
   # Return number of days until task is due, or false if already completed
   taskService.daysUntilDueDate = (task) ->
-    return false if !task.definition.due_date? || task.status in taskService.finalStatuses
     moment(task.definition.due_date).diff(moment(), 'days')
 
   # Return number of days task is overdue from target, or false if not
   taskService.daysPastTargetDate = (task) ->
-    return false if task.status in taskService.finalStatuses
-    diffDays = moment().diff(moment(task.definition.target_date), 'days')
-    return false if !diffDays? || diffDays <= 0
-    diffDays
+    moment().diff(moment(task.targetDate()), 'days')
 
   # Return number of days task is overdue, or false if not overdue
   taskService.daysPastDueDate = (task) ->
-    return false if task.status in taskService.finalStatuses || !task.definition.due_date?
-    diffDays = moment().diff(moment(task.definition.due_date), 'days')
-    return false if !diffDays? || diffDays <= 0
-    diffDays
+    moment().diff(moment(task.definition.due_date), 'days')
 
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
     return if task.status == status
-    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.definition.upload_requirements.length > 0
+    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.requiresFileUpload()
     if requiresFileUpload
       taskService.presentTaskSubmissionModal(task, status)
     else
@@ -408,6 +403,8 @@ angular.module("doubtfire.common.services.tasks", [])
     task.submisson_date = response.submisson_date
     task.updateTaskStatus response.status, response.new_stats
     task.processing_pdf = response.processing_pdf
+    task.due_date = response.due_date
+    task.extensions = response.extensions
     task.grade = response.grade
     if response.status == status
       project.updateBurndownChart?()
@@ -513,8 +510,10 @@ angular.module("doubtfire.common.services.tasks", [])
     comment.author_is_me = comment.author.id == currentUser.profile.id
     comment
 
-  taskService.addComment = (task, textString, success, failure) ->
-    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString },
+  #============================================================================
+  #ADD COMMENT
+  taskService.addComment = (task, textString, commentType, success, failure) ->
+    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType},
       (response) ->
         unless task.comments?
           task.comments = []
@@ -525,6 +524,44 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) ->
         if failure? and _.isFunction failure
           failure(response)
+
+  #============================================================================
+  #SCROLL DOWN
+  taskService.scrollDown = ->
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+
+  #============================================================================
+  #ADD MEDIA COMMENT
+  taskService.addMediaComment = (task, media, commentType, onSuccess, onError) ->
+    form = new FormData()
+    form.append 'type', commentType
+    form.append 'project_id', task.project().project_id
+    form.append 'task_definition_id', task.task_definition_id
+
+    if commentType == "image"
+      form.append 'attachment', media[0]
+    else if commentType == "audio"
+      form.append 'attachment', media, "a-comment.webm"
+
+    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
+      (response) -> #success
+        unless task.comments?
+          task.comments = []
+        task.comments.unshift(taskService.mapComment(response))
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+  taskService.applyForExtension = (task, onSuccess, onError) ->
+    interceptSuccess = (response) ->
+      task.due_date = response.data.due_date
+      task.extensions = response.data.extensions
+      task.project().updateBurndownChart()
+      onSuccess(response)
+
+    Task.applyForExtension(task, interceptSuccess, onError)
 
   taskService
 )

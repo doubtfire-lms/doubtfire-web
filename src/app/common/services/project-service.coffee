@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService) ->
   projectService = {}
 
   projectService.loadedProjects = null
@@ -58,6 +58,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->
       taskService.canReuploadEvidence(task)
+    task.requiresFileUpload = ->
+      task.definition.upload_requirements.length > 0
     task.plagiarismDetected = ->
       taskService.plagiarismDetected(task)
     task.isGroupTask = ->
@@ -68,18 +70,34 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
       taskService.addComment(task, textString, success, failure)
+    task.applyForExtension = (onSuccess, onError) ->
+      taskService.applyForExtension(task, onSuccess, onError)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
+    task.timeToDue = ->
+      if task.daysUntilTargetDate() < 0
+        return ""
+      else
+        days = task.daysUntilTargetDate()
+        if days < 7
+          return "#{days}d"
+        else
+          return "#{Math.floor(days/7)}w"
+    task.targetDate = ->
+      if task.due_date?
+        return task.due_date
+      else
+        return task.definition.target_date
     task.isToBeCompletedSoon = ->
-      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() > 0
+      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() >= 0 && ! task.inFinalState()
     task.isDueSoon = ->
-      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() > 0
+      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() >= 0 && ! task.inFinalState()
     task.isOverdue = ->
-      task.daysPastDueDate() > 0
+      task.daysPastDueDate() > 0 && ! task.inFinalState()
     task.isPastTargetDate = ->
-      task.daysPastTargetDate() > 0
+      task.daysPastTargetDate() > 0 && ! task.inFinalState()
     task.isDueToday = ->
-      task.daysUntilDueDate() == 0
+      task.daysUntilDueDate() == 0 && ! task.inFinalState()
     task.daysPastDueDate = ->
       taskService.daysPastDueDate(task)
     task.daysPastTargetDate = ->
@@ -91,6 +109,8 @@ angular.module("doubtfire.common.services.projects", [])
 
     task.inFinalState = ->
       task.status in taskService.finalStatuses
+    task.inTerminalState = ->
+      task.status in taskService.terminalStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
@@ -121,6 +141,10 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.hasTaskKey(task, key)
     task.filterFutureStates = (states) ->
       _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
+    task.gradeDesc = () ->
+      gradeService.gradeAcronyms[task.grade]
+    task.hasGrade = () ->
+      task.grade?
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },
@@ -170,11 +194,16 @@ angular.module("doubtfire.common.services.projects", [])
     #
     project.updateTaskStats = (new_stats) ->
       updated_stats = project.task_stats
-      for i, value of new_stats.split("|")
-        if i < updated_stats.length
-          updated_stats[i].value = Math.round(100 * value)
-        else
-          break
+
+      updated_stats[0].value = Math.round(100 * new_stats.red_pct)
+      updated_stats[1].value = Math.round(100 * new_stats.grey_pct)
+      updated_stats[2].value = Math.round(100 * new_stats.orange_pct)
+      updated_stats[3].value = Math.round(100 * new_stats.blue_pct)
+      updated_stats[4].value = Math.round(100 * new_stats.green_pct)
+      
+      # Map the order directly to the project
+      project.orderScale = Math.round(100 * new_stats.order_scale)
+
       project.task_stats = updated_stats
 
     project.updateBurndownChart = ->
@@ -191,7 +220,7 @@ angular.module("doubtfire.common.services.projects", [])
       else
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
-      if currentTask.isGroupTask() and !currentTask.groups?
+      if currentTask.isGroupTask() and !currentTask.group()?
         projectService.updateGroups(currentTask.project(), callback, true)
       callback?()
       currentTask
@@ -222,14 +251,17 @@ angular.module("doubtfire.common.services.projects", [])
       )
 
   projectService.updateGroups = (project, onSuccess, force = false) ->
+    # Only update if the project has groups, or we are forced to update
     if project.groups? or force
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
         onSuccess?(project)
+      project.unit().refreshGroups()
 
   projectService.getGroupForTask = (project, task) ->
     return null unless task.definition.group_set
-    _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
+    result = _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
+    result || _.find project.unit().groups, (group) -> group.group_set_id == task.definition.group_set.id && project.project_id in group.projects
 
   projectService.taskFromTaskDefId = (project, task_definition_id) ->
     project.findTaskForDefinition(task_definition_id)
