@@ -62,7 +62,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
         if response.data.error?
           alertService.add("danger", "Error: " + response.data.error, 6000)
     )
-  
+
   updateExistingTeachingPeriod = ->
     TeachingPeriod.update( { id: $scope.teachingperiod.id, teaching_period: $scope.teachingperiod } ).$promise.then (
       (updatedTeachingPeriod) ->

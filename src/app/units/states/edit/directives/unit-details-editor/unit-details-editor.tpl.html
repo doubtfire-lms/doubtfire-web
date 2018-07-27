@@ -35,8 +35,8 @@
           <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
           <div class="col-sm-9">
             <select class="form-control" ng-model="unit.teaching_period_id">
-              <option value="">Custom Period</option>            
-              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}</option>                
+              <option value="">Custom Period</option>
+              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}</option>
             </select>
           </div>
         </div><!--/teaching-period-date-->
@@ -46,7 +46,7 @@
           <div class="col-sm-9">
             <div class="col-sm-4 input-group">
               <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="unit.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-if="!unit.teaching_period_id" />
-              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="tp.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />              
+              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="tp.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="open($event,'start')">
                   <i class="fa fa-calendar"></i>
