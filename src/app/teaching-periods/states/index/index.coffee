@@ -1,7 +1,7 @@
 angular.module('doubtfire.teaching-periods.states.index', [])
 
 #
-# Root state for units
+# Root state for teaching periods
 #
 .config((headerServiceProvider) ->
   headerServiceProvider.state 'teaching-periods/index', {
