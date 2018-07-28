@@ -8,7 +8,7 @@
       <h3 class="panel-title">Update Unit</h3>
       Update overview details of the unit below.
     </div>
-    <form class="form-horizontal" role="form" name="unitForm" ng-submit="saveUnit()">
+    <form class="form-horizontal" role="form" name="unitForm" ng-click="rolloverUnit()" ng-submit="saveUnit()">
       <div class="panel-body">
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Code</label>
@@ -86,6 +86,7 @@
         </div><!--/active-->
       </div>
       <div class="panel-footer text-right">
+        <input type="button" value="Rollover" class="btn btn-success" />
         <input type="submit" value="{{ unit.id == -1 ? 'Create' : 'Update' }}" class="btn btn-success" ng-disabled="unitForm.$pristine" />
       </div>
     </form>
