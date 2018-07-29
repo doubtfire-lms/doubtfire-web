@@ -353,13 +353,6 @@ angular.module("doubtfire.common.services.units", [])
       { value: 0, key: taskService.statusKeys[9]  }
     ]
 
-    # Returns the student's progress sorting order
-    student.progressSortOrder = ->
-      -1 * student.task_stats[0].value +
-      20 * student.task_stats[4].value +
-      7 * student.task_stats[3].value +
-      student.task_stats[2].value
-
     # Enable the student/project to be able to switch to its view
     student.viewProject = (as_tutor) ->
       $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor})

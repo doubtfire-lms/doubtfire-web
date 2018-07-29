@@ -38,8 +38,17 @@
     </div>
     <div class="panel-footer clearfix">
       <div class="input-group col-sm-12">
-        <input class="form-control" id="convenors" placeholder="Staff Name" ng-model="selectedStaff" typeahead="staff as
-        staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff">
+        <input
+          class="form-control"
+          id="convenors"
+          placeholder="Staff Name"
+          ng-model="selectedStaff"
+          typeahead="staff as staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"
+          autocomplete="off"
+          typeahead-editable="false"
+          typeahead-wait-ms="200"
+          typeahead-select-on-exact="true"
+          typeahead-on-select="addSelectedStaff()">
 
         <span class="input-group-btn">
           <button class="btn btn-success pull-right" ng-click="addSelectedStaff()">

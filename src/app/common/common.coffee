@@ -7,10 +7,13 @@ angular.module("doubtfire.common", [
   'doubtfire.common.pdf-panel-viewer'
   'doubtfire.common.grade-icon'
   'doubtfire.common.status-icon'
-  'doubtfire.common.markdown-editor'
+  'doubtfire.common.content-editable'
   'doubtfire.common.alert-list'
   # New
   'doubtfire.common.pdf-viewer'
   'doubtfire.common.pdf-panel-viewer'
   'doubtfire.common.user-icon'
+  # Audio
+  'doubtfire.common.audio-player'
+  'doubtfire.common.audio-recorder'
 ])

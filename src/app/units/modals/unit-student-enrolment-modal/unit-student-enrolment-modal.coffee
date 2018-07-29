@@ -19,6 +19,7 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 .controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService) ->
   $scope.unit = unit
   $scope.projects = unit.students
+  $scope.tutorial = ""
 
   $scope.enrolStudent = (student_id, tutorial) ->
     # get tutorial_id from tutorial_name
@@ -33,5 +34,5 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
           $modalInstance.close()
 
       , (response) ->
-        alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)
+        alertService.add("danger", "Unable to find student. Please check the student ID, and ensure the student has logged in at least once already to ensure they have an account.", 6000)
 )

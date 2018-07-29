@@ -20,17 +20,21 @@
       ng-submit="addMember(selectedStudent)"
       class="input-group">
       <input
-        type="text"
+        type="search"
         class="form-control"
         placeholder="Enter student name or username..."
         ng-model="selectedStudent"
+        typeahead-select-on-exact="true"
+        typeahead-on-select="addMember(selectedStudent)"
         typeahead="
-          student as (student.username + ' ' + student.name)
+          student as student.name
           for student in unit.activeStudents() |
           studentsForGroup:selectedGroupSet:selectedGroup:members |
           filter:$viewValue |
           limitTo:8"
-        typeahead-wait-ms="200">
+        typeahead-wait-ms="200"
+        typeahead-editable="false"
+        autocomplete="off">
       <div class="input-group-btn">
         <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
           <i class="fa fa-plus"></i> Add Member

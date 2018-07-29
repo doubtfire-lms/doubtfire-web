@@ -11,3 +11,4 @@ vendor/
 tmp.scss
 .vscode
 .tscache
+a.env

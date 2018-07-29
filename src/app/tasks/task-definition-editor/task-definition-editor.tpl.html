@@ -123,7 +123,7 @@
                 </div><!--/start-date-->
 
                 <div class="form-group" ng-required="isNew">
-                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Target Date</label>
+                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Due Date</label>
                   <div class="col-sm-7">
                     <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
@@ -191,11 +191,11 @@
                       url="taskSheetUploadUrl()"
                       on-success="onTaskSheetSuccess">
                     </file-uploader>
-                    <a href="{{taskPDFUrl()}}" ng-show="task.has_task_pdf" target="_blank" class="btn btn-lg btn-info col-sm-12">
-                      <div>
-                        <i class="fa fa-2x fa-download"></i>
-                        <p>Download Task Sheet</p>
-                      </div>
+                    <a href="{{taskPDFUrl()}}" ng-show="task.has_task_sheet" target="_blank" class="btn btn-info col-sm-12">
+                      <i class="fa fa-download"></i> Download Task Sheet
+                    </a>
+                    <a ng-click="removeTaskSheet(task)" ng-show="task.has_task_sheet" class="btn btn-danger col-sm-12">
+                      <i class="fa fa-trash-o"></i> Delete Task Sheet
                     </a>
                   </div>
                   <div class="col-sm-6">
@@ -204,11 +204,11 @@
                       url="taskResourcesUploadUrl()"
                       on-success="onTaskResourcesSuccess">
                     </file-uploader>
-                    <a href="{{resourceUrl()}}" ng-show="task.has_task_resources" target="_blank" class="btn btn-lg btn-success col-sm-12">
-                      <div>
-                        <i class="fa fa-2x fa-download"></i>
-                        <p>Download Resources</p>
-                      </div>
+                    <a href="{{resourceUrl()}}" ng-show="task.has_task_resources" target="_blank" class="btn btn-info col-sm-12">
+                      <i class="fa fa-download"></i> Download Resources
+                    </a>
+                    <a ng-click="removeTaskResources(task)" ng-show="task.has_task_resources" class="btn btn-danger col-sm-12">
+                      <i class="fa fa-trash-o"></i> Delete Resources
                     </a>
                   </div>
                 </div>
