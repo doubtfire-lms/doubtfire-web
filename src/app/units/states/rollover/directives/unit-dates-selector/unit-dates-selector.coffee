@@ -40,6 +40,9 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
 
+      #Assign unit roles to null, otherwise it will not update the role in unit list
+      unitService.loadedUnitRoles = null
+
       if $scope.unit.start_date && $scope.unit.start_date.getMonth
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
