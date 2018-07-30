@@ -23,7 +23,7 @@
               <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="unit.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-if="!unit.teaching_period_id" />
               <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="tp.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="open($event,'start')">
+                <button class="btn btn-default" type="button" ng-click="open($event,'start')" ng-disabled="unit.teaching_period_id">
                   <i class="fa fa-calendar"></i>
                 </button>
               </span>
@@ -38,7 +38,7 @@
               <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" ng-if="!unit.teaching_period_id" />
               <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="tp.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="open($event,'end')">
+                <button class="btn btn-default" type="button" ng-click="open($event,'end')" ng-disabled="unit.teaching_period_id">
                   <i class="fa fa-calendar"></i>
                 </button>
               </span>
