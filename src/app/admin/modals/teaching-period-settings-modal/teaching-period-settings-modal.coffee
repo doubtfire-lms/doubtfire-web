@@ -22,7 +22,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     endOpened: false
   }
 
-  # Get the confugurable, external name of Doubtfire
+  # Get the external name of Doubtfire
   $scope.externalName = ExternalName
 
   if $scope.isNew
