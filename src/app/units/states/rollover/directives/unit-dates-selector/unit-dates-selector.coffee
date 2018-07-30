@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/rollover/directives/unit-dates-selector/unit-dates-selector.tpl.html'
-  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, ExternalName, Unit, RolloverUnit, alertService, analyticsService, unitService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
@@ -44,5 +44,26 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
+
+      if $scope.unit.teaching_period_id
+        saveData = {
+          id: $scope.unit.id
+          teaching_period_id: $scope.unit.teaching_period_id
+        }
+      else
+        saveData = {
+          id: $scope.unit.id
+          start_date: $scope.unit.start_date
+          end_date: $scope.unit.end_date
+        }
+
+      RolloverUnit.create(
+        saveData
+        (response) ->
+          alertService.add("success", "Unit created.", 2000)
+          analyticsService.event 'Unit Admin', 'Saved New Unit'
+        (response) ->
+          alertService.add 'danger', "Error creating unit - #{response.data.error}"
+      )
 
 )
