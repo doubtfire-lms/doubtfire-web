@@ -1,10 +1,7 @@
 angular.module('doubtfire.admin.states.teachingperiods', [])
 
 #
-# Convenors of a unit(s) can see a list of all the units they convene
-# in this view and make changes to those units.
-#
-# Users with an Administrator system role can create new units.
+# Users with an Administrator system role can create new Teaching Periods.
 #
 .config((headerServiceProvider) ->
   teachingPeriodsAdminViewStateData =
