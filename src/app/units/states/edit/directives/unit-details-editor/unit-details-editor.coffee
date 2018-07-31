@@ -82,6 +82,4 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
             alertService.add("danger", "Failed to update unit. #{response.data.error}", 6000)
         )
 
-    $scope.rolloverUnit = ->
-      alertService.add("success", "Rollover unit.", 2000)
 )
