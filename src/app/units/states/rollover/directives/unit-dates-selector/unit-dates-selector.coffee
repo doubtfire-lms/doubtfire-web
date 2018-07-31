@@ -65,6 +65,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
         (response) ->
           alertService.add("success", "Unit created.", 2000)
           analyticsService.event 'Unit Admin', 'Saved New Unit'
+          $state.go("admin/units")
         (response) ->
           alertService.add 'danger', "Error creating unit - #{response.data.error}"
       )
