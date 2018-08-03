@@ -145,13 +145,29 @@
         </div>
       </div>
       <!--/card-comments-->
+      <div class="card card-default" ng-show="privacyPolicy.privacy">
+        <div class="card-heading">
+          <h4>
+            Declaration
+          </h4>
+        </div>
+        <!--/card-heading-->
+        <div class="card-body">
+          <span>
+            {{privacyPolicy.privacy}}
+          </span>
+          <a href="#" ng-click="showPlagiarism = !showPlagiarism">Plagiarism and collusion</a>
+          <div ng-show="showPlagiarism">
+            <h4>Plagiarism and Collusion</h4>
+            <span>
+              {{privacyPolicy.plagiarism}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--/declaration-->
     </div>
     <!--/state-comments-->
-    <div class="state state-policy" ng-class="{'state-hidden-left': isHidden('policy').left, 'state-hidden-right': isHidden('policy').right}">
-      <div id="policyText">
-        <p>{{privacyPolicy.value}}</p>
-      </div>
-    </div>
   </div>
 </div>
 <!--/modal-body-->
