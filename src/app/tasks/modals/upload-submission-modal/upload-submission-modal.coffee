@@ -29,7 +29,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
-  $scope.plagiarismCollapse = true
 
   # Set up submission types
   submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
