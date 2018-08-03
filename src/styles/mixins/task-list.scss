@@ -29,7 +29,19 @@
     .due-time {
       padding-left: 6px;
       font-size: 10px;
-      font-weight: lighter;
+      font-weight: lighter;     
+    }
+    .warning{
+      padding-left: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      color: chocolate;
+    }
+    .final-warning{
+      padding-left: 6px;
+      font-size: 12px;
+      font-weight: bolder;
+      color: crimson;
     }
 
     &:hover, &:focus {

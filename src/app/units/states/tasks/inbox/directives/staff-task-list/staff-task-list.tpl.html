@@ -54,13 +54,13 @@
         </h4>
         <p class="list-group-item-text">
           {{task.definition.abbreviation}} - {{task.definition.name}}
+          <span class="due-time"ng-if=" (task.days_after_submission==1)"><i class="fa fa-hourglass-half"></i>{{task.daysAfterSubmission()}} </span> 
+          <span class="warning"ng-if="(task.days_after_submission==2 || task.days_after_submission==3)"><i class="fa fa-hourglass-half"></i>{{task.daysAfterSubmission()}} </span> 
+          <span class="final-warning"ng-if="(task.days_after_submission>3)"><i class="fa fa-hourglass-half"></i>{{task.daysAfterSubmission()}} </span> 
         </p>
         <div class="list-group-item-text-extended" ng-show="isSelectedTask(task)"> 
           <p>
             {{task.project().shortTutorialDescription()}}
-          </p>
-          <p>
-            Submitted {{showDate(task.submission_date)}}
           </p>
           <p ng-show="task.times_assessed > 0">
             Assessed {{task.times_assessed}} time{{task.times_assessed == 1 ? "" : "s"}}

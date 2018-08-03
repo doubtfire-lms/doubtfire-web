@@ -88,6 +88,16 @@ angular.module("doubtfire.common.services.projects", [])
         return task.due_date
       else
         return task.definition.target_date
+    task.days_after_submission = moment().diff(task.submission_date,"days")
+    task.daysAfterSubmission = ->
+      daysAfter = task.days_after_submission
+      if daysAfter < 0
+        return ""
+      else
+        if daysAfter < 7
+          return "#{daysAfter}d"
+        else
+          return "#{Math.floor(daysAfter/7)}w"
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() >= 0 && ! task.inFinalState()
     task.isDueSoon = ->
