@@ -10,13 +10,11 @@
     <ul>
       <li>
         <strong>{{grades.names[taskDef.target_grade]}} Task</strong>
-        &mdash;
-        This task is a <strong>{{grades.names[taskDef.target_grade] | lcfirst}}</strong> task.
       </li>
       <li>
         <strong>Due Date</strong>
         &mdash;
-        Aim to have this task completed by <strong>{{dueDate() | humanizedDate}}</strong>.
+        Aim to complete by <strong>{{dueDate() |  date : 'MMM d' }} at {{dueDate() | date : 'h:mm a' }}.</strong>.
       </li>
       <li ng-show="task && task.extensions > 0">
           <strong>Number of extensions</strong>
@@ -26,7 +24,7 @@
       <li ng-show="should_show_deadline()">
         <strong>Deadline</strong>
         &mdash;
-        Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | humanizedDate}}</strong>. Your work will be checked in your portfolio.
+        Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | date  : 'MMM d' }} at {{taskDef.due_date | date : 'h:mm a' }}</strong>. Your work will be checked in your portfolio.
       </li>
     </ul>
   </div><!--/key-info-footer-->

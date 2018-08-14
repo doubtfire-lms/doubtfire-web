@@ -326,6 +326,14 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.daysPastDueDate = (task) ->
     moment().diff(moment(task.definition.due_date), 'days')
 
+  # Return amount of time past target due date
+  taskService.timePastTargetDate = (task) ->
+    moment().diff(moment(task.targetDate()))
+
+  # Return the amount of time past the deadline
+  taskService.timePastDueDate = (task) ->
+    moment().diff(moment(task.definition.due_date))
+
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
