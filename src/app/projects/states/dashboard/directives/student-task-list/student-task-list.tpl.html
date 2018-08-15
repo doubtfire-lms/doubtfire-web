@@ -30,6 +30,9 @@
           <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
             {{task.gradeDesc()}}
           </span>
+          <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
+            <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
+          </span>
           <span class="task-subscript-badge soon-badge" ng-if="task.isToBeCompletedSoon() && ! task.isDueSoon()">
             <i class="fa fa-clock-o"></i>
           </span>
