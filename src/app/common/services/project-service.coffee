@@ -88,9 +88,9 @@ angular.module("doubtfire.common.services.projects", [])
         return task.due_date
       else
         return task.definition.target_date
-    task.days_after_submission = moment().diff(task.submission_date,"days")
-    task.daysAfterSubmission = ->
-      daysAfter = task.days_after_submission
+    task.daysAfterSubmission = moment().diff(task.submission_date,"days")
+    task.daysAfterSubmissionMessage = ->
+      daysAfter = task.daysAfterSubmission
       if daysAfter < 0
         return ""
       else
