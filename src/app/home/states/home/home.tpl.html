@@ -18,7 +18,9 @@
             {{unitRole.unit_name}}
           </header>
           <p>
-            <label class="label label-default">{{showDate(unitRole.start_date)}}</label>
+            <label class="label label-default" ng-if="unitRole.teaching_period">{{unitRole.teaching_period.period}}</label>
+            <label class="label label-default" ng-if="unitRole.teaching_period">{{unitRole.teaching_period.year}}</label>
+            <label class="label label-default" ng-if="!unitRole.teaching_period">{{showDate(unitRole.start_date)}}</label>
             <label class="label label-info">{{unitRole.unit_code}}</label>
             <label class="label label-primary">{{unitRole.role}}</label>
           </p>
