@@ -12,7 +12,9 @@
       <div class="card-heading">
         <h4>Units You Teach</h4>
       </div>
+      <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
+        <!-- For units with a teaching period -->
         <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teaching_period">
           <header>
             {{unitRole.unit_name}}
@@ -24,7 +26,7 @@
             <label class="label label-primary">{{unitRole.role}}</label>
           </p>
         </a>
-
+        <!-- For units without a teaching period -->
         <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teaching_period">
           <header>
             {{unitRole.unit_name}}
@@ -44,7 +46,9 @@
       <div class="card-heading">
         <h4>Units You Study</h4>
       </div>
+      <!-- Units with a teaching period should be listed first -->
       <div class="list-group">
+        <!-- For units with a teaching period -->
         <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period">
           <header>
             {{project.unit_name}}
@@ -55,7 +59,7 @@
             <label class="label label-info">{{project.unit_code}}</label>
           </p>
         </a>
-
+        <!-- For units without a teaching period -->
         <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="!project.teaching_period">
           <header>
             {{project.unit_name}}
