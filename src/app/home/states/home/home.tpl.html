@@ -45,7 +45,18 @@
         <h4>Units You Study</h4>
       </div>
       <div class="list-group">
-        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item">
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period">
+          <header>
+            {{project.unit_name}}
+          </header>
+          <p>
+            <label class="label label-default">{{project.teaching_period.period}}</label>
+            <label class="label label-default">{{project.teaching_period.year}}</label>
+            <label class="label label-info">{{project.unit_code}}</label>
+          </p>
+        </a>
+
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="!project.teaching_period">
           <header>
             {{project.unit_name}}
           </header>
