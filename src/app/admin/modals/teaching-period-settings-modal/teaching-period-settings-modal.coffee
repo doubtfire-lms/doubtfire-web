@@ -40,9 +40,15 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     if pickerData == 'start'
       $scope.calOptions.startOpened = ! $scope.calOptions.startOpened
       $scope.calOptions.endOpened = false
-    else
+      $scope.calOptions.activeUntilOpened = false
+    else if pickerData == 'end'
       $scope.calOptions.startOpened = false
       $scope.calOptions.endOpened = ! $scope.calOptions.endOpened
+      $scope.calOptions.activeUntilOpened = false
+    else
+      $scope.calOptions.startOpened = false
+      $scope.calOptions.endOpened = false
+      $scope.calOptions.activeUntilOpened = ! $scope.calOptions.activeUntilOpened
 
   $scope.dateOptions = {
     formatYear: 'yy',

@@ -50,9 +50,9 @@
         <label class="col-sm-3 control-label" for="activeuntil">Active Until</label>
         <div class="col-sm-9">
           <div class="col-sm-4 input-group">
-            <input datepicker-popup="{{format}}" id="activeuntil" type="text" class="form-control" ng-model="teachingperiod.active_until" is-open="calOptions.endOpened" ng-required="true" close-text="Close" />
+            <input datepicker-popup="{{format}}" id="activeuntil" type="text" class="form-control" ng-model="teachingperiod.active_until" is-open="calOptions.activeUntilOpened" ng-required="true" close-text="Close" />
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-click="open($event,'end')">
+              <button class="btn btn-default" type="button" ng-click="open($event,'active')">
                 <i class="fa fa-calendar"></i>
               </button>
             </span>
