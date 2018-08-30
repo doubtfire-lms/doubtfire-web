@@ -11,7 +11,15 @@
           </div>
           <div class="pull-right">
             <form ng-show="unit.students.length > 0" role="search" class="form-horizontal">
-              <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="studentSearch" typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus="">
+              <input
+                id="searchbar"
+                class="input-md form-control"
+                placeholder="Search..."
+                type="search"
+                ng-model="studentSearch"
+                typeahead="text for text in unitTypeAheadData(unit)| filter:$viewValue | limitTo:8" typeahead-wait-ms="200"
+                autofocus=""
+                autocomplete="off">
               <p ng-show="filteredStudents.length < unit.students.length && filteredStudents.length != 0">
                 Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
               </p>

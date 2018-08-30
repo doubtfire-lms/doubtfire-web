@@ -273,7 +273,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      time_exceeded: []
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
@@ -325,6 +325,14 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return number of days task is overdue, or false if not overdue
   taskService.daysPastDueDate = (task) ->
     moment().diff(moment(task.definition.due_date), 'days')
+
+  # Return amount of time past target due date
+  taskService.timePastTargetDate = (task) ->
+    moment().diff(moment(task.targetDate()))
+
+  # Return the amount of time past the deadline
+  taskService.timePastDueDate = (task) ->
+    moment().diff(moment(task.definition.due_date))
 
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
@@ -535,16 +543,11 @@ angular.module("doubtfire.common.services.tasks", [])
 
   #============================================================================
   #ADD MEDIA COMMENT
-  taskService.addMediaComment = (task, media, commentType, onSuccess, onError) ->
+  taskService.addMediaComment = (task, media, onSuccess, onError) ->
     form = new FormData()
-    form.append 'type', commentType
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id
-
-    if commentType == "image"
-      form.append 'attachment', media[0]
-    else if commentType == "audio"
-      form.append 'attachment', media, "a-comment.webm"
+    form.append 'attachment', media
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success

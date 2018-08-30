@@ -23,11 +23,12 @@ angular.module('doubtfire.groups.group-set-manager', [])
       $scope.showMemberPanelToolbar = true if $scope.unitRole?
     resetAddMemberForm = ->
       @addMemberForm.reset()
-      @addMemberForm.querySelector('input[type="text"]').focus()
+      @addMemberForm.querySelector('input[type="search"]').focus()
     # Add new member to the group
     $scope.addMember = (member) ->
       $scope.selectedGroup.addMember(member, resetAddMemberForm)
     # Update name of group
+
     $scope.updateGroup = (data) ->
       Group.update(
         {

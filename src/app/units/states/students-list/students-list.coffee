@@ -102,9 +102,6 @@ angular.module('doubtfire.units.states.students', [])
         row['lab'] = student.tutorial.abbreviation
       else
         row['lab'] = ""
-      angular.forEach(taskService.statusKeys, (key) ->
-        row[key] = student.task_stats[taskService.statusSeq[key]].value
-      )
       result.push row
     )
     result

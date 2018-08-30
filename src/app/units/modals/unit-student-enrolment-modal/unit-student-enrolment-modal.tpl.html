@@ -13,9 +13,13 @@
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Tutorial</label>
         <div class="col-sm-7">
-          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials" />
+          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials"
+          typeahead-select-on-exact="true"
+          typeahead-editable="false"
+          autocomplete="off"/>
         </div>
       </div>
+      <p class="help-block" style="padding-left: 5em" ng-show="tutorial.trim().length == 0">Student will be enrolled without a tutorial assigned.</p>
     </form>
   </div>
   <div class="modal-footer text-right">

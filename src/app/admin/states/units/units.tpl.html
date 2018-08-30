@@ -6,7 +6,7 @@
         Modify units registered with {{externalName.value}}
       </div>
       <form role="search" class="pull-right form-horizontal">
-        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search.$" typeahead="unit.name for unit in units | filter:$viewValue | limitTo:8" />
+        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unit.name for unit in units | filter:$viewValue | limitTo:8" />
         <p ng-show="filteredUnits.length < students.length && filteredUnits.length != 0">Showing {{filteredUnits.length}} of {{users.length}} users.</p>
         <p ng-show="filteredUnits.length < students.length && filteredUnits.length == 0">No students found.</p>
       </form>

@@ -17,7 +17,7 @@
           Modify users registered with {{externalName.value}}
         </div>
         <form role="search" class="pull-right form-horizontal">
-          <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search" ng-model="search.$" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
+          <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search" ng-model="search" autocomplete="off" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
           <p ng-show="filteredUsers.length < students.length && filteredUsers.length != 0">Showing {{filteredUsers.length}} of {{users.length}} users.</p>
           <p ng-show="filteredUsers.length < students.length && filteredUsers.length == 0">No students found.</p>
         </form>
