@@ -41,6 +41,8 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
         $scope.teachingPeriod.start_date = "#{$scope.teachingPeriod.start_date.getFullYear()}-#{$scope.teachingPeriod.start_date.getMonth() + 1}-#{$scope.teachingPeriod.start_date.getDate()}"
       if $scope.teachingPeriod.end_date && $scope.teachingPeriod.end_date.getMonth
         $scope.teachingPeriod.end_date = "#{$scope.teachingPeriod.end_date.getFullYear()}-#{$scope.teachingPeriod.end_date.getMonth() + 1}-#{$scope.teachingPeriod.end_date.getDate()}"
+      if $scope.teachingperiod.active_until && $scope.teachingperiod.active_until.getMonth
+        $scope.teachingperiod.active_until = "#{$scope.teachingperiod.active_until.getFullYear()}-#{$scope.teachingperiod.active_until.getMonth() + 1}-#{$scope.teachingperiod.active_until.getDate()}"
 
       saveData = {
         period: $scope.teachingPeriod.period
