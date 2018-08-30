@@ -27,6 +27,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
 
       if pickerData == 'start'
         $scope.calOptions.startOpened = ! $scope.calOptions.startOpened
+        $scope.calOptions.endOpened = false
         $scope.calOptions.activeUntilOpened = false
       else if pickerData == 'end'
         $scope.calOptions.startOpened = false
