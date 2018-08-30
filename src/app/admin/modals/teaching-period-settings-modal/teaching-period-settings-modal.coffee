@@ -20,6 +20,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   $scope.calOptions = {
     startOpened: false
     endOpened: false
+    activeUntilOpened: false
   }
 
   # Get the external name of Doubtfire
