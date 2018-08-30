@@ -47,6 +47,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
         year: $scope.teachingPeriod.year
         start_date: $scope.teachingPeriod.start_date
         end_date: $scope.teachingPeriod.end_date
+        active_until: $scope.teachingPeriod.active_until
       }
 
       if $scope.teachingPeriod.id == -1
