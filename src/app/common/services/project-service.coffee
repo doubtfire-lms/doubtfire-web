@@ -106,6 +106,11 @@ angular.module("doubtfire.common.services.projects", [])
         return task.due_date
       else
         return task.definition.target_date
+    task.startDate = ->
+      if task.start_date?
+        return task.start_date
+      else
+        return task.definition.start_date
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inFinalState()
     task.isDueSoon = ->
