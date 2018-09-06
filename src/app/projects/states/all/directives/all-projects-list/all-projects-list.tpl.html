@@ -16,10 +16,6 @@
           <div class="card-heading text-center bg-primary" ng-if="key != ','">
             <h4>{{key}}</h4>
           </div>
-          <!-- If no teaching period, then show Custom -->
-          <div class="card-heading text-center bg-primary" ng-if="key == ','">
-            <h4>Custom</h4>
-          </div>
           <div class="container card-deck">
             <!-- For units with a teaching period -->
             <a ng-repeat="project in value" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="project.teaching_period">
@@ -35,18 +31,24 @@
           </div>
         </div>
         <!-- For units without a teaching period -->
-        <div class="container card-deck">
-          <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="!project.teaching_period">
-            <div class="card-body text-center">
-              <header>
-                {{project.unit_name}}
-              </header>
-              <p>
-                <label class="label label-default">{{showDate(project.start_date)}}</label>
-                <label class="label label-info">{{project.unit_code}}</label>
-              </p>
-            </div>
-          </a>
+        <div ng-repeat="project in projects" ng-if="!project.teaching_period">
+          <!-- If no teaching period, then show Custom -->
+          <div class="card-heading text-center bg-primary">
+            <h4>Custom</h4>
+          </div>
+          <div class="container card-deck">
+            <a ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary">
+              <div class="card-body text-center">
+                <header>
+                  {{project.unit_name}}
+                </header>
+                <p>
+                  <label class="label label-default">{{showDate(project.start_date)}}</label>
+                  <label class="label label-info">{{project.unit_code}}</label>
+                </p>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </div>
