@@ -1,0 +1,68 @@
+<div id="all-units">
+  <div class="text-center" ng-show="notEnrolled()">
+    <h1>
+      You are not enrolled in {{externalName.value}}.
+    </h1>
+    <p class="lead">
+      Contact your unit convenor or tutor to enrol you in a subject.
+    </p>
+  </div>
+  <div ng-hide="notEntrolled()">
+    <div class="card card-primary" if-role="Tutor Convenor Admin">
+      <!-- Units with a teaching period should be listed first -->
+      <div class="list-group" ng-show="filteredUnitRoles.length > 0">
+        <div ng-repeat="(key,value) in filteredUnitRoles = (unitRoles | isActiveUnitRole) | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
+          <!-- If there is no teaching period, the key will be ',' -->
+          <div class="card-heading text-center bg-primary" ng-if="key != '0'">
+            <h4>{{key | ltrim: '-' }}</h4>
+          </div>
+          <div ng-repeat="(key2,value2) in value  | orderBy: 'teaching_period.period' | groupBy: 'teaching_period.period'">
+            <div class="list-group-heading text-center bg-primary" ng-if="key2 != 'undefined'">
+              <h4>{{key2}}</h4>
+            </div>
+            <div class="container card-deck">
+              <!-- For units with a teaching period -->
+              <a ng-repeat="unitRole in value2" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="unitRole.teaching_period">
+                <div class="card-body text-center">
+                  <header>
+                    {{unitRole.unit_name}}
+                  </header>
+                  <p>
+                    <label class="card-text label label-info">{{unitRole.unit_code}}</label>
+                    <label class="label label-primary">{{unitRole.role}}</label>
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- For units without a teaching period -->
+        <div ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ng-if="!unitRole.teaching_period">
+          <div class="card-heading text-center bg-primary">
+            <h4>Custom</h4>
+          </div>
+          <div class="container card-deck">
+            <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item list-group-item-action col-sm-4 card bg-primary">
+              <div class="card-body text-center">
+                <header>
+                  {{unitRole.unit_name}}
+                </header>
+                <p>
+                  <label class="label label-default">{{showDate(unitRole.start_date)}}</label>
+                  <label class="label label-info">{{unitRole.unit_code}}</label>
+                  <label class="label label-primary">{{unitRole.role}}</label>
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="spinner" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
+  </div>
+</div>
