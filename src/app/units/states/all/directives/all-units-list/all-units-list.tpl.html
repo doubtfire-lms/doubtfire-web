@@ -11,18 +11,18 @@
     <div class="card card-primary" if-role="Tutor Convenor Admin">
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
-        <div ng-repeat="(key,value) in filteredUnitRoles = (unitRoles | isActiveUnitRole) | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
-          <!-- If there is no teaching period, the key will be '0' -->
-          <div class="card-heading text-center bg-primary" ng-if="key != '0'">
-            <h4>{{key | ltrim: '-' }}</h4>
+        <div ng-repeat="(year, groupedByYearUnitRoles) in filteredUnitRoles = (unitRoles | isActiveUnitRole) | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
+          <!-- If there is no teaching period, the year will be '0' -->
+          <div class="card-heading text-center bg-primary" ng-if="year != '0'">
+            <h4>{{year | ltrim: '-' }}</h4>
           </div>
-          <div ng-repeat="(key2,value2) in value  | orderBy: 'teaching_period.period' | groupBy: 'teaching_period.period'">
+          <div ng-repeat="(period,groupedByPeriodUnitRoles) in groupedByYearUnitRoles  | orderBy: 'teaching_period.period' | groupBy: 'teaching_period.period'">
             <div class="list-group-heading text-center bg-primary" ng-if="key2 != 'undefined'">
               <h4>{{key2}}</h4>
             </div>
             <div class="container card-deck">
               <!-- For units with a teaching period -->
-              <a ng-repeat="unitRole in value2" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="unitRole.teaching_period">
+              <a ng-repeat="unitRole in groupedByPeriodUnitRoles" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="unitRole.teaching_period">
                 <div class="card-body text-center">
                   <header>
                     {{unitRole.unit_name}}
