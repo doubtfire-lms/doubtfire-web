@@ -12,7 +12,7 @@
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
         <div ng-repeat="(key,value) in filteredUnitRoles = (unitRoles | isActiveUnitRole) | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
-          <!-- If there is no teaching period, the key will be ',' -->
+          <!-- If there is no teaching period, the key will be '0' -->
           <div class="card-heading text-center bg-primary" ng-if="key != '0'">
             <h4>{{key | ltrim: '-' }}</h4>
           </div>
@@ -59,9 +59,6 @@
       </div>
     </div>
   </div>
-
-
-
   <div class="spinner" ng-hide="dataLoaded">
     <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
   </div>
