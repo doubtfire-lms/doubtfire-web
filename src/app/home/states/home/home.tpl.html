@@ -15,7 +15,7 @@
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
         <!-- For units with a teaching period -->
-        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teaching_period">
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teaching_period && unitRole.teaching_period.active">
           <header>
             {{unitRole.unit_name}}
           </header>
@@ -55,7 +55,7 @@
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group">
         <!-- For units with a teaching period -->
-        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period">
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period && project.teaching_period.active">
           <header>
             {{project.unit_name}}
           </header>
