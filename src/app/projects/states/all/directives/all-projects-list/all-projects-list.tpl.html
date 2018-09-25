@@ -1,0 +1,65 @@
+<div id="all-projects">
+  <div class="text-center" ng-show="notEnrolled()">
+    <h1>
+      You are not enrolled in {{externalName.value}}.
+    </h1>
+    <p class="lead">
+      Contact your unit convenor or tutor to enrol you in a subject.
+    </p>
+  </div>
+  <div ng-hide="notEntrolled()">
+    <div class="card card-primary" ng-show="projects.length > 0">
+      <!-- Units with a teaching period should be listed first -->
+      <div class="list-group">
+        <div ng-repeat="(year,groupedByYearProjects) in projects | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
+          <!-- If there is no teaching period, the year will be '0' -->
+          <div class="card-heading text-center bg-primary" ng-if="year != '0'">
+            <h4>{{year | ltrim: '-' }}</h4>
+          </div>
+          <div  ng-repeat="(period,groupedByPeriodProjects) in groupedByYearProjects  | orderBy: 'teaching_period.period' | groupBy: 'teaching_period.period'">
+            <div class="list-group-heading text-center bg-primary" ng-if="period != 'undefined'">
+              <h4>{{period}}</h4>
+            </div>
+            <div class="container card-deck">
+              <!-- For units with a teaching period -->
+              <a ng-repeat="project in groupedByPeriodProjects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="project.teaching_period">
+                <div class="card-body text-center">
+                  <header>
+                    {{project.unit_name}}
+                  </header>
+                  <p>
+                    <label class="card-text label label-info">{{project.unit_code}}</label>
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <!-- Show Custom at the end -->
+          <div class="card-heading text-center bg-primary" ng-if="$last">
+            <h4>Custom</h4>
+          </div>
+        </div>
+        <!-- For units without a teaching period -->
+        <div ng-if="!project.teaching_period">
+          <!-- If no teaching period, then show Custom -->
+          <div class="container card-deck">
+            <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="!project.teaching_period">
+              <div class="card-body text-center">
+                <header>
+                  {{project.unit_name}}
+                </header>
+                <p>
+                  <label class="label label-default">{{showDate(project.start_date)}}</label>
+                  <label class="label label-info">{{project.unit_code}}</label>
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spinner" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
+  </div>
+</div>

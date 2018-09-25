@@ -51,6 +51,20 @@
             </div>
           </div>
         </div><!--/end-date-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="activeuntil">Active Until</label>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input datepicker-popup="{{format}}" id="activeuntil" type="text" class="form-control" ng-model="teachingPeriod.active_until" is-open="calOptions.activeUntilOpened" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="open($event,'active')">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div><!--/active-until-date-->
       </div>
       <div class="panel-footer text-right">
         <input type="submit" value="{{ teachingPeriod.id == -1 ? 'Create' : 'Update' }}" class="btn btn-success" ng-disabled="teachingPeriodForm.$pristine" />
