@@ -11,7 +11,7 @@
           <div class="col-sm-9">
             <select class="form-control" ng-model="unit.teaching_period_id">
               <option value="">Custom Period</option>
-              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}</option>
+              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}-{{tp.year}}</option>
             </select>
           </div>
         </div><!--/teaching-period-date-->
