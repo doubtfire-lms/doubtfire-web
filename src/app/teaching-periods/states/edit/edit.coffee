@@ -25,4 +25,32 @@ angular.module('doubtfire.teaching-periods.states.edit', [
 
     (failure) -> alertService.add("danger", "Failed to load teaching period. #{failure?.data?.error}", 6000)
   )
+
+  #
+  # Active tab group
+  #
+  $scope.tabs =
+    editorTab:
+      title: "Teaching Period Details Editor"
+      seq:   0
+    unitsTab:
+      title: "Rollover Teaching Period"
+      seq:   1
+
+  # Set the active tab
+  $scope.setActiveTab = (tab) ->
+    # Do nothing if we're switching to the same tab
+    return if tab is $scope.activeTab
+
+    # Actions to perform when changing tab
+    $scope.activeTab?.active = false  # Deactivate original tab
+
+    # run de-select actions...
+    $scope.activeTab.deselect?()
+
+    $scope.activeTab = tab            # Switch tabs
+    $scope.activeTab.active = true    # Make it active
+
+  $scope.activeTab = $scope.tabs.editorTab
+
 )
