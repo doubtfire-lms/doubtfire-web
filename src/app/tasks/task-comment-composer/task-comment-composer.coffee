@@ -14,12 +14,15 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
   controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
 
     $scope.isRecorderOpen = false
+    $scope.isEmojiOpen = false
+    
     # Initialise comment
     $scope.comment = {
       text: ""
       type: "text"
     }
 
+    $scope.emojiPopover = 'emojiSelectorPopover.html'
     $scope.audioPopover = 'audioRecorderPopover.html'
 
     # Don't insert a newline character when sending a comment

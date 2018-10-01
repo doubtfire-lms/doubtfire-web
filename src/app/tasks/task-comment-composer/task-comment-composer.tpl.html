@@ -4,9 +4,16 @@
     <i class="fa fa-microphone"></i>
   </button> -->
 
-  <button class="btn-recorder" type="button" popover-template="audioPopover" ng-click="isRecorderOpen = !isRecorderOpen">
-    <span class="fa fa-microphone"></span>
-  </button>
+  <div style="width: 3em;">
+    <button style="width: 100%; height: 50%; padding-right: 80%" class="btn-recorder" type="button" popover-template="audioPopover" ng-click="isRecorderOpen = !isRecorderOpen">
+      <span class="fa fa-microphone"></span>
+    </button>
+    
+    <button style="width: 100%; height: 50%; padding-right: 80%" class="btn-recorder" type="button" popover-template="emojiPopover" ng-click="isEmojiOpen = !isEmojiOpen">
+      <span class="fa fa-smile-o"></span>
+    </button>
+  </div>
+
 
   <div class="image-uploader" ngf-drop ng-show="upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
     ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
@@ -39,4 +46,8 @@
 <!-- The HTML which will be injected into the audio popover -->
 <script type="text/ng-template" id="audioRecorderPopover.html">
   <audio-recorder ng-if="isRecorderOpen"></audio-recorder>
+</script>
+
+<script type="text/ng-template" id="emojiSelectorPopover.html">
+  <emoji-selector ng-if="isEmojiOpen"></emoji-selector>
 </script>
