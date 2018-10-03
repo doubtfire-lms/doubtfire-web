@@ -7,8 +7,6 @@
       </div>
       <form role="search" class="pull-right form-horizontal">
         <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods.loadedPeriods | filter:$viewValue | limitTo:8" />
-        <p ng-show="filteredTeachingPeriods.length < students.length && filteredTeachingPeriods.length != 0">Showing {{filteredTeachingPeriods.length}} of {{users.length}} users.</p>
-        <p ng-show="filteredTeachingPeriods.length < students.length && filteredTeachingPeriods.length == 0">No students found.</p>
       </form>
     </div>
     <div class="panel-body">
