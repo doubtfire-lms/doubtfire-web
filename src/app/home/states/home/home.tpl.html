@@ -27,7 +27,7 @@
           </p>
         </a>
         <!-- For units without a teaching period -->
-        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teaching_period">
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teaching_period_name">
           <header>
             {{unitRole.unit_name}}
           </header>
@@ -55,18 +55,18 @@
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group">
         <!-- For units with a teaching period -->
-        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period && project.teaching_period.active">
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period_name && project.teaching_period_active">
           <header>
             {{project.unit_name}}
           </header>
           <p>
-            <label class="label label-default">{{project.teaching_period.period}}</label>
-            <label class="label label-default">{{project.teaching_period.year}}</label>
+            <label class="label label-default">{{project.teaching_period_name}}</label>
+            <label class="label label-default">{{project.teaching_period_year}}</label>
             <label class="label label-info">{{project.unit_code}}</label>
           </p>
         </a>
         <!-- For units without a teaching period -->
-        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="!project.teaching_period">
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="!project.teaching_period_name">
           <header>
             {{project.unit_name}}
           </header>
