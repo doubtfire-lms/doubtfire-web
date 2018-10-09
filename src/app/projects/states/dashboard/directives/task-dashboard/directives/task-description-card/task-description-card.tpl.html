@@ -26,7 +26,7 @@
           &mdash;
           you have requested <strong>{{task.extensions}}</strong> one week extension{{task.extensions > 1 ? "s" : ""}} for this task.
         </li>
-      <li ng-show="should_show_deadline()">
+      <li ng-show="shouldShowDeadline()">
         <strong>Deadline</strong>
         &mdash;
         Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | date  : 'MMM d' }} at {{taskDef.due_date | date : 'h:mm a' }}</strong>. Your work will be checked in your portfolio.
