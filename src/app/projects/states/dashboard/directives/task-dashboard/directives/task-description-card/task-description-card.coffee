@@ -45,7 +45,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
         return new Date()
 
     $scope.shouldShowDeadline = () ->
-      $scope.task?.isDueSoon() || false
+      $scope.task?.daysUntilDueDate() <= 14 || false
 
     $scope.applyForExtension = () ->
       $scope.task.applyForExtension(

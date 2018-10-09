@@ -42,7 +42,7 @@
           <span class="task-subscript-badge due-badge" ng-if="task.isDueSoon()">
             <i class="fa fa-clock-o"></i>
           </span>
-          <span class="task-subscript-badge due-badge" ng-if="task.isOverdue()">
+          <span class="task-subscript-badge due-badge" ng-if="task.isOverdue() && ! task.inTerminalState()">
             <i class="fa fa-clock-o"></i><strong>!</strong>
           </span>
         </div>

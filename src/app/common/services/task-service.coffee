@@ -44,6 +44,32 @@ angular.module("doubtfire.common.services.tasks", [])
     'discuss'
   ]
 
+  # What are the states that are associated with tutor actions...
+  taskService.submittedStatuses = [
+    'do_not_resubmit'
+    'ready_to_mark'
+    'discuss'
+    'demonstrate'
+    'complete'
+    'fail'
+    'time_exceeded'
+  ]
+
+  # Which states can a task be considered to be overdue
+  taskService.overdueStates = [
+    'not_started'
+    'do_not_resubmit'
+    'redo'
+    'need_help'
+    'working_on_it'
+    'fix_and_resubmit'
+    'time_exceeded'
+    'discuss'
+    'demonstrate'
+    'ready_to_mark'
+  ]
+
+  # Which states are considered final
   taskService.finalStatuses = [
     'complete'
     'fail'
@@ -56,10 +82,14 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
   ]
 
-  taskService.terminalStatuses = [
-    'demonstrate'
+  taskService.discussionStatuses = [
     'discuss'
+    'demonstrate'
+  ]
+
+  taskService.terminalStatuses = [
     'do_not_resubmit'
+    'time_exceeded'
     'complete'
     'fail'
   ]
@@ -218,7 +248,7 @@ angular.module("doubtfire.common.services.tasks", [])
     do_not_resubmit:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
-      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
+      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio."
     fix_and_resubmit:
       detail: "Your submission requires some more work"
       reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
@@ -242,7 +272,7 @@ angular.module("doubtfire.common.services.tasks", [])
     time_exceeded:
       detail: "Time limit exceeded"
       reason: "This work was submitted after the deadline, having missed both the target date and deadline."
-      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. This task will not be considered to be Complete, which may limit your maximum grade."
+      action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -262,6 +292,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'fail'
     ]
 
+  # Which status should not show up in the task status drop down
   taskService.rejectFutureStates =
       not_started: []
       working_on_it: []
@@ -273,7 +304,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fix_and_resubmit:  []
       redo:  []
       do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: []
+      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
@@ -363,10 +394,6 @@ angular.module("doubtfire.common.services.tasks", [])
         task.status = oldStatus
         alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
     )
-
-  # Whether or not new submissions can be made on a task
-  taskService.canReuploadEvidence = (task) ->
-    _.includes(taskService.terminalStatuses, task.status)
 
   doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { id: task.id }).$promise.then (

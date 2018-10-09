@@ -75,7 +75,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->
-      taskService.canReuploadEvidence(task)
+      task.inSubmittedState()
     task.requiresFileUpload = ->
       task.definition.upload_requirements.length > 0
     task.plagiarismDetected = ->
@@ -112,15 +112,15 @@ angular.module("doubtfire.common.services.projects", [])
       else
         return task.definition.start_date
     task.isToBeCompletedSoon = ->
-      task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inFinalState()
+      task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
       task.daysUntilDueDate() <= 14 && task.timePastDueDate() < 0 && ! task.inFinalState()
     task.isOverdue = ->
-      task.timePastDueDate() > 0 && ! task.inFinalState()
+      task.timePastDueDate() > 0 && (task.status in taskService.overdueStates)
     task.isPastTargetDate = ->
-      task.timePastTargetDate() > 0 && ! task.inFinalState()
+      task.timePastTargetDate() > 0 && ! task.inSubmittedState()
     task.isDueToday = ->
-      task.daysUntilDueDate() == 0 && ! task.inFinalState()
+      task.daysUntilDueDate() == 0 && ! task.inSubmittedState()
     task.daysPastDueDate = ->
       taskService.daysPastDueDate(task)
     task.daysPastTargetDate = ->
@@ -155,6 +155,10 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.finalStatuses
     task.inTerminalState = ->
       task.status in taskService.terminalStatuses
+    task.inSubmittedState = ->
+      task.status in taskService.submittedStatuses
+    task.inDiscussState = ->
+      task.status in taskService.discussionStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
