@@ -111,6 +111,7 @@ angular.module("doubtfire.common.services.projects", [])
         return task.start_date
       else
         return task.definition.start_date
+    
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
@@ -133,9 +134,23 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
-    task.timeUntilDueDate = ->
-      taskService.timeUntilDueDate(task)
-
+    
+    # Start date helpers
+    task.timeUntilStartDate = ->
+      moment(task.startDate()).diff(moment())
+    task.daysUntilStartDate = ->
+      moment(task.startDate()).diff(moment(), 'days')
+    task.isBeforeStartDate = ->
+      task.timeUntilStartDate() > 0
+    task.timeToStart = ->
+      if task.daysUntilStartDate() < 0
+        return ""
+      else
+        days = task.daysUntilStartDate()
+        if days < 7
+          return "#{days}d"
+        else
+          return "#{Math.floor(days/7)}w"
 
 
     # Return hours until the deadline...
