@@ -17,7 +17,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
     # Rollover
     $scope.rolloverTeachingPeriodModal = (teachingPeriod) ->
       # If we're given a user, show that user, else create a new one
-      teachingPeriodToShow = if teachingPeriod? then teachingPeriod else { }
-      RolloverTeachingPeriodModal.show teachingPeriodToShow
+      teachingPeriodToRollover = if teachingPeriod? then teachingPeriod else { }
+      RolloverTeachingPeriodModal.show teachingPeriodToRollover
 
 )
