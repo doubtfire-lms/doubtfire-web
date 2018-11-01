@@ -5,6 +5,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal'
 
+import { setTheme } from 'ngx-bootstrap/utils';
+
 @NgModule({
   imports:      [
     BrowserModule,
@@ -14,7 +16,10 @@ import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal
   providers: [ AboutDoubtfireModal ]
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule  ) { }
+  constructor(private upgrade: UpgradeModule  )
+  {
+    setTheme('bs3'); // or 'bs4'
+  }
 
   ngDoBootstrap() {
     this.upgrade.bootstrap(document.body, ['doubtfire'], { strictDi: false });
