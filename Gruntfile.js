@@ -635,7 +635,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ gruntEnv, 'build', 'browserSync', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', 'browserSync', 'delta' ] );
 
   /**
    * Grunt watchsvr no longer exists
@@ -666,6 +666,7 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
+    gruntEnv,
     'clean',
     'html2js',
     'jshint',

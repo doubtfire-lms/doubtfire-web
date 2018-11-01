@@ -44,5 +44,4 @@ angular.module('doubtfire.config.runtime', [])
   # Redirect the user if their token expires
   $rootScope.$on "tokenTimeout", handleTokenTimeout
 
-  _.mixin(_.string.exports())
 )

@@ -37,6 +37,8 @@
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
 
+    <!-- bootstrap for ngx -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Analytics -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -50,12 +52,10 @@
     <div ui-view="header"></div>
     <div ui-view="main" class="container-fluid"></div>
     <alert-list> </alert-list>
-    <!-- compiled JS --><% scripts.forEach( function ( file ) { %>
-    <script type="text/javascript" src="<%= file %>"></script><% }); %>
-    <script type="text/javascript" src="runtime.js"></script>
+    <!-- <script type="text/javascript" src="runtime.js"></script>
     <script type="text/javascript" src="polyfills.js"></script>
     <!-- <script type="text/javascript" src="styles.js"></script> -->
-    <script type="text/javascript" src="vendor.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+    <!-- <script type="text/javascript" src="vendor.js"></script> -->
+    <!-- <script type="text/javascript" src="main.js"></script> -->
   </body>
 </html>

@@ -76,7 +76,7 @@ angular.module("doubtfire.sessions.auth", [
       user =
         id: response.user.id
         authenticationToken: response.auth_token
-        role: _.string.camelize(response.user.system_role)
+        role: response.user.system_role
         profile: response.user
 
       $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), 1000*60*60
