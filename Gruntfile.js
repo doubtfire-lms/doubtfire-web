@@ -635,7 +635,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'browserSync', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', 'delta' ] );
 
   /**
    * Grunt watchsvr no longer exists
