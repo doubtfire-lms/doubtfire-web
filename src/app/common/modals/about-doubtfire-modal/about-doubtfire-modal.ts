@@ -2,9 +2,7 @@
 // Modal to show Doubtfire version info
 //
 import { Injectable, Component } from '@angular/core';
-
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as _ from "lodash";
 
 import { DoubtfireConstants } from 'src/app/config/constants/constants';
@@ -17,12 +15,13 @@ import { DoubtfireConstants } from 'src/app/config/constants/constants';
 })
 export class AboutDoubtfireModal {
   constructor(
-    private modal: BsModalService){
-    }
+    private modal: BsModalService) {
+  }
 
   public show() {
-    console.log("here");
+    // console.log(this);
     this.modal.show(AboutDoubtfireModalContent)
+
   }
 }
 
@@ -31,14 +30,12 @@ export class AboutDoubtfireModal {
   templateUrl: 'about-doubtfire-modal.tpl.html'
 })
 export class AboutDoubtfireModalContent {
-  private contributors: { avatar:string; handler: any; }[]
-  constructor(private constants: DoubtfireConstants)
-  {
-    console.log("in constructor");
+  private contributors: { avatar: string; handler: any; }[]
+  private constants: DoubtfireConstants;
+  constructor(private bsModalRef: BsModalRef, constants: DoubtfireConstants) {
+    this.constants = constants;
+    console.log(constants.externalName);
     this.contributors = this.mapContributors();
-    // vm.close = () => $modalInstance.dismiss();
-    // // Get the confugurable, external name of Doubtfire
-    // vm.externalName = ExternalName;
     // vm.loadContributorDetails = loadContributorDetails;
 
     // // Load in the contributors from GitHub
@@ -48,19 +45,21 @@ export class AboutDoubtfireModalContent {
     // }
   }
 
+  public hide() {
+    this.bsModalRef.hide();
+  }
+
   // Map contributors to initial hashes - with handler and default avatar
-  private mapContributors()
-  {
-    return _.map(DoubtfireConstants.mainContributors, (c) =>
-      ( {
-        avatar:   '/assets/images/person-unknown.gif',
-        handler:  c
+  private mapContributors() {
+    return _.map(this.constants.mainContributors, (c) =>
+      ({
+        avatar: '/assets/images/person-unknown.gif',
+        handler: c
       })
     );
   }
 
-  private loadContributorDetails(handler: string, index: number)
-  {
+  private loadContributorDetails(handler: string, index: number) {
     // $http.get(`https://api.github.com/users/${handler}`)
     //   .then( (response) =>
     //   {
