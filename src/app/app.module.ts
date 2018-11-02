@@ -2,6 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal'
 
@@ -13,6 +14,7 @@ import { setTheme } from 'ngx-bootstrap/utils';
   ],
   imports:      [
     BrowserModule,
+    HttpClientModule,
     UpgradeModule,
     ModalModule.forRoot()
   ],
