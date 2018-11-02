@@ -21,8 +21,8 @@ export class AboutDoubtfireModal {
     }
 
   public show() {
-    // this.modal.show(AboutDoubtfireModalContent)
     console.log("here");
+    this.modal.show(AboutDoubtfireModalContent)
   }
 }
 
@@ -34,6 +34,7 @@ export class AboutDoubtfireModalContent {
   private contributors: { avatar:string; handler: any; }[]
   constructor(private constants: DoubtfireConstants)
   {
+    console.log("in constructor");
     this.contributors = this.mapContributors();
     // vm.close = () => $modalInstance.dismiss();
     // // Get the confugurable, external name of Doubtfire
