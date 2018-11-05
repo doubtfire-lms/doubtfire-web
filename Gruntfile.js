@@ -125,6 +125,26 @@ module.exports = function ( grunt ) {
           }
        ]
       },
+      font_bootstrap: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= build_dir %>/assets/fonts/bootstrap/',
+            cwd: 'vendor/bootstrap-sass/assets/fonts/bootstrap',
+            expand: true
+          }
+        ]
+      },
+      font_fontawesome: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= build_dir %>/assets/fonts/font-awesome/',
+            cwd: 'vendor/font-awesome/fonts',
+            expand: true
+          }
+        ]
+      },
       build_app_js: {
         files: [
           {
@@ -674,6 +694,8 @@ module.exports = function ( grunt ) {
     'coffee',
     'styles',
     'copy:build_assets',
+    'copy:font_bootstrap',
+    'copy:font_fontawesome',
     'copy:build_app_js',
     'copy:build_vendor_js',
     'copy:build_vendor_jsmap',
