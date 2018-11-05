@@ -18,5 +18,14 @@ angular.module('doubtfire.teaching-periods.modals.rollover-teaching-period-modal
   $scope.teachingPeriods = TeachingPeriod.query()
 
   $scope.rolloverTo = {}
+
+  $scope.rollover = ->
+
+    TeachingPeriod.rollover.create { existing_teaching_period_id: $scope.teachingperiod.id, new_teaching_period_id: $scope.rolloverTo },
+      (createdTeachingPeriod) ->
+        $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
+        alertService.add("success", "Teaching Period created.", 2000)
+      (response) ->
+        alertService.add("danger", response.data.error, 6000)
 )
 
