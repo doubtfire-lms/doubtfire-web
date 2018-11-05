@@ -6,7 +6,7 @@ angular.module("doubtfire.sessions.auth.roles.if-role", [])
 .directive("ifRole", (auth) ->
   restrict: "A"
   link: (scope, element, attrs) ->
-    roleWhitelist = _.string.words(attrs.ifRole)
+    roleWhitelist = _.words(attrs.ifRole)
     element.remove() if not auth.isAuthorised roleWhitelist
 
 )

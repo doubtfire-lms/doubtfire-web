@@ -1,3 +1,6 @@
+# Typescript Migration Status:
+# Moved to apiURL.ts/apiURL.prod.ts and constants.ts
+
 angular.module("doubtfire.api.api-url", [])
 
 #

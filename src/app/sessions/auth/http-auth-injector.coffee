@@ -10,7 +10,7 @@ angular.module("doubtfire.sessions.auth.http-auth-injector", [])
     #
     injectAuthForRequest = (request) ->
       # Intercept API requests and inject the auth token.
-      if _.string.startsWith(request.url, api) and currentUser.authenticationToken?
+      if _.startsWith(request.url, api) and currentUser.authenticationToken?
         request.params = {} unless _.has request, "params"
         request.params.auth_token = currentUser.authenticationToken
       request or $q.when request
@@ -20,7 +20,7 @@ angular.module("doubtfire.sessions.auth.http-auth-injector", [])
     #
     injectAuthForResponseWithError = (response) ->
       # Intercept unauthorised API responses and fire an event.
-      if response.config && response.config.url and _.string.startsWith(response.config.url, api)
+      if response.config && response.config.url and _.startsWith(response.config.url, api)
         # Timeout?
         if response.status is 419
           $rootScope.$broadcast "tokenTimeout"
