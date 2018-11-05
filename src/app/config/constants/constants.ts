@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import apiURL from 'src/app/config/constants/apiURL';
 interface externalNameResponseFormat {
   externalName: String;
 };
@@ -13,7 +14,6 @@ export class DoubtfireConstants {
     console.log("getting api url");
     httpClient.get(`${this.apiURL}/settings`).toPromise().then((response: externalNameResponseFormat) => {
       this.externalName = response.externalName;
-      console.log("Loaded " + response.externalName);
     })
   }
   public mainContributors: Array<string> = [
@@ -21,7 +21,7 @@ export class DoubtfireConstants {
     'alexcu',              // Alex Cummaudo
     'jakerenzella'
   ];
-  public apiURL = "http://localhost:3000/api"
+  public apiURL = apiURL;
   public externalName: String = "Loading...";
 }
 

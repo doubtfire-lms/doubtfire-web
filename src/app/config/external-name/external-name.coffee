@@ -12,6 +12,3 @@ angular.module("doubtfire.config.external-name", [])
 
   externalName
 )
-
-
-
