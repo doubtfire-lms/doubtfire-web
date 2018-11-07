@@ -12,7 +12,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
-  controller: ($scope, $timeout, $filter, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService) ->
+  controller: ($scope, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Check taskSource exists
@@ -41,6 +41,9 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     # auto-selected with the search options open task def mode -- i.e., the mode
     # for selecting tasks by task definitions
     $scope.isTaskDefMode = $scope.taskData.source == Unit.tasksForDefinition && $scope.filters?.taskDefinitionIdSelected? && $scope.showSearchOptions?
+    if $scope.isTaskDefMode
+      $scope.submissionsUrl = TaskDefinition.getSubmissionsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
+      $scope.submissionsPdfsUrl = TaskDefinition.getSubmissionsPdfsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
     openTaskDefs = ->
       # Automatically "open" the task definition select element if in task def mode
       selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
@@ -74,6 +77,8 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit) if $scope.unit.hasGroupwork()
     $scope.taskDefinitionIdChanged = ->
+      $scope.submissionsUrl = TaskDefinition.getSubmissionsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
+      $scope.submissionsPdfsUrl = TaskDefinition.getSubmissionsPdfsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
       taskDefId = $scope.filters.taskDefinitionIdSelected
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
@@ -108,7 +113,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
-          task = findTaskForTaskKey($scope.taskData.taskKey) || _.first($scope.filteredTasks)
+          task = findTaskForTaskKey($scope.taskData.taskKey)
           $timeout((-> $scope.setSelectedTask(task)), 500)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey

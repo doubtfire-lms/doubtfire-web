@@ -72,7 +72,6 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           alertService.add("success", "Deleted task sheet", 2000)
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
-      
 
     $scope.removeTaskResources = (task) ->
       TaskDefinition.taskResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
@@ -86,7 +85,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     #
     # The task resources uploader...
     #
-    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip'  } }
+    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip' } }
     $scope.taskResourcesUploadUrl = -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskResourcesSuccess = (response) ->
@@ -170,40 +169,43 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       else
         task.group_set_id = -1
 
-      if task.target_date && task.target_date.getMonth
-        tgt = task.target_date
-        task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-
-      if task.start_date && task.start_date.getMonth
-        tgt = task.start_date
-        task.start_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-
-      if task.due_date && task.due_date.getMonth
-        due = task.due_date
-        task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
-
-      if $scope.isNew
-        promise = TaskDefinition.create( { task_def: task } ).$promise
-        ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
-        promise.then (
-          (response) ->
-            $scope.unit.task_definitions.push(response)
-            alertService.add("success", "#{response.name} Added", 2000)
-        ),
-        (
-          (response) ->
-            if response.data.error?
-              alertService.add("danger", "Error: " + response.data.error, 6000)
-        )
+      if (Date.parse(task.start_date) > Date.parse(task.target_date)) || (Date.parse(task.target_date) > Date.parse(task.due_date))
+        alertService.add("danger", "Invalid task dates, unit not saved. Ensure start date is before due date, and due date is before deadline.", 5000)
       else
-        TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
-          (response) ->
-            populate_task($scope.task, response)
-            alertService.add("success", "#{response.name} Updated", 2000)
-        ),
-        (
-          (response) ->
-            if response.data.error?
-              alertService.add("danger", "Error: " + response.data.error, 6000)
-        )
+        if task.target_date && task.target_date.getMonth
+          tgt = task.target_date
+          task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+
+        if task.start_date && task.start_date.getMonth
+          tgt = task.start_date
+          task.start_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+
+        if task.due_date && task.due_date.getMonth
+          due = task.due_date
+          task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
+
+        if $scope.isNew
+          promise = TaskDefinition.create( { task_def: task } ).$promise
+          ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
+          promise.then (
+            (response) ->
+              $scope.unit.task_definitions.push(response)
+              alertService.add("success", "#{response.name} Added", 2000)
+          ),
+          (
+            (response) ->
+              if response.data.error?
+                alertService.add("danger", "Error: " + response.data.error, 6000)
+          )
+        else
+          TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
+            (response) ->
+              populate_task($scope.task, response)
+              alertService.add("success", "#{response.name} Updated", 2000)
+          ),
+          (
+            (response) ->
+              if response.data.error?
+                alertService.add("danger", "Error: " + response.data.error, 6000)
+          )
 )

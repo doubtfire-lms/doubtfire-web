@@ -26,7 +26,8 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
     $scope.keyPress = (e) ->
       if (e.key.toLowerCase() == "enter" && !e.shiftKey)
         e.preventDefault()
-        $scope.addComment()
+        if $scope.comment.text.trim() != ""
+          $scope.addComment()
 
     $scope.formatImageName = (imageName) ->
       index = imageName.indexOf(".")
@@ -46,8 +47,8 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
 
     #============================================================================
     # Upload image files as comments to a given task
-    $scope.postImageComment = ->
-      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model, "image",
+    $scope.postAttachmentComment = ->
+      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model[0],
         (success) ->
           taskService.scrollDown()
         (failure) ->
