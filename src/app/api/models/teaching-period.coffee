@@ -9,16 +9,21 @@ angular.module("doubtfire.api.models.teaching-period", [])
 
   TeachingPeriod = {
     rollover: rollover
-    query: () ->
+    query: (onSuccess, onFailure) ->
       if data.loadedPeriods.length == 0
         resource.query(
           (success) ->
             data.loadedPeriods = success
+            if onSuccess? && _.isFunction(onSuccess)
+              onSuccess(data)
           (failure) ->
             alertService.add("danger", "Failed to load teaching periods. #{failure?.data?.error}", 6000)
+            if onFailure? && _.isFunction(onFailure)
+              onFailure(failure)
         )
+      if onSuccess? && _.isFunction(onSuccess)
+        onSuccess(data)
       data
-
     create: ( { teaching_period: teachingperiod } ) ->
       resource.create( { teaching_period: teachingperiod } )
 
