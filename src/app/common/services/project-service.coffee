@@ -32,7 +32,7 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.getProjects = ( callback ) ->
     fireCallback = ->
       callback(projectService.loadedProjects) if _.isFunction(callback)
-    unless projectService.loadedUnitRoles?
+    unless projectService.loadedProjects?
       success = (projects) ->
         projectService.loadedProjects = projects
         fireCallback()
