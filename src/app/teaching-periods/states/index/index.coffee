@@ -20,6 +20,7 @@ angular.module('doubtfire.teaching-periods.states.index', [])
 .controller("TeachingPeriodIndexStateCtrl", ($scope, $state, $stateParams, listenerService, TeachingPeriod, alertService) ->
   # Error - required teachingPeriodId is missing!
   teachingPeriodId = +$stateParams.teachingPeriodId
+  TeachingPeriod.query()
 
   TeachingPeriod.get(
     teachingPeriodId
