@@ -12,8 +12,22 @@
       <div class="card-heading">
         <h4>Units You Teach</h4>
       </div>
+      <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
-        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item">
+        <!-- For units with a teaching period -->
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teaching_period_name && unitRole.teaching_period_active">
+          <header>
+            {{unitRole.unit_name}}
+          </header>
+          <p>
+            <label class="label label-default">{{unitRole.teaching_period_name}}</label>
+            <label class="label label-default">{{unitRole.teaching_period_year}}</label>
+            <label class="label label-info">{{unitRole.unit_code}}</label>
+            <label class="label label-primary">{{unitRole.role}}</label>
+          </p>
+        </a>
+        <!-- For units without a teaching period -->
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teaching_period_name">
           <header>
             {{unitRole.unit_name}}
           </header>
@@ -24,6 +38,12 @@
           </p>
         </a>
       </div>
+      <div class="list-group">
+        <a class="list-group-item text-right" ui-sref="view-all-units">
+          View All
+          <span class="glyphicon glyphicon-share-alt"></span>
+        </a>
+      </div>
       <div class="card-body" ng-hide="filteredUnitRoles.length > 0">
         You do not teach any active units
       </div>
@@ -32,8 +52,21 @@
       <div class="card-heading">
         <h4>Units You Study</h4>
       </div>
+      <!-- Units with a teaching period should be listed first -->
       <div class="list-group">
-        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item">
+        <!-- For units with a teaching period -->
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="project.teaching_period_name && project.teaching_period_active">
+          <header>
+            {{project.unit_name}}
+          </header>
+          <p>
+            <label class="label label-default">{{project.teaching_period_name}}</label>
+            <label class="label label-default">{{project.teaching_period_year}}</label>
+            <label class="label label-info">{{project.unit_code}}</label>
+          </p>
+        </a>
+        <!-- For units without a teaching period -->
+        <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item" ng-if="!project.teaching_period_name">
           <header>
             {{project.unit_name}}
           </header>
@@ -43,12 +76,26 @@
           </p>
         </a>
       </div>
+      <div class="list-group">
+        <a class="list-group-item text-right" ui-sref="view-all-projects" if-role="Admin">
+          View All
+          <span class="glyphicon glyphicon-share-alt"></span>
+        </a>
+      </div>
     </div><!--/units-taught-->
     <div class="card card-primary" if-role="Admin Convenor">
       <div class="card-heading">
         <h4>Administration</h4>
       </div>
       <div class="list-group">
+        <a class="list-group-item" ui-sref="admin/teachingperiods" if-role="Admin">
+          <header>
+            Administer Teaching Period
+          </header>
+          <p class="text-muted">
+            Add new teaching-periods, or modify existing teaching-periods.
+          </p>
+        </a>
         <a class="list-group-item" ui-sref="admin/units">
           <header>
             Administer Units
