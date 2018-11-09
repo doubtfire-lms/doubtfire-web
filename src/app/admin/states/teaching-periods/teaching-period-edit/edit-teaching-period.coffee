@@ -1,24 +1,23 @@
-angular.module('doubtfire.teaching-periods.states.edit', [
-  'doubtfire.teaching-periods.states.edit.directives'
-])
+angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teaching-periods.states.edit.directives'])
 
-.config(($stateProvider) ->
-  $stateProvider.state 'teaching-periods/admin', {
-    parent: 'teaching-periods/index'
-    url: '/admin'
-    controller: 'EditTeachingPeriodStateCtrl'
-    templateUrl: 'teaching-periods/states/edit/edit.tpl.html'
+.config(($stateProvider, headerServiceProvider) ->
+  teachingPeriodsAdminViewStateData =
+    url: '/admin/teaching-periods/:teachingPeriodId'
+    views:
+      main:
+        controller: 'EditTeachingPeriodStateCtrl'
+        templateUrl: 'admin/states/teaching-periods/teaching-period-edit/edit-teaching-period.tpl.html'
     data:
       pageTitle: "_Teaching-Period Administration_"
       roleWhitelist: ['Admin']
-  }
+  headerServiceProvider.state "admin/teachingperiods/edit", teachingPeriodsAdminViewStateData
 )
 
 .controller("EditTeachingPeriodStateCtrl", ($scope, $state, TeachingPeriod, alertService, analyticsService) ->
   analyticsService.event 'Edit Teaching Period View', "Started Edit Teaching Period View"
 
   TeachingPeriod.get(
-    $state.params.teachingPeriodId
+    +$state.params.teachingPeriodId
     (success) ->
       $scope.teachingPeriod = success
       $scope.newTeachingPeriod = $scope.teachingPeriod.id == -1

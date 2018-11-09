@@ -7,7 +7,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
 .directive('teachingPeriodDetailsEditor', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'teaching-periods/states/edit/directives/teaching-period-details-editor/teaching-period-details-editor.tpl.html'
+  templateUrl: 'admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.tpl.html'
   controller: ($scope, $state, ExternalName, alertService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false

@@ -1,4 +1,4 @@
-angular.module('doubtfire.teaching-periods.modals.rollover-teaching-period-modal', [])
+angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
 
 .factory('RolloverTeachingPeriodModal', ($modal) ->
   RolloverTeachingPeriodModal = {}

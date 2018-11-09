@@ -12,7 +12,6 @@ angular.module('doubtfire', [
   'doubtfire.errors'
   'doubtfire.home'
   'doubtfire.admin'
-  'doubtfire.teaching-periods'
   'doubtfire.units'
   'doubtfire.tasks'
   'doubtfire.projects'

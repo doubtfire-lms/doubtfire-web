@@ -53,15 +53,10 @@ angular.module("doubtfire.api.models.teaching-period", [])
     get: (id, onSuccess, onFailure) ->
       resource.get( {id: id}
         (success) ->
-          indexOfTeachingPeriods = 0
-          for teachingperiod in data.loadedPeriods
-            if teachingperiod.id == success.id
-              onSuccess data.loadedPeriods[indexOfTeachingPeriods]
-            else
-              data.loadedPeriods << success
-              onSuccess success
-
-            indexOfTeachingPeriods++
+          # Fetched teaching period details... update teaching period in loadedPeriods
+          result = _.find data.loadedPeriods, (tp) -> tp.id == id
+          _.extend result, success
+          onSuccess(result)
         (error) ->
           onFailure error
       )

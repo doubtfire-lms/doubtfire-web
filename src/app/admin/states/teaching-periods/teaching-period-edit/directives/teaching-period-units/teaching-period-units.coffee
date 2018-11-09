@@ -3,7 +3,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
 .directive('teachingPeriodUnits', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'teaching-periods/states/edit/directives/teaching-period-units/teaching-period-units.tpl.html'
+  templateUrl: 'admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-units/teaching-period-units.tpl.html'
   controller: ($scope, $state, alertService, RolloverTeachingPeriodModal) ->
     # Table sort details
     $scope.sortOrder = "start_date"
