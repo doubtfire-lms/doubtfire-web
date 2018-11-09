@@ -7,13 +7,25 @@ angular.module("doubtfire.api.models.teaching-period", [])
   data = { }
   data.loadedPeriods = []
 
+  injectFunctionalityInTeachingPeriod = (tp) ->
+    unless tp.name?
+      tp.name = () ->
+        "#{tp.period} #{tp.year}"
+      tp.active = () ->
+        moment(tp.active_until).diff(moment()) > 0
+    tp
+
   TeachingPeriod = {
     rollover: rollover
+    
+    # Get a teaching period with an id, assumes that teaching periods are loaded...
+    getTeachingPeriod: (id) ->
+      _.find data.loadedPeriods, (tp) -> tp.id == id
     query: (onSuccess, onFailure) ->
       if data.loadedPeriods.length == 0
         resource.query(
           (success) ->
-            data.loadedPeriods = success
+            data.loadedPeriods = _.map success, (tp) -> injectFunctionalityInTeachingPeriod(tp)
             if onSuccess? && _.isFunction(onSuccess)
               onSuccess(data)
           (failure) ->
@@ -34,13 +46,12 @@ angular.module("doubtfire.api.models.teaching-period", [])
           indexOfTeachingPeriods = 0
           for teachingperiod in data.loadedPeriods
             if teachingperiod.id == updatedTeachingPeriod.id
-              data.loadedPeriods[indexOfTeachingPeriods] = updatedTeachingPeriod
+              data.loadedPeriods[indexOfTeachingPeriods] = injectFunctionalityInTeachingPeriod(updatedTeachingPeriod)
             indexOfTeachingPeriods++
       )
 
     get: (id, onSuccess, onFailure) ->
-      resource.get(
-        {id: id}
+      resource.get( {id: id}
         (success) ->
           indexOfTeachingPeriods = 0
           for teachingperiod in data.loadedPeriods
