@@ -12,7 +12,7 @@
     ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
     ngf-drop-available="dropSupported">
 
-    <div id="textField" contenteditable ng-keypress="keyPress($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image..."></div>
+    <div id="textField" contenteditable ng-keypress="keyPress($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image, audio or pdf..."></div>
 
     <p ng-show="upload.display.error">
       Invalid file type!
@@ -24,13 +24,13 @@
   </div>
   <div ng-if="!singleDropZone && upload.model.length > 0" class="selected-files">
     <span class="selected-file">
-      <i class="file-type fa fa-file-image-o"></i>
+      <i class="file-type fa fa-file-o"></i>
       {{formatImageName(upload.model[0].name)}}
     </span>
     <a class="clear-upload" ng-click="clearEnqueuedUpload(upload)">
       <i class="clear-upload fa fa-times"></i>
     </a>
-    <a class="send-upload" ng-click="postImageComment()">
+    <a class="send-upload" ng-click="postAttachmentComment()">
       <i class="fa fa-paper-plane"></i>
     </a>
   </div>

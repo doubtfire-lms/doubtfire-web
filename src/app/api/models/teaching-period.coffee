@@ -7,18 +7,35 @@ angular.module("doubtfire.api.models.teaching-period", [])
   data = { }
   data.loadedPeriods = []
 
+  injectFunctionalityInTeachingPeriod = (tp) ->
+    unless tp.name?
+      tp.name = () ->
+        "#{tp.period} #{tp.year}"
+      tp.active = () ->
+        moment(tp.active_until).diff(moment()) > 0
+    tp
+
   TeachingPeriod = {
     rollover: rollover
-    query: () ->
+    
+    # Get a teaching period with an id, assumes that teaching periods are loaded...
+    getTeachingPeriod: (id) ->
+      _.find data.loadedPeriods, (tp) -> tp.id == id
+    query: (onSuccess, onFailure) ->
       if data.loadedPeriods.length == 0
         resource.query(
           (success) ->
-            data.loadedPeriods = success
+            data.loadedPeriods = _.map success, (tp) -> injectFunctionalityInTeachingPeriod(tp)
+            if onSuccess? && _.isFunction(onSuccess)
+              onSuccess(data)
           (failure) ->
             alertService.add("danger", "Failed to load teaching periods. #{failure?.data?.error}", 6000)
+            if onFailure? && _.isFunction(onFailure)
+              onFailure(failure)
         )
+      if onSuccess? && _.isFunction(onSuccess)
+        onSuccess(data)
       data
-
     create: ( { teaching_period: teachingperiod } ) ->
       resource.create( { teaching_period: teachingperiod } )
 
@@ -29,23 +46,17 @@ angular.module("doubtfire.api.models.teaching-period", [])
           indexOfTeachingPeriods = 0
           for teachingperiod in data.loadedPeriods
             if teachingperiod.id == updatedTeachingPeriod.id
-              data.loadedPeriods[indexOfTeachingPeriods] = updatedTeachingPeriod
+              data.loadedPeriods[indexOfTeachingPeriods] = injectFunctionalityInTeachingPeriod(updatedTeachingPeriod)
             indexOfTeachingPeriods++
       )
 
     get: (id, onSuccess, onFailure) ->
-      resource.get(
-        {id: id}
+      resource.get( {id: id}
         (success) ->
-          indexOfTeachingPeriods = 0
-          for teachingperiod in data.loadedPeriods
-            if teachingperiod.id == success.id
-              onSuccess data.loadedPeriods[indexOfTeachingPeriods]
-            else
-              data.loadedPeriods << success
-              onSuccess success
-
-            indexOfTeachingPeriods++
+          # Fetched teaching period details... update teaching period in loadedPeriods
+          result = _.find data.loadedPeriods, (tp) -> tp.id == id
+          _.extend result, success
+          onSuccess(result)
         (error) ->
           onFailure error
       )

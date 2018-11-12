@@ -1,15 +1,15 @@
-angular.module('doubtfire.admin.states.teachingperiods', [])
+angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.states.teachingperiods.edit'])
 
 #
 # Users with an Administrator system role can create new Teaching Periods.
 #
 .config((headerServiceProvider) ->
   teachingPeriodsAdminViewStateData =
-    url: "/admin/teachingperiods"
+    url: "/admin/teaching-periods"
     views:
       main:
         controller: "AdministerTeachingPeriodsState"
-        templateUrl: "admin/states/teachingperiods/teachingperiods.tpl.html"
+        templateUrl: "admin/states/teaching-periods/teaching-period-list/teaching-period-list.tpl.html"
     data:
       pageTitle: "_Teaching-Period Administration_"
       roleWhitelist: ['Admin']

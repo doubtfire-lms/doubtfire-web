@@ -113,7 +113,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
-          task = findTaskForTaskKey($scope.taskData.taskKey) || _.first($scope.filteredTasks)
+          task = findTaskForTaskKey($scope.taskData.taskKey)
           $timeout((-> $scope.setSelectedTask(task)), 500)
           # For when URL has been manually changed, set the selected task
           # using new array of tasks loaded from the new taskKey

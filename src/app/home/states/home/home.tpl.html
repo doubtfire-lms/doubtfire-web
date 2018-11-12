@@ -15,19 +15,18 @@
       <!-- Units with a teaching period should be listed first -->
       <div class="list-group" ng-show="filteredUnitRoles.length > 0">
         <!-- For units with a teaching period -->
-        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teaching_period_name && unitRole.teaching_period_active">
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()">
           <header>
             {{unitRole.unit_name}}
           </header>
           <p>
-            <label class="label label-default">{{unitRole.teaching_period_name}}</label>
-            <label class="label label-default">{{unitRole.teaching_period_year}}</label>
+            <label class="label label-default">{{unitRole.teachingPeriod().name()}}</label>
             <label class="label label-info">{{unitRole.unit_code}}</label>
             <label class="label label-primary">{{unitRole.role}}</label>
           </p>
         </a>
         <!-- For units without a teaching period -->
-        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teaching_period_name">
+        <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)" ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item" ng-if="!unitRole.teachingPeriod()">
           <header>
             {{unitRole.unit_name}}
           </header>

@@ -73,14 +73,14 @@ task-comments-viewer .comment.comment-by-other-user .user-icon {
   margin-right: 0;
 }
 
-.delete-comment {
+task-comments-viewer .delete-comment {
   align-self: flex-start;
   padding-left: 6px;
   font-style: normal;
   font-size: 1.6em;
   margin-right: $comment-text-padding;
 }
-img {
+task-comments-viewer img {
   border-radius: $comment-border-radius;
   color: #EEEEEE;
   border-style: solid;
