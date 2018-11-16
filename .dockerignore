@@ -1,0 +1,6 @@
+Dockerfile
+.git
+build
+dist
+node_modules
+vendor
