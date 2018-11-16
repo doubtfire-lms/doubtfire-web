@@ -6,7 +6,8 @@
   "license": "AGPL-3.0",
   "repository": {},
   "scripts": {
-    "build": "grunt build && ng build"
+    "build": "grunt build && ng build",
+    "start": "ng serve --host 0.0.0.0"
   },
   "keywords": [],
   "author": "",
