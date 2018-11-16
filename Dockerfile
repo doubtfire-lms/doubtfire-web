@@ -19,6 +19,4 @@ RUN bower install --allow-root
 COPY package.json package-lock.json /doubtfire-web/
 RUN npm install
 
-COPY . /doubtfire-web/
-
 CMD npm start
