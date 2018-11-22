@@ -20,6 +20,15 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
 
   $scope.showDate = dateService.showDate
 
+  # Table sort details
+  $scope.sortOrder = "start_date"
+  $scope.reverse = true
+
+  # Pagination details
+  $scope.currentPage = 1
+  $scope.maxSize = 5
+  $scope.pageSize = 15
+
   hasRoles = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
