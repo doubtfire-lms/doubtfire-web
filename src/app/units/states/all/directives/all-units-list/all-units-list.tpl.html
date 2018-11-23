@@ -25,7 +25,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/admin({unitId: unit.id})" >
+            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize">
               <td>
                 <label class="label label-info">
                   {{unitRole.unit_code}}
