@@ -18,8 +18,6 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
 
   $scope.externalName = ExternalName
 
-  $scope.showDate = dateService.showDate
-
   # Table sort details
   $scope.sortOrder = "start_date"
   $scope.reverse = true
