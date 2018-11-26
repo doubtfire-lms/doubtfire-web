@@ -56,7 +56,7 @@ Install and sign the git hooks using `overcommit`:
 
 ```
 $ overcommit --install
-$ dstil --sign
+$ overcommit --sign
 ```
 
 Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally:
