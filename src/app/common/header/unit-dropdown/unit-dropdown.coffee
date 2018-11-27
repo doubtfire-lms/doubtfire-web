@@ -16,5 +16,5 @@ angular.module('doubtfire.common.header.unit-dropdown', [])
     # Global Units Menu
     unitService.getUnitRoles (roles) ->
       $scope.unitRoles = roles
-    projectService.getProjects (projects) ->
+    projectService.getProjects false, (projects) ->
       $scope.projects = projects

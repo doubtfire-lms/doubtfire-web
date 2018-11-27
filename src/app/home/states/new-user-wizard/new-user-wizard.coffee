@@ -15,7 +15,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
 
 .controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, ExternalName, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
   # Get projects for target grades
-  projectService.getProjects (projects) ->
+  projectService.getProjects false, (projects) ->
     $scope.projects = projects
     # Only ask for student ID if learning subjects!
     if projects.length == 0 && currentUser.role != 'Student'

@@ -18,12 +18,19 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
 
   $scope.externalName = ExternalName
 
-  $scope.showDate = dateService.showDate
+  # Table sort details
+  $scope.sortOrder = "start_date"
+  $scope.reverse = true
+
+  # Pagination details
+  $scope.currentPage = 1
+  $scope.maxSize = 5
+  $scope.pageSize = 15
 
   hasProjects = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
-  projectService.getProjects (projects) ->
+  projectService.getProjects true, (projects) ->
     $scope.projects = projects
     $scope.showSpinner = false
     $scope.dataLoaded = true

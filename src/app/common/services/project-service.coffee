@@ -41,9 +41,13 @@ angular.module("doubtfire.common.services.projects", [])
   $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
-  projectService.getProjects = ( callback ) ->
+  projectService.getProjects = ( inactive, callback ) ->
     fireCallback = ->
-      callback(projectService.loadedProjects) if _.isFunction(callback)
+      if inactive
+        projs = projectService.loadedProjects
+      else
+        projs = _.filter projectService.loadedProjects, (p) -> p.active
+      callback(projs) if _.isFunction(callback)
     unless projectService.loadedProjects?
       success = (projects) ->
         projectService.loadedProjects = _.map projects, (p) -> injectFunctionalityInProject(p)
@@ -52,7 +56,7 @@ angular.module("doubtfire.common.services.projects", [])
         if response?.status != 419
           msg = unless response? then response.error else ''
           alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
-      Project.query(success, failure)
+      Project.query({include_inactive: true}, success, failure)
     else
       fireCallback()
 

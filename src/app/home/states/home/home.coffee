@@ -64,7 +64,7 @@ angular.module('doubtfire.home.states.home', [])
   unitService.getUnitRoles (roles) ->
     $scope.unitRoles = roles
     hasRoles = true
-    projectService.getProjects (projects) ->
+    projectService.getProjects false, (projects) ->
       $scope.projects = projects
       $scope.showSpinner = false
       $scope.dataLoaded = true

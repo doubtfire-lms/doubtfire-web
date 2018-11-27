@@ -1,62 +1,51 @@
-<div id="all-projects">
-  <div class="text-center" ng-show="notEnrolled()">
-    <h1>
-      You are not enrolled in {{externalName.value}}.
-    </h1>
-    <p class="lead">
-      Contact your unit convenor or tutor to enrol you in a subject.
-    </p>
-  </div>
-  <div ng-hide="notEntrolled()">
-    <div class="card card-primary" ng-show="projects.length > 0">
-      <!-- Units with a teaching period should be listed first -->
-      <div class="list-group">
-        <div ng-repeat="(year,groupedByYearProjects) in projects | orderBy: '-teaching_period.year' | groupBy: '-teaching_period.year'">
-          <!-- If there is no teaching period, the year will be '0' -->
-          <div class="card-heading text-center bg-primary" ng-if="year != '0'">
-            <h4>{{year | ltrim: '-' }}</h4>
-          </div>
-          <div  ng-repeat="(period,groupedByPeriodProjects) in groupedByYearProjects  | orderBy: 'teaching_period.period' | groupBy: 'teaching_period.period'">
-            <div class="list-group-heading text-center bg-primary" ng-if="period != 'undefined'">
-              <h4>{{period}}</h4>
-            </div>
-            <div class="container card-deck">
-              <!-- For units with a teaching period -->
-              <a ng-repeat="project in groupedByPeriodProjects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="project.teaching_period">
-                <div class="card-body text-center">
-                  <header>
-                    {{project.unit_name}}
-                  </header>
-                  <p>
-                    <label class="card-text label label-info">{{project.unit_code}}</label>
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <!-- Show Custom at the end -->
-          <div class="card-heading text-center bg-primary" ng-if="$last">
-            <h4>Custom</h4>
-          </div>
-        </div>
-        <!-- For units without a teaching period -->
-        <div ng-if="!project.teaching_period">
-          <!-- If no teaching period, then show Custom -->
-          <div class="container card-deck">
-            <a ng-repeat="project in projects" ui-sref='projects/dashboard({projectId: project.project_id})' class="list-group-item list-group-item-action col-sm-4 card bg-primary" ng-if="!project.teaching_period">
-              <div class="card-body text-center">
-                <header>
-                  {{project.unit_name}}
-                </header>
-                <p>
-                  <label class="label label-default">{{showDate(project.start_date)}}</label>
-                  <label class="label label-info">{{project.unit_code}}</label>
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Units</h4>
+        Units you study with {{externalName.value}}
       </div>
+      <form role="search" class="pull-right form-horizontal">
+        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="project.unit_name for project in projects | filter:$viewValue | limitTo:8" />
+      </form>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" ng-hide="filteredProjects.length > 0">You are not enrolled in any unit with {{externalName.value}} yet</div>
+      <table ng-show="filteredProjects.length > 0" class="table table-hover table-pointer">
+        <thead>
+          <tr>
+            <th><a ng-click="sortOrder='unit_code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit_code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit_name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='teachingPeriod().active()'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="project in filteredProjects = (projects | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="projects/dashboard({projectId: project.project_id})" >
+            <td>
+              <label class="label label-info">
+                {{project.unit_code}}
+              </label>
+            </td>
+            <td>{{project.unit_name}}</td>
+            <td ng-if="project.teachingPeriod()">{{(project.teachingPeriod().name())}}</td>
+            <td ng-if="!project.teachingPeriod()">Custom</td>
+            <td>{{project.start_date | date: short}}</td>
+            <td>{{project.end_date | date: short}}</td>
+            <td>
+              <i ng-if="project.teachingPeriod() && project.teachingPeriod().active()" class="fa fa-check"></i>
+              <i ng-if="project.teachingPeriod() && !project.teachingPeriod().active()" class="fa fa-times"></i>
+              <i ng-if="!project.teachingPeriod() && project.active" class="fa fa-check"></i>
+              <i ng-if="!project.teachingPeriod() && !project.active" class="fa fa-times"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <pagination ng-show="filteredProjects.length > pageSize" total-items="filteredProjects.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
     </div>
   </div>
   <div class="spinner" ng-hide="dataLoaded">
