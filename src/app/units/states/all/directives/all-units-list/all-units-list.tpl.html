@@ -21,7 +21,7 @@
               <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='teachingPeriod().active()'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             </tr>
           </thead>
           <tbody>
@@ -37,11 +37,13 @@
               <td ng-if="!unitRole.teachingPeriod()">Custom</td>
               <td>{{unitRole.start_date | date: short}}</td>
               <td>{{unitRole.end_date | date: short}}</td>
-              <td>
-                <i ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()" class="fa fa-check"></i>
-                <i ng-if="unitRole.teachingPeriod() && !unitRole.teachingPeriod().active()" class="fa fa-times"></i>
-                <i ng-if="!unitRole.teachingPeriod() && unitRole.active" class="fa fa-check"></i>
-                <i ng-if="!unitRole.teachingPeriod() && !unitRole.active" class="fa fa-times"></i>
+              <td ng-if="unitRole.teachingPeriod()">
+                <i ng-if="unitRole.teachingPeriod().active() && unitRole.active" class="fa fa-check"></i>
+                <i ng-if="!unitRole.teachingPeriod().active() || !unitRole.active" class="fa fa-times"></i>
+              </td>
+              <td ng-if="!unitRole.teachingPeriod()">
+                <i ng-if="unitRole.active" class="fa fa-check"></i>
+                <i ng-if="!unitRole.active" class="fa fa-times"></i>
               </td>
             </tr>
           </tbody>
