@@ -17,7 +17,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
 
   TeachingPeriod = {
     rollover: rollover
-    
+
     # Get a teaching period with an id, assumes that teaching periods are loaded...
     getTeachingPeriod: (id) ->
       _.find data.loadedPeriods, (tp) -> tp.id == id
@@ -53,9 +53,14 @@ angular.module("doubtfire.api.models.teaching-period", [])
     get: (id, onSuccess, onFailure) ->
       resource.get( {id: id}
         (success) ->
-          # Fetched teaching period details... update teaching period in loadedPeriods
           result = _.find data.loadedPeriods, (tp) -> tp.id == id
-          _.extend result, success
+          # Fetched teaching period details... update teaching period in loadedPeriods
+          if result?
+            _.extend result, success
+          # If teaching period is not in loadedPeriods
+          else
+            loadedPeriods << success
+            result = success
           onSuccess(result)
         (error) ->
           onFailure error
