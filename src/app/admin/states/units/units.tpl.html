@@ -38,9 +38,13 @@
          <td ng-if="!unit.teachingPeriod">Custom</td>
          <td>{{unit.start_date | date: short}}</td>
          <td>{{unit.end_date | date: short}}</td>
-         <td>
-           <i ng-show="unit.active" class="fa fa-check"></i>
-           <i ng-hide="unit.active" class="fa fa-times"></i>
+         <td ng-if="unit.teachingPeriod">
+          <i ng-if="unit.teachingPeriod.active() && unit.active" class="fa fa-check"></i>
+          <i ng-if="!unit.teachingPeriod.active() || !unit.active" class="fa fa-times"></i>
+        </td>
+         <td ng-if="!unit.teachingPeriod">
+            <i ng-if="unit.active" class="fa fa-check"></i>
+            <i ng-if="!unit.active" class="fa fa-times"></i>
          </td>
        </tr>
        </tbody>
