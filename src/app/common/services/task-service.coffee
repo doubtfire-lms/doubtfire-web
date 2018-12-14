@@ -66,7 +66,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
     'discuss'
     'demonstrate'
-    'ready_to_mark'
+    #'ready_to_mark' (Removed by Jeff)
   ]
 
   # Which states are considered final
