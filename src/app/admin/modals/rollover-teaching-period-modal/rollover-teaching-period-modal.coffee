@@ -5,7 +5,7 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
 
   RolloverTeachingPeriodModal.show = (teachingPeriod) ->
     $modal.open
-      templateUrl: 'teaching-periods/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.tpl.html'
+      templateUrl: 'admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.tpl.html'
       controller: 'RolloverTeachingPeriodModal'
       resolve:
         teachingperiod: -> teachingPeriod
