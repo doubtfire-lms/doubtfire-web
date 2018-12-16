@@ -10,13 +10,13 @@
       </form>
     </div>
     <div class="panel-body">
-      <div class="callout callout-info" ng-hide="teachingPeriod.units.length > 0">No units have been registered with {{teachingPeriod.period}}-{{teachingPeriod.year}} yet</div>
+      <div class="callout callout-info" ng-hide="teachingPeriod.units.length > 0">No units have been registered with {{teachingPeriod.name()}} yet</div>
       <table ng-show="teachingPeriod.units.length > 0" class="table table-hover table-pointer">
        <thead>
          <tr>
            <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
            <th><a ng-click="sortOrder='name'; reverse=!reverse">Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-           <th><a ng-click="sortOrder='teaching_period'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teaching_period'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+           <th><a ng-click="sortOrder='teachingPeriodName'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriodName'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
          </tr>
        </thead>
@@ -28,7 +28,7 @@
            </label>
          </td>
          <td>{{unit.name}}</td>
-         <td>{{teachingPeriod.period}}-{{teachingPeriod.year}}</td>
+         <td>{{teachingPeriod.name()}}</td>
          <td>
            <i ng-show="unit.active" class="fa fa-check"></i>
            <i ng-hide="unit.active" class="fa fa-times"></i>
