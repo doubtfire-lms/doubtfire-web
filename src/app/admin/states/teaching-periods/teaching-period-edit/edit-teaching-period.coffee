@@ -32,9 +32,12 @@ angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teachi
     editorTab:
       title: "Teaching Period Details Editor"
       seq:   0
+    breaksTab:
+      title: "Teaching Period Breaks"
+      seq:   1
     unitsTab:
       title: "Rollover Teaching Period"
-      seq:   1
+      seq:   2
 
   # Set the active tab
   $scope.setActiveTab = (tab) ->
