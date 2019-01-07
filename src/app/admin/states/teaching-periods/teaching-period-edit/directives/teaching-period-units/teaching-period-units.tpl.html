@@ -30,8 +30,8 @@
          <td>{{unit.name}}</td>
          <td>{{teachingPeriod.name()}}</td>
          <td>
-           <i ng-show="unit.active" class="fa fa-check"></i>
-           <i ng-hide="unit.active" class="fa fa-times"></i>
+           <i ng-if="teachingPeriod.active && unit.active" class="fa fa-check"></i>
+           <i ng-if="!teachingPeriod.active || !unit.active" class="fa fa-times"></i>
          </td>
        </tr>
        </tbody>
