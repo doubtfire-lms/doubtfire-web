@@ -12,29 +12,29 @@
     <div class="panel-body">
       <div class="callout callout-info" ng-hide="teachingPeriod.units.length > 0">No units have been registered with {{teachingPeriod.name()}} yet</div>
       <table ng-show="teachingPeriod.units.length > 0" class="table table-hover table-pointer">
-       <thead>
-         <tr>
-           <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-           <th><a ng-click="sortOrder='name'; reverse=!reverse">Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-           <th><a ng-click="sortOrder='teachingPeriodName'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriodName'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-           <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-         </tr>
-       </thead>
-       <tbody>
-       <tr ng-repeat="unit in filteredUnits = (teachingPeriod.units | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/admin({unitId: unit.id})" >
-         <td>
-           <label class="label label-info">
-             {{unit.code}}
-           </label>
-         </td>
-         <td>{{unit.name}}</td>
-         <td>{{teachingPeriod.name()}}</td>
-         <td>
-           <i ng-if="teachingPeriod.active && unit.active" class="fa fa-check"></i>
-           <i ng-if="!teachingPeriod.active || !unit.active" class="fa fa-times"></i>
-         </td>
-       </tr>
-       </tbody>
+        <thead>
+          <tr>
+            <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='name'; reverse=!reverse">Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='teachingPeriodName'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriodName'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="unit in filteredUnits = (teachingPeriod.units | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/admin({unitId: unit.id})" >
+            <td>
+              <label class="label label-info">
+                {{unit.code}}
+              </label>
+            </td>
+            <td>{{unit.name}}</td>
+            <td>{{teachingPeriod.name()}}</td>
+            <td>
+              <i ng-if="teachingPeriod.active && unit.active" class="fa fa-check"></i>
+              <i ng-if="!teachingPeriod.active || !unit.active" class="fa fa-times"></i>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="panel-footer clearfix">
@@ -42,7 +42,7 @@
       <button class="btn btn-success pull-right" ng-click="rolloverTeachingPeriodModal(teachingPeriod)">
         <i class="fa fa-university"></i>
         <i class="fa fa-plus"></i>
-         Rollover Teaching Period
+        Rollover Teaching Period
       </button>
     </div>
   </div>
