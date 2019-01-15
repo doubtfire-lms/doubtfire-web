@@ -59,7 +59,7 @@ angular.module("doubtfire.api.models.teaching-period", [])
             _.extend result, success
           # If teaching period is not in loadedPeriods
           else
-            loadedPeriods << success
+            data.loadedPeriods << success
             result = success
           onSuccess(result)
         (error) ->

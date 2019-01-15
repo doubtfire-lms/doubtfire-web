@@ -16,8 +16,7 @@ angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teachi
 .controller("EditTeachingPeriodStateCtrl", ($scope, $state, TeachingPeriod, alertService, analyticsService) ->
   analyticsService.event 'Edit Teaching Period View', "Started Edit Teaching Period View"
 
-  TeachingPeriod.get(
-    +$state.params.teachingPeriodId
+  TeachingPeriod.get( Number($state.params.teachingPeriodId)
     (success) ->
       $scope.teachingPeriod = success
       $scope.newTeachingPeriod = $scope.teachingPeriod.id == -1
