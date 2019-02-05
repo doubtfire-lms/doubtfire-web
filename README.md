@@ -52,25 +52,11 @@ If using `rbenv`, rehash to ensure each of the gems are on your `PATH`:
 $ rbenv rehash
 ```
 
-Comply with [DSTIL](https://github.com/dstil) best practices using DSTIL's [dotfiles](https://github.com/dstil/dotfiles) repo. Run the following command to install DSTIL's dotfiles.
-
-```
-$ curl -s https://raw.githubusercontent.com/dstil/dotfiles/master/bootstrap | bash
-```
-
-Restart your terminal so that you can run `dstil`:
-
-```
-$ exec $SHELL
-$ which dstil
-dstil: aliased to /Users/Fred/.dstil/current/sources/1/files/labcheck
-```
-
 Install and sign the git hooks using `overcommit`:
 
 ```
 $ overcommit --install
-$ dstil --sign
+$ overcommit --sign
 ```
 
 Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally:
