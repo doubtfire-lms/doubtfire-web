@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Units</h4>
+        Units you study with {{externalName.value}}
+      </div>
+      <form role="search" class="pull-right form-horizontal">
+        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="project.unit_name for project in projects | filter:$viewValue | limitTo:8" />
+      </form>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" ng-hide="filteredProjects.length > 0">You are not enrolled in any unit with {{externalName.value}} yet</div>
+      <table ng-show="filteredProjects.length > 0" class="table table-hover table-pointer">
+        <thead>
+          <tr>
+            <th><a ng-click="sortOrder='unit_code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit_code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit_name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="project in filteredProjects = (projects | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="projects/dashboard({projectId: project.project_id})" >
+            <td>
+              <label class="label label-info">
+                {{project.unit_code}}
+              </label>
+            </td>
+            <td>{{project.unit_name}}</td>
+            <td ng-if="project.teachingPeriod()">{{(project.teachingPeriod().name())}}</td>
+            <td ng-if="!project.teachingPeriod()">Custom</td>
+            <td>{{project.start_date | date: short}}</td>
+            <td>{{project.end_date | date: short}}</td>
+            <td ng-if="project.teachingPeriod()">
+              <i ng-if="project.teachingPeriod().active() && project.active" class="fa fa-check"></i>
+              <i ng-if="!project.teachingPeriod().active() || !project.active" class="fa fa-times"></i>
+            </td>
+            <td ng-if="!project.teachingPeriod()">
+              <i ng-if="project.active" class="fa fa-check"></i>
+              <i ng-if="!project.active" class="fa fa-times"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <pagination ng-show="filteredProjects.length > pageSize" total-items="filteredProjects.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+    </div>
+  </div>
+  <div class="spinner" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
+  </div>
+</div>

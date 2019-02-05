@@ -1,20 +1,20 @@
-angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
+angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector', [])
 
 #
 # Editor for the basic details of a unit, such as the name, code
 # start and end dates etc.
 #
-.directive('unitDetailsEditor', ->
+.directive('unitDatesSelector', ->
   replace: true
   restrict: 'E'
-  templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService, TeachingPeriod) ->
+  templateUrl: 'units/states/rollover/directives/unit-dates-selector/unit-dates-selector.tpl.html'
+  controller: ($scope, $state, $rootScope, ExternalName, Unit, RolloverUnit, alertService, analyticsService, unitService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
 
-    # Get the confugurable, external name of Doubtfire
+    # Get the configurable, external name of Doubtfire
     $scope.externalName = ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
@@ -36,11 +36,12 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       formatYear: 'yy',
       startingDay: 1
     }
-    $scope.unitTypeAheadData = unitService.unitTypeAheadData
-    $scope.studentSearch = ""
 
     $scope.saveUnit = ->
       if $scope.unit.convenors then delete $scope.unit.convenors
+
+      #Assign unit roles to null, otherwise it will not update the role in unit list
+      unitService.loadedUnitRoles = null
 
       if $scope.unit.start_date && $scope.unit.start_date.getMonth
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
@@ -49,37 +50,24 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
 
       if $scope.unit.teaching_period_id
         saveData = {
-          name: $scope.unit.name
-          code: $scope.unit.code
-          description: $scope.unit.description
+          id: $scope.unit.id
           teaching_period_id: $scope.unit.teaching_period_id
-          active: $scope.unit.active
         }
       else
         saveData = {
-          name: $scope.unit.name
-          code: $scope.unit.code
-          description: $scope.unit.description
+          id: $scope.unit.id
           start_date: $scope.unit.start_date
           end_date: $scope.unit.end_date
-          active: $scope.unit.active
         }
 
-      if $scope.unit.id == -1
-        Unit.create { unit: saveData },
-          (unit) ->
-            $scope.saveSuccess(unit)
-          (response) ->
-            alertService.add("danger", response.data.error, 6000)
-      else
-        Unit.update(
-          {
-            id: $scope.unit.id
-            unit: saveData
-          }, (unit) ->
-            alertService.add("success", "Unit updated.", 2000)
-          (response) ->
-            alertService.add("danger", "Failed to update unit. #{response.data.error}", 6000)
-        )
+      RolloverUnit.create(
+        saveData
+        (response) ->
+          alertService.add("success", "Unit created.", 2000)
+          analyticsService.event 'Unit Admin', 'Saved New Unit'
+          $state.go("admin/units")
+        (response) ->
+          alertService.add 'danger', "Error creating unit - #{response.data.error}"
+      )
 
 )

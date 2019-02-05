@@ -1,42 +1,17 @@
-<div class="unit-details-editor">
+<div class="unit-dates-selector">
   <div class="panel panel-primary">
-    <div class="panel-heading" ng-if="unit.id == -1">
+    <div class="panel-heading">
       <h3 class="panel-title">Create Unit</h3>
-      Create a new unit with all overview unit details here.
+      Duplicate an existing unit by specifying the time period.
     </div>
-    <div class="panel-heading" ng-if="unit.id != -1">
-      <h3 class="panel-title">Update Unit</h3>
-      Update overview details of the unit below.
-    </div>
-    <form class="form-horizontal" role="form" name="unitForm" ng-submit="saveUnit()">
+    <form class="form-horizontal" role="form" name="rolloverUnitForm" ng-submit="saveUnit()">
       <div class="panel-body">
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="code">Code</label>
-          <div class="col-sm-9">
-            <input class="form-control" id="code" type="text" placeholder="COS1234567" ng-model="unit.code">
-          </div>
-        </div><!--/code-date-->
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="name">Name</label>
-          <div class="col-sm-9">
-            <input id="name" type="text" class="form-control" ng-model="unit.name" placeholder="Introduction to {{externalName.value}}">
-          </div>
-        </div><!--/name-date-->
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="description">Description</label>
-          <div class="col-sm-9">
-            <textarea id="description" class="form-control" ng-model="unit.description"></textarea>
-          </div>
-        </div><!--/description-date-->
-
         <div class="form-group">
           <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
           <div class="col-sm-9">
             <select class="form-control" ng-model="unit.teaching_period_id">
               <option value="">Custom Period</option>
-              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}-{{tp.year}} </option>
+              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}-{{tp.year}}</option>
             </select>
           </div>
         </div><!--/teaching-period-date-->
@@ -70,28 +45,9 @@
             </div>
           </div>
         </div><!--/end-date-->
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="enddate">Active</label>
-          <div class="col-sm-9">
-            <div class="btn-group">
-              <label class="btn btn-{{unit.active ? 'success' : 'default'}}" ng-model="unit.active" btn-radio="true" uncheckable>
-                <i class="fa fa-check"></i>
-              </label>
-              <label class="btn btn-{{unit.active ? 'default' : 'danger'}}" ng-model="unit.active" btn-radio="false" uncheckable>
-                <i class="fa fa-times"></i>
-              </label>
-            </div>
-          </div>
-        </div><!--/active-->
       </div>
       <div class="panel-footer text-right">
-        <a class="btn btn-success" ui-sref="units/rollover" >
-          <header>
-            Rollover
-          </header>
-        </a>
-        <input type="submit" value="{{ unit.id == -1 ? 'Create' : 'Update' }}" class="btn btn-success" ng-disabled="unitForm.$pristine" />
+        <input type="submit" value="Create Unit" class="btn btn-success" />
       </div>
     </form>
   </div>

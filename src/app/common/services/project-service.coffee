@@ -3,8 +3,20 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod) ->
   projectService = {}
+
+  injectFunctionalityInProject = (project) ->
+    unless project.teachingPeriod?
+      # Store the linked teaching period in each project
+      project._teachingPeriod = null
+      project.teachingPeriod = () ->
+        # If there is a teaching period and it is not linked... link on first access
+        if project.teaching_period_id? && !project._teachingPeriod?
+          project._teachingPeriod = TeachingPeriod.getTeachingPeriod(project.teaching_period_id)
+        # Return the first role
+        project._teachingPeriod
+    project
 
   # This function is used by the task until/to descriptions
   timeToDescription = (earlyTime, laterTime) ->
@@ -29,18 +41,22 @@ angular.module("doubtfire.common.services.projects", [])
   $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
-  projectService.getProjects = ( callback ) ->
+  projectService.getProjects = ( inactive, callback ) ->
     fireCallback = ->
-      callback(projectService.loadedProjects) if _.isFunction(callback)
+      if inactive
+        projs = projectService.loadedProjects
+      else
+        projs = _.filter projectService.loadedProjects, (p) -> p.active
+      callback(projs) if _.isFunction(callback)
     unless projectService.loadedProjects?
       success = (projects) ->
-        projectService.loadedProjects = projects
+        projectService.loadedProjects = _.map projects, (p) -> injectFunctionalityInProject(p)
         fireCallback()
       failure = (response) ->
         if response?.status != 419
           msg = unless response? then response.error else ''
           alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
-      Project.query(success, failure)
+      Project.query({include_inactive: true}, success, failure)
     else
       fireCallback()
 
