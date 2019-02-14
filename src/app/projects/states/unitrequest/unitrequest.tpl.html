@@ -1,0 +1,50 @@
+<div class="container" id="unitrequest-state">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Request a unit</h4>
+    </div>
+    <div class="panel-body">
+      <p>
+        Click the request unit button to request unit enrollement. 
+      </p>
+      <p>      
+    </div>
+    <table  class="table table-hover table-pointer">
+       <thead>
+         <tr>
+           <th><a ng-click="sortOrder='code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+           <th><a ng-click="sortOrder='name'; reverse=!reverse">Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th> 
+           <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+           <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+           <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th class="actions">
+             
+          </th>
+         </tr>
+       </thead>
+       <tbody>
+       <tr ng-repeat="unit in units | orderBy:sortOrder:reverse">
+         <td>
+           <label class="label label-info">
+             {{unit.code}}
+           </label>
+         </td>
+         <td>{{unit.name}}</td>
+         <td>{{unit.start_date | date: short}}</td>
+         <td>{{unit.end_date | date: short}}</td>
+         <td>
+           <i ng-show="unit.active" class="fa fa-check"></i>
+           <i ng-hide="unit.active" class="fa fa-times"></i>
+         </td>
+          <td>
+            <button
+              class="btn btn-default btn-sm"
+              ng-click ="addUnitRequest(unit.id)"
+              <i class="fa fa-plus"></i> Request Unit
+            </button> 
+          </td>
+       </tr>
+       </tbody>
+      </table> 
+  </div>
+</div>

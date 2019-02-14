@@ -96,6 +96,10 @@
               <li>
                 <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a>
               </li>
+               <li class="divider"></li>
+               <li>
+                <a ui-sref="projects/unitrequest({studentId: project.user_id})">Request Unit</a>
+              </li>
             </ul><!--/student-tasks-->
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="unitRole">
               <li>
@@ -142,7 +146,6 @@
       <li class="dropdown" dropdown if-role="Admin Convenor">
         <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a ui-sref="admin/teachingperiods" if-role="Admin">Manage Teaching Periods</a></li>
           <li><a ui-sref="admin/units">Manage Units</a></li>
           <li><a ui-sref="admin/users">Manage Users</a></li>
         </ul>
