@@ -19,6 +19,16 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
+.filter('showAllStudents', ->
+  (input, student_num) ->
+    if _.isString student_num
+      matchText = student_num.toLowerCase()
+      if input
+        _.filter  input, (student) -> (student?) && student.student_num.indexOf(student_num) >= 0 unless student.student_num==null
+      else
+        input
+)
+
 .filter('showTasks', ->
   (input, kind, tutorName) ->
     if input

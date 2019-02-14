@@ -1,4 +1,4 @@
-<div class="unit-student-enrolment-modal">
+  <div class="unit-student-enrolment-modal">
   <div class="modal-header">
     <h3>Enrol Student</h3>
   </div>
@@ -7,10 +7,21 @@
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Student ID</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Student ID" ng-model="student_id">
+          <input type="input" class="form-control" placeholder="Student ID" 
+          ng-model="student_num"
+          type="search"
+          ng-change="studentIdChanged()"
+          typeahead-on-select="studentIdChanged()"
+          typeahead="text for text in
+            unitTypeAheadStudentData(unit) |
+            filter:$viewValue |
+            limitTo:8"
+          typeahead-wait-ms="200"
+          autofocus
+          >
         </div>
-      </div>
-      <div class="form-group" required>
+       </div> 
+       <div class="form-group" required>
         <label class="col-sm-3 control-label">Tutorial</label>
         <div class="col-sm-7">
           <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials"
@@ -23,6 +34,6 @@
     </form>
   </div>
   <div class="modal-footer text-right">
-    <input type="button" ng-click="enrolStudent(student_id, tutorial)" class="btn btn-primary" value="Save" />
+    <input type="button" ng-click="enrolStudent(student_num, tutorial)" class="btn btn-primary" value="Save" />
   </div>
 </div>

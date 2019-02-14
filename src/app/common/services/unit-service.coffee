@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state) ->
   #
   # The unit service object
   #
@@ -8,18 +8,6 @@ angular.module("doubtfire.common.services.units", [])
 
   unitService.loadedUnits = {}
   unitService.loadedUnitRoles = null
-
-  injectFunctionalityInUnitRole = (unitRole) ->
-    unless unitRole.teachingPeriod?
-      # Store the linked teaching period in each unit role
-      unitRole._teachingPeriod = null
-      unitRole.teachingPeriod = () ->
-        # If there is a teaching period and it is not linked... link on first access
-        if unitRole.teaching_period_id? && ! unitRole._teachingPeriod?
-          unitRole._teachingPeriod = TeachingPeriod.getTeachingPeriod(unitRole.teaching_period_id)
-        # Return the first role
-        unitRole._teachingPeriod
-    unitRole
 
   $rootScope.$on 'signOut', ->
     unitService.loadedUnits = {}
@@ -30,7 +18,7 @@ angular.module("doubtfire.common.services.units", [])
       callback(unitService.loadedUnitRoles) if _.isFunction(callback)
     unless unitService.loadedUnitRoles?
       UnitRole.query (roles) ->
-        unitService.loadedUnitRoles = _.map roles, (r) -> injectFunctionalityInUnitRole(r)
+        unitService.loadedUnitRoles = roles
         fireCallback()
     else
       fireCallback()
@@ -51,6 +39,7 @@ angular.module("doubtfire.common.services.units", [])
   #     (error) -> $scope.error = error
   #    )
   #
+   
   unitService.getUnit = (unitId, options, onSuccess, onFailure) ->
     # Passed success callback to options? Default options
     if _.isFunction(options)
@@ -275,6 +264,14 @@ angular.module("doubtfire.common.services.units", [])
     result = _.uniq(result, (item) -> item )
     result
 
+  unitService.unitTypeAheadStudentData = (unit) ->
+    result = []
+    angular.forEach(unit.students, (student) ->
+      result.push(student.student_num)
+      result.push(student.student_id)
+    )
+    result = _.uniq(result, (item) -> item )
+    result
   #
   # Tutorial description
   #
