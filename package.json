@@ -12,7 +12,8 @@
     "serve:angular6": "ng serve --host 0.0.0.0",
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular6",
     "watch:angular1": "grunt delta",
-    "deploy": "ng build --prod --output-path ../public"
+    "deploy:build2api": "ng build --prod --output-path ../doubtfire-api/public",
+    "deploy": "run-s -l build:angular1 deploy:build2api"
   },
   "keywords": [],
   "author": "",
