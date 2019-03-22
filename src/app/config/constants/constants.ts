@@ -1,19 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import apiURL from 'src/app/config/constants/apiURL';
-interface externalNameResponseFormat {
-  externalName: String;
+interface ExternalNameResponseFormat {
+  externalName: string;
 };
 
 @Injectable({
   providedIn: 'root',
 })
 export class DoubtfireConstants {
-  constructor(private httpClient: HttpClient) {
-    httpClient.get(`${this.apiURL}/settings`).toPromise().then((response: externalNameResponseFormat) => {
-      this.externalName = response.externalName;
-    })
+  constructor(
+    private http: HttpClient,
+    private title: Title
+  ) {
+    http
+      .get<ExternalNameResponseFormat>(`${this.apiURL}/settings`)
+      .subscribe(
+        (response) => {
+          this.externalName = response.externalName;
+          title.setTitle(this.externalName);
+        },
+        (error) => {
+          this.externalName = "Doubtfire";
+          title.setTitle(this.externalName);
+        }
+      )
   }
   public mainContributors: string[] = [
     'macite',              // Andrew Cain
@@ -21,6 +34,6 @@ export class DoubtfireConstants {
     'jakerenzella'         // Jake Renzella
   ];
   public apiURL = apiURL;
-  public externalName: String = "Loading...";
+  public externalName: string = "Loading...";
 }
 
