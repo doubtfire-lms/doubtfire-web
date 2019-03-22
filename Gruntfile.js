@@ -526,7 +526,8 @@ module.exports = function ( grunt ) {
        * for us
        */
       options: {
-        livereload: false
+        livereload: false,
+        interval: 4000
       },
 
       /**
@@ -625,19 +626,19 @@ module.exports = function ( grunt ) {
     /**
      * Use the browserSync task to reload our web browser on change
      */
-    browserSync: {
-      dev: {
-        bsFiles: {
-          // Watch build directory
-          src: userConfig.build_dir + '/**/*.*'
-        },
-        options: {
-          watchTask: true,
-          server: '<%= build_dir %>',
-          port: 8000
-        }
-      }
-    }
+    // browserSync: {
+    //   dev: {
+    //     bsFiles: {
+    //       // Watch build directory
+    //       src: userConfig.build_dir + '/**/*.*'
+    //     },
+    //     options: {
+    //       watchTask: true,
+    //       server: '<%= build_dir %>',
+    //       port: 8000
+    //     }
+    //   }
+    // }
   }; // end task config
 
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig, envConfig ) );
