@@ -14,18 +14,6 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
 )
 
 .controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, ExternalName, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
-  # Get projects for target grades
-  projectService.getProjects (projects) ->
-    $scope.projects = projects
-    # Only ask for student ID if learning subjects!
-    if projects.length == 0 && currentUser.role != 'Student'
-      $scope.isStaff = true
-      $scope.user.student_id = null
-      delete $scope.steps.studentIdStep
-      # NOTE: Must add step to below
-      for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
-        $scope.steps[step].seq -= 1
-      $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
   # Define steps for wizard
   # MUST ADD TO ABOVE NOTE!
   $scope.steps = {
@@ -121,12 +109,11 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
         state = $scope.user.student_id?.trim().length > 0
       when $scope.steps.emailStep
         state = $scope.user.email?.trim().length > 0
-        if $scope.projects.length > 0
-          state =
-            state &&
-            _.isBoolean($scope.user.receive_feedback_notifications) and
-            _.isBoolean($scope.user.receive_portfolio_notifications) and
-            _.isBoolean($scope.user.receive_task_notifications)
+        state =
+          state &&
+          _.isBoolean($scope.user.receive_feedback_notifications) &&
+          _.isBoolean($scope.user.receive_portfolio_notifications) &&
+          _.isBoolean($scope.user.receive_task_notifications)
       when $scope.steps.optInToResearchStep
         state = _.isBoolean($scope.user.opt_in_to_research)
     not state
@@ -150,4 +137,17 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = ExternalName
+
+    # Get projects for target grades
+  projectService.getProjects false, (projects) ->
+    $scope.projects = projects
+    # Only ask for student ID if learning subjects!
+    if projects.length == 0 && currentUser.role != 'Student'
+      $scope.isStaff = true
+      $scope.user.student_id = null
+      delete $scope.steps.studentIdStep
+      # NOTE: Must add step to below
+      for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
+        $scope.steps[step].seq -= 1
+      $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
 )

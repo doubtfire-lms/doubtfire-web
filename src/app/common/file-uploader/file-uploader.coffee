@@ -71,7 +71,7 @@ angular.module('doubtfire.common.file-uploader', [])
         icon:       'fa-file-code-o'
         name:       'code'
       image:
-        extensions: ['png', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg']
+        extensions: ['png', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg', 'gif']
         name:       'image'
         icon:       'fa-file-image-o'
       zip:

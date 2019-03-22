@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -8,6 +8,18 @@ angular.module("doubtfire.common.services.units", [])
 
   unitService.loadedUnits = {}
   unitService.loadedUnitRoles = null
+
+  injectFunctionalityInUnitRole = (unitRole) ->
+    unless unitRole.teachingPeriod?
+      # Store the linked teaching period in each unit role
+      unitRole._teachingPeriod = null
+      unitRole.teachingPeriod = () ->
+        # If there is a teaching period and it is not linked... link on first access
+        if unitRole.teaching_period_id? && ! unitRole._teachingPeriod?
+          unitRole._teachingPeriod = TeachingPeriod.getTeachingPeriod(unitRole.teaching_period_id)
+        # Return the first role
+        unitRole._teachingPeriod
+    unitRole
 
   $rootScope.$on 'signOut', ->
     unitService.loadedUnits = {}
@@ -18,7 +30,7 @@ angular.module("doubtfire.common.services.units", [])
       callback(unitService.loadedUnitRoles) if _.isFunction(callback)
     unless unitService.loadedUnitRoles?
       UnitRole.query (roles) ->
-        unitService.loadedUnitRoles = roles
+        unitService.loadedUnitRoles = _.map roles, (r) -> injectFunctionalityInUnitRole(r)
         fireCallback()
     else
       fireCallback()

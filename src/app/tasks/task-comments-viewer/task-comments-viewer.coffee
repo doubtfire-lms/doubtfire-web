@@ -40,8 +40,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
 
     $scope.openCommentsModal = (comment)->
-      imageUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      CommentResourceService.setImageUrl(imageUrl)
+      resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      CommentResourceService.setResourceUrl(resourceUrl)
+      CommentResourceService.setCommentType(comment.type)
       CommentsModal.show()
 
     #===========================================================================================

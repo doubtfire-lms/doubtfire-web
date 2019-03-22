@@ -1,67 +1,110 @@
-<div class="card card-danger card-sm" ng-show="task.isDueSoon()">
+<div class="card card-danger card-sm" ng-show="task.isDueSoon() && ! task.inDiscussState()">
   <div class="card-heading">
-    <h4>Deadline Approaching</h4>
+    <h4>Deadline Approaching in {{task.timeUntilDeadlineDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      This task's deadline is {{task.definition.due_date | date}}.
+      This task's deadline is {{task.definition.due_date | date : 'MMM d' }} at {{task.definition.due_date | date : 'h:mm a' }}.
        Submitting after this date means your tutor will not provide feedback for your submission, but that it will be checked in your portfolio.
     </p>
-    <p class="text-muted">
-      Tasks are only considered <strong>Completed</strong> once your tutor has
-      <strong>Discussed</strong> your work with you.
-    </p>
   </div>
-</div><!--/due-card-->
-<div class="card card-warning card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDueSoon()">
+</div><!--/due-card pre-discuss -->
+<div class="card card-danger card-sm" ng-show="task.isDueSoon() && task.inDiscussState()">
   <div class="card-heading">
-    <h4>Aim To Complete Soon</h4>
+    <h4>Deadline Approaching in {{task.timeUntilDeadlineDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      This task's target completion date is {{task.targetDate() | date}}.
+      This task's deadline is {{task.definition.due_date | date : 'MMM d' }} at {{task.definition.due_date | date : 'h:mm a' }}.
+      Make sure to discuss this task with your tutor as soon as possible.
+    </p>
+    <p class="text-muted">
+      Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work with you.
+    </p>
+  </div>
+</div><!--/due-card discuss -->
+<div class="card card-warning card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDueSoon() && !task.inDiscussState()">
+  <div class="card-heading">
+    <h4>Aim To Complete Soon - Due in {{task.timeUntilTargetDescription()}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      This task's target completion date is <strong>{{task.targetDate() | date : 'MMM d' }} at {{task.targetDate() | date : 'h:mm a' }}</strong>.
       You should aim to complete this task before then to keep your progress on track.
+    </p>
+  </div>
+</div><!--/target-card pre-discuss-->
+<div class="card card-warning card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDueSoon() && task.inDiscussState()">
+  <div class="card-heading">
+    <h4>Aim To Complete Soon - Due in {{task.timeUntilTargetDescription()}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      This task's target completion date is <strong>{{task.targetDate() | date : 'MMM d' }} at {{task.targetDate() | date : 'h:mm a' }}</strong>.
+      Make sure to discuss this task with your tutor as soon as possible.
     </p>
     <p class="text-muted">
       Tasks are only considered <strong>completed</strong> once your tutor has
       <strong>discussed</strong> your work with you.
     </p>
   </div>
-</div><!--/target-card-->
-<div class="card card-warning card-sm" ng-show="task.isPastTargetDate() && !task.isOverdue()">
+</div><!--/target-card discuss-->
+<div class="card card-warning card-sm" ng-show="task.isPastTargetDate() && !task.isOverdue() && !task.inDiscussState() ">
   <div class="card-heading">
-    <h4>Past Due Date By {{task.daysPastTargetDate()}} Day{{task.daysPastTargetDate() > 1 ? 's' : ''}}</h4>
+    <h4>Past Due Date By {{task.timePastTargetDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      You should have completed this task by {{task.targetDate() | date}}.
+      You should have completed this task by <strong>{{task.targetDate() | date : 'MMM d' }} at {{task.targetDate() | date : 'h:mm a' }}</strong>.
       Try and finish it as soon as possible by focusing on this task and completing it
       to not fall behind. Remember that you can request and extension to alter the due
       date, up to the task's deadline.
     </p>
     <p>
       <a
-      ng-click="applyForExtension()"
-      ng-hide="task.inTerminalState()"
-      class="btn btn-success">
-      <i class="fa fa-medkit"></i>
-      Request Extension
-    </a>
+        ng-click="applyForExtension()"
+        ng-hide="task.inTerminalState()"
+        class="btn btn-success">
+        <i class="fa fa-medkit"></i>
+        Request Extension
+      </a>
+    </p>
+  </div>
+</div><!--/past-target-card pre-discuss-->
+<div class="card card-warning card-sm" ng-show="task.isPastTargetDate() && !task.isOverdue() && !task.inDiscussState() ">
+  <div class="card-heading">
+    <h4>Past Due Date By {{task.timePastTargetDescription()}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      You should have completed this task by <strong>{{task.targetDate() | date : 'MMM d' }} at {{task.targetDate() | date : 'h:mm a' }}</strong>.
+      Make sure to discuss this task with your tutor as soon as possible.
     </p>
     <p class="text-muted">
       Tasks are only considered <strong>completed</strong> once your tutor has
       <strong>discussed</strong> your work with you.
     </p>
   </div>
-</div><!--/past-target-card-->
-<div class="card card-danger card-sm" ng-show="task.isOverdue()">
+</div><!--/past-target-card pre-discuss-->
+<div class="card card-danger card-sm" ng-show="task.isOverdue() && !task.inDiscussState() ">
   <div class="card-heading">
-    <h4>Missed Deadline By {{task.daysPastDueDate()}} Day{{task.daysPastDueDate() > 1 ? 's' : ''}}</h4>
+    <h4>Missed Deadline By {{task.timePastDeadlineDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      You should have completed this task by {{task.definition.due_date | date}}.
+      You should have completed this task by <strong>{{task.definition.due_date | date : 'MMM d' }} at {{task.definition.due_date | date : 'h:mm a' }}</strong>.
       As this task is past the deadline you will need to make sure it is of acceptable standard in your portfolio. The task will be marked as <em>Time Exceeded</em> when submitted, but will be reviewed in your portfolio.
+    </p>
+  </div>
+</div><!--/overdue-card-->
+<div class="card card-danger card-sm" ng-show="task.isOverdue() && task.inDiscussState() ">
+  <div class="card-heading">
+    <h4>Past Deadline By {{task.timePastDeadlineDescription()}}</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      You should have completed this task by <strong>{{task.definition.due_date | date : 'MMM d' }} at {{task.definition.due_date | date : 'h:mm a' }}</strong>.
+      Make sure to discuss this task with your tutor as soon as possible.
     </p>
     <p class="text-muted">
       Tasks are only considered <strong>Completed</strong> once your tutor has

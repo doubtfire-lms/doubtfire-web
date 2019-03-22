@@ -3,6 +3,7 @@
 *.log
 .DS_Store
 build/
+dist/
 bin/
 node_modules/
 vendor/

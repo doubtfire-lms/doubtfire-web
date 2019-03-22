@@ -1,0 +1,60 @@
+<div class="container">
+  <div if-role="Tutor Convenor Admin">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">Units</h4>
+          All units registered with {{externalName.value}}
+        </div>
+        <form role="search" class="pull-right form-horizontal">
+          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unitRole.unit_name for unitRole in unitRoles | filter:$viewValue | limitTo:8" />
+        </form>
+      </div>
+      <div class="panel-body">
+        <div class="callout callout-info" ng-hide="unitRoles.length > 0">No units have been registered with {{externalName.value}} yet</div>
+        <table ng-show="unitRoles.length > 0" class="table table-hover table-pointer">
+          <thead>
+            <tr>
+              <th><a ng-click="sortOrder='unit_code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit_code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='unit_name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='role'; reverse=!reverse">Unit Role <i ng-show="sortOrder=='role'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
+              <td>
+                <label class="label label-info">
+                  {{unitRole.unit_code}}
+                </label>
+              </td>
+              <td>{{unitRole.unit_name}}</td>
+              <td>{{(unitRole.role | ucfirst) || "N/A"}}</td>
+              <td ng-if="unitRole.teachingPeriod()">{{(unitRole.teachingPeriod().name())}}</td>
+              <td ng-if="!unitRole.teachingPeriod()">Custom</td>
+              <td>{{unitRole.start_date | date: short}}</td>
+              <td>{{unitRole.end_date | date: short}}</td>
+              <td ng-if="unitRole.teachingPeriod()">
+                <i ng-if="unitRole.teachingPeriod().active() && unitRole.active" class="fa fa-check"></i>
+                <i ng-if="!unitRole.teachingPeriod().active() || !unitRole.active" class="fa fa-times"></i>
+              </td>
+              <td ng-if="!unitRole.teachingPeriod()">
+                <i ng-if="unitRole.active" class="fa fa-check"></i>
+                <i ng-if="!unitRole.active" class="fa fa-times"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer clearfix">
+        <pagination ng-show="filteredUnitRoles.length > pageSize" total-items="filteredUnitRoles.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
+    </div>
+  </div>
+  <div class="spinner" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
+  </div>
+</div>

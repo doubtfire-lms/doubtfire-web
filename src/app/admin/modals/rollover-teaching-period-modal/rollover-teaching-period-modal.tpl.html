@@ -1,0 +1,24 @@
+<div>
+  <form class="form-horizontal" ng-submit="rollover()" role="form">
+    <div class="modal-header">
+      <h3>Rollover Teaching Period</h3>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Rollover From: </label>
+      <div class="col-sm-7">
+        <input type="input" class="form-control" placeholder="Name" value="{{teachingperiod.name()}}" ng-disabled="true">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="teachingperiod">Rollover To:</label>
+      <div class="col-sm-7">
+        <select class="form-control" ng-model="rolloverTo" ng-required="true">
+          <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}-{{tp.year}} </option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="Rollover" />
+    </div>
+  </form>>
+</div>

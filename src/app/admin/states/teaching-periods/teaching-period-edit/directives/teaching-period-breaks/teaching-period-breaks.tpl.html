@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Breaks</h4>
+        Breaks in {{teachingPeriod.name()}}
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" ng-hide="teachingPeriod.breaks.length > 0">No breaks have been registered with {{teachingPeriod.name()}} yet</div>
+      <table ng-show="teachingPeriod.breaks.length > 0" class="table table-hover table-pointer">
+        <thead>
+          <tr>
+            <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='duration'; reverse=!reverse">Duration <i ng-show="sortOrder=='duration'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="break in teachingPeriod.breaks | orderBy:sortOrder:reverse">
+            <td>{{break.start_date | date: short}}</td>
+            <td>{{break.number_of_weeks}} week</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <button class="btn btn-success pull-right" ng-click="addBreak(teachingPeriod)">
+        <i class="fa fa-university"></i>
+        <i class="fa fa-plus"></i>
+        Add Break
+      </button>
+    </div>
+  </div>
+</div>

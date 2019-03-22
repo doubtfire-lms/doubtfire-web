@@ -1,7 +1,8 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <div class="input-group">
-      <input type="text" class="form-control" ng-model="filters.studentName" ng-change="studentNameChanged()" placeholder="Search students...">
+      <input type="text" class="form-control" ng-model="filters.studentName" ng-change="studentNameChanged()"
+        placeholder="Search students...">
       <span class="input-group-btn">
         <button class="btn btn-default btn-search-opts-toggle" type="button" ng-model="showSearchOptions" btn-checkbox>
           <i class="fa fa-chevron-{{showSearchOptions ? 'up' : 'down'}}"></i>
@@ -15,7 +16,8 @@
     <div class="form-group task-definition">
       <div class="dropdown" dropdown>
         <label>Task Definition</label>
-        <i ng-if="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle" style="cursor:pointer; padding-top: 8px; padding-right: 8px;" dropdown-toggle></i>
+        <i ng-if="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle" style="cursor:pointer; padding-top: 8px; padding-right: 8px;"
+          dropdown-toggle></i>
         <ul class="dropdown-menu pull-right">
           <li>
             <a ng-href="{{submissionsPdfsUrl}}">Bulk Export Submission PDFs</a>
@@ -26,12 +28,8 @@
         </ul>
       </div>
       <div class="input-group col-sm-12">
-        <select
-          ng-model="filters.taskDefinitionIdSelected"
-          ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
-          ng-change="taskDefinitionIdChanged()"
-          autofocus="{{autofocus.onTaskDefinitionSelect}}"
-          class="form-control input-md">
+        <select ng-model="filters.taskDefinitionIdSelected" ng-options="td.id as (td.abbreviation + ' - ' + td.name) group by groupSetName(td.group_set_id) for td in unit.task_definitions | orderBy:'+seq'"
+          ng-change="taskDefinitionIdChanged()" autofocus="{{autofocus.onTaskDefinitionSelect}}" class="form-control input-md">
           <option value="" ng-hide="isTaskDefMode">All task definitions</option>
         </select>
       </div>
@@ -51,8 +49,8 @@
   </form>
   <!--/search-options-->
   <ul class="list-group">
-    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}" id="{{task.taskKeyToIdString()}}" ng-click="setSelectedTask(task)"
-      ng-class="{selected: isSelectedTask(task)}" ng-repeat="task in filteredTasks">
+    <li class="list-group-item list-group-item-task clearfix {{task.statusClass()}}" id="{{task.taskKeyToIdString()}}"
+      ng-click="setSelectedTask(task)" ng-class="{selected: isSelectedTask(task)}" ng-repeat="task in filteredTasks">
       <user-icon user="task.project()" email="task.project().student_email" size="50">
       </user-icon>
       <div class="task-data">
@@ -89,13 +87,19 @@
           <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
             {{task.gradeDesc()}}
           </span>
+          <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
+            <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
+          </span>
         </div>
       </div>
       <!--/badges-->
     </li>
     <!--/task-->
     <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
-      No tasks to display.
+      <div id="empty-task-inbox">
+        <img src="/assets/images/empty_task_inbox.svg" alt="Empty task inbox">
+        No tasks to display!
+      </div>
     </li>
   </ul>
 </div>

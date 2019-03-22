@@ -6,7 +6,12 @@
   "license": "AGPL-3.0",
   "repository": {},
   "scripts": {
-    "build": "ng build && grunt build"
+    "build": "run-s -l build:angular1 build:angular6",
+    "build:angular1": "grunt build",
+    "build:angular6": "ng build",
+    "serve:angular6": "ng serve --host 0.0.0.0",
+    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular6",
+    "watch:angular1": "grunt delta"
   },
   "keywords": [],
   "author": "",
@@ -70,6 +75,7 @@
     "karma-coverage-istanbul-reporter": "~1.4.2",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "npm-run-all": "^4.1.5",
     "postcss-scss": "^0.1.7",
     "protractor": "~5.3.0",
     "ts-node": "~5.0.1",

@@ -5,7 +5,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 #
 .factory('UploadSubmissionModal', ($modal, alertService) ->
   UploadSubmissionModal = {}
-
   #
   # Open a grade task modal with the provided task
   #
@@ -26,7 +25,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService, PrivacyPolicy) ->
+  $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
 

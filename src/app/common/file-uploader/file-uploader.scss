@@ -20,7 +20,7 @@
   }
 
   .well.drop {
-    border: 3px #bbb dotted;
+    border: 2px #bbb dotted;
     font-size: larger;
     font-weight: bold;
     color: #aaa;
@@ -67,6 +67,7 @@
       display: inline-block;
     }
     .selected-file {
+      display: block;
       font-size: 1.2em;
       i.file-type {
         margin-right: 1ex;

@@ -100,8 +100,8 @@ module.exports = function ( grunt ) {
      */
     clean: {
       build: [
-        // '<%= build_dir %>',
-        '<%= compile_dir %>'
+        '<%= build_dir %>/*',
+        '<%= compile_dir %>/*'
       ],
       styles: [
          '<%= temp_scss_file %>'
@@ -124,6 +124,26 @@ module.exports = function ( grunt ) {
             follow: true
           }
        ]
+      },
+      font_bootstrap: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= build_dir %>/assets/fonts/bootstrap/',
+            cwd: 'vendor/bootstrap-sass/assets/fonts/bootstrap',
+            expand: true
+          }
+        ]
+      },
+      font_fontawesome: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= build_dir %>/assets/fonts/font-awesome/',
+            cwd: 'vendor/font-awesome/fonts',
+            expand: true
+          }
+        ]
       },
       build_app_js: {
         files: [
@@ -506,7 +526,8 @@ module.exports = function ( grunt ) {
        * for us
        */
       options: {
-        livereload: false
+        livereload: false,
+        interval: 4000
       },
 
       /**
@@ -605,19 +626,19 @@ module.exports = function ( grunt ) {
     /**
      * Use the browserSync task to reload our web browser on change
      */
-    browserSync: {
-      dev: {
-        bsFiles: {
-          // Watch build directory
-          src: userConfig.build_dir + '/**/*.*'
-        },
-        options: {
-          watchTask: true,
-          server: '<%= build_dir %>',
-          port: 8000
-        }
-      }
-    }
+    // browserSync: {
+    //   dev: {
+    //     bsFiles: {
+    //       // Watch build directory
+    //       src: userConfig.build_dir + '/**/*.*'
+    //     },
+    //     options: {
+    //       watchTask: true,
+    //       server: '<%= build_dir %>',
+    //       port: 8000
+    //     }
+    //   }
+    // }
   }; // end task config
 
   grunt.initConfig( grunt.util._.extend( taskConfig, userConfig, envConfig ) );
@@ -674,6 +695,8 @@ module.exports = function ( grunt ) {
     'coffee',
     'styles',
     'copy:build_assets',
+    'copy:font_bootstrap',
+    'copy:font_fontawesome',
     'copy:build_app_js',
     'copy:build_vendor_js',
     'copy:build_vendor_jsmap',

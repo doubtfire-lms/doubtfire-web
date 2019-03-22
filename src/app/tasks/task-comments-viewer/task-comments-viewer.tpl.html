@@ -10,7 +10,7 @@
         tooltip-append-to-body="true" tooltip-popover-delay="500" tooltip-placement="left">
       </user-icon>
 
-      <div ng-class="comment.type == 'image' ? 'image-bubble' : 'comment-bubble'">
+      <div ng-class="comment.type == 'image' || comment.type == 'pdf' ? 'image-bubble' : 'comment-bubble'">
 
         <div ng-show="comment.type == 'text'" class="comment-text">
           <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
@@ -24,6 +24,12 @@
           <!-- <p>Image here?</p> -->
           <a ng-click="openCommentsModal(comment)">
             <img ng-src="{{getCommentAttachment(comment)}}" width="100%" height="100%" />
+          </a>
+        </div>
+        <!-- Add PDF support -->
+        <div ng-if="comment.type == 'pdf'" class="comment-pdf">
+          <a ng-click="openCommentsModal(comment)">
+            <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
           </a>
         </div>
 
