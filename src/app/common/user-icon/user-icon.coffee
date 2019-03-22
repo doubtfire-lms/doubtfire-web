@@ -23,6 +23,6 @@ angular.module('doubtfire.common.user-icon', [])
     
     $scope.initials = (->
       initials = if ($scope.user && $scope.user.name) then $scope.user.name.split(" ") else "  "
-      ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
+      if initials.length > 1 then ("#{initials[0][0]}#{initials[1][0]}").toUpperCase() else "  "
     )()
 )

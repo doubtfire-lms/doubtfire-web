@@ -1,6 +1,15 @@
 <ul class="dropdown-menu dropdown-units" dropdown-menu>
   <li ng-hide="filteredUnitRoles.length == 0" class="dropdown-header">Units You Teach {{filteredUnitRoles.length}}</li>
-  <li ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole) | filter:isUniqueUnitRole ">
+  <li ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole) | filter:isUniqueUnitRole " ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()">
+    <a ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
+        <small class="unit-info">
+          <label class="label label-unit small">{{unitRole.unit_code}}</label>
+          <small class="text-muted">{{showDate(unitRole.start_date)}}</small>
+        </small>
+        <span class="unit-name">{{unitRole.unit_name}}</span>
+    </a>
+  </li>
+  <li ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole) | filter:isUniqueUnitRole " ng-if="!unitRole.teachingPeriod()">
     <a ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
         <small class="unit-info">
           <label class="label label-unit small">{{unitRole.unit_code}}</label>
@@ -11,7 +20,16 @@
   </li>
   <li ng-hide="filteredUnitRoles.length == 0 || projects.length == 0" class="divider"></li>
   <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
-  <li ng-repeat="project in projects">
+  <li ng-repeat="project in projects" ng-if="project.teachingPeriod() && project.teachingPeriod().active()">
+    <a ui-sref="projects/dashboard({ projectId: project.project_id })">
+      <small class="unit-info">
+        <label class="label label-unit small">{{project.unit_code}}</label>
+        <small class="text-muted">{{showDate(project.start_date)}}</small>
+      </small>
+      <span class="unit-name">{{project.unit_name}}</span>
+    </a>
+  </li>
+  <li ng-repeat="project in projects" ng-if="!project.teachingPeriod()">
     <a ui-sref="projects/dashboard({ projectId: project.project_id })">
       <small class="unit-info">
         <label class="label label-unit small">{{project.unit_code}}</label>

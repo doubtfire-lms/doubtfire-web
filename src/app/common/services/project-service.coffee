@@ -3,26 +3,60 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService) ->
+.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod) ->
   projectService = {}
+
+  injectFunctionalityInProject = (project) ->
+    unless project.teachingPeriod?
+      # Store the linked teaching period in each project
+      project._teachingPeriod = null
+      project.teachingPeriod = () ->
+        # If there is a teaching period and it is not linked... link on first access
+        if project.teaching_period_id? && !project._teachingPeriod?
+          project._teachingPeriod = TeachingPeriod.getTeachingPeriod(project.teaching_period_id)
+        # Return the first role
+        project._teachingPeriod
+    project
+
+  # This function is used by the task until/to descriptions
+  timeToDescription = (earlyTime, laterTime) ->
+    times = [
+      "weeks"
+      "days"
+      "hours"
+      "minutes"
+      "seconds"
+    ]
+
+    for t in times
+      diff = laterTime.diff(earlyTime, t)
+      if diff > 1
+        return "#{diff} #{t.charAt(0).toUpperCase() + t.substr(1)}"
+      else if diff == 1
+        return "1 #{t.charAt(0).toUpperCase() + t.substr(1, t.length - 2)}"
+    return laterTime.diff(earlyTime, "seconds")
 
   projectService.loadedProjects = null
 
   $rootScope.$on 'signOut', ->
     projectService.loadedProjects = null
 
-  projectService.getProjects = ( callback ) ->
+  projectService.getProjects = ( inactive, callback ) ->
     fireCallback = ->
-      callback(projectService.loadedProjects) if _.isFunction(callback)
-    unless projectService.loadedUnitRoles?
+      if inactive
+        projs = projectService.loadedProjects
+      else
+        projs = _.filter projectService.loadedProjects, (p) -> p.active
+      callback(projs) if _.isFunction(callback)
+    unless projectService.loadedProjects?
       success = (projects) ->
-        projectService.loadedProjects = projects
+        projectService.loadedProjects = _.map projects, (p) -> injectFunctionalityInProject(p)
         fireCallback()
       failure = (response) ->
         if response?.status != 419
           msg = unless response? then response.error else ''
           alertService.add("danger", "Failed to connect to Doubtfire server. #{msg}", 6000)
-      Project.query(success, failure)
+      Project.query({include_inactive: true}, success, failure)
     else
       fireCallback()
 
@@ -57,7 +91,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->
-      taskService.canReuploadEvidence(task)
+      task.inSubmittedState()
     task.requiresFileUpload = ->
       task.definition.upload_requirements.length > 0
     task.plagiarismDetected = ->
@@ -88,29 +122,74 @@ angular.module("doubtfire.common.services.projects", [])
         return task.due_date
       else
         return task.definition.target_date
+    task.startDate = ->
+      if task.start_date?
+        return task.start_date
+      else
+        return task.definition.start_date
+    
     task.isToBeCompletedSoon = ->
-      task.daysUntilTargetDate() <= 7 && task.daysUntilTargetDate() >= 0 && ! task.inFinalState()
+      task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
-      task.daysUntilDueDate() <= 7 && task.daysUntilDueDate() >= 0 && ! task.inFinalState()
+      task.daysUntilDueDate() <= 14 && task.timePastDueDate() < 0 && ! task.inFinalState()
     task.isOverdue = ->
-      task.daysPastDueDate() > 0 && ! task.inFinalState()
+      task.timePastDueDate() > 0 && (task.status in taskService.overdueStates)
     task.isPastTargetDate = ->
-      task.daysPastTargetDate() > 0 && ! task.inFinalState()
+      task.timePastTargetDate() > 0 && ! task.inSubmittedState()
     task.isDueToday = ->
-      task.daysUntilDueDate() == 0 && ! task.inFinalState()
+      task.daysUntilDueDate() == 0 && ! task.inSubmittedState()
     task.daysPastDueDate = ->
       taskService.daysPastDueDate(task)
     task.daysPastTargetDate = ->
       taskService.daysPastTargetDate(task)
+    task.timePastTargetDate = ->
+      taskService.timePastTargetDate(task)
+    task.timePastDueDate = ->
+      taskService.timePastDueDate(task)
     task.daysUntilDueDate = ->
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
+    
+    # Start date helpers
+    task.timeUntilStartDate = ->
+      moment(task.startDate()).diff(moment())
+    task.daysUntilStartDate = ->
+      moment(task.startDate()).diff(moment(), 'days')
+    task.isBeforeStartDate = ->
+      task.timeUntilStartDate() > 0
+    task.timeToStart = ->
+      if task.daysUntilStartDate() < 0
+        return ""
+      else
+        days = task.daysUntilStartDate()
+        if days < 7
+          return "#{days}d"
+        else
+          return "#{Math.floor(days/7)}w"
+
+
+    # Return hours until the deadline...
+    task.timeUntilDeadlineDescription = ->
+      timeToDescription(moment(), moment(task.definition.due_date))
+
+    task.timeUntilTargetDescription = ->
+      timeToDescription(moment(), moment(task.targetDate()))
+
+    task.timePastDeadlineDescription = ->
+      timeToDescription(moment(task.definition.due_date), moment())
+
+    task.timePastTargetDescription = ->
+      timeToDescription(moment(task.targetDate()), moment())
 
     task.inFinalState = ->
       task.status in taskService.finalStatuses
     task.inTerminalState = ->
       task.status in taskService.terminalStatuses
+    task.inSubmittedState = ->
+      task.status in taskService.submittedStatuses
+    task.inDiscussState = ->
+      task.status in taskService.discussionStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
@@ -145,6 +224,8 @@ angular.module("doubtfire.common.services.projects", [])
       gradeService.gradeAcronyms[task.grade]
     task.hasGrade = () ->
       task.grade?
+    task.hasQualityPoints = () ->
+      task.definition.max_quality_pts > 0 && (task.status in taskService.gradeableStatuses)
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },
@@ -200,7 +281,7 @@ angular.module("doubtfire.common.services.projects", [])
       updated_stats[2].value = Math.round(100 * new_stats.orange_pct)
       updated_stats[3].value = Math.round(100 * new_stats.blue_pct)
       updated_stats[4].value = Math.round(100 * new_stats.green_pct)
-      
+
       # Map the order directly to the project
       project.orderScale = Math.round(100 * new_stats.order_scale)
 

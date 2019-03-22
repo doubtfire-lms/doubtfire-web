@@ -18,7 +18,7 @@ angular.module('doubtfire.admin.states.units', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, ExternalName, Unit, CreateUnitModal, currentUser, unitService, alertService, analyticsService) ->
+.controller("AdministerUnitsState", ($scope, $state, $modal, ExternalName, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
 
   # Map unit role
@@ -27,6 +27,8 @@ angular.module('doubtfire.admin.states.units', [])
       (success) ->
         $scope.units = _.map(success, (unit) ->
           unit.unitRole = _.find(unitRoles, { unit_id: unit.id })
+          if unit.teaching_period_id
+            unit.teachingPeriod = TeachingPeriod.getTeachingPeriod(unit.teaching_period_id)
           unit
         )
       (failure) ->

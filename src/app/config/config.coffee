@@ -14,4 +14,5 @@ angular.module('doubtfire.config', [
   'doubtfire.config.root-controller'
   'doubtfire.config.debug'
   'doubtfire.config.external-name'
+  'doubtfire.config.privacy-policy'
 ])

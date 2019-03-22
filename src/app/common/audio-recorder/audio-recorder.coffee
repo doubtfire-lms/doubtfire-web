@@ -89,7 +89,7 @@ angular.module('doubtfire.common.audio-recorder', [])
       return
 
     $scope.sendRecording = () ->
-      taskService.addMediaComment($scope.task, blob, "audio",
+      taskService.addMediaComment($scope.task, blob,
         (success) ->
           taskService.scrollDown()
         (failure) ->

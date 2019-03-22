@@ -40,9 +40,8 @@
           <div class="form-group">
             <input class="form-control input-lg text-center" placeholder="Email Address"  ng-model="user.email">
           </div>
-          <div ng-hide="isStaff">
-            <hr>
-            <div class="form-group clearfix">
+            <hr ng-hide="isStaff">
+            <div class="form-group clearfix" ng-hide="isStaff">
               <div class="col-sm-12">
                 <label>Task Notifications</label>
                 <p class="help-block">
@@ -65,7 +64,7 @@
               <div class="col-sm-12">
                 <label>Feedback Notifications</label>
                 <p class="help-block">
-                  Recieve email notifications when your tutor has feedback for you
+                  Recieve feedback and weekly status email notifications
                 </p>
               </div>
               <div class="col-sm-12">
@@ -79,8 +78,8 @@
                 </div>
               </div>
             </div>
-            <hr>
-            <div class="form-group clearfix">
+            <hr  ng-hide="isStaff">
+            <div class="form-group clearfix" ng-hide="isStaff">
               <div class="col-sm-12">
                 <label>Portfolio Notifications</label>
                 <p class="help-block">
@@ -98,7 +97,6 @@
                 </div>
               </div>
             </div>
-          </div>
         </div><!--/email-step-->
         <div ng-show="currentStep == steps.targetGradeStep">
           <div ng-repeat="project in projects">

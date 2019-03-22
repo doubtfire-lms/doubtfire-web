@@ -100,7 +100,7 @@ module.exports = function ( grunt ) {
      */
     clean: {
       build: [
-        // '<%= build_dir %>/*',
+        '<%= build_dir %>/*',
         '<%= compile_dir %>/*'
       ],
       styles: [

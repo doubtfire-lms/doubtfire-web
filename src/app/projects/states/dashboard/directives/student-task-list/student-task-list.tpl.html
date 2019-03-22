@@ -13,7 +13,7 @@
           {{task.definition.name}}
         </h4>
         <p class="list-group-item-text">
-          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="!task.isPastTargetDate() && !task.inFinalState()"><i class="fa fa-hourglass-half"></i> {{task.timeToDue()}}</span>
+          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-half"></i> {{task.timeToStart()}}</span>
         </p>
       </div><!--/task-data-->
       <div class="task-badges">
@@ -30,6 +30,9 @@
           <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
             {{task.gradeDesc()}}
           </span>
+          <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
+            <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
+          </span>
           <span class="task-subscript-badge soon-badge" ng-if="task.isToBeCompletedSoon() && ! task.isDueSoon()">
             <i class="fa fa-clock-o"></i>
           </span>
@@ -39,7 +42,7 @@
           <span class="task-subscript-badge due-badge" ng-if="task.isDueSoon()">
             <i class="fa fa-clock-o"></i>
           </span>
-          <span class="task-subscript-badge due-badge" ng-if="task.isOverdue()">
+          <span class="task-subscript-badge due-badge" ng-if="task.isOverdue() && ! task.inTerminalState()">
             <i class="fa fa-clock-o"></i><strong>!</strong>
           </span>
         </div>

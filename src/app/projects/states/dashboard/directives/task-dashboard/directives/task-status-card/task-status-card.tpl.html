@@ -40,7 +40,7 @@
   <div class="card-body">
     <p>{{task.statusHelp().reason}} {{task.statusHelp().action}}</p>
   </div><!--/status-body-->
-  <div class="card-footer clearfix" ng-show="(task.inFinalState() || task.status == 'ready_to_mark') && task.requiresFileUpload()">
+  <div class="card-footer clearfix" ng-show="task.inSubmittedState() && task.requiresFileUpload()">
     <a
       ng-click="updateFilesInSubmission()"
       class="btn btn-primary"
