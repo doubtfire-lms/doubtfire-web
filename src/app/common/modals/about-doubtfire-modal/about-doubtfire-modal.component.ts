@@ -35,7 +35,10 @@ export class AboutDoubtfireModal {
 // Should be the PascalCase of the name of the component/file
 export class AboutDoubtfireModalContent implements OnInit {
   contributors: GithubProfile[];
-  constructor(private aboutDoubtfireModalService: AboutDoubtfireModalService, private bsModalRef: BsModalRef, private constants: DoubtfireConstants) { }
+  constructor(
+    private aboutDoubtfireModalService: AboutDoubtfireModalService,
+    private bsModalRef: BsModalRef,
+    public constants: DoubtfireConstants) { }
 
   ngOnInit() {
     this.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
