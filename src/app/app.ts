@@ -6,7 +6,7 @@
 // #
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal'
+import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 
 var angular = window['angular'];
 

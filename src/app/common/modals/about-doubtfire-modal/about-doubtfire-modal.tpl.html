@@ -1,24 +1,22 @@
-<div class="modal-header">
-  <h4 class="modal-title pull-left">Hello {{constants.externalName}}</h4>
+<!-- <div class="modal-header">
+  <h4 class="modal-title pull-left">Hello </h4>
   <button type="button" class="close pull-right" aria-label="Close" (click)="hide()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body">
+<div class="modal-body"> -->
 
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" (click)="hide()">Close</button>
-</div>
-<!-- <div class="modal-about">
+<!-- </div> -->
+
+<div class="modal-about">
   <div class="modal-header">
     <i class="logo"></i>
     <h1 class="full logo">
-      {{externalName.value}}
-      <small ng-hide="externalName.value == 'Doubtfire'">
+      {{constants.externalName}}
+      <small [hidden]="constants.externalName == 'Doubtfire'">
         Powered By Doubtfire
       </small>
-      <small ng-show="externalName.value == 'Doubtfire'">
+      <small [hidden]="constants.externalName != 'Doubtfire'">
         Version 5
       </small>
     </h1>
@@ -26,24 +24,37 @@
   <div class="modal-body">
     <h2>Main Contributors</h2>
     <ul>
-      <li ng-repeat="person in contributors">
-        <a ng-href="{{person.website}}">
-          <img ng-src="{{person.avatar}}">
-          <span class="name">{{person.name}}</span>
+      <li *ngFor="let person of contributors">
+        <a target="_blank" [href]="person.html_url">
+          <img [src]="person.avatar_url">
+          <div class="name">{{person.name}}</div>
+          <div class="handler">@{{person.login}}</div>
         </a>
-        <a ng-href="{{person.github}}" class="handler">@{{person.handler}}</a>
       </li>
     </ul>
+    <!-- <h2>Special Thanks</h2>
+    <ul>
+      <li *ngFor="let person of contributors">
+        <a [href]="person.website">
+          <img [src]="person.avatar_url">
+          <span class="name">{{person.name}}</span>
+        </a>
+        <a target="_blank" [href]="person.html_url" class="handler">@{{person.login}}</a>
+      </li>
+    </ul> -->
     <p class="text-muted text-center">
       &copy; 2012&ndash;2018. Made in Melbourne.
     </p>
     <p class="text-muted text-center logo-smallprint">
-      Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us on <a href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!
+      Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU
+        Affero General Public License (AGPL) v3.0</strong>. Star us on <a
+        href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!
       <br>
-      The Doubtfire Logo adapted under Creative Commons from "Progress" by Creative Stall from the <a href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
+      The Doubtfire Logo adapted under Creative Commons from "Progress" by Creative Stall from the <a
+        href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
     </p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="close()">Done</button>
+    <button type="button" class="btn btn-default" (click)="hide()">Close</button>
   </div>
-</div> -->
+</div>
