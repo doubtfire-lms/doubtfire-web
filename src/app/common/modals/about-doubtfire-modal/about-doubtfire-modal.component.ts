@@ -26,7 +26,9 @@ export interface AboutDialogData {
 })
 export class AboutDoubtfireModal {
   contributors: GithubProfile[];
-  constructor(public dialog: MatDialog, private constants: DoubtfireConstants, private aboutDoubtfireModalService: AboutDoubtfireModalService) {
+  constructor(public dialog: MatDialog,
+    private constants: DoubtfireConstants,
+    private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
@@ -35,7 +37,7 @@ export class AboutDoubtfireModal {
   }
 
   show() {
-    const dialogRef = this.dialog.open(AboutDoubtfireModalContent,
+    this.dialog.open(AboutDoubtfireModalContent,
       {
         width: '900px',
         data: {
@@ -43,10 +45,6 @@ export class AboutDoubtfireModal {
           contributors: this.contributors
         }
       });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   getContributorDetails() {
