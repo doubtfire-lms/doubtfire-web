@@ -21,7 +21,6 @@ export interface AboutDialogData {
 })
 @Component({
   selector: 'about-modal-content',
-  templateUrl: 'about-doubtfire-modal.tpl.html',
   providers: [AboutDoubtfireModalService]
 })
 export class AboutDoubtfireModal {
