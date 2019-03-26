@@ -1,22 +1,12 @@
-<!-- <div class="modal-header">
-  <h4 class="modal-title pull-left">Hello </h4>
-  <button type="button" class="close pull-right" aria-label="Close" (click)="hide()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body"> -->
-
-<!-- </div> -->
-
-<div class="modal-about">
+<mat-dialog-content class="mat-typography">
   <div class="modal-header">
     <i class="logo"></i>
     <h1 class="full logo">
-      {{constants.externalName}}
-      <small [hidden]="constants.externalName == 'Doubtfire'">
+      {{data.externalName}}
+      <small [hidden]="data.externalName == 'Doubtfire'">
         Powered By Doubtfire
       </small>
-      <small [hidden]="constants.externalName != 'Doubtfire'">
+      <small [hidden]="data.externalName != 'Doubtfire'">
         Version 5
       </small>
     </h1>
@@ -24,7 +14,7 @@
   <div class="modal-body">
     <h2>Main Contributors</h2>
     <ul>
-      <li *ngFor="let person of contributors">
+      <li *ngFor="let person of data.contributors">
         <a target="_blank" [href]="person.html_url">
           <img [src]="person.avatar_url">
           <div class="name">{{person.name}}</div>
@@ -32,16 +22,6 @@
         </a>
       </li>
     </ul>
-    <!-- <h2>Special Thanks</h2>
-    <ul>
-      <li *ngFor="let person of contributors">
-        <a [href]="person.website">
-          <img [src]="person.avatar_url">
-          <span class="name">{{person.name}}</span>
-        </a>
-        <a target="_blank" [href]="person.html_url" class="handler">@{{person.login}}</a>
-      </li>
-    </ul> -->
     <p class="text-muted text-center">
       &copy; 2012&ndash;2018. Made in Melbourne.
     </p>
@@ -54,7 +34,7 @@
         href="https://thenounproject.com/search/?q=progress&i=175994">Noun Project</a>.
     </p>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="hide()">Close</button>
-  </div>
-</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

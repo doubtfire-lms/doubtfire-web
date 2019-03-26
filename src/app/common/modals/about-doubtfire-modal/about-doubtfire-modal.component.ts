@@ -1,13 +1,17 @@
 //
 // Modal to show Doubtfire version info
 //
-import { Injectable, Component, OnInit } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
+import { Injectable, Component, Inject } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/constants';
-
-import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
+import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
+
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+
+export interface AboutDialogData {
+  externalName: string
+  contrubutors: GithubProfile[]
+}
 
 /**
  * The about doubtfire modal service - used to create and show the modal
@@ -15,34 +19,31 @@ import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubt
 @Injectable({
   providedIn: 'root',
 })
-export class AboutDoubtfireModal {
-  constructor(
-    private modal: BsModalService) {
-  }
-
-  public show() {
-    this.modal.show(AboutDoubtfireModalContent)
-  }
-}
-
 @Component({
   selector: 'about-modal-content',
-  templateUrl: 'about-doubtfire-modal.tpl.html',
   providers: [AboutDoubtfireModalService]
 })
-
-// Export the class
-// Should be the PascalCase of the name of the component/file
-export class AboutDoubtfireModalContent implements OnInit {
+export class AboutDoubtfireModal {
   contributors: GithubProfile[];
-  constructor(private aboutDoubtfireModalService: AboutDoubtfireModalService, private bsModalRef: BsModalRef, private constants: DoubtfireConstants) { }
-
-  ngOnInit() {
+  constructor(public dialog: MatDialog,
+    private constants: DoubtfireConstants,
+    private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
     }));
     this.getContributorDetails();
+  }
+
+  show() {
+    this.dialog.open(AboutDoubtfireModalContent,
+      {
+        width: '900px',
+        data: {
+          externalName: this.constants.externalName,
+          contributors: this.contributors
+        }
+      });
   }
 
   getContributorDetails() {
@@ -59,9 +60,12 @@ export class AboutDoubtfireModalContent implements OnInit {
         })
     });
   }
+}
 
-  // method to hide the modal
-  public hide() {
-    this.bsModalRef.hide();
-  }
+@Component({
+  selector: 'about-doubtfire-dialog',
+  templateUrl: 'about-doubtfire-modal-content.tpl.html',
+})
+export class AboutDoubtfireModalContent {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: AboutDialogData) { }
 }

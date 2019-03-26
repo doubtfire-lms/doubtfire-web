@@ -2,33 +2,33 @@
   display: none !important;
 }
 
-.modal-about {
+mat-dialog-content {
   i.logo + h1.logo {
     margin-left: 1ex;
     display: inline-block;
   }
 
-  h1.logo {
-    @include logo-font-rendering;
-    @media (max-width: $screen-sm) {
-      font-size: 3em;
-    }
-    small {
-      text-align: right;
-      font-size: 0.5em;
-    }
-    &.full.logo small {
-      display: block;
-    }
-    &.sup.logo small {
-      vertical-align: super;
-      margin-left: 0.5ex;
-      color: #999;
-    }
-  }
-
   .modal-header {
     text-align: center;
+    h1.logo {
+      @include logo-font-rendering;
+      @media (max-width: $screen-sm) {
+        font-size: 3em;
+      }
+      small {
+        text-align: right;
+        font-size: 0.5em;
+      }
+      &.full.logo small {
+        display: block;
+        line-height: 2;
+      }
+      &.sup.logo small {
+        vertical-align: super;
+        margin-left: 0.5ex;
+        color: #999;
+      }
+    }
   }
 
   .modal-content {
@@ -81,7 +81,7 @@
       &:hover {
         text-decoration: underline;
       }
-      
+
       .name {
         line-height: 1;
         font-weight: bold;
