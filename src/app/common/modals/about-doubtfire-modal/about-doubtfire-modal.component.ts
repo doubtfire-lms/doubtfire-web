@@ -57,7 +57,7 @@ export class AboutDoubtfireModal {
   }
 
   private getExternalName(): void {
-    this.constants.myBehaviorSubject
+    this.constants.getExternalName
       .subscribe(result => {
         this.aboutDialogData.externalName = result;
       });

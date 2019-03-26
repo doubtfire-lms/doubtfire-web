@@ -32,7 +32,7 @@ export class AppModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
     setTheme('bs3'); // or 'bs4'
 
-    this.constants.myBehaviorSubject
+    this.constants.getExternalName
       .subscribe(result => {
         this.title.setTitle(result)
       });

@@ -22,11 +22,11 @@ export class DoubtfireConstants {
   public loaded: boolean = false;
   public apiURL: string = apiURL;
 
-  public myBehaviorSubject = new BehaviorSubject<string>('Loading...');
+  public getExternalName = new BehaviorSubject<string>('Loading...');
 
   private loadExternalName() {
     this.http.get<externalNameResponseFormat>(`${this.apiURL}/settings`)
-      .subscribe(result => this.myBehaviorSubject.next(result.externalName)),
+      .subscribe(result => this.getExternalName.next(result.externalName)),
       (error) => {
         console.error(error);
       };
