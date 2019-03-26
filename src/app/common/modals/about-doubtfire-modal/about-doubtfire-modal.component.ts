@@ -1,7 +1,7 @@
 //
 // Modal to show Doubtfire version info
 //
-import { Injectable, Component, Inject } from '@angular/core';
+import { Injectable, Component, Inject, OnInit } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/constants';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
@@ -9,8 +9,8 @@ import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface AboutDialogData {
-  externalName: string
-  contrubutors: GithubProfile[]
+  externalName: string,
+  contributors: GithubProfile[]
 }
 
 /**
@@ -21,36 +21,53 @@ export interface AboutDialogData {
 })
 @Component({
   selector: 'about-modal-content',
-  providers: [AboutDoubtfireModalService]
+  providers: [AboutDoubtfireModalService, DoubtfireConstants]
 })
 export class AboutDoubtfireModal {
-  contributors: GithubProfile[];
+
+  aboutDialogData: AboutDialogData;
+
   constructor(public dialog: MatDialog,
     private constants: DoubtfireConstants,
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
-    this.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
+    this.init()
+  }
+
+  private init(): void {
+    this.aboutDialogData = {
+      externalName: "",
+      contributors: []
+    }
+
+    this.aboutDialogData.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
     }));
+
     this.getContributorDetails();
+    this.getExternalName();
   }
 
   show() {
     this.dialog.open(AboutDoubtfireModalContent,
       {
         width: '900px',
-        data: {
-          externalName: this.constants.externalName,
-          contributors: this.contributors
-        }
+        data: this.aboutDialogData
       });
   }
 
-  getContributorDetails() {
-    this.contributors.forEach((item: GithubProfile, i) => {
+  private getExternalName(): void {
+    this.constants.myBehaviorSubject
+      .subscribe(result => {
+        this.aboutDialogData.externalName = result;
+      });
+  }
+
+  private getContributorDetails() {
+    this.aboutDialogData.contributors.forEach((item: GithubProfile, i) => {
       this.aboutDoubtfireModalService.GetGithubProfiles(item.login)
         .subscribe(response => {
-          this.contributors[i] =
+          this.aboutDialogData.contributors[i] =
             {
               avatar_url: response.avatar_url,
               name: response.name,
