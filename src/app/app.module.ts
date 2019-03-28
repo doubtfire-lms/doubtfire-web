@@ -9,7 +9,7 @@ import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfir
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 
 import { setTheme } from 'ngx-bootstrap/utils';
-import { DoubtfireConstants } from './config/constants/constants';
+import { DoubtfireConstants } from 'src/app/config/constants/constants';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,7 @@ export class AppModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
     setTheme('bs3'); // or 'bs4'
 
-    this.constants.getExternalName
+    this.constants.ExternalName
       .subscribe(result => {
         this.title.setTitle(result)
       });

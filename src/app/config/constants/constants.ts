@@ -13,23 +13,26 @@ export class DoubtfireConstants {
   constructor(private http: HttpClient) {
     this.loadExternalName();
   }
+
   public mainContributors: string[] = [
     'macite',              // Andrew Cain
     'alexcu',              // Alex Cummaudo
     'jakerenzella'         // Jake Renzella
   ];
 
-  public loaded: boolean = false;
   public apiURL: string = apiURL;
 
-  public getExternalName = new BehaviorSubject<string>('Loading...');
+  // initialise exernal name to loading.
+  public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
 
+  // publish update to ExternalName when get request finishes.
   private loadExternalName() {
-    this.http.get<externalNameResponseFormat>(`${this.apiURL}/settings`)
-      .subscribe(result => this.getExternalName.next(result.externalName)),
-      (error) => {
-        console.error(error);
-      };
-  }
+    const settingsUrl: string = `${this.apiURL}/settings`;
 
+    this.http.get<externalNameResponseFormat>(settingsUrl)
+      .subscribe(
+        result => this.ExternalName.next(result.externalName)
+      ),
+      error => console.error(error);
+  }
 }
