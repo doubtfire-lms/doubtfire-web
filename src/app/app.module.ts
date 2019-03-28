@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfir
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 
 import { setTheme } from 'ngx-bootstrap/utils';
+import { DoubtfireConstants } from 'src/app/config/constants/constants';
 
 @NgModule({
   declarations: [
@@ -24,12 +25,17 @@ import { setTheme } from 'ngx-bootstrap/utils';
     UpgradeModule,
     ModalModule.forRoot()
   ],
-  providers: [AboutDoubtfireModal, AboutDoubtfireModalService],
+  providers: [AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
   entryComponents: [AboutDoubtfireModalContent]
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule) {
+  constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
     setTheme('bs3'); // or 'bs4'
+
+    this.constants.ExternalName
+      .subscribe(result => {
+        this.title.setTitle(result)
+      });
   }
 
   ngDoBootstrap() {
