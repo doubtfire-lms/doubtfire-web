@@ -130,7 +130,7 @@ module.exports = function ( grunt ) {
           {
             src: [ '**' ],
             dest: '<%= build_dir %>/assets/fonts/bootstrap/',
-            cwd: 'vendor/bootstrap-sass/assets/fonts/bootstrap',
+            cwd: 'node_modules/bootstrap-sass/assets/fonts/bootstrap',
             expand: true
           }
         ]
@@ -140,7 +140,7 @@ module.exports = function ( grunt ) {
           {
             src: [ '**' ],
             dest: '<%= build_dir %>/assets/fonts/font-awesome/',
-            cwd: 'vendor/font-awesome/fonts',
+            cwd: 'node_modules/font-awesome/fonts',
             expand: true
           }
         ]
@@ -471,8 +471,8 @@ module.exports = function ( grunt ) {
         src: [
           '<%= vendor_files.compile.js %>',
           '<%= build_dir %>/src/**/*.js',
-          '<%= build_dir %>/assets/vendor/**/*.css',
-          '<%= build_dir %>/assets/vendor/**/*.js',
+          '<%= build_dir %>/assets/node_modules/**/*.css',
+          '<%= build_dir %>/assets/node_modules/**/*.js',
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= postcss.source.dest %>'
@@ -505,7 +505,7 @@ module.exports = function ( grunt ) {
           '<%= vendor_files.compile.js %>',
           '<%= html2js.app.dest %>',
           '<%= html2js.common.dest %>',
-          'vendor/angular-mocks/angular-mocks.js'
+          'node_modules/angular-mocks/angular-mocks.js'
         ]
       }
     },
