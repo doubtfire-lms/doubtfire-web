@@ -301,11 +301,13 @@ $ npm install
 
 **Note:** You may need to install `grunt-cli` globally in Linux using `sudo`.
 
-Lastly, to compile and run a watch server and web server, use `grunt`:
+Lastly, to compile and run a watch server and web server, use `npm install`:
 
 ```
-$ grunt
+$ npm install
 ```
+
+This will automaticall run the angular 1 `grunt watch`, and the angular 7 `ng serve`.
 
 You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
 
