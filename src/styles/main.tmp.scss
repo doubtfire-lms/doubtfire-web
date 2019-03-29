@@ -2,8 +2,8 @@
 
 @import "vendor-config/bootstrap";
 @import "vendor-config/font-awesome";
-@import "../../vendor/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "../../vendor/font-awesome/scss/font-awesome";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../node_modules/font-awesome/scss/font-awesome";
 @import "mixins/animations/fade-in";
 @import "mixins/animations/grow";
 @import "mixins/animations/slide-down";
