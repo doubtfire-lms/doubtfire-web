@@ -107,7 +107,6 @@
               "build/src/app/config/config.js",
               "build/src/app/config/root-controller/root-controller.js",
               "build/src/app/config/local-storage/local-storage.js",
-              "build/src/app/config/external-name/external-name.js",
               "build/src/app/config/routing/routing.js",
               "build/src/app/config/vendor-dependencies/vendor-dependencies.js",
               "build/src/app/config/analytics/analytics.js",

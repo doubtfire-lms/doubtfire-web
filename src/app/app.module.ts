@@ -27,9 +27,14 @@ import { DoubtfireConstants } from 'src/app/config/constants/constants';
     UpgradeModule,
     UIRouterUpgradeModule.forRoot(),
   ],
+  providers: [
+    AboutDoubtfireModal,
+    AboutDoubtfireModalService,
+    DoubtfireConstants
   ],
-  providers: [AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent]
+  entryComponents: [
+    AboutDoubtfireModalContent
+  ]
 })
 export class AppModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {

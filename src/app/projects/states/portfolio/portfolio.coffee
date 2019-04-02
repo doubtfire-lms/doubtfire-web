@@ -18,7 +18,7 @@ angular.module('doubtfire.projects.states.portfolio', [
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, ExternalName, taskService, gradeService, PortfolioSubmission, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, taskService, gradeService, PortfolioSubmission, analyticsService) ->
   #
   # Active task tab group
   #
@@ -68,7 +68,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.targetGrade = gradeService.grades[newValue]
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   # Get only extra files submitted
   $scope.extraFiles = ->

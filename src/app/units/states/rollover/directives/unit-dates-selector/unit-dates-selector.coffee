@@ -8,14 +8,14 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/rollover/directives/unit-dates-selector/unit-dates-selector.tpl.html'
-  controller: ($scope, $state, $rootScope, ExternalName, Unit, RolloverUnit, alertService, analyticsService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, RolloverUnit, alertService, analyticsService, unitService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
 
     # Get the configurable, external name of Doubtfire
-    $scope.externalName = ExternalName
+    $scope.externalName = DoubtfireConstants.ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
     $scope.teachingPeriods = TeachingPeriod.query()

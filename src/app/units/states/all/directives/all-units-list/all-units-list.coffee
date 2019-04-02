@@ -13,10 +13,10 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   headerServiceProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, ExternalName, headerService, currentUser, unitService, analyticsService, dateService) ->
+.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, headerService, currentUser, unitService, analyticsService, dateService) ->
   analyticsService.event 'view-all-units', 'viewed all-units list'
 
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   # Table sort details
   $scope.sortOrder = "start_date"

@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.create-unit-modal', [])
         units: -> units
   CreateUnitModal
 )
-.controller('CreateUnitModalCtrl', ($scope, $modalInstance, ExternalName, alertService, units, Unit, analyticsService) ->
+.controller('CreateUnitModalCtrl', ($scope, $modalInstance, DoubtfireConstants, alertService, units, Unit, analyticsService) ->
   analyticsService.event 'Unit Admin', 'Started to Create Unit'
   $scope.units = units
   $scope.unit = { code: null, name: null }
@@ -28,6 +28,6 @@ angular.module('doubtfire.admin.modals.create-unit-modal', [])
       (response) ->
         alertService.add 'danger', "Error creating unit - #{response.data.error}"
     )
-  # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  # Get the configurable, external name of Doubtfire
+  $scope.externalName = DoubtfireConstants.ExternalName
 )

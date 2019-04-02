@@ -7,6 +7,7 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
+import { DoubtfireConstants } from 'src/app/config/constants/constants';
 
 var angular = window['angular'];
 
@@ -25,8 +26,9 @@ var m = angular.module('doubtfire', [
   'doubtfire.visualisations']);
 
 m.factory('AboutDoubtfireModal',
-  downgradeInjectable(AboutDoubtfireModal)
-);
+  downgradeInjectable(AboutDoubtfireModal));
+m.factory('DoubtfireConstants',
+  downgradeInjectable(DoubtfireConstants));
 
 export class DoubtfireAppModule {
   public static angularJS = angular;
