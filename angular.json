@@ -37,7 +37,6 @@
               "vendor/angular-local-storage/angular-local-storage.js",
               "vendor/angular-resource/angular-resource.js",
               "vendor/angular-bootstrap/ui-bootstrap-tpls.js",
-              "vendor/angular-ui-router/release/angular-ui-router.js",
               "vendor/d3/d3.js",
               "vendor/lodash/lodash.js",
               "vendor/underscore.string/dist/underscore.string.min.js",

@@ -30,4 +30,5 @@ m.factory('AboutDoubtfireModal',
 
 export class DoubtfireAppModule {
   public static angularJS = angular;
+  public static angularJSModule = m;
 }

@@ -102,7 +102,6 @@ module.exports = {
         'vendor/angular-local-storage/angular-local-storage.js',
         'vendor/angular-resource/angular-resource.js',
         'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-        'vendor/angular-ui-router/release/angular-ui-router.js',
         'vendor/d3/d3.js',
         'vendor/angular-charts/dist/angular-charts.js',
         'vendor/flashular/bin/flashular.js',
@@ -129,7 +128,8 @@ module.exports = {
         'vendor/angular-ui-select/dist/select.js',
         'vendor/angulartics/dist/angulartics.min.js',
         'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js',
-        'vendor/angular-md5/angular-md5.js'
+        'vendor/angular-md5/angular-md5.js',
+        'node_modules/@uirouter/angular-hybrid/lib/angular-hybrid.js'
       ],
       jsmap: [
         'vendor/showdown/dist/showdown.js.map'

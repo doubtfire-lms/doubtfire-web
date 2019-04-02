@@ -21,7 +21,7 @@
   <li ng-hide="filteredUnitRoles.length == 0 || projects.length == 0" class="divider"></li>
   <li ng-hide="projects.length == 0" class="dropdown-header" ng-hide="{{projects.length}}">Units You Study</li>
   <li ng-repeat="project in projects" ng-if="project.teachingPeriod() && project.teachingPeriod().active()">
-    <a ui-sref="projects/dashboard({ projectId: project.project_id })">
+    <a ui-sref="projects/dashboard({ projectId: project.project_id, taskAbbr:'' })">
       <small class="unit-info">
         <label class="label label-unit small">{{project.unit_code}}</label>
         <small class="text-muted">{{showDate(project.start_date)}}</small>
@@ -30,7 +30,7 @@
     </a>
   </li>
   <li ng-repeat="project in projects" ng-if="!project.teachingPeriod()">
-    <a ui-sref="projects/dashboard({ projectId: project.project_id })">
+    <a ui-sref="projects/dashboard({ projectId: project.project_id, taskAbbr:'' })">
       <small class="unit-info">
         <label class="label label-unit small">{{project.unit_code}}</label>
         <small class="text-muted">{{showDate(project.start_date)}}</small>

@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
+
+import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid'
+
 import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service"
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 
@@ -23,7 +25,8 @@ import { DoubtfireConstants } from 'src/app/config/constants/constants';
     MatDialogModule,
     HttpClientModule,
     UpgradeModule,
-    ModalModule.forRoot()
+    UIRouterUpgradeModule.forRoot(),
+  ],
   ],
   providers: [AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
   entryComponents: [AboutDoubtfireModalContent]

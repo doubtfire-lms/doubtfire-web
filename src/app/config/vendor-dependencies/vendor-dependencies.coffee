@@ -14,6 +14,7 @@ angular.module('doubtfire.config.vendor-dependencies', [
 
   # ui.*
   'ui.router'
+  'ui.router.upgrade'
   'ui.bootstrap'
   'ui.codemirror'
 
