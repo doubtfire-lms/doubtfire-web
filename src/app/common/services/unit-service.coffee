@@ -177,7 +177,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Refresh the groups within the unit
     unit.refreshGroups = () ->
-      return unless unit.groups?
+      return unless unit.groups?.length > 0
       # Query the groups within the unit.
       Unit.groups.query( {id: unit.id} ,
         (success) ->
@@ -186,7 +186,7 @@ angular.module("doubtfire.common.services.units", [])
         (failure) ->
           alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
       )
-    
+
     # Queries the unit for all groups
     unit.getGroups = (groupSetId, onSuccess, onFailure) ->
       groupService.getGroups(unit, groupSetId, onSuccess, onFailure)
@@ -367,7 +367,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Enable the student/project to be able to switch to its view
     student.viewProject = (as_tutor) ->
-      $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor})
+      $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor, taskAbbr:''})
 
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->
