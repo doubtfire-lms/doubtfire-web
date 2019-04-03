@@ -2,7 +2,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
   "ngFileUpload"
 ])
 
-.factory("PortfolioSubmission", (api, $window, FileUploader, currentUser, alertService, resourcePlus) ->
+.factory("PortfolioSubmission", (DoubtfireConstants, $window, FileUploader, currentUser, alertService, resourcePlus) ->
   #
   # Creates a new instance of a PortfolioSubmission object. Requires
   # a project object parameter.
@@ -15,7 +15,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     # PortfolioSubmission object
     #
     resource.portfolioUrl =
-      "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+      "#{DoubtfireConstants.API_URL}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
 
     resource.portfolioUrlAsAttachment =
       resource.portfolioUrl + "&as_attachment=true"
@@ -57,7 +57,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     resource
 
   PortfolioSubmission.getPortfolioUrl = (project, asAttachment = false) ->
-    url = "#{api}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
+    url = "#{DoubtfireConstants.API_URL}/submission/project/#{project.project_id}/portfolio?auth_token=#{currentUser.authenticationToken}"
     url += "&as_attachment=true" if asAttachment
     url
 

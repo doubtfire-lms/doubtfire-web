@@ -7,11 +7,11 @@ import { MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/ma
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid'
 
+import { setTheme } from 'ngx-bootstrap/utils';
+
 import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service"
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
-
-import { setTheme } from 'ngx-bootstrap/utils';
-import { DoubtfireConstants } from 'src/app/config/constants/constants';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/constants';
     AboutDoubtfireModalContent
   ]
 })
-export class AppModule {
+export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
     setTheme('bs3'); // or 'bs4'
 

@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -33,9 +33,9 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.externalName = DoubtfireConstants.ExternalName
 
   # Check for AAF login
-  $scope.api = api
+  $scope.api = DoubtfireConstants.API_URL
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
-  $http.get("#{api}/auth/method").then ((response) ->
+  $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
     $scope.aafLogin = response.data.redirect_to || false
 
     if $scope.aafLogin
@@ -89,7 +89,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
           username: $scope.session.username
           password: $scope.session.password
           remember: $scope.session.remember_me
-        auth.signIn(api + "/auth", signInCredentials,
+        auth.signIn("#{DoubtfireConstants.API_URL}/auth", signInCredentials,
           (response) ->
             if $scope.session.remember_me
               localStorageService.set(usernameCookie, currentUser)

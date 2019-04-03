@@ -2,7 +2,7 @@
 // Modal to show Doubtfire version info
 //
 import { Injectable, Component, Inject, OnInit } from '@angular/core';
-import { DoubtfireConstants } from 'src/app/config/constants/constants';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 
