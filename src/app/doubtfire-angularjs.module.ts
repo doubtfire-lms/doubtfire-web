@@ -301,7 +301,7 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
-const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider, $locationProvider) => {
+const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider : any, $locationProvider : any) => {
   $locationProvider.hashPrefix('');
   $urlRouterProvider.otherwise("/home");
 }];

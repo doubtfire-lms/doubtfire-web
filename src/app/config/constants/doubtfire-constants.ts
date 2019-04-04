@@ -19,7 +19,7 @@ export class DoubtfireConstants {
     this.loadSignoutUrl();
   }
 
-  public mainContributors: string[] = [
+  public mainContributors: ReadonlyArray<string> = [
     'macite',              // Andrew Cain
     'alexcu',              // Alex Cummaudo
     'jakerenzella'         // Jake Renzella
@@ -35,9 +35,9 @@ export class DoubtfireConstants {
 
     this.http.get<signoutUrlResponseFormat>(url)
       .subscribe(
-        result => this.SignoutURL = result.auth_signout_url
-      ),
-      error => console.error(error);
+        result => this.SignoutURL = result.auth_signout_url,
+        error => console.error(error)
+      )
   }
 
   // initialise exernal name to loading.
@@ -49,8 +49,8 @@ export class DoubtfireConstants {
 
     this.http.get<externalNameResponseFormat>(settingsUrl)
       .subscribe(
-        result => this.ExternalName.next(result.externalName)
-      ),
-      error => console.error(error);
+        result => this.ExternalName.next(result.externalName),
+        error => console.error(error)
+      )
   }
 }
