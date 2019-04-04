@@ -1,3 +1,6 @@
+// Make sure that angular is loaded before anything else!
+import 'node_modules/angular/angular.js'
+
 import { enableProdMode, NgZone } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
@@ -14,10 +17,12 @@ if (environment.production) {
 
 // Using AngularJS config block, call `deferIntercept()`.
 // This tells UI-Router to delay the initial URL sync (until all bootstrapping is complete)
-DoubtfireAngularJSModule.angularJSModule.config([ '$urlServiceProvider', ($urlService: UrlService) => $urlService.deferIntercept() ]);
+DoubtfireAngularJSModule.config(['$urlServiceProvider', ($urlService: UrlService) => $urlService.deferIntercept()]);
 
 // Manually bootstrap the Angular app
-platformBrowserDynamic().bootstrapModule(DoubtfireAngularModule).then(platformRef => {
+platformBrowserDynamic()
+  .bootstrapModule(DoubtfireAngularModule)
+  .then(platformRef => {
   // Intialize the Angular Module
   // get() the UIRouter instance from DI to initialize the router
   const urlService: UrlService = platformRef.injector.get(UIRouter).urlService;
@@ -31,7 +36,3 @@ platformBrowserDynamic().bootstrapModule(DoubtfireAngularModule).then(platformRe
   platformRef.injector.get<NgZone>(NgZone).run(startUIRouter);
 });
 
-// platformBrowserDynamic().bootstrapModule(AppModule)
-//   .catch(err => console.log(err));
-
-console.log(DoubtfireAngularJSModule.angularJS.version)

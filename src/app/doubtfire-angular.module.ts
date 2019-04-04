@@ -13,6 +13,8 @@ import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfir
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
+import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
+
 @NgModule({
   declarations: [
     AboutDoubtfireModalContent
@@ -47,6 +49,6 @@ export class DoubtfireAngularModule {
   }
 
   ngDoBootstrap() {
-    this.upgrade.bootstrap(document.body, ['doubtfire'], { strictDi: false });
+    this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], { strictDi: false });
   }
 }

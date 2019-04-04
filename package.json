@@ -73,6 +73,7 @@
     "@angular/cli": "~7.3.6",
     "@angular/compiler-cli": "^7.2.10",
     "@angular/language-service": "^7.2.10",
+    "@types/angular": "1.5.11",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.115",
