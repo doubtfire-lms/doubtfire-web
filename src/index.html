@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-controller="AppCtrl">
+<html>
   <head>
     <title ng-bind="externalName.value"> Loading... </title>
 
@@ -46,7 +46,7 @@
       ga('create', 'UA-72959346-1', 'auto');
     </script>
   </head>
-  <body>
+  <body ng-controller="AppCtrl">
     <div ui-view="header"></div>
     <div ui-view="main" class="container-fluid"></div>
     <alert-list> </alert-list>
