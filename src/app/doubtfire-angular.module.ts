@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { HttpClientModule } from '@angular/common/http';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
 
@@ -14,6 +15,7 @@ import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
+import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,14 +31,12 @@ import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
     UpgradeModule,
     UIRouterUpgradeModule.forRoot(),
   ],
-  providers: [
-    AboutDoubtfireModal,
-    AboutDoubtfireModalService,
-    DoubtfireConstants
-  ],
-  entryComponents: [
-    AboutDoubtfireModalContent
-  ]
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpErrorInterceptor,
+    multi: true
+  }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
+  entryComponents: [AboutDoubtfireModalContent]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {

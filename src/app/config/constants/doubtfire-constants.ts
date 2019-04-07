@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -42,15 +42,13 @@ export class DoubtfireConstants {
 
   // initialise exernal name to loading.
   public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
+  private readonly settingsUrl: string = `${this.API_URL}/settings`;
 
   // publish update to ExternalName when get request finishes.
   private loadExternalName() {
-    const settingsUrl: string = `${this.API_URL}/settings`;
-
-    this.http.get<externalNameResponseFormat>(settingsUrl)
+    this.http.get<externalNameResponseFormat>(this.settingsUrl)
       .subscribe(
-        result => this.ExternalName.next(result.externalName),
-        error => console.error(error)
+        result => this.ExternalName.next(result.externalName)
       )
   }
 }
