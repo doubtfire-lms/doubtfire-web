@@ -1,4 +1,4 @@
-let apiURL: String;
+let API_URL: String;
 
-apiURL = `https://${window.location.host}/api`;
-export default apiURL;
+API_URL = `https://${window.location.host}/api`;
+export default API_URL;

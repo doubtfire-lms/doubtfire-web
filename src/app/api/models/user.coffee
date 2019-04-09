@@ -1,8 +1,8 @@
 angular.module("doubtfire.api.models.user", [])
 
-.factory("User", (resourcePlus, currentUser, api) ->
+.factory("User", (resourcePlus, currentUser, DoubtfireConstants) ->
   User = resourcePlus "/users/:id", { id: "@id" }
   User.csvUrl = ->
-    "#{api}/csv/users?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/csv/users?auth_token=#{currentUser.authenticationToken}"
   return User
 )

@@ -9,7 +9,6 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
   templateUrl: 'tasks/task-comment-composer/task-comment-composer.tpl.html'
   scope:
     task: '='
-    comment: '=ngModel'
     singleDropZone: '=?'
   controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
 

@@ -1,4 +1,4 @@
-let apiURL: string;
+let API_URL: string;
 
-apiURL = "http://localhost:3000/api";
-export default apiURL;
+API_URL = "http://localhost:3000/api";
+export default API_URL;

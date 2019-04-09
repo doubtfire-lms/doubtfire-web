@@ -32,9 +32,8 @@ module.exports = {
   /**
    * This is a collection of file patterns that refer to our app code (the
    * stuff in `src/`). These file paths are used in the configuration of
-   * build tasks. `js` is all project javascript, sass tests. `ctpl` contains
-   * our reusable components' (`src/common`) template HTML files, while
-   * `atpl` contains the same, but for our app's code. `html` is just our
+   * build tasks. `js` is all project javascript, sass tests.
+   * `atpl` contains our app's code. `html` is just our
    * main HTML file, `sass` is our main stylesheet, and `unit` contains our
    * app's unit tests.
    */
@@ -59,9 +58,6 @@ module.exports = {
 
     atpl: [
       'src/app/**/*.tpl.html'
-    ],
-    ctpl: [
-      'src/common/**/*.tpl.html'
     ],
 
     html: [
@@ -96,61 +92,24 @@ module.exports = {
   vendor_files: {
     compile: {
       js: [
-        'vendor/jquery/jquery.js',
-        'vendor/angular/angular.js',
-        'vendor/angular-cookies/angular-cookies.js',
-        'vendor/angular-local-storage/angular-local-storage.js',
-        'vendor/angular-resource/angular-resource.js',
-        'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-        'vendor/angular-ui-router/release/angular-ui-router.js',
-        'vendor/d3/d3.js',
-        'vendor/angular-charts/dist/angular-charts.js',
-        'vendor/flashular/bin/flashular.js',
-        'vendor/ngprogress/ngProgress.js',
-        'vendor/lodash/lodash.js',
-        'vendor/underscore.string/dist/underscore.string.min.js',
-        'vendor/momentjs/moment.js',
-        'vendor/d3/d3.js',
-        'vendor/nvd3/build/nv.d3.js',
-        'vendor/angular-nvd3/dist/angular-nvd3.js',
-        'vendor/angular-file-upload/angular-file-upload.js',
-        'vendor/ng-file-upload/ng-file-upload-all.min.js',
-        'vendor/es5-shim/es5-shim.js',
-        'vendor/angular-sanitize/angular-sanitize.js',
-        'vendor/ng-csv/build/ng-csv.js',
-        'vendor/angular-xeditable/dist/js/xeditable.js',
-        'vendor/angular-filter/dist/angular-filter.js',
-        'vendor/codemirror/lib/codemirror.js',
-        'vendor/codemirror/addon/display/placeholder.js',
-        'vendor/codemirror/mode/markdown/markdown.js',
-        'vendor/angular-ui-codemirror/ui-codemirror.js',
-        'vendor/showdown/dist/showdown.js',
-        'vendor/angular-markdown-filter/markdown.js',
-        'vendor/angular-ui-select/dist/select.js',
-        'vendor/angulartics/dist/angulartics.min.js',
-        'vendor/angulartics-google-analytics/lib/angulartics-google-analytics.js',
-        'vendor/angular-md5/angular-md5.js'
       ],
       jsmap: [
-        'vendor/showdown/dist/showdown.js.map'
       ],
       scss: [
-        'vendor/bootstrap-sass/**/_bootstrap.scss',
-        'vendor/font-awesome/**/font-awesome.scss'
+        'node_modules/bootstrap-sass/**/_bootstrap.scss',
+        'node_modules/font-awesome/**/font-awesome.scss'
       ],
     },
     copy: {
       js: [
-
       ],
       jsmap: [
-        'vendor/showdown/dist/showdown.js.map'
       ],
       css: [
-        "vendor/nvd3/build/nv.d3.css",
-        "vendor/angular-xeditable/dist/css/xeditable.css",
-        "vendor/codemirror/lib/codemirror.css",
-        "vendor/codemirror/theme/xq-light.css"
+        "node_modules/nvd3/build/nv.d3.css",
+        "node_modules/angular-xeditable/dist/css/xeditable.css",
+        "node_modules/codemirror/lib/codemirror.css",
+        "node_modules/codemirror/theme/xq-light.css"
       ]
     }
   }

@@ -14,6 +14,6 @@ angular.module("doubtfire.errors.states.timeout", [])
       pageTitle: "_Timeout_"
   $stateProvider.state "timeout", stateData, 'TimeoutCtrl'
 )
-.controller("TimeoutCtrl", ($scope, $timeout, api, auth, currentUser, $state) ->
+.controller("TimeoutCtrl", ($state) ->
   $state.go("sign_out")
 )

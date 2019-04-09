@@ -2,7 +2,7 @@
 // Modal to show Doubtfire version info
 //
 import { Injectable, Component, Inject, OnInit } from '@angular/core';
-import { DoubtfireConstants } from 'src/app/config/constants/constants';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 
@@ -21,7 +21,7 @@ export interface AboutDialogData {
 })
 @Component({
   selector: 'about-modal-content',
-  providers: [AboutDoubtfireModalService, DoubtfireConstants]
+  providers: [AboutDoubtfireModalService, DoubtfireConstants],
 })
 export class AboutDoubtfireModal {
 
@@ -30,10 +30,6 @@ export class AboutDoubtfireModal {
   constructor(public dialog: MatDialog,
     private constants: DoubtfireConstants,
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
-    this.init()
-  }
-
-  private init(): void {
     this.aboutDialogData = {
       externalName: "",
       contributors: []
@@ -43,12 +39,11 @@ export class AboutDoubtfireModal {
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
     }));
-
-    this.getContributorDetails();
-    this.getExternalName();
   }
 
   show() {
+    this.getContributorDetails();
+    this.getExternalName();
     this.dialog.open(AboutDoubtfireModalContent,
       {
         width: '900px',

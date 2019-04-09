@@ -13,11 +13,11 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, ExternalName, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService, UserNotificationSettingsModal) ->
+.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService, UserNotificationSettingsModal) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   $scope.userFirstName = currentUser.profile.nickname or currentUser.profile.first_name
   $scope.showDate = dateService.showDate
@@ -41,24 +41,8 @@ angular.module('doubtfire.home.states.home', [])
 
     showNewUserWizard
 
-  #
-  # If there is a single project role, then automatically
-  # switch the user to the project view for that role
-  #
-  testSingleProjectRole = ->
-    # if not (hasRoles && hasProjects)
-    #   return
-    # if $scope.unitRoles.length + $scope.projects.length == 1
-    #   if $scope.projects.length == 1
-    #     analyticsService.event 'Home', 'Switched to project on single unit'
-    #     $state.go 'projects/dashboard', {projectId: $scope.projects[0].project_id}
-    #   else if $scope.unitRoles.length == 1
-    #     analyticsService.event 'Home', 'Switched to unit on single unit'
-    #     $state.go 'units/tasks/inbox', {unitRole: $scope.unitRoles[0].id}
-
   testForStateChanges = ->
     showingWizard = testForNewUserWizard()
-    testSingleProjectRole() unless showingWizard
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
   unitService.getUnitRoles (roles) ->

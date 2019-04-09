@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   TeachingPeriodSettingsModal
 )
 
-.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, ExternalName, alertService, analyticsService, currentUser, TeachingPeriod, teachingperiod, auth) ->
+.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, currentUser, TeachingPeriod, teachingperiod, auth) ->
   $scope.teachingperiod = teachingperiod or { }
   $scope.isNew = teachingperiod?.id is undefined
 
@@ -24,7 +24,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   }
 
   # Get the external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   if $scope.isNew
     $scope.teachingperiods = TeachingPeriod.query()

@@ -78,14 +78,12 @@ module.exports = function ( grunt ) {
     bump: {
       options: {
         files: [
-          "package.json",
-          "bower.json"
+          "package.json"
         ],
         commit: false,
         commitMessage: 'chore(release): v%VERSION%',
         commitFiles: [
-          "package.json",
-          "client/bower.json"
+          "package.json"
         ],
         createTag: false,
         tagName: 'v%VERSION%',
@@ -130,7 +128,7 @@ module.exports = function ( grunt ) {
           {
             src: [ '**' ],
             dest: '<%= build_dir %>/assets/fonts/bootstrap/',
-            cwd: 'vendor/bootstrap-sass/assets/fonts/bootstrap',
+            cwd: 'node_modules/bootstrap-sass/assets/fonts/bootstrap',
             expand: true
           }
         ]
@@ -140,7 +138,7 @@ module.exports = function ( grunt ) {
           {
             src: [ '**' ],
             dest: '<%= build_dir %>/assets/fonts/font-awesome/',
-            cwd: 'vendor/font-awesome/fonts',
+            cwd: 'node_modules/font-awesome/fonts',
             expand: true
           }
         ]
@@ -244,7 +242,6 @@ module.exports = function ( grunt ) {
           'module.prefix',
           '<%= build_dir %>/src/**/*.js',
           '<%= html2js.app.dest %>',
-          '<%= html2js.common.dest %>',
           'module.suffix'
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
@@ -424,17 +421,6 @@ module.exports = function ( grunt ) {
         },
         src: [ '<%= app_files.atpl %>' ],
         dest: '<%= build_dir %>/templates-app.js'
-      },
-
-      /**
-       * These are the templates from `src/common`.
-       */
-      common: {
-        options: {
-          base: 'src/common'
-        },
-        src: [ '<%= app_files.ctpl %>' ],
-        dest: '<%= build_dir %>/templates-common.js'
       }
     },
 
@@ -471,9 +457,8 @@ module.exports = function ( grunt ) {
         src: [
           '<%= vendor_files.compile.js %>',
           '<%= build_dir %>/src/**/*.js',
-          '<%= build_dir %>/assets/vendor/**/*.css',
-          '<%= build_dir %>/assets/vendor/**/*.js',
-          '<%= html2js.common.dest %>',
+          '<%= build_dir %>/assets/node_modules/**/*.css',
+          '<%= build_dir %>/assets/node_modules/**/*.js',
           '<%= html2js.app.dest %>',
           '<%= postcss.source.dest %>'
         ]
@@ -504,8 +489,7 @@ module.exports = function ( grunt ) {
         src: [
           '<%= vendor_files.compile.js %>',
           '<%= html2js.app.dest %>',
-          '<%= html2js.common.dest %>',
-          'vendor/angular-mocks/angular-mocks.js'
+          'node_modules/angular-mocks/angular-mocks.js'
         ]
       }
     },
@@ -587,7 +571,6 @@ module.exports = function ( grunt ) {
       tpls: {
         files: [
           '<%= app_files.atpl %>',
-          '<%= app_files.ctpl %>'
         ],
         tasks: [ 'newer:html2js' ]
       },

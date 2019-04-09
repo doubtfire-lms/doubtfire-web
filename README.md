@@ -293,26 +293,21 @@ $ overcommit --install
 $ overcommit --sign
 ```
 
-Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) and [bower](http://bower.io) globally:
+Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) globally:
 
 ```
 $ npm install
-$ npm install -g grunt-cli bower
 ```
 
 **Note:** You may need to install `grunt-cli` globally in Linux using `sudo`.
 
-Install bower dependencies from `bower.json`:
+Lastly, to compile and run a watch server and web server, use `npm install`:
 
 ```
-$ bower install
+$ npm install
 ```
 
-Lastly, to compile and run a watch server and web server, use `grunt`:
-
-```
-$ grunt
-```
+This will automaticall run the angular 1 `grunt watch`, and the angular 7 `ng serve`.
 
 You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
 

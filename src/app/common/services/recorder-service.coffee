@@ -41,7 +41,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
 
       #  This is the case on ios/chrome, when clicking links from within ios/slack (sometimes), etc.
       if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
-        console.log('Missing support for navigator.mediaDevices.getUserMedia') # temp: helps when testing for strange issues on ios/safari
+        console.error('Missing support for navigator.mediaDevices.getUserMedia') # temp: helps when testing for strange issues on ios/safari
         return
 
       @audioCtx = new AudioContext()

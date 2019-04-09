@@ -7,8 +7,7 @@ import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 export class AboutDoubtfireModalService {
   constructor(private http: HttpClient) { }
 
-  GetGithubProfiles(handler) {
+  GetGithubProfiles(handler: string) {
     return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
   }
-
 }

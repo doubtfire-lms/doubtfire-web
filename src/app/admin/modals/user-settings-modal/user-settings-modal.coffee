@@ -13,12 +13,12 @@ angular.module('doubtfire.admin.modals.user-settings-modal', [])
   UserSettingsModal
 )
 
-.controller('UserSettingsModalCtrl', ($scope, $modalInstance, ExternalName, alertService, analyticsService, currentUser, User, user, auth) ->
+.controller('UserSettingsModalCtrl', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, currentUser, User, user, auth) ->
   $scope.user = user or new User { }
   $scope.isNew = user?.id is undefined
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   if $scope.isNew
     $scope.users = User.query()
