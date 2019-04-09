@@ -3,8 +3,11 @@
 #
 angular.module('doubtfire.config.runtime', [])
 
-.run(($rootScope, $state, $filter, $location, auth, editableOptions) ->
+.run(($rootScope, $state, $filter, $location, auth, editableOptions, editableThemes) ->
+  # Angular xeditable
   editableOptions.theme = 'bs3'
+  editableThemes.bs3.inputClass = 'input-sm'
+  editableThemes.bs3.buttonsClass = 'btn-sm'
 
   serialize = (obj, prefix) ->
     str = []

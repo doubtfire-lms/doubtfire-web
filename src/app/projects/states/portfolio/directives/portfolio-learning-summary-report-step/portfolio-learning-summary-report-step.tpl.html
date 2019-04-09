@@ -1,0 +1,58 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      {{activeTab.title}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    <p>
+      Upload the Learning Summary Report, the primary porfolio document which
+      justifies your desired grade.
+    </p>
+    <p>
+      Your Learning Summary Report is a <strong>summary of what you have learnt in this unit</strong>.
+      It consists of two sections:
+      <ol>
+        <li>a self-assessment, and</li>
+        <li>your reflections on the unit.</li>
+      </ol>
+    </p>
+    <p>
+      The <strong>self-assessment</strong> indicates how your portfolio aligns
+      with the assessment criteria, and which grade you are applying for.
+    </p>
+    <p>
+      Your <strong>reflections</strong> are a personal comment on what you have
+      learnt in the unit, and how your knowledge and skills have developed.
+    </p>
+    <div class="card card-success" ng-class="{'card-danger': 'projectHasLearningSummaryReport() && !forceLSRSubmit', 'card-success': '!(projectHasLearningSummaryReport() && !forceLSRSubmit)'}">
+      <div class="card-heading" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
+        <h4>
+          <i class="fa fa-check"></i> Learning Summary Report Submitted
+        </h4>
+        Click <a ng-click="forceLSRSubmit = true">here</a> to re-upload a new Learning Summary Report
+      </div><!--/lsr-uploaded-->
+      <div class="card-heading" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
+        <h4>
+          <i class="fa fa-warning"></i> Before you submit the Learning Summary Report...
+        </h4>
+        Remember to <strong>provide a justification</strong> for why you believe
+        you have achieved a {{targetGrade}} in {{unit.name}}.
+      </div>
+      <div class="card-body" ng-show="!projectHasLearningSummaryReport() || (projectHasLearningSummaryReport() && forceLSRSubmit)">
+        <file-uploader
+          files="portfolioSubmission.learningSummaryReportFileUploadData.type"
+          payload="portfolioSubmission.learningSummaryReportFileUploadData.payload"
+          url="portfolioSubmission.portfolioUrl"
+          on-success="addNewFilesToPortfolio"></file-uploader>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer clearfix">
+    <button class="btn btn-primary pull-left" ng-click="advanceActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!projectHasLearningSummaryReport()" ng-click="advanceActiveTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="help-block pull-right text-right col-md-8 col-sm-12" ng-hide="projectHasLearningSummaryReport()">
+      You're missing a Learning Summary Report. Upload one to continue.
+    </div>
+  </div>
+</div>

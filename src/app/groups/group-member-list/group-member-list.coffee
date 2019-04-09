@@ -6,31 +6,58 @@ angular.module('doubtfire.groups.group-member-list', [])
 .directive('groupMemberList', ->
   restrict: 'E'
   templateUrl: 'groups/group-member-list/group-member-list.tpl.html'
+  scope:
+    unit: '='
+    project: '='
+    unitRole: '='
+    selectedGroup: '='
+    onMembersLoaded: '=?'
+  controller: ($scope, $timeout, GroupMember, gradeService, alertService, listenerService) ->
+    # Cleanup
+    listeners = listenerService.listenTo($scope)
 
-  controller: ($scope, GroupMember, gradeService) ->
-    $scope.memberSortOrder = 'student_name'
-    $scope.members = []
+    # Initial sort orders
+    $scope.tableSort =
+      order: 'student_name'
+      reverse: false
 
-    $scope.$watch "selectedGroupset", (newValue, oldValue) ->
-      if newValue && $scope.selectedGroup && $scope.selectedGroupset
-        if $scope.selectedGroupset.id != $scope.selectedGroup.group_set_id
-          $scope.members = []
-          $scope.selectedGroup = null
-        else
-          $scope.refreshGroupMembers()
+    # Table sorting
+    $scope.sortTableBy = (column) ->
+      $scope.tableSort.order = column
+      $scope.tableSort.reverse = !$scope.tableSort.reverse
 
-    $scope.refreshGroupMembers = () ->
-      if $scope.selectedGroup && $scope.selectedGroupset
-        if $scope.selectedGroupset.id == $scope.selectedGroup.group_set_id
-          GroupMember.query { unit_id: $scope.unit.id, group_set_id: $scope.selectedGroupset.id, group_id: $scope.selectedGroup.id }, (members) ->
-            $scope.members = members
-        else
-          $scope.members = []
-          $scope.selectedGroup = null
-      else
-        $scope.members = []
+    # Loading
+    startLoading  = -> $scope.loaded = false
+    finishLoading = -> $timeout(->
+      $scope.loaded = true
+      $scope.onMembersLoaded?()
+    , 500)
 
-    $scope.$watch "selectedGroup", (newValue, oldValue) ->
-      if newValue != oldValue
-        $scope.refreshGroupMembers()
+    # Initially not loaded
+    $scope.loaded = false
+
+    # Remove group members
+    $scope.removeMember = (member) ->
+      $scope.selectedGroup.removeMember(member,
+        # Remove from member's group if exists
+        () ->
+          if member.project_id == $scope.project?.project_id
+            $scope.project.groups = _.without($scope.project.groups, $scope.selectedGroup)
+            $scope.selectedGroup = null
+      )
+
+    # Listen for changes to group
+    listeners.push $scope.$watch "selectedGroup.id", (newGroupId) ->
+      return unless newGroupId?
+      startLoading()
+      $scope.canRemoveMembers = $scope.unitRole || $scope.selectedGroup.groupSet().allow_students_to_manage_groups
+      $scope.selectedGroup.getMembers(
+        (members) ->
+          finishLoading()
+        (failure) ->
+          $timeout((->
+            alertService.add("danger", "Unauthorised to view members in this group", 3000)
+            $scope.selectedGroup = null
+          ), 1000)
+      )
 )

@@ -19,11 +19,11 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
   #
   CsvResultModal.show = (title, response) ->
     if response.errors.length == 0
-      alertService.add("success", "CSV uploaded. Success with #{response.success.length} rows.", 2000)
+      alertService.add("success", "Data uploaded. Success with #{response.success.length} items.", 2000)
     else if response.success.length > 0
-      alertService.add("warning", "CSV uploaded, success with #{response.success.length} rows, but #{response.errors.length} errors.", 6000)
+      alertService.add("warning", "Data uploaded, success with #{response.success.length} items, but #{response.errors.length} errors.", 6000)
     else
-      alertService.add("danger", "CSV uploaded but #{response.errors.length} errors", 6000)
+      alertService.add("danger", "Data uploaded but #{response.errors.length} errors", 6000)
 
     $modal.open
       templateUrl: 'common/modals/csv-result-modal/csv-result-modal.tpl.html'

@@ -10,10 +10,10 @@ angular.module("doubtfire.sessions.auth", [
 
   defaultAnonymousUser = _.clone currentUser
 
-  checkAuth = () ->
+  checkAuth = ->
     not _.isEqual currentUser, defaultAnonymousUser
 
-  saveCurrentUser = () ->
+  saveCurrentUser = ->
     localStorageService.set(usernameCookie, currentUser)
     $cookieStore.put usernameCookie, currentUser
 

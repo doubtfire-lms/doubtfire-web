@@ -1,0 +1,6 @@
+@media (min-width: $screen-lg) {
+  group-set-manager {
+    display: block;
+    @include panel-row;
+  }
+}

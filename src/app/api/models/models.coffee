@@ -1,4 +1,5 @@
 angular.module("doubtfire.api.models", [
+  "doubtfire.api.models.break"
   "doubtfire.api.models.project"
   "doubtfire.api.models.unit"
   "doubtfire.api.models.unit-role"
@@ -14,9 +15,11 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.group-member"
   "doubtfire.api.models.group"
   "doubtfire.api.models.group-set"
+  "doubtfire.api.models.rollover-unit"
   "doubtfire.api.models.task-alignment"
   "doubtfire.api.models.task-feedback"
   "doubtfire.api.models.task-similarity"
+  "doubtfire.api.models.teaching-period"
   "doubtfire.api.models.students"
   "doubtfire.api.models.user"
   "doubtfire.api.models.task-completion-csv"

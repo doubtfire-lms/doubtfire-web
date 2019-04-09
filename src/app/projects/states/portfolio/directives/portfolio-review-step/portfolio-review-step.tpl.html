@@ -1,0 +1,121 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      {{activeTab.title}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class="card card-danger" ng-hide="hasLSR && hasTasksSelected">
+      <div class="card-heading">
+        <h4>
+          <i class="fa fa-warning"></i> There are issues with your portfolio
+        </h4>
+      </div>
+      <div class="card-body">
+        <p ng-hide="hasLSR">
+          Your portfolio <strong>must</strong> include a learning summary report.
+          Upload this before you schedule your portfolio to be compiled.
+        </p>
+        <p ng-hide="hasTasksSelected">
+          <p ng-show="unitHasILOs">
+            Your portfolio <strong>must</strong> include tasks aligned to the
+            unit's <strong>{{unit.ilos.length}} intended learning outcomes</strong>.
+            Please indicate which tasks you think align to the unit's learning
+            outcomes before you schedule your portfolio to be compiled.
+          </p>
+          <p ng-hide="unitHasILOs">
+            Your portfolio <strong>must</strong> include tasks that you have
+            completed this teaching period. Please indicate which tasks you you would
+            like to include in your portfolio before you schedule your portfolio
+            to be compiled.
+          </p>
+        </p>
+      </div>
+    </div><!--/warnings-->
+    <div class="card card-default" ng-show="portfolioIsCompiling">
+      <div class="card-heading">
+        <h4>Portfolio Processing</h4>
+      </div>
+      <div class="card-body">
+        <p>
+          Your portfolio compilation is scheduled with {{externalName.value}}.
+          This process will take some time, check back soon to see if your
+          portfolio is available.
+        </p>
+      </div>
+    </div><!--/processing-->
+    <div ng-show="canCompilePortfolio">
+      <p>
+        {{externalName.value}} will create your portfolio once you are happy with your
+        submissions so far.
+      </p>
+      <div ng-show="extraFiles().length > 0">
+        <p>
+          You have attached <strong>{{extraFiles().length}} extra file{{extraFiles().length > 1 ? 's' : ''}}</strong>
+          to your portfolio. You may add more files or remove {{extraFiles().length > 1 ? 'these' : 'this'}}
+          file{{extraFiles().length > 1 ? 's' : ''}} in the previous step. Each file is listed
+          in order of attachment below:
+        </p>
+        <ol>
+          <li ng-repeat="file in extraFiles()">
+            <i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}
+          </li>
+        </ol>
+      </div>
+      <div ng-show="selectedTasks().length > 0">
+        <p>
+          You have included <strong>{{selectedTasks().length}} tasks</strong> in your portfolio. If you wish to add or remove some of these tasks,
+          please review the <em>Select Tasks</em> step to adjust your alignments of each
+          task to the unit's learning outcomes. Each task will be attached in the order below:
+        </p>
+        <ol>
+          <li ng-repeat="task in selectedTasks()">
+            <label class="label label-info">{{task.definition.abbreviation}}</label>
+            {{task.definition.name}}
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="card card-default" ng-show="canCompilePortfolio">
+      <div class="card-heading">
+        <h4>Create Your Portfolio</h4>
+      </div>
+      <div class="card-body">
+        <p>
+          Once you click Create Portfolio, the construction of your portfolio will
+          be scheduled with {{externalName.value}}. This process will take some time, and you
+          will be emailed when your portfolio is ready to review if you have enabled
+          portfolio notifications.
+        </p>
+        <p class="strong">
+          If you would like to make any further changes after you have created
+          your portfolio, you will need to delete and recreate your portfolio.
+        </p>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-success form-control" ng-click="toggleCompileProject()">
+          <i class="fa fa-book"></i> Create My Portfolio
+        </button>
+      </div>
+    </div><!--/create-portfolio-->
+    <div class="card card-default" ng-show="project.portfolio_available">
+      <div class="card-heading">
+        <h4>Download Portfolio</h4>
+      </div>
+      <div class="card-body">
+        This is the <strong>exact same document</strong> your assessor will see
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-danger" ng-click="deletePortfolio()">
+          <i class="fa fa-trash-o"></i> Delete Portfolio
+        </button>
+        <a href="{{project.portfolioUrlAsAttachment()}}" target="_blank" class="btn btn-success">
+          <i class="fa fa-download"></i> Download Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer clearfix">
+    <button class="btn btn-primary pull-left" ng-click="advanceActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+  </div>
+</div>

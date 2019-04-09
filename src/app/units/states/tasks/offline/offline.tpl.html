@@ -1,0 +1,242 @@
+<div class="container" id="task-offline-marking-state">
+  <div class="panel-row">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">Download Unmarked Tasks</h4>
+      </div>
+      <div class="panel-body">
+        <p>
+          Download a zip file containing the tasks that require feedback,
+          along with a CSV you can use to submit your comments and task
+          status changes.
+        </p>
+      </div>
+      <div class="panel-footer">
+        <a target="_blank" class="btn btn-success form-control" href="{{readyToMarkSubmissionsUrl}}">
+          <i class="fa fa-file-zip-o"></i> <i class="fa fa-download"></i> Download Tasks To Mark
+        </a>
+      </div>
+    </div><!--/download-unmarked-->
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">Upload Marked Zip</h4>
+      </div>
+      <div class="panel-body">
+        <p>
+          Make changes to student's statuses in the downloaded <code>marks.csv</code>
+          file. Re-zip your changes and optional annotated PDFs with your feedback and
+          upload below.
+        </p>
+        <p class="text-muted">
+          Use this option when you have made annotations to student's work for feedback
+          and to change student's task states.
+        </p>
+      </div>
+      <div class="panel-footer">
+        <file-uploader
+          url="uploadSubmissionUrl"
+          files="zipMarkingFiles"
+          is-uploading="isUploading"
+          is-ready="isReady.zip"
+          as-button="true"
+          on-success="onMarkingUploadSuccess">
+        </file-uploader>
+      </div>
+    </div><!--/upload-zip-->
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">Upload Marked CSV</h4>
+      </div>
+      <div class="panel-body">
+        <p>
+          Make changes to student's statuses in the downloaded <code>marks.csv</code>
+          file. Upload your modified <code>marks.csv</code> below.
+        </p>
+        <p class="text-muted">
+          Use this option when you have not made annotations to student's work
+          and just want to change student's task states.
+        </p>
+      </div>
+      <div class="panel-footer">
+        <file-uploader
+          url="uploadSubmissionUrl"
+          files="csvMarkingFiles"
+          is-uploading="isUploading"
+          is-ready="isReady.csv"
+          as-button="true"
+          on-success="onMarkingUploadSuccess">
+        </file-uploader>
+      </div>
+    </div><!--/upload-zip-->
+  </div><!--/top-panels-->
+  <div class="panel panel-default" ng-show="taskUploadResults && taskUploadResults.length > 0">
+    <hr>
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        Upload Results
+        <a class="pull-right" ng-click="dismissResults()">
+          <i class="fa fa-times"></i>
+        </a>
+      </h4>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <th>Filename</th>
+        <th>Task</th>
+        <th>Message</th>
+      </thead>
+      <tr ng-repeat="item in taskUploadResults.failed" class="danger">
+        <td>{{item.file}}</td>
+        <td>{{item.task}}</td>
+        <td>{{item.error}}</td>
+      </tr>
+      <tr ng-repeat="item in taskUploadResults.succeeded">
+        <td>{{item.file}}</td>
+        <td>{{item.task}}</td>
+        <td>Success</td>
+      </tr>
+      <tr ng-repeat="item in taskUploadResults.ignored" class="info">
+        <td>{{item.file}}</td>
+        <td>{{item.task}}</td>
+        <td>File ignored</td>
+      </tr>
+    </table>
+  </div><!--/upload-results-->
+  <hr>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">How to mark offline</h4>
+    </div>
+    <div class="panel-body">
+      <h5>1. Open CSV</h5>
+      <p>
+        To mark, open <code>marks.csv</code> in your favourite spreadsheet or text editor.
+      </p>
+      <h5>2. Open PDF</h5>
+      <p>
+        Open a student's PDF submission file under the appropriate directory.
+        You may choose to annotate or comment on this PDF file.
+      </p>
+      <h5>3. Decide a new status</h5>
+      <p>
+        A student may decide that their work is:
+      </p>
+      <ul>
+        <li>Ready to Mark (or <code>rtm</code>), or</li>
+        <li>Needs Help (or <code>needs_help</code>).</li>
+      </ul>
+      <p>
+        This is indicated in the <code>status</code> column for the respective task
+        row in the <code>marks.csv</code> file.
+      </p>
+      <p>
+        Once you decide what status to update a student's work to, change the
+        <code>status</code> column value to one of the following:
+      </p>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>discuss</code> or <code>d</code>
+            </td>
+            <td>
+              The student has completed work to a satisfactory
+              standard and you will discuss the work with them at
+              the next tutorial.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>demonstrate</code> or <code>demo</code>
+            </td>
+            <td>
+              The same as <code>discuss</code>, but a reminder for you
+              to ask the student to show you the work in class (i.e., prove
+              to you that the code works).
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>fix</code>
+            </td>
+            <td>
+              The student has made some errors and you will want them to
+              make fixes to their submission, and resubmit their work for
+              re-correction at a later date.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>do_not_resubmit</code>
+            </td>
+            <td>
+              The student has consistently submitted the same work without
+              making required fixes. This indicates that the student should
+              fix the work themselves and include it in their portfolio where
+              staff will reassess it.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>redo</code>
+            </td>
+            <td>
+              The student has completely misunderstood what the task asked
+              of them, or have completed unrelated files to Doubtfire. You want
+              them to start the task again from scratch.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>fail</code>
+            </td>
+            <td>
+              The student has failed this task and will no longer have any
+              more attempts at uploading further work. Use this sparingly.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5>4. Leaving a comment</h5>
+      <p>
+        Your previous comment and the student's previous comment will be
+        present in the <code>Student's Last Comment</code> and
+        <code>Your Last Comment</code> column, respectively.
+
+        You may choose to add a new comment to this in the <code>New Comment</code>
+        column.
+      </p>
+
+      <h5>5. Graded task</h5>
+      <p>
+        If the task is a graded task, you should set the value of the
+        <code>New Grade</code> column to one of:
+      </p>
+
+      <ul>
+        <li><code>p</code>  - for a task that was completed to a Pass standard</li>
+        <li><code>c</code>  - for a task that was completed to a Credit standard</li>
+        <li><code>d</code>  - for a task that was completed to a Distinction standard</li>
+        <li><code>hd</code> - for a task that was completed to a High Distinction standard</li>
+      </ul>
+
+      <h5>6. Rezip</h5>
+      <p>
+        Re-zip the entire package again, including each student's username folder and
+        <code>marks.csv</code>. Alternatively, if you haven't made any annotations to students' work
+        you can chose to upload just the marks.csv file instead.
+      </p>
+
+      <p>
+        To do this, navigate to the upload tabs above.
+      </p>
+    </div>
+  </div>
+</div>

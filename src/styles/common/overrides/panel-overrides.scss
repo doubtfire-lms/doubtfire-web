@@ -17,6 +17,85 @@
   padding-right: 0 !important; // Override for col-sm-*
 }
 
+@mixin panel-row {
+  display: flex;
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel > *:not(.panel-heading):not(.panel-footer):not(.panel-toolbar) {
+    flex: 1;
+  }
+  .panel-heading, .panel-body, .panel-footer {
+    width: 100%;
+  }
+  .panel + .panel {
+    margin-left: $panel-body-padding;
+  }
+  // Panels with file dropzones
+  .panel-footer .well {
+    background-color: #fff;
+  }
+  .panel h3.file-title {
+    margin-top: 0;
+    font-size: 1em;
+  }
+  .panel .drop.well, .panel .file-uploader {
+    margin: 0;
+  }
+}
+.panel-row {
+  @include panel-row();
+}
+
+// New panel loading panel
+.panel-body.panel-loading {
+  @extend .text-muted;
+  @extend .text-center;
+  @extend .strong;
+  font-size: 1.3em;
+  padding-top: $panel-body-padding * 4;
+  padding-bottom: $panel-body-padding * 4;
+  i {
+    margin-right: 0.9ex;
+  }
+}
+
+.panel.panel-scrollable {
+  overflow: hidden;
+  .panel-body {
+    overflow: scroll;
+    height: 100%;
+    padding-bottom: $panel-body-padding * 3;
+  }
+}
+
+// Search options panel
+.panel-body.panel-collapseable {
+  background-color: lighten($gray-lighter, 2%);
+}
+
+// Two panel bodies next to eachother (include those with one nested in custom element)
+.panel-body:not(.ng-hide) + * > .panel-body, .panel-body:not(.ng-hide) + .panel-body {
+  padding-top: 0;
+}
+// Remove extra margin for callouts in padding
+.panel-body > .callout:first-child {
+  margin-top: 0;
+}
+.panel-body > .callout:last-child {
+  margin-bottom: 0;
+}
+
+// Full screen set of panels
+.panel-full-screen {
+  height: $main-view-max-height;
+  & > *, & > * > .panel {
+    height: 100%;
+  }
+}
+
 .panel-marking-context {
   padding: 0;
   .panel {
@@ -27,5 +106,13 @@
   }
   .panel-submission-marking-context .panel-body {
     padding: 60px;
+  }
+}
+
+.panel.panel-pdf {
+  @include flex-panel;
+  .panel-body.has-pdf {
+    padding: 0;
+    position: relative;
   }
 }

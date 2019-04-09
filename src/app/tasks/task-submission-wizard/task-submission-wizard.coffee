@@ -15,6 +15,14 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
   controller: ($scope, $timeout, Task, taskService, alertService, projectService, groupService, analyticsService) ->
     # Upload types which are also task states
     UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
+    UPLOAD_TYPES = ['ready_to_mark', 'need_help', 'reupload_evidence']
+
+    # States in the Wizard
+    $scope.states = {
+      initial: 'initial',
+      uploadFiles: 'uploadFiles',
+      groupMemberContribution: 'groupMemberContribution'
+    }
 
     # Reverts changes to task state made during the upload
     revertChanges = (task) ->
@@ -25,6 +33,8 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
 
     # Watch the task, and reinitialise oldStatus if it changes
     $scope.$watch 'task', (task, oldTask) ->
+      # Reset initial state
+      $scope.state = $scope.states.initial
       # Revert changes if need be
       revertChanges(oldTask)
       # Copy in the old status
@@ -39,10 +49,13 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       # Re-generate the submission URL and numberOfFiles
       $scope.url = Task.generateSubmissionUrl $scope.project, $scope.task
       $scope.numberOfFiles = task.definition.upload_requirements.length
+      # Set if in group task
+      $scope.isGroupTask = groupService.isGroupTask($scope.task)
+      $scope.inGroupForTask = projectService.getGroupForTask($scope.project, $scope.task)?
 
     # Watch the task's status and set it as the new upload type if it changes
     $scope.$watch 'task.status', (newStatus) ->
-      return if newStatus is uploadType
+      return if newStatus is $scope.uploadType
       uploadType = if newStatus in UPLOAD_STATUS_TYPES then newStatus
       $scope.setUploadType(uploadType)
 
@@ -60,12 +73,12 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
         icon: taskService.statusIcons['ready_to_mark']
         text: taskService.statusLabels['ready_to_mark']
         class: 'ready-to-mark'
-        hide: false
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
       need_help:
         icon: taskService.statusIcons['need_help']
         text: taskService.statusLabels['need_help']
         class: 'need-help'
-        hide: false
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
       reupload_evidence:
         icon: 'fa fa-recycle'
         text: "new evidence for portfolio"
@@ -75,15 +88,22 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
 
     # Switch the status if the upload type matches a state
     $scope.setUploadType = (type) ->
+      $scope.uploadType = type
+
       if type in UPLOAD_STATUS_TYPES
         $scope.task.status = type
-      $scope.uploadType = type
+
+      if type in UPLOAD_TYPES
+        # Progress to next state... depends on if it's a group task or not
+        $scope.state = if $scope.isGroupTask and $scope.state isnt $scope.states.uploadFiles then $scope.states.groupMemberContribution else $scope.states.uploadFiles
+
 
     # When upload is successful, update the task status on the back-end
     $scope.onSuccess = (response) ->
       # Update the project's task stats and burndown data
       updateTaskStatusFunc = ->
         taskService.processTaskStatusChange $scope.unit, $scope.project, $scope.task, response.status, response
+        $scope.oldStatus = angular.copy $scope.task.status
       # Perform as timeout to show 'Upload Complete'
       $timeout updateTaskStatusFunc, 1500
       asUser = if $scope.assessingUnitRole? then $scope.assessingUnitRole.role else 'Student'
@@ -91,7 +111,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       analyticsService.event 'Task Submit Form', "Files Uploaded", undefined, $scope.numberOfFiles
 
     $scope.onComplete = ->
-      $scope.uploadType = null
+      $scope.state = $scope.states.initial
 
     #
     # When the scope leaves focus, revert all changes if need be
@@ -100,7 +120,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       revertChanges($scope.task)
 
     # Allow upload
-    $scope.recreateTask = () ->
+    $scope.recreateTask = ->
       # No callback
       taskService.recreatePDF $scope.task, null
 
@@ -110,11 +130,11 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
     $scope.team = {members: []}
     $scope.payload = { }
 
-    $scope.mapTeamToPayload = () ->
+    $scope.mapTeamToPayload = ->
       total = groupService.groupContributionSum $scope.team.members
-      _.map $scope.team.members, (member) -> { project_id: member.project_id, pct: (100 * member.rating / total).toFixed(0)  }
+      _.map $scope.team.members, (member) -> { project_id: member.project_id, pct: (100 * member.rating / total).toFixed(0), pts: member.rating  }
 
-    $scope.onBeforeUpload = () ->
+    $scope.onBeforeUpload = ->
       if groupService.isGroupTask($scope.task)
         $scope.payload.contributions =  $scope.mapTeamToPayload()
       else
@@ -123,11 +143,6 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       if $scope.uploadType == 'need_help'
         $scope.payload.trigger = 'need_help'
 
-
-
-    $scope.inGroupForTask = () ->
-      projectService.getGroupForTask($scope.project, $scope.task)?
-
-    $scope.isGroupTask = () ->
-      groupService.isGroupTask($scope.task)
+    $scope.setState = (newState) ->
+      $scope.state = newState
   )

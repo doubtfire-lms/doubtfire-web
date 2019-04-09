@@ -1,7 +1,7 @@
 <div class="panel panel-primary task-definition-editor">
   <div class="panel-heading clearfix">
     <h3 class="panel-title">
-      {{task ? (isNew ? "Create Task" : "Edit Task") : "Task Details"}}
+      {{task ? (isNew ? "Create Task" : "Editing " + task.abbreviation + " - " + task.name) : "Task Details"}}
     </h3>
   </div>
   <div class="panel-body large-notice-block" ng-hide="task" ng-hide="task">
@@ -99,9 +99,21 @@
                 </div><!--/graded-task-->
 
                 <div class="form-group" ng-required="isNew">
+                  <label class="col-sm-3 control-label">Quality Points</label>
+                  <div class="col-sm-8">
+                    <div class="btn-group">
+                      <label ng-repeat="value in allowedQualityPoints" class="btn btn-sm btn-default" ng-model="task.max_quality_pts" btn-radio="{{value}}">{{value || 'Disabled'}}</label>
+                    </div>
+                    <span class="help-block">
+                      Requires tutors to provide a quality rating based on a number of stars. The value set here determines the maximum number of stars allowed.
+                    </span>
+                  </div>
+                </div><!--/quality points-->
+
+                <div class="form-group" ng-required="isNew">
                   <label tooltip="Date students should aim to start this task." class="col-sm-3 control-label">Start Date</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="startPicker.open" type="text" class="form-control" ng-model="task.start_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, startPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -111,9 +123,9 @@
                 </div><!--/start-date-->
 
                 <div class="form-group" ng-required="isNew">
-                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Target Date</label>
+                  <label tooltip="Date students should aim to complete this task." class="col-sm-3 control-label">Due Date</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="targetPicker.open" type="text" class="form-control" ng-model="task.target_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, targetPicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -123,9 +135,9 @@
                 </div><!--/target-date-->
 
                 <div class="form-group">
-                  <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Due Date</label>
+                  <label tooltip="Date after which task submissions will not appear for feedback. Can be empty." class="col-sm-3 control-label">Deadline</label>
                   <div class="col-sm-7">
-                    <div class="col-sm-4 input-group">
+                    <div class="col-sm-8 input-group">
                       <input datepicker-popup="yyyy-MM-dd" is-open="duePicker.open" type="text" class="form-control" ng-model="task.due_date" placeholder="yyyy-MM-dd" close-text="Close" />
                       <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, duePicker)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -179,11 +191,11 @@
                       url="taskSheetUploadUrl()"
                       on-success="onTaskSheetSuccess">
                     </file-uploader>
-                    <a href="{{taskPDFUrl()}}" ng-show="task.has_task_pdf" target="_blank" class="btn btn-lg btn-info col-sm-12">
-                      <div>
-                        <i class="fa fa-2x fa-download"></i>
-                        <p>Download Task Sheet</p>
-                      </div>
+                    <a href="{{taskPDFUrl()}}" ng-show="task.has_task_sheet" target="_blank" class="btn btn-info col-sm-12">
+                      <i class="fa fa-download"></i> Download Task Sheet
+                    </a>
+                    <a ng-click="removeTaskSheet(task)" ng-show="task.has_task_sheet" class="btn btn-danger col-sm-12">
+                      <i class="fa fa-trash-o"></i> Delete Task Sheet
                     </a>
                   </div>
                   <div class="col-sm-6">
@@ -192,11 +204,11 @@
                       url="taskResourcesUploadUrl()"
                       on-success="onTaskResourcesSuccess">
                     </file-uploader>
-                    <a href="{{resourceUrl()}}" ng-show="task.has_task_resources" target="_blank" class="btn btn-lg btn-success col-sm-12">
-                      <div>
-                        <i class="fa fa-2x fa-download"></i>
-                        <p>Download Resources</p>
-                      </div>
+                    <a href="{{resourceUrl()}}" ng-show="task.has_task_resources" target="_blank" class="btn btn-info col-sm-12">
+                      <i class="fa fa-download"></i> Download Resources
+                    </a>
+                    <a ng-click="removeTaskResources(task)" ng-show="task.has_task_resources" class="btn btn-danger col-sm-12">
+                      <i class="fa fa-trash-o"></i> Delete Resources
                     </a>
                   </div>
                 </div>
@@ -207,7 +219,7 @@
                   <div class="col-sm-8">
                     <input type="number" ng-disabled="task.plagiarism_checks.length == 0" class="form-control" ng-model="task.plagiarism_warn_pct"/>
                     <p class="help-block">
-                      The percentage similarity where Doubtfire creates a warning
+                      The percentage similarity where {{externalName.value}} creates a warning
                     </p>
                   </div>
                 </div><!--/check-perecent-->
@@ -223,7 +235,7 @@
                       <option value="moss python">Python</option>
                     </select>
                     <p class="help-block">
-                      Doubtfire uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
+                      {{externalName.value}} uses <a href="http://theory.stanford.edu/~aiken/moss/"M>Measure Of Software Similarity</a> (Moss) developed by Stanford University.
                     </p>
                   </div>
                   <button class="btn btn-danger pull-right" ng-click="removeCheck(check)">

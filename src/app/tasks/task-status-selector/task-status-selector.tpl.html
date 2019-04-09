@@ -1,16 +1,24 @@
 <ul ng-class="{'dropdown-menu' :inMenu}" class="task-status-selector">
   <li ng-show="assessingUnitRole" class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in taskEngagementConfig.tutorTriggers" >
     <div class="row">
-    <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" uncheckable>
-      <i class="{{action.iconClass}} fa-2x task-status-icon"></i>
+    <button class="col-xs-12 btn task-status {{action.class}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" uncheckable>
+      <i class="{{action.icon}} fa-2x task-status-icon"></i>
       <strong>{{action.label}}</strong>
     </button>
     </div>
   </li><!--/tutor-statuses-->
-  <li class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in taskEngagementConfig.studentTriggers" >
+  <li ng-hide="assessingUnitRole || taskService.rejectFutureStates[task.status].length == 0" class="col-xs-6 col-sm-4 col-md-4">
     <div class="row">
-      <button class="col-xs-12 btn task-status {{action.taskClass}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" >
-        <i class="{{action.iconClass}} fa-2x task-status-icon"></i>
+    <button class="col-xs-12 btn task-status {{task.statusClass()}} active" uncheckable>
+      <i class="{{task.statusIcon()}} fa-2x task-status-icon"></i>
+      <strong>{{task.statusLabel()}}</strong>
+    </button>
+    </div>
+  </li>
+  <li class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in task.filterFutureStates(taskEngagementConfig.studentTriggers)" >
+    <div class="row">
+      <button class="col-xs-12 btn task-status {{action.class}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" >
+        <i class="{{action.icon}} fa-2x task-status-icon"></i>
         <strong>{{action.label}}</strong>
       </button>
     </div>

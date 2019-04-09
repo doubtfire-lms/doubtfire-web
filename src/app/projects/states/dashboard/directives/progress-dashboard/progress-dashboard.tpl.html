@@ -1,0 +1,65 @@
+<div class="panel panel-default panel-scrollable">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Progress Dashboard <span ng-show="tutor">for {{project.student_name}}</span>
+    </h4>
+  </div><!--/panel-heading-->
+  <div class="panel-body">
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-default card-sm card-target-grade">
+        <div class="card-heading">
+          <h4>Target Grade</h4>
+        </div><!--/target-grade-heading-->
+        <div class="card-body">
+          <select
+            class="form-control input-lg"
+            ng-model="project.target_grade"
+            ng-options="grade as grades.names[grade] for grade in grades.values"
+            ng-change="updateTargetGrade(project.target_grade)"></select>
+        </div><!--/target-grade-body-->
+      </div><!--/target-grade-card-->
+      <div class="card card-default card-lg card-burndown">
+        <div class="card-heading">
+          <h4>Progress Burndown</h4>
+          <div class="text-muted">
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </div>
+        </div><!--/burndown-heading-->
+        <div class="card-body">
+          <progress-burndown-chart project="project" unit="project.unit()"></progress-burndown-chart>
+        </div><!--/burndown-body-->
+        <div class="card-footer">
+          Aim to keep your
+          <strong style="color: #e01b5d">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-muted">Target</strong>
+          line to keep on track.
+        </div><!--/burndown-footer-->
+      </div><!--/burndown-card-->
+    </div><!--/burndown-column-->
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-default card-lg card-pie-chart">
+        <div class="card-heading">
+          <h4>Task Statuses</h4>
+          <div class="text-muted">
+            Breakdown summary of each of your task statuses.
+          </div>
+        </div><!--/pie-chart-heading-->
+        <div class="card-body">
+          <student-task-status-pie-chart
+            project="project"
+            update-data="renderTaskStatusPieChart">
+          </student-task-status-pie-chart>
+        </div><!--/pie-chart-body-->
+        <div class="card-footer">
+          You have completed
+          <strong>{{numberOfTasks.completed}}</strong>
+          tasks and have
+          <strong>{{numberOfTasks.remaining}}</strong>
+          left to complete to achieve a
+          <strong>{{grades.names[project.target_grade]}}</strong>.
+        </div><!--/pie-chart-footer-->
+      </div><!--/pie-chart-card-->
+    </div><!--/pie-chart-column-->
+  </div><!--/panel-body-->
+</div>

@@ -38,7 +38,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       sortedTasks = _.sortBy(_.sortBy(_.filter(input, (task) -> _.includes taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
 
       overdueTasks = _.filter sortedTasks, (task) ->
-        taskService.daysOverdue(task) > 0
+        taskService.daysPastTargetDate(task) > 0
 
       #
       # Step 1: if today is the tutorial day... show tasks to discuss with tutor
@@ -75,7 +75,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysFromTarget(task) <= 0
+      toAdd = _.filter sortedTasks, (task) -> _.includes(taskService.toBeWorkedOn, task.status) && taskService.daysUntilTargetDate(task) >= 0
       # Add tasks by grade... pass is always done first!
       for grade in gradeService.gradeValues
         toAddGradeTasks = _.map (_.filter toAdd, (task) -> task.definition.target_grade == grade), (task) ->
@@ -85,7 +85,7 @@ angular.module('doubtfire.tasks.project-top-tasks-list', [])
       return _.slice(result, 0, 5)
 
     $scope.topTasks = []
-    refreshTopTasks = () ->
+    refreshTopTasks = ->
       $scope.topTasks.length = 0
       $scope.topTasks = calculateTopTasks($scope.project.activeTasks())
 

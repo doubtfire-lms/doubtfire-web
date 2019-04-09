@@ -1,15 +1,16 @@
 angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 .directive 'progressBurndownChart', ->
-  replace: true
   restrict: 'E'
   templateUrl: 'visualisations/visualisation.tpl.html'
   scope:
     project: '='
     unit: '='
-  controller: ($scope, Visualisation) ->
+  controller: ($scope, Visualisation, listenerService) ->
+    listeners = listenerService.listenTo($scope)
+
     $scope.data = []
 
-    $scope.$watch 'project.burndown_chart_data', (newValue) ->
+    listeners.push $scope.$watch 'project.burndown_chart_data', (newValue) ->
       return unless newValue?
       now = +new Date().getTime() / 1000
       timeSeries =
@@ -47,6 +48,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     # Clips x values to be at the y = 0 intercept if y < 0
     #
     xAxisClipNegBurndown = (d) ->
+      return d[0]
       if d[1] < 0.0
         # find the x intercept at y = 0
         # know originX is the origin date of the graph (i.e. burnoff is still 100%)
@@ -81,23 +83,16 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     #
     # Converts a moment date to a Unix Time Stamp in seconds
     #
-    toUTS = (momentDate) ->
+    toUnixTimestamp = (momentDate) ->
       +momentDate / 1000
 
     #
     # X domain is defined as the unit's start date to the unit's end date add two weeks
     #
     xDomain = [
-      toUTS(dates.start),
-      toUTS(dates.end)
+      toUnixTimestamp(dates.start),
+      toUnixTimestamp(dates.end)
     ]
-    #
-    # X axis ticks is each week (weeks + 2)
-    #
-    #
-    weeksTotal = dates.end.diff(dates.start, 'weeks')
-
-    ticks = ( toUTS(moment(dates.start).add(i, 'weeks')) for i in [0..weeksTotal] )
 
     [$scope.options, $scope.config] = Visualisation 'lineChart', 'Student Progress Burndown Chart', {
       useInteractiveGuideline: yes
@@ -118,7 +113,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       xAxis:
         axisLabel: "Time"
         tickFormat: xAxisTickFormatDateFormat
-        tickValues: ticks
+        ticks: 8
       yAxis:
         axisLabel: "Tasks Remaining"
         tickFormat: yAxisTickFormatPercentFormat

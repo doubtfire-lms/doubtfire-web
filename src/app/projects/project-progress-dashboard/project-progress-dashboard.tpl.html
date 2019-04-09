@@ -1,7 +1,7 @@
-<div ng-if="unitLoaded" class="project-progress-dashboard">
-  <div class="col-lg-4 col-lg-push-8">
+<div ng-if="unit" class="project-progress-dashboard">
+  <div class="col-md-4 col-md-push-8">
     <div class="row">
-      <div class="col-sm-6 col-lg-12">
+      <div class="col-sm-6 col-md-12">
         <div class="panel panel-primary">
           <div class="panel-heading clearfix">
             <div class="pull-left">
@@ -10,17 +10,17 @@
                 The tasks you need to focus on now.
               </div>
               <div ng-show="taskDetailsSelector.viewAll">
-                All of the tasks to achieve a {{grades[project.target_grade]}}.
+                All of the tasks to achieve a {{grades.names[project.target_grade]}}.
               </div>
             </div>
             <div class="pull-right toolbar">
               <div class="buttons">
                 <div class="btn-group">
-                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
-                    <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
-                  </label>
                   <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="true">
                     <i tooltip="View all tasks" class="fa fa-list"></i>
+                  </label>
+                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
+                    <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
                   </label>
                 </div>
               </div>
@@ -32,7 +32,7 @@
           </div>
         </div><!--task-lists-->
       </div>
-      <div class="col-sm-6 col-lg-12">
+      <div class="col-sm-6 col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">Target Grade</h3>
@@ -46,7 +46,7 @@
             </p>
             <p class="help-block">
               You target grade is
-              <strong>{{grades[project.target_grade]}}</strong>.
+              <strong>{{grade.names[project.target_grade]}}</strong>.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@
     </div>
   </div><!--right-hand-panel-->
 
-  <div class="col-lg-8 col-lg-pull-4">
+  <div class="col-md-8 col-md-pull-4">
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
         <div class="pull-left">
@@ -95,7 +95,7 @@
           tasks and have
           <strong>{{taskStats.numberOfTasksRemaining}}</strong>
           left to complete to achieve a
-          <strong>{{grades[project.target_grade]}}</strong>.
+          <strong>{{grade.names[project.target_grade]}}</strong>.
         </div>
         <div ng-show="currentVisualisation == 'burndown'">
           Aim to keep your

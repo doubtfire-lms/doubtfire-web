@@ -1,0 +1,205 @@
+<div class="upload-submission-modal">
+  <div class="modal-header">
+    <h3>Submit
+      <strong>{{task.definition.abbreviation}}</strong> as
+      <select 
+        class="form-control input-lg submission-type"
+        ng-if="!uploader.isUploading"
+        ng-change="onSelectNewSubmissionType(submissionType)"
+        ng-model="submissionType"
+        ng-options="id as label for (id, label) in submissionTypes">
+      </select>
+      <span ng-show="uploader.isUploading">
+        {{submissionTypes[submissionType]}}
+      </span>
+    </h3>
+  </div><!--/modal-header-->
+  <div class="modal-body">
+    <div 
+      class="state state-group"
+      ng-class="{'state-hidden-left': isHidden('group').left,
+                 'state-hidden-right': isHidden('group').right}">
+      <div class="card card-default">
+        <div class="card-heading">
+          <h4>
+            Team Contribution
+          </h4>
+          <p>
+            Please rate each team member's effort on working on {{task.definition.name}} 
+            by clicking on a <i class="fa fa-child"></i> icon that represents their 
+            assigned effort.
+          </p>
+          <p class="text-muted">
+            To mark a team member as contributing <strong> no effort </strong> click
+            on a <i class="fa fa-child"></i> icon twice.
+          </p>
+        </div>
+        <!--/card-heading-->
+        <group-member-contribution-assigner 
+          task="task"
+          class="card-body"
+          project="task.project()"
+          team="team">
+        </group-member-contribution-assigner><!--/group-member-contribution-->
+      </div><!--/card-group-->
+    </div><!--/state-group-->
+    <div class="state state-files" ng-class="{'state-hidden-left': isHidden('files').left,
+                 'state-hidden-right': isHidden('files').right,
+                 'state-files-uploading': uploader.isUploading}">
+      <div ng-class="{'card card-default': !uploader.isUploading}">
+        <div class="card-heading" ng-hide="uploader.isUploading">
+          <h4>
+            Select {{submissionType == 'need_help' ? 'files' : 'evidence'}} to upload
+          </h4>
+          <span ng-hide="submissionType == 'need_help'">
+            Select files from your device that show evidence of your work until no more required files are pending.
+          </span>
+          <span ng-show="submissionType == 'need_help'">
+            Select files from your device that you need help with. You will need to upload all required files for this submission to
+            get help on this task but it does not matter if they are not finished.
+          </span>
+        </div>
+        <div class="card-body">
+          <file-uploader 
+            files="uploader.files"
+            url="uploader.url"
+            payload="uploader.payload"
+            single-drop-zone="true"
+            show-upload-button="false"
+            reset-after-upload="false"
+            is-ready="uploader.isReady"
+            is-uploading="uploader.isUploading"
+            initiate-upload="uploader.start"
+            on-click-failure-cancel="uploader.onFailureCancel"
+            on-before-upload="uploader.onBeforeUpload"
+            on-success="uploader.onSuccess"
+            on-complete="uploader.onComplete"></file-uploader>
+        </div>
+      </div>
+    </div>
+    <!--/state-files-->
+    <div 
+      class="state state-alignment" 
+      ng-class="{'state-hidden-left': isHidden('alignment').left,
+                 'state-hidden-right': isHidden('alignment').right}">
+      <div class="card card-default">
+        <div class="card-heading">
+          <h4>
+            Learning Outcome Alignment
+          </h4>
+          <p>
+            Please rate the relevancy of this task to the specific learning outcome.
+            You <strong>must</strong> relate this task to at least one outcome.
+          </p>
+          <p class="text-muted">
+            If you think the task is not related to a specific outcome, click the highest filled circle to remove its relevancy.
+          </p>
+        </div>
+        <!--/card-heading-->
+        <div class="list-group">
+          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'ilo_number'">
+            <div class="col-sm-12 col-md-7 pointer" ng-click="ilo.collapsed = !ilo.collapsed">
+              <h4>
+                <strong>{{ilo.abbreviation}}</strong>
+                <small>{{ilo.name}}</small>
+              </h4>
+              <div>Staff believe that {{ilo.staffAlignment.label | lcfirst}}. Click to expand.</div>
+              <div class="panel panel-default" collapse="!ilo.collapsed">
+                <div class="panel-body">
+                  <p>
+                    <h5>Outcome Description</h5>
+                    <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
+                  </p>
+                  <p ng-show="ilo.staffAlignment.rating > 0">
+                    <h5>Rationale</h5>
+                    <div class="markdown-to-html" ng-bind-html="ilo.staffAlignment.rationale | markdown"></div>
+                  </p>
+                </div>
+              </div>
+            </div><!--/ilo-description-->
+            <div class="col-sm-12 col-md-5">
+              <task-ilo-alignment-rater
+                readonly="false"
+                unit="task.unit()"
+                show-zero-rating="true"
+                ng-model="alignments[ilo.id]">
+              </task-ilo-alignment-rater>
+            </div><!--/alignment-rater-->
+          </div>
+        </div><!--/alignment-list-group-->
+        <div class="card-footer">
+          <p>
+            Jusitfy your relevancy alignments with a comment to explain your choices.
+          </p>
+          <textarea ng-model="alignmentsRationale" class="form-control input-lg" rows="3" placeholder="My rationale is...">
+          </textarea>
+        </div><!--/comments-for-alignment-->
+      </div><!--/card-alignment-->
+    </div><!--/state-alignment-->
+    <div 
+      class="state state-comments" 
+      ng-class="{'state-hidden-left': isHidden('comments').left,
+                 'state-hidden-right': isHidden('comments').right}">
+      <div class="card card-default">
+        <div class="card-heading">
+          <h4 ng-show="submissionType == 'need_help'">
+            What do you need help with?
+          </h4>
+          <h4 ng-hide="submissionType == 'need_help'">
+            Final comments
+          </h4>
+          <span ng-show="submissionType == 'need_help'">
+            Supply a comment on what you would like help on for this task so your tutor can assist you.
+          </span>
+          <span ng-hide="submissionType == 'need_help'">
+            Supply an <strong>optional</strong> comment about this submission for your tutor to read as they assess.
+          </span>
+        </div><!--/card-heading-->
+        <div class="card-body">
+          <textarea ng-model="comment" class="form-control input-lg" rows="3" placeholder="{{submissionType == 'need_help' ? 'I need help with...' : 'Make a comment...'}}">
+          </textarea>
+        </div>
+      </div><!--/card-comments-->
+      <div class="card card-default" ng-show="privacyPolicy.privacy">
+        <div class="card-heading">
+          <h4>
+            Declaration
+          </h4>
+        </div><!--/card-heading-->
+        <div class="card-body">
+          <span>
+            {{privacyPolicy.privacy}}
+          </span>
+          <a href="#" ng-click="showPlagiarism = !showPlagiarism">Plagiarism and collusion</a>
+          <div ng-show="showPlagiarism">
+            <h4>Plagiarism and Collusion</h4>
+            <span>
+              {{privacyPolicy.plagiarism}}
+            </span>
+          </div>
+        </div>
+      </div><!--/declaration-->
+    </div><!--/state-comments-->
+  </div>
+</div><!--/modal-body-->
+<div class="modal-footer" ng-hide="uploader.isUploading">
+  <button class="btn btn-danger pull-left" ng-click="$dismiss()" ng-disabled="shouldDisableBtn.cancel()" ng-show="shouldShowBtn.cancel()">
+    <i class="fa fa-times"></i> Cancel Submission
+  </button>
+  <!--/cancel-button-->
+  <button class="btn btn-default" ng-click="goToState.previous()" ng-disabled="shouldDisableBtn.back()" ng-show="shouldShowBtn.back()">
+    <i class="fa fa-arrow-left"></i> Back
+  </button>
+  <!--/back-button-->
+  <button class="btn btn-default" ng-click="goToState.next()" ng-disabled="shouldDisableBtn.next()" ng-show="shouldShowBtn.next()">
+    Next
+    <i class="fa fa-arrow-right"></i>
+  </button>
+  <!--/next-button-->
+  <button class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
+    <i class="fa fa-upload"></i> Upload Submission
+  </button>
+  <!--/upload-button-->
+</div>
+<!--/modal-footer-->
+</div>

@@ -18,12 +18,13 @@
         <div class="small" ng-hide="alignment.description">Click to add one</div>
       </div>
       <div ng-if="editingRationale" class="clearfix">
-        <markdown-editor
+        <!-- <markdown-editor
           height="200"
           ng-model="alignment.description"
           placeholder="Edit rationale..."
           autofocus="true">
-        </markdown-editor>
+        </markdown-editor> -->
+        <div contenteditable ng-model="alignment.description" placeholder="Edit rationale here..." autofocus="true" style="border-style: solid; border-width: thin; height: 200px" ></div>
         <a ng-click="toggleEditRationale(alignment)" class="pull-right">Done Editing</a>
       </div>
     </div>

@@ -1,34 +1,52 @@
-<div class="panel-body task-comments-viewer">
-  <div class="large-notice-block no-comments" ng-show="(!task.comments) || task.comments.length == 0">
-    <i class="fa fa-2x fa-comments-o"></i>
-    <p>No comments have yet been made</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      Comments on this task
+    </div>
   </div>
-  <div class="comment col-sm-12 col-lg-8 col-lg-offset-2" ng-repeat="comment in task.comments">
-    <div class="comment-details col-md-2">
-      <span class="comment-by">
-        {{comment.comment_by}}
-      </span>
-      <span class="comment-date">
-        {{comment.created_at | date: 'd MMM yyyy'}}
-      </span>
-    </div>
-    <div class="comment-text col-md-9">
-      <div class="markdown-to-html col-md-11" ng-bind-html="comment.comment | markdown"></div>
-      <div class="col-md-1 delete-comment text-right" ng-click="deleteComment(comment.id)" tooltip="Delete comment" tooltip-placement="right">
-        <i class="fa fa-trash"></i>
+  <div class="panel-body">
+    <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
+      <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}" tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}"
+        tooltip-append-to-body="true" tooltip-popover-delay="500" tooltip-placement="left">
+      </user-icon>
+
+      <div ng-class="comment.type == 'image' || comment.type == 'pdf' ? 'image-bubble' : 'comment-bubble'">
+
+        <div ng-show="comment.type == 'text'" class="comment-text">
+          <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+        </div>
+
+        <div ng-if="comment.type == 'audio'" class="comment-text comment-audio">
+          <audio-player></audio-player>
+        </div>
+
+        <div ng-if="comment.type == 'image'" class="comment-image">
+          <!-- <p>Image here?</p> -->
+          <a ng-click="openCommentsModal(comment)">
+            <img ng-src="{{getCommentAttachment(comment)}}" width="100%" height="100%" />
+          </a>
+        </div>
+        <!-- Add PDF support -->
+        <div ng-if="comment.type == 'pdf'" class="comment-pdf">
+          <a ng-click="openCommentsModal(comment)">
+            <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
+          </a>
+        </div>
+
+        <div class="delete-comment" ng-click="deleteComment(comment.id)" ng-show="{{canUserEdit(comment)}}" tooltip-append-to-body="true">
+          <i class="fa fa-trash"></i>
+        </div>
+        <!--/delete-comment-->
       </div>
+      <!--/comment-bubble-->
     </div>
+    <!--/comment-->
+    <div class="read-receipt" ng-show="lastComment.author_is_me && lastComment.recipient_read_time">
+      Read {{lastComment.recipient_read_time | humanizedDate}} by {{lastComment.recipient.name}}
+    </div>
+  </div>
+  <!--/comment-list-->
+  <div class="panel-footer">
+    <task-comment-composer task="task"></task-comment-composer>
   </div>
 </div>
-
-  <div class="panel-footer">
-    <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-      <markdown-editor class="editor col-sm-11" ng-model="comment.text" ng-keydown="checkForEnterPress($event)" placeholder="Make a comment on this submission..." height="auto"></markdown-editor>
-      <div class="send-button-wrapper col-sm-1">
-        <button type="submit" class="btn btn-primary" type="button" ng-disabled="comment.text.trim().length == 0">
-          <i class="fa fa-paper-plane fa-2x"></i>
-          <div>Send</div>
-        </button>
-      </div>
-    </form>
-  </div>

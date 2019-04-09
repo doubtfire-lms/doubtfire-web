@@ -1,0 +1,12 @@
+<div class="task-summary-stats">
+  <div class="panel-body text-center">
+    <div ng-show="scatterData.length == 0">
+      <i class="fa fa-4x fa-spinner fa-pulse"></i>
+      <h2>Loading...</h2>
+    </div>
+    <div ng-if="scatterData.length > 0">
+      <summary-task-status-scatter data="scatterData" unit="unit">
+      </summary-task-status-scatter>
+    </div>
+  </div>
+</div>

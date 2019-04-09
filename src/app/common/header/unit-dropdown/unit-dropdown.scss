@@ -1,0 +1,15 @@
+.dropdown-units {
+  li:not(.divider) a {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    display: flex;
+  }
+  li:not(.divider):last-child a {
+    margin-bottom: 0.5em
+  }
+  li a .unit-name {
+    padding-left: 1.75ex;
+    flex: 1;
+    text-align: right;
+  }
+}

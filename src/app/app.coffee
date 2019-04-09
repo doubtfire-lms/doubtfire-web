@@ -4,7 +4,6 @@
 # Doubtfire is modularised into many modules, as indicated by the directory
 # tree inside app/
 #
-#
 angular.module('doubtfire', [
   'doubtfire.config'
   'doubtfire.api'
@@ -12,10 +11,10 @@ angular.module('doubtfire', [
   'doubtfire.common'
   'doubtfire.errors'
   'doubtfire.home'
+  'doubtfire.admin'
   'doubtfire.units'
   'doubtfire.tasks'
   'doubtfire.projects'
-  'doubtfire.users'
   'doubtfire.groups'
   'doubtfire.visualisations'
 ])

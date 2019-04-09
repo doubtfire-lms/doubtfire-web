@@ -1,0 +1,217 @@
+<div id="student-portfolios" class="container">
+  <tabset>
+    <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" disable="!selectedStudent" ng-click="selectedStudent && setActiveTab(tab)">
+      <tab-heading>{{tab.title}}</tab-heading>
+    </tab>
+  </tabset><!--/tabs-->
+  <div class="panel panel-primary" ng-show="activeTab == tabs.selectStudent">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Mark Portfolios</h4>
+        Assess student portfolios
+      </div>
+      <div class="pull-right toolbar">
+        <div class="buttons">
+          <div class="btn-group">
+            <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'allStudents'">
+              <i class="fa fa-globe" tooltip-placement="top" tooltip="Show all students, even those without portfolios"></i>
+            </label>
+            <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'withPortfolio'">
+              <i class="fa fa-book" tooltip-placement="top" tooltip="Show only students with portfolios"></i>
+            </label>
+          </div>
+          <div class="btn-group">
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'allStudents'">
+              <i class="fa fa-university" tooltip-placement="top" tooltip="Show all students"></i>
+            </label>
+            <label class="btn btn-default" ng-model="studentFilter" btn-radio="'myStudents'">
+              <i class="fa fa-pencil" tooltip-placement="top" tooltip="Show only my students"></i>
+            </label>
+          </div>
+          <div class="btn-group btn-group-sm select-portfolio-grade">
+              <label class="btn btn-default text-center" ng-model="filterOptions.selectedGrade" btn-radio="-1">
+                  <span class="grade-icon" tooltip="Show all portfolios" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}">All</span>
+              </label>
+          </div>
+          <div class="btn-group btn-group-sm select-portfolio-grade">
+            <label ng-repeat="grade in grades" class="btn btn-default col-sm-3 text-center" ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
+              <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}" tooltip-append-to-body="true" class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
+            </label>
+          </div>
+        </div><!--/buttons-->
+        <form role="search" class="form-horizontal">
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
+        </form><!--/search-->
+      </div><!--/toolbar-->
+    </div><!--header-->
+    <div class="panel-body unit-student-list">
+      <div class="panel-body large-notice-block" ng-hide="filteredStudents.length > 0">
+        <i class="fa fa-book"></i>
+        <p>No portfolios found</p>
+      </div>
+      <table ng-hide="filteredStudents.length == 0" class="table table-condensed table-hover table-pointer ">
+        <thead>
+          <tr>
+            <th class="student-id">
+              <a ng-click="sortOrder='student_id'; reverse=!reverse">
+                Student <i ng-show="sortOrder=='student_id'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="name">
+              <a ng-click="sortOrder='name'; reverse=!reverse">
+                Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th>
+              <a ng-click="sortOrder='tutorial.tutor_name'; reverse=!reverse">
+                Tutor <i ng-show="sortOrder=='tutorial.tutor_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="tutorial">
+              <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
+                Tutorial <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th>
+              <a ng-click="sortOrder='target_grade'; reverse=!reverse">
+                Target <i ng-show="sortOrder=='target_grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th>
+              <a ng-click="sortOrder='orderScale'; reverse=!reverse">
+                Stats<i ng-show="sortOrder=='orderScale'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
+                <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
+                  Portfolio? <i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th class="grade">
+              <a ng-click="sortOrder='grade'; reverse=!reverse">
+                Grade <i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithTargetGrade:filterOptions.selectedGrade) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
+            <td>{{student.student_id}}</td>
+            <td>{{student.name}}</td>
+            <td>{{student.tutorial ? student.tutorial.tutor_name : 'None'}}</td>
+            <td>{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</td>
+            <td class="flags-data">
+              <grade-icon grade="student.target_grade"></grade-icon>
+            </td>
+            <td class="task-progress-bar">
+              <progress class="task-progress" animate="true">
+                <bar
+                  ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                  value="bar.value"
+                  type="{{statusClass(bar.key)}}">
+                  <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+                </bar>
+              </progress>
+            </td>
+            <td ng-show="portfolioFilter == 'allStudents'">{{student.has_portfolio ? "Yes" : "No"}}</td>
+            <td>{{student.grade}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      <div class="pull-right">
+        <a class="btn btn-info" href="{{portfolioDownloadUrl}}" target="_blank" tooltip-html-unsafe="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all portfolios may take a long time" tooltip-append-to-body="true">
+          <i class="fa fa-download"></i> Download All Portfolios
+        </a>
+        <a class="btn btn-success" href="{{gradeDownloadUrl}}" target="_blank">
+          <i class="fa fa-download"></i> Download Grades
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary" ng-show="activeTab != tabs.selectStudent && !selectedStudent">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title" ng-hide="selectedStudent">Portfolio Details</h4>
+        Review portfolio and assign grade.
+      </div>
+    </div>
+    <div class="panel-body large-notice-block" ng-hide="selectedStudent">
+      <i class="fa fa-book"></i>
+      <p>Select student to view portfolio and assign grade</p>
+    </div>
+  </div>
+  <div ng-if="selectedStudent">
+    <div class="panel panel-primary" ng-show="activeTab == tabs.viewProgress">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h3 class="panel-title">Review Progress of {{selectedStudent.name}}</h3><!--/title-->
+          Review the students progress through the unit's tasks.
+        </div>
+      </div>
+      <div class="panel-body">
+        <project-progress-dashboard ng-if="project"></project-progress-dashboard>
+      </div>
+    </div>
+
+    <div class="panel panel-primary" ng-show="activeTab == tabs.viewPortfolio">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h3 class="panel-title">Review Portfolio of {{selectedStudent.name}}</h3><!--/title-->
+          View or download portfolio for assessment.
+        </div>
+      </div>
+      <div class="panel-body large-notice-block" ng-hide="project.portfolio_available">
+        <i class="fa fa-book"></i>
+        <p>No Portfolio Submitted</p>
+      </div>
+      <pdf-panel-viewer
+        ng-if="project.portfolio_available"
+        pdf-url="project.portfolioUrl()">
+      </pdf-panel-viewer>
+    </div>
+
+    <div class="panel panel-primary" ng-show="activeTab == tabs.assessPortfolio">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h4 class="panel-title">Grade for {{selectedStudent.name}}</h4>
+          Assign Grade for this work.
+        </div>
+      </div>
+      <div class="panel-body alignment-rater">
+        <div class="col-sm-12 rationale-wrapper">
+          <div tooltip="Click to edit rationale" tooltip-placement="left" tooltip-append-to-body="false" tooltip-popup-delay="300" tooltip-enable="project.grade_rationale != null" ng-click="toggleEditRationale()" class="rationale" ng-class="{'no-rationale': project.grade_rationale == null}" ng-hide="editingRationale">
+            <label class="text-muted" ng-show="project.grade_rationale != null">
+              Provided Rationale
+            </label>
+            <div ng-bind-html="(project.grade_rationale || 'No rationale provided') | markdown"></div>
+            <div class="small" ng-hide="project.grade_rationale">Click to add one</div>
+          </div>
+          <div ng-if="editingRationale" class="clearfix">
+            <!-- <markdown-editor
+              height="200"
+              ng-model="project.grade_rationale"
+              placeholder="Edit rationale..."
+              autofocus="true">
+            </markdown-editor> -->
+            <div contenteditable ng-model="project.grade_rationale" placeholder="Edit rationale here..." style="border-style: solid; border-width: thin; height: 200px"></div>
+            <a ng-click="toggleEditRationale(alignment)" class="pull-right">Done Editing</a>
+          </div>
+        </div>
+
+        <div ng-repeat="results in gradeResults">
+          <h5 class="col-sm-2">{{results.name}}</h5>
+          <p class="btn-group col-sm-10">
+            <label ng-repeat="resultScore in results.scores" ng-click="project.assignGrade(resultScore, project.grade_rationale)" class="btn col-sm-2 text-center {{project.grade == resultScore ? 'btn-primary' : 'btn-default'}}">
+              {{resultScore}}
+            </label>
+          </p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

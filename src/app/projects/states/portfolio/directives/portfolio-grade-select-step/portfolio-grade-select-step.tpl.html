@@ -1,0 +1,43 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Select Grade</h3>
+  </div>
+  <div class="panel-body">
+    <p>
+      In preparing your portfolio, you need to undertake a self assessment. Use the
+      unit's assessment criteria to determine the grade your portfolio should be awarded.
+    </p>
+    <div class="card card-danger">
+      <div class="card-heading">
+        <h4><i class="fa fa-warning"></i> Read the assessment criteria</h4>
+        Make sure that you have reviewed the Assessment Criteria for the grade you
+        are applying for. Each grade will have a list of criteria that you can use
+        to determine if you meet the requirements to achieve that grade.
+      </div>
+      <div class="card-body text-center" style="font-size: 1.25em;">
+        <input type="checkbox" class="pointer" id="agree-read" ng-model="agreedToAssessmentCriteria">
+        <label class="pointer" for="agree-read">I have read the Assessment Criteria for this unit</label>
+      </div>
+    </div><!--/confirm-read-assessment-criteria-->
+    <div class="card card-default" collapse="!agreedToAssessmentCriteria">
+      <div class="card-heading">
+        <h4>Grade Application</h4>
+        Select the <strong>grade</strong> you are applying for {{unit.name}} below.
+      </div>
+      <div class="card-body text-center">
+        <div class="btn-group">
+          <label ng-repeat="grade in grades" ng-click="chooseGrade($index); status.isopen=false" class="btn btn-default col-sm-3" ng-model="project.target_grade" btn-radio="{{$index}}">
+            <grade-icon grade="grade" class="text-{{project.target_grade == grades.indexOf(grade) ? 'success' : 'muted'}}"></grade-icon>
+          </label>
+        </div>
+        <p class="help-block">
+          Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio demonstrates you have <strong>met all unit learning outcomes to a {{targetGrade}} level</strong>
+        </p>
+      </div>
+    </div><!--/select-the-grade-->
+  </div><!--/content-->
+  <div class="panel-footer clearfix">
+    <button class="btn btn-primary pull-left" ng-click="advanceActiveTab(-1)"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!agreedToAssessmentCriteria" ng-click="advanceActiveTab(1)">Next <i class="fa fa-arrow-right"></i></button>
+  </div>
+</div>

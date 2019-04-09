@@ -1,0 +1,12 @@
+<div class="modal-comment">
+  <div class="modal-body">
+    <div ng-if="commentType == 'image'">
+      <a href="{{commentResourceUrl}}" target="_blank">
+        <img class="image-comment" ng-src="{{commentResourceUrl}}"></img>
+      </a>
+    </div>
+    <div ng-if="commentType == 'pdf'">
+      <iframe class="pdf-comment" ng-src="{{commentResourceUrl}}" type="application/pdf" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+//
+// Colors for associated grades
+//
+// ********************************************************
+// IMPORTANT: Grade colours must also be matched
+// in the grade-service.coffee file
+// ********************************************************
+//
+
+$grade-color-p:  darken(#FF0000, 10%);
+$grade-color-c:  darken(#FF8000, 5%);
+$grade-color-d:  darken(#0080FF, 10%);
+$grade-color-hd: darken(#80FF00, 15%);

@@ -33,5 +33,5 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
           $modalInstance.close()
 
       , (response) ->
-        alertService.add("danger", "Unable to find student. Ensure they have an account.", 6000)
+        alertService.add("danger", "Unable to find student. Please check the student ID, and ensure the student has logged in at least once already to ensure they have an account.", 6000)
 )

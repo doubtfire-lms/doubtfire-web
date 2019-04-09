@@ -38,6 +38,9 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
 
   $scope.tutors = $scope.unit.staff
 
+  $scope.validForm = () ->
+    $scope.tutorial.tutor? && $scope.tutorial.abbreviation? && $scope.tutorial.meeting_location?
+
   $scope.saveTutorial = ->
     save_data = _.omit($scope.tutorial, 'tutor', 'tutor_name', 'meeting_time', 'data')
     save_data.tutor_id = if $scope.tutorial.tutor.user_id then $scope.tutorial.tutor.user_id else $scope.tutorial.tutor.id
@@ -45,7 +48,7 @@ angular.module('doubtfire.units.modals.unit-tutorial-edit-modal', [])
     if $scope.tutorial.meeting_time.getHours
       save_data.meeting_time = $scope.tutorial.meeting_time.getHours() + ":" + $scope.tutorial.meeting_time.getMinutes()
 
-    if ! save_data.tutor_id?
+    unless save_data.tutor_id?
       alertService.add 'danger', 'Ensure that you select a tutor from those engaged in this unit.', 6000
       return
 

@@ -1,0 +1,10 @@
+<div class="container">
+  <tabset class="tabset-icon">
+    <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
+      <tab-heading>{{tab.title}}</tab-heading>
+    </tab>
+  </tabset><!--/tabs-->
+  <teaching-period-details-editor teachingperiod="teachingPeriod" ng-if="activeTab === tabs.editorTab"></teaching-period-details-editor>
+  <teaching-period-breaks teachingperiod="teachingPeriod" ng-if="activeTab === tabs.breaksTab"></teaching-period-breaks>
+  <teaching-period-units teachingperiod="teachingPeriod" ng-if="activeTab === tabs.unitsTab"></teaching-period-units>
+</div>

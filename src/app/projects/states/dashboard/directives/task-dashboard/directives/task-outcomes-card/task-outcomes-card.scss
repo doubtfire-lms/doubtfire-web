@@ -1,0 +1,16 @@
+task-outcomes-card .card .list-group {
+  @media (min-width: $screen-md) {
+    heading {
+      display: flex;
+    }
+    .task-ilo-alignment-rater {
+      align-self: center;
+      margin-left: auto;
+    }
+  }
+  @media (max-width: $screen-md) {
+    .task-ilo-alignment-rater {
+      margin: 1em;
+    }
+  }
+}

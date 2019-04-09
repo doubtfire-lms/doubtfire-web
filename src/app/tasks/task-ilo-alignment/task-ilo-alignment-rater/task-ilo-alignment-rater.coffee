@@ -24,24 +24,29 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-rater',[])
     selectedTooltip: '=?'
     # Show as tooltips instead (false)
     showTooltips: '=?'
+    # Hide labels
+    hideLabels: '=?'
     # Compact version
     compact: '=?'
-  controller: ($scope) ->
+    # Expose label outwards
+    label: '=?'
+    # Show the zero label
+    showZeroRating: '=?'
+  controller: ($scope, outcomeService) ->
     $scope.max = 5
+
+    $scope.hideLabels ?= false
+
+    $scope.showZeroRating ?= false
 
     $scope.readonly = true if $scope.compact
 
-    $scope.tooltips = [
-      "The task is slightly related to this outcome",
-      "The task is related to this outcome",
-      "The task is a reasonable example for this outcome",
-      "The task is a strong example of this outcome",
-      "The task is the best example of this outcome",
-    ]
+    $scope.tooltips = outcomeService.alignmentLabels
 
     $scope.setHoverValue = (value) ->
       return $scope.ngModel if $scope.readonly and not $scope.showTooltips
       $scope.hoveringOver = value
+      $scope.label = $scope.tooltips[value]
 
     # Set defaults
     for property in ['tooltips', 'colorful', 'selectedTooltip']

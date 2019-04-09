@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, headerService, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?
@@ -21,33 +21,33 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 
     $scope.currentVisualisation = 'burndown'
 
-    $scope.taskDetailsSelector = { viewAll: false }
+    $scope.taskDetailsSelector = { viewAll: true }
 
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
-        projectService.updateTaskStats $scope.project, project.stats
+        $scope.project.updateTaskStats project.stats
         analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
         $rootScope.$broadcast "TargetGradeUpdated"
 
-    $scope.taskCount = () ->
+    $scope.taskCount = ->
       $scope.unit.task_definitions.length
 
     $scope.taskStats = {}
 
-    updateTaskCompletionStats = () ->
+    updateTaskCompletionStats = ->
       $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
       $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
 
-    $scope.$watch "taskDetailsSelector.viewAll", () ->
-      if ! $scope.taskDetailsSelector.viewAll
+    $scope.$watch "taskDetailsSelector.viewAll", ->
+      unless $scope.taskDetailsSelector.viewAll
         analyticsService.event 'Student Project View', "Showed Top Tasks"
 
-    $scope.$on 'TaskStatusUpdated', () ->
+    $scope.$on 'TaskStatusUpdated', ->
       updateTaskCompletionStats()
 
-    $scope.$on 'TargetGradeUpdated', () ->
+    $scope.$on 'TargetGradeUpdated', ->
       updateTaskCompletionStats()
 
     updateTaskCompletionStats()

@@ -1,0 +1,15 @@
+<div class="container" ng-if="unit.hasGroupwork()">
+  <group-set-manager
+    project="project"
+    unit="unit">
+  </group-set-manager>
+</div><!--/has-groupwork-->
+<div class="container" ng-hide="unit.hasGroupwork()">
+  <div class="large-notice-block">
+    <i class="fa fa-2x fa-users"></i>
+    <p>No Groupwork Enabled</p>
+  </div>
+  <div class="text-center text-muted col-sm-12 col-md-6 col-md-offset-3">
+    There is no group work enabled for this unit.
+  </div>
+</div><!--/no-groupwork-->

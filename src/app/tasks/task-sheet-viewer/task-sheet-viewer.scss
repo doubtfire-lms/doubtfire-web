@@ -83,4 +83,47 @@
       }
     }
   }
+
+  .panel-body.assessment-details-alignment-panel {
+    height: auto !important; // override
+    .assessment-item {
+      padding: 15px;
+      display: flex;
+    }
+    .assessment-item.quality-stars .content {
+      i {
+        margin: 0 0.25ex;
+        font-size: 1.25em;
+      }
+      label {
+        margin-right: 1ex;
+      }
+    }
+    .assessment-item:not(:first-child) {
+      border-top: 1px dashed $text-muted;
+    }
+    aside, .content {
+      display: inline-block;
+    }
+    aside .grade-icon {
+      font-size: 1.15em;
+    }
+    aside > i.fa {
+      font-size: 2.3em;
+    }
+    aside {
+      width: 3.5em;
+      margin-right: 2.5ex;
+      text-align: right;
+      padding-top: 1em;
+    }
+    .content {
+      font-size: 1.2em;
+      font-weight: lighter;
+      max-width: 90%;
+      .callout {
+        display: inline-block;
+      }
+    }
+  }
 }

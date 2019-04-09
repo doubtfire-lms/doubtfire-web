@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Teaching Periods</h4>
+        Modify Teaching Periods registered with {{externalName.value}}
+      </div>
+      <form role="search" class="pull-right form-horizontal">
+        <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods.loadedPeriods | filter:$viewValue | limitTo:8" />
+      </form>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" ng-hide="teachingPeriods.loadedPeriods.length > 0">No teaching periods have been registered with {{externalName.value}} yet</div>
+        <table ng-show="teachingPeriods.loadedPeriods.length > 0" class="table table-hover table-pointer">
+          <thead>
+            <tr>
+              <th><a ng-click="sortOrder='teachingperiod.name()'; reverse=!reverse">Name <i ng-show="sortOrder=='period'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='active_until'; reverse=!reverse">Active Until <i ng-show="sortOrder=='active_until'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
+              <td>{{teachingperiod.name()}}</td>
+              <td>{{teachingperiod.start_date | date: short}}</td>
+              <td>{{teachingperiod.end_date | date: short}}</td>
+              <td>{{teachingperiod.active_until | date: short}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer clearfix">
+        <a href class="btn btn-success pull-right" ng-click="showTeachingPeriodModal()">
+          <i class="fa fa-calendar"></i>
+          <i class="fa fa-plus"></i>
+          Add New Teaching Period
+        </a>
+        <pagination ng-show="filteredTeachingPeriods.length > pageSize" total-items="filteredTeachingPeriods.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,13 +18,14 @@ angular.module("doubtfire.common.services.alerts", [])
     closeThisAlertFunc = ->
       alertService.closeAlert(this)
 
-    alertData =
+    alertData = {
       type: type
       msg: $sce.trustAsHtml(msg)
       close: closeThisAlertFunc
+    }
 
     # Push to the root alerts
-    $rootScope.alerts.push alertData
+    $rootScope.alerts.unshift(alertData)
 
     # When a timeout is specified, call the close function of this alert
     # when the time is up

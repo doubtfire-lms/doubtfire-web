@@ -1,0 +1,54 @@
+<div class="unit-dates-selector">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Create Unit</h3>
+      Duplicate an existing unit by specifying the time period.
+    </div>
+    <form class="form-horizontal" role="form" name="rolloverUnitForm" ng-submit="saveUnit()">
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
+          <div class="col-sm-9">
+            <select class="form-control" ng-model="unit.teaching_period_id">
+              <option value="">Custom Period</option>
+              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">{{tp.period}}-{{tp.year}}</option>
+            </select>
+          </div>
+        </div><!--/teaching-period-date-->
+
+        <div class="form-group">
+          <label tooltip="Date for the start of teaching in the unit." class="col-sm-2 control-label" for="startdate">Start Date</label>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="unit.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-if="!unit.teaching_period_id" />
+              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="tp.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="open($event,'start')" ng-disabled="unit.teaching_period_id">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div><!--/start-date-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">End Date</label>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" ng-if="!unit.teaching_period_id" />
+              <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="tp.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="open($event,'end')" ng-disabled="unit.teaching_period_id">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div><!--/end-date-->
+      </div>
+      <div class="panel-footer text-right">
+        <input type="submit" value="Create Unit" class="btn btn-success" />
+      </div>
+    </form>
+  </div>
+</div>

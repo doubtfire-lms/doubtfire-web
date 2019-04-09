@@ -1,13 +1,6 @@
-.group-member-list table {
-  td.student-id    { width: 25%; }
-  td.actions       { width: 25%; }
-  td.student-name  { width: 50%; }
-  td.student-grade { width: 50%; }
-
-  td.student-id + td.student-name { width: 30%; }
-  td.student-id + td.student-name + td.student-grade { width: 20%; }
-
-  .grade-icon {
-    margin-left: 0;
-  }
+group-member-list table {
+  th.student-id    { width: 25%; }
+  th.student-name  { width: 50%; }
+  th.actions       { width: 25%; }
+  th.student-grade { width: 50%; }
 }

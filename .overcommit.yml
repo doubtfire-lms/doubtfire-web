@@ -1,29 +1,22 @@
-#
-# Standard Doubtfire Overcommit Config
-# See https://gist.github.com/alexcu/6e05d64d04b32bb42b4d
-#
-CommitMsg:
-  ALL:
-    on_warn: fail
-  EmptyMessage:
-    enabled: true
-  MessageFormat:
-    enabled: true
-    pattern: '((NEW|FIX|ENHANCE|LOOKS|SPEED|QUALITY|DOC|CONFIG|TEST): [A-Z].+)|(Merge .+)'
-    expected_pattern_message: '<NEW|FIX|ENHANCE|LOOKS|SPEED|QUALITY|DOC|CONFIG|TEST>: <Message Subject>'
-    sample_message: 'CONFIG: Add overcommit to project'
-  TraillingPeriod:
-    enabled: true
-  TextWidth:
-    enabled: true
 PreCommit:
-  AuthorEmail:
+  OvercommitConfig:
     enabled: true
-    on_warn: fail
-  AuthorName:
+    description: Check lab hooks are configured
+
+CommitMsg:
+  CommitTag:
     enabled: true
-    on_warn: fail
-  HardTabs:
+    description: Check subject tag
+  Imperative:
     enabled: true
-  TrailingWhitespace:
+    description: Check subject tense
+  CapitalizedSubject:
+    enabled: false
+  SubjectFormat:
     enabled: true
+    description: Check subject format
+
+PrePush:
+  BranchFormat:
+    enabled: true
+    description: Check branch naming

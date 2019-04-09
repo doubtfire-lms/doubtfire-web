@@ -1,0 +1,67 @@
+<div>
+    <form class="form-horizontal" ng-submit="saveTeachingPeriod()" role="form">
+      <div class="modal-header">
+        <h3>{{isNew ? "Create Teaching Period" : "Edit Teaching Period"}}</h3>
+      </div>
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Name</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Name" ng-model="teachingperiod.period">
+        </div>
+      </div>
+
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Year</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Year" ng-model="teachingperiod.year">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label tooltip="Date for the start of teaching in the unit." class="col-sm-3 control-label" for="startdate">Start Date</label>
+        <div class="col-sm-9">
+          <div class="col-sm-4 input-group">
+            <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="teachingperiod.start_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'start')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div><!--/start-date-->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="enddate">End Date</label>
+        <div class="col-sm-9">
+          <div class="col-sm-4 input-group">
+            <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="teachingperiod.end_date" is-open="calOptions.endOpened" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'end')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div><!--/end-date-->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="activeuntil">Active Until</label>
+        <div class="col-sm-9">
+          <div class="col-sm-4 input-group">
+            <input datepicker-popup="{{format}}" id="activeuntil" type="text" class="form-control" ng-model="teachingperiod.active_until" is-open="calOptions.activeUntilOpened" ng-required="true" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'active')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div><!--/active-until-date-->
+
+      <div class="modal-footer text-right">
+        <input type="submit" class="btn btn-primary" value="{{isNew ? 'Add' : 'Save'}}" />
+      </div>
+    </form>>
+</div>

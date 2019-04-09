@@ -9,7 +9,8 @@ A modern, lightweight learning management system.
 1. [Getting Started](#getting-started)
 2. [Resources](#resources)
 3. [Contributing](#contributing)
-4. [License](#license)
+4. [Deployment](#deployment)
+5. [License](#license)
 
 ## Getting Started
 
@@ -76,10 +77,27 @@ $ bower install
 Lastly, to compile and run a watch server and web server, use `grunt`:
 
 ```
-$ grunt watchsvr
+$ grunt
 ```
 
-You can then navigate to the Doubtfire web interface at **http://localhost:8000**
+You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
+
+## Deployment
+
+To compile the front-end, ensure `doubtfire-api` is placed as a sibling directory to `doubtfire-web`, then run:
+
+```
+$ cd /path/to/repos
+$ ls
+doubtfire-api    doubtfire-web
+$ cd ./doubtfire-api
+$ grunt deploy
+```
+
+You may prefix this command with the following environment variables:
+
+* `DF_API_URL` - the URL of the API (e.g., `https://doubtfire.com/api`). This will default to `window.location.host` if not set and dynamically generate a URL.
+* `DF_EXTERNAL_NAME` - a new name that removes references to the _Doubtfire_ name should you so want to not use such its original name (😢).
 
 ## Resources
 
@@ -89,7 +107,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 - [Moment.js](http://momentjs.com)
 - [Font Awesome](http://fontawesome.io)
 - [UI Router](https://github.com/angular-ui/ui-router)
-- [UI Bootstrap](http://angular-ui.github.io/bootstrap/)
+- [UI Bootstrap](http://angular-ui.github.io/bootstrap/versioned-docs/0.13.4/)
 - [UI Select](https://github.com/angular-ui/ui-select)
 - [NVD3 Charts](http://krispo.github.io/angular-nvd3/#/)
 - [Angular X-Editable](http://vitalets.github.io/angular-xeditable/)

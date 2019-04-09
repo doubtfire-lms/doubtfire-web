@@ -1,0 +1,7 @@
+<div ng-hide="unit && (unitRole || project)" class="large-notice-block">
+  <i class="fa fa-2x fa-spinner fa-pulse"></i>
+  <p>Loading unit details...</p>
+</div><!--/loading-->
+<div ng-if="unit && (unitRole || project)">
+  <ui-view/>
+</div>

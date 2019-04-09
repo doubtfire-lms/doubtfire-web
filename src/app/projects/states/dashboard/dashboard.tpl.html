@@ -1,0 +1,26 @@
+<div class="panel-full-screen">
+  <student-task-list
+    task-data="taskData"
+    project="project"
+    refresh-tasks="targetGradeUpdated"
+    class="col-xs-12 col-md-3"><!--/panel-1-->
+  </student-task-list>
+  <progress-dashboard
+    project="project"
+    on-update-target-grade="targetGradeUpdated"
+    class="col-xs-12 col-md-9"
+    ng-if="!taskData.selectedTask">
+  </progress-dashboard><!--/panel-2-->
+  <task-dashboard
+    task="taskData.selectedTask"
+    class="col-xs-12 col-md-6"
+    ng-if="taskData.selectedTask">
+  </task-dashboard><!--/panel-2-->
+  <task-comments-viewer
+    task="taskData.selectedTask"
+    project="project"
+    class="col-xs-12 col-md-3"
+    refocus-on-task-change="true"
+    ng-if="taskData.selectedTask">
+  </task-comments-viewer><!--/panel-3-->
+</div>

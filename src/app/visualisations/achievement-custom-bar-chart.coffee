@@ -9,7 +9,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
 
   controller: ($scope, Visualisation, outcomeService, gradeService) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
-    if ! nv.models.achievementBar?
+    unless nv.models.achievementBar?
       nv.models.achievementBar = ->
         chart = (selection) ->
           renderWatch.reset()
@@ -68,7 +68,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
             g = wrap.select('g')
             gEnter.append('g').attr 'class', 'nv-groups'
             wrap.attr 'transform', 'translate(' + margin.left + ',' + margin.top + ')'
-            #TODO: by definition, the discrete bar should not have multiple groups, will modify/remove later
+            # TODO: (@macite) by definition, the discrete bar should not have multiple groups, will modify/remove later
             groups = wrap.select('.nv-groups').selectAll('.nv-group').data(((d) ->
               d
             ), (d) ->
@@ -158,7 +158,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
             barsEnter = bars.enter().append('g').attr('transform', (d, i, j) ->
               'translate(' + x(getX(d, i)) + x.rangeBand() * .25 + ', ' + y(0) + ')'
             ).on('mouseover', (d, i) ->
-              #TODO: figure out why j works above, but not here
+              # TODO: (@macite) figure out why j works above, but not here
               d3.select(this).classed 'hover', true
               dispatch.elementMouseover
                 data: d
@@ -516,7 +516,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
         #------------------------------------------------------------
         achievementbar.dispatch.on 'elementMouseover.tooltip', (evt) ->
           key = chart.x()(evt.data)
-          if ! key?
+          unless key?
             key = "#{evt.data} task range"
           else
             key = "Your progress with #{key}"
@@ -656,7 +656,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
       iloTargets[0] = { offset: 0, height: targets[ilo.id][0], color: gradeService.gradeColors.P }
       iloTargets[1] = { offset: iloTargets[0].offset + iloTargets[0].height, height: targets[ilo.id][1], color: gradeService.gradeColors.C  }
       iloTargets[2] = { offset: iloTargets[1].offset + iloTargets[1].height, height: targets[ilo.id][2], color: gradeService.gradeColors.D  }
-      iloTargets[3] = { offset: iloTargets[2].offset + iloTargets[2].height, height: targets[ilo.id][2], color: gradeService.gradeColors.HD }
+      iloTargets[3] = { offset: iloTargets[2].offset + iloTargets[2].height, height: targets[ilo.id][3], color: gradeService.gradeColors.HD }
 
       if iloTargets[3].offset + iloTargets[3].height  > max
         max = iloTargets[3].offset + iloTargets[3].height

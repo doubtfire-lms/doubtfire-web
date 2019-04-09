@@ -1,51 +1,59 @@
 .task-viewer .task-viewer-toolbar {
-  border-bottom: 1px dashed #ddd;
-  margin-bottom: 2em;
+  display: flex;
+  padding-bottom: 1em;
+  &:last-child {
+    border-bottom: 1px dashed #ddd;
+    margin-bottom: 1.5em;
+  }
 }
 
 .task-viewer .task-header-info {
-  margin-bottom: 1em;
-  .task-status-summary {
+  display: flex;
+  .task-header-summary {
+    display: flex;
+    align-items: center;
     float: left;
     h3 {
       margin: 0;
     }
-    .graded-task-mark {
-      font-weight: bold;
-      .grade-icon {
+    .task-header-grade-icon {
+      float: left;
+      margin-right: 1.75ex;
+    }
+  }
+  .task-date-info {
+    display: flex;
+    justify-content: flex-end;
+    .label {
+      @include no-select;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      font-weight: normal;
+      text-align: center;
+      font-size: 1em;
+      label {
+        margin: 0 1ex 0.25em 0;
+        display: block;
+      }
+      &:not(:last-child) {
+        margin-right: 1ex;
+      }
+      i {
         display: inline-block;
-        text-align: center;
-        line-height: 2.25em;
-        margin: 0 0.5ex;
+        font-size: 2em;
+        float: left;
+        margin-right: 0.4ex;
+      }
+      &.overdue {
+        text-transform: uppercase;
       }
     }
   }
-  .overdue.label {
-    i {
-      display: inline-block;
-      font-size: 2em;
-      float: left;
-      margin-right: 0.25ex;
-    }
-    font-size: 1em;
-    text-align: center;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: inline-block;
-  }
-  .date-info {
-    text-align: right;
-    .due-date {
-      margin: 0;
-    }
-  }
-  .task-header-grade-icon{
-    float: left;
-    margin-right: 1ex;
-  }
 }
 
-.task-viewer .task-viewer-tab-panel .panel-body {
+.task-viewer .task-viewer-tab-panel > .panel-body {
   height: $task-viewer-tab-content-height;
   overflow: scroll;
   .help-block {
@@ -61,9 +69,9 @@
 .task-viewer {
   .active-task-selector, .active-task-status-selector {
     @include dropdown-selector;
+    height: 43px;
   }
 }
-
 
 .task-viewer-tabs {
   li {

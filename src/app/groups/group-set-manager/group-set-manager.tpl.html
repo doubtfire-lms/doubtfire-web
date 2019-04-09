@@ -1,0 +1,52 @@
+<group-selector
+  unit="unit"
+  unit-role="unitRole"
+  project="project"
+  selected-group="selectedGroup"
+  selected-group-set="selectedGroupSet"
+  show-group-set-selector="showGroupSetSelector"
+  on-select="newGroupSelected"
+  class="panel panel-primary">
+</group-selector>
+<div class="panel panel-default panel-group-memberships" ng-show="selectedGroup">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Members of <a editable-text="selectedGroup.name" class="strong" ng-show="unitRole || selectedGroupSet.allow_students_to_manage_groups" onbeforesave="updateGroup($data)">{{selectedGroup.name}}</a>
+    </h4>
+  </div><!--/panel-heading-->
+  <div class="panel-body panel-toolbar" ng-show="showMemberPanelToolbar">
+    <form
+      name="addMemberForm"
+      ng-submit="addMember(selectedStudent)"
+      class="input-group">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Enter student name or username..."
+        ng-model="selectedStudent"
+        typeahead-select-on-exact="true"
+        typeahead-on-select="addMember(selectedStudent)"
+        typeahead="
+          student as student.name
+          for student in unit.activeStudents() |
+          studentsForGroup:selectedGroupSet:selectedGroup:members |
+          filter:$viewValue |
+          limitTo:8"
+        typeahead-wait-ms="200"
+        typeahead-editable="false"
+        autocomplete="off">
+      <div class="input-group-btn">
+        <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
+          <i class="fa fa-plus"></i> Add Member
+        </button>
+      </div>
+    </form>
+  </div><!--/panel-body-->
+  <group-member-list
+    unit="unit"
+    unit-role="unitRole"
+    project="project"
+    selected-group="selectedGroup"
+    on-members-loaded="groupMembersLoaded">
+  </group-member-list>
+</div><!--/panel-group-memberships-->

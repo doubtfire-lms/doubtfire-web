@@ -1,68 +1,165 @@
-.task-comments-viewer {
+$comment-bubble-color: #0084ff;
+$comment-bubble-color-darker: darken($comment-bubble-color, 10%);
+$comment-bubble-color-other-user: #e5e5ea;
+$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
+$comment-author-bubble-size: 38px;
+$comment-text-padding: 12px;
+
+// Leave the 1.9 if you want amazing border radii
+$border-width: 0.8em;
+$comment-border-radius: $border-width * 1.9;
+
+task-comments-viewer .panel {
+  @include flex-panel;
+}
+
+task-comments-viewer .panel-body {
   overflow: scroll;
-  height: 30vh;
-  .no-comments {
-    height: 100%;
+  height: 100%;
+  font-size: 15px;
+}
+
+// Primary comment div
+task-comments-viewer .comment {
+  display: flex;
+  margin-bottom: 0.6em;
+  &.new-comment .comment-bubble {
+    animation: fade-in-comment-animation;
+    animation-duration: 5s;
+    @keyframes fade-in-comment-animation {
+      0% { background: rgba(33, 150, 243, 0.4); }
+      0% { border: rgba(33, 150, 243, 1); }
+      0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
+      100% { border: rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+    }
+  }
+  &.comment-by-other-user {
+    flex-direction: row-reverse;
   }
 }
 
-.task-comments-viewer .comment {
-  display: flex;
-  margin-bottom: 2em;
-  .comment-details {
-    @include flex-center;
-    align-items: flex-end;
-    align-content: flex-end;
-    height: 100%;
-    height: auto;
-    & > * {
-      width: 100%;
-      text-align: right;
-    }
-    .comment-by, .comment-date {
-      display: block;
-    }
-    .comment-by {
-      font-weight: bolder;
-    }
-    .comment-date {
-      margin-top: -5px;
-      font-size: 0.8em;
-    }
+// Author Bubble
+task-comments-viewer .comment .user-icon {
+  display: inline-block;
+  align-self: flex-end;
+  line-height: $comment-author-bubble-size - 2px;
+  margin-right: $comment-text-padding;
+  .user-icon-gravatar {
+    // To hide blue border
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
   }
+  .user-icon-initials {
+    color: #fff;
+    // border: 2px solid #fff;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    // box-shadow: 0 0 0 1px $comment-bubble-color;
+    background-color: $comment-bubble-color;
+    // background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
+  }
+}
+task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {
+  box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
+  background: $comment-bubble-color-other-user;
+  background: linear-gradient(to left, $comment-bubble-color-other-user , $comment-bubble-color-other-user-darker);
+  color: $text-color;
+}
+task-comments-viewer .comment.comment-by-other-user .user-icon {
+  margin-left: $comment-text-padding;
+  margin-right: 0;
+}
+
+task-comments-viewer .delete-comment {
+  align-self: flex-start;
+  padding-left: 6px;
+  font-style: normal;
+  font-size: 1.6em;
+  margin-right: $comment-text-padding;
+}
+task-comments-viewer img {
+  border-radius: $comment-border-radius;
+  color: #EEEEEE;
+  border-style: solid;
+  border-width: 1px;
+}
+task-comments-viewer .comment .comment-bubble {
+  display: flex;
+  background: $comment-bubble-color;
+  color: #fff;
+  border-radius: $comment-border-radius;
+  font-size: 1em;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 0;
+  line-height: 1.5em;
+
   .comment-text {
-    background-color: #efefef;
-    border-radius: 1.0em 1.0em 1.0em 0em;
-    padding: 1.5em;
-    font-size: 1.2em;
-    line-height: 1.5em;
-    .markdown-to-html > *:last-child {
-      margin-bottom: 0px;
-    }
-    img {
-      border-radius: 1em;
-    }
+    width: 100%;
+    margin: 0 auto 0 $comment-text-padding;
+    padding-right: $comment-text-padding;
+    word-break: break-word;
+    -webkit-font-smoothing: antialiased;
   }
-  .delete-comment {
-    font-style: normal;
-    color: #bbb;
-    font-size: 1.6em;
-    &:hover {
-      color: red;
-      cursor: pointer;
-    }
+
+  .comment-audio {
+    width: 200px;
+  }
+  .markdown-to-html > *:last-child {
+    margin-bottom: 0px;
   }
 }
-
-.comment-submitter {
+task-comments-viewer .comment .image-bubble {
   display: flex;
+  background: transparent;
+  border-radius: $comment-border-radius;
+}
+
+task-comments-viewer .comment.comment-by-other-user .comment-bubble,
+task-comments-viewer .comment.comment-by-other-user .image-bubble {
+  background: $comment-bubble-color-other-user;
+  &, .delete-comment {
+    color: $text-color;
+  }
+}
+task-comments-viewer .comment .comment-bubble .delete-comment:hover,
+task-comments-viewer .comment .image-bubble .delete-comment:hover {
+  color: lighten(#B71C1C, 15%);
+  cursor: pointer;
+}
+
+// Read receipts
+task-comments-viewer .read-receipt {
+  @extend .small;
+  @extend .text-muted;
+  @extend .text-right;
+  width: 100%;
+}
+
+// Footer
+task-comments-viewer .panel-footer {
+  padding: 0;
+  font-size: 15px;
+  background-color: white;
+}
+
+// Editor & submitter
+task-comments-viewer .markdown-editor .markdown-editor-inner-context {
+  border: 0;
+  width: 100%;
+  box-shadow: none;
+  border-radius: none;
+  min-height: 54px;
+}
+task-comments-viewer .comment-submitter {
+  display: flex;
+  word-wrap: break-word;
+  hyphens: auto;
   .markdown-editor {
     padding: 0;
-  }
-  .send-button-wrapper {
-    padding-right: 0;
-    .btn {
-      width: 100%;
-    }
+    width: 100%;
   }
 }

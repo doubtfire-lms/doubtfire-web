@@ -1,0 +1,60 @@
+<div class="card card-default card-sm" ng-show="task.definition.is_graded || task.definition.max_quality_pts > 0">
+  <div class="card-heading">
+    <h4>Assessment Information</h4>
+  </div>
+  <div class="card-body">
+    <div ng-show="task.definition.is_graded">
+      <h5>This task {{assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
+      <div ng-hide="hasBeenGraded(task)">
+        <p>
+          This task will be graded against a grade standard. Your work will
+          be assessed and assigned a grade according to a Pass, Credit,
+          Distinction or High Distinction standard.
+        </p>
+        <div class="callout callout-primary">
+          <h5>Advice for achieving a {{gradeNames[task.project().target_grade]}}</h5>
+          <p>
+            As you are attempting to achieve a {{gradeNames[task.project().target_grade]}} in this unit,
+            you should attempt to achieve a <strong>{{gradeNames[task.project().target_grade]}}</strong> grade
+            on this task. Ask your tutor to find out more on what they are looking for when they are assessing
+            this work to a specific grade.
+          </p>
+        </div>
+      </div><!--/graded-task-is-not-graded-->
+      <div ng-show="hasBeenGraded(task)">
+        Your tutor has marked you on this task to a <strong>{{gradeNames[task.grade]}}</strong> standard.
+      </div><!--/graded-task-is-graded-->
+    </div><!--/graded-task-->
+    <hr ng-show="task.definition.is_graded && task.definition.max_quality_pts > 0">
+    <div ng-show="task.definition.max_quality_pts > 0">
+      <h5>
+        <span ng-hide="hasBeenGivenStars(task)">
+          This task will be assessed on a scale to {{task.definition.max_quality_pts}}
+        </span>
+        <span ng-show="hasBeenGivenStars(task)">
+          This task has been assessed for quality
+        </span>
+      </h5>
+      <p ng-hide="hasBeenGivenStars(task)">
+        This task will be graded against a quality scale from
+        <strong>0 to {{task.definition.max_quality_pts}}</strong>. Your work will assessed
+        and assigned a star rating based on the quality of your submission.
+      </p>
+      <div ng-show="hasBeenGivenStars(task)">
+        <rating
+          class="task-quality-rating"
+          ng-model="task.quality_pts"
+          max="task.definition.max_quality_pts"
+          state-on="'fa fa-star rating-outline'"
+          state-off="'fa fa-star rating-disabled'"
+          readonly="true">
+        </rating>
+        <p>
+          You have been awarded out
+          <strong>{{task.quality_pts}} of {{task.definition.max_quality_pts}}</strong>
+          avaliable points for this task.
+        </p>
+      </div>
+    </div><!--/quality-star-task-->
+  </div><!--/assessment-body-->
+</div><!--/assessment-card-->

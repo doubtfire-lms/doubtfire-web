@@ -3,9 +3,12 @@
 *.log
 .DS_Store
 build/
+dist/
 bin/
 node_modules/
 vendor/
 .sass-cache*
 .bundle*
 tmp.scss
+.vscode/
+a.env

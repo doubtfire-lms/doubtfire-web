@@ -1,0 +1,64 @@
+#students-list {
+  // Flag icons
+  $flag-icon-width: 35px;
+  $number-of-flags: 3;
+  table thead th {
+    vertical-align: middle;
+  }
+  a.sort-by-flag-anchor {
+    &:hover {
+      text-decoration: none;
+      .show-link {
+        text-decoration: underline;
+      }
+    }
+  }
+  a.sort-by-flag-anchor + .flag-sort-options {
+    display: flex;
+    max-width: $flag-icon-width * $number-of-flags;
+    margin: 0.5em 0;
+    align-items: center;
+    justify-content: space-between;
+    .flag-sort {
+      i, grade-icon {
+        display: inline-block;
+      }
+    }
+    .flag-sort > i:hover {
+      color: $link-hover-color;
+    }
+    .flag-sort > grade-icon:hover span {
+      background-color: $link-hover-color;
+    }
+  }
+  table {
+    td.flags-data {
+      .flags {
+        max-width: $flag-icon-width * $number-of-flags;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    td.task-progress-bar {
+      padding-right: 3ex;
+      .progress {
+        border-radius: 10px;
+      }
+    }
+    td.avatar {
+      text-align: right;
+      .user-icon {
+        margin-right: 1ex;
+        width: 2.5em;
+        height: 2.5em;
+      }
+    }
+    th.avatar     { width: 05%; }
+    th.student-id { width: 10%; }
+    th.name       { width: 15%; }
+    th.stats      { width: 30%; }
+    th.flags      { width: 15%; }
+    th.tutorial   { width: 30%; }
+  }
+}

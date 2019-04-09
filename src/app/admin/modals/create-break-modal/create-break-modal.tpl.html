@@ -1,0 +1,31 @@
+<div class="create-break-modal">
+  <form class="form-horizontal" ng-submit="addBreak()" role="form">
+    <div class="modal-header">
+      <h3>Add Break</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label tooltip="Date for the start of break in the teaching period." class="col-sm-3 control-label" for="startdate">Start Date</label>
+        <div class="col-sm-9">
+          <div class="col-sm-4 input-group">
+            <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="break.start_date" ng-required="true" placeholder="yyyy-mm-dd" close-text="Close" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="open($event,'start')">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Number of Weeks</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" ng-model="break.number_of_weeks"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="Add Break"/>
+    </div>
+  </form>
+</div>

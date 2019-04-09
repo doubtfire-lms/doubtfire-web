@@ -11,12 +11,15 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
+  controller: ($scope, $filter, ExternalName, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
     $scope.startPicker = { open: false }
+
+    # Get the confugurable, external name of Doubtfire
+    $scope.externalName = ExternalName
 
     #
     # Active task tab group
@@ -52,27 +55,44 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # The task sheet uploader...
     #
     $scope.taskSheet = { file: { name: 'Task Sheet', type: 'document'  } }
-    $scope.taskSheetUploadUrl = () -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
+    $scope.taskSheetUploadUrl = -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskSheetSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
-      $scope.task.has_task_pdf = true
+      $scope.task.has_task_sheet = true
       # $scope.filesUploaded = response
 
-    $scope.taskPDFUrl = () ->
-      Task.getTaskPDFUrl($scope.unit, $scope.task)
+    $scope.taskPDFUrl = ->
+      "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
+
+    $scope.removeTaskSheet = (task) ->
+      TaskDefinition.taskSheet.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+        (success) ->
+          task.has_task_sheet = false
+          alertService.add("success", "Deleted task sheet", 2000)
+        (error) ->
+          alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
+
+    $scope.removeTaskResources = (task) ->
+      TaskDefinition.taskResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+        (success) ->
+          task.has_task_resources = false
+          alertService.add("success", "Deleted task resources", 2000)
+        (error) ->
+          alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
+
 
     #
     # The task resources uploader...
     #
-    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip'  } }
-    $scope.taskResourcesUploadUrl = () -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
+    $scope.taskResources = { file: { name: 'Task Resources', type: 'zip' } }
+    $scope.taskResourcesUploadUrl = -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
 
     $scope.onTaskResourcesSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_resources = true
 
-    $scope.resourceUrl = () ->
+    $scope.resourceUrl = ->
       Task.getTaskResourcesUrl($scope.unit, $scope.task)
 
 
@@ -100,7 +120,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       $event.preventDefault()
       $event.stopPropagation()
 
-      if ! pickerData.open
+      unless pickerData.open
         # Close both
         $scope.targetPicker.open = false
         $scope.duePicker.open = false
@@ -109,7 +129,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       # Toggle one
       pickerData.open = ! pickerData.open
 
-    $scope.addUpReq = () ->
+    $scope.addUpReq = ->
       newLength = $scope.task.upload_requirements.length + 1
       newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
       $scope.task.upload_requirements.push newUpReq
@@ -117,7 +137,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeUpReq = (upReq) ->
       $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
 
-    $scope.addCheck = () ->
+    $scope.addCheck = ->
       newLength = $scope.task.plagiarism_checks.length + 1
       newCheck = { key: "check#{newLength-1}", pattern: "", type: "" }
       $scope.task.plagiarism_checks.push newCheck
@@ -125,15 +145,17 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeCheck = (check) ->
       $scope.task.plagiarism_checks = $scope.task.plagiarism_checks.filter (aCheck) -> aCheck.key isnt check.key
 
+    $scope.allowedQualityPoints = [0..10]
+
     populate_task = (oldTask, newTask) ->
       _.extend(oldTask, newTask)
       if newTask.weighting
         oldTask.weight = newTask.weighting
 
-    $scope.deleteTask = () ->
+    $scope.deleteTask = ->
       taskService.deleteTask $scope.task, $scope.unit, null
 
-    $scope.saveTask = () ->
+    $scope.saveTask = ->
       # Map the task to upload to the appropriate fields
       task = {}
       _.extend(task, $scope.task)
@@ -147,40 +169,43 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       else
         task.group_set_id = -1
 
-      if task.target_date && task.target_date.getMonth
-        tgt = task.target_date
-        task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-
-      if task.start_date && task.start_date.getMonth
-        tgt = task.start_date
-        task.start_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
-
-      if task.due_date && task.due_date.getMonth
-        due = task.due_date
-        task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
-
-      if $scope.isNew
-        promise = TaskDefinition.create( { task_def: task } ).$promise
-        ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
-        promise.then (
-          (response) ->
-            $scope.unit.task_definitions.push(response)
-            alertService.add("success", "#{response.name} Added", 2000)
-        ),
-        (
-          (response) ->
-            if response.data.error?
-              alertService.add("danger", "Error: " + response.data.error, 6000)
-        )
+      if (Date.parse(task.start_date) > Date.parse(task.target_date)) || (Date.parse(task.target_date) > Date.parse(task.due_date))
+        alertService.add("danger", "Invalid task dates, unit not saved. Ensure start date is before due date, and due date is before deadline.", 5000)
       else
-        TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
-          (response) ->
-            populate_task($scope.task, response)
-            alertService.add("success", "#{response.name} Updated", 2000)
-        ),
-        (
-          (response) ->
-            if response.data.error?
-              alertService.add("danger", "Error: " + response.data.error, 6000)
-        )
+        if task.target_date && task.target_date.getMonth
+          tgt = task.target_date
+          task.target_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+
+        if task.start_date && task.start_date.getMonth
+          tgt = task.start_date
+          task.start_date = "#{tgt.getFullYear()}-#{tgt.getMonth() + 1}-#{tgt.getDate()}"
+
+        if task.due_date && task.due_date.getMonth
+          due = task.due_date
+          task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
+
+        if $scope.isNew
+          promise = TaskDefinition.create( { task_def: task } ).$promise
+          ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
+          promise.then (
+            (response) ->
+              $scope.unit.task_definitions.push(response)
+              alertService.add("success", "#{response.name} Added", 2000)
+          ),
+          (
+            (response) ->
+              if response.data.error?
+                alertService.add("danger", "Error: " + response.data.error, 6000)
+          )
+        else
+          TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
+            (response) ->
+              populate_task($scope.task, response)
+              alertService.add("success", "#{response.name} Updated", 2000)
+          ),
+          (
+            (response) ->
+              if response.data.error?
+                alertService.add("danger", "Error: " + response.data.error, 6000)
+          )
 )

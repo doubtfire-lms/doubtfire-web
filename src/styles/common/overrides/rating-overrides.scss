@@ -1,0 +1,12 @@
+// The generated <rating> from ui-bootstrap becomes this
+span[role="slider"] {
+  outline: none;
+}
+.rating-outline {
+  color: lighten($brand-warning, 30%);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: $brand-warning;
+}
+.rating-disabled {
+  color: lighten($text-muted, 30%);
+}

@@ -36,6 +36,6 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
 
     $scope.calculateAlignmentVisualisation($scope.source, $scope.taskStatusFactor)
 
-    $scope.$on('UpdateAlignmentChart', () ->
+    $scope.$on('UpdateAlignmentChart', ->
       $scope.calculateAlignmentVisualisation($scope.source, $scope.taskStatusFactor)
     )

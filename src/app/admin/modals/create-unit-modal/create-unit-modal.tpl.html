@@ -1,0 +1,24 @@
+<div class="create-unit-modal">
+  <form class="form-horizontal" ng-submit="saveUnit()" role="form">
+    <div class="modal-header">
+      <h3>Create Unit</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Name</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" ng-model="unit.name" placeholder="Introduction to {{externalName.value}}"/>
+        </div>
+      </div>
+      <div class="form-group" required>
+        <label class="col-sm-3 control-label">Code</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" ng-model="unit.code" placeholder="COS123456"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="Create" ng-disabled="unit.name == null || unit.code == null"/>
+    </div>
+  </form>
+</div>

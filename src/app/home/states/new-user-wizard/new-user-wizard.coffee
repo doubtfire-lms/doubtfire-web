@@ -13,11 +13,9 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
   $stateProvider.state 'new-user-wizard', newUserWizardStateData
 )
 
-.controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
-  # Get projects for target grades
-  projectService.getProjects (projects) ->
-    $scope.projects = projects
+.controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, ExternalName, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
   # Define steps for wizard
+  # MUST ADD TO ABOVE NOTE!
   $scope.steps = {
     nameStep: {
       title:    "What's your name?"
@@ -29,20 +27,30 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       subtitle: "If you'll find it easier for your tutor to call you another name please let us know!"
       seq:      1
     },
+    studentIdStep: {
+      title:    "What is your Student ID?"
+      subtitle: "Please enter your Student ID number that is allocated by your institution."
+      seq:      2
+    }
+    avatarStep: {
+      title:    "Give yourself an avatar"
+      subtitle: "Set your avatar using Gravatar to help you be identified on Doubtfire."
+      seq:      3
+    }
     emailStep: {
       title:    "How would you like us to email you?"
       subtitle: "Based on your preferences, we will email you as frequently as you'd like us to."
-      seq:      2
+      seq:      4
     },
     targetGradeStep: {
       title:    "What grades are you aiming for?"
       subtitle: "We noticed you are enrolled in the following subject(s)."
-      seq:      3
+      seq:      5
     },
     optInToResearchStep: {
       title:    "Would you like to help us make Doubtfire better?"
       subtitle: "We would like to anonymously use your Doubtfire usage for research in making Doubtfire better."
-      seq:      4
+      seq:      6
     }
   }
   # Alises to first and last step
@@ -59,6 +67,7 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     firstName = null
     lastName = null
     email = null
+    studentId = ""
     unless currentUser.profile.first_name.toLowerCase() is 'first name' or currentUser.profile.last_name.toLowerCase() is 'last name'
       firstName = currentUser.profile.first_name
       lastName = currentUser.profile.last_name
@@ -68,10 +77,11 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       last_name: lastName
       nickname: null
       email: email
-      receive_feedback_notifications: null
-      receive_portfolio_notifications: null
-      receive_task_notifications: null
-      opt_in_to_research: null
+      student_id: studentId
+      receive_feedback_notifications: true
+      receive_portfolio_notifications: true
+      receive_task_notifications: true
+      opt_in_to_research: true
       has_run_first_time_setup: true
     }
   # Progress through wizard
@@ -93,13 +103,16 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     switch $scope.currentStep
       when $scope.steps.nameStep
         state = $scope.user.first_name?.trim().length > 0 and $scope.user.last_name?.trim().length > 0
-      when $scope.steps.nicknameStep, $scope.steps.targetGradeStep
+      when $scope.steps.nicknameStep, $scope.steps.targetGradeStep, $scope.steps.avatarStep
         state = true
+      when $scope.steps.studentIdStep
+        state = $scope.user.student_id?.trim().length > 0
       when $scope.steps.emailStep
+        state = $scope.user.email?.trim().length > 0
         state =
-          $scope.user.email?.trim().length > 0 and
-          _.isBoolean($scope.user.receive_feedback_notifications) and
-          _.isBoolean($scope.user.receive_portfolio_notifications) and
+          state &&
+          _.isBoolean($scope.user.receive_feedback_notifications) &&
+          _.isBoolean($scope.user.receive_portfolio_notifications) &&
           _.isBoolean($scope.user.receive_task_notifications)
       when $scope.steps.optInToResearchStep
         state = _.isBoolean($scope.user.opt_in_to_research)
@@ -109,7 +122,6 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
     user = if user? then user else $scope.user
     promises = []
     errorFn = (response) ->
-      console.log response
       alertService.add("danger", "Error: " + response.data.error, 6000)
     # update projects
     for project in $scope.projects
@@ -122,4 +134,20 @@ angular.module('doubtfire.home.states.new-user-wizard', [])
       $state.go('home')
 
   $scope.userFirstName = currentUser.profile.first_name
+
+  # Get the confugurable, external name of Doubtfire
+  $scope.externalName = ExternalName
+
+    # Get projects for target grades
+  projectService.getProjects false, (projects) ->
+    $scope.projects = projects
+    # Only ask for student ID if learning subjects!
+    if projects.length == 0 && currentUser.role != 'Student'
+      $scope.isStaff = true
+      $scope.user.student_id = null
+      delete $scope.steps.studentIdStep
+      # NOTE: Must add step to below
+      for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
+        $scope.steps[step].seq -= 1
+      $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
 )

@@ -8,48 +8,54 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
   restrict: 'E'
   templateUrl: 'tasks/task-comments-viewer/task-comments-viewer.tpl.html'
   scope:
-    project: "="
-    task: "="
-    comment: "=?"
-  controller: ($scope, $modal, $state, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
-    #
-    # Comment code
-    #
-    $scope.currentPage = 1
-    $scope.pageSize = 3
-    $scope.maxSize = 5
+    task: '='
+    comment: '=?'
+    autofocus: '@?'
+    refocusOnTaskChange: '@?'
+
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+    # Cleanup
+    listeners = listenerService.listenTo($scope)
 
     # Initialise scope comment text
     unless _.isString $scope.comment?.text
       $scope.comment = { text: "" }
 
-    $scope.$watch 'task', (newTask) ->
-      fetchTaskComments(newTask)
+    # Watch for initial task
+    listeners.push $scope.$watch 'task', (newTask) ->
+      return unless newTask?.project? # Must have project for task to be mapped
+      $scope.project = newTask.project()
+      # Once project is loaded fetch task comments
+      TaskComment.query {
+        project_id: $scope.project.project_id,
+        task_definition_id: $scope.task.task_definition_id
+      }, (response) ->
+        $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
+        $scope.lastComment = $scope.task.comments.slice(-1)[0]
+        $scope.task.num_new_comments = 0
+        taskService.scrollDown()
+        $scope.focus?() if $scope.refocusOnTaskChange
 
-    #
-    # Comment text area enter to submit comment
-    #
-    fetchTaskComments = (task) ->
-      TaskComment.query {project_id: $scope.project.project_id, task_definition_id: task.task_definition_id},
-        (response) ->
-          task.comments = response
-          $scope.currentPage = 1
+        CommentResourceService.setTask($scope.task)
 
-    $scope.checkForEnterPress = ($event) ->
-      ENTER_KEY = 13
-      return if $event.which isnt ENTER_KEY or $event.shiftKey
-      if $scope.comment.text.trim().length isnt 0
-        $scope.addComment()
-      false
 
-    $scope.addComment = ->
-      # console.log $scope.task, $scope.comment
-      taskService.addComment $scope.task, $scope.comment.text,
-        (success) ->
-          $scope.comment.text = ""
-          analyticsService.event "View Task Comments", "Added new comment"
-        (response) ->
-          alertService.add("danger", response.data.error, 2000)
+    $scope.openCommentsModal = (comment)->
+      resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+      CommentResourceService.setResourceUrl(resourceUrl)
+      CommentResourceService.setCommentType(comment.type)
+      CommentsModal.show()
+
+    #===========================================================================================
+    $scope.canUserEdit = (comment) ->
+      canEdit = false
+      if comment.author_is_me || currentUser.role == "Admin"
+        canEdit = true
+      canEdit
+
+    #===========================================================================================
+    $scope.getCommentAttachment = (comment) ->
+      # TODO: Refactor to use other Task method
+      mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
 
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },

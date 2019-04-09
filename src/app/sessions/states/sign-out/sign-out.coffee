@@ -14,8 +14,14 @@ angular.module("doubtfire.sessions.states.sign-out", [])
       pageTitle: "_Sign Out_"
   $stateProvider.state "sign_out", signOutStateData
 )
-.controller("SignOutCtrl", ($state, $timeout, auth, api, currentUser) ->
+.controller("SignOutCtrl", ($state, $timeout, $http, auth, api, currentUser) ->
   if auth.signOut api + "/auth/" + currentUser.authenticationToken + ".json"
-    $timeout (-> $state.go "sign_in"), 750
+    $http.get("#{api}/auth/signout_url").then ((response) ->
+      signoutURL = response.data.auth_signout_url || false
+      if signoutURL
+        window.location.assign(signoutURL)
+      else
+        $timeout (-> $state.go "sign_in"), 750
+    )
   return this
 )

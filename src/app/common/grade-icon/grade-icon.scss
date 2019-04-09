@@ -22,15 +22,27 @@ a .grade-icon:hover {
 .grade-icon {
   color: #fff;
   font-size: 1em;
-  background: $text-color;
+  background-color: $text-color;
   border-radius: 100%;
   width: 2.25em;
   height: 2.25em;
   font-weight: 100;
   font-size: 1em;
-  cursor: pointer;
+  @include no-select;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.grade-icon.colorful {
+  &.grade-0 { background-color: $grade-color-p;  }
+  &.grade-1 { background-color: $grade-color-c;  }
+  &.grade-2 { background-color: $grade-color-d;  }
+  &.grade-3 { background-color: $grade-color-hd; }
+}
+.text-left .grade-icon {
+  margin-left: 0;
+}
+.text-right .grade-icon {
+  margin-right: 0;
 }

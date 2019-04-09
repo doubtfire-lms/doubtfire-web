@@ -5,17 +5,13 @@ angular.module("doubtfire.common.filters", [])
 #
 .filter('startFrom', ->
   (input, start) ->
-    start = +start # parse to int
-    if input
-      input.slice(start)
-    else
-      input
+    input?.slice(+start)
 )
 
 .filter('showStudents', ->
   (input, kind, tutorName) ->
     if input
-      if kind == "myStudents"
+      if kind == "mine" || kind == "myStudents"
         _.filter  input, { tutorial: {tutor_name: tutorName} }
       else
         input
@@ -26,7 +22,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('showTasks', ->
   (input, kind, tutorName) ->
     if input
-      if kind == "myStudents"
+      if kind == "mine"
         _.filter  input, (t) -> (t?) && t.project().tutorName() == tutorName
       else
         input
@@ -67,16 +63,16 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('studentsWithPortfolio', ->
-  (input) ->
+  (input, option) ->
     if input
-      _.filter  input, (student) -> (student?) && student.has_portfolio > 0
+      _.filter  input, (student) ->  option == 'allStudents' || ((student?) && student.has_portfolio > 0)
     else
       input
 )
 
 .filter('studentsWithTargetGrade', ->
   (input, grade) ->
-    if input
+    if input && grade > -1
       _.filter  input, (student) -> (student?) && student.target_grade == grade
     else
       input
@@ -91,36 +87,12 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('studentsForGroup', ->
-  (input, gs, grp, members) ->
+  (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.tutorial_id == grp.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.tutorial_id == group.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
-    else
-      input
-)
-
-#
-# Filter groups for students and in group admin pages
-#   gs: group set to determine if keep to class
-#   project: nil for admin pages, otherwise student
-#   assessingUnitRole: nil for student, otherwise staff details
-#   kind: 'all' | 'mine'
-#
-.filter('groupFilter', ->
-  (input, unit, gs, project, assessingUnitRole, kind) ->
-    if input
-      if assessingUnitRole && ! project # staff only... so tutorial is ignored!
-        if kind == 'mine'
-          _.filter input, (grp) -> unit.tutorialFromId(grp.tutorial_id).tutor_name == assessingUnitRole.name
-        else # just all
-          input
-      else  # student...
-        if gs.keep_groups_in_same_class # match just those in this tutorial
-          _.filter input, (grp) -> (project.tutorial?) && grp.tutorial_id == project.tutorial.id
-        else # all
-          input
     else
       input
 )
@@ -171,7 +143,7 @@ angular.module("doubtfire.common.filters", [])
             project = task.project()
             (task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0) ||
               (task.definition.name.toLowerCase().indexOf(matchText) >= 0) ||
-              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0))))
+              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0)))))
           else
             false
       else
@@ -183,7 +155,7 @@ angular.module("doubtfire.common.filters", [])
     if _.isString text
       matchText = text.toLowerCase()
       if input
-        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || project.tutorName().toLowerCase().indexOf(matchText) >= 0)) )
+        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0))) )
       else
         input
 )
@@ -198,4 +170,117 @@ angular.module("doubtfire.common.filters", [])
           !_.includes(taskService.toBeWorkedOn, task.status)
         else
           false
+)
+
+# NEW FILTERS
+
+.filter('tasksOfTaskDefinition', ->
+  (tasks, taskDefinition) ->
+    return tasks unless (taskDefinition? && tasks?)
+    tasks = _.filter tasks, { task_definition_id: taskDefinition.id }
+)
+
+.filter('tasksWithStatuses', ->
+  (tasks, statusKeys) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty statusKeys
+    _.filter tasks, (task) -> _.includes(statusKeys, task.status)
+)
+
+.filter('tasksInTutorials', ->
+  (tasks, tutorialIds) ->
+    return tasks unless tasks?
+    return [] if _.isEmpty tutorialIds
+    # If task is group task, then use group tutorial, else use project tutorial
+    _.filter tasks, (task) ->
+      if task.isGroupTask()
+        if task.group()?
+          _.includes(tutorialIds, task.group().tutorial_id)
+      else
+        _.includes(tutorialIds, task.project().tutorial_id)
+
+)
+
+.filter('tasksWithStudentName', ->
+  (tasks, searchName) ->
+    return tasks unless (searchName? && tasks?)
+    searchName = searchName.toLowerCase()
+    _.filter tasks, (task) ->
+      task.project().name.toLowerCase().indexOf(searchName) >= 0
+)
+
+.filter('groupsInTutorials', ->
+  (input, unitRole, kind) ->
+    return unless input? && unitRole? && kind?
+    return input if kind == 'all'
+    if kind == 'mine'
+      _.filter(input, (group) -> group.tutorial().tutor_name == unitRole.name)
+)
+
+.filter('groupsForStudent', ->
+  (input, project, groupSet) ->
+    # Filter by tutorial if keep groups in same class
+    return unless input? && groupSet? && project?
+    return input unless groupSet.keep_groups_in_same_class
+    if groupSet.keep_groups_in_same_class
+      _.filter(input, (group) -> group.tutorial_id == project.tutorial?.id)
+)
+
+.filter('paginateAndSort', ($filter) ->
+  (input, pagination, tableSort) ->
+    return unless input? && tableSort? && pagination?
+    return input if input.length == 0
+    pagination.show = input.length > pagination.pageSize
+    pagination.totalSize = input.length
+    input = $filter('orderBy')(input, tableSort.order, tableSort.reverse)
+    input = $filter('startFrom')(input, (pagination.currentPage - 1) * pagination.pageSize)
+    input = $filter('limitTo')(input, pagination.pageSize)
+    input
+)
+
+.filter('tasksWithName', ->
+  (tasks, searchName) ->
+    return tasks unless (searchName? && tasks?)
+    searchName = searchName.toLowerCase()
+    _.filter(tasks, (task) ->
+      # Search using name or abbreviation
+      task.definition.name.toLowerCase().indexOf(searchName) >= 0 ||
+      task.definition.abbreviation.toLowerCase().indexOf(searchName) >= 0
+    )
+)
+
+.filter('taskDefinitionName', ->
+  (taskDefinitions, searchName) ->
+    return taskDefinitions unless (searchName? && taskDefinitions?)
+    searchName = searchName.toLowerCase()
+    _.filter(taskDefinitions, (td) ->
+      # Search using name or abbreviation
+      td.name.toLowerCase().indexOf(searchName) >= 0 ||
+      td.abbreviation.toLowerCase().indexOf(searchName) >= 0 ||
+      td.targetGrade().toLowerCase().indexOf(searchName) >= 0
+    )
+)
+
+.filter('humanizedDate', ($filter) ->
+  (input) ->
+    return unless input?
+    moment(input).calendar(null, {
+      sameDay: '',
+      nextDay: '[tomorrow]',
+      nextWeek: '[this] dddd',
+      lastDay: '[yesterday]',
+      lastWeek: '[last] dddd',
+      sameElse: 'DD/MM/YYYY'
+    })
+)
+
+.filter('lcfirst', ->
+  (input) ->
+    return if !input? || input.length == 0
+    input[0].toLowerCase() + input.substring(1)
+)
+
+.filter('isActiveUnitRole', ->
+  (unitRoles) ->
+    _.filter(unitRoles, (ur) -> ur.active )
 )

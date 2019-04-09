@@ -1,0 +1,45 @@
+<div>
+  <form class="form-horizontal" ng-submit="saveNotifications()" role="form">
+    <div class="modal-header">
+      <h3>Notification Settings</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Task Notifications</label>
+        <div class="btn-group">
+          <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
+            <i class="glyphicon glyphicon-ok"></i>
+          </label>
+          <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
+            <i class="glyphicon glyphicon-remove"></i>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Feedback Notifications</label>
+        <div class="btn-group">
+          <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
+            <i class="glyphicon glyphicon-ok"></i>
+          </label>
+          <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
+            <i class="glyphicon glyphicon-remove"></i>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-6 control-label">Portfolio Notifications</label>
+        <div class="btn-group">
+          <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
+            <i class="glyphicon glyphicon-ok"></i>
+          </label>
+          <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
+            <i class="glyphicon glyphicon-remove"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+  </form>
+</div>

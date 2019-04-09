@@ -1,83 +1,35 @@
-#home .panel-wrapper {
-  width: 100%;
+#home .cards {
   display: flex;
-  justify-content: stretch;
   flex-wrap: wrap;
-  .panel-container {
-    // For keeping the panels in the centre of the screen
-    @media (min-width: $screen-md) {
-      &.col-md-4 {
-        width: calc(33.33333333% - 1px);
-        &:first-child:last-child {
-          margin-left: 33.33333333%;
-        }
-      }
-    }
+  padding: 0 15px;
+  align-items: flex-start;
+  .card {
+    width: 30%;
     margin: 0 auto;
-    display: flex;
-    width: 100%;
-  }
-  .panel {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    .panel-heading {
-      width: 100%;
-      max-height: 38px;
-      display: flex;
-      align-items: center;
-    }
-    .list-group {
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .no-content, .list-group {
-      flex: 1;
-    }
-    .no-content, .list-group-item {
-      display: flex;
-      align-items: center;
-      div {
-        width: 100%;
-      }
-    }
-    .list-group-item, .no-content, .panel-body, & {
-      width: 100%;
-    }
+    display: inline-block;
   }
 }
-#home .panel-admin, #home .panel-project, #home .panel-teaching {
-  .list-group-item {
-    i {
-      float: left;
-      width: 10%;
-      text-align: left;
-      font-size: 2em;
-      padding-top: 0.5em;
-      @media (max-width: $screen-sm) {
-        font-size: 1.5em;
-      }
-      @media (min-width: $screen-lg) {
-        padding-left: 0.33ex;
-      }
-    }
-    .list-group-item-heading, .list-group-item-text {
-      width: 88%;
-      float: right;
-    }
-    p {
-      margin: 0.75em 0 0.5em 0;
-      label {
-        font-size: 1em;
-      }
-    }
-  }
-  .no-content {
-    i {
-      display: block;
-      margin-bottom: 10px;
-    }
-    text-align:center;
-    padding: 100px inherit;
-  }
+#home .card header {
+  font-size: 1.3em;
+  font-weight: 400;
+  margin-bottom: 0.5em;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#home .welcome-to-doubtfire {
+  margin-top: 1em;
+}
+#home .spinner {
+  position: fixed;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
