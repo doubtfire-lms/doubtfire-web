@@ -308,7 +308,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
-  taskService.statusClass = (status) -> _.trim(_.dasherize(status))
+  taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
 
   # This function gets the status text for the indicated status
   taskService.statusText = (status) -> taskService.statusLabels[status]

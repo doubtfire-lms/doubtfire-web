@@ -8,7 +8,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
   replace: true
   restrict: 'E'
   templateUrl: 'admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.tpl.html'
-  controller: ($scope, $state, ExternalName, alertService, TeachingPeriod) ->
+  controller: ($scope, $state, DoubtfireConstants, alertService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
@@ -18,7 +18,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
     TeachingPeriod.query()
 
     # Get the confugurable, external name of Doubtfire
-    $scope.externalName = ExternalName
+    $scope.externalName = DoubtfireConstants.ExternalName
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->

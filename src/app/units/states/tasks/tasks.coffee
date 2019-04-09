@@ -22,7 +22,7 @@ angular.module('doubtfire.units.states.tasks', [
    }
 )
 
-.controller('UnitsTasksStateCtrl', ($scope, $state, taskService, listenerService) ->
+.controller('UnitsTasksStateCtrl', ($scope, $state, taskService, listenerService, $transition$) ->
   # Cleanup
   listeners = listenerService.listenTo($scope)
 
@@ -54,7 +54,7 @@ angular.module('doubtfire.units.states.tasks', [
 
   # Child states will use taskKey to notify what task has been
   # selected by the child on first load.
-  taskKey = $state.$current.locals.globals.$stateParams.taskKey
+  taskKey = $transition$.params().taskKey
   setTaskKeyFromUrlParams(taskKey)
 
   # Whenever the state is changed, we look at the taskKey in the URL params

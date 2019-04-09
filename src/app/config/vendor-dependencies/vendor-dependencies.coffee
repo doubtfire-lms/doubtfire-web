@@ -10,10 +10,10 @@ angular.module('doubtfire.config.vendor-dependencies', [
 
   # templates
   'templates-app'
-  'templates-common'
 
   # ui.*
   'ui.router'
+  'ui.router.upgrade'
   'ui.bootstrap'
   'ui.codemirror'
 

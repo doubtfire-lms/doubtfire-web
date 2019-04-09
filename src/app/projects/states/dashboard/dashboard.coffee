@@ -32,6 +32,7 @@ angular.module('doubtfire.projects.states.dashboard', [
   # Sets URL parameters for the task key
   setTaskAbbrAsUrlParams = (task) ->
     taskAbbr = if _.isString(task) then task else task?.definition.abbreviation
+    taskAbbr = if taskAbbr then taskAbbr else ''
     # Change URL of new task without notify
     $state.go($state.$current, {taskAbbr: taskAbbr}, {notify: false})
 
