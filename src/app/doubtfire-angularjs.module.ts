@@ -13,7 +13,7 @@ import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 // Here are the old angular node modules, previously loaded via grunt
-
+//#region 
 import 'node_modules/angular-cookies/angular-cookies.js';
 import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
 import 'node_modules/angular-resource/angular-resource.js';
@@ -275,7 +275,7 @@ import 'build/src/i18n/resources-locale_default.js';
 import 'build/src/i18n/resources-locale_en-US.js';
 import 'build/src/i18n/resources-locale_en-AU.js';
 import 'build/src/i18n/resources-locale_en-GB.js';
-
+//#endregion
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -292,7 +292,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.visualisations']);
 
 // Downgrade angular modules that we need...
-
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',

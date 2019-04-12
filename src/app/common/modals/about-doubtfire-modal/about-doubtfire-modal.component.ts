@@ -7,6 +7,7 @@ import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubt
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { Unit } from 'src/app/ajs-upgraded-providers';
 
 export interface AboutDialogData {
   externalName: string,
@@ -21,13 +22,14 @@ export interface AboutDialogData {
 })
 @Component({
   selector: 'about-modal-content',
-  providers: [AboutDoubtfireModalService, DoubtfireConstants],
+  providers: [AboutDoubtfireModalService, DoubtfireConstants]
 })
 export class AboutDoubtfireModal {
 
   aboutDialogData: AboutDialogData;
 
   constructor(public dialog: MatDialog,
+    @Inject(Unit) private unit: any,
     private constants: DoubtfireConstants,
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.aboutDialogData = {
@@ -39,6 +41,11 @@ export class AboutDoubtfireModal {
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
     }));
+
+
+    this.unit.get({ id: 1 }, res => {
+      console.log(res);
+    });
   }
 
   show() {

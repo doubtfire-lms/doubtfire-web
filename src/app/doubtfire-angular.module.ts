@@ -16,6 +16,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
+import { unitProvider } from './ajs-upgraded-providers';
 
 @NgModule({
   declarations: [
@@ -31,11 +32,13 @@ import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
     UpgradeModule,
     UIRouterUpgradeModule.forRoot(),
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpErrorInterceptor,
-    multi: true
-  }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
+  providers: [
+    unitProvider,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
   entryComponents: [AboutDoubtfireModalContent]
 })
 export class DoubtfireAngularModule {
