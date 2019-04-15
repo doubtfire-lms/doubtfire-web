@@ -1,7 +1,5 @@
 import { InjectionToken } from '@angular/core';
 
-// import '../app/api/models/unit.js'
-
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string
 export const Unit = new InjectionToken('Unit');
