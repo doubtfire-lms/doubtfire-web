@@ -28,8 +28,7 @@
     }
     width: 100%;
     text-align: center;
-    /*display: inline-block;*/
-    display: flex; /* Teju */
+    display: flex;
     flex-wrap: nowrap;
     &:focus {
       outline: none;
