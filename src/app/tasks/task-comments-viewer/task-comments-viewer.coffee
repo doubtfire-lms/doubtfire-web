@@ -13,7 +13,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 

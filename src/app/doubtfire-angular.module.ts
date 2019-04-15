@@ -6,21 +6,24 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
 
-import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid'
+import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
-import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service"
+import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { unitProvider } from './ajs-upgraded-providers';
+import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider } from './ajs-upgraded-providers';
+import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
+// import { TaskCommentComposerService } from 'src/app/tasks/task-comment-composer/task-comment-composer.service';
 
 @NgModule({
   declarations: [
-    AboutDoubtfireModalContent
+    AboutDoubtfireModalContent,
+    TaskCommentComposerComponent
   ],
   imports: [
     BrowserModule,
@@ -34,12 +37,17 @@ import { unitProvider } from './ajs-upgraded-providers';
   ],
   providers: [
     unitProvider,
+    taskServiceProvider,
+    analyticsServiceProvider,
+    taskProvider,
+    alertServiceProvider,
+    CommentResourceServiceProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent]
+  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
@@ -47,7 +55,7 @@ export class DoubtfireAngularModule {
 
     this.constants.ExternalName
       .subscribe(result => {
-        this.title.setTitle(result)
+        this.title.setTitle(result);
       });
   }
 

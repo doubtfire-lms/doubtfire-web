@@ -5,15 +5,11 @@
 // # tree inside app/
 // #
 
-import * as angular from "angular";
-
-import { downgradeInjectable } from '@angular/upgrade/static';
-
-import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import * as angular from 'angular';
+import { downgradeInjectable, downgradeComponent } from '@angular/upgrade/static';
 
 // Here are the old angular node modules, previously loaded via grunt
-//#region 
+//#region
 import 'node_modules/angular-cookies/angular-cookies.js';
 import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
 import 'node_modules/angular-resource/angular-resource.js';
@@ -64,7 +60,6 @@ import 'build/src/app/tasks/task-viewer/task-viewer.js';
 import 'build/src/app/tasks/tasks.js';
 import 'build/src/app/tasks/task-feedback-assessor/task-feedback-assessor.js';
 import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.js';
-import 'build/src/app/tasks/task-comment-composer/task-comment-composer.js';
 import 'build/src/app/tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
@@ -277,6 +272,10 @@ import 'build/src/i18n/resources-locale_en-AU.js';
 import 'build/src/i18n/resources-locale_en-GB.js';
 //#endregion
 
+import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.api',
@@ -296,13 +295,14 @@ DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
+DoubtfireAngularJSModule.directive('taskCommentComposer',
+  downgradeComponent({component: TaskCommentComposerComponent}));
 
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
-const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider : any, $locationProvider : any) => {
+const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {
   $locationProvider.hashPrefix('');
-  $urlRouterProvider.otherwise("/home");
+  $urlRouterProvider.otherwise('/home');
 }];
 DoubtfireAngularJSModule.config(otherwiseConfigBlock);
-
