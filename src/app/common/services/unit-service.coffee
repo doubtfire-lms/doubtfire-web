@@ -318,6 +318,45 @@ angular.module("doubtfire.common.services.units", [])
       else
         'No Tutorial'
 
+    student.calcTopTasks = () ->
+      #
+      # sort tasks by start date
+      #
+      sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> _.includes taskService.validTopTask, task.status), 'definition.seq'), 'definition.start_date')
+
+      currentWeight = 0
+
+      overdueTasks = _.filter sortedTasks, (task) ->
+        taskService.daysPastTargetDate(task) > 0
+    
+      #
+      # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
+      #
+      for grade in gradeService.gradeValues
+        overdueGradeTasks = _.filter overdueTasks, (task) ->
+          task.definition.target_grade == grade
+
+        # Sorting needs to be done here according to the days past the target date.
+        overdueGradeTasks = _.orderBy(overdueGradeTasks, [(task)-> taskService.daysPastTargetDate(task)], ['desc'])
+
+        _.forEach overdueGradeTasks, (task) ->
+          task.topWeight = currentWeight
+          task.topReason = "Complete this #{gradeService.grades[grade]} task to get back on track."
+          currentWeight++
+
+      #
+      # Step 3: ... up to date, so look forward
+      #
+      toAdd = _.filter sortedTasks, (task) -> taskService.daysUntilTargetDate(task) >= 0
+      # Sort by the target_grade. Pass task are done first if same due date as others.
+      toAdd = _.sortBy(toAdd, 'definition.target_grade')
+      # Sort by the upcoming deadline.
+      toAdd = _.orderBy(toAdd,[(task)-> taskService.daysUntilTargetDate(task)])
+      _.forEach toAdd, (task) ->
+        task.topWeight = currentWeight
+        task.topReason = "Complete this #{gradeService.grades[grade]} task to get back on track."
+        currentWeight++
+
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
