@@ -10,8 +10,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { Unit } from 'src/app/ajs-upgraded-providers';
 
 export interface AboutDialogData {
-  externalName: string,
-  contributors: GithubProfile[]
+  externalName: string;
+  contributors: GithubProfile[];
 }
 
 /**
@@ -33,7 +33,7 @@ export class AboutDoubtfireModal {
     private constants: DoubtfireConstants,
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.aboutDialogData = {
-      externalName: "",
+      externalName: '',
       contributors: []
     }
 
@@ -69,14 +69,13 @@ export class AboutDoubtfireModal {
     this.aboutDialogData.contributors.forEach((item: GithubProfile, i) => {
       this.aboutDoubtfireModalService.GetGithubProfiles(item.login)
         .subscribe(response => {
-          this.aboutDialogData.contributors[i] =
-            {
-              avatar_url: response.avatar_url,
-              name: response.name,
-              html_url: response.html_url,
-              login: response.login
-            }
-        })
+          this.aboutDialogData.contributors[i] = {
+            avatar_url: response.avatar_url,
+            name: response.name,
+            html_url: response.html_url,
+            login: response.login
+          };
+        });
     });
   }
 }

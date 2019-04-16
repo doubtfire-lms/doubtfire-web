@@ -1,30 +1,40 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { taskService, analyticsService, Task, alertService, CommentResourceService } from 'src/app/ajs-upgraded-providers';
+import { Component, OnInit, Inject, Input, inject, ViewChildren, QueryList } from '@angular/core';
+import { taskService, analyticsService, alertService, CommentResourceService } from 'src/app/ajs-upgraded-providers';
+import { PopoverDirective } from 'ngx-bootstrap';
 
+enum PopupStates { closed, audioComment, discussionComment }
 
 @Component({
   selector: 'task-comment-composer',
-  template: '<h1>test</h1>'
-  // templateUrl: './task-comment-composer.html'
-  // styleUrls: ['./task-comment-composer.scss']
+  templateUrl: './task-comment-composer.html'
 })
-
 export class TaskCommentComposerComponent implements OnInit {
-  isRecorderOpen: boolean = false;
+  @Input() task: {};
+  public popupStates = PopupStates;
+  public showingPopup: PopupStates = PopupStates.closed;
   comment = {
     text: '',
     type: 'text'
   };
   audioPopover: string = 'audioRecorderPopover.html';
 
+  @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
+  ngAfterViewInit() {
+    this.popovers.forEach((popover: PopoverDirective) => {
+      popover.onShown.subscribe(() => {
+        this.popovers
+          .filter(p => p !== popover)
+          .forEach(p => p.hide());
+      });
+    });
+  }
+
   constructor(
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
-    @Inject(Task) private task: any,
     @Inject(alertService) private alerts: any,
-    @Inject(CommentResourceService) private commentResourceService: any
+    @Inject(CommentResourceService) private commentResourceService: any,
   ) { }
-
 
   ngOnInit() {
   }
@@ -43,12 +53,13 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   // Don't insert a newline character when sending a comment
-  keyPress(e: any) {
-    if ((e.key.toLowerCase() === 'enter') && !e.shiftKey) {
-      e.preventDefault();
-      if (this.comment.text.trim() !== '') {
-        return this.addComment();
-      }
+  send(e: Event) {
+    // if ((e.key.toLowerCase() === 'enter') && !e.shiftKey) {
+    // e.preventDefault();
+    e.preventDefault();
+    let comment = this.comment.text.trim();
+    if (comment !== '') {
+      this.addComment(comment);
     }
   }
 
@@ -79,13 +90,12 @@ export class TaskCommentComposerComponent implements OnInit {
   //   }
   // };
 
-  addComment() {
-    this.comment.text = this.comment.text.trim();
-    return this.ts.addComment(this.task, this.comment.text, 'text',
-      function (success) {
+  addComment(comment: string) {
+    this.ts.addComment(this.task, comment, 'text',
+      (success) => {
         this.comment.text = '';
         this.analytics.event('Vie Comments', 'Added new comment');
-        return this.ts.scrollDown();
+        this.ts.scrollDown();
       },
       failure =>
         this.alerts.add('danger', failure.data.error, 2000)

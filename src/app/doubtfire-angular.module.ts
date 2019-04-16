@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
+import { PopoverModule } from 'ngx-bootstrap';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
@@ -16,23 +17,35 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider } from './ajs-upgraded-providers';
+import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, audioRecorder } from './ajs-upgraded-providers';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
-// import { TaskCommentComposerService } from 'src/app/tasks/task-comment-composer/task-comment-composer.service';
+import { FormsModule } from '@angular/forms';
+
+import { ContenteditableModule } from '@ng-stack/contenteditable';
+import { AudioCommentUpgrader } from './common/audio-recorder/audio-recorder';
+import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 
 @NgModule({
   declarations: [
     AboutDoubtfireModalContent,
-    TaskCommentComposerComponent
+    TaskCommentComposerComponent,
+    AudioCommentUpgrader,
+    DiscussionPromptComposerComponent
+  ],
+  exports: [
   ],
   imports: [
+    ContenteditableModule,
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatIconModule,
     HttpClientModule,
     UpgradeModule,
+    PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot(),
   ],
   providers: [
@@ -42,6 +55,7 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
     taskProvider,
     alertServiceProvider,
     CommentResourceServiceProvider,
+    AudioRecorderProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

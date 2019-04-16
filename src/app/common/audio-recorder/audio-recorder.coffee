@@ -2,7 +2,6 @@ angular.module('doubtfire.common.audio-recorder', [])
 
 .directive 'audioRecorder', ->
   restrict: 'E'
-  replace: true
   templateUrl: 'common/audio-recorder/audio-recorder.tpl.html'
 
   controller: ($scope, taskService, recorderService, alertService) ->

@@ -1,24 +1,29 @@
 <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-  Hey!
-  <button class="btn-recorder" type="button" popover-template="audioPopover" (click)="isRecorderOpen = !isRecorderOpen">
+  <button class="btn-recorder" type="button" [popover]="audioCommentTemplate"
+    (click)="showingPopup = showingPopup == popupStates.audioComment ? popupStates.closed : popupStates.audioComment">
     <span class="fa fa-microphone"></span>
   </button>
-
+  <button class="btn-recorder" type="button" [popover]="discussionCommentTemplate"
+    (click)="showingPopup = showingPopup == popupStates.discussionComment ? popupStates.closed : popupStates.discussionComment">
+    <span class="fa fa-magic"></span>
+  </button>
   <!-- <div class="image-uploader" ngf-drop [hidden]="!upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
     ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
-    ngf-drop-available="dropSupported">
+    ngf-drop-available="dropSupported"> -->
 
-    <div id="textField" contenteditable ng-keypress="keyPress($event)" ng-model="comment.text" placeholder="Type a comment, or try dragging an image, audio or pdf..."></div>
+  <div id="textField" contenteditable="plaintext-only" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
+    placeholder="Type a comment, or try dragging an image, audio or pdf..." name="commentComposer">
+  </div>
 
-    <p [hidden]="!upload.display.error">
-      Invalid file type!
-    </p>
+  <!-- <p [hidden]="!upload.display.error">
+    Invalid file type!
+  </p>
 
-    <p [hidden]="dropSupported || upload.display.error">
-      Click to select image file
-    </p>
+  <p [hidden]="dropSupported || upload.display.error">
+    Click to select image file
+  </p>
   </div> -->
-  <div *ngIf="!singleDropZone && upload.model.length > 0" class="selected-files">
+  <!-- <div *ngIf="!singleDropZone && upload.model.length > 0" class="selected-files">
     <span class="selected-file">
       <i class="file-type fa fa-file-o"></i>
       {{formatImageName(upload.model[0].name)}}
@@ -29,10 +34,15 @@
     <a class="send-upload" (click)="postAttachmentComment()">
       <i class="fa fa-paper-plane"></i>
     </a>
-  </div>
-</form> -->
+  </div> -->
+  <!-- <audio-recorder *ngIf="isRecorderOpen"></audio-recorder> -->
+</form>
 
-<!-- The HTML which will be injected into the audio popover -->
-<script type="text/ng-template" id="audioRecorderPopover.html">
-  <audio-recorder *ngIf="isRecorderOpen"></audio-recorder>
-</script>
+<!-- The HTML which will be injected -->
+<ng-template #audioCommentTemplate>
+  <audio-recorder *ngIf="showingPopup == popupStates.audioComment"></audio-recorder>
+</ng-template>
+
+<ng-template #discussionCommentTemplate>
+  <discussion-prompt-composer *ngIf="showingPopup == popupStates.discussionComment"></discussion-prompt-composer>
+</ng-template>

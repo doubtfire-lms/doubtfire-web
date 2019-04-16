@@ -30,6 +30,7 @@
     "@angular/platform-browser-dynamic": "~7.2.10",
     "@angular/router": "~7.2.10",
     "@angular/upgrade": "~7.2.10",
+    "@ng-stack/contenteditable": "^1.0.1",
     "@uirouter/angular-hybrid": "^7.0.0",
     "angular": "1.5.11",
     "angular-cookies": "1.5.11",
