@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiscussionPromptComposerComponent implements OnInit {
 
+  
   constructor() { }
 
   ngOnInit() {

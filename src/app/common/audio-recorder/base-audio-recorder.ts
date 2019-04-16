@@ -2,7 +2,6 @@ import { OnInit } from '@angular/core';
 
 export abstract class BaseAudioRecorderComponent implements OnInit {
 
-  // fields
   protected mediaRecorder: any = null;
   protected recordingAvailable: Boolean = false;
   protected isRecording: Boolean = false;
@@ -13,9 +12,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   abstract canvasCtx: CanvasRenderingContext2D;
 
   protected blob: Blob;
-  // private chunks: Array;
 
-  // Properties
   get canRecord(): boolean {
     return Boolean(navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
@@ -38,11 +35,6 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     // Required for visualising the stream
     this.mediaRecorder.config.createAnalyserNode = true;
     this.mediaRecorder.em.addEventListener('recording', (evt: any) => this.onNewRecording(evt));
-
-    // this.chunks = [];
-    // this.blob = {};
-
-    // Need to get non-angular bindable components
   }
 
   playStop(): void {
@@ -68,10 +60,9 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   }
 
   onNewRecording(evt: any): void {
-    this.blob = evt.detail.recording;
+    this.blob = evt.detail.recording.blob;
     this.audio.src = evt.detail.recording.blobUrl;
     this.audio.load();
-    // $scope.$apply(() => $scope.recordingAvailable = true);
     this.recordingAvailable = true;
   }
 
