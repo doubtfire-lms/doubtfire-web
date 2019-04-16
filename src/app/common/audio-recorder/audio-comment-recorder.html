@@ -1,0 +1,22 @@
+<div class="audio-recorder">
+  <p [hidden]="canRecord">Audio recording
+    <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+  <div [hidden]="!canRecord">
+    <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
+      <p [hidden]="isRecording"> record</p>
+      <i [hidden]="!isRecording" class="fa fa-square"></i>
+    </button>
+
+    <div id="button-wrapper">
+      <button type="button" id='btnSend' (click)="sendRecording()" [disabled]="!recordingAvailable" class="btn-circle">
+        <i class="fa fa-paper-plane"></i>
+      </button>
+      <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
+        <i class="fa fa-play"></i>
+      </button>
+    </div>
+
+    <audio id='audioPlayer'></audio>
+    <canvas class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
+  </div>
+</div>

@@ -17,19 +17,19 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, audioRecorder } from './ajs-upgraded-providers';
+import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider } from './ajs-upgraded-providers';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule } from '@angular/forms';
 
 import { ContenteditableModule } from '@ng-stack/contenteditable';
-import { AudioCommentUpgrader } from './common/audio-recorder/audio-recorder';
+import { AudioCommentRecorderComponent } from './common/audio-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 
 @NgModule({
   declarations: [
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
-    AudioCommentUpgrader,
+    AudioCommentRecorderComponent,
     DiscussionPromptComposerComponent
   ],
   exports: [
@@ -56,6 +56,7 @@ import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer
     alertServiceProvider,
     CommentResourceServiceProvider,
     AudioRecorderProvider,
+    AudioRecorderServiceProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

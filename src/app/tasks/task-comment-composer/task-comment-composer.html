@@ -40,7 +40,7 @@
 
 <!-- The HTML which will be injected -->
 <ng-template #audioCommentTemplate>
-  <audio-recorder *ngIf="showingPopup == popupStates.audioComment"></audio-recorder>
+  <audio-comment-recorder [task]="task" *ngIf="showingPopup == popupStates.audioComment"></audio-comment-recorder>
 </ng-template>
 
 <ng-template #discussionCommentTemplate>

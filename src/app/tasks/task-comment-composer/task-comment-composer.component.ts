@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input, inject, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewChildren, QueryList } from '@angular/core';
 import { taskService, analyticsService, alertService, CommentResourceService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap';
 

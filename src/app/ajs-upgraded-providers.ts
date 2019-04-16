@@ -9,6 +9,8 @@ export const analyticsService = new InjectionToken('analyticsService');
 export const CommentResourceService = new InjectionToken('CommentResourceService');
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
+export const audioRecorderService = new InjectionToken('recorderService');
+
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
@@ -51,5 +53,11 @@ export const CommentResourceServiceProvider = {
 export const AudioRecorderProvider = {
   provide: audioRecorder,
   useFactory: (i: any) => i.get('audioRecorder'),
+  deps: ['$injector']
+};
+
+export const AudioRecorderServiceProvider = {
+  provide: audioRecorderService,
+  useFactory: (i: any) => i.get('recorderService'),
   deps: ['$injector']
 };
