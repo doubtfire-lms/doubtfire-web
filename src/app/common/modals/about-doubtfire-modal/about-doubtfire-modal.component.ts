@@ -29,7 +29,6 @@ export class AboutDoubtfireModal {
   aboutDialogData: AboutDialogData;
 
   constructor(public dialog: MatDialog,
-    @Inject(Unit) private unit: any,
     private constants: DoubtfireConstants,
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.aboutDialogData = {
@@ -41,11 +40,6 @@ export class AboutDoubtfireModal {
       avatar_url: '/assets/images/person-unknown.gif',
       login: c
     }));
-
-
-    this.unit.get({ id: 1 }, res => {
-      console.log(res);
-    });
   }
 
   show() {
