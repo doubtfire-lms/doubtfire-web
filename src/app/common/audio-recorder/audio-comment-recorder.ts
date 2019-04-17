@@ -1,4 +1,4 @@
-import { Directive, Inject, Input, Component } from '@angular/core';
+import { Inject, Input, Component } from '@angular/core';
 import { BaseAudioRecorderComponent } from './base-audio-recorder';
 import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
 
@@ -7,6 +7,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
+  isSending: Boolean;
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
@@ -20,6 +21,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
       this.init();
     }
   }
+
   init(): void {
     super.init();
     this.canvas = <HTMLCanvasElement>document.getElementById('audio-recorder-visualiser');
@@ -28,10 +30,17 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
   }
 
   sendRecording(): void {
+    this.isSending = true;
     if (this.blob && this.blob.size > 0) {
       this.ts.addMediaComment(this.task, this.blob,
-        () => this.ts.scrollDown(),
-        failure => this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`));
+        () => {
+          this.ts.scrollDown();
+          this.isSending = false;
+        },
+        (failure: { data: { error: any; }; }) => {
+          this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+          this.isSending = false;
+        });
       this.blob = <Blob>{};
       this.recordingAvailable = false;
       this.ts.scrollDown();

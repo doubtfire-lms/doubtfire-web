@@ -8,6 +8,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   protected isPlaying: Boolean = false;
   protected audio: HTMLAudioElement;
 
+  abstract isSending: Boolean = false;
   abstract canvas: HTMLCanvasElement;
   abstract canvasCtx: CanvasRenderingContext2D;
 
