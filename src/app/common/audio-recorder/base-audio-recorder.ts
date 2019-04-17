@@ -3,12 +3,12 @@ import { OnInit } from '@angular/core';
 export abstract class BaseAudioRecorderComponent implements OnInit {
 
   protected mediaRecorder: any = null;
-  protected recordingAvailable: Boolean = false;
-  protected isRecording: Boolean = false;
-  protected isPlaying: Boolean = false;
+  protected recordingAvailable: boolean = false;
+  protected isRecording: boolean = false;
+  protected isPlaying: boolean = false;
   protected audio: HTMLAudioElement;
 
-  abstract isSending: Boolean = false;
+  abstract isSending: boolean = false;
   abstract canvas: HTMLCanvasElement;
   abstract canvasCtx: CanvasRenderingContext2D;
 

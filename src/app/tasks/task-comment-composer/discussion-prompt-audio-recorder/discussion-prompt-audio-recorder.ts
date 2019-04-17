@@ -8,7 +8,7 @@ export class DiscussionPromptAudioRecorder extends BaseAudioRecorderComponent {
   @Output() audioRecording = new EventEmitter<string>();
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
-  isSending: Boolean = false;
+  isSending: boolean = false;
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,

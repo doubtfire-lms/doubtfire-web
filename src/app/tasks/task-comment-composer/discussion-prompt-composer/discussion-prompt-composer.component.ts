@@ -8,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class DiscussionPromptComposerComponent implements OnInit {
   recordings: string[] = new Array<string>();
   audio: HTMLAudioElement;
+  get canAddRecording(): boolean {
+    return this._bar;
+}
 
   constructor() { }
 
