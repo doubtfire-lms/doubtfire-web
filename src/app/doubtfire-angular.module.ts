@@ -25,6 +25,7 @@ import { ContenteditableModule } from '@ng-stack/contenteditable';
 import { AudioCommentRecorderComponent } from './common/audio-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import { DiscussionPromptAudioRecorder } from './tasks/task-comment-composer/discussion-prompt-audio-recorder/discussion-prompt-audio-recorder';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   // components
@@ -45,6 +46,7 @@ import { DiscussionPromptAudioRecorder } from './tasks/task-comment-composer/dis
     MatCheckboxModule,
     MatDialogModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     HttpClientModule,
     UpgradeModule,
     PopoverModule.forRoot(),
