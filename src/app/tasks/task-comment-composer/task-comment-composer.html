@@ -44,5 +44,5 @@
 </ng-template>
 
 <ng-template #discussionCommentTemplate>
-  <discussion-prompt-composer *ngIf="showingPopup == popupStates.discussionComment"></discussion-prompt-composer>
+  <discussion-prompt-composer [task]="task" *ngIf="showingPopup == popupStates.discussionComment"></discussion-prompt-composer>
 </ng-template>

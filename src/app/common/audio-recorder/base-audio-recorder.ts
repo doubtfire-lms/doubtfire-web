@@ -30,6 +30,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   }
 
   protected init(): void {
+    this.blob = new Blob();
     this.mediaRecorder = new this.mediaRecorderService();
     // Required for recording multiple times
     this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true;

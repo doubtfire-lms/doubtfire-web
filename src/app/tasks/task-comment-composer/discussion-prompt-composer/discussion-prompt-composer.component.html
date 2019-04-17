@@ -1,8 +1,5 @@
 <mat-action-list id="discussion-recordings-list" dense>
-  <!-- <audio-player></audio-player> -->
-  <!-- <audio *ngFor="let url of recordings" src="{{url}}">></audio> -->
-  <button mat-list-item *ngFor="let url of recordings" (click)="playRecording(url)"> Play </button>
-  <!-- <button mat-list-item (click)="undo()"> Undo </button> -->
+  <button mat-list-item *ngFor="let recording of recordings" (click)="playRecording(getUrl(recording))"> Play </button>
 </mat-action-list>
 <audio id='audioDiscussionPlayer'></audio>
 
@@ -11,17 +8,22 @@
   <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
   <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
   <div [hidden]="!canRecord || isSending">
-    <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-small">
+    <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-small"
+      [disabled]="!canAddRecording">
       <i [hidden]="!isRecording" class="fa fa-square"></i>
       <i [hidden]="isRecording" class="fa fa-circle"></i>
     </button>
 
     <div id="button-wrapper">
-      <button type="button" id='btnSend' (click)="sendRecording()" [disabled]="!recordingAvailable" class="btn-circle">
+      <button type="button" id='btnSave' (click)="saveRecording()" [disabled]="!recordingAvailable || !canAddRecording"
+        class="btn-circle">
         <i class="fa fa-plus"></i>
       </button>
-      <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
+      <button type="button" id='btnPlay' [hidden]="canSendPrompt" [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
         <i class="fa fa-play"></i>
+      </button>
+      <button type="button" id='btnSend' (click)="sendRecording()" [hidden]="!canSendPrompt"  class="btn-circle">
+        <i class="fa fa-paper-plane"></i>
       </button>
     </div>
 

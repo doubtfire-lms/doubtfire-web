@@ -9,8 +9,7 @@ import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upg
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
-
-  recordings: string[] = new Array<string>();
+  recordings: Blob[] = new Array<Blob>();
   audio: HTMLAudioElement;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
@@ -20,10 +19,13 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
     return this.recordings.length < 3;
   }
 
+  get canSendPrompt(): boolean {
+    return this.recordings.length > 0 && (this.blob.size === 0);
+  }
+
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any,
-    @Inject(alertService) private alerts: any, ) {
+    @Inject(taskService) private ts: any, ) {
     super(mediaRecorderService);
   }
 
@@ -31,12 +33,6 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
     if (this.canRecord) {
       this.init();
     }
-  }
-
-  playRecording(url: string) {
-    this.audio.src = url;
-    this.audio.load();
-    this.audio.play();
   }
 
   init(): void {
@@ -47,14 +43,39 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  sendRecording(): void {
+  getUrl(b: Blob) {
+    return URL.createObjectURL(b);
+  }
+
+  playRecording(url: string) {
+    this.audio.src = url;
+    this.audio.load();
+    this.audio.play();
+  }
+
+  saveRecording(): void {
     if (this.blob && this.blob.size > 0) {
       if (this.canAddRecording) {
-        this.recordings.push(URL.createObjectURL(this.blob));
+        this.recordings.push(this.blob);
       }
-      this.blob = <Blob>{};
+      this.blob = new Blob();
       this.recordingAvailable = false;
     }
+  }
+
+  sendRecording(): void {
+    this.ts.addDiscussionComment(this.task, this.recordings,
+      () => {
+        this.ts.scrollDown();
+        this.isSending = false;
+      },
+      (failure: { data: { error: any; }; }) => {
+        // this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+        this.isSending = false;
+      });
+    this.blob = <Blob>{};
+    this.recordingAvailable = false;
+    this.ts.scrollDown();
   }
 
   visualise(): void {

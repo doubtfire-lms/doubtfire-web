@@ -23,6 +23,10 @@ mat-action-list {
   top: 70%;
 }
 
+.btn-circle-small:disabled {
+  background-color: #c42a15;
+}
+
 .btn-circle-small i {
   font-size: 14px;
 }

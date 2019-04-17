@@ -584,6 +584,25 @@ angular.module("doubtfire.common.services.tasks", [])
         onSuccess(response)
       (response) -> #failure
         onError(response)
+
+  #Add discussion comment
+  taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
+    console.log("Here!")
+    form = new FormData()
+    form.append 'project_id', task.project().project_id
+    form.append 'task_definition_id', task.task_definition_id
+    for prompt in prompts
+      form.append 'attachment', prompt
+
+    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+      (response) -> #success
+        unless task.comments?
+          task.comments = []
+        task.comments.unshift(taskService.mapComment(response))
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
   taskService.applyForExtension = (task, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
