@@ -1,1 +1,8 @@
-<discussion-prompt-audio-recorder> </discussion-prompt-audio-recorder>
+<mat-action-list id="discussion-recordings-list" dense>
+  <!-- <audio-player></audio-player> -->
+  <!-- <audio *ngFor="let url of recordings" src="{{url}}">></audio> -->
+  <button mat-list-item *ngFor="let url of recordings" (click)="playRecording(url)"> Play </button>
+  <!-- <button mat-list-item (click)="undo()"> Undo </button> -->
+</mat-action-list>
+<audio id='audioDiscussionPlayer'></audio>
+<discussion-prompt-audio-recorder (audioRecording)="onNewRecording($event)"> </discussion-prompt-audio-recorder>

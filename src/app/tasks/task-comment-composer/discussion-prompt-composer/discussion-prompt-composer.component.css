@@ -1,0 +1,6 @@
+#discussion-recordings-list {
+  flex-grow: 1;
+  max-height: 120px;
+  background-color: red;
+  overflow: auto;
+}

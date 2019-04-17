@@ -29,7 +29,7 @@
   }
 }
 
-mat-spinner {
+mat-spinner.send-audio-spinner {
   position: absolute !important;
   left: 37%;
   top: 25%;
@@ -42,6 +42,7 @@ mat-spinner {
 .btn-circle {
   width: 30px;
   height: 30px;
+  margin-right:5px;
   padding: 6px 0px;
   background-color: transparent;
   border-radius: 15px;
@@ -68,5 +69,13 @@ mat-spinner {
 #button-wrapper {
   position: absolute;
   bottom: 26px;
-  right: 26px;
+  right: 12px;
+}
+
+#audio-recorder-visualiser.audio-visualiser {
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  bottom: 10px;
+  left: 24px;
 }

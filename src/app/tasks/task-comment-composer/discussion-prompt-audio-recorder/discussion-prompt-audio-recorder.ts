@@ -1,12 +1,14 @@
-import { Inject, Input, Component } from '@angular/core';
+import { Inject, Input, Component, Output, EventEmitter } from '@angular/core';
 import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/base-audio-recorder';
 
 @Component({ selector: 'discussion-prompt-audio-recorder', templateUrl: './discussion-prompt-audio-recorder.html' })
 export class DiscussionPromptAudioRecorder extends BaseAudioRecorderComponent {
   @Input() task: {};
+  @Output() audioRecording = new EventEmitter<string>();
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
+  isSending: Boolean = false;
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
@@ -28,14 +30,11 @@ export class DiscussionPromptAudioRecorder extends BaseAudioRecorderComponent {
   }
 
   sendRecording(): void {
-    // if (this.blob && this.blob.size > 0) {
-    //   this.ts.addMediaComment(this.task, this.blob,
-    //     () => this.ts.scrollDown(),
-    //     failure => this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`));
-    //   this.blob = <Blob>{};
-    //   this.recordingAvailable = false;
-    //   this.ts.scrollDown();
-    // }
+    if (this.blob && this.blob.size > 0) {
+      this.audioRecording.emit(URL.createObjectURL(this.blob));
+      this.blob = <Blob>{};
+      this.recordingAvailable = false;
+    }
   }
 
   visualise(): void {
@@ -48,9 +47,9 @@ export class DiscussionPromptAudioRecorder extends BaseAudioRecorderComponent {
 
       this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
       let i = 0;
-      const bar_width = 1;
-      while (i < WIDTH) {
-        const bar_x = i * 10;
+      const bar_width = 0.5;
+      while (i < WIDTH ) {
+        const bar_x = i * 8;
         const bar_y = HEIGHT / 2;
         const bar_height = -(dataArray[i] / 4) + 1;
         this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
