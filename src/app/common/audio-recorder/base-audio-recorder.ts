@@ -68,6 +68,35 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.recordingAvailable = true;
   }
 
+  // virtual method
+  protected visualise(): void {
+    let draw = () => {
+      const WIDTH = this.canvas.width;
+      const HEIGHT = this.canvas.height;
+      requestAnimationFrame(draw);
+      analyser.getByteTimeDomainData(dataArray);
+      analyser.getByteFrequencyData(dataArray);
+
+      this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      let i = 0;
+      const bar_width = 1;
+      while (i < WIDTH) {
+        const bar_x = i * 10;
+        const bar_y = HEIGHT / 2;
+        const bar_height = -(dataArray[i] / 4) + 1;
+        this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
+        this.canvasCtx.fillRect(bar_x, bar_y - bar_height, bar_width, bar_height);
+        i++;
+      }
+    };
+
+    let analyser = this.mediaRecorder.analyserNode;
+    analyser.fftSize = 2048;
+    const bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
+    draw();
+  }
+
   protected abstract sendRecording(): void;
-  protected abstract visualise(): void;
+  // protected abstract visualise(): void;
 }

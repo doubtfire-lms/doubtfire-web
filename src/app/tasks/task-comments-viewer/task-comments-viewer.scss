@@ -118,6 +118,11 @@ task-comments-viewer .comment .image-bubble {
   border-radius: $comment-border-radius;
 }
 
+task-comments-viewer .comment .discussion-bubble {
+  background: transparent;
+  border-radius: $comment-border-radius;
+}
+
 task-comments-viewer .comment.comment-by-other-user .comment-bubble,
 task-comments-viewer .comment.comment-by-other-user .image-bubble {
   background: $comment-bubble-color-other-user;

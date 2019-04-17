@@ -1,0 +1,69 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step>
+
+    <ng-template matStepLabel>Introduction</ng-template>
+    <div class="introduction-text">
+      <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
+      <p>
+        Your tutor would like to discuss some topics with you regarding this task. <br> <br>
+
+        Discussions are great way for you and your tutor to gauge your understanding of concepts, and are an
+        important aspect of your portfolio. <br> <br>
+
+        These discussions are designed to be casual and informal, and will <strong>require a working microphone and
+          speakers.</strong> <br><br>
+
+        These are timed discussions, <strong> you will have a few minutes from when you hear your tutor's discussion
+          prompt to reply.</strong> <br><br> <br>
+
+        <strong>You should only proceed once you are in a suitibly quiet envioronment. </strong>
+      </p>
+
+    </div>
+    <div>
+      <button mat-button mat-raised-button matStepperNext color="primary" style="float: right;">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [completed]="confirmed">
+    <ng-template matStepLabel>Test everything is working!</ng-template>
+    <audio controls="controls" controlsList="nodownload">
+      <source src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3" type="audio/mpeg">
+      Your browser does not support the HTML5 Audio element.
+    </audio>
+    <div class="audio-recorder">
+      <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+      <div [hidden]="!canRecord || isSending">
+        <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
+          <p [hidden]="isRecording">record</p>
+          <i [hidden]="!isRecording" class="fa fa-square"></i>
+        </button>
+
+        <div id="button-wrapper">
+          <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
+            <i class="fa fa-play"></i>
+          </button>
+        </div>
+
+        <audio id='audioPlayer'></audio>
+        <canvas class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
+      </div>
+    </div>
+    <mat-checkbox [(ngModel)]="confirmed" matStepperNext required> Ready to go! </mat-checkbox>
+    <div>
+      <button mat-button mat-raised-button matStepperNext color="primary" matStepperNext
+        style="float: right;">Next</button>
+      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+<button mat-button mat-dialog-close mat-stroked-button color="warn" style="float: right;">Cancel</button>

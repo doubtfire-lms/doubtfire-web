@@ -4,7 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule } from '@angular/material';
+import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -19,12 +19,13 @@ import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider } from './ajs-upgraded-providers';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContenteditableModule } from '@ng-stack/contenteditable';
 import { AudioCommentRecorderComponent } from './common/audio-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 
 @NgModule({
   // components
@@ -33,6 +34,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     DiscussionPromptComposerComponent,
+    IntelligentDiscussionPlayerComponent,
+    IntelligentDiscussionDialog,
   ],
   // Module Imports
   imports: [
@@ -40,7 +43,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatListModule,
+    MatStepperModule,
     MatButtonModule,
     MatDividerModule,
     MatCheckboxModule,
@@ -49,6 +55,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
     HttpClientModule,
     UpgradeModule,
+    ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot(),
   ],
@@ -67,7 +74,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent]
+  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
