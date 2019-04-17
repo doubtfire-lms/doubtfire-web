@@ -8,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class DiscussionPromptComposerComponent implements OnInit {
   recordings: string[] = new Array<string>();
   audio: HTMLAudioElement;
+
   get canAddRecording(): boolean {
-    return this._bar;
-}
+    return this.recordings.length < 3;
+  }
 
   constructor() { }
 
@@ -25,7 +26,8 @@ export class DiscussionPromptComposerComponent implements OnInit {
   }
 
   onNewRecording(audioRecordingUrl: string) {
-    this.recordings.push(audioRecordingUrl);
-    console.log(this.recordings);
+    if (this.canAddRecording) {
+      this.recordings.push(audioRecordingUrl);
+    }
   }
 }

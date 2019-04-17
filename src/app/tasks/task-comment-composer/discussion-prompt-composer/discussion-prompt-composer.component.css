@@ -1,6 +1,9 @@
 #discussion-recordings-list {
   flex-grow: 1;
-  max-height: 120px;
-  background-color: red;
-  overflow: auto;
+  max-height: 130px;
+  margin-top: -10px;
+}
+
+mat-action-list{
+  height: 100%;
 }
