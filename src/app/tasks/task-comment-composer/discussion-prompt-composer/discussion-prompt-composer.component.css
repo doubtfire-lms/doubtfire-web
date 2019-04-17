@@ -4,6 +4,33 @@
   margin-top: -10px;
 }
 
-mat-action-list{
+mat-action-list {
   height: 100%;
+}
+
+.btn-circle-small {
+  user-select: none;
+  background-color: #f03d25;
+  border-radius: 72px;
+  color: #fff;
+  height: 40px;
+  transition: width 0.1s, height 0.1s;
+  width: 40px;
+  border: none;
+  outline: none;
+  position: absolute;
+  left: 5%;
+  top: 70%;
+}
+
+.btn-circle-small i {
+  font-size: 14px;
+}
+
+#audio-recorder-visualiser.discussion-audio-visualiser {
+  height: 60px;
+  width: 115px;
+  position: absolute;
+  bottom: 10px;
+  left: 65px;
 }
