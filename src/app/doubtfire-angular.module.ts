@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 
@@ -24,16 +24,18 @@ import { FormsModule } from '@angular/forms';
 import { ContenteditableModule } from '@ng-stack/contenteditable';
 import { AudioCommentRecorderComponent } from './common/audio-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
+import { DiscussionPromptAudioRecorder } from './tasks/task-comment-composer/discussion-prompt-audio-recorder/discussion-prompt-audio-recorder';
 
 @NgModule({
+  // components
   declarations: [
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
-    DiscussionPromptComposerComponent
+    DiscussionPromptComposerComponent,
+    DiscussionPromptAudioRecorder
   ],
-  exports: [
-  ],
+  // Module Imports
   imports: [
     ContenteditableModule,
     FormsModule,
@@ -48,6 +50,7 @@ import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot(),
   ],
+  // Services
   providers: [
     unitProvider,
     taskServiceProvider,
