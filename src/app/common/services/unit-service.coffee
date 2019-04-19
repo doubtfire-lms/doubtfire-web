@@ -327,8 +327,7 @@ angular.module("doubtfire.common.services.units", [])
       currentWeight = 0
 
       overdueTasks = _.filter sortedTasks, (task) ->
-        task.daysPastTargetDate() > 0
-    
+        task.daysPastTargetDate() >= 0
       #
       # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
       #
@@ -347,7 +346,7 @@ angular.module("doubtfire.common.services.units", [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() >= 0
+      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() > 0
       # Sort by the target_grade. Pass task are done first if same due date as others.
       toAdd = _.sortBy(toAdd, 'definition.target_grade')
       # Sort by the upcoming deadline.
