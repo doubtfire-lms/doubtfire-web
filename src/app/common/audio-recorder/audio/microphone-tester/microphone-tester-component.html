@@ -1,0 +1,21 @@
+<div class="audio-recorder">
+    <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+    <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
+    <div [hidden]="!canRecord || isSending">
+      <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
+        <p [hidden]="isRecording">record</p>
+        <i [hidden]="!isRecording" class="fa fa-square"></i>
+      </button>
+  
+      <div id="button-wrapper">
+        <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
+          <i class="fa fa-play"></i>
+        </button>
+      </div>
+  
+      <audio id='micTesterAudioPlayer'></audio>
+      <canvas class="audio-visualiser" id="microphone-tester-visualiser"></canvas>
+    </div>
+  </div>
+
+  

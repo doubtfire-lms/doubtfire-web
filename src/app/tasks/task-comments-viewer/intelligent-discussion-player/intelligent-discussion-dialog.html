@@ -27,31 +27,26 @@
 
   <mat-step [completed]="confirmed">
     <ng-template matStepLabel>Test everything is working!</ng-template>
-    <audio controls="controls" controlsList="nodownload">
-      <source src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3" type="audio/mpeg">
-      Your browser does not support the HTML5 Audio element.
-    </audio>
-    <div class="audio-recorder">
-      <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
-      <div [hidden]="!canRecord || isSending">
-        <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
-          <p [hidden]="isRecording">record</p>
-          <i [hidden]="!isRecording" class="fa fa-square"></i>
-        </button>
-
-        <div id="button-wrapper">
-          <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
-            <i class="fa fa-play"></i>
-          </button>
-        </div>
-
-        <audio id='audioPlayer'></audio>
-        <canvas class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
-      </div>
-    </div>
+    <microphone-tester></microphone-tester>
     <mat-checkbox [(ngModel)]="confirmed" matStepperNext required> Ready to go! </mat-checkbox>
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" matStepperNext
+      <button [disabled]="!confirmed" mat-button mat-raised-button matStepperNext color="primary" matStepperNext
+        style="float: right;">Next</button>
+      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Discussion</ng-template>
+    <div>
+      <div>
+        <audio controls="controls" controlsList="nodownload">
+          <source src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3" type="audio/mpeg">
+          Your browser does not support the HTML5 Audio element.
+        </audio>
+        <p (click)="oberserableTimer()">Start Observable timer</p> {{timerText}}
+      </div>
+      <button [disabled]="!confirmed" mat-button mat-raised-button matStepperNext color="primary" matStepperNext
         style="float: right;">Next</button>
       <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
     </div>
@@ -60,10 +55,6 @@
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
   </mat-step>
 </mat-horizontal-stepper>
 <button mat-button mat-dialog-close mat-stroked-button color="warn" style="float: right;">Cancel</button>

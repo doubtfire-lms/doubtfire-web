@@ -22,10 +22,11 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContenteditableModule } from '@ng-stack/contenteditable';
-import { AudioCommentRecorderComponent } from './common/audio-recorder/audio-comment-recorder';
+import { AudioCommentRecorderComponent } from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
+import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 
 @NgModule({
   // components
@@ -33,6 +34,7 @@ import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } fro
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
+    MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
     IntelligentDiscussionDialog,

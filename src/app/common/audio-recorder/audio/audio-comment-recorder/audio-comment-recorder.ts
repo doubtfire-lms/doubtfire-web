@@ -1,5 +1,5 @@
 import { Inject, Input, Component } from '@angular/core';
-import { BaseAudioRecorderComponent } from './base-audio-recorder';
+import { BaseAudioRecorderComponent } from '../base-audio-recorder';
 import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({ selector: 'audio-comment-recorder', templateUrl: './audio-comment-recorder.html' })
