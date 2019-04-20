@@ -28,7 +28,7 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
 
   init(): void {
     super.init();
-    this.canvas = <HTMLCanvasElement>document.getElementById('microphone-tester-visualiser');
+    this.canvas = <HTMLCanvasElement>document.getElementById('micTesterVisualiser');
     this.audio = <HTMLAudioElement>document.getElementById('micTesterAudioPlayer');
     this.canvasCtx = this.canvas.getContext('2d');
   }

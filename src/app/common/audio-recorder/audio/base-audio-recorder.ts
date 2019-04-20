@@ -33,7 +33,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.blob = new Blob();
     this.mediaRecorder = new this.mediaRecorderService();
     // Required for recording multiple times
-    this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true;
+    this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = false;
     // Required for visualising the stream
     this.mediaRecorder.config.createAnalyserNode = true;
     this.mediaRecorder.em.addEventListener('recording', (evt: any) => this.onNewRecording(evt));
@@ -61,6 +61,31 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     }
   }
 
+  stopRecording() {
+    if (!this.audio.paused) {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+      this.isPlaying = false;
+    }
+
+    if (this.isRecording) {
+      this.mediaRecorder.stopRecording();
+      this.isRecording = false;
+    }
+  }
+
+  startRecording(): void {
+    if (!this.isRecording) {
+      this.mediaRecorder.startRecording();
+      this.visualise();
+      this.isRecording = true;
+    }
+  }
+
+  processChunks(): void {
+    this.mediaRecorder.processChunks();
+  }
+
   onNewRecording(evt: any): void {
     this.blob = evt.detail.recording.blob;
     this.audio.src = evt.detail.recording.blobUrl;
@@ -68,7 +93,8 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.recordingAvailable = true;
   }
 
-  // virtual method
+  // virtual implementation of visualise
+  // Which can be overridden
   protected visualise(): void {
     let draw = () => {
       const WIDTH = this.canvas.width;
@@ -98,5 +124,4 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   }
 
   protected abstract sendRecording(): void;
-  // protected abstract visualise(): void;
 }

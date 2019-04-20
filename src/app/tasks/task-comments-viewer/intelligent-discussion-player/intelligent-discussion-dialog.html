@@ -1,6 +1,9 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
+<button id="dialogCloseButton" mat-button mat-dialog-close mat-icon-button aria-label="Close dialog button">
+  <mat-icon aria-label="Quit cross icon">close</mat-icon>
+</button>
+<mat-horizontal-stepper id="intelligentDiscussionStepper" *ngIf="inDiscussion || !startedDiscussion" [linear]="true"
+  #stepper>
   <mat-step>
-
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
       <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
@@ -26,26 +29,33 @@
   </mat-step>
 
   <mat-step [completed]="confirmed">
-    <ng-template matStepLabel>Test everything is working!</ng-template>
-    <microphone-tester></microphone-tester>
+    <ng-template matStepLabel>Test everything is working</ng-template>
+    <microphone-tester #testRecorder></microphone-tester>
     <mat-checkbox [(ngModel)]="confirmed" matStepperNext required> Ready to go! </mat-checkbox>
     <div>
-      <button [disabled]="!confirmed" mat-button mat-raised-button matStepperNext color="primary" matStepperNext
-        style="float: right;">Next</button>
+      <button [disabled]="!confirmed" (click)="disableTester()" mat-button mat-raised-button matStepperNext
+        color="primary" matStepperNext style="float: right;">Next</button>
       <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
+    <mat-divider></mat-divider>
+    <intelligent-discussion-recorder #discussionRecorder></intelligent-discussion-recorder>
+    <mat-divider></mat-divider>
     <div>
-      <div>
-        <audio controls="controls" controlsList="nodownload">
-          <source src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3" type="audio/mpeg">
+      <div *ngFor="let prompt of prompts">
+        <audio attr.id="audio{{prompt.id}}" preload="false" controls="controls" controlsList="nodownload">
+          <source src="{{prompt.url}}" type="audio/mpeg">
           Your browser does not support the HTML5 Audio element.
         </audio>
-        <p (click)="oberserableTimer()">Start Observable timer</p> {{timerText}}
+        <mat-checkbox [disabled]="prompt.id != activePromptId" attr.id="checked{{prompt.id}}"
+          (change)="responseConfirmed($event)" color="primary">Complete</mat-checkbox>
+
       </div>
+      {{timerText}}
+      <button mat-button (click)="startDiscussion()">Start discussion</button>
       <button [disabled]="!confirmed" mat-button mat-raised-button matStepperNext color="primary" matStepperNext
         style="float: right;">Next</button>
       <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
@@ -57,4 +67,7 @@
     You are now done.
   </mat-step>
 </mat-horizontal-stepper>
-<button mat-button mat-dialog-close mat-stroked-button color="warn" style="float: right;">Cancel</button>
+
+<div *ngIf="!inDiscussion && startedDiscussion">
+  <p>Discussion over</p>
+</div>

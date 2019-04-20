@@ -162,6 +162,22 @@ angular.module("doubtfire.common.services.recorder-service", [])
             @encoderWorker.postMessage(['encode', e.inputBuffer.getChannelData(0)])
       return
 
+    processChunks: () ->
+      if (@state == 'inactive')
+        return
+      this._dumpChunks()
+      return
+
+    _dumpChunks: () ->
+      # event = new Event('dataavailable')
+      # console.log(event)
+      if(@usingMediaRecorder)
+        @mediaRecorder.requestData()
+
+      if (!@usingMediaRecorder)
+        @encoderWorker.postMessage(['dump', @audioCtx.sampleRate])
+        clearInterval(@slicing)
+
     # Called once when the recording has been stopped
     stopRecording: () ->
       if (@state == 'inactive')
@@ -175,13 +191,14 @@ angular.module("doubtfire.common.services.recorder-service", [])
         clearInterval(@slicing)
       return
 
+    _processDataAvailable: () ->
+
+
     # Called each time a chunk of recording becomes available
     _onDataAvailable: (evt) ->
+      console.log("data available")
       @chunks.push(evt.data)
       @chunkType = evt.data.type
-
-      if (@state != 'inactive')
-        return
 
       blob = new Blob(@chunks, { 'type': @chunkType })
       blobUrl = URL.createObjectURL(blob)
@@ -193,10 +210,17 @@ angular.module("doubtfire.common.services.recorder-service", [])
         blob: blob
       }
 
+      console.log(recording)
+
+      @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
+
       @chunks = []
-      @chunkType = null
+
+      if (@state != 'inactive')
+        return
 
       # cleanup
+      @chunkType = null
       if (@destinationNode)
         @destinationNode.disconnect()
         @destinationNode = null
@@ -230,7 +254,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @audioCtx.close()
         @audioCtx = null
 
-      @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
       return
 
     _onError: (evt) ->

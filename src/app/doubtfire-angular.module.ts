@@ -27,6 +27,7 @@ import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
+import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 
 @NgModule({
   // components
@@ -38,6 +39,7 @@ import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microph
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
     IntelligentDiscussionDialog,
+    IntelligentDiscussionRecorderComponent,
   ],
   // Module Imports
   imports: [
