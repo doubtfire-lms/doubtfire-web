@@ -196,7 +196,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
 
     # Called each time a chunk of recording becomes available
     _onDataAvailable: (evt) ->
-      console.log("data available")
       @chunks.push(evt.data)
       @chunkType = evt.data.type
 
@@ -210,8 +209,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
         blob: blob
       }
 
-      console.log(recording)
-
       @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
 
       @chunks = []
@@ -219,7 +216,10 @@ angular.module("doubtfire.common.services.recorder-service", [])
       if (@state != 'inactive')
         return
 
-      # cleanup
+      _cleanup()
+      return
+
+    _cleanup: () ->
       @chunkType = null
       if (@destinationNode)
         @destinationNode.disconnect()
