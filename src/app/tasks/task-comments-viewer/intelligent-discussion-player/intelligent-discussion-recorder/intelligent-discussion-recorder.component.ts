@@ -1,7 +1,6 @@
-import { Component, Inject, AfterViewInit, Input, ViewChild } from '@angular/core';
+import { Component, Inject, AfterViewInit, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
-import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
+import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'intelligent-discussion-recorder',
@@ -33,7 +32,6 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   init(): void {
     super.init();
     this.canvas = <HTMLCanvasElement>document.getElementById('mainDiscussionRecorderVisualiser');
-    this.audio = <HTMLAudioElement>document.getElementById('mainDiscussionAudioPlayer');
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
@@ -45,15 +43,22 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
     }, 5000);
   }
 
-  stopStreaming() {
-    clearInterval(this.intervalID);
-    this.stopRecording();
+  onNewRecording(evt: any): void {
+    this.blob = evt.detail.recording.blob;
+  }
+
+  stopRecording() {
+    this.isPlaying = false;
+    if (this.isRecording) {
+      this.mediaRecorder.stopRecording();
+      this.isRecording = false;
+    }
   }
 
   sendRecording() {
     if (this.blob && this.blob.size > 0) {
 
-      console.log(URL.createObjectURL(this.blob));
+      // console.log(URL.createObjectURL(this.blob));
       // this.ts.addMediaComment(this.task, this.blob,
       //   () => {
       //     this.isSending = false;

@@ -1,24 +1,16 @@
-/* :host {
-  display: initial;
-  width: 300px;
-  max-width: 300px;
-}
-
-h1 {
-  font-size: 12px;
-} */
 :host mat-divider {
   margin-bottom: 20px;
 }
 
-.mat-dialog-container {
+:host .mat-dialog-container {
   max-width: 800px !important;
 }
 
-#intelligentDiscussionStepper {
+:host #intelligentDiscussionStepper {
   margin-top: 20px;
 }
-.introduction-text {
+
+:host .introduction-text {
   margin-top: 4em;
   display: inline-flex;
 }
@@ -30,7 +22,7 @@ h1 {
   vertical-align: middle;
 }
 
-.introduction-text p {
+:host .introduction-text p {
   font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -42,8 +34,26 @@ h1 {
   float: right;
 }
 
-#dialogCloseButton {
+:host #dialogCloseButton {
   float: right;
   margin-bottom: 20px;
   color: red;
+}
+
+:host #discussionReadout {
+  overflow: hidden;
+}
+
+:host #discussionRecorderContainer {
+  line-height: 1.2em;
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+
+  p {
+    font-size: 1.2em;
+  }
+
+  p#discussionCountdown {
+    font-size: 3em;
+    font-weight: bold;
+  }
 }

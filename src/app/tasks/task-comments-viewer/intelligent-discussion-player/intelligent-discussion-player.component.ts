@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
@@ -12,7 +10,7 @@ import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
-  styleUrls: ['./intelligent-discussion-player.component.css']
+  styleUrls: ['./intelligent-discussion-player.component.scss']
 })
 export class IntelligentDiscussionPlayerComponent {
   canvas: HTMLCanvasElement;
@@ -24,7 +22,6 @@ export class IntelligentDiscussionPlayerComponent {
   ngOnInit() {
 
   }
-
 
   sendRecording(): void { }
 
@@ -53,21 +50,23 @@ interface Prompt {
 @Component({
   selector: 'intelligent-discussion-dialog',
   templateUrl: 'intelligent-discussion-dialog.html',
-  styleUrls: ['./intelligent-discussion-player.component.css'],
+  styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService]
 })
 export class IntelligentDiscussionDialog implements OnInit {
   // TODO: Check that all these are needed or can be cleaned up.
   confirmed = false;
-  timerText: string = '';
+  timerText: string = '4m:00s';
   ticks: number = 0;
   startedDiscussion = false;
   audioPromptsLoaded = false;
   inDiscussion = false;
+  discussionComplete: boolean = false;
   count: number = 3 * 60 * 1000; // 3 minutes
   prompts: Array<Prompt>;
   currentDiscussionPrompt: string = '';
   activePromptId: number = 0;
+  counter: Subscription;
   @ViewChild('testRecorder') testRecorder: MicrophoneTesterComponent;
   @ViewChild('discussionRecorder') discussionRecorder: IntelligentDiscussionRecorderComponent;
 
@@ -89,6 +88,12 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.dialogRef.close();
   }
 
+  finishDiscussion() {
+    this.discussionComplete = true;
+    this.discussionRecorder.stopRecording();
+    this.counter.unsubscribe();
+  }
+
   startDiscussion() {
     if (!this.startedDiscussion) {
       // load the audio files and wait until loaded
@@ -103,14 +108,14 @@ export class IntelligentDiscussionDialog implements OnInit {
 
       // get the cutoff date from the server
       // For now this is stubbed as 4 minutes from now.
-      let discussionCutoff = moment().add(3, 'minutes');
+      let discussionCutoff = moment().add(4, 'minutes');
 
-      let counter = timer(0, 1000).subscribe(val => {
+      this.counter = timer(0, 1000).subscribe(val => {
         let difference = discussionCutoff.diff(moment());
         if (difference <= 0) {
           difference = 0;
         }
-        this.timerText = moment.utc(difference).format('mm:ss');
+        this.timerText = moment.utc(difference).format('mm[m]:ss[s]');
         this.ticks = val;
 
         // every ten seconds make a blob and send to server for combining.
@@ -121,20 +126,18 @@ export class IntelligentDiscussionDialog implements OnInit {
         if (difference === 0) {
           console.log(difference + ' No DIfference');
           this.inDiscussion = false;
-          counter.unsubscribe();
+          this.counter.unsubscribe();
         }
 
       });
     }
   }
 
-  getNextPrompt() {
-
-  }
-
   responseConfirmed(e: any) {
-    console.log(e);
     this.activePromptId++;
+    if (this.activePromptId === this.prompts[this.prompts.length - 1].id + 1) {
+      this.finishDiscussion();
+    }
   }
 
   getPrompts(): void {

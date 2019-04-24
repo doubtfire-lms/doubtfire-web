@@ -17,9 +17,9 @@
           speakers.</strong> <br><br>
 
         These are timed discussions, <strong> you will have a few minutes from when you hear your tutor's discussion
-          prompt to reply.</strong> <br><br> <br>
+          prompt to reply.</strong> <br><br><br><br>
 
-        <strong>You should only proceed once you are in a suitibly quiet envioronment. </strong>
+        You should only proceed once you are in a suitibly quiet envioronment.
       </p>
 
     </div>
@@ -41,8 +41,15 @@
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
-    <mat-divider></mat-divider>
-    <intelligent-discussion-recorder #discussionRecorder></intelligent-discussion-recorder>
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
+      <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start discussion</button>
+      <intelligent-discussion-recorder #discussionRecorder></intelligent-discussion-recorder>
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <p id="discussionCountdown">{{timerText}}</p>
+        <p>remaining</p>
+      </div>
+    </div>
     <mat-divider></mat-divider>
     <div>
       <div *ngFor="let prompt of prompts">
@@ -54,11 +61,9 @@
           (change)="responseConfirmed($event)" color="primary">Complete</mat-checkbox>
 
       </div>
-      {{timerText}}
-      <button mat-button (click)="startDiscussion()">Start discussion</button>
-      <button [disabled]="!confirmed" mat-button mat-raised-button matStepperNext color="primary" matStepperNext
-        style="float: right;">Next</button>
-      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+      <button [disabled]="!discussionComplete" mat-button mat-raised-button matStepperNext color="primary"
+        matStepperNext required style="float: right;">Complete</button>
+      <button [disabled]="startedDiscussion" mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
 
