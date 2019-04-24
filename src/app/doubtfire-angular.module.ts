@@ -28,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   // components
@@ -43,10 +44,12 @@ import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-vi
   ],
   // Module Imports
   imports: [
-    ContenteditableModule,
-    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ContenteditableModule,
+    FlexLayoutModule,
+    FormsModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
@@ -57,7 +60,6 @@ import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-vi
     MatDialogModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    HttpClientModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
