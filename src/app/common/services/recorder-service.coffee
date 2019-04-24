@@ -216,7 +216,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
       if (@state != 'inactive')
         return
 
-      _cleanup()
+      this._cleanup()
       return
 
     _cleanup: () ->
