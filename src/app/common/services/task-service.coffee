@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -591,10 +591,12 @@ angular.module("doubtfire.common.services.tasks", [])
     form = new FormData()
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id
-    for prompt in prompts
-      form.append 'attachment', prompt
+    temp = []
 
-    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+    for prompt in prompts
+      form.append('attachments[]', prompt)
+
+    DiscussionComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
       (response) -> #success
         unless task.comments?
           task.comments = []
