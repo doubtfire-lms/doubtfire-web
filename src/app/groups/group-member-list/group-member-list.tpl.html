@@ -10,6 +10,7 @@
 <table ng-show="loaded && selectedGroup.members.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
+        <th>Avatar</th>
       <th>
         <a ng-click="sortTableBy('student_id')">
           Student ID
@@ -35,6 +36,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="member in selectedGroup.members | orderBy:tableSort.order:tableSort.reverse">
+        <td>
+            <user-icon size="20" user="user" email="user.email" style="max-width: 20px; max-height: 20px; font-size: 12px;"></user-icon>
+          </td>
       <td class="student-id">{{member.student_id || "N/A"}}</td>
       <td class="student-name">{{member.student_name}}</td>
       <td class="student-grade text-left">
