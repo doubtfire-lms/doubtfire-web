@@ -341,7 +341,7 @@ angular.module("doubtfire.common.services.units", [])
 
         _.forEach overdueGradeTasks, (task) ->
           task.topWeight = currentWeight
-          task.topReason = "Complete this #{gradeService.grades[task.definition.target_grade]} task to get back on track."
+          task.topReason = "Complete this overdue #{gradeService.grades[task.definition.target_grade]} task as soon as possible."
           currentWeight++
 
       #
@@ -354,7 +354,7 @@ angular.module("doubtfire.common.services.units", [])
       toAdd = _.orderBy(toAdd,[(task)-> task.daysUntilTargetDate()])
       _.forEach toAdd, (task) ->
         task.topWeight = currentWeight
-        task.topReason = "Complete this #{gradeService.grades[task.definition.target_grade]} task to get ahead."
+        task.topReason = if task.daysUntilTargetDate() >= 14 then "Complete this #{gradeService.grades[task.definition.target_grade]} task to get ahead."
         currentWeight++
 
     # Switch's the student's current tutorial to a new tutorial, either specified
