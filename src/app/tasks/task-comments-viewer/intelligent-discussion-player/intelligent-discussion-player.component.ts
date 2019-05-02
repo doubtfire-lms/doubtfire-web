@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
@@ -12,10 +12,9 @@ import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion
   templateUrl: './intelligent-discussion-player.component.html',
   styleUrls: ['./intelligent-discussion-player.component.scss']
 })
-export class IntelligentDiscussionPlayerComponent {
-  canvas: HTMLCanvasElement;
-  canvasCtx: CanvasRenderingContext2D;
-  isSending: boolean;
+export class IntelligentDiscussionPlayerComponent implements OnInit {
+  @Input() parentCommentId: number;
+
   constructor(public dialog: MatDialog, ) {
   }
 

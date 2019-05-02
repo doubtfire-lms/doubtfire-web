@@ -66,7 +66,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
       //   (failure: { data: { error: any; }; }) => {
       //     this.isSending = false;
       //   });
-      console.log('Sending Recording of size ' + this.blob.size);
+      // console.log('Sending Recording of size ' + this.blob.size);
       this.blob = <Blob>{};
       // this.recordingAvailable = false;
     }

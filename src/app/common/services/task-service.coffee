@@ -540,6 +540,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   # Map extra front-end details to comment
   taskService.mapComment = (comment) ->
+    comment.id = comment.id
     initials = comment.author.name.split(" ")
     comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
     comment.author_is_me = comment.author.id == currentUser.profile.id
@@ -587,7 +588,6 @@ angular.module("doubtfire.common.services.tasks", [])
 
   #Add discussion comment
   taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
-    console.log("Here!")
     form = new FormData()
     form.append 'project_id', task.project().project_id
     form.append 'task_definition_id', task.task_definition_id

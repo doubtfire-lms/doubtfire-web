@@ -5,28 +5,6 @@
     </div>
   </div>
   <div class="panel-body">
-    <div class="comment comment-by-other-user">
-      <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
-        tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}" tooltip-append-to-body="true"
-        tooltip-popover-delay="500" tooltip-placement="left">
-      </user-icon>
-
-      <div class="comment-text comment-bubble discussion-bubble">
-        <intelligent-discussion-player></intelligent-discussion-player>
-      </div>
-    </div>
-
-    <div class="comment">
-      <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
-        tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}" tooltip-append-to-body="true"
-        tooltip-popover-delay="500" tooltip-placement="left">
-      </user-icon>
-
-      <div class="comment-text comment-bubble discussion-bubble">
-        <intelligent-discussion-player></intelligent-discussion-player>
-      </div>
-    </div>
-
     <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'"
       ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
       <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
@@ -45,7 +23,7 @@
         </div>
 
         <div ng-if="comment.type == 'discussion'" class="comment-text comment-discussion">
-          <intelligent-discussion-player></intelligent-discussion-player>
+          <intelligent-discussion-player [parent_comment_id]="comment.id"></intelligent-discussion-player>
         </div>
 
         <div ng-if="comment.type == 'image'" class="comment-image">
