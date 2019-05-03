@@ -58,14 +58,10 @@ angular.module("doubtfire.common.services.tasks", [])
   # Which states can a task be considered to be overdue
   taskService.overdueStates = [
     'not_started'
-    'do_not_resubmit'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'time_exceeded'
-    'discuss'
-    'demonstrate'
     'ready_to_mark'
   ]
 

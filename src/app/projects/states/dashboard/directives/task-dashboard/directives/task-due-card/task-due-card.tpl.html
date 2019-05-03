@@ -86,7 +86,7 @@
     </p>
   </div>
 </div><!--/past-target-card pre-discuss-->
-<div class="card card-danger card-sm" ng-show="task.isOverdue() && !task.inDiscussState() ">
+<div class="card card-danger card-sm" ng-show="task.isOverdue() && !task.inDiscussState() && task.status != 'ready_to_mark'">
   <div class="card-heading">
     <h4>Missed Deadline By {{task.timePastDeadlineDescription()}}</h4>
   </div>
@@ -94,6 +94,17 @@
     <p>
       You should have completed this task by <strong>{{task.definition.due_date | date : 'MMM d' }} at {{task.definition.due_date | date : 'h:mm a' }}</strong>.
       As this task is past the deadline you will need to make sure it is of acceptable standard in your portfolio. The task will be marked as <em>Time Exceeded</em> when submitted, but will be reviewed in your portfolio.
+    </p>
+  </div>
+</div><!--submitted the task before deadline-->
+<div class="card card-warning card-sm" ng-show="task.isOverdue() && !task.inDiscussState() && task.status == 'ready_to_mark'">
+  <div class="card-heading">
+    <h4>Await Feedback from Tutor</h4>
+  </div>
+  <div class="card-body">
+    <p>
+      You submitted the work before deadline. Do not re-upload new files at this time as the status will be changed to <strong>Time Exceeded</strong>.
+      Please wait for your tutor to give feedback.
     </p>
   </div>
 </div><!--/overdue-card-->
