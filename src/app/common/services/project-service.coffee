@@ -182,6 +182,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.timePastTargetDescription = ->
       timeToDescription(moment(task.targetDate()), moment())
 
+    task.canApplyForExtension = ->
+      !task.inSubmittedState() && !task.isOverdue()
     task.inFinalState = ->
       task.status in taskService.finalStatuses
     task.inTerminalState = ->
@@ -190,6 +192,8 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.submittedStatuses
     task.inDiscussState = ->
       task.status in taskService.discussionStatuses
+    task.inAwaitingFeedbackState = ->
+      task.status in taskService.awaitingFeedbackStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
