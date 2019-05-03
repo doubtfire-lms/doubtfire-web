@@ -592,6 +592,7 @@ angular.module("doubtfire.common.services.tasks", [])
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
       task.project().updateBurndownChart()
+      task.project().calcTopTasks() # Sort the task list again
       onSuccess(response)
 
     Task.applyForExtension(task, interceptSuccess, onError)
