@@ -86,7 +86,7 @@
     </p>
   </div>
 </div><!--/past-target-card pre-discuss-->
-<div class="card card-danger card-sm" ng-show="task.isOverdue() && !task.inDiscussState() && task.status != 'ready_to_mark'">
+<div class="card card-danger card-sm" ng-show="task.isOverdue() && !task.inSubmittedState()">
   <div class="card-heading">
     <h4>Missed Deadline By {{task.timePastDeadlineDescription()}}</h4>
   </div>
@@ -97,7 +97,7 @@
     </p>
   </div>
 </div><!--submitted the task before deadline-->
-<div class="card card-warning card-sm" ng-show="task.isOverdue() && !task.inDiscussState() && task.status == 'ready_to_mark'">
+<div class="card card-warning card-sm" ng-show="task.isOverdue() && task.inAwaitingFeedbackState()">
   <div class="card-heading">
     <h4>Await Feedback from Tutor</h4>
   </div>
