@@ -182,6 +182,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.timePastTargetDescription = ->
       timeToDescription(moment(task.targetDate()), moment())
 
+    task.canApplyForExtension = ->
+      !task.inSubmittedState() && !task.isOverdue()
     task.inFinalState = ->
       task.status in taskService.finalStatuses
     task.inTerminalState = ->
