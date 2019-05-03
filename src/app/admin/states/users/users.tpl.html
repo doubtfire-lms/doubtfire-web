@@ -27,6 +27,7 @@
         <table class="table table-condensed table-hover">
           <thead>
             <tr>
+              <th>Avatar<th>
               <th><a ng-click="sortOrder='id'; reverse=!reverse">User ID</a></th>
               <th><a ng-click="sortOrder='first_name'; reverse=!reverse">First Name</a></th>
               <th><a ng-click="sortOrder='last_name'; reverse=!reverse">Last Name</a></th>
@@ -37,6 +38,9 @@
           </thead>
           <tbody>
             <tr class="pointer" ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
+              <td>
+                <user-icon size="20" user="user" email="user.email" style="max-width: 20px; max-height: 20px; font-size: 12px;"></user-icon>
+              </td>
               <td>{{user.id}}</td>
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
