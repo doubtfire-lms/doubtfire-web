@@ -8,14 +8,14 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, ExternalName, Unit, alertService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
 
     # Get the confugurable, external name of Doubtfire
-    $scope.externalName = ExternalName
+    $scope.externalName = DoubtfireConstants.ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
     $scope.teachingPeriods = TeachingPeriod.query()

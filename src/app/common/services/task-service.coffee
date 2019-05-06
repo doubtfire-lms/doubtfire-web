@@ -45,6 +45,9 @@ angular.module("doubtfire.common.services.tasks", [])
   ]
 
   # What are the states that are associated with tutor actions...
+  # TODO: This needs to be reworked, this actually means we are
+  # not waiting on a new submission =  either waiting for the tutor
+  # to mark it, or waiting on a discussion between student and tutor.
   taskService.submittedStatuses = [
     'do_not_resubmit'
     'ready_to_mark'
@@ -53,6 +56,10 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
     'fail'
     'time_exceeded'
+  ]
+
+  taskService.awaitingFeedbackStatuses = [
+    'ready_to_mark'
   ]
 
   # Which states can a task be considered to be overdue
@@ -304,7 +311,7 @@ angular.module("doubtfire.common.services.tasks", [])
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
   # This function gets the status CSS class for the indicated status
-  taskService.statusClass = (status) -> _.trim(_.dasherize(status))
+  taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
 
   # This function gets the status text for the indicated status
   taskService.statusText = (status) -> taskService.statusLabels[status]

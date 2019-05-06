@@ -15,7 +15,7 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
       roleWhitelist: ['Admin']
   headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
 )
-.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, ExternalName, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal) ->
+.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, DoubtfireConstants, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal) ->
 
   $scope.teachingPeriods = TeachingPeriod.query()
 
@@ -29,7 +29,7 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
   $scope.pageSize = 15
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   # User settings/create modal
   $scope.showTeachingPeriodModal = (teachingPeriod) ->

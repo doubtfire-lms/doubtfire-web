@@ -5,10 +5,10 @@ angular.module("utilService", [])
     return moment(new Date(date)).fromNow()
 
 .filter "titleize", ->
-  (input) -> _.string.titleize input
+  (input) -> _.titleize input
 
 .filter "humanize", ->
-  (input) -> _.string.humanize input
+  (input) -> _.humanize input
 
 .directive "autoFillSync", ($timeout) ->
 

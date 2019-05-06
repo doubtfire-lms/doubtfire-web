@@ -8,10 +8,10 @@ angular.module("doubtfire.api.resource-plus", [
 # - the addition of the authentication token
 # - change save to use PUT for update and POST for create
 #
-.factory("resourcePlus", ($resource, api, currentUser) ->
+.factory("resourcePlus", ($resource, DoubtfireConstants, currentUser) ->
   (url, paramDefaults, actions) ->
     # Prefix specified relative url with API endpoint.
-    url = api + url
+    url = DoubtfireConstants.API_URL + url
 
     # Angular's default save method uses POST for both create and update, but
     # Rails expects a PUT for update. :( To handle this, we must override the

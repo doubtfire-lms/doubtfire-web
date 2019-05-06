@@ -88,7 +88,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     setTaskDefFromTaskKey = (taskKey) ->
       # Only applicable in taskDefMode
       return unless $scope.isTaskDefMode
-      taskDef = _.find($scope.unit.task_definitions, {abbreviation: taskKey.taskDefAbbr}) || _.first($scope.unit.task_definitions)
+      taskDef = _.find($scope.unit.task_definitions, {abbreviation: taskKey?.taskDefAbbr}) || _.first($scope.unit.task_definitions)
       $scope.filters.taskDefinitionIdSelected = taskDef.id
       $scope.filters.taskDefinition = taskDef
     setTaskDefFromTaskKey($scope.taskData.taskKey)

@@ -18,7 +18,7 @@ angular.module('doubtfire.admin.states.units', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, ExternalName, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService) ->
+.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
 
   # Map unit role
@@ -45,7 +45,7 @@ angular.module('doubtfire.admin.states.units', [])
   $scope.pageSize = 15
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   $scope.createUnit = ->
     CreateUnitModal.show $scope.units

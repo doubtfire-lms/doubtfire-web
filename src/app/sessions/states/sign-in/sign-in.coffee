@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, ExternalName, usernameCookie, $timeout, $http, $modal, currentUser, auth, api, alertService, localStorageService, redirectService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -30,20 +30,20 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.session = { remember_me: true }
 
   # Get the confugurable, external name of Doubtfire
-  $scope.externalName = ExternalName
+  $scope.externalName = DoubtfireConstants.ExternalName
 
   # Check for AAF login
-  $scope.api = api
+  $scope.api = DoubtfireConstants.API_URL
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
-  $http.get("#{api}/auth/method").then ((response) ->
+  $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
     $scope.aafLogin = response.data.redirect_to || false
-    
+
     if $scope.aafLogin
       if $stateParams.authToken
         # This is AAF and we just got an auth_token? Must request to sign in
         $scope.signIn({ auth_token: $stateParams.authToken })
       else
-        # We are AAF and no auth token so we can just redirect
+        # We are AAF and no auth token so we can must redirect to AAF login provider
         window.location.assign($scope.aafLogin)
     else
       $scope.authMethodLoaded = true
@@ -57,7 +57,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   # April Fools Easter Egg :-)
   angular.element(document).ready ->
     # This would make absolutely no sense unless the external name is Doubtfire!
-    return if ExternalName isnt 'Doubtfire'
+    return if DoubtfireConstants.ExternalName.value isnt 'Doubtfire'
     today = new Date()
     aprilFools =  today.getDate()   is 1 and # first day of the
                   today.getMonth()  is 3     # fourth month (April - zero-based)
@@ -80,7 +80,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     AboutDoubtfireModal.show()
 
   if auth.isAuthenticated()
-    redirectService.redirect "home", {}
+    $state.go "home"
   else
     $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
@@ -89,7 +89,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
           username: $scope.session.username
           password: $scope.session.password
           remember: $scope.session.remember_me
-        auth.signIn(api + "/auth", signInCredentials,
+        auth.signIn("#{DoubtfireConstants.API_URL}/auth", signInCredentials,
           (response) ->
             if $scope.session.remember_me
               localStorageService.set(usernameCookie, currentUser)
@@ -100,7 +100,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
               localStorageService.set(rememberDoubtfireCredentialsCookie, false)
               localStorageService.remove(doubtfireLoginTimeCookie)
             alertService.clearAll()
-            redirectService.redirect "home", {}
+            $state.go "home", {}
           (response) ->
             $scope.session.password = ''
             $scope.signingIn = false

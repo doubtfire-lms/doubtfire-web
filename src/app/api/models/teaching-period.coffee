@@ -1,6 +1,6 @@
 angular.module("doubtfire.api.models.teaching-period", [])
 
-.factory("TeachingPeriod", (resourcePlus, api, currentUser, alertService) ->
+.factory("TeachingPeriod", (resourcePlus, currentUser, alertService) ->
   resource = resourcePlus "/teaching_periods/:id", { id: "@id"}
   rollover = resourcePlus "/teaching_periods/:existing_teaching_period_id/rollover", { existing_teaching_period_id: "@existing_teaching_period_id"}
 

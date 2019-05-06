@@ -6,7 +6,7 @@ angular.module("doubtfire.sessions.auth", [
 #
 # Authentication factory object for checking all auth
 #
-.factory("auth", ($http, $cookieStore, $timeout, usernameCookie, currentUser, authRoles, localStorageService, doubtfireLoginTimeCookie, rememberDoubtfireCredentialsCookie, api, $rootScope) ->
+.factory("auth", ($http, $cookieStore, $timeout, usernameCookie, currentUser, authRoles, localStorageService, doubtfireLoginTimeCookie, rememberDoubtfireCredentialsCookie, DoubtfireConstants, $rootScope) ->
 
   defaultAnonymousUser = _.clone currentUser
 
@@ -31,7 +31,7 @@ angular.module("doubtfire.sessions.auth", [
       currentUser.authenticationToken = response.auth_token
       saveCurrentUser()
 
-      $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), 1000*60*60
+      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), 1000*60*60
     )
 
   # Private factory methods.
@@ -76,10 +76,10 @@ angular.module("doubtfire.sessions.auth", [
       user =
         id: response.user.id
         authenticationToken: response.auth_token
-        role: _.string.camelize(response.user.system_role)
+        role: response.user.system_role
         profile: response.user
 
-      $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), 1000*60*60
+      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), 1000*60*60
 
       if tryChangeUser user
         success()
@@ -104,7 +104,7 @@ angular.module("doubtfire.sessions.auth", [
     if delayTime < 100
       delayTime = 100
 
-    $timeout (( ) -> updateAuth api + "/auth/" + currentUser.authenticationToken + ".json"), delayTime
+    $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), delayTime
 
   # Return the auth object
   auth

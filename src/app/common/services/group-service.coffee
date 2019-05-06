@@ -138,6 +138,10 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   # Adds a group memeber to the currently selected group and groupset
   groupService.addMemberToGroup = (group, member, onSuccess, onFailure) ->
+    if ! member?
+      alertService.add('danger', "The student you are trying to add to the group could not be found.", 6000)
+      return
+
     GroupMember.create(
       {
         unit_id: group.unit().id,

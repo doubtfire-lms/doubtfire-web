@@ -10,5 +10,7 @@ vendor/
 .sass-cache*
 .bundle*
 tmp.scss
-.vscode/
+.vscode
+.tscache
 a.env
+dist/
