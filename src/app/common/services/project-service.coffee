@@ -29,10 +29,16 @@ angular.module("doubtfire.common.services.projects", [])
     ]
 
     for t in times
-      diff = laterTime.diff(earlyTime, t)
-      if diff > 1
+      #exactDiff is floating point
+      exactDiff = laterTime.diff(earlyTime, t, true).toFixed(2)
+      diff = Math.floor(exactDiff)
+      # if days are more than 14 then show in week
+      if(exactDiff > 2 && t == "weeks")
         return "#{diff} #{t.charAt(0).toUpperCase() + t.substr(1)}"
-      else if diff == 1
+      # Always show in days, Hours, Minutes and Seconds.
+      else if diff > 1 && t != "weeks"
+        return "#{diff} #{t.charAt(0).toUpperCase() + t.substr(1)}"
+      else if diff == 1 && t != "weeks"
         return "1 #{t.charAt(0).toUpperCase() + t.substr(1, t.length - 2)}"
     return laterTime.diff(earlyTime, "seconds")
 
