@@ -7,6 +7,9 @@
       Contact your unit convenor or tutor to enrol you in a subject.
     </p>
   </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
   <div class="cards" ng-hide="notEntrolled()">
     <div class="card card-primary" if-role="Tutor Convenor Admin" >
       <div class="card-heading">
@@ -47,6 +50,10 @@
         You do not teach any active units
       </div>
     </div><!--/units-taught-->
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="cards" ng-hide="notEntrolled()">
     <div class="card card-primary" ng-show="projects.length > 0">
       <div class="card-heading">
         <h4>Units You Study</h4>
@@ -80,7 +87,11 @@
           <span class="glyphicon glyphicon-share-alt"></span>
         </a>
       </div>
+          </div>
+        </div>
     </div><!--/units-taught-->
+      <div class="col-md-4">
+        <div class="cards" ng-hide="notEntrolled()">
     <div class="card card-primary" if-role="Admin Convenor">
       <div class="card-heading">
         <h4>Administration</h4>
@@ -111,6 +122,9 @@
           </p>
         </a>
       </div><!--/admin-->
+    </div>
+  </div>
+      </div>
     </div>
   </div>
   <div class="spinner" ng-hide="dataLoaded">
