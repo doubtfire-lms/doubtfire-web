@@ -71,7 +71,7 @@
     </p>
   </div>
 </div><!--/past-target-card pre-discuss-->
-<div class="card card-warning card-sm" ng-show="task.isPastTargetDate() && !task.isOverdue() && !task.inDiscussState() ">
+<div class="card card-warning card-sm" ng-show="task.isPastTargetDate() && !task.isOverdue() && task.inDiscussState() ">
   <div class="card-heading">
     <h4>Past Due Date By {{task.timePastTargetDescription()}}</h4>
   </div>
