@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, taskService, listenerService, ConfirmationModal, WarningModal) ->
+  controller: ($scope, $stateParams, taskService, listenerService, ConfirmationModal) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
@@ -50,17 +50,19 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
 
     $scope.triggerStatusChange = (trigger) ->
-      if (trigger == 'not_started' || trigger == 'working_on_it' || trigger == 'need_help') && $scope.task.status == 'ready_to_mark' && !$scope.task.isOverdue()
+      if (trigger == 'not_started' || trigger == 'working_on_it' || trigger == 'need_help') && $scope.task.inAwaitingFeedbackState() && !$scope.task.isOverdue()
         ConfirmationModal.show(
           "Do you want to change the status?",
-          "Changing the status will cancel all previous submissions.
-          Use confirm to change the status.",
+          "Changing the status will cancel the previous submission.
+          Use confirm to perform the action.",
           () -> $scope.task.triggerTransition(trigger, $scope.unitRole))
-      else if (trigger == 'not_started' || trigger == 'working_on_it' || trigger == 'need_help') && $scope.task.status == 'ready_to_mark' && $scope.task.isOverdue()
-        WarningModal.show(
-          "Not allowed to perform this action",
-          "The deadline for this task has passed and you are not allowed to change status.
-          Please wait for your tutor to give feedback.")
+      else if (trigger == 'not_started' || trigger == 'working_on_it' || trigger == 'need_help') && $scope.task.inAwaitingFeedbackState() && $scope.task.isOverdue()
+        ConfirmationModal.show(
+          "Do you want to change the status?",
+          "The deadline for this task has passed and going back to previous status will mark the task to Time Exceeded on re-submission.
+          Instead use upload new files option to re-submit.
+          Use confirm to perform the action.",
+          () -> $scope.task.triggerTransition(trigger, $scope.unitRole))
       else
         $scope.task.triggerTransition(trigger, $scope.unitRole)
 )
