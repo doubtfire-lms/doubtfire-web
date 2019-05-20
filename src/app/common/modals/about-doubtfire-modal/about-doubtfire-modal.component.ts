@@ -5,13 +5,14 @@ import { Injectable, Component, Inject, OnInit } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
+import {GithubProfileOthers} from '../about-doubtfire-modal/GithubProfileOthers';
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface AboutDialogData {
   externalName: string,
   contributors: GithubProfile[],
-  otherContributors: GithubProfile[]
+  otherContributors: GithubProfileOthers[]
 }
 
 /**
@@ -79,7 +80,7 @@ export class AboutDoubtfireModal {
   private getOtherContributorsDetails() {
     this.aboutDoubtfireModalService.GetOtherContributors()
       .subscribe(response => {
-        this.aboutDialogData.otherContributors.push(response); 
+        this.aboutDialogData.otherContributors.push(...response); 
       });
   }
 }
