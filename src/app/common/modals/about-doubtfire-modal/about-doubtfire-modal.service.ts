@@ -10,4 +10,8 @@ export class AboutDoubtfireModalService {
   GetGithubProfiles(handler: string) {
     return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
   }
+
+  GetOtherContributors() {
+    return this.http.get<GithubProfile>("https://api.github.com/repos/doubtfire-lms/doubtfire-web/contributors");
+  }
 }

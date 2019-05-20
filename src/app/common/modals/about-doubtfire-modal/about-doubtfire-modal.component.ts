@@ -10,7 +10,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface AboutDialogData {
   externalName: string,
-  contributors: GithubProfile[]
+  contributors: GithubProfile[],
+  otherContributors: GithubProfile[]
 }
 
 /**
@@ -32,7 +33,8 @@ export class AboutDoubtfireModal {
     private aboutDoubtfireModalService: AboutDoubtfireModalService) {
     this.aboutDialogData = {
       externalName: "",
-      contributors: []
+      contributors: [],
+      otherContributors: []
     }
 
     this.aboutDialogData.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
@@ -44,6 +46,7 @@ export class AboutDoubtfireModal {
   show() {
     this.getContributorDetails();
     this.getExternalName();
+    this.getOtherContributorsDetails();
     this.dialog.open(AboutDoubtfireModalContent,
       {
         width: '900px',
@@ -71,6 +74,13 @@ export class AboutDoubtfireModal {
             }
         })
     });
+  }
+
+  private getOtherContributorsDetails() {
+    this.aboutDoubtfireModalService.GetOtherContributors()
+      .subscribe(response => {
+        this.aboutDialogData.otherContributors.push(response); 
+      });
   }
 }
 

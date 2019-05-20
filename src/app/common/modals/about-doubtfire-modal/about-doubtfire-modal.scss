@@ -1,34 +1,30 @@
-[hidden] {
-  display: none !important;
-}
-
-mat-dialog-content {
+.modal-about {
   i.logo + h1.logo {
     margin-left: 1ex;
     display: inline-block;
   }
 
+  h1.logo {
+    @include logo-font-rendering;
+    @media (max-width: $screen-sm) {
+      font-size: 3em;
+    }
+    small {
+      text-align: right;
+      font-size: 0.5em;
+    }
+    &.full.logo small {
+      display: block;
+    }
+    &.sup.logo small {
+      vertical-align: super;
+      margin-left: 0.5ex;
+      color: #999;
+    }
+  }
+
   .modal-header {
     text-align: center;
-    h1.logo {
-      @include logo-font-rendering;
-      @media (max-width: $screen-sm) {
-        font-size: 3em;
-      }
-      small {
-        text-align: right;
-        font-size: 0.5em;
-      }
-      &.full.logo small {
-        display: block;
-        line-height: 2;
-      }
-      &.sup.logo small {
-        vertical-align: super;
-        margin-left: 0.5ex;
-        color: #999;
-      }
-    }
   }
 
   .modal-content {
@@ -52,7 +48,6 @@ mat-dialog-content {
     display: flex;
     flex-wrap: wrap;
     width: 85%;
-    justify-content: center;
     margin: 0 auto;
   }
   li {
@@ -65,27 +60,27 @@ mat-dialog-content {
       display: inline-block;
       width: 15%;
       margin: 3em 5% 3em 5%;
-    }
-    &.handler {
-      display: block;
-      margin-top: 0.25em;
-      font-size: 1.1em;
+      &:last-child {
+        margin-right: auto;
+      }
     }
     a {
       display: block;
       width: 100%;
       text-align: center;
-      font-size: 1.1em;
+      font-size: 1.3em;
       color: #444;
       text-decoration: none;
       &:hover {
         text-decoration: underline;
       }
-
+      &.handler {
+        display: block;
+        margin-top: 0.25em;
+        font-size: 1.1em;
+      }
       .name {
-        line-height: 1;
         font-weight: bold;
-        text-align: center;
       }
     }
     img {
@@ -100,5 +95,10 @@ mat-dialog-content {
     a {
       color: #222;
     }
+  }
+  .contributions {
+    font-size: 1em;
+    text-align: center;
+    margin-top: -0.5em;
   }
 }
