@@ -1,6 +1,7 @@
 <div class="container" id="task-offline-marking-state">
-  <div class="panel-row">
-    <div class="panel panel-primary">
+  <div class="row">
+    <div class="col-sm-4">
+     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">Download Unmarked Tasks</h4>
       </div>
@@ -17,6 +18,8 @@
         </a>
       </div>
     </div><!--/download-unmarked-->
+    </div>
+    <div class"col-sm-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">Upload Marked Zip</h4>
@@ -43,6 +46,8 @@
         </file-uploader>
       </div>
     </div><!--/upload-zip-->
+    </div>
+    <div class"col-sm-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h4 class="panel-title">Upload Marked CSV</h4>
@@ -68,6 +73,7 @@
         </file-uploader>
       </div>
     </div><!--/upload-zip-->
+    </div>  
   </div><!--/top-panels-->
   <div class="panel panel-default" ng-show="taskUploadResults && taskUploadResults.length > 0">
     <hr>
