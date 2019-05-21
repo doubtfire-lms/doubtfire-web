@@ -12,6 +12,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 export interface AboutDialogData {
   externalName: string,
   contributors: GithubProfile[],
+  otherWebContributors: GithubProfileOthers[],
+  otherAPIContributors: GithubProfileOthers[],
   otherContributors: GithubProfileOthers[]
 }
 
@@ -35,6 +37,8 @@ export class AboutDoubtfireModal {
     this.aboutDialogData = {
       externalName: "",
       contributors: [],
+      otherWebContributors: [],
+      otherAPIContributors: [],
       otherContributors: []
     }
 
@@ -47,7 +51,11 @@ export class AboutDoubtfireModal {
   show() {
     this.getContributorDetails();
     this.getExternalName();
-    this.getOtherContributorsDetails();
+    if(this.aboutDialogData.otherContributors.length === 0) {
+      this.getOtherWebContributorsDetails();
+      this.getOtherAPIContributorsDetails();
+      setTimeout(this.combineContributions.bind(this), 2000);
+    }
     this.dialog.open(AboutDoubtfireModalContent,
       {
         width: '900px',
@@ -77,11 +85,31 @@ export class AboutDoubtfireModal {
     });
   }
 
-  private getOtherContributorsDetails() {
-    this.aboutDoubtfireModalService.GetOtherContributors()
+  private getOtherWebContributorsDetails() {
+    this.aboutDoubtfireModalService.GetOtherWebContributors()
       .subscribe(response => {
-        this.aboutDialogData.otherContributors.push(...response); 
+        this.aboutDialogData.otherWebContributors.push(...response); 
       });
+  }
+
+  private getOtherAPIContributorsDetails() {
+    this.aboutDoubtfireModalService.GetOtherAPIContributors()
+      .subscribe(response => {
+        this.aboutDialogData.otherAPIContributors.push(...response); 
+      });
+  }
+
+  private combineContributions() {
+    this.aboutDialogData.otherContributors = Array.from(this.aboutDialogData.otherAPIContributors);
+    this.aboutDialogData.otherWebContributors.forEach(contributor => {
+      var user = this.aboutDialogData.otherContributors.find(c => c.id === contributor.id);
+      if(user !== undefined) {
+        user.contributions += contributor.contributions;
+      } else {
+        this.aboutDialogData.otherContributors.push(contributor);
+      }
+    })
+    this.aboutDialogData.otherContributors.sort((a,b) => b.contributions - a.contributions)
   }
 }
 

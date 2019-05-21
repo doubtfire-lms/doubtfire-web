@@ -12,7 +12,11 @@ export class AboutDoubtfireModalService {
     return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
   }
 
-  GetOtherContributors() {
+  GetOtherWebContributors() {
     return this.http.get<GithubProfileOthers[]>("https://api.github.com/repos/doubtfire-lms/doubtfire-web/contributors");
+  }
+
+  GetOtherAPIContributors() {
+    return this.http.get<GithubProfileOthers[]>("https://api.github.com/repos/doubtfire-lms/doubtfire-api/contributors");
   }
 }
