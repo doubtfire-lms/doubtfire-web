@@ -53,7 +53,7 @@ export class AboutDoubtfireModal {
     this.getExternalName();
     // Make API calls only if this is first request. 
     if(this.aboutDialogData.otherTotalContributors.length === 0) {
-      this.combineContributions();
+      this.getAPIData();
     }
     this.dialog.open(AboutDoubtfireModalContent,
       {
@@ -84,31 +84,15 @@ export class AboutDoubtfireModal {
     });
   }
 
-  private getOtherWebContributorsDetails() {
-    this.aboutDoubtfireModalService.GetOtherWebContributors()
-      .subscribe(response => {
-        this.aboutDialogData.otherWebContributors.push(...response); 
-      });
-  }
-
-  private getOtherAPIContributorsDetails() {
-    this.aboutDoubtfireModalService.GetOtherAPIContributors()
-      .subscribe(response => {
-        this.aboutDialogData.otherAPIContributors.push(...response); 
-      });
-  }
-
-  private callAPIs() {
-    // Get both Web and Api contribution list.
-    this.getOtherAPIContributorsDetails();
-    this.getOtherWebContributorsDetails();
-  }
-
-  // 
-  private async combineContributions() {
+  private async getAPIData() {
     // Wait for the data to be retrieved.
-    await this.callAPIs();
+    this.aboutDialogData.otherWebContributors = await this.aboutDoubtfireModalService.GetOtherWebContributors().toPromise();
+    this.aboutDialogData.otherAPIContributors = await this.aboutDoubtfireModalService.GetOtherAPIContributors().toPromise();
 
+    this.combineContributions();
+  }
+
+  private combineContributions() {
     this.aboutDialogData.otherTotalContributors = Array.from(this.aboutDialogData.otherAPIContributors);
     this.aboutDialogData.otherWebContributors.forEach(contributor => {
       var user = this.aboutDialogData.otherTotalContributors.find(c => c.id === contributor.id);
@@ -118,7 +102,7 @@ export class AboutDoubtfireModal {
         this.aboutDialogData.otherTotalContributors.push(contributor);
       }
     })
-    this.aboutDialogData.otherTotalContributors.sort((a,b) => b.contributions - a.contributions)
+    this.aboutDialogData.otherTotalContributors.sort((a,b) => b.contributions - a.contributions);
   }
 }
 
