@@ -101,8 +101,18 @@ export class AboutDoubtfireModal {
       } else {
         this.aboutDialogData.otherTotalContributors.push(contributor);
       }
-    })
+    });
     this.aboutDialogData.otherTotalContributors.sort((a,b) => b.contributions - a.contributions);
+
+    // Filter main contributors so that they are not shown again.
+    let mainContributors: String[] = [];
+    this.aboutDialogData.contributors.forEach(c => mainContributors.push(c.login));
+    this.aboutDialogData.otherTotalContributors = this.aboutDialogData.otherTotalContributors.filter(user => {
+      if(mainContributors.indexOf(user.login) === -1)
+        return true;
+      else
+        return false;
+    });
   }
 }
 
