@@ -24,7 +24,7 @@
     </ul>
     <h2>Other Contributors</h2>
     <ul>
-      <li *ngFor="let contributor of data.otherContributors">
+      <li *ngFor="let contributor of data.otherTotalContributors">
         <a [href]="contributor.html_url" target="_blank">
           <img [src]="contributor.avatar_url || '/assets/images/person-unknown.gif'">
           <div class="name">@{{contributor.login}}</div>

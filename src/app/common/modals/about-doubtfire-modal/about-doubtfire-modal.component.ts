@@ -14,7 +14,7 @@ export interface AboutDialogData {
   contributors: GithubProfile[],
   otherWebContributors: GithubProfileOthers[],
   otherAPIContributors: GithubProfileOthers[],
-  otherContributors: GithubProfileOthers[]
+  otherTotalContributors: GithubProfileOthers[]
 }
 
 /**
@@ -39,7 +39,7 @@ export class AboutDoubtfireModal {
       contributors: [],
       otherWebContributors: [],
       otherAPIContributors: [],
-      otherContributors: []
+      otherTotalContributors: []
     }
 
     this.aboutDialogData.contributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
@@ -51,10 +51,9 @@ export class AboutDoubtfireModal {
   show() {
     this.getContributorDetails();
     this.getExternalName();
-    if(this.aboutDialogData.otherContributors.length === 0) {
-      this.getOtherWebContributorsDetails();
-      this.getOtherAPIContributorsDetails();
-      setTimeout(this.combineContributions.bind(this), 2000);
+    // Make API calls only if this is first request. 
+    if(this.aboutDialogData.otherTotalContributors.length === 0) {
+      this.combineContributions();
     }
     this.dialog.open(AboutDoubtfireModalContent,
       {
@@ -99,17 +98,27 @@ export class AboutDoubtfireModal {
       });
   }
 
-  private combineContributions() {
-    this.aboutDialogData.otherContributors = Array.from(this.aboutDialogData.otherAPIContributors);
+  private callAPIs() {
+    // Get both Web and Api contribution list.
+    this.getOtherAPIContributorsDetails();
+    this.getOtherWebContributorsDetails();
+  }
+
+  // 
+  private async combineContributions() {
+    // Wait for the data to be retrieved.
+    await this.callAPIs();
+
+    this.aboutDialogData.otherTotalContributors = Array.from(this.aboutDialogData.otherAPIContributors);
     this.aboutDialogData.otherWebContributors.forEach(contributor => {
-      var user = this.aboutDialogData.otherContributors.find(c => c.id === contributor.id);
+      var user = this.aboutDialogData.otherTotalContributors.find(c => c.id === contributor.id);
       if(user !== undefined) {
         user.contributions += contributor.contributions;
       } else {
-        this.aboutDialogData.otherContributors.push(contributor);
+        this.aboutDialogData.otherTotalContributors.push(contributor);
       }
     })
-    this.aboutDialogData.otherContributors.sort((a,b) => b.contributions - a.contributions)
+    this.aboutDialogData.otherTotalContributors.sort((a,b) => b.contributions - a.contributions)
   }
 }
 
