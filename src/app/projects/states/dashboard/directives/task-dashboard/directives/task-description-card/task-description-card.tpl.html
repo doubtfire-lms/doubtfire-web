@@ -31,11 +31,17 @@
         &mdash;
         Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | date  : 'MMM d' }} at {{taskDef.due_date | date : 'h:mm a' }}</strong>. Your work will be checked in your portfolio.
       </li>
+      <li>
+        <strong>Number of visits</strong>
+        &mdash;
+        You have visited the TaskSheet<strong>{{task.count}}</strong>
+      </li>
     </ul>
   </div><!--/key-info-footer-->
+  
   <div class="card-footer" ng-show="task.canApplyForExtension() || taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
-      ng-click="downloadEvent('PDF')"
+      ng-click="downloadEvent('PDF') "
       href="{{urls.taskSheet}}"
       ng-show="taskDef.has_task_sheet"
       target="_blank"

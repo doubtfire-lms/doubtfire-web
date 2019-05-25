@@ -112,6 +112,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.addComment(task, textString, success, failure)
     task.applyForExtension = (onSuccess, onError) ->
       taskService.applyForExtension(task, onSuccess, onError)
+    task.updatecount = (onSuccess, onError) ->
+      taskService.updatecount(task, onSuccess, onError)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->

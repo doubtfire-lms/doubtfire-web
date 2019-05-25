@@ -22,6 +22,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     )
     # Analytics event for when task resource is downloaded
     $scope.downloadEvent = (type) ->
+      $scope.task.updatecount(
+        (success) ->
+          alertService.add("success", "Extension granted", 2000)
+        (failure) ->
+          alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
+      )
       analyticsService.event 'Task Sheet', "Downloaded Task #{type}"
     # Expose grade names
     $scope.grades =

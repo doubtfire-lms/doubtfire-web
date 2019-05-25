@@ -443,6 +443,7 @@ angular.module("doubtfire.common.services.tasks", [])
     task.processing_pdf = response.processing_pdf
     task.due_date = response.due_date
     task.extensions = response.extensions
+    task.count = response.viewcount
     task.grade = response.grade
     if response.status == status
       project.updateBurndownChart?()
@@ -596,6 +597,15 @@ angular.module("doubtfire.common.services.tasks", [])
       onSuccess(response)
 
     Task.applyForExtension(task, interceptSuccess, onError)
+  taskService.updatecount = (task, onSuccess, onError) ->
+    interceptSuccess = (response) ->
+      task.due_date = response.data.due_date
+      task.count = response.data.viewcount
+      task.project().updateBurndownChart()
+      task.project().calcTopTasks() # Sort the task list again
+      onSuccess(response)
+
+    Task.updatecount(task, interceptSuccess, onError)
 
   taskService
 )
