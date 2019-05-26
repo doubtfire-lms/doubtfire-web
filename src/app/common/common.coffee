@@ -16,4 +16,5 @@ angular.module("doubtfire.common", [
   # Audio
   'doubtfire.common.audio-player'
   'doubtfire.common.audio-recorder'
+  'doubtfire.common.emoji-selector'
 ])

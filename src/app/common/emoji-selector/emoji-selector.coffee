@@ -1,18 +1,19 @@
-angular.module("doubtfire.tasks.task-comment-composer", [])
+#Emoji code shortcut keys work according to their position to make it easier to understand
+#while building it. The keys can be changed at anytime later
+#for now, an emoji positioned at 5th row and 4th column would be ' (54) '
 
-#
-# Allows a new comment to be created and added to a task
-# Includes the ability to create and add audio, text, and image comments
-#
-.directive('taskCommentComposer', ->
+
+angular.module('doubtfire.common.emoji-selector', [])
+
+.directive 'emojiSelector', ->
   restrict: 'E'
-  templateUrl: 'tasks/task-comment-composer/task-comment-composer.tpl.html'
-  scope:
-    task: '='
-    comment: '=ngModel'
-    singleDropZone: '=?'
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskFeedback, TaskComment, Task, Project, taskService, alertService, projectService, analyticsService) ->
+  replace: true
+  templateUrl: 'common/emoji-selector/emoji-selector.tpl.html'
+
+  controller: ($scope, taskService, alertService) ->
     $scope.emojis = [{
+      "unicode": "0020",
+    },{
       "unicode": "1f600",
       "unicode_alternates": "(11)",
       "name": "grinning face",
@@ -245,78 +246,17 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
       "keywords": ["angel", "innocent", "ring", "circle", "heaven", "fairy tale", "fantasy", "person", "smile"]
     }]
 
-    $scope.isRecorderOpen = false
-    $scope.isEmojiOpen = false
+     # Emoji Selector JS
+     #$scope.copy_emojis = (event) ->
+    $scope.copy_emojis = (event) ->
+      #alertService.add("info", event.currentTarget.innerHTML, 10000)
 
-    # Initialise comment
-    $scope.comment = {
-      text: ""
-      type: "text"
-    }
+      # actual -> $scope.comment.text = $scope.comment.text + event.currentTarget.innerHTML
+      $scope.comment.text = $scope.comment.text + event.currentTarget.innerHTML
+      return
 
-    $scope.emojiPopover = 'emojiSelectorPopover.html'
-    $scope.audioPopover = 'audioRecorderPopover.html'
-
-    # Don't insert a newline character when sending a comment
-    $scope.keyPress = (e) ->
-      if (e.key.toLowerCase() == "enter" && !e.shiftKey)
-        e.preventDefault()
-        len = $scope.emojis.length
-        for i in [0...len-1]
-          if($scope.emojis[i].unicode_alternates != "")
-            console.log($scope.emojis[i].unicode_alternates)
-            console.log($scope.comment.text.indexOf($scope.emojis[i].unicode_alternates))
-            if ($scope.comment.text.indexOf($scope.emojis[i].unicode_alternates) == 0)
-              $scope.comment.text = $scope.comment.text.replace($scope.emojis[i].unicode_alternates, "&#x" + $scope.emojis[i].unicode + ';')
-        if $scope.comment.text.trim() != ""
-          $scope.addComment()
-
-    $scope.formatImageName = (imageName) ->
-      index = imageName.indexOf(".")
-      nameString = imageName.substring(0,index)
-      typeString = imageName.substring(index)
-
-      if nameString.length > 20
-        nameString = nameString.substring(0,20) + ".."
-
-      finalString = nameString + typeString
-      finalString
-
-    #============================================================================
-    $scope.clearEnqueuedUpload = (upload) ->
-      upload.model = null
-      refreshShownUploadZones()
-
-    #============================================================================
-    # Upload image files as comments to a given task
-    $scope.postAttachmentComment = ->
-      taskService.addMediaComment(CommentResourceService.task, $scope.upload.model[0],
-        (success) ->
-          taskService.scrollDown()
-        (failure) ->
-          alertService.add('danger', "Failed to post image. #{failure.data?.error}")
-      )
-      $scope.clearEnqueuedUpload($scope.upload)
-
-    #============================================================================
-    # Will refresh which shown drop zones are shown
-    # Only changes if showing one drop zone
-    refreshShownUploadZones = ->
-      if $scope.singleDropZone
-        # Find the first-most empty model in each zone
-        firstEmptyZone = _.find($scope.uploadZones, (zone) -> !zone.model? || zone.model.length == 0)
-        if firstEmptyZone?
-          $scope.shownUploadZones = [firstEmptyZone]
-        else
-          $scope.shownUploadZones = []
-
-    $scope.addComment = ->
-      $scope.comment.text = $scope.comment.text.trim()
-      taskService.addComment $scope.task, $scope.comment.text, "text",
-        (success) ->
-          $scope.comment.text = ""
-          analyticsService.event "View Task Comments", "Added new comment"
-          taskService.scrollDown()
-        (failure) -> #changed from response to failure
-          alertService.add("danger", failure.data.error, 2000)
+.filter('exposeEmoji', ($sce) ->
+  (val) ->
+    val = "&#x" + val.unicode + ';'
+    return $sce.trustAsHtml(val)
 )
