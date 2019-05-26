@@ -247,7 +247,6 @@ angular.module("doubtfire.tasks.task-comment-composer", [])
 
     $scope.isRecorderOpen = false
     $scope.isEmojiOpen = false
-
     # Initialise comment
     $scope.comment = {
       text: ""
