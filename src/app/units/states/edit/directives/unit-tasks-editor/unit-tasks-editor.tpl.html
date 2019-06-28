@@ -75,9 +75,9 @@
               <tr ng-repeat="task in filteredTaskDefs = (allTaskDefs = ( unit.task_definitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(task)" ng-class="{'info': taskAdminData.selectedTask == task}">
                 <td><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
                 <td>{{grades[task.target_grade]}}</td>
-                <td>{{task.start_date | date:'d MMM yyyy'}}</td>
-                <td>{{task.target_date | date:'d MMM yyyy'}}</td>
-                <td><span ng-show="task.due_date">{{task.due_date | date:'d MMM yyyy'}}</span><span ng-hide="task.due_date">None</span></td>
+                <td>{{task.start_date | date : 'EEE d MMM' : '+0000'}}</td>
+                <td>{{task.target_date | date : 'EEE d MMM' : '+0000'}}</td>
+                <td><span ng-show="task.due_date">{{task.due_date | date : 'EEE d MMM' : '+0000'}}</span><span ng-hide="task.due_date">None</span></td>
                 <td ng-show="unit.hasGroupwork()">{{groupSetName(task.group_set_id)}}</td>
                 <td>{{task.upload_requirements.length}}</td>
                 <td><i ng-show="task.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="task.hasPlagiarismCheck()" class="fa fa-times"></i></td>
