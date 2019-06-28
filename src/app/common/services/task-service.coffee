@@ -596,13 +596,22 @@ angular.module("doubtfire.common.services.tasks", [])
     for prompt in prompts
       form.append('attachments[]', prompt)
 
-    DiscussionComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+    DiscussionComment.post {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
       (response) -> #success
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
         onSuccess(response)
       (response) -> #failure
+        onError(response)
+
+  taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
+    DiscussionComment.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
+      (response) -> #success
+        console.log(response)
+        onSuccess(response)
+      (response) -> #failure
+        console.log(response)
         onError(response)
 
   taskService.applyForExtension = (task, onSuccess, onError) ->

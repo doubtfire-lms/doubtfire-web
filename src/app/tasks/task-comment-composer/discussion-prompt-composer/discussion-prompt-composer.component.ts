@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'discussion-prompt-composer',

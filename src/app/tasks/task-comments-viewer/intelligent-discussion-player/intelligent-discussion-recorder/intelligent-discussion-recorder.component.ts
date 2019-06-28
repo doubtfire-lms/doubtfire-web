@@ -35,13 +35,13 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  startStreaming() {
-    this.startRecording();
-    this.intervalID = setInterval(() => {
-      this.processChunks();
-      this.sendRecording();
-    }, 5000);
-  }
+  // startStreaming() {
+    // this.startRecording();
+    // this.intervalID = setInterval(() => {
+      // this.processChunks();
+      // this.sendRecording();
+    // }, 5000);
+  // }
 
   onNewRecording(evt: any): void {
     this.blob = evt.detail.recording.blob;

@@ -5,7 +5,7 @@ import { IntelligentDiscussionPlayerService } from './intelligent-discussion-pla
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-
+import { taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'intelligent-discussion-player',
@@ -13,22 +13,41 @@ import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion
   styleUrls: ['./intelligent-discussion-player.component.scss']
 })
 export class IntelligentDiscussionPlayerComponent implements OnInit {
+  @Input() task: {};
   @Input() parentCommentId: number;
 
-  constructor(public dialog: MatDialog, ) {
+  constructor(@Inject(taskService) private ts: any,
+    public dialog: MatDialog, ) {
+
   }
 
   ngOnInit() {
-
+    console.log(this.parentCommentId);
   }
-
-  sendRecording(): void { }
 
   beginDiscussion(): void {
     const dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
       maxWidth: '800px',
       disableClose: true,
-    });
+    }
+      // load discussion comment with ID this.parentCommentId;
+      // this.ts.addDiscussionComment(this.task, this.recordings,
+      //   () => {
+      //     this.ts.scrollDown();
+      //     this.isSending = false;
+      //   },
+      //   (failure: { data: { error: any; }; }) => {
+      //     // this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+      //     this.isSending = false;
+      //   });
+    );
+
+    this.ts.getDiscussionComment(this.task, this.parentCommentId, () => {
+      console.log("Success");
+    }, () =>{
+      console.log("fail");
+    }
+    );
 
     dialogRef.afterOpened().subscribe((result: any) => {
     });
@@ -66,6 +85,8 @@ export class IntelligentDiscussionDialog implements OnInit {
   currentDiscussionPrompt: string = '';
   activePromptId: number = 0;
   counter: Subscription;
+  audio: HTMLAudioElement;
+
   @ViewChild('testRecorder') testRecorder: MicrophoneTesterComponent;
   @ViewChild('discussionRecorder') discussionRecorder: IntelligentDiscussionRecorderComponent;
 
@@ -77,6 +98,7 @@ export class IntelligentDiscussionDialog implements OnInit {
 
   ngOnInit() {
     this.prompts = new Array<Prompt>();
+    this.audio = new Audio();
   }
 
   disableTester() {
@@ -90,6 +112,8 @@ export class IntelligentDiscussionDialog implements OnInit {
   finishDiscussion() {
     this.discussionComplete = true;
     this.discussionRecorder.stopRecording();
+    this.audio.pause();
+    this.audio = null;
     this.counter.unsubscribe();
   }
 
@@ -99,7 +123,7 @@ export class IntelligentDiscussionDialog implements OnInit {
       this.getPrompts();
 
       // start recording
-      this.discussionRecorder.startStreaming();
+      this.discussionRecorder.startRecording();
 
       // start the discussion
       this.startedDiscussion = true;
@@ -136,26 +160,33 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.activePromptId++;
     if (this.activePromptId === this.prompts[this.prompts.length - 1].id + 1) {
       this.finishDiscussion();
+      return;
     }
+    this.audio.src = this.prompts[this.activePromptId].url;
+    this.audio.load();
+    this.audio.play();
   }
 
   getPrompts(): void {
-    this.discussionService.GetDiscussionFiles().subscribe(response => {
-      // this.prompts = response.prompts;
-      this.prompts = [{
-        id: 0,
-        url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-        responseRecorded: false
-      }, {
-        id: 1,
-        url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-        responseRecorded: false
-      }, {
-        id: 2,
-        url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-        responseRecorded: false
-      }];
-      this.audioPromptsLoaded = true;
-    });
+    // this.discussionService.GetDiscussionFiles().subscribe(response => {
+    // this.prompts = response.prompts;
+    this.prompts = [{
+      id: 0,
+      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
+      responseRecorded: false
+    }, {
+      id: 1,
+      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
+      responseRecorded: false
+    }, {
+      id: 2,
+      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
+      responseRecorded: false
+    }];
+    this.audio.src = this.prompts[0].url;
+    this.audio.load();
+    this.audio.play();
+    this.audioPromptsLoaded = true;
+    // });
   }
 }
