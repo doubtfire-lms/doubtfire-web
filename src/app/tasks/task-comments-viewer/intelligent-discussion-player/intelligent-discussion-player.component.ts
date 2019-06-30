@@ -7,6 +7,15 @@ import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/m
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { taskService } from 'src/app/ajs-upgraded-providers';
 
+interface DiscussionComment {
+  created_at: string;
+  id: number;
+  task_comment_id: number;
+  time_completed: string;
+  time_started: string;
+  response: string;
+}
+
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
@@ -16,39 +25,50 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   @Input() task: {};
   @Input() parentCommentId: number;
   loading: boolean = false;
+  discussionComment: any = {};
 
   constructor(@Inject(taskService) private ts: any,
     public dialog: MatDialog, ) {
   }
 
   ngOnInit() {
-  }
-
-  beginDiscussion(): void {
-    this.loading = true;
-    let dc = null;
-    let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
-    this.ts.getDiscussionComment(this.task, this.parentCommentId, (discussionComment: any) => {
-      this.loading = false;
-      dc = discussionComment;
-
-      dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-        data: { dc: dc },
-        maxWidth: '800px',
-        disableClose: true
-      });
-
-      dialogRef.afterOpened().subscribe((result: any) => {
-      });
-
-      dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('The dialog was closed');
-      });
-
+    this.ts.getDiscussionComment(this.task, this.parentCommentId, (dc: any) => {
+      // this.loading = false;
+      this.discussionComment = dc;
+      // if (this.responseAvailable) {
+      // this.responses = ['http://www.noiseaddicts.com/samples_1w72b820/160.mp3'];
+      // }
     }, () => {
       console.log('fail');
     }
     );
+  }
+
+  // get discussionStatus() {
+
+  // }
+
+  get responseAvailable() {
+    if (this.discussionComment == null) { return true; }
+    return this.discussionComment.time_completed == null; // TODO: This needs to change to a field addded to DCs
+  }
+
+  beginDiscussion(): void {
+    // this.loading = true;
+    // load audio prompts soon.
+    let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
+
+    dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
+      data: { dc: this.discussionComment },
+      maxWidth: '800px',
+      disableClose: true
+    });
+
+    dialogRef.afterOpened().subscribe((result: any) => {
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+    });
   }
 }
 
@@ -90,7 +110,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
+    // console.log(this.data);
     this.prompts = new Array<Prompt>();
     this.audio = new Audio();
   }

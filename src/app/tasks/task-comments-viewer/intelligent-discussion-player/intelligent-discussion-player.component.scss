@@ -2,6 +2,21 @@
   margin-bottom: 20px;
 }
 
+#discussion-title {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+mat-divider {
+  background-color: white;
+}
+
+#startDiscussionBtn {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+
 :host .mat-dialog-container {
   max-width: 800px !important;
 }

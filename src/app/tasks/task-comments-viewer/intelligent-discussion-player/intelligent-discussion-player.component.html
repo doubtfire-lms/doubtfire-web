@@ -1,9 +1,21 @@
-<div id="comment-bubble discussion-comment-player">
+<div class="comment-bubble discussion-comment-player">
   <mat-spinner [hidden]="!loading"></mat-spinner>
-
   <div [hidden]="loading">
-    <h1>Discussion</h1>
-    <button mat-flat-button (click)="beginDiscussion()">Begin</button>
-    <p>Expires in 3 days</p>
+    <h3 id="discussion-title">
+      Discussion {{discussionComment.status}}
+      <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
+    </h3>
+    <mat-divider></mat-divider>
+
+    <div [hidden]="responseAvailable">
+      <!-- <p>Response recorded on: {{discussionComment.time_completed || "undefined"}}</p> -->
+      <audio controls src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3"> </audio>
+    </div>
+
+    <div [hidden]="!responseAvailable">
+      <p>Your tutor would like to discuss this task with you.</p>
+      <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
+      <!-- <p>Expires in 3 days</p> -->
+    </div>
   </div>
 </div>
