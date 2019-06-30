@@ -608,10 +608,8 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
     DiscussionComment.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
       (response) -> #success
-        console.log(response)
         onSuccess(response)
       (response) -> #failure
-        console.log(response)
         onError(response)
 
   taskService.applyForExtension = (task, onSuccess, onError) ->

@@ -7,6 +7,7 @@
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
       <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
+      {{data.dc.created_at}}
       <p>
         Your tutor would like to discuss some topics with you regarding this task. <br> <br>
 
@@ -54,17 +55,9 @@
     <mat-divider></mat-divider>
     <div>
       <div *ngFor="let prompt of prompts">
-        <audio attr.id="audio{{prompt.id}}">
-          <source src="{{prompt.url}}" type="audio/mpeg">
-          Your browser does not support the HTML5 Audio element.
-        </audio>
         <mat-checkbox [disabled]="prompt.id != activePromptId" attr.id="checked{{prompt.id}}"
           (change)="responseConfirmed($event)" color="primary">Complete</mat-checkbox>
       </div>
-
-      <h2 class="example-h2">Result</h2>
-      <mat-progress-spinner class="example-margin" [color]="color" [mode]="mode" [value]="value">
-      </mat-progress-spinner>
 
       <button [disabled]="!discussionComplete" mat-button mat-raised-button matStepperNext color="primary"
         matStepperNext required style="float: right;">Complete</button>

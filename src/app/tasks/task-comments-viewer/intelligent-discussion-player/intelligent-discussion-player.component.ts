@@ -15,46 +15,40 @@ import { taskService } from 'src/app/ajs-upgraded-providers';
 export class IntelligentDiscussionPlayerComponent implements OnInit {
   @Input() task: {};
   @Input() parentCommentId: number;
+  loading: boolean = false;
 
   constructor(@Inject(taskService) private ts: any,
     public dialog: MatDialog, ) {
-
   }
 
   ngOnInit() {
-    console.log(this.parentCommentId);
   }
 
   beginDiscussion(): void {
-    const dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-      maxWidth: '800px',
-      disableClose: true,
+    this.loading = true;
+    let dc = null;
+    let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
+    this.ts.getDiscussionComment(this.task, this.parentCommentId, (discussionComment: any) => {
+      this.loading = false;
+      dc = discussionComment;
+
+      dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
+        data: { dc: dc },
+        maxWidth: '800px',
+        disableClose: true
+      });
+
+      dialogRef.afterOpened().subscribe((result: any) => {
+      });
+
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('The dialog was closed');
+      });
+
+    }, () => {
+      console.log('fail');
     }
-      // load discussion comment with ID this.parentCommentId;
-      // this.ts.addDiscussionComment(this.task, this.recordings,
-      //   () => {
-      //     this.ts.scrollDown();
-      //     this.isSending = false;
-      //   },
-      //   (failure: { data: { error: any; }; }) => {
-      //     // this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
-      //     this.isSending = false;
-      //   });
     );
-
-    this.ts.getDiscussionComment(this.task, this.parentCommentId, () => {
-      console.log("Success");
-    }, () =>{
-      console.log("fail");
-    }
-    );
-
-    dialogRef.afterOpened().subscribe((result: any) => {
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('The dialog was closed');
-    });
   }
 }
 
@@ -63,7 +57,6 @@ interface Prompt {
   id: number;
   responseRecorded: boolean;
 }
-
 // The Dialog Component
 @Component({
   selector: 'intelligent-discussion-dialog',
@@ -92,11 +85,12 @@ export class IntelligentDiscussionDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
-    private discussionService: IntelligentDiscussionPlayerService,
+    // private discussionService: IntelligentDiscussionPlayerService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit() {
+    console.log(this.data);
     this.prompts = new Array<Prompt>();
     this.audio = new Audio();
   }
