@@ -11,6 +11,11 @@ mat-divider {
   background-color: white;
 }
 
+h1 {
+  max-width: 300px;
+  margin-top: 0;
+}
+
 #startDiscussionBtn {
   margin-left: 20px;
   margin-bottom: 20px;
@@ -34,6 +39,7 @@ microphone-tester .btn-circle-xl {
   margin-top: 4em;
   display: inline-flex;
 }
+
 :host img#discussion-splash-image {
   float: left;
   margin: auto;

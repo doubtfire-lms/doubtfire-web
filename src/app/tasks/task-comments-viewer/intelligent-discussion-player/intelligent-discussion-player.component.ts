@@ -94,7 +94,6 @@ export class IntelligentDiscussionDialog implements OnInit {
   ) { }
 
   ngOnInit() {
-    // console.log(this.data);
     this.prompts = new Array<Prompt>();
     this.audio = new Audio();
   }

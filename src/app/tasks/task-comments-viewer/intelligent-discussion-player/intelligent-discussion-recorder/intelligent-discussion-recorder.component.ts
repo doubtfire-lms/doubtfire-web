@@ -1,5 +1,6 @@
 import { Component, Inject, AfterViewInit, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
+import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
 import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
@@ -8,7 +9,7 @@ import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-provider
   styleUrls: ['./intelligent-discussion-recorder.component.css']
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
-  @Input() task: {};
+  @Input() discussion: {};
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;
@@ -16,12 +17,14 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any,
+    @Inject(IntelligentDiscussionPlayerService) private dps: any,
   ) {
     super(mediaRecorderService);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.discussion);
+  }
 
   ngAfterViewInit() {
     if (this.canRecord) {
@@ -36,11 +39,11 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   }
 
   // startStreaming() {
-    // this.startRecording();
-    // this.intervalID = setInterval(() => {
-      // this.processChunks();
-      // this.sendRecording();
-    // }, 5000);
+  // this.startRecording();
+  // this.intervalID = setInterval(() => {
+  // this.processChunks();
+  // this.sendRecording();
+  // }, 5000);
   // }
 
   onNewRecording(evt: any): void {
@@ -58,16 +61,17 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   sendRecording() {
     if (this.blob && this.blob.size > 0) {
 
-      // console.log(URL.createObjectURL(this.blob));
-      // this.ts.addMediaComment(this.task, this.blob,
-      //   () => {
-      //     this.isSending = false;
-      //   },
-      //   (failure: { data: { error: any; }; }) => {
-      //     this.isSending = false;
-      //   });
-      // console.log('Sending Recording of size ' + this.blob.size);
-      this.blob = <Blob>{};
+      console.log(URL.createObjectURL(this.blob));
+      this.dps.addDiscussionReply();
+        // this.ts.addMediaComment(this.task, this.blob,
+        //   () => {
+        //     this.isSending = false;
+        //   },
+        //   (failure: { data: { error: any; }; }) => {
+        //     this.isSending = false;
+        //   });
+        // console.log('Sending Recording of size ' + this.blob.size);
+        this.blob = <Blob>{};
       // this.recordingAvailable = false;
     }
   }

@@ -31,12 +31,14 @@
   <mat-step [completed]="confirmed">
     <ng-template matStepLabel>Test everything is working</ng-template>
     <microphone-tester #testRecorder></microphone-tester>
-    <mat-checkbox [(ngModel)]="confirmed" matStepperNext required> Ready to go! </mat-checkbox>
-    <div>
+    <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+    <div style="float: right">
+      <mat-checkbox style="margin-right: 20px;" [(ngModel)]="confirmed" matStepperNext required> Ready to go!
+      </mat-checkbox>
       <button [disabled]="!confirmed" (click)="disableTester()" mat-button mat-raised-button matStepperNext
-        color="primary" matStepperNext style="float: right;">Next</button>
-      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+        color="primary" matStepperNext>Next</button>
     </div>
+
   </mat-step>
 
   <mat-step>
@@ -45,7 +47,7 @@
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
       <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
         discussion</button>
-      <intelligent-discussion-recorder #discussionRecorder></intelligent-discussion-recorder>
+      <intelligent-discussion-recorder [discussion]="discussion" #discussionRecorder></intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
         <p id="discussionCountdown">{{timerText}}</p>
         <p>remaining</p>
