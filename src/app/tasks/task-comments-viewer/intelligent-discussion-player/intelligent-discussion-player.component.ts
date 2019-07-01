@@ -22,26 +22,16 @@ interface DiscussionComment {
   styleUrls: ['./intelligent-discussion-player.component.scss']
 })
 export class IntelligentDiscussionPlayerComponent implements OnInit {
-  @Input() task: {};
-  @Input() parentCommentId: number;
+  @Input() discussion: DiscussionComment;
+
   loading: boolean = false;
-  discussionComment: any = {};
 
   constructor(@Inject(taskService) private ts: any,
     public dialog: MatDialog, ) {
   }
 
   ngOnInit() {
-    this.ts.getDiscussionComment(this.task, this.parentCommentId, (dc: any) => {
-      // this.loading = false;
-      this.discussionComment = dc;
-      // if (this.responseAvailable) {
-      // this.responses = ['http://www.noiseaddicts.com/samples_1w72b820/160.mp3'];
-      // }
-    }, () => {
-      console.log('fail');
-    }
-    );
+    console.log(this.discussion);
   }
 
   // get discussionStatus() {
@@ -49,8 +39,8 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   // }
 
   get responseAvailable() {
-    if (this.discussionComment == null) { return true; }
-    return this.discussionComment.time_completed == null; // TODO: This needs to change to a field addded to DCs
+    if (this.discussion == null) { return true; }
+    return this.discussion.time_completed == null; // TODO: This needs to change to a field addded to DCs
   }
 
   beginDiscussion(): void {
@@ -59,7 +49,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
 
     dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-      data: { dc: this.discussionComment },
+      data: { dc: this.discussion },
       maxWidth: '800px',
       disableClose: true
     });

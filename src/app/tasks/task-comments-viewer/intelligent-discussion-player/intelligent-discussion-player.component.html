@@ -2,13 +2,13 @@
   <mat-spinner [hidden]="!loading"></mat-spinner>
   <div [hidden]="loading">
     <h3 id="discussion-title">
-      Discussion {{discussionComment.status}}
+      Discussion {{discussion.status}}
       <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
     </h3>
     <mat-divider></mat-divider>
 
     <div [hidden]="responseAvailable">
-      <!-- <p>Response recorded on: {{discussionComment.time_completed || "undefined"}}</p> -->
+      <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
       <audio controls src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3"> </audio>
     </div>
 
