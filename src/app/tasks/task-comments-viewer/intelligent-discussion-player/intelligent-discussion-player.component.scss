@@ -16,10 +16,11 @@ mat-divider {
   margin-bottom: 20px;
 }
 
-:host microphone-tester .btn-circle-xl {
-  position: relative;
+microphone-tester .btn-circle-xl {
+  position: inherit;
+  margin-top: 80px;
+  margin-left: 80px;
 }
-
 
 :host .mat-dialog-container {
   max-width: 800px !important;
