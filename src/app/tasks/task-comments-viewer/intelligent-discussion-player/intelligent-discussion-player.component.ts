@@ -30,13 +30,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     public dialog: MatDialog, ) {
   }
 
-  ngOnInit() {
-    console.log(this.discussion);
-  }
-
-  // get discussionStatus() {
-
-  // }
+  ngOnInit() { }
 
   get responseAvailable() {
     if (this.discussion == null) { return true; }
