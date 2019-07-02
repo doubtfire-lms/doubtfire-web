@@ -106,6 +106,7 @@ task-comments-viewer img {
   padding-bottom: 6px;
   padding-left: 0;
   line-height: 1.5em;
+  background: $comment-bubble-color;
   border-radius: $comment-border-radius;
 
   .comment-text {
@@ -117,10 +118,19 @@ task-comments-viewer img {
   }
 }
 
+// text comments
 task-comments-viewer .comment .text-bubble {
   @include base-bubble;
 
-  background: $comment-bubble-color;
+  .markdown-to-html > *:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+// Audio comments
+task-comments-viewer .comment .audio-bubble {
+  @include base-bubble;
+
   .comment-audio {
     width: 200px;
   }
@@ -129,11 +139,13 @@ task-comments-viewer .comment .text-bubble {
   }
 }
 
+// Image comments
 task-comments-viewer .comment .image-bubble {
   @include base-bubble;
   background: transparent;
 }
 
+// Disucssion comments
 task-comments-viewer .comment .discussion-bubble {
   @include base-bubble;
   mat-stepper {
