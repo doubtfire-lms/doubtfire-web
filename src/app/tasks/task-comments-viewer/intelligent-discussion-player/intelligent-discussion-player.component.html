@@ -6,13 +6,18 @@
       <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
     </h3>
     <mat-divider></mat-divider>
-
-    <div [hidden]="responseAvailable">
+    <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
-      <audio controls src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3"> </audio>
+      <!-- <audio controls src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3"> </audio> -->
+      <div [hidden]="!responseAvailable" class="audio-comment-container">
+        <button class="play-button" ng-click="playAudio()">
+          <mat-icon aria-label="play audio">{{isPlaying ? 'stop_circle_outline' : 'play_circle_filled_white' }}</mat-icon>
+          <!-- <progressbar class="progress-bar-container" max="max" value="audioProgress"></progressbar> -->
+        </button>
+      </div>
     </div>
 
-    <div [hidden]="!responseAvailable">
+    <div [hidden]="responseAvailable">
       <p>Your tutor would like to discuss this task with you.</p>
       <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
       <!-- <p>Expires in 3 days</p> -->

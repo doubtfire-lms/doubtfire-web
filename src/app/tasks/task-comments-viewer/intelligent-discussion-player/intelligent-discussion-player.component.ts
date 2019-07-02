@@ -14,6 +14,7 @@ interface DiscussionComment {
   time_completed: string;
   time_started: string;
   response: string;
+  status: string;
 }
 
 @Component({
@@ -23,18 +24,18 @@ interface DiscussionComment {
 })
 export class IntelligentDiscussionPlayerComponent implements OnInit {
   @Input() discussion: DiscussionComment;
-
   loading: boolean = false;
 
   constructor(@Inject(taskService) private ts: any,
     public dialog: MatDialog, ) {
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.discussion);
+   }
 
   get responseAvailable() {
-    if (this.discussion == null) { return true; }
-    return this.discussion.time_completed == null; // TODO: This needs to change to a field addded to DCs
+    return this.discussion.status === 'complete'; // TODO: This needs to change to a field addded to DCs
   }
 
   beginDiscussion(): void {

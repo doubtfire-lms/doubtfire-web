@@ -23,7 +23,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   }
 
   ngOnInit() {
-    console.log(this.discussion);
+    // console.log(this.discussion);
   }
 
   ngAfterViewInit() {
