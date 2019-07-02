@@ -579,6 +579,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
+        console.log(response)
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
@@ -589,15 +590,16 @@ angular.module("doubtfire.common.services.tasks", [])
   #Add discussion comment
   taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
     form = new FormData()
-    form.append 'project_id', task.project().project_id
-    form.append 'task_definition_id', task.task_definition_id
     temp = []
 
     for prompt in prompts
       form.append('attachments[]', prompt)
 
-    DiscussionComment.post {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+    console.log(DiscussionComment)
+
+    res = DiscussionComment.createDiscussion.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
       (response) -> #success
+        console.log(response)
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
@@ -606,8 +608,8 @@ angular.module("doubtfire.common.services.tasks", [])
         onError(response)
 
   taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
-    DiscussionComment.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
-      (response) -> #success
+    DiscussionComment.getDiscussion.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
+      (response) -> #success)
         onSuccess(response)
       (response) -> #failure
         onError(response)
