@@ -45,7 +45,8 @@
     <ng-template matStepLabel>Discussion</ng-template>
 
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
-      <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start discussion</button>
+      <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
+        discussion</button>
       <intelligent-discussion-recorder [discussion]="discussion" #discussionRecorder></intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
         <p id="discussionCountdown">{{timerText}}</p>
@@ -53,12 +54,12 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div>
-      <div *ngFor="let prompt of prompts">
-        <mat-checkbox [disabled]="prompt.id != activePromptId" attr.id="checked{{prompt.id}}"
-          (change)="responseConfirmed($event)" color="primary">Complete</mat-checkbox>
-      </div>
+    <div [hidden]="!inDiscussion">
+      <h1>Listening to prompt {{activePromptId+1}} of {{numberOfPrompts}}</h1>
+      <button [hidden]="activePromptId+1 === numberOfPrompts " mat-button mat-stroked-button (click)="responseConfirmed($event)">Next Prompt</button>
+    </div>
 
+    <div>
       <button [disabled]="!discussionComplete" mat-button mat-raised-button matStepperNext color="primary"
         matStepperNext required style="float: right;">Complete</button>
       <button [disabled]="startedDiscussion" mat-button mat-raised-button matStepperNext color="primary"

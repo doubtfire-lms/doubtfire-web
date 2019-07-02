@@ -73,18 +73,13 @@ interface Prompt {
   providers: [IntelligentDiscussionPlayerService]
 })
 export class IntelligentDiscussionDialog implements OnInit {
-  // TODO: Check that all these are needed or can be cleaned up.
   confirmed = false;
   timerText: string = '4m:00s';
   ticks: number = 0;
   startedDiscussion = false;
-  audioPromptsLoaded = false;
   inDiscussion = false;
   discussionComplete: boolean = false;
   count: number = 3 * 60 * 1000; // 3 minutes
-  prompts: Array<Prompt>;
-  promptTests: Array<Blob>;
-  currentDiscussionPrompt: string = '';
   activePromptId: number = 0;
   counter: Subscription;
   audio: HTMLAudioElement;
@@ -99,8 +94,6 @@ export class IntelligentDiscussionDialog implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.prompts = new Array<Prompt>();
-    this.promptTests = new Array<Blob>();
     this.audio = new Audio();
   }
 
@@ -112,8 +105,13 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.dialogRef.close();
   }
 
+  get numberOfPrompts(): number {
+    return this.data.dc.number_of_prompts;
+  }
+
   finishDiscussion() {
     this.discussionComplete = true;
+    this.inDiscussion = false;
     this.discussionRecorder.stopRecording();
     this.audio.pause();
     this.audio = null;
@@ -122,20 +120,11 @@ export class IntelligentDiscussionDialog implements OnInit {
 
   startDiscussion() {
     if (!this.startedDiscussion) {
-      // load the audio files and wait until loaded
-      // this.getPrompts();
-      console.log(this.data);
-      this.audio.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, 0);
-      // promptPromise.then((res) => {
-      //   this.promptTests[0] = res;
-      // });
 
-      // this.audio.src = URL.createObjectURL(this.promptTests[0]);
-      this.audio.load();
-      this.audio.play();
+      this.setPrompt();
 
       // start recording
-      // this.discussionRecorder.startRecording();
+      this.discussionRecorder.startRecording();
 
       // start the discussion
       this.startedDiscussion = true;
@@ -153,52 +142,26 @@ export class IntelligentDiscussionDialog implements OnInit {
         this.timerText = moment.utc(difference).format('mm[m]:ss[s]');
         this.ticks = val;
 
-        // every ten seconds make a blob and send to server for combining.
-        if (this.ticks % 10 === 0) {
-          // this.recorder.sendRecording();
-        }
-
         if (difference === 0) {
-          console.log(difference + ' No DIfference');
           this.inDiscussion = false;
           this.counter.unsubscribe();
         }
-
       });
     }
   }
 
-  responseConfirmed(e: any) {
-    this.activePromptId++;
-    if (this.activePromptId === this.prompts[this.prompts.length - 1].id + 1) {
-      this.finishDiscussion();
-      return;
-    }
-    // this.audio.src = this.prompts[this.activePromptId].url;
-    // this.audio.load();
-    // this.audio.play();
+  setPrompt() {
+    this.audio.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, this.activePromptId);
+    this.audio.load();
+    this.audio.play();
   }
 
-  getPrompts(): void {
-    // this.discussionService.GetDiscussionFiles().subscribe(response => {
-    // this.prompts = response.prompts;
-    this.prompts = [{
-      id: 0,
-      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-      responseRecorded: false
-    }, {
-      id: 1,
-      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-      responseRecorded: false
-    }, {
-      id: 2,
-      url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
-      responseRecorded: false
-    }];
-    // this.audio.src = this.prompts[0].url;
-    // this.audio.load();
-    // this.audio.play();
-    this.audioPromptsLoaded = true;
-    // });
+  responseConfirmed(e: any) {
+    if (this.activePromptId !== this.numberOfPrompts - 1) {
+      this.activePromptId++;
+      this.setPrompt();
+    } else {
+      this.finishDiscussion();
+    }
   }
 }
