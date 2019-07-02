@@ -22,6 +22,9 @@ angular.module("doubtfire.api.models.task", [])
   Task.generateCommentsAttachmentUrl = (project, task, comment) ->
     "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.task_definition_id}/comments/#{comment.id}?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
 
+  Task.generateDiscussionPromptUrl = (task, commentID, number) ->
+    "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/comments/#{commentID}/discussion_comment/prompt_number/#{number}?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
+
   Task.generateSubmissionUrl = (project, task) ->
     "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
 

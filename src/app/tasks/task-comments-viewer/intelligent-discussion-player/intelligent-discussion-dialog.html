@@ -45,8 +45,7 @@
     <ng-template matStepLabel>Discussion</ng-template>
 
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
-      <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
-        discussion</button>
+      <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start discussion</button>
       <intelligent-discussion-recorder [discussion]="discussion" #discussionRecorder></intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
         <p id="discussionCountdown">{{timerText}}</p>

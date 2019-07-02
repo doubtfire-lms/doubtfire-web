@@ -5,7 +5,6 @@ import { IntelligentDiscussionPlayerService } from './intelligent-discussion-pla
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import { taskService } from 'src/app/ajs-upgraded-providers';
 
 interface DiscussionComment {
   created_at: string;
@@ -24,15 +23,16 @@ interface DiscussionComment {
 })
 export class IntelligentDiscussionPlayerComponent implements OnInit {
   @Input() discussion: DiscussionComment;
+  @Input() task: any;
   loading: boolean = false;
 
-  constructor(@Inject(taskService) private ts: any,
+  constructor(
     public dialog: MatDialog, ) {
   }
 
   ngOnInit() {
     console.log(this.discussion);
-   }
+  }
 
   get responseAvailable() {
     return this.discussion.status === 'complete'; // TODO: This needs to change to a field addded to DCs
@@ -44,7 +44,10 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
 
     dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-      data: { dc: this.discussion },
+      data: {
+        dc: this.discussion,
+        task: this.task
+      },
       maxWidth: '800px',
       disableClose: true
     });
@@ -80,6 +83,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   discussionComplete: boolean = false;
   count: number = 3 * 60 * 1000; // 3 minutes
   prompts: Array<Prompt>;
+  promptTests: Array<Blob>;
   currentDiscussionPrompt: string = '';
   activePromptId: number = 0;
   counter: Subscription;
@@ -90,12 +94,13 @@ export class IntelligentDiscussionDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
-    // private discussionService: IntelligentDiscussionPlayerService,
+    private discussionService: IntelligentDiscussionPlayerService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit() {
     this.prompts = new Array<Prompt>();
+    this.promptTests = new Array<Blob>();
     this.audio = new Audio();
   }
 
@@ -118,10 +123,19 @@ export class IntelligentDiscussionDialog implements OnInit {
   startDiscussion() {
     if (!this.startedDiscussion) {
       // load the audio files and wait until loaded
-      this.getPrompts();
+      // this.getPrompts();
+      console.log(this.data);
+      this.audio.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, 0);
+      // promptPromise.then((res) => {
+      //   this.promptTests[0] = res;
+      // });
+
+      // this.audio.src = URL.createObjectURL(this.promptTests[0]);
+      this.audio.load();
+      this.audio.play();
 
       // start recording
-      this.discussionRecorder.startRecording();
+      // this.discussionRecorder.startRecording();
 
       // start the discussion
       this.startedDiscussion = true;
@@ -160,9 +174,9 @@ export class IntelligentDiscussionDialog implements OnInit {
       this.finishDiscussion();
       return;
     }
-    this.audio.src = this.prompts[this.activePromptId].url;
-    this.audio.load();
-    this.audio.play();
+    // this.audio.src = this.prompts[this.activePromptId].url;
+    // this.audio.load();
+    // this.audio.play();
   }
 
   getPrompts(): void {
@@ -181,9 +195,9 @@ export class IntelligentDiscussionDialog implements OnInit {
       url: 'http://www.noiseaddicts.com/samples_1w72b820/160.mp3',
       responseRecorded: false
     }];
-    this.audio.src = this.prompts[0].url;
-    this.audio.load();
-    this.audio.play();
+    // this.audio.src = this.prompts[0].url;
+    // this.audio.load();
+    // this.audio.play();
     this.audioPromptsLoaded = true;
     // });
   }

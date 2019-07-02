@@ -614,6 +614,16 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) -> #failure
         onError(response)
 
+  # taskService.generateDiscussionPromptUrl = (task, commentID, number) ->
+    # "#{DoubtfireConstants.API_URL}/projects/#{task.project.project_id}/task_def_id/#{task.task_definition_id}/comments/#{commentID}/discussion_comment/prompt_number/#{number}?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
+
+  # taskService.getDiscussionPrompt = (task, commentID, prompt_number, onSuccess, onError) ->
+  #   DiscussionComment.getDiscussionPrompt.get { project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID, prompt_number: prompt_number },
+  #     (response) -> #success)
+  #       onSuccess(response)
+  #     (response) -> #failure
+  #       onError(response)
+
   taskService.applyForExtension = (task, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
