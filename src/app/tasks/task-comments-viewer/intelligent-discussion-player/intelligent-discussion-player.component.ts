@@ -5,7 +5,6 @@ import { IntelligentDiscussionPlayerService } from './intelligent-discussion-pla
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import { alertService } from 'src/app/ajs-upgraded-providers';
 
 interface DiscussionComment {
   created_at: string;

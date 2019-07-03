@@ -1,18 +1,15 @@
 <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-  <button class="btn-recorder" type="button" [popover]="audioCommentTemplate"
-    (click)="showingPopup = showingPopup == popupStates.audioComment ? popupStates.closed : popupStates.audioComment">
+  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate"
+    (click)="showingPopup = !showingPopup">
     <span class="fa fa-microphone"></span>
   </button>
-  <button class="btn-recorder" type="button" [popover]="discussionCommentTemplate"
-    (click)="showingPopup = showingPopup == popupStates.discussionComment ? popupStates.closed : popupStates.discussionComment">
-    <span class="fa fa-magic"></span>
-  </button>
+
   <!-- <div class="image-uploader" ngf-drop [hidden]="!upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
     ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
     ngf-drop-available="dropSupported"> -->
 
   <div id="textField" contenteditable="plaintext-only" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
-    placeholder="Type a comment, or try dragging an image, audio or pdf..." name="commentComposer">
+    placeholder="Type a comment, or try dragging an image or pdf" name="commentComposer">
   </div>
 
   <!-- <p [hidden]="!upload.display.error">
@@ -39,10 +36,21 @@
 </form>
 
 <!-- The HTML which will be injected -->
+<ng-template #audioDiscussionTemplate>
+  <p>New! Try out the beta for the new intelligent discussion feature.</p>
+  <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
+    <button (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
+  </div>
+  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
+  <mat-divider></mat-divider>
+  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
+</ng-template>
+
 <ng-template #audioCommentTemplate>
-  <audio-comment-recorder [task]="task" *ngIf="showingPopup == popupStates.audioComment"></audio-comment-recorder>
+  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
 </ng-template>
 
 <ng-template #discussionCommentTemplate>
-  <discussion-prompt-composer [task]="task" *ngIf="showingPopup == popupStates.discussionComment"></discussion-prompt-composer>
+  <discussion-prompt-composer [task]="task" *ngIf="showingPopup">
+  </discussion-prompt-composer>
 </ng-template>

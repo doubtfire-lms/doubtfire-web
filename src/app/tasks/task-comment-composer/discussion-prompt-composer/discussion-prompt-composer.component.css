@@ -18,9 +18,8 @@ mat-action-list {
   width: 40px;
   border: none;
   outline: none;
-  position: absolute;
-  left: 5%;
-  top: 70%;
+  /* left: 5%; */
+  /* top: 70%; */
 }
 
 .btn-circle-small:disabled {
@@ -34,7 +33,6 @@ mat-action-list {
 #audio-recorder-visualiser.discussion-audio-visualiser {
   height: 60px;
   width: 115px;
-  position: absolute;
   bottom: 10px;
   left: 65px;
 }

@@ -3,8 +3,8 @@
   <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
   <div [hidden]="!canRecord || isSending">
     <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
-      <p [hidden]="isRecording">record</p>
-      <i [hidden]="!isRecording" class="fa fa-square"></i>
+      <mat-icon [hidden]="isRecording" aria-label="Quit cross icon">fiber_manual_record</mat-icon>
+      <mat-icon [hidden]="!isRecording" aria-label="Quit cross icon">stop</mat-icon>
     </button>
 
     <div id="button-wrapper">

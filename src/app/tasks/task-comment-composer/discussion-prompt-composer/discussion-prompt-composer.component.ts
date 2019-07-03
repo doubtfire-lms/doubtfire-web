@@ -29,7 +29,9 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
     super(mediaRecorderService);
   }
 
-  ngOnInit() {
+  // We have to use ngAfterViewInit
+  // To ensure the dialog has been infalted
+  ngAfterViewInit() {
     if (this.canRecord) {
       this.init();
     }

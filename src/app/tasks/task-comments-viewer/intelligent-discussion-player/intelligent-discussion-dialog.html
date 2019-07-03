@@ -1,25 +1,24 @@
 <button id="dialogCloseButton" mat-button mat-dialog-close mat-icon-button aria-label="Close dialog button">
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
-<mat-horizontal-stepper id="intelligentDiscussionStepper" *ngIf="inDiscussion || !startedDiscussion" [linear]="true"
-  #stepper>
+<mat-horizontal-stepper id="intelligentDiscussionStepper" [linear]="true" #stepper>
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
       <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
       <p>
-        Your tutor would like to discuss some topics with you regarding this task. <br> <br>
+        Your tutor would like to discuss some topics with you regarding this task
 
-        Discussions are great way for you and your tutor to gauge your understanding of concepts, and are an
-        important aspect of your portfolio. <br> <br>
+        Discussions are a great way for you and your tutor to gauge your understanding of concepts and are an important
+        aspect of your portfolio.
 
         These discussions are designed to be casual and informal, and will <strong>require a working microphone and
-          speakers.</strong> <br><br>
+          speakers.</strong>
 
         These are timed discussions, <strong> you will have a few minutes from when you hear your tutor's discussion
           prompt to reply.</strong> <br><br><br><br>
 
-        You should only proceed once you are in a suitibly quiet envioronment.
+        You should only proceed once you are in a suitably quiet environment.
       </p>
 
     </div>
@@ -43,11 +42,11 @@
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
-
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
       <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
         discussion</button>
-      <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder></intelligent-discussion-recorder>
+      <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder>
+      </intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
         <p id="discussionCountdown">{{timerText}}</p>
         <p>remaining</p>
@@ -56,7 +55,9 @@
     <mat-divider></mat-divider>
     <div [hidden]="!inDiscussion">
       <h1>Listening to prompt {{activePromptId+1}} of {{numberOfPrompts}}</h1>
-      <button [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }} </button>
+      <button [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button
+        (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }}
+      </button>
     </div>
 
     <div>
@@ -69,10 +70,6 @@
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    You are now done.
+    You are now complete.
   </mat-step>
 </mat-horizontal-stepper>
-
-<div *ngIf="!inDiscussion && startedDiscussion">
-  <p>Discussion over</p>
-</div>

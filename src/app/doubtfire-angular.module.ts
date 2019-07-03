@@ -18,7 +18,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider } from './ajs-upgraded-providers';
-import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
+import { TaskCommentComposerComponent, DiscussionComposerDialog } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContenteditableModule } from '@ng-stack/contenteditable';
@@ -40,6 +40,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
     IntelligentDiscussionDialog,
+    DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
   ],
   // Module Imports
@@ -81,7 +82,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog]
+  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog, DiscussionComposerDialog]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {

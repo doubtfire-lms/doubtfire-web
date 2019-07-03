@@ -3,30 +3,30 @@
   background-color: #f03d25;
   border-radius: 72px;
   color: #fff;
-  height: 72px;
+  height: 38px;
+  width: 38px;
   transition: width 0.1s, height 0.1s;
-  width: 72px;
   border: none;
   outline: none;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -70%);
-  transform: translate(-50%, -70%);
+  left: 5%;
+  top: 71%;
 
-  p {
-    font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
-    text-rendering: optimizeLegibility;
-    line-height: 1.3;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    text-align: center;
-    transform: translate(20%, -50%);
-    position: absolute;
-  }
-  i {
+  mat-icon {
     font-size: 24px;
+    vertical-align: middle;
   }
+}
+
+#audioDiscussionTemplate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host mat-divider {
+  position: absolute;
+  bottom: 15%;
 }
 
 mat-spinner.send-audio-spinner {
@@ -35,14 +35,15 @@ mat-spinner.send-audio-spinner {
   top: 25%;
 }
 
-.mat-progress-spinner circle, .mat-spinner circle {
+.mat-progress-spinner circle,
+.mat-spinner circle {
   stroke: #f03d25;
-  }
+}
 
 .btn-circle {
   width: 30px;
   height: 30px;
-  margin-right:5px;
+  margin-right: 5px;
   padding: 6px 0px;
   background-color: transparent;
   border-radius: 15px;
@@ -73,9 +74,9 @@ mat-spinner.send-audio-spinner {
 }
 
 #audio-recorder-visualiser.audio-visualiser {
-  height: 60px;
-  width: 60px;
   position: absolute;
+  height: 60px;
+  width: 110px;
   bottom: 10px;
-  left: 24px;
+  left: 25%;
 }
