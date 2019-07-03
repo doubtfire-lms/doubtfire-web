@@ -5,6 +5,7 @@ import { IntelligentDiscussionPlayerService } from './intelligent-discussion-pla
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 interface DiscussionComment {
   created_at: string;
@@ -19,34 +20,48 @@ interface DiscussionComment {
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
-  styleUrls: ['./intelligent-discussion-player.component.scss']
+  styleUrls: ['./intelligent-discussion-player.component.scss'],
+  providers: [IntelligentDiscussionPlayerService]
 })
 export class IntelligentDiscussionPlayerComponent implements OnInit {
   @Input() discussion: DiscussionComment;
   @Input() task: any;
   loading: boolean = false;
+  audio: HTMLAudioElement;
+  audioProgress: number = 0;
 
   constructor(
-    public dialog: MatDialog, ) {
+    public dialog: MatDialog,
+    private discussionService: IntelligentDiscussionPlayerService,
+  ) {
   }
 
   ngOnInit() {
-    console.log(this.discussion);
+    this.audio = new Audio();
+    this.audio.ontimeupdate = () => {
+      const percentagePlayed = this.audio.currentTime / this.audio.duration;
+      this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
+    };
   }
 
   get responseAvailable() {
-    return this.discussion.status === 'complete'; // TODO: This needs to change to a field addded to DCs
+    return this.discussion.status === 'complete';
+  }
+
+  playResponseAudio() {
+    this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
+    this.audio.load();
+    this.audio.play();
   }
 
   beginDiscussion(): void {
-    // this.loading = true;
-    // load audio prompts soon.
     let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
 
     dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
       data: {
         dc: this.discussion,
-        task: this.task
+        task: this.task,
+        audioRef: this.audio
       },
       maxWidth: '800px',
       disableClose: true
@@ -60,11 +75,6 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   }
 }
 
-interface Prompt {
-  url: string;
-  id: number;
-  responseRecorded: boolean;
-}
 // The Dialog Component
 @Component({
   selector: 'intelligent-discussion-dialog',
@@ -82,7 +92,6 @@ export class IntelligentDiscussionDialog implements OnInit {
   count: number = 3 * 60 * 1000; // 3 minutes
   activePromptId: number = 0;
   counter: Subscription;
-  audio: HTMLAudioElement;
 
   @ViewChild('testRecorder') testRecorder: MicrophoneTesterComponent;
   @ViewChild('discussionRecorder') discussionRecorder: IntelligentDiscussionRecorderComponent;
@@ -94,7 +103,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.audio = new Audio();
+    // this.data.audioRef = new Audio();
   }
 
   disableTester() {
@@ -113,8 +122,9 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.discussionComplete = true;
     this.inDiscussion = false;
     this.discussionRecorder.stopRecording();
-    this.audio.pause();
-    this.audio = null;
+    this.data.audioRef.pause();
+    this.data.audioRef.src = null;
+    // this.data.audioRef = null;
     this.counter.unsubscribe();
   }
 
@@ -151,9 +161,9 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   setPrompt() {
-    this.audio.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, this.activePromptId);
-    this.audio.load();
-    this.audio.play();
+    this.data.audioRef.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, this.activePromptId);
+    this.data.audioRef.load();
+    this.data.audioRef.play();
   }
 
   responseConfirmed(e: any) {

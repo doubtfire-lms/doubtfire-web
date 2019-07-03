@@ -8,12 +8,13 @@
     <mat-divider></mat-divider>
     <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
-      <!-- <audio controls src="http://www.noiseaddicts.com/samples_1w72b820/160.mp3"> </audio> -->
       <div [hidden]="!responseAvailable" class="audio-comment-container">
-        <button class="play-button" ng-click="playAudio()">
-          <mat-icon aria-label="play audio">{{isPlaying ? 'stop_circle_outline' : 'play_circle_filled_white' }}</mat-icon>
-          <!-- <progressbar class="progress-bar-container" max="max" value="audioProgress"></progressbar> -->
+        <button class="play-button" (click)="playResponseAudio()">
+          <mat-icon aria-label="play audio">{{isPlaying ? 'stop_circle_outline' : 'play_circle_filled_white' }}
+          </mat-icon>
         </button>
+        <mat-progress-bar [color]="white" class="progress-bar-container" [mode]="determinate" [value]="audioProgress">
+        </mat-progress-bar>
       </div>
     </div>
 

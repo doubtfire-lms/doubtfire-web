@@ -4,7 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatProgressBarModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -55,9 +55,10 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     MatListModule,
     MatStepperModule,
     MatButtonModule,
-    MatDividerModule,
     MatCheckboxModule,
+    MatDividerModule,
     MatDialogModule,
+    MatProgressBarModule,
     MatIconModule,
     MatProgressSpinnerModule,
     UpgradeModule,

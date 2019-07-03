@@ -1,6 +1,6 @@
-import { Inject, Input, Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Inject, Input, Component, AfterViewInit } from '@angular/core';
 import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
 
 @Component({ selector: 'microphone-tester', templateUrl: './microphone-tester-component.html' })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
@@ -11,8 +11,6 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any,
-    @Inject(alertService) private alerts: any,
   ) {
     super(mediaRecorderService);
   }

@@ -47,7 +47,7 @@
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
       <button mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
         discussion</button>
-      <intelligent-discussion-recorder [discussion]="discussion" #discussionRecorder></intelligent-discussion-recorder>
+      <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder></intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
         <p id="discussionCountdown">{{timerText}}</p>
         <p>remaining</p>
@@ -56,7 +56,7 @@
     <mat-divider></mat-divider>
     <div [hidden]="!inDiscussion">
       <h1>Listening to prompt {{activePromptId+1}} of {{numberOfPrompts}}</h1>
-      <button [hidden]="activePromptId+1 === numberOfPrompts " mat-button mat-stroked-button (click)="responseConfirmed($event)">Next Prompt</button>
+      <button [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }} </button>
     </div>
 
     <div>

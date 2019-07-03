@@ -573,13 +573,10 @@ angular.module("doubtfire.common.services.tasks", [])
   #ADD MEDIA COMMENT
   taskService.addMediaComment = (task, media, onSuccess, onError) ->
     form = new FormData()
-    form.append 'project_id', task.project().project_id
-    form.append 'task_definition_id', task.task_definition_id
     form.append 'attachment', media
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
-        console.log(response)
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
@@ -595,14 +592,21 @@ angular.module("doubtfire.common.services.tasks", [])
     for prompt in prompts
       form.append('attachments[]', prompt)
 
-    console.log(DiscussionComment)
-
     res = DiscussionComment.createDiscussion.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
       (response) -> #success
-        console.log(response)
         unless task.comments?
           task.comments = []
         task.comments.unshift(taskService.mapComment(response))
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
+    form = new FormData()
+    form.append 'attachment', replyAudio
+
+    DiscussionComment.postDiscussionReply.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID}, form,
+      (response) -> #success)
         onSuccess(response)
       (response) -> #failure
         onError(response)
@@ -613,16 +617,6 @@ angular.module("doubtfire.common.services.tasks", [])
         onSuccess(response)
       (response) -> #failure
         onError(response)
-
-  # taskService.generateDiscussionPromptUrl = (task, commentID, number) ->
-    # "#{DoubtfireConstants.API_URL}/projects/#{task.project.project_id}/task_def_id/#{task.task_definition_id}/comments/#{commentID}/discussion_comment/prompt_number/#{number}?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
-
-  # taskService.getDiscussionPrompt = (task, commentID, prompt_number, onSuccess, onError) ->
-  #   DiscussionComment.getDiscussionPrompt.get { project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID, prompt_number: prompt_number },
-  #     (response) -> #success)
-  #       onSuccess(response)
-  #     (response) -> #failure
-  #       onError(response)
 
   taskService.applyForExtension = (task, onSuccess, onError) ->
     interceptSuccess = (response) ->

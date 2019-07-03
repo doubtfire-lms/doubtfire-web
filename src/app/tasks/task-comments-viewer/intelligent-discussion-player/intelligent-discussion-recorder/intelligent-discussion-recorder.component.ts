@@ -9,11 +9,11 @@ import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-provider
   styleUrls: ['./intelligent-discussion-recorder.component.css']
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
-  @Input() discussion: {};
+  @Input() discussion: any = {};
+  @Input() task: {};
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;
-  intervalID: any;
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
@@ -23,7 +23,6 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   }
 
   ngOnInit() {
-    // console.log(this.discussion);
   }
 
   ngAfterViewInit() {
@@ -38,16 +37,10 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  // startStreaming() {
-  // this.startRecording();
-  // this.intervalID = setInterval(() => {
-  // this.processChunks();
-  // this.sendRecording();
-  // }, 5000);
-  // }
-
   onNewRecording(evt: any): void {
     this.blob = evt.detail.recording.blob;
+    this.recordingAvailable = true;
+    this.sendRecording();
   }
 
   stopRecording() {
@@ -60,19 +53,13 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   sendRecording() {
     if (this.blob && this.blob.size > 0) {
+      this.dps.addDiscussionReply(this.task, this.discussion.id, this.blob, () => {
+        this.isSending = false;
+      }, (failure: { data: { error: any; }; }) => {
+        console.error(failure);
+      });
+      this.blob = <Blob>{};
 
-      console.log(URL.createObjectURL(this.blob));
-      this.dps.addDiscussionReply();
-        // this.ts.addMediaComment(this.task, this.blob,
-        //   () => {
-        //     this.isSending = false;
-        //   },
-        //   (failure: { data: { error: any; }; }) => {
-        //     this.isSending = false;
-        //   });
-        // console.log('Sending Recording of size ' + this.blob.size);
-        this.blob = <Blob>{};
-      // this.recordingAvailable = false;
     }
   }
 }

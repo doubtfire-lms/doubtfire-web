@@ -91,8 +91,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
           that._startRecordingWithStream(stream)
         )
         .catch((error) ->
-          console.log('Error with getUserMedia: ' + error.message)
-          console.log(error)
           return
         )
       return
@@ -169,8 +167,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
       return
 
     _dumpChunks: () ->
-      # event = new Event('dataavailable')
-      # console.log(event)
       if(@usingMediaRecorder)
         @mediaRecorder.requestData()
 
@@ -190,9 +186,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @encoderWorker.postMessage(['dump', @audioCtx.sampleRate])
         clearInterval(@slicing)
       return
-
-    _processDataAvailable: () ->
-
 
     # Called each time a chunk of recording becomes available
     _onDataAvailable: (evt) ->
@@ -257,7 +250,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
       return
 
     _onError: (evt) ->
-      console.log('error', evt)
       @em.dispatchEvent(new Event('error'))
       return
 )
