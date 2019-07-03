@@ -163,8 +163,9 @@ task-comments-viewer .comment.comment-by-other-user .image-bubble {
   }
 }
 task-comments-viewer .comment .text-bubble .delete-comment:hover,
+task-comments-viewer .comment .discussion-bubble .delete-comment:hover,
 task-comments-viewer .comment .image-bubble .delete-comment:hover {
-  color: lighten(#b71c1c, 15%);
+  color: darken(white, 20%);
   cursor: pointer;
 }
 
