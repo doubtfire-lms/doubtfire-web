@@ -76,8 +76,8 @@
                 <td><strong>{{task.abbreviation}}</strong> - {{task.name}}</td>
                 <td>{{grades[task.target_grade]}}</td>
                 <td>{{task.start_date | date : 'EEE d MMM' : '+0000'}}</td>
-                <td>{{task.target_date | date : 'EEE d MMM' : '+0000'}}</td>
-                <td><span ng-show="task.due_date">{{task.due_date | date : 'EEE d MMM' : '+0000'}}</span><span ng-hide="task.due_date">None</span></td>
+                <td>{{task.localTargetDate() | date : 'EEE d MMM'}}</td>
+                <td><span ng-show="task.due_date">{{task.localDueDate() | date : 'EEE d MMM' : '+0000' }}</span><span ng-hide="task.due_date">None</span></td>
                 <td ng-show="unit.hasGroupwork()">{{groupSetName(task.group_set_id)}}</td>
                 <td>{{task.upload_requirements.length}}</td>
                 <td><i ng-show="task.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="task.hasPlagiarismCheck()" class="fa fa-times"></i></td>
