@@ -2,36 +2,9 @@
   <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate" (click)="showingPopup = !showingPopup">
     <span class="fa fa-microphone"></span>
   </button>
-
-  <!-- <div class="image-uploader" ngf-drop [hidden]="!upload.model == null || upload.model.length == 0" ng-model="upload.model" ng-model-rejected="upload.rejects"
-    ngf-change="modelChanged($files, upload)" ngf-accept="{{upload.accept}}" ngf-drag-over-class="{accept:'file-over', reject:'file-over', delay:100}"
-    ngf-drop-available="dropSupported"> -->
-
   <div id="textField" contenteditable="plaintext-only" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
-    placeholder="Type a comment, or try dragging an image or pdf" name="commentComposer">
+    placeholder="Type a comment, or try dragging an image or pdf above" name="commentComposer">
   </div>
-
-  <!-- <p [hidden]="!upload.display.error">
-    Invalid file type!
-  </p>
-
-  <p [hidden]="dropSupported || upload.display.error">
-    Click to select image file
-  </p>
-  </div> -->
-  <!-- <div *ngIf="!singleDropZone && upload.model.length > 0" class="selected-files">
-    <span class="selected-file">
-      <i class="file-type fa fa-file-o"></i>
-      {{formatImageName(upload.model[0].name)}}
-    </span>
-    <a class="clear-upload" (click)="clearEnqueuedUpload(upload)">
-      <i class="clear-upload fa fa-times"></i>
-    </a>
-    <a class="send-upload" (click)="postAttachmentComment()">
-      <i class="fa fa-paper-plane"></i>
-    </a>
-  </div> -->
-  <!-- <audio-recorder *ngIf="isRecorderOpen"></audio-recorder> -->
 </form>
 
 <!-- The HTML which will be injected -->

@@ -9,13 +9,28 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
   templateUrl: 'tasks/task-comments-viewer/task-comments-viewer.tpl.html'
   scope:
     task: '='
+    singleDropZone: '=?'
     comment: '=?'
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService) ->
-    # Cleanup
+  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
     listeners = listenerService.listenTo($scope)
+
+    $scope.uploadFiles = (files) ->
+      if typeof files != "undefined"
+        for file in files then do (file) ->
+          $scope.postAttachmentComment(file)
+
+    #============================================================================
+    # Upload image files as comments to a given task
+    $scope.postAttachmentComment = (file) ->
+      taskService.addMediaComment(CommentResourceService.task, file,
+        (success) ->
+          taskService.scrollDown()
+        (failure) ->
+          alertService.add('danger', "Failed to post image. #{failure.data?.error}")
+      )
 
     # Initialise scope comment text
     unless _.isString $scope.comment?.text

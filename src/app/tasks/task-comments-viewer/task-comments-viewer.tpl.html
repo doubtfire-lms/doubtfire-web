@@ -4,7 +4,9 @@
       Comments on this task
     </div>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" ngf-drop="uploadFiles($files)" ngf-drag-over-class="'dragover'" ngf-multiple="true"
+    ngf-pattern="'image/*,application/pdf'">
+
     <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'"
       ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
       <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
@@ -26,12 +28,10 @@
         </div>
 
         <div ng-if="comment.type == 'image'" class="comment-image">
-          <!-- <p>Image here?</p> -->
           <a ng-click="openCommentsModal(comment)">
             <img ng-src="{{getCommentAttachment(comment)}}" width="100%" height="100%" />
           </a>
         </div>
-        <!-- Add PDF support -->
         <div ng-if="comment.type == 'pdf'" class="comment-pdf">
           <a ng-click="openCommentsModal(comment)">
             <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
