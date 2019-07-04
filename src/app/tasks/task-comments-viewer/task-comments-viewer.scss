@@ -25,7 +25,7 @@ task-comments-viewer .panel-body {
 task-comments-viewer .panel-body.dragover {
   margin: 0;
   border-style: dotted;
-  border-color: gray;
+  border-color: #333333;
 }
 
 // Primary comment div
@@ -133,6 +133,10 @@ task-comments-viewer .comment .text-bubble {
   }
 }
 
+task-comments-viewer .pdf-bubble {
+  display: flex;
+}
+
 // Audio comments
 task-comments-viewer .comment .audio-bubble {
   @include base-bubble;
@@ -168,6 +172,11 @@ task-comments-viewer .comment.comment-by-other-user .image-bubble {
     color: $text-color;
   }
 }
+
+task-comments-viewer .comment .image-bubble .delete-comment {
+  color: #333333;
+}
+
 task-comments-viewer .comment .text-bubble .delete-comment:hover,
 task-comments-viewer .comment .discussion-bubble .delete-comment:hover,
 task-comments-viewer .comment .image-bubble .delete-comment:hover {
