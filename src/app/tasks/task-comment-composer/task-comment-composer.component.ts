@@ -2,10 +2,6 @@ import { Component, OnInit, Inject, Input, ViewChildren, QueryList, ViewChild } 
 import { taskService, analyticsService, alertService, CommentResourceService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
-import { IntelligentDiscussionRecorderComponent } from '../task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import { IntelligentDiscussionPlayerService } from '../task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.service';
-import { DiscussionPromptComposerComponent } from './discussion-prompt-composer/discussion-prompt-composer.component';
 
 @Component({
   selector: 'task-comment-composer',
@@ -115,15 +111,11 @@ export class TaskCommentComposerComponent implements OnInit {
 }
 
 
-
-
-
-
-// The Dialog Component
+// The discussion prompt composer fialog Component
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
-  // styleUrls: ['./discussion-recorder.component.scss'],
+  styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
   constructor(
