@@ -20,12 +20,59 @@ task-comments-viewer .panel-body {
   overflow: scroll;
   height: 100%;
   font-size: 15px;
+  width: 100%;
 }
 
 task-comments-viewer .panel.dragover {
   margin: 0;
   border-style: dotted;
   border-color: #333333;
+}
+
+task-comments-viewer .comment-container {
+  width: 100%;
+}
+
+task-comments-viewer .comment-status {
+  width: 100%;
+  display: inline-block;
+  align-self: flex-end;
+
+  hr {
+    margin: 0;
+  }
+
+  .hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: 0.8;
+    &:before {
+      content: "";
+      background: linear-gradient(to right, transparent, #9696969d, transparent);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+    &:after {
+      content: attr(data-content);
+      position: relative;
+      display: inline-block;
+      color: black;
+
+      padding: 0 0.5em;
+      line-height: 1.5em;
+
+      color: #9696969d;
+      background-color: #fff;
+    }
+  }
 }
 
 // Primary comment div

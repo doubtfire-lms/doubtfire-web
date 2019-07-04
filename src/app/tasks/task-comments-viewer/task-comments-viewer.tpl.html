@@ -8,44 +8,50 @@
   <div class="panel-body">
     <div class="comment" ng-repeat="comment in task.comments | orderBy:'+created_at'"
       ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
-      <user-icon size="50" user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
+      <user-icon ng-if="comment.type != 'status'" size="50" user="comment.author"
+        ng-class="{'hidden-xs hidden-sm': comment.author_is_me}"
         tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}" tooltip-append-to-body="true"
         tooltip-popover-delay="500" tooltip-placement="left">
       </user-icon>
 
-      <div ng-class="comment.type + '-bubble'">
-        <div ng-show="comment.type == 'text'" class="comment-text">
-          <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+      <div class="comment-container" ng-switch="comment.type">
+        <div ng-switch-when="status" class="comment-status">
+          <hr class="hr-text" data-content="{{comment.comment}}" />
         </div>
 
-        <div ng-if="comment.type == 'audio'" class="comment-text comment-audio">
-          <audio-player></audio-player>
-        </div>
+        <div ng-class="comment.type + '-bubble'">
+          <div ng-switch-when="text" class="comment-text">
+            <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
+          </div>
 
-        <div ng-if="comment.type == 'discussion'" class="comment-text comment-discussion">
-          <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
-        </div>
+          <div ng-switch-when="audio" class="comment-text comment-audio">
+            <audio-player></audio-player>
+          </div>
 
-        <div ng-if="comment.type == 'image'" class="comment-image">
-          <a ng-click="openCommentsModal(comment)">
-            <img ng-src="{{getCommentAttachment(comment)}}" width="100%" height="100%" />
-          </a>
-        </div>
-        <div ng-if="comment.type == 'pdf'" class="comment-pdf">
-          <a ng-click="openCommentsModal(comment)">
-            <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
-          </a>
-        </div>
+          <div ng-switch-when="discussion" class="comment-text comment-discussion">
+            <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
+          </div>
 
-        <div class="delete-comment" ng-click="deleteComment(comment.id)" ng-show="{{canUserEdit(comment)}}"
-          tooltip-append-to-body="true">
-          <i class="fa fa-trash"></i>
+          <div ng-switch-when="image" class="comment-image">
+            <a ng-click="openCommentsModal(comment)">
+              <img ng-src="{{getCommentAttachment(comment)}}" width="100%" height="100%" />
+            </a>
+          </div>
+
+          <div ng-switch-when="pdf" class="comment-pdf">
+            <a ng-click="openCommentsModal(comment)">
+              <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
+            </a>
+          </div>
+
+          <div ng-if="comment.type != 'status'" class="delete-comment" ng-click="deleteComment(comment.id)" ng-show="{{canUserEdit(comment)}}"
+            tooltip-append-to-body="true">
+            <i class="fa fa-trash"></i>
+          </div>
         </div>
-        <!--/delete-comment-->
       </div>
-      <!--/comment-bubble-->
     </div>
-    <!--/comment-->
+
     <div class="read-receipt" ng-show="lastComment.author_is_me && lastComment.recipient_read_time">
       Read {{lastComment.recipient_read_time | humanizedDate}} by {{lastComment.recipient.name}}
     </div>
