@@ -1,33 +1,41 @@
-<mat-action-list id="discussion-recordings-list" dense>
-  <button mat-list-item *ngFor="let recording of recordings" (click)="playRecording(getUrl(recording))"> Play </button>
-</mat-action-list>
-<audio id='audioDiscussionPlayer'></audio>
+<div [hidden]="!canRecord || isSending">
+  <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-small"
+    [disabled]="!canAddRecording">
+    <i [hidden]="!isRecording" class="fa fa-square"></i>
+    <i [hidden]="isRecording" class="fa fa-circle"></i>
+  </button>
 
-<mat-divider></mat-divider>
-<div class="audio-recorder">
-  <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
-  <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
-  <div [hidden]="!canRecord || isSending">
-    <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-small"
-      [disabled]="!canAddRecording">
-      <i [hidden]="!isRecording" class="fa fa-square"></i>
-      <i [hidden]="isRecording" class="fa fa-circle"></i>
-    </button>
-
-    <div>
-      <button type="button" id='btnSave' (click)="saveRecording()" [disabled]="!recordingAvailable || !canAddRecording"
-        class="btn-circle">
-        <i class="fa fa-plus"></i>
-      </button>
-      <button type="button" id='btnPlay' [hidden]="canSendPrompt" [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
-        <i class="fa fa-play"></i>
-      </button>
-      <button type="button" id='btnSend' (click)="sendRecording()" [hidden]="!canSendPrompt" class="btn-circle">
-        <i class="fa fa-paper-plane"></i>
-      </button>
+  <div class="audio-recorder">
+    <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+    <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <canvas #discussionPromptComposerCanvas class="discussion-audio-visualiser"></canvas>
     </div>
-
     <audio #discussionPromptComposerAudio></audio>
-    <canvas #discussionPromptComposerCanvas class="discussion-audio-visualiser"></canvas>
+  </div>
+
+  <div>
+    <button type="button" id='btnSave' (click)="saveRecording()" [disabled]="!recordingAvailable || !canAddRecording"
+      class="btn-circle">
+      <i class="fa fa-plus"></i>
+    </button>
+    <button type="button" id='btnPlay' [hidden]="canSendPrompt" [disabled]="!recordingAvailable" (click)="playStop()"
+      class="btn-circle">
+      <i class="fa fa-play"></i>
+    </button>
+    <button type="button" id='btnSend' (click)="sendRecording()" [hidden]="!canSendPrompt" class="btn-circle">
+      <i class="fa fa-paper-plane"></i>
+    </button>
   </div>
 </div>
+
+<mat-action-list>
+  <h3 mat-subheader>Recordings</h3>
+  <button *ngFor="let recording of recordings; let i = index" mat-list-item (click)="playRecording(getUrl(recording))">
+    <mat-icon mat-list-icon>play_arrow_rounded</mat-icon>
+    <h4 mat-line>Recording {{i + 1}}</h4>
+    <p mat-line> test{{recording.duration}} </p>
+  </button>
+</mat-action-list>
+
+<mat-divider></mat-divider>
