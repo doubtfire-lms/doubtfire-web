@@ -26,6 +26,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 
     extendAndSubmit = (trigger) ->
       $scope.task.applyForExtension(
+        ""
         (success) ->
           if $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
             extendAndSubmit(trigger)

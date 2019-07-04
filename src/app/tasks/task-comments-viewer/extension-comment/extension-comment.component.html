@@ -1,0 +1,19 @@
+<hr class="hr-text" />
+
+<!-- if student -->
+<div></div>
+
+<!-- if staff -->
+<div></div>
+
+<div fxLayout="row" fxLayoutAlign="center center">
+  <p>
+    {{message}}
+  </p>
+</div>
+
+<div *ngIf="!comment.assessed && isNotStudent" fxLayout="row" fxLayoutAlign="space-evenly center">
+  <button (click)="grantExtension()" mat-flat-button color="primary" style="background-color: #43A047">Grant</button>
+  <button (click)="denyExtension()" mat-flat-button color="warn">Deny</button>
+</div>
+<hr class="hr-text" />

@@ -33,6 +33,12 @@ task-comments-viewer .comment-container {
   width: 100%;
 }
 
+task-comments-viewer .comment-extension {
+  width: 100%;
+  display: inline-block;
+  align-self: flex-end;
+}
+
 task-comments-viewer .comment-status {
   width: 100%;
   display: inline-block;
@@ -162,12 +168,22 @@ task-comments-viewer img {
   background: $comment-bubble-color;
   border-radius: $comment-border-radius;
 
-  .comment-text {
+  .comment-text,
+  p {
     width: 100%;
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
     word-break: break-word;
     -webkit-font-smoothing: antialiased;
+  }
+}
+
+task-comments-viewer .comment .extension-bubble {
+  @include base-bubble;
+  background-color: transparent;
+
+  .markdown-to-html > *:last-child {
+    margin-bottom: 0px;
   }
 }
 

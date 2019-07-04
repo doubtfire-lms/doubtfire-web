@@ -3,7 +3,8 @@ import { alertService, taskService, Task } from 'src/app/ajs-upgraded-providers'
 
 @Injectable()
 export class IntelligentDiscussionPlayerService {
-  constructor(@Inject(taskService) private ts: any,
+  constructor(
+    @Inject(taskService) private ts: any,
     @Inject(Task) private Task: any,
     @Inject(alertService) private alerts: any,
   ) { }

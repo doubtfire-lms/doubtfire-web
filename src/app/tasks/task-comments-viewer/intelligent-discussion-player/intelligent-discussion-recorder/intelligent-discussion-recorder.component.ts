@@ -1,7 +1,7 @@
 import { Component, Inject, AfterViewInit, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
-import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'intelligent-discussion-recorder',

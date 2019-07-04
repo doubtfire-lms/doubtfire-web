@@ -618,14 +618,14 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) -> #failure
         onError(response)
 
-  taskService.applyForExtension = (task, onSuccess, onError) ->
+  taskService.applyForExtension = (task, reason, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
       task.project().updateBurndownChart()
       onSuccess(response)
 
-    Task.applyForExtension(task, interceptSuccess, onError)
+    Task.applyForExtension(task, reason, interceptSuccess, onError)
 
   taskService
 )

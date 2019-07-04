@@ -46,8 +46,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
         $scope.task.comments = _.map(response, taskService.mapComment) #in the HTML, the mapped task.comments are displayed
-        console.log($scope.task.comments)
-        # $scope.task.comments.push({type: "submission"})
         $scope.lastComment = $scope.task.comments.slice(-1)[0]
         $scope.task.num_new_comments = 0
         taskService.scrollDown()
@@ -62,14 +60,15 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       CommentResourceService.setCommentType(comment.type)
       CommentsModal.show()
 
-    #===========================================================================================
     $scope.canUserEdit = (comment) ->
       canEdit = false
       if comment.author_is_me || currentUser.role == "Admin"
         canEdit = true
       canEdit
 
-    #===========================================================================================
+    $scope.shouldShowAuthorIcon = (commentType) ->
+      return not (commentType == "extension" || commentType == "status")
+
     $scope.getCommentAttachment = (comment) ->
       # TODO: Refactor to use other Task method
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))

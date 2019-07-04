@@ -49,6 +49,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 
     $scope.applyForExtension = () ->
       $scope.task.applyForExtension(
+        ""
         (success) ->
           alertService.add("success", "Extension granted", 2000)
         (failure) ->

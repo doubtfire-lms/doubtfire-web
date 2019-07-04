@@ -7,8 +7,14 @@ angular.module("doubtfire.api.models.task", [])
 
   Task.summaryData = resourcePlus "/tasks/:id", { id: "@id" }
 
-  Task.applyForExtension = (task, onSuccess, onError) ->
-    $http.post("#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/extension", { }).then(
+  Task.applyForExtension = (task, reason, onSuccess, onError) ->
+    $http.post("#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/extension", { comment: reason }).then(
+      (data) -> onSuccess(data)
+      (response) -> onError(response)
+    )
+
+  Task.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
+    $http.put("#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/assess_extension/#{taskCommentID}", { granted: assessment }).then(
       (data) -> onSuccess(data)
       (response) -> onError(response)
     )

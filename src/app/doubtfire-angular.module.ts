@@ -29,6 +29,7 @@ import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } fro
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
+import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 
 @NgModule({
   // components
@@ -42,6 +43,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
+    ExtensionCommentComponent,
   ],
   // Module Imports
   imports: [
@@ -82,7 +84,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog, DiscussionComposerDialog]
+  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, ExtensionCommentComponent, IntelligentDiscussionDialog, DiscussionComposerDialog]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
