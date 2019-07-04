@@ -39,18 +39,8 @@
 <ng-template #audioDiscussionTemplate>
   <p>New! Try out the beta for the new intelligent discussion feature.</p>
   <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
-    <button (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
+    <button type="button" (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
   </div>
-  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
   <mat-divider></mat-divider>
-  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
-</ng-template>
-
-<ng-template #audioCommentTemplate>
-  <audio-comment-recorder [task]="task" *ngIf="showingPopup"></audio-comment-recorder>
-</ng-template>
-
-<ng-template #discussionCommentTemplate>
-  <discussion-prompt-composer [task]="task" *ngIf="showingPopup">
-  </discussion-prompt-composer>
+  <audio-comment-recorder [task]="task"></audio-comment-recorder>
 </ng-template>

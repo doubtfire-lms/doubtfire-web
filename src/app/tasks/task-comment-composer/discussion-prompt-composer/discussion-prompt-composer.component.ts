@@ -1,14 +1,16 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, ViewChild, ElementRef } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService, taskService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'discussion-prompt-composer',
   templateUrl: './discussion-prompt-composer.component.html',
-  styleUrls: ['./discussion-prompt-composer.component.css']
+  styleUrls: ['./discussion-prompt-composer.component.scss']
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
+  @ViewChild('discussionPromptComposerCanvas') canvasRef: ElementRef;
+  @ViewChild('discussionPromptComposerAudio') audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
   audio: HTMLAudioElement;
   canvas: HTMLCanvasElement;
@@ -25,7 +27,8 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any, ) {
+    @Inject(taskService) private ts: any,
+    @Inject(alertService) private alerts: any, ) {
     super(mediaRecorderService);
   }
 
@@ -39,9 +42,8 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
 
   init(): void {
     super.init();
-    this.audio = <HTMLAudioElement>document.getElementById('audioDiscussionPlayer');
-    this.canvas = <HTMLCanvasElement>document.getElementById('audio-recorder-visualiser');
-    this.audio = <HTMLAudioElement>document.getElementById('audioPlayer');
+    this.audio = this.audioRef.nativeElement;
+    this.canvas = this.canvasRef.nativeElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
@@ -72,7 +74,7 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
         this.isSending = false;
       },
       (failure: { data: { error: any; }; }) => {
-        // this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+        this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
         this.isSending = false;
       });
     this.blob = <Blob>{};

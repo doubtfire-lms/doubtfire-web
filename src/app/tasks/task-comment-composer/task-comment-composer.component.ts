@@ -5,14 +5,14 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from '../task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { IntelligentDiscussionPlayerService } from '../task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.service';
+import { DiscussionPromptComposerComponent } from './discussion-prompt-composer/discussion-prompt-composer.component';
 
 @Component({
   selector: 'task-comment-composer',
-  templateUrl: './task-comment-composer.html'
+  templateUrl: './task-comment-composer.html',
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: {};
-  public showingPopup: boolean = false;
   comment = {
     text: '',
     type: 'text'
@@ -20,15 +20,6 @@ export class TaskCommentComposerComponent implements OnInit {
   audioPopover: string = 'audioRecorderPopover.html';
 
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
-  ngAfterViewInit() {
-    this.popovers.forEach((popover: PopoverDirective) => {
-      popover.onShown.subscribe(() => {
-        this.popovers
-          .filter(p => p !== popover)
-          .forEach(p => p.hide());
-      });
-    });
-  }
 
   constructor(
     public dialog: MatDialog,
@@ -70,9 +61,7 @@ export class TaskCommentComposerComponent implements OnInit {
 
     dialogRef = this.dialog.open(DiscussionComposerDialog, {
       data: {
-        // dc: this.discussion,
         task: this.task,
-        // audioRef: this.audio
       },
       maxWidth: '800px',
       disableClose: true
@@ -135,28 +124,13 @@ export class TaskCommentComposerComponent implements OnInit {
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   // styleUrls: ['./discussion-recorder.component.scss'],
-  // providers: [IntelligentDiscussionPlayerService]
 })
 export class DiscussionComposerDialog implements OnInit {
-  confirmed = false;
-  timerText: string = '4m:00s';
-  ticks: number = 0;
-  startedDiscussion = false;
-  inDiscussion = false;
-  discussionComplete: boolean = false;
-  count: number = 3 * 60 * 1000; // 3 minutes
-  activePromptId: number = 0;
-
-  @ViewChild('testRecorder') testRecorder: MicrophoneTesterComponent;
-  @ViewChild('discussionRecorder') discussionRecorder: IntelligentDiscussionRecorderComponent;
-
   constructor(
     public dialogRef: MatDialogRef<DiscussionComposerDialog>,
-    // private discussionService: IntelligentDiscussionPlayerService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit() {
-    // this.data.audioRef = new Audio();
   }
 }
