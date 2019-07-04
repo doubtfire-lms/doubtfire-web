@@ -18,10 +18,9 @@
       </div>
     </div>
 
-    <div [hidden]="responseAvailable">
+    <div [hidden]="responseAvailable || isNotStudent">
       <p>Your tutor would like to discuss this task with you.</p>
       <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
-      <!-- <p>Expires in 3 days</p> -->
     </div>
   </div>
 </div>

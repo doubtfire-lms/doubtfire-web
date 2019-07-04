@@ -87,7 +87,7 @@ angular.module("doubtfire.common.services.projects", [])
 
     # must be function to avoid cyclic structure
     task.project = -> project
-    task.unit = project.unit
+    task.unit = -> unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->

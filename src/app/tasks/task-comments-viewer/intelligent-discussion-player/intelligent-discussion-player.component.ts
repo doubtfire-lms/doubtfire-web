@@ -47,6 +47,10 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     return this.discussion.status === 'complete';
   }
 
+  get isNotStudent() {
+    return this.task.project().unit().my_role !== 'Student';
+  }
+
   playResponseAudio() {
     this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
     this.audio.load();
@@ -102,7 +106,6 @@ export class IntelligentDiscussionDialog implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.data.audioRef = new Audio();
   }
 
   disableTester() {
@@ -123,8 +126,8 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.discussionRecorder.stopRecording();
     this.data.audioRef.pause();
     this.data.audioRef.src = null;
-    // this.data.audioRef = null;
     this.counter.unsubscribe();
+    this.data.dc.status = 'complete';
   }
 
   startDiscussion() {

@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   templateUrl: './task-comment-composer.html',
 })
 export class TaskCommentComposerComponent implements OnInit {
-  @Input() task: {};
+  @Input() task: any = {};
   comment = {
     text: '',
     type: 'text'
@@ -24,6 +24,10 @@ export class TaskCommentComposerComponent implements OnInit {
     @Inject(alertService) private alerts: any,
     @Inject(CommentResourceService) private commentResourceService: any,
   ) { }
+
+  get isStaff() {
+    return this.task.project().unit().my_role !== 'Student';
+  }
 
   ngOnInit() {
   }
