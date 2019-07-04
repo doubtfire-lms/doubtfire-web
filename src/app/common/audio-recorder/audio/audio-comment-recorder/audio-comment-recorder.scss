@@ -1,3 +1,8 @@
+.audio-recorder {
+  height: 50px;
+  margin-top: 10px;
+}
+
 .btn-circle-xl {
   user-select: none;
   background-color: #f03d25;
@@ -8,9 +13,6 @@
   transition: width 0.1s, height 0.1s;
   border: none;
   outline: none;
-  position: absolute;
-  left: 5%;
-  top: 71%;
 
   mat-icon {
     font-size: 24px;
