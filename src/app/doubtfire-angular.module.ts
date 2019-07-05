@@ -4,7 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatDividerModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSliderModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -30,6 +30,9 @@ import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microph
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
+
+import 'hammerjs';
 
 @NgModule({
   // components
@@ -44,6 +47,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
+    ExtensionModalComponent,
   ],
   // Module Imports
   imports: [
@@ -64,6 +68,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
     MatProgressBarModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSliderModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
@@ -84,7 +89,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, ExtensionCommentComponent, IntelligentDiscussionDialog, DiscussionComposerDialog]
+  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, ExtensionCommentComponent, IntelligentDiscussionDialog, DiscussionComposerDialog, ExtensionModalComponent]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {

@@ -276,6 +276,7 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -292,10 +293,15 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.visualisations']);
 
 // Downgrade angular modules that we need...
+// factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
+DoubtfireAngularJSModule.factory('ExtensionModal',
+  downgradeInjectable(ExtensionModalService));
+
+// directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent }));
 DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
