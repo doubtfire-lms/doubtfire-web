@@ -161,13 +161,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
-<<<<<<< HEAD
-
-=======
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
-    
->>>>>>> 3afdad774a65413a35fb681b08fe4da14b9f8903
     # Start date helpers
     task.timeUntilStartDate = ->
       moment(task.startDate()).diff(moment())
