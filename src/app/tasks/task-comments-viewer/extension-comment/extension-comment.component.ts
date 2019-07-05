@@ -24,10 +24,11 @@ export class ExtensionCommentComponent implements OnInit {
   get message() {
     const studentName = this.comment.author.name;
     if (this.comment.assessed) {
-      return `Extension ${this.comment.granted ? 'granted' : 'denied'}`;
+      return this.comment.extension_response;
     }
     const subject = this.isStudent ? 'You have ' : studentName + ' has ';
-    return subject + 'requested an extension.';
+    const message = `requested an extension for ${this.comment.weeks_requested} ${(this.comment.weeks_requested === 1 ? 'week' : 'weeks')}.`;
+    return subject + message;
   }
 
   get isStudent() {
@@ -39,17 +40,21 @@ export class ExtensionCommentComponent implements OnInit {
   }
 
   denyExtension() {
-    this.task.assessExtension(this.task, this.comment.id, 0, () => {
+    this.task.assessExtension(this.comment.id, 0, ((result) => {
       this.task.assessed = true;
       this.task.granted = false;
-    }, (error: any) => this.handleError(error));
+      const indexToUpdate = this.task.comments.findIndex(comment => comment.id === result.data.id);
+      this.task.comments[indexToUpdate] = result.data;
+    }).bind(this), (error: any) => this.handleError(error));
 
   }
 
   grantExtension() {
-    this.task.assessExtension(this.task, this.comment.id, 1, () => {
+    this.task.assessExtension(this.comment.id, 1, ((result) => {
       this.task.assessed = true;
-      this.task.granted = true;
-    }, (error: any) => this.handleError(error));
+      this.task.granted = false;
+      const indexToUpdate = this.task.comments.findIndex(comment => comment.id === result.data.id);
+      this.task.comments[indexToUpdate] = result.data;
+    }).bind(this), (error: any) => this.handleError(error));
   }
 }
