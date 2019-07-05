@@ -48,7 +48,7 @@
             </a>
           </div>
 
-          <div ng-if="comment.type != 'status'" class="delete-comment" ng-click="deleteComment(comment.id)"
+          <div ng-if="comment.type != 'status' && comment.type != 'extension'" class="delete-comment" ng-click="deleteComment(comment.id)"
             ng-show="{{canUserEdit(comment)}}" tooltip-append-to-body="true">
             <i class="fa fa-trash"></i>
           </div>

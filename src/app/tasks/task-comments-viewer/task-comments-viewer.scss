@@ -187,7 +187,7 @@ task-comments-viewer img {
 
 task-comments-viewer .comment .extension-bubble {
   width: 100%;
-  @include base-bubble;
+  // @include base-bubble;
   background-color: transparent;
 
   .markdown-to-html > *:last-child {

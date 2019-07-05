@@ -1,18 +1,17 @@
 extension-comment {
+  width: 100%;
   p {
     color: #2c2c2c;
     text-align: center;
-    margin-bottom: 1em !important;
   }
 
   .hr-fade {
     background: linear-gradient(to right, transparent, #9696969d, transparent);
-    position: relative;
-    height: 1.5em;
-    opacity: 0.8;
+    width: 100%;
   }
 
   .hr-text {
+    margin: 0;
     line-height: 1em;
     position: relative;
     outline: 0;
