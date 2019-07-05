@@ -110,8 +110,13 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
       taskService.addComment(task, textString, success, failure)
+    task.scrollCommentsToBottom = ->
+      taskService.scrollDown()
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
       taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
+    task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
+      console.log(taskCommentID + ' ' + assessment)
+      taskService.assessExtension(task, taskCommentID, assessment, onSuccess, onError)
     task.maxWeeksCanExtend = () ->
       Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
     task.minWeeksCanExtend = () ->

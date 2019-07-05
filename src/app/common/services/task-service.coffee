@@ -631,5 +631,15 @@ angular.module("doubtfire.common.services.tasks", [])
 
     Task.applyForExtension(task, reason, weeksRequested, interceptSuccess, onError)
 
+  taskService.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
+    interceptSuccess = (response) ->
+      task.due_date = response.data.due_date
+      task.extensions = response.data.extensions
+      task.project().updateBurndownChart()
+      task.project().calcTopTasks() # Sort the task list again
+      onSuccess(response)
+
+    Task.assessExtension(task, taskCommentID, assessment, interceptSuccess, onError)
+
   taskService
 )

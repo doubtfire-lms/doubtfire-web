@@ -10,12 +10,4 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   controller: ($scope, alertService, ExtensionModal) ->
     $scope.applyForExtension = () ->
       ExtensionModal.show($scope.task)
-
-      # $scope.task.applyForExtension(
-      #   ""
-      #   (success) ->
-      #     alertService.add("success", "Extension granted", 2000)
-      #   (failure) ->
-      #     alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
-      # )
 )
