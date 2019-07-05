@@ -104,8 +104,10 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
       taskService.addComment(task, textString, success, failure)
-    task.applyForExtension = (reason, onSuccess, onError) ->
-      taskService.applyForExtension(task, reason, onSuccess, onError)
+    task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
+      taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
+    task.weeksCanExtend = () ->
+      Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->
@@ -150,7 +152,7 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
-    
+
     # Start date helpers
     task.timeUntilStartDate = ->
       moment(task.startDate()).diff(moment())
