@@ -45,6 +45,9 @@ angular.module("doubtfire.common.services.tasks", [])
   ]
 
   # What are the states that are associated with tutor actions...
+  # TODO: This needs to be reworked, this actually means we are
+  # not waiting on a new submission =  either waiting for the tutor
+  # to mark it, or waiting on a discussion between student and tutor.
   taskService.submittedStatuses = [
     'do_not_resubmit'
     'ready_to_mark'
@@ -55,17 +58,17 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
   ]
 
+  taskService.awaitingFeedbackStatuses = [
+    'ready_to_mark'
+  ]
+
   # Which states can a task be considered to be overdue
   taskService.overdueStates = [
     'not_started'
-    'do_not_resubmit'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'time_exceeded'
-    'discuss'
-    'demonstrate'
     'ready_to_mark'
   ]
 
@@ -623,6 +626,7 @@ angular.module("doubtfire.common.services.tasks", [])
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
       task.project().updateBurndownChart()
+      task.project().calcTopTasks() # Sort the task list again
       onSuccess(response)
 
     Task.applyForExtension(task, reason, weeksRequested, interceptSuccess, onError)

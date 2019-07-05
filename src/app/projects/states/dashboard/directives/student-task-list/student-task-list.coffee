@@ -24,10 +24,11 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
     # Sets new filteredTasks variable
     applyFilters = ->
       filteredTasks = $filter('tasksWithName')($scope.project.activeTasks(), $scope.filters.taskName)
-      filteredTasks = $filter('orderBy')(filteredTasks, 'definition.seq')
       $scope.filteredTasks = filteredTasks
     # Apply filters first-time
     applyFilters()
+    # Sort the tasks according to priority.
+    $scope.project.calcTopTasks()
     # When refreshing tasks, we are just reloading the active tasks
     $scope.refreshTasks = applyFilters
     # Expose grade service names

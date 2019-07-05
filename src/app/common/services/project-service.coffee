@@ -29,10 +29,16 @@ angular.module("doubtfire.common.services.projects", [])
     ]
 
     for t in times
-      diff = laterTime.diff(earlyTime, t)
-      if diff > 1
+      #exactDiff is floating point
+      exactDiff = laterTime.diff(earlyTime, t, true).toFixed(2)
+      diff = Math.floor(exactDiff)
+      # if days are more than 14 then show in week
+      if(exactDiff > 2 && t == "weeks")
         return "#{diff} #{t.charAt(0).toUpperCase() + t.substr(1)}"
-      else if diff == 1
+      # Always show in days, Hours, Minutes and Seconds.
+      else if diff > 1 && t != "weeks"
+        return "#{diff} #{t.charAt(0).toUpperCase() + t.substr(1)}"
+      else if diff == 1 && t != "weeks"
         return "1 #{t.charAt(0).toUpperCase() + t.substr(1, t.length - 2)}"
     return laterTime.diff(earlyTime, "seconds")
 
@@ -155,7 +161,13 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilDueDate(task)
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
+<<<<<<< HEAD
 
+=======
+    task.isValidTopTask = ->
+      _.includes taskService.validTopTask, task.status
+    
+>>>>>>> 3afdad774a65413a35fb681b08fe4da14b9f8903
     # Start date helpers
     task.timeUntilStartDate = ->
       moment(task.startDate()).diff(moment())
@@ -187,6 +199,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.timePastTargetDescription = ->
       timeToDescription(moment(task.targetDate()), moment())
 
+    task.canApplyForExtension = ->
+      !task.inSubmittedState() && !task.isOverdue()
     task.inFinalState = ->
       task.status in taskService.finalStatuses
     task.inTerminalState = ->
@@ -195,6 +209,8 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.submittedStatuses
     task.inDiscussState = ->
       task.status in taskService.discussionStatuses
+    task.inAwaitingFeedbackState = ->
+      task.status in taskService.awaitingFeedbackStatuses
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)

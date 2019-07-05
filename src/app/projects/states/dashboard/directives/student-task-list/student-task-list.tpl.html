@@ -7,7 +7,7 @@
       id="{{task.taskKeyToIdString()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks">
+      ng-repeat="task in filteredTasks | orderBy: 'topWeight'">
       <div class="task-data">
         <h4 class="list-group-item-heading">
           {{task.definition.name}}

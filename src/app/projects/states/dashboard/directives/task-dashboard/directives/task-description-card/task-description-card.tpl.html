@@ -14,12 +14,12 @@
       <li>
         <strong>Start Date</strong>
         &mdash;
-        Aim to start this task by <strong>{{startDate() |  date : 'MMM d' }} at {{startDate() | date : 'h:mm a' }}.</strong>.
+        Aim to start this task by <strong>{{startDate() |  date : 'MMM d' }} at {{startDate() | date : 'h:mm a' }}</strong>.
       </li>
       <li>
         <strong>Due Date</strong>
         &mdash;
-        Aim to complete by <strong>{{dueDate() |  date : 'MMM d' }} at {{dueDate() | date : 'h:mm a' }}.</strong>.
+        Aim to complete by <strong>{{dueDate() |  date : 'MMM d' }} at {{dueDate() | date : 'h:mm a' }}</strong>.
       </li>
       <li ng-show="task && task.extensions > 0">
           <strong>Number of extensions</strong>
@@ -33,7 +33,7 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show=" (!task.inTerminalState() && !task.isOverdue()) || taskDef.has_task_sheet || taskDef.has_task_resources">
+  <div class="card-footer" ng-show="task.canApplyForExtension() || taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
@@ -54,7 +54,7 @@
     </a>
     <a
       ng-click="applyForExtension()"
-      ng-hide="task.inTerminalState() || task.isOverdue()"
+      ng-show="task.canApplyForExtension()"
       class="btn btn-success">
       <i class="fa fa-medkit"></i>
       Request Extension

@@ -29,6 +29,7 @@
     width: 100%;
     text-align: center;
     display: flex;
+    flex-wrap: nowrap;
     &:focus {
       outline: none;
     }
