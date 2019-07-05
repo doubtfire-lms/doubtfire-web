@@ -7,13 +7,15 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, alertService) ->
+  controller: ($scope, alertService, ExtensionModal) ->
     $scope.applyForExtension = () ->
-      $scope.task.applyForExtension(
-        ""
-        (success) ->
-          alertService.add("success", "Extension granted", 2000)
-        (failure) ->
-          alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
-      )
+      ExtensionModal.show($scope.task)
+
+      # $scope.task.applyForExtension(
+      #   ""
+      #   (success) ->
+      #     alertService.add("success", "Extension granted", 2000)
+      #   (failure) ->
+      #     alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
+      # )
 )

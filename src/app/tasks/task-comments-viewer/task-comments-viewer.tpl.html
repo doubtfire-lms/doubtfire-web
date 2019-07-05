@@ -19,7 +19,7 @@
           <hr class="hr-text" data-content="{{comment.comment}}"/>
         </div>
 
-        <div ng-class="comment.type + '-bubble'">
+        <div ng-class="comment.type + '-bubble'" class="bubble">
           <div ng-switch-when="extension" class="comment-extension">
             <extension-comment [task]="task" [comment]="comment"> </extension-comment>
           </div>
@@ -32,7 +32,7 @@
             <audio-player></audio-player>
           </div>
 
-          <div ng-switch-when="discussion" class="comment-text comment-discussion">
+          <div ng-switch-when="discussion" class="comment-discussion">
             <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
           </div>
 

@@ -106,8 +106,11 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.addComment(task, textString, success, failure)
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
       taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
-    task.weeksCanExtend = () ->
+    task.maxWeeksCanExtend = () ->
       Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
+    task.minWeeksCanExtend = () ->
+      minWeeks = Math.ceil(moment().diff(task.targetDate(), 'days') / 7)
+      if minWeeks < 0 then 0 else minWeeks
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->

@@ -11,7 +11,6 @@ export class ExtensionCommentComponent implements OnInit {
   @Input() task: any;
 
   constructor(
-    @Inject(Task) private Task: any,
     @Inject(alertService) private alerts: any, ) { }
 
   private handleError(error: any) {
@@ -40,7 +39,7 @@ export class ExtensionCommentComponent implements OnInit {
   }
 
   denyExtension() {
-    this.Task.assessExtension(this.task, this.comment.id, 0, () => {
+    this.task.assessExtension(this.task, this.comment.id, 0, () => {
       this.task.assessed = true;
       this.task.granted = false;
     }, (error: any) => this.handleError(error));
@@ -48,7 +47,7 @@ export class ExtensionCommentComponent implements OnInit {
   }
 
   grantExtension() {
-    this.Task.assessExtension(this.task, this.comment.id, 1, () => {
+    this.task.assessExtension(this.task, this.comment.id, 1, () => {
       this.task.assessed = true;
       this.task.granted = true;
     }, (error: any) => this.handleError(error));
