@@ -43,6 +43,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
+import 'moment';
 
 @NgModule({
   // components

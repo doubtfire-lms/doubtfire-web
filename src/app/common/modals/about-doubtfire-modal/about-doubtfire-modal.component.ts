@@ -18,7 +18,6 @@ export interface AboutDialogData {
  */
 @Injectable({
   providedIn: 'root',
-  providers: [AboutDoubtfireModalService, DoubtfireConstants]
 })
 export class AboutDoubtfireModal {
 
