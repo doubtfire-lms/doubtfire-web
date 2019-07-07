@@ -6,7 +6,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface AboutDialogData {
   externalName: string;
