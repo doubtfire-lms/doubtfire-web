@@ -27,8 +27,7 @@ task-comments-viewer .panel-body {
 
 task-comments-viewer .panel.dragover {
   margin: 0;
-  border-style: dotted;
-  border-color: #333333;
+  border: 5px dashed #333333;
 }
 
 task-comments-viewer .comment-container {
