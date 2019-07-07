@@ -52,9 +52,15 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   }
 
   playResponseAudio() {
-    this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
-    this.audio.load();
-    this.audio.play();
+    if (this.audio.paused) {
+      this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
+      this.audio.load();
+      this.audio.play();
+    } else {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+    }
+
   }
 
   beginDiscussion(): void {

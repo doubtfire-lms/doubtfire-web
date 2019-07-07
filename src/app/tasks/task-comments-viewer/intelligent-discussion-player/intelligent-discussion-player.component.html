@@ -13,7 +13,7 @@
       </div>
       <div [hidden]="!responseAvailable" class="audio-comment-container">
         <button class="play-button" (click)="playResponseAudio()">
-          <mat-icon aria-label="play audio">{{isPlaying ? 'stop_circle_outline' : 'play_circle_filled_white' }}
+          <mat-icon aria-label="play audio">{{!audio.paused ? 'stop_circle_outline' : 'play_circle_filled_white' }}
           </mat-icon>
         </button>
         <mat-progress-bar [color]="white" class="progress-bar-container" [mode]="determinate" [value]="audioProgress">
