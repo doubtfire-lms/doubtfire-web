@@ -87,7 +87,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
 })
 export class IntelligentDiscussionDialog implements OnInit {
   confirmed = false;
-  timerText: string = '4m:00s';
+  timerText: string = '15m:00s';
   ticks: number = 0;
   startedDiscussion = false;
   inDiscussion = false;
@@ -144,7 +144,7 @@ export class IntelligentDiscussionDialog implements OnInit {
 
       // get the cutoff date from the server
       // For now this is stubbed as 4 minutes from now.
-      let discussionCutoff = moment().add(4, 'minutes');
+      let discussionCutoff = moment().add(15, 'minutes');
 
       this.counter = timer(0, 1000).subscribe(val => {
         let difference = discussionCutoff.diff(moment());

@@ -38,7 +38,7 @@
 <h4>Step 3. Send.</h4>
 <div fxLayout="row" fxLayoutAlign="end center">
   <button mat-raised-button color="primary" type="button" mat-dialog-close
-    (click)="sendRecording()" [hidden]="!canSendPrompt">
+    (click)="sendRecording()" [hidden]="recordings.length === 0">
     Send
   </button>
 </div>

@@ -52,9 +52,9 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div [hidden]="!inDiscussion">
-      <h1>Listening to prompt {{activePromptId+1}} of {{numberOfPrompts}}</h1>
-      <button [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" [hidden]="!inDiscussion">
+      <h2 class="mat-headline">Listening to prompt {{activePromptId+1}} of {{numberOfPrompts}}</h2>
+      <button style="margin-bottom: 3em;" [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button
         (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }}
       </button>
     </div>
@@ -69,6 +69,6 @@
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    You are now complete.
+    Thank you for completing the discussion.
   </mat-step>
 </mat-horizontal-stepper>
