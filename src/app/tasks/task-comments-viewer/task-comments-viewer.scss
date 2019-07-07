@@ -1,3 +1,5 @@
+// This entire file needs to be refactored.
+
 $comment-bubble-color: #0084ff;
 // $discussion-comment-bubble-color: $comment-bubble-color;
 $discussion-comment-bubble-color: linear-gradient(#794da5, #546acc);
@@ -31,15 +33,10 @@ task-comments-viewer .panel.dragover {
 
 task-comments-viewer .comment-container {
   width: 100%;
-  // display: inline-block;
-  // flex: 0 auto;
-  // display: inline-flex;
 }
 
 task-comments-viewer .comment-container .comment-extension {
   width: 100%;
-  // display: inline-block;
-  // align-self: flex-end;
 }
 
 task-comments-viewer .comment-container .comment-status {
@@ -150,7 +147,6 @@ task-comments-viewer .comment.comment-by-other-user .user-icon {
 }
 
 task-comments-viewer .delete-comment {
-  display: inline-block;
   align-self: flex-start;
   float: right;
   padding-left: 6px;

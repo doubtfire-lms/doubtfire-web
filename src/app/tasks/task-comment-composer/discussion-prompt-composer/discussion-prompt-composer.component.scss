@@ -4,8 +4,23 @@
   margin-top: -10px;
 }
 
+#dialogCloseButton {
+  float: right;
+  margin-bottom: 20px;
+  color: red;
+}
+
 mat-action-list {
   height: 100%;
+}
+
+#btnRecordPrompt {
+  background-color: #f03d25;
+  color: white;
+}
+
+.discussion-prompt-audio-visualiser {
+  // max-width: 100px;
 }
 
 .btn-circle-small {
@@ -26,6 +41,10 @@ mat-action-list {
 
 .btn-circle-small i {
   font-size: 14px;
+}
+
+#recordingList {
+  margin-bottom: 2em;
 }
 
 #audio-recorder-visualiser.discussion-audio-visualiser {

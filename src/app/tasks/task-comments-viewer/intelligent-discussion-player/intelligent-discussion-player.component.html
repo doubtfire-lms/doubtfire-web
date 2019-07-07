@@ -8,6 +8,9 @@
     <mat-divider></mat-divider>
     <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
+      <div *ngIf="discussion.status === 'opened' && isNotStudent">
+        Warning: The student has opened the discussion prompts without sending a response.
+      </div>
       <div [hidden]="!responseAvailable" class="audio-comment-container">
         <button class="play-button" (click)="playResponseAudio()">
           <mat-icon aria-label="play audio">{{isPlaying ? 'stop_circle_outline' : 'play_circle_filled_white' }}

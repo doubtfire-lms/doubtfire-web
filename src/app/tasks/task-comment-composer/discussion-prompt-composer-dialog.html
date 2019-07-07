@@ -30,10 +30,7 @@
     <discussion-prompt-composer [task]="data.task"></discussion-prompt-composer>
 
     <div>
-      <button [disabled]="!discussionComplete" mat-button mat-raised-button matStepperNext color="primary" required
-        style="float: right;">Complete</button>
-      <button [disabled]="startedDiscussion" mat-button mat-raised-button matStepperNext color="primary"
-        matStepperPrevious>Back</button>
+      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
