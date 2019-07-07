@@ -32,7 +32,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       taskDefinition: null
     }, $scope.filters)
     # Sets the new filteredTasks variable
-    $scope.applyFilters = ->
+    applyFilters = ->
       filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
       filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
       filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
@@ -43,7 +43,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
         $scope.setSelectedTask(null)
       if filteredTasks && filteredTasks.length && !$scope.taskData.selectedTask
         $scope.setSelectedTask(filteredTasks[0])
-
+      
     # Let's call having a source of tasksForDefinition plus having a task definition
     # auto-selected with the search options open task def mode -- i.e., the mode
     # for selecting tasks by task definitions
@@ -77,7 +77,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       else
         $scope.filters.tutorials = [$scope.unit.tutorialFromId(tutorialId)]
       $scope.filters.tutorials = _.map($scope.filters.tutorials, 'id')
-      $scope.applyFilters()
+      applyFilters()
     # Set initial tutorial scope
     $scope.tutorialIdChanged()
     # Task definition options
@@ -90,7 +90,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       taskDef = $scope.unit.taskDef(taskDefId) if taskDefId?
       $scope.filters.taskDefinition = taskDef
       refreshData() if $scope.isTaskDefMode
-      $scope.applyFilters()
+      applyFilters()
     # Set new taskDefinitionIdSelected if task def mode and taskDefAbbr set
     setTaskDefFromTaskKey = (taskKey) ->
       # Only applicable in taskDefMode
@@ -100,7 +100,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       $scope.filters.taskDefinition = taskDef
     setTaskDefFromTaskKey($scope.taskData.taskKey)
     # Student Name options
-    $scope.studentNameChanged = $scope.applyFilters
+    $scope.studentNameChanged = applyFilters
     # Finds a task (or null) given its task key
     findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
     # Initially not watching the task key
@@ -110,13 +110,13 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       # Tasks for feedback or tasks for task, depending on the data source
       $scope.taskData.source.query { id: $scope.unit.id, task_def_id: $scope.filters.taskDefinitionIdSelected },
         (response) ->
-          $scope.tasks = $scope.unit.incorporateTasks(response, $scope.applyFilters)
+          $scope.tasks = $scope.unit.incorporateTasks(response, applyFilters)
           # If loading via task definitions, fill
           if $scope.isTaskDefMode
             unstartedTasks = $scope.unit.fillWithUnStartedTasks($scope.tasks, $scope.filters.taskDefinitionIdSelected)
             _.extend($scope.tasks, unstartedTasks)
           # Apply initial filters
-          $scope.applyFilters()
+          applyFilters()
           # Load initial set task, either the one provided (by the URL)
           # then load actual task in now or the first task that applies
           # to the given set of filters.
