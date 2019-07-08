@@ -9,8 +9,8 @@ import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upg
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
-  @ViewChild('discussionPromptComposerCanvas') canvasRef: ElementRef;
-  @ViewChild('discussionPromptComposerAudio') audioRef: ElementRef;
+  @ViewChild('discussionPromptComposerCanvas', { static: true }) canvasRef: ElementRef;
+  @ViewChild('discussionPromptComposerAudio', { static: true }) audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
   audio: HTMLAudioElement;
   canvas: HTMLCanvasElement;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Input, ViewChildren, QueryList } from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'task-comment-composer',

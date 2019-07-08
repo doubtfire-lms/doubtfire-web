@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
 import * as moment from 'moment';
@@ -102,8 +102,8 @@ export class IntelligentDiscussionDialog implements OnInit {
   activePromptId: number = 0;
   counter: Subscription;
 
-  @ViewChild('testRecorder') testRecorder: MicrophoneTesterComponent;
-  @ViewChild('discussionRecorder') discussionRecorder: IntelligentDiscussionRecorderComponent;
+  @ViewChild('testRecorder', { static: true }) testRecorder: MicrophoneTesterComponent;
+  @ViewChild('discussionRecorder', { static: true }) discussionRecorder: IntelligentDiscussionRecorderComponent;
 
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
