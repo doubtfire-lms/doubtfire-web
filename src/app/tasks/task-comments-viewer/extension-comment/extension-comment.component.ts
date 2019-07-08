@@ -18,7 +18,6 @@ export class ExtensionCommentComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.comment);
   }
 
   get message() {
