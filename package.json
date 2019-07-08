@@ -6,11 +6,11 @@
   "license": "AGPL-3.0",
   "repository": {},
   "scripts": {
-    "build": "run-s -l build:angular1 build:angular6",
+    "build": "run-s -l build:angular1 build:angular8",
     "build:angular1": "grunt build",
-    "build:angular6": "ng build",
-    "serve:angular6": "ng serve --host 0.0.0.0",
-    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular6",
+    "build:angular8": "ng build",
+    "serve:angular8": "ng serve --host 0.0.0.0",
+    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular8",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --outputHashing=none --deleteOutputPath=false --optimization=false --prod --output-path ../doubtfire-api/public",
     "deploy": "run-s -l build:angular1 deploy:build2api"
