@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, taskService, listenerService, ConfirmationModal) ->
+  controller: ($scope, $stateParams, taskService, listenerService, ConfirmationModal, alertService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available

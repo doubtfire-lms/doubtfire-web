@@ -123,17 +123,22 @@ angular.module("doubtfire.common.services.projects", [])
           return "#{days}d"
         else
           return "#{Math.floor(days/7)}w"
+    task.localDueDate = ->
+      if task.due_date?
+        due = new Date(task.due_date)
+        return new Date(due.getFullYear(), due.getMonth(), due.getDate(), 23, 59, 59)
+      return null
     task.targetDate = ->
       if task.due_date?
-        return task.due_date
+        return task.localDueDate()
       else
-        return task.definition.target_date
+        return task.definition.localTargetDate()
     task.startDate = ->
       if task.start_date?
         return task.start_date
       else
         return task.definition.start_date
-    
+
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
@@ -158,7 +163,7 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilTargetDate(task)
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
-    
+
     # Start date helpers
     task.timeUntilStartDate = ->
       moment(task.startDate()).diff(moment())
@@ -179,13 +184,13 @@ angular.module("doubtfire.common.services.projects", [])
 
     # Return hours until the deadline...
     task.timeUntilDeadlineDescription = ->
-      timeToDescription(moment(), moment(task.definition.due_date))
+      timeToDescription(moment(), moment(task.definition.localDueDate()))
 
     task.timeUntilTargetDescription = ->
       timeToDescription(moment(), moment(task.targetDate()))
 
     task.timePastDeadlineDescription = ->
-      timeToDescription(moment(task.definition.due_date), moment())
+      timeToDescription(moment(task.definition.localDueDate()), moment())
 
     task.timePastTargetDescription = ->
       timeToDescription(moment(task.targetDate()), moment())

@@ -32,7 +32,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       if $scope.task?
         return $scope.task.targetDate()
       else if $scope.taskDef?
-        return $scope.taskDef?.target_date
+        return $scope.taskDef.localTargetDate()
       else
         return new Date()
 
