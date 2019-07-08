@@ -29,14 +29,14 @@
             <i class="fa fa-clock-o"></i>
             <div>
               <label>Due Date</label>
-              {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
+              {{project.selectedTask.definition.localTargetDate() | date:'EEE MMM d'}}
             </div>
           </span>
           <span class="label label-warning" ng-if="project.selectedTask.definition.due_date" tooltip="The task must be completed by this date" tooltip-placement="right" tooltip-append-to-body="true">
             <i class="fa fa-lock"></i>
             <div>
               <label>Deadline</label>
-              {{project.selectedTask.definition.due_date | date:'EEE MMM d'}}
+              {{project.selectedTask.definition.due_date | date:'EEE MMM d' : '+0000' }}
             </div>
           </span>
         </div>
