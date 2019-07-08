@@ -115,7 +115,6 @@ angular.module("doubtfire.common.services.projects", [])
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
       taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
     task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
-      console.log(taskCommentID + ' ' + assessment)
       taskService.assessExtension(task, taskCommentID, assessment, onSuccess, onError)
     task.maxWeeksCanExtend = () ->
       Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
@@ -231,7 +230,10 @@ angular.module("doubtfire.common.services.projects", [])
     task.statusLabel = ->
       taskService.statusData(task.status).label
     task.statusHelp = ->
-      taskService.statusData(task.status).help
+      help = taskService.statusData(task.status).help
+      if (taskService.betweenTargetAndDueDate(task))
+        help = taskService.statusData('awaiting_extension').help
+      help
     task.taskKey = ->
       taskService.taskKey(task)
     task.recreateSubmissionPdf = (onSuccess, onFailure) ->

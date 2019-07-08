@@ -276,6 +276,10 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "Time limit exceeded"
       reason: "This work was submitted after the deadline, having missed both the target date and deadline."
       action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
+    awaiting_extension:
+      detail: "Time limit exceeded, awaiting extension"
+      reason: "This work was submitted after the deadline, having missed both the target date and deadline but is awaiting an extension."
+      action: "You require an extension to have this work assessed. If an extension is granted the task will be ready for feedback, and will be reviewed by your tutor."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -363,6 +367,10 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return amount of time past target due date
   taskService.timePastTargetDate = (task) ->
     moment().diff(moment(task.targetDate()))
+
+  # Return the amount of time past the deadline
+  taskService.betweenTargetAndDueDate = (task) ->
+    ((moment() > moment(task.definition.target_date)) && (moment() < moment(task.definition.due_date)))
 
   # Return the amount of time past the deadline
   taskService.timePastDueDate = (task) ->
@@ -543,7 +551,6 @@ angular.module("doubtfire.common.services.tasks", [])
 
   # Map extra front-end details to comment
   taskService.mapComment = (comment) ->
-    comment.id = comment.id
     initials = comment.author.name.split(" ")
     comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
     comment.author_is_me = comment.author.id == currentUser.profile.id
