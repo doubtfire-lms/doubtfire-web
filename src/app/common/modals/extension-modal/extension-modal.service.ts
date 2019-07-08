@@ -9,25 +9,20 @@ export class ExtensionModalService {
 
   constructor(public dialog: MatDialog, ) { }
 
-  public show(task: any, afterOpened?: any, afterClosed?: any) {
+  public show(task: any, afterApplication?: any) {
     let dialogRef: MatDialogRef<ExtensionModalComponent, any>;
 
     dialogRef = this.dialog.open(ExtensionModalComponent, {
       data: {
-        task: task
+        task: task,
+        afterApplication: afterApplication
       },
     });
 
     dialogRef.afterOpened().subscribe((result: any) => {
-      if (typeof afterClosed !== 'undefined') {
-        afterOpened()();
-      }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
-      if (typeof afterClosed !== 'undefined') {
-        afterClosed();
-      }
     });
   }
 }

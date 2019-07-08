@@ -24,22 +24,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       reapplyTriggers()
     )
 
-    extendAndSubmit = (trigger) ->
-      $scope.task.applyForExtension(
-        ""
-        (success) ->
-          if $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
-            extendAndSubmit(trigger)
-          else
-            $scope.task.triggerTransition(trigger, $scope.unitRole)
-        (failure) ->
-          alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
-      )
-
     # Triggers a new task status
     $scope.triggerTransition = (trigger) ->
       if trigger == 'ready_to_mark' && $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
-        ExtensionModal.show($scope.task)
+        ExtensionModal.show($scope.task, () -> $scope.task.triggerTransition(trigger, $scope.unitRole))
       else
         $scope.task.triggerTransition(trigger, $scope.unitRole)
 

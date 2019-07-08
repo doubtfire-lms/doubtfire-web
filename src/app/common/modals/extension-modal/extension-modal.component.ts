@@ -42,6 +42,7 @@ export class ExtensionModalComponent implements OnInit {
         this.alerts.add('success', 'Extension requested.');
         this.data.task.comments.push(result.data);
         this.data.task.scrollCommentsToBottom();
+        this.data.afterApplication();
       }).bind(this),
       (error) => this.alerts.add('danger', 'Error ' + error.data.error));
   }
