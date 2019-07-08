@@ -25,6 +25,9 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-postcss');
   grunt.loadNpmTasks('grunt-newer');
 
+
+  var sass = require('node-sass');
+  require('load-grunt-tasks')(grunt);
   /**
    * Load in our build configuration file.
    */
@@ -309,6 +312,7 @@ module.exports = function ( grunt ) {
     sass: {
       source: {
         options: {
+          implementation: sass,
           lineNumbers: true,
           sourcemap: 'none'
         },
