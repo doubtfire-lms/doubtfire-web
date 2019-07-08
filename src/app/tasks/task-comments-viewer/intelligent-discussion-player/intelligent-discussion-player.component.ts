@@ -131,7 +131,7 @@ export class IntelligentDiscussionDialog implements OnInit {
     this.inDiscussion = false;
     this.discussionRecorder.stopRecording();
     this.data.audioRef.pause();
-    this.data.audioRef.src = null;
+    this.data.audioRef.currentTime = 0;
     this.counter.unsubscribe();
     this.data.dc.status = 'complete';
   }
@@ -149,7 +149,7 @@ export class IntelligentDiscussionDialog implements OnInit {
       this.inDiscussion = true;
 
       // get the cutoff date from the server
-      // For now this is stubbed as 4 minutes from now.
+      // For now this is stubbed as 15 minutes from now.
       let discussionCutoff = moment().add(15, 'minutes');
 
       this.counter = timer(0, 1000).subscribe(val => {
