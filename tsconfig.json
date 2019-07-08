@@ -13,12 +13,12 @@
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es2015",
+    "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2017",
+      "es2018",
       "dom"
     ]
   }
