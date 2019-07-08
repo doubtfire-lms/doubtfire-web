@@ -13,12 +13,18 @@ export interface AboutDialogData {
   contributors: GithubProfile[];
 }
 
+@Component({
+  selector: 'about-doubtfire-dialog',
+  templateUrl: 'about-doubtfire-modal-content.tpl.html',
+})
+export class AboutDoubtfireModalContent {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: AboutDialogData) { }
+}
+
 /**
  * The about doubtfire modal service - used to create and show the modal
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AboutDoubtfireModal {
 
   aboutDialogData: AboutDialogData;
@@ -67,12 +73,4 @@ export class AboutDoubtfireModal {
         });
     });
   }
-}
-
-@Component({
-  selector: 'about-doubtfire-dialog',
-  templateUrl: 'about-doubtfire-modal-content.tpl.html',
-})
-export class AboutDoubtfireModalContent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: AboutDialogData) { }
 }

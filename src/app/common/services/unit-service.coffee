@@ -89,6 +89,12 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
           taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
+          taskDef.localTargetDate = ()  ->
+            tgt = new Date(taskDef.target_date)
+            return new Date(tgt.getFullYear(), tgt.getMonth(), tgt.getDate(), 23, 59, 59)
+          taskDef.localDueDate = ()  ->
+            due = new Date(taskDef.due_date)
+            return new Date(due.getFullYear(), due.getMonth(), due.getDate(), 23, 59, 59)
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback
