@@ -10,14 +10,18 @@ import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid'
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
-import { AboutDoubtfireModalService } from "src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service"
-import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
+import { AboutDoubtfireModalService }
+  from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service'
+import { AboutDoubtfireModal, AboutDoubtfireModalContent }
+  from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
+
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 
 @NgModule({
+  // Declare components in this module
   declarations: [
     AboutDoubtfireModalContent
   ],
@@ -31,11 +35,16 @@ import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
     UpgradeModule,
     UIRouterUpgradeModule.forRoot(),
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpErrorInterceptor,
-    multi: true
-  }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    AboutDoubtfireModal,
+    AboutDoubtfireModalService,
+    DoubtfireConstants
+  ],
   entryComponents: [AboutDoubtfireModalContent]
 })
 export class DoubtfireAngularModule {
