@@ -12,6 +12,8 @@ angular.module('doubtfire.units.states.tasks.definition', [
     # We can recycle the task inbox, switching the data source scope variable
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskDefinitionStateCtrl"
+    params:
+      taskKey: dynamic: true
     data:
       task: "Mark by Task Definition"
       pageTitle: "_Home_"

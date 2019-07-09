@@ -11,6 +11,8 @@ angular.module('doubtfire.projects.states.dashboard', [
     url: '/dashboard/:taskAbbr?tutor'
     controller: 'ProjectsDashboardStateCtrl'
     templateUrl: 'projects/states/dashboard/dashboard.tpl.html'
+    params:
+      taskAbbr: dynamic: true
     data:
       task: "Dashboard"
       pageTitle: "_Home_"
