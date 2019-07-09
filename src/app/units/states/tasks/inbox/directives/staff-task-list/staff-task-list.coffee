@@ -38,7 +38,9 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
       $scope.filteredTasks = filteredTasks
 
-      # TODO: Fix selected task remaining if new filtered list does not include the task.
+      # Fix selected task.
+      if $scope.taskData.selectedTask && !_.includes(filteredTasks, $scope.taskData.selectedTask)
+        $scope.setSelectedTask(null)
 
     # Let's call having a source of tasksForDefinition plus having a task definition
     # auto-selected with the search options open task def mode -- i.e., the mode
