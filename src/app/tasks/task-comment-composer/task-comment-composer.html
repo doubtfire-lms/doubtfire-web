@@ -1,5 +1,5 @@
 <form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate" (click)="showingPopup = !showingPopup">
+  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
     <span class="fa fa-microphone"></span>
   </button>
   <div id="textField" contenteditable="plaintext-only" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
