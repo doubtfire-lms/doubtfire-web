@@ -13,7 +13,7 @@
           {{task.definition.name}}
         </h4>
         <p class="list-group-item-text">
-          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-half"></i> {{task.timeToStart()}}</span>
+          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}</span><span class="due-time" ng-if="!task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-end"></i> {{task.timeToDue()}}</span>
         </p>
       </div><!--/task-data-->
       <div class="task-badges">
