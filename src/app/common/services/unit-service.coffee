@@ -325,41 +325,47 @@ angular.module("doubtfire.common.services.units", [])
         'No Tutorial'
 
     student.calcTopTasks = () ->
+      # We will assign current weight to tasks...
+      currentWeight = 0
+
       #
-      # sort tasks by start date
+      # Assign weights to completed tasks...
+      #
+      sortedCompletedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.inCompleteState()), 'definition.seq'), 'definition.start_date')
+      _.forEach sortedCompletedTasks, (task) ->
+        task.topWeight = currentWeight
+        currentWeight++
+
+      #
+      # sort valid top tasks by start date
       #
       sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.isValidTopTask()), 'definition.seq'), 'definition.start_date')
 
-      currentWeight = 0
-
       overdueTasks = _.filter sortedTasks, (task) ->
-        task.daysPastTargetDate() >= 0
+        task.daysUntilTargetDate() <= 7
+
       #
       # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
       #
       for grade in gradeService.gradeValues
-        overdueGradeTasks = _.filter overdueTasks, (task) ->
+        closeGradeTasks = _.filter overdueTasks, (task) ->
           task.definition.target_grade == grade
 
         # Sorting needs to be done here according to the days past the target date.
-        overdueGradeTasks = _.orderBy(overdueGradeTasks, [(task)-> task.daysPastTargetDate()], ['desc'])
+        closeGradeTasks = _.orderBy(closeGradeTasks, [(task)-> task.daysPastTargetDate()], ['desc'])
 
-        _.forEach overdueGradeTasks, (task) ->
+        _.forEach closeGradeTasks, (task) ->
           task.topWeight = currentWeight
-          task.topReason = "Complete this overdue #{gradeService.grades[task.definition.target_grade]} task as soon as possible."
           currentWeight++
 
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() > 0
+      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() > 7
       # Sort by the target_grade. Pass task are done first if same due date as others.
-      toAdd = _.sortBy(toAdd, 'definition.target_grade')
-      # Sort by the upcoming deadline.
-      toAdd = _.orderBy(toAdd,[(task)-> task.daysUntilTargetDate()])
+      toAdd = _.sortBy(_.sortBy(toAdd, 'definition.target_grade'), 'definition.start_date')
       _.forEach toAdd, (task) ->
         task.topWeight = currentWeight
-        task.topReason = if task.daysUntilTargetDate() >= 14 then "Complete this #{gradeService.grades[task.definition.target_grade]} task to get ahead."
         currentWeight++
 
     # Switch's the student's current tutorial to a new tutorial, either specified
