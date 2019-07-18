@@ -91,10 +91,10 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
           taskDef.localTargetDate = ()  ->
             tgt = new Date(taskDef.target_date)
-            return new Date(tgt.getFullYear(), tgt.getMonth(), tgt.getDate(), 23, 59, 59)
+            return moment({ year: tgt.getFullYear(), month: tgt.getMonth(), day: tgt.getDate(), hour: 23, minute: 59, second: 59})
           taskDef.localDueDate = ()  ->
             due = new Date(taskDef.due_date)
-            return new Date(due.getFullYear(), due.getMonth(), due.getDate(), 23, 59, 59)
+            return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback

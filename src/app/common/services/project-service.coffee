@@ -124,19 +124,19 @@ angular.module("doubtfire.common.services.projects", [])
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->
-      if task.daysUntilTargetDate() < 0
-        return ""
+      days = task.daysUntilTargetDate()
+      if days < 0
+        return "!"
+      else if days < 11
+        return "#{days}d"
       else
-        days = task.daysUntilTargetDate()
-        if days < 7
-          return "#{days}d"
-        else
-          return "#{Math.floor(days/7)}w"
+        return "#{Math.floor(days/7)}w"
     task.localDueDate = ->
       if task.due_date?
         due = new Date(task.due_date)
-        return new Date(due.getFullYear(), due.getMonth(), due.getDate(), 23, 59, 59)
-      return null
+        return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate() , hour: 23 , minute: 59, second: 59, millisecond :999})
+      else
+        return task.definition.localDueDate()
     task.targetDate = ->
       if task.due_date?
         return task.localDueDate()
@@ -144,9 +144,9 @@ angular.module("doubtfire.common.services.projects", [])
         return task.definition.localTargetDate()
     task.startDate = ->
       if task.start_date?
-        return task.start_date
+        return moment(task.start_date)
       else
-        return task.definition.start_date
+        return moment(task.definition.start_date)
 
     task.isToBeCompletedSoon = ->
       task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
@@ -164,19 +164,24 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysPastTargetDate(task)
     task.timePastTargetDate = ->
       taskService.timePastTargetDate(task)
+
+    # Return the amount of time past the deadline
     task.timePastDueDate = ->
-      taskService.timePastDueDate(task)
+      moment().diff(task.localDueDate())
+
+    # Return number of days until task is due, or false if already completed
     task.daysUntilDueDate = ->
-      taskService.daysUntilDueDate(task)
+      task.localDueDate().diff(moment(), 'days')
+
     task.daysUntilTargetDate = ->
       taskService.daysUntilTargetDate(task)
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
     # Start date helpers
     task.timeUntilStartDate = ->
-      moment(task.startDate()).diff(moment())
+      task.startDate().diff(moment())
     task.daysUntilStartDate = ->
-      moment(task.startDate()).diff(moment(), 'days')
+      task.startDate().diff(moment(), 'days')
     task.isBeforeStartDate = ->
       task.timeUntilStartDate() > 0
     task.timeToStart = ->
@@ -192,16 +197,16 @@ angular.module("doubtfire.common.services.projects", [])
 
     # Return hours until the deadline...
     task.timeUntilDeadlineDescription = ->
-      timeToDescription(moment(), moment(task.definition.localDueDate()))
+      timeToDescription(moment(), task.definition.localDueDate())
 
     task.timeUntilTargetDescription = ->
-      timeToDescription(moment(), moment(task.targetDate()))
+      timeToDescription(moment(), task.targetDate())
 
     task.timePastDeadlineDescription = ->
-      timeToDescription(moment(task.definition.localDueDate()), moment())
+      timeToDescription(task.definition.localDueDate(), moment())
 
     task.timePastTargetDescription = ->
-      timeToDescription(moment(task.targetDate()), moment())
+      timeToDescription(task.targetDate(), moment())
 
     task.canApplyForExtension = ->
       !task.inSubmittedState() && !task.isOverdue()
@@ -215,6 +220,8 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.discussionStatuses
     task.inAwaitingFeedbackState = ->
       task.status in taskService.awaitingFeedbackStatuses
+    task.inCompleteState = ->
+      task.status == 'complete'
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
