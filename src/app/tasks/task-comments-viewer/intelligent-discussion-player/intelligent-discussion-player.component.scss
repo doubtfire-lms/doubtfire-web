@@ -1,0 +1,78 @@
+:host mat-divider {
+  margin-bottom: 20px;
+}
+
+#discussion-title {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+mat-divider {
+  background-color: white;
+}
+
+#startDiscussionBtn {
+  margin: 20px;
+  float: right;
+}
+
+microphone-tester .btn-circle-xl {
+  position: inherit;
+}
+
+:host .mat-dialog-container {
+  max-width: 800px !important;
+}
+
+:host #intelligentDiscussionStepper {
+  margin-top: 20px;
+}
+
+:host .introduction-text {
+  margin-top: 4em;
+  display: inline-flex;
+}
+
+:host img#discussion-splash-image {
+  float: left;
+  margin: auto;
+  max-width: 800px;
+  max-height: 300px;
+  vertical-align: middle;
+}
+
+:host .introduction-text p {
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.1;
+  font-size: 1.1em;
+  text-align: justify;
+  margin-left: 3em;
+  margin-top: 0;
+  float: right;
+}
+
+:host #dialogCloseButton {
+  float: right;
+  margin-bottom: 20px;
+  color: red;
+}
+
+:host #discussionReadout {
+  overflow: hidden;
+}
+
+:host #discussionRecorderContainer {
+  line-height: 1.2em;
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+
+  p {
+    font-size: 1.2em;
+  }
+
+  p#discussionCountdown {
+    font-size: 3em;
+    font-weight: bold;
+  }
+}

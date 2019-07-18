@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -276,6 +276,10 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "Time limit exceeded"
       reason: "This work was submitted after the deadline, having missed both the target date and deadline."
       action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
+    awaiting_extension:
+      detail: "Time limit exceeded, awaiting extension"
+      reason: "This work was submitted after the deadline, having missed both the target date and deadline but is awaiting an extension."
+      action: "You require an extension to have this work assessed. If an extension is granted the task will be ready for feedback, and will be reviewed by your tutor."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -363,6 +367,10 @@ angular.module("doubtfire.common.services.tasks", [])
   # Return amount of time past target due date
   taskService.timePastTargetDate = (task) ->
     moment().diff(moment(task.targetDate()))
+
+  # Return the amount of time past the deadline
+  taskService.betweenTargetAndDueDate = (task) ->
+    ((moment() > moment(task.definition.target_date)) && (moment() < moment(task.definition.due_date)))
 
   # Return the amount of time past the deadline
   taskService.timePastDueDate = (task) ->
@@ -575,8 +583,6 @@ angular.module("doubtfire.common.services.tasks", [])
   #ADD MEDIA COMMENT
   taskService.addMediaComment = (task, media, onSuccess, onError) ->
     form = new FormData()
-    form.append 'project_id', task.project().project_id
-    form.append 'task_definition_id', task.task_definition_id
     form.append 'attachment', media
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
@@ -587,7 +593,42 @@ angular.module("doubtfire.common.services.tasks", [])
         onSuccess(response)
       (response) -> #failure
         onError(response)
-  taskService.applyForExtension = (task, onSuccess, onError) ->
+
+  #Add discussion comment
+  taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
+    form = new FormData()
+    temp = []
+
+    for prompt in prompts
+      form.append('attachments[]', prompt)
+
+    res = DiscussionComment.createDiscussion.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+      (response) -> #success
+        unless task.comments?
+          task.comments = []
+        task.comments.unshift(taskService.mapComment(response))
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
+    form = new FormData()
+    form.append 'attachment', replyAudio
+
+    DiscussionComment.postDiscussionReply.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID}, form,
+      (response) -> #success)
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
+    DiscussionComment.getDiscussion.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
+      (response) -> #success)
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.applyForExtension = (task, reason, weeksRequested, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
@@ -595,7 +636,17 @@ angular.module("doubtfire.common.services.tasks", [])
       task.project().calcTopTasks() # Sort the task list again
       onSuccess(response)
 
-    Task.applyForExtension(task, interceptSuccess, onError)
+    Task.applyForExtension(task, reason, weeksRequested, interceptSuccess, onError)
+
+  taskService.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
+    interceptSuccess = (response) ->
+      task.due_date = response.data.due_date
+      task.extensions = response.data.extensions
+      task.project().updateBurndownChart()
+      task.project().calcTopTasks() # Sort the task list again
+      onSuccess(response)
+
+    Task.assessExtension(task, taskCommentID, assessment, interceptSuccess, onError)
 
   taskService
 )

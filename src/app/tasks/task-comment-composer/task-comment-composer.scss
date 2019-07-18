@@ -98,15 +98,7 @@ button.btn-recorder {
   color: black;
 }
 
-#audio-recorder-visualiser {
-  height: 60px;
-  width: 60px;
-  position: absolute;
-  bottom: 10px;
-  left: 24px;
-}
-
 .popover-content {
-  width: 350px;
-  height: 200px;
+  width: 275px;
+  max-height: 200px;
 }

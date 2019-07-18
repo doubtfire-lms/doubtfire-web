@@ -1,16 +1,16 @@
 //
 // Modal to show Doubtfire version info
 //
-import { Injectable, Component, Inject, OnInit } from '@angular/core';
+import { Injectable, Component, Inject } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from '../about-doubtfire-modal/GithubProfile';
 
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface AboutDialogData {
-  externalName: string,
-  contributors: GithubProfile[]
+  externalName: string;
+  contributors: GithubProfile[];
 }
 
 @Component({
@@ -64,14 +64,13 @@ export class AboutDoubtfireModal {
     this.aboutDialogData.contributors.forEach((item: GithubProfile, i) => {
       this.aboutDoubtfireModalService.GetGithubProfiles(item.login)
         .subscribe(response => {
-          this.aboutDialogData.contributors[i] =
-            {
-              avatar_url: response.avatar_url,
-              name: response.name,
-              html_url: response.html_url,
-              login: response.login
-            }
-        })
+          this.aboutDialogData.contributors[i] = {
+            avatar_url: response.avatar_url,
+            name: response.name,
+            html_url: response.html_url,
+            login: response.login
+          };
+        });
     });
   }
 }
