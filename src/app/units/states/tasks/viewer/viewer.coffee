@@ -8,8 +8,7 @@ angular.module('doubtfire.units.states.tasks.viewer', [
 .config(($stateProvider) ->
   $stateProvider.state 'units/tasks/viewer', {
     parent: 'units/tasks'
-    url: '/viewer/{taskKey:any}'
-    # We can recycle the task inbox, switching the data source scope variable
+    url: '/viewer'
     templateUrl: "units/states/tasks/viewer/viewer.tpl.html"
     controller: "TaskViewerStateCtrl"
     data:

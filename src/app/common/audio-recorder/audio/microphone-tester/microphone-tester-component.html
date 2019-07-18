@@ -1,0 +1,30 @@
+<div class="audio-recorder">
+  <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+  <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
+  <div [hidden]="!canRecord || isSending">
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxLayout="column" fxLayoutAlign="start start">
+        <h1>Step 1. Record some audio!</h1>
+        <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
+          <p [hidden]="isRecording">record</p>
+          <i [hidden]="!isRecording" class="fa fa-square"></i>
+        </button>
+        <audio id='micTesterAudioPlayer'></audio>
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="start start">
+        <canvas class="audio-visualiser" id="micTesterVisualiser"></canvas>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 48px;" fxLayout="row" fxLayoutAlign="space-between start">
+      <h1>Step 2. Stop the recording, and playback the audio to make sure it's audible:</h1>
+      <button type="button" id='btnPlay' color="primary" [disabled]="!recordingAvailable" (click)="playStop()"
+        mat-raised-button>Play test recording</button>
+    </div>
+
+    <div style="margin-bottom: 24px;" fxLayout="row" fxLayoutAlign="space-between start">
+        <h1>Step 3. Check the "Ready to go" cehckbox below if you're all set!</h1>
+    </div>
+  </div>
+</div>

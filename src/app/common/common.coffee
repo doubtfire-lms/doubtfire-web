@@ -15,5 +15,4 @@ angular.module("doubtfire.common", [
   'doubtfire.common.user-icon'
   # Audio
   'doubtfire.common.audio-player'
-  'doubtfire.common.audio-recorder'
 ])

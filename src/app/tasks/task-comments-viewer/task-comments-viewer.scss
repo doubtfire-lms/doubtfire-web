@@ -1,4 +1,9 @@
+// This entire file needs to be refactored.
+
 $comment-bubble-color: #0084ff;
+// $discussion-comment-bubble-color: $comment-bubble-color;
+$discussion-comment-bubble-color: linear-gradient(#794da5, #546acc);
+// $discussion-comment-bubble-color: linear-gradient(darken(red, 10%), lighten($comment-bubble-color, 10%));
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
@@ -17,25 +22,94 @@ task-comments-viewer .panel-body {
   overflow: scroll;
   height: 100%;
   font-size: 15px;
+  width: 100%;
+}
+
+task-comments-viewer .panel.dragover {
+  margin: 0;
+  border: 5px dashed #333333;
+}
+
+task-comments-viewer .comment-container {
+  width: 100%;
+}
+
+task-comments-viewer .comment-container .comment-extension {
+  width: 100%;
+}
+
+task-comments-viewer .comment-container .comment-status {
+  width: 100%;
+  align-self: flex-end;
+
+  hr {
+    margin: 0;
+  }
+
+  .hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: 0.8;
+    &:before {
+      content: "";
+      background: linear-gradient(to right, transparent, #9696969d, transparent);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+    &:after {
+      content: attr(data-content);
+      position: relative;
+      display: inline-block;
+      color: black;
+
+      padding: 0 0.5em;
+      line-height: 1.5em;
+
+      color: #9696969d;
+      background-color: #fff;
+    }
+  }
 }
 
 // Primary comment div
 task-comments-viewer .comment {
   display: flex;
   margin-bottom: 0.6em;
-  &.new-comment .comment-bubble {
+  &.new-comment .text-bubble {
     animation: fade-in-comment-animation;
     animation-duration: 5s;
     @keyframes fade-in-comment-animation {
-      0% { background: rgba(33, 150, 243, 0.4); }
-      0% { border: rgba(33, 150, 243, 1); }
-      0% { box-shadow: 0 0 6px rgba(33, 150, 243, 1); }
-      100% { border: rgba(255, 255, 255, 0); }
-      100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+      0% {
+        background: rgba(33, 150, 243, 0.4);
+      }
+      0% {
+        border: rgba(33, 150, 243, 1);
+      }
+      0% {
+        box-shadow: 0 0 6px rgba(33, 150, 243, 1);
+      }
+      100% {
+        border: rgba(255, 255, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+      }
     }
   }
   &.comment-by-other-user {
     flex-direction: row-reverse;
+
+    .bubble {
+      float: right;
+    }
   }
 }
 
@@ -54,18 +128,16 @@ task-comments-viewer .comment .user-icon {
   }
   .user-icon-initials {
     color: #fff;
-    // border: 2px solid #fff;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    // box-shadow: 0 0 0 1px $comment-bubble-color;
     background-color: $comment-bubble-color;
-    // background-color: linear-gradient(to left, $comment-bubble-color, $comment-bubble-color-darker);
   }
 }
+
 task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {
   box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
   background: $comment-bubble-color-other-user;
-  background: linear-gradient(to left, $comment-bubble-color-other-user , $comment-bubble-color-other-user-darker);
+  background: linear-gradient(to left, $comment-bubble-color-other-user, $comment-bubble-color-other-user-darker);
   color: $text-color;
 }
 task-comments-viewer .comment.comment-by-other-user .user-icon {
@@ -75,6 +147,7 @@ task-comments-viewer .comment.comment-by-other-user .user-icon {
 
 task-comments-viewer .delete-comment {
   align-self: flex-start;
+  float: right;
   padding-left: 6px;
   font-style: normal;
   font-size: 1.6em;
@@ -82,52 +155,131 @@ task-comments-viewer .delete-comment {
 }
 task-comments-viewer img {
   border-radius: $comment-border-radius;
-  color: #EEEEEE;
+  color: #eeeeee;
   border-style: solid;
   border-width: 1px;
 }
-task-comments-viewer .comment .comment-bubble {
+
+@mixin base-bubble {
   display: flex;
-  background: $comment-bubble-color;
   color: #fff;
-  border-radius: $comment-border-radius;
   font-size: 1em;
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 0;
   line-height: 1.5em;
+  background: $comment-bubble-color;
+  border-radius: $comment-border-radius;
 
-  .comment-text {
-    width: 100%;
+  .comment-text,
+  .comment-discussion,
+  p {
+    display: inline-block;
     margin: 0 auto 0 $comment-text-padding;
     padding-right: $comment-text-padding;
     word-break: break-word;
     -webkit-font-smoothing: antialiased;
   }
+  .comment-audio {
+    display: inline-block;
+    margin: 0 auto 0 $comment-text-padding;
+    padding-right: $comment-text-padding;
+    word-break: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+task-comments-viewer .comment .extension-bubble {
+  width: 100%;
+  // @include base-bubble;
+  background-color: transparent;
+
+  .markdown-to-html > *:last-child {
+    p {
+      display: inline-block;
+    }
+    display: inline-block;
+    margin-bottom: 0px;
+  }
+}
+
+// text comments
+task-comments-viewer .comment .text-bubble {
+  @include base-bubble;
+  display: inline-block;
+
+  .markdown-to-html > *:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+task-comments-viewer .pdf-bubble {
+  display: flex;
+}
+
+// Audio comments
+task-comments-viewer .comment .audio-bubble {
+  @include base-bubble;
+  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  margin-right: 0;
+  padding-right: 0;
 
   .comment-audio {
-    width: 200px;
+    width: 70%;
+    margin-right: 0;
+    padding-right: 0;
   }
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
   }
 }
-task-comments-viewer .comment .image-bubble {
-  display: flex;
+
+// Image comments
+task-comments-viewer .bubble.image-bubble {
+  @include base-bubble;
   background: transparent;
-  border-radius: $comment-border-radius;
 }
 
-task-comments-viewer .comment.comment-by-other-user .comment-bubble,
-task-comments-viewer .comment.comment-by-other-user .image-bubble {
+// Disucssion comments
+task-comments-viewer .comment .discussion-bubble {
+  @include base-bubble;
+  max-width: 300px;
+  mat-stepper {
+    background-color: white;
+  }
+
+  .comment-discussion {
+    // display: inline-block;
+  }
+  background: $discussion-comment-bubble-color;
+}
+
+task-comments-viewer .comment.comment-by-other-user .text-bubble {
   background: $comment-bubble-color-other-user;
-  &, .delete-comment {
+  &,
+  .delete-comment {
     color: $text-color;
   }
 }
-task-comments-viewer .comment .comment-bubble .delete-comment:hover,
-task-comments-viewer .comment .image-bubble .delete-comment:hover {
-  color: lighten(#B71C1C, 15%);
+
+task-comments-viewer .comment.comment-by-other-user .image-bubble {
+  background: transparent;
+}
+
+task-comments-viewer .comment.comment-by-other-user .text-bubble .delete-comment,
+task-comments-viewer .comment.comment-by-other-user .image-bubble .delete-comment {
+  float: left;
+  margin-left: 10px;
+}
+
+task-comments-viewer .comment .image-bubble .delete-comment {
+  color: #333333;
+}
+
+task-comments-viewer .comment .delete-comment:hover {
+  color: darken(white, 20%);
   cursor: pointer;
 }
 

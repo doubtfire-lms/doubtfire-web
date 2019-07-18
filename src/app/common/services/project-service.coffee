@@ -93,7 +93,7 @@ angular.module("doubtfire.common.services.projects", [])
 
     # must be function to avoid cyclic structure
     task.project = -> project
-    task.unit = project.unit
+    task.unit = -> unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
     task.canReuploadEvidence = ->
@@ -110,8 +110,17 @@ angular.module("doubtfire.common.services.projects", [])
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
       taskService.addComment(task, textString, success, failure)
-    task.applyForExtension = (onSuccess, onError) ->
-      taskService.applyForExtension(task, onSuccess, onError)
+    task.scrollCommentsToBottom = ->
+      taskService.scrollDown()
+    task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
+      taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
+    task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
+      taskService.assessExtension(task, taskCommentID, assessment, onSuccess, onError)
+    task.maxWeeksCanExtend = () ->
+      Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
+    task.minWeeksCanExtend = () ->
+      minWeeks = Math.ceil(moment().diff(task.targetDate(), 'days') / 7)
+      if minWeeks < 0 then 0 else minWeeks
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->
@@ -163,7 +172,6 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.daysUntilTargetDate(task)
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
-
     # Start date helpers
     task.timeUntilStartDate = ->
       moment(task.startDate()).diff(moment())
@@ -222,7 +230,10 @@ angular.module("doubtfire.common.services.projects", [])
     task.statusLabel = ->
       taskService.statusData(task.status).label
     task.statusHelp = ->
-      taskService.statusData(task.status).help
+      help = taskService.statusData(task.status).help
+      if (taskService.betweenTargetAndDueDate(task))
+        help = taskService.statusData('awaiting_extension').help
+      help
     task.taskKey = ->
       taskService.taskKey(task)
     task.recreateSubmissionPdf = (onSuccess, onFailure) ->

@@ -11,6 +11,8 @@ angular.module('doubtfire.units.states.tasks.inbox', [
     url: '/inbox/{taskKey:any}'
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskInboxStateCtrl"
+    params:
+      taskKey: dynamic: true
     data:
       task: "Task Inbox"
       pageTitle: "_Home_"

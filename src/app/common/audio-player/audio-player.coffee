@@ -6,7 +6,6 @@ angular.module('doubtfire.common.audio-player', [])
   templateUrl: 'common/audio-player/audio-player.tpl.html'
 
   controller: ($scope, Task, $sce, $http, $q) ->
-
     $scope.isLoaded = false
     $scope.isPlaying = false
     $scope.audioProgress = 0

@@ -1,0 +1,29 @@
+<div class="comment-bubble discussion-comment-player">
+  <mat-spinner [hidden]="!loading"></mat-spinner>
+  <div [hidden]="loading">
+    <h3 id="discussion-title">
+      Discussion {{discussion.status}}
+      <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
+    </h3>
+    <mat-divider></mat-divider>
+    <div>
+      <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
+      <div *ngIf="discussion.status === 'opened' && isNotStudent">
+        Warning: The student has opened the discussion prompts without sending a response.
+      </div>
+      <div [hidden]="!responseAvailable" class="audio-comment-container">
+        <button class="play-button" (click)="playResponseAudio()">
+          <mat-icon aria-label="play audio">{{!audio.paused ? 'stop_circle_outline' : 'play_circle_filled_white' }}
+          </mat-icon>
+        </button>
+        <mat-progress-bar color="white" class="progress-bar-container" mode="determinate" [value]="audioProgress">
+        </mat-progress-bar>
+      </div>
+    </div>
+
+    <div [hidden]="responseAvailable || isNotStudent">
+      <p>Your tutor would like to discuss this task with you.</p>
+      <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
+    </div>
+  </div>
+</div>

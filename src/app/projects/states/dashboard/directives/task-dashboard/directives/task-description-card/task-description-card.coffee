@@ -9,7 +9,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     task: '='
     taskDef: '='
     unit: '='
-  controller: ($scope, Task, listenerService, analyticsService, gradeService, alertService) ->
+  controller: ($scope, Task, ExtensionModal, listenerService, analyticsService, gradeService, alertService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
@@ -48,10 +48,5 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       $scope.task?.daysUntilDueDate() <= 14 || false
 
     $scope.applyForExtension = () ->
-      $scope.task.applyForExtension(
-        (success) ->
-          alertService.add("success", "Extension granted", 2000)
-        (failure) ->
-          alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
-      )
+      ExtensionModal.show($scope.task)
 )

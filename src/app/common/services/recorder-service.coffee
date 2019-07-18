@@ -91,8 +91,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
           that._startRecordingWithStream(stream)
         )
         .catch((error) ->
-          console.log('Error with getUserMedia: ' + error.message)
-          console.log(error)
           return
         )
       return
@@ -162,6 +160,20 @@ angular.module("doubtfire.common.services.recorder-service", [])
             @encoderWorker.postMessage(['encode', e.inputBuffer.getChannelData(0)])
       return
 
+    processChunks: () ->
+      if (@state == 'inactive')
+        return
+      this._dumpChunks()
+      return
+
+    _dumpChunks: () ->
+      if(@usingMediaRecorder)
+        @mediaRecorder.requestData()
+
+      if (!@usingMediaRecorder)
+        @encoderWorker.postMessage(['dump', @audioCtx.sampleRate])
+        clearInterval(@slicing)
+
     # Called once when the recording has been stopped
     stopRecording: () ->
       if (@state == 'inactive')
@@ -180,9 +192,6 @@ angular.module("doubtfire.common.services.recorder-service", [])
       @chunks.push(evt.data)
       @chunkType = evt.data.type
 
-      if (@state != 'inactive')
-        return
-
       blob = new Blob(@chunks, { 'type': @chunkType })
       blobUrl = URL.createObjectURL(blob)
       recording = {
@@ -193,10 +202,18 @@ angular.module("doubtfire.common.services.recorder-service", [])
         blob: blob
       }
 
-      @chunks = []
-      @chunkType = null
+      @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
 
-      # cleanup
+      @chunks = []
+
+      if (@state != 'inactive')
+        return
+
+      this._cleanup()
+      return
+
+    _cleanup: () ->
+      @chunkType = null
       if (@destinationNode)
         @destinationNode.disconnect()
         @destinationNode = null
@@ -230,11 +247,9 @@ angular.module("doubtfire.common.services.recorder-service", [])
         @audioCtx.close()
         @audioCtx = null
 
-      @em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
       return
 
     _onError: (evt) ->
-      console.log('error', evt)
       @em.dispatchEvent(new Event('error'))
       return
 )
