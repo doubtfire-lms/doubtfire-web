@@ -23,24 +23,24 @@
     </p>
   </div>
 </div><!--/due-card discuss -->
-<div class="card card-warning card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDeadlineSoon() && !task.inDiscussState()">
+<div class="card card-warning card-sm" ng-show="task.isDueSoon() && !task.isDeadlineSoon() && !task.inDiscussState()">
   <div class="card-heading">
-    <h4>Aim To Complete Soon - Due in {{task.timeUntilTargetDescription()}}</h4>
+    <h4>Aim To Complete Soon - Due in {{task.timeUntilDueDateDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      This task's target completion date is <strong>{{task.localDueDateString()}}</strong>.
+      This task's due date is <strong>{{task.localDueDateString()}}</strong>.
       You should aim to complete this task before then to keep your progress on track.
     </p>
   </div>
 </div><!--/target-card pre-discuss-->
-<div class="card card-warning card-sm" ng-show="task.isToBeCompletedSoon() && !task.isDeadlineSoon() && task.inDiscussState()">
+<div class="card card-warning card-sm" ng-show="task.isDueSoon() && !task.isDeadlineSoon() && task.inDiscussState()">
   <div class="card-heading">
-    <h4>Aim To Complete Soon - Due in {{task.timeUntilTargetDescription()}}</h4>
+    <h4>Aim To Complete Soon - Due in {{task.timeUntilDueDateDescription()}}</h4>
   </div>
   <div class="card-body">
     <p>
-      This task's target completion date is <strong>{{task.localDueDateString()}}</strong>.
+      This task's due date is <strong>{{task.localDueDateString()}}</strong>.
       Make sure to discuss this task with your tutor as soon as possible.
     </p>
     <p class="text-muted">

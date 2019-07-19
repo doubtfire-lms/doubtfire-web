@@ -34,13 +34,13 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       else if $scope.taskDef?
         return $scope.taskDef.target_date
       else
-        return new Date()
+        return ""
 
     $scope.startDate = () ->
       if $scope.taskDef?
         return $scope.taskDef.start_date
       else
-        return new Date()
+        return ""
 
     $scope.shouldShowDeadline = () ->
       $scope.task?.daysUntilDeadlineDate() <= 14 || false
