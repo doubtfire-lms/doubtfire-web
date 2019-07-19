@@ -89,11 +89,11 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
           taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
-          taskDef.localTargetDate = ()  ->
-            tgt = new Date(taskDef.target_date)
-            return moment({ year: tgt.getFullYear(), month: tgt.getMonth(), day: tgt.getDate(), hour: 23, minute: 59, second: 59})
+          taskDef.localDeadlineDate = ()  ->
+            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
           taskDef.localDueDate = ()  ->
-            due = new Date(taskDef.due_date)
+            due = new Date(taskDef.target_date)
             return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
           taskDef
         )
@@ -342,7 +342,7 @@ angular.module("doubtfire.common.services.units", [])
       sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.isValidTopTask()), 'definition.seq'), 'definition.start_date')
 
       overdueTasks = _.filter sortedTasks, (task) ->
-        task.daysUntilTargetDate() <= 7
+        task.daysUntilDueDate() <= 7
 
       #
       # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
@@ -352,7 +352,7 @@ angular.module("doubtfire.common.services.units", [])
           task.definition.target_grade == grade
 
         # Sorting needs to be done here according to the days past the target date.
-        closeGradeTasks = _.orderBy(closeGradeTasks, [(task)-> task.daysPastTargetDate()], ['desc'])
+        closeGradeTasks = _.orderBy(closeGradeTasks, [(task)-> task.daysPastDueDate()], ['desc'])
 
         _.forEach closeGradeTasks, (task) ->
           task.topWeight = currentWeight
@@ -361,7 +361,7 @@ angular.module("doubtfire.common.services.units", [])
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() > 7
+      toAdd = _.filter sortedTasks, (task) -> task.daysUntilDueDate() > 7
       # Sort by the target_grade. Pass task are done first if same due date as others.
       toAdd = _.sortBy(_.sortBy(toAdd, 'definition.target_grade'), 'definition.start_date')
       _.forEach toAdd, (task) ->

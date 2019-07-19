@@ -117,31 +117,43 @@ angular.module("doubtfire.common.services.projects", [])
     task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
       taskService.assessExtension(task, taskCommentID, assessment, onSuccess, onError)
     task.maxWeeksCanExtend = () ->
-      Math.ceil(moment(task.definition.due_date).diff(task.targetDate(), 'days') / 7)
+      Math.ceil(task.definition.localDeadlineDate().diff(task.localDueDate(), 'days') / 7)
     task.minWeeksCanExtend = () ->
-      minWeeks = Math.ceil(moment().diff(task.targetDate(), 'days') / 7)
+      minWeeks = Math.ceil(moment().diff(task.localDueDate(), 'days') / 7)
       if minWeeks < 0 then 0 else minWeeks
     task.staffAlignments = ->
       taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->
-      days = task.daysUntilTargetDate()
+      days = task.daysUntilDueDate()
       if days < 0
         return "!"
       else if days < 11
         return "#{days}d"
       else
         return "#{Math.floor(days/7)}w"
+
+    # The due date for a task is the date it is due for this student... this starts at the target date, and can get extended to the deadline date.
     task.localDueDate = ->
       if task.due_date?
         due = new Date(task.due_date)
         return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate() , hour: 23 , minute: 59, second: 59, millisecond :999})
       else
         return task.definition.localDueDate()
-    task.targetDate = ->
-      if task.due_date?
-        return task.localDueDate()
-      else
-        return task.definition.localTargetDate()
+
+    task.localDueDateString = ->
+      task.localDueDate().format("ddd D MMM")
+
+    task.startDateString = ->
+      task.startDate().format("ddd D MMM")
+
+    task.deadlineString = ->
+      task.localDeadlineDate().format("ddd D MMM")
+
+    # What is the deadline for this task?
+    task.localDeadlineDate = ->
+      return task.definition.localDeadlineDate()
+
+    # When should you start the task?
     task.startDate = ->
       if task.start_date?
         return moment(task.start_date)
@@ -149,32 +161,54 @@ angular.module("doubtfire.common.services.projects", [])
         return moment(task.definition.start_date)
 
     task.isToBeCompletedSoon = ->
-      task.daysUntilTargetDate() <= 7 && task.timePastTargetDate() < 0 && ! task.inSubmittedState()
+      task.daysUntilDueDate() <= 7 && task.timePastDueDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
       task.daysUntilDueDate() <= 14 && task.timePastDueDate() < 0 && ! task.inFinalState()
+    task.isPastDueDate = ->
+      task.timePastDueDate() > 0 && ! task.inSubmittedState()
+
+    # Is the task past the deadline
     task.isOverdue = ->
-      task.timePastDueDate() > 0 && (task.status in taskService.overdueStates)
-    task.isPastTargetDate = ->
-      task.timePastTargetDate() > 0 && ! task.inSubmittedState()
+      task.timePastDeadlineDate() > 0 && (task.status in taskService.overdueStates)
+    # Are we approaching the deadline?
+    task.isDeadlineSoon = ->
+      task.daysUntilDeadlineDate() <= 14 && task.timePastDeadlineDate() < 0 && ! task.inFinalState()
+
+    task.isPastDeadline = ->
+      task.timePastDeadlineDate() > 0 && ! task.inSubmittedState()
+
     task.isDueToday = ->
       task.daysUntilDueDate() == 0 && ! task.inSubmittedState()
-    task.daysPastDueDate = ->
-      taskService.daysPastDueDate(task)
-    task.daysPastTargetDate = ->
-      taskService.daysPastTargetDate(task)
-    task.timePastTargetDate = ->
-      taskService.timePastTargetDate(task)
 
-    # Return the amount of time past the deadline
+    # Return true if between due date and deadline
+    task.betweenDueDateAndDeadlineDate = () ->
+      ((moment() > task.localDueDate()) && (moment() < task.localDeadlineDate()))
+
+    # Return number of days task is overdue, or false if not overdue
+    task.daysPastDeadlineDate = ->
+      moment().diff(task.localDeadlineDate(), 'days')
+
+    # Return number of days currently overdue (extensions may be available)
+    task.daysPastDueDate = ->
+      moment().diff(task.localDueDate(), 'days')
+
+    # Return amount of time past due date (extensions may be available)
     task.timePastDueDate = ->
       moment().diff(task.localDueDate())
 
+    # Return the amount of time past the deadline
+    task.timePastDeadlineDate = ->
+      moment().diff(task.localDeadlineDate())
+
     # Return number of days until task is due, or false if already completed
+    task.daysUntilDeadlineDate = ->
+      task.localDeadlineDate().diff(moment(), 'days')
+
+    # Return number of days until task hits target date, or false if already
+    # completed
     task.daysUntilDueDate = ->
       task.localDueDate().diff(moment(), 'days')
 
-    task.daysUntilTargetDate = ->
-      taskService.daysUntilTargetDate(task)
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
     # Start date helpers
@@ -197,16 +231,16 @@ angular.module("doubtfire.common.services.projects", [])
 
     # Return hours until the deadline...
     task.timeUntilDeadlineDescription = ->
-      timeToDescription(moment(), task.definition.localDueDate())
+      timeToDescription(moment(), task.definition.localDeadlineDate())
 
-    task.timeUntilTargetDescription = ->
-      timeToDescription(moment(), task.targetDate())
+    task.timeUntilDueDateDescription = ->
+      timeToDescription(moment(), task.localDueDate())
 
     task.timePastDeadlineDescription = ->
-      timeToDescription(task.definition.localDueDate(), moment())
+      timeToDescription(task.definition.localDeadlineDate(), moment())
 
-    task.timePastTargetDescription = ->
-      timeToDescription(task.targetDate(), moment())
+    task.timePastDueDateDescription = ->
+      timeToDescription(task.localDueDate(), moment())
 
     task.canApplyForExtension = ->
       !task.inSubmittedState() && !task.isOverdue()
@@ -238,7 +272,7 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).label
     task.statusHelp = ->
       help = taskService.statusData(task.status).help
-      if (taskService.betweenTargetAndDueDate(task))
+      if (task.betweenDueDateAndDeadlineDate())
         help = taskService.statusData('awaiting_extension').help
       help
     task.taskKey = ->

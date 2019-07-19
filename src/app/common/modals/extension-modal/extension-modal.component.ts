@@ -20,10 +20,10 @@ export class ExtensionModalComponent implements OnInit {
   }
 
   get newDueDate() {
-    const calculatedDueDate = moment(this.data.task.targetDate()).add(this.weeksRequested, 'weeks');
-    const taskDueDate = moment(this.data.task.definition.due_date);
-    if (calculatedDueDate > taskDueDate) {
-      return taskDueDate.format('DD of MMMM');
+    const calculatedDueDate = this.data.task.localDueDate().add(this.weeksRequested, 'weeks');
+    const taskDeadlineDate = this.data.task.definition.localDeadlineDate();
+    if (calculatedDueDate > taskDeadlineDate) {
+      return taskDeadlineDate.format('DD of MMMM');
     }
     return calculatedDueDate.format('DD of MMMM');
   }
