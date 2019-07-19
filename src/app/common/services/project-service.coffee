@@ -160,10 +160,8 @@ angular.module("doubtfire.common.services.projects", [])
       else
         return moment(task.definition.start_date)
 
-    task.isToBeCompletedSoon = ->
-      task.daysUntilDueDate() <= 7 && task.timePastDueDate() < 0 && ! task.inSubmittedState()
     task.isDueSoon = ->
-      task.daysUntilDueDate() <= 14 && task.timePastDueDate() < 0 && ! task.inFinalState()
+      task.daysUntilDueDate() <= 7 && task.timePastDueDate() < 0 && ! task.inFinalState()
     task.isPastDueDate = ->
       task.timePastDueDate() > 0 && ! task.inSubmittedState()
 
