@@ -347,35 +347,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.staffAlignmentsForTask = (task) ->
     task.unit().staffAlignmentsForTaskDefinition(task.definition)
 
-  # Return number of days until task hits target date, or false if already
-  # completed
-  taskService.daysUntilTargetDate = (task) ->
-    moment(task.targetDate()).diff(moment(), 'days')
-
-  # Return number of days until task is due, or false if already completed
-  taskService.daysUntilDueDate = (task) ->
-    moment(task.definition.localDueDate()).diff(moment(), 'days')
-
-  # Return number of days task is overdue from target, or false if not
-  taskService.daysPastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()), 'days')
-
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysPastDueDate = (task) ->
-    moment().diff(moment(task.definition.localDueDate()), 'days')
-
-  # Return amount of time past target due date
-  taskService.timePastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()))
-
-  # Return the amount of time past the deadline
-  taskService.betweenTargetAndDueDate = (task) ->
-    ((moment() > moment(task.definition.target_date)) && (moment() < moment(task.definition.due_date)))
-
-  # Return the amount of time past the deadline
-  taskService.timePastDueDate = (task) ->
-    moment().diff(moment(task.definition.localDueDate()))
-
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)

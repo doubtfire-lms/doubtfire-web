@@ -15,8 +15,7 @@ angular.module("doubtfire.errors.states.timeout", [])
   $stateProvider.state "timeout", stateData, 'TimeoutCtrl'
 )
 .controller("TimeoutCtrl", ($state, $timeout, auth, currentUser, DoubtfireConstants) ->
-  if currentUser?.authenticationToken?
-    auth.signOut("#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json")
+  auth.signOut()
 
   $timeout (-> $state.go "sign_in"), 500
 )
