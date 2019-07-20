@@ -329,15 +329,15 @@ angular.module("doubtfire.common.services.units", [])
       currentWeight = 0
 
       #
-      # Assign weights to completed tasks...
+      # Assign weights to tasks in final state - complete, fail, etc
       #
-      sortedCompletedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.inCompleteState()), 'definition.seq'), 'definition.start_date')
+      sortedCompletedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.inFinalState()), 'definition.seq'), 'definition.start_date')
       _.forEach sortedCompletedTasks, (task) ->
         task.topWeight = currentWeight
         currentWeight++
 
       #
-      # sort valid top tasks by start date
+      # Sort valid top tasks by start date - tasks in non-final state
       #
       sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.isValidTopTask()), 'definition.seq'), 'definition.start_date')
 

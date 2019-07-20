@@ -63,7 +63,7 @@
     <p>
       <a
         ng-click="applyForExtension()"
-        ng-hide="task.inTerminalState()"
+        ng-if="task.inStateThatAllowsExtension()"
         class="btn btn-success">
         <i class="fa fa-medkit"></i>
         Request Extension

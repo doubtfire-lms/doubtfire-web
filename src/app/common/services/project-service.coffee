@@ -244,8 +244,8 @@ angular.module("doubtfire.common.services.projects", [])
       !task.inSubmittedState() && !task.isOverdue()
     task.inFinalState = ->
       task.status in taskService.finalStatuses
-    task.inTerminalState = ->
-      task.status in taskService.terminalStatuses
+    task.inStateThatAllowsExtension = ->
+      task.status in taskService.stateThatAllowsExtension
     task.inSubmittedState = ->
       task.status in taskService.submittedStatuses
     task.inDiscussState = ->
