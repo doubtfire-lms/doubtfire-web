@@ -21,14 +21,16 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
   ]
 
+  # All status other than those that are final - these are sorted in the student task list
   taskService.validTopTask = [
     'not_started'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'demonstrate'
+    'ready_to_mark'
     'discuss'
+    'demonstrate'
   ]
 
   taskService.toBeWorkedOn = [
@@ -77,6 +79,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
     'fail'
     'do_not_resubmit'
+    'time_exceeded'
   ]
 
   taskService.gradeableStatuses = [
@@ -90,11 +93,15 @@ angular.module("doubtfire.common.services.tasks", [])
     'demonstrate'
   ]
 
-  taskService.terminalStatuses = [
-    'do_not_resubmit'
-    'time_exceeded'
-    'complete'
-    'fail'
+  taskService.stateThatAllowsExtension = [
+    'not_started'
+    'redo'
+    'need_help'
+    'working_on_it'
+    'fix_and_resubmit'
+    'ready_to_mark'
+    'discuss'
+    'demonstrate'
   ]
 
   taskService.pdfRegeneratableStatuses = [
