@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -26,6 +26,12 @@ export class TaskCommentComposerComponent implements OnInit {
 
   get isStaff() {
     return this.task.project().unit().my_role !== 'Student';
+  }
+
+  contentEditableValue() {
+    const UA = navigator.userAgent;
+    const isWebkit = /WebKit/.test(UA) && !/Edge/.test(UA);
+    return isWebkit ? 'plaintext-only' : 'true';
   }
 
   ngOnInit() {

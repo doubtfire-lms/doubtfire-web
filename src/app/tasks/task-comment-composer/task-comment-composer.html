@@ -2,7 +2,7 @@
   <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
     <span class="fa fa-microphone"></span>
   </button>
-  <div id="textField" contenteditable="plaintext-only" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
+  <div id="textField" [contenteditable]="contentEditableValue()" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
     placeholder="Type a comment, or try dragging an image or pdf above" name="commentComposer">
   </div>
 </form>
