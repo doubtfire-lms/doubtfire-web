@@ -433,6 +433,9 @@ angular.module("doubtfire.common.services.tasks", [])
     if response.status == status
       project.updateBurndownChart?()
       alertService.add("success", "Status saved.", 2000)
+      if task.inTimeExceeded() && !task.isPastDeadline()
+        alertService.add('warning', "Request an extension, or wait for your extension request to be granted, to have this task assessed.")
+
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id) if unit.students?
