@@ -254,6 +254,8 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.awaitingFeedbackStatuses
     task.inCompleteState = ->
       task.status == 'complete'
+    task.inTimeExceeded = ->
+      task.status == 'time_exceeded'
 
     task.triggerTransition = (status, unitRole) ->
       taskService.triggerTransition(task, status, unitRole)
