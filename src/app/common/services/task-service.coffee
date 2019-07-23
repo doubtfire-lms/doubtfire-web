@@ -21,14 +21,16 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
   ]
 
+  # All status other than those that are final - these are sorted in the student task list
   taskService.validTopTask = [
     'not_started'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'demonstrate'
+    'ready_to_mark'
     'discuss'
+    'demonstrate'
   ]
 
   taskService.toBeWorkedOn = [
@@ -77,6 +79,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
     'fail'
     'do_not_resubmit'
+    'time_exceeded'
   ]
 
   taskService.gradeableStatuses = [
@@ -90,11 +93,15 @@ angular.module("doubtfire.common.services.tasks", [])
     'demonstrate'
   ]
 
-  taskService.terminalStatuses = [
-    'do_not_resubmit'
-    'time_exceeded'
-    'complete'
-    'fail'
+  taskService.stateThatAllowsExtension = [
+    'not_started'
+    'redo'
+    'need_help'
+    'working_on_it'
+    'fix_and_resubmit'
+    'ready_to_mark'
+    'discuss'
+    'demonstrate'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -347,35 +354,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.staffAlignmentsForTask = (task) ->
     task.unit().staffAlignmentsForTaskDefinition(task.definition)
 
-  # Return number of days until task hits target date, or false if already
-  # completed
-  taskService.daysUntilTargetDate = (task) ->
-    moment(task.targetDate()).diff(moment(), 'days')
-
-  # Return number of days until task is due, or false if already completed
-  taskService.daysUntilDueDate = (task) ->
-    moment(task.definition.localDueDate()).diff(moment(), 'days')
-
-  # Return number of days task is overdue from target, or false if not
-  taskService.daysPastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()), 'days')
-
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysPastDueDate = (task) ->
-    moment().diff(moment(task.definition.localDueDate()), 'days')
-
-  # Return amount of time past target due date
-  taskService.timePastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()))
-
-  # Return the amount of time past the deadline
-  taskService.betweenTargetAndDueDate = (task) ->
-    ((moment() > moment(task.definition.target_date)) && (moment() < moment(task.definition.due_date)))
-
-  # Return the amount of time past the deadline
-  taskService.timePastDueDate = (task) ->
-    moment().diff(moment(task.definition.localDueDate()))
-
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
@@ -455,6 +433,9 @@ angular.module("doubtfire.common.services.tasks", [])
     if response.status == status
       project.updateBurndownChart?()
       alertService.add("success", "Status saved.", 2000)
+      if task.inTimeExceeded() && !task.isPastDeadline()
+        alertService.add('warning', "Request an extension, or wait for your extension request to be granted, to have this task assessed.")
+
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id) if unit.students?

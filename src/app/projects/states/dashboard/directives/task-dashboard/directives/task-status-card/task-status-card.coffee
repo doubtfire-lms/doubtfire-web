@@ -26,10 +26,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 
     # Triggers a new task status
     $scope.triggerTransition = (trigger) ->
-      if trigger == 'ready_to_mark' && $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
-        ExtensionModal.show($scope.task, () -> $scope.task.triggerTransition(trigger, $scope.unitRole))
-      else
-        $scope.task.triggerTransition(trigger, $scope.unitRole)
+      $scope.task.triggerTransition(trigger, $scope.unitRole)
 
     # Allow upload of new files for an updated submission
     $scope.updateFilesInSubmission = ->

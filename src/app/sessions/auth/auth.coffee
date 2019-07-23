@@ -87,8 +87,10 @@ angular.module("doubtfire.sessions.auth", [
         error()
     ).error error
 
-  auth.signOut = (authenticationUrl) ->
-    $http.delete(authenticationUrl)
+  auth.signOut = () ->
+    if currentUser?.authenticationToken?
+      $http.delete("#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json")
+
     tryChangeUser defaultAnonymousUser
     $rootScope.$broadcast "signOut"
     localStorageService.remove(usernameCookie)
