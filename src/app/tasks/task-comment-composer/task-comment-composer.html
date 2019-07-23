@@ -2,9 +2,12 @@
   <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
     <span class="fa fa-microphone"></span>
   </button>
-  <div id="textField" [contenteditable]="contentEditableValue()" (keydown.enter)="send($event)" [(ngModel)]="comment.text"
-    placeholder="Type a comment, or try dragging an image or pdf above" name="commentComposer">
+  <div id="textFieldContainer">
+    <div id="textField" [contenteditable]="contentEditableValue()" (keydown.enter)="send($event)"
+      [(ngModel)]="comment.text" placeholder="Type a message, drag files..." name="commentComposer">
+    </div>
   </div>
+
 </form>
 
 <!-- The HTML which will be injected -->
@@ -12,7 +15,7 @@
   <div *ngIf="isStaff">
     <p>New! Try out the beta for the new intelligent discussion feature.</p>
     <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
-      <button type="button" (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
+      <button style="align-items: flex-end;" type="button" (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
     </div>
     <mat-divider></mat-divider>
   </div>

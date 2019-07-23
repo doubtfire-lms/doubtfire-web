@@ -85,6 +85,10 @@ export class TaskCommentComposerComponent implements OnInit {
         this.comment.text = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();
+        let comments = this.task.comments;
+        console.log(comments);
+        comments = this.ts.mapComments(comments);
+        this.task.comments = comments;
       },
       (failure: any) =>
         this.alerts.add('danger', failure.data.error, 2000)

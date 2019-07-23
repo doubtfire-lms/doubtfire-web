@@ -549,6 +549,22 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.hasTaskKey = (task, key) ->
     _.isEqual(task?.taskKey(), key)
 
+  timeBetween = (time1, time2) ->
+    diff = Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60)
+    return diff
+
+  taskService.mapComments = (comments) ->
+    for i in [0...comments.length - 1]
+      authorID = comments[i].author.id
+      timeOfMessage = comments[i].created_at
+      if (authorID != comments[i+1].author.id || timeBetween(timeOfMessage, comments[i+1].created_at) > 15) # IDs match
+        comments[i].should_show_details = true
+      else
+        comments[i].close_to_neighbour = true
+    comments[comments.length - 1].should_show_details = true
+    comments
+
+
   # Map extra front-end details to comment
   taskService.mapComment = (comment) ->
     initials = comment.author.name.split(" ")
@@ -610,6 +626,11 @@ angular.module("doubtfire.common.services.tasks", [])
         onSuccess(response)
       (response) -> #failure
         onError(response)
+
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
   taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
     form = new FormData()
