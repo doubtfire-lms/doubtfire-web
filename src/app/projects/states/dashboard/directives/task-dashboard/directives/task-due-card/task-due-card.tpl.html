@@ -1,4 +1,4 @@
-<div ng-if="!task.inFinalState() && !task.inAwaitingFeedbackState()"> <!--Only show this if it matters... not in final or waiting for tutor input-->
+<div ng-if="(!task.inFinalState() || (task.inTimeExceeded() && !task.isPastDeadline())) && !task.inAwaitingFeedbackState()"> <!--Only show this if it matters... not in final or waiting for tutor input-->
   <div ng-if="task.isDeadlineSoon()"> <!--Start with deadline soon-->
     <div class="card card-danger card-sm">
       <div class="card-heading">
@@ -51,18 +51,12 @@
       <div class="card-heading">
         <h4>Past Due Date By {{task.timePastDueDateDescription()}}</h4>
       </div>
-      <div class="card-body" ng-hide="task.inSubmittedState()"> <!--Not in submitted state and overdue-->
+      <div class="card-body" ng-hide="task.inDiscussState()"> <!--Not in submitted state and overdue-->
         <p>
           You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
           Try and finish it as soon as possible to avoid falling behind. You will need to
           request an extension in order to have this task checked and marked as complete by
           your tutor.
-        </p>
-        <p>
-          <a ng-click="applyForExtension()" ng-if="task.inStateThatAllowsExtension()" class="btn btn-success">
-            <i class="fa fa-medkit"></i>
-            Request Extension
-          </a>
         </p>
       </div>
       <div class="card-body" ng-show="task.inDiscussState()"> <!--Not discussed-->
