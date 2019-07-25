@@ -102,6 +102,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'ready_to_mark'
     'discuss'
     'demonstrate'
+    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
