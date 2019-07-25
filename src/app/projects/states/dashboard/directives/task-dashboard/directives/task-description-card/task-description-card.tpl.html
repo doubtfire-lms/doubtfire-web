@@ -33,7 +33,7 @@
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show="task.canApplyForExtension() || taskDef.has_task_sheet || taskDef.has_task_resources">
+  <div class="card-footer" ng-show="taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"

@@ -46,6 +46,7 @@
       Request Extension
     </a>
     <a
+      ng-if="task.inSubmittedState() && task.requiresFileUpload()"
       ng-click="updateFilesInSubmission()"
       class="btn btn-primary"
       tooltip="This allows you to update files for your portfolio, but does not update the task status."

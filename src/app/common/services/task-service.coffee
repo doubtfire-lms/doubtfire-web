@@ -100,8 +100,6 @@ angular.module("doubtfire.common.services.tasks", [])
     'working_on_it'
     'fix_and_resubmit'
     'ready_to_mark'
-    'discuss'
-    'demonstrate'
     'time_exceeded'
   ]
 
