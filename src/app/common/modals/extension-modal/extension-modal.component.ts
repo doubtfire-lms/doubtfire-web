@@ -17,6 +17,9 @@ export class ExtensionModalComponent implements OnInit {
 
   ngOnInit() {
     this.weeksRequested = this.minWeeksCanExtend + 1;
+    if (this.weeksRequested > this.maxWeeksCanExtend) {
+      this.weeksRequested = this.maxWeeksCanExtend;
+    }
   }
 
   get newDueDate() {
@@ -39,7 +42,7 @@ export class ExtensionModalComponent implements OnInit {
   submitApplication() {
     this.data.task.applyForExtension(this.reason, this.weeksRequested,
       ((result) => {
-        this.alerts.add('success', 'Extension requested.');
+        this.alerts.add('success', 'Extension requested.', 2000);
         this.data.task.comments.push(result.data);
         this.data.task.scrollCommentsToBottom();
         if (this.data.afterApplication as Function) {

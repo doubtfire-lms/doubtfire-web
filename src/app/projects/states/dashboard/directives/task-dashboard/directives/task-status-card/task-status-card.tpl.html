@@ -40,8 +40,8 @@
   <div class="card-body">
     <p>{{task.statusHelp().reason}} {{task.statusHelp().action}}</p>
   </div><!--/status-body-->
-  <div class="card-footer clearfix" ng-if="task.inStateThatAllowsExtension() || (task.inSubmittedState() && task.requiresFileUpload())">
-    <a ng-click="applyForExtension()" ng-if="task.inStateThatAllowsExtension()" class="btn btn-success">
+  <div class="card-footer clearfix" ng-if="task.canApplyForExtension() || (task.inSubmittedState() && task.requiresFileUpload())">
+    <a ng-click="applyForExtension()" ng-if="task.canApplyForExtension()" class="btn btn-success">
       <i class="fa fa-medkit"></i>
       Request Extension
     </a>
