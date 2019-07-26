@@ -47,8 +47,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         project_id: $scope.project.project_id,
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
-        comments = _.map(response, taskService.mapComment)
-        comments = taskService.mapComments(comments)
+        comments = taskService.mapComments(response)
         $scope.task.comments = comments #in the HTML, the mapped task.comments are displayed
         $scope.lastComment = $scope.task.comments.slice(-1)[0]
         $scope.task.num_new_comments = 0
