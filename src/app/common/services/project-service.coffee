@@ -248,7 +248,7 @@ angular.module("doubtfire.common.services.projects", [])
 
     # You can apply for an extension in certain states, if it is before the deadline or was submitted before the deadline, and you can request some extensions still.
     task.canApplyForExtension = ->
-      task.inStateThatAllowsExtension() && ( !task.isPastDeadline() || task.subwasSubmittedOnTime() ) && task.maxWeeksCanExtend() > 0
+      task.inStateThatAllowsExtension() && ( !task.isPastDeadline() || task.wasSubmittedOnTime() ) && task.maxWeeksCanExtend() > 0
 
     task.inFinalState = ->
       task.status in taskService.finalStatuses
