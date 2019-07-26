@@ -89,9 +89,15 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
           taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
+
+          # Local deadline date is the last moment in the local time zone
           taskDef.localDeadlineDate = ()  ->
             deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
             return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
+          # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
+          taskDef.finalDeadlineDate = ()  ->
+            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59}, '-12:00')
           taskDef.localDueDate = ()  ->
             due = new Date(taskDef.target_date)
             return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})

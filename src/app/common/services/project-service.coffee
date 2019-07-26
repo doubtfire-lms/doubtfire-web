@@ -113,7 +113,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.scrollCommentsToBottom = ->
       taskService.scrollDown()
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
-      taskService.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
+      Task.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
     task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
       taskService.assessExtension(task, taskCommentID, assessment, onSuccess, onError)
     task.maxWeeksCanExtend = () ->
@@ -207,8 +207,14 @@ angular.module("doubtfire.common.services.projects", [])
     task.daysUntilDueDate = ->
       task.localDueDate().diff(moment(), 'days')
 
+    # Determine if submitted before deadline
+    task.wasSubmittedOnTime = ->
+      deadline = task.localDeadlineDate
+      moment(task.submission_date).diff( task.definition.finalDeadlineDate() )
+
     task.isValidTopTask = ->
       _.includes taskService.validTopTask, task.status
+
     # Start date helpers
     task.timeUntilStartDate = ->
       task.startDate().diff(moment())
@@ -240,8 +246,10 @@ angular.module("doubtfire.common.services.projects", [])
     task.timePastDueDateDescription = ->
       timeToDescription(task.localDueDate(), moment())
 
+    # You can apply for an extension in certain states, if it is before the deadline or was submitted before the deadline, and you can request some extensions still.
     task.canApplyForExtension = ->
-      !task.inSubmittedState() && !task.isOverdue()
+      task.inStateThatAllowsExtension() && ( !task.isPastDeadline() || task.subwasSubmittedOnTime() ) && task.maxWeeksCanExtend() > 0
+
     task.inFinalState = ->
       task.status in taskService.finalStatuses
     task.inStateThatAllowsExtension = ->

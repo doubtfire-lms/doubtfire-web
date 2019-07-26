@@ -100,8 +100,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'working_on_it'
     'fix_and_resubmit'
     'ready_to_mark'
-    'discuss'
-    'demonstrate'
+    'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -609,20 +608,11 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) -> #failure
         onError(response)
 
-  taskService.applyForExtension = (task, reason, weeksRequested, onSuccess, onError) ->
-    interceptSuccess = (response) ->
-      task.due_date = response.data.due_date
-      task.extensions = response.data.extensions
-      task.project().updateBurndownChart()
-      task.project().calcTopTasks() # Sort the task list again
-      onSuccess(response)
-
-    Task.applyForExtension(task, reason, weeksRequested, interceptSuccess, onError)
-
   taskService.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
+      task.status = response.data.task_status
       task.project().updateBurndownChart()
       task.project().calcTopTasks() # Sort the task list again
       onSuccess(response)

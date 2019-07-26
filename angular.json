@@ -57,7 +57,7 @@
                 }
               ],
               "optimization": true,
-              "outputHashing": "none",
+              "outputHashing": "bundles",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
