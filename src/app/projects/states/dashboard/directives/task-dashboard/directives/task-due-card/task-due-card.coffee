@@ -8,6 +8,4 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   scope:
     task: '='
   controller: ($scope, alertService, ExtensionModal) ->
-    $scope.applyForExtension = () ->
-      ExtensionModal.show($scope.task)
 )

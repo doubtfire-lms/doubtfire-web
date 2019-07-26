@@ -32,4 +32,6 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     $scope.updateFilesInSubmission = ->
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
 
+    $scope.applyForExtension = () ->
+      ExtensionModal.show($scope.task)
 )

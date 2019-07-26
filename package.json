@@ -12,8 +12,9 @@
     "serve:angular8": "ng serve --host 0.0.0.0",
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular8",
     "watch:angular1": "grunt delta",
-    "deploy:build2api": "ng build --outputHashing=none --deleteOutputPath=false --optimization=false --prod --output-path ../doubtfire-api/public",
-    "deploy": "run-s -l build:angular1 deploy:build2api"
+    "deploy:clean_api": "../doubtfire-api/clean_ui.sh",
+    "deploy:build2api": "ng build --deleteOutputPath=false --optimization=false --prod --output-path ../doubtfire-api/public",
+    "deploy": "run-s -l build:angular1 deploy:clean_api deploy:build2api"
   },
   "keywords": [],
   "author": "",
