@@ -529,12 +529,27 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.hasTaskKey = (task, key) ->
     _.isEqual(task?.taskKey(), key)
 
-  # Map extra front-end details to comment
-  taskService.mapComment = (comment) ->
-    initials = comment.author.name.split(" ")
-    comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
-    comment.author_is_me = comment.author.id == currentUser.profile.id
-    comment
+  hoursBetween = (time1, time2) ->
+    return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
+
+  taskService.mapComments = (comments) ->
+    return comments if !comments? || comments.length == 0
+    comments[0].should_show_timestamp = true
+    for i in [0...comments.length]
+      initials = comments[i].author.name.split(" ")
+      comments[i].initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
+      comments[i].author_is_me = comments[i].author.id == currentUser.profile.id
+
+      authorID = comments[i].author.id
+      timeOfMessage = comments[i].created_at
+      if (authorID != comments[i+1]?.author.id || hoursBetween(timeOfMessage, comments[i+1]?.created_at) > 3) # IDs match
+        comments[i].should_show_avatar = true
+        comments[i+1]?.should_show_timestamp = true
+      else
+        comments[i].should_show_avatar = false
+        comments[i+1]?.should_show_timestamp = false
+    comments[comments.length-1].should_show_avatar = true
+    comments
 
   #============================================================================
   #ADD COMMENT
@@ -543,7 +558,8 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) ->
         unless task.comments?
           task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
         if success? and _.isFunction success
           success(response)
         analyticsService.event "View Task Comments", "Added new comment"
@@ -569,7 +585,8 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) -> #success
         unless task.comments?
           task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
         onSuccess(response)
       (response) -> #failure
         onError(response)
@@ -586,10 +603,16 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) -> #success
         unless task.comments?
           task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
         onSuccess(response)
       (response) -> #failure
         onError(response)
+
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
   taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
     form = new FormData()

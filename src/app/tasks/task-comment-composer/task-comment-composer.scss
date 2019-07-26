@@ -1,19 +1,31 @@
+#commentComposerFoter {
+  border-top: none;
+}
+
+#textFieldContainer {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+  display: flex;
+  flex: 1 1 auto;
+  margin: 8px 8px 8px 0;
+  min-width: 100px;
+  padding: 0 8px 0 12px;
+}
+
 #textField {
+  flex: 1;
+  max-height: 144px;
+  min-height: 18px;
+  overflow-y: auto;
+  padding: 9px 0;
+  vertical-align: middle;
   box-shadow: none;
   border: none;
-  width: 100%;
-  min-height: 5em;
   resize: none;
-  overflow: auto;
   outline: none;
-  box-shadow: none;
-
-  padding: 8px;
   line-height: 1.5em;
-  margin: 0px auto;
   -webkit-font-smoothing: antialiased;
   max-height: 200px;
-
 }
 
 .selected-files {
@@ -28,6 +40,7 @@
 }
 
 #textField[placeholder]:empty::before {
+  padding: 9px 0;
   -webkit-font-smoothing: antialiased;
   content: attr(placeholder);
   color: #555;
@@ -85,11 +98,13 @@
 button.btn-recorder {
   span {
     font-size: 1.3em;
+    position: absolute;
+    bottom: 1.3em;
+    left: 0.9em;
   }
   outline: none;
   width: 30px;
-  margin-left: 0.8em;
-  margin-right: 0.8em;
+  margin-left: 0.4em;
   border: none;
   text-align: center;
   font-size: 12px;
