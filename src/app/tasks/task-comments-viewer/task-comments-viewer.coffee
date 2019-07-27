@@ -64,10 +64,8 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       CommentsModal.show()
 
     $scope.canUserEdit = (comment) ->
-      canEdit = false
-      if comment.author_is_me || currentUser.role == "Admin"
-        canEdit = true
-      canEdit
+      # TODO: This should not use global role, if admin is a student they can delete comments.
+      return comment.author_is_me || currentUser.role == "Admin"
 
     $scope.shouldShowAuthorIcon = (commentType) ->
       return not (commentType == "extension" || commentType == "status")
