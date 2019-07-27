@@ -297,6 +297,7 @@ task-comments-viewer .comment.comment-by-other-user .text-bubble {
   background: $comment-bubble-color-other-user;
   color: $text-color;
   margin-right: 50px;
+  margin-left: 0;
 }
 
 task-comments-viewer .comment.comment-by-other-user .audio-bubble {
