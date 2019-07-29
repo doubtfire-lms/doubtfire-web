@@ -1,29 +1,5 @@
 <div ng-if="(!task.inFinalState() || (task.inTimeExceeded() && !task.isPastDeadline())) && !task.inAwaitingFeedbackState()"> <!--Only show this if it matters... not in final or waiting for tutor input-->
-  <div ng-if="task.isDeadlineSoon()"> <!--Start with deadline soon-->
-    <div class="card card-danger card-sm">
-      <div class="card-heading">
-        <h4>Deadline Approaching in {{task.timeUntilDeadlineDescription()}}</h4>
-      </div>
-      <div class="card-body" ng-hide="task.inDiscussState()"> <!--Deadline soon and not in discuss-->
-        <p>
-          This task's deadline is {{task.definition.due_date | date : 'EEE d MMM' : '+0000' }}.
-          Submitting after this date means your tutor will not provide feedback for your submission, but that it will be
-          checked in your portfolio.
-        </p>
-      </div>
-      <div class="card-body" ng-show="task.inDiscussState()"> <!--Deadline soon but in discuss-->
-        <p>
-          This task's deadline is {{task.definition.due_date | date : 'EEE d MMM' : '+0000' }}.
-          Make sure to discuss this task with your tutor as soon as possible.
-        </p>
-        <p class="text-muted">
-          Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work
-          with you.
-        </p>
-      </div>
-    </div>
-  </div> <!--/is deadline soon-->
-  <div ng-if="task.isDueSoon() && !task.isDeadlineSoon()"> <!--Due soon-->
+  <div ng-if="task.isDueSoon() && !task.pastDueDate()"> <!--Due soon-->
     <div class="card card-warning card-sm">
       <div class="card-heading">
         <h4>Aim To Complete Soon - Due in {{task.timeUntilDueDateDescription()}}</h4>
@@ -47,7 +23,7 @@
     </div>
   </div> <!--/is due soon-->
   <div ng-if="task.betweenDueDateAndDeadlineDate()">
-    <div class="card card-warning card-sm">
+    <div class="card card-danger card-sm">
       <div class="card-heading">
         <h4>Past Due Date By {{task.timePastDueDateDescription()}}</h4>
       </div>
@@ -75,21 +51,19 @@
   <div ng-if="task.isPastDeadline()">
     <div class="card card-danger card-sm">
       <div class="card-heading">
-        <h4>Passed Deadline By {{task.timePastDeadlineDescription()}}</h4>
+        <h4>Passed Due Date By {{task.timePastDueDateDescription()}}</h4>
       </div>
       <div class="card-body" ng-hide="task.inDiscussState()"> <!--Past deadline and not submitted-->
         <p>
-          You should have completed this task by
-          <strong>{{task.definition.due_date | date : 'EEE d MMM' : '+0000' }}</strong>.
-          As this task is past the deadline the task will be marked as <em>Time Exceeded</em> when submitted. You should
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
+          This task is now past the deadline and will be marked as <em>Time Exceeded</em> when submitted. You should
           consult with the unit assessment details to determine the impact of failing to complete this task within
           the allocated time.
         </p>
       </div>
       <div class="card-body" ng-show="task.inDiscussState()"> <!--Past deadline but in discuss or awaiting feedback-->
         <p>
-          You should have completed this task by
-          <strong>{{task.definition.due_date | date : 'EEE d MMM' : '+0000' }}</strong>.
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
           Make sure to discuss this task with your tutor as soon as possible.
         </p>
         <p class="text-muted">
