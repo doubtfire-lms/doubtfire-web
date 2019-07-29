@@ -20,8 +20,7 @@
             <hr class="hr-text" data-content="{{comment.comment}}" />
           </div>
 
-          <div tooltip="{{comment.author.name}} {{comment.created_at | humanizedDate}}" tooltip-append-to-body="true"
-          tooltip-popover-delay="500" tooltip-placement="left" ng-right-click="rightClick(comment, $event)"
+          <div ng-right-click="rightClick(comment, $event)"
             ng-class="['bubble', comment.type + '-bubble', {'first-in-series': comment.should_show_timestamp}, {'last-in-series': comment.should_show_avatar}]">
             <div ng-switch-when="extension" class="comment-extension">
               <extension-comment [task]="task" [comment]="comment"> </extension-comment>
