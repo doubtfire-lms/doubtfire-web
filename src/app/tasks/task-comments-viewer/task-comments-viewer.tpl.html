@@ -8,7 +8,7 @@
   <div class="panel-body">
 
     <div ng-repeat="comment in task.comments | orderBy:'+created_at'">
-      <p id="commentTimestamp" ng-if="comment.should_show_timestamp">{{comment.created_at | humanizedDate}}</p>
+      <p id="commentTimestamp" ng-if="comment.should_show_timestamp">{{comment.author.name}} {{comment.created_at | humanizedDate}}</p>
       <div class="comment" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
 
         <user-icon ng-if="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)" size="50"
@@ -16,12 +16,13 @@
         </user-icon>
 
         <div class="comment-container" ng-switch="comment.type">
+
           <div ng-switch-when="status" class="comment-status">
             <hr class="hr-text" data-content="{{comment.comment}}" />
           </div>
 
           <div ng-right-click="rightClick(comment, $event)"
-            ng-class="['bubble', comment.type + '-bubble', {'first-in-series': comment.should_show_timestamp}, {'last-in-series': comment.should_show_avatar}]">
+            ng-class="['bubble', comment.type + '-bubble', {'first-in-series': comment.should_show_timestamp || comment.first_in_series}, {'last-in-series': comment.should_show_avatar}]">
             <div ng-switch-when="extension" class="comment-extension">
               <extension-comment [task]="task" [comment]="comment"> </extension-comment>
             </div>
