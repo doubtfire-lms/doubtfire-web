@@ -17,7 +17,6 @@ angular.module('doubtfire.common.on-long-press', [])
               return
           return
         ), 600
-        return
 
         $elm.bin 'touchend', (evt) ->
           # Prevent the onLongPress event from firing
