@@ -22,14 +22,10 @@
         Aim to complete by <strong>{{dueDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
       </li>
       <li ng-show="task && task.extensions > 0">
-          <strong>Number of extensions</strong>
-          &mdash;
-          you have requested <strong>{{task.extensions}}</strong> one week extension{{task.extensions > 1 ? "s" : ""}} for this task.
-        </li>
-      <li ng-show="shouldShowDeadline()">
-        <strong>Deadline</strong>
+        <strong>Number of extensions</strong>
         &mdash;
-        Final deadline for submission is <strong>{{taskDef.due_date | date  : 'EEE d MMM' : '+0000'  }}</strong>.
+        you have requested extensions for <strong>{{task.extensions}}</strong> week{{task.extensions > 1 ? "s" : ""}} for
+        this task.
       </li>
     </ul>
   </div><!--/key-info-footer-->
