@@ -48,21 +48,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     # Clips x values to be at the y = 0 intercept if y < 0
     #
     xAxisClipNegBurndown = (d) ->
-      if d[1] < 0.0
-        # find the x intercept at y = 0
-        # know originX is the origin date of the graph (i.e. burnoff is still 100%)
-        originX = $scope.project.burndown_chart_data[0].values[0][0]
-        # work off the 100% point and this point
-        [pt1x, pt1y] = [originX, 1]
-        [pt2x, pt2y] = [d[0], d[1]]
-        # find gradient
-        m    = (pt2y - pt1y) / (pt2x - pt1x)
-        # get actual y intercept
-        c    = pt1y - m * pt1x
-        # solve x intercept via 0 = mx+c
-        -c/m
-      else
-        d[0]
+      d[0]
 
     #
     # Clips y to 0 if y < 0
