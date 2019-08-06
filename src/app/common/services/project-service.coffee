@@ -258,6 +258,8 @@ angular.module("doubtfire.common.services.projects", [])
       task.status in taskService.submittedStatuses
     task.inDiscussState = ->
       task.status in taskService.discussionStatuses
+    task.inMarkedState = ->
+      task.status in taskService.markedStatuses
     task.inAwaitingFeedbackState = ->
       task.status in taskService.awaitingFeedbackStatuses
     task.inCompleteState = ->
@@ -280,7 +282,7 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusData(task.status).label
     task.statusHelp = ->
       help = taskService.statusData(task.status).help
-      if (task.betweenDueDateAndDeadlineDate())
+      if (task.betweenDueDateAndDeadlineDate() && task.inTimeExceeded())
         help = taskService.statusData('awaiting_extension').help
       help
     task.taskKey = ->
