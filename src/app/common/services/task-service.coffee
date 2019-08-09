@@ -533,7 +533,7 @@ angular.module("doubtfire.common.services.tasks", [])
     return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
 
   isBubbleComment = (commentType) ->
-    return (["text", "dsicussion", "audio", "image"].includes(commentType))
+    return (["text", "discussion", "audio", "image", "pdf"].includes(commentType))
 
   taskService.mapComments = (comments) ->
     return comments if !comments? || comments.length == 0

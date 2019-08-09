@@ -8,7 +8,8 @@
   <div class="panel-body">
 
     <div ng-repeat="comment in task.comments | orderBy:'+created_at'">
-      <p id="commentTimestamp" ng-if="comment.should_show_timestamp">{{comment.author.name}} {{comment.created_at | humanizedDate}}</p>
+      <p id="commentTimestamp" ng-if="comment.should_show_timestamp">{{comment.author.name}}
+        {{comment.created_at | humanizedDate}}</p>
       <div class="comment" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
 
         <user-icon ng-if="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)" size="50"
@@ -47,7 +48,7 @@
 
             <div ng-switch-when="pdf" class="comment-pdf">
               <a ng-click="openCommentsModal(comment)">
-                <i class="fa fa-file-pdf-o" style="font-size: 3em;"></i>
+                <p> <i class="fa fa-file-pdf-o"></i> view pdf</p>
               </a>
             </div>
           </div>
