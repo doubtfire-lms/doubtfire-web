@@ -218,6 +218,7 @@ task-comments-viewer .bubble.first-in-series.last-in-series {
   background: $comment-bubble-color;
 
   .comment-text,
+  .comment-pdf,
   .comment-discussion,
   p {
     padding-right: 6px;
@@ -240,9 +241,15 @@ task-comments-viewer .comment .extension-bubble {
 }
 
 // text comments
-task-comments-viewer .comment .text-bubble {
+task-comments-viewer .comment .text-bubble,
+task-comments-viewer .comment .pdf-bubble {
   @include base-bubble;
   display: inline-block;
+
+  a p {
+    color: white;
+    margin-bottom: 0px;
+  }
 
   .markdown-to-html > *:last-child {
     margin-bottom: 0px;
@@ -254,7 +261,8 @@ task-comments-viewer .comment .text-bubble {
 }
 
 task-comments-viewer .pdf-bubble {
-  display: flex;
+  @include base-bubble;
+  display: inline-block;
 }
 
 // Audio comments
@@ -298,6 +306,18 @@ task-comments-viewer .comment.comment-by-other-user .text-bubble {
   color: $text-color;
   margin-right: 50px;
   margin-left: 0;
+}
+
+task-comments-viewer .comment.comment-by-other-user .pdf-bubble {
+  background: $comment-bubble-color-other-user;
+  color: $text-color;
+  margin-right: 50px;
+  margin-left: 0;
+
+  a p {
+    color: $text-color;
+    margin-bottom: 0;
+  }
 }
 
 task-comments-viewer .comment.comment-by-other-user .audio-bubble {
