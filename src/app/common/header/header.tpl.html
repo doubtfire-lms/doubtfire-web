@@ -10,21 +10,21 @@
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
-    <div class="container" style="width:100%">
+    <div class="container" id="header-container">
       <div class="row">
         <div class="col-md-6">
     <ul class="nav navbar-nav navbar-left">
       <ul class="breadcrumb">
-        <div class="container" style="width:100%">
+        <div class="container" id="breadcrumb-container">
           <div class="row">
-            <div class="col-md-1" style="padding-left:0px;padding-right:50px;">
+            <div class="col-md-1" id="breadcrumb-col1">
         <li>
           <a class="home" ui-sref="home">
             <i class="logo"></i>
           </a>
         </li><!--/home-->
             </div>
-        <div class="col-md-6" style="padding-right:100px;padding-left:0px;">
+        <div class="col-md-6" id="breadcrumb-col2">
             <li>
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
@@ -39,7 +39,7 @@
           </div>
         </li><!--/selected-unit-->
             </div>
-            <div class="col-md-4" style="padding-left:0px;">
+            <div class="col-md-4" id="breadcrumb-col3">
         <li ng-if="task && tutor">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
