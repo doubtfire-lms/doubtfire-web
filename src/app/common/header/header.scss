@@ -5,7 +5,20 @@
   border-right: none;
   margin-bottom: 0;
 }
-
+#header-container,#breadcrumb-container {
+  width:100%;
+}
+#breadcrumb-col1 {
+  padding-left:0px;
+  padding-right:50px;
+}
+#breadcrumb-col2 {
+  margin-right:25px;
+  padding-left:0px;
+}
+#breadcrumb-col3 {
+  padding-left:0px;
+}
 .navbar ul.breadcrumb {
   margin: 0;
   padding-left: 0;
