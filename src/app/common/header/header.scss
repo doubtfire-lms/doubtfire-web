@@ -5,7 +5,23 @@
   border-right: none;
   margin-bottom: 0;
 }
-
+.header-container{
+  width:100%;
+}
+.breadcrumb-container{
+  width:100%;
+}
+.homebtn{
+padding-right:50px;
+padding-left: 0px;
+}
+.unitbtn{
+  padding-right:330px;
+  padding-left: 0px;
+}
+.feedbackbtn{
+  padding-left: 0px;
+}
 .navbar ul.breadcrumb {
   margin: 0;
   padding-left: 0;
