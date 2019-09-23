@@ -3,6 +3,7 @@ import { InjectionToken } from '@angular/core';
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string
 export const Unit = new InjectionToken('Unit');
+export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const analyticsService = new InjectionToken('analyticsService');

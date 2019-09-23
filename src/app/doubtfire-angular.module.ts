@@ -44,11 +44,16 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 
 import 'hammerjs';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
+import { UserSettingsDialogService } from './admin/modals/user-settings-modal/user-settings-dialog.service';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   // components
   declarations: [
     AboutDoubtfireModalContent,
+    UserSettingsDialogContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -71,8 +76,10 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
     HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
+    MatRadioModule,
     MatListModule,
     MatStepperModule,
+    MatButtonToggleModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDividerModule,
@@ -89,6 +96,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
   // Services
   providers: [
     unitProvider,
+    currentUserProvider,
     taskServiceProvider,
     currentUserProvider,
     analyticsServiceProvider,
@@ -110,7 +118,8 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    UserIconComponent
+    UserIconComponent,
+    UserSettingsDialogContent
   ]
 })
 export class DoubtfireAngularModule {

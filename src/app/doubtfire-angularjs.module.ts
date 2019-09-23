@@ -276,6 +276,7 @@ import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-view
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -295,6 +296,8 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
+DoubtfireAngularJSModule.factory('UserSettingsDialog',
+  downgradeInjectable(UserSettingsDialog));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
