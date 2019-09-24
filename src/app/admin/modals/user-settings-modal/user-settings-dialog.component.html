@@ -1,96 +1,89 @@
 <div>
   <form (ngSubmit)="saveUser()">
     <h1 mat-dialog-title>{{data.isNew ? "Create User" : "Edit User"}}</h1>
+    <mat-divider></mat-divider>
     <div mat-dialog-content>
-      <div *ngIf="!data.isNew">
-        <label>Username</label>
-        <div>
-          <p class="form-control-static">{{data.user.username}}</p>
-        </div>
-      </div>
-      <mat-form-field *ngIf="data.isNew" [hideRequiredMarker]="!data.isNew">
-        <mat-label>Username</mat-label>
-        <div>
+      <div fxLayout="column">
+        <mat-form-field *ngIf="!data.isNew" layout="row" floatLabel="always">
+          <mat-label fxFlex="20">Username</mat-label>
+          <input disabled matInput placeholder="{{data.user.username}}">
+        </mat-form-field>
+        <mat-form-field *ngIf="data.isNew" [hideRequiredMarker]="!data.isNew">
+          <mat-label>Username</mat-label>
           <input matInput placeholder="1744070" [(ngModel)]="data.user.username" required>
-        </div>
-      </mat-form-field>
-      <mat-form-field [hideRequiredMarker]="!data.isNew">
-        <mat-label>First Name</mat-label>
-        <div>
+        </mat-form-field>
+        <mat-form-field [hideRequiredMarker]="!data.isNew">
+          <mat-label>First Name</mat-label>
           <input name="firstName" matInput placeholder="Name" [(ngModel)]="data.user.first_name" required>
-        </div>
-      </mat-form-field>
-      <mat-form-field [hideRequiredMarker]="!data.isNew">
-        <mat-label>Last Name</mat-label>
-        <div>
+        </mat-form-field>
+        <mat-form-field [hideRequiredMarker]="!data.isNew">
+          <mat-label>Last Name</mat-label>
           <input name="lastName" matInput placeholder="Surname" [(ngModel)]="data.user.last_name" required>
-        </div>
-      </mat-form-field>
-      <mat-form-field [hideRequiredMarker]="!data.isNew">
-        <mat-label>Preferred Name</mat-label>
-        <div>
+        </mat-form-field>
+        <mat-form-field [hideRequiredMarker]="!data.isNew">
+          <mat-label>Preferred Name</mat-label>
           <input name="preferredName" matInput placeholder="Name" [(ngModel)]="data.user.nickname" required>
-        </div>
-      </mat-form-field>
-      <mat-form-field [hideRequiredMarker]="!data.isNew">
-        <mat-label>Email</mat-label>
-        <div>
+        </mat-form-field>
+        <mat-form-field [hideRequiredMarker]="!data.isNew">
+          <mat-label>Email</mat-label>
           <input matInput name="email" type="email" placeholder="name@university.edu" [(ngModel)]="data.user.email"
             required>
-        </div>
-      </mat-form-field>
-      <hr>
-      <mat-form-field ng-show="data.user.system_role == 'Student'">
-        <mat-label>Student ID</mat-label>
-        <div>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <mat-form-field [hidden]="data.user.system_role != 'Student'">
+          <mat-label>Student ID</mat-label>
           <input name="studentId" matInput placeholder="1744070" [(ngModel)]="data.user.student_id" required>
           <p class="help-block">
             Please ensure your institution's student identification number matches this value
           </p>
-        </div>
-      </mat-form-field>
-      <div>
-        <label>Avatar</label>
+        </mat-form-field>
         <div>
-          <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank"
-            class="btn btn-sm btn-default pull-right"> Change Avatar </a>
-          <p class="help-block">
-            Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a>
-            and associate your email above to your account to give yourself an avatar
-          </p>
-        </div>
-      </div>
-      <div if-role="Admin Convenor">
-        <label>System Role</label>
-        <mat-radio-group [(ngModel)]="data.user.system_role" name="sysRole">
-          <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin" [value]="Admin">Administrator
-          </mat-radio-button>
-          <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" [value]="Convenor">
-            Convenor</mat-radio-button>
-          <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" [value]="Tutor">Tutor
-          </mat-radio-button>
-          <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" [value]="Student">
-            Student</mat-radio-button>
-          <p [hidden]="data.user.id != data.currentUser.id" class="help-block text-center">You cannot modify your own
-            permissions</p>
-        </mat-radio-group>
-      </div>
-      <div *ngIf="!data.isNew && data.user.id == data.currentUser.id">
-        <hr>
-        <div>
-          <label>Allow Analytics</label>
+          <label>Avatar</label>
           <div>
-            <mat-button-toggle-group name="analytics" [(ngModel)]="data.user.opt_in_to_research"
-              aria-label="Font Style">
-              <mat-button-toggle value="true"><i class="fa fa-check"></i></mat-button-toggle>
-              <mat-button-toggle value="false"><i class="fa fa-close"></i></mat-button-toggle>
-            </mat-button-toggle-group>
-            <p class="help-block">Allow us to anonymously gather your usage to im prove {{data.externalName.value}}</p>
+            <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank"
+              class="btn btn-sm btn-default pull-right"> Change Avatar </a>
+            <p class="help-block">
+              Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a>
+              and associate your email above to your account to give yourself an avatar
+            </p>
           </div>
         </div>
-      </div>
-      <div class="modal-footer text-right">
-        <button type="submit" mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
+        <div if-role="Admin Convenor">
+          <label>System Role</label>
+          <mat-radio-group [(ngModel)]="data.user.system_role" name="sysRole">
+            <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin" value="Admin">
+              Administrator
+            </mat-radio-button>
+            <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor"
+              value="Convenor">
+              Convenor</mat-radio-button>
+            <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Tutor">
+              Tutor
+            </mat-radio-button>
+            <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Student">
+              Student</mat-radio-button>
+            <p [hidden]="data.user.id != data.currentUser.id" class="help-block text-center">You cannot modify your own
+              permissions</p>
+          </mat-radio-group>
+        </div>
+        <div *ngIf="!data.isNew && data.user.id == data.currentUser.id">
+          <mat-divider></mat-divider>
+          <div>
+            <label>Allow Analytics</label>
+            <div>
+              <mat-button-toggle-group name="analytics" [(ngModel)]="data.user.opt_in_to_research"
+                aria-label="Font Style">
+                <mat-button-toggle value="true"><i class="fa fa-check"></i></mat-button-toggle>
+                <mat-button-toggle value="false"><i class="fa fa-close"></i></mat-button-toggle>
+              </mat-button-toggle-group>
+              <p class="help-block">Allow us to anonymously gather your usage to im prove {{data.externalName.value}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer text-right">
+          <button type="submit" mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
+        </div>
       </div>
     </div>
   </form>
