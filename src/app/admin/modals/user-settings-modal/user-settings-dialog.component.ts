@@ -5,6 +5,7 @@ import { Component, Inject, Injectable } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { analyticsService, auth, currentUser } from 'src/app/ajs-upgraded-providers';
 import { UserSettingsDialogService } from '../user-settings-modal/user-settings-dialog.service';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 interface UserSettingsDialogData {
   user: any;
@@ -56,7 +57,9 @@ export class UserSettingsDialog {
 
   userSettingsDialogData: UserSettingsDialogData;
 
-  constructor(public dialog: MatDialog, @Inject(currentUser) private currentUser: any) {
+  constructor(public dialog: MatDialog,
+    @Inject(currentUser) private currentUser: any,
+    private constants: DoubtfireConstants) {
     this.userSettingsDialogData = {
       externalName: '',
       user: {},
@@ -67,10 +70,19 @@ export class UserSettingsDialog {
 
   show(user: any) {
     this.userSettingsDialogData.user = user;
+    this.getExternalName();
+    console.log(this.userSettingsDialogData);
     this.dialog.open(UserSettingsDialogContent,
       {
         width: '900px',
         data: this.userSettingsDialogData
+      });
+  }
+
+  private getExternalName(): void {
+    this.constants.ExternalName
+      .subscribe(result => {
+        this.userSettingsDialogData.externalName = result;
       });
   }
 }
