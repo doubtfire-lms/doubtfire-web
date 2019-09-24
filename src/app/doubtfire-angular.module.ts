@@ -27,7 +27,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider, currentUserProvider } from './ajs-upgraded-providers';
+import { unitProvider, currentUserProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider, userProvider, authProvider } from './ajs-upgraded-providers';
 import { TaskCommentComposerComponent, DiscussionComposerDialog } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -96,6 +96,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
   // Services
   providers: [
     unitProvider,
+    userProvider,
+    authProvider,
     currentUserProvider,
     taskServiceProvider,
     currentUserProvider,

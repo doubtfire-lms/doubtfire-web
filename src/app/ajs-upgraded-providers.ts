@@ -13,7 +13,6 @@ export const CommentResourceService = new InjectionToken('CommentResourceService
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
-export const currentUser = new InjectionToken('currentUser');
 
 
 // Define a provider for the above injection token...
