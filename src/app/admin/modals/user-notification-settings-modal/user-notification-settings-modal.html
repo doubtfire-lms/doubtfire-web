@@ -1,0 +1,34 @@
+<div>
+  <div class="mat-dialog-title">
+    Notification Settings
+  </div>
+  <mat-dialog-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="data.receive_task_notifications">
+          Task Notifications
+        </mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="data.receive_feedback_notifications">
+          Feedback Notifications
+        </mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="data.receive_portfolio_notifications">
+          Portfolio Notifications
+        </mat-checkbox>
+      </mat-list-item>
+    </mat-list>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      (click)="saveSettings()"
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="true"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>
