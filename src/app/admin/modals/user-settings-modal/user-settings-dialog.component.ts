@@ -10,8 +10,7 @@ import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-provid
 interface UserSettingsDialogData {
   user: any,
   externalName: string,
-  isNew: boolean,
-  service: any
+  isNew: boolean
 }
 
 @Component({
@@ -20,14 +19,14 @@ interface UserSettingsDialogData {
 })
 export class UserSettingsDialogContent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: UserSettingsDialogData, @Inject(auth) private auth: any,
-    @Inject(analyticsService) private analyticsService: any, @Inject(currentUser) private currentUser: any) { }
+    @Inject(analyticsService) private analyticsService: any, @Inject(currentUser) private currentUser: any, private userSettingsDialogService: UserSettingsDialogService) { }
 
   private createNewUser() {
-    this.data.service.createUser(this.data.user).subscribe(result => { });
+    this.userSettingsDialogService.createUser(this.data.user).subscribe(result => { });
   }
 
   private updateExistingUser() {
-    this.data.service.updateUser(this.data.user).subscribe(result => {
+    this.userSettingsDialogService.updateUser(this.data.user).subscribe(result => {
       this.data.user.name = `${this.data.user.first_name} ${this.data.user.last_name}`;
       if (this.data.user == this.currentUser.profile) {
         this.auth.saveCurrentUser();
@@ -47,14 +46,11 @@ export class UserSettingsDialog {
 
   userSettingsDialogData: UserSettingsDialogData;
 
-  constructor(public dialog: MatDialog,
-    private constants: DoubtfireConstants,
-    private userSettingsDialogServive: UserSettingsDialogService) {
+  constructor(public dialog: MatDialog) {
     this.userSettingsDialogData = {
       externalName: '',
       user: {},
-      isNew: false,
-      service: userSettingsDialogServive,
+      isNew: false
     }
   }
 
