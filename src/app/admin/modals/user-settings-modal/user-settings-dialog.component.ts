@@ -37,7 +37,7 @@ export class UserSettingsDialogContent {
   private updateExistingUser() {
     this.userSettingsDialogService.updateUser(this.data.user).subscribe(result => {
       this.data.user.name = `${this.data.user.first_name} ${this.data.user.last_name}`;
-      if (this.data.user == this.data.currentUser.profile) {
+      if (this.data.user === this.data.currentUser.profile) {
         this.auth.saveCurrentUser();
         if (this.data.user.opt_in_to_research) {
           this.analyticsService.event('Doubtfire Analytics', 'User opted in research');
@@ -47,7 +47,6 @@ export class UserSettingsDialogContent {
   }
 
   saveUser() {
-    console.log(this.data.user);
     this.data.isNew ? this.createNewUser() : this.updateExistingUser();
   }
 }
