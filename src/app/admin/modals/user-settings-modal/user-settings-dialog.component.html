@@ -1,5 +1,5 @@
 <div>
-  <form class="form-horizontal" ng-submit="saveUser()" role="form">
+  <form (ngSubmit)="saveUser()">
     <h1 mat-dialog-title>{{data.isNew ? "Create User" : "Edit User"}}</h1>
     <div mat-dialog-content>
       <div *ngIf="!data.isNew">
@@ -63,19 +63,19 @@
       <div if-role="Admin Convenor">
         <label>System Role</label>
         <mat-radio-group [(ngModel)]="data.user.system_role" name="sysRole">
-          <mat-radio-button disabled="data.user.id == data.currentUser.id" if-role="Admin" value="Admin">Administrator
+          <mat-radio-button disabled="data.user.id == currentUser.id" if-role="Admin" value="Admin">Administrator
           </mat-radio-button>
-          <mat-radio-button disabled="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Convenor">
+          <mat-radio-button disabled="data.user.id == currentUser.id" if-role="Admin Convenor" value="Convenor">
             Convenor</mat-radio-button>
-          <mat-radio-button disabled="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Tutor">Tutor
+          <mat-radio-button disabled="data.user.id == currentUser.id" if-role="Admin Convenor" value="Tutor">Tutor
           </mat-radio-button>
-          <mat-radio-button disabled="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Student">
+          <mat-radio-button disabled="data.user.id == currentUser.id" if-role="Admin Convenor" value="Student">
             Student</mat-radio-button>
-          <p ng-show="data.user.id == data.currentUser.id" class="help-block text-center">You cannot modify your own
+          <p ng-show="data.user.id == currentUser.id" class="help-block text-center">You cannot modify your own
             permissions</p>
         </mat-radio-group>
       </div>
-      <div *ngIf="!data.isNew && data.user.id == data.currentUser.id">
+      <div *ngIf="!data.isNew && data.user.id == currentUser.id">
         <hr>
         <div>
           <label>Allow Analytics</label>
