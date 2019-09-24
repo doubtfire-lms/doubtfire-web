@@ -1,6 +1,6 @@
-import { Injectable, Inject } from '@angular/core';
-import { User, alertService } from 'src/app/ajs-upgraded-providers';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { alertService, User } from 'src/app/ajs-upgraded-providers';
 
 @Injectable()
 export class UserSettingsDialogService {
@@ -10,15 +10,25 @@ export class UserSettingsDialogService {
     this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
   }
 
+  queryUsers(): Observable<Object[]> {
+    return Observable.create(
+      observer => this.user.query((response: any) => { observer.next(response); }, (error: any) => { this.handleError(error); })
+    );
+  }
+
   createUser(newUser: any): Observable<Object> {
     return Observable.create(
-      observer => this.user.create(newUser, (response: any) => { observer.next(response) }, (error: any) => { this.handleError(error) })
-    )
+      observer => this.user.create(newUser, (response: any) => { observer.next(response); }, (error: any) => { this.handleError(error); })
+    );
   }
 
   updateUser(user: any): Observable<Object> {
     return Observable.create(
-      observer => this.user.update({ id: user.id, user: user }, (response: any) => { observer.next(response) }, (error: any) => { this.handleError(error) })
-    )
+      observer => this.user.update(
+        { id: user.id, user: user },
+        (response: any) => { observer.next(response); },
+        (error: any) => { this.handleError(error);
+      })
+    );
   }
 }
