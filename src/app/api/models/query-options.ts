@@ -14,9 +14,6 @@ export class QueryOptions implements QueryBuilder {
 
   toQueryMap() {
     const queryMap = new Map<string, string>();
-    queryMap.set('pageNumber', `${this.pageNumber}`);
-    queryMap.set('pageSize', `${this.pageSize}`);
-
     return queryMap;
   }
 

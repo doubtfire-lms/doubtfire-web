@@ -10,6 +10,8 @@ export interface Serializer {
   toJson(resource: Resource): any;
 }
 
+// Abstract ResourceService which is used by any components
+// to perform CRUD activity.
 export class ResourceService<T extends Resource> {
   url = API_URL;
   constructor(
