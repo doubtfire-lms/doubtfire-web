@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 
@@ -34,6 +34,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
+import { TokenInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
   currentUserProvider,
@@ -45,7 +46,8 @@ import {
   CommentResourceServiceProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
-  userProvider
+  userProvider,
+  currentUser
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -72,7 +74,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
-import { UserService } from './api/models/user.service';
+import { UserService } from './api/models//user/user.service';
 
 @NgModule({
   // components
@@ -129,6 +131,12 @@ import { UserService } from './api/models/user.service';
     CommentResourceServiceProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+      deps: [currentUser]
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
