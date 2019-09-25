@@ -1,11 +1,10 @@
 <div>
   <form (ngSubmit)="saveUser()">
     <h1 mat-dialog-title>{{data.isNew ? "Create User" : "Edit User"}}</h1>
-    <mat-divider></mat-divider>
     <div mat-dialog-content>
       <div fxLayout="column">
         <mat-form-field *ngIf="!data.isNew" layout="row" floatLabel="always">
-          <mat-label fxFlex="20">Username</mat-label>
+          <mat-label>Username</mat-label>
           <input disabled matInput placeholder="{{data.user.username}}">
         </mat-form-field>
         <mat-form-field *ngIf="data.isNew" [hideRequiredMarker]="!data.isNew">
@@ -29,7 +28,6 @@
           <input matInput name="email" type="email" placeholder="name@university.edu" [(ngModel)]="data.user.email"
             required>
         </mat-form-field>
-        <mat-divider></mat-divider>
         <mat-form-field [hidden]="data.user.system_role != 'Student'">
           <mat-label>Student ID</mat-label>
           <input name="studentId" matInput placeholder="1744070" [(ngModel)]="data.user.student_id" required>
@@ -37,19 +35,21 @@
             Please ensure your institution's student identification number matches this value
           </p>
         </mat-form-field>
-        <div>
-          <label>Avatar</label>
+        <div fxLayout="row" fxLayoutAlign="start">
+          <label fxFlex="20">Avatar</label>
+          <!-- <user-icon [size]="50" [user]="user" [email]="user.email"
+              style="max-width: 50px; max-height: 50px; font-size: 18px;"></user-icon> -->
+          <p fxFlex="60" class="mat-caption">
+            Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a>
+            and associate your email above to your account to give yourself an avatar
+          </p>
           <div>
-            <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank"
-              class="btn btn-sm btn-default pull-right"> Change Avatar </a>
-            <p class="help-block">
-              Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a>
-              and associate your email above to your account to give yourself an avatar
-            </p>
+            <button mat-stroked-button href="http://en.gravatar.com/support/activating-your-account/" target="_blank">
+              Change Avatar </button>
           </div>
         </div>
-        <div if-role="Admin Convenor">
-          <label>System Role</label>
+        <div if-role="Admin Convenor" fxLayout="row">
+          <label fxFlex="20">System Role</label>
           <mat-radio-group [(ngModel)]="data.user.system_role" name="sysRole">
             <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin" value="Admin">
               Administrator

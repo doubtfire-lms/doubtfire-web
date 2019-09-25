@@ -19,7 +19,8 @@ interface UserSettingsDialogData {
   templateUrl: 'user-settings-dialog.component.html',
 })
 export class UserSettingsDialogContent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: UserSettingsDialogData,
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: UserSettingsDialogData,
     @Inject(auth) private auth: any,
     @Inject(analyticsService) private analyticsService: any,
     private userSettingsDialogService: UserSettingsDialogService
@@ -71,10 +72,8 @@ export class UserSettingsDialog {
   show(user: any) {
     this.userSettingsDialogData.user = user;
     this.getExternalName();
-    console.log(this.userSettingsDialogData);
     this.dialog.open(UserSettingsDialogContent,
       {
-        width: '900px',
         data: this.userSettingsDialogData
       });
   }

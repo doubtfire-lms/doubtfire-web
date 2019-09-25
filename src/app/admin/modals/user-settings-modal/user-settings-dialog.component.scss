@@ -1,3 +1,11 @@
 user-settings-dialog {
-    
+    padding: 5rem;
+    mat-divider {
+        margin: 1rem 0 1rem 0;
+    }
+    mat-radio-group {
+        mat-radio-button {
+            padding-right: 1rem;
+        }
+    }
 }
