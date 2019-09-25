@@ -14,8 +14,7 @@ export class UserNotificationSettingsModalContent {
   ) {}
 
   saveSettings(): void {
-    this.userService.update(this.data);
-    this.userService.save(this.data);
+    this.userService.update(this.data).subscribe(result => this.userService.save(this.data));
   }
 }
 
