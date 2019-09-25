@@ -116,7 +116,6 @@ import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignme
 import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
 import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
 import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
-import 'build/src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.js';
 import 'build/src/app/admin/modals/user-settings-modal/user-settings-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
