@@ -16,6 +16,10 @@ user-settings-dialog {
     }
     
     .row {
-        margin: 1rem 0 1rem 0;
+        margin: 0.75rem 0 0.75rem 0;
+    }
+
+    .mat-dialog-actions {
+        padding-bottom: 3rem;
     }
 }
