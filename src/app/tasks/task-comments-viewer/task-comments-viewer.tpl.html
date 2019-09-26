@@ -12,8 +12,8 @@
         {{comment.created_at | humanizedDate}}</p>
       <div class="comment" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
 
-        <user-icon ng-if="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)" size="50"
-          user="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}">
+        <user-icon ng-if="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)" [size]="50"
+          [user]="comment.author" ng-class="{'hidden-xs hidden-sm': comment.author_is_me}">
         </user-icon>
 
         <div class="comment-container" ng-switch="comment.type">
