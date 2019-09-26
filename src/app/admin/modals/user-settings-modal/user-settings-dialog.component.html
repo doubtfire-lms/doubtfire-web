@@ -9,7 +9,7 @@
         </mat-form-field>
         <mat-form-field *ngIf="data.isNew" [hideRequiredMarker]="!data.isNew">
           <mat-label>Username</mat-label>
-          <input matInput placeholder="1744070" [(ngModel)]="data.user.username" required>
+          <input name="username" matInput placeholder="1744070" [(ngModel)]="data.user.username" required>
         </mat-form-field>
         <mat-form-field [hideRequiredMarker]="!data.isNew">
           <mat-label>First Name</mat-label>
@@ -60,7 +60,7 @@
             </mat-radio-button>
             <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin Convenor" value="Student">
               Student</mat-radio-button>
-            <p [hidden]="data.user.id != data.currentUser.id" class="help-block text-center">You cannot modify your own
+            <p [hidden]="data.user.id != data.currentUser.id">You cannot modify your own
               permissions</p>
           </mat-radio-group>
         </div>
@@ -69,16 +69,20 @@
           <div>
             <mat-button-toggle-group name="analytics" [(ngModel)]="data.user.opt_in_to_research"
               aria-label="Font Style">
-              <mat-button-toggle value="true"><i class="fa fa-check"></i></mat-button-toggle>
-              <mat-button-toggle value="false"><i class="fa fa-close"></i></mat-button-toggle>
+              <mat-button-toggle [value]="true"><i class="material-icons">
+                  done
+                </i></mat-button-toggle>
+              <mat-button-toggle [value]="false"><i class="material-icons">
+                  clear
+                </i></mat-button-toggle>
             </mat-button-toggle-group>
-            <p class="help-block">Allow us to anonymously gather your usage to improve {{data.externalName}}</p>
+            <p>Allow us to anonymously gather your usage to improve {{data.externalName}}</p>
           </div>
         </div>
       </div>
     </div>
     <mat-dialog-actions align="end">
-      <button type="submit" mat-dialog-close mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
+      <button type="submit" mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
     </mat-dialog-actions>
   </form>
 </div>

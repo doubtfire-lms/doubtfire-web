@@ -4,8 +4,8 @@
 import { Component, Inject, Injectable } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { analyticsService, auth, currentUser } from 'src/app/ajs-upgraded-providers';
-import { UserSettingsDialogService } from '../user-settings-modal/user-settings-dialog.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { UserService } from 'src/app/api/models/user/user.service';
 
 interface UserSettingsDialogData {
   user: any;
@@ -23,13 +23,13 @@ export class UserSettingsDialogContent {
     @Inject(MAT_DIALOG_DATA) public data: UserSettingsDialogData,
     @Inject(auth) private auth: any,
     @Inject(analyticsService) private analyticsService: any,
-    private userSettingsDialogService: UserSettingsDialogService
+    private user: UserService
   ) { }
 
   private createNewUser() {
-    this.userSettingsDialogService.createUser(this.data.user).subscribe(result => {
+    this.user.create(this.data.user).subscribe(result => {
       if (this.data.isNew) {
-        this.userSettingsDialogService.queryUsers().subscribe(users => {
+        this.user.query().subscribe(users => {
           users.push(result);
         });
       }
@@ -37,7 +37,7 @@ export class UserSettingsDialogContent {
   }
 
   private updateExistingUser() {
-    this.userSettingsDialogService.updateUser(this.data.user).subscribe(result => {
+    this.user.update(this.data.user).subscribe(result => {
       this.data.user.name = `${this.data.user.first_name} ${this.data.user.last_name}`;
       if (this.data.user === this.data.currentUser.profile) {
         this.auth.saveCurrentUser();
@@ -71,6 +71,9 @@ export class UserSettingsDialog {
 
   show(user: any) {
     this.userSettingsDialogData.user = user;
+    if (!user.id) {
+      this.userSettingsDialogData.isNew = true;
+    }
     this.getExternalName();
     this.dialog.open(UserSettingsDialogContent,
       {

@@ -44,6 +44,12 @@ export class ResourceService<T extends Resource> {
       .pipe(map((data: any) => this.convertData(data.items)));
   }
 
+  query(): Observable<T[]> {
+    return this.httpClient
+      .get(`${this.url}/${this.endpoint}`)
+      .pipe(map((data: any) => this.convertData(data.items)));
+  }
+
   delete(id: number) {
     return this.httpClient
       .delete(`${this.url}/${this.endpoint}/${id}`);
