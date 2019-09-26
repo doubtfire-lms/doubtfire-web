@@ -40,7 +40,7 @@ export const authProvider = {
   provide: auth,
   useFactory: (i: any) => i.get('auth'),
   deps: ['$injector']
-}
+};
 
 export const currentUserProvider = {
   provide: currentUser,

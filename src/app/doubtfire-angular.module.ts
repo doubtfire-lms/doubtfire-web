@@ -112,7 +112,13 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
+    },
+    AboutDoubtfireModal,
+    AboutDoubtfireModalService,
+    UserSettingsDialog,
+    UserSettingsDialogService,
+    DoubtfireConstants
+  ],
   entryComponents: [
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
