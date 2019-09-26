@@ -10,6 +10,7 @@ export const CommentResourceService = new InjectionToken('CommentResourceService
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
+export const currentUser = new InjectionToken('currentUser');
 
 
 // Define a provider for the above injection token...
@@ -18,6 +19,12 @@ export const unitProvider = {
   provide: Unit,                          // When you need 'Unit' you
   useFactory: (i: any) => i.get('Unit'),  // get the AngularJS module
   deps: ['$injector']                     // using the upgrade injector.
+};
+
+export const currentUserProvider = {
+  provide: currentUser,
+  useFactory: (i: any) => i.get('currentUser'),
+  deps: ['$injector']
 };
 
 export const taskServiceProvider = {
