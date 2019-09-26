@@ -75,10 +75,9 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 import 'hammerjs';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
-import { UserSettingsDialogService } from './admin/modals/user-settings-modal/user-settings-dialog.service';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { UserService } from './api/models//user/user.service';
+import { UserService } from './api/models/user/user.service';
 
 @NgModule({
   // components
@@ -155,7 +154,6 @@ import { UserService } from './api/models//user/user.service';
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     UserSettingsDialog,
-    UserSettingsDialogService,
     UserNotificationSettingsModal,
     DoubtfireConstants
   ],
