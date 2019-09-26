@@ -115,7 +115,11 @@ import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignme
 import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
 import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
 import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
+<<<<<<< HEAD
 import 'build/src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.js';
+=======
+import 'build/src/app/admin/modals/user-settings-modal/user-settings-modal.js';
+>>>>>>> 032db896658b5ab0fdbab725de32fc5af525349e
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
@@ -269,9 +273,14 @@ import 'build/src/i18n/resources-locale_en-GB.js';
 //#endregion
 
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {
+  UserNotificationSettingsModal
+} from 'src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.component';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
+import {
+  IntelligentDiscussionPlayerComponent
+} from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
@@ -297,6 +306,8 @@ DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory('UserSettingsDialog',
   downgradeInjectable(UserSettingsDialog));
+DoubtfireAngularJSModule.factory('UserNotificationSettingsModal',
+  downgradeInjectable(UserNotificationSettingsModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',

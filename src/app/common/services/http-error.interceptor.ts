@@ -18,7 +18,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         retryWhen(errors => errors
           .pipe(
             concatMap((error, count) => {
-              if (count < retryTimes && (error.status == 400 || error.status == 0)) {
+              if (count < retryTimes && (error.status === 400 || error.status === 0)) {
                 return of(error.status);
               }
               return throwError(error);
@@ -37,6 +37,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           return throwError(errorMessage);
         })
-      )
+      );
   }
 }

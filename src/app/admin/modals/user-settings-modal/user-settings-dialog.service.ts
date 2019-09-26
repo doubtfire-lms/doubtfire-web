@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { alertService, User } from 'src/app/ajs-upgraded-providers';
+import { debug } from 'util';
 
 @Injectable()
 export class UserSettingsDialogService {
@@ -27,8 +28,9 @@ export class UserSettingsDialogService {
       observer => this.user.update(
         { id: user.id, user: user },
         (response: any) => { observer.next(response); },
-        (error: any) => { this.handleError(error);
-      })
+        (error: any) => {
+          this.handleError(error);
+        })
     );
   }
 }

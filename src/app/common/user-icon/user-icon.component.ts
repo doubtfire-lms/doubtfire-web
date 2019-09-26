@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'node_modules/ts-md5/dist/md5';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-    selector: 'app-test',
+    selector: 'user-icon',
     templateUrl: 'user-icon.component.html',
     styleUrls: ['user-icon.component.scss']
 })
@@ -14,8 +13,7 @@ export class UserIconComponent implements OnInit {
     @Input() size: number;
 
     constructor(
-        @Inject(currentUser) private currentUser: any,
-        private sanitizer: DomSanitizer) {
+        @Inject(currentUser) private currentUser: any) {
     }
 
     get userBackgroundStyle() {

@@ -35,20 +35,18 @@
             Please ensure your institution's student identification number matches this value
           </p>
         </mat-form-field>
-        <div fxLayout="row" fxLayoutAlign="start">
+        <div fxLayout="row" class="row" fxLayoutAlign="start">
           <label fxFlex="20">Avatar</label>
-          <!-- <user-icon [size]="50" [user]="user" [email]="user.email"
-              style="max-width: 50px; max-height: 50px; font-size: 18px;"></user-icon> -->
+          <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">
+            <user-icon [size]="50" [user]="data.user" [email]="data.user.email"
+              style="max-width: 50px; max-height: 50px; font-size: 18px;"></user-icon>
+          </a>
           <p fxFlex="60" class="mat-caption">
             Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a>
             and associate your email above to your account to give yourself an avatar
           </p>
-          <div>
-            <button mat-stroked-button href="http://en.gravatar.com/support/activating-your-account/" target="_blank">
-              Change Avatar </button>
-          </div>
         </div>
-        <div if-role="Admin Convenor" fxLayout="row">
+        <div if-role="Admin Convenor" fxLayout="row" class="row">
           <label fxFlex="20">System Role</label>
           <mat-radio-group [(ngModel)]="data.user.system_role" name="sysRole">
             <mat-radio-button [disabled]="data.user.id == data.currentUser.id" if-role="Admin" value="Admin">
@@ -66,7 +64,7 @@
               permissions</p>
           </mat-radio-group>
         </div>
-        <div *ngIf="!data.isNew && data.user.id == data.currentUser.id" fxLayout="row">
+        <div *ngIf="!data.isNew && data.user.id == data.currentUser.id" fxLayout="row" class="row">
           <label fxFlex="20">Allow Analytics</label>
           <div>
             <mat-button-toggle-group name="analytics" [(ngModel)]="data.user.opt_in_to_research"
@@ -74,13 +72,13 @@
               <mat-button-toggle value="true"><i class="fa fa-check"></i></mat-button-toggle>
               <mat-button-toggle value="false"><i class="fa fa-close"></i></mat-button-toggle>
             </mat-button-toggle-group>
-          <p class="help-block">Allow us to anonymously gather your usage to improve {{data.externalName}}</p>
-        </div>
-        </div>
-        <div class="modal-footer text-right">
-          <button type="submit" mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
+            <p class="help-block">Allow us to anonymously gather your usage to improve {{data.externalName}}</p>
+          </div>
         </div>
       </div>
     </div>
+    <mat-dialog-actions align="end">
+      <button type="submit" mat-dialog-close mat-flat-button color="primary">{{data.isNew ? 'Add' : 'Save'}}</button>
+    </mat-dialog-actions>
   </form>
 </div>
