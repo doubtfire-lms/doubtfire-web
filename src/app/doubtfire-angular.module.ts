@@ -22,12 +22,12 @@ import { PopoverModule } from 'ngx-bootstrap';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
-import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component'
+import { AboutDoubtfireModal, AboutDoubtfireModalContent } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider } from './ajs-upgraded-providers';
+import { unitProvider, taskServiceProvider, analyticsServiceProvider, taskProvider, alertServiceProvider, CommentResourceServiceProvider, AudioRecorderProvider, AudioRecorderServiceProvider, currentUserProvider } from './ajs-upgraded-providers';
 import { TaskCommentComposerComponent, DiscussionComposerDialog } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -38,11 +38,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {FlexLayoutModule} from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
 
 @NgModule({
   // components
@@ -58,6 +59,7 @@ import 'hammerjs';
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
     ExtensionModalComponent,
+    UserIconComponent
   ],
   // Module Imports
   imports: [
@@ -88,6 +90,7 @@ import 'hammerjs';
   providers: [
     unitProvider,
     taskServiceProvider,
+    currentUserProvider,
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,
@@ -99,7 +102,16 @@ import 'hammerjs';
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, ExtensionCommentComponent, IntelligentDiscussionDialog, DiscussionComposerDialog, ExtensionModalComponent]
+  entryComponents: [
+    AboutDoubtfireModalContent,
+    TaskCommentComposerComponent,
+    IntelligentDiscussionPlayerComponent,
+    ExtensionCommentComponent,
+    IntelligentDiscussionDialog,
+    DiscussionComposerDialog,
+    ExtensionModalComponent,
+    UserIconComponent
+  ]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {
