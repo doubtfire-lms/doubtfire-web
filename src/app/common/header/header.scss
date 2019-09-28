@@ -1,39 +1,68 @@
-.navbar {
+.navbar 
+{
   border-radius: 0;
   border-top: none;
   border-left: none;
   border-right: none;
   margin-bottom: 0;
 }
-
-.navbar ul.breadcrumb {
+.header-container 
+{
+  width: 100%;
+}
+.breadcrumb-container 
+{
+  width: 100%;
+}
+.homebtn 
+{
+  padding-right: 50px;
+  padding-left: 0px;
+}
+.unitbtn 
+{
+  padding-right: 330px;
+  padding-left: 0px;
+}
+.feedbackbtn 
+{
+  padding-left: 0px;
+}
+.navbar ul.breadcrumb 
+{
   margin: 0;
   padding-left: 0;
   padding-right: 0;
   display: flex;
-  & > li {
+  & > li 
+  {
     height: 33px;
   }
-  & > li + li:before {
+  & > li + li:before 
+  {
     padding-left: 10px;
   }
-  .home i.logo {
+  .home i.logo 
+  {
     height: 33px;
     width: 33px;
   }
-  .dropdown-menu {
+  .dropdown-menu 
+  {
     margin-top: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
   }
-  button.dropdown-toggle[aria-expanded="true"] {
+  button.dropdown-toggle[aria-expanded="true"] 
+  {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-width: 0;
   }
 }
 
-.dropdown-user .user-icon {
+.dropdown-user .user-icon 
+{
   width: 2em;
   height: 2em;
   float: left;
