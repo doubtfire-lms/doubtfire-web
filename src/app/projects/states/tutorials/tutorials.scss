@@ -1,8 +1,41 @@
-#tutorials-state table {
-  th.code    { width: 15%; }
-  th.day     { width: 15%; }
-  th.time    { width: 15%; }
-  th.room    { width: 15%; }
-  th.tutor   { width: 15%; }
-  th.actions { width: 25%; }
+#tutorials-state table 
+{
+  th.code 
+  {
+    width: 15%;
+  }
+  th.day 
+  {
+    width: 15%;
+  }
+  th.time 
+  {
+    width: 15%;
+  }
+  th.room 
+  {
+    width: 15%;
+  }
+  th.tutor 
+  {
+    width: 15%;
+  }
+  th.actions 
+  {
+    width: 25%;
+  }
+}
+
+.table-responsive-wrapper 
+{
+  position: relative;
+  overflow: auto;
+}
+
+#tutorials-state table 
+{
+  min-width: 720px;
+  overflow: auto;
+  margin-bottom: 0;
+  border-top: 1px solid #ddd;
 }
