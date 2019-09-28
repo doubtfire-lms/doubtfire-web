@@ -32,7 +32,8 @@
         <div class="panel-body">
           <div ng-hide="unit.students.length > 0" class="callout callout-info">There are no students enrolled in this unit</div>
           <div ng-show="unit.students.length > 0">
-            <table class="table table-condensed table-hover">
+           <div style="overflow: auto; position: relative;">
+            <table class="table table-condensed table-hover" style="min-width: 720px;">
               <thead>
                 <tr>
                   <th>Username</th>
@@ -77,7 +78,8 @@
                 </tr>
               </tbody>
             </table>
-            <!--/enrolment-table-->
+            </div>
+           <!--/enrolment-table-->
           </div>
         </div>
         <div class="panel-footer clearfix">
