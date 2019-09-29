@@ -2,7 +2,7 @@
 // Modal to show User Profile settings
 //
 import { Component, Inject, Injectable } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { analyticsService, auth, currentUser } from 'src/app/ajs-upgraded-providers';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { UserService } from 'src/app/api/models/user/user.service';
@@ -23,6 +23,7 @@ export class UserSettingsDialogContent {
     @Inject(MAT_DIALOG_DATA) public data: UserSettingsDialogData,
     @Inject(auth) private auth: any,
     @Inject(analyticsService) private analyticsService: any,
+    private dialog: MatDialogRef<UserSettingsDialog>,
     private user: UserService
   ) { }
 
@@ -50,6 +51,7 @@ export class UserSettingsDialogContent {
 
   saveUser() {
     this.data.isNew ? this.createNewUser() : this.updateExistingUser();
+    this.dialog.close();
   }
 }
 
