@@ -27,7 +27,5 @@ export class UserIconComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (!this.user) { this.user = this.currentUser.profile; }
-        if (!this.email) { this.email = this.currentUser.profile.email; }
     }
 }
