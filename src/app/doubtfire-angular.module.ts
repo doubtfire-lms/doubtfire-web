@@ -4,11 +4,13 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatSelectModule} from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -78,6 +80,8 @@ import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/us
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UserService } from './api/models/user/user.service';
+import { UnitTutorialEditDialogContent, UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
+import { MatOptionModule } from '@angular/material/core';
 
 @NgModule({
   // components
@@ -85,6 +89,7 @@ import { UserService } from './api/models/user/user.service';
     AboutDoubtfireModalContent,
     UserSettingsDialogContent,
     UserNotificationSettingsModalContent,
+    UnitTutorialEditDialogContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -106,10 +111,13 @@ import { UserService } from './api/models/user/user.service';
     FormsModule,
     HttpClientModule,
     MatFormFieldModule,
+    MatAutocompleteModule,
     MatInputModule,
     MatRadioModule,
     MatListModule,
+    MatOptionModule,
     MatStepperModule,
+    MatSelectModule,
     MatButtonToggleModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -154,6 +162,7 @@ import { UserService } from './api/models/user/user.service';
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     UserSettingsDialog,
+    UnitTutorialEditDialog,
     UserNotificationSettingsModal,
     DoubtfireConstants
   ],
@@ -167,7 +176,8 @@ import { UserService } from './api/models/user/user.service';
     DiscussionComposerDialog,
     ExtensionModalComponent,
     UserIconComponent,
-    UserSettingsDialogContent
+    UserSettingsDialogContent,
+    UnitTutorialEditDialogContent
   ]
 })
 export class DoubtfireAngularModule {

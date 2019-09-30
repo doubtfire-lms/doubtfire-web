@@ -7,9 +7,9 @@ angular.module('doubtfire.units.states.edit.directives.unit-tutorials-editor', [
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tutorials-editor/unit-tutorials-editor.tpl.html'
-  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditModal, alertService) ->
+  controller: ($scope, $modal, $rootScope, Unit, UnitRole, Tutorial, UnitTutorialEditDialog, alertService) ->
     $scope.editTutorial = (tutorial) ->
-      UnitTutorialEditModal.show $scope.unit, tutorial
+      UnitTutorialEditDialog.show $scope.unit, tutorial
 
     $scope.deleteTutorial = (tutorial) ->
       Tutorial.delete { id: tutorial.id },
@@ -20,6 +20,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-tutorials-editor', [
           alertService.add("danger", response.data.error)
 
     $scope.createTutorial = ->
-      UnitTutorialEditModal.show $scope.unit
+      UnitTutorialEditDialog.show $scope.unit
 
 )
