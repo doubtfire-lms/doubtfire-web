@@ -1,5 +1,6 @@
 import { Resource } from '../resource';
 
+export type Tutor = User;
 export class User extends Resource {
   name: string;
   first_name: string;
