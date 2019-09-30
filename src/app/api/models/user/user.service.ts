@@ -18,7 +18,7 @@ export class UserService extends ResourceService<User> {
       new UserSerializer());
   }
 
-  // Specific to the User resrouce, so extended.
+  // Specific to the User resource, so extended.
   save(user: User) {
     user.name = `${user.first_name} ${user.last_name}`;
     if (user === this.currentUser.profile) {
