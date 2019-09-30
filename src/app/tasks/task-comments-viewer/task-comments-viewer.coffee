@@ -23,7 +23,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
           $scope.postAttachmentComment(file)
         $scope.task.comments = taskService.mapComments($scope.task.comments)
 
-    #============================================================================
     # Upload image files as comments to a given task
     $scope.postAttachmentComment = (file) ->
       taskService.addMediaComment(CommentResourceService.task, file,
@@ -67,6 +66,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       # TODO: This should not use global role, if admin is a student they can delete comments.
       return comment.author_is_me || currentUser.role == "Admin"
 
+    $scope.isBubbleType = (comment) ->
+      return taskService.isBubbleComment(comment.type)
+
     $scope.shouldShowAuthorIcon = (commentType) ->
       return not (commentType == "extension" || commentType == "status")
 
@@ -75,39 +77,6 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
 
     $overlay = angular.element(document.querySelector('#contextOverlay'))
-
-    $scope.clickOff = () ->
-      if $scope.currentItem?
-        $scope.currentItem = null
-        $overlay.css display: 'none'
-      return
-
-    $scope.rightClick = (item, $event) ->
-      # return if no permission to edit
-      return if !$scope.canUserEdit(item) && item.type != 'status' && item.type != 'extension'
-
-      # focus the element, this is required for the use of blur.
-      setTimeout(()->
-        document.getElementById("deleteMenu").focus()
-      ,10)
-
-      if $scope.currentItem == item
-        $scope.currentItem = null
-        overlayDisplay = 'none'
-      else
-        $scope.currentItem = item
-        overlayDisplay = 'block'
-      overLayCSS =
-        left: $event.offsetX + 80 + 'px'
-        top: $event.clientY - 70 + 'px'
-        display: overlayDisplay
-      $overlay.css overLayCSS
-      return
-
-    $scope.delete = () ->
-      $scope.deleteComment($scope.currentItem.id)
-      $overlay.css display: 'none'
-      return
 
     $scope.deleteComment = (id) ->
       TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },

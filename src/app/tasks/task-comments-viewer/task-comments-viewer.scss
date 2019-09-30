@@ -36,7 +36,31 @@ task-comments-viewer .panel.dragover {
 }
 
 task-comments-viewer .comment-container {
-  width: 100%;
+  display: flex;
+  flex-grow: 2;
+
+  .comment-overflow {
+    min-width: 20px; //Reserve enough room for overflow icon
+    flex-shrink: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0.8em 0 0.8em;
+    color: #9696969d;
+
+    .icon-button {
+      appearance: none;
+      outline: none;
+      border: 0;
+      background: transparent;
+    }
+  }
+}
+
+task-comments-viewer .comment-by-other-user .comment-container {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-grow: 2;
 }
 
 task-comments-viewer .comment-container .comment-extension {
@@ -322,15 +346,18 @@ task-comments-viewer .comment.comment-by-other-user .pdf-bubble {
 
 task-comments-viewer .comment.comment-by-other-user .audio-bubble {
   margin-right: 50px;
+  margin-left: 0;
 }
 
 task-comments-viewer .comment.comment-by-other-user .discussion-bubble {
   margin-right: 50px;
+  margin-left: 0;
 }
 
 task-comments-viewer .comment.comment-by-other-user .image-bubble {
   background: transparent;
   margin-right: 50px;
+  margin-left: 0;
 }
 
 // Read receipts
