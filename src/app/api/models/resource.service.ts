@@ -41,13 +41,13 @@ export class ResourceService<T extends Resource> {
   list(queryOptions: QueryOptions): Observable<T[]> {
     return this.httpClient
       .get(`${this.url}/${this.endpoint}?${queryOptions.toQueryString()}`)
-      .pipe(map((data: any) => this.convertData(data.items)));
+      .pipe(map((data: any) => this.convertData(data)));
   }
 
   query(): Observable<T[]> {
     return this.httpClient
       .get(`${this.url}/${this.endpoint}`)
-      .pipe(map((data: any) => this.convertData(data.items)));
+      .pipe(map((data: any) => this.convertData(data)));
   }
 
   delete(id: number) {
@@ -56,6 +56,6 @@ export class ResourceService<T extends Resource> {
   }
 
   private convertData(data: any): T[] {
-    return data.map(item => this.serializer.fromJson(item));
+    return data.map((item: any) => this.serializer.fromJson(item));
   }
 }

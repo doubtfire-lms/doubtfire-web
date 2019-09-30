@@ -11,7 +11,7 @@ import { catchError, retryWhen, concatMap, delay } from 'rxjs/operators';
 export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const retryTimes: number = 3;
-    const delayDuration: number = 1000;
+    const delayDuration: number = 100;
 
     return next.handle(request)
       .pipe(
@@ -33,7 +33,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             errorMessage = `Error: ${error.error.message}`;
           } else {
             // server-side error
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            errorMessage = `${error.error.error}`;
           }
           return throwError(errorMessage);
         })
