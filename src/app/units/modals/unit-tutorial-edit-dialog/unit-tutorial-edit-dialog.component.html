@@ -1,0 +1,63 @@
+<div class="unit-tutorial-edit-modal">
+  <form (ngSubmit)="saveTutorial()">
+    <h1 mat-dialog-title>{{data.model.isNew ? "Create Tutorial" : "Edit Tutorial"}}</h1>
+    <div mat-dialog-content>
+      <div fxLayout="column">
+        <mat-form-field>
+          <mat-label>Abbreviation</mat-label>
+          <input name="abbreviation" matInput placeholder="Abbreviation eg. LA1-01"
+            [(ngModel)]="data.model.tutorial.abbreviation">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Location</mat-label>
+          <input name="location" matInput placeholder="Room Number" [(ngModel)]="data.model.tutorial.meeting_location"
+            required>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Day</mat-label>
+          <mat-select name="day" [(ngModel)]="data.model.tutorial.meeting_day">
+            <mat-option *ngFor="let day of data.days" [value]="day">
+              {{day}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Tutor Name" aria-label="Tutor" [matAutocomplete]="auto" [formControl]="data.formControl">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option class="user-dropdown" *ngFor="let tutor of data.filteredTutors | async" [value]="tutor.name">
+                <user-icon [size]="10" [user]="tutor" [email]="tutor.email" style="max-width: 10px; max-height: 10px; font-size: 8px;"></user-icon>
+                <span>{{tutor.name}}</span> |
+                <small>email: {{tutor.email}}</small>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+      </div>
+    </div>
+    <!-- <div class="modal-body">
+        <div class="form-group" required>
+          <label class="col-sm-3 control-label">Time</label>
+          <div class="col-sm-7">
+            <timepicker ng-model="tutorial.meeting_time" hour-step="1" minute-step="30" show-meridian="false"></timepicker>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Tutor</label>
+          <div class="col-sm-7">
+            <input
+              type="text"
+              class="form-control"
+              ng-model="tutorial.tutor"
+              placeholder="Staff Name"
+              autocomplete="off"
+              typeahead="tutor as tutor.name for tutor in tutors | filter: $viewValue"
+              typeahead-select-on-exact="true"
+              typeahead-editable="false"
+              typeahead-wait-ms="200">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-right">
+        <input ng-disabled="!validForm()" type="submit" class="btn btn-primary" value="{{isNew ? 'Create' : 'Update'}}" />
+      </div> -->
+  </form>
+</div>
