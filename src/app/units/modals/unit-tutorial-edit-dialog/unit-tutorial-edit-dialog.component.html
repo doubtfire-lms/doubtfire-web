@@ -1,35 +1,35 @@
 <div class="unit-tutorial-edit-modal">
   <form (ngSubmit)="saveTutorial()">
-    <h1 mat-dialog-title>{{data.model.isNew ? "Create Tutorial" : "Edit Tutorial"}}</h1>
+    <h1 mat-dialog-title>{{data.isNew ? "Create Tutorial" : "Edit Tutorial"}}</h1>
     <div mat-dialog-content>
       <div fxLayout="column">
         <mat-form-field>
           <mat-label>Abbreviation</mat-label>
           <input name="abbreviation" matInput placeholder="Abbreviation eg. LA1-01"
-            [(ngModel)]="data.model.tutorial.abbreviation" required>
+            [(ngModel)]="data.tutorial.abbreviation" required>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Location</mat-label>
-          <input name="location" matInput placeholder="Room Number" [(ngModel)]="data.model.tutorial.meeting_location"
+          <input name="location" matInput placeholder="Room Number" [(ngModel)]="data.tutorial.meeting_location"
             required>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Day</mat-label>
-          <mat-select name="day" [(ngModel)]="data.model.tutorial.meeting_day">
-            <mat-option *ngFor="let day of data.days" [value]="day" required>
+          <mat-select name="day" [(ngModel)]="data.tutorial.meeting_day">
+            <mat-option *ngFor="let day of days" [value]="day" required>
               {{day}}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Time</mat-label>
-          <input type="time" name="time" matInput placeholder="08:30" [(ngModel)]="data.model.tutorial.meeting_time"
+          <input type="time" name="time" matInput placeholder="08:30" [(ngModel)]="data.tutorial.meeting_time"
             required>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Campus</mat-label>
           <mat-select required>
-            <mat-option *ngFor="let campus of data.campus" [value]="campus">
+            <mat-option *ngFor="let campus of campuses" [value]="campus">
               {{campus}}
             </mat-option>
           </mat-select>
@@ -40,8 +40,8 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Tutor Name" aria-label="Tutor" [matAutocomplete]="auto"
-            [formControl]="data.formControl" required>
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="data.tutorName">
+            [formControl]="data.tutorControl" required>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTutorName">
             <mat-option class="user-dropdown" *ngFor="let tutor of data.filteredTutors | async" [value]="tutor">
               <user-icon [size]="10" [user]="tutor" [email]="tutor.email"
                 style="max-width: 10px; max-height: 10px; font-size: 8px;"></user-icon>
