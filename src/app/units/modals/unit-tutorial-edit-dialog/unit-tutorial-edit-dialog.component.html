@@ -42,11 +42,8 @@
           <input matInput placeholder="Tutor Name" aria-label="Tutor" [matAutocomplete]="auto"
             [formControl]="data.tutorControl" required>
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTutorName">
-            <mat-option class="user-dropdown" *ngFor="let tutor of data.filteredTutors | async" [value]="tutor">
-              <user-icon [size]="10" [user]="tutor" [email]="tutor.email"
-                style="max-width: 10px; max-height: 10px; font-size: 8px;"></user-icon>
-              <span>{{tutor.name}}</span> |
-              <small>email: {{tutor.email}}</small>
+            <mat-option *ngFor="let tutor of data.filteredTutors | async" [value]="tutor">
+              <span>{{tutor.name}}</span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
