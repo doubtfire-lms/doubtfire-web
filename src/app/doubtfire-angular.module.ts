@@ -82,6 +82,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UserService } from './api/models/user/user.service';
 import { UnitTutorialEditDialogContent, UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
+import { TutorialService } from './api/models/tutorial/tutorial.service';
 
 @NgModule({
   // components
@@ -135,6 +136,7 @@ import { MatOptionModule } from '@angular/material/core';
   // Services
   providers: [
     UserService,
+    TutorialService,
     userProvider,
     unitProvider,
     ifRoleProvider,
