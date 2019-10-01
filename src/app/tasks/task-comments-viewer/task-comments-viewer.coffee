@@ -14,8 +14,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, markdown, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
     listeners = listenerService.listenTo($scope)
+    markdown.setFlavor('github')
 
     $scope.uploadFiles = (files) ->
       if typeof files != "undefined"
@@ -88,14 +89,3 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         (response) ->
           alertService.add("danger", response.data.error, 2000)
 )
-
-.directive 'ngRightClick', ($parse) ->
-  (scope, element, attrs) ->
-    fn = $parse(attrs.ngRightClick)
-    element.bind 'contextmenu', (event) ->
-      scope.$apply ->
-        event.preventDefault()
-        fn scope, $event: event
-        return
-      return
-    return
