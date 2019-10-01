@@ -270,7 +270,7 @@ task-comments-viewer .comment .pdf-bubble {
   @include base-bubble;
   display: inline-block;
 
-  a p {
+  a p,a {
     color: white;
     margin-bottom: 0px;
   }
