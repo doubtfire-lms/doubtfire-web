@@ -29,10 +29,12 @@ export class UnitTutorialEditDialogContent {
     this.data.tutorial.tutor_id = this.data.tutorControl.value.user_id
       ? this.data.tutorControl.value.user_id
       : this.data.tutorControl.value.id;
+
     if (this.data.isNew) {
       this.data.tutorial.unit_id = this.data.unit.id;
       this.tutorialService.create(this.data.tutorial).subscribe(
         result => {
+          this.data.unit.tutorials.push(result);
           this.alerts.add('success', `Tutorial added`, 2000);
         },
         error => this.alerts.add('danger', `Error creating user. ${(error != null ? error : undefined)}`, 2000));
@@ -84,8 +86,6 @@ export class UnitTutorialEditDialog {
       this.isNew = true;
       this.tutorial.meeting_day = 'Monday';
       this.tutorial.meeting_time = '08:30';
-      this.tutorial.abbreviation = '';
-      this.tutorial.meeting_location = '';
     }
     if (unit) {
       this.unit = unit;
@@ -96,7 +96,6 @@ export class UnitTutorialEditDialog {
       data: {
         isNew: this.isNew,
         tutorial: this.tutorial,
-        campus: this.campus,
         filteredTutors: this.filteredTutors,
         tutorControl: this.tutorControl,
         unit: this.unit
