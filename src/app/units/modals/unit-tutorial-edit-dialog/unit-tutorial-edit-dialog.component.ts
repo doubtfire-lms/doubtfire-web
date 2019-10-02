@@ -26,6 +26,7 @@ export class UnitTutorialEditDialogContent {
   ) {}
 
   saveTutorial() {
+    if (!this.formValid() ) { return; }
     this.data.tutorial.tutor_id = this.data.tutorControl.value.user_id
       ? this.data.tutorControl.value.user_id
       : this.data.tutorControl.value.id;
@@ -45,6 +46,10 @@ export class UnitTutorialEditDialogContent {
         },
         error => this.alerts.add('danger', `Error creating user. ${(error != null ? error : undefined)}`, 2000));
     }
+  }
+
+  private formValid() {
+    return this.data.tutorControl.value && this.data.tutorial.abbreviation && this.data.tutorial.meeting_location;
   }
 
   displayTutorName(tutor?: Tutor): string | undefined {
