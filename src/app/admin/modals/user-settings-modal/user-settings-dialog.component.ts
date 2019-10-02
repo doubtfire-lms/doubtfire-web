@@ -30,13 +30,13 @@ export class UserSettingsDialogContent {
   ) { }
 
   private createNewUser() {
-    this.user.create(this.data.user).subscribe(
-      result => {
-        this.alerts.add('success', `Created ${result.first_name} ${result.last_name} successfully`, 2000);
-        this.user.query().subscribe(
-          users => users.push(result));
-      },
-      error => this.alerts.add('danger', `Error creating user. ${(error != null ? error : undefined)}`, 2000));
+    // this.user.create(this.data.user).subscribe(
+    //   result => {
+    //     this.alerts.add('success', `Created ${result.first_name} ${result.last_name} successfully`, 2000);
+    //     this.user.query().subscribe(
+    //       users => users.push(result));
+    //   },
+    //   error => this.alerts.add('danger', `Error creating user. ${(error != null ? error : undefined)}`, 2000));
   }
 
   private updateExistingUser() {

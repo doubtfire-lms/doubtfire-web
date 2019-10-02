@@ -1,35 +1,65 @@
-import { ResourceService } from '../resource.service';
-import { HttpClient } from '@angular/common/http';
-import { User } from './user';
-import { UserSerializer } from './user.serializer';
-import { Inject } from '@angular/core';
-import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { EntityService } from "../entity.service";
+import { User } from "./user";
+import { Observable } from "rxjs";
 
-// Used to perform CRUD actions on User resources.
-// Calls the ResourceService constructor, passing the URL path and serializer.
-export class UserService extends ResourceService<User> {
-  constructor(httpClient: HttpClient,
-    @Inject(currentUser) private currentUser: any,
-    @Inject(auth) private auth: any,
-    @Inject(analyticsService) private analyticsService: any, ) {
-    super(
-      httpClient,
-      'users',
-      new UserSerializer());
-  }
+export class UserService extends EntityService<User> {
 
-  // Specific to the User resrouce, so extended.
-  save(user: User) {
-    user.name = `${user.first_name} ${user.last_name}`;
-    if (user === this.currentUser.profile) {
-      this.auth.saveCurrentUser();
-      if (user.opt_in_to_research) {
-        this.analyticsService.event(
-          'Doubtfire Analytics',
-          'User opted in research'
-        );
-      }
+  protected readonly baseEndpoint = "users";
+
+  protected endpoint(data: number): string;
+  protected endpoint(data: string): string;
+  protected endpoint(data: User): string;
+  protected endpoint(data: Object): string {
+
+    if (!data) {
+      console.log("error");
     }
+    let id: number;
+    if (typeof data === "number") {
+      id = data;
+    } else if (data instanceof User) {
+      id = (data as User).id;
+    } else if (typeof data === "object") {
+      id = data["id"];
+    } else {
+      id = data;
+    }
+    return `${this.baseEndpoint}/${id}`;
   }
 
+  // public get(id: number): Observable<User> {
+  //   return this.getEntity(id.toString(), this.endpoint(id));
+  // }
+
+  // public list(): Observable<User | User[]> {
+  //   return super.list(this.baseEndpoint);
+  // }
+
+  private upgrade(item: any): User {
+    return Object.setPrototypeOf(item, User.prototype);
+  }
+
+  public delete(item: any) {
+    if (!(item instanceof User)) {
+      this.upgrade(item);
+    }
+    return super.delete(item);
+  }
+
+  public update(item: any): Observable<User> {
+    if (!(item instanceof User)) {
+      this.upgrade(item);
+    }
+    return super.update(item);
+  }
+
+  protected createInstanceFrom(json: any): User {
+    let user = new User();
+    user.updateFromJson(json);
+    return user;
+  }
+
+  public keyForJson(json: any): string {
+    return json.id;
+  }
 }
