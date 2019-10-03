@@ -120,7 +120,6 @@ import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
 import 'build/src/app/admin/states/units/units.js';
 import 'build/src/app/admin/states/users/users.js';
-import 'build/src/app/admin/states/campuses/campus-list/campus-list.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.js';
@@ -281,6 +280,7 @@ import { ExtensionModalService } from './common/modals/extension-modal/extension
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 import { UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
+import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -318,8 +318,10 @@ DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
 DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
-  DoubtfireAngularJSModule.directive('userIcon',
+DoubtfireAngularJSModule.directive('userIcon',
   downgradeComponent({ component: UserIconComponent }));
+DoubtfireAngularJSModule.directive('campusListComponent',
+  downgradeComponent({ component: CampusListComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

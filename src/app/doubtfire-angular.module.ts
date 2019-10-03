@@ -72,6 +72,7 @@ import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microph
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
@@ -83,6 +84,7 @@ import { UserService } from './api/models/user/user.service';
 import { UnitTutorialEditDialogContent, UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
+import { doubtfireStates } from './doubtfire.states';
 
 @NgModule({
   // components
@@ -100,6 +102,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
+    CampusListComponent,
     ExtensionModalComponent,
     UserIconComponent
   ],
@@ -131,7 +134,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
-    UIRouterUpgradeModule.forRoot(),
+    UIRouterUpgradeModule.forRoot({states: doubtfireStates})
   ],
   // Services
   providers: [
