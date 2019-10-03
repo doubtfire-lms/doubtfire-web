@@ -120,6 +120,7 @@ import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
 import 'build/src/app/admin/states/units/units.js';
 import 'build/src/app/admin/states/users/users.js';
+import 'build/src/app/admin/states/campuses/campus-list/campus-list.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.js';

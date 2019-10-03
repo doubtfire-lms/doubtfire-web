@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Campuses</h4>
+        Modify Campuses registered with {{externalName.value}}
+      </div>
+      <form role="search" class="pull-right form-horizontal">
+        <input id="searchbar" class="input-md form-control" placeholder="Search for campuses..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods.loadedPeriods | filter:$viewValue | limitTo:8" />
+      </form>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" ng-hide="campuses.loadedCampuses.length > 0">No teaching periods have been registered with {{externalName.value}} yet</div>
+        <table ng-show="campuses.loadedCampuses.length > 0" class="table table-hover table-pointer">
+          <thead>
+            <tr>
+              <th><a ng-click="sortOrder='campus.name()'; reverse=!reverse">Name <i ng-show="sortOrder=='period'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='campus.mode()'; reverse=!reverse">Mode <i ng-show="sortOrder=='active_until'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="campus in filteredCampuses = (campuses.loadedCampuses | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="" >
+              <td>{{campus.name}}</td>
+              <td>{{campus.mode}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer clearfix">
+        <a href class="btn btn-success pull-right" ng-click="showCampusMdal()">
+          <i class="fa fa-calendar"></i>
+          <i class="fa fa-plus"></i>
+          Add Campus
+        </a>
+        <pagination ng-show="filteredCampuses.length > pageSize" total-items="filteredCampuses.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+      </div>
+    </div>
+  </div>
+</div>
