@@ -59,7 +59,7 @@
     ],
     "quotemark": [
       true,
-      "double"
+      "single"
     ],
     "radix": true,
     "semicolon": [
