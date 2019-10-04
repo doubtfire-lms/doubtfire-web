@@ -111,15 +111,26 @@ export abstract class EntityService<T extends Entity>  {
    */
   public update(pathIds: Object, options?: HttpOptions): Observable<T>;
   public update(pathIds: any, options?: HttpOptions): Observable<T> {
+    return this.put<Object>(pathIds, options).pipe(
+      map(rawData => this.createInstanceFrom(rawData))
+    );
+  }
+
+  /**
+   * Make an put request to the endpoint, indicating the type of data to be returned from the endpoint. 
+   * The supplied object identifies the endpoint url and data.
+   *
+   * @typeparam S The type of the data to be returned
+   * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
+   * @param options Optional http options
+   */
+  public put<S>(pathIds: Object, options?: HttpOptions): Observable<S>;
+  public put<S>(pathIds: any, options?: HttpOptions): Observable<S> {
     let object = { ...pathIds };
     const json = (typeof pathIds === 'object') ? pathIds.toJson() : pathIds;
-    if (typeof pathIds === 'number') {
-      object['id'] = pathIds;
-    }
     const path = this.buildEndpoint(this.endpointFormat, object);
 
-    return this.httpClient.put(path, json, options)
-      .pipe(map(rawData => this.createInstanceFrom(rawData)));  // Turn the raw JSON returned into the object T
+    return this.httpClient.put(path, json, options) as Observable<S>;
   }
 
 
@@ -176,4 +187,5 @@ export abstract class EntityService<T extends Entity>  {
    * @returns string containing the unique key value
    */
   public abstract keyForJson(json: any): string;
+
 }

@@ -1,7 +1,7 @@
 import { EntityService, HttpOptions } from './entity.service';
 import { Entity } from './entity';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 
 export abstract class CacheableEntityService<T extends Entity> extends EntityService<T> {
   private cache: Map<string, T> = new Map<string, T>();
@@ -46,21 +46,23 @@ export abstract class CacheableEntityService<T extends Entity> extends EntitySer
  * @param options Optional http options
  */
   public get(pathIds: number, options?: HttpOptions): Observable<T>;
+  public get(pathIds: string, options?: HttpOptions): Observable<T>;
   public get(pathIds: object, options?: HttpOptions): Observable<T>;
   public get(pathIds: any, options?: HttpOptions): Observable<T> {
     let key: string;
     if (typeof pathIds === 'object') {
       key = pathIds['id'];
+    } else if (typeof pathIds === 'number') {
+      key = pathIds.toString();
     } else {
       key = pathIds;
     }
-
     if (this.cache.has(key)) {
-      return Observable.create((observer: any) => {
-        observer.next(this.cache.get(key));
-      });
+      return Observable.create((observer: any) => observer.next(this.cache.get(key)));
     } else {
-      return super.get(pathIds, options);
+      return super.get(pathIds, options).pipe(
+        tap((entity: T) => this.cache.set(entity.key, entity))
+      );
     }
   }
 
