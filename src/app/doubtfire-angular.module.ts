@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -14,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -85,6 +87,8 @@ import { UnitTutorialEditDialogContent, UnitTutorialEditDialog } from './units/m
 import { MatOptionModule } from '@angular/material/core';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { doubtfireStates } from './doubtfire.states';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   // components
@@ -124,14 +128,18 @@ import { doubtfireStates } from './doubtfire.states';
     MatSelectModule,
     MatButtonToggleModule,
     MatButtonModule,
+    MatMenuModule,
+    MatCardModule,
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,
+    MatSortModule,
     MatProgressBarModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
     UpgradeModule,
+    MatTableModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({states: doubtfireStates})

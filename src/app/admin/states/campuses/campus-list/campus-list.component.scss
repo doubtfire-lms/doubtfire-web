@@ -1,0 +1,27 @@
+campus-list {
+  table {
+    width: 100%;
+  }
+  td.mat-column-star {
+    width: 10%;
+  }
+  .divider {
+    width: 8px;
+    height: auto;
+    display: inline-block;
+  }
+  td {
+    width: 33%;
+  }
+  .right {
+    float: right;
+  }
+  .actions {
+    float: right;
+    padding: 2rem 0 1rem 0;
+  }
+  .campus-entry {
+    padding: 1rem 1rem 1rem 0;
+    width: 95%;
+  }
+}
