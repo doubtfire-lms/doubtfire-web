@@ -166,7 +166,6 @@ import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-
 import 'build/src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
-import 'build/src/app/units/states/edit/directives/unit-tutorials-editor/unit-tutorials-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
@@ -281,6 +280,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 import { UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-editor/unit-tutorials-list.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -316,6 +316,8 @@ DoubtfireAngularJSModule.directive('taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent }));
 DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
+DoubtfireAngularJSModule.directive('unitTutorialsList',
+  downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('userIcon',

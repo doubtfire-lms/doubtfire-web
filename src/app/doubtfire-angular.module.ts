@@ -89,6 +89,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-editor/unit-tutorials-list.component';
 
 @NgModule({
   // components
@@ -102,6 +103,7 @@ import { MatSortModule } from '@angular/material/sort';
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
+    UnitTutorialsListComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
@@ -184,6 +186,7 @@ import { MatSortModule } from '@angular/material/sort';
     UserNotificationSettingsModalContent,
     TaskCommentComposerComponent,
     IntelligentDiscussionPlayerComponent,
+    UnitTutorialsListComponent,
     ExtensionCommentComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,

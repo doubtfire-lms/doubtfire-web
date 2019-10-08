@@ -1,0 +1,85 @@
+<div>
+  <div class="header">
+    <div>
+      <h3>Unit Tutorials</h3>
+      <p>Add new tutorials to the unit or modify existing ones</p>
+    </div>
+    <div class="interactions">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- Abbreviation Column -->
+    <ng-container matColumnDef="abbreviation">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <td mat-cell *matCellDef="let tutorial">
+        {{tutorial.abbreviation}}
+      </td>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+      <td mat-cell *matCellDef="let tutorial">
+        {{tutorial.meeting_location}}
+      </td>
+    </ng-container>
+
+    <!-- Day Column -->
+    <ng-container matColumnDef="day">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Day </th>
+      <td mat-cell *matCellDef="let tutorial">
+        {{tutorial.meeting_day}}
+      </td>
+    </ng-container>
+
+    <!-- Time Column -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+      <td mat-cell *matCellDef="let tutorial">
+        {{tutorial.meeting_time | date:'HH:mm'}}
+      </td>
+    </ng-container>
+
+    <!-- Tutor Column -->
+    <ng-container matColumnDef="tutor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutor </th>
+      <td mat-cell *matCellDef="let tutorial">
+        {{tutorial.tutor_name}}
+      </td>
+    </ng-container>
+
+    <!-- Options Column -->
+    <ng-container matColumnDef="options" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editTutorial(element)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <ng-container>
+    <div class="actions">
+      <button mat-stroked-button color="primary" (click)="createTutorial()">Add Tutorial</button>
+    </div>
+  </ng-container>
+</div>
