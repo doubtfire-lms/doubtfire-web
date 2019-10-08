@@ -3,9 +3,7 @@ import { currentUser, alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-// Need to add abbriviation
-
-const ELEMENT_DATA = [
+let ELEMENT_DATA = [
   { id: 1, abbreviation: 'ABBR-01', name: 'Waterfront', mode: 'Timetable' },
   { id: 2, abbreviation: 'ABBR-01', name: 'Cloud', mode: 'Automatic' }
 ];
@@ -21,7 +19,7 @@ export class CampusListComponent implements OnInit {
   newCampus = false;
   edit: number;
 
-  displayedColumns: string[] = ['abbreviation', 'name', 'mode', 'star'];
+  displayedColumns: string[] = ['abbreviation', 'name', 'mode', 'options'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -37,6 +35,15 @@ export class CampusListComponent implements OnInit {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  save(item) {
+    // Do save stuff here
+    this.edit = -1;
+  }
+
+  delete(toDelete) {
+    // Perform deletion
   }
 
   editing(id): boolean {

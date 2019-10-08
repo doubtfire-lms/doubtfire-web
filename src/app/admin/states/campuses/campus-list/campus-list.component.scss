@@ -5,30 +5,32 @@ campus-list {
   table {
     width: 100%;
   }
-  td.mat-column-star {
-    width: 10%;
+  .header {
+    display: flex;
+    .interactions {
+      margin-left: auto;
+      margin-top: auto;
+    }
+  }
+  td.mat-cell:last-of-type,
+  td.mat-footer-cell:last-of-type,
+  th.mat-header-cell:last-of-type {
+    padding-right: 0px;
+  }
+  td.mat-column-options {
+    width: 10px;
+  }
+  .actions {
+    display: flex;
+    padding: 2rem 0 1rem 0;
+    button {
+      margin-left: auto;
+    }
   }
   .divider {
     width: 8px;
     height: auto;
     display: inline-block;
-  }
-  td {
-    width: 33%;
-  }
-  .context {
-    width: 20%;
-    display: inline-block;
-  }
-  .filter {
-    margin-top: 4rem;
-  }
-  .right {
-    float: right;
-  }
-  .actions {
-    float: right;
-    padding: 2rem 0 1rem 0;
   }
   .campus-entry {
     padding: 1rem 1rem 1rem 0;
