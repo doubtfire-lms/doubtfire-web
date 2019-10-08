@@ -1,4 +1,7 @@
 campus-list {
+  .campus-list-container {
+    padding: 0 5rem 0 5rem;
+  }
   table {
     width: 100%;
   }
@@ -12,6 +15,13 @@ campus-list {
   }
   td {
     width: 33%;
+  }
+  .context {
+    width: 20%;
+    display: inline-block;
+  }
+  .filter {
+    margin-top: 4rem;
   }
   .right {
     float: right;
