@@ -20,14 +20,28 @@ unit-tutorials-list {
   th.mat-header-cell:last-of-type {
     padding-right: 0px;
   }
-  td.mat-column-options {
-    width: 10px;
+  .mat-column-abbreviation {
+    max-width: 150px;
+    .data-entry {
+      max-width: 100px;
+    }
   }
+
+  .mat-column-campus {
+    max-width: 150px;
+    .data-entry {
+      max-width: 100px;
+    }
+  }
+
   .actions {
     display: flex;
     padding: 2rem 0 1rem 0;
     button {
       margin-left: auto;
     }
+  }
+  .data-entry {
+    padding: 1rem 1rem 1rem 0;
   }
 }

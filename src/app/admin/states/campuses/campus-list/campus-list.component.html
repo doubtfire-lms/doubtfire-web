@@ -5,7 +5,7 @@
       <p>Add new campuses or modify existing ones</p>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z4">
 
     <!-- Abbreviation Column -->
     <ng-container matColumnDef="abbreviation">
@@ -15,13 +15,13 @@
           {{element.abbreviation}}
         </div>
         <ng-template #edit>
-          <mat-form-field class="campus-entry">
+          <mat-form-field class="data-entry">
             <input matInput [value]="element.abbreviation">
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="campus-entry">
+        <mat-form-field class="data-entry">
           <input matInput placeholder="Campus Abbreviation">
         </mat-form-field>
       </td>
@@ -35,13 +35,13 @@
           {{element.name}}
         </div>
         <ng-template #edit>
-          <mat-form-field class="campus-entry">
+          <mat-form-field class="data-entry">
             <input matInput [value]="element.name">
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="campus-entry">
+        <mat-form-field class="data-entry">
           <input matInput placeholder="Campus Name">
         </mat-form-field>
       </td>
@@ -56,7 +56,7 @@
           {{element.mode}}
         </div>
         <ng-template #edit>
-          <mat-form-field class="campus-entry">
+          <mat-form-field class="data-entry">
             <mat-select [(value)]="element.mode">
               <mat-option *ngFor="let mode of syncModes" value="mode">
                 {{mode}}
@@ -66,7 +66,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="campus-entry">
+        <mat-form-field class="data-entry">
           <mat-label>Default Sync Mode</mat-label>
           <mat-select>
             <mat-option *ngFor="let mode of syncModes" [value]="mode">

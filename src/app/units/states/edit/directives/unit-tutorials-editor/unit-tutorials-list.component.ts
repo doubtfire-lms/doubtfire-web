@@ -22,9 +22,10 @@ export class UnitTutorialsListComponent implements OnInit {
 
   syncTableColumns: string[] = ['campus', 'sync'];
   syncOptions = ['Timetable', 'Automatic', 'None'];
+  edit: number;
 
 
-  displayedColumns: string[] = ['abbreviation', 'location', 'day', 'time', 'tutor', 'options'];
+  displayedColumns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
   dataSource: MatTableDataSource<any>;
   sampleSyncDataSource = new MatTableDataSource(sampleSyncData);
   sync = 'default';
@@ -37,12 +38,17 @@ export class UnitTutorialsListComponent implements OnInit {
     @Inject(UnitTutorialEditDialog) private tutorialDialog
   ) { }
 
-  createTutorial() {
-    this.tutorialDialog.show(this.unit);
+  save(item) {
+    // Do save stuff here
+    this.edit = -1;
   }
 
-  editTutorial(tutorial) {
-    this.tutorialDialog.show(this.unit, tutorial);
+  editing(id): boolean {
+    return id === this.edit;
+  }
+
+  flagEdit(id) {
+    this.edit = id;
   }
 
   ngOnInit() {

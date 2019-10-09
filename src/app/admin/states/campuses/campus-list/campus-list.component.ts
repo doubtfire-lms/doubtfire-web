@@ -16,7 +16,6 @@ let ELEMENT_DATA = [
 export class CampusListComponent implements OnInit {
 
   syncModes = ['Timetable', 'Automatic', 'None'];
-  newCampus = false;
   edit: number;
 
   displayedColumns: string[] = ['abbreviation', 'name', 'mode', 'options'];
@@ -52,13 +51,5 @@ export class CampusListComponent implements OnInit {
 
   flagEdit(id) {
     this.edit = id;
-  }
-
-  addCampus() {
-    this.newCampus = true;
-  }
-
-  cancelAddCampus() {
-    this.newCampus = false;
   }
 }
