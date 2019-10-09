@@ -1,7 +1,7 @@
 import { EntityService, HttpOptions } from './entity.service';
 import { Entity } from './entity';
 import { Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, map } from 'rxjs/operators';
 
 export abstract class CacheableEntityService<T extends Entity> extends EntityService<T> {
   private cache: Map<string, T> = new Map<string, T>();
@@ -35,6 +35,42 @@ export abstract class CacheableEntityService<T extends Entity> extends EntitySer
         });
       }));
   }
+
+  /**
+* First, tries to retrieve from cache, the object with the id, or id field from the pathIds.
+* If found, return the item from cache, otherwise make a get request to the end point,
+* using the supplied parameters to determine path. Caches the returned object
+*
+* @param pathIds Either the id, if a number and maps simple to ':id', otherwise an object
+*                with keys the match the placeholders within the endpointFormat string.
+* @param options Optional http options
+*/
+  public fetch(pathIds: number, options?: HttpOptions): Observable<T>;
+  public fetch(pathIds: string, options?: HttpOptions): Observable<T>;
+  public fetch(pathIds: object, options?: HttpOptions): Observable<T>;
+  public fetch(pathIds: any, options?: HttpOptions): Observable<T> {
+    let key: string;
+    if (typeof pathIds === 'object') {
+      key = pathIds['id'];
+    } else if (typeof pathIds === 'number') {
+      key = pathIds.toString();
+    } else {
+      key = pathIds;
+    }
+    return super.get(pathIds, options).pipe(
+      map((entity: T) => {
+        if (this.cache.has(key)) {
+          let cachedEntity = this.cache.get(key);
+          Object.assign(cachedEntity, entity);
+          return cachedEntity;
+        } else {
+          this.cache.set(key, entity);
+          return entity;
+        }
+      })
+    );
+  }
+
 
   /**
  * First, tries to retrieve from cache, the object with the id, or id field from the pathIds.

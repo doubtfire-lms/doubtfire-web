@@ -150,9 +150,6 @@ describe('UserService', () => {
 
     userService.get(1).subscribe(data => {
     });
-    // let getTest2 = userService.get(1);
-    // let getTest3 = userService.get(1);
-    // let getTest4 = userService.get(1);
 
     let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
@@ -169,59 +166,53 @@ describe('UserService', () => {
 
     httpMock.expectNone((request: HttpRequest<any>): boolean => { return true; });
     tick();
+  }));
 
+  it('should cache fetch/get', fakeAsync(() => {
+    let user = new User();
+    user.updateFromJson({
+      name: 'jake', last_name: 'renzella', first_name: 'Jake', nickname: 'jake',
+      system_role: 'admin', has_run_first_time_setup: false, email: 'jake@jake.jake',
+      student_id: '1', username: 'test', opt_in_to_research: true, receive_portfolio_notifications: false,
+      receive_feedback_notifications: false, receive_task_notifications: false
+    });
 
-    // forkJoin([getTest, getTest2, getTest3]).subscribe(results => {
-    //   results.forEach(result => {
-    //     expect(result).toEqual(user);
-    //   });
-    // });
-    // userService.get(1).pipe(
-    //   tap(u => expect(u).toEqual(user, 'expected users')),
-    // ).subscribe(x => {
-    //   userService.get(1).pipe(
-    //     tap(u => expect(u).toEqual(user, 'expected users')),
-    //   ).subscribe();
-    // });
+    // 1 request here
+    userService.get(1).subscribe(data => {
+      user = data;
+    });
 
+    let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+      expect(request.url).toEqual('http://localhost:3000/api/users/1');
+      expect(request.method).toBe('GET');
+      return true;
+    });
 
+    let user2 = new User();
+    user2.updateFromJson(user);
+    user2.id = 1;
+    req.flush(user2);
+    tick();
 
-    // return userService.get(1).subscribe(
-    //   result2 => {
-    //     expect(result2).toEqual(user, 'expected users');
-    //     return userService.get(1).subscribe();
-    //   }
-    // );
+    let user3;
 
+    // 1 request here
+    userService.fetch(1).subscribe(data => {
+      expect(data).toBe(user);
+      user3 = data;
+    });
 
-    // userService.get(1).subscribe(
-    //   result => expect(result).toEqual(user, 'expected users')
-    // );
+    req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+      expect(request.url).toEqual('http://localhost:3000/api/users/1');
+      expect(request.method).toBe('GET');
+      return true;
+    });
+    let user4 = new User();
+    user4.updateFromJson(user2);
+    user4.name = 'fred';
+    req.flush(user4);
 
-    // const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
-    //   expect(request.url).toEqual('http://localhost:3000/api/users/1');
-    //   expect(request.method).toBe('GET');
-    //   return true;
-    // });
-    // req.flush(user);
-    // tick();
+    httpMock.expectNone((request: HttpRequest<any>): boolean => { return true; });
+    tick();
   }));
 });
-
-
-  // it('#Create a new user using the UserService', () => {
-  //   let userService: UserService = TestBed.get(UserService);
-  //   userService.get(1).subscribe(data => {
-  //     console.log(data);
-  //     expect(data).toBe(new User())
-  //   });
-  // });
-
-  // it('#Update an existing User', () => {
-  //   let userService: UserService = TestBed.get(UserService);
-  //   userService.get(1).subscribe(data => {
-  //     data.first_name = 'Applebee';
-  //     userService.update(data).subscribe(result => expect(result).toBe(data));
-  //   });
-  // });
-// });
