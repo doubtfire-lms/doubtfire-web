@@ -22,6 +22,7 @@ export class UnitTutorialsListComponent implements OnInit {
 
   syncTableColumns: string[] = ['campus', 'sync'];
   syncOptions = ['Timetable', 'Automatic', 'None'];
+  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   edit: number;
 
 
@@ -48,10 +49,12 @@ export class UnitTutorialsListComponent implements OnInit {
   }
 
   flagEdit(id) {
+    debugger;
     this.edit = id;
   }
 
   ngOnInit() {
+
     this.dataSource = new MatTableDataSource(this.unit.tutorials);
     this.dataSource.sort = this.sort;
   }

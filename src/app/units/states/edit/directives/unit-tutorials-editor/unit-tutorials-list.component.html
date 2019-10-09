@@ -83,13 +83,23 @@
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput [value]="tutorial.meeting_day">
+            <mat-label>Day</mat-label>
+            <mat-select name="day" [(ngModel)]="tutorial.meeting_day">
+              <mat-option *ngFor="let day of days" [value]="day" required>
+                {{day}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput placeholder="Day">
+          <mat-label>Day</mat-label>
+          <mat-select name="day">
+            <mat-option *ngFor="let day of days" [value]="day" required>
+              {{day}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </td>
     </ng-container>
@@ -103,13 +113,13 @@
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput [value]="tutorial.meeting_time">
+            <input type="time" matInput [value]="tutorial.meeting_time">
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput placeholder="Time">
+          <input type="time" matInput placeholder="Time">
         </mat-form-field>
       </td>
     </ng-container>
@@ -123,13 +133,23 @@
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput [value]="tutorial.tutor_name">
+            <mat-label>Tutor</mat-label>
+            <mat-select name="tutor" [(ngModel)]="tutorial.tutor_name">
+              <mat-option *ngFor="let staff of unit.staff" [value]="staff" required>
+                {{staff.name}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput placeholder="Tutor">
+          <mat-label>Tutor</mat-label>
+          <mat-select name="tutor">
+            <mat-option *ngFor="let staff of unit.staff" [value]="staff" required>
+              {{staff.name}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </td>
     </ng-container>
@@ -157,13 +177,13 @@
     <!-- Options Column -->
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let tutorial">
+      <td mat-cell *matCellDef="let tutorial; let i = index">
         <div class="right" *ngIf="!editing(tutorial.id) else edit">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="flagEdit(tutorial.id)">
+            <button mat-menu-item (click)="flagEdit(i)">
               <mat-icon color="primary">edit</mat-icon>
               <span>Edit</span>
             </button>

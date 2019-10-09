@@ -20,18 +20,17 @@ unit-tutorials-list {
   th.mat-header-cell:last-of-type {
     padding-right: 0px;
   }
-  .mat-column-abbreviation {
-    max-width: 150px;
-    .data-entry {
-      max-width: 100px;
-    }
+
+  .mat-column-abbreviation,
+  .mat-column-campus,
+  .mat-column-location,
+  .mat-column-day {
+    max-width: 120px;
   }
 
-  .mat-column-campus {
-    max-width: 150px;
-    .data-entry {
-      max-width: 100px;
-    }
+  .mat-column-time,
+  .mat-column-capacity {
+    max-width: 80px;
   }
 
   .actions {
@@ -43,5 +42,6 @@ unit-tutorials-list {
   }
   .data-entry {
     padding: 1rem 1rem 1rem 0;
+    width: 95%;
   }
 }
