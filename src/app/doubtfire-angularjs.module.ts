@@ -280,7 +280,9 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 import { UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
-import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-editor/unit-tutorials-list.component';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
+import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -322,8 +324,12 @@ DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('userIcon',
   downgradeComponent({ component: UserIconComponent }));
-DoubtfireAngularJSModule.directive('campusListComponent',
+DoubtfireAngularJSModule.directive('campusList',
   downgradeComponent({ component: CampusListComponent }));
+DoubtfireAngularJSModule.directive('activityList',
+  downgradeComponent({ component: ActivityListComponent }));
+DoubtfireAngularJSModule.directive('institutionSettings',
+  downgradeComponent({ component: InstitutionSettingsComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

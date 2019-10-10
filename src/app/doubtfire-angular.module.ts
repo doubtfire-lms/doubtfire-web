@@ -4,7 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -72,7 +72,7 @@ import {
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
@@ -88,8 +88,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-editor/unit-tutorials-list.component';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
+import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 
 @NgModule({
   // components
@@ -109,8 +112,10 @@ import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
     CampusListComponent,
+    ActivityListComponent,
     ExtensionModalComponent,
-    UserIconComponent
+    UserIconComponent,
+    InstitutionSettingsComponent
   ],
   // Module Imports
   imports: [
@@ -142,9 +147,10 @@ import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-
     MatSliderModule,
     UpgradeModule,
     MatTableModule,
+    MatTabsModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
-    UIRouterUpgradeModule.forRoot({states: doubtfireStates})
+    UIRouterUpgradeModule.forRoot({ states: doubtfireStates })
   ],
   // Services
   providers: [
