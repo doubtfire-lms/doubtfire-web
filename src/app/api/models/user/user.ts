@@ -1,5 +1,7 @@
 import { Entity } from '../entity';
 
+export type Tutor = User;
+
 const KEYS =
   [
     'id',

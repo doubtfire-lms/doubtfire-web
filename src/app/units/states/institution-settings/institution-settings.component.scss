@@ -1,0 +1,8 @@
+institution-settings {
+  .institution-settings-container {
+    padding: 0 5rem 0 5rem;
+    [class*="-container"] {
+      padding: 0 1rem 1rem 1rem;
+    }
+  }
+}
