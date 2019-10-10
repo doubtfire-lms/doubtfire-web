@@ -1,35 +1,41 @@
-import { ResourceService } from '../resource.service';
-import { HttpClient } from '@angular/common/http';
 import { User } from './user';
-import { UserSerializer } from './user.serializer';
+import { CacheableEntityService } from '../cacheableentity.service';
 import { Inject } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { HttpClient } from '@angular/common/http';
 
-// Used to perform CRUD actions on User resources.
-// Calls the ResourceService constructor, passing the URL path and serializer.
-export class UserService extends ResourceService<User> {
+export class UserService extends CacheableEntityService<User> {
+  protected readonly endpointFormat = 'users/:id:';
+
   constructor(httpClient: HttpClient,
     @Inject(currentUser) private currentUser: any,
     @Inject(auth) private auth: any,
-    @Inject(analyticsService) private analyticsService: any, ) {
-    super(
-      httpClient,
-      'users',
-      new UserSerializer());
+    @Inject(analyticsService) private analyticsService: any,
+  ) {
+    super(httpClient);
   }
 
-  // Specific to the User resource, so extended.
-  save(user: User) {
+  protected createInstanceFrom(json: any): User {
+    let user = new User();
+    user.updateFromJson(json);
+    return user;
+  }
+
+  public keyForJson(json: any): string {
+    return json.id;
+  }
+
+  // Specific to the User entity
+  public save(user: User) {
     user.name = `${user.first_name} ${user.last_name}`;
     if (user === this.currentUser.profile) {
       this.auth.saveCurrentUser();
       if (user.opt_in_to_research) {
         this.analyticsService.event(
           'Doubtfire Analytics',
-          'User opted in research'
+          'User saved'
         );
       }
     }
   }
-
 }

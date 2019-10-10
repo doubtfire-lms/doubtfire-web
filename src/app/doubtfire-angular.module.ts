@@ -93,6 +93,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CampusService } from './api/models/campus/campus.service';
 
 @NgModule({
   // components
@@ -156,6 +157,7 @@ import { InstitutionSettingsComponent } from './units/states/institution-setting
   providers: [
     UserService,
     TutorialService,
+    CampusService,
     userProvider,
     unitProvider,
     ifRoleProvider,

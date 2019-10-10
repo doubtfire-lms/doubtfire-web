@@ -1,6 +1,9 @@
 import { Injectable, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from 'src/app/api/models/user/user.service';
+import { User } from 'src/app/api/models/user/user';
+import { Campus } from 'src/app/api/models/campus/campus';
+import { CampusService } from 'src/app/api/models/campus/campus.service';
 
 @Component({
   selector: 'user-notification-modal',
@@ -9,23 +12,26 @@ import { UserService } from 'src/app/api/models/user/user.service';
 })
 export class UserNotificationSettingsModalContent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private userService: UserService
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: User,
+    private userService: UserService,
+  ) { }
 
   saveSettings(): void {
-    this.userService.update(this.data).subscribe(result => this.userService.save(this.data));
+    this.userService.update(this.data).subscribe(() => this.userService.save(this.data));
   }
 }
 
 @Injectable()
 export class UserNotificationSettingsModal {
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
-  show(user: any) {
+  show(user: User) {
+    // TODO: This needs to be thought about...
+    let u = new User();
+    u.updateFromJson(user);
     this.dialog.open(UserNotificationSettingsModalContent, {
       width: '365px',
-      data: user
+      data: u
     });
   }
 }

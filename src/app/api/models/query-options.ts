@@ -18,7 +18,7 @@ export class QueryOptions implements QueryBuilder {
   }
 
   toQueryString() {
-    let queryString = '';
+    let queryString = "";
     this.toQueryMap().forEach((value: string, key: string) => {
       queryString = queryString.concat(`${key}=${value}&`);
     });
