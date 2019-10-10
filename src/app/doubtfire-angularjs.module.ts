@@ -278,7 +278,6 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
-import { UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
@@ -306,8 +305,6 @@ DoubtfireAngularJSModule.factory('UserSettingsDialog',
   downgradeInjectable(UserSettingsDialog));
 DoubtfireAngularJSModule.factory('UserNotificationSettingsModal',
   downgradeInjectable(UserNotificationSettingsModal));
-DoubtfireAngularJSModule.factory('UnitTutorialEditDialog',
-  downgradeInjectable(UnitTutorialEditDialog));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',

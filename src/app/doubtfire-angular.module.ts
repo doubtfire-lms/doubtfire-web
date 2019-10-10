@@ -83,9 +83,7 @@ import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/us
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UserService } from './api/models/user/user.service';
-import { UnitTutorialEditDialogContent, UnitTutorialEditDialog } from './units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 import { MatOptionModule } from '@angular/material/core';
-import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -101,7 +99,6 @@ import { CampusService } from './api/models/campus/campus.service';
     AboutDoubtfireModalContent,
     UserSettingsDialogContent,
     UserNotificationSettingsModalContent,
-    UnitTutorialEditDialogContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -156,7 +153,6 @@ import { CampusService } from './api/models/campus/campus.service';
   // Services
   providers: [
     UserService,
-    TutorialService,
     CampusService,
     userProvider,
     unitProvider,
@@ -185,7 +181,6 @@ import { CampusService } from './api/models/campus/campus.service';
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     UserSettingsDialog,
-    UnitTutorialEditDialog,
     UserNotificationSettingsModal,
     DoubtfireConstants
   ],
@@ -200,8 +195,7 @@ import { CampusService } from './api/models/campus/campus.service';
     DiscussionComposerDialog,
     ExtensionModalComponent,
     UserIconComponent,
-    UserSettingsDialogContent,
-    UnitTutorialEditDialogContent
+    UserSettingsDialogContent
   ]
 })
 export class DoubtfireAngularModule {

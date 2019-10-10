@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
 import { currentUser, alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { UnitTutorialEditDialog } from 'src/app/units/modals/unit-tutorial-edit-dialog/unit-tutorial-edit-dialog.component';
 
 const campuses = ['Burwood', 'Coud'];
 const sampleSyncData = [
@@ -36,7 +35,6 @@ export class UnitTutorialsListComponent implements OnInit {
   constructor(
     @Inject(currentUser) private currentUser: any,
     @Inject(alertService) private alertService: any,
-    @Inject(UnitTutorialEditDialog) private tutorialDialog
   ) { }
 
   save(item) {
