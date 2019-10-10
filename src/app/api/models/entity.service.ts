@@ -117,7 +117,7 @@ export abstract class EntityService<T extends Entity>  {
   }
 
   /**
-   * Make an put request to the endpoint, indicating the type of data to be returned from the endpoint. 
+   * Make an put request to the endpoint, indicating the type of data to be returned from the endpoint.
    * The supplied object identifies the endpoint url and data.
    *
    * @typeparam S The type of the data to be returned
@@ -141,9 +141,12 @@ export abstract class EntityService<T extends Entity>  {
    * @param options Optional http options
    * @returns {Observable} a new cold observable with the newely created @type {T}
    */
-  public create(pathIds?: Object, options?: HttpOptions): Observable<T> {
-    const path = this.buildEndpoint(this.endpointFormat, pathIds);
-    return this.httpClient.post(path, options)
+  public create(pathIds?: Object, options?: HttpOptions): Observable<T>;
+  public create(pathIds?: any, options?: HttpOptions): Observable<T> {
+    let object = { ...pathIds };
+    const json = (typeof pathIds === 'object') ? pathIds.toJson() : pathIds;
+    const path = this.buildEndpoint(this.endpointFormat, object);
+    return this.httpClient.post(path, json, options)
       .pipe(
         map(rawData => this.createInstanceFrom(rawData))
       );

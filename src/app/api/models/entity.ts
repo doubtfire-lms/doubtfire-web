@@ -1,6 +1,16 @@
 export abstract class Entity {
-  constructor(
-  ) { }
+
+  /**
+   * Construct an Entity object
+   *
+   * @param initialData An optional object storing the data to initialise the Entity with, calls @method updateFromJson with the data.
+   */
+  constructor(initialData?: Object
+  ) {
+    if (initialData) {
+      this.updateFromJson(initialData);
+    }
+  }
 
   public abstract toJson(): any;
   public abstract updateFromJson(data: any): void;

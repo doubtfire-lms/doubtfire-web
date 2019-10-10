@@ -78,6 +78,7 @@ import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/us
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UserService } from './api/models/user/user.service';
+import { CampusService } from './api/models/campus/campus.service';
 
 @NgModule({
   // components
@@ -127,6 +128,7 @@ import { UserService } from './api/models/user/user.service';
   // Services
   providers: [
     UserService,
+    CampusService,
     userProvider,
     unitProvider,
     ifRoleProvider,
