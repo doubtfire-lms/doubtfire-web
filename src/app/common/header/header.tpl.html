@@ -1,12 +1,12 @@
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
-      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+    <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
@@ -16,7 +16,8 @@
           <a class="home" ui-sref="home">
             <i class="logo"></i>
           </a>
-        </li><!--/home-->
+        </li>
+        <!--/home-->
         <li>
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
@@ -29,7 +30,8 @@
             </button>
             <unit-dropdown></unit-dropdown>
           </div>
-        </li><!--/selected-unit-->
+        </li>
+        <!--/selected-unit-->
         <li ng-if="task && tutor">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
@@ -52,7 +54,8 @@
               <li>
                 <a ui-sref="units/tasks/viewer({unitId: project.unit_id})">Task List</a>
               </li>
-              <li class="divider"></li><!--/task-related-->
+              <li class="divider"></li>
+              <!--/task-related-->
               <li>
                 <a ui-sref="units/students/list({unitId: project.unit_id})">Student List</a>
               </li>
@@ -65,12 +68,14 @@
               <li>
                 <a ui-sref="units/students/portfolios({unitId: project.unit_id})">Student Portfolios</a>
               </li>
-              <li class="divider"></li><!--/student-related-->
+              <li class="divider"></li>
+              <!--/student-related-->
               <li>
                 <a ui-sref="units/analytics({unitId: project.unit_id})">Unit Analytics</a>
               </li>
-            </ul><!--/teaching-tasks-->
-          <div>
+            </ul>
+            <!--/teaching-tasks-->
+            <div>
         </li>
         <li ng-if="task" ng-if="tutor">
           <div class="btn-group" dropdown>
@@ -96,58 +101,77 @@
               <li>
                 <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a>
               </li>
-            </ul><!--/student-tasks-->
+            </ul>
+            <!--/student-tasks-->
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="unitRole">
               <li>
-                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task Inbox</a>
+                <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task
+                  Inbox</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Give Student Feedback</a>
+                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Give
+                  Student Feedback</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark By Definition</a>
+                <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark By
+                  Definition</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark Tasks Offline</a>
+                <a ui-sref="units/tasks/offline({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark Tasks
+                  Offline</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/viewer({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task List</a>
+                <a ui-sref="units/tasks/viewer({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task
+                  List</a>
               </li>
-              <li class="divider" ng-if="unitRole.role != 'Admin'"></li><!--/task-related-->
+              <li class="divider" ng-if="unitRole.role != 'Admin'"></li>
+              <!--/task-related-->
               <li>
-                <a ui-sref="units/students/list({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student List</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/groups({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Groups</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Plagiarism</a>
+                <a ui-sref="units/students/list({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student
+                  List</a>
               </li>
               <li>
-                <a ui-sref="units/students/portfolios({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student Portfolios</a>
+                <a ui-sref="units/students/groups({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Student
+                  Groups</a>
               </li>
-              <li class="divider" ng-if="unitRole.role != 'Admin'"></li><!--/student-related-->
               <li>
-                <a ui-sref="units/analytics({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Unit Analytics</a>
+                <a ui-sref="units/students/plagiarism({unitId: unitRole.unit_id})"
+                  ng-if="unitRole.role != 'Admin'">Student Plagiarism</a>
+              </li>
+              <li>
+                <a ui-sref="units/students/portfolios({unitId: unitRole.unit_id})"
+                  ng-if="unitRole.role != 'Admin'">Student Portfolios</a>
+              </li>
+              <li class="divider" ng-if="unitRole.role != 'Admin'"></li>
+              <!--/student-related-->
+              <li>
+                <a ui-sref="units/analytics({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Unit
+                  Analytics</a>
               </li>
               <li ng-if="unitRole.role == 'Convenor' || unitRole.role == 'Admin'">
                 <a ui-sref="units/admin({unitId: unitRole.unit_id})">Unit Administration</a>
               </li>
-            </ul><!--/teaching-tasks-->
+            </ul>
+            <!--/teaching-tasks-->
           </div>
-        </li><!--/task-dropdown-->
-      </ul><!--breadcrumbs-->
-    </ul><!--/nav-left-->
+        </li>
+        <!--/task-dropdown-->
+      </ul>
+      <!--breadcrumbs-->
+    </ul>
+    <!--/nav-left-->
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown" dropdown if-role="Admin Convenor">
-        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b
+            class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><a ui-sref="admin/teachingperiods" if-role="Admin">Manage Teaching Periods</a></li>
-          <li><a ui-sref="campuses" if-role="Admin">Manage Campuses</a></li>
+          <li><a ui-sref="institutionsettings" if-role="Admin">Institution Settings</a></li>
           <li><a ui-sref="admin/units">Manage Units</a></li>
           <li><a ui-sref="admin/users">Manage Users</a></li>
         </ul>
-      </li><!--/administration-->
+      </li>
+      <!--/administration-->
       <li class="dropdown" dropdown>
         <a class="dropdown-toggle dropdown-user" dropdown-toggle>
           <user-icon [size]="25" [user]="currentUser" [email]="currentUser.email"></user-icon>
@@ -162,7 +186,10 @@
           <li class="divider"></li>
           <li><a ui-sref="sign_out">Sign Out</a></li>
         </ul>
-      </li><!--/current-user-->
-    </ul><!--/navbar-right-->
-  </div><!--/navbar-collapse-->
+      </li>
+      <!--/current-user-->
+    </ul>
+    <!--/navbar-right-->
+  </div>
+  <!--/navbar-collapse-->
 </nav>

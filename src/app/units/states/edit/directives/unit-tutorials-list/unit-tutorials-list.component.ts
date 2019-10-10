@@ -49,7 +49,6 @@ export class UnitTutorialsListComponent implements OnInit {
   }
 
   flagEdit(id) {
-    debugger;
     this.edit = id;
   }
 

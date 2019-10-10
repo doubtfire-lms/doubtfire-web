@@ -5,6 +5,15 @@ unit-tutorials-list {
   .sync-options {
     margin-bottom: 2rem;
   }
+  td.mat-column-options {
+    width: 84px;
+    button {
+      float: right;
+    }
+    span {
+      display: inline;
+    }
+  }
   .header {
     display: flex;
     .interactions {
