@@ -532,7 +532,7 @@ angular.module("doubtfire.common.services.tasks", [])
   hoursBetween = (time1, time2) ->
     return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
 
-  isBubbleComment = (commentType) ->
+  taskService.isBubbleComment = (commentType) ->
     return (["text", "discussion", "audio", "image", "pdf"].includes(commentType))
 
   taskService.mapComments = (comments) ->
@@ -557,11 +557,11 @@ angular.module("doubtfire.common.services.tasks", [])
         comments[i+1]?.should_show_timestamp = false
 
       # if the comment is preceeded by a non-conent comment, mark it as start of series.
-      if (isBubbleComment(comments[i].type) && !isBubbleComment(comments[i-1]?.type))
+      if (taskService.isBubbleComment(comments[i].type) && !taskService.isBubbleComment(comments[i-1]?.type))
         comments[i].first_in_series = true
 
       # if the comment is proceeded by a non-conent comment, mark it as end of series.
-      if (isBubbleComment(comments[i].type) && !isBubbleComment(comments[i+1]?.type))
+      if (taskService.isBubbleComment(comments[i].type) && !taskService.isBubbleComment(comments[i+1]?.type))
         comments[i].should_show_avatar = true
 
     comments[comments.length-1].should_show_avatar = true
