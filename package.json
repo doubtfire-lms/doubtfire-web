@@ -31,7 +31,7 @@
     "@angular/upgrade": "~8.1.0",
     "@ng-stack/contenteditable": "^1.0.1",
     "@uirouter/angular-hybrid": "^7.0.0",
-    "angular": "1.5.11",
+    "angular": "1.6.0",
     "angular-cookies": "1.5.11",
     "angular-file-upload": "1.1.1",
     "angular-filter": "~0.5.4",
