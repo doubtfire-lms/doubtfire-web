@@ -50,6 +50,12 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           icon: "fa-eye"
           seq: 4
           active: false
+        taskAssessmentResources:
+          title: "Task Assessment Resources"
+          subtitle: "Upload the bash script and other resources for this task assessment"
+          icon: "fa-wpforms"
+          seq: 5
+          active: false
 
     #
     # The task sheet uploader...
@@ -81,6 +87,14 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
 
+    $scope.removeTaskAssessmentResources = (task) ->
+      TaskDefinition.taskAssessmentResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+        (success) ->
+          task.has_task_assessment_resources = false
+          alertService.add("success", "Deleted task assessment resources", 2000)
+        (error) ->
+          alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
+
 
     #
     # The task resources uploader...
@@ -94,6 +108,20 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.resourceUrl = ->
       Task.getTaskResourcesUrl($scope.unit, $scope.task)
+
+
+    # #
+    # # TODO: The assessment resources uploader...
+    # #
+    $scope.taskAssessmentResources = { file: { name: 'Task Assessment Resources', type: 'zip' } }
+    $scope.taskAssessmentResourcesUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+
+    $scope.onTaskAssessmentResourcesSuccess = (response) ->
+      alertService.add("success", "Task assessment resources uploaded", 2000)
+      $scope.task.has_task_assessment_resources = true
+
+    $scope.taskAssessmentResourcesUrl = ->
+      Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task)
 
 
     #

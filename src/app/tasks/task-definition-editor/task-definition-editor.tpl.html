@@ -212,6 +212,7 @@
                     </a>
                   </div>
                 </div>
+
               </div>
               <div ng-show="activeTab == taskAdmin.tabsData.plagiarismChecks" class="form-group">
                 <div class="panel-body plagiarism-check" ng-required="isNew">
@@ -250,6 +251,25 @@
                   </div>
                 </div>
               </div><!--/plagiarism checks-->
+              <div ng-show="activeTab == taskAdmin.tabsData.taskAssessmentResources">
+                  <div class="panel-body large-notice-block" ng-hide="task && task.id">
+                  </div>
+                  <!-- <task-assessor [task]="task"> -->
+                      <div ng-if="task && task.id">
+                          <file-uploader
+                            files="taskAssessmentResources"
+                            url="taskAssessmentResourcesUploadUrl()"
+                            on-success="onTaskAssessmentResourcesSuccess">
+                          </file-uploader>
+                          <a href="{{taskAssessmentResourcesUrl()}}" ng-show="task.has_task_assessment_resources" target="_blank" class="btn btn-info col-sm-12">
+                            <i class="fa fa-download"></i> Download Assessment Resources
+                          </a>
+                          <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.has_task_assessment_resources" class="btn btn-danger col-sm-12">
+                            <i class="fa fa-trash-o"></i> Delete Assessment Resources
+                          </a>
+                        </div>
+                  <!-- </task-assessor> -->
+              </div> <!--/ upload task assessment resources-->
             </div><!--/panel-body-area-->
             <div class="panel-footer text-right" ng-show="activeTab == taskAdmin.tabsData.fileUpload">
               <button type="button" ng-click="addUpReq()" class="btn btn-success">

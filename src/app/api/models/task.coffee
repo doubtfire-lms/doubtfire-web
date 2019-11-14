@@ -49,6 +49,9 @@ angular.module("doubtfire.api.models.task", [])
   Task.getTaskMarkingUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
 
+  Task.getTaskAssessmentResourcesUrl = (unit, task_def) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_assessment_resources.json?auth_token=#{currentUser.authenticationToken}"
+
   Task.generateMarkingSubmissionUrl = ->
 
   Task
