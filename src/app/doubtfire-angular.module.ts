@@ -43,6 +43,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 
 @NgModule({
   // components
@@ -58,6 +59,7 @@ import 'hammerjs';
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
     ExtensionModalComponent,
+    TaskAssessorComponent,
   ],
   // Module Imports
   imports: [
@@ -99,7 +101,16 @@ import 'hammerjs';
       useClass: HttpErrorInterceptor,
       multi: true
     }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
-  entryComponents: [AboutDoubtfireModalContent, TaskCommentComposerComponent, IntelligentDiscussionPlayerComponent, ExtensionCommentComponent, IntelligentDiscussionDialog, DiscussionComposerDialog, ExtensionModalComponent]
+  entryComponents: [
+    AboutDoubtfireModalContent,
+    TaskCommentComposerComponent,
+    IntelligentDiscussionPlayerComponent,
+    ExtensionCommentComponent,
+    IntelligentDiscussionDialog,
+    DiscussionComposerDialog,
+    ExtensionModalComponent,
+    TaskAssessorComponent
+  ]
 })
 export class DoubtfireAngularModule {
   constructor(private upgrade: UpgradeModule, private constants: DoubtfireConstants, private title: Title) {

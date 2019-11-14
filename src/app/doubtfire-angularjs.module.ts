@@ -277,6 +277,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -308,6 +309,8 @@ DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
 DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
+DoubtfireAngularJSModule.directive('taskAssessor',
+  downgradeComponent({ component: TaskAssessorComponent }));
 
 // Global configuration
 
