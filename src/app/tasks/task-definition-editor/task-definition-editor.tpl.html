@@ -254,7 +254,7 @@
               <div ng-show="activeTab == taskAdmin.tabsData.taskAssessmentResources">
                   <div class="panel-body large-notice-block" ng-hide="task && task.id">
                   </div>
-                  <!-- <task-assessor [task]="task"> -->
+                  <task-assessor [task]="task">
                       <div ng-if="task && task.id">
                           <file-uploader
                             files="taskAssessmentResources"
@@ -268,7 +268,7 @@
                             <i class="fa fa-trash-o"></i> Delete Assessment Resources
                           </a>
                         </div>
-                  <!-- </task-assessor> -->
+                  </task-assessor>
               </div> <!--/ upload task assessment resources-->
             </div><!--/panel-body-area-->
             <div class="panel-footer text-right" ng-show="activeTab == taskAdmin.tabsData.fileUpload">
