@@ -54,7 +54,7 @@ export class TaskCommentComposerComponent implements OnInit {
     e.preventDefault();
     let comment = this.comment.text.trim();
     if (comment !== '') {
-      this.addComment(comment);
+      this.addCommentWithType(comment, 'text');
     }
   }
 
@@ -81,6 +81,19 @@ export class TaskCommentComposerComponent implements OnInit {
 
   addComment(comment: string) {
     this.ts.addComment(this.task, comment, 'text',
+      (success: any) => {
+        this.comment.text = '';
+        this.analytics.event('Vie Comments', 'Added new comment');
+        this.ts.scrollDown();
+        this.task.comments = this.ts.mapComments(this.task.comments);
+      },
+      (failure: any) =>
+        this.alerts.add('danger', failure.data.error, 2000)
+    );
+  }
+
+  addCommentWithType(comment: string, type: string) {
+    this.ts.addComment(this.task, comment, type,
       (success: any) => {
         this.comment.text = '';
         this.analytics.event('Vie Comments', 'Added new comment');

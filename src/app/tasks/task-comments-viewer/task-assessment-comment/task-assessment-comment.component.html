@@ -1,0 +1,11 @@
+<div>
+    <div *ngIf="comment.assessment_result.is_successful; else testsInProgress" style="width: 100%"
+        class=
+        "btn
+        {{ comment.assessment_result.is_successful ? 'btn-success' : 'btn-danger' }}"
+        (click)="showTaskAssessmentResult()">
+       {{ comment.assessment_result.is_successful ? 'Tests passed' : 'Tests failed' }}</div>
+    <ng-template #testsInProgress style="width: 100%">
+      <hr class="hr-text" data-content="Tests in Progress" />
+    </ng-template>
+</div>

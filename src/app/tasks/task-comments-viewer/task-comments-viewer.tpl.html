@@ -28,6 +28,10 @@
               <extension-comment [task]="task" [comment]="comment"> </extension-comment>
             </div>
 
+            <div ng-switch-when="assessment" class="comment-assessment">
+              <task-assessment-comment [task]="task" [comment]="comment"></task-assessment-comment>
+            </div>
+
             <div ng-switch-when="text" class="comment-text">
               <div class="markdown-to-html" ng-bind-html="comment.comment | markdown"></div>
             </div>

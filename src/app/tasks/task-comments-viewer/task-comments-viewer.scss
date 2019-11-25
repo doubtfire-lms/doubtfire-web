@@ -37,6 +37,7 @@ task-comments-viewer .panel.dragover {
 
 task-comments-viewer .comment-container {
   display: flex;
+  width: 100%;
   flex-grow: 2;
 
   .comment-overflow {
@@ -63,7 +64,8 @@ task-comments-viewer .comment-by-other-user .comment-container {
   flex-grow: 2;
 }
 
-task-comments-viewer .comment-container .comment-extension {
+task-comments-viewer .comment-container .comment-extension,
+task-comments-viewer .comment-container .comment-assessment  {
   width: 100%;
 }
 
@@ -264,6 +266,11 @@ task-comments-viewer .comment .extension-bubble {
   background-color: transparent;
 }
 
+task-comments-viewer .comment .assessment-bubble {
+  width: 100%;
+  background-color: transparent;
+}
+
 // text comments
 task-comments-viewer .comment .text-bubble,
 task-comments-viewer .comment .pdf-bubble {
@@ -292,7 +299,6 @@ task-comments-viewer .pdf-bubble {
 // Audio comments
 task-comments-viewer .comment .audio-bubble {
   @include base-bubble;
-  display: inline-block;
   width: 70%;
   max-width: 300px;
   margin-right: 0;

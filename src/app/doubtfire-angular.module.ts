@@ -15,6 +15,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule} from '@angular/material/expansion';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -44,6 +46,8 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 
 import 'hammerjs';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
+import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 @NgModule({
   // components
@@ -60,6 +64,8 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
     ExtensionCommentComponent,
     ExtensionModalComponent,
     TaskAssessorComponent,
+    TaskAssessmentCommentComponent,
+    TaskAssessmentModalComponent,
   ],
   // Module Imports
   imports: [
@@ -81,6 +87,8 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatCardModule,
+    MatExpansionModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
@@ -109,7 +117,9 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    TaskAssessorComponent
+    TaskAssessorComponent,
+    TaskAssessmentCommentComponent,
+    TaskAssessmentModalComponent,
   ]
 })
 export class DoubtfireAngularModule {

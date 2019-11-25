@@ -276,8 +276,11 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskSubmissionService } from './common/services/task-submission.service';
+import {TaskAssessmentModalService} from './common/modals/task-assessment-modal/task-assessment-modal.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -301,6 +304,10 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('TaskSubmission',
+  downgradeInjectable(TaskSubmissionService));
+DoubtfireAngularJSModule.factory('TaskAssessmentModal',
+  downgradeInjectable(TaskAssessmentModalService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
@@ -311,6 +318,8 @@ DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('taskAssessor',
   downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive('taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent }));
 
 // Global configuration
 

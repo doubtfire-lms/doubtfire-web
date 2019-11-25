@@ -25,7 +25,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService, PrivacyPolicy) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService, PrivacyPolicy, TaskSubmission) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
@@ -62,6 +62,10 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $modalInstance.close(task)
       # Add comment if requested
       task.addComment($scope.comment) if $scope.comment.trim().length > 0
+
+      # Add comment that the task is in process for automated assessment.
+      # task.addComment("Running tests..", "assessment") if @scope.task.comments.find
+
       # Broadcast that upload is complete
       $rootScope.$broadcast('TaskSubmissionUploadComplete', task)
       # Perform as timeout to show 'Upload Complete'

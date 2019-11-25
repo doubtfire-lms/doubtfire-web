@@ -14,7 +14,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, markdown, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
+  controller: ($scope, $modal, $state, $sce, $timeout,
+  markdown, CommentResourceService, CommentsModal, listenerService,
+  currentUser, TaskComment, taskService, alertService, analyticsService, Task, TaskSubmission) ->
     listeners = listenerService.listenTo($scope)
     markdown.setFlavor('github')
 
@@ -48,6 +50,11 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         task_definition_id: $scope.task.task_definition_id
       }, (response) ->
         comments = taskService.mapComments(response)
+        # Trying to push a new comment into the comments collection.
+        # taskAssessment = TaskSubmission.getLatestTaskAssessment($scope.task)
+        # comments.find(c => c.type = "assessment").assessment_result = taskAssessment
+        # TaskSubmission.testPassingThingsBetweenCoffeeAndTS(comments)
+        # the place where comments are mapped to the task on load.
         $scope.task.comments = comments #in the HTML, the mapped task.comments are displayed
         $scope.lastComment = $scope.task.comments.slice(-1)[0]
         $scope.task.num_new_comments = 0
@@ -71,7 +78,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       return taskService.isBubbleComment(comment.type)
 
     $scope.shouldShowAuthorIcon = (commentType) ->
-      return not (commentType == "extension" || commentType == "status")
+      return not (commentType == "extension" || commentType == "status" || commentType == "assessment")
 
     $scope.getCommentAttachment = (comment) ->
       # TODO: Refactor to use other Task method
