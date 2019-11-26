@@ -54,6 +54,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           description: $scope.unit.description
           teaching_period_id: $scope.unit.teaching_period_id
           active: $scope.unit.active
+          assessment_enabled: $scope.unit.assessment_enabled
+          routing_key: $scope.unit.routing_key
         }
       else
         saveData = {
@@ -63,6 +65,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           start_date: $scope.unit.start_date
           end_date: $scope.unit.end_date
           active: $scope.unit.active
+          assessment_enabled: $scope.unit.assessment_enabled
+          routing_key: $scope.unit.routing_key
         }
 
       if $scope.unit.id == -1

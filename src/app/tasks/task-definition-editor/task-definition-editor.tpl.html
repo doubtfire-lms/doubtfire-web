@@ -145,6 +145,26 @@
                     </div>
                   </div>
                 </div><!--/due-date-->
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Task Assessment</label>
+                  <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" ng-model="task.assessment_enabled" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                      <i class="fa fa-{{task.assessment_enabled ? 'check' : 'times'}}"></i>
+                    </button>
+                    <span class="help-block">
+                      If true, the task will be automatically assessed.
+                    </span>
+                  </div>
+                </div><!--/task-assessment-enabled-->
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Routing Key</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="task.routing_key" />
+                  </div>
+                </div><!--/routing-key-->
+
               </div>
               <div ng-show="activeTab == taskAdmin.tabsData.fileUpload">
                 <div class="form-group" ng-required="isNew">
