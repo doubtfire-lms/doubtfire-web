@@ -47,6 +47,7 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.update();
   }
 
   get message() {
@@ -61,9 +62,20 @@ export class TaskAssessmentCommentComponent implements OnInit {
     el.scrollIntoView({behavior: 'smooth'});
   }
 
-  update(new_created_at: string, new_assessment_result: TaskAssessmentResult): void {
-    this.comment.created_at = new_created_at;
-    this.comment.assessment_result = new_assessment_result;
+  update(): void {
+    this.submissions.getLatestTaskAssessment(this.task)
+    .subscribe(
+      result => {
+        this.comment.assessment_result.assessment_output = result.result;
+        this.comment.assessment_result.is_completed = true;
+        this.comment.assessment_result.is_successful = true;
+      },
+      error => {
+        this.comment.assessment_result.assessment_output = error.error;
+        this.comment.assessment_result.is_completed = false;
+        this.comment.assessment_result.is_successful = false;
+      }
+    );
   }
 }
 

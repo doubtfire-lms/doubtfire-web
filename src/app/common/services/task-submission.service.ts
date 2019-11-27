@@ -2,6 +2,8 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { alertService, taskService, Task } from 'src/app/ajs-upgraded-providers';
+import { Observable } from 'rxjs';
+import { TaskAssessmentComment } from 'src/app/tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 
 export interface TaskAssessmentResult {
   id?: number;
@@ -20,9 +22,10 @@ export interface TestResult {
 
 export interface TaskInfo {
   id: number;
-  tutorial_id: number;
+  project_id?: number;
+  tutorial_id?: number;
   task_definition_id: number;
-  status: string;
+  status?: string;
 }
 
 @Injectable({
@@ -31,63 +34,19 @@ export interface TaskInfo {
 export class TaskSubmissionService {
   constructor(
     // @Inject(taskService) private ts: any,
-    // @Inject(Task) private TaskLegacy: any,
+    @Inject(Task) private TaskLegacy: any,
     @Inject(alertService) private alerts: any,
     private http: HttpClient,
     private constants: DoubtfireConstants,
      ) { }
 
-  public getLatestTaskAssessment(taskInfo: TaskInfo): TaskAssessmentResult {
-
-    const preformattedText = `Test A: Create a new vector by calling 'Vector<int> vector = new Vector<int>(50);'
-    :: FAIL
-   System.Exception: Vector has a wrong capacity
-      at Vector.Tester.Main(String[] args) in /Users/akashagarwal/ruby/docker-tests/csharp/lazarus_pit/Tester.cs:line 30
-   Test B: Add a sequence of numbers 2, 6, 8, 5, 5, 1, 8, 5, 3, 5
-    :: SUCCESS
-   Test C: Run a sequence of operations:
-   Find number that is greater than 3 and less than 7, i.e. 'e => e > 3 && e < 7'
-    :: SUCCESS
-   Find number that is either 10 or 8, i.e. 'e => e == 10 || e == 8'
-    :: SUCCESS
-   Find number that is not 2, i.e. 'e => e != 2'
-    :: SUCCESS
-   Find number that is greater than 20, i.e. 'e => e > 20'
-    :: SUCCESS
-   Find the first odd number, i.e. 'e => (e % 2) == 1'
-    :: SUCCESS
-   Find the number that is divided by 11 without remainder, i.e. 'e => (e % 11) == 0'
-    :: SUCCESS
-   Test DFind the minimum of the sequence
-    :: SUCCESS
-   Test E: Find the maximum of the sequence
-    :: SUCCESS
-   Test F: Find all numbers that are greater than 3 and less than 7, i.e. 'e => e > 3 && e < 7'
-    :: SUCCESS
-   Test G: Find all numbers that is either 10 or 8, i.e. 'e => e == 10 || e == 8'
-    :: SUCCESS
-   Test H: Find all odd numbers, i.e. 'e => (e % 2) == 1'
-    :: SUCCESS
-   Test I: Find all odd numbers that are divided by 11 without remainder, i.e. 'e => (e % 11) == 0'
-    :: SUCCESS
-   Test J: Remove all even numbers, i.e. 'e => (e % 2) == 0'
-    :: SUCCESS
-    ------------------- SUMMARY -------------------
-   Tests passed: -BCDEFGHIJ"`;
-    const dummyRes: TaskAssessmentResult = {
-      id : 1,
-      assessment_output : preformattedText,
-      is_completed: true,
-      is_successful: true,
-    };
-    return dummyRes;
-
-    // const API_URL = this.constants.API_URL;
-    // const url = this.TaskLegacy.generateTaskAssessmentURL(t);
-    // return this.http.get<TaskAssesment>('URL');
+  public getLatestTaskAssessment(taskInfo: TaskInfo): Observable<any> {
+    const API_URL = this.constants.API_URL;
+    const url = this.TaskLegacy.generateLatestAssessmentUrl(taskInfo);
+    return this.http.get<any>(url);
   }
 
-  // createTaskAssessmentComment(res: TaskAssessmentResult): TaskAssessmentComment {
+  // createTaskAssessmentComment(taskInfo: TaskInfo): TaskAssessmentComment {
   //   const dummyComment: TaskAssessmentComment = {
   //     id: 888,
   //     comment: '',
@@ -106,12 +65,21 @@ export class TaskSubmissionService {
   //     },
   //     created_at: '2019-11-21T04:49:56.797Z',
   //     assessment_result: {
-  //       is_completed: res.is_completed,
-  //       is_successful: res.is_successful,
-  //       assessment_output: res.assessment_output,
+  //       is_completed: true,
+  //       is_successful: true,
+  //       assessment_output: 'Long_Output_Here',
   //     }
-  // };
-  // return dummyComment;
+  //   };
+  //   // let assessmentRes = this.getLatestTaskAssessment(taskInfo).subscribe(
+  //   //   res => {
+  //   //     console.log(res);
+  //   //     dummyComment.assessment_result.assessment_output = res.result;
+  //   //   },
+  //   //   err => {
+  //   //     console.log(err.error);
+  //   //   }
+  //   // );
+  //   return dummyComment;
   // }
 
   // testPassingThingsBetweenCoffeeAndTS(param: any): any {

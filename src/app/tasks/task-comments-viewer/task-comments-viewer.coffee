@@ -51,6 +51,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       }, (response) ->
         comments = taskService.mapComments(response)
         # Trying to push a new comment into the comments collection.
+        # comments.push(TaskSubmission.createTaskAssessmentComment($scope.task))
         # taskAssessment = TaskSubmission.getLatestTaskAssessment($scope.task)
         # comments.find(c => c.type = "assessment").assessment_result = taskAssessment
         # TaskSubmission.testPassingThingsBetweenCoffeeAndTS(comments)
