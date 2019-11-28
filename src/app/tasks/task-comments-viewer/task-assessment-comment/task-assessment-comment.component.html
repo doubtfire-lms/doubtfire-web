@@ -1,10 +1,12 @@
 <div>
-    <div *ngIf="comment.assessment_result.is_successful; else testsInProgress" style="width: 100%"
-        class=
-        "btn
-        {{ comment.assessment_result.is_successful ? 'btn-success' : 'btn-danger' }}"
-        (click)="showTaskAssessmentResult()">
-       {{ comment.assessment_result.is_successful ? 'Tests passed' : 'Tests failed' }}</div>
+    <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress" style="width: 100%">
+      <hr class="hr-fade" />
+      <div class="btn {{ comment.assessment_result.is_successful ? 'btn-success' : 'btn-danger' }}" (click)="showTaskAssessmentResult()" style="width: 100%">
+       {{ comment.assessment_result.is_successful ? 'Tests passed' : 'Tests failed' }}
+      </div>
+      <hr class="hr-fade" />
+    </div>
+
     <ng-template #testsInProgress style="width: 100%">
       <hr class="hr-text" data-content="Tests in Progress" />
     </ng-template>

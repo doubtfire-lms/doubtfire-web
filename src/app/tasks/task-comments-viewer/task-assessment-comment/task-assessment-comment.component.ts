@@ -27,14 +27,13 @@ export interface TaskAssessmentComment {
   selector: 'app-task-assessment-comment',
   templateUrl: './task-assessment-comment.component.html',
   styleUrls: ['./task-assessment-comment.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskAssessmentCommentComponent implements OnInit {
   @Input() task: any;
   @Input() comment: TaskAssessmentComment;
-  @Input() isLastComment: boolean;
-  public lastSpaceIndexInShortMessage: number;
-  public readonly wordLimitInShortMessage: number = 10;
+  // public lastSpaceIndexInShortMessage: number;
+  // public readonly wordLimitInShortMessage: number = 10;
 
   constructor(
     @Inject(alertService) private alerts: any,
@@ -66,14 +65,19 @@ export class TaskAssessmentCommentComponent implements OnInit {
     this.submissions.getLatestTaskAssessment(this.task)
     .subscribe(
       result => {
-        this.comment.assessment_result.assessment_output = result.result;
-        this.comment.assessment_result.is_completed = true;
-        this.comment.assessment_result.is_successful = true;
+        this.comment.assessment_result = {
+          assessment_output: result.result,
+          is_completed: true,
+          is_successful: true
+        };
+        this.comment.created_at = result.created_at;
       },
       error => {
-        this.comment.assessment_result.assessment_output = error.error;
-        this.comment.assessment_result.is_completed = false;
-        this.comment.assessment_result.is_successful = false;
+        this.comment.assessment_result = {
+          assessment_output: error.error,
+          is_completed: false,
+          is_successful: false
+        };
       }
     );
   }
