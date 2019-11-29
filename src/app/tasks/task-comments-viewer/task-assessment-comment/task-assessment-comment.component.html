@@ -1,10 +1,27 @@
 <div>
     <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress" style="width: 100%">
-      <hr class="hr-fade" />
+      <!-- <hr class="hr-fade" />
       <div class="btn {{ comment.assessment_result.is_successful ? 'btn-success' : 'btn-danger' }}" (click)="showTaskAssessmentResult()" style="width: 100%">
        {{ comment.assessment_result.is_successful ? 'Tests passed' : 'Tests failed' }}
       </div>
-      <hr class="hr-fade" />
+      <hr class="hr-fade" /> -->
+      <div #anchor>
+          <hr class="hr-fade" />
+          <mat-card (afterExpand)="scroll(anchor)" expanded="true" hideToggle="true">
+              <mat-card-subtitle style="text-align: center">
+                <strong>Assessment Summary</strong>
+              </mat-card-subtitle>
+
+              <mat-card-content style="white-space: pre-line">{{comment.comment}} </mat-card-content>
+            <!-- <p >{{message | slice:0:lastSpaceIndexInShortMessage}}
+               {{comment.messageWordCount > wordLimitInShortMessage ? '...' : ''}}</p> -->
+
+            <mat-card-actions align="end">
+              <button mat-button (click)="showTaskAssessmentResult()" class="btn btn-primary">View full report</button>
+            </mat-card-actions>
+          </mat-card>
+          <hr class="hr-fade" />
+        </div>
     </div>
 
     <ng-template #testsInProgress style="width: 100%">
