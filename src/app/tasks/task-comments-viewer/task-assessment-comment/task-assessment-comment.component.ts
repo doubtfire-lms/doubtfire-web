@@ -70,7 +70,6 @@ export class TaskAssessmentCommentComponent implements OnInit {
           is_completed: true,
           is_successful: true
         };
-        this.comment.created_at = result.created_at;
       },
       error => {
         this.comment.assessment_result = {
