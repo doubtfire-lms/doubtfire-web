@@ -46,6 +46,12 @@ export class TaskSubmissionService {
     return this.http.get<any>(url);
   }
 
+  public getLatestSubmissionsTimestamps(taskInfo: TaskInfo): Observable<any> {
+    const API_URL = this.constants.API_URL;
+    const url = this.TaskLegacy.getLatestTimestampsUrl(taskInfo);
+    return this.http.get<any>(url);
+  }
+
   // createTaskAssessmentComment(taskInfo: TaskInfo): TaskAssessmentComment {
   //   const dummyComment: TaskAssessmentComment = {
   //     id: 888,
