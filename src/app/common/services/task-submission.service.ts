@@ -52,44 +52,9 @@ export class TaskSubmissionService {
     return this.http.get<any>(url);
   }
 
-  // createTaskAssessmentComment(taskInfo: TaskInfo): TaskAssessmentComment {
-  //   const dummyComment: TaskAssessmentComment = {
-  //     id: 888,
-  //     comment: '',
-  //     has_attachment: false,
-  //     type: 'assessment',
-  //     is_new: true,
-  //     author: {
-  //         id: 1,
-  //         name: 'Andrew Cain',
-  //         email: 'acain@doubtfire.com'
-  //     },
-  //     recipient: {
-  //         id: 2,
-  //         name: 'Clinton Woodward',
-  //         email: 'acain@doubtfire.com'
-  //     },
-  //     created_at: '2019-11-21T04:49:56.797Z',
-  //     assessment_result: {
-  //       is_completed: true,
-  //       is_successful: true,
-  //       assessment_output: 'Long_Output_Here',
-  //     }
-  //   };
-  //   // let assessmentRes = this.getLatestTaskAssessment(taskInfo).subscribe(
-  //   //   res => {
-  //   //     console.log(res);
-  //   //     dummyComment.assessment_result.assessment_output = res.result;
-  //   //   },
-  //   //   err => {
-  //   //     console.log(err.error);
-  //   //   }
-  //   // );
-  //   return dummyComment;
-  // }
-
-  // testPassingThingsBetweenCoffeeAndTS(param: any): any {
-  //   const dummy = param;
-  // return dummy;
-  // }
+  public getSubmissionByTimestamp(taskInfo: TaskInfo, timestamp: string): Observable<any> {
+    const API_URL = this.constants.API_URL;
+    const url = this.TaskLegacy.getSubmissionByTimestampUrl(taskInfo, timestamp);
+    return this.http.get<any>(url);
+  }
 }

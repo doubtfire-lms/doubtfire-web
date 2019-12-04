@@ -40,7 +40,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IntelligentDiscussionPlayerComponent, IntelligentDiscussionDialog } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import {FlexLayoutModule} from "@angular/flex-layout";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
@@ -48,6 +48,18 @@ import 'hammerjs';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
+
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { TaskSubmissionTabContentComponent } from './tasks/task-submission-history/task-submission-tab-content.component';
+
+
+import en from '@angular/common/locales/en';
+
+/** config ng-zorro-antd i18n **/
+import { NZ_I18N, en_GB } from 'ng-zorro-antd/i18n';
 
 @NgModule({
   // components
@@ -66,6 +78,8 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
     TaskAssessorComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
+    TaskSubmissionHistoryComponent,
+    TaskSubmissionTabContentComponent,
   ],
   // Module Imports
   imports: [
@@ -93,6 +107,9 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot(),
+    NzButtonModule,
+    NzModalModule,
+    NzTabsModule,
   ],
   // Services
   providers: [
@@ -108,7 +125,12 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }, AboutDoubtfireModal, AboutDoubtfireModalService, DoubtfireConstants],
+    },
+    AboutDoubtfireModal,
+    AboutDoubtfireModalService,
+    DoubtfireConstants,
+    { provide: NZ_I18N, useValue: en_GB }
+  ],
   entryComponents: [
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
@@ -120,6 +142,8 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
     TaskAssessorComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
+    TaskSubmissionHistoryComponent,
+    TaskSubmissionTabContentComponent,
   ]
 })
 export class DoubtfireAngularModule {

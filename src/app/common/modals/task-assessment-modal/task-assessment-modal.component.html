@@ -1,8 +1,16 @@
-<h3 mat-dialog-title>Overseer Assessment</h3>
+<!-- Old implementation -->
+<!-- <h3 mat-dialog-title>Overseer Assessment</h3>
 <div mat-dialog-content>
   <pre class="terminalOutput">{{data.assessment_output}}</pre>
 </div>
 
 <div mat-dialog-actions style="float: right">
   <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+</div> -->
+<div>
+  <task-submission-history [task]="task">
+      <div *nzModalFooter>
+          <button class="btn btn-danger" (click)="closeModal()" >Dismiss</button>
+      </div>
+  </task-submission-history>
 </div>

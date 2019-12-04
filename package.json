@@ -60,6 +60,7 @@
     "moment": "^2.24.0",
     "ng-csv": "0.2.3",
     "ng-file-upload": "~5.0.9",
+    "ng-zorro-antd": "^8.5.2",
     "ngx-bootstrap": "^3.1.1",
     "nvd3": "1.8.1",
     "rxjs": "^6.5.2",

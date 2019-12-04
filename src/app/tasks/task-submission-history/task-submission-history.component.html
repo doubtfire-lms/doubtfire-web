@@ -1,0 +1,13 @@
+<div>
+  <nz-tabset nzTabPosition="left">
+      <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.timestamp | date:'medium'">
+        <!-- ng-template wrapper makes the content lazy-loaded. -->
+        <ng-template nz-tab>
+            <task-submission-tab-content [task]="task" [timestamp]="tab.timestampString"></task-submission-tab-content>
+        </ng-template>
+      </nz-tab>
+  </nz-tabset>
+  <ng-content></ng-content>
+
+
+</div>

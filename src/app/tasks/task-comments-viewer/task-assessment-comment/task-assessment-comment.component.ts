@@ -37,12 +37,12 @@ export class TaskAssessmentCommentComponent implements OnInit {
 
   constructor(
     @Inject(alertService) private alerts: any,
-    @Inject(taskService) private ts: any,
     @Inject(TaskSubmissionService) private submissions: TaskSubmissionService,
     private modalService: TaskAssessmentModalService) { }
 
   private handleError(error: any) {
     this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
+    /// TODO: Angular 8 error structure is different. Uses http-error.interceptor.ts - check there.
   }
 
   ngOnInit() {
@@ -54,7 +54,8 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   showTaskAssessmentResult() {
-    this.modalService.show(this.comment.assessment_result);
+    // this.modalService.show(this.comment.assessment_result);
+    this.modalService.createComponentModal(this.task);
   }
 
   scroll(el: HTMLElement) {

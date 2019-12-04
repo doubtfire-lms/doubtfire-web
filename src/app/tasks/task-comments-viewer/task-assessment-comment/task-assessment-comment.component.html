@@ -1,7 +1,7 @@
 <div>
     <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress" style="width: 100%">
       <hr class="hr-text" [attr.data-content]="comment.created_at | date:'medium'" />
-      <mat-card (afterExpand)="scroll(anchor)" expanded="true" hideToggle="true">
+      <mat-card>
           <mat-card-subtitle style="text-align: center">
             <strong>Assessment Summary</strong>
           </mat-card-subtitle>
