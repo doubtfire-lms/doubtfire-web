@@ -421,6 +421,9 @@ angular.module("doubtfire.common.services.tasks", [])
     result
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+    if response.updated_task
+      response = response.updated_task
+
     task.id = response.id
     task.times_assessed = response.times_assessed
     task.submisson_date = response.submisson_date
