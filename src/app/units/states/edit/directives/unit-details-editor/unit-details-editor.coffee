@@ -8,11 +8,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod, TaskSubmission) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
+
+    # Get docker images available for automated task assessment for the unit.
+    TaskSubmission.getDockerImagesAsPromise($scope.unit.id).then (images) ->
+      $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
@@ -55,7 +59,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           teaching_period_id: $scope.unit.teaching_period_id
           active: $scope.unit.active
           assessment_enabled: $scope.unit.assessment_enabled
-          routing_key: $scope.unit.routing_key
+          docker_image_name_tag: $scope.unit.docker_image_name_tag
         }
       else
         saveData = {
@@ -66,7 +70,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           end_date: $scope.unit.end_date
           active: $scope.unit.active
           assessment_enabled: $scope.unit.assessment_enabled
-          routing_key: $scope.unit.routing_key
+          docker_image_name_tag: $scope.unit.docker_image_name_tag
         }
 
       if $scope.unit.id == -1
@@ -87,3 +91,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         )
 
 )
+
+
+
+

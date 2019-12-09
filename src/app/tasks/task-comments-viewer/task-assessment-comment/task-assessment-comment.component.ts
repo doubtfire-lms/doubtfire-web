@@ -42,7 +42,7 @@ export class TaskAssessmentCommentComponent implements OnInit {
 
   private handleError(error: any) {
     this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
-    /// TODO: Angular 8 error structure is different. Uses http-error.interceptor.ts - check there.
+    /// TODO: error object structure is different to the one used in legacy angularjs part. Uses http-error.interceptor.ts - check there.
   }
 
   ngOnInit() {
@@ -73,6 +73,7 @@ export class TaskAssessmentCommentComponent implements OnInit {
         };
       },
       error => {
+        this.handleError(error);
         this.comment.assessment_result = {
           assessment_output: error.error,
           is_completed: false,

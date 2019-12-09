@@ -11,12 +11,16 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
     $scope.startPicker = { open: false }
+
+    # Get docker images available for automated task assessment for the unit.
+    TaskSubmission.getDockerImagesAsPromise($scope.unit.id).then (images) ->
+      $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName

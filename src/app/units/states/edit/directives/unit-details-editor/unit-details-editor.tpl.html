@@ -97,11 +97,28 @@
         </div><!--/task-assessment-enabled-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label">Routing Key</label>
+          <label class="col-sm-2 control-label">Docker Image Name</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" ng-model="unit.routing_key" />
+            <select class="form-control" ng-model="unit.docker_image_name_tag" ng-options="image for image in dockerImages" />
           </div>
-        </div><!--/routing-key-->
+        </div> <!--/docker-image-name-->
+
+        <!-- An attempt to use angular component as part of angularJS form. Unfortunately, AngularJS form doesn't track changes from it.-->
+        <!-- <div class="form-group">
+          {{unit.docker_image_name_tag}}
+          <label class="col-sm-2 control-label">Docker Image Name</label>
+          <div class="col-sm-9">
+            <docker-image-select
+            (valueChange)="alert()"
+            later-name="docker-image-select"
+            class="form-control"
+            [unit]="unit"
+            ng-model="unit.docker_image_name_tag"
+            ng-model-options="{ updateOn: 'default valueChange' }"
+            required>
+            </docker-image-select>
+          </div>
+        </div> -->
 
       </div>
       <div class="panel-footer text-right">

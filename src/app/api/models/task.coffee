@@ -61,6 +61,9 @@ angular.module("doubtfire.api.models.task", [])
   Task.getSubmissionByTimestampUrl = (task, timestamp) ->
     "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submissions/timestamps/#{timestamp}?auth_token=#{currentUser.authenticationToken}"
 
+  Task.getDockerImageNamesByUnitUrl = (unitId) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unitId}/overseer/docker/images?auth_token=#{currentUser.authenticationToken}"
+
   Task.generateMarkingSubmissionUrl = ->
 
   Task
