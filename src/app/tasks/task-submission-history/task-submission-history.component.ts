@@ -54,10 +54,12 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
     transformedData.subscribe(
       tabs => {
-        this.tabs = tabs;
         if (!tabs.length) {
           this.tabs.push({timestamp: new Date(), content: 'There are no submissions for this task at the moment.' });
+        } else {
+          this.tabs = tabs;
         }
+        this.openSubmission(tabs[0]);
         console.log(tabs);
       },
       error => {

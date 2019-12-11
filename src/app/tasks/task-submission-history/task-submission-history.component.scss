@@ -38,7 +38,7 @@ $screen-sm-max:              ($screen-md-min - 1) !default;
 $screen-md-max:              ($screen-lg-min - 1) !default;
 
 
-.wrap {
+.submission-wrap {
   height: 100%;
   display: flex;
 }
@@ -46,6 +46,12 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 .submission-main {
   flex: 1;
   display: flex;
+}
+
+@media (max-width: 800px) {
+  .submission-main {
+    flex-direction: column;
+  }
 }
 
 .submission-sidenav, .submisson-result {
@@ -63,6 +69,13 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   flex: 3;
   height: 100%;
   padding-top: 0;
+
+  padding-right: 0;
+}
+@media (max-width: 800px) {
+  .submisson-result {
+    padding-left: 0;
+  }
 }
 
 pre{
@@ -81,6 +94,11 @@ mat-list, mat-nav-list{
   background-color: #337ab7;
   // padding-left: 1em;
   color: white;
+  // position: fixed;
+  //   padding: 0;
+  //   left: 50%;
+  //   top: 50%;
+  //   transform: translate(-50%, -50%);
 }
 
 @mixin custom-box-shadow($color) {
@@ -88,15 +106,16 @@ mat-list, mat-nav-list{
 }
 
 mat-list-item {
+  border-bottom-width: 1px !important;
   border-bottom-right-radius: 0;
   transition: all 200ms ease-out;
   transition-property: box-shadow, padding-right;
   display: flex;
-  &:hover, &:focus, &.selected {
-    padding-right: 30px;
-    background-color: rgb(235, 231, 231);
-    @include custom-box-shadow(#0079D8);
-  }
+  // &:hover, &:focus, &.selected {
+  //   padding-right: 30px;
+  //   background-color: rgb(231, 231, 231);
+  //   @include custom-box-shadow(#0079D8);
+  // }
   &:hover, &:focus {
     cursor: pointer;
     text-decoration: none;
@@ -104,7 +123,7 @@ mat-list-item {
     @include custom-box-shadow(lighten(#0079D8, 15%));
   }
   &.selected {
-    background-color: rgb(235, 231, 231);
+    background-color: rgb(231, 231, 231);
     @include custom-box-shadow(#0079D8);
   }
 
@@ -114,9 +133,13 @@ mat-list-item {
 mat-list-item:last-of-type {
   border-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+  border-bottom-color: rgb(221, 221, 221) !important;
+  border-bottom: 1px !important;
+
 }
 
 .panel .panel-heading {
+  margin-bottom: 0;
   // With buttons in a small screen
   @media (max-width: $screen-sm) {
     // Increase tapping area
@@ -169,4 +192,6 @@ mat-list-item:last-of-type {
       }
     }
   }
+
+  .mat-dialog-content { max-height: unset; }
 }

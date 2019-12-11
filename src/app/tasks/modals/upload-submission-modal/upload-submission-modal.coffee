@@ -72,6 +72,9 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $timeout((->
         response = $scope.uploader.response
         taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
+        if response.comment
+        taskService.addComment
+
       ), 1500)
   }
 
