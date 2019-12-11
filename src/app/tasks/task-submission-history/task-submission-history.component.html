@@ -1,9 +1,15 @@
 <div class="submission-wrap">
   <div class="submission-main">
     <div class="submission-sidenav panel panel-primary">
+        <div class="panel-heading panel-title submission-heading">Submissions</div>
         <mat-list class="list-group">
-            <div class="panel-heading panel-title submission-heading">Submissions</div>
-            <mat-list-item class="list-group-item" [class.selected]="tab.timestampString == selectedTab.timestampString" *ngFor="let tab of tabs" (click)="openSubmission(tab)"> {{tab.timestamp | date: 'medium'}} </mat-list-item>
+
+            <mat-list-item class="list-group-item"
+              [class.selected]="tab.timestampString == selectedTab.timestampString"
+              *ngFor="let tab of tabs"
+              (click)="openSubmission(tab)">
+                {{tab.timestamp | date: 'medium'}}
+            </mat-list-item>
         </mat-list>
       </div>
       <div class="submisson-result" >
