@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'task-assessment-modal',
@@ -11,14 +11,15 @@ export class TaskAssessmentModalComponent implements OnInit {
   @Input() task: any;
 
   constructor(
-    private modal: NzModalRef,
+    public dialogRef: MatDialogRef<TaskAssessmentModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     @Inject(alertService) private alerts: any, ) { }
 
   ngOnInit() {
+    this.task = this.data.task;
   }
 
   closeModal() {
-    this.modal.destroy();
   }
 
 }

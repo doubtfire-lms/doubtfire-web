@@ -13,6 +13,7 @@ export interface TaskAssessmentResult {
   is_successful?: boolean;
   assessment_date?: Date;
   tests?: TestResult[];
+  task?: any;
 }
 
 export interface TestResult {

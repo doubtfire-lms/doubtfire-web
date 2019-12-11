@@ -1,0 +1,172 @@
+@import "src/styles/mixins/flex-center";
+//== Media queries breakpoints
+//
+//## Define the breakpoints at which your layout will change, adapting to different screen sizes.
+
+// Extra small screen / phone
+//** Deprecated `$screen-xs` as of v3.0.1
+$screen-xs:                  480px !default;
+//** Deprecated `$screen-xs-min` as of v3.2.0
+$screen-xs-min:              $screen-xs !default;
+//** Deprecated `$screen-phone` as of v3.0.1
+$screen-phone:               $screen-xs-min !default;
+
+// Small screen / tablet
+//** Deprecated `$screen-sm` as of v3.0.1
+$screen-sm:                  768px !default;
+$screen-sm-min:              $screen-sm !default;
+//** Deprecated `$screen-tablet` as of v3.0.1
+$screen-tablet:              $screen-sm-min !default;
+
+// Medium screen / desktop
+//** Deprecated `$screen-md` as of v3.0.1
+$screen-md:                  992px !default;
+$screen-md-min:              $screen-md !default;
+//** Deprecated `$screen-desktop` as of v3.0.1
+$screen-desktop:             $screen-md-min !default;
+
+// Large screen / wide desktop
+//** Deprecated `$screen-lg` as of v3.0.1
+$screen-lg:                  1200px !default;
+$screen-lg-min:              $screen-lg !default;
+//** Deprecated `$screen-lg-desktop` as of v3.0.1
+$screen-lg-desktop:          $screen-lg-min !default;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max:              ($screen-sm-min - 1) !default;
+$screen-sm-max:              ($screen-md-min - 1) !default;
+$screen-md-max:              ($screen-lg-min - 1) !default;
+
+
+.wrap {
+  height: 100%;
+  display: flex;
+}
+
+.submission-main {
+  flex: 1;
+  display: flex;
+}
+
+.submission-sidenav, .submisson-result {
+  overflow-y: scroll !important;
+  padding: 1em;
+}
+
+.submission-sidenav {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+}
+
+.submisson-result {
+  flex: 3;
+  height: 100%;
+  padding-top: 0;
+}
+
+pre{
+  white-space: pre-wrap;
+}
+
+mat-list, mat-nav-list{
+  padding-top: 0;
+}
+// mat-list-item{
+//   background-color: aqua;
+// }
+
+.submission-heading {
+  border-radius: 0;
+  background-color: #337ab7;
+  // padding-left: 1em;
+  color: white;
+}
+
+@mixin custom-box-shadow($color) {
+  box-shadow: -15px 0 $color inset;
+}
+
+mat-list-item {
+  border-bottom-right-radius: 0;
+  transition: all 200ms ease-out;
+  transition-property: box-shadow, padding-right;
+  display: flex;
+  &:hover, &:focus, &.selected {
+    padding-right: 30px;
+    background-color: rgb(235, 231, 231);
+    @include custom-box-shadow(#0079D8);
+  }
+  &:hover, &:focus {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #F5F5F5;
+    @include custom-box-shadow(lighten(#0079D8, 15%));
+  }
+  &.selected {
+    background-color: rgb(235, 231, 231);
+    @include custom-box-shadow(#0079D8);
+  }
+
+
+}
+
+mat-list-item:last-of-type {
+  border-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.panel .panel-heading {
+  // With buttons in a small screen
+  @media (max-width: $screen-sm) {
+    // Increase tapping area
+    & > * {
+      width: 100%;
+    }
+    .btn-group, .btn, input {
+      height: 4em;
+      width: 100%;
+    }
+  }
+  .toolbar {
+    @media (max-width: $screen-sm) {
+      margin: 1.5em auto;
+      width: 100%;
+      text-align: left;
+    }
+    .btn-group, .buttons > .btn {
+      @media (min-width: $screen-sm-max) {
+        margin-right: 1ex;
+      }
+    }
+    .buttons {
+      float: right;
+      @media (max-width: $screen-sm) {
+        width: 100%;
+        .btn-group {
+          margin-top: 1em;
+          display: flex;
+          float: left;
+          float: right;
+          clear: both;
+          .btn {
+            flex: 1
+          }
+          .btn {
+            @include flex-center;
+          }
+        }
+      }
+    }
+    form[role="search"] {
+      float: right;
+      margin-right: 1.5ex;
+      @media (max-width: $screen-sm) {
+        margin-right: 0;
+        width: 100%;
+        margin-top: 1em;
+        padding: 0 !important;
+      }
+    }
+  }
+}

@@ -16,7 +16,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCardModule } from '@angular/material/card';
-import { MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -103,6 +106,9 @@ import { NZ_I18N, en_GB } from 'ng-zorro-antd/i18n';
     MatSliderModule,
     MatCardModule,
     MatExpansionModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatGridListModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),

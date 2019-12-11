@@ -54,8 +54,8 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   showTaskAssessmentResult() {
-    // this.modalService.show(this.comment.assessment_result);
-    this.modalService.createComponentModal(this.task);
+    this.modalService.show(this.comment.assessment_result, this.task);
+    // this.modalService.createComponentModal(this.task);
   }
 
   scroll(el: HTMLElement) {
@@ -63,13 +63,15 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   update(): void {
+
     this.submissions.getLatestTaskAssessment(this.task)
     .subscribe(
       result => {
         this.comment.assessment_result = {
           assessment_output: result.result,
           is_completed: true,
-          is_successful: true
+          is_successful: true,
+          task: this.task
         };
       },
       error => {
@@ -77,7 +79,8 @@ export class TaskAssessmentCommentComponent implements OnInit {
         this.comment.assessment_result = {
           assessment_output: error.error,
           is_completed: false,
-          is_successful: false
+          is_successful: false,
+          task: this.task
         };
       }
     );

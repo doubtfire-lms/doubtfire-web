@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewEncapsulation } from '@angular/core';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 import { map } from 'rxjs/operators';
-import { Timestamp } from 'rxjs/internal/operators/timestamp';
+import { Timestamp, timestamp } from 'rxjs/internal/operators/timestamp';
+import { TaskSubmissionTabContentComponent } from './task-submission-tab-content.component';
 
-export interface SubmissionTab {
+export interface ISubmissionTab {
   id?: number;
   timestamp: Date;
   timestampString?: string;
@@ -11,15 +12,25 @@ export interface SubmissionTab {
   task?: any;
 }
 
+export class SubmissionTab implements ISubmissionTab {
+  timestamp = new Date();
+  id?: number;
+  timestampString?: string;
+  content?: string;
+  task?: any;
+  constructor() {}
+}
+
 @Component({
   selector: 'task-submission-history',
   templateUrl: './task-submission-history.component.html',
-  styleUrls: ['./task-submission-history.component.scss']
+  styleUrls: ['./task-submission-history.component.scss'],
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: any;
   tabs: SubmissionTab[];
   timestamps: string[];
+  selectedTab: SubmissionTab = new SubmissionTab();
 
   constructor(
     @Inject(TaskSubmissionService) private submissions: TaskSubmissionService,
@@ -30,13 +41,13 @@ export class TaskSubmissionHistoryComponent implements OnInit {
   }
 
   fillTabs(): void {
-    const newTabs = this.submissions.getLatestSubmissionsTimestamps(this.task);
+    this.submissions.getLatestSubmissionsTimestamps(this.task);
     let transformedData = this.submissions.getLatestSubmissionsTimestamps(this.task).pipe(
       map(data => {
         // console.log(data.result, data.result.length);
-        return data.result.map(timestamp => {
+        return data.result.map((ts: number) => {
           // console.log(timestamp);
-          return { timestamp: new Date(timestamp * 1000), content: '', timestampString: timestamp };
+          return { timestamp: new Date(ts * 1000), content: '', timestampString: ts };
         });
       })
     );
@@ -47,12 +58,27 @@ export class TaskSubmissionHistoryComponent implements OnInit {
         if (!tabs.length) {
           this.tabs.push({timestamp: new Date(), content: 'There are no submissions for this task at the moment.' });
         }
-        // console.log(tabs);
+        console.log(tabs);
       },
       error => {
         console.log(error);
         /// TODO: alert service call
       }
     );
+  }
+
+  openSubmission(tab: SubmissionTab) {
+    this.selectedTab.timestamp = tab.timestamp;
+    this.selectedTab.timestampString = tab.timestampString;
+    this.submissions.getSubmissionByTimestamp(this.task, tab.timestampString)
+      .subscribe(
+        sub => {
+          this.selectedTab.content = sub.result;
+        },
+        error => {
+          /// TODO: add alert service call here. Maybe HTTP interceptor error handling is enough.
+          this.selectedTab.content = error;
+        }
+      );
   }
 }

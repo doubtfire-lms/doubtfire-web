@@ -1,13 +1,35 @@
-<div>
+<!-- <div>
   <nz-tabset nzTabPosition="left">
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.timestamp | date:'medium'">
-        <!-- ng-template wrapper makes the content lazy-loaded. -->
         <ng-template nz-tab>
             <task-submission-tab-content [task]="task" [timestamp]="tab.timestampString"></task-submission-tab-content>
         </ng-template>
       </nz-tab>
   </nz-tabset>
   <ng-content></ng-content>
-
-
+</div> -->
+<div class="wrap">
+  <div class="submission-main panel">
+    <div class="submission-sidenav panel panel-primary">
+        <mat-list class="list-group">
+            <div class="panel-heading panel-title submission-heading">Submissions</div>
+            <mat-list-item class="list-group-item" [class.selected]="tab.timestampString == selectedTab.timestampString" *ngFor="let tab of tabs" (click)="openSubmission(tab)"> {{tab.timestamp | date: 'medium'}} </mat-list-item>
+        </mat-list>
+      </div>
+      <div class="submisson-result" >
+        <pre class="terminal-output">{{selectedTab.content}} </pre>
+      </div>
+  </div>
 </div>
+
+<!-- <mat-grid-list cols="2" rowHewight="fit">
+  <mat-grid-tile>
+      <mat-nav-list>
+          <mat-list-item *ngFor="let tab of tabs"> {{tab.timestamp | date: "medium"}}</mat-list-item>
+        </mat-nav-list>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    content
+  </mat-grid-tile>
+</mat-grid-list> -->
