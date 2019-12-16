@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -52,17 +53,11 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { TaskSubmissionTabContentComponent } from './tasks/task-submission-history/task-submission-tab-content.component';
 
 
 import en from '@angular/common/locales/en';
-
-/** config ng-zorro-antd i18n **/
-import { NZ_I18N, en_GB } from 'ng-zorro-antd/i18n';
 
 @NgModule({
   // components
@@ -108,14 +103,12 @@ import { NZ_I18N, en_GB } from 'ng-zorro-antd/i18n';
     MatExpansionModule,
     MatSelectModule,
     MatToolbarModule,
+    MatTooltipModule,
     MatGridListModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot(),
-    NzButtonModule,
-    NzModalModule,
-    NzTabsModule,
   ],
   // Services
   providers: [
@@ -135,7 +128,6 @@ import { NZ_I18N, en_GB } from 'ng-zorro-antd/i18n';
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants,
-    { provide: NZ_I18N, useValue: en_GB }
   ],
   entryComponents: [
     AboutDoubtfireModalContent,
