@@ -1,19 +1,18 @@
 <div class="submission-wrap">
   <div class="submission-main">
     <div class="submission-sidenav panel panel-primary">
-        <div class="panel-heading panel-title submission-heading">Submissions</div>
-        <mat-list class="list-group">
-
-            <mat-list-item class="list-group-item"
-              [class.selected]="tab.timestampString == selectedTab.timestampString"
-              *ngFor="let tab of tabs"
-              (click)="openSubmission(tab)">
-                {{tab.timestamp | date: 'medium'}}
-            </mat-list-item>
-        </mat-list>
-      </div>
-      <div class="submisson-result" >
-        <pre class="terminal-output">{{selectedTab.content}} </pre>
-      </div>
+      <div class="panel-heading panel-title submission-heading">Submissions</div>
+      <mat-list class="list-group">
+        <mat-list-item class="list-group-item"
+          [class.selected]="tab.timestampString == selectedTab.timestampString"
+          *ngFor="let tab of tabs"
+          (click)="openSubmission(tab)">
+            {{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="submisson-result" >
+      <pre class="terminal-output">{{selectedTab.content}} </pre>
+    </div>
   </div>
 </div>

@@ -27,13 +27,10 @@ export interface TaskAssessmentComment {
   selector: 'app-task-assessment-comment',
   templateUrl: './task-assessment-comment.component.html',
   styleUrls: ['./task-assessment-comment.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskAssessmentCommentComponent implements OnInit {
   @Input() task: any;
   @Input() comment: TaskAssessmentComment;
-  // public lastSpaceIndexInShortMessage: number;
-  // public readonly wordLimitInShortMessage: number = 10;
 
   constructor(
     @Inject(alertService) private alerts: any,
@@ -41,8 +38,7 @@ export class TaskAssessmentCommentComponent implements OnInit {
     private modalService: TaskAssessmentModalService) { }
 
   private handleError(error: any) {
-    this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
-    /// TODO: error object structure is different to the one used in legacy angularjs part. Uses http-error.interceptor.ts - check there.
+    this.alerts.add('danger', 'Error: ' + error, 6000);
   }
 
   ngOnInit() {

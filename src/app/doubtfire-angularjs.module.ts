@@ -280,7 +280,8 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskSubmissionService } from './common/services/task-submission.service';
-import {TaskAssessmentModalService} from './common/modals/task-assessment-modal/task-assessment-modal.service';
+import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -320,6 +321,8 @@ DoubtfireAngularJSModule.directive('taskAssessor',
   downgradeComponent({ component: TaskAssessorComponent }));
 DoubtfireAngularJSModule.directive('taskAssessmentComment',
   downgradeComponent({ component: TaskAssessmentCommentComponent }));
+DoubtfireAngularJSModule.directive('taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
 
 // Global configuration
 

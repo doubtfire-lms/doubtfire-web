@@ -48,7 +48,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   display: flex;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 992px) {
   .submission-main {
     flex-direction: column;
   }
@@ -63,7 +63,12 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   flex: 1;
   width: 100%;
   padding: 0;
-  display: inline-block
+  display: inline-block;
+  line-height: 1;
+}
+
+.submission-sidenav .panel-heading {
+  line-height: 2;
 }
 
 .submisson-result {
@@ -73,7 +78,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 
   padding-right: 0;
 }
-@media (max-width: 800px) {
+@media (max-width: 992px) {
   .submisson-result {
     padding-left: 0;
   }
@@ -84,6 +89,7 @@ pre{
 }
 
 mat-list, mat-nav-list{
+  overflow-y: scroll !important;
   padding-top: 0;
   border-bottom-width: 1px;
   padding-bottom: 1px;

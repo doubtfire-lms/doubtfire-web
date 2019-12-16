@@ -3,6 +3,7 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
 import { map } from 'rxjs/operators';
 import { Timestamp, timestamp } from 'rxjs/internal/operators/timestamp';
 import { TaskSubmissionTabContentComponent } from './task-submission-tab-content.component';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 export interface ISubmissionTab {
   id?: number;
@@ -33,6 +34,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
   selectedTab: SubmissionTab = new SubmissionTab();
 
   constructor(
+    @Inject(alertService) private alerts: any,
     @Inject(TaskSubmissionService) private submissions: TaskSubmissionService,
   ) { }
 
@@ -40,13 +42,15 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     this.fillTabs();
   }
 
+  private handleError(error: any) {
+    this.alerts.add('danger', 'Error: ' + error, 6000);
+  }
+
   fillTabs(): void {
     this.submissions.getLatestSubmissionsTimestamps(this.task);
     let transformedData = this.submissions.getLatestSubmissionsTimestamps(this.task).pipe(
       map(data => {
-        // console.log(data.result, data.result.length);
         return data.result.map((ts: number) => {
-          // console.log(timestamp);
           return { timestamp: new Date(ts * 1000), content: '', timestampString: ts };
         });
       })
@@ -60,12 +64,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
           this.tabs = tabs;
         }
         this.openSubmission(tabs[0]);
-        console.log(tabs);
       },
-      error => {
-        console.log(error);
-        /// TODO: alert service call
-      }
     );
   }
 
@@ -78,7 +77,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
           this.selectedTab.content = sub.result;
         },
         error => {
-          /// TODO: add alert service call here. Maybe HTTP interceptor error handling is enough.
+          this.handleError(error);
           this.selectedTab.content = error;
         }
       );

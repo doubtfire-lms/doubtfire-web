@@ -85,7 +85,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
         response = $scope.uploader.response
         taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
         if response.comment
-          taskService.addComment
+          taskService.addComment(response.comment)
       ), 1500)
   }
 
