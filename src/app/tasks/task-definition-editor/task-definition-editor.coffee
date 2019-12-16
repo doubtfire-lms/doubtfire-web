@@ -12,6 +12,11 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     task: "="
     isNew: "="
   controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission) ->
+    # if the task is just a task definition, add a project_id to enable test submission.
+    # unless $scope.task.project
+    #   project = {project_id: 32}
+    #   task.project = -> project
+
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
@@ -99,6 +104,13 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
 
+    # $scope.removeTaskAssessmentTests = (task) ->
+    #   TaskDefinition.taskAssessmentTests.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+    #     (success) ->
+    #       task.has_task_assessment_tests = false
+    #       alertService.add("success", "Deleted task assessment tests", 2000)
+    #     (error) ->
+    #       alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
 
     #
     # The task resources uploader...
@@ -115,7 +127,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
 
     # #
-    # # TODO: The assessment resources uploader...
+    # # The assessment resources uploader...
     # #
     $scope.taskAssessmentResources = { file: { name: 'Task Assessment Resources', type: 'zip' } }
     $scope.taskAssessmentResourcesUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
@@ -126,6 +138,19 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.taskAssessmentResourcesUrl = ->
       Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task)
+
+    # #
+    # # The assessment tests uploader...
+    # #
+    # $scope.taskAssessmentTests = { file: { name: 'Task Assessment Resources', type: 'zip' } }
+    # $scope.taskAssessmentTestsUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+
+    # $scope.onTaskAssessmentTestsSuccess = (response) ->
+    #   alertService.add("success", "Task assessment tests uploaded", 2000)
+    #   $scope.task.has_task_assessment_tests = true
+
+    # $scope.taskAssessmentTestsUrl = ->
+    #   Task.getTaskAssessmentTestsUrl($scope.unit, $scope.task)
 
 
     #

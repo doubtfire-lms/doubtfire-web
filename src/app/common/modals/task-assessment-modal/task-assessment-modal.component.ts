@@ -16,7 +16,7 @@ export class TaskAssessmentModalComponent implements OnInit {
     @Inject(alertService) private alerts: any, ) { }
 
   ngOnInit() {
-    this.task = this.data.task;
+    this.task = this.data;
   }
 
   closeModal() {

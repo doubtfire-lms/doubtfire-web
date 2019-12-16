@@ -13,42 +13,13 @@ export class TaskAssessmentModalService {
 
   constructor(
     public dialog: MatDialog,
-    // private modalService: NzModalService
     ) { }
 
-  // Old implentation
-  public show(assessmentResult: TaskAssessmentResult, task: any) {
+  public show(task: any) {
     let dialogRef: MatDialogRef<TaskAssessmentModalComponent, any>;
     dialogRef = this.dialog.open(TaskAssessmentModalComponent, {
-      data: assessmentResult,
+      data: task,
       panelClass: 'submission-history-modal'
     });
   }
-
-  // createComponentModal(task: any): void {
-  //   const modal = this.modalService.create({
-  //     nzTitle: 'Submission History',
-  //     nzContent: TaskAssessmentModalComponent,
-  //     nzComponentParams: {
-  //       task: task,
-  //     },
-  //     //nzWrapClassName: 'submission-history-modal',
-  //     nzWidth: '80%',
-  //     nzStyle: { top: '20px',
-  //                height: '95vh',
-  //                 // display: 'flex',
-  //                 // flex: 1,
-  //              },
-  //     // // Not a great idea to provide a React-style blocks of template inside the code, but it's possible.
-  //     // nzFooter: [
-  //     //   {
-  //     //     label: 'change component title from outside',
-  //     //     onClick: componentInstance => {
-  //     //       componentInstance!.title = 'title changed';
-  //     //     }
-  //     //   }
-  //     // ]
-  //   });
-  // }
-
 }

@@ -87,6 +87,7 @@ mat-list, mat-nav-list{
   padding-top: 0;
   border-bottom-width: 1px;
   padding-bottom: 1px;
+  // background-color: red;
 }
 
 .submission-heading {
@@ -107,6 +108,7 @@ mat-list, mat-nav-list{
 
 mat-list-item {
   border-bottom-width: 1px !important;
+  border-color: #f5f5f5;
   // border-bottom-right-radius: 0;
   transition: all 200ms ease-out;
   transition-property: box-shadow, padding-right;
@@ -128,9 +130,11 @@ mat-list-item {
   }
 }
 
-mat-list-item:last-of-type {
-  border-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+.panel > .list-group:last-child .list-group-item:last-child,
+.panel > .panel-collapse > .list-group:last-child .list-group-item:last-child {
+  border-color: #f5f5f5;
+  border-style: solid;
+  border-radius: 0;
 }
 
 .panel .panel-heading {

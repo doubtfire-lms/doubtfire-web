@@ -365,10 +365,10 @@ angular.module("doubtfire.common.services.tasks", [])
       asUser = if unitRole? then unitRole.role else 'Student'
       analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
-  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence) ->
+  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence, isTestSubmission = false) ->
     oldStatus = task.status
     task.status = status
-    modal = UploadSubmissionModal.show(task, reuploadEvidence)
+    modal = UploadSubmissionModal.show(task, reuploadEvidence, isTestSubmission)
     # Modal failed to present
     unless modal?
       task.status = oldStatus

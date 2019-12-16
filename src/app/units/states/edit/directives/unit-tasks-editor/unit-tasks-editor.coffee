@@ -27,6 +27,14 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
 
     # Modal Events
     $scope.editTask = (task) ->
+      # if task is just a task definition, add a project_id to enable test submission.
+      unless task.project
+        project = {project_id: 32}
+        task.project = -> project
+
+      unless task.definition
+        task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
+
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = false
 

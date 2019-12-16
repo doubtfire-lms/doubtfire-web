@@ -8,11 +8,18 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   #
   # Open a grade task modal with the provided task
   #
-  UploadSubmissionModal.show = (task, reuploadEvidence) ->
+  UploadSubmissionModal.show = (task, reuploadEvidence, isTestSubmission = false) ->
     # Refuse to open modal if group task and not in a group
-    if task.isGroupTask() && !task.studentInAGroup()
+    if !isTestSubmission && task.isGroupTask() && !task.studentInAGroup()
       alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
       return null
+    # project = {project_id: 32}
+    if isTestSubmission
+      task.canReuploadEvidence = -> false
+      # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
+      # task.project = -> project
+      task.isTestSubmission = isTestSubmission
+
     $modal.open
       templateUrl: 'tasks/modals/upload-submission-modal/upload-submission-modal.tpl.html'
       controller: 'UploadSubmissionModalCtrl'
@@ -34,12 +41,21 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
     [ status, taskService.statusLabels[status] ]
   ).fromPairs().value()
+
+  # [[0,"hey"], [1, "he1"]] -> {0: "hey", 1: "he1"} -> ["hey", "he1"]
+
   if $scope.task.canReuploadEvidence()
     submissionTypes['reupload_evidence'] = 'New Evidence'
-  $scope.submissionTypes = submissionTypes
 
   # Load in submission type
-  $scope.submissionType = if reuploadEvidence then 'reupload_evidence' else $scope.task.status
+  if $scope.task.isTestSubmission
+    $scope.submissionType = 'test_submission'
+    submissionTypes = {'test_submission': 'Test Submission'}
+    # submissionTypes['test_submission'] = 'Test Submission'
+  else
+    $scope.submissionType = if reuploadEvidence then 'reupload_evidence' else $scope.task.status
+
+  $scope.submissionTypes = submissionTypes
 
   # Upload files
   $scope.uploader = {
@@ -62,10 +78,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $modalInstance.close(task)
       # Add comment if requested
       task.addComment($scope.comment) if $scope.comment.trim().length > 0
-
-      # Add comment that the task is in process for automated assessment.
-      # task.addComment("Running tests..", "assessment") if @scope.task.comments.find
-
       # Broadcast that upload is complete
       $rootScope.$broadcast('TaskSubmissionUploadComplete', task)
       # Perform as timeout to show 'Upload Complete'
@@ -73,8 +85,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
         response = $scope.uploader.response
         taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
         if response.comment
-        taskService.addComment
-
+          taskService.addComment
       ), 1500)
   }
 
@@ -103,10 +114,12 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     removed: ->
       # Only show some states if RTM
       isRtm = $scope.submissionType == 'ready_to_mark'
+      isTestSubmission = $scope.submissionType == 'test_submission'
       removed = []
       # Remove group and alignment states
       removed.push('group') if !isRtm || !task.isGroupTask()
       removed.push('alignment') if !isRtm || !task.unit().ilos.length > 0
+      removed.push('comments') if isTestSubmission
       removed
     # Initialises the states
     initialise: ->
@@ -154,7 +167,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       false
     submit: ->
       # Disable if no comment is supplied with need_help
-      $scope.comment.trim().length == 0 && $scope.submissionType == 'need_help'
+      !$scope.uploader.isReady || ($scope.comment.trim().length == 0 && $scope.submissionType == 'need_help')
     cancel: ->
       # Can't cancel whilst uploading
       $scope.uploader.isUploading
@@ -217,25 +230,39 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     .value()
 
   # Get initial alignment data...
-  initialAlignments = task.project().task_outcome_alignments.filter( (a) -> a.task_definition_id == task.definition.id )
+  if !$scope.task.isTestSubmission
+    initialAlignments = task.project().task_outcome_alignments.filter( (a) -> a.task_definition_id == task.definition.id )
+  else
+    initialAlignments = []
 
   # ILO alignment defaults
   $scope.alignmentsRationale = if initialAlignments.length > 0 then initialAlignments[0].description else ""
-  staffAlignments = $scope.task.staffAlignments()
-  $scope.ilos = _.map(task.unit().ilos, (ilo) ->
-    staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
-    staffAlignment ?= {}
-    staffAlignment.rating ?= 0
-    staffAlignment.label = outcomeService.alignmentLabels[staffAlignment.rating]
-    ilo.staffAlignment = staffAlignment
-    ilo
-  )
-  $scope.alignments = _.chain(task.unit().ilos)
-    .map((ilo) ->
-      value = initialAlignments.filter((a) -> a.learning_outcome_id == ilo.id)?[0]?.rating
-      value ?= 0
-      [ilo.id, {rating: value }]
+  if !$scope.task.isTestSubmission
+    staffAlignments = $scope.task.staffAlignments()
+  else
+    staffAlignments = []
+
+  if !$scope.task.isTestSubmission
+    $scope.ilos = _.map(task.unit().ilos, (ilo) ->
+      staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
+      staffAlignment ?= {}
+      staffAlignment.rating ?= 0
+      staffAlignment.label = outcomeService.alignmentLabels[staffAlignment.rating]
+      ilo.staffAlignment = staffAlignment
+      ilo
     )
-    .fromPairs()
-    .value()
+  else
+    $scope.ilos = []
+
+  if !$scope.task.isTestSubmission
+    $scope.alignments = _.chain(task.unit().ilos)
+      .map((ilo) ->
+        value = initialAlignments.filter((a) -> a.learning_outcome_id == ilo.id)?[0]?.rating
+        value ?= 0
+        [ilo.id, {rating: value }]
+      )
+      .fromPairs()
+      .value()
+  else
+    $scope.alignments = []
 )
