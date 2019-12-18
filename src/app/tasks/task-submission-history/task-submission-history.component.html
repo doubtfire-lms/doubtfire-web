@@ -15,6 +15,10 @@
       <mat-tab-group dynamicHeight>
         <mat-tab *ngFor="let selTab of selectedTab.content" label="{{selTab.label}}">
           <pre class="terminal-output">{{selTab.result}} </pre>
+          <!-- <button mat-button mat-raised-button color="primary"
+            *ngIf="noDataFlag"
+            (click)="fillTabs()"><i class="fa fa-refresh"></i> Refresh
+          </button> -->
         </mat-tab>
       </mat-tab-group>
     </div>

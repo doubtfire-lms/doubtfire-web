@@ -1,7 +1,8 @@
-import { Component, OnInit, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 import { map } from 'rxjs/operators';
 import { alertService } from 'src/app/ajs-upgraded-providers';
+import { Subject } from 'rxjs';
 
 export interface ISubmissionTab {
   id?: number;
@@ -29,9 +30,12 @@ export class SubmissionTab implements ISubmissionTab {
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: any;
+  @Output() hasNoData = new EventEmitter<boolean>();
   tabs: SubmissionTab[];
   timestamps: string[];
   selectedTab: SubmissionTab = new SubmissionTab();
+  noDataFlag: boolean = false;
+  @Input() refreshTrigger: Subject<boolean>;
 
   constructor(
     @Inject(alertService) private alerts: any,
@@ -40,6 +44,10 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.fillTabs();
+
+    this.refreshTrigger.subscribe( () => {
+      this.fillTabs();
+   });
   }
 
   private handleError(error: any) {
@@ -60,6 +68,8 @@ export class TaskSubmissionHistoryComponent implements OnInit {
       tabs => {
           if (tabs) {
             this.tabs = tabs;
+            this.noDataFlag = false;
+            this.hasNoData.emit(this.noDataFlag);
           }
         this.openSubmission(tabs[0]);
       },
@@ -67,6 +77,8 @@ export class TaskSubmissionHistoryComponent implements OnInit {
         if (error) {
           this.tabs = [{timestamp: new Date()}];
           this.selectedTab.content = [{label: 'No Data', result: 'There are no submissions for this task at the moment.' }];
+          this.noDataFlag = true;
+          this.hasNoData.emit(this.noDataFlag);
         }
       }
     );
