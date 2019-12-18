@@ -18,8 +18,4 @@ export class TaskAssessmentModalComponent implements OnInit {
   ngOnInit() {
     this.task = this.data;
   }
-
-  closeModal() {
-  }
-
 }

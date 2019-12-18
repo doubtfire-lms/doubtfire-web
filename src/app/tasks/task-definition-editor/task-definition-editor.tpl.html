@@ -277,7 +277,7 @@
               <div ng-show="activeTab == taskAdmin.tabsData.taskAssessmentResources">
                 <div class="panel-body large-notice-block" ng-hide="task && task.id">
                 </div>
-                <task-assessor [task]="task">
+                <task-assessor [task]="task" [unit]="unit" ng-if="task">
                   <div ng-if="task && task.id">
                     <file-uploader
                       files="taskAssessmentResources"

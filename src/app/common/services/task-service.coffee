@@ -376,6 +376,7 @@ angular.module("doubtfire.common.services.tasks", [])
     modal.result.then(
       # Grade was selected (modal closed with result)
       (response) ->
+        task.has_any_submissions = true
         null
       # Grade was not selected (modal was dismissed)
       (dismissed) ->

@@ -5,37 +5,37 @@
 
 // Extra small screen / phone
 //** Deprecated `$screen-xs` as of v3.0.1
-$screen-xs:                  480px !default;
-//** Deprecated `$screen-xs-min` as of v3.2.0
-$screen-xs-min:              $screen-xs !default;
-//** Deprecated `$screen-phone` as of v3.0.1
-$screen-phone:               $screen-xs-min !default;
+// $screen-xs:                  480px !default;
+// //** Deprecated `$screen-xs-min` as of v3.2.0
+// $screen-xs-min:              $screen-xs !default;
+// //** Deprecated `$screen-phone` as of v3.0.1
+// $screen-phone:               $screen-xs-min !default;
 
-// Small screen / tablet
-//** Deprecated `$screen-sm` as of v3.0.1
-$screen-sm:                  768px !default;
-$screen-sm-min:              $screen-sm !default;
-//** Deprecated `$screen-tablet` as of v3.0.1
-$screen-tablet:              $screen-sm-min !default;
+// // Small screen / tablet
+// //** Deprecated `$screen-sm` as of v3.0.1
+// $screen-sm:                  768px !default;
+// $screen-sm-min:              $screen-sm !default;
+// //** Deprecated `$screen-tablet` as of v3.0.1
+// $screen-tablet:              $screen-sm-min !default;
 
-// Medium screen / desktop
-//** Deprecated `$screen-md` as of v3.0.1
-$screen-md:                  992px !default;
-$screen-md-min:              $screen-md !default;
-//** Deprecated `$screen-desktop` as of v3.0.1
-$screen-desktop:             $screen-md-min !default;
+// // Medium screen / desktop
+// //** Deprecated `$screen-md` as of v3.0.1
+// $screen-md:                  992px !default;
+// $screen-md-min:              $screen-md !default;
+// //** Deprecated `$screen-desktop` as of v3.0.1
+// $screen-desktop:             $screen-md-min !default;
 
-// Large screen / wide desktop
-//** Deprecated `$screen-lg` as of v3.0.1
-$screen-lg:                  1200px !default;
-$screen-lg-min:              $screen-lg !default;
-//** Deprecated `$screen-lg-desktop` as of v3.0.1
-$screen-lg-desktop:          $screen-lg-min !default;
+// // Large screen / wide desktop
+// //** Deprecated `$screen-lg` as of v3.0.1
+// $screen-lg:                  1200px !default;
+// $screen-lg-min:              $screen-lg !default;
+// //** Deprecated `$screen-lg-desktop` as of v3.0.1
+// $screen-lg-desktop:          $screen-lg-min !default;
 
-// So media queries don't overlap when required, provide a maximum
-$screen-xs-max:              ($screen-sm-min - 1) !default;
-$screen-sm-max:              ($screen-md-min - 1) !default;
-$screen-md-max:              ($screen-lg-min - 1) !default;
+// // So media queries don't overlap when required, provide a maximum
+// $screen-xs-max:              ($screen-sm-min - 1) !default;
+// $screen-sm-max:              ($screen-md-min - 1) !default;
+// $screen-md-max:              ($screen-lg-min - 1) !default;
 
 
 .submission-wrap {
@@ -46,6 +46,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 .submission-main {
   flex: 1;
   display: flex;
+  width: 100%;
 }
 
 @media (max-width: 992px) {
@@ -55,8 +56,18 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 }
 
 .submission-sidenav, .submisson-result {
-  overflow-y: scroll !important;
-  padding: 1em;
+  overflow-y: scroll;
+  padding: 1em 1em 0 1em;
+}
+
+mat-list.list-group {
+  overflow-y: scroll;
+}
+
+.terminal-output {
+  padding: 10px;
+  margin: 1em 0 0 0;
+  // margin-bottom: 0;
 }
 
 .submission-sidenav {
@@ -65,6 +76,16 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   padding: 0;
   display: inline-block;
   line-height: 1;
+}
+
+.submission-sidenav.panel.panel-primary{
+  margin-bottom: 0;
+}
+
+@media (max-width: 992px) {
+  .submission-sidenav.panel.panel-primary{
+    margin-bottom: 2em;
+  }
 }
 
 .submission-sidenav .panel-heading {
@@ -84,28 +105,39 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   }
 }
 
+.panel-heading.panel-title.submission-heading {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 pre{
   white-space: pre-wrap;
 }
 
 mat-list, mat-nav-list{
-  overflow-y: scroll !important;
   padding-top: 0;
   border-bottom-width: 1px;
   padding-bottom: 1px;
-  // background-color: red;
+}
+
+mat-tab-header.mat-tab-header {
+  margin-bottom: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: white;
+}
+
+
+mat-tab-body.mat-tab-body.mat-tab-body-active {
+  z-index: 1;
 }
 
 .submission-heading {
   border-radius: 0;
   background-color: #337ab7;
-  // padding-left: 1em;
   color: white;
-  // position: fixed;
-  //   padding: 0;
-  //   left: 50%;
-  //   top: 50%;
-  //   transform: translate(-50%, -50%);
 }
 
 @mixin custom-box-shadow($color) {
@@ -115,15 +147,9 @@ mat-list, mat-nav-list{
 mat-list-item {
   border-bottom-width: 1px !important;
   border-color: #f5f5f5;
-  // border-bottom-right-radius: 0;
   transition: all 200ms ease-out;
   transition-property: box-shadow, padding-right;
   display: flex;
-  // &:hover, &:focus, &.selected {
-  //   padding-right: 30px;
-  //   background-color: rgb(231, 231, 231);
-  //   @include custom-box-shadow(#0079D8);
-  // }
   &:hover, &:focus {
     cursor: pointer;
     text-decoration: none;

@@ -59,7 +59,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Upload files
   $scope.uploader = {
-    url: Task.generateSubmissionUrl($scope.task.project(), $scope.task)
+    url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit().id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
     files: _.chain(task.definition.upload_requirements).map((file) ->
       [file.key, { name: file.name, type: file.type }]
     ).fromPairs().value()
@@ -229,20 +229,12 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     )
     .value()
 
-  # Get initial alignment data...
-  if !$scope.task.isTestSubmission
+  unless $scope.task.isTestSubmission
+    # Get initial alignment data...
     initialAlignments = task.project().task_outcome_alignments.filter( (a) -> a.task_definition_id == task.definition.id )
-  else
-    initialAlignments = []
-
-  # ILO alignment defaults
-  $scope.alignmentsRationale = if initialAlignments.length > 0 then initialAlignments[0].description else ""
-  if !$scope.task.isTestSubmission
+    # ILO alignment defaults
+    $scope.alignmentsRationale = if initialAlignments.length > 0 then initialAlignments[0].description else ""
     staffAlignments = $scope.task.staffAlignments()
-  else
-    staffAlignments = []
-
-  if !$scope.task.isTestSubmission
     $scope.ilos = _.map(task.unit().ilos, (ilo) ->
       staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
       staffAlignment ?= {}
@@ -251,10 +243,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       ilo.staffAlignment = staffAlignment
       ilo
     )
-  else
-    $scope.ilos = []
-
-  if !$scope.task.isTestSubmission
     $scope.alignments = _.chain(task.unit().ilos)
       .map((ilo) ->
         value = initialAlignments.filter((a) -> a.learning_outcome_id == ilo.id)?[0]?.rating
@@ -264,5 +252,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       .fromPairs()
       .value()
   else
+    $scope.ilos = []
     $scope.alignments = []
+    $scope.alignmentsRationale = ""
 )

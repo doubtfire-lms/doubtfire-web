@@ -19,8 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -54,7 +53,6 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
-import { TaskSubmissionTabContentComponent } from './tasks/task-submission-history/task-submission-tab-content.component';
 
 
 import en from '@angular/common/locales/en';
@@ -77,7 +75,6 @@ import en from '@angular/common/locales/en';
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
-    TaskSubmissionTabContentComponent,
   ],
   // Module Imports
   imports: [
@@ -103,8 +100,7 @@ import en from '@angular/common/locales/en';
     MatExpansionModule,
     MatSelectModule,
     MatToolbarModule,
-    MatTooltipModule,
-    MatGridListModule,
+    MatTabsModule,
     UpgradeModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
@@ -141,7 +137,6 @@ import en from '@angular/common/locales/en';
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
-    TaskSubmissionTabContentComponent,
   ]
 })
 export class DoubtfireAngularModule {

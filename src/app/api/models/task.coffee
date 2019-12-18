@@ -37,6 +37,9 @@ angular.module("doubtfire.api.models.task", [])
   Task.generateSubmissionUrl = (project, task) ->
     "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
 
+  Task.generateTestSubmissionUrl = (unitId, task_def) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unitId}/task_definitions/#{task_def.id}/test_overseer_assessment?auth_token=#{currentUser.authenticationToken}"
+
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
 

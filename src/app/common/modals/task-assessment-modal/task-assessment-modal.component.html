@@ -1,23 +1,9 @@
-<!-- Old implementation -->
 <div class="submission-history-modal">
-  <!-- <div class="panel-heading">
-    <h3 mat-dialog-title class="panel-title" >Overseer Assessment</h3>
-  </div> -->
-
   <h3 mat-dialog-title class="panel-title" >Overseer Assessment</h3>
-  <mat-dialog-content style="height: calc(100% - 48px);">
+  <mat-dialog-content style="height: calc(100% - 7em);">
     <task-submission-history [task]="task"></task-submission-history>
   </mat-dialog-content>
   <div mat-dialog-actions style="float: right" >
     <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
   </div>
 </div>
-
-
-<!-- <div>
-  <task-submission-history [task]="task">
-      <div *nzModalFooter>
-          <button class="btn btn-danger" (click)="closeModal()" >Dismiss</button>
-      </div>
-  </task-submission-history>
-</div> -->

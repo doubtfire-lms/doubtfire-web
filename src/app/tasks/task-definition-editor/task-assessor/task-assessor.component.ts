@@ -9,8 +9,8 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
   styleUrls: ['./task-assessor.component.scss']
 })
 export class TaskAssessorComponent implements OnInit {
-  @Input() comment: any;
   @Input() task: any;
+  @Input() unit: any;
   public _hasAnySubmissions: boolean;
 
   constructor(
@@ -24,21 +24,48 @@ export class TaskAssessorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.submissions.getLatestSubmissionsTimestamps(this.task)
+    .subscribe(
+      (result) => {
+        if (result) {
+          this._hasAnySubmissions = true;
+          this.task.has_any_submissions = true;
+        }
+      },
+      (error) => {
+        if (error) {
+          this._hasAnySubmissions = false;
+          this.task.has_any_submissions = false;
+        }
+      }
+    );
+  }
+
+  ngOnChanges() {
+    this.submissions.getLatestSubmissionsTimestamps(this.task)
+    .subscribe(
+      (result) => {
+        if (result) {
+          this._hasAnySubmissions = true;
+          this.task.has_any_submissions = true;
+        }
+      },
+      (error) => {
+        if (error) {
+          this._hasAnySubmissions = false;
+          this.task.has_any_submissions = false;
+        }
+      }
+    );
   }
 
   testSubmission() {
+    this.task.unit = () => this.unit;
+    // this.task.unit_id = this.unit.id;
     this.ts.presentTaskSubmissionModal(this.task, this.task.status, false, true);
   }
 
   testSubmissionHistory() {
     this.modalService.show(this.task);
   }
-
-  // hasAnySubmissions(): void {
-  //   this.submissions.getLatestTaskAssessment(this.task)
-  //     .subscribe(
-  //       () => true,
-  //       () => false
-  //     );
-  // }
 }

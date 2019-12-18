@@ -1,23 +1,23 @@
 import { Component, OnInit, Inject, Input, ViewEncapsulation } from '@angular/core';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 import { map } from 'rxjs/operators';
-import { Timestamp, timestamp } from 'rxjs/internal/operators/timestamp';
-import { TaskSubmissionTabContentComponent } from './task-submission-tab-content.component';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 
 export interface ISubmissionTab {
   id?: number;
+  label?: string;
   timestamp: Date;
   timestampString?: string;
-  content?: string;
+  content?: [{ label: string; result: string }];
   task?: any;
 }
 
 export class SubmissionTab implements ISubmissionTab {
   timestamp = new Date();
   id?: number;
+  label?: string;
   timestampString?: string;
-  content?: string;
+  content?: [{ label: string; result: string }];
   task?: any;
   constructor() {}
 }
@@ -58,13 +58,17 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
     transformedData.subscribe(
       tabs => {
-        if (!tabs.length) {
-          this.tabs.push({timestamp: new Date(), content: 'There are no submissions for this task at the moment.' });
-        } else {
-          this.tabs = tabs;
-        }
+          if (tabs) {
+            this.tabs = tabs;
+          }
         this.openSubmission(tabs[0]);
       },
+      error => {
+        if (error) {
+          this.tabs = [{timestamp: new Date()}];
+          this.selectedTab.content = [{label: 'No Data', result: 'There are no submissions for this task at the moment.' }];
+        }
+      }
     );
   }
 
@@ -74,11 +78,10 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     this.submissions.getSubmissionByTimestamp(this.task, tab.timestampString)
       .subscribe(
         sub => {
-          this.selectedTab.content = sub.result;
+          this.selectedTab.content = sub;
         },
         error => {
-          this.handleError(error);
-          this.selectedTab.content = error;
+          this.selectedTab.content = [{label: 'Error', result: error }];
         }
       );
   }

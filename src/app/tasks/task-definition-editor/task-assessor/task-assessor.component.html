@@ -6,6 +6,6 @@
   (click)="testSubmission()"
   style="width: 100%; line-height: 36px; padding: 0 16px;"><i class="fa fa-upload"></i>Test Submission</button>
 <button mat-button mat-raised-button color="accent"
-  [disabled]="task && !task.has_task_assessment_resources"
+  [disabled]="task && !task.has_any_submissions"
   (click)="testSubmissionHistory()"
   style="width: 100%; line-height: 36px; padding: 0 16px;"><i class="fa fa-terminal"></i>Test Submission History</button>
