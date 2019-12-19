@@ -60,8 +60,8 @@ export class TaskAssessorComponent implements OnInit {
   }
 
   testSubmission() {
-    this.task.unit = () => this.unit;
-    // this.task.unit_id = this.unit.id;
+    // this.task.unit = () => this.unit;
+    this.task.unit_id = this.unit.id;
     this.ts.presentTaskSubmissionModal(this.task, this.task.status, false, true);
   }
 

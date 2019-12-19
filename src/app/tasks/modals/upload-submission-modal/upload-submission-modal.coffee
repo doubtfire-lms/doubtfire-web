@@ -59,7 +59,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Upload files
   $scope.uploader = {
-    url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit().id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
+    url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit_id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
     files: _.chain(task.definition.upload_requirements).map((file) ->
       [file.key, { name: file.name, type: file.type }]
     ).fromPairs().value()
@@ -82,10 +82,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $rootScope.$broadcast('TaskSubmissionUploadComplete', task)
       # Perform as timeout to show 'Upload Complete'
       $timeout((->
-        response = $scope.uploader.response
-        taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
-        if response.comment
-          taskService.addComment(response.comment)
+        unless $scope.task.isTestSubmission
+          response = $scope.uploader.response
+          taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
+          if response.comment
+            taskService.addComment(response.comment)
       ), 1500)
   }
 
