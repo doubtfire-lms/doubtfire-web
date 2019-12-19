@@ -11,6 +11,11 @@ export interface ISubmissionTab {
   timestampString?: string;
   content?: [{ label: string; result: string }];
   task?: any;
+  taskStatus?: any;
+  submissionStatus?: any;
+  createdAt?: any;
+  updatedAt?: any;
+  taskId?: any;
 }
 
 export class SubmissionTab implements ISubmissionTab {
@@ -20,6 +25,11 @@ export class SubmissionTab implements ISubmissionTab {
   timestampString?: string;
   content?: [{ label: string; result: string }];
   task?: any;
+  taskStatus?: any;
+  submissionStatus?: any;
+  createdAt?: any;
+  updatedAt?: any;
+  taskId?: any;
   constructor() {}
 }
 
@@ -58,28 +68,36 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     this.submissions.getLatestSubmissionsTimestamps(this.task);
     let transformedData = this.submissions.getLatestSubmissionsTimestamps(this.task).pipe(
       map(data => {
-        return data.result.map((ts: number) => {
-          return { timestamp: new Date(ts * 1000), content: '', timestampString: ts };
+        return data.result.map((ts: any) => {
+          return {
+            timestamp: new Date(ts.submission_timestamp * 1000),
+            content: '',
+            timestampString: ts.submission_timestamp,
+            taskStatus: ts.result_task_status,
+            submissionStatus: ts.status,
+            createdAt: ts.created_at,
+            updatedAt: ts.updated_at,
+            taskId: ts.task_id};
         });
       })
     );
 
     transformedData.subscribe(
       tabs => {
-          if (tabs) {
-            this.tabs = tabs;
-            this.noDataFlag = false;
-            this.hasNoData.emit(this.noDataFlag);
-          }
-        this.openSubmission(tabs[0]);
-      },
-      error => {
-        if (error) {
+        if (tabs.length === 0) {
           this.tabs = [{timestamp: new Date()}];
           this.selectedTab.content = [{label: 'No Data', result: 'There are no submissions for this task at the moment.' }];
           this.noDataFlag = true;
           this.hasNoData.emit(this.noDataFlag);
+        } else {
+          this.tabs = tabs;
+          this.noDataFlag = false;
+          this.hasNoData.emit(this.noDataFlag);
         }
+        this.openSubmission(tabs[0]);
+      },
+      error => {
+        this.handleError(error);
       }
     );
   }
@@ -87,6 +105,9 @@ export class TaskSubmissionHistoryComponent implements OnInit {
   openSubmission(tab: SubmissionTab) {
     this.selectedTab.timestamp = tab.timestamp;
     this.selectedTab.timestampString = tab.timestampString;
+    this.selectedTab.taskStatus = tab.taskStatus;
+    this.selectedTab.submissionStatus = tab.submissionStatus;
+
     this.submissions.getSubmissionByTimestamp(this.task, tab.timestampString)
       .subscribe(
         sub => {
