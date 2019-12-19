@@ -26,10 +26,10 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
     }
 
     # Modal Events
-    $scope.editTask = (task) ->
+    $scope.editTask = (unit, task) ->
       # if task is just a task definition, add a project_id to enable test submission.
       unless task.project
-        project = {project_id: 32}
+        project = {project_id: unit.project_id}
         task.project = -> project
 
       unless task.definition
@@ -82,7 +82,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       if $scope.unit.task_definitions.length > 0
         # Delete
         if newLength < oldLength
-          $scope.editTask _.first $scope.unit.task_definitions
+          $scope.editTask($scope.unit, _.first $scope.unit.task_definitions)
         else
           $scope.editTask _.last $scope.unit.task_definitions
       else
