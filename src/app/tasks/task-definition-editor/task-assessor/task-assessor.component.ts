@@ -20,7 +20,7 @@ export class TaskAssessorComponent implements OnInit {
     @Inject(TaskSubmissionService) private submissions: TaskSubmissionService) { }
 
   private handleError(error: any) {
-    this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
+    this.alerts.add('danger', 'Error: ' + error, 6000);
   }
 
   ngOnInit() {
@@ -44,16 +44,17 @@ export class TaskAssessorComponent implements OnInit {
     this.submissions.getLatestSubmissionsTimestamps(this.task)
     .subscribe(
       (result) => {
-        if (result) {
+        if (result.length === 0) {
+          this._hasAnySubmissions = false;
+          this.task.has_any_submissions = false;
+        } else {
           this._hasAnySubmissions = true;
           this.task.has_any_submissions = true;
         }
       },
       (error) => {
-        if (error) {
-          this._hasAnySubmissions = false;
-          this.task.has_any_submissions = false;
-        }
+        this._hasAnySubmissions = false;
+        this.task.has_any_submissions = false;
       }
     );
   }
