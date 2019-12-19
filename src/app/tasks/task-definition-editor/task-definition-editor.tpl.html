@@ -146,7 +146,7 @@
                   </div>
                 </div><!--/due-date-->
 
-                <div class="form-group">
+                <div class="form-group" ng-if="overseer_enabled">
                   <label class="col-sm-3 control-label">Overseer Assessment</label>
                   <div class="col-sm-7">
                     <button type="button" class="btn btn-default" ng-model="task.assessment_enabled" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
@@ -158,7 +158,7 @@
                   </div>
                 </div><!--/task-assessment-enabled-->
 
-                <div class="form-group">
+                <div class="form-group" ng-if="overseer_enabled">
                   <label class="col-sm-3 control-label">Docker Image Name</label>
                   <div class="col-sm-8">
                     <select class="form-control" ng-model="task.docker_image_name_tag" ng-options="image for image in dockerImages" />

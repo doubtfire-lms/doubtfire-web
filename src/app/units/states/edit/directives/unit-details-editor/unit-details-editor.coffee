@@ -9,6 +9,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
   controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod, TaskSubmission) ->
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+
     $scope.calOptions = {
       startOpened: false
       endOpened: false

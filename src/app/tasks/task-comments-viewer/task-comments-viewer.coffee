@@ -16,9 +16,12 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
   controller: ($scope, $modal, $state, $sce, $timeout,
   markdown, CommentResourceService, CommentsModal, listenerService,
-  currentUser, TaskComment, taskService, alertService, analyticsService, Task, TaskSubmission) ->
+  currentUser, TaskComment, taskService, alertService, analyticsService, Task, TaskSubmission,
+  DoubtfireConstants) ->
     listeners = listenerService.listenTo($scope)
     markdown.setFlavor('github')
+
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.uploadFiles = (files) ->
       if typeof files != "undefined"

@@ -12,10 +12,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     task: "="
     isNew: "="
   controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission) ->
-    # if the task is just a task definition, add a project_id to enable test submission.
-    # unless $scope.task.project
-    #   project = {project_id: 32}
-    #   task.project = -> project
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.grades = gradeService.grades
 
@@ -59,12 +56,14 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           icon: "fa-eye"
           seq: 4
           active: false
-        taskAssessmentResources:
-          title: "Task Assessment Resources"
-          subtitle: "Upload the bash script and other resources for this task assessment"
-          icon: "fa-wpforms"
-          seq: 5
-          active: false
+
+    if $scope.overseer_enabled
+      $scope.taskAdmin.tabsData.taskAssessmentResources = {
+        title: "Task Assessment Resources"
+        subtitle: "Upload the bash script and other resources for this task assessment"
+        icon: "fa-wpforms"
+        seq: 5
+        active: false}
 
     #
     # The task sheet uploader...

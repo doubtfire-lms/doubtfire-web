@@ -11,7 +11,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     task: '='
     showFooter: '@?'
     showSubmission: '@?'
-  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService) ->
+  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal) ->
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
@@ -48,6 +49,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Is the current view?
     $scope.isCurrentView = (view) ->
       return $scope.currentView == view
+
+    $scope.showSubmissionHistoryModal = ->
+      TaskAssessmentModal.show($scope.task)
 
     # Now also load in the assessment details
     if $scope.showFooter

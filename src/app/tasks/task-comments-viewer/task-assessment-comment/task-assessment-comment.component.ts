@@ -58,7 +58,6 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   update(): void {
-
     this.submissions.getLatestTaskAssessment(this.task)
     .subscribe(
       result => {
