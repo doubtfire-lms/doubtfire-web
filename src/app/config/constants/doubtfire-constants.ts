@@ -34,9 +34,8 @@ export class DoubtfireConstants {
   // initialise exernal name to loading.
   public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
 
-  // public IsOverseerEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public IsOverseerEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public IsOverseerEnabled: boolean = false;
 
   private readonly settingsUrl: string = `${this.API_URL}/settings`;
 
@@ -56,8 +55,7 @@ export class DoubtfireConstants {
       .subscribe(
         result => {
           this.ExternalName.next(result.externalName);
-          // this.IsOverseerEnabled.next(result.overseer_enabled);
-          this.IsOverseerEnabled = result.overseer_enabled;
+          this.IsOverseerEnabled.next(result.overseer_enabled);
         }
       );
   }

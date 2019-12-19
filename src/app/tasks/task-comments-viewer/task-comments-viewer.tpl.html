@@ -28,7 +28,7 @@
               <extension-comment [task]="task" [comment]="comment"> </extension-comment>
             </div>
 
-            <div ng-switch-when="assessment" class="comment-assessment" ng-if="overseer_enabled">
+            <div ng-switch-when="assessment" class="comment-assessment" ng-if="overseer_enabled.value">
               <task-assessment-comment [task]="task" [comment]="comment"></task-assessment-comment>
             </div>
 

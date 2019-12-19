@@ -25,7 +25,7 @@
           <li ng-show="task.has_pdf">
             <a href="{{urls.taskFilesUrl}}">Download Submitted Files</a>
           </li>
-          <li ng-show="true" ng-if="overseer_enabled">
+          <li ng-show="true" ng-if="overseer_enabled.value">
             <a ng-click="showSubmissionHistoryModal()">View Submission History</a>
           </li>
         </ul>
