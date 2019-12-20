@@ -7,7 +7,7 @@
           [class.selected]="tab.timestampString == selectedTab.timestampString"
           *ngFor="let tab of tabs"
           (click)="openSubmission(tab)">
-            {{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}
+          <div style="-webkit-box-flex: 1; flex: 1;">{{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}</div>
            &nbsp; <task-status-icon [taskStatus]="tab.taskStatus" ></task-status-icon>
         </mat-list-item>
       </mat-list>
