@@ -69,7 +69,6 @@ export class TaskAssessmentCommentComponent implements OnInit {
         };
       },
       error => {
-        this.handleError(error);
         this.comment.assessment_result = {
           assessment_output: error.error,
           is_completed: false,

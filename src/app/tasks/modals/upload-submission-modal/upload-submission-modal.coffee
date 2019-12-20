@@ -13,7 +13,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     if !isTestSubmission && task.isGroupTask() && !task.studentInAGroup()
       alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
       return null
-    # project = {project_id: 32}
+
     if isTestSubmission
       task.canReuploadEvidence = -> false
       # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
@@ -85,8 +85,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
         unless $scope.task.isTestSubmission
           response = $scope.uploader.response
           taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
-          if response.comment
-            taskService.addComment(response.comment)
       ), 1500)
   }
 
