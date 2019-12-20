@@ -44,7 +44,6 @@ export class TaskSubmissionHistoryComponent implements OnInit {
   tabs: SubmissionTab[];
   timestamps: string[];
   selectedTab: SubmissionTab = new SubmissionTab();
-  noDataFlag: boolean = false;
   @Input() refreshTrigger: Subject<boolean>;
 
   constructor(
@@ -87,14 +86,14 @@ export class TaskSubmissionHistoryComponent implements OnInit {
         if (tabs.length === 0) {
           this.tabs = [{timestamp: new Date()}];
           this.selectedTab.content = [{label: 'No Data', result: 'There are no submissions for this task at the moment.' }];
-          this.noDataFlag = true;
-          this.hasNoData.emit(this.noDataFlag);
         } else {
           this.tabs = tabs;
-          this.noDataFlag = false;
-          this.hasNoData.emit(this.noDataFlag);
         }
-        this.openSubmission(tabs[0]);
+        if (this.selectedTab.timestampString) {
+          this.openSubmission(tabs.filter(x => x.timestampString === this.selectedTab.timestampString)[0]);
+        } else {
+          this.openSubmission(tabs[0]);
+        }
       },
       error => {
         this.handleError(error);
@@ -112,9 +111,11 @@ export class TaskSubmissionHistoryComponent implements OnInit {
       .subscribe(
         sub => {
           this.selectedTab.content = sub;
+          this.hasNoData.emit(false);
         },
         error => {
           this.selectedTab.content = [{label: 'Error', result: error }];
+          this.hasNoData.emit(true);
         }
       );
   }
