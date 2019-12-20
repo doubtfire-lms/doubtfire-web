@@ -46,7 +46,7 @@ export class DoubtfireConstants {
       .subscribe(
         result => this.SignoutURL = result.auth_signout_url,
         error => console.error(error)
-      )
+      );
   }
 
   // publish update to Settings when get request finishes.

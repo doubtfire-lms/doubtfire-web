@@ -56,6 +56,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
 
 
 import en from '@angular/common/locales/en';
+import { TaskStatusIconComponent } from './common/task-status-icon/task-status-icon.component';
 
 @NgModule({
   // components
@@ -75,6 +76,7 @@ import en from '@angular/common/locales/en';
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
+    TaskStatusIconComponent,
   ],
   // Module Imports
   imports: [
