@@ -69,7 +69,8 @@ module.exports = {
       'src/styles/mixins/**/*.scss',
       'src/styles/common/**/*.scss',
       'src/styles/modules/**/*.scss',
-      'src/app/**/*.scss'
+      'src/app/**/*.scss',
+      '!src/app/**/*.component.scss'
     ]
   },
 
