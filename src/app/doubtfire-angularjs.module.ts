@@ -210,7 +210,6 @@ import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/group-service.js';
-import 'build/src/app/common/services/comment-service.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/project-service.js';
 import 'build/src/app/common/services/media-service.js';
@@ -282,6 +281,8 @@ import { ExtensionModalService } from './common/modals/extension-modal/extension
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import { TaskCommentService } from './common/services/task-comment.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -305,6 +306,9 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('TaskCommentService',
+  downgradeInjectable(TaskCommentService));
+
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
@@ -319,6 +323,9 @@ DoubtfireAngularJSModule.directive('activityTypeList',
   downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
+DoubtfireAngularJSModule.directive('commentBubbleAction',
+  downgradeComponent({ component: CommentBubbleActionComponent }));
+
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

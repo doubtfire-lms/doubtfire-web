@@ -19,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -40,6 +41,7 @@ import {
   currentUserProvider,
   authProvider,
   taskServiceProvider,
+  TaskCommentServiceProvider,
   analyticsServiceProvider,
   taskProvider,
   alertServiceProvider,
@@ -84,6 +86,7 @@ import { ActivityTypeListComponent } from './admin/states/activities/activity-ty
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CampusService } from './api/models/campus/campus.service';
+import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 
 @NgModule({
   // components
@@ -101,7 +104,8 @@ import { CampusService } from './api/models/campus/campus.service';
     CampusListComponent,
     ActivityTypeListComponent,
     ExtensionModalComponent,
-    InstitutionSettingsComponent
+    InstitutionSettingsComponent,
+    CommentBubbleActionComponent,
   ],
   // Module Imports
   imports: [
@@ -120,6 +124,7 @@ import { CampusService } from './api/models/campus/campus.service';
     MatStepperModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatTooltipModule,
     MatButtonModule,
     MatMenuModule,
     MatCardModule,
@@ -152,6 +157,7 @@ import { CampusService } from './api/models/campus/campus.service';
     taskProvider,
     alertServiceProvider,
     CommentResourceServiceProvider,
+    TaskCommentServiceProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     {
@@ -177,6 +183,7 @@ import { CampusService } from './api/models/campus/campus.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
+    CommentBubbleActionComponent
   ]
 })
 export class DoubtfireAngularModule {
