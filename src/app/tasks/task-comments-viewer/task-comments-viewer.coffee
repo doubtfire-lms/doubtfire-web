@@ -14,7 +14,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, markdown, CommentResourceService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, markdown, TaskCommentService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
     listeners = listenerService.listenTo($scope)
     markdown.setFlavor('github')
 
@@ -26,7 +26,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     # Upload image files as comments to a given task
     $scope.postAttachmentComment = (file) ->
-      taskService.addMediaComment(CommentResourceService.task, file,
+      taskService.addMediaComment(TaskCommentService.task, file,
         (success) ->
           taskService.scrollDown()
         (failure) ->
@@ -54,13 +54,13 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         taskService.scrollDown()
         $scope.focus?() if $scope.refocusOnTaskChange
 
-        CommentResourceService.setTask($scope.task)
+        TaskCommentService.setTask($scope.task)
 
 
     $scope.openCommentsModal = (comment)->
       resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      CommentResourceService.setResourceUrl(resourceUrl)
-      CommentResourceService.setCommentType(comment.type)
+      TaskCommentService.setResourceUrl(resourceUrl)
+      TaskCommentService.setCommentType(comment.type)
       CommentsModal.show()
 
     $scope.canUserEdit = (comment) ->
@@ -79,13 +79,13 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     $overlay = angular.element(document.querySelector('#contextOverlay'))
 
-    $scope.deleteComment = (id) ->
-      TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
-        (response) ->
-          comments = $scope.task.comments.filter (e) -> e.id isnt id
-          comments = taskService.mapComments(comments)
-          $scope.task.comments = comments
-          analyticsService.event "View Task Comments", "Deleted existing comment"
-        (response) ->
-          alertService.add("danger", response.data.error, 2000)
+    # $scope.deleteComment = (id) ->
+      # TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
+      #   (response) ->
+      #     comments = $scope.task.comments.filter (e) -> e.id isnt id
+      #     comments = taskService.mapComments(comments)
+      #     $scope.task.comments = comments
+      #     analyticsService.event "View Task Comments", "Deleted existing comment"
+      #   (response) ->
+      #     alertService.add("danger", response.data.error, 2000)
 )

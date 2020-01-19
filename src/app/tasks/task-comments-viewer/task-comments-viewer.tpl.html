@@ -52,10 +52,7 @@
               </a>
             </div>
           </div>
-          <div class="comment-overflow" ng-if="isBubbleType(comment)">
-            <i tooltip="Delete" tooltip-placement="top" ng-click="deleteComment(comment.id)" role="button"
-              ng-show="hover && canUserEdit(comment)" class="fa fa-trash"></i>
-          </div>
+          <comment-bubble-action ng-show="hover" [task]="task" [comment]="comment"></comment-bubble-action>
         </div>
       </div>
     </div>

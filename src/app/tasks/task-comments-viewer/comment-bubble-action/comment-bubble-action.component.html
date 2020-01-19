@@ -1,0 +1,14 @@
+<div *ngIf="isBubbleComment">
+  <!-- <button type="button" (click)="react()" matTooltip="React to this comment" mat-icon-button
+    aria-label="React to this comment">
+    <mat-icon>tag_faces</mat-icon>
+  </button> -->
+  <button type="button" (click)="reply()" matTooltip="Info about the action" mat-icon-button
+    aria-label="Example icon-button with a heart icon" [hidden]="!canReplyToComment">
+    <mat-icon>reply</mat-icon>
+  </button>
+  <button type="button" (click)="delete()" matTooltip="Info about the action" mat-icon-button
+    aria-label="Example icon-button with a heart icon" [hidden]=!canEditComment>
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
