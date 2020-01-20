@@ -1,9 +1,8 @@
-import { Component, OnInit, EventEmitter, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TaskCommentService } from 'src/app/common/services/task-comment.service';
-import { taskService, analyticsService, alertService, taskComment } from 'src/app/ajs-upgraded-providers';
 
 @Component({
-  selector: 'app-comment-bubble-action',
+  selector: 'comment-bubble-action',
   templateUrl: './comment-bubble-action.component.html',
   styleUrls: ['./comment-bubble-action.component.scss']
 })
