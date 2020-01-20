@@ -44,7 +44,7 @@
             <a ng-click="scrollToComment(comment.original_comment.id)" class="original-comment" ng-if="!!comment.reply_to">
               <p class="reply-text">
                 <i class="fa fa-reply"></i>
-                {{comment.original_comment.comment}}
+                {{comment.original_comment ? comment.original_comment.comment : 'comment removed'}}
               </p>
             </a>
             <div ng-switch-when="extension" class="comment-extension">
