@@ -14,7 +14,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
     autofocus: '@?'
     refocusOnTaskChange: '@?'
 
-  controller: ($scope, $modal, $state, $sce, $timeout, markdown, TaskCommentService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
+  controller: ($scope, $modal, $state, $sce, $timeout, $location, $anchorScroll, markdown, TaskCommentService, CommentsModal, listenerService, currentUser, TaskComment, taskService, alertService, analyticsService, Task) ->
     listeners = listenerService.listenTo($scope)
     markdown.setFlavor('github')
 
@@ -56,19 +56,16 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
         TaskCommentService.setTask($scope.task)
 
+    $scope.scrollToComment = (commentID) ->
+      id = "comment-#{commentID}"
+      $location.hash(id)
+      $anchorScroll()
 
-    $scope.openCommentsModal = (comment)->
+    $scope.openCommentsModal = (comment) ->
       resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
       TaskCommentService.setResourceUrl(resourceUrl)
       TaskCommentService.setCommentType(comment.type)
       CommentsModal.show()
-
-    $scope.canUserEdit = (comment) ->
-      # TODO: This should not use global role, if admin is a student they can delete comments.
-      return comment.author_is_me || currentUser.role == "Admin"
-
-    $scope.isBubbleType = (comment) ->
-      return taskService.isBubbleComment(comment.type)
 
     $scope.shouldShowAuthorIcon = (commentType) ->
       return not (commentType == "extension" || commentType == "status")
@@ -78,14 +75,4 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
 
     $overlay = angular.element(document.querySelector('#contextOverlay'))
-
-    # $scope.deleteComment = (id) ->
-      # TaskComment.delete { project_id: $scope.project.project_id, task_definition_id: $scope.task.task_definition_id, id: id },
-      #   (response) ->
-      #     comments = $scope.task.comments.filter (e) -> e.id isnt id
-      #     comments = taskService.mapComments(comments)
-      #     $scope.task.comments = comments
-      #     analyticsService.event "View Task Comments", "Deleted existing comment"
-      #   (response) ->
-      #     alertService.add("danger", response.data.error, 2000)
 )
