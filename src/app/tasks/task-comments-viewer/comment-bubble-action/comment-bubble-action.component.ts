@@ -29,7 +29,7 @@ export class CommentBubbleActionComponent implements OnInit {
   }
 
   react() {
-    this.taskCommentService.reactToComment(this.comment.id);
+    // this.taskCommentService.reactToComment(this.comment.id);
   }
 
   reply() {
