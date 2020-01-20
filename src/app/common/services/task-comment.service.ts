@@ -36,13 +36,12 @@ export class TaskCommentService {
     }
   }
 
-  replyToComment(originalComment) {
-    console.log('here');
+  replyToComment(originalCommentID) {
+    this.ts.currentReplyID.id =  originalCommentID;
   }
 
-  reactToComment(originalComment) {
-    console.log('here');
-  }
+  // reactToComment(originalComment) {
+  // }
 
   isStaff(project: any) {
     return project.unit().my_role !== 'Student';
@@ -60,7 +59,6 @@ export class TaskCommentService {
     this.tc.delete(
       { project_id: task.project().project_id, task_definition_id: task.task_definition_id, id: comment.id },
       (success) => {
-        console.log('Success');
         let comments = task.comments.filter(e => e.id !== comment.id);
         comments = this.ts.mapComments(comments);
         task.comments = comments;
