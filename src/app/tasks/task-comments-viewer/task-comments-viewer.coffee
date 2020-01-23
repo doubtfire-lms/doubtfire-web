@@ -57,9 +57,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
         TaskCommentService.setTask($scope.task)
 
     $scope.scrollToComment = (commentID) ->
-      id = "comment-#{commentID}"
-      $location.hash(id)
-      $anchorScroll()
+      $anchorScroll("comment-#{commentID}")
 
     $scope.openCommentsModal = (comment) ->
       resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
