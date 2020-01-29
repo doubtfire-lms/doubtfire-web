@@ -1,5 +1,5 @@
 import { Campus } from './campus';
-import { CacheableEntityService } from '../cacheableentity.service';
+import { CacheableEntityService } from '../cacheable-entity.service';
 
 export class CampusService extends CacheableEntityService<Campus> {
 

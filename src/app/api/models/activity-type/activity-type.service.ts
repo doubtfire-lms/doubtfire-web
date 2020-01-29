@@ -1,4 +1,4 @@
-import { CacheableEntityService } from '../cacheableentity.service';
+import { CacheableEntityService } from '../cacheable-entity.service';
 import { ActivityType } from './activity-type';
 
 export class ActivityTypeService extends CacheableEntityService<ActivityType> {
