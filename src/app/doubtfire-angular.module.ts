@@ -75,7 +75,6 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 import 'hammerjs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { UserService } from './api/models/user/user.service';
 import { MatOptionModule } from '@angular/material/core';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
@@ -140,7 +139,6 @@ import { CampusService } from './api/models/campus/campus.service';
   ],
   // Services
   providers: [
-    UserService,
     CampusService,
     userProvider,
     unitProvider,
