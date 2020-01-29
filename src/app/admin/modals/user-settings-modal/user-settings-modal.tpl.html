@@ -1,0 +1,103 @@
+<div>
+  <form class="form-horizontal" ng-submit="saveUser()" role="form">
+    <div class="modal-header">
+      <h3>{{isNew ? "Create User" : "Edit User"}}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" ng-if="!isNew">
+        <label class="col-sm-3 control-label">Username</label>
+        <div class="col-sm-7">
+          <p class="form-control-static">{{user.username}}</p>
+        </div>
+      </div>
+      <div class="form-group" ng-if="isNew">
+        <label class="col-sm-3 control-label" ng-required="isNew">Username</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="1744070" ng-model="user.username">
+        </div>
+      </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">First Name</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Name" ng-model="user.first_name">
+        </div>
+      </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Last Name</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Surname" ng-model="user.last_name">
+        </div>
+      </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Preferred Name</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="Name" ng-model="user.nickname">
+        </div>
+      </div>
+      <div class="form-group" ng-required="isNew">
+        <label class="col-sm-3 control-label">Email</label>
+        <div class="col-sm-7">
+          <input type="email" class="form-control" placeholder="name@university.edu" ng-model="user.email">
+        </div>
+      </div>
+      <hr>
+      <div class="form-group" ng-show="user.system_role == 'Student'">
+        <label class="col-sm-3 control-label">Student ID</label>
+        <div class="col-sm-7">
+          <input type="input" class="form-control" placeholder="1744070" ng-model="user.student_id">
+          <p class="help-block">
+            Please ensure your institution's student identification number matches this value
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Avatar</label>
+        <div class="col-sm-7">
+          <user-icon size="50" user="user" email="user.email" style="max-width: 50px; max-height: 50px; font-size: 18px;"></user-icon>
+          <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank" class="btn btn-sm btn-default pull-right"> Change Avatar </a>
+          <p class="help-block">
+            Sign up to <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank">Gravatar</a> and associate your email above to your account to give yourself an avatar
+          </p>
+        </div>
+      </div>
+      <div class="form-group" if-role="Admin Convenor" ng-required="isNew">
+        <label class="col-sm-3 control-label">System Role</label>
+        <div class="col-sm-7">
+          <label class="radio-inline" if-role="Admin">
+            <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin" ng-model="user.system_role" value="Admin">Administrator
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Convenor">Convenor
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Tutor">Tutor
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-disabled="user.id == currentUser.id" name="sysRole" if-role="Admin Convenor" ng-model="user.system_role" value="Student">Student
+          </label>
+          <p ng-show="user.id == currentUser.id" class="help-block text-center">You cannot modify your own permissions</p>
+        </div>
+      </div>
+      <div ng-if="!isNew && user.id == currentUser.id">
+        <hr>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Allow Analytics</label>
+          <div class="col-sm-7">
+            <div class="btn-group">
+              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="true">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="false">
+                <i class="fa fa-close"></i>
+              </label>
+            </div>
+            <p class="help-block">Allow us to anonymously gather your usage to improve {{externalName.value}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <input type="submit" class="btn btn-primary" value="{{isNew ? 'Add' : 'Save'}}" />
+    </div>
+  </form>
+</div>

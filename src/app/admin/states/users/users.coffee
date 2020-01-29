@@ -16,7 +16,7 @@ angular.module('doubtfire.admin.states.users', [])
   headerServiceProvider.state "admin/users", usersAdminViewStateData
 )
 
-.controller("AdministerUsersCtrl", ($scope, $modal, User, DoubtfireConstants, alertService, CsvResultModal, UserSettingsDialog) ->
+.controller("AdministerUsersCtrl", ($scope, $modal, User, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal) ->
   $scope.file_data =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
@@ -41,5 +41,5 @@ angular.module('doubtfire.admin.states.users', [])
   $scope.showUserModal = (user) ->
     # If we're given a user, show that user, else create a new one
     userToShow = if user? then user else new User { }
-    UserSettingsDialog.show userToShow
+    UserSettingsModal.show userToShow
 )

@@ -13,7 +13,6 @@ export const CommentResourceService = new InjectionToken('CommentResourceService
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
-export const ifRole = new InjectionToken('ifRole');
 
 
 // Define a provider for the above injection token...
@@ -22,12 +21,6 @@ export const unitProvider = {
   provide: Unit,                          // When you need 'Unit' you
   useFactory: (i: any) => i.get('Unit'),  // get the AngularJS module
   deps: ['$injector']                     // using the upgrade injector.
-};
-
-export const ifRoleProvider = {
-  provide: ifRole,
-  useFactory: (i: any) => i.get('ifRole'),
-  deps: ['$injector']
 };
 
 export const userProvider = {

@@ -30,10 +30,6 @@ import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent
 } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
-import {
-  UserNotificationSettingsModal,
-  UserNotificationSettingsModalContent
-} from 'src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
@@ -51,8 +47,7 @@ import {
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   userProvider,
-  currentUser,
-  ifRoleProvider
+  currentUser
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -78,8 +73,6 @@ import { CampusListComponent } from './admin/states/campuses/campus-list/campus-
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 
 import 'hammerjs';
-import { UserIconComponent } from './common/user-icon/user-icon.component';
-import { UserSettingsDialogContent, UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UserService } from './api/models/user/user.service';
@@ -88,7 +81,6 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CampusService } from './api/models/campus/campus.service';
@@ -97,14 +89,11 @@ import { CampusService } from './api/models/campus/campus.service';
   // components
   declarations: [
     AboutDoubtfireModalContent,
-    UserSettingsDialogContent,
-    UserNotificationSettingsModalContent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
-    UnitTutorialsListComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
@@ -112,7 +101,6 @@ import { CampusService } from './api/models/campus/campus.service';
     CampusListComponent,
     ActivityListComponent,
     ExtensionModalComponent,
-    UserIconComponent,
     InstitutionSettingsComponent
   ],
   // Module Imports
@@ -156,7 +144,6 @@ import { CampusService } from './api/models/campus/campus.service';
     CampusService,
     userProvider,
     unitProvider,
-    ifRoleProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
@@ -180,22 +167,16 @@ import { CampusService } from './api/models/campus/campus.service';
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
-    UserSettingsDialog,
-    UserNotificationSettingsModal,
     DoubtfireConstants
   ],
   entryComponents: [
     AboutDoubtfireModalContent,
-    UserNotificationSettingsModalContent,
     TaskCommentComposerComponent,
     IntelligentDiscussionPlayerComponent,
-    UnitTutorialsListComponent,
     ExtensionCommentComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    UserIconComponent,
-    UserSettingsDialogContent
   ]
 })
 export class DoubtfireAngularModule {

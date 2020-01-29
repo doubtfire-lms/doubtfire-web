@@ -115,6 +115,8 @@ import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignme
 import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
 import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
 import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
+import 'build/src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.js';
+import 'build/src/app/admin/modals/user-settings-modal/user-settings-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
@@ -137,6 +139,7 @@ import 'build/src/app/groups/tutor-group-manager/tutor-group-manager.js';
 import 'build/src/app/groups/student-group-manager/student-group-manager.js';
 import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.js';
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
+import 'build/src/app/units/modals/unit-tutorial-edit-modal/unit-tutorial-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
@@ -166,6 +169,7 @@ import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-
 import 'build/src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
+import 'build/src/app/units/states/edit/directives/unit-tutorials-editor/unit-tutorials-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
@@ -197,6 +201,7 @@ import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
 import 'build/src/app/common/status-icon/status-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
+import 'build/src/app/common/user-icon/user-icon.js';
 import 'build/src/app/common/header/header.js';
 import 'build/src/app/common/header/unit-dropdown/unit-dropdown.js';
 import 'build/src/app/common/services/task-service.js';
@@ -266,9 +271,6 @@ import 'build/src/i18n/resources-locale_en-GB.js';
 //#endregion
 
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
-import {
-  UserNotificationSettingsModal
-} from 'src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.component';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import {
@@ -276,10 +278,7 @@ import {
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
-import { UserIconComponent } from './common/user-icon/user-icon.component';
-import { UserSettingsDialog } from './admin/modals/user-settings-modal/user-settings-dialog.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
-import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 
@@ -301,10 +300,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
-DoubtfireAngularJSModule.factory('UserSettingsDialog',
-  downgradeInjectable(UserSettingsDialog));
-DoubtfireAngularJSModule.factory('UserNotificationSettingsModal',
-  downgradeInjectable(UserNotificationSettingsModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
@@ -315,12 +310,8 @@ DoubtfireAngularJSModule.directive('taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent }));
 DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
-DoubtfireAngularJSModule.directive('unitTutorialsList',
-  downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
-DoubtfireAngularJSModule.directive('userIcon',
-  downgradeComponent({ component: UserIconComponent }));
 DoubtfireAngularJSModule.directive('campusList',
   downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityList',
