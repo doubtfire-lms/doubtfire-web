@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -81,7 +81,8 @@ angular.module("doubtfire.common.services.units", [])
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorial.description = unitService.tutorialDescription(tutorial)
-          tutorial
+          tutorial.unit = unit
+          tutorialService.createInstanceFrom(tutorial)
         )
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
@@ -292,8 +293,7 @@ angular.module("doubtfire.common.services.units", [])
   #
   unitService.tutorialDescription = (tutorial) ->
     if (tutorial?)
-      timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-      "#{tutorial.meeting_day.slice(0,3)} at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+      tutorial.description
     else
       "No Tutorial"
 
@@ -326,7 +326,7 @@ angular.module("doubtfire.common.services.units", [])
     student.shortTutorialDescription = () ->
       if student.tutorial?
         timeDesc = $filter('date')(student.tutorial.meeting_time, 'shortTime')
-        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor_name.split(' ')[0]} - #{student.tutorial.meeting_location}"
+        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor.name.split(' ')[0]} - #{student.tutorial.meeting_location}"
       else
         'No Tutorial'
 

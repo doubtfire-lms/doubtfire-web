@@ -1,0 +1,223 @@
+<div>
+  <div class="header">
+    <div>
+      <h3>Unit Tutorials</h3>
+      <p>Add new tutorials to the unit or modify existing ones</p>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- Abbreviation Column -->
+    <ng-container [formGroup]="formData" matColumnDef="abbreviation" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.abbreviation}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Campus Column -->
+    <ng-container [formGroup]="formData" matColumnDef="campus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Campus </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.campus ? tutorial.campus.name : ''}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <mat-label>Campus</mat-label>
+            <mat-select required [compareWith]="compareSelection" formControlName="campus">
+              <mat-option *ngFor="let campus of campuses" [value]="campus">
+                {{campus.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <mat-label>Campus</mat-label>
+          <mat-select required formControlName="campus">
+            <mat-option *ngFor="let campus of campuses" [value]="campus">
+              {{campus.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container [formGroup]="formData" matColumnDef="location" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.meeting_location}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <input matInput required formControlName="meeting_location" placeholder="Location">
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <input matInput required formControlName="meeting_location" placeholder="Location">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Day Column -->
+    <ng-container [formGroup]="formData" matColumnDef="day">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Day </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.meeting_day}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <mat-label>Day</mat-label>
+            <mat-select required formControlName="meeting_day">
+              <mat-option *ngFor="let day of days" [value]="day">
+                {{day  }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <mat-label>Day</mat-label>
+          <mat-select required formControlName="meeting_day">
+            <mat-option *ngFor="let day of days" [value]="day">
+              {{ day }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Time Column -->
+    <ng-container [formGroup]="formData" matColumnDef="time" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.meeting_time}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <input matInput type="time" required formControlName="meeting_time"
+              [value]="formData.get('meeting_time').value" placeholder="Time">
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <input matInput type="time" required formControlName="meeting_time" placeholder="Time">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Tutor Column -->
+    <ng-container [formGroup]="formData" matColumnDef="tutor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutor </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{ tutorial.tutor.name }}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <mat-label>Tutor</mat-label>
+            <mat-select required [compareWith]="compareSelection" formControlName="tutor">
+              <mat-option *ngFor="let tutor of unit.staff" [value]="tutor">
+                {{ tutor.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <mat-label>Tutor</mat-label>
+          <mat-select required formControlName="tutor">
+            <mat-option *ngFor="let tutor of unit.staff" [value]="tutor">
+              {{ tutor.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Capacity Column -->
+    <ng-container [formGroup]="formData" matColumnDef="capacity" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Capacity </th>
+      <td mat-cell *matCellDef="let tutorial">
+        <div *ngIf="!editing(tutorial) else edit">
+          {{tutorial.capacity}}
+        </div>
+        <ng-template #edit>
+          <mat-form-field class="data-entry">
+            <input matInput required formControlName="capacity" placeholder="Capacity">
+          </mat-form-field>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field class="data-entry">
+          <input matInput required formControlName="capacity" placeholder="Capacity">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Options Column -->
+    <ng-container matColumnDef="options" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let campus">
+        <div class="right" *ngIf="!editing(campus) else edit">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="flagEdit(campus)">
+              <mat-icon color="primary">edit</mat-icon>
+              <span>Edit</span>
+            </button>
+          </mat-menu>
+        </div>
+        <ng-template #edit>
+          <div class="edit-actions right">
+            <span>
+              <button mat-icon-button color="warn" (click)="cancelEdit()">
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="submit()">
+                <mat-icon>save</mat-icon>
+              </button>
+            </span>
+          </div>
+        </ng-template>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <div class="edit-actions right">
+          <button mat-icon-button (click)="submit()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
+  </table>
+</div>
