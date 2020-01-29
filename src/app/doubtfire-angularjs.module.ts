@@ -280,7 +280,7 @@ import {
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
-import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
+import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -315,8 +315,8 @@ DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('campusList',
   downgradeComponent({ component: CampusListComponent }));
-DoubtfireAngularJSModule.directive('activityList',
-  downgradeComponent({ component: ActivityListComponent }));
+DoubtfireAngularJSModule.directive('activityTypeList',
+  downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
 // Global configuration

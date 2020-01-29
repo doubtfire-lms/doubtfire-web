@@ -23,6 +23,11 @@ export interface HttpOptions {
  */
 export abstract class EntityService<T extends Entity>  {
 
+  abstract entityName: string;
+  get serverKey(): string {
+    return this.entityName.replace(/(.)([A-Z][a-z]+)/, '$1_$2').replace(/([a-z0-9])([A-Z])/, '$1_$2').toLowerCase();
+  }
+
   /**
    * Provide a string template for the endpoint URLs in the format
    * 'path/to/:id1:/other/:id2:' where ':id1:' and ':id2:' are placeholders for id values
@@ -106,13 +111,14 @@ export abstract class EntityService<T extends Entity>  {
   /**
    * Make an update request to the endpoint, using the supplied object to identify which id to update.
    *
-   * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
+   * @param obj An object with keys which match the placeholders within the endpointFormat string.
    * @param options Optional http options
    */
-  public update(pathIds: Object, options?: HttpOptions): Observable<T>;
-  public update(pathIds: any, options?: HttpOptions): Observable<T> {
-    return this.put<Object>(pathIds, options).pipe(
-      map(rawData => this.createInstanceFrom(rawData))
+  public update(obj: T, options?: HttpOptions): Observable<T> {
+    return this.put<Object>(obj, options).pipe(
+      map(rawData => {
+        obj.updateFromJson(rawData); return obj;
+      })
     );
   }
 
@@ -133,18 +139,17 @@ export abstract class EntityService<T extends Entity>  {
     return this.httpClient.put(path, json, options) as Observable<S>;
   }
 
-
   /**
    * Make a create request to the endpoint, using the supplied parameters to determine the path.
    *
    * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
    * @param options Optional http options
-   * @returns {Observable} a new cold observable with the newely created @type {T}
+   * @returns {Observable} a new cold observable with the newly created @type {T}
    */
   public create(pathIds?: Object, options?: HttpOptions): Observable<T>;
   public create(pathIds?: any, options?: HttpOptions): Observable<T> {
     let object = { ...pathIds };
-    const json = (typeof pathIds === 'object') ? pathIds.toJson() : pathIds;
+    const json = (typeof pathIds.toJson === 'function') ? pathIds.toJson() : pathIds;
     const path = this.buildEndpoint(this.endpointFormat, object);
     return this.httpClient.post(path, json, options)
       .pipe(

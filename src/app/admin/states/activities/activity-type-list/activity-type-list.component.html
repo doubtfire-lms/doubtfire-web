@@ -1,4 +1,4 @@
-<div class="activity-list-container">
+<div class="activity-type-list-container">
   <div class="header">
     <div>
       <h3>Activities</h3>
@@ -8,41 +8,41 @@
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z4">
 
     <!-- Name Column -->
-    <ng-container matColumnDef="name">
+    <ng-container [formGroup]="formData" matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let element">
-        <div *ngIf="!editing(element.id) else edit">
-          {{element.name}}
+      <td mat-cell *matCellDef="let activityType">
+        <div *ngIf="!editing(activityType) else edit">
+          {{activityType.name}}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput [value]="element.name">
+            <input matInput required formControlName="name" placeholder="Name">
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput placeholder="Campus name">
+          <input matInput required formControlName="name" placeholder="Name">
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Abbreviation Column -->
-    <ng-container matColumnDef="abbreviation">
+    <ng-container [formGroup]="formData" matColumnDef="abbreviation">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
-      <td mat-cell *matCellDef="let element">
-        <div *ngIf="!editing(element.id) else edit">
-          {{element.abbreviation}}
+      <td mat-cell *matCellDef="let activityType">
+        <div *ngIf="!editing(activityType) else edit">
+          {{activityType.abbreviation}}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput [value]="element.abbreviation">
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput placeholder="Campus Abbreviation">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
         </mat-form-field>
       </td>
     </ng-container>
@@ -50,29 +50,25 @@
     <!-- Options Column -->
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <div class="right" *ngIf="!editing(element.id) else edit">
+      <td mat-cell *matCellDef="let activityType">
+        <div class="right" *ngIf="!editing(activityType) else edit">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="flagEdit(element.id)">
+            <button mat-menu-item (click)="flagEdit(activityType)">
               <mat-icon color="primary">edit</mat-icon>
               <span>Edit</span>
-            </button>
-            <button mat-menu-item (click)="delete(element)">
-              <mat-icon color="warn">delete</mat-icon>
-              <span>Delete</span>
             </button>
           </mat-menu>
         </div>
         <ng-template #edit>
           <div class="edit-actions right">
             <span>
-              <button mat-icon-button color="warn" (click)="save(element)">
+              <button mat-icon-button color="warn" (click)="cancelEdit()">
                 <mat-icon>cancel</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="save(element)">
+              <button mat-icon-button color="primary" (click)="submit()">
                 <mat-icon>save</mat-icon>
               </button>
             </span>
@@ -81,15 +77,15 @@
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <div class="edit-actions right">
-          <button mat-icon-button (click)="save(element)">
+          <button mat-icon-button (click)="submit()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>

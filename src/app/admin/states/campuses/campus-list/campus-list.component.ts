@@ -1,90 +1,74 @@
-import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
-import { currentUser, alertService } from 'src/app/ajs-upgraded-providers';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { CampusService } from 'src/app/api/models/campus/campus.service';
 import { Campus } from 'src/app/api/models/campus/campus';
+import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 
 @Component({
   selector: 'campus-list',
   templateUrl: 'campus-list.component.html',
   styleUrls: ['campus-list.component.scss']
 })
-export class CampusListComponent implements OnInit {
+export class CampusListComponent extends EntityFormComponent<Campus> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  // Form controls
-  abbreviation = new FormControl('');
-  name = new FormControl('');
-  sync = new FormControl('');
+  syncModes = ['timetable', 'automatic', 'manual'];
 
   // Set up the table
-  columns: string[] = ['abbreviation', 'name', 'mode', 'options'];
+  columns: string[] = ['name', 'abbreviation', 'mode', 'active', 'options'];
   campuses: Campus[] = new Array<Campus>();
   dataSource = new MatTableDataSource(this.campuses);
 
-  syncModes = ['timetable', 'automatic', 'manual'];
-  selectedCampus: Campus;
-
+  // Calls the parent's constructor, passing in an object
+  // that maps all of the form controls that this form consists of.
   constructor(
     private campusService: CampusService,
-    // tslint:disable-next-line: no-shadowed-variable
-    @Inject(alertService) private alertService: any
-  ) { }
-
-  clearFormControls() {
-    this.abbreviation.setValue('');
-    this.name.setValue('');
-    this.sync.setValue('');
+    @Inject(alertService) private alerts: any
+  ) {
+    super({
+      abbreviation: new FormControl('', [
+        Validators.required
+      ]),
+      name: new FormControl('', [
+        Validators.required
+      ]),
+      mode: new FormControl('', [
+        Validators.required
+      ]),
+      active: new FormControl(false)
+    });
   }
 
   ngOnInit() {
+    // Get all the campuses and add them to the table
     this.campusService.query().subscribe((campuses) => {
-      this.campuses.push(...campuses);
-      this.table.renderRows();
+      this.pushToTable(campuses);
     });
   }
 
-  applyFilter(filterValue: string) {
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
+  // This method is passed to the submit method on the parent
+  // and is only run when an entity is successfully created or updated
+  onSuccess(response: Campus, isNew: boolean) {
+    if (isNew) {
+      this.pushToTable(response);
+    }
   }
 
-  update(campus: Campus) {
-    this.campusService.update(campus).subscribe(
-      () => {
-        this.alertService.add('success', 'Campus edited', 2000);
-      },
-      error => {
-        this.alertService.add('danger', error, 2000);
-      });
-    this.selectedCampus = null;
+  // Push the values that will be displayed in the table
+  // to the datasource
+  private pushToTable(value: Campus | Campus[]) {
+    value instanceof Array ? this.campuses.push(...value) : this.campuses.push(value);
+    this.dataSource.sort = this.sort;
+    this.table.renderRows();
   }
 
-  delete(campus: Campus) {
-    this.campusService.delete(campus).subscribe();
-    this.selectedCampus = null;
-  }
-
-  saveNew() {
-    const newCampus = new Campus({ abbreviation: this.abbreviation.value, name: this.name.value, mode: this.sync.value });
-    this.campusService.create(newCampus).subscribe(result => {
-      this.campuses.push(result);
-      this.table.renderRows();
-      this.clearFormControls();
-    });
-  }
-
-  cancelEdit() {
-    this.selectedCampus = null;
-  }
-
-  editing(item: Campus): boolean {
-    return item === this.selectedCampus;
-  }
-
-  flagEdit(item) {
-    this.selectedCampus = item;
+  // This method is called when the form is submitted,
+  // which then calls the parent's submit.
+  submit() {
+    super.submit(this.campusService, this.alerts, this.onSuccess.bind(this));
   }
 }

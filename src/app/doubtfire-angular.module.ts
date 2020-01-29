@@ -80,7 +80,8 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { ActivityListComponent } from './admin/states/activities/activity-list/activity-list.component';
+import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CampusService } from './api/models/campus/campus.service';
 
@@ -98,7 +99,7 @@ import { CampusService } from './api/models/campus/campus.service';
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
     CampusListComponent,
-    ActivityListComponent,
+    ActivityTypeListComponent,
     ExtensionModalComponent,
     InstitutionSettingsComponent
   ],
@@ -140,6 +141,7 @@ import { CampusService } from './api/models/campus/campus.service';
   // Services
   providers: [
     CampusService,
+    ActivityTypeService,
     userProvider,
     unitProvider,
     authProvider,
