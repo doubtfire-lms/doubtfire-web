@@ -1,106 +1,104 @@
-about-doubtfire-dialog {
-  [hidden] {
-    display: none !important;
+[hidden] {
+  display: none !important;
+}
+
+mat-dialog-content {
+  i.logo + h1.logo {
+    margin-left: 1ex;
+    display: inline-block;
   }
 
-  mat-dialog-content {
-    i.logo + h1.logo {
-      margin-left: 1ex;
-      display: inline-block;
-    }
-
-    .modal-header {
-      text-align: center;
-      h1.logo {
-        @include logo-font-rendering;
-        @media (max-width: $screen-sm) {
-          font-size: 3em;
-        }
-        small {
-          text-align: right;
-          font-size: 0.5em;
-        }
-        &.full.logo small {
-          display: block;
-          line-height: 2;
-        }
-        &.sup.logo small {
-          vertical-align: super;
-          margin-left: 0.5ex;
-          color: #999;
-        }
-      }
-    }
-
-    .modal-content {
-      padding-top: 3em;
-      padding-bottom: 3em;
-    }
-    i.logo {
-      height: 6em;
-      width: 6em;
-    }
-    h2 {
-      font-size: 1.2em;
-      font-weight: bold;
-      text-transform: uppercase;
-      text-align: center;
-      color: #333;
-    }
-    ul {
-      @include remove-list-padding;
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      width: 85%;
-      justify-content: center;
-      margin: 0 auto;
-    }
-    li {
+  .modal-header {
+    text-align: center;
+    h1.logo {
+      @include logo-font-rendering;
       @media (max-width: $screen-sm) {
-        width: 80%;
-        margin: 0 auto;
-        margin-bottom: 2em;
+        font-size: 3em;
       }
-      @media (min-width: $screen-sm) {
-        display: inline-block;
-        width: 15%;
-        margin: 3em 5% 3em 5%;
+      small {
+        text-align: right;
+        font-size: 0.5em;
       }
-      &.handler {
+      &.full.logo small {
         display: block;
-        margin-top: 0.25em;
-        font-size: 1.1em;
+        line-height: 2;
       }
-      a {
-        display: block;
-        width: 100%;
-        text-align: center;
-        font-size: 1.1em;
-        color: #444;
-        text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
-
-        .name {
-          line-height: 1;
-          font-weight: bold;
-          text-align: center;
-        }
-      }
-      img {
-        width: 100%;
-        margin: 0 auto;
-        border-radius: 100%;
-        margin-bottom: 1em;
+      &.sup.logo small {
+        vertical-align: super;
+        margin-left: 0.5ex;
+        color: #999;
       }
     }
-    .logo-smallprint {
-      font-size: 0.8em;
-      a {
-        color: #222;
+  }
+
+  .modal-content {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+  i.logo {
+    height: 6em;
+    width: 6em;
+  }
+  h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #333;
+  }
+  ul {
+    @include remove-list-padding;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    width: 85%;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  li {
+    @media (max-width: $screen-sm) {
+      width: 80%;
+      margin: 0 auto;
+      margin-bottom: 2em;
+    }
+    @media (min-width: $screen-sm) {
+      display: inline-block;
+      width: 15%;
+      margin: 3em 5% 3em 5%;
+    }
+    &.handler {
+      display: block;
+      margin-top: 0.25em;
+      font-size: 1.1em;
+    }
+    a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 1.1em;
+      color: #444;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
       }
+
+      .name {
+        line-height: 1;
+        font-weight: bold;
+        text-align: center;
+      }
+    }
+    img {
+      width: 100%;
+      margin: 0 auto;
+      border-radius: 100%;
+      margin-bottom: 1em;
+    }
+  }
+  .logo-smallprint {
+    font-size: 0.8em;
+    a {
+      color: #222;
     }
   }
 }

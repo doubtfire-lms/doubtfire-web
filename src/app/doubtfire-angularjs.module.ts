@@ -25,6 +25,7 @@ import 'node_modules/angular-ui-codemirror/src/ui-codemirror.js';
 import 'node_modules/angular-markdown-filter/markdown.js';
 import 'node_modules/angulartics/dist/angulartics.min.js';
 import 'node_modules/angulartics-google-analytics/lib/angulartics-google-analytics.js';
+import 'node_modules/angular-md5/angular-md5.js';
 
 // Ok... here is what we need to convert!
 

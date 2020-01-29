@@ -5,7 +5,6 @@ angular.module("doubtfire.common", [
   'doubtfire.common.header'
   'doubtfire.common.file-uploader'
   'doubtfire.common.pdf-panel-viewer'
-  'doubtfire.common.user-icon'
   'doubtfire.common.grade-icon'
   'doubtfire.common.status-icon'
   'doubtfire.common.content-editable'
@@ -13,6 +12,7 @@ angular.module("doubtfire.common", [
   # New
   'doubtfire.common.pdf-viewer'
   'doubtfire.common.pdf-panel-viewer'
+  'doubtfire.common.user-icon'
   # Audio
   'doubtfire.common.audio-player'
 ])
