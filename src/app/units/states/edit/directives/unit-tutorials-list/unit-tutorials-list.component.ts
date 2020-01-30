@@ -59,9 +59,10 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   }
 
   ngOnInit() {
+    this.campusService.query().subscribe(campuses => {
+      this.campuses.push(...campuses);
+    });
     this.dataSource = new MatTableDataSource(this.tutorials);
-    console.log(this.tutorials);
-    console.log(this.stream)
   }
 
   // This method is passed to the submit method on the parent
@@ -88,6 +89,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
 
   protected formDataToNewObject(endPointKey: string, associations?: Object): Object {
     let result = super.formDataToNewObject(endPointKey);
+    if (this.stream) {
+      result['tutorial']['tutorial_stream_abbr'] = this.stream.abbreviation;
+    }
     return Tutorial.mapToCreateJson(this.unit, result);
   }
 

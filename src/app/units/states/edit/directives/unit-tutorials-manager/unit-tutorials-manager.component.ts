@@ -14,6 +14,12 @@ export class UnitTutorialsManagerComponent {
 
   ngOnInit() {
     // TODO: gotta handle cases where there are tutorials that don't have stream
+    this.tutorialsByStream.push(
+      {
+        stream: null,
+        tutorials: this.unit.tutorials.filter(tutorial => !tutorial.tutorial_stream)
+      }
+    );
     this.unit.tutorial_streams.forEach(stream => {
       this.tutorialsByStream.push(
         {

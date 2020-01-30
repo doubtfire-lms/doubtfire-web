@@ -32,7 +32,7 @@ const UPDATE_KEYS =
     'capacity',
     'tutor_id',
     'unit_id',
-    'tutorial_stream'
+    'tutorial_stream_abbr'
   ];
 
 const IGNORE = [

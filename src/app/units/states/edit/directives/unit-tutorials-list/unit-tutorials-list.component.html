@@ -1,7 +1,10 @@
 <div>
   <div class="header">
     <div>
-      <h4>{{stream.name}} - {{stream.abbreviation}}</h4>
+      <h4 *ngIf="stream else noStream">{{stream.name}} - {{stream.abbreviation}}</h4>
+      <ng-template #noStream>
+        <h4>Tutorials without a stream</h4>
+      </ng-template>
     </div>
   </div>
 
