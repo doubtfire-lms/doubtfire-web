@@ -18,14 +18,15 @@ import { User } from 'src/app/api/models/user/user';
 export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @Input() tutorials: Tutorial[];
+  @Input() stream: any;
   @Input() unit: any;
 
   days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  tutorials: Tutorial[] = new Array<Tutorial>();
-  dataSource = new MatTableDataSource(this.tutorials);
+  dataSource: MatTableDataSource<Tutorial>;
 
   constructor(
     private tutorialService: TutorialService,
@@ -58,12 +59,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   }
 
   ngOnInit() {
-    // Get the campuses
-    // TODO: These need to be cached on bootstrap
-    this.campusService.query().subscribe(campuses => {
-      this.campuses.push(...campuses);
-    });
-    this.tutorials.push(...this.unit.tutorials);
+    this.dataSource = new MatTableDataSource(this.tutorials);
+    console.log(this.tutorials);
+    console.log(this.stream)
   }
 
   // This method is passed to the submit method on the parent

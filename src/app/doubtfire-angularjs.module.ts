@@ -281,6 +281,7 @@ import { CampusListComponent } from './admin/states/campuses/campus-list/campus-
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -322,8 +323,10 @@ DoubtfireAngularJSModule.directive('activityTypeList',
 DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList',
-  downgradeComponent({ component: UnitTutorialsListComponent }));
-// Global configuration
+    downgradeComponent({ component: UnitTutorialsListComponent }));
+DoubtfireAngularJSModule.directive('unitTutorialsManager',
+    downgradeComponent({ component: UnitTutorialsManagerComponent }));
+  // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {

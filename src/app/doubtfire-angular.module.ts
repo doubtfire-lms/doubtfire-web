@@ -84,6 +84,7 @@ import { ActivityTypeListComponent } from './admin/states/activities/activity-ty
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { CampusService } from './api/models/campus/campus.service';
 import { UserService } from './api/models/user/user.service';
@@ -105,7 +106,8 @@ import { UserService } from './api/models/user/user.service';
     ActivityTypeListComponent,
     ExtensionModalComponent,
     InstitutionSettingsComponent,
-    UnitTutorialsListComponent
+    UnitTutorialsListComponent,
+    UnitTutorialsManagerComponent
   ],
   // Module Imports
   imports: [
@@ -183,7 +185,7 @@ import { UserService } from './api/models/user/user.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    UnitTutorialsListComponent
+    UnitTutorialsManagerComponent
   ]
 })
 export class DoubtfireAngularModule {

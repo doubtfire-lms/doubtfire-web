@@ -17,6 +17,7 @@ const READ_KEYS =
     'tutor_name',
     'tutor_id',
     'num_students',
+    'tutorial_stream',
     'tutor',
   ];
 
@@ -31,6 +32,7 @@ const UPDATE_KEYS =
     'capacity',
     'tutor_id',
     'unit_id',
+    'tutorial_stream'
   ];
 
 const IGNORE = [
@@ -50,6 +52,7 @@ export class Tutorial extends Entity {
   capacity: number;
   num_students: number;
   tutor: User;
+  tutorial_stream: string;
   // unit: Unit;
 
   description: string;
