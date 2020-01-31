@@ -1,4 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
+
+interface TutorialsSteamData {
+  stream: string;
+  tutorials: Tutorial[];
+}
 
 @Component({
   selector: 'unit-tutorials-manager',
@@ -13,23 +19,19 @@ export class UnitTutorialsManagerComponent {
   }
 
   ngOnInit() {
-    // TODO: gotta handle cases where there are tutorials that don't have stream
-    this.tutorialsByStream.push(
-      {
-        stream: null,
-        tutorials: this.unit.tutorials.filter(tutorial => !tutorial.tutorial_stream)
-      }
-    );
+    const tutorialsWithNostream: TutorialsSteamData = {
+      stream: null,
+      tutorials: this.unit.tutorials.filter(tutorial => !tutorial.tutorial_stream)
+    };
+    this.tutorialsByStream.push(tutorialsWithNostream);
+    const tutorialsWithAStream: TutorialsSteamData[] = new Array<TutorialsSteamData>();
     this.unit.tutorial_streams.forEach(stream => {
-      this.tutorialsByStream.push(
-        {
-          stream: stream,
-          tutorials: this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream === stream.abbreviation)
-        }
-      );
+      const tutorialsAndStream: TutorialsSteamData = {
+        stream: stream,
+        tutorials: this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream === stream.abbreviation)
+      };
+      tutorialsWithAStream.push(tutorialsAndStream);
     });
-   // This is where we want to load all
-   // of the data required to render each of the
-   // unit tutorials lists - by stream
+    this.tutorialsByStream.push(...tutorialsWithAStream);
   }
 }

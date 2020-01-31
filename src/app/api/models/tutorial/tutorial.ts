@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { AppInjector } from '../../../app-injector';
 import { Campus } from '../campus/campus';
 import { CampusService } from '../campus/campus.service';
+import { StreamService } from '../stream/stream.service';
 
 const READ_KEYS =
   [
@@ -106,6 +107,9 @@ export class Tutorial extends Entity {
         userService.addEntityToCache(data.tutor.id, t);
       }
       this.tutor = t;
+    }
+    if (data.tutorial_stream) {
+      // this is where the stream should be instantiated
     }
     this.description = ` ${this.meeting_day.slice(0, 3)} at ${this.meeting_time} by ${data.tutor_name} in ${this.meeting_location}`;
   }

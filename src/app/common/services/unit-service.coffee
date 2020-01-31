@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -78,6 +78,10 @@ angular.module("doubtfire.common.services.units", [])
     unit.refresh = (onSuccess, onFailure) ->
       successCallback = (newUnit) ->
         _.extend(unit, newUnit)
+        # Map the streams to the unit
+        unit.tutorial_streams = _.map(unit.tutorial_streams, (stream) ->
+          streamService.createInstanceFrom(stream)
+        )
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorial.description = unitService.tutorialDescription(tutorial)
