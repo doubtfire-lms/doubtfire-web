@@ -79,6 +79,19 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
     value instanceof Array ? this.tutorials.push(...value) : this.tutorials.push(value);
+    this.renderTable();
+  }
+
+  // Handle the removal of a tutorial
+  private deleteTutorial(tutorial: Tutorial) {
+    this.tutorialService.delete(tutorial).subscribe(result => {
+      this.cancelEdit();
+      this.tutorials.splice(this.tutorials.indexOf(tutorial), 1);
+      this.renderTable();
+    });
+  }
+
+  private renderTable() {
     this.dataSource.sort = this.sort;
     this.table.renderRows();
   }
@@ -102,11 +115,19 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // tutorial. The function is bound to the compareFn attribute on the related
   // mat-selects.
   // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus, bTutor: User | Campus) {
-    return aEntity && bTutor ? aEntity.id === bTutor.id : aEntity === bTutor;
+  compareSelection(aEntity: User | Campus | any, bEntity: User | Campus) {
+    if (!aEntity || !bEntity) {
+      return;
+    }
+    if (bEntity instanceof User) {
+      return aEntity.user_id === bEntity.id;
+    } else {
+      return aEntity.id === bEntity.id;
+    }
   }
 
-  handleStreamDeleted() {
+  // Handle the deletion of a stream
+  deleteStream() {
     this.unit.deleteStream(this.stream);
   }
 }
