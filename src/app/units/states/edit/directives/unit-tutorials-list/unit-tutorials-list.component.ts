@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewChild } from '@angular/core';
+import { Component, Input, Inject, ViewChild, Output, EventEmitter } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
@@ -9,6 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Campus } from 'src/app/api/models/campus/campus';
 import { CampusService } from 'src/app/api/models/campus/campus.service';
 import { User } from 'src/app/api/models/user/user';
+import { TutorialStream } from 'src/app/api/models/stream/tutorial-stream';
 
 @Component({
   selector: 'unit-tutorials-list',
@@ -18,8 +19,7 @@ import { User } from 'src/app/api/models/user/user';
 export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @Input() tutorials: Tutorial[];
-  @Input() stream: any;
+  @Input() stream: TutorialStream;
   @Input() unit: any;
 
   days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -27,6 +27,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
   dataSource: MatTableDataSource<Tutorial>;
+  tutorials: Tutorial[];
 
   constructor(
     private tutorialService: TutorialService,
@@ -62,6 +63,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.campusService.query().subscribe(campuses => {
       this.campuses.push(...campuses);
     });
+    this.tutorials = this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream === this.stream);
     this.dataSource = new MatTableDataSource(this.tutorials);
   }
 
@@ -102,5 +104,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // See: https://angular.io/api/forms/SelectControlValueAccessor
   compareSelection(aEntity: User | Campus, bTutor: User | Campus) {
     return aEntity && bTutor ? aEntity.id === bTutor.id : aEntity === bTutor;
+  }
+
+  handleStreamDeleted() {
+    this.unit.deleteStream(this.stream);
   }
 }

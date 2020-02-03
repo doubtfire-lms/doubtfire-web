@@ -1,5 +1,6 @@
 <div>
-  <unit-tutorials-list *ngFor="let data of tutorialsByStream" [unit]="unit" [stream]="data.stream" [tutorials]="data.tutorials"></unit-tutorials-list>
+  <unit-tutorials-list [unit]="unit"></unit-tutorials-list>
+  <unit-tutorials-list *ngFor="let stream of unit.tutorial_streams" [unit]="unit" [stream]="stream"></unit-tutorials-list>
   <button mat-icon-button [matMenuTriggerFor]="activities">
     <mat-icon>add</mat-icon>
   </button>

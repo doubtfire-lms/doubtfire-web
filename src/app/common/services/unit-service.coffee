@@ -73,6 +73,12 @@ angular.module("doubtfire.common.services.units", [])
     }
 
     #
+    #  Get a stream from the unit by abbreviation
+    #
+    unit.tutorialStreamForAbbr = (abbr) ->
+      _.find(unit.tutorial_streams, (stream) -> stream.abbreviation == abbr) if abbr?
+
+    #
     # Refresh the unit with data from the server...
     #
     unit.refresh = (onSuccess, onFailure) ->
@@ -86,6 +92,7 @@ angular.module("doubtfire.common.services.units", [])
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorial.description = unitService.tutorialDescription(tutorial)
           tutorial.unit = unit
+          tutorial.tutorial_stream = unit.tutorialStreamForAbbr(tutorial.tutorial_stream)
           tutorialService.createInstanceFrom(tutorial)
         )
         # Add a sequence from the order fetched from server
@@ -162,6 +169,26 @@ angular.module("doubtfire.common.services.units", [])
       unless unit.students?
         throw Error "Students not yet mapped to unit (unit.students is undefined)"
       _.find(unit.students, {project_id: id})
+
+    # Delete a unit's stream
+    unit.deleteStream = (stream) ->
+      successCallback = () ->
+        # Add the new stream to the unit
+        _.pull unit.tutorial_streams, stream
+      failureCallback = (response) ->
+        # Deal with the failure
+        alertService.add("danger", "Failed to delete stream. #{response?.data?.error}", 8000)
+      Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
+
+    # Get a unit's next stream based on activity abbreviation
+    unit.nextStream = (activityTypeAbbreviation) ->
+      successCallback = (stream) ->
+        # Add the new stream to the unit
+        unit.tutorial_streams.push streamService.createInstanceFrom(stream)
+      failureCallback = (response) ->
+        # Deal with the failure
+        alertService.add("danger", "Failed to add stream. #{response?.data?.error}", 8000)
+      Unit.tutorialStream.create({id: unit.id, activity_type_abbr: activityTypeAbbreviation}, successCallback, failureCallback)
 
     # Adds a new student to this unit
     unit.addStudent = (student) ->

@@ -1,7 +1,12 @@
 <div>
   <div class="header">
     <div>
-      <h4 *ngIf="stream else noStream">{{stream.name}} - {{stream.abbreviation}}</h4>
+      <div *ngIf="stream else noStream">
+        <h4>{{stream.name}} - {{stream.abbreviation}}</h4>
+        <button mat-icon-button color="warn" (click)="handleStreamDeleted()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>       
       <ng-template #noStream>
         <h4>Tutorials without a stream</h4>
       </ng-template>
