@@ -4,7 +4,7 @@ import { UserService } from '../user/user.service';
 import { AppInjector } from '../../../app-injector';
 import { Campus } from '../campus/campus';
 import { CampusService } from '../campus/campus.service';
-import { StreamService } from '../stream/stream.service';
+import { TutorialStream } from '../tutorial-stream/tutorial-stream';
 
 const READ_KEYS =
   [
@@ -53,8 +53,7 @@ export class Tutorial extends Entity {
   capacity: number;
   num_students: number;
   tutor: User;
-  tutorial_stream: string;
-  // unit: Unit;
+  tutorial_stream: TutorialStream;
 
   description: string;
 

@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { ActivityTypeService } from 'src/app/api/models/activity-type/activity-type.service';
 import { ActivityType } from 'src/app/api/models/activity-type/activity-type';
-import { TutorialStream } from 'src/app/api/models/stream/tutorial-stream';
+import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
 
 @Component({
   selector: 'unit-tutorials-manager',

@@ -9,7 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Campus } from 'src/app/api/models/campus/campus';
 import { CampusService } from 'src/app/api/models/campus/campus.service';
 import { User } from 'src/app/api/models/user/user';
-import { TutorialStream } from 'src/app/api/models/stream/tutorial-stream';
+import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
 
 @Component({
   selector: 'unit-tutorials-list',
