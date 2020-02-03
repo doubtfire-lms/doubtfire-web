@@ -16,12 +16,22 @@ unit-tutorials-list {
   }
   .header {
     display: flex;
+    margin-bottom:  4px;
     .interactions {
       margin-left: auto;
       margin-top: auto;
     }
     .interactions > * {
       padding-left: 20px;
+    }
+    div {
+      width: 100%;
+      h4 {
+        display: inline-block;
+      }
+      button {
+        float: right;
+      }
     }
   }
   td.mat-cell:last-of-type,
@@ -45,9 +55,9 @@ unit-tutorials-list {
     max-width: 80px;
   }
 
-  .actions {
+  .edit-actions {
     display: flex;
-    padding: 2rem 0 1rem 0;
+    flex-direction: column;
     button {
       margin-left: auto;
     }
