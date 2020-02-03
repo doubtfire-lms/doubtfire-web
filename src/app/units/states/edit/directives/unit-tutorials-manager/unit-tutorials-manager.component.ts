@@ -5,7 +5,8 @@ import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stre
 
 @Component({
   selector: 'unit-tutorials-manager',
-  templateUrl: 'unit-tutorials-manager.component.html'
+  templateUrl: 'unit-tutorials-manager.component.html',
+  styleUrls: ['unit-tutorials-manager.component.scss']
 })
 export class UnitTutorialsManagerComponent {
   @Input() unit: any;
