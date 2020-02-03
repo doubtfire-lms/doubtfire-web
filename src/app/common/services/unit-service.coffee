@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -178,7 +178,11 @@ angular.module("doubtfire.common.services.units", [])
       failureCallback = (response) ->
         # Deal with the failure
         alertService.add("danger", "Failed to delete stream. #{response?.data?.error}", 8000)
-      Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
+      ConfirmationModal.show "Delete Tutorial Stream #{stream.abbreviation}",
+      'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
+      ->
+        promise = Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
+        ProgressModal.show "Deleting Tutorial Stream #{stream.abbreviation}.", promise
 
     # Get a unit's next stream based on activity abbreviation
     unit.nextStream = (activityTypeAbbreviation) ->
