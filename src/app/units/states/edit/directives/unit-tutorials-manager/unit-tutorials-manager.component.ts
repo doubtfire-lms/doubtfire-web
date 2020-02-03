@@ -27,8 +27,6 @@ export class UnitTutorialsManagerComponent {
   }
 
   onClickNewActivity(activity: ActivityType) {
-    this.unit.nextStream(activity.abbreviation, (stream: TutorialStream) => {
-      // implement
-    });
+    this.unit.nextStream(activity.abbreviation);
   }
 }
