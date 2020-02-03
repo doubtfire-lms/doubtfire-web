@@ -173,7 +173,7 @@ angular.module("doubtfire.common.services.units", [])
     # Delete a unit's stream
     unit.deleteStream = (stream) ->
       successCallback = () ->
-        # Add the new stream to the unit
+        _.remove unit.tutorials, (tutorial) -> tutorial.tutorial_stream == stream
         _.pull unit.tutorial_streams, stream
       failureCallback = (response) ->
         # Deal with the failure
