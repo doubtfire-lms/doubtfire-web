@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { EntityService } from '../entity.service';
-import { Stream } from './stream';
+import { TutorialStream } from './tutorial-stream';
 
-export class StreamService extends EntityService<Stream> {
+export class TutorialStreamService extends EntityService<TutorialStream> {
   protected readonly endpointFormat = '';
   entityName = 'Stream';
 
@@ -11,8 +11,8 @@ export class StreamService extends EntityService<Stream> {
     super(httpClient);
   }
 
-  protected createInstanceFrom(json: any): Stream {
-    let stream = new Stream(json);
+  protected createInstanceFrom(json: any): TutorialStream {
+    let stream = new TutorialStream(json);
     stream.updateFromJson(json);
     return stream;
   }

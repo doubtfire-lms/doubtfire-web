@@ -9,7 +9,7 @@ const KEYS =
   ];
 
 
-export class Stream extends Entity {
+export class TutorialStream extends Entity {
   id: number;
   name: string;
   abbreviation: string;
