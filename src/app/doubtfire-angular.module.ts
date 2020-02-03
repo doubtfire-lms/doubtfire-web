@@ -86,7 +86,7 @@ import { InstitutionSettingsComponent } from './units/states/institution-setting
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
-import { StreamService } from './api/models/stream/stream.service';
+import { TutorialStreamService } from './api/models/stream/tutorial-stream.service';
 import { CampusService } from './api/models/campus/campus.service';
 import { UserService } from './api/models/user/user.service';
 
@@ -149,7 +149,7 @@ import { UserService } from './api/models/user/user.service';
   providers: [
     CampusService,
     TutorialService,
-    StreamService,
+    TutorialStreamService,
     UserService,
     ActivityTypeService,
     userProvider,

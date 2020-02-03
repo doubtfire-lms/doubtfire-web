@@ -283,7 +283,7 @@ import { InstitutionSettingsComponent } from './units/states/institution-setting
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
-import { StreamService } from './api/models/stream/stream.service';
+import { TutorialStreamService } from './api/models/stream/tutorial-stream.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -310,7 +310,7 @@ DoubtfireAngularJSModule.factory('ExtensionModal',
 DoubtfireAngularJSModule.factory('tutorialService',
   downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService',
-  downgradeInjectable(StreamService));
+  downgradeInjectable(TutorialStreamService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
