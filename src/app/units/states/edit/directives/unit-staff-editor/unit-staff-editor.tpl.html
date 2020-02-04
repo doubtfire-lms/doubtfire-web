@@ -13,6 +13,7 @@
               <tr>
                 <th> Name </th>
                 <th> Role </th>
+                <th> Main Convenor </th>
                 <th> Actions </th>
               </tr>
             </thead>
@@ -24,6 +25,11 @@
                     <label class="btn btn-default" ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
                     <label class="btn btn-default" ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
                   </div>
+                </td>
+                <td>
+                  <label ng-show="staff.role == 'Convenor'" class="btn btn-default" ng-model="" btn-radio="true">
+                    <i class="fa fa-check"></i>
+                  </label>
                 </td>
                 <td>
                   <button class="btn btn-danger" ng-click="removeStaff(staff)">
