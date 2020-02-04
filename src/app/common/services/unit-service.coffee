@@ -223,6 +223,10 @@ angular.module("doubtfire.common.services.units", [])
     unit.hasGroupwork = ->
       unit.group_sets?.length > 0
 
+    # Check if there are any streams
+    unit.hasStreams = ->
+      unit.tutorial_streams?.length > 0
+
     #
     # Push all of the tasks downloaded into the existing student projects
     #
