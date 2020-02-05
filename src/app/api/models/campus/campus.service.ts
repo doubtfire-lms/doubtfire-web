@@ -1,6 +1,8 @@
 import { Campus } from './campus';
 import { CacheableEntityService } from '../cacheable-entity.service';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class CampusService extends CacheableEntityService<Campus> {
 
   protected readonly endpointFormat = 'campuses/:id:';

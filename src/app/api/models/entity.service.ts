@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import API_URL from '../../config/constants/apiURL';
+import { Injectable } from '@angular/core';
 
 export interface HttpOptions {
   headers?: HttpHeaders | {
@@ -21,6 +22,7 @@ export interface HttpOptions {
  * ResourceService, responsible for the CRUD actions for
  * all resources which inherit form it.
  */
+@Injectable()
 export abstract class EntityService<T extends Entity>  {
 
   abstract entityName: string;

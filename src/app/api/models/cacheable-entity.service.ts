@@ -2,7 +2,9 @@ import { EntityService, HttpOptions } from './entity.service';
 import { Entity } from './entity';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export abstract class CacheableEntityService<T extends Entity> extends EntityService<T> {
   private cache: Map<string, T> = new Map<string, T>();
 
