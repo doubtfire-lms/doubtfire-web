@@ -6,8 +6,8 @@
     </div>
   </div>
   <div class="panel-body">
-
-    <div ng-repeat="comment in task.comments | orderBy:'+created_at'">
+    <div ng-repeat="comment in task.comments | orderBy:'+created_at'" ng-mouseover="hover=true"
+      ng-mouseleave="hover=false">
       <p id="commentTimestamp" ng-if="comment.should_show_timestamp">{{comment.author.name}}
         {{comment.created_at | humanizedDate}}</p>
       <div class="comment" ng-class="{'comment-by-other-user': !comment.author_is_me, 'new-comment': comment.is_new}">
@@ -22,7 +22,7 @@
             <hr class="hr-text" data-content="{{comment.comment}}" />
           </div>
 
-          <div ng-right-click="rightClick(comment, $event)"
+          <div
             ng-class="['bubble', comment.type + '-bubble', {'first-in-series': comment.should_show_timestamp || comment.first_in_series}, {'last-in-series': comment.should_show_avatar}]">
             <div ng-switch-when="extension" class="comment-extension">
               <extension-comment [task]="task" [comment]="comment"> </extension-comment>
@@ -47,18 +47,18 @@
             </div>
 
             <div ng-switch-when="pdf" class="comment-pdf">
-              <a ng-click="openCommentsModal(comment)">
+              <a ng-click="openCommentsModal(comment.type)">
                 <p> <i class="fa fa-file-pdf-o"></i> view pdf</p>
               </a>
             </div>
           </div>
+          <div class="comment-overflow" ng-if="isBubbleType(comment)">
+            <i tooltip="Delete" tooltip-placement="top" ng-click="deleteComment(comment.id)" role="button"
+              ng-show="hover && canUserEdit(comment)" class="fa fa-trash"></i>
+          </div>
         </div>
       </div>
     </div>
-
-    <ul id="contextOverlay" class="dropdown-menu">
-      <li><a id="deleteMenu" autofocus tabindex="-1" ng-blur="clickOff()" ng-click="delete()">Delete</a></li>
-    </ul>
 
     <div class="read-receipt" ng-show="lastComment.author_is_me && lastComment.recipient_read_time">
       Read {{lastComment.recipient_read_time | humanizedDate}} by {{lastComment.recipient.name}}
