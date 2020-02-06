@@ -1,9 +1,10 @@
 import { User } from './user';
 import { CacheableEntityService } from '../cacheable-entity.service';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 
+@Injectable()
 export class UserService extends CacheableEntityService<User> {
   entityName: string = 'User';
   protected readonly endpointFormat = 'users/:id:';

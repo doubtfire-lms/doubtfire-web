@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { EntityService } from '../entity.service';
 import { TutorialStream } from './tutorial-stream';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class TutorialStreamService extends EntityService<TutorialStream> {
   protected readonly endpointFormat = '';
   entityName = 'Stream';

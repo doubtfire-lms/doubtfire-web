@@ -1,9 +1,10 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 import { Tutorial } from './tutorial';
 import { EntityService } from '../entity.service';
 
+@Injectable()
 export class TutorialService extends EntityService<Tutorial> {
   protected readonly endpointFormat = 'tutorials/:id:';
   entityName = 'Tutorial';
