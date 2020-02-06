@@ -166,7 +166,6 @@ import 'build/src/app/units/states/states.js';
 import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.js';
-import 'build/src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
@@ -284,6 +283,7 @@ import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
+import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -330,6 +330,9 @@ DoubtfireAngularJSModule.directive('unitTutorialsList',
 DoubtfireAngularJSModule.directive('unitTutorialsManager',
     downgradeComponent({ component: UnitTutorialsManagerComponent }));
   // Global configuration
+DoubtfireAngularJSModule.directive('unitStudentsEditor',
+  downgradeComponent({ component: UnitStudentsEditorComponent }));
+// Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {

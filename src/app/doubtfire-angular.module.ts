@@ -81,6 +81,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
@@ -108,7 +109,8 @@ import { UserService } from './api/models/user/user.service';
     ExtensionModalComponent,
     InstitutionSettingsComponent,
     UnitTutorialsListComponent,
-    UnitTutorialsManagerComponent
+    UnitTutorialsManagerComponent,
+    UnitStudentsEditorComponent
   ],
   // Module Imports
   imports: [
@@ -163,6 +165,7 @@ import { UserService } from './api/models/user/user.service';
     CommentResourceServiceProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -186,7 +189,8 @@ import { UserService } from './api/models/user/user.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    UnitTutorialsManagerComponent
+    UnitTutorialsManagerComponent,
+    UnitStudentsEditorComponent
   ]
 })
 export class DoubtfireAngularModule {
