@@ -157,7 +157,6 @@ import { UserService } from './api/models/user/user.service';
     authProvider,
     currentUserProvider,
     taskServiceProvider,
-    currentUserProvider,
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,
