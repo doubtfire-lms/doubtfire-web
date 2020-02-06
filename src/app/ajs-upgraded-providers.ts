@@ -3,6 +3,9 @@ import { InjectionToken } from '@angular/core';
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string
 export const Unit = new InjectionToken('Unit');
+export const User = new InjectionToken('User');
+export const auth = new InjectionToken('auth');
+export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const analyticsService = new InjectionToken('analyticsService');
@@ -18,6 +21,24 @@ export const unitProvider = {
   provide: Unit,                          // When you need 'Unit' you
   useFactory: (i: any) => i.get('Unit'),  // get the AngularJS module
   deps: ['$injector']                     // using the upgrade injector.
+};
+
+export const userProvider = {
+  provide: User,
+  useFactory: (i: any) => i.get('User'),
+  deps: ['$injector']
+};
+
+export const authProvider = {
+  provide: auth,
+  useFactory: (i: any) => i.get('auth'),
+  deps: ['$injector']
+};
+
+export const currentUserProvider = {
+  provide: currentUser,
+  useFactory: (i: any) => i.get('currentUser'),
+  deps: ['$injector']
 };
 
 export const taskServiceProvider = {

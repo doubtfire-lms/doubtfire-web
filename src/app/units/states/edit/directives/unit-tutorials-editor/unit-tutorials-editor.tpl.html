@@ -25,7 +25,7 @@
             <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_location}}</td>
             <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_day}}</td>
             <td ng-click="editTutorial(tutorial)">{{tutorial.meeting_time | date:'HH:mm'}}</td>
-            <td ng-click="editTutorial(tutorial)">{{tutorial.tutor_name}}</td>
+            <td ng-click="editTutorial(tutorial)">{{tutorial.tutor.name}}</td>
             <td>
               <button class="btn btn-danger" ng-click="deleteTutorial(tutorial)">
                 <i class="fa fa-trash-o"></i>

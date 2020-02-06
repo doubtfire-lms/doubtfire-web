@@ -274,9 +274,14 @@ import 'build/src/i18n/resources-locale_en-GB.js';
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
+import {
+  IntelligentDiscussionPlayerComponent
+} from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
+import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
+import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -308,7 +313,12 @@ DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
 DoubtfireAngularJSModule.directive('extensionComment',
   downgradeComponent({ component: ExtensionCommentComponent }));
-
+DoubtfireAngularJSModule.directive('campusList',
+  downgradeComponent({ component: CampusListComponent }));
+DoubtfireAngularJSModule.directive('activityTypeList',
+  downgradeComponent({ component: ActivityTypeListComponent }));
+DoubtfireAngularJSModule.directive('institutionSettings',
+  downgradeComponent({ component: InstitutionSettingsComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
