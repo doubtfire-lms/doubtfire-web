@@ -2,6 +2,7 @@ import { ViewChild, Component, Input, Inject } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
+import { ConsoleReporter } from 'jasmine';
 
 @Component({
   selector: 'unit-students-editor',
@@ -15,6 +16,7 @@ export class UnitStudentsEditorComponent {
 
   columns: string[] = ['username', 'firstName', 'lastName', 'email', 'tutorial', 'enrolled'];
   dataSource: MatTableDataSource<any>;
+  tutorials: any[];
 
 
   // Calls the parent's constructor, passing in an object
@@ -25,7 +27,15 @@ export class UnitStudentsEditorComponent {
   }
 
   ngOnInit() {
-    console.log(this.unit.students);
     this.dataSource = new MatTableDataSource(this.unit.students);
+    this.tutorials = this.unit.tutorials;
+    console.log(this.unit.students);
+  }
+
+  compareSelection(aEntity:  any, bEntity: any) {
+    if (!aEntity || !bEntity) {
+      return;
+    }
+    return aEntity.id === bEntity.id;
   }
 }
