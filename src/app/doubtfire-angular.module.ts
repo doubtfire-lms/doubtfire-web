@@ -19,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -127,6 +128,7 @@ import { UserService } from './api/models/user/user.service';
     MatListModule,
     MatOptionModule,
     MatStepperModule,
+    MatPaginatorModule,
     MatSelectModule,
     MatButtonToggleModule,
     MatButtonModule,
