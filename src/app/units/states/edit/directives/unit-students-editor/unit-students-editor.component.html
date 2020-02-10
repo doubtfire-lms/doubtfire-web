@@ -54,10 +54,7 @@
           <mat-form-field class="data-entry">
             <mat-label>Tutorial</mat-label>
             <mat-select [compareWith]="compareSelection" required>
-              <mat-option>
-                None
-              </mat-option>
-              <mat-option *ngFor="let tutorial of tutorialsForStream(stream)" [value]="tutorial">
+              <mat-option *ngFor="let tutorial of tutorialsForStream(stream)" [value]="tutorial" (click)="switchToTutorial(student, tutorial)">
                 {{tutorial.abbreviation }}
               </mat-option>
             </mat-select>

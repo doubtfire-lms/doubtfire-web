@@ -78,4 +78,9 @@ export class UnitStudentsEditorComponent {
       this.alerts.add('danger', response.data.error, 5000);
     });
   }
+
+  switchToTutorial(student: any, tutorial: Tutorial) {
+    // TODO: Fix this! eep
+    student.switchToTutorial(tutorial);
+  }
 }
