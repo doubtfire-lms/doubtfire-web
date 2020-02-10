@@ -181,8 +181,7 @@ angular.module("doubtfire.common.services.units", [])
       ConfirmationModal.show "Delete Tutorial Stream #{stream.abbreviation}",
       'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
       ->
-        promise = Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
-        ProgressModal.show "Deleting Tutorial Stream #{stream.abbreviation}.", promise
+        Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
 
     # Get a unit's next stream based on activity abbreviation
     unit.nextStream = (activityTypeAbbreviation) ->
