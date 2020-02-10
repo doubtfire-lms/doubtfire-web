@@ -48,7 +48,8 @@ import {
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   userProvider,
-  currentUser
+  currentUser,
+  projectProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -158,6 +159,7 @@ import { UserService } from './api/models/user/user.service';
     ActivityTypeService,
     userProvider,
     unitProvider,
+    projectProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,

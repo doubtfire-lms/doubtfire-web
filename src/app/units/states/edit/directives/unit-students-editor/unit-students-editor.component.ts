@@ -1,8 +1,11 @@
+import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
+import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
 import { ViewChild, Component, Input, Inject } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService, Project } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
+import { User } from 'src/app/api/models/user/user';
 
 @Component({
   selector: 'unit-students-editor',
@@ -17,14 +20,15 @@ export class UnitStudentsEditorComponent {
 
   columns: string[] = ['username', 'firstName', 'lastName', 'email', 'enrolled'];
   dataSource: MatTableDataSource<any>;
-  tutorials: any[];
-  streams: any[];
+  tutorials: Tutorial[];
+  streams: TutorialStream[];
 
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(
     @Inject(alertService) private alerts: any,
+    @Inject(Project) private project: any
   ) {
   }
 
@@ -34,9 +38,8 @@ export class UnitStudentsEditorComponent {
     this.dataSource.sort = this.sort;
     this.tutorials = this.unit.tutorials;
     this.streams = this.unit.tutorial_streams;
-    this.streams.forEach(stream => {
-      this.columns.push(stream.abbreviation);
-    });
+    // Ensure enrolled column is the last one
+    this.columns.splice(this.columns.indexOf('email') + 1, 0, ...this.streams.map(stream => stream.abbreviation));
   }
 
   compareSelection(aEntity:  any, bEntity: any) {
@@ -46,8 +49,12 @@ export class UnitStudentsEditorComponent {
     return aEntity.id === bEntity.id;
   }
 
-  tutorialsForStream(stream: any) {
-    return this.tutorials.filter(tutorial => tutorial.tutorial_stream === stream.abbreviation);
+  tutorialsForStream(stream: TutorialStream) {
+    return this.tutorials.filter(tutorial => {
+      if (tutorial.tutorial_stream) {
+        return tutorial.tutorial_stream.abbreviation === stream.abbreviation;
+      }
+    });
   }
 
   applyFilter(event: Event) {
@@ -56,5 +63,19 @@ export class UnitStudentsEditorComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  updateStudentEnrollment(student: any) {
+    const newEnrollment = !student.enrolled;
+    this.project.update({id: student.project_id, enrolled: !student.enrolled}, (project) => {
+      if (newEnrollment === project.enrolled) {
+        this.alerts.add('success', 'Enrolment changed.', 2000);
+      } else {
+        this.alerts.add('danger', 'Enrolment change failed.', 5000);
+      }
+    },
+    (response) => {
+      this.alerts.add('danger', response.data.error, 5000);
+    });
   }
 }

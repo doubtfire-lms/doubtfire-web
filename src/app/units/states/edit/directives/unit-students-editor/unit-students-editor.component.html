@@ -69,7 +69,7 @@
     <ng-container matColumnDef="enrolled" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Enrolled </th>
       <td mat-cell *matCellDef="let student">
-        <mat-checkbox [(ngModel)]="student.enrolled"></mat-checkbox>
+        <mat-checkbox [(ngModel)]="student.enrolled" (click)="updateStudentEnrollment(student)"></mat-checkbox>
       </td>
     </ng-container>
 
