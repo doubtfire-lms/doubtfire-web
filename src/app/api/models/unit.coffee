@@ -31,6 +31,7 @@ angular.module("doubtfire.api.models.unit", [])
   Unit.targetGradeStats = resourcePlus "/units/:id/stats/student_target_grade", {id: "@id"}
   Unit.taskCompletionStats = resourcePlus "/units/:id/stats/task_completion_stats", {id: "@id"}
   Unit.tutorialStream = resourcePlus "/units/:id/tutorial_streams/:tutorial_stream_abbr", {id: "@id", tutorial_stream_abbr: "@abbr"}
+  Unit.tutorialEnrollment = resourcePlus "/units/:id/tutorials/:tutorial_abbreviation/enrolments/:project_id", {id: "@id", tutorial_abbreviation: "@tutorial_abbreviation", project_id: "@project_id"}
 
   Unit.groups = resourcePlus "/units/:id/groups", {id: "@id"}
 

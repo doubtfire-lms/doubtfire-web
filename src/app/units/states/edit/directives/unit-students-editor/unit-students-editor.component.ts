@@ -1,3 +1,4 @@
+import { Unit } from './../../../../../ajs-upgraded-providers';
 import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
 import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
 import { ViewChild, Component, Input, Inject } from '@angular/core';
@@ -6,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { alertService, Project } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { User } from 'src/app/api/models/user/user';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'unit-students-editor',
@@ -18,17 +20,17 @@ export class UnitStudentsEditorComponent {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @Input() unit: any;
 
-  columns: string[] = ['username', 'firstName', 'lastName', 'email', 'enrolled'];
+  columns: string[] = ['username', 'firstName', 'lastName', 'email', 'tutorial', 'enrolled'];
   dataSource: MatTableDataSource<any>;
   tutorials: Tutorial[];
   streams: TutorialStream[];
-
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(
     @Inject(alertService) private alerts: any,
-    @Inject(Project) private project: any
+    @Inject(Project) private project: any,
+    @Inject(Unit) private u: any
   ) {
   }
 
@@ -38,21 +40,22 @@ export class UnitStudentsEditorComponent {
     this.dataSource.sort = this.sort;
     this.tutorials = this.unit.tutorials;
     this.streams = this.unit.tutorial_streams;
-    // Ensure enrolled column is the last one
-    this.columns.splice(this.columns.indexOf('email') + 1, 0, ...this.streams.map(stream => stream.abbreviation));
   }
 
   compareSelection(aEntity:  any, bEntity: any) {
     if (!aEntity || !bEntity) {
       return;
     }
-    return aEntity.id === bEntity.id;
+    return aEntity.id === bEntity.tutorial;
   }
 
-  tutorialsForStream(stream: TutorialStream) {
+  tutorialsForStreamAndStudent(student: any, stream: TutorialStream = undefined) {
     return this.tutorials.filter(tutorial => {
-      if (tutorial.tutorial_stream) {
-        return tutorial.tutorial_stream.abbreviation === stream.abbreviation;
+      if (tutorial.tutorial_stream && stream) {
+        return tutorial.tutorial_stream.abbreviation === stream.abbreviation
+          && student.campus_id === tutorial.campus.id;
+      } else if (!tutorial.tutorial_stream && !stream) {
+        return student.campus_id === tutorial.campus.id;
       }
     });
   }
@@ -79,8 +82,44 @@ export class UnitStudentsEditorComponent {
     });
   }
 
+  studentHasTutorials(student: any) {
+    return student.tutorial_streams.filter(tutorialStream => tutorialStream.tutorial).length > 0;
+  }
+
   switchToTutorial(student: any, tutorial: Tutorial) {
-    // TODO: Fix this! eep
-    student.switchToTutorial(tutorial);
+    const enrollmentFunc = () => {
+      this.u.tutorialEnrollment.create(
+        {
+          id: this.unit.id,
+          tutorial_abbreviation: tutorial.abbreviation,
+          project_id: student.project_id
+        },
+        () => {
+          this.alerts.add('success', 'Student tutorial changed.', 2000);
+        },
+        (response) => {
+          this.alerts.add('danger', response.data.error, 5000);
+        }
+      );
+    };
+    // check for current enrollment
+    let enrollment = student.tutorial_streams.find(enrollment => enrollment.stream === tutorial.tutorial_stream.abbreviation);
+    if (enrollment && enrollment.tutorial) {
+      this.u.tutorialEnrollment.delete(
+        {
+          id: this.unit.id,
+          tutorial_abbreviation: this.unit.tutorialFromId(enrollment.tutorial).abbreviation,
+          project_id: student.project_id
+        },
+        () => {
+          enrollmentFunc();
+        },
+        (response) => {
+          this.alerts.add('danger', response.data.error, 5000);
+        }
+      );
+    } else {
+      enrollmentFunc();
+    }
   }
 }

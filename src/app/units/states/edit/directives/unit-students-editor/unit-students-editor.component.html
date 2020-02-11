@@ -47,18 +47,27 @@
       </td>
     </ng-container>
 
-    <!-- Stream Columns -->
-    <ng-container *ngFor="let stream of streams" matColumnDef="{{stream.abbreviation}}" sticky>
-      <th mat-header-cell *matHeaderCellDef> {{stream.name}} </th>
+    <!-- Tutorial Column -->
+    <ng-container matColumnDef="tutorial" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutorial </th>
       <td mat-cell *matCellDef="let student">
-          <mat-form-field class="data-entry">
-            <mat-label>Tutorial</mat-label>
-            <mat-select [compareWith]="compareSelection" required>
-              <mat-option *ngFor="let tutorial of tutorialsForStream(stream)" [value]="tutorial" (click)="switchToTutorial(student, tutorial)">
-                {{tutorial.abbreviation }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field class="data-entry">
+          <mat-label>Tutorial</mat-label>
+          <mat-select multiple [compareWith]="compareSelection" [(ngModel)]="student.tutorial_streams">
+            <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">
+                <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student)" [value]="tutorial" (click)="switchToTutorial(student, tutorial)">
+                  {{tutorial.abbreviation}}
+                </mat-option>
+              </mat-optgroup>
+            <div *ngFor="let stream of streams">
+              <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student, stream).length > 0" [label]="stream.name">
+                <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student, stream)" [value]="tutorial" (click)="switchToTutorial(student, tutorial)">
+                  {{tutorial.abbreviation}}
+                </mat-option>
+              </mat-optgroup>
+            </div>
+          </mat-select>
+        </mat-form-field>
         </td>
     </ng-container>
 
