@@ -6,8 +6,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { alertService, Project } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
-import { User } from 'src/app/api/models/user/user';
-import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'unit-students-editor',
@@ -40,6 +38,7 @@ export class UnitStudentsEditorComponent {
     this.dataSource.sort = this.sort;
     this.tutorials = this.unit.tutorials;
     this.streams = this.unit.tutorial_streams;
+    console.log(this.unit.students[0]);
   }
 
   compareSelection(aEntity:  any, bEntity: any) {
@@ -76,8 +75,7 @@ export class UnitStudentsEditorComponent {
       } else {
         this.alerts.add('danger', 'Enrolment change failed.', 5000);
       }
-    },
-    (response) => {
+    }, (response) => {
       this.alerts.add('danger', response.data.error, 5000);
     });
   }
@@ -87,39 +85,35 @@ export class UnitStudentsEditorComponent {
   }
 
   switchToTutorial(student: any, tutorial: Tutorial) {
-    const enrollmentFunc = () => {
-      this.u.tutorialEnrollment.create(
-        {
-          id: this.unit.id,
-          tutorial_abbreviation: tutorial.abbreviation,
-          project_id: student.project_id
-        },
-        () => {
-          this.alerts.add('success', 'Student tutorial changed.', 2000);
-        },
-        (response) => {
-          this.alerts.add('danger', response.data.error, 5000);
-        }
-      );
-    };
-    // check for current enrollment
-    let enrollment = student.tutorial_streams.find(enrollment => enrollment.stream === tutorial.tutorial_stream.abbreviation);
-    if (enrollment && enrollment.tutorial) {
-      this.u.tutorialEnrollment.delete(
-        {
-          id: this.unit.id,
-          tutorial_abbreviation: this.unit.tutorialFromId(enrollment.tutorial).abbreviation,
-          project_id: student.project_id
-        },
-        () => {
-          enrollmentFunc();
-        },
-        (response) => {
-          this.alerts.add('danger', response.data.error, 5000);
-        }
-      );
+    // Handle case where tutorial doesn't belong to a stream
+    if (!tutorial.tutorial_stream) {
+      const currentEnrollments = student.tutorial_streams.filter(tutorial => tutorial.tutorial_stream);
+      currentEnrollments.forEach(enrolledTutorial => {
+        this.modifyTutorialEnrollment(student, enrolledTutorial, false);
+      });
+      this.modifyTutorialEnrollment(student, tutorial);
     } else {
-      enrollmentFunc();
+      console.log('deal with enrollment into a tutorial with a stream');
     }
+  }
+
+  private modifyTutorialEnrollment(student: any, tutorial: Tutorial, create: boolean = true) {
+    const action: string = create ? 'create' : 'delete';
+    this.u.tutorialEnrollment[action](
+      {
+        id: this.unit.id,
+        tutorial_abbreviation: tutorial.abbreviation,
+        project_id: student.project_id
+      },
+      () => {
+        this.alerts.add('success', 'Student tutorial enrollment updated.', 2000);
+        if (!create) {
+          student.tutorial_streams = student.tutorial_streams.filter(t => t.id !== tutorial.id);
+        }
+      },
+      (response) => {
+        this.alerts.add('danger', response.data.error, 5000);
+      }
+    );
   }
 }
