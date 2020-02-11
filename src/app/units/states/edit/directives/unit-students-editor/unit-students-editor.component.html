@@ -53,7 +53,7 @@
       <td mat-cell *matCellDef="let student">
         <mat-form-field class="data-entry">
           <mat-label>Tutorial</mat-label>
-          <mat-select multiple [compareWith]="compareSelection" [(ngModel)]="student.tutorial_streams">
+          <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorial_streams">
             <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">
                 <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student)" [value]="tutorial" (click)="switchToTutorial(student, tutorial)">
                   {{tutorial.abbreviation}}

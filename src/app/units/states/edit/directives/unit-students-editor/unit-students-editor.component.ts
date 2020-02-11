@@ -38,7 +38,6 @@ export class UnitStudentsEditorComponent {
     this.dataSource.sort = this.sort;
     this.tutorials = this.unit.tutorials;
     this.streams = this.unit.tutorial_streams;
-    console.log(this.unit.students[0]);
   }
 
   compareSelection(aEntity:  any, bEntity: any) {
@@ -85,35 +84,47 @@ export class UnitStudentsEditorComponent {
   }
 
   switchToTutorial(student: any, tutorial: Tutorial) {
-    // Handle case where tutorial doesn't belong to a stream
-    if (!tutorial.tutorial_stream) {
-      const currentEnrollments = student.tutorial_streams.filter(tutorial => tutorial.tutorial_stream);
-      currentEnrollments.forEach(enrolledTutorial => {
-        this.modifyTutorialEnrollment(student, enrolledTutorial, false);
-      });
-      this.modifyTutorialEnrollment(student, tutorial);
-    } else {
-      console.log('deal with enrollment into a tutorial with a stream');
-    }
+    // // Handle case where tutorial doesn't belong to a stream
+    // if (!tutorial.tutorial_stream) {
+    //   const currentEnrollments = student.tutorial_streams.filter(tutorial => tutorial.tutorial);
+    //   currentEnrollments.forEach(enrolledTutorial => {
+    //     this.modifyTutorialEnrollment(student, this.unit.tutorialFromId(enrolledTutorial.tutorial), false);
+    //   });
+    //   this.modifyTutorialEnrollment(student, tutorial);
+    // } else {
+    //   // 1. Un-enroll from any tutorials without a stream
+    //   // 2. Make sure a student can only be enrolled into one tutorial per stream
+    //   const matchingStreamEnrollments = student.tutorial_streams.find(
+    //     t => tutorial.tutorial_stream.abbreviation === t.stream && t.tutorial
+    //   );
+    //   if (matchingStreamEnrollments) {
+    //     this.modifyTutorialEnrollment(student, this.unit.tutorialFromId(matchingStreamEnrollments.tutorial), false);
+    //   }
+    //   this.modifyTutorialEnrollment(student, tutorial);
+    // }
+    // this.table.renderRows();
   }
 
   private modifyTutorialEnrollment(student: any, tutorial: Tutorial, create: boolean = true) {
-    const action: string = create ? 'create' : 'delete';
-    this.u.tutorialEnrollment[action](
-      {
-        id: this.unit.id,
-        tutorial_abbreviation: tutorial.abbreviation,
-        project_id: student.project_id
-      },
-      () => {
-        this.alerts.add('success', 'Student tutorial enrollment updated.', 2000);
-        if (!create) {
-          student.tutorial_streams = student.tutorial_streams.filter(t => t.id !== tutorial.id);
-        }
-      },
-      (response) => {
-        this.alerts.add('danger', response.data.error, 5000);
-      }
-    );
+    // const action: string = create ? 'create' : 'delete';
+    // this.u.tutorialEnrollment[action](
+    //   {
+    //     id: this.unit.id,
+    //     tutorial_abbreviation: tutorial.abbreviation,
+    //     project_id: student.project_id
+    //   },
+    //   (enrollment) => {
+    //     this.alerts.add('success', 'Student tutorial enrollment updated.', 2000);
+    //     if (create && tutorial.tutorial_stream) {
+    //       student.tutorial_streams.find(t => t.stream === tutorial.tutorial_stream.abbreviation).tutorial = tutorial.id;
+    //     }
+    //     if (!create) {
+    //       student.tutorial_streams.find(t => t.stream === tutorial.tutorial_stream.abbreviation).tutorial = undefined;
+    //     }
+    //   },
+    //   (response) => {
+    //     this.alerts.add('danger', response.data.error, 5000);
+    //   }
+    // );
   }
 }
