@@ -41,7 +41,7 @@
           <div
             ng-class="['bubble', comment.type + '-bubble', {'first-in-series': comment.should_show_timestamp || comment.first_in_series}, {'last-in-series': comment.should_show_avatar}]"
           >
-            <a ng-click="scrollToComment(comment.original_comment.id)" class="original-comment" ng-if="!!comment.reply_to">
+            <a ng-click="scrollToComment(comment.original_comment.id)" class="original-comment" ng-if="!!comment.reply_to_id">
               <p class="reply-text">
                 <i class="fa fa-reply"></i>
                 {{comment.original_comment ? comment.original_comment.comment : 'comment removed'}}
