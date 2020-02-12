@@ -27,9 +27,9 @@
                   </div>
                 </td>
                 <td>
-                  <label ng-show="staff.role == 'Convenor'" class="btn btn-default" ng-model="" btn-radio="true">
-                    <i class="fa fa-check"></i>
-                  </label>
+                  <button ng-show="staff.role == 'Convenor'" type="button" class="btn btn-default" ng-model="unit.main_convenor_id" ng-click="changeMainConvenor(staff)" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                    <i class="fa fa-{{staff.id == unit.main_convenor_id ? 'check' : 'times'}}"></i>
+                  </button>
                 </td>
                 <td>
                   <button class="btn btn-danger" ng-click="removeStaff(staff)">

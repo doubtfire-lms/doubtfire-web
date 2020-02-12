@@ -20,6 +20,14 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
         (response) ->
           alertService.add("danger", response.data.error, 6000)
 
+    $scope.changeMainConvenor = (staff) ->
+      Unit.update {id: $scope.unit.id, unit: {main_convenor_id: staff.id}},
+        (response) ->
+          alertService.add("success", "Main convenor changed", 2000)
+          $scope.unit.main_convenor_id = staff.id
+        (response) ->
+          alertService.add("danger", response.data.error, 6000)
+
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
       $scope.selectedStaff = null
