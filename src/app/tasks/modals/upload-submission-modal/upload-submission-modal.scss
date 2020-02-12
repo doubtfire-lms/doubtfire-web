@@ -1,12 +1,17 @@
 .upload-submission-modal {
+  .modal-header {
+    padding-left: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
   select.submission-type {
     width: auto !important;
     display: inline-block;
     margin-left: 0.6ex;
-    font-size: 22px;
+    font-size: 20px;
   }
   .modal-body {
-    min-height: 500px;
+    min-height: 420px;
     overflow-x: hidden;
     overflow-y: scroll;
   }
@@ -30,6 +35,9 @@
   .state.state-files {
     .file-uploader {
       margin: 0;
+      .well {
+        padding: 10px;
+      }
       .error-message-area {
         font-size: $font-size-base;
       }
@@ -39,6 +47,12 @@
       width: 50%;
       margin: 0 auto;
       font-size: 2em;
+    }
+    .card-body {
+      padding: 8px;
+    }
+    .card-heading {
+      padding: 8px  ;
     }
   }
   .state.state-alignment {
