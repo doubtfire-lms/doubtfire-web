@@ -1,12 +1,17 @@
-<hr *ngIf="comment.assessed" class="hr-text" [attr.data-content]="message" />
-
-<div style="width: 100%;" *ngIf="!comment.assessed" fxLayout="row" fxLayoutAlign="space-evenly center">
-  <div style="width: 100%;" fxLayout="column" fxLayoutAlign="space-around center">
+<div fxLayout="row" fxLayoutAlign="space-evenly center">
+  <div *ngIf="comment.assessed" fxLayout="column" fxLayoutAlign="space-around center">
+    <hr class="hr-text" [attr.data-content]="message" />
+    <p class="fade-text">
+      <strong> reason:</strong> {{comment.comment}}
+    </p>
+  </div>
+  
+  <div *ngIf="!comment.assessed" fxLayout="column" fxLayoutAlign="space-around center">
     <hr class="hr-fade" />
     <p>
       {{message}} <br> <strong> reason:</strong> {{comment.comment}}
     </p>
-    <div style="width: 100%;" *ngIf="isNotStudent" fxLayout="row" fxLayoutAlign="space-evenly center">
+    <div *ngIf="isNotStudent" fxLayout="row" fxLayoutAlign="space-evenly center">
       <button (click)="grantExtension()" mat-flat-button color="primary"
         style="background-color: #43A047">Grant</button>
       <button (click)="denyExtension()" mat-flat-button color="warn">Deny</button>
