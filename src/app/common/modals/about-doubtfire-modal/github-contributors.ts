@@ -1,4 +1,4 @@
-export interface GithubProfileOthers {
+export interface GithubContributors {
     login: string;
     id: number;
     node_id: string;
