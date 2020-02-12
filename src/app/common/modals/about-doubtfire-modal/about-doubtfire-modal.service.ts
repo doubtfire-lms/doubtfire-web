@@ -2,9 +2,30 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { GithubProfile } from './github-profile';
-import { GithubContributors } from './github-contributors';
 import { ContributorData } from "./contributor-data";
 import { AboutDialogData } from './about-dialog-data';
+
+interface GithubContributors {
+  login: string;
+  id: number;
+  node_id: string;
+  avatar_url: string;
+  gravatar_id: string;
+  url: string;
+  html_url: string;
+  followers_url: string;
+  following_url: string;
+  gists_url: string;
+  starred_url: string;
+  subscriptions_url: string;
+  organizations_url: string;
+  repos_url: string;
+  events_url: string;
+  received_events_url: string;
+  type: string;
+  site_admin: boolean;
+  contributions: number;
+}
 
 @Injectable()
 export class AboutDoubtfireModalService {
