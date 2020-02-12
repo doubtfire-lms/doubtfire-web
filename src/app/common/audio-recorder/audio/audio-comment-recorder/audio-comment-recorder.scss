@@ -1,0 +1,84 @@
+audio-comment-recorder .audio-recorder {
+  height: 50px;
+  margin-top: 10px;
+}
+
+.btn-circle-xl {
+  user-select: none;
+  background-color: #f03d25;
+  border-radius: 72px;
+  color: #fff;
+  height: 38px;
+  width: 38px;
+  transition: width 0.1s, height 0.1s;
+  border: none;
+  outline: none;
+
+  mat-icon {
+    font-size: 24px;
+    vertical-align: middle;
+  }
+}
+
+#audioDiscussionTemplate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host mat-divider {
+  position: absolute;
+  bottom: 15%;
+}
+
+mat-spinner.send-audio-spinner {
+  position: absolute !important;
+  left: 37%;
+  top: 25%;
+}
+
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #f03d25;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  padding: 6px 0px;
+  background-color: transparent;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+  border: 1px solid #bdbdbd;
+  box-shadow: 0.5px 0.5px 1px #bdbdbd;
+}
+
+.btn-circle:disabled {
+  opacity: 0.2;
+  border: none;
+}
+
+.btn-circle:active {
+  box-shadow: 0px 0px 0px #bdbdbd;
+}
+
+.btn-circle:focus {
+  outline: 0;
+}
+
+#button-wrapper {
+  position: absolute;
+  bottom: 26px;
+  right: 12px;
+}
+
+#audio-recorder-visualiser.audio-visualiser {
+  position: absolute;
+  height: 60px;
+  width: 110px;
+  bottom: 10px;
+  left: 25%;
+}

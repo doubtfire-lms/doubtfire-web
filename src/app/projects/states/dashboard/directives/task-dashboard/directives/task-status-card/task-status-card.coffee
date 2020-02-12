@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, taskService, listenerService, ConfirmationModal) ->
+  controller: ($scope, $stateParams, alertService, taskService, listenerService, ConfirmationModal, ExtensionModal) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
@@ -24,29 +24,14 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       reapplyTriggers()
     )
 
-    extendAndSubmit = (trigger) ->
-      $scope.task.applyForExtension(
-        (success) ->
-          if $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
-            extendAndSubmit(trigger)
-          else
-            $scope.task.triggerTransition(trigger, $scope.unitRole)
-        (failure) ->
-          alertService.add("danger", "Extension failed - #{failure.data.error}", 6000)
-      )
-
     # Triggers a new task status
     $scope.triggerTransition = (trigger) ->
-      if trigger == 'ready_to_mark' && $scope.task.isPastTargetDate() && !$scope.task.isOverdue()
-        ConfirmationModal.show(
-          "Request Extensions?",
-          "This task is past the target due date, so you will need to request an extension to get feedback. Use confirm to request extensions and proceed with the submission.",
-          () -> extendAndSubmit(trigger))
-      else
-        $scope.task.triggerTransition(trigger, $scope.unitRole)
+      $scope.task.triggerTransition(trigger, $scope.unitRole)
 
     # Allow upload of new files for an updated submission
     $scope.updateFilesInSubmission = ->
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
 
+    $scope.applyForExtension = () ->
+      ExtensionModal.show($scope.task)
 )

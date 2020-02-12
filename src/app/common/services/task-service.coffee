@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
   #
   # The unit service object
   #
@@ -21,14 +21,16 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
   ]
 
+  # All status other than those that are final - these are sorted in the student task list
   taskService.validTopTask = [
     'not_started'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'demonstrate'
+    'ready_to_mark'
     'discuss'
+    'demonstrate'
   ]
 
   taskService.toBeWorkedOn = [
@@ -77,6 +79,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'complete'
     'fail'
     'do_not_resubmit'
+    'time_exceeded'
   ]
 
   taskService.gradeableStatuses = [
@@ -90,11 +93,14 @@ angular.module("doubtfire.common.services.tasks", [])
     'demonstrate'
   ]
 
-  taskService.terminalStatuses = [
-    'do_not_resubmit'
+  taskService.stateThatAllowsExtension = [
+    'not_started'
+    'redo'
+    'need_help'
+    'working_on_it'
+    'fix_and_resubmit'
+    'ready_to_mark'
     'time_exceeded'
-    'complete'
-    'fail'
   ]
 
   taskService.pdfRegeneratableStatuses = [
@@ -276,6 +282,10 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "Time limit exceeded"
       reason: "This work was submitted after the deadline, having missed both the target date and deadline."
       action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
+    awaiting_extension:
+      detail: "Time limit exceeded, awaiting extension"
+      reason: "This work was submitted after the deadline, having missed both the target date and deadline but is awaiting an extension."
+      action: "You require an extension to have this work assessed. If an extension is granted the task will be ready for feedback, and will be reviewed by your tutor."
 
   # Statuses students/tutors can switch tasks to
   taskService.switchableStates =
@@ -342,31 +352,6 @@ angular.module("doubtfire.common.services.tasks", [])
   # Returns the alignments for this task
   taskService.staffAlignmentsForTask = (task) ->
     task.unit().staffAlignmentsForTaskDefinition(task.definition)
-
-  # Return number of days until task hits target date, or false if already
-  # completed
-  taskService.daysUntilTargetDate = (task) ->
-    moment(task.targetDate()).diff(moment(), 'days')
-
-  # Return number of days until task is due, or false if already completed
-  taskService.daysUntilDueDate = (task) ->
-    moment(task.definition.due_date).diff(moment(), 'days')
-
-  # Return number of days task is overdue from target, or false if not
-  taskService.daysPastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()), 'days')
-
-  # Return number of days task is overdue, or false if not overdue
-  taskService.daysPastDueDate = (task) ->
-    moment().diff(moment(task.definition.due_date), 'days')
-
-  # Return amount of time past target due date
-  taskService.timePastTargetDate = (task) ->
-    moment().diff(moment(task.targetDate()))
-
-  # Return the amount of time past the deadline
-  taskService.timePastDueDate = (task) ->
-    moment().diff(moment(task.definition.due_date))
 
   # Trigger for new status
   taskService.triggerTransition = (task, status, unitRole) ->
@@ -447,6 +432,9 @@ angular.module("doubtfire.common.services.tasks", [])
     if response.status == status
       project.updateBurndownChart?()
       alertService.add("success", "Status saved.", 2000)
+      if task.inTimeExceeded() && !task.isPastDeadline()
+        alertService.add('warning', "Request an extension, or wait for your extension request to be granted, to have this task assessed.")
+
       if response.other_projects?
         _.each response.other_projects, (details) ->
           proj = unit.findStudent(details.id) if unit.students?
@@ -541,12 +529,43 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.hasTaskKey = (task, key) ->
     _.isEqual(task?.taskKey(), key)
 
-  # Map extra front-end details to comment
-  taskService.mapComment = (comment) ->
-    initials = comment.author.name.split(" ")
-    comment.initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
-    comment.author_is_me = comment.author.id == currentUser.profile.id
-    comment
+  hoursBetween = (time1, time2) ->
+    return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
+
+  taskService.isBubbleComment = (commentType) ->
+    return (["text", "discussion", "audio", "image", "pdf"].includes(commentType))
+
+  taskService.mapComments = (comments) ->
+    return comments if !comments? || comments.length == 0
+    comments[0].should_show_timestamp = true
+
+    for i in [0...comments.length]
+      initials = comments[i].author.name.split(" ")
+      comments[i].initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
+      comments[i].author_is_me = comments[i].author.id == currentUser.profile.id
+
+      authorID = comments[i].author.id
+      timeOfMessage = comments[i].created_at
+
+      # if the comment is proceeded by a different author's comment, or the time between comments
+      # is significant, mark it as start of end of series, then start a new series proceeding.
+      if (authorID != comments[i+1]?.author.id || hoursBetween(timeOfMessage, comments[i+1]?.created_at) > 3) # IDs match
+        comments[i].should_show_avatar = true
+        comments[i+1]?.should_show_timestamp = true
+      else
+        comments[i].should_show_avatar = false
+        comments[i+1]?.should_show_timestamp = false
+
+      # if the comment is preceeded by a non-conent comment, mark it as start of series.
+      if (taskService.isBubbleComment(comments[i].type) && !taskService.isBubbleComment(comments[i-1]?.type))
+        comments[i].first_in_series = true
+
+      # if the comment is proceeded by a non-conent comment, mark it as end of series.
+      if (taskService.isBubbleComment(comments[i].type) && !taskService.isBubbleComment(comments[i+1]?.type))
+        comments[i].should_show_avatar = true
+
+    comments[comments.length-1].should_show_avatar = true
+    comments
 
   #============================================================================
   #ADD COMMENT
@@ -555,7 +574,8 @@ angular.module("doubtfire.common.services.tasks", [])
       (response) ->
         unless task.comments?
           task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
         if success? and _.isFunction success
           success(response)
         analyticsService.event "View Task Comments", "Added new comment"
@@ -575,27 +595,68 @@ angular.module("doubtfire.common.services.tasks", [])
   #ADD MEDIA COMMENT
   taskService.addMediaComment = (task, media, onSuccess, onError) ->
     form = new FormData()
-    form.append 'project_id', task.project().project_id
-    form.append 'task_definition_id', task.task_definition_id
     form.append 'attachment', media
 
     TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
       (response) -> #success
         unless task.comments?
           task.comments = []
-        task.comments.unshift(taskService.mapComment(response))
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
         onSuccess(response)
       (response) -> #failure
         onError(response)
-  taskService.applyForExtension = (task, onSuccess, onError) ->
+
+  #Add discussion comment
+  taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
+    form = new FormData()
+    temp = []
+
+    for prompt in prompts
+      form.append('attachments[]', prompt)
+
+    res = DiscussionComment.createDiscussion.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
+      (response) -> #success
+        unless task.comments?
+          task.comments = []
+        task.comments.push(response)
+        taskService.mapComments(task.comments)
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+    $timeout ->
+      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      wrappedResult = angular.element(objDiv)
+      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
+
+  taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
+    form = new FormData()
+    form.append 'attachment', replyAudio
+
+    DiscussionComment.postDiscussionReply.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID}, form,
+      (response) -> #success)
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
+    DiscussionComment.getDiscussion.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
+      (response) -> #success)
+        onSuccess(response)
+      (response) -> #failure
+        onError(response)
+
+  taskService.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
     interceptSuccess = (response) ->
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
+      task.status = response.data.task_status
       task.project().updateBurndownChart()
       task.project().calcTopTasks() # Sort the task list again
       onSuccess(response)
 
-    Task.applyForExtension(task, interceptSuccess, onError)
+    Task.assessExtension(task, taskCommentID, assessment, interceptSuccess, onError)
 
   taskService
 )

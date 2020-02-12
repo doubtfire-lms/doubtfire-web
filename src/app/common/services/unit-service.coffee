@@ -89,6 +89,18 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
           taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
+
+          # Local deadline date is the last moment in the local time zone
+          taskDef.localDeadlineDate = ()  ->
+            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
+          # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
+          taskDef.finalDeadlineDate = ()  ->
+            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59}, '-12:00')
+          taskDef.localDueDate = ()  ->
+            due = new Date(taskDef.target_date)
+            return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback
@@ -319,41 +331,47 @@ angular.module("doubtfire.common.services.units", [])
         'No Tutorial'
 
     student.calcTopTasks = () ->
+      # We will assign current weight to tasks...
+      currentWeight = 0
+
       #
-      # sort tasks by start date
+      # Assign weights to tasks in final state - complete, fail, etc
+      #
+      sortedCompletedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.inFinalState()), 'definition.seq'), 'definition.start_date')
+      _.forEach sortedCompletedTasks, (task) ->
+        task.topWeight = currentWeight
+        currentWeight++
+
+      #
+      # Sort valid top tasks by start date - tasks in non-final state
       #
       sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.isValidTopTask()), 'definition.seq'), 'definition.start_date')
 
-      currentWeight = 0
-
       overdueTasks = _.filter sortedTasks, (task) ->
-        task.daysPastTargetDate() >= 0
+        task.daysUntilDueDate() <= 7
+
       #
       # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
       #
       for grade in gradeService.gradeValues
-        overdueGradeTasks = _.filter overdueTasks, (task) ->
+        closeGradeTasks = _.filter overdueTasks, (task) ->
           task.definition.target_grade == grade
 
         # Sorting needs to be done here according to the days past the target date.
-        overdueGradeTasks = _.orderBy(overdueGradeTasks, [(task)-> task.daysPastTargetDate()], ['desc'])
+        closeGradeTasks = _.orderBy(closeGradeTasks, [(task)-> task.daysPastDueDate()], ['desc'])
 
-        _.forEach overdueGradeTasks, (task) ->
+        _.forEach closeGradeTasks, (task) ->
           task.topWeight = currentWeight
-          task.topReason = "Complete this overdue #{gradeService.grades[task.definition.target_grade]} task as soon as possible."
           currentWeight++
 
       #
       # Step 3: ... up to date, so look forward
       #
-      toAdd = _.filter sortedTasks, (task) -> task.daysUntilTargetDate() > 0
+      toAdd = _.filter sortedTasks, (task) -> task.daysUntilDueDate() > 7
       # Sort by the target_grade. Pass task are done first if same due date as others.
-      toAdd = _.sortBy(toAdd, 'definition.target_grade')
-      # Sort by the upcoming deadline.
-      toAdd = _.orderBy(toAdd,[(task)-> task.daysUntilTargetDate()])
+      toAdd = _.sortBy(_.sortBy(toAdd, 'definition.target_grade'), 'definition.start_date')
       _.forEach toAdd, (task) ->
         task.topWeight = currentWeight
-        task.topReason = if task.daysUntilTargetDate() >= 14 then "Complete this #{gradeService.grades[task.definition.target_grade]} task to get ahead."
         currentWeight++
 
     # Switch's the student's current tutorial to a new tutorial, either specified

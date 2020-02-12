@@ -1,0 +1,23 @@
+<h3 mat-dialog-title>Extension request</h3>
+<div mat-dialog-content>
+  <p>Please explain why you require an extension for this task, <br>
+    The teaching team will assess the
+    request shortly.</p>
+
+  <mat-form-field style="width: 100%;">
+    <input required matInput maxlength="256" placeholder="Reason" [(ngModel)]="reason">
+    <mat-hint align="end">{{reason.length}} / 256</mat-hint>
+  </mat-form-field>
+
+  <p>Requesting extension to: {{newDueDate}} </p>
+  <mat-slider id="requestWeekSlider" thumbLabel [min]="minWeeksCanExtend" [max]="maxWeeksCanExtend" step="1"
+    [(ngModel)]="weeksRequested">
+  </mat-slider>
+</div>
+
+<div mat-dialog-actions style="float: right">
+  <button mat-dialog-close style="margin-right: 10px;" mat-stroked-button color="primary" mat-button
+    [disabled]="weeksRequested == 0 || reason.length < 15" (click)="submitApplication()">Request {{weeksRequested}}
+    {{weeksRequested == 1 ? 'week' : 'weeks'}}</button>
+  <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+</div>

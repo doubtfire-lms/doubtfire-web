@@ -12,6 +12,8 @@ angular.module('doubtfire.units.states.tasks.feedback', [
     # We can recycle the task inbox, switching the data source scope variable
     templateUrl: "units/states/tasks/inbox/inbox.tpl.html"
     controller: "TaskFeedbackStateCtrl"
+    params:
+      taskKey: dynamic: true
     data:
       task: "Give Student Feedback"
       pageTitle: "_Home_"

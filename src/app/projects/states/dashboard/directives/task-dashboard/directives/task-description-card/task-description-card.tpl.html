@@ -5,7 +5,7 @@
   <div class="card-body">
     <div class="markdown-to-pdf" ng-bind-html="taskDef.description | markdown"></div>
   </div><!--/description-body-->
-  <div class="card-footer">
+  <div class="card-footer" ng-if="taskDef || task">
     <h5>Key Information</h5>
     <ul>
       <li>
@@ -14,26 +14,16 @@
       <li>
         <strong>Start Date</strong>
         &mdash;
-        Aim to start this task by <strong>{{startDate() |  date : 'MMM d' }} at {{startDate() | date : 'h:mm a' }}</strong>.
+        Aim to start this task by <strong>{{startDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
       </li>
       <li>
         <strong>Due Date</strong>
         &mdash;
-        Aim to complete by <strong>{{dueDate() |  date : 'MMM d' }} at {{dueDate() | date : 'h:mm a' }}</strong>.
-      </li>
-      <li ng-show="task && task.extensions > 0">
-          <strong>Number of extensions</strong>
-          &mdash;
-          you have requested <strong>{{task.extensions}}</strong> one week extension{{task.extensions > 1 ? "s" : ""}} for this task.
-        </li>
-      <li ng-show="shouldShowDeadline()">
-        <strong>Deadline</strong>
-        &mdash;
-        Tutors will not give feedback on work submitted after <strong>{{taskDef.due_date | date  : 'MMM d' }} at {{taskDef.due_date | date : 'h:mm a' }}</strong>. Your work will be checked in your portfolio.
+        Aim to complete by <strong>{{dueDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
       </li>
     </ul>
   </div><!--/key-info-footer-->
-  <div class="card-footer" ng-show="task.canApplyForExtension() || taskDef.has_task_sheet || taskDef.has_task_resources">
+  <div class="card-footer" ng-show="taskDef.has_task_sheet || taskDef.has_task_resources">
     <a
       ng-click="downloadEvent('PDF')"
       href="{{urls.taskSheet}}"
@@ -51,13 +41,6 @@
       class="btn btn-primary">
       <i class="fa fa-download"></i>
       Download Resources
-    </a>
-    <a
-      ng-click="applyForExtension()"
-      ng-show="task.canApplyForExtension()"
-      class="btn btn-success">
-      <i class="fa fa-medkit"></i>
-      Request Extension
     </a>
   </div><!--/description-footer-->
 </div>

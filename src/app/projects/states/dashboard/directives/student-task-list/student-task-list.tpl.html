@@ -13,7 +13,7 @@
           {{task.definition.name}}
         </h4>
         <p class="list-group-item-text">
-          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-half"></i> {{task.timeToStart()}}</span>
+          {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}</span><span class="due-time" ng-if="!task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-end"></i> {{task.timeToDue()}}</span>
         </p>
       </div><!--/task-data-->
       <div class="task-badges">
@@ -33,16 +33,13 @@
           <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
             <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
           </span>
-          <span class="task-subscript-badge soon-badge" ng-if="task.isToBeCompletedSoon() && ! task.isDueSoon()">
+          <span class="task-subscript-badge soon-badge" ng-if="task.isDueSoon() && !task.inFinalState()">
             <i class="fa fa-clock-o"></i>
           </span>
-          <span class="task-subscript-badge soon-badge" ng-if="task.isPastTargetDate() && ! (task.isDueSoon() || task.isOverdue())">
-            <i class="fa fa-clock-o"></i><strong>!</strong>
-          </span>
-          <span class="task-subscript-badge due-badge" ng-if="task.isDueSoon()">
+          <span class="task-subscript-badge due-badge" ng-if="task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()">
             <i class="fa fa-clock-o"></i>
           </span>
-          <span class="task-subscript-badge due-badge" ng-if="task.isOverdue() && ! task.inTerminalState()">
+          <span class="task-subscript-badge due-badge" ng-if="task.isPastDeadline() && !task.inFinalState()">
             <i class="fa fa-clock-o"></i><strong>!</strong>
           </span>
         </div>

@@ -1,0 +1,101 @@
+#discussion-recordings-list {
+  flex-grow: 1;
+  max-height: 130px;
+  margin-top: -10px;
+}
+
+#dialogCloseButton {
+  float: right;
+  margin-bottom: 20px;
+  color: red;
+}
+
+mat-action-list {
+  height: 100%;
+}
+
+#btnRecordPrompt {
+  background-color: #f03d25;
+  color: white;
+}
+
+.discussion-prompt-audio-visualiser {
+  // max-width: 100px;
+}
+
+.btn-circle-small {
+  user-select: none;
+  background-color: #f03d25;
+  border-radius: 72px;
+  color: #fff;
+  height: 40px;
+  transition: width 0.1s, height 0.1s;
+  width: 40px;
+  border: none;
+  outline: none;
+}
+
+.btn-circle-small:disabled {
+  background-color: #c42a15;
+}
+
+.btn-circle-small i {
+  font-size: 14px;
+}
+
+#recordingList {
+  margin-bottom: 2em;
+}
+
+#audio-recorder-visualiser.discussion-audio-visualiser {
+  height: 60px;
+  width: 115px;
+  bottom: 10px;
+  left: 65px;
+}
+
+:host .mat-list-icon {
+  color: black;
+}
+
+:host .mat-dialog-container {
+  max-width: 800px !important;
+}
+
+:host #intelligentDiscussionStepper {
+  margin-top: 20px;
+}
+
+:host img#discussion-splash-image {
+  float: left;
+  margin: auto;
+  max-width: 800px;
+  max-height: 300px;
+  vertical-align: middle;
+}
+
+:host .introduction-text {
+  margin-top: 4em;
+  display: inline-flex;
+}
+
+:host .introduction-text p {
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.1;
+  font-size: 1.1em;
+  text-align: justify;
+  margin-left: 3em;
+  margin-top: 0;
+  float: right;
+}
+
+:host #discussionRecorderContainer {
+  line-height: 1.2em;
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+
+  p {
+    font-size: 1.2em;
+  }
+}

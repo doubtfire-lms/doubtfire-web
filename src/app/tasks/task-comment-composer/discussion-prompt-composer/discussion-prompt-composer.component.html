@@ -1,0 +1,46 @@
+<h4>Step 1. Record and add up to 3 prompts.</h4>
+<div [hidden]="!canRecord || isSending" fxLayout="row" fxLayoutAlign="space-around center">
+  <div>
+    <button mat-icon-button aria-label="Record icon button" [disabled]="!canAddRecording" id='btnRecordPrompt'
+      (click)="recordingToggle()" mat-icon-button aria-label="Record audio prompt">
+      <mat-icon [hidden]="!isRecording">stop_rounded</mat-icon>
+      <mat-icon [hidden]="isRecording">fiber_manual_record</mat-icon>
+    </button>
+  </div>
+
+  <div class="audio-recorder">
+    <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+    <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <canvas #discussionPromptComposerCanvas class="discussion-prompt-audio-visualiser"></canvas>
+    </div>
+    <audio #discussionPromptComposerAudio></audio>
+  </div>
+
+  <div>
+    <button mat-icon-button type="button" id='btnSave' (click)="saveRecording()"
+      [disabled]="!recordingAvailable || !canAddRecording" class="btn-circle">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
+</div>
+
+<h4>Step 2. Optionally play back prompts.</h4>
+<mat-action-list id="recordingList">
+  <h3 mat-subheader>Discussion Prompts</h3>
+  <button *ngFor="let recording of recordings; let i = index" mat-list-item (click)="playRecording(getUrl(recording))">
+    <mat-icon mat-list-icon>play_arrow_rounded</mat-icon>
+    <h4 mat-line>Prompt {{i + 1}}</h4>
+    <p mat-line> Click to play recording </p>
+  </button>
+</mat-action-list>
+
+<h4>Step 3. Send.</h4>
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button color="primary" type="button" mat-dialog-close
+    (click)="sendRecording()" [hidden]="recordings.length === 0">
+    Send
+  </button>
+</div>
+
+<mat-divider style="margin: 3em 0 3em 0;"></mat-divider>

@@ -57,7 +57,7 @@
                 }
               ],
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "bundles",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
@@ -141,5 +141,10 @@
       }
     }
   },
-  "defaultProject": "doubtfire"
+  "defaultProject": "doubtfire",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

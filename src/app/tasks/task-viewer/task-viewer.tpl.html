@@ -21,22 +21,22 @@
           <h3>{{project.selectedTask.definition.name}}</h3>
         </div>
         <div class="col-sm-5 task-date-info">
-          <div class="overdue label label-{{daysPastTargetDate > 5 ? 'danger' : 'warning'}}" ng-hide="daysPastTargetDate === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
+          <div class="overdue label label-{{daysPastDueDate > 5 ? 'danger' : 'warning'}}" ng-hide="daysPastDueDate === false" tooltip="Tasks are overdue until they are discussed with your tutor." tooltip-placement="right">
             <i class="fa fa-exclamation-triangle"></i>
-            Past Due Date By <br/> {{daysPastTargetDate}} day{{daysPastTargetDate > 1 ? 's' : ''}}
+            Past Due Date By <br/> {{daysPastDueDate}} day{{daysPastDueDate > 1 ? 's' : ''}}
           </div>
           <span class="label label-info" tooltip="You should aim to complete the task by this date" tooltip-placement="right" tooltip-append-to-body="true">
             <i class="fa fa-clock-o"></i>
             <div>
               <label>Due Date</label>
-              {{project.selectedTask.definition.target_date | date:'EEE MMM d'}}
+              {{project.selectedTask.definition.localDueDateString()}}
             </div>
           </span>
           <span class="label label-warning" ng-if="project.selectedTask.definition.due_date" tooltip="The task must be completed by this date" tooltip-placement="right" tooltip-append-to-body="true">
             <i class="fa fa-lock"></i>
             <div>
               <label>Deadline</label>
-              {{project.selectedTask.definition.due_date | date:'EEE MMM d'}}
+              {{project.selectedTask.definition.due_date | date:'EEE MMM d' : '+0000' }}
             </div>
           </span>
         </div>

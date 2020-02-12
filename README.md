@@ -252,6 +252,21 @@ If you will be using [Docker](https://github.com/doubtfire-lms/doubtfire-api/#ge
 
 Before you get started, make sure you have the [Doubtfire API](https://github.com/doubtfire-lms/doubtfire-api) up and running. You will need to do this before continuing.
 
+First, clone the web repository, and change to the root directory:
+
+```
+$ git clone https://github.com/doubtfire-lms/doubtfire-web.git
+$ cd ./doubtfire-web
+```
+
+You can automate the installation process by running the automated setup script:
+
+```
+$ ./setup.sh
+```
+
+Or, you can continue following the below steps to manually install `doubtfire-web`.
+
 Install [Node.js](http://nodejs.org/) either by [downloading it](http://nodejs.org/download/) and installing it manually, or via [Homebrew](http://brew.sh) on OS X:
 
 ```
@@ -261,15 +276,8 @@ $ brew install node
 _or_ by using `apt-get` on Linux:
 
 ```
-$ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
-$ sudo apt-get install nodejs nodejs-legacy
-```
-
-Clone the web repository, and change to the root directory:
-
-```
-$ git clone https://github.com/doubtfire-lms/doubtfire-web.git
-$ cd ./doubtfire-web
+$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ sudo apt-get install nodejs
 ```
 
 Install [overcommit](https://github.com/brigade/overcommit) and Ruby [SASS](http://sass-lang.com):
@@ -301,13 +309,13 @@ $ npm install
 
 **Note:** You may need to install `grunt-cli` globally in Linux using `sudo`.
 
-Lastly, to compile and run a watch server and web server, use `npm install`:
+Lastly, to compile and run a watch server and web server, use `npm start`:
 
 ```
-$ npm install
+$ npm start
 ```
 
-This will automaticall run the angular 1 `grunt watch`, and the angular 7 `ng serve`.
+This will automatically run the angular 1 `grunt watch`, and the angular 7 `ng serve`.
 
 You can then navigate to the Doubtfire web interface at **http://localhost:8000**.
 

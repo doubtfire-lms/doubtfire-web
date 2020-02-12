@@ -10,9 +10,7 @@ angular.module("doubtfire.common.services.media-service", [])
   mediaService.getMimeType = () ->
     mimeType = 'audio/webm'
     if !MediaRecorder.isTypeSupported(mimeType)
-      console.log mimeType + ' is not Supported'
       if navigator.userAgent.toLowerCase().indexOf('firefox') > -1
-        console.log("Using Firefox")
         mimeType = 'audio/ogg'
       else
         mimeType = ''

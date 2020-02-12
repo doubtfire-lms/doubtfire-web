@@ -1,0 +1,23 @@
+<form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
+  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
+    <span class="fa fa-microphone"></span>
+  </button>
+  <div id="textFieldContainer">
+    <div id="textField" [contenteditable]="contentEditableValue()" (keydown.enter)="send($event)"
+      [(ngModel)]="comment.text" placeholder="Type a message, drag files..." name="commentComposer">
+    </div>
+  </div>
+
+</form>
+
+<!-- The HTML which will be injected -->
+<ng-template #audioDiscussionTemplate>
+  <div *ngIf="isStaff">
+    <p>New! Try out the beta for the new intelligent discussion feature.</p>
+    <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
+      <button style="align-items: flex-end;" type="button" (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
+    </div>
+    <mat-divider></mat-divider>
+  </div>
+  <audio-comment-recorder [task]="task"></audio-comment-recorder>
+</ng-template>

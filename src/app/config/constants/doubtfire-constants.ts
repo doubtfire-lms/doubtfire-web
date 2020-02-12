@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -6,15 +6,18 @@ import API_URL from 'src/app/config/constants/apiURL';
 
 interface externalNameResponseFormat {
   externalName: string;
-};
+}
 
 interface signoutUrlResponseFormat {
   auth_signout_url: string;
-};
+}
 
 @Injectable({ providedIn: 'root' })
 export class DoubtfireConstants {
-  constructor(private http: HttpClient) {
+  private http: HttpClient;
+  constructor(handler: HttpBackend) {
+    // Don't use interceptors for Doubtfire Constants
+    this.http = new HttpClient(handler);
     this.loadExternalName();
     this.loadSignoutUrl();
   }
@@ -37,7 +40,7 @@ export class DoubtfireConstants {
       .subscribe(
         result => this.SignoutURL = result.auth_signout_url,
         error => console.error(error)
-      )
+      );
   }
 
   // initialise exernal name to loading.
@@ -49,6 +52,6 @@ export class DoubtfireConstants {
     this.http.get<externalNameResponseFormat>(this.settingsUrl)
       .subscribe(
         result => this.ExternalName.next(result.externalName)
-      )
+      );
   }
 }
