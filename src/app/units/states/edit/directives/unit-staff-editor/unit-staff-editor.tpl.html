@@ -1,4 +1,10 @@
 <div class="unit-staff-editor">
+  <script type="text/ng-template" id="staffAvatar.html">
+    <a>
+      <!-- This is where a user icon can go -->
+      <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+  </script>
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">Modify Unit Staff</h3>
@@ -11,7 +17,7 @@
           <table class="table table-condensed table-hover">
             <thead>
               <tr>
-                <th> Name </th>
+                <th colspan="2"> Name </th>
                 <th> Role </th>
                 <th> Main Convenor </th>
                 <th> Actions </th>
@@ -19,7 +25,12 @@
             </thead>
             <tbody>
               <tr ng-repeat="staff in unit.staff">
-                <td> {{staff.name}} </td>
+                <td style="width: 35px;">
+                    <user-icon size="50" user="staff" email="staff.email" style="max-width: 35px; max-height: 35px; font-size: 14px;"></user-icon>
+                </td>
+                <td>
+                    {{staff.name}}
+                </td>
                 <td>
                   <div class="btn-group">
                     <label class="btn btn-default" tooltip="Tutors deliver unit content." ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
@@ -53,6 +64,7 @@
           autocomplete="off"
           typeahead-editable="false"
           typeahead-wait-ms="200"
+          typeahead-template-url="staffAvatar.html"
           typeahead-select-on-exact="true"
           typeahead-on-select="addSelectedStaff()">
 
