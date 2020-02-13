@@ -1,4 +1,10 @@
 <div class="unit-staff-editor">
+  <script type="text/ng-template" id="customTemplate.html">
+  <a>
+    <user-icon></user-icon>
+    <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+  </a>
+</script>
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">Modify Unit Staff</h3>
@@ -22,7 +28,7 @@
                 <td> {{staff.name}} </td>
                 <td>
                   <div class="btn-group">
-                    <label class="btn btn-default" ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Hooray!" ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
                     <label class="btn btn-default" ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
                   </div>
                 </td>
@@ -50,6 +56,7 @@
           placeholder="Staff Name"
           ng-model="selectedStaff"
           typeahead="staff as staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"
+          typeahead-template-url="customTemplate.html"
           autocomplete="off"
           typeahead-editable="false"
           typeahead-wait-ms="200"
