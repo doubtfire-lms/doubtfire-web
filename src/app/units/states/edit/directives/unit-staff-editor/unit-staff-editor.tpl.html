@@ -22,8 +22,8 @@
                 <td> {{staff.name}} </td>
                 <td>
                   <div class="btn-group">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Hooray!" ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
-                    <label class="btn btn-default" ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
+                    <label class="btn btn-default" tooltip="Tutors deliver unit content." ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
+                    <label class="btn btn-default" tooltip="Convenors manage the unit." ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
                   </div>
                 </td>
                 <td>
