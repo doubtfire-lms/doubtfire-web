@@ -18,7 +18,7 @@ export class UnitStudentsEditorComponent {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @Input() unit: any;
 
-  columns: string[] = ['username', 'firstName', 'lastName', 'email', 'tutorial', 'enrolled'];
+  columns: string[] = ['student_id', 'first_name', 'last_name', 'email', 'tutorial', 'enrolled'];
   dataSource: MatTableDataSource<any>;
   tutorials: Tutorial[];
   streams: TutorialStream[];

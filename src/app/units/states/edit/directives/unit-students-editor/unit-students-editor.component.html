@@ -16,7 +16,7 @@
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
     <!-- Username Column -->
-    <ng-container matColumnDef="username" sticky>
+    <ng-container matColumnDef="student_id" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
       <td mat-cell *matCellDef="let student">
         {{student.student_id}}
@@ -24,7 +24,7 @@
     </ng-container>
 
     <!-- First name Column -->
-    <ng-container matColumnDef="firstName" sticky>
+    <ng-container matColumnDef="first_name" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
       <td mat-cell *matCellDef="let student">
         {{student.first_name}}
@@ -32,7 +32,7 @@
     </ng-container>
 
     <!-- Last name Column -->
-    <ng-container matColumnDef="lastName" sticky>
+    <ng-container matColumnDef="last_name" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
       <td mat-cell *matCellDef="let student">
         {{student.last_name}}
@@ -49,7 +49,7 @@
 
     <!-- Tutorial Column -->
     <ng-container matColumnDef="tutorial" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutorial </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="tutorial"> Tutorial </th>
       <td mat-cell *matCellDef="let student">
         <mat-form-field class="data-entry">
           <mat-label>Tutorial</mat-label>
