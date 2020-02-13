@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -73,15 +73,27 @@ angular.module("doubtfire.common.services.units", [])
     }
 
     #
+    #  Get a stream from the unit by abbreviation
+    #
+    unit.tutorialStreamForAbbr = (abbr) ->
+      _.find(unit.tutorial_streams, (stream) -> stream.abbreviation == abbr) if abbr?
+
+    #
     # Refresh the unit with data from the server...
     #
     unit.refresh = (onSuccess, onFailure) ->
       successCallback = (newUnit) ->
         _.extend(unit, newUnit)
+        # Map the streams to the unit
+        unit.tutorial_streams = _.map(unit.tutorial_streams, (stream) ->
+          streamService.createInstanceFrom(stream)
+        )
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorial.description = unitService.tutorialDescription(tutorial)
-          tutorial
+          tutorial.unit = unit
+          tutorial.tutorial_stream = unit.tutorialStreamForAbbr(tutorial.tutorial_stream)
+          tutorialService.createInstanceFrom(tutorial)
         )
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
@@ -157,6 +169,29 @@ angular.module("doubtfire.common.services.units", [])
       unless unit.students?
         throw Error "Students not yet mapped to unit (unit.students is undefined)"
       _.find(unit.students, {project_id: id})
+
+    # Delete a unit's stream
+    unit.deleteStream = (stream) ->
+      successCallback = () ->
+        _.remove unit.tutorials, (tutorial) -> tutorial.tutorial_stream == stream
+        _.pull unit.tutorial_streams, stream
+      failureCallback = (response) ->
+        # Deal with the failure
+        alertService.add("danger", "Failed to delete stream. #{response?.data?.error}", 8000)
+      ConfirmationModal.show "Delete Tutorial Stream #{stream.abbreviation}",
+      'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
+      ->
+        Unit.tutorialStream.delete({id: unit.id, tutorial_stream_abbr: stream.abbreviation}, successCallback, failureCallback)
+
+    # Get a unit's next stream based on activity abbreviation
+    unit.nextStream = (activityTypeAbbreviation) ->
+      successCallback = (stream) ->
+        # Add the new stream to the unit
+        unit.tutorial_streams.push streamService.createInstanceFrom(stream)
+      failureCallback = (response) ->
+        # Deal with the failure
+        alertService.add("danger", "Failed to add stream. #{response?.data?.error}", 8000)
+      Unit.tutorialStream.create({id: unit.id, activity_type_abbr: activityTypeAbbreviation}, successCallback, failureCallback)
 
     # Adds a new student to this unit
     unit.addStudent = (student) ->
@@ -292,8 +327,7 @@ angular.module("doubtfire.common.services.units", [])
   #
   unitService.tutorialDescription = (tutorial) ->
     if (tutorial?)
-      timeDesc = $filter('date')(tutorial.meeting_time, 'shortTime')
-      "#{tutorial.meeting_day.slice(0,3)} at #{timeDesc} by #{tutorial.tutor_name} in #{tutorial.meeting_location}"
+      tutorial.description
     else
       "No Tutorial"
 
@@ -326,7 +360,7 @@ angular.module("doubtfire.common.services.units", [])
     student.shortTutorialDescription = () ->
       if student.tutorial?
         timeDesc = $filter('date')(student.tutorial.meeting_time, 'shortTime')
-        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor_name.split(' ')[0]} - #{student.tutorial.meeting_location}"
+        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor.name.split(' ')[0]} - #{student.tutorial.meeting_location}"
       else
         'No Tutorial'
 

@@ -1,7 +1,7 @@
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-
+import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
@@ -83,7 +83,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
+import { TutorialService } from './api/models/tutorial/tutorial.service';
+import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { CampusService } from './api/models/campus/campus.service';
+import { UserService } from './api/models/user/user.service';
 
 @NgModule({
   // components
@@ -101,7 +106,9 @@ import { CampusService } from './api/models/campus/campus.service';
     CampusListComponent,
     ActivityTypeListComponent,
     ExtensionModalComponent,
-    InstitutionSettingsComponent
+    InstitutionSettingsComponent,
+    UnitTutorialsListComponent,
+    UnitTutorialsManagerComponent
   ],
   // Module Imports
   imports: [
@@ -141,13 +148,15 @@ import { CampusService } from './api/models/campus/campus.service';
   // Services
   providers: [
     CampusService,
+    TutorialService,
+    TutorialStreamService,
+    UserService,
     ActivityTypeService,
     userProvider,
     unitProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
-    currentUserProvider,
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,
@@ -177,14 +186,17 @@ import { CampusService } from './api/models/campus/campus.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
+    UnitTutorialsManagerComponent
   ]
 })
 export class DoubtfireAngularModule {
   constructor(
+    injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
     private title: Title
   ) {
+    setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
 
     this.constants.ExternalName.subscribe(result => {

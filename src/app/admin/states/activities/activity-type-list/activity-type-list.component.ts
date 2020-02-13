@@ -38,7 +38,7 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   }
 
   ngOnInit() {
-    // Get all the campuses and add them to the table
+    // Get all the activity types and add them to the table
     this.activityTypeService.query().subscribe((activityTypes) => {
       this.pushToTable(activityTypes);
     });

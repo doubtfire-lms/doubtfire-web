@@ -1,0 +1,13 @@
+<div>
+  <unit-tutorials-list [unit]="unit"></unit-tutorials-list>
+  <unit-tutorials-list *ngFor="let stream of unit.tutorial_streams" [unit]="unit" [stream]="stream"></unit-tutorials-list>
+  <button class="new-activity-stream-button"mat-raised-button [matMenuTriggerFor]="activities">
+    <mat-icon>add</mat-icon>
+    New Tutorial Stream
+  </button>
+  <mat-menu #activities="matMenu">
+    <button *ngFor="let activityType of activityTypes" mat-menu-item (click)="onClickNewActivity(activityType)">
+      <span>{{activityType.name}}</span>
+    </button>
+  </mat-menu>
+</div>

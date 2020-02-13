@@ -42,7 +42,7 @@ angular.module('doubtfire.common.header', [
 
   # Watch for state transitions and update the task details for the dropdown
   $transitions.onSuccess { to: '**' }, (trans) ->
-    $scope.task = trans.to().data.task
+    $scope.task = trans.to().data?.task
 
   $rootScope.$on 'UnitRoleChanged', updateSelectedUnit
   $rootScope.$on 'ProjectChanged', updateSelectedUnit
