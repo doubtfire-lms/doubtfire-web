@@ -3,10 +3,11 @@ import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
 import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
 import { Observable } from 'rxjs';
+import { Sort } from '@angular/material/sort';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
-export class EntityFormComponent<T extends Entity> implements OnInit {
+export abstract class EntityFormComponent<T extends Entity> implements OnInit {
 
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
@@ -241,9 +242,32 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @param resource the value to be compared against the current selection.
    *
-   * @returns whether or not the probided resource is being edited.
+   * @returns whether or not the provided resource is being edited.
    */
   editing(resource): boolean {
     return this.selected === resource;
+  }
+
+  /**
+   * Function to implement custom sorting on implementors of EntityForm.
+   * You will be required to implement this method on inheritors when
+   * the data within the EntityForm contains properties whose values
+   * are objects. See unit-tutorial-list.ts for implementation.
+   *
+   * @param sort the event received when sorting has been triggered.
+   */
+  abstract sortTableData(sort: Sort);
+
+  /**
+   * Function used by implemented sortTableData to determine the order
+   * of values within the EntityForm once sorting has been triggered.
+   *
+   * @param aValue value to be compared against bValue.
+   * @param bValue value to be compared against aValue.
+   *
+   * @returns truthy comparison between aValue and bValue.
+   */
+  protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }
