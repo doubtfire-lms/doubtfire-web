@@ -80,7 +80,9 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
     }
     switch (sort.active) {
       case 'name':
-      case 'abbreviation': return super.sortTableData(sort);
+      case 'abbreviation':
+      case 'mode':
+      case 'active': return super.sortTableData(sort);
     }
   }
 }
