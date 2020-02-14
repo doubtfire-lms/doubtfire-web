@@ -408,18 +408,58 @@ angular.module("doubtfire.common.services.units", [])
         task.topWeight = currentWeight
         currentWeight++
 
+    # Check if the student is enrolled in a tutorial
+    student.isEnrolledIn = (tutorialId) ->
+      _.find(student.tutorial_enrolments, (enrolment) -> enrolment.tutorial_id == tutorialId)?
+
+    # Update the student's list of tutorial enrolments based on them enrolling in a new tutorial.
+    # The passed in enrolment data indicates the new tutorial they are enrolled in and its steam
+    # enrolled is pass true if they enrolled in this tutorial, otherwise it is false
+    student.updateTutorialEnrolments = (enrolment, enrolled) ->
+      _.each student.tutorial_enrolments, (value) ->
+        if !enrolment.stream || value.stream_abbr == enrolment.stream_abbr
+          if enrolled
+            value.tutorial_id = enrolment.tutorial_id
+          else
+            value.tutorial_id = undefined
+
+    # Updat student enrolment within a unni
+    student.updateUnitEnrolment = () ->
+      newEnrollment = !student.enrolled
+      Project.update({id: student.project_id, enrolled: !student.enrolled},
+      (project) ->
+        if newEnrollment == project.enrolled
+          alertService.add('success', 'Enrolment changed.', 2000)
+        else
+          alertService.add('danger', 'Enrolment change failed.', 5000)
+      (response) ->
+        alertService.add('danger', response.data.error, 5000)
+      )
+
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
       newId = if tutorial? then (if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id) else -1
-      analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
-      Project.update({ id: student.project_id, tutorial_id: newId },
-        (project) ->
-          alertService.add "success", "Tutorial updated for #{student.name}", 3000
-          student.tutorial_id = project.tutorial_id
-          student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
+
+      # analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
+      if student.isEnrolledIn(newId)
+        fn = Project.tutorialEnrolment.delete
+        enrol = false
+      else
+        fn = Project.tutorialEnrolment.create
+        enrol = true
+
+      fn(
+        {
+          id:                     student.unit().id,
+          project_id:             student.project_id
+          tutorial_abbreviation:  tutorial.abbreviation,
+        },
+        (enrolment) ->
+          alertService.add "success", "Tutorial enrolment updated for #{student.name}", 3000
+          student.updateTutorialEnrolments(enrolment, enrol)
         (response) ->
-          alertService.add "danger", "Failed to change tutorial. #{response?.data?.error}", 8000
+          alertService.add "danger", "Failed to update tutorial enrolment. #{response?.data?.error}", 8000
       )
 
     # TODO: (@alexcu) change these to use functions...
