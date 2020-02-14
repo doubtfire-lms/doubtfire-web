@@ -5,7 +5,7 @@
       <p>Add new activities or modify existing ones</p>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
 
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
