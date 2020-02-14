@@ -26,7 +26,6 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  dataSource: MatTableDataSource<Tutorial>;
   tutorials: Tutorial[];
 
   constructor(
@@ -134,22 +133,21 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // Sorting function to sort data when sort
   // event is triggered
   sortTableData(sort: Sort) {
-    const data = this.tutorials.slice();
     if (!sort.active || sort.direction === '') {
-      this.tutorials = data;
       return;
     }
-
-    this.dataSource.data = data.sort((a, b) => {
+    switch (sort.active) {
+      case 'abbreviation':
+      case 'location':
+      case 'day':
+      case 'time':
+      case 'capacity': return super.sortTableData(sort);
+    }
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'abbreviation': return this.sortCompare(a.abbreviation, b.abbreviation, isAsc);
         case 'campus': return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
-        case 'location': return this.sortCompare(a.meeting_location, b.meeting_location, isAsc);
-        case 'day': return this.sortCompare(a.meeting_day, b.meeting_day, isAsc);
-        case 'time': return this.sortCompare(a.meeting_time, b.meeting_time, isAsc);
         case 'tutor': return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
-        case 'capacity': return this.sortCompare(a.capacity, b.capacity, isAsc);
         default: return 0;
       }
     });

@@ -4,10 +4,11 @@ import { Entity } from 'src/app/api/models/entity';
 import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
 import { Observable } from 'rxjs';
 import { Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
-export abstract class EntityFormComponent<T extends Entity> implements OnInit {
+export class EntityFormComponent<T extends Entity> implements OnInit {
 
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
@@ -38,6 +39,8 @@ export abstract class EntityFormComponent<T extends Entity> implements OnInit {
   // and the same with campus as { campus_id: y }.
   // See unit-tutorials-list.component
   formDataMapping = {};
+
+  dataSource: MatTableDataSource<T>;
 
   /**
    * Create a new instance of EntityFormComponent.
@@ -213,7 +216,7 @@ export abstract class EntityFormComponent<T extends Entity> implements OnInit {
    * prepares the form's inputs to be sent off to the server in order to
    * create a new entity.
    *
-   * @param endPointKey identifies the type of data the server will recieve.
+   * @param endPointKey identifies the type of data the server will receive.
    *
    * @returns object representation of form data.
    */
@@ -256,7 +259,16 @@ export abstract class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @param sort the event received when sorting has been triggered.
    */
-  abstract sortTableData(sort: Sort);
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+    });
+  }
 
   /**
    * Function used by implemented sortTableData to determine the order
