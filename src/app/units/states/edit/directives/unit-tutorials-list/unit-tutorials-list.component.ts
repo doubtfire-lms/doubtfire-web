@@ -1,6 +1,6 @@
 import { Component, Input, Inject, ViewChild, Output, EventEmitter } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
@@ -26,7 +26,6 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  dataSource: MatTableDataSource<Tutorial>;
   tutorials: Tutorial[];
 
   constructor(
@@ -129,5 +128,28 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // Handle the deletion of a stream
   deleteStream() {
     this.unit.deleteStream(this.stream);
+  }
+
+  // Sorting function to sort data when sort
+  // event is triggered
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+    switch (sort.active) {
+      case 'abbreviation':
+      case 'location':
+      case 'day':
+      case 'time':
+      case 'capacity': return super.sortTableData(sort);
+    }
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'campus': return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
+        case 'tutor': return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
+        default: return 0;
+      }
+    });
   }
 }

@@ -5,13 +5,13 @@
       <button mat-icon-button color="warn" (click)="deleteStream()">
         <mat-icon>delete</mat-icon>
       </button>
-    </div>       
+    </div>
     <ng-template #noStream>
       <h4>Tutorials without a stream</h4>
     </ng-template>
   </div>
 
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
 
     <!-- Abbreviation Column -->
     <ng-container [formGroup]="formData" matColumnDef="abbreviation" sticky>

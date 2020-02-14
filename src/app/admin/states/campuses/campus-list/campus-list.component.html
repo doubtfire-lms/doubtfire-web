@@ -5,7 +5,7 @@
       <p>Add new campuses or modify existing ones</p>
     </div>
   </div>
-  <table #table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z3">
+  <table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
 
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
