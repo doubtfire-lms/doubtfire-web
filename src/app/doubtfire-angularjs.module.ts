@@ -284,6 +284,7 @@ import { UnitTutorialsManagerComponent } from './units/states/edit/directives/un
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import { CampusService } from './api/models/campus/campus.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -311,6 +312,8 @@ DoubtfireAngularJSModule.factory('tutorialService',
   downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
+  DoubtfireAngularJSModule.factory('campusService',
+  downgradeInjectable(CampusService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
