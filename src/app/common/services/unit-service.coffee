@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -352,6 +352,10 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns the unit for this student
     student.unit = -> unit
+
+    # Returns the campus for this student
+    student.campus = ->
+      campusService.getFromCache("#{student.campus_id}")
 
     # Add a tutorial description
     student.tutorialDescription = () ->
