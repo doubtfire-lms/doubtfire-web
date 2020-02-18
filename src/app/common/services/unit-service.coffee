@@ -416,17 +416,6 @@ angular.module("doubtfire.common.services.units", [])
     student.isEnrolledIn = (tutorialId) ->
       _.find(student.tutorial_enrolments, (enrolment) -> enrolment.tutorial_id == tutorialId)?
 
-    # Update the student's list of tutorial enrolments based on them enrolling in a new tutorial.
-    # The passed in enrolment data indicates the new tutorial they are enrolled in and its steam
-    # enrolled is pass true if they enrolled in this tutorial, otherwise it is false
-    student.updateTutorialEnrolments = (enrolment, enrolled) ->
-      _.each student.tutorial_enrolments, (value) ->
-        if !enrolment.stream || value.stream_abbr == enrolment.stream_abbr
-          if enrolled
-            value.tutorial_id = enrolment.tutorial_id
-          else
-            value.tutorial_id = undefined
-
     # Updat student enrolment within a unni
     student.updateUnitEnrolment = () ->
       newEnrollment = !student.enrolled
@@ -448,10 +437,8 @@ angular.module("doubtfire.common.services.units", [])
       # analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
       if student.isEnrolledIn(newId)
         fn = Project.tutorialEnrolment.delete
-        enrol = false
       else
         fn = Project.tutorialEnrolment.create
-        enrol = true
 
       fn(
         {
@@ -459,9 +446,9 @@ angular.module("doubtfire.common.services.units", [])
           project_id:             student.project_id
           tutorial_abbreviation:  tutorial.abbreviation,
         },
-        (enrolment) ->
+        (successResponse) ->
+          student.tutorial_enrolments = successResponse.enrolments
           alertService.add "success", "Tutorial enrolment updated for #{student.name}", 3000
-          student.updateTutorialEnrolments(enrolment, enrol)
         (response) ->
           alertService.add "danger", "Failed to update tutorial enrolment. #{response?.data?.error}", 8000
       )
