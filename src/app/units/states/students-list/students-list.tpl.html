@@ -136,13 +136,14 @@
             </span>
           </td><!--/flags-column-->
           <td>
-            <select
+            <student-tutorial-select [unit]="unit" [student]="student"></student-tutorial-select>
+            <!-- <select
               class="form-control input-sm"
               ng-model="student.tutorial_id"
               ng-options="tutorial.id as (tutorial.abbreviation + ' - ' + tutorial.description) for tutorial in unit.tutorials | orderBy:'abbreviation'"
               ng-change="switchToTutorial(student, student.tutorial_id)">
               <option value="">None</option>
-            </select>
+            </select> -->
           </td><!--/tutorial-column-->
         </tr><!--/student-row-->
       </tbody>

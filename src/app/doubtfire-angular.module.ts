@@ -198,7 +198,8 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     ExtensionModalComponent,
     // Angular JS nested components
     UnitTutorialsManagerComponent,
-    UnitStudentsEditorComponent
+    UnitStudentsEditorComponent,
+    StudentTutorialSelectComponent
   ]
 })
 export class DoubtfireAngularModule {
