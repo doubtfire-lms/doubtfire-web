@@ -91,6 +91,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { CampusService } from './api/models/campus/campus.service';
 import { UserService } from './api/models/user/user.service';
+import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 
 @NgModule({
   // components
@@ -111,7 +112,8 @@ import { UserService } from './api/models/user/user.service';
     InstitutionSettingsComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
-    UnitStudentsEditorComponent
+    UnitStudentsEditorComponent,
+    StudentTutorialSelectComponent
   ],
   // Module Imports
   imports: [
@@ -183,7 +185,10 @@ import { UserService } from './api/models/user/user.service';
     AboutDoubtfireModalService,
     DoubtfireConstants
   ],
+  // Entry components include any routes, as well as components that are currently nested within AngularJS components
+  // Eventually we can remove those that are just here due to nesting within AngularJS
   entryComponents: [
+    // Routes (to check...)
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
     IntelligentDiscussionPlayerComponent,
@@ -191,6 +196,7 @@ import { UserService } from './api/models/user/user.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
+    // Angular JS nested components
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent
   ]

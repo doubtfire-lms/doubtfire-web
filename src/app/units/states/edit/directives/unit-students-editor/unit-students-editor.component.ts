@@ -20,8 +20,6 @@ export class UnitStudentsEditorComponent {
 
   columns: string[] = ['student_id', 'first_name', 'last_name', 'student_email', 'campus', 'tutorial', 'enrolled'];
   dataSource: MatTableDataSource<any>;
-  tutorials: Tutorial[];
-  streams: TutorialStream[];
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -35,26 +33,6 @@ export class UnitStudentsEditorComponent {
     this.dataSource = new MatTableDataSource(this.unit.students);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.tutorials = this.unit.tutorials;
-    this.streams = this.unit.tutorial_streams;
-  }
-
-  compareSelection(aEntity:  any, bEntity: any) {
-    if (!aEntity || !bEntity) {
-      return;
-    }
-    return aEntity.id === bEntity.tutorial_id;
-  }
-
-  tutorialsForStreamAndStudent(student: any, stream: TutorialStream = undefined) {
-    return this.tutorials.filter(tutorial => {
-      if (tutorial.tutorial_stream && stream) {
-        return tutorial.tutorial_stream.abbreviation === stream.abbreviation
-          && student.campus_id === tutorial.campus.id;
-      } else if (!tutorial.tutorial_stream && !stream) {
-        return student.campus_id === tutorial.campus.id;
-      }
-    });
   }
 
   applyFilter(event: Event) {

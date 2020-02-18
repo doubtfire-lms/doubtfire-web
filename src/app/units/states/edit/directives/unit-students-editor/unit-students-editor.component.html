@@ -59,24 +59,8 @@
     <ng-container matColumnDef="tutorial" sticky>
       <th mat-header-cell *matHeaderCellDef> Tutorial </th>
       <td mat-cell *matCellDef="let student">
-        <mat-form-field class="data-entry">
-          <mat-label>Tutorial</mat-label>
-          <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorial_enrolments">
-            <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">
-                <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student)" [value]="tutorial" (click)="student.switchToTutorial(tutorial)">
-                  {{tutorial.abbreviation}}
-                </mat-option>
-              </mat-optgroup>
-            <div *ngFor="let stream of streams">
-              <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student, stream).length > 0" [label]="stream.name">
-                <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student, stream)" [value]="tutorial" (click)="student.switchToTutorial(tutorial)">
-                  {{tutorial.abbreviation}}
-                </mat-option>
-              </mat-optgroup>
-            </div>
-          </mat-select>
-        </mat-form-field>
-        </td>
+        <student-tutorial-select [unit]="unit" [student]="student"></student-tutorial-select>
+      </td>
     </ng-container>
 
     <!-- Enrolled Column -->
