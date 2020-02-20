@@ -46,7 +46,7 @@ export class AboutDoubtfireModal {
   }
 
   public show(): void {
-    // Make API calls only if this is first request. 
+    // Make API calls only if this is first request.
     if (!this.loaded) {
       this.loaded = true;
       this.getExternalName();
@@ -85,7 +85,7 @@ export class AboutDoubtfireModal {
     });
   }
 
-  private async getContributorData() {
+  private getContributorData() {
     this.aboutDoubtfireModalService.getAPIContributors(this.aboutDialogData);
     this.aboutDoubtfireModalService.getWebContributors(this.aboutDialogData);
     this.aboutDoubtfireModalService.getDoubtfireIOWebContributors(this.aboutDialogData);
