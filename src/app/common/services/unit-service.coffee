@@ -476,6 +476,10 @@ angular.module("doubtfire.common.services.units", [])
         (response) ->
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
+    # Get a group for a given group set
+    student.groupForGroupSet = (gs) ->
+      _.find student.groups, (grp) -> gs.id == grp.group_set_id
+
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)
     student.updateTaskStats(student.stats) if student.stats?

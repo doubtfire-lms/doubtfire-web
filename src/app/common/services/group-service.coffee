@@ -150,7 +150,13 @@ angular.module("doubtfire.common.services.group-service", [  ])
         project_id: member.project_id
       }
       (success) ->
-        member.groups?.push(group) # If member is actually a project!
+        if member.groups?
+          grp = member.groupForGroupSet(group.groupSet())
+          if grp?
+            _.remove grp.members, (mbr) -> mbr.project_id == member.project_id
+          group.members = _.without(group.members, member)
+          _.remove member.groups, (grp) -> grp.group_set_id == group.group_set_id
+          member.groups.push(group) # If member is actually a project!
         # Loaded group members?
         if group.members?
           group.members.push(success)
@@ -178,7 +184,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
       (success) ->
         # Loaded group members?
         if group.members?
-          group.members = _.without(group.members, member)
+          _.remove group.members, member
+          _.remove member.groups, group
           alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
