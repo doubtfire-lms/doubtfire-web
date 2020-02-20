@@ -9,7 +9,7 @@
     "build": "run-s -l build:angular1 build:angular8",
     "build:angular1": "grunt build",
     "build:angular8": "ng build",
-    "serve:angular8": "ng serve --host 0.0.0.0",
+    "serve:angular8": "ng serve --host 0.0.0.0 --sourceMap='true'",
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular8",
     "watch:angular1": "grunt delta",
     "deploy:clean_api": "../doubtfire-api/clean_ui.sh",
