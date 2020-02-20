@@ -32,7 +32,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
               name: data.name
               allow_students_to_create_groups: data.allow_students_to_create_groups,
               allow_students_to_manage_groups: data.allow_students_to_manage_groups,
-              keep_groups_in_same_class: data.keep_groups_in_same_class
+              keep_groups_in_same_class: data.keep_groups_in_same_class,
+              capacity: data.capacity
             }
         }
         (response) -> alertService.add("success", "Group set updated.", 2000)
