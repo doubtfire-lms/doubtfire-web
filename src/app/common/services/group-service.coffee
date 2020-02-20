@@ -27,7 +27,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
     unit.findGroupSet(id)?.name || "Individual Work"
 
   # Maps additional functionality to a group
-  groupService.mapFuncsToGroup = (group, index, unit, groupSet) ->
+  groupService.mapFuncsToGroup = (group, unit, groupSet) ->
     group = unit.mapGroupToUnit(group)
     group.groupSet = -> groupSet
     group.addMember = (member, onSuccess, onFailure) ->
@@ -45,8 +45,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
     return onSuccess?(groupSet.groups) if groupSet?.groups?
     Group.query({ unit_id: unit.id, group_set_id: groupSetId },
       (success) ->
-        groupSet.groups = _.map(success, (group, idx) ->
-          groupService.mapFuncsToGroup(group, idx, unit, groupSet)
+        groupSet.groups = _.map(success, (group) ->
+          groupService.mapFuncsToGroup(group, unit, groupSet)
         )
         onSuccess?(groupSet.groups)
       (failure) ->
@@ -68,7 +68,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         }
       }
       (success) ->
-        newGroup = groupService.mapFuncsToGroup(success, groupSet.groups.length, unit, groupSet)
+        newGroup = groupService.mapFuncsToGroup(success, unit, groupSet)
         groupSet.groups.push(newGroup)
         alertService.add("success", "#{newGroup.name} was created!", 3000)
         onSuccess?(newGroup)

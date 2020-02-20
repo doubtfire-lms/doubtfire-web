@@ -480,6 +480,10 @@ angular.module("doubtfire.common.services.units", [])
     student.groupForGroupSet = (gs) ->
       _.find student.groups, (grp) -> gs.id == grp.group_set_id
 
+    student.inGroup = (grp) -> grp? && _.find(student.groups, {id: grp.id})?
+
+    student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)
     student.updateTaskStats(student.stats) if student.stats?
