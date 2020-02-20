@@ -122,7 +122,6 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   # Gets the group members for a specific group
   groupService.getGroupMembersForGroup = (group, onSuccess, onFailure) ->
-    # return onSuccess?(group.members) if group.members?
     GroupMember.query(
       {
         unit_id: group.unit().id,
