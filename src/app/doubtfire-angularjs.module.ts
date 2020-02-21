@@ -175,7 +175,6 @@ import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
-import 'build/src/app/units/states/analytics/directives/task-summary-stats/task-summary-stats.js';
 import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
 import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
 import 'build/src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.js';

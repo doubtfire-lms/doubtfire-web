@@ -148,7 +148,6 @@ TODO:
 - [ ] ./src/app/units/states/students-list/students-list
 - [ ] ./src/app/units/states/analytics/directives/directives
 - [ ] ./src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats
-- [ ] ./src/app/units/states/analytics/directives/task-summary-stats/task-summary-stats
 - [ ] ./src/app/units/states/analytics/directives/task-status-stats/task-status-stats
 - [ ] ./src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download
 - [ ] ./src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats

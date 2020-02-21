@@ -90,7 +90,6 @@ angular.module("doubtfire.common.services.units", [])
         )
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
-          tutorial.description = unitService.tutorialDescription(tutorial)
           tutorial.unit = unit
           tutorial.tutorial_stream = unit.tutorialStreamForAbbr(tutorial.tutorial_stream)
           tutorialService.createInstanceFrom(tutorial)
@@ -145,7 +144,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns all tutorials where the tutor name matches the user name provided
     unit.tutorialsForUserName = (userName) ->
-      _.filter unit.tutorials, (tutorial) -> tutorial.tutor_name is userName
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutor.name is userName
 
     # Refresh callback for reloading students
     unit.refreshStudents = (onSuccess, onFailure) ->
@@ -313,7 +312,7 @@ angular.module("doubtfire.common.services.units", [])
     result = []
     angular.forEach(unit.tutorials, (tute) ->
       result.push(tute.abbreviation)
-      result.push(tute.tutor_name)
+      result.push(tute.tutor.name)
     )
     angular.forEach(unit.students, (student) ->
       result.push(student.name)
@@ -321,15 +320,6 @@ angular.module("doubtfire.common.services.units", [])
     )
     result = _.uniq(result, (item) -> item )
     result
-
-  #
-  # Tutorial description
-  #
-  unitService.tutorialDescription = (tutorial) ->
-    if (tutorial?)
-      tutorial.description
-    else
-      "No Tutorial"
 
   #
   # Adds additional unit-related functionality to groups

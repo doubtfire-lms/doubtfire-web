@@ -1,6 +1,7 @@
 import { Unit } from './../../../../../../ajs-upgraded-providers';
 import { Component, Input } from '@angular/core';
 import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
+import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
 
 @Component({
   selector: 'student-tutorial-select',
@@ -11,7 +12,14 @@ export class StudentTutorialSelectComponent {
   @Input() unit: any;
   @Input() student: any;
 
-  compareSelection(aEntity:  any, bEntity: any) {
+
+  /**
+   * Compare a tutorial with an enrolment
+   *
+   * @param aEntity The tutorial itself
+   * @param bEntity The tutorial enrolment
+   */
+  compareSelection(aEntity:  Tutorial, bEntity: any) {
     if (!aEntity || !bEntity) {
       return;
     }

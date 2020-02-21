@@ -194,7 +194,7 @@ angular.module("doubtfire.common.filters", [])
     return unless input? && unitRole? && kind?
     return input if kind == 'all'
     if kind == 'mine'
-      _.filter(input, (group) -> group.tutorial().tutor_name == unitRole.name)
+      _.filter(input, (group) -> group.tutorial().tutor.name == unitRole.name)
 )
 
 .filter('groupsForStudent', ->
