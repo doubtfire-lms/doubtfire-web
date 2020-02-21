@@ -97,9 +97,12 @@
       </td><!--/group-tutorial-->
       <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         <div ng-show="project">
-          <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm">
+          <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm" ng-show="group.student_count < selectedGroupSet.capacity">
             <i class="fa fa-plus"></i> Join
           </button>
+          <span ng-show="group.student_count >= selectedGroupSet.capacity">
+            Full
+          </span>
         </div>
         <div ng-show="unitRole">
           <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
