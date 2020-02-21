@@ -135,12 +135,11 @@ angular.module("doubtfire.common.filters", [])
 
 .filter('projectFilter', ->
   (input, text) ->
-    if _.isString text
+    if _.isString(text) && text.length > 0 && input
       matchText = text.toLowerCase()
-      if input
-        _.filter  input, (project) -> (project?) && project.matches(text)
-      else
-        input
+      _.filter  input, (project) -> (project?) && project.matches(matchText)
+    else
+      input
 )
 
 .filter('taskForPortfolio', (taskService) ->
