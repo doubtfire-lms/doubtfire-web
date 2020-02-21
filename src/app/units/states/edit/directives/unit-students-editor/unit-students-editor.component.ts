@@ -6,6 +6,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'unit-students-editor',
@@ -24,8 +25,9 @@ export class UnitStudentsEditorComponent {
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(
+    private httpClient: HttpClient,
     @Inject(alertService) private alerts: any,
-    @Inject(Unit) private u: any
+    @Inject(Unit) private unitService: any
   ) {
   }
 
@@ -65,5 +67,37 @@ export class UnitStudentsEditorComponent {
         default:            return 0;
       }
     });
+  }
+
+  downloadEnrolments() {
+    var url: string;
+    url = this.unitService.enrolStudentsCSVUrl(this.unit);
+
+    let headers = new HttpHeaders();
+
+    this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
+        (response) => {
+          let binaryData = [];
+          binaryData.push(response.body);
+          let downloadLink = document.createElement('a');
+          downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: 'text/csv'}));
+          downloadLink.target = '_blank';
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
+          if (matches != null && matches[1]) {
+              const filename = matches[1].replace(/['"]/g, '');
+              downloadLink.setAttribute('download', filename);
+          }
+          else {
+            downloadLink.setAttribute('download', `${this.unit.code}-enrolments.csv`);
+          }
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          downloadLink.parentNode.removeChild(downloadLink);
+        },
+        (error) => {
+          this.alerts.add('danger', `Error downloading enrolments - ${error}`)
+        }
+      );
   }
 }

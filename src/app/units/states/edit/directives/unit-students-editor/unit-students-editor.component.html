@@ -76,5 +76,14 @@
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
   </table>
 
-  <mat-paginator class="mat-elevation-z4" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <button mat-button target="_blank" (click)="downloadEnrolments()">
+        <i class="fa fa-download"></i> Download
+      </button>
+      <span class="spacer"></span>
+      <mat-paginator class="mat-elevation-z4" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
 </div>

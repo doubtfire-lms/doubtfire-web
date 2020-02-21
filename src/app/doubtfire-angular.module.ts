@@ -4,6 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -123,6 +124,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    MatToolbarModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
