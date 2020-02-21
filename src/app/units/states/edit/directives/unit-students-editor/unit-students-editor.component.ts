@@ -1,6 +1,4 @@
-import { Unit } from './../../../../../ajs-upgraded-providers';
-import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
-import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
+import { Unit, csvUploadModalService, csvResultModalService } from './../../../../../ajs-upgraded-providers';
 import { ViewChild, Component, Input, Inject } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -27,7 +25,9 @@ export class UnitStudentsEditorComponent {
   constructor(
     private httpClient: HttpClient,
     @Inject(alertService) private alerts: any,
-    @Inject(Unit) private unitService: any
+    @Inject(Unit) private unitService: any,
+    @Inject(csvUploadModalService) private csvUploadModal: any,
+    @Inject(csvResultModalService) private csvResultModal: any
   ) {
   }
 
@@ -67,6 +67,38 @@ export class UnitStudentsEditorComponent {
         default:            return 0;
       }
     });
+  }
+
+  uploadEnrolments() {
+    this.csvUploadModal.show(
+      'Upload Students to Enrol',
+      'Test message',
+      { file: { name: 'Enrol CSV Data', type: 'csv'  } },
+      this.unitService.enrolStudentsCSVUrl(this.unit),
+      (response : any) => {
+        // at least one student?
+        this.csvResultModal.show("Enrol Student CSV Results", response)
+        if(response.success.length > 0) {
+          this.unit.refreshStudents()
+        }
+      }
+    );
+  }
+
+  uploadWithdrawals() {
+    this.csvUploadModal.show(
+      'Upload Students to Withdraw',
+      'Test message',
+      { file: { name: 'Withdraw CSV Data', type: 'csv'  } },
+      this.unitService.enrolStudentsCSVUrl(this.unit),
+      (response : any) => {
+        // at least one student?
+        this.csvResultModal.show("Withdraw Student CSV Results", response)
+        if(response.success.length > 0) {
+          this.unit.refreshStudents()
+        }
+      }
+    );
   }
 
   downloadEnrolments() {
