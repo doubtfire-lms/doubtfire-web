@@ -140,7 +140,6 @@ import 'build/src/app/groups/tutor-group-manager/tutor-group-manager.js';
 import 'build/src/app/groups/student-group-manager/student-group-manager.js';
 import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.js';
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
-import 'build/src/app/units/modals/unit-tutorial-edit-modal/unit-tutorial-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
@@ -170,7 +169,6 @@ import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-
 import 'build/src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
-import 'build/src/app/units/states/edit/directives/unit-tutorials-editor/unit-tutorials-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
@@ -283,6 +281,10 @@ import { ActivityTypeListComponent } from './admin/states/activities/activity-ty
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { TaskCommentService } from './common/services/task-comment.service';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
+import { TutorialService } from './api/models/tutorial/tutorial.service';
+import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -308,7 +310,10 @@ DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('TaskCommentService',
   downgradeInjectable(TaskCommentService));
-
+DoubtfireAngularJSModule.factory('tutorialService',
+  downgradeInjectable(TutorialService));
+DoubtfireAngularJSModule.factory('streamService',
+  downgradeInjectable(TutorialStreamService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
@@ -325,6 +330,10 @@ DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
 DoubtfireAngularJSModule.directive('commentBubbleAction',
   downgradeComponent({ component: CommentBubbleActionComponent }));
+DoubtfireAngularJSModule.directive('unitTutorialsList',
+    downgradeComponent({ component: UnitTutorialsListComponent }));
+DoubtfireAngularJSModule.directive('unitTutorialsManager',
+    downgradeComponent({ component: UnitTutorialsManagerComponent }));
 
 // Global configuration
 

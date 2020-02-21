@@ -5,7 +5,7 @@ import { ActivityTypeService } from 'src/app/api/models/activity-type/activity-t
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 import { FormControl, Validators } from '@angular/forms';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'activity-type-list',
@@ -38,7 +38,7 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   }
 
   ngOnInit() {
-    // Get all the campuses and add them to the table
+    // Get all the activity types and add them to the table
     this.activityTypeService.query().subscribe((activityTypes) => {
       this.pushToTable(activityTypes);
     });
@@ -64,5 +64,17 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // which then calls the parent's submit.
   submit() {
     super.submit(this.activityTypeService, this.alerts, this.onSuccess.bind(this));
+  }
+
+  // Sorting function to sort data when sort
+  // event is triggered
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+    switch (sort.active) {
+      case 'name':
+      case 'abbreviation': return super.sortTableData(sort);
+    }
   }
 }

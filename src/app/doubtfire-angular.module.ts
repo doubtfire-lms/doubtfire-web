@@ -1,7 +1,7 @@
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-
+import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
@@ -85,8 +85,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
+import { TutorialService } from './api/models/tutorial/tutorial.service';
+import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import { UserService } from './api/models/user/user.service';
 
 @NgModule({
   // components
@@ -106,6 +111,8 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
     ExtensionModalComponent,
     InstitutionSettingsComponent,
     CommentBubbleActionComponent,
+    UnitTutorialsListComponent,
+    UnitTutorialsManagerComponent
   ],
   // Module Imports
   imports: [
@@ -146,13 +153,15 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
   // Services
   providers: [
     CampusService,
+    TutorialService,
+    TutorialStreamService,
+    UserService,
     ActivityTypeService,
     userProvider,
     unitProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
-    currentUserProvider,
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,
@@ -184,14 +193,17 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
     DiscussionComposerDialog,
     ExtensionModalComponent,
     CommentBubbleActionComponent
+    UnitTutorialsManagerComponent
   ]
 })
 export class DoubtfireAngularModule {
   constructor(
+    injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
     private title: Title
   ) {
+    setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
 
     this.constants.ExternalName.subscribe(result => {

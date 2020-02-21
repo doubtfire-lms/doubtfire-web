@@ -3,6 +3,8 @@ import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
 import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
 import { Observable } from 'rxjs';
+import { Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
@@ -37,6 +39,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
   // and the same with campus as { campus_id: y }.
   // See unit-tutorials-list.component
   formDataMapping = {};
+
+  dataSource: MatTableDataSource<T>;
 
   /**
    * Create a new instance of EntityFormComponent.
@@ -212,7 +216,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    * prepares the form's inputs to be sent off to the server in order to
    * create a new entity.
    *
-   * @param endPointKey identifies the type of data the server will recieve.
+   * @param endPointKey identifies the type of data the server will receive.
    *
    * @returns object representation of form data.
    */
@@ -241,9 +245,41 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @param resource the value to be compared against the current selection.
    *
-   * @returns whether or not the probided resource is being edited.
+   * @returns whether or not the provided resource is being edited.
    */
   editing(resource): boolean {
     return this.selected === resource;
+  }
+
+  /**
+   * Function to implement custom sorting on implementors of EntityForm.
+   * You will be required to implement this method on inheritors when
+   * the data within the EntityForm contains properties whose values
+   * are objects. See unit-tutorial-list.ts for implementation.
+   *
+   * @param sort the event received when sorting has been triggered.
+   */
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+    });
+  }
+
+  /**
+   * Function used by implemented sortTableData to determine the order
+   * of values within the EntityForm once sorting has been triggered.
+   *
+   * @param aValue value to be compared against bValue.
+   * @param bValue value to be compared against aValue.
+   *
+   * @returns truthy comparison between aValue and bValue.
+   */
+  protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

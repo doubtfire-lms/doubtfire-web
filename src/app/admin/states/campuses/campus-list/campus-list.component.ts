@@ -1,6 +1,6 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { FormControl, Validators } from '@angular/forms';
 import { CampusService } from 'src/app/api/models/campus/campus.service';
@@ -70,5 +70,19 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
   // which then calls the parent's submit.
   submit() {
     super.submit(this.campusService, this.alerts, this.onSuccess.bind(this));
+  }
+
+  // Sorting function to sort data when sort
+  // event is triggered
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+    switch (sort.active) {
+      case 'name':
+      case 'abbreviation':
+      case 'mode':
+      case 'active': return super.sortTableData(sort);
+    }
   }
 }
