@@ -90,7 +90,7 @@ angular.module("doubtfire.common.filters", [])
   (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.tutorial_id == group.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial_id)) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else
