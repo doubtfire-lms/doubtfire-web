@@ -13,6 +13,42 @@
   padding: 0 8px 0 12px;
 }
 
+
+
+#replyContainer {
+  margin: 0.4em 1em -0.2em 1em;
+  font-size: 14px;
+
+  p {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 12px;
+    max-lines: 2;
+    max-height: 30px;
+    line-clamp: 2;
+    line-height: 15.36px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: break-word;
+    text-align: left;
+    text-rendering: optimizelegibility;
+    user-select: text;
+    white-space: normal;
+  }
+
+  .replying-wrap {
+    max-lines: 1;
+    max-height: 24px;
+    line-clamp: 1;
+  }
+
+  .mat-icon-button {
+    float: right;
+    margin-top: -12px;
+  }
+}
+
 #textField {
   flex: 1;
   max-height: 144px;
@@ -27,7 +63,6 @@
   outline: none;
   line-height: 1.5em;
   -webkit-font-smoothing: antialiased;
-  max-height: 200px;
 }
 
 .selected-files {
@@ -106,6 +141,7 @@ button.btn-recorder {
   }
   outline: none;
   width: 30px;
+  height: 30px;
   margin-left: 0.4em;
   border: none;
   text-align: center;

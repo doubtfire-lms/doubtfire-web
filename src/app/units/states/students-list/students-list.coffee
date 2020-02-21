@@ -81,10 +81,12 @@ angular.module('doubtfire.units.states.students', [])
 
   # CSV header func
   $scope.getCSVHeader = ->
-    result = ['student_code', 'name', 'email', 'portfolio', 'lab']
-    angular.forEach(taskService.statusKeys, (key) ->
-      result.push(key)
-    )
+    result = ['student_code', 'name', 'email', 'portfolio']
+    if $scope.unit.tutorial_streams.length > 0
+      _.each $scope.unit.tutorial_streams, (ts) ->
+        result.push ts.abbreviation
+    else
+      result.push 'tutorial'
     result
 
   # CSV data row func
@@ -98,10 +100,11 @@ angular.module('doubtfire.units.states.students', [])
       row['name'] = student.name
       row['email'] = student.student_email
       row['portfolio'] = student.portfolio_status
-      if student.tutorial
-        row['lab'] = student.tutorial.abbreviation
+      if $scope.unit.tutorial_streams.length > 0
+        _.each $scope.unit.tutorial_streams, (ts) ->
+          row[ts.abbreviation] = student.tutorialForStream(ts)?.abbreviation || ''
       else
-        row['lab'] = ""
+        row['tutorial'] = student.tutorials()[0]?.abbreviation || ''
       result.push row
     )
     result

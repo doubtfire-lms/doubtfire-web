@@ -1,0 +1,18 @@
+table {
+  width: 100%;
+}
+.header {
+  display: flex;
+}
+.spacer {
+  flex-grow: 1;
+}
+.filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.data-entry {
+  padding: 1rem 1rem 1rem 0;
+  width: 95%;
+}

@@ -12,7 +12,7 @@ For extendability and maintenance purposes, following these guidelines:
   - when *viewing* a project or task, the directive is project-**viewer** and task-**viewer**
   - when *assessing* task submissions, the directive is task-submission-**assessor**
   - when *editing* a unit's tutorials, the directive is unit-tutorial-**editor**
-- Name directives that show lots of data in one directive in a table a list: e.g.: `unit-student-list`, `group-member-list`, `project-top-task-list`
+- Name directives that show lots of data in one directive in a table a list: e.g.: `unit-student-list`, `group-member-list`
 - Name directives with a series of steps to perform a goal a `wizard`, e.g.: `project-portfolio-wizard`, `new-user-wizard`
 - Always name modals in Pascal Case `SomeModal` and create them as a factory/controller pair CoffeeScript file which can then be easily created on the fly:
 

@@ -1,21 +1,64 @@
-<form class="input-group col-sm-12 comment-submitter" ng-submit="addComment()" role="form">
-  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
+<div id="replyContainer" [hidden]="originalComment == null">
+  <div>
+    <div class="replying-wrap">
+      Replying to:
+      <b>{{originalComment != null ? originalComment.author.name : ''}}</b>
+      <button
+        id="cancelReplyButton"
+        (click)="cancelReply()"
+        mat-button
+        mat-icon-button
+        aria-label="Close reply"
+      >
+        <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
+      </button>
+    </div>
+    <p>{{originalComment != null ? originalComment.comment : ''}}</p>
+  </div>
+</div>
+
+<form
+  class="input-group col-sm-12 comment-submitter"
+  ng-submit="addComment()"
+  role="form"
+>
+  <button
+    class="btn-recorder"
+    type="button"
+    [popover]="audioDiscussionTemplate"
+  >
     <span class="fa fa-microphone"></span>
   </button>
   <div id="textFieldContainer">
-    <div id="textField" [contenteditable]="contentEditableValue()" (keydown.enter)="send($event)"
-      [(ngModel)]="comment.text" placeholder="Type a message, drag files..." name="commentComposer">
-    </div>
+    <div
+      #commentInput
+      id="textField"
+      [contenteditable]="contentEditableValue()"
+      (keydown.enter)="send($event)"
+      [(ngModel)]="comment.text"
+      placeholder="Type a message, drag files..."
+      name="commentComposer"
+    ></div>
   </div>
-
 </form>
 
 <!-- The HTML which will be injected -->
 <ng-template #audioDiscussionTemplate>
   <div *ngIf="isStaff">
     <p>New! Try out the beta for the new intelligent discussion feature.</p>
-    <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
-      <button style="align-items: flex-end;" type="button" (click)="openDiscussionComposer()" mat-stroked-button>Create Discussion</button>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      style="margin-bottom: 20px; padding-top: 10px"
+    >
+      <button
+        style="align-items: flex-end;"
+        type="button"
+        (click)="openDiscussionComposer()"
+        mat-stroked-button
+      >
+        Create Discussion
+      </button>
     </div>
     <mat-divider></mat-divider>
   </div>

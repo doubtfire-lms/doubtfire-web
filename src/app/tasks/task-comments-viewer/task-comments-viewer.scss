@@ -1,7 +1,10 @@
 $comment-bubble-color: #0084ff;
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
-$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
+$comment-bubble-color-other-user-darker: darken(
+  $comment-bubble-color-other-user,
+  10%
+);
 $comment-author-bubble-size: 38px;
 $comment-text-padding: 12px;
 
@@ -40,20 +43,12 @@ task-comments-viewer .comment-container {
   flex-grow: 2;
 
   .comment-overflow {
-    min-width: 20px; //Reserve enough room for overflow icon
+    max-width: 50px;
+    min-width: 38px;
     flex-shrink: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 0.8em 0 0.8em;
-    color: #9696969d;
-
-    .icon-button {
-      appearance: none;
-      outline: none;
-      border: 0;
-      background: transparent;
-    }
   }
 }
 
@@ -61,6 +56,13 @@ task-comments-viewer .comment-by-other-user .comment-container {
   display: flex;
   flex-direction: row-reverse;
   flex-grow: 2;
+
+  .original-comment {
+    .reply-text {
+      margin-left: 1em;
+      color: rgb(0, 0, 0, 0.7);
+    }
+  }
 }
 
 task-comments-viewer .comment-container .comment-extension {
@@ -86,7 +88,12 @@ task-comments-viewer .comment-container .comment-status {
     opacity: 0.8;
     &:before {
       content: "";
-      background: linear-gradient(to right, transparent, #9696969d, transparent);
+      background: linear-gradient(
+        to right,
+        transparent,
+        #9696969d,
+        transparent
+      );
       position: absolute;
       left: 0;
       top: 50%;
@@ -137,6 +144,28 @@ task-comments-viewer .comment {
       float: right;
     }
   }
+
+  .original-comment {
+    .reply-text {
+      margin: 0 0.4em 1em 0;
+      max-lines: 2;
+      max-height: 30px;
+      line-clamp: 2;
+      line-height: 15.36px;
+      margin-left: 0.8em;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-font-smoothing: antialiased;
+      overflow-wrap: break-word;
+      text-align: left;
+      text-rendering: optimizelegibility;
+      user-select: text;
+      white-space: normal;
+      font-size: 12px;
+      color: rgb(255, 255, 255, 0.8);
+    }
+  }
 }
 
 // Author Bubble
@@ -160,10 +189,17 @@ task-comments-viewer .comment .user-icon {
   }
 }
 
-task-comments-viewer .comment.comment-by-other-user .user-icon .user-icon-initials {
+task-comments-viewer
+  .comment.comment-by-other-user
+  .user-icon
+  .user-icon-initials {
   box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
   background: $comment-bubble-color-other-user;
-  background: linear-gradient(to left, $comment-bubble-color-other-user, $comment-bubble-color-other-user-darker);
+  background: linear-gradient(
+    to left,
+    $comment-bubble-color-other-user,
+    $comment-bubble-color-other-user-darker
+  );
   color: $text-color;
 }
 task-comments-viewer .comment.comment-by-other-user .user-icon {
@@ -210,7 +246,9 @@ task-comments-viewer .comment.comment-by-other-user .bubble.last-in-series {
   margin-bottom: 0.4em;
 }
 
-task-comments-viewer .comment.comment-by-other-user .bubble.first-in-series.last-in-series {
+task-comments-viewer
+  .comment.comment-by-other-user
+  .bubble.first-in-series.last-in-series {
   border-radius: $comment-border-radius;
 }
 
@@ -270,7 +308,8 @@ task-comments-viewer .comment .pdf-bubble {
   @include base-bubble;
   display: inline-block;
 
-  a p,a {
+  a p,
+  a {
     color: white;
     margin-bottom: 0px;
   }

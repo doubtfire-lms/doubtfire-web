@@ -305,6 +305,11 @@ angular.module("doubtfire.common.services.projects", [])
       task.grade?
     task.hasQualityPoints = () ->
       task.definition.max_quality_pts > 0 && (task.status in taskService.gradeableStatuses)
+    task.matches = (matchText) ->
+      project = task.project()
+      task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+      task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
+      project? && project.matches(matchText)
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },

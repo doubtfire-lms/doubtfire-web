@@ -50,7 +50,6 @@ import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/task-comments-viewer/task-comments-viewer.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
-import 'build/src/app/tasks/project-top-tasks-list/project-top-tasks-list.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
@@ -79,7 +78,6 @@ import 'build/src/app/config/routing/routing.js';
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/config/analytics/analytics.js';
 import 'build/src/app/config/debug/debug.js';
-import 'build/src/app/projects/project-lab-list/project-lab-list.js';
 import 'build/src/app/projects/projects.js';
 import 'build/src/app/projects/project-progress-dashboard/project-progress-dashboard.js';
 import 'build/src/app/projects/states/all/directives/directives.js';
@@ -166,7 +164,6 @@ import 'build/src/app/units/states/states.js';
 import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.js';
-import 'build/src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
@@ -177,7 +174,6 @@ import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
-import 'build/src/app/units/states/analytics/directives/task-summary-stats/task-summary-stats.js';
 import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
 import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
 import 'build/src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.js';
@@ -208,7 +204,6 @@ import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/group-service.js';
-import 'build/src/app/common/services/comment-service.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/project-service.js';
 import 'build/src/app/common/services/media-service.js';
@@ -280,10 +275,15 @@ import { ExtensionModalService } from './common/modals/extension-modal/extension
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import { TaskCommentService } from './common/services/task-comment.service';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
+import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import { CampusService } from './api/models/campus/campus.service';
+import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -307,10 +307,14 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('TaskCommentService',
+  downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService',
   downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
+DoubtfireAngularJSModule.factory('campusService',
+  downgradeInjectable(CampusService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive('taskCommentComposer',
@@ -325,11 +329,18 @@ DoubtfireAngularJSModule.directive('activityTypeList',
   downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
+DoubtfireAngularJSModule.directive('commentBubbleAction',
+  downgradeComponent({ component: CommentBubbleActionComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList',
     downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsManager',
     downgradeComponent({ component: UnitTutorialsManagerComponent }));
-  // Global configuration
+DoubtfireAngularJSModule.directive('unitStudentsEditor',
+  downgradeComponent({ component: UnitStudentsEditorComponent }));
+DoubtfireAngularJSModule.directive('studentTutorialSelect',
+  downgradeComponent({ component: StudentTutorialSelectComponent }));
+
+// Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {

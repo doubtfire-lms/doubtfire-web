@@ -37,7 +37,6 @@ TODO:
 - [ ] ./src/app/tasks/tasks
 - [ ] ./src/app/tasks/task-comments-viewer/task-comments-viewer
 - [ ] ./src/app/tasks/task-sheet-viewer/task-sheet-viewer
-- [ ] ./src/app/tasks/project-top-tasks-list/project-top-tasks-list
 - [ ] ./src/app/tasks/modals/modals
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal
 - [ ] ./src/app/tasks/modals/grade-task-modal/grade-task-modal
@@ -67,7 +66,6 @@ TODO:
 - [ ] ./src/app/config/analytics/analytics
 - [ ] ./src/app/config/debug/debug
 - [ ] ./src/app/projects/projects
-- [ ] ./src/app/projects/project-lab-list/project-lab-list
 - [ ] ./src/app/projects/project-progress-dashboard/project-progress-dashboard
 - [ ] ./src/app/projects/states/states
 - [ ] ./src/app/projects/states/groups/groups
@@ -149,7 +147,6 @@ TODO:
 - [ ] ./src/app/units/states/students-list/students-list
 - [ ] ./src/app/units/states/analytics/directives/directives
 - [ ] ./src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats
-- [ ] ./src/app/units/states/analytics/directives/task-summary-stats/task-summary-stats
 - [ ] ./src/app/units/states/analytics/directives/task-status-stats/task-status-stats
 - [ ] ./src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download
 - [ ] ./src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats

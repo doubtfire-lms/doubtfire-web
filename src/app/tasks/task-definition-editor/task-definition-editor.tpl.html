@@ -45,6 +45,22 @@
                   </div>
                 </div><!--/abbr-->
 
+                <div class="form-group" ng-show="unit.hasStreams()" ng-required="isNew">
+                  <label class="col-sm-3 control-label">Stream</label>
+                  <div class="col-sm-8">
+                    <div class="btn-group dropdown" dropdown>
+                      <span>
+                        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+                          {{task.tutorial_stream ? task.tutorial_stream : 'None'}} <span class="caret"></span>
+                        </button>
+                      </span>
+                      <ul class="dropdown-menu">
+                        <li ng-repeat="stream in unit.tutorial_streams | orderBy:'abbreviation'"><a ng-click="changeTaskStream(task, stream.abbreviation)" ng-hide="stream.abbreviation == task.tutorial_stream">{{stream.abbreviation}}</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div><!--/stream-->
+
                 <div class="form-group" ng-required="isNew">
                   <label class="col-sm-3 control-label">Grade</label>
                   <div class="col-sm-7">

@@ -1,0 +1,15 @@
+<div class="csv-result-modal">
+  <div class="modal-header clearfix">
+    <h3 class="modal-title">
+      <i class="fa fa-file-excel-o fa-2x pull-left"></i>
+      {{title}}
+      <small>Response details</small>
+    </h3>
+  </div>
+  <div class="modal-body clearfix">
+    <file-uploader files="batchFiles" url="url" on-success="onSuccess"></file-uploader>
+  </div>
+  <div class="modal-footer clearfix">
+    <button class="btn btn-primary pull-right" ng-click="close()">Done</button>
+  </div>
+</div>
