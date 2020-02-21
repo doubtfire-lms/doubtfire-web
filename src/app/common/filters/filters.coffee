@@ -19,17 +19,6 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
-.filter('showTasks', ->
-  (input, kind, tutorName) ->
-    if input
-      if kind == "mine"
-        _.filter  input, (t) -> (t?) && t.project().tutorName() == tutorName
-      else
-        input
-    else
-      input
-)
-
 .filter('orderObjectBy', ->
   (items, field, reverse) ->
     filtered = []
