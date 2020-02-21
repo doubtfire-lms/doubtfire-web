@@ -470,12 +470,12 @@ angular.module("doubtfire.common.services.units", [])
     student.activeTasks = ->
       _.filter(student.tasks, (task) -> task.definition.target_grade <= student.target_grade)
 
-    # Assigns the student's tutorial from the unit
-    student.tutorial = unit.tutorialFromId(student.tutorial_id)
-
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
-    student.tutorName = ->
-      student.tutorial?.tutor_name || 'N/A'
+    student.tutorNames = ->
+      _.chain(student.tutorials())
+        .map (tute) -> tute.tutor.name.split(' ')[0]
+        .join()
+        .value() || 'None'
 
     # Students task statistics (for bar)
     student.task_stats = [
@@ -519,7 +519,8 @@ angular.module("doubtfire.common.services.units", [])
     # Search through tutorial
     student.matchesTutorialEnrolments = (matchText) ->
       _.filter(student.tutorials(), (enrol) ->
-        enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0
+        enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+          enrol.tutor.name.toLowerCase().indexOf(matchText) >= 0
       ).length > 0
 
     # Check if this student should match the passed in text filter
