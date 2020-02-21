@@ -55,8 +55,6 @@ export class Tutorial extends Entity {
   tutor: User;
   tutorial_stream: TutorialStream;
 
-  description: string;
-
   /**
    * Map the passed in data to a json object on create for a tutorial.
    *
@@ -110,7 +108,6 @@ export class Tutorial extends Entity {
     if (data.tutorial_stream) {
       // this is where the stream should be instantiated
     }
-    this.description = ` ${this.meeting_day.slice(0, 3)} at ${this.meeting_time} by ${data.tutor_name} in ${this.meeting_location}`;
   }
 
   public updateFromJson(data: any): void {
@@ -120,6 +117,10 @@ export class Tutorial extends Entity {
         return time.slice(0, time.lastIndexOf(':'));
       }
     });
+  }
+
+  public get description(): string {
+    return ` ${this.meeting_day.slice(0, 3)} at ${this.meeting_time} by ${this.tutor.name} in ${this.meeting_location} at ${this.campus.name}`
   }
 
   public get key(): string {
