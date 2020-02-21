@@ -474,6 +474,7 @@ angular.module("doubtfire.common.services.units", [])
     student.tutorNames = ->
       _.chain(student.tutorials())
         .map (tute) -> tute.tutor.name.split(' ')[0]
+        .uniq()
         .join()
         .value() || 'None'
 
