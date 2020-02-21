@@ -478,6 +478,9 @@ angular.module("doubtfire.common.services.units", [])
         .join()
         .value() || 'None'
 
+    student.hasTutor = (tutorName) ->
+      _.find(student.tutorials(), (tute) -> tute.tutor.name == tutorName)?
+
     # Students task statistics (for bar)
     student.task_stats = [
       { value: 0, key: taskService.statusKeys[10] }

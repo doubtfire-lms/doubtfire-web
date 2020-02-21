@@ -117,11 +117,12 @@ angular.module('doubtfire.groups.group-selector', [])
         alertService.add("danger", "Please ensure there is at least one tutorial before groups are created", 6000)
       # Student context
       if $scope.project
+        #TODO: Need to add stream to group set
         tutorialId = $scope.project.tutorial.id
       # Convenor or Tutor
       else
         tutorName = $scope.unitRole?.name || currentUser.profile.name
-        tutorialId = _.find($scope.unit.tutorials, {tutor_name: tutorName})?.id
+        tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutor.name == tutorName)?.id
         # Default to first tutorial if can't find
         tutorialId ?= _.first($scope.unit.tutorials).id
       $scope.unit.addGroup($scope.selectedGroupSet, name, tutorialId,

@@ -12,7 +12,7 @@ angular.module("doubtfire.common.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "mine" || kind == "myStudents"
-        _.filter  input, { tutorial: {tutor_name: tutorName} }
+        _.filter  input, (project) -> project.hasTutor(tutorName)
       else
         input
     else
@@ -196,7 +196,7 @@ angular.module("doubtfire.common.filters", [])
     return unless input? && groupSet? && project?
     return input unless groupSet.keep_groups_in_same_class
     if groupSet.keep_groups_in_same_class
-      _.filter(input, (group) -> group.tutorial_id == project.tutorial?.id)
+      _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id)
 )
 
 .filter('paginateAndSort', ($filter) ->
