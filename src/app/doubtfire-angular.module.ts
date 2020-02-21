@@ -196,6 +196,9 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     DoubtfireConstants
   ]
 })
+  // There is no longer any requirement for an EntryComponants section
+  // since Angular 9 introduced the IVY renderer
+
 export class DoubtfireAngularModule {
   constructor(
     injector: Injector,
