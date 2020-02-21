@@ -313,7 +313,7 @@ DoubtfireAngularJSModule.factory('tutorialService',
   downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
-  DoubtfireAngularJSModule.factory('campusService',
+DoubtfireAngularJSModule.factory('campusService',
   downgradeInjectable(CampusService));
 
 // directive -> component
