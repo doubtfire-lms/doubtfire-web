@@ -197,7 +197,9 @@ angular.module("doubtfire.common.filters", [])
         if task.group()?
           _.includes(tutorialIds, task.group().tutorial_id)
       else
-        _.includes(tutorialIds, task.project().tutorial_id)
+        _.filter(task.project().tutorial_enrolments, (enrolment) ->
+          _.includes(tutorialIds, enrolment.tutorial_id)
+        ).length > 0
 
 )
 
