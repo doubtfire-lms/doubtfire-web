@@ -151,7 +151,7 @@
   "defaultProject": "doubtfire",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     }
   }
 }
