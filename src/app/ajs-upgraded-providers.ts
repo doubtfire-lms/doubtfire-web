@@ -13,6 +13,8 @@ export const CommentResourceService = new InjectionToken('CommentResourceService
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
+export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
+export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const taskComment = new InjectionToken('TaskComment');
 
 
@@ -81,6 +83,18 @@ export const AudioRecorderProvider = {
 export const AudioRecorderServiceProvider = {
   provide: audioRecorderService,
   useFactory: (i: any) => i.get('recorderService'),
+  deps: ['$injector']
+};
+
+export const CsvUploadModalProvider = {
+  provide: csvUploadModalService,
+  useFactory: (i: any) => i.get('CsvUploadModal'),
+  deps: ['$injector']
+};
+
+export const CsvResultModalProvider = {
+  provide: csvResultModalService,
+  useFactory: (i: any) => i.get('CsvResultModal'),
   deps: ['$injector']
 };
 

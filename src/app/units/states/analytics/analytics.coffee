@@ -43,10 +43,6 @@ angular.module('doubtfire.units.states.analytics', [
       title: "ILO Achievement Statistics"
       subtitle: "View how ILOs have been achieved by students to their associated tasks as a box plot"
       seq: 4
-    taskSummaryStats:
-      title: "Task Statistics"
-      subtitle: "Click a lab code's circle in the legend to remove the lab from the graph. Double click the lab code's circle to make this lab the only visible lab in the graph"
-      seq: 5
 
   #
   # Sets the active tab

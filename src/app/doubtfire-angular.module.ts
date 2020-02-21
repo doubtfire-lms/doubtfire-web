@@ -4,6 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -19,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
@@ -45,6 +47,8 @@ import {
   analyticsServiceProvider,
   taskProvider,
   alertServiceProvider,
+  CsvUploadModalProvider,
+  CsvResultModalProvider,
   CommentResourceServiceProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
@@ -83,6 +87,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
@@ -92,6 +97,7 @@ import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-str
 import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UserService } from './api/models/user/user.service';
+import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 
 @NgModule({
   // components
@@ -112,7 +118,9 @@ import { UserService } from './api/models/user/user.service';
     InstitutionSettingsComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
-    UnitTutorialsManagerComponent
+    UnitTutorialsManagerComponent,
+    UnitStudentsEditorComponent,
+    StudentTutorialSelectComponent
   ],
   // Module Imports
   imports: [
@@ -122,6 +130,7 @@ import { UserService } from './api/models/user/user.service';
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    MatToolbarModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
@@ -129,6 +138,7 @@ import { UserService } from './api/models/user/user.service';
     MatListModule,
     MatOptionModule,
     MatStepperModule,
+    MatPaginatorModule,
     MatSelectModule,
     MatButtonToggleModule,
     MatTooltipModule,
@@ -165,10 +175,13 @@ import { UserService } from './api/models/user/user.service';
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,
+    CsvUploadModalProvider,
+    CsvResultModalProvider,
     CommentResourceServiceProvider,
     TaskCommentServiceProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -184,7 +197,10 @@ import { UserService } from './api/models/user/user.service';
     AboutDoubtfireModalService,
     DoubtfireConstants
   ],
+  // Entry components include any routes, as well as components that are currently nested within AngularJS components
+  // Eventually we can remove those that are just here due to nesting within AngularJS
   entryComponents: [
+    // Routes (to check...)
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
     IntelligentDiscussionPlayerComponent,
@@ -192,7 +208,11 @@ import { UserService } from './api/models/user/user.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    CommentBubbleActionComponent
+    // Angular JS nested components
+    UnitTutorialsManagerComponent,
+    UnitStudentsEditorComponent,
+    StudentTutorialSelectComponent,
+    CommentBubbleActionComponent,
     UnitTutorialsManagerComponent
   ]
 })
