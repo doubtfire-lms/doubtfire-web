@@ -320,6 +320,8 @@ angular.module("doubtfire.common.services.tasks", [])
       time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 
+  taskService.currentReplyID = { id: null }
+
   # This function gets the status CSS class for the indicated status
   taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
 
@@ -540,6 +542,10 @@ angular.module("doubtfire.common.services.tasks", [])
     comments[0].should_show_timestamp = true
 
     for i in [0...comments.length]
+      # If the comment is a reply to an earlier comment
+      if comments[i].reply_to_id?
+        comments[i].original_comment = $filter('filter')(comments, {'id':comments[i].reply_to_id})[0]
+
       initials = comments[i].author.name.split(" ")
       comments[i].initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
       comments[i].author_is_me = comments[i].author.id == currentUser.profile.id
@@ -569,8 +575,8 @@ angular.module("doubtfire.common.services.tasks", [])
 
   #============================================================================
   #ADD COMMENT
-  taskService.addComment = (task, textString, commentType, success, failure) ->
-    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType},
+  taskService.addComment = (task, textString, commentType, replyID, success, failure) ->
+    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType, reply_to_id: replyID},
       (response) ->
         unless task.comments?
           task.comments = []
@@ -597,7 +603,11 @@ angular.module("doubtfire.common.services.tasks", [])
     form = new FormData()
     form.append 'attachment', media
 
-    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id}, form,
+    if taskService.currentReplyID.id?
+      reply_to_id = taskService.currentReplyID.id
+      taskService.currentReplyID.id = null
+
+    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, reply_to_id: reply_to_id}, form,
       (response) -> #success
         unless task.comments?
           task.comments = []

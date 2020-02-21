@@ -46,12 +46,17 @@
                     Deadline <i ng-show="taskAdminPager.sortOrder=='due_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
+                <th>
+                  <a ng-click="taskAdminPager.sortOrder='tutorial_stream'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorial_stream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  </a>
+                </th>
                 <th ng-show="unit.hasGroupwork()">
                   <a ng-click="taskAdminPager.sortOrder='group_set_id'; taskAdminPager.reverse=!taskAdminPager.reverse">
                     Group Set <i ng-show="taskAdminPager.sortOrder=='group_set_id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
-                <th>
+                <th ng-show="unit.hasStreams()">
                   <a ng-click="taskAdminPager.sortOrder='upload_requirements.length'; taskAdminPager.reverse=!taskAdminPager.reverse">
                     <i class="fa fa-upload" tooltip="The number of files the student needs to submit."></i> <i ng-show="taskAdminPager.sortOrder=='upload_requirements.length'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
@@ -79,6 +84,7 @@
                 <td>{{taskDef.target_date | date : 'EEE d MMM' : '+0000'}}</td>
                 <td><span ng-show="taskDef.due_date">{{taskDef.due_date | date : 'EEE d MMM' : '+0000'}}</span><span ng-hide="taskDef.due_date">None</span></td>
                 <td ng-show="unit.hasGroupwork()">{{groupSetName(taskDef.group_set_id)}}</td>
+                <td ng-show="unit.hasStreams()">{{taskDef.tutorial_stream}}</td>
                 <td>{{taskDef.upload_requirements.length}}</td>
                 <td><i ng-show="taskDef.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="taskDef.hasPlagiarismCheck()" class="fa fa-times"></i></td>
                 <td><i ng-show="taskDef.restrict_status_updates" class="fa fa-check"></i><i ng-hide="taskDef.restrict_status_updates" class="fa fa-times"></i></td>

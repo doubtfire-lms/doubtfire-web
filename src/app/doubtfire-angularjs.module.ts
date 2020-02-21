@@ -204,7 +204,6 @@ import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/group-service.js';
-import 'build/src/app/common/services/comment-service.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/project-service.js';
 import 'build/src/app/common/services/media-service.js';
@@ -276,6 +275,8 @@ import { ExtensionModalService } from './common/modals/extension-modal/extension
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import { TaskCommentService } from './common/services/task-comment.service';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
@@ -306,6 +307,8 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('TaskCommentService',
+  downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService',
   downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService',
@@ -326,15 +329,17 @@ DoubtfireAngularJSModule.directive('activityTypeList',
   downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent }));
+DoubtfireAngularJSModule.directive('commentBubbleAction',
+  downgradeComponent({ component: CommentBubbleActionComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList',
     downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsManager',
     downgradeComponent({ component: UnitTutorialsManagerComponent }));
-  // Global configuration
 DoubtfireAngularJSModule.directive('unitStudentsEditor',
   downgradeComponent({ component: UnitStudentsEditorComponent }));
 DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
+
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

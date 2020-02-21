@@ -21,6 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -42,6 +43,7 @@ import {
   currentUserProvider,
   authProvider,
   taskServiceProvider,
+  TaskCommentServiceProvider,
   analyticsServiceProvider,
   taskProvider,
   alertServiceProvider,
@@ -93,6 +95,7 @@ import { UnitTutorialsManagerComponent } from './units/states/edit/directives/un
 import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { CampusService } from './api/models/campus/campus.service';
+import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 
@@ -113,6 +116,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     ActivityTypeListComponent,
     ExtensionModalComponent,
     InstitutionSettingsComponent,
+    CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
@@ -137,6 +141,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     MatPaginatorModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatTooltipModule,
     MatButtonModule,
     MatMenuModule,
     MatCardModule,
@@ -173,6 +178,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     CsvUploadModalProvider,
     CsvResultModalProvider,
     CommentResourceServiceProvider,
+    TaskCommentServiceProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     UnitStudentsEditorComponent,
@@ -205,7 +211,9 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     // Angular JS nested components
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
-    StudentTutorialSelectComponent
+    StudentTutorialSelectComponent,
+    CommentBubbleActionComponent,
+    UnitTutorialsManagerComponent
   ]
 })
 export class DoubtfireAngularModule {

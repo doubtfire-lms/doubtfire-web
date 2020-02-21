@@ -1,0 +1,26 @@
+<div id="overflowContainer" *ngIf="isBubbleComment">
+  <!-- <button type="button" (click)="react()" matTooltip="React to this comment" mat-icon-button
+    aria-label="React to this comment">
+    <mat-icon>tag_faces</mat-icon>
+  </button> -->
+  <mat-icon
+    type="button"
+    (click)="reply()"
+    matTooltip="Reply to this comment"
+    matTooltipPosition="above"
+    aria-label="Example icon-button with a heart icon"
+    [hidden]="!canReplyToComment"
+  >
+    reply</mat-icon
+  >
+  <mat-icon
+    type="button"
+    (click)="delete()"
+    matTooltip="Delete this comment"
+    matTooltipPosition="above"
+    aria-label="Example icon-button with a heart icon"
+    [hidden]="!canEditComment"
+  >
+    delete</mat-icon
+  >
+</div>

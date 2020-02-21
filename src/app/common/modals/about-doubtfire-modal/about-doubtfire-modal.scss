@@ -95,10 +95,25 @@ mat-dialog-content {
       margin-bottom: 1em;
     }
   }
+  table {
+    width: 100%;
+    margin-bottom: 1em;
+    img {
+      width: 3em;
+      margin: 0em 1em auto;
+      border-radius: 100%;
+      margin-bottom: 1em;
+    }
+  }
   .logo-smallprint {
     font-size: 0.8em;
     a {
       color: #222;
     }
+  }
+
+  .contributions {
+    font-size: 1em;
+    text-align: center;
   }
 }

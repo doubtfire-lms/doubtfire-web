@@ -62,6 +62,12 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       $scope.task.has_task_sheet = true
       # $scope.filesUploaded = response
 
+    # Assign task the stream - this is called
+    # From the template as you can't ngModel
+    # With dropdown
+    $scope.changeTaskStream = (task, stream) ->
+      task.tutorial_stream = stream
+
     $scope.taskPDFUrl = ->
       "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
 
@@ -164,6 +170,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       task.unit_id = $scope.unit.id
       task.upload_requirements = JSON.stringify $scope.task.upload_requirements
       task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+      task.tutorial_stream_abbr = $scope.task.tutorial_stream
       if task.group_set
         task.group_set_id = task.group_set.id
       else
