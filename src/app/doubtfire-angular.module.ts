@@ -78,8 +78,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
-
-import 'hammerjs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
