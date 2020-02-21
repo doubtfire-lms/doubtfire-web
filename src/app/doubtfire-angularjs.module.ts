@@ -50,7 +50,6 @@ import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/task-comments-viewer/task-comments-viewer.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
-import 'build/src/app/tasks/project-top-tasks-list/project-top-tasks-list.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';

@@ -37,7 +37,6 @@ TODO:
 - [ ] ./src/app/tasks/tasks
 - [ ] ./src/app/tasks/task-comments-viewer/task-comments-viewer
 - [ ] ./src/app/tasks/task-sheet-viewer/task-sheet-viewer
-- [ ] ./src/app/tasks/project-top-tasks-list/project-top-tasks-list
 - [ ] ./src/app/tasks/modals/modals
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal
 - [ ] ./src/app/tasks/modals/grade-task-modal/grade-task-modal

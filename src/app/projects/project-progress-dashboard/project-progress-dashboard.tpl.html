@@ -6,29 +6,10 @@
           <div class="panel-heading clearfix">
             <div class="pull-left">
               <h4 class="panel-title">Task List</h4>
-              <div ng-hide="taskDetailsSelector.viewAll">
-                The tasks you need to focus on now.
-              </div>
-              <div ng-show="taskDetailsSelector.viewAll">
-                All of the tasks to achieve a {{grades.names[project.target_grade]}}.
-              </div>
-            </div>
-            <div class="pull-right toolbar">
-              <div class="buttons">
-                <div class="btn-group">
-                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="true">
-                    <i tooltip="View all tasks" class="fa fa-list"></i>
-                  </label>
-                  <label class="btn btn-default" ng-model="taskDetailsSelector.viewAll" btn-radio="false">
-                    <i tooltip="View the tasks to focus on now" class="fa fa-dashboard"></i>
-                  </label>
-                </div>
-              </div>
             </div>
           </div>
           <div class="panel-body">
-            <project-tasks-list project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView" ng-if="taskDetailsSelector.viewAll"></project-tasks-list>
-            <project-top-tasks-list on-select="showTaskView" project="project" ng-hide="taskDetailsSelector.viewAll"></project-top-tasks-list>
+            <project-tasks-list project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView"></project-tasks-list>
           </div>
         </div><!--task-lists-->
       </div>
@@ -43,10 +24,6 @@
               <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.target_grade" btn-radio="{{$index}}">
                 <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.target_grade ? 'primary' : 'muted'}}"></grade-icon>
               </label>
-            </p>
-            <p class="help-block">
-              You target grade is
-              <strong>{{grade.names[project.target_grade]}}</strong>.
             </p>
           </div>
         </div>
