@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core';
+import { OnInit, Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
 import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
+@Directive()
 export class EntityFormComponent<T extends Entity> implements OnInit {
 
   // formData consists of the various FormControl elements that the form is made up of.
