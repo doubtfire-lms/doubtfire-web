@@ -182,6 +182,13 @@ angular.module("doubtfire.common.filters", [])
       task.project().name.toLowerCase().indexOf(searchName) >= 0
 )
 
+.filter('tutorialCampusFilter', ->
+  (tutorials, project) ->
+    return tutorials unless project?
+    _.filter tutorials, (tute) ->
+      tute.campus == project.campus()
+)
+
 .filter('groupsInTutorials', ->
   (input, unitRole, kind) ->
     return unless input? && unitRole? && kind?
@@ -196,7 +203,7 @@ angular.module("doubtfire.common.filters", [])
     return unless input? && groupSet? && project?
     return input unless groupSet.keep_groups_in_same_class
     if groupSet.keep_groups_in_same_class
-      _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id)
+      _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
 )
 
 .filter('paginateAndSort', ($filter) ->

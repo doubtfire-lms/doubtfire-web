@@ -10,16 +10,19 @@
       </p>
       <p>
         You are currently enrolled in
-        <strong ng-show="project.tutorial">
-          {{project.tutorial.abbreviation}}.
-        </strong>
-        <strong ng-hide="project.tutorial">
-          no tutorial.
+        <strong>
+          {{project.shortTutorialDescription()}}.
         </strong>
     </div>
     <table class="table table-condensed table-hover">
       <thead>
         <tr>
+          <th class="stream" ng-if="unit.tutorial_streams.length > 0">
+            <a ng-click="sortOrder='stream'; reverse=!reverse">Stream</a>
+          </th>
+          <th class="campus">
+            <a ng-click="sortOrder='campus.name'; reverse=!reverse">Campus</a>
+          </th>
           <th class="code">
             <a ng-click="sortOrder='abbreviation'; reverse=!reverse">Code</a>
           </th>
@@ -33,7 +36,7 @@
             <a ng-click="sortOrder='meeting_location'; reverse=!reverse">Room</a>
           </th>
           <th class="tutor">
-            <a ng-click="sortOrder='tutor_name'; reverse=!reverse">Tutor</a>
+            <a ng-click="sortOrder='tutor.name'; reverse=!reverse">Tutor</a>
           </th>
           <th class="actions">
             Actions
@@ -41,25 +44,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tutorial in unit.tutorials | orderBy:sortOrder:reverse"
+        <tr ng-repeat="tutorial in unit.tutorials | tutorialCampusFilter:project | orderBy:sortOrder:reverse"
           ng-class="{'info': tutorial == project.tutorial}">
+          <td>{{tutorial.tutorial_stream.name || 'All'}}</td>
+          <td>{{tutorial.campus.name}}</td>
           <td>{{tutorial.abbreviation}}</td>
           <td>{{tutorial.meeting_day}}</td>
           <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
           <td>{{tutorial.meeting_location}}</td>
-          <td>{{tutorial.tutor_name}}</td>
+          <td>{{tutorial.tutor.name}}</td>
           <td>
             <button
               class="btn btn-default btn-sm"
-              ng-click ="setTutorial(tutorial.id)"
-              ng-hide="project.tutorial_id == tutorial.id">
-              <i class="fa fa-plus"></i> Enrol
-            </button>
-            <button
-              ng-show="project.tutorial_id == tutorial.id"
-              class="btn btn-danger btn-sm"
-              ng-click="setTutorial(-1)">
-              <i class="fa fa-minus"></i> Withdraw
+              ng-click ="project.switchToTutorial(tutorial)">
+              <div ng-hide="project.isEnrolledIn(tutorial.id)"><i class="fa fa-plus"></i> Enrol</div>
+              <div ng-show="project.isEnrolledIn(tutorial.id)"><i class="fa fa-minus"></i> Withdraw</div>
             </button>
           </td>
       </tbody>
