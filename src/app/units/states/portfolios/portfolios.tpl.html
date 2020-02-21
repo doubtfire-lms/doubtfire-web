@@ -96,11 +96,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithTargetGrade:filterOptions.selectedGrade) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
+          <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithTargetGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
             <td>{{student.student_id}}</td>
             <td>{{student.name}}</td>
-            <td>{{student.tutorial ? student.tutorial.tutor_name : 'None'}}</td>
-            <td>{{student.tutorial ? student.tutorial.abbreviation : 'None'}}</td>
+            <td>{{student.tutorNames()}}</td>
+            <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
               <grade-icon grade="student.target_grade"></grade-icon>
             </td>
