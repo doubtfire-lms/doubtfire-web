@@ -67,7 +67,6 @@ TODO:
 - [ ] ./src/app/config/analytics/analytics
 - [ ] ./src/app/config/debug/debug
 - [ ] ./src/app/projects/projects
-- [ ] ./src/app/projects/project-lab-list/project-lab-list
 - [ ] ./src/app/projects/project-progress-dashboard/project-progress-dashboard
 - [ ] ./src/app/projects/states/states
 - [ ] ./src/app/projects/states/groups/groups
