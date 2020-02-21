@@ -510,6 +510,9 @@ angular.module("doubtfire.common.services.units", [])
     student.tutorials = () ->
       _.chain(student.tutorial_enrolments).map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id)).filter((tutorial) -> tutorial?).value()
 
+    student.tutorialForStream = (ts) ->
+      _.find student.tutorials(), (tute) -> tute.tutorial_stream == ts || !tute.tutorial_stream
+
     # Search through tutorial
     student.matchesTutorialEnrolments = (matchText) ->
       _.filter(student.tutorials(), (enrol) ->
