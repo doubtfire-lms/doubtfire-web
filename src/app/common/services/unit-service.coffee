@@ -358,15 +358,15 @@ angular.module("doubtfire.common.services.units", [])
       campusService.getFromCache("#{student.campus_id}")
 
     # Add a tutorial description
-    student.tutorialDescription = () ->
-      unitService.tutorialDescription(student.tutorial)
-
     student.shortTutorialDescription = () ->
-      if student.tutorial?
-        timeDesc = $filter('date')(student.tutorial.meeting_time, 'shortTime')
-        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor.name.split(' ')[0]} - #{student.tutorial.meeting_location}"
+      tutorials = student.tutorials()
+      if tutorials.length > 0
+        _.chain tutorials
+          .map (tute) -> tute.abbreviation
+          .join()
+          .value()
       else
-        'No Tutorial'
+        'None'
 
     student.calcTopTasks = () ->
       # We will assign current weight to tasks...
@@ -508,7 +508,10 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
     student.tutorials = () ->
-      _.chain(student.tutorial_enrolments).map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id)).filter((tutorial) -> tutorial?).value()
+      _.chain(student.tutorial_enrolments)
+        .map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id))
+        .uniq()
+        .filter((tutorial) -> tutorial?).value()
 
     student.tutorialForStream = (ts) ->
       _.find student.tutorials(), (tute) -> tute.tutorial_stream == ts || !tute.tutorial_stream
