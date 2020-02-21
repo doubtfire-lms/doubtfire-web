@@ -194,23 +194,6 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants
-  ],
-  // Entry components include any routes, as well as components that are currently nested within AngularJS components
-  // Eventually we can remove those that are just here due to nesting within AngularJS
-  entryComponents: [
-    // Routes (to check...)
-    AboutDoubtfireModalContent,
-    TaskCommentComposerComponent,
-    IntelligentDiscussionPlayerComponent,
-    ExtensionCommentComponent,
-    IntelligentDiscussionDialog,
-    DiscussionComposerDialog,
-    ExtensionModalComponent,
-    // Angular JS nested components
-    UnitTutorialsManagerComponent,
-    UnitStudentsEditorComponent,
-    StudentTutorialSelectComponent,
-    CommentBubbleActionComponent,
   ]
 })
 export class DoubtfireAngularModule {
