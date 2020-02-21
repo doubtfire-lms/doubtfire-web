@@ -192,7 +192,7 @@ import { UserService } from './api/models/user/user.service';
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     ExtensionModalComponent,
-    CommentBubbleActionComponent
+    CommentBubbleActionComponent,
     UnitTutorialsManagerComponent
   ]
 })
