@@ -30,7 +30,7 @@
     "@angular/router": "~9.0.2",
     "@angular/upgrade": "~9.0.2",
     "@ng-stack/contenteditable": "^1.0.1",
-    "@uirouter/angular-hybrid": "^7.0.0",
+    "@uirouter/angular-hybrid": "^10.0.1",
     "angular": "1.5.11",
     "angular-cookies": "1.5.11",
     "angular-file-upload": "1.1.1",
