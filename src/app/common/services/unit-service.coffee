@@ -507,6 +507,22 @@ angular.module("doubtfire.common.services.units", [])
         (response) ->
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
+    student.tutorials = () ->
+      _.chain(student.tutorial_enrolments).map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id)).filter((tutorial) -> tutorial?).value()
+
+    # Search through tutorial
+    student.matchesTutorialEnrolments = (matchText) ->
+      _.filter(student.tutorials(), (enrol) ->
+        enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0
+      ).length > 0
+
+    # Check if this student should match the passed in text filter
+    student.matches = (matchText) ->
+      student.student_id.indexOf(matchText) >= 0 ||
+      student.name.toLowerCase().indexOf(matchText) >= 0 ||
+      student.campus().matches(matchText) ||
+      student.matchesTutorialEnrolments(matchText)
+
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)
     student.updateTaskStats(student.stats) if student.stats?

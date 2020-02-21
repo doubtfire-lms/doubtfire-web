@@ -32,4 +32,13 @@ export class Campus extends Entity {
   public keyForJson(json: any): string {
     return json.id;
   }
+
+  /**
+   * Does the campus match the passed in text?
+   * Used in filters.
+   * @param matchText the text to match
+   */
+  public matches(matchText: string): boolean {
+    return this.name.toLowerCase().indexOf(matchText) >= 0 || this.abbreviation.toLowerCase().indexOf(matchText) >= 0;
+  }
 }
