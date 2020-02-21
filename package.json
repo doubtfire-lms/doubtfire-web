@@ -22,7 +22,7 @@
     "@angular/animations": "^9.0.2",
     "@angular/common": "~9.0.2",
     "@angular/core": "~9.0.2",
-    "@angular/flex-layout": "^7.0.0-beta.24",
+    "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~9.0.2",
     "@angular/material": "^9.0.1",
     "@angular/platform-browser": "~9.0.2",
