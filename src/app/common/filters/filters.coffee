@@ -201,9 +201,10 @@ angular.module("doubtfire.common.filters", [])
   (input, project, groupSet) ->
     # Filter by tutorial if keep groups in same class
     return unless input? && groupSet? && project?
+    grp = project.groupForGroupSet(groupSet)
+    return [grp] if grp
     return input unless groupSet.keep_groups_in_same_class
-    if groupSet.keep_groups_in_same_class
-      _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
+    _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
 )
 
 .filter('paginateAndSort', ($filter) ->
