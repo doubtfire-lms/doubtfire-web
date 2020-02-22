@@ -34,7 +34,7 @@ angular.module('doubtfire.groups.group-selector', [])
       if $scope.unitRole? # apply staff filter
         filteredGroups = $filter('groupsInTutorials')($scope.selectedGroupSet.groups, $scope.unitRole, $scope.staffFilter)
       else # apply project filter
-        filteredGroups = $filter('groupsForStudent')($scope.selectedGroupSet.groups, $scope.project, $scope.selectedGroupSet)
+        filteredGroups = $scope.selectedGroupSet.groups
       # Apply remaining filters
       $scope.filteredGroups = $filter('paginateAndSort')(filteredGroups, $scope.pagination, $scope.tableSort)
 

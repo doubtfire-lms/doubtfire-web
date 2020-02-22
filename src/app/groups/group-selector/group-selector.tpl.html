@@ -71,7 +71,7 @@
   <tbody>
     <tr
       ng-class="{info: group == selectedGroup}"
-      ng-repeat="group in filteredGroups">
+      ng-repeat="group in filteredGroups | groupsForStudent:project:selectedGroupSet">
       <th ng-click="selectGroup(group)">
         {{ group.number }}
       </th><!--/group-number-->
