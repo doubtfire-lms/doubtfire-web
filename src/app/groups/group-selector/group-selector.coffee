@@ -125,7 +125,7 @@ angular.module('doubtfire.groups.group-selector', [])
       # Student context
       if $scope.project
         #TODO: Need to add stream to group set
-        tutorialId = $scope.project.tutorial.id
+        tutorialId = $scope.project.tutorials()[0].id || $scope.unit.tutorials[0].id
       # Convenor or Tutor
       else
         tutorName = $scope.unitRole?.name || currentUser.profile.name
