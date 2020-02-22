@@ -10,7 +10,7 @@
 <table ng-show="loaded && selectedGroup.members.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
-      <th>
+      <th ng-show="unitRole">
         <a ng-click="sortTableBy('student_id')">
           Student ID
           <i ng-show="tableSort.order == 'student_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
@@ -22,7 +22,7 @@
           <i ng-show="tableSort.order == 'student_name'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th>
+      <th ng-show="unitRole">
         <a ng-click="sortTableBy('target_grade')">
           Target Grade
           <i ng-show="tableSort.order == 'target_grade'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
@@ -35,16 +35,19 @@
   </thead>
   <tbody>
     <tr ng-repeat="member in selectedGroup.members | orderBy:tableSort.order:tableSort.reverse">
-      <td class="student-id">{{member.student_id || "N/A"}}</td>
+      <td class="student-id" ng-show="unitRole">{{member.student_id || "N/A"}}</td>
       <td class="student-name">{{member.student_name}}</td>
-      <td class="student-grade text-left">
+      <td ng-show="unitRole" class="student-grade text-left">
         <grade-icon grade="member.target_grade"></grade-icon>
       </td>
       <td class="actions" ng-if="canRemoveMembers">
-        <button ng-click="removeMember(member)" class="btn btn-sm btn-danger">
+        <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-hide="project">
           <i class="fa fa-minus"></i>
           <span ng-hide="member.project_id == project.project_id">Kick</span>
-          <span ng-show="member.project_id == project.project_id">Leave</span>
+        </button>
+        <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-show="member.project_id == project.project_id">
+          <i class="fa fa-minus"></i>
+          <span>Leave</span>
         </button>
       </td>
     </tr>

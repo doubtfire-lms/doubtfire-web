@@ -48,6 +48,9 @@
               <span tooltip="Name of the group set">Name</span>
             </th>
             <th>
+              <span tooltip="Capacity for associated groups, empty for unlimited capacity">Capacity</span>
+            </th>
+            <th>
               <span tooltip="Who can create groups?">Create Groups</span>
             </th>
             <th>
@@ -64,6 +67,11 @@
             <td ng-click="selectGroupSet(gs)" class="col-sm-3">
               <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
                 {{ gs.name || 'No Name Set' }}
+              </span>
+            </td>
+            <td ng-click="selectGroupSet(gs)">
+              <span editable-number="gs.capacity" e-name="capacity" e-form="gsRowform" e-min="2">
+                {{ gs.capacity || 'Unlimited' }}
               </span>
             </td>
             <td ng-click="selectGroupSet(gs)">

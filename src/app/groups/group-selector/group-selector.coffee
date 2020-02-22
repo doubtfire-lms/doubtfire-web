@@ -34,7 +34,7 @@ angular.module('doubtfire.groups.group-selector', [])
       if $scope.unitRole? # apply staff filter
         filteredGroups = $filter('groupsInTutorials')($scope.selectedGroupSet.groups, $scope.unitRole, $scope.staffFilter)
       else # apply project filter
-        filteredGroups = $filter('groupsForStudent')($scope.selectedGroupSet.groups, $scope.project, $scope.selectedGroupSet)
+        filteredGroups = $scope.selectedGroupSet.groups
       # Apply remaining filters
       $scope.filteredGroups = $filter('paginateAndSort')(filteredGroups, $scope.pagination, $scope.tableSort)
 
@@ -60,10 +60,16 @@ angular.module('doubtfire.groups.group-selector', [])
 
     # Loading
     startLoading  = -> $scope.loaded = false
-    finishLoading = -> $timeout((-> $scope.loaded = true), 500)
+    finishLoading = -> $timeout((->
+      $scope.loaded = true
+      if $scope.project?
+        $scope.selectGroup($scope.project.groupForGroupSet($scope.selectedGroupSet))
+    ), 500)
 
     # Select group function
     $scope.selectGroup = (group) ->
+      return if $scope.project? && ! $scope.project.inGroup(group) # its the student view
+
       $scope.selectedGroup = group
       $scope.onSelect?(group)
 
@@ -94,10 +100,11 @@ angular.module('doubtfire.groups.group-selector', [])
         resetNewGroupForm()
         applyFilters()
       , finishLoading)
+
     $scope.selectGroupSet($scope.selectedGroupSet)
 
     # Load groups if not loaded
-    $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
+    # $scope.unit.getGroups($scope.selectedGroupSet.id) if $scope.selectedGroupSet?.groups?
 
     # Staff filter options (convenor should see all)
     $scope.staffFilter = {
@@ -118,7 +125,7 @@ angular.module('doubtfire.groups.group-selector', [])
       # Student context
       if $scope.project
         #TODO: Need to add stream to group set
-        tutorialId = $scope.project.tutorial.id
+        tutorialId = $scope.project.tutorials()[0].id || $scope.unit.tutorials[0].id
       # Convenor or Tutor
       else
         tutorName = $scope.unitRole?.name || currentUser.profile.name
@@ -134,7 +141,7 @@ angular.module('doubtfire.groups.group-selector', [])
 
     # Join or leave group as project
     $scope.projectInGroup = (group) ->
-      _.find($scope.project?.groups, {id: group.id})?
+      $scope.project?.inGroup(group)
 
     $scope.joinGroup = (group) ->
       return unless $scope.project?
@@ -143,6 +150,7 @@ angular.module('doubtfire.groups.group-selector', [])
       group.addMember($scope.project,
         () ->
           $scope.selectedGroup = group
+          $scope.selectedGroup.student_count += 1
         () ->
       )
 

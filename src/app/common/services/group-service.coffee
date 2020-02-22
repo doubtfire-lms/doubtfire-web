@@ -27,7 +27,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
     unit.findGroupSet(id)?.name || "Individual Work"
 
   # Maps additional functionality to a group
-  groupService.mapFuncsToGroup = (group, index, unit, groupSet) ->
+  groupService.mapFuncsToGroup = (group, unit, groupSet) ->
     group = unit.mapGroupToUnit(group)
     group.groupSet = -> groupSet
     group.addMember = (member, onSuccess, onFailure) ->
@@ -45,8 +45,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
     return onSuccess?(groupSet.groups) if groupSet?.groups?
     Group.query({ unit_id: unit.id, group_set_id: groupSetId },
       (success) ->
-        groupSet.groups = _.map(success, (group, idx) ->
-          groupService.mapFuncsToGroup(group, idx, unit, groupSet)
+        groupSet.groups = _.map(success, (group) ->
+          groupService.mapFuncsToGroup(group, unit, groupSet)
         )
         onSuccess?(groupSet.groups)
       (failure) ->
@@ -68,7 +68,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         }
       }
       (success) ->
-        newGroup = groupService.mapFuncsToGroup(success, groupSet.groups.length, unit, groupSet)
+        newGroup = groupService.mapFuncsToGroup(success, unit, groupSet)
         groupSet.groups.push(newGroup)
         alertService.add("success", "#{newGroup.name} was created!", 3000)
         onSuccess?(newGroup)
@@ -122,7 +122,6 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
   # Gets the group members for a specific group
   groupService.getGroupMembersForGroup = (group, onSuccess, onFailure) ->
-    return onSuccess?(group.members) if group.members?
     GroupMember.query(
       {
         unit_id: group.unit().id,
@@ -150,7 +149,13 @@ angular.module("doubtfire.common.services.group-service", [  ])
         project_id: member.project_id
       }
       (success) ->
-        member.groups?.push(group) # If member is actually a project!
+        if member.groups?
+          grp = member.groupForGroupSet(group.groupSet())
+          if grp?
+            _.remove grp.members, (mbr) -> mbr.project_id == member.project_id
+          group.members = _.without(group.members, member)
+          _.remove member.groups, (grp) -> grp.group_set_id == group.group_set_id
+          member.groups.push(group) # If member is actually a project!
         # Loaded group members?
         if group.members?
           group.members.push(success)
@@ -178,7 +183,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
       (success) ->
         # Loaded group members?
         if group.members?
-          group.members = _.without(group.members, member)
+          _.remove group.members, member
+          _.remove member.groups, group
           alertService.add("info", "#{member.student_name} was removed from '#{group.name}'", 3000)
           onSuccess?(group.members)
         else

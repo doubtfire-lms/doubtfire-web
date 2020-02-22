@@ -505,6 +505,14 @@ angular.module("doubtfire.common.services.units", [])
         (response) ->
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
 
+    # Get a group for a given group set
+    student.groupForGroupSet = (gs) ->
+      _.find student.groups, (grp) -> gs.id == grp.group_set_id
+
+    student.inGroup = (grp) -> grp? && _.find(student.groups, {id: grp.id})?
+
+    student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+
     student.tutorials = () ->
       _.chain(student.tutorial_enrolments)
         .map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id))
