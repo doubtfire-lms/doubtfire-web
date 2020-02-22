@@ -150,6 +150,7 @@ angular.module('doubtfire.groups.group-selector', [])
       group.addMember($scope.project,
         () ->
           $scope.selectedGroup = group
+          $scope.selectedGroup.student_count += 1
         () ->
       )
 
