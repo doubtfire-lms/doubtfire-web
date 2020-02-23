@@ -72,6 +72,23 @@
         </div><!--/end-date-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Auto apply extensions</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn btn-{{unit.auto_apply_extension_before_deadline ? 'success' : 'default'}}" ng-model="unit.auto_apply_extension_before_deadline" btn-radio="true" uncheckable>
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-{{unit.auto_apply_extension_before_deadline ? 'default' : 'danger'}}" ng-model="unit.auto_apply_extension_before_deadline" btn-radio="false" uncheckable>
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true, extensions will be automatically applied when they result in a date that is between the task's due date and deadline.
+            </span>
+          </div>
+        </div><!--/active-->
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
           <div class="col-sm-9">
             <div class="btn-group">

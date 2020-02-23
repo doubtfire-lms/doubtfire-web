@@ -321,6 +321,14 @@ angular.module("doubtfire.common.services.projects", [])
         (response) ->
           onFailure?(response)
       )
+    task.refresh = () ->
+      Project.refreshTasks.get { project_id: task.project().project_id, task_definition_id: task.task_definition_id },
+          (response) ->
+            task.status = response['status']
+            task.extensions = response['extensions']
+            task.due_date = response['due_date']
+          (response) ->
+            console.log("Failed to refresh tasks on extension #{response.data.error}")
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
