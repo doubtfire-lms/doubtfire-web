@@ -305,6 +305,11 @@ angular.module("doubtfire.common.services.projects", [])
       task.grade?
     task.hasQualityPoints = () ->
       task.definition.max_quality_pts > 0 && (task.status in taskService.gradeableStatuses)
+    task.matches = (matchText) ->
+      project = task.project()
+      task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+      task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
+      project? && project.matches(matchText)
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },
@@ -316,6 +321,14 @@ angular.module("doubtfire.common.services.projects", [])
         (response) ->
           onFailure?(response)
       )
+    task.refresh = () ->
+      Project.refreshTasks.get { project_id: task.project().project_id, task_definition_id: task.task_definition_id },
+          (response) ->
+            task.status = response['status']
+            task.extensions = response['extensions']
+            task.due_date = response['due_date']
+          (response) ->
+            console.log("Failed to refresh tasks on extension #{response.data.error}")
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->

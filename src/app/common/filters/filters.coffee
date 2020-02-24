@@ -12,18 +12,7 @@ angular.module("doubtfire.common.filters", [])
   (input, kind, tutorName) ->
     if input
       if kind == "mine" || kind == "myStudents"
-        _.filter  input, { tutorial: {tutor_name: tutorName} }
-      else
-        input
-    else
-      input
-)
-
-.filter('showTasks', ->
-  (input, kind, tutorName) ->
-    if input
-      if kind == "mine"
-        _.filter  input, (t) -> (t?) && t.project().tutorName() == tutorName
+        _.filter  input, (project) -> project.hasTutor(tutorName)
       else
         input
     else
@@ -90,7 +79,7 @@ angular.module("doubtfire.common.filters", [])
   (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.tutorial_id == group.tutorial_id) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial_id)) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else
@@ -133,31 +122,13 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
-.filter('taskFilter', ->
-  (input, text) ->
-    if _.isString text
-      matchText = text.toLowerCase()
-      if input
-        _.filter  input, (task) ->
-          if task?
-            project = task.project()
-            (task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0) ||
-              (task.definition.name.toLowerCase().indexOf(matchText) >= 0) ||
-              (project? && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0)))))
-          else
-            false
-      else
-        input
-)
-
 .filter('projectFilter', ->
   (input, text) ->
-    if _.isString text
+    if _.isString(text) && text.length > 0 && input
       matchText = text.toLowerCase()
-      if input
-        _.filter  input, (project) -> (project?) && ( project.student_id.indexOf(matchText) >= 0 || project.name.toLowerCase().indexOf(matchText) >= 0 || (project.tutorial? && (project.tutorial.abbreviation.toLowerCase().indexOf(matchText) >= 0 || (project.tutorName()? && project.tutorName().toLowerCase().indexOf(matchText) >= 0))) )
-      else
-        input
+      _.filter  input, (project) -> (project?) && project.matches(matchText)
+    else
+      input
 )
 
 .filter('taskForPortfolio', (taskService) ->
@@ -197,7 +168,9 @@ angular.module("doubtfire.common.filters", [])
         if task.group()?
           _.includes(tutorialIds, task.group().tutorial_id)
       else
-        _.includes(tutorialIds, task.project().tutorial_id)
+        _.filter(task.project().tutorial_enrolments, (enrolment) ->
+          _.includes(tutorialIds, enrolment.tutorial_id)
+        ).length > 0
 
 )
 
@@ -209,21 +182,29 @@ angular.module("doubtfire.common.filters", [])
       task.project().name.toLowerCase().indexOf(searchName) >= 0
 )
 
+.filter('tutorialCampusFilter', ->
+  (tutorials, project) ->
+    return tutorials unless project?
+    _.filter tutorials, (tute) ->
+      tute.campus == project.campus()
+)
+
 .filter('groupsInTutorials', ->
   (input, unitRole, kind) ->
     return unless input? && unitRole? && kind?
     return input if kind == 'all'
     if kind == 'mine'
-      _.filter(input, (group) -> group.tutorial().tutor_name == unitRole.name)
+      _.filter(input, (group) -> group.tutorial().tutor.name == unitRole.name)
 )
 
 .filter('groupsForStudent', ->
   (input, project, groupSet) ->
     # Filter by tutorial if keep groups in same class
     return unless input? && groupSet? && project?
+    grp = project.groupForGroupSet(groupSet)
+    return [grp] if grp
     return input unless groupSet.keep_groups_in_same_class
-    if groupSet.keep_groups_in_same_class
-      _.filter(input, (group) -> group.tutorial_id == project.tutorial?.id)
+    _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
 )
 
 .filter('paginateAndSort', ($filter) ->

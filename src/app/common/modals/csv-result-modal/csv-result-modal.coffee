@@ -60,3 +60,46 @@ angular.module("doubtfire.common.modals.csv-result-modal", [])
   $scope.close = ->
     $modalInstance.dismiss()
 )
+
+
+.factory("CsvUploadModal", ($modal, alertService) ->
+  CsvUploadModal = {}
+
+  #
+  # Shows a dialog to allow people to upload a CSV.
+  #
+  CsvUploadModal.show = (title, message, batchFiles, url, onSuccess) ->
+    $modal.open
+      templateUrl: 'common/modals/csv-result-modal/csv-upload-modal.tpl.html'
+      controller: 'CsvUploadModalCtrl'
+      resolve:
+        title: -> title
+        message: -> message
+        batchFiles: -> batchFiles
+        url: -> url
+        onSuccess: -> onSuccess
+
+  CsvUploadModal
+)
+
+#
+# Controller for CSV result modal
+#
+.controller('CsvUploadModalCtrl', ($scope, $modalInstance, title, message, batchFiles, url, onSuccess) ->
+
+  wrapSuccess = (response) ->
+    $modalInstance.dismiss()
+    onSuccess(response)
+
+  $scope.title = title
+  $scope.message = message
+  $scope.batchFiles = batchFiles
+  $scope.url = url
+  $scope.onSuccess = wrapSuccess
+
+
+
+  $scope.close = ->
+    $modalInstance.dismiss()
+)
+

@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
@@ -90,7 +90,6 @@ angular.module("doubtfire.common.services.units", [])
         )
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
-          tutorial.description = unitService.tutorialDescription(tutorial)
           tutorial.unit = unit
           tutorial.tutorial_stream = unit.tutorialStreamForAbbr(tutorial.tutorial_stream)
           tutorialService.createInstanceFrom(tutorial)
@@ -145,7 +144,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns all tutorials where the tutor name matches the user name provided
     unit.tutorialsForUserName = (userName) ->
-      _.filter unit.tutorials, (tutorial) -> tutorial.tutor_name is userName
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutor.name is userName
 
     # Refresh callback for reloading students
     unit.refreshStudents = (onSuccess, onFailure) ->
@@ -258,6 +257,10 @@ angular.module("doubtfire.common.services.units", [])
     unit.hasGroupwork = ->
       unit.group_sets?.length > 0
 
+    # Check if there are any streams
+    unit.hasStreams = ->
+      unit.tutorial_streams?.length > 0
+
     #
     # Push all of the tasks downloaded into the existing student projects
     #
@@ -313,7 +316,7 @@ angular.module("doubtfire.common.services.units", [])
     result = []
     angular.forEach(unit.tutorials, (tute) ->
       result.push(tute.abbreviation)
-      result.push(tute.tutor_name)
+      result.push(tute.tutor.name)
     )
     angular.forEach(unit.students, (student) ->
       result.push(student.name)
@@ -321,15 +324,6 @@ angular.module("doubtfire.common.services.units", [])
     )
     result = _.uniq(result, (item) -> item )
     result
-
-  #
-  # Tutorial description
-  #
-  unitService.tutorialDescription = (tutorial) ->
-    if (tutorial?)
-      tutorial.description
-    else
-      "No Tutorial"
 
   #
   # Adds additional unit-related functionality to groups
@@ -353,16 +347,20 @@ angular.module("doubtfire.common.services.units", [])
     # Returns the unit for this student
     student.unit = -> unit
 
-    # Add a tutorial description
-    student.tutorialDescription = () ->
-      unitService.tutorialDescription(student.tutorial)
+    # Returns the campus for this student
+    student.campus = ->
+      campusService.getFromCache("#{student.campus_id}")
 
+    # Add a tutorial description
     student.shortTutorialDescription = () ->
-      if student.tutorial?
-        timeDesc = $filter('date')(student.tutorial.meeting_time, 'shortTime')
-        "#{student.tutorial.meeting_day.slice(0,3)} #{timeDesc} - #{student.tutorial.tutor.name.split(' ')[0]} - #{student.tutorial.meeting_location}"
+      tutorials = student.tutorials()
+      if tutorials.length > 0
+        _.chain tutorials
+          .map (tute) -> tute.abbreviation
+          .join()
+          .value()
       else
-        'No Tutorial'
+        'None'
 
     student.calcTopTasks = () ->
       # We will assign current weight to tasks...
@@ -408,18 +406,45 @@ angular.module("doubtfire.common.services.units", [])
         task.topWeight = currentWeight
         currentWeight++
 
+    # Check if the student is enrolled in a tutorial
+    student.isEnrolledIn = (tutorialId) ->
+      _.find(student.tutorial_enrolments, (enrolment) -> enrolment.tutorial_id == tutorialId)?
+
+    # Updat student enrolment within a unni
+    student.updateUnitEnrolment = () ->
+      newEnrollment = !student.enrolled
+      Project.update({id: student.project_id, enrolled: !student.enrolled},
+      (project) ->
+        if newEnrollment == project.enrolled
+          alertService.add('success', 'Enrolment changed.', 2000)
+        else
+          alertService.add('danger', 'Enrolment change failed.', 5000)
+      (response) ->
+        alertService.add('danger', response.data.error, 5000)
+      )
+
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
       newId = if tutorial? then (if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id) else -1
-      analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
-      Project.update({ id: student.project_id, tutorial_id: newId },
-        (project) ->
-          alertService.add "success", "Tutorial updated for #{student.name}", 3000
-          student.tutorial_id = project.tutorial_id
-          student.tutorial = student.unit().tutorialFromId( student.tutorial_id )
+
+      # analyticsService.event 'Teacher View - Students Tab', 'Changed Student Tutorial'
+      if student.isEnrolledIn(newId)
+        fn = Project.tutorialEnrolment.delete
+      else
+        fn = Project.tutorialEnrolment.create
+
+      fn(
+        {
+          id:                     student.unit().id,
+          project_id:             student.project_id
+          tutorial_abbreviation:  tutorial.abbreviation,
+        },
+        (successResponse) ->
+          student.tutorial_enrolments = successResponse.enrolments
+          alertService.add "success", "Tutorial enrolment updated for #{student.name}", 3000
         (response) ->
-          alertService.add "danger", "Failed to change tutorial. #{response?.data?.error}", 8000
+          alertService.add "danger", "Failed to update tutorial enrolment. #{response?.data?.error}", 8000
       )
 
     # TODO: (@alexcu) change these to use functions...
@@ -439,12 +464,16 @@ angular.module("doubtfire.common.services.units", [])
     student.activeTasks = ->
       _.filter(student.tasks, (task) -> task.definition.target_grade <= student.target_grade)
 
-    # Assigns the student's tutorial from the unit
-    student.tutorial = unit.tutorialFromId(student.tutorial_id)
-
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
-    student.tutorName = ->
-      student.tutorial?.tutor_name || 'N/A'
+    student.tutorNames = ->
+      _.chain(student.tutorials())
+        .map (tute) -> tute.tutor.name.split(' ')[0]
+        .uniq()
+        .join()
+        .value() || 'None'
+
+    student.hasTutor = (tutorName) ->
+      _.find(student.tutorials(), (tute) -> tute.tutor.name == tutorName)?
 
     # Students task statistics (for bar)
     student.task_stats = [
@@ -475,6 +504,37 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add("success", "Grade updated.", 2000)
         (response) ->
           alertService.add("danger", "Grade was not updated: #{response.data.error}", 8000)
+
+    # Get a group for a given group set
+    student.groupForGroupSet = (gs) ->
+      _.find student.groups, (grp) -> gs.id == grp.group_set_id
+
+    student.inGroup = (grp) -> grp? && _.find(student.groups, {id: grp.id})?
+
+    student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+
+    student.tutorials = () ->
+      _.chain(student.tutorial_enrolments)
+        .map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id))
+        .uniq()
+        .filter((tutorial) -> tutorial?).value()
+
+    student.tutorialForStream = (ts) ->
+      _.find student.tutorials(), (tute) -> tute.tutorial_stream == ts || !tute.tutorial_stream
+
+    # Search through tutorial
+    student.matchesTutorialEnrolments = (matchText) ->
+      _.filter(student.tutorials(), (enrol) ->
+        enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+          enrol.tutor.name.toLowerCase().indexOf(matchText) >= 0
+      ).length > 0
+
+    # Check if this student should match the passed in text filter
+    student.matches = (matchText) ->
+      student.student_id.indexOf(matchText) >= 0 ||
+      student.name.toLowerCase().indexOf(matchText) >= 0 ||
+      student.campus().matches(matchText) ||
+      student.matchesTutorialEnrolments(matchText)
 
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)

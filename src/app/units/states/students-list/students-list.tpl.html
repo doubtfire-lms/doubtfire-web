@@ -94,6 +94,11 @@
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/flags-column-header-->
+          <th class="campus">
+            <a ng-click="sortTableBy('campus().name')">
+              Campus <i ng-show="tableSort.order == 'campus'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            </a>
+          </th><!--/campus-column-header-->
           <th class="tutorial">
             <a ng-click="sortTableBy('tutorial.abbreviation')">
               Tutorial <i ng-show="tableSort.order == 'tutorial.abbreviation'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
@@ -135,14 +140,11 @@
               </span>
             </span>
           </td><!--/flags-column-->
+          <td ng-click="viewStudent(student)">
+            {{student.campus().name}}
+          </td><!--/campus-column-->
           <td>
-            <select
-              class="form-control input-sm"
-              ng-model="student.tutorial_id"
-              ng-options="tutorial.id as (tutorial.abbreviation + ' - ' + tutorial.description) for tutorial in unit.tutorials | orderBy:'abbreviation'"
-              ng-change="switchToTutorial(student, student.tutorial_id)">
-              <option value="">None</option>
-            </select>
+            <student-tutorial-select [unit]="unit" [student]="student"></student-tutorial-select>
           </td><!--/tutorial-column-->
         </tr><!--/student-row-->
       </tbody>

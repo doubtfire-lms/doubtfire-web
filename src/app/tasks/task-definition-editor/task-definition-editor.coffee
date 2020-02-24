@@ -32,17 +32,23 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           icon: "fa-info"
           seq: 0
           active: false
+        rareSettings:
+          title: "Other Settings"
+          subtitle: "Adjust settings to customise task interaction"
+          icon: "fa-adjust"
+          seq: 1
+          active: false
         fileUpload:
           title: "Submission Details"
           subtitle: "Indicate what files students need to submit for this task"
           icon: "fa-upload"
-          seq: 1
+          seq: 2
           active: false
         taskResources:
           title: "Task Resources"
           subtitle: "Upload the task sheet and other resources for this task"
           icon: "fa-file-o"
-          seq: 2
+          seq: 3
           active: false
         plagiarismChecks:
           title: "Plagiarism Detection"
@@ -61,6 +67,12 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_sheet = true
       # $scope.filesUploaded = response
+
+    # Assign task the stream - this is called
+    # From the template as you can't ngModel
+    # With dropdown
+    $scope.changeTaskStream = (task, stream) ->
+      task.tutorial_stream = stream
 
     $scope.taskPDFUrl = ->
       "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
@@ -161,9 +173,9 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       _.extend(task, $scope.task)
 
       task.weighting = $scope.task.weight
-      task.unit_id = $scope.unit.id
       task.upload_requirements = JSON.stringify $scope.task.upload_requirements
       task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
+      task.tutorial_stream_abbr = $scope.task.tutorial_stream
       if task.group_set
         task.group_set_id = task.group_set.id
       else
@@ -185,7 +197,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           task.due_date = "#{due.getFullYear()}-#{due.getMonth() + 1}-#{due.getDate()}"
 
         if $scope.isNew
-          promise = TaskDefinition.create( { task_def: task } ).$promise
+          promise = TaskDefinition.create( { unit_id: $scope.unit.id, task_def: task } ).$promise
           ProgressModal.show('Task Definition Creation', 'Please wait while student projects are updated.', promise)
           promise.then (
             (response) ->
@@ -198,7 +210,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
                 alertService.add("danger", "Error: " + response.data.error, 6000)
           )
         else
-          TaskDefinition.update( { id: task.id, task_def: task } ).$promise.then (
+          TaskDefinition.update( { unit_id: @scope.unit.id, id: task.id, task_def: task } ).$promise.then (
             (response) ->
               populate_task($scope.task, response)
               alertService.add("success", "#{response.name} Updated", 2000)

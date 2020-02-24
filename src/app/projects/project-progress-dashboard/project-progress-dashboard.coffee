@@ -21,8 +21,6 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 
     $scope.currentVisualisation = 'burndown'
 
-    $scope.taskDetailsSelector = { viewAll: true }
-
     $scope.chooseGrade = (idx) ->
       Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
         $scope.project.target_grade = project.target_grade
@@ -39,10 +37,6 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
     updateTaskCompletionStats = ->
       $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
       $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
-
-    $scope.$watch "taskDetailsSelector.viewAll", ->
-      unless $scope.taskDetailsSelector.viewAll
-        analyticsService.event 'Student Project View', "Showed Top Tasks"
 
     $scope.$on 'TaskStatusUpdated', ->
       updateTaskCompletionStats()

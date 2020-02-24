@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, alertService, taskService, listenerService, ConfirmationModal, ExtensionModal) ->
+  controller: ($scope, $stateParams, alertService, taskService, listenerService, ConfirmationModal, ExtensionModal, Project) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
@@ -33,5 +33,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
 
     $scope.applyForExtension = () ->
-      ExtensionModal.show($scope.task)
+      ExtensionModal.show($scope.task, ()->
+        # After application refresh the task details
+        $scope.task.refresh()
+      )
 )
