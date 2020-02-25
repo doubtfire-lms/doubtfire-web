@@ -35,6 +35,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
     group.removeMember = (member, onSuccess, onFailure) ->
       groupService.removeMemberFromGroup(group, member, onSuccess, onFailure)
     group.getMembers = (onSuccess, onFailure) ->
+      groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
     group.hasSpace = () ->
       return true if !groupSet.capacity?
       return group.student_count < groupSet.capacity
