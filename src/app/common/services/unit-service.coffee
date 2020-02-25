@@ -349,7 +349,9 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns the campus for this student
     student.campus = ->
-      campusService.getFromCache("#{student.campus_id}")
+      result = campusService.getFromCache("#{student.campus_id}")
+      return result if result?
+      return { name: 'None', abbreviation: '', matches: () -> false }
 
     # Add a tutorial description
     student.shortTutorialDescription = () ->
