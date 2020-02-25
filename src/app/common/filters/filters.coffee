@@ -186,7 +186,7 @@ angular.module("doubtfire.common.filters", [])
   (tutorials, project) ->
     return tutorials unless project?
     _.filter tutorials, (tute) ->
-      tute.campus_id == project.campus_id
+      !project.campus_id? || !tute.campus? || tute.campus.id == project.campus_id
 )
 
 .filter('groupsInTutorials', ->

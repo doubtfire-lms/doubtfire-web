@@ -8,17 +8,12 @@
         Click the plus on the specific tutorial to enrol in that tutorial, or click
         the minus icon to withdraw from your current tutorial.
       </p>
-      <p>
-        You are currently enrolled in
-        <strong>
-          {{project.shortTutorialDescription()}}.
-        </strong>
     </div>
     <table class="table table-condensed table-hover">
       <thead>
         <tr>
-          <th class="stream" ng-if="unit.tutorial_streams.length > 0">
-            <a ng-click="sortOrder='stream'; reverse=!reverse">Stream</a>
+          <th class="stream" ng-show="unit.tutorial_streams.length > 0">
+            <a ng-click="sortOrder='tutorial_stream.name'; reverse=!reverse">Stream</a>
           </th>
           <th class="campus">
             <a ng-click="sortOrder='campus.name'; reverse=!reverse">Campus</a>
