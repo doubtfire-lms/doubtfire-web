@@ -98,6 +98,7 @@ import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
+import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 
 @NgModule({
   // components
@@ -120,7 +121,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
-    StudentTutorialSelectComponent
+    StudentCampusSelectComponent
   ],
   // Module Imports
   imports: [
@@ -212,6 +213,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
     StudentTutorialSelectComponent,
+    StudentCampusSelectComponent,
     CommentBubbleActionComponent,
     UnitTutorialsManagerComponent
   ]
