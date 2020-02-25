@@ -157,6 +157,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
           # Get old group..
           grp = member.groupForGroupSet(group.groupSet())
           if grp?
+            grp.student_count -= 1
             # Remove current member from old group
             _.remove grp.members, (mbr) -> mbr.project_id == member.project_id
             _.remove member.groups, grp
