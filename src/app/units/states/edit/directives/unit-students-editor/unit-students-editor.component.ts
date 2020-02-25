@@ -1,4 +1,4 @@
-import { Unit, csvUploadModalService, csvResultModalService } from './../../../../../ajs-upgraded-providers';
+import { Unit, csvUploadModalService, csvResultModalService, unitStudentEnrolmentModal } from './../../../../../ajs-upgraded-providers';
 import { ViewChild, Component, Input, Inject } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -24,6 +24,7 @@ export class UnitStudentsEditorComponent {
   // that maps all of the form controls that this form consists of.
   constructor(
     private httpClient: HttpClient,
+    @Inject(unitStudentEnrolmentModal) private enrolModal: any,
     @Inject(alertService) private alerts: any,
     @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
@@ -70,6 +71,9 @@ export class UnitStudentsEditorComponent {
     });
   }
 
+  enrolStudent() {
+    this.enrolModal.show(this.unit);
+  }
   uploadEnrolments() {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
