@@ -223,15 +223,15 @@ angular.module("doubtfire.common.services.units", [])
 
     # Refresh the groups within the unit
     unit.refreshGroups = () ->
-      return unless unit.groups?.length > 0
-      # Query the groups within the unit.
-      Unit.groups.query( {id: unit.id} ,
-        (success) ->
-          # Save the result as the unit's groups
-          unit.groups = success
-        (failure) ->
-          alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
-      )
+      # return unless unit.groups?.length > 0
+      # # Query the groups within the unit.
+      # Unit.groups.query( {id: unit.id} ,
+      #   (success) ->
+      #     # Save the result as the unit's groups
+      #     unit.groups = success
+      #   (failure) ->
+      #     alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
+      # )
 
     # Queries the unit for all groups
     unit.getGroups = (groupSetId, onSuccess, onFailure) ->
