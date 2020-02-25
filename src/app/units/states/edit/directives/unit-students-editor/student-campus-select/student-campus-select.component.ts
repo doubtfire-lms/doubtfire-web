@@ -14,7 +14,7 @@ export class StudentCampusSelectComponent implements OnInit {
   @Input() student: any;
   @Input() update: boolean;
 
-  private campuses: Campus[];
+  campuses: Campus[];
   private originalCampusId: number;
 
   constructor ( private campusService: CampusService ) {
@@ -30,7 +30,7 @@ export class StudentCampusSelectComponent implements OnInit {
     });
   }
 
-  private campusChange(event: MatSelectChange) {
+  campusChange(event: MatSelectChange) {
     if(this.update) {
       this.student.switchToCampus(event.value, this.originalCampusId, () => this.ngOnChanges())
     }
