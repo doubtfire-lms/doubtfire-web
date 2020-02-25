@@ -200,7 +200,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('groupsForStudent', ->
   (input, project, groupSet) ->
     # Filter by tutorial if keep groups in same class
-    return unless input? && groupSet? && project?
+    return input unless input? && groupSet? && project?
     grp = project.groupForGroupSet(groupSet)
     return [grp] if grp
     return input unless groupSet.keep_groups_in_same_class
