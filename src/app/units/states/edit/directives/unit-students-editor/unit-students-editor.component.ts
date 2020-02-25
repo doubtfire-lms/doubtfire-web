@@ -12,9 +12,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
   styleUrls: ['unit-students-editor.component.scss']
 })
 export class UnitStudentsEditorComponent {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @Input() unit: any;
 
   columns: string[] = ['student_id', 'first_name', 'last_name', 'student_email', 'campus', 'tutorial', 'enrolled'];
@@ -34,9 +34,13 @@ export class UnitStudentsEditorComponent {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.unit.students);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+  }
+
+  // The maginator is inside the table
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   applyFilter(event: Event) {
@@ -64,9 +68,9 @@ export class UnitStudentsEditorComponent {
         case 'first_name':
         case 'last_name':
         case 'student_email':
-        case 'enrolled':    return this.sortCompare(a[sort.active], b[sort.active], isAsc);
-        case 'campus':      return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
-        default:            return 0;
+        case 'enrolled': return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+        case 'campus': return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
+        default: return 0;
       }
     });
   }
@@ -78,12 +82,12 @@ export class UnitStudentsEditorComponent {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
       'Test message',
-      { file: { name: 'Enrol CSV Data', type: 'csv'  } },
+      { file: { name: 'Enrol CSV Data', type: 'csv' } },
       this.unitService.enrolStudentsCSVUrl(this.unit),
-      (response : any) => {
+      (response: any) => {
         // at least one student?
         this.csvResultModal.show("Enrol Student CSV Results", response)
-        if(response.success.length > 0) {
+        if (response.success.length > 0) {
           this.unit.refreshStudents()
         }
       }
@@ -94,12 +98,12 @@ export class UnitStudentsEditorComponent {
     this.csvUploadModal.show(
       'Upload Students to Withdraw',
       'Test message',
-      { file: { name: 'Withdraw CSV Data', type: 'csv'  } },
+      { file: { name: 'Withdraw CSV Data', type: 'csv' } },
       this.unitService.enrolStudentsCSVUrl(this.unit),
-      (response : any) => {
+      (response: any) => {
         // at least one student?
         this.csvResultModal.show("Withdraw Student CSV Results", response)
-        if(response.success.length > 0) {
+        if (response.success.length > 0) {
           this.unit.refreshStudents()
         }
       }
@@ -113,28 +117,28 @@ export class UnitStudentsEditorComponent {
     let headers = new HttpHeaders();
 
     this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
-        (response) => {
-          let binaryData = [];
-          binaryData.push(response.body);
-          let downloadLink = document.createElement('a');
-          downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: 'text/csv'}));
-          downloadLink.target = '_blank';
-          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-          const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
-          if (matches != null && matches[1]) {
-              const filename = matches[1].replace(/['"]/g, '');
-              downloadLink.setAttribute('download', filename);
-          }
-          else {
-            downloadLink.setAttribute('download', `${this.unit.code}-enrolments.csv`);
-          }
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          downloadLink.parentNode.removeChild(downloadLink);
-        },
-        (error) => {
-          this.alerts.add('danger', `Error downloading enrolments - ${error}`)
+      (response) => {
+        let binaryData = [];
+        binaryData.push(response.body);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'text/csv' }));
+        downloadLink.target = '_blank';
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
+        if (matches != null && matches[1]) {
+          const filename = matches[1].replace(/['"]/g, '');
+          downloadLink.setAttribute('download', filename);
         }
-      );
+        else {
+          downloadLink.setAttribute('download', `${this.unit.code}-enrolments.csv`);
+        }
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.parentNode.removeChild(downloadLink);
+      },
+      (error) => {
+        this.alerts.add('danger', `Error downloading enrolments - ${error}`)
+      }
+    );
   }
 }
