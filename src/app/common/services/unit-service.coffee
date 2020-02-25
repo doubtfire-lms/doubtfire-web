@@ -423,6 +423,21 @@ angular.module("doubtfire.common.services.units", [])
         alertService.add('danger', response.data.error, 5000)
       )
 
+    student.switchToCampus = (campus, oldId, success) ->
+      newId = if campus? then (if _.isString(campus) || _.isNumber(campus) then +campus else campus?.id) else -1
+
+      # return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
+      Project.update( {id: student.project_id, campus_id: newId},
+        (response) -> #success
+          student.campus_id = if (newId == -1) then null else newId
+          alertService.add('success', "Campus changed for #{student.name}", 2000)
+          if success? && _.isFunction(success)
+            success()
+        (response) -> #error
+          student.campus_id = oldId
+          alertService.add('danger', response.data.error, 5000)
+      )
+
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
     student.switchToTutorial = (tutorial) ->
