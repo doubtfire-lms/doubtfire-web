@@ -48,6 +48,7 @@ import {
   taskProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
+  UnitStudentEnrolmentModalProvider,
   CsvResultModalProvider,
   CommentResourceServiceProvider,
   AudioRecorderProvider,
@@ -87,7 +88,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
-import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
@@ -121,6 +122,7 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
+    StudentTutorialSelectComponent,
     StudentCampusSelectComponent
   ],
   // Module Imports
@@ -178,6 +180,7 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
+    UnitStudentEnrolmentModalProvider,
     CommentResourceServiceProvider,
     TaskCommentServiceProvider,
     AudioRecorderProvider,

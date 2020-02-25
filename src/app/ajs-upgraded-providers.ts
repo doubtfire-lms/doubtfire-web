@@ -16,6 +16,7 @@ export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
 export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const taskComment = new InjectionToken('TaskComment');
+export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 
 
 // Define a provider for the above injection token...
@@ -103,3 +104,11 @@ export const TaskCommentServiceProvider = {
   useFactory: (i: any) => i.get('TaskComment'),
   deps: ['$injector']
 };
+
+export const UnitStudentEnrolmentModalProvider = {
+  provide: unitStudentEnrolmentModal,
+  useFactory: (i: any) => i.get('UnitStudentEnrolmentModal'),
+  deps: ['$injector']
+};
+
+
