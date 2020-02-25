@@ -16,13 +16,22 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 
   UnitStudentEnrolmentModal
 )
-.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService) ->
+.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService, campusService) ->
   $scope.unit = unit
   $scope.projects = unit.students
+  $scope.campuses = []
+  $scope.data = { campus_id: 1 } # need in object for observing
 
-  $scope.enrolStudent = (student_id, tutorial) ->
-    # get tutorial_id from tutorial_name
-    Project.create {unit_id: unit.id, student_num: student_id, tutorial_id: if tutorial then tutorial.id else null },
+  campusService.query().subscribe( (campuses) ->
+    $scope.campuses = campuses
+    $scope.data.campus_id = campuses[0].id
+  )
+
+  $scope.enrolStudent = (student_id, campus_id) ->
+    if ! campus_id?
+      alertService.add('danger', 'Campus missing. Please indicate student campus', 5000)
+      return
+    Project.create {unit_id: unit.id, student_num: student_id, campus_id: campus_id },
       (project) ->
         if ! unit.studentEnrolled project.project_id
           unit.addStudent project
@@ -31,6 +40,6 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
         else
           alertService.add("danger", "Student is already enrolled", 2000)
           $modalInstance.close()
-      , (response) ->
+      (response) ->
         alertService.add("danger", "Error enrolling student: #{response.data.error}", 6000)
 )

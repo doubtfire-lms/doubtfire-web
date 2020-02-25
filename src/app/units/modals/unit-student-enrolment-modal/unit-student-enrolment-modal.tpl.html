@@ -5,24 +5,22 @@
   <div class="modal-body">
     <form class="form-horizontal">
       <div class="form-group" required>
-        <label class="col-sm-3 control-label">Student ID</label>
+        <label class="col-sm-3 control-label">Student</label>
         <div class="col-sm-7">
           <input type="input" class="form-control" placeholder="Student ID" ng-model="student_id">
         </div>
       </div>
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Tutorial</label>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="teachingperiod">Campus</label>
         <div class="col-sm-7">
-          <input id="searchbar" class="form-control" placeholder="Tutorial Code" type="search" ng-model="tutorial" typeahead="tutorial as tutorial.abbreviation for tutorial in unit.tutorials"
-          typeahead-select-on-exact="true"
-          typeahead-editable="false"
-          autocomplete="off"/>
+          <select class="form-control" ng-model="data.campus_id">
+            <option ng-value="campus.id" ng-repeat="campus in campuses" value="{{campus.id}}">{{campus.name}}</option>
+          </select>
         </div>
       </div>
-      <p class="help-block" style="padding-left: 5em" ng-show="tutorial.trim().length == 0">Student will be enrolled without a tutorial assigned.</p>
     </form>
   </div>
   <div class="modal-footer text-right">
-    <input type="button" ng-click="enrolStudent(student_id, tutorial)" class="btn btn-primary" value="Save" />
+    <input type="button" ng-click="enrolStudent(student_id, data.campus_id)" class="btn btn-primary" value="Save" />
   </div>
 </div>
