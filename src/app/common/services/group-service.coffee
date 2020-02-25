@@ -151,19 +151,22 @@ angular.module("doubtfire.common.services.group-service", [  ])
         project_id: member.project_id
       }
       (success) ->
+        group.student_count += 1
         if member.groups?
+          # Get old group..
           grp = member.groupForGroupSet(group.groupSet())
           if grp?
+            # Remove current member from old group
             _.remove grp.members, (mbr) -> mbr.project_id == member.project_id
-          group.members = _.without(group.members, member)
-          _.remove member.groups, (grp) -> grp.group_set_id == group.group_set_id
+            _.remove member.groups, grp
           member.groups.push(group) # If member is actually a project!
-        # Loaded group members?
         if group.members?
+          # Has members so add this member
           group.members.push(success)
           alertService.add("info", "#{success.student_name} was added to '#{group.name}'", 3000)
           onSuccess?(group.members)
         else
+          # Load all members of the group
           group.getMembers((->
             alertService.add("info", "#{success.student_name} was added to '#{group.name}'", 3000)
             onSuccess?()
@@ -183,6 +186,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         id: member.project_id # ID maps to student's project_id!
       }
       (success) ->
+        group.student_count -= 1
         # Loaded group members?
         if group.members?
           _.remove group.members, member

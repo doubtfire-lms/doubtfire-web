@@ -2,9 +2,10 @@ group-selector {
   display: block;
 }
 group-selector table {
-  th.number { width: 15%; }
+  th.number { width: 10%; }
   th.name { width: 30%; }
-  th.tutorial { width: 25%; }
+  th.tutorial { width: 20%; }
+  th.capacity { width: 10%; }
   th.actions { width: 30%; }
 }
 group-selector .panel-title > group-set-selector {
