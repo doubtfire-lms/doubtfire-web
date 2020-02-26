@@ -1,0 +1,9 @@
+<mat-form-field class="data-entry">
+  <mat-label>Campus</mat-label>
+  <mat-select [(value)]="student.campus_id" (selectionChange)="campusChange($event)">
+    <mat-option [value]="-1">None</mat-option>
+    <mat-option *ngFor="let campus of campuses" [value]="campus.id">
+      {{campus.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

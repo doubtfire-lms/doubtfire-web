@@ -39,11 +39,9 @@ angular.module('doubtfire.groups.group-member-list', [])
     # Remove group members
     $scope.removeMember = (member) ->
       $scope.selectedGroup.removeMember(member,
-        # Remove from member's group if exists
         () ->
-          $scope.selectedGroup.student_count -= 1
           if member.project_id == $scope.project?.project_id
-            $scope.project.groups = _.without($scope.project.groups, $scope.selectedGroup)
+            _.remove $scope.project.groups, $scope.selectedGroup
             $scope.selectedGroup = null
       )
 

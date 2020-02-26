@@ -223,15 +223,15 @@ angular.module("doubtfire.common.services.units", [])
 
     # Refresh the groups within the unit
     unit.refreshGroups = () ->
-      return unless unit.groups?.length > 0
-      # Query the groups within the unit.
-      Unit.groups.query( {id: unit.id} ,
-        (success) ->
-          # Save the result as the unit's groups
-          unit.groups = success
-        (failure) ->
-          alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
-      )
+      # return unless unit.groups?.length > 0
+      # # Query the groups within the unit.
+      # Unit.groups.query( {id: unit.id} ,
+      #   (success) ->
+      #     # Save the result as the unit's groups
+      #     unit.groups = success
+      #   (failure) ->
+      #     alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
+      # )
 
     # Queries the unit for all groups
     unit.getGroups = (groupSetId, onSuccess, onFailure) ->
@@ -349,7 +349,9 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns the campus for this student
     student.campus = ->
-      campusService.getFromCache("#{student.campus_id}")
+      result = campusService.getFromCache("#{student.campus_id}")
+      return result if result?
+      return { name: 'None', abbreviation: '', matches: () -> false }
 
     # Add a tutorial description
     student.shortTutorialDescription = () ->
@@ -421,6 +423,21 @@ angular.module("doubtfire.common.services.units", [])
           alertService.add('danger', 'Enrolment change failed.', 5000)
       (response) ->
         alertService.add('danger', response.data.error, 5000)
+      )
+
+    student.switchToCampus = (campus, oldId, success) ->
+      newId = if campus? then (if _.isString(campus) || _.isNumber(campus) then +campus else campus?.id) else -1
+
+      # return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
+      Project.update( {id: student.project_id, campus_id: newId},
+        (response) -> #success
+          student.campus_id = if (newId == -1) then null else newId
+          alertService.add('success', "Campus changed for #{student.name}", 2000)
+          if success? && _.isFunction(success)
+            success()
+        (response) -> #error
+          student.campus_id = oldId
+          alertService.add('danger', response.data.error, 5000)
       )
 
     # Switch's the student's current tutorial to a new tutorial, either specified

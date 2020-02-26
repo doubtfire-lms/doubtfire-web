@@ -48,6 +48,7 @@ import {
   taskProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
+  UnitStudentEnrolmentModalProvider,
   CsvResultModalProvider,
   CommentResourceServiceProvider,
   AudioRecorderProvider,
@@ -87,7 +88,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
-import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
@@ -98,6 +99,7 @@ import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
+import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 
 @NgModule({
   // components
@@ -120,7 +122,8 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
-    StudentTutorialSelectComponent
+    StudentTutorialSelectComponent,
+    StudentCampusSelectComponent
   ],
   // Module Imports
   imports: [
@@ -177,6 +180,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
+    UnitStudentEnrolmentModalProvider,
     CommentResourceServiceProvider,
     TaskCommentServiceProvider,
     AudioRecorderProvider,
@@ -212,6 +216,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
     StudentTutorialSelectComponent,
+    StudentCampusSelectComponent,
     CommentBubbleActionComponent,
   ]
 })

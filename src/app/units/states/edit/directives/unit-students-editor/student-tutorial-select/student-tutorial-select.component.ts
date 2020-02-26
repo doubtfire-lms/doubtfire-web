@@ -12,7 +12,6 @@ export class StudentTutorialSelectComponent {
   @Input() unit: any;
   @Input() student: any;
 
-
   /**
    * Compare a tutorial with an enrolment
    *
@@ -26,13 +25,20 @@ export class StudentTutorialSelectComponent {
     return aEntity.id === bEntity.tutorial_id;
   }
 
+  private switchToTutorial(tutorial: Tutorial) {
+    this.student.switchToTutorial(tutorial);
+  }
+
   public tutorialsForStreamAndStudent(student: any, stream: TutorialStream = undefined) {
     return this.unit.tutorials.filter(tutorial => {
+      var result: boolean = student.campus_id == null || tutorial.campus == null || student.campus_id === tutorial.campus.id;
+      if (!result) return result;
       if (tutorial.tutorial_stream && stream) {
-        return tutorial.tutorial_stream.abbreviation === stream.abbreviation
-          && student.campus_id === tutorial.campus.id;
+        return tutorial.tutorial_stream.abbreviation === stream.abbreviation;
       } else if (!tutorial.tutorial_stream && !stream) {
-        return student.campus_id === tutorial.campus.id;
+        return true;
+      } else {
+        return false;
       }
     });
   }

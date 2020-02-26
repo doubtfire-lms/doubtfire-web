@@ -284,6 +284,7 @@ import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-str
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { CampusService } from './api/models/campus/campus.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
+import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -339,7 +340,8 @@ DoubtfireAngularJSModule.directive('unitStudentsEditor',
   downgradeComponent({ component: UnitStudentsEditorComponent }));
 DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
-
+DoubtfireAngularJSModule.directive('studentCampusSelect',
+  downgradeComponent({ component: StudentCampusSelectComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
