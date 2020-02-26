@@ -4,7 +4,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'unit-students-editor',
@@ -86,9 +86,9 @@ export class UnitStudentsEditorComponent {
       this.unitService.enrolStudentsCSVUrl(this.unit),
       (response: any) => {
         // at least one student?
-        this.csvResultModal.show("Enrol Student CSV Results", response)
+        this.csvResultModal.show('Enrol Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents()
+          this.unit.refreshStudents();
         }
       }
     );
@@ -102,19 +102,16 @@ export class UnitStudentsEditorComponent {
       this.unitService.enrolStudentsCSVUrl(this.unit),
       (response: any) => {
         // at least one student?
-        this.csvResultModal.show("Withdraw Student CSV Results", response)
+        this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents()
+          this.unit.refreshStudents();
         }
       }
     );
   }
 
   downloadEnrolments() {
-    var url: string;
-    url = this.unitService.enrolStudentsCSVUrl(this.unit);
-
-    let headers = new HttpHeaders();
+    const url: string = this.unitService.enrolStudentsCSVUrl(this.unit);
 
     this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
       (response) => {
@@ -123,13 +120,12 @@ export class UnitStudentsEditorComponent {
         let downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'text/csv' }));
         downloadLink.target = '_blank';
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;
         const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
         if (matches != null && matches[1]) {
-          const filename = matches[1].replace(/['"]/g, '');
+          const filename = matches[1].replace(/['']/g, '');
           downloadLink.setAttribute('download', filename);
-        }
-        else {
+        } else {
           downloadLink.setAttribute('download', `${this.unit.code}-enrolments.csv`);
         }
         document.body.appendChild(downloadLink);
@@ -137,7 +133,7 @@ export class UnitStudentsEditorComponent {
         downloadLink.parentNode.removeChild(downloadLink);
       },
       (error) => {
-        this.alerts.add('danger', `Error downloading enrolments - ${error}`)
+        this.alerts.add('danger', `Error downloading enrolments - ${error}`);
       }
     );
   }
