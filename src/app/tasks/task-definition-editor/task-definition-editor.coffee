@@ -210,7 +210,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
                 alertService.add("danger", "Error: " + response.data.error, 6000)
           )
         else
-          TaskDefinition.update( { unit_id: @scope.unit.id, id: task.id, task_def: task } ).$promise.then (
+          TaskDefinition.update( { unit_id: $scope.unit.id, id: task.id, task_def: task } ).$promise.then (
             (response) ->
               populate_task($scope.task, response)
               alertService.add("success", "#{response.name} Updated", 2000)
