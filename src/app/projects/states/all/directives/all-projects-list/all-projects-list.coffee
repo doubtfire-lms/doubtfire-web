@@ -13,7 +13,7 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
   headerServiceProvider.state 'view-all-projects', homeStateData
 )
 
-.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, headerService, currentUser, projectService, analyticsService, dateService) ->
+.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, currentUser, projectService, analyticsService, dateService) ->
   analyticsService.event 'view-all-projects', 'viewed all-projects list'
 
   $scope.externalName = DoubtfireConstants.ExternalName

@@ -13,7 +13,7 @@ angular.module('doubtfire.home.states.home', [])
   headerServiceProvider.state 'home', homeStateData
 )
 
-.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, headerService, currentUser, unitService, projectService, $rootScope, analyticsService, dateService, UserNotificationSettingsModal) ->
+.controller("HomeCtrl", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, currentUser, unitService, projectService, $rootScope, analyticsService, dateService, UserNotificationSettingsModal) ->
   analyticsService.event 'Home', 'Viewed Home page'
 
   # Get the confugurable, external name of Doubtfire
