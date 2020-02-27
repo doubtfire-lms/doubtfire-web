@@ -11,8 +11,8 @@ angular.module("doubtfire.api.models.teaching-period", [])
     unless tp.name?
       tp.name = () ->
         "#{tp.period} #{tp.year}"
-      tp.active = () ->
-        moment(tp.active_until).diff(moment()) > 0
+    tp.active = () ->
+      moment(tp.active_until).diff(moment()) > 0
     tp
 
   TeachingPeriod = {
@@ -53,7 +53,9 @@ angular.module("doubtfire.api.models.teaching-period", [])
     get: (id, onSuccess, onFailure) ->
       resource.get( {id: id}
         (success) ->
-          result = _.find data.loadedPeriods, (tp) -> tp.id == id
+          success = injectFunctionalityInTeachingPeriod(success)
+          result = _.find data.loadedPeriods, (tp) ->
+            tp.id == id
           # Fetched teaching period details... update teaching period in loadedPeriods
           if result?
             _.extend result, success
