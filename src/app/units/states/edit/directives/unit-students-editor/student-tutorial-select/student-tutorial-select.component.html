@@ -1,4 +1,4 @@
-<mat-form-field class="data-entry">
+<mat-form-field floatLabel="never" class="data-entry">
   <mat-label>Tutorial</mat-label>
   <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorial_enrolments">
     <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">

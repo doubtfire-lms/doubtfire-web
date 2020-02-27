@@ -21,7 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTooltipModule } from '@angular/material';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -78,8 +78,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
-
-import 'hammerjs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
@@ -200,27 +198,11 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants
-  ],
-  // Entry components include any routes, as well as components that are currently nested within AngularJS components
-  // Eventually we can remove those that are just here due to nesting within AngularJS
-  entryComponents: [
-    // Routes (to check...)
-    AboutDoubtfireModalContent,
-    TaskCommentComposerComponent,
-    IntelligentDiscussionPlayerComponent,
-    ExtensionCommentComponent,
-    IntelligentDiscussionDialog,
-    DiscussionComposerDialog,
-    ExtensionModalComponent,
-    // Angular JS nested components
-    UnitTutorialsManagerComponent,
-    UnitStudentsEditorComponent,
-    StudentTutorialSelectComponent,
-    StudentCampusSelectComponent,
-    CommentBubbleActionComponent,
-    UnitTutorialsManagerComponent
   ]
 })
+  // There is no longer any requirement for an EntryComponants section
+  // since Angular 9 introduced the IVY renderer
+
 export class DoubtfireAngularModule {
   constructor(
     injector: Injector,
