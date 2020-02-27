@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, headerService, alertService, analyticsService) ->
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, alertService, analyticsService) ->
   analyticsService.event 'Edit Unit View', "Started Edit Unit View", 'Unit Tab'
 
   unitService.getUnit $state.params.unitId, {loadAllStudents: true}, (unit) ->
@@ -63,16 +63,16 @@ angular.module('doubtfire.units.states.edit', [
   $scope.setActiveTab = (tab) ->
     # Do nothing if we're switching to the same tab
     return if tab is $scope.activeTab
-    
+
     # Actions to perform when changing tab
     $scope.activeTab?.active = false  # Deactivate original tab
-    
+
     # run de-select actions...
     $scope.activeTab.deselect?()
 
     $scope.activeTab = tab            # Switch tabs
     $scope.activeTab.active = true    # Make it active
-    
+
     # Actions to take when selecting this tab
     if $scope.assessingUnitRole?
       analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
