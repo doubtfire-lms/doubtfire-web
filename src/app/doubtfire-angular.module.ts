@@ -98,6 +98,8 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   // components
@@ -159,7 +161,8 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
     MatTabsModule,
     ReactiveFormsModule,
     PopoverModule.forRoot(),
-    UIRouterUpgradeModule.forRoot({ states: doubtfireStates })
+    UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   // Services
   providers: [
@@ -220,7 +223,7 @@ export class DoubtfireAngularModule {
 
   ngDoBootstrap() {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
-      strictDi: false
+      strictDi: true
     });
   }
 }
