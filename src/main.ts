@@ -6,8 +6,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { environment } from 'src/environments/environment';
 
-import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { DoubtfireAngularModule }   from 'src/app/doubtfire-angular.module';
+import { DoubtfireAngularJSModule } from './app/doubtfire-angularjs.module';
+import { DoubtfireAngularModule }   from './app/doubtfire-angular.module';
 
 import { UIRouter, UrlService } from '@uirouter/core';
 
