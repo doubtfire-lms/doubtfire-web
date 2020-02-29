@@ -162,7 +162,7 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
   ],
   // Services
   providers: [
