@@ -30,7 +30,6 @@
         "urls": [
           "https://maxcdn.bootstrapcdn.com/bootstrap/**",
           "https://fonts.googleapis.com/**",
-          "https://www.google-analytics.com/**",
           "https://www.gravatar.com/avatar/**"
         ]
       }
