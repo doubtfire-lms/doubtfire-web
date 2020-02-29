@@ -162,8 +162,9 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerWithDelay:5000' }),
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerWithDelay:3000' }),
   ],
+  // TODO: Use an observable for service worker registration to ensure it is registered once sign in is complete.
   // Services
   providers: [
     CampusService,
