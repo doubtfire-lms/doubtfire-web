@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal, serviceWorkerRegistrationService) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal) ->
 
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
@@ -101,7 +101,6 @@ angular.module("doubtfire.sessions.states.sign-in", [])
               localStorageService.remove(doubtfireLoginTimeCookie)
             alertService.clearAll()
             $state.go "home", {}
-            serviceWorkerRegistrationService.signedIn()
           (response) ->
             $scope.session.password = ''
             $scope.signingIn = false
