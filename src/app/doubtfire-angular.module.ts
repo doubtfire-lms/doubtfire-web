@@ -98,8 +98,9 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';
+import { ServiceWorkerRegistrationService } from './common/services/service-worker-registration.service';
+import { serviceWorkerInitFactory } from './common/services/service-worker.factory';
 
 @NgModule({
   // components
@@ -162,7 +163,7 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
+    ServiceWorkerModule.register('/ngsw-worker.js'),
   ],
   // Services
   providers: [
@@ -185,6 +186,7 @@ import { environment } from '../environments/environment';
     CommentResourceServiceProvider,
     TaskCommentServiceProvider,
     AudioRecorderProvider,
+    ServiceWorkerRegistrationService,
     AudioRecorderServiceProvider,
     UnitStudentsEditorComponent,
     {
@@ -198,13 +200,14 @@ import { environment } from '../environments/environment';
       useClass: HttpErrorInterceptor,
       multi: true
     },
+    { provide: SwRegistrationOptions, useFactory: serviceWorkerInitFactory, deps: [ServiceWorkerRegistrationService] },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants
   ]
 })
-  // There is no longer any requirement for an EntryComponants section
-  // since Angular 9 introduced the IVY renderer
+// There is no longer any requirement for an EntryComponants section
+// since Angular 9 introduced the IVY renderer
 
 export class DoubtfireAngularModule {
   constructor(
@@ -223,7 +226,7 @@ export class DoubtfireAngularModule {
 
   ngDoBootstrap() {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
-      strictDi: true
+      strictDi: false
     });
   }
 }
