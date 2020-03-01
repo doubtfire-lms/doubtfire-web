@@ -163,7 +163,7 @@ import { serviceWorkerInitFactory } from './common/services/service-worker.facto
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('/ngsw-worker.js'),
+    ServiceWorkerModule.register('./ngsw-worker.js'),
   ],
   // Services
   providers: [
