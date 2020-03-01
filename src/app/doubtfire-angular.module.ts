@@ -165,7 +165,6 @@ import { serviceWorkerInitFactory } from './common/services/service-worker.facto
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('/ngsw-worker.js'),
   ],
-  // TODO: Use an observable for service worker registration to ensure it is registered once sign in is complete.
   // Services
   providers: [
     CampusService,
