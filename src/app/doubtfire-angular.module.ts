@@ -98,9 +98,8 @@ import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comme
 import { UserService } from './api/models/user/user.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
-import { ServiceWorkerModule, SwRegistrationOptions } from '@angular/service-worker';
-import { ServiceWorkerRegistrationService } from './common/services/service-worker-registration.service';
-import { serviceWorkerInitFactory } from './common/services/service-worker.factory';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   // components
@@ -163,7 +162,7 @@ import { serviceWorkerInitFactory } from './common/services/service-worker.facto
     ReactiveFormsModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('./ngsw-worker.js'),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
   ],
   // Services
   providers: [
@@ -186,7 +185,6 @@ import { serviceWorkerInitFactory } from './common/services/service-worker.facto
     CommentResourceServiceProvider,
     TaskCommentServiceProvider,
     AudioRecorderProvider,
-    ServiceWorkerRegistrationService,
     AudioRecorderServiceProvider,
     UnitStudentsEditorComponent,
     {
@@ -200,7 +198,6 @@ import { serviceWorkerInitFactory } from './common/services/service-worker.facto
       useClass: HttpErrorInterceptor,
       multi: true
     },
-    { provide: SwRegistrationOptions, useFactory: serviceWorkerInitFactory, deps: [ServiceWorkerRegistrationService] },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants
