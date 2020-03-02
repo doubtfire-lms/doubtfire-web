@@ -65,6 +65,9 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
       TaskCommentService.setCommentType(comment.type)
       CommentsModal.show()
 
+    $scope.isBubbleComment = (commentType) ->
+      return taskService.isBubbleComment(commentType)
+
     $scope.shouldShowAuthorIcon = (commentType) ->
       return not (commentType == "extension" || commentType == "status")
 

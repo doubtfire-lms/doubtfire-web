@@ -24,10 +24,6 @@ export class CommentBubbleActionComponent implements OnInit {
     return true;
   }
 
-  get isBubbleComment(): boolean {
-    return this.taskCommentService.isBubbleComment(this.comment);
-  }
-
   react() {
     // this.taskCommentService.reactToComment(this.comment.id);
   }
