@@ -86,7 +86,7 @@
               </a>
             </div>
           </div>
-          <div class="comment-overflow">
+          <div ng-if="isBubbleComment(comment.type)" class="comment-overflow">
             <comment-bubble-action
               ng-show="hover"
               [task]="task"
