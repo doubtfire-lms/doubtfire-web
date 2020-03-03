@@ -66,7 +66,7 @@ angular.module('doubtfire.common.file-uploader', [])
         name:       'CSV'
       code:
         extensions: ['pas', 'cpp', 'c', 'cs', 'h', 'java', 'py', 'js', 'html', 'coffee', 'rb', 'css',
-                    'scss', 'yaml', 'yml', 'xml', 'json', 'ts', 'r', 'rmd', 'rnw', 'rhtml', 'pres', 'tex',
+                    'scss', 'yaml', 'yml', 'xml', 'json', 'ts', 'r', 'rmd', 'rnw', 'rhtml', 'rpres', 'tex',
                     'vb', 'sql', 'txt', 'md']
         icon:       'fa-file-code-o'
         name:       'code'
