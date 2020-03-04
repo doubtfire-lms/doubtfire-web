@@ -86,14 +86,18 @@
       <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
         <mat-toolbar>
           <mat-toolbar-row>
+            <button mat-button target="_blank" (click)="enrolStudent()">
+              <i class="fa fa-user"></i> Enrol
+            </button>
+            <span class="spacer"></span>
             <button mat-button target="_blank" (click)="downloadEnrolments()">
               <i class="fa fa-download"></i> Download
             </button>
             <button mat-button target="_blank" (click)="uploadEnrolments()">
-              <i class="fa fa-upload"></i> Enrol
+              <i class="fa fa-upload"></i> Batch Enrol
             </button>
             <button mat-button target="_blank" (click)="uploadWithdrawals()">
-              <i class="fa fa-upload"></i> Withdraw
+              <i class="fa fa-upload"></i> Batch Withdraw
             </button>
             <span class="spacer"></span>
             <mat-paginator
