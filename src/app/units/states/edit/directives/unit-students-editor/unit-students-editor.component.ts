@@ -78,6 +78,7 @@ export class UnitStudentsEditorComponent {
   enrolStudent() {
     this.enrolModal.show(this.unit);
   }
+
   uploadEnrolments() {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
