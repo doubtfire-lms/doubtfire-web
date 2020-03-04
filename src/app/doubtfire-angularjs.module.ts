@@ -284,6 +284,7 @@ import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit
 import { CampusService } from './api/models/campus/campus.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
+import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -342,6 +343,8 @@ DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
 DoubtfireAngularJSModule.directive('studentCampusSelect',
   downgradeComponent({ component: StudentCampusSelectComponent }));
+DoubtfireAngularJSModule.directive('taskListItem',
+  downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 

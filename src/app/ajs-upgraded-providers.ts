@@ -8,6 +8,7 @@ export const auth = new InjectionToken('auth');
 export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
+export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
 export const CommentResourceService = new InjectionToken('CommentResourceService');
 export const alertService = new InjectionToken('AlertService');
@@ -48,6 +49,12 @@ export const currentUserProvider = {
 export const taskServiceProvider = {
   provide: taskService,
   useFactory: (i: any) => i.get('taskService'),
+  deps: ['$injector']
+};
+
+export const gradeServiceProvider = {
+  provide: gradeService,
+  useFactory: (i: any) => i.get('gradeService'),
   deps: ['$injector']
 };
 
