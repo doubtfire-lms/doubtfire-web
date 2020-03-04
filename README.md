@@ -200,7 +200,6 @@ TODO:
 - [ ] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [ ] ./src/app/common/grade-icon/grade-icon.coffee
 - [ ] ./src/app/common/pdf-viewer/pdf-viewer.coffee
-- [ ] ./src/app/common/status-icon/status-icon.coffee
 - [ ] ./src/app/common/file-uploader/file-uploader.coffee
 - [ ] ./src/app/common/user-icon/user-icon.coffee
 - [ ] ./src/app/common/common.coffee

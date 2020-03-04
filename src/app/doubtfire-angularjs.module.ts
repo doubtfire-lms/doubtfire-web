@@ -193,7 +193,6 @@ import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
-import 'build/src/app/common/status-icon/status-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/user-icon/user-icon.js';
@@ -285,6 +284,7 @@ import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit
 import { CampusService } from './api/models/campus/campus.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -342,7 +342,10 @@ DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
 DoubtfireAngularJSModule.directive('studentCampusSelect',
   downgradeComponent({ component: StudentCampusSelectComponent }));
-// Global configuration
+DoubtfireAngularJSModule.directive('statusIcon',
+  downgradeComponent({ component: StatusIconComponent }));
+
+  // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {
