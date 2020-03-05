@@ -8,7 +8,7 @@ import { taskService } from 'src/app/ajs-upgraded-providers';
 })
 export class StatusIconComponent {
   @Input() status: string;
-  @Input() showTooltip: boolean;
+  @Input() showTooltip: boolean = true;
 
   constructor (
     @Inject(taskService) private ts: any
