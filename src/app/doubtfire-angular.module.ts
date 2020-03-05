@@ -103,6 +103,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
+import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 
 @NgModule({
   // Components we declare
@@ -128,6 +129,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,
+    CreatePortfolioTaskListItemComponent,
     StatusIconComponent
   ],
   // Module Imports

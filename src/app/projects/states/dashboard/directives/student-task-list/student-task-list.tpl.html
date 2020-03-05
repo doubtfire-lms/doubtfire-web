@@ -11,5 +11,10 @@
     <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
       No tasks to display.
     </li>
+    <create-portfolio-task-list-item
+      ng-show="filteredTasks.length > 0"
+      [project]="project"
+      [set-selected-task]="setSelectedTask">
+    </create-portfolio-task-list-item>
   </ul>
 </div>
