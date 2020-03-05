@@ -1,24 +1,55 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <input type="text" class="form-control" ng-model="filters.taskName" ng-change="taskNameChanged()" placeholder="Search tasks...">
+    <input
+      type="text"
+      class="form-control"
+      ng-model="filters.taskName"
+      ng-change="taskNameChanged()"
+      placeholder="Search tasks..."
+    />
   </div>
   <ul class="list-group">
-    <create-portfolio-task-list-item
+    <li
+      class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
       ng-show="showCreatePortfolio && nearEnd()"
-      [project]="project"
-      [set-selected-task]="setSelectedTask">
-    </create-portfolio-task-list-item>
-    <task-list-item ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
-      [task]="task"
-      [set-selected-task]="setSelectedTask"
-      [is-selected-task]="isSelectedTask">
-    </task-list-item>
-    <create-portfolio-task-list-item
+    >
+      <create-portfolio-task-list-item
+        [project]="project"
+        [set-selected-task]="setSelectedTask"
+      >
+      </create-portfolio-task-list-item>
+    </li>
+
+    <li
+      class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
+      id="{{task.taskKeyToIdString()}}"
+      ng-click="setSelectedTask(task)"
+      ng-class="{selected: isSelectedTask(task)}"
+      ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
+    >
+      <task-list-item
+        [task]="task"
+        [set-selected-task]="setSelectedTask"
+        [is-selected-task]="isSelectedTask"
+      >
+      </task-list-item>
+    </li>
+
+    <li
+      class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
       ng-show="showCreatePortfolio && !nearEnd()"
-      [project]="project"
-      [set-selected-task]="setSelectedTask">
-    </create-portfolio-task-list-item>
-    <li ng-show="filteredTasks.length == 0 && !showCreatePortfolio" class="list-group-item text-center text-muted">
+    >
+      <create-portfolio-task-list-item
+        [project]="project"
+        [set-selected-task]="setSelectedTask"
+      >
+      </create-portfolio-task-list-item>
+    </li>
+
+    <li
+      ng-show="filteredTasks.length == 0 && !showCreatePortfolio"
+      class="list-group-item text-center text-muted"
+    >
       No tasks to display.
     </li>
   </ul>
