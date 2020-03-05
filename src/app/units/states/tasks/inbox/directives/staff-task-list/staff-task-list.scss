@@ -19,3 +19,11 @@ staff-task-list {
   left: 50%;
   transform: translateX(-50%) translateY(50%);
 }
+
+status-icon {
+  width: 100%;
+  min-width: 40px;
+  min-height: 40px;
+  font-size: 1.25em;
+  display: inline-block;
+}

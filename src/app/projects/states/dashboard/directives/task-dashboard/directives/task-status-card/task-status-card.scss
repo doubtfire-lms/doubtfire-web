@@ -17,6 +17,8 @@ task-status-card .card .card-heading {
         font-size: 1.25em;
         min-width: 40px;
         margin-right: 1ex;
+        min-height: 40px;
+        display: inline-block;
       }
       ul {
         margin-top: -1px;
