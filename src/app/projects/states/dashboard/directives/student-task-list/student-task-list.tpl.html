@@ -8,13 +8,13 @@
       [set-selected-task]="setSelectedTask"
       [is-selected-task]="isSelectedTask">
     </task-list-item>
-    <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
-      No tasks to display.
-    </li>
     <create-portfolio-task-list-item
-      ng-show="filteredTasks.length > 0"
+      ng-show="showCreatePortfolio"
       [project]="project"
       [set-selected-task]="setSelectedTask">
     </create-portfolio-task-list-item>
+    <li ng-show="filteredTasks.length == 0 && !showCreatePortfolio" class="list-group-item text-center text-muted">
+      No tasks to display.
+    </li>
   </ul>
 </div>

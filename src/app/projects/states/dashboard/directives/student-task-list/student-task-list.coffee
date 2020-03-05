@@ -25,6 +25,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
     applyFilters = ->
       filteredTasks = $filter('tasksWithName')($scope.project.activeTasks(), $scope.filters.taskName)
       $scope.filteredTasks = filteredTasks
+      $scope.showCreatePortfolio = !$scope.filters.taskName? || 'create portfolio'.indexOf($scope.filters.taskName.toLowerCase()) >= 0
     # Apply filters first-time
     applyFilters()
     # Sort the tasks according to priority.
