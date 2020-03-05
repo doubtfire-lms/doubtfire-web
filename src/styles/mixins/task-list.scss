@@ -151,13 +151,11 @@
     }
     .task-data {
       flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
     }
     .task-badges, .user-icon {
       align-self: center;
-    }
-    .task-data {
-      overflow: hidden;
-      white-space: nowrap;
     }
     .task-data > * {
       overflow: hidden;
