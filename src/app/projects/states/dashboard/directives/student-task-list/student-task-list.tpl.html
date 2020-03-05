@@ -3,13 +3,18 @@
     <input type="text" class="form-control" ng-model="filters.taskName" ng-change="taskNameChanged()" placeholder="Search tasks...">
   </div>
   <ul class="list-group">
+    <create-portfolio-task-list-item
+      ng-show="showCreatePortfolio && nearEnd()"
+      [project]="project"
+      [set-selected-task]="setSelectedTask">
+    </create-portfolio-task-list-item>
     <task-list-item ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
       [task]="task"
       [set-selected-task]="setSelectedTask"
       [is-selected-task]="isSelectedTask">
     </task-list-item>
     <create-portfolio-task-list-item
-      ng-show="showCreatePortfolio"
+      ng-show="showCreatePortfolio && !nearEnd()"
       [project]="project"
       [set-selected-task]="setSelectedTask">
     </create-portfolio-task-list-item>
