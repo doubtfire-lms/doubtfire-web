@@ -1,5 +1,13 @@
 @import '../../../styles/mixins/task-status-colors-generator.scss';
 
+:host {
+  width: 100%;
+  min-width: 40px;
+  min-height: 40px;
+  font-size: 1.25em;
+  display: inline-block;
+}
+
 @mixin status-icon($status) {
   $background-color: task-status-color($status);
   $foreground-color: task-status-color($status, fore);
