@@ -24,7 +24,7 @@ export class TaskCommentComposerComponent implements OnInit {
   differ: KeyValueDiffer<string, any>;
   showEmojiPicker: boolean = false;
   emojiSearchMode: boolean = false;
-  emojiRegex: RegExp = /(?<=\:)(.*?)(?=\:|$)/;
+  emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
 
