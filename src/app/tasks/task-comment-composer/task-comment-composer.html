@@ -1,3 +1,10 @@
+<emoji-mart
+  [hidden]="!this.showEmojiPicker"
+  class="emoji-picker"
+  title="Pick your emoji…"
+  emoji="thumbsup"
+  (emojiClick)="addEmoji($event)"
+></emoji-mart>
 <div id="replyContainer" [hidden]="originalComment == null">
   <div>
     <div class="replying-wrap">
@@ -36,11 +43,22 @@
       [contenteditable]="contentEditableValue()"
       (keydown.enter)="send($event)"
       [(ngModel)]="comment.text"
-      placeholder="Type a message, drag files..."
+      placeholder="Type a message..."
       name="commentComposer"
     ></div>
+    <div id="innerButtons">
+      <mat-icon
+        id="emojiButton"
+        (click)="this.showEmojiPicker = !this.showEmojiPicker"
+        aria-hidden="false"
+        aria-label="Emoji picker button"
+        >emoji_emotions</mat-icon
+      >
+    </div>
   </div>
 </form>
+
+<!-- <ng-template #emojiPopover class="emojiPopover"> </ng-template> -->
 
 <!-- The HTML which will be injected -->
 <ng-template #audioDiscussionTemplate>

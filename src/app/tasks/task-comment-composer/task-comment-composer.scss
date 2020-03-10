@@ -13,7 +13,23 @@
   padding: 0 8px 0 12px;
 }
 
+#innerButtons {
+  align-items: flex-end;
+  display: flex;
+  padding: 6px 0 6px 2px;
+}
 
+#emojiButton {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+.emoji-picker {
+  position: absolute;
+  right: 26px;
+  bottom: 60px;
+}
 
 #replyContainer {
   margin: 0.4em 1em -0.2em 1em;
@@ -149,9 +165,4 @@ button.btn-recorder {
   line-height: 1.42857;
   background-color: white;
   color: black;
-}
-
-.popover-content {
-  width: 275px;
-  max-height: 200px;
 }

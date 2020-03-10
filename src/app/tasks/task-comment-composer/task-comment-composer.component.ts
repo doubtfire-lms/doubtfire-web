@@ -20,6 +20,7 @@ export class TaskCommentComposerComponent implements OnInit {
 
   commentReplyID: { id: any } = this.ts.currentReplyID;
   differ: KeyValueDiffer<string, any>;
+  showEmojiPicker: boolean = false;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -90,10 +91,15 @@ export class TaskCommentComposerComponent implements OnInit {
 
   send(e: Event) {
     e.preventDefault();
-    let comment = this.comment.text.trim();
+    let comment = this.input.first.nativeElement.innerText.trim();
+    console.log(comment);
     if (comment !== '') {
       this.addComment(comment);
     }
+  }
+
+  addEmoji(e: any) {
+    this.input.first.nativeElement.innerText += e.emoji.native;
   }
 
   openDiscussionComposer() {
@@ -125,6 +131,7 @@ export class TaskCommentComposerComponent implements OnInit {
     this.ts.addComment(this.task, comment, 'text', originalCommentID,
       (success: any) => {
         this.comment.text = '';
+        this.input.first.nativeElement.innerText = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();
         this.task.comments = this.ts.mapComments(this.task.comments);
