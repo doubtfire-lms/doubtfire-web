@@ -100,6 +100,7 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   // components
@@ -160,6 +161,7 @@ import { environment } from 'src/environments/environment';
     MatTableModule,
     MatTabsModule,
     ReactiveFormsModule,
+    PickerModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
