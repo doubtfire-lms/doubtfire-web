@@ -2,6 +2,8 @@ import { Component, OnInit, Inject, Input, ViewChildren, QueryList, KeyValueDiff
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
 
 @Component({
   selector: 'task-comment-composer',
@@ -21,10 +23,15 @@ export class TaskCommentComposerComponent implements OnInit {
   commentReplyID: { id: any } = this.ts.currentReplyID;
   differ: KeyValueDiffer<string, any>;
   showEmojiPicker: boolean = false;
+  emojiSearchMode: boolean = false;
+  emojiRegex: RegExp = /(?<=\:)(.*?)(?=\:|$)/;
+  emojiSearchResults: EmojiData[] = [];
+  emojiMatch: string;
 
   constructor(
     private differs: KeyValueDiffers,
     public dialog: MatDialog,
+    private emojiSearch: EmojiSearch,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
     @Inject(alertService) private alerts: any,
@@ -91,15 +98,81 @@ export class TaskCommentComposerComponent implements OnInit {
 
   send(e: Event) {
     e.preventDefault();
-    let comment = this.input.first.nativeElement.innerText.trim();
-    console.log(comment);
-    if (comment !== '') {
-      this.addComment(comment);
+    if (this.input.first.nativeElement.innerText.trim() !== '') {
+      this.addComment();
     }
   }
 
+  keyTyped(e: KeyboardEvent) {
+    setTimeout(() => {
+      const commentText: string = this.input.first.nativeElement.innerText;
+      this.emojiSearchMode = !commentText.includes('`') && this.emojiRegex.test(commentText);
+
+      if (this.emojiSearchMode) {
+        // get the cursor position in the content-editable
+        const cursorPosition = this.caretOffset();
+
+        // get the text from the start of the string up to the cursor.
+        const testText = commentText.slice(0, cursorPosition);
+
+        // within this smaller string, find the last :
+        const lastColPos = testText.lastIndexOf(':');
+
+        // The emoji search term will be from the position after the last :
+        // Note, the second parameter is a length not position, so we subtract.
+        this.emojiMatch = testText.substr(lastColPos + 1, cursorPosition - lastColPos);
+
+        // results is the list of emoji returned.
+        let results = this.emojiSearch.search(this.emojiMatch);
+        if (results?.length > 0) {
+          this.emojiSearchResults = results.slice(0, 5).reverse();
+        }
+      } // we timeout 0 to ensure that the innerhtml is updated with the new character.
+    }, 0);
+  }
+
+  emojiSelected(emoji: string) {
+    this.input.first.nativeElement.innerText = this.input.first.nativeElement.innerText.replace(`:${this.emojiMatch}`, emoji);
+    this.emojiSearchMode = false;
+  }
+
+  private caretOffset() {
+    let element = this.input.first.nativeElement;
+    let caretOffset: number = 0;
+    let doc = element.ownerDocument || element.document;
+    let win = doc.defaultView || doc.parentWindow;
+    let sel;
+    if (typeof win.getSelection !== 'undefined') {
+      sel = win.getSelection();
+      if (sel.rangeCount > 0) {
+        let range = win.getSelection().getRangeAt(0);
+        let preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+      }
+    } else if ((sel = doc.selection) && sel.type !== 'Control') {
+      let textRange = sel.createRange();
+      let preCaretTextRange = doc.body.createTextRange();
+      preCaretTextRange.moveToElementText(element);
+      preCaretTextRange.setEndPoint('EndToEnd', textRange);
+      caretOffset = preCaretTextRange.text.length;
+    }
+    return caretOffset;
+  }
+
+  addEmoji(e: string);
+  addEmoji(e: Event);
   addEmoji(e: any) {
-    this.input.first.nativeElement.innerText += e.emoji.native;
+    let char: string;
+    if (typeof e === 'string') {
+      char = e;
+    } else {
+      char = e.emoji.native;
+    }
+    const text = this.input.first.nativeElement.innerText;
+    const position = this.caretOffset();
+    this.input.first.nativeElement.innerText = [text.slice(0, position), char, text.slice(position)].join('');
   }
 
   openDiscussionComposer() {
@@ -123,14 +196,13 @@ export class TaskCommentComposerComponent implements OnInit {
     // });
   }
 
-  addComment(comment: string) {
-    let originalCommentID = this.originalComment ? this.originalComment.id : null;
+  addComment() {
+    const originalCommentID = this.originalComment ? this.originalComment.id : null;
     if (originalCommentID != null) {
       this.cancelReply();
     }
-    this.ts.addComment(this.task, comment, 'text', originalCommentID,
+    this.ts.addComment(this.task, this.input.first.nativeElement.innerText, 'text', originalCommentID,
       (success: any) => {
-        this.comment.text = '';
         this.input.first.nativeElement.innerText = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();

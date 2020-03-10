@@ -5,6 +5,7 @@
   emoji="thumbsup"
   (emojiClick)="addEmoji($event)"
 ></emoji-mart>
+
 <div id="replyContainer" [hidden]="originalComment == null">
   <div>
     <div class="replying-wrap">
@@ -24,6 +25,15 @@
   </div>
 </div>
 
+<mat-action-list [hidden]="!emojiSearchMode" dense id="emojiSearchResults">
+  <mat-list-item
+    *ngFor="let emoji of emojiSearchResults"
+    (click)="emojiSelected(emoji.native)"
+  >
+    {{emoji.native}} {{emoji.colons}}
+  </mat-list-item>
+</mat-action-list>
+
 <form
   class="input-group col-sm-12 comment-submitter"
   ng-submit="addComment()"
@@ -42,7 +52,7 @@
       id="textField"
       [contenteditable]="contentEditableValue()"
       (keydown.enter)="send($event)"
-      [(ngModel)]="comment.text"
+      (keydown)="keyTyped($event)"
       placeholder="Type a message..."
       name="commentComposer"
     ></div>
