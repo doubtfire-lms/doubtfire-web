@@ -51,7 +51,7 @@ export class TaskCommentComposerComponent implements OnInit {
           // Set the input field as focused, so the user can start typing
           // timeout is required
           setTimeout(() => {
-            this.input.toArray()[0].nativeElement.focus();
+            this.input.first.nativeElement.focus();
           });
         }
       });
@@ -100,6 +100,8 @@ export class TaskCommentComposerComponent implements OnInit {
 
   send(e: Event) {
     e.preventDefault();
+    this.emojiSearchMode = false;
+    this.showEmojiPicker = false;
     if (this.input.first.nativeElement.innerText.trim() !== '') {
       this.addComment();
     }

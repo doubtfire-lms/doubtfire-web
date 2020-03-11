@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<mat-action-list [hidden]="!emojiSearchMode" dense id="emojiSearchResults">
+<mat-action-list [hidden]="!emojiSearchMode || !(emojiSearchResults.length > 0)" dense id="emojiSearchResults">
   <mat-list-item
     *ngFor="let emoji of emojiSearchResults"
     (click)="emojiSelected(emoji.native)"
