@@ -17,14 +17,12 @@ export class EmojiService {
 
   private mapEmojiToString(emoji): string {
     const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
-    const result = emojiList.find(e => e.native === emoji).colons;
-    return result;
+    return emojiList.find(e => e.native === emoji).colons;
   }
 
   private mapStringToEmoji(emojiString): string {
     const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
-    const result = emojiList.find(e => e.colons === emojiString).native;
-    return result;
+    return emojiList.find(e => e.colons === emojiString).native;
   }
 
   /**
