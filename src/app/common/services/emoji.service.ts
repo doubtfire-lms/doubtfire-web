@@ -17,12 +17,16 @@ export class EmojiService {
 
   private mapEmojiToString(emoji): string {
     const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
-    return emojiList.find(e => e.native === emoji).colons;
+    return emojiList.find(e => e.native === emoji)?.colons;
   }
 
-  private mapStringToEmoji(emojiString): string {
+  private mapStringToEmoji(emojiString: string): string {
     const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
-    return emojiList.find(e => e.colons === emojiString).native;
+    let result = emojiList.find(e => e.colons === emojiString)?.native;
+    if (result === undefined) {
+      result = emojiString.replace(/\:/, '<><>');
+    }
+    return result;
   }
 
   /**
@@ -38,7 +42,8 @@ export class EmojiService {
         return this.mapStringToEmoji(matched);
       });
     }
-    return s;
+    const result = s.replace(/\<\>\<\>/, ':');
+    return result;
   }
 
   /**
