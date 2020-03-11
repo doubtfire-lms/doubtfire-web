@@ -101,6 +101,7 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from './common/services/emoji.service';
 
 @NgModule({
   // components
@@ -173,6 +174,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     TutorialStreamService,
     UserService,
     ActivityTypeService,
+    EmojiService,
     userProvider,
     unitProvider,
     authProvider,

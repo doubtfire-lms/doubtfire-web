@@ -4,6 +4,7 @@ import { PopoverDirective } from 'ngx-bootstrap';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
+import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Component({
   selector: 'task-comment-composer',
@@ -32,6 +33,7 @@ export class TaskCommentComposerComponent implements OnInit {
     private differs: KeyValueDiffers,
     public dialog: MatDialog,
     private emojiSearch: EmojiSearch,
+    private emojiService: EmojiService,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
     @Inject(alertService) private alerts: any,
@@ -201,7 +203,8 @@ export class TaskCommentComposerComponent implements OnInit {
     if (originalCommentID != null) {
       this.cancelReply();
     }
-    this.ts.addComment(this.task, this.input.first.nativeElement.innerText, 'text', originalCommentID,
+    const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
+    this.ts.addComment(this.task, text, 'text', originalCommentID,
       (success: any) => {
         this.input.first.nativeElement.innerText = '';
         this.analytics.event('Vie Comments', 'Added new comment');
