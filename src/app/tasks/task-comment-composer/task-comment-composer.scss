@@ -34,7 +34,8 @@
 
 #emojiSearchResults {
   margin: 0 5px 0 5px;
-  max-height: 500px;
+  max-height: 125px;
+  overflow: scroll;
   background-color: white;
   border-radius: 12px;
   border-style: solid;
@@ -127,6 +128,11 @@
   &:hover {
     color: $brand-primary;
   }
+}
+
+.emoji-details {
+  line-height: 1.2em;
+  margin-left: 1em;
 }
 
 .popup {
