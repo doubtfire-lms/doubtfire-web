@@ -25,12 +25,22 @@
   </div>
 </div>
 
-<mat-action-list [hidden]="!emojiSearchMode || !(emojiSearchResults.length > 0)" dense id="emojiSearchResults">
+<mat-action-list
+  [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)"
+  dense
+  id="emojiSearchResults"
+>
   <mat-list-item
     *ngFor="let emoji of emojiSearchResults"
     (click)="emojiSelected(emoji.native)"
   >
-    {{emoji.native}} {{emoji.colons}}
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <ngx-emoji style="align-items: center;" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
+      <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
+        <div style="font-weight: 500; font-size: 12px;">{{emoji.name}}</div>
+        <div style="font-size: 10px;">{{emoji.colons}}</div>
+      </div>
+    </div>
   </mat-list-item>
 </mat-action-list>
 
@@ -52,7 +62,7 @@
       id="textField"
       [contenteditable]="contentEditableValue()"
       (keydown.enter)="send($event)"
-      (keydown)="keyTyped($event)"
+      (keydown)="keyTyped()"
       placeholder="Type a message..."
       name="commentComposer"
     ></div>

@@ -107,7 +107,7 @@ export class TaskCommentComposerComponent implements OnInit {
     }
   }
 
-  keyTyped(e: KeyboardEvent) {
+  keyTyped() {
     setTimeout(() => {
       const commentText: string = this.input.first.nativeElement.innerText;
       this.emojiSearchMode = !commentText.includes('`') && this.emojiRegex.test(commentText);
@@ -126,12 +126,17 @@ export class TaskCommentComposerComponent implements OnInit {
         // Note, the second parameter is a length not position, so we subtract.
         this.emojiMatch = testText.substr(lastColPos + 1, cursorPosition - lastColPos);
 
-        // results is the list of emoji returned.
-        let results = this.emojiSearch.search(this.emojiMatch);
-        if (results?.length > 0) {
-          this.emojiSearchResults = results.slice(0, 5).reverse();
+        if (this.emojiMatch?.includes(' ')) {
+          this.emojiSearchMode = false;
+          this.emojiSearchResults = null;
+        } else {
+          // results is the list of emoji returned.
+          const results = this.emojiSearch.search(this.emojiMatch);
+          if (results?.length > 0) {
+            this.emojiSearchResults = results.slice(0, 15);
+          }
         }
-      } // we timeout 0 to ensure that the innerhtml is updated with the new character.
+      } // timeout to ensure that the innerhtml is updated with the new character.
     }, 0);
   }
 
@@ -165,9 +170,9 @@ export class TaskCommentComposerComponent implements OnInit {
     return caretOffset;
   }
 
-  addEmoji(e: string);
-  addEmoji(e: Event);
-  addEmoji(e: any) {
+  addEmoji(e: string): void;
+  addEmoji(e: Event): void;
+  addEmoji(e: any): void {
     let char: string;
     if (typeof e === 'string') {
       char = e;
