@@ -15,9 +15,18 @@ export class EmojiService {
 
   }
 
-  private mapEmojiToString(emoji): string {
-    const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
-    return emojiList.find(e => e.native === emoji)?.colons;
+  private mapEmojiToString(emoji: string) {
+    console.log(emoji);
+    switch (emoji) {
+      case '🅰':
+        return ':a:';
+      case '🅱':
+          return ':b:';
+      default: {
+        const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
+        return emojiList.find(e => e.native === emoji)?.colons;
+      }
+    }
   }
 
   private mapStringToEmoji(emojiString: string): string {
