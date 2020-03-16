@@ -9,13 +9,13 @@ export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const analyticsService = new InjectionToken('analyticsService');
-export const CommentResourceService = new InjectionToken('CommentResourceService');
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
 export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const taskComment = new InjectionToken('TaskComment');
+export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 
 
@@ -69,12 +69,6 @@ export const alertServiceProvider = {
   deps: ['$injector']
 };
 
-export const CommentResourceServiceProvider = {
-  provide: CommentResourceService,
-  useFactory: (i: any) => i.get('CommentResourceService'),
-  deps: ['$injector']
-};
-
 export const AudioRecorderProvider = {
   provide: audioRecorder,
   useFactory: (i: any) => i.get('audioRecorder'),
@@ -99,9 +93,15 @@ export const CsvResultModalProvider = {
   deps: ['$injector']
 };
 
-export const TaskCommentServiceProvider = {
+export const TaskCommentProvider = {
   provide: taskComment,
   useFactory: (i: any) => i.get('TaskComment'),
+  deps: ['$injector']
+};
+
+export const TaskCommentServiceProvider = {
+  provide: taskCommentService,
+  useFactory: (i: any) => i.get('TaskCommentService'),
   deps: ['$injector']
 };
 
