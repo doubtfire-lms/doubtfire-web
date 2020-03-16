@@ -11,9 +11,9 @@ angular.module("doubtfire.common.modals.comments-modal", [])
       size: 'lg'
   CommentsModal
 )
-.controller("CommentsModalCtrl", ($scope, $modalInstance, CommentResourceService) ->
-  $scope.commentResourceUrl = CommentResourceService.commentResourceUrl
-  $scope.commentType = CommentResourceService.commentType
+.controller("CommentsModalCtrl", ($scope, $modalInstance, TaskCommentService) ->
+  $scope.commentResourceUrl = TaskCommentService.commentResourceUrl
+  $scope.commentType = TaskCommentService.commentType
   $scope.close = ->
     $modalInstance.dismiss()
 )

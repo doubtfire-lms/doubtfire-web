@@ -50,11 +50,11 @@ import {
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
   CsvResultModalProvider,
-  CommentResourceServiceProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   userProvider,
-  currentUser
+  currentUser,
+  TaskCommentProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -182,8 +182,8 @@ import { environment } from 'src/environments/environment';
     CsvUploadModalProvider,
     CsvResultModalProvider,
     UnitStudentEnrolmentModalProvider,
-    CommentResourceServiceProvider,
     TaskCommentServiceProvider,
+    TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     UnitStudentsEditorComponent,
