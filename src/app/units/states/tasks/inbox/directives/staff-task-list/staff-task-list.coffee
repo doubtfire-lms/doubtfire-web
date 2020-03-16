@@ -12,7 +12,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
-  controller: ($scope, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
+  controller: ($scope, $timeout, $filter, $window, $state, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Check taskSource exists
@@ -31,6 +31,10 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       taskDefinitionIdSelected: null
       taskDefinition: null
     }, $scope.filters)
+
+    $scope.refreshTasks = ->
+      refreshData()
+
     # Sets the new filteredTasks variable
     applyFilters = ->
       filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
@@ -49,6 +53,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     if $scope.isTaskDefMode
       $scope.submissionsUrl = TaskDefinition.getSubmissionsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
       $scope.submissionsPdfsUrl = TaskDefinition.getSubmissionsPdfsUrl($scope.unit.id, $scope.filters.taskDefinitionIdSelected)
+
     openTaskDefs = ->
       # Automatically "open" the task definition select element if in task def mode
       selectEl = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]')
