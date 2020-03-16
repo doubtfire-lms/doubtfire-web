@@ -12,7 +12,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     unitRole: '='
     filters: '=?'
     showSearchOptions: '=?'
-  controller: ($scope, $timeout, $filter, $window, $state, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
+  controller: ($scope, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Check taskSource exists
