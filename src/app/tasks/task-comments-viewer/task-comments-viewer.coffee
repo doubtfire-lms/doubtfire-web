@@ -61,9 +61,7 @@ angular.module("doubtfire.tasks.task-comments-viewer", [])
 
     $scope.openCommentsModal = (comment) ->
       resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-      TaskCommentService.setResourceUrl(resourceUrl)
-      TaskCommentService.setCommentType(comment.type)
-      CommentsModal.show()
+      CommentsModal.show(resourceUrl, comment.type)
 
     $scope.isBubbleComment = (commentType) ->
       return taskService.isBubbleComment(commentType)

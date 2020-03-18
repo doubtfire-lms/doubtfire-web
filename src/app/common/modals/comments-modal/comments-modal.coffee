@@ -4,16 +4,19 @@ angular.module("doubtfire.common.modals.comments-modal", [])
 #
 .factory("CommentsModal", ($modal) ->
   CommentsModal = {}
-  CommentsModal.show = ->
+  CommentsModal.show = (commentResourceUrl, commentType) ->
     $modal.open
       templateUrl: 'common/modals/comments-modal/comments-modal.tpl.html'
       controller: 'CommentsModalCtrl'
       size: 'lg'
+      resolve:
+        commentResourceUrl: -> commentResourceUrl
+        commentType: -> commentType
   CommentsModal
 )
-.controller("CommentsModalCtrl", ($scope, $modalInstance, TaskCommentService) ->
-  $scope.commentResourceUrl = TaskCommentService.commentResourceUrl
-  $scope.commentType = TaskCommentService.commentType
+.controller("CommentsModalCtrl", ($scope, $modalInstance, commentResourceUrl, commentType) ->
+  $scope.commentResourceUrl = commentResourceUrl
+  $scope.commentType = commentType
   $scope.close = ->
     $modalInstance.dismiss()
 )
