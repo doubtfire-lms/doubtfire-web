@@ -260,7 +260,10 @@ angular.module('doubtfire.common.file-uploader', [])
             try
               response = JSON.parse xhr.responseText
             catch e
-              response = xhr.responseText
+              if xhr.status is 0
+                response = { error: 'Could not connect to the Doubtfire server' }
+              else
+                response = xhr.responseText
             # Success (20x success range)
             if xhr.status >= 200 and xhr.status < 300
               $scope.onSuccess?(response)
@@ -273,8 +276,6 @@ angular.module('doubtfire.common.file-uploader', [])
             # Fail
             else
               $scope.onFailure?(response)
-              if xhr.status is 0
-                response.error = 'Could not connect to the Doubtfire server'
               $scope.uploadingInfo.success = false
               $scope.uploadingInfo.error   = response.error or "Unknown error"
             $scope.$apply()
