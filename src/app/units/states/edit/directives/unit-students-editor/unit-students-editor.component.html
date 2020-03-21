@@ -55,7 +55,7 @@
     <ng-container matColumnDef="campus" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
       <td mat-cell *matCellDef="let student">
-        {{ student.campus().name }}
+        <student-campus-select [unit]="unit" [student]="student" [update]="true"></student-campus-select>
       </td>
     </ng-container>
 
