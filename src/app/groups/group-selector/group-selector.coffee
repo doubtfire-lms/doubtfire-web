@@ -49,7 +49,7 @@ angular.module('doubtfire.groups.group-selector', [])
 
     # Initial sort orders
     $scope.tableSort =
-      order: 'number'
+      order: 'name'
       reverse: false
 
     # Table sorting
@@ -77,12 +77,6 @@ angular.module('doubtfire.groups.group-selector', [])
     # groups are technically optional)
     resetNewGroupForm = () ->
       @newGroupForm?.reset()
-      if _.isEmpty($scope.selectedGroupSet.groups)
-        $scope.newGroupNamePlaceholder = "Group 1"
-      else if _.last($scope.selectedGroupSet.groups)?.name.match(/\d+$/)?
-        $scope.newGroupNamePlaceholder = "Group #{_.last($scope.selectedGroupSet.groups).number + 1}"
-      else
-        $scope.newGroupNamePlaceholder = "Enter New Group Name..."
 
     # Group set selector
     $scope.selectedGroupSet ?= _.first($scope.unit.group_sets)

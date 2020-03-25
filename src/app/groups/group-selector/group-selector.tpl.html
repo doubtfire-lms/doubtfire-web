@@ -25,7 +25,7 @@
       </div>
     </div><!--/staff-filter-button-group-->
     <form name="newGroupForm" class="input-group pull-right col-md-6" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)">
-      <input class="form-control" placeholder="{{newGroupNamePlaceholder}}" ng-model="newGroupName">
+      <input class="form-control" placeholder="Group Name" ng-model="newGroupName">
       <span class="input-group-btn">
         <button type="submit" class="btn btn-success">
           <i class="fa fa-plus"></i> Create Group
@@ -48,11 +48,6 @@
 <table ng-show="loaded && filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
-      <th class="number">
-        <a ng-click="sortTableBy('number')">
-          Number <i ng-show="tableSort.order == 'number'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
-        </a>
-      </th>
       <th class="name">
         <a ng-click="sortTableBy('name')">
           Name <i ng-show="tableSort.order == 'name'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
@@ -77,9 +72,6 @@
     <tr
       ng-class="{info: group == selectedGroup}"
       ng-repeat="group in filteredGroups | groupsForStudent:project:selectedGroupSet">
-      <th ng-click="selectGroup(group)">
-        {{ group.number }}
-      </th><!--/group-number-->
       <th ng-click="selectGroup(group)">
         <span
           editable-text="group.name"
