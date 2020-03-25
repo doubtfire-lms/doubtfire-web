@@ -55,6 +55,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           teaching_period_id: $scope.unit.teaching_period_id
           active: $scope.unit.active
           auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
+          send_notifications: $scope.unit.send_notifications
         }
       else
         saveData = {
@@ -65,6 +66,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           end_date: $scope.unit.end_date
           active: $scope.unit.active
           auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
+          send_notifications: $scope.unit.send_notifications
         }
 
       if $scope.unit.id == -1

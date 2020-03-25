@@ -86,7 +86,25 @@
               When true, extensions will be automatically applied when they result in a date that is between the task's due date and deadline.
             </span>
           </div>
+        </div><!--/auto apply extension-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Send notification emails</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn btn-{{unit.send_notifications ? 'success' : 'default'}}" ng-model="unit.send_notifications" btn-radio="true" uncheckable>
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-{{unit.send_notifications ? 'default' : 'danger'}}" ng-model="unit.send_notifications" btn-radio="false" uncheckable>
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true, emails will be set to students each week to indicate progress and suggest future tasks for them to work on.
+            </span>
+          </div>
         </div><!--/active-->
+
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
