@@ -72,7 +72,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.900.4",
+    "@angular-devkit/build-angular": "~0.901.0",
     "@angular/cdk": "^9.0.1",
     "@angular/cli": "^9.1.0",
     "@angular/compiler": "^9.1.0",
@@ -125,7 +125,7 @@
     "sass": "^1.22.3",
     "ts-node": "~5.0.1",
     "tslint": "~6.1.0",
-    "typescript": "~3.7.5",
+    "typescript": "~3.8.3",
     "underscore": "^1.8.3"
   }
 }
