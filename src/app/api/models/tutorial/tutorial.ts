@@ -44,6 +44,7 @@ const IGNORE = [
 
 export class Tutorial extends Entity {
 
+  unit: any; // TODO: Convert to a unit object once this exists
   id: number;
   meeting_day: string;
   meeting_time: string;
@@ -54,6 +55,14 @@ export class Tutorial extends Entity {
   num_students: number;
   tutor: User;
   tutorial_stream: TutorialStream;
+
+  constructor (initialData: object, unit: any) {
+    super(); // delay update from json
+    this.unit = unit;
+    if (initialData) {
+      this.updateFromJson(initialData);
+    }
+  }
 
   /**
    * Map the passed in data to a json object on create for a tutorial.
@@ -106,6 +115,8 @@ export class Tutorial extends Entity {
       this.tutor = t;
     }
     if (data.tutorial_stream) {
+      let ts = this.unit.tutorialStreamForAbbr(data.tutorial_stream);
+      this.tutorial_stream = ts;
       // this is where the stream should be instantiated
     }
   }

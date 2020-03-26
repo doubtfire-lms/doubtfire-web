@@ -17,8 +17,8 @@ export class TutorialService extends EntityService<Tutorial> {
     super(httpClient);
   }
 
-  protected createInstanceFrom(json: any): Tutorial {
-    let tutorial = new Tutorial(json);
+  protected createInstanceFrom(json: any, other?: any): Tutorial {
+    let tutorial = new Tutorial(json, other);
     tutorial.updateFromJson(json);
     return tutorial;
   }

@@ -8,7 +8,7 @@ export class CampusService extends CacheableEntityService<Campus> {
   protected readonly endpointFormat = 'campuses/:id:';
   entityName = 'Campus';
 
-  protected createInstanceFrom(json: any): Campus {
+  protected createInstanceFrom(json: any, other?: any): Campus {
     let campus = new Campus();
     campus.updateFromJson(json);
     return campus;

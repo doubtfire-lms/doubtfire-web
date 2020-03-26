@@ -17,7 +17,7 @@ export class UserService extends CacheableEntityService<User> {
     super(httpClient);
   }
 
-  protected createInstanceFrom(json: any): User {
+  protected createInstanceFrom(json: any, other?: any): User {
     let user = new User();
     user.updateFromJson(json);
     return user;

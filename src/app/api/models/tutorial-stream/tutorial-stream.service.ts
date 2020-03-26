@@ -13,7 +13,7 @@ export class TutorialStreamService extends EntityService<TutorialStream> {
     super(httpClient);
   }
 
-  protected createInstanceFrom(json: any): TutorialStream {
+  protected createInstanceFrom(json: any, other?: any): TutorialStream {
     let stream = new TutorialStream(json);
     stream.updateFromJson(json);
     return stream;

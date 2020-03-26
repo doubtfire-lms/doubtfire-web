@@ -73,18 +73,20 @@ export abstract class EntityService<T extends Entity>  {
    *
    * @param json The json data to convert to T
    */
-  protected abstract createInstanceFrom(json: any): T;
+  protected abstract createInstanceFrom(json: any, other?: any): T;
 
   /**
    * Make a get request to the end point, using the supplied parameters to determine path.
    *
    * @param pathIds Either the id, if a number and maps simple to ':id', otherwise an object
    *                with keys the match the placeholders within the endpointFormat string.
+   * @param other   Any other data that is needed to be passed to the creation of entities
+   *                resulting from this get request.
    * @param options Optional http options
    */
-  public get(pathIds: number, options?: HttpOptions): Observable<T>;
-  public get(pathIds: object, options?: HttpOptions): Observable<T>;
-  public get(pathIds: any, options?: HttpOptions): Observable<T> {
+  public get(pathIds: number, other?: any, options?: HttpOptions): Observable<T>;
+  public get(pathIds: object, other?: any, options?: HttpOptions): Observable<T>;
+  public get(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
     let object = { ...pathIds };
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
@@ -92,7 +94,7 @@ export abstract class EntityService<T extends Entity>  {
     const path = this.buildEndpoint(this.endpointFormat, object);
 
     return this.httpClient.get(path, options)
-      .pipe(map(rawData => this.createInstanceFrom(rawData)));  // Turn the raw JSON returned into the object T
+      .pipe(map(rawData => this.createInstanceFrom(rawData, other)));  // Turn the raw JSON returned into the object T
   }
 
   /**
@@ -145,17 +147,18 @@ export abstract class EntityService<T extends Entity>  {
    * Make a create request to the endpoint, using the supplied parameters to determine the path.
    *
    * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
+   * @param other   Any other data needed to be passed to the entity on creation
    * @param options Optional http options
    * @returns {Observable} a new cold observable with the newly created @type {T}
    */
-  public create(pathIds?: Object, options?: HttpOptions): Observable<T>;
-  public create(pathIds?: any, options?: HttpOptions): Observable<T> {
+  public create(pathIds?: Object, other?: any, options?: HttpOptions): Observable<T>;
+  public create(pathIds?: any, other?: any, options?: HttpOptions): Observable<T> {
     let object = { ...pathIds };
     const json = (typeof pathIds.toJson === 'function') ? pathIds.toJson() : pathIds;
     const path = this.buildEndpoint(this.endpointFormat, object);
     return this.httpClient.post(path, json, options)
       .pipe(
-        map(rawData => this.createInstanceFrom(rawData))
+        map(rawData => this.createInstanceFrom(rawData, other))
       );
   }
 
@@ -164,11 +167,13 @@ export abstract class EntityService<T extends Entity>  {
    *
    * @param pathIds Either the id, if a number and maps simple to ':id', otherwise an object
    *                with keys the match the placeholders within the endpointFormat string.
+   * @param other   Any other data that is needed to be passed to entities created from
+   *                this delete request.
    * @param options Optional http options
    */
-  public delete(pathIds: number, options?: HttpOptions): Observable<T>;
-  public delete(pathIds: Object, options?: HttpOptions): Observable<T>;
-  public delete(pathIds: any, options?: HttpOptions): Observable<T> {
+  public delete(pathIds: number, other?: any, options?: HttpOptions): Observable<T>;
+  public delete(pathIds: Object, other?: any, options?: HttpOptions): Observable<T>;
+  public delete(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
     let object = { ...pathIds };
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
@@ -176,7 +181,7 @@ export abstract class EntityService<T extends Entity>  {
     const path = this.buildEndpoint(this.endpointFormat, object);
 
     return this.httpClient.delete(path, options)
-      .pipe(map(rawData => this.createInstanceFrom(rawData)));
+      .pipe(map(rawData => this.createInstanceFrom(rawData, other)));
   }
 
 
@@ -185,8 +190,8 @@ export abstract class EntityService<T extends Entity>  {
    * from the server.
    * @returns {T[]} The array of Objects
    */
-  private convertCollection(collection: any): T[] {
-    return collection.map((data: any) => this.createInstanceFrom(data));
+  private convertCollection(collection: any, other?: any): T[] {
+    return collection.map((data: any) => this.createInstanceFrom(data, other));
   }
 
   /**

@@ -90,9 +90,7 @@ angular.module("doubtfire.common.services.units", [])
         )
         # Map extra utility to tutorials
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
-          tutorial.unit = unit
-          tutorial.tutorial_stream = unit.tutorialStreamForAbbr(tutorial.tutorial_stream)
-          tutorialService.createInstanceFrom(tutorial)
+          tutorialService.createInstanceFrom(tutorial, unit)
         )
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
