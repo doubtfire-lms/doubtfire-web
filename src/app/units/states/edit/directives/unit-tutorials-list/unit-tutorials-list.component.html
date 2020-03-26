@@ -43,7 +43,8 @@
         <ng-template #edit>
           <mat-form-field class="data-entry">
             <mat-label>Campus</mat-label>
-            <mat-select required [compareWith]="compareSelection" formControlName="campus">
+            <mat-select [compareWith]="compareSelection" formControlName="campus">
+              <mat-option [value]="null">Not Specified</mat-option>
               <mat-option *ngFor="let campus of campuses" [value]="campus">
                 {{campus.name }}
               </mat-option>
@@ -54,7 +55,8 @@
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
           <mat-label>Campus</mat-label>
-          <mat-select required formControlName="campus">
+          <mat-select formControlName="campus">
+            <mat-option [value]="null">Not Specified</mat-option>
             <mat-option *ngFor="let campus of campuses" [value]="campus">
               {{campus.name }}
             </mat-option>

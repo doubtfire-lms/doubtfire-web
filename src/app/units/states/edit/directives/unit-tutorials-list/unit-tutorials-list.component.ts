@@ -22,7 +22,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   @Input() stream: TutorialStream;
   @Input() unit: any;
 
-  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Asynchronous'];
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
@@ -46,9 +46,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
       abbreviation: new FormControl('', [
         Validators.required
       ]),
-      campus: new FormControl(null, [
-        Validators.required
-      ]),
+      campus: new FormControl(null, []),
       capacity: new FormControl('', [
         Validators.required
       ]),
@@ -62,7 +60,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.campusService.query().subscribe(campuses => {
       this.campuses.push(...campuses);
     });
-    this.tutorials = this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream === this.stream);
+    this.tutorials = this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream == this.stream);
     this.dataSource = new MatTableDataSource(this.tutorials);
   }
 
@@ -70,6 +68,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // and is only run when an entity is successfully created or updated
   onSuccess(response: Tutorial, isNew: boolean) {
     if (isNew) {
+      this.unit.tutorials.push(response);
       this.pushToTable(response);
     }
   }

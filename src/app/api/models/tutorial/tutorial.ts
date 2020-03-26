@@ -75,7 +75,10 @@ export class Tutorial extends Entity {
       if (key === 'tutor_id') {
         result['tutorial']['tutor_id'] = data['tutorial']['tutor']['user_id'];
       } else if (key === 'campus_id') {
-        result['tutorial']['campus_id'] = data['tutorial']['campus']['id'];
+        if(data['tutorial']['campus'])
+          result['tutorial']['campus_id'] = data['tutorial']['campus']['id'];
+        else
+          result['tutorial']['campus_id'] = -1
       } else {
         result['tutorial'][key] = data['tutorial'][key];
       }
@@ -92,7 +95,10 @@ export class Tutorial extends Entity {
           return data['tutor']['user_id'] ? data['tutor']['user_id'] : data['tutor']['id'];
         },
         campus_id: (data: Object) => {
-          return data['campus']['id'];
+          if ( data['campus'] )
+            return data['campus']['id'];
+          else
+            return -1;
         }
       })
     };
