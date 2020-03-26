@@ -145,7 +145,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'campus': return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
+        case 'campus': return this.sortCompare(a.campus ? a.campus.abbreviation : "", b.campus ? b.campus.abbreviation : "", isAsc);
         case 'tutor': return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
         default: return 0;
       }
