@@ -31,7 +31,8 @@
               "./build/assets/node_modules/angular-xeditable/dist/css/xeditable.css",
               "./build/assets/node_modules/codemirror/lib/codemirror.css",
               "./build/assets/node_modules/codemirror/theme/xq-light.css",
-              "./build/assets/node_modules/nvd3/build/nv.d3.css"
+              "./build/assets/node_modules/nvd3/build/nv.d3.css",
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css"
             ],
             "scripts": [
               "node_modules/moment/moment.js",

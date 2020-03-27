@@ -1,3 +1,11 @@
+<emoji-mart
+  [hidden]="!this.showEmojiPicker"
+  class="emoji-picker"
+  title="Pick your emoji…"
+  emoji="thumbsup"
+  (emojiClick)="addEmoji($event)"
+></emoji-mart>
+
 <div id="replyContainer" [hidden]="originalComment == null">
   <div>
     <div class="replying-wrap">
@@ -17,6 +25,25 @@
   </div>
 </div>
 
+<mat-action-list
+  [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)"
+  dense
+  id="emojiSearchResults"
+>
+  <mat-list-item
+    *ngFor="let emoji of emojiSearchResults"
+    (click)="emojiSelected(emoji.native)"
+  >
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <ngx-emoji style="align-items: center;" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
+      <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
+        <div style="font-weight: 500; font-size: 12px;">{{emoji.name}}</div>
+        <div style="font-size: 10px;">{{emoji.colons}}</div>
+      </div>
+    </div>
+  </mat-list-item>
+</mat-action-list>
+
 <form
   class="input-group col-sm-12 comment-submitter"
   ng-submit="addComment()"
@@ -35,12 +62,23 @@
       id="textField"
       [contenteditable]="contentEditableValue()"
       (keydown.enter)="send($event)"
-      [(ngModel)]="comment.text"
-      placeholder="Type a message, drag files..."
+      (keydown)="keyTyped()"
+      placeholder="Type a message..."
       name="commentComposer"
     ></div>
+    <div id="innerButtons">
+      <mat-icon
+        id="emojiButton"
+        (click)="this.showEmojiPicker = !this.showEmojiPicker"
+        aria-hidden="false"
+        aria-label="Emoji picker button"
+        >emoji_emotions</mat-icon
+      >
+    </div>
   </div>
 </form>
+
+<!-- <ng-template #emojiPopover class="emojiPopover"> </ng-template> -->
 
 <!-- The HTML which will be injected -->
 <ng-template #audioDiscussionTemplate>

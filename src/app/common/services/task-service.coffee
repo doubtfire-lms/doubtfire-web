@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService) ->
+.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, currentUser, groupService, emojiService) ->
   #
   # The unit service object
   #
@@ -542,6 +542,9 @@ angular.module("doubtfire.common.services.tasks", [])
     comments[0].should_show_timestamp = true
 
     for i in [0...comments.length]
+      # Turn the emoji colons into emojis for rendering.
+      comments[i].comment = emojiService.colonsToNative(comments[i].comment)
+
       # If the comment is a reply to an earlier comment
       if comments[i].reply_to_id?
         comments[i].original_comment = $filter('filter')(comments, {'id':comments[i].reply_to_id})[0]

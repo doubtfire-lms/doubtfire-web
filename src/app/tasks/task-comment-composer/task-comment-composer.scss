@@ -13,7 +13,35 @@
   padding: 0 8px 0 12px;
 }
 
+#innerButtons {
+  align-items: flex-end;
+  display: flex;
+  padding: 6px 0 6px 2px;
+}
 
+#emojiButton {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+.emoji-picker {
+  z-index: 1060;
+  position: absolute;
+  right: 26px;
+  bottom: 60px;
+}
+
+#emojiSearchResults {
+  margin: 0 5px 0 5px;
+  max-height: 125px;
+  overflow: scroll;
+  background-color: white;
+  border-radius: 12px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: darken($color: white, $amount: 10);
+}
 
 #replyContainer {
   margin: 0.4em 1em -0.2em 1em;
@@ -102,6 +130,11 @@
   }
 }
 
+.emoji-details {
+  line-height: 1.2em;
+  margin-left: 1em;
+}
+
 .popup {
   position: absolute;
   left: 0;
@@ -149,9 +182,4 @@ button.btn-recorder {
   line-height: 1.42857;
   background-color: white;
   color: black;
-}
-
-.popover-content {
-  width: 275px;
-  max-height: 200px;
 }
