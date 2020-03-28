@@ -109,6 +109,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
 
 @NgModule({
   // Components we declare
@@ -137,7 +138,8 @@ import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
     CreatePortfolioTaskListItemComponent,
     StatusIconComponent,
     TaskCommentsViewerComponent,
-    MarkedPipe
+    UserIconComponent,
+    MarkedPipe,
   ],
   // Module Imports
   imports: [

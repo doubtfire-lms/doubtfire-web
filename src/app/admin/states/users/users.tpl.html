@@ -24,37 +24,34 @@
       </div>
       <div class="panel-body">
         <div class="callout callout-info" ng-hide="users.length > 0">No users have been registered with {{externalName.value}} yet</div>
-        <div style="position: relative;
-                    overflow: auto;">
-          <table class="table table-condensed table-hover" style= "min-width: 720px;">
-            <thead>
-              <tr>
-                <th>Avatar</th>
-                <th><a ng-click="sortOrder='id'; reverse=!reverse">User ID</a></th>
-                <th><a ng-click="sortOrder='first_name'; reverse=!reverse">First Name</a></th>
-                <th><a ng-click="sortOrder='last_name'; reverse=!reverse">Last Name</a></th>
-                <th>Username</th>
-                <th>Email</th>
-                <th><a ng-click="sortOrder='system_role'; reverse=!reverse">System Role</a></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="pointer" ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
-                <td>
-                <user-icon size="20" user="user" email="user.email" style="max-width: 20px; max-height: 20px; font-size: 12px;"></user-icon>
-                </td>
-                <td>{{user.id}}</td>
-                <td>{{user.first_name}}</td>
-                <td>{{user.last_name}}</td>
-                <td>{{user.username}}</td>
-                <td><a href="mailto:{{user.email}}">{{user.email}}</a></td>
-                <td>
-                  {{user.system_role}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>Avatar</th>
+              <th><a ng-click="sortOrder='id'; reverse=!reverse">User ID</a></th>
+              <th><a ng-click="sortOrder='first_name'; reverse=!reverse">First Name</a></th>
+              <th><a ng-click="sortOrder='last_name'; reverse=!reverse">Last Name</a></th>
+              <th>Username</th>
+              <th>Email</th>
+              <th><a ng-click="sortOrder='system_role'; reverse=!reverse">System Role</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="pointer" ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
+              <td>
+              <user-icon [size]="20" [user]="user" [email]="user.email" style="max-width: 20px; max-height: 20px; font-size: 12px;"></user-icon>
+              </td>
+              <td>{{user.id}}</td>
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td>{{user.username}}</td>
+              <td><a href="mailto:{{user.email}}">{{user.email}}</a></td>
+              <td>
+                {{user.system_role}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="panel-footer clearfix">
         <a href class="btn btn-success pull-right" ng-click="showUserModal()">

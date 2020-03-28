@@ -36,8 +36,8 @@
             *ngIf="
               comment.should_show_avatar && shouldShowAuthorIcon(comment.type)
             "
-            size="50"
-            user="comment.author"
+            [size]="20"
+            [user]="comment.author"
             [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
           >
           </user-icon>
