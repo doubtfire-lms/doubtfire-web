@@ -105,6 +105,7 @@ import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
 
 @NgModule({
   // components
@@ -130,7 +131,8 @@ import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskCommentsViewerComponent,
-    MarkedPipe
+    UserIconComponent,
+    MarkedPipe,
   ],
   // Module Imports
   imports: [
