@@ -108,6 +108,7 @@ import { TaskListItemComponent } from './projects/states/dashboard/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
+import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
 
 @NgModule({
   // Components we declare
@@ -135,7 +136,8 @@ import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-c
     TaskListItemComponent,
     CreatePortfolioTaskListItemComponent,
     StatusIconComponent,
-    TaskCommentsViewerComponent
+    TaskCommentsViewerComponent,
+    MarkedPipe
   ],
   // Module Imports
   imports: [

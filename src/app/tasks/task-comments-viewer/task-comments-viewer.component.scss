@@ -14,11 +14,11 @@ $border-width: 0.7em;
 $comment-border-radius: $border-width * 1.9; // Leave the 1.9
 $comment-inner-border-radius: 4px;
 :host {
-  task-comments-viewer .panel {
+   .panel {
     // @include flex-panel;
   }
 
-  task-comments-viewer p#commentTimestamp {
+   p#commentTimestamp {
     color: #9696969d;
     font-size: 11px;
     text-align: center;
@@ -26,19 +26,19 @@ $comment-inner-border-radius: 4px;
     margin-bottom: 0;
   }
 
-  task-comments-viewer .panel-body {
+   .panel-body {
     overflow: scroll;
     height: 100%;
     font-size: 15px;
     width: 100%;
   }
 
-  task-comments-viewer .panel.dragover {
+   .panel.dragover {
     margin: 0;
     border: 5px dashed #333333;
   }
 
-  task-comments-viewer .comment-container {
+   .comment-container {
     display: flex;
     flex-grow: 2;
 
@@ -52,7 +52,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer .comment-by-other-user .comment-container {
+   .comment-by-other-user .comment-container {
     display: flex;
     flex-direction: row-reverse;
     flex-grow: 2;
@@ -65,11 +65,11 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer .comment-container .comment-extension {
+   .comment-container .comment-extension {
     width: 100%;
   }
 
-  task-comments-viewer .comment-container .comment-status {
+   .comment-container .comment-status {
     width: 100%;
     align-self: flex-end;
 
@@ -114,7 +114,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Primary comment div
-  task-comments-viewer .comment {
+   .comment {
     display: flex;
     &.new-comment .text-bubble {
       animation: fade-in-comment-animation;
@@ -169,7 +169,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Author Bubble
-  task-comments-viewer .comment .user-icon {
+   .comment .user-icon {
     margin-right: -37px;
     display: inline-block;
     align-self: flex-end;
@@ -189,7 +189,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer
+
     .comment.comment-by-other-user
     .user-icon
     .user-icon-initials {
@@ -203,19 +203,19 @@ $comment-inner-border-radius: 4px;
     // color: $text-color;
     color: black;
   }
-  task-comments-viewer .comment.comment-by-other-user .user-icon {
+   .comment.comment-by-other-user .user-icon {
     margin-left: -37px;
     margin-right: 0;
   }
 
-  task-comments-viewer img {
+   img {
     border-radius: $comment-border-radius;
     color: #eeeeee;
     border-style: solid;
     border-width: 1px;
   }
 
-  task-comments-viewer .bubble {
+   .bubble {
     border-top-left-radius: $comment-inner-border-radius;
     border-top-right-radius: $comment-border-radius;
     border-bottom-left-radius: $comment-inner-border-radius;
@@ -224,7 +224,7 @@ $comment-inner-border-radius: 4px;
     margin-top: 1px;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .bubble {
+   .comment.comment-by-other-user .bubble {
     border-top-left-radius: $comment-border-radius;
     border-bottom-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-inner-border-radius;
@@ -233,39 +233,39 @@ $comment-inner-border-radius: 4px;
     margin-top: 1px;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .bubble.first-in-series {
+   .comment.comment-by-other-user .bubble.first-in-series {
     border-top-right-radius: $comment-border-radius;
     border-top-left-radius: $comment-border-radius;
     border-bottom-right-radius: $comment-inner-border-radius;
     margin-top: 0.2em;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .bubble.last-in-series {
+   .comment.comment-by-other-user .bubble.last-in-series {
     border-bottom-right-radius: $comment-border-radius;
     border-top-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-inner-border-radius;
     margin-bottom: 0.4em;
   }
 
-  task-comments-viewer
+
     .comment.comment-by-other-user
     .bubble.first-in-series.last-in-series {
     border-radius: $comment-border-radius;
   }
 
-  task-comments-viewer .bubble.first-in-series {
+   .bubble.first-in-series {
     border-top-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-border-radius;
     margin-top: 0.2em;
   }
 
-  task-comments-viewer .bubble.last-in-series {
+   .bubble.last-in-series {
     border-radius: $comment-border-radius;
     border-top-left-radius: $comment-inner-border-radius;
     margin-bottom: 0.4em;
   }
 
-  task-comments-viewer .bubble.first-in-series.last-in-series {
+   .bubble.first-in-series.last-in-series {
     border-radius: $comment-border-radius;
   }
 
@@ -298,14 +298,14 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer .comment .extension-bubble {
+   .comment .extension-bubble {
     width: 100%;
     background-color: transparent;
   }
 
   // text comments
-  task-comments-viewer .comment .text-bubble,
-  task-comments-viewer .comment .pdf-bubble {
+   .comment .text-bubble,
+   .comment .pdf-bubble {
     @include base-bubble;
     display: inline-block;
 
@@ -324,13 +324,13 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer .pdf-bubble {
+   .pdf-bubble {
     @include base-bubble;
     display: inline-block;
   }
 
   // Audio comments
-  task-comments-viewer .comment .audio-bubble {
+   .comment .audio-bubble {
     @include base-bubble;
     display: inline-block;
     width: 70%;
@@ -349,13 +349,13 @@ $comment-inner-border-radius: 4px;
   }
 
   // Image comments
-  task-comments-viewer .bubble.image-bubble {
+   .bubble.image-bubble {
     @include base-bubble;
     background: transparent;
   }
 
   // Disucssion comments
-  task-comments-viewer .comment .discussion-bubble {
+   .comment .discussion-bubble {
     @include base-bubble;
     max-width: 300px;
     mat-stepper {
@@ -365,7 +365,7 @@ $comment-inner-border-radius: 4px;
     background: $discussion-comment-bubble-color;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .text-bubble {
+   .comment.comment-by-other-user .text-bubble {
     background: $comment-bubble-color-other-user;
     // color: $text-color;
     color: black;
@@ -373,7 +373,7 @@ $comment-inner-border-radius: 4px;
     margin-left: 0;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .pdf-bubble {
+   .comment.comment-by-other-user .pdf-bubble {
     background: $comment-bubble-color-other-user;
     // color: $text-color;
     color: black;
@@ -388,24 +388,24 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  task-comments-viewer .comment.comment-by-other-user .audio-bubble {
+   .comment.comment-by-other-user .audio-bubble {
     margin-right: 50px;
     margin-left: 0;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .discussion-bubble {
+   .comment.comment-by-other-user .discussion-bubble {
     margin-right: 50px;
     margin-left: 0;
   }
 
-  task-comments-viewer .comment.comment-by-other-user .image-bubble {
+   .comment.comment-by-other-user .image-bubble {
     background: transparent;
     margin-right: 50px;
     margin-left: 0;
   }
 
   // Read receipts
-  task-comments-viewer .read-receipt {
+   .read-receipt {
     // @extend .small;
     // @extend .text-muted;
     // @extend .text-right;
@@ -413,21 +413,21 @@ $comment-inner-border-radius: 4px;
   }
 
   // Footer
-  task-comments-viewer .panel-footer {
+   .panel-footer {
     padding: 0;
     font-size: 15px;
     background-color: white;
   }
 
   // Editor & submitter
-  task-comments-viewer .markdown-editor .markdown-editor-inner-context {
+   .markdown-editor .markdown-editor-inner-context {
     border: 0;
     width: 100%;
     box-shadow: none;
     border-radius: none;
     min-height: 54px;
   }
-  task-comments-viewer .comment-submitter {
+   .comment-submitter {
     display: flex;
     word-wrap: break-word;
     hyphens: auto;

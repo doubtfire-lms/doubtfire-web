@@ -70,11 +70,10 @@
               <div *ngSwitchCase="'text'" class="comment-text">
                 <div
                   class="markdown-to-html"
-                  [innerHTML]="comment.comment"
+                  [innerHTML]="comment.comment | marked"
                 >
               </div>
             </div>
-            <!--TODO: pipe to markdown -->
 
               <div *ngSwitchCase="'audio'" class="comment-audio">
                 <audio-player></audio-player>
