@@ -103,6 +103,7 @@ import { environment } from 'src/environments/environment';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
+import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 
 @NgModule({
   // components
@@ -126,7 +127,8 @@ import { EmojiService } from './common/services/emoji.service';
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
     StudentTutorialSelectComponent,
-    StudentCampusSelectComponent
+    StudentCampusSelectComponent,
+    TaskCommentsViewerComponent
   ],
   // Module Imports
   imports: [

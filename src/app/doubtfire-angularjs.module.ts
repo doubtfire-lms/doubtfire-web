@@ -48,7 +48,6 @@ import 'build/src/app/home/states/new-user-wizard/new-user-wizard.js';
 import 'build/src/app/home/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
-import 'build/src/app/tasks/task-comments-viewer/task-comments-viewer.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
@@ -286,6 +285,7 @@ import { CampusService } from './api/models/campus/campus.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
+import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -345,6 +345,8 @@ DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
 DoubtfireAngularJSModule.directive('studentCampusSelect',
   downgradeComponent({ component: StudentCampusSelectComponent }));
+DoubtfireAngularJSModule.directive('taskCommentsViewer',
+  downgradeComponent({ component: TaskCommentsViewerComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
