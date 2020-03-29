@@ -2,10 +2,11 @@ group-selector {
   display: block;
 }
 group-selector table {
-  th.name { width: 30%; }
-  th.tutorial { width: 30%; }
-  th.capacity { width: 10%; }
-  th.actions { width: 30%; }
+  th.name { width: 25%; }
+  th.tutorial { width: 15%; }
+  th.capacity_adjustment { width: 15%; }
+  th.capacity { width: 15%; }
+  th.actions { width: 25%; }
 }
 group-selector .panel-title > group-set-selector {
   display: inline-block;

@@ -73,13 +73,14 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
     $scope.csvImportResponse = {}
     $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
     $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupSet)
+    $scope.groupStudentCSVUploadUrl = -> GroupSet.groupStudentCSVUploadUrl($scope.unit, $scope.selectedGroupSet)
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
       CsvResultModal.show 'Group CSV upload results.', response
-      $scope.unit.refresh()
+      $scope.selectGroupSet($scope.selectedGroupSet)
     $scope.onGroupCSVComplete = ->
       $scope.isGroupCSVUploading = null
 
-    $scope.downloadGroupCSV = ->
-      GroupSet.downloadCSV($scope.unit, $scope.selectedGroupSet)
+    $scope.downloadGroupCSV = -> GroupSet.downloadCSV($scope.unit, $scope.selectedGroupSet)
+    $scope.downloadGroupStudentCSV = -> GroupSet.downloadStudentCSV($scope.unit, $scope.selectedGroupSet)
 )

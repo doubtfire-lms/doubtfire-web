@@ -17,7 +17,7 @@ export class UnitStudentsEditorComponent {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @Input() unit: any;
 
-  columns: string[] = ['student_id', 'first_name', 'last_name', 'student_email', 'campus', 'tutorial', 'enrolled'];
+  columns: string[] = ['student_id', 'first_name', 'last_name', 'student_email', 'campus', 'tutorial', 'enrolled', 'goto'];
   dataSource: MatTableDataSource<any>;
 
   // Calls the parent's constructor, passing in an object
@@ -74,6 +74,10 @@ export class UnitStudentsEditorComponent {
         default: return 0;
       }
     });
+  }
+
+  public gotoStudent(student: any) {
+    student.viewProject(true)
   }
 
   enrolStudent() {

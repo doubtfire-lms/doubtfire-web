@@ -38,6 +38,10 @@ angular.module('doubtfire.groups.group-selector', [])
       # Apply remaining filters
       $scope.filteredGroups = $filter('paginateAndSort')(filteredGroups, $scope.pagination, $scope.tableSort)
 
+    $scope.setStaffFilter = (scope) ->
+      $scope.staffFilter = scope
+      applyFilters()
+
     # Pagination values
     $scope.pagination =
       currentPage: 1
@@ -165,6 +169,6 @@ angular.module('doubtfire.groups.group-selector', [])
     # Watch selected group set changes
     listeners.push $scope.$on 'UnitGroupSetEditor/SelectedGroupSetChanged', (evt, args) ->
       newGroupSet = $scope.unit.findGroupSet(args.id)
-      return if newGroupSet == $scope.selectedGroupSet
+      # return if newGroupSet == $scope.selectedGroupSet
       $scope.selectGroupSet(newGroupSet)
 )

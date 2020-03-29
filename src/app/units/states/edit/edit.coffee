@@ -57,7 +57,6 @@ angular.module('doubtfire.units.states.edit', [
     groupsTab:
       title: "Groups"
       seq:   6
-      deselect: () -> $scope.unit.refreshGroups()
 
   # Set the active tab
   $scope.setActiveTab = (tab) ->

@@ -429,7 +429,6 @@ angular.module("doubtfire.common.services.projects", [])
       Project.get { id: project.project_id }, (response) ->
         project.groups = response.groups
         onSuccess?(project)
-      project.unit().refreshGroups()
 
   projectService.getGroupForTask = (project, task) ->
     return null unless task.definition.group_set

@@ -38,14 +38,14 @@ angular.module("doubtfire.common.services.group-service", [  ])
       groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
     group.hasSpace = () ->
       return true if !groupSet.capacity?
-      return group.student_count < groupSet.capacity
+      return group.student_count < groupSet.capacity + group.capacity_adjustment
     group
 
   # Queries a unit's groupset for the given ID, returning the groups for that group
   groupService.getGroups = (unit, groupSetId, onSuccess, onFailure) ->
     throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
     groupSet = unit.findGroupSet(groupSetId)
-    return onSuccess?(groupSet.groups) if groupSet?.groups?
+    # return onSuccess?(groupSet.groups) if groupSet?.groups?
     Group.query({ unit_id: unit.id, group_set_id: groupSetId },
       (success) ->
         groupSet.groups = _.map(success, (group) ->
@@ -90,6 +90,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         group: {
           name: group.name,
           tutorial_id: group.tutorial_id,
+          capacity_adjustment: group.capacity_adjustment
         }
       }
       (success) ->
