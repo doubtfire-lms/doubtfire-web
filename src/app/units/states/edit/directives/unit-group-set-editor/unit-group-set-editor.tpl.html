@@ -134,7 +134,7 @@
     <div class="panel-row">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4 class="panel-title">Batch Import to <strong>{{selectedGroupSet.name}}</strong></h4>
+          <h4 class="panel-title">Import Groups for <strong>{{selectedGroupSet.name}}</strong></h4>
         </div>
         <div class="panel-body">
           <p>
@@ -143,12 +143,16 @@
           </p>
           <ul>
             <li><code>group_name</code> for the indicated group's name,</li>
-            <li><code>group_number</code> for the indicated group's number,</li>
-            <li><code>username</code> for the student's username, and </li>
-            <li><code>tutorial</code> for the student's tutorial.</li>
+            <li><code>tutorial</code> the group's tutorial.</li>
+            <li><code>campus</code> the tutorial's campus (if the tutorial is new), and </li>
+            <li><code>capacity_adjustment</code> any adjustment made to the group's capacity</li>
           </ul>
         </div>
         <div class="panel-footer">
+          <button class="btn btn-success form-control" ng-click="downloadGroupCSV()">
+            <i class="fa fa-download"></i> Download CSV
+          </button>
+          <hr />
           <file-uploader
             files="groupCSV"
             url="groupCSVUploadUrl()"
@@ -158,16 +162,16 @@
             as-button="true">
           </file-uploader>
         </div>
-      </div><!--/import-panel-->
+      </div><!--/import-group-->
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            Batch Export <strong>{{selectedGroupSet.name}}</strong>
+            Import Students into Groups for <strong>{{selectedGroupSet.name}}</strong>
           </h3>
         </div>
         <div class="panel-body">
           <p>
-            Download a CSV of all teams in group set named <strong>{{selectedGroupSet.name}}</strong>.
+            Import students into groups for <strong>{{selectedGroupSet.name}}</strong>.
             Data is listed under the following column headings:
           </p>
           <ul>
@@ -178,9 +182,18 @@
           </ul>
         </div>
         <div class="panel-footer">
-          <button class="btn btn-success form-control" ng-click="downloadGroupCSV()">
+          <button class="btn btn-success form-control" ng-click="downloadGroupStudentCSV()">
             <i class="fa fa-download"></i> Download CSV
           </button>
+          <hr />
+          <file-uploader
+            files="groupCSV"
+            url="groupStudentCSVUploadUrl()"
+            is-uploading="isGroupCSVUploading"
+            on-success="onGroupCSVSuccess"
+            on-complete="onGroupCSVComplete"
+            as-button="true">
+          </file-uploader>
         </div><!--/download-panel-->
       </div>
     </div>
