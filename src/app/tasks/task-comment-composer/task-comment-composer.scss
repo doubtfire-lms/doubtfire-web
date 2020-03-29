@@ -1,3 +1,7 @@
+:host {
+  width: 100%;
+}
+
 #commentComposerFoter {
   border-top: none;
 }
@@ -133,6 +137,11 @@
 .emoji-details {
   line-height: 1.2em;
   margin-left: 1em;
+}
+
+form {
+  display: flex;
+  width: 100%;
 }
 
 .popup {

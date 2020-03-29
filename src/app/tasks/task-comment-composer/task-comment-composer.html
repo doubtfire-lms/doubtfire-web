@@ -35,7 +35,12 @@
     (click)="emojiSelected(emoji.native)"
   >
     <div fxLayout="row" fxLayoutAlign="start center">
-      <ngx-emoji style="align-items: center;" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
+      <ngx-emoji
+        style="align-items: center;"
+        [emoji]="emoji"
+        set="apple"
+        size="20"
+      ></ngx-emoji>
       <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
         <div style="font-weight: 500; font-size: 12px;">{{emoji.name}}</div>
         <div style="font-size: 10px;">{{emoji.colons}}</div>
@@ -45,6 +50,7 @@
 </mat-action-list>
 
 <form
+  style="display: flex; width: 100%;"
   class="input-group col-sm-12 comment-submitter"
   ng-submit="addComment()"
   role="form"
