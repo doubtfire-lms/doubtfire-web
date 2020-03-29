@@ -81,6 +81,16 @@
       </td>
     </ng-container>
 
+    <!-- Goto Column -->
+    <ng-container matColumnDef="goto" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let student">
+        <button mat-button target="_blank" (click)="gotoStudent(student)">
+          <i class="fa fa-share"></i>
+        </button>
+      </td>
+    </ng-container>
+
     <!-- Disclaimer column -->
     <ng-container matColumnDef="actions">
       <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
