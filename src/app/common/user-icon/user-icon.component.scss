@@ -1,4 +1,4 @@
-.user-icon {
+:host {
   display: inline-block;
   align-self: flex-end;
   border-radius: 50%;
@@ -9,7 +9,7 @@
   height: 2.5em;
   position: relative;
 }
-.user-icon > .user-icon-wrapper {
+:host > .user-icon-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -142,7 +142,7 @@
         }
       }
     }
-    .user-icon {
+    user-icon {
       font-size: 1.5em;
       margin-right: 1.5ex;
     }
@@ -154,7 +154,7 @@
       overflow: hidden;
       white-space: nowrap;
     }
-    .task-badges, .user-icon {
+    .task-badges, user-icon {
       align-self: center;
     }
     .task-data > * {

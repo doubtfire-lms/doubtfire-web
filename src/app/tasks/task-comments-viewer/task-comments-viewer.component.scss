@@ -169,7 +169,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Author Bubble
-   .comment .user-icon {
+   .comment user-icon {
     margin-right: -37px;
     display: inline-block;
     align-self: flex-end;
@@ -191,7 +191,7 @@ $comment-inner-border-radius: 4px;
 
 
     .comment.comment-by-other-user
-    .user-icon
+    user-icon
     .user-icon-initials {
     box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
     background: $comment-bubble-color-other-user;
