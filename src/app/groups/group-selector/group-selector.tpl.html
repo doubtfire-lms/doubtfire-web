@@ -137,8 +137,9 @@
     </tr>
   </tbody>
 </table>
-<div class="panel-footer text-center" ng-show="pagination.show">
+<div class="panel-footer text-center" ng-show="pagination.show || selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
   <pagination
+    ng-show="pagination.show"
     total-items="pagination.totalSize"
     ng-change="pagination.onChange()"
     ng-model="pagination.currentPage"
@@ -148,4 +149,8 @@
     boundary-links="true"
     rotate="false">
   </pagination>
+
+  <p ng-show="selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
+    Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial enrolment if needed.
+  </p>
 </div>
