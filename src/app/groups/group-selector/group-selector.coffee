@@ -38,6 +38,10 @@ angular.module('doubtfire.groups.group-selector', [])
       # Apply remaining filters
       $scope.filteredGroups = $filter('paginateAndSort')(filteredGroups, $scope.pagination, $scope.tableSort)
 
+    $scope.setStaffFilter = (scope) ->
+      $scope.staffFilter = scope
+      applyFilters()
+
     # Pagination values
     $scope.pagination =
       currentPage: 1

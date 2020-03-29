@@ -16,10 +16,10 @@
   <div class="clearfix">
     <div class="input-group pull-left col-md-6 staff-filter" ng-if="unitRole">
       <div class="btn-group">
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'all'">
+        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'all'" ng-click="setStaffFilter('all')">
           <i class="fa fa-university"></i> All Tutorials
         </label>
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" ng-change="onChangeStaffFilter()" btn-radio="'mine'">
+        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'mine'" ng-click="setStaffFilter('mine')">
           <i class="fa fa-pencil"></i> My Tutorials
         </label>
       </div>
