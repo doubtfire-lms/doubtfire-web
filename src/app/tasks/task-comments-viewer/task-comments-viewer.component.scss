@@ -1,3 +1,5 @@
+@import "../../../styles/mixins/flex-panel.scss";
+
 $comment-bubble-color: #0084ff;
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
@@ -13,12 +15,55 @@ $discussion-comment-bubble-color: linear-gradient(#794da5, #546acc);
 $border-width: 0.7em;
 $comment-border-radius: $border-width * 1.9; // Leave the 1.9
 $comment-inner-border-radius: 4px;
+
+.header-text {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 32px;
+  justify-content: center;
+  margin: 0;
+}
+
+.comments-body {
+  overflow-y: scroll;
+  -webkit-scrollbar-track {
+    color: blue;
+    background-color: blueviolet;
+}
+}
+
+.comments-footer {
+  display: flex;
+  // position: absolute;
+  // bottom: 0;
+}
+
+
+.comments-header {
+  font-size: 14px;
+  padding: 0;
+  align-items: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  padding-left: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  padding: 8px;
+  position: relative;
+  text-align: center;
+  z-index: 201;
+}
+
 :host {
-   .panel {
-    // @include flex-panel;
+  // overflow-y: auto;
+  .panel {
+    @include flex-panel;
   }
 
-   p#commentTimestamp {
+  p#commentTimestamp {
     color: #9696969d;
     font-size: 11px;
     text-align: center;
@@ -26,19 +71,19 @@ $comment-inner-border-radius: 4px;
     margin-bottom: 0;
   }
 
-   .panel-body {
+  .panel-body {
     overflow: scroll;
     height: 100%;
     font-size: 15px;
     width: 100%;
   }
 
-   .panel.dragover {
+  .panel.dragover {
     margin: 0;
     border: 5px dashed #333333;
   }
 
-   .comment-container {
+  .comment-container {
     display: flex;
     flex-grow: 2;
 
@@ -52,7 +97,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-   .comment-by-other-user .comment-container {
+  .comment-by-other-user .comment-container {
     display: flex;
     flex-direction: row-reverse;
     flex-grow: 2;
@@ -65,11 +110,11 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-   .comment-container .comment-extension {
+  .comment-container .comment-extension {
     width: 100%;
   }
 
-   .comment-container .comment-status {
+  .comment-container .comment-status {
     width: 100%;
     align-self: flex-end;
 
@@ -114,7 +159,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Primary comment div
-   .comment {
+  .comment {
     display: flex;
     &.new-comment .text-bubble {
       animation: fade-in-comment-animation;
@@ -169,7 +214,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Author Bubble
-   .comment user-icon {
+  .comment user-icon {
     margin-right: -37px;
     display: inline-block;
     align-self: flex-end;
@@ -189,10 +234,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-
-    .comment.comment-by-other-user
-    user-icon
-    .user-icon-initials {
+  .comment.comment-by-other-user user-icon .user-icon-initials {
     box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
     background: $comment-bubble-color-other-user;
     background: linear-gradient(
@@ -203,19 +245,19 @@ $comment-inner-border-radius: 4px;
     // color: $text-color;
     color: black;
   }
-   .comment.comment-by-other-user .user-icon {
+  .comment.comment-by-other-user .user-icon {
     margin-left: -37px;
     margin-right: 0;
   }
 
-   img {
+  img {
     border-radius: $comment-border-radius;
     color: #eeeeee;
     border-style: solid;
     border-width: 1px;
   }
 
-   .bubble {
+  .bubble {
     border-top-left-radius: $comment-inner-border-radius;
     border-top-right-radius: $comment-border-radius;
     border-bottom-left-radius: $comment-inner-border-radius;
@@ -224,7 +266,7 @@ $comment-inner-border-radius: 4px;
     margin-top: 1px;
   }
 
-   .comment.comment-by-other-user .bubble {
+  .comment.comment-by-other-user .bubble {
     border-top-left-radius: $comment-border-radius;
     border-bottom-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-inner-border-radius;
@@ -233,39 +275,37 @@ $comment-inner-border-radius: 4px;
     margin-top: 1px;
   }
 
-   .comment.comment-by-other-user .bubble.first-in-series {
+  .comment.comment-by-other-user .bubble.first-in-series {
     border-top-right-radius: $comment-border-radius;
     border-top-left-radius: $comment-border-radius;
     border-bottom-right-radius: $comment-inner-border-radius;
     margin-top: 0.2em;
   }
 
-   .comment.comment-by-other-user .bubble.last-in-series {
+  .comment.comment-by-other-user .bubble.last-in-series {
     border-bottom-right-radius: $comment-border-radius;
     border-top-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-inner-border-radius;
     margin-bottom: 0.4em;
   }
 
-
-    .comment.comment-by-other-user
-    .bubble.first-in-series.last-in-series {
+  .comment.comment-by-other-user .bubble.first-in-series.last-in-series {
     border-radius: $comment-border-radius;
   }
 
-   .bubble.first-in-series {
+  .bubble.first-in-series {
     border-top-left-radius: $comment-border-radius;
     border-top-right-radius: $comment-border-radius;
     margin-top: 0.2em;
   }
 
-   .bubble.last-in-series {
+  .bubble.last-in-series {
     border-radius: $comment-border-radius;
     border-top-left-radius: $comment-inner-border-radius;
     margin-bottom: 0.4em;
   }
 
-   .bubble.first-in-series.last-in-series {
+  .bubble.first-in-series.last-in-series {
     border-radius: $comment-border-radius;
   }
 
@@ -298,14 +338,14 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-   .comment .extension-bubble {
+  .comment .extension-bubble {
     width: 100%;
     background-color: transparent;
   }
 
   // text comments
-   .comment .text-bubble,
-   .comment .pdf-bubble {
+  .comment .text-bubble,
+  .comment .pdf-bubble {
     @include base-bubble;
     display: inline-block;
 
@@ -324,13 +364,13 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-   .pdf-bubble {
+  .pdf-bubble {
     @include base-bubble;
     display: inline-block;
   }
 
   // Audio comments
-   .comment .audio-bubble {
+  .comment .audio-bubble {
     @include base-bubble;
     display: inline-block;
     width: 70%;
@@ -349,13 +389,13 @@ $comment-inner-border-radius: 4px;
   }
 
   // Image comments
-   .bubble.image-bubble {
+  .bubble.image-bubble {
     @include base-bubble;
     background: transparent;
   }
 
   // Disucssion comments
-   .comment .discussion-bubble {
+  .comment .discussion-bubble {
     @include base-bubble;
     max-width: 300px;
     mat-stepper {
@@ -365,7 +405,7 @@ $comment-inner-border-radius: 4px;
     background: $discussion-comment-bubble-color;
   }
 
-   .comment.comment-by-other-user .text-bubble {
+  .comment.comment-by-other-user .text-bubble {
     background: $comment-bubble-color-other-user;
     // color: $text-color;
     color: black;
@@ -373,7 +413,7 @@ $comment-inner-border-radius: 4px;
     margin-left: 0;
   }
 
-   .comment.comment-by-other-user .pdf-bubble {
+  .comment.comment-by-other-user .pdf-bubble {
     background: $comment-bubble-color-other-user;
     // color: $text-color;
     color: black;
@@ -388,24 +428,24 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-   .comment.comment-by-other-user .audio-bubble {
+  .comment.comment-by-other-user .audio-bubble {
     margin-right: 50px;
     margin-left: 0;
   }
 
-   .comment.comment-by-other-user .discussion-bubble {
+  .comment.comment-by-other-user .discussion-bubble {
     margin-right: 50px;
     margin-left: 0;
   }
 
-   .comment.comment-by-other-user .image-bubble {
+  .comment.comment-by-other-user .image-bubble {
     background: transparent;
     margin-right: 50px;
     margin-left: 0;
   }
 
   // Read receipts
-   .read-receipt {
+  .read-receipt {
     // @extend .small;
     // @extend .text-muted;
     // @extend .text-right;
@@ -413,21 +453,21 @@ $comment-inner-border-radius: 4px;
   }
 
   // Footer
-   .panel-footer {
+  .panel-footer {
     padding: 0;
     font-size: 15px;
     background-color: white;
   }
 
   // Editor & submitter
-   .markdown-editor .markdown-editor-inner-context {
+  .markdown-editor .markdown-editor-inner-context {
     border: 0;
     width: 100%;
     box-shadow: none;
     border-radius: none;
     min-height: 54px;
   }
-   .comment-submitter {
+  .comment-submitter {
     display: flex;
     word-wrap: break-word;
     hyphens: auto;
