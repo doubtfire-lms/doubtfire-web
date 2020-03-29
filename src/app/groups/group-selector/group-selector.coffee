@@ -165,6 +165,6 @@ angular.module('doubtfire.groups.group-selector', [])
     # Watch selected group set changes
     listeners.push $scope.$on 'UnitGroupSetEditor/SelectedGroupSetChanged', (evt, args) ->
       newGroupSet = $scope.unit.findGroupSet(args.id)
-      return if newGroupSet == $scope.selectedGroupSet
+      # return if newGroupSet == $scope.selectedGroupSet
       $scope.selectGroupSet(newGroupSet)
 )

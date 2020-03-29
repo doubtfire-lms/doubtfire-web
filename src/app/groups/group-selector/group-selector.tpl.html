@@ -58,6 +58,11 @@
           Tutorial <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
+      <th class="capacity_adjustment" ng-show="unitRole">
+        <a ng-click="sortTableBy('capacity_adjustment')">
+          Capacity Adjustment <i ng-show="tableSort.order == 'capacity_adjustment'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+        </a>
+      </th>
       <th class="capacity">
         <a ng-click="sortTableBy('hasSpace()')">
           Capacity <i ng-show="tableSort.order == 'hasSpace()'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
@@ -92,7 +97,12 @@
           </span>
         </span>
       </td><!--/group-tutorial-->
-      <td>
+      <td ng-show="unitRole" ng-click="selectGroup(group)">
+        <span editable-text="group.capacity_adjustment" e-form="groupRowForm" e-name="capacity_adjustment">
+          {{group.capacity_adjustment}}
+        </span>
+      </td><!--/capacity_adjustment-->
+      <td ng-click="selectGroup(group)">
         <span ng-show="group.hasSpace()">Available</span>
         <span ng-hide="group.hasSpace()">Full</span>
       </td><!--/capacity-->
