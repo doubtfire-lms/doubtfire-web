@@ -18,7 +18,6 @@ export class TaskCommentsViewerComponent implements OnChanges {
 
   constructor(
     private taskCommentService: TaskCommentService,
-    // private commentsModal: CommentsModal,
     @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModal: any,
     @Inject(Task) private Task: any,
