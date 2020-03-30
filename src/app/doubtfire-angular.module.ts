@@ -55,7 +55,8 @@ import {
   userProvider,
   currentUser,
   TaskCommentProvider,
-  gradeServiceProvider
+  gradeServiceProvider,
+  commentsModalProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -112,6 +113,7 @@ import { MarkedPipe } from './common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
+import { DragDropDirective } from './common/directives/drag-drop.directive';
 
 @NgModule({
   // Components we declare
@@ -144,6 +146,7 @@ import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
     AudioPlayerComponent,
     MarkedPipe,
     HumanizedDatePipe,
+    DragDropDirective,
   ],
   // Module Imports
   imports: [
@@ -196,6 +199,7 @@ import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
     EmojiService,
     userProvider,
     unitProvider,
+    commentsModalProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,

@@ -2,10 +2,9 @@
   style="height: 100%"
   *ngIf="task"
   class="comments-panel"
-  ngf-drop="uploadFiles($files)"
-  ngf-drag-over-class="'dragover'"
-  ngf-multiple="true"
-  ngf-pattern="'image/*,application/pdf'"
+  appDragDrop
+  (onFileDropped)="uploadFiles($event)"
+  (onDragOver)="'dragover'"
   fxLayout="column"
 >
   <div fxFlex="50px" class="comments-header">

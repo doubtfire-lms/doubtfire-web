@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { TaskCommentService } from 'src/app/common/services/task-comment.service';
-import { taskService, alertService, taskComment } from 'src/app/ajs-upgraded-providers';
+import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'task-comments-viewer',
@@ -20,10 +20,11 @@ export class TaskCommentsViewerComponent implements OnChanges {
     private taskCommentService: TaskCommentService,
     // private commentsModal: CommentsModal,
     @Inject(taskService) private ts: any,
+    @Inject(commentsModal) private commentsModal: any,
+    @Inject(Task) private Task: any,
     @Inject(alertService) private alerts: any,
     @Inject(taskComment) private TaskComment: any,
   ) {
-    console.log("HERE");
     if (typeof this.comment?.text !== 'string') {
       this.comment = { text: '' };
     }
@@ -45,9 +46,8 @@ export class TaskCommentsViewerComponent implements OnChanges {
           this.task.comments = comments; // in the HTML, the mapped task.comments are displayed
           this.lastComment = this.task.comments.slice(-1)[0];
           this.task.num_new_comments = 0;
-          this.ts.scrollDown()
+          this.ts.scrollDown();
           if (this.refocusOnTaskChange) {
-            // this.focus ? ()
           }
         });
 
@@ -56,13 +56,13 @@ export class TaskCommentsViewerComponent implements OnChanges {
     }
   }
 
-  uploadFiles(files) {
-    if (typeof files !== 'undefined') {
-      files.forEach(file => {
+  uploadFiles(event) {
+    [...event].forEach(file => {
+      if (['image/png', 'image/pdf'].includes(file.type)) {
         this.postAttachmentComment(file);
-      });
-      this.task.comments = this.ts.mapComments(this.task.comments);
-    }
+      }
+    });
+    this.task.comments = this.ts.mapComments(this.task.comments);
   }
 
   // # Upload image files as comments to a given task
@@ -75,12 +75,11 @@ export class TaskCommentsViewerComponent implements OnChanges {
 
   scrollToComment(commentID) {
     document.querySelector(`#comment-${commentID}`).scrollIntoView();
-    // $anchorScroll()
   }
 
   openCommentsModal(comment) {
-    // this.resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
-    // this.CommentsModal.show(resourceUrl, comment.type)
+    let resourceUrl = this.Task.generateCommentsAttachmentUrl(this.project, this.task, comment);
+    this.commentsModal.show(resourceUrl, comment.type);
   }
 
   isBubbleComment(commentType: string) {
@@ -92,7 +91,7 @@ export class TaskCommentsViewerComponent implements OnChanges {
   }
 
   getCommentAttachment(comment) {
-    // this.mediaURL = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))
+    return this.Task.generateCommentsAttachmentUrl(this.project, this.task, comment);
   }
 
   commentClasses(comment: any): object {
