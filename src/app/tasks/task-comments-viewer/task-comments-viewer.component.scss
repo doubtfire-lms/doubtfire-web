@@ -26,15 +26,21 @@ $comment-inner-border-radius: 4px;
 }
 
 .comments-body {
-  overflow-y: scroll;
-  ::-webkit-scrollbar-track {
-    display: none;
-  }
-
-  -webkit-scrollbar-track {
-    color: blue;
-    background-color: blueviolet;
-  }
+  overflow-y: auto;
+}
+.comments-body::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+  border-radius: 4px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+.comments-body::-webkit-scrollbar:hover {
+  background: #c6c7ca;
+}
+.comments-body::-webkit-scrollbar-thumb {
+  background: #777779;
+  border-radius: 4px;
 }
 
 .comments-footer {
@@ -62,6 +68,7 @@ $comment-inner-border-radius: 4px;
 }
 
 :host {
+  overflow-x: none;
   // overflow-y: auto;
   .panel {
     @include flex-panel;
@@ -75,11 +82,18 @@ $comment-inner-border-radius: 4px;
     margin-bottom: 0;
   }
 
-  .panel-body {
-    overflow: scroll;
+  .comments-body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    ::-webkit-scrollbar-track {
+      display: none;
+    }
     height: 100%;
     font-size: 15px;
     width: 100%;
+  }
+  .comments-body::-webkit-scrollbar-track {
+    display: none;
   }
 
   .panel.dragover {
@@ -450,6 +464,7 @@ $comment-inner-border-radius: 4px;
 
   // Read receipts
   .read-receipt {
+    // float: right
     // @extend .small;
     // @extend .text-muted;
     // @extend .text-right;
