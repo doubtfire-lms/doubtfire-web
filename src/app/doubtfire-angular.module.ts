@@ -110,6 +110,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 
 @NgModule({
   // Components we declare
@@ -139,6 +140,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
     StatusIconComponent,
     TaskCommentsViewerComponent,
     UserIconComponent,
+    AudioPlayerComponent,
     MarkedPipe,
   ],
   // Module Imports

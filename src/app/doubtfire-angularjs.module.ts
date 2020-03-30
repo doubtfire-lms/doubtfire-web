@@ -182,7 +182,6 @@ import 'build/src/app/common/pdf-panel-viewer/pdf-panel-viewer.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/long-press/on-long-press.js';
 import 'build/src/app/common/content-editable/content-editable.js';
-import 'build/src/app/common/audio-player/audio-player.js';
 import 'build/src/app/common/alert-list/alert-list.js';
 import 'build/src/app/common/modals/confirmation-modal/confirmation-modal.js';
 import 'build/src/app/common/modals/comments-modal/comments-modal.js';

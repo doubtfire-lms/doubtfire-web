@@ -1,0 +1,7 @@
+<div class="audio-comment-container">
+  <button class="play-button" (click)="playAudio()">
+    <i id="playButton" class="play-button fa" [ngClass]="isPlaying ? 'fa-stop-circle' : 'fa-play-circle'"></i>
+  </button>
+  <mat-progress-bar class="progress-bar-container" [value]="audioProgress" [bufferValue]="audioBuffer" ></mat-progress-bar>
+  <!-- <progressbar class="progress-bar-container" max="max" value="audioProgress"></progressbar> -->
+</div>

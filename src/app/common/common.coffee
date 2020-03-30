@@ -11,6 +11,4 @@ angular.module("doubtfire.common", [
   # New
   'doubtfire.common.pdf-viewer'
   'doubtfire.common.pdf-panel-viewer'
-  # Audio
-  'doubtfire.common.audio-player'
 ])

@@ -78,7 +78,7 @@
                 </div>
 
                 <div *ngSwitchCase="'audio'" class="comment-audio">
-                  <audio-player></audio-player>
+                  <audio-player [task]="task" [project]="project" [comment]="comment"></audio-player>
                 </div>
 
                 <div *ngSwitchCase="'discussion'" class="comment-discussion">
