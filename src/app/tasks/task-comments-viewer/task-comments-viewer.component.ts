@@ -9,9 +9,7 @@ import { taskService, alertService, taskComment } from 'src/app/ajs-upgraded-pro
 })
 export class TaskCommentsViewerComponent implements OnChanges {
   @Input() comment: any;
-  // @Output() commentChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() task: any = { comments: [] };
-  // @Output() taskChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() refocusOnTaskChange: boolean;
 
   lastComment: any = {};

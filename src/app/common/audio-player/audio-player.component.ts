@@ -28,13 +28,11 @@ export class AudioPlayerComponent implements OnInit {
 
       let bufferPercentage = this.audio.buffered.end(0) / this.audio.duration;
       this.audioBuffer = (isNaN(bufferPercentage) ? 0 : bufferPercentage) * 100;
-      // this.$apply();
     };
 
 
     this.audio.onended = () => {
       this.isPlaying = false;
-      // $scope.$apply()
     };
 
   }

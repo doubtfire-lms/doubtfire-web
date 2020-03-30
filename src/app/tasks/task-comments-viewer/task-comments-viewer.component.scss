@@ -27,10 +27,14 @@ $comment-inner-border-radius: 4px;
 
 .comments-body {
   overflow-y: scroll;
+  ::-webkit-scrollbar-track {
+    display: none;
+  }
+
   -webkit-scrollbar-track {
     color: blue;
     background-color: blueviolet;
-}
+  }
 }
 
 .comments-footer {
@@ -39,7 +43,6 @@ $comment-inner-border-radius: 4px;
     width: 100%;
   }
 }
-
 
 .comments-header {
   font-size: 14px;
@@ -311,7 +314,7 @@ $comment-inner-border-radius: 4px;
   }
 
   @mixin base-bubble {
-    margin-left: 50px;
+    margin-left: 10px;
     display: flex;
     color: #fff;
     font-size: 1em;

@@ -108,9 +108,10 @@ import { TaskListItemComponent } from './projects/states/dashboard/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
-import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
+import { MarkedPipe } from './common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
+import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 
 @NgModule({
   // Components we declare
@@ -142,6 +143,7 @@ import { AudioPlayerComponent } from './common/audio-player/audio-player.compone
     UserIconComponent,
     AudioPlayerComponent,
     MarkedPipe,
+    HumanizedDatePipe,
   ],
   // Module Imports
   imports: [
