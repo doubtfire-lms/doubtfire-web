@@ -54,7 +54,7 @@ import {
   AudioRecorderServiceProvider,
   userProvider,
   currentUser,
-  TaskCommentProvider
+  TaskCommentProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -106,6 +106,7 @@ import { EmojiService } from './common/services/emoji.service';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 
 @NgModule({
   // components
@@ -132,6 +133,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
     StudentCampusSelectComponent,
     TaskCommentsViewerComponent,
     UserIconComponent,
+    AudioPlayerComponent,
     MarkedPipe,
   ],
   // Module Imports

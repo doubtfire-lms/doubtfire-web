@@ -1,6 +1,6 @@
 @import "../../../styles/mixins/flex-panel.scss";
 
-$comment-bubble-color: #0084ff;
+$comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: #e5e5ea;
 $comment-bubble-color-other-user-darker: darken(
@@ -35,8 +35,9 @@ $comment-inner-border-radius: 4px;
 
 .comments-footer {
   display: flex;
-  // position: absolute;
-  // bottom: 0;
+  task-comment-composer {
+    width: 100%;
+  }
 }
 
 
