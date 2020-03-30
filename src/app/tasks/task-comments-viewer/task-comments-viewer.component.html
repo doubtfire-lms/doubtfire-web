@@ -20,13 +20,12 @@
         <div
           id="comment-{{ comment.id }}"
           *ngFor="let comment of task.comments"
-          ng-mouseover="hover=true"
-          ng-mouseleave="hover=false"
+          (mouseover)="comment.hover=true"
+          (mouseout)="comment.hover=false"
           class="anchor"
         >
-          <!-- comment.created_at | humanizedDate -->
           <p id="commentTimestamp" *ngIf="comment.should_show_timestamp">
-            {{ comment.author.name }} {{ comment.created_at }}
+            {{ comment.author.name }} {{ comment.created_at | humanizedDate  }}
           </p>
           <div
             class="comment"
@@ -35,17 +34,28 @@
               'new-comment': comment.is_new
             }"
           >
-            <user-icon
-              *ngIf="
-                comment.should_show_avatar && shouldShowAuthorIcon(comment.type)
-              "
-              [size]="20"
-              [user]="comment.author"
-              [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
+            <!-- <div
+              style="background-color: chartreuse;"
+              style="height: 100%; width: 100%"
+              fxLayout="row"
             >
-            </user-icon>
+              <div style="background-color: red;"></div>
+              <div style="background-color: blue;" fxFlex></div>
+            </div> -->
+            <div fxFlex="30px" style="display: flex;">
+              <user-icon
+                *ngIf="
+                  comment.should_show_avatar &&
+                  shouldShowAuthorIcon(comment.type)
+                "
+                [size]="20"
+                [user]="comment.author"
+                [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
+              >
+              </user-icon>
+            </div>
 
-            <div class="comment-container" [ngSwitch]="comment.type">
+            <div fxFlex class="comment-container" [ngSwitch]="comment.type">
               <div *ngSwitchCase="status" class="comment-status">
                 <hr class="hr-text" data-content="{{ comment.comment }}" />
               </div>
@@ -78,7 +88,11 @@
                 </div>
 
                 <div *ngSwitchCase="'audio'" class="comment-audio">
-                  <audio-player [task]="task" [project]="project" [comment]="comment"></audio-player>
+                  <audio-player
+                    [task]="task"
+                    [project]="project"
+                    [comment]="comment"
+                  ></audio-player>
                 </div>
 
                 <div *ngSwitchCase="'discussion'" class="comment-discussion">
@@ -109,7 +123,7 @@
                 class="comment-overflow"
               >
                 <comment-bubble-action
-                  ng-show="hover"
+                  [hidden]="!comment.hover"
                   [task]="task"
                   [comment]="comment"
                 ></comment-bubble-action>
@@ -124,8 +138,7 @@
         class="read-receipt"
         [hidden]="!lastComment.author_is_me && !lastComment.recipient_read_time"
       >
-        <!-- lastComment.recipient_read_time | humanizedDate -->
-        Read {{ lastComment.recipient_read_time }} by
+        Read {{ lastComment.recipient_read_time | humanizedDate }} by
         {{ lastComment.recipient.name }}
       </div>
     </div>

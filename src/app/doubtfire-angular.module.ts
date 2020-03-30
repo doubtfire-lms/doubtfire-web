@@ -104,9 +104,10 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
-import { MarkedPipe } from './common/pipes/common/pipes/marked.pipe';
+import { MarkedPipe } from './common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
+import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 
 @NgModule({
   // components
@@ -135,6 +136,7 @@ import { AudioPlayerComponent } from './common/audio-player/audio-player.compone
     UserIconComponent,
     AudioPlayerComponent,
     MarkedPipe,
+    HumanizedDatePipe,
   ],
   // Module Imports
   imports: [

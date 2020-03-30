@@ -8,7 +8,8 @@ import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Component({
   selector: 'task-comment-composer',
-  templateUrl: './task-comment-composer.html',
+  templateUrl: './task-comment-composer.component.html',
+  styleUrls: ['./task-comment-composer.component.scss'],
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
