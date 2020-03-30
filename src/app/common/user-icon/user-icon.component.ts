@@ -10,9 +10,9 @@ import { Md5 } from 'ts-md5/dist/md5';
 })
 
 export class UserIconComponent implements OnInit {
-  @Input() user: User;
+  @Input() user: User = this.currentUser.profile;
   @Input() size: number = 100;
-  @Input() email: string;
+  @Input() email: string = this.user.email;
 
   constructor(
     @Inject(currentUser) private currentUser: any,
@@ -20,9 +20,7 @@ export class UserIconComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.user = this.currentUser.profile;
-    this.email = this.user.email;
+  ngOnInit(): void {
   }
 
   get backgroundUrl(): string {
@@ -52,7 +50,7 @@ export class UserIconComponent implements OnInit {
   }
 
   get initials() {
-    let initials = ((this.user != null) && (this.user.name != null)) ? this.user.name.split(' ') : '  ';
+    let initials = (this.user?.name != null) ? this.user.name.split(' ') : '  ';
     return (initials.length > 1) ? (`${initials[0][0]}${initials[1][0]}`).toUpperCase() : '  ';
   }
 }
