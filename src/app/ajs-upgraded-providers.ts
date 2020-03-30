@@ -17,6 +17,7 @@ export const csvResultModalService = new InjectionToken('CsvResultModalAngular')
 export const taskComment = new InjectionToken('TaskComment');
 export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
+export const commentsModal = new InjectionToken('CommentsModal');
 
 
 // Define a provider for the above injection token...
@@ -25,6 +26,12 @@ export const unitProvider = {
   provide: Unit,                          // When you need 'Unit' you
   useFactory: (i: any) => i.get('Unit'),  // get the AngularJS module
   deps: ['$injector']                     // using the upgrade injector.
+};
+
+export const commentsModalProvider = {
+  provide: commentsModal,
+  useFactory: (i: any) => i.get('CommentsModal'),
+  deps: ['$injector']
 };
 
 export const userProvider = {
