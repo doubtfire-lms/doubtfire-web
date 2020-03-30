@@ -73,8 +73,10 @@ export class TaskCommentsViewerComponent implements OnChanges {
     );
   }
 
-  //     $scope.scrollToComment = (commentID) ->
-  //       $anchorScroll("comment-#{commentID}")
+  scrollToComment(commentID) {
+    document.querySelector(`#comment-${commentID}`).scrollIntoView();
+    // $anchorScroll()
+  }
 
   openCommentsModal(comment) {
     // this.resourceUrl = $sce.trustAsResourceUrl(Task.generateCommentsAttachmentUrl($scope.project, $scope.task, comment))

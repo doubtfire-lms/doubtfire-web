@@ -25,19 +25,36 @@ export class UserIconComponent implements OnInit {
     this.email = this.user.email;
   }
 
+  get backgroundUrl(): string {
+    let hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
+    // let hash =  Md5.hashStr('jake.renzella@deakin.edu.au'.trim().toLowerCase());
+    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size}`;
+  }
+
   userBackgroundStyle(email: string): object {
     // Gravatar hash
     let hash = email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
 
     let backgroundUrl = `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size}`;
-    return { 'background-image': `url('${backgroundUrl}')`
-  };
-}
+    return {
+      'background-image': `url('${backgroundUrl}')`
+    };
 
-get initials() {
-  let initials = ((this.user != null) && (this.user.name != null)) ? this.user.name.split(' ') : '  ';
-  return (initials.length > 1) ? (`${initials[0][0]}${initials[1][0]}`).toUpperCase() : '  ';
-}
+  }
+
+  get componentSize() {
+    return {
+      'width.px': this.size,
+      'height.px': this.size,
+      'min.width.px': this.size,
+      'min.height.px': this.size
+    };
+  }
+
+  get initials() {
+    let initials = ((this.user != null) && (this.user.name != null)) ? this.user.name.split(' ') : '  ';
+    return (initials.length > 1) ? (`${initials[0][0]}${initials[1][0]}`).toUpperCase() : '  ';
+  }
 }
 
 
