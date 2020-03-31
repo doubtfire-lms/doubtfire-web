@@ -1,28 +1,12 @@
 :host {
-  display: inline-block;
+  display: flex;
   align-self: flex-end;
   border-radius: 50%;
   position: relative;
 }
-:host > .user-icon-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  font-weight: bold;
-  font-size: 1vh;
-  padding-bottom: 2px;
-  border-radius: 50%;
-  &.user-icon-gravatar {
-    z-index: 1;
-    background-size: cover;
-  }
-  &.user-icon-initials {
-    color: #fff;
-    background-color: #777;
-  }
+
+text {
+  color: red;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
