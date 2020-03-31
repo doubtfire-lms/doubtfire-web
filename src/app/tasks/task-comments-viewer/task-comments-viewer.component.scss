@@ -30,7 +30,7 @@ $comment-inner-border-radius: 4px;
 }
 .comments-body::-webkit-scrollbar {
   height: 10px;
-  width: 10px;
+  width: 8px;
   border-radius: 4px;
   background: transparent;
   transition: all 0.3s ease;
@@ -69,7 +69,6 @@ $comment-inner-border-radius: 4px;
 
 :host {
   overflow-x: none;
-  // overflow-y: auto;
   .panel {
     @include flex-panel;
   }
@@ -234,22 +233,9 @@ $comment-inner-border-radius: 4px;
   // Author Bubble
   .comment user-icon {
     margin-right: -37px;
-    display: inline-block;
+    // display: inline-block;
     align-self: flex-end;
     line-height: $comment-author-bubble-size - 2px;
-    .user-icon-gravatar {
-      // To hide blue border
-      top: -2px;
-      right: -2px;
-      bottom: -2px;
-      left: -2px;
-    }
-    .user-icon-initials {
-      color: #fff;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      background-color: $comment-bubble-color;
-    }
   }
 
   .comment.comment-by-other-user user-icon .user-icon-initials {
