@@ -21,9 +21,7 @@ export class UserIconComponent implements AfterViewInit {
 
   constructor(
     @Inject(currentUser) private currentUser: any,
-  ) {
-
-  }
+  ) { }
 
   get backgroundUrl(): string {
     let hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
@@ -75,10 +73,6 @@ export class UserIconComponent implements AfterViewInit {
     return context.measureText(text).width;
   }
 
-  private appendUserIcon(): void {
-
-  }
-
   ngAfterViewInit(): void {
     const lines = this.generateLines();
 
@@ -95,11 +89,11 @@ export class UserIconComponent implements AfterViewInit {
       .attr('height', this.size)
       .attr('text-anchor', 'middle');
 
-    function appendCircle(selection, size) {
+    function appendCircle(selection, size, radius) {
       selection.append('circle')
         .attr('cx', size / 2)
         .attr('cy', size / 2)
-        .attr('r', this.radius);
+        .attr('r', radius);
     }
 
     const id = this.generateUniqueId();
@@ -107,7 +101,7 @@ export class UserIconComponent implements AfterViewInit {
     let defs = svg.append('defs');
     defs.append('clipPath')
       .attr('id', `image-clip-${id}`)
-      .call(appendCircle, this.size);
+      .call(appendCircle, this.size, this.radius);
 
     svg.append('circle')
       .attr('cx', this.size / 2)
@@ -127,8 +121,8 @@ export class UserIconComponent implements AfterViewInit {
 
     svg.append('image')
       .attr('xlink:href', this.backgroundUrl)
-      .attr('width', `${this.size}px`)
-      .attr('height', `${this.size}px`)
+      .attr('width', this.size)
+      .attr('height', this.size)
       .attr('x', 0)
       .attr('y', 0)
       .attr('clip-path', `url(#image-clip-${id})`);
