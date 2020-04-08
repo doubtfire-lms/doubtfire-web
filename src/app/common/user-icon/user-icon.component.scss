@@ -1,12 +1,11 @@
 :host {
   display: flex;
   align-self: flex-end;
-  border-radius: 50%;
+  // border-radius: 50%;
   position: relative;
 }
 
-text {
-  color: red;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
+// text {
+//   -webkit-backface-visibility: hidden;
+//   backface-visibility: hidden;
+// }
