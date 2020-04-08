@@ -328,7 +328,7 @@ $comment-inner-border-radius: 4px;
     .comment-text,
     .comment-pdf,
     .comment-discussion,
-    p {
+    .markdown-to-html {
       padding-right: 6px;
       padding-left: 4px;
       word-break: break-word;
@@ -454,13 +454,12 @@ $comment-inner-border-radius: 4px;
     margin-left: 0;
   }
 
-  // Read receipts
   .read-receipt {
-    // float: right
-    // @extend .small;
-    // @extend .text-muted;
-    // @extend .text-right;
     width: 100%;
+
+    user-icon {
+      float: right;
+    }
   }
 
   // Footer

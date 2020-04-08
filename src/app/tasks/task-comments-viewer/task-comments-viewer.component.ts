@@ -2,19 +2,29 @@ import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, Output, Eve
 import { TaskCommentService } from 'src/app/common/services/task-comment.service';
 import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 
+interface Comment {
+  recipient: {
+    name: string;
+  };
+  author_is_me: boolean;
+  recipient_read_time: string;
+  text: string;
+  last_read?: boolean;
+}
+
 @Component({
   selector: 'task-comments-viewer',
   templateUrl: './task-comments-viewer.component.html',
   styleUrls: ['./task-comments-viewer.component.scss']
 })
-export class TaskCommentsViewerComponent implements OnChanges {
-  @Input() comment: any;
+export class TaskCommentsViewerComponent implements OnChanges, OnInit {
+  lastComment: Comment = { recipient: { name: '' }, author_is_me: false, recipient_read_time: '', text: '' };
+  project: any = {};
+  loading: boolean = true;
+
+  @Input() comment?: Comment = ({ recipient: { name: '' }, author_is_me: false, recipient_read_time: '', text: '' });
   @Input() task: any = { comments: [] };
   @Input() refocusOnTaskChange: boolean;
-
-  lastComment: any = {};
-  project: any = {};
-
 
   constructor(
     private taskCommentService: TaskCommentService,
@@ -24,35 +34,39 @@ export class TaskCommentsViewerComponent implements OnChanges {
     @Inject(alertService) private alerts: any,
     @Inject(taskComment) private TaskComment: any,
   ) {
-    if (typeof this.comment?.text !== 'string') {
-      this.comment = { text: '' };
-    }
+
+  }
+  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
+    this.loading = true;
 
-    if (!changes.task.isFirstChange()) {
-      if (changes.task.currentValue?.project !== 'undefined') {
-        // Must have project for task to be mapped
-        this.project = changes.task.currentValue.project();
-        //  Once project is loaded fetch task comments
-        this.TaskComment.query({
-          project_id: this.project.project_id,
-          task_definition_id: this.task.task_definition_id
-        }, (response: any) => {
-          let comments = this.ts.mapComments(response);
-          this.task.comments = comments; // in the HTML, the mapped task.comments are displayed
-          this.lastComment = this.task.comments.slice(-1)[0];
-          this.task.num_new_comments = 0;
-          this.ts.scrollDown();
-          if (this.refocusOnTaskChange) {
-          }
-        });
+    // Must have project for task to be mapped
+    if (changes.task.currentValue?.project != null) {
+      this.project = changes.task.currentValue.project();
+      this.TaskComment.query({
+        project_id: this.project.project_id,
+        task_definition_id: this.task.task_definition_id
+      }, (response: any) => {
+        this.task.comments = this.ts.mapComments(response);
+        let lastReadComment = this.task.comments.slice().reverse().find(
+          comment => comment.recipient_read_time != null || !comment.author_is_me
+        );
+        if (lastReadComment) { lastReadComment.last_read = true; }
+        this.task.num_new_comments = 0;
+        this.ts.scrollDown();
+        this.loading = false;
+      });
 
-        this.taskCommentService.setTask(this.task);
-      }
+      this.taskCommentService.setTask(this.task);
+    } else {
+      this.loading = false;
     }
+  }
+
+  shouldShowReadReceipt() {
+    return (this.task.comments.slice(-1)[0]?.author_is_me);
   }
 
   uploadFiles(event) {
