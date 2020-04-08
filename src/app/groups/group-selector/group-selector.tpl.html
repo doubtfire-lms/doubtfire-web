@@ -12,7 +12,7 @@
     </group-set-selector>
   </h4>
 </div><!--/panel-heading-->
-<div class="panel-body panel-toolbar" ng-show="loaded && canCreateGroups">
+<div class="panel-body panel-toolbar" ng-show="loaded && canCreateGroups && (unitRole || project.tutorials().length > 0)">
   <div class="clearfix">
     <div class="input-group pull-left col-md-6 staff-filter" ng-if="unitRole">
       <div class="btn-group">
@@ -37,15 +37,18 @@
 <div class="panel-body panel-loading" ng-show="!loaded">
   <i class="fa fa-spinner fa-pulse"></i> Loading Groups...
 </div><!--/loading-spinner-->
-<div class="panel-body" ng-show="loaded && filteredGroups.length == 0">
+<div class="panel-body" ng-show="loaded && shownGroups.length == 0">
   <div class="callout callout-primary row">
     <h4>No Groups To Show</h4>
     <p>
-      The <strong>{{selectedGroupSet.name}}</strong> group set has no groups{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : "."}}
+      There are no groups available for <strong>{{selectedGroupSet.name}}</strong>{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : "."}}
+    </p>
+    <p ng-show="selectedGroupSet.keep_groups_in_same_class">
+      Please make sure that you are enrolled in the correct tutorial. You can only join a group that is running in your allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial enrolment.
     </p>
   </div>
 </div><!--/no-groups-->
-<table ng-show="loaded && filteredGroups.length > 0" class="table table-condensed table-hover table-pointer">
+<table ng-show="loaded && shownGroups.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
       <th class="name">
@@ -76,7 +79,7 @@
   <tbody>
     <tr
       ng-class="{info: group == selectedGroup}"
-      ng-repeat="group in filteredGroups | groupsForStudent:project:selectedGroupSet">
+      ng-repeat="group in shownGroups = (filteredGroups | groupsForStudent:project:selectedGroupSet)">
       <th ng-click="selectGroup(group)">
         <span
           editable-text="group.name"
@@ -134,8 +137,9 @@
     </tr>
   </tbody>
 </table>
-<div class="panel-footer text-center" ng-show="pagination.show">
+<div class="panel-footer text-center" ng-show="pagination.show || selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
   <pagination
+    ng-show="pagination.show"
     total-items="pagination.totalSize"
     ng-change="pagination.onChange()"
     ng-model="pagination.currentPage"
@@ -145,4 +149,8 @@
     boundary-links="true"
     rotate="false">
   </pagination>
+
+  <p ng-show="selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
+    Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial enrolment if needed.
+  </p>
 </div>
