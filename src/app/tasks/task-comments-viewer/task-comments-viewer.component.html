@@ -49,7 +49,7 @@
                   comment.should_show_avatar &&
                   shouldShowAuthorIcon(comment.type)
                 "
-                size="30"
+                [size]="32"
                 [user]="comment.author"
                 [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
               >
@@ -137,7 +137,7 @@
                 comment.recipient_read_time | humanizedDate
               }} by {{ comment.recipient.name }}"
               matTooltipPosition="above"
-              size="15"
+              size="22"
               [user]="comment.recipient"
             >
             </user-icon>

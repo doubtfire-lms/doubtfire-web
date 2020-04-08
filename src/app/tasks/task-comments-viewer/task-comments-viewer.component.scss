@@ -2,7 +2,7 @@
 
 $comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
-$comment-bubble-color-other-user: #e5e5ea;
+$comment-bubble-color-other-user: rgb(241, 240, 240);
 $comment-bubble-color-other-user-darker: darken(
   $comment-bubble-color-other-user,
   10%
@@ -314,8 +314,8 @@ $comment-inner-border-radius: 4px;
   }
 
   @mixin base-bubble {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
     display: flex;
     color: #fff;
     font-size: 1em;
@@ -439,18 +439,18 @@ $comment-inner-border-radius: 4px;
   }
 
   .comment.comment-by-other-user .audio-bubble {
-    margin-right: 10px;
+    margin-right: 5px;
     margin-left: 0;
   }
 
   .comment.comment-by-other-user .discussion-bubble {
-    margin-right: 10px;
+    margin-right: 5px;
     margin-left: 0;
   }
 
   .comment.comment-by-other-user .image-bubble {
     background: transparent;
-    margin-right: 10px;
+    margin-right: 5px;
     margin-left: 0;
   }
 
