@@ -1,13 +1,12 @@
 .audio-comment-container {
-
   button:focus {
-    outline:0;
+    outline: 0;
   }
 
   button.play-button {
-    border:none;
-    background-image:none;
-    background-color:transparent;
+    border: none;
+    background-image: none;
+    background-color: transparent;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -36,9 +35,13 @@
   }
 
   .progress-bar-container {
+    &:hover {
+      cursor: pointer;
+    }
+
     background-color: white;
     width: 100%;
-    height: 3px;
+    height: 8px;
     align-self: center;
     margin-bottom: 0px;
     border-radius: 0px;
@@ -46,13 +49,22 @@
     .progress {
       box-shadow: 0px;
     }
+  }
 
-    .progress-bar {
-      background-color: #B0BEC5;
-      width: 100%;
-      transition : width 0.5s ease;
-      box-shadow: none;
-      border-radius: 0px;
-    }
+  /deep/ .mat-progress-bar-fill::after {
+    background-color: white;
+  }
+
+  /deep/ .mat-progress-bar-buffer {
+    background: #2650c3;
+  }
+
+  /deep/
+    .mat-progress-bar-primary.mat-progress-bar-fill.mat-progress-bar-element {
+    pointer-events: none;
+  }
+  #progressContainer {
+    width: 100%;
+    background-color: red;
   }
 }
