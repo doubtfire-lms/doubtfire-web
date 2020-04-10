@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Task } from 'src/app/ajs-upgraded-providers';
 
 @Component({
@@ -12,12 +12,15 @@ export class AudioPlayerComponent implements OnInit {
   @Input() task: {};
   @Input() comment: {};
 
+  @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
+
+  barWidth: number;
   isLoaded = false;
   isPlaying = false;
   audioProgress = 0;
   audioBuffer = 0;
   currentTime = 0;
-  audio: any = document.createElement('AUDIO');
+  audio: HTMLAudioElement = <HTMLAudioElement>document.createElement('AUDIO');
 
   constructor(@Inject(Task) private Task) {
     this.audio.ontimeupdate = () => {
@@ -32,16 +35,40 @@ export class AudioPlayerComponent implements OnInit {
     this.audio.onended = () => {
       this.isPlaying = false;
     };
-
-  }
-  ngOnInit(): void {
-    // throw new Error("Method not implemented.");
   }
 
-  playAudio() {
+  ngOnInit() {
+  }
+
+  setTime(percent: number) {
+    const newTime = percent * this.audio.duration;
+    this.audio.currentTime = newTime;
+  }
+
+  seek(evt: MouseEvent) {
+    const offset = evt.offsetX;
+    const percent = offset / this.progressBar.nativeElement.offsetWidth;
+
+    if (!this.isLoaded) {
+      this.loadAudio();
+      this.audio.onloadeddata = () => {
+        this.setTime(percent);
+      };
+    } else {
+      this.setTime(percent);
+    }
+  }
+
+  loadAudio() {
     if (!this.isLoaded) {
       this.isLoaded = true;
       this.audio.src = this.Task.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+    }
+  }
+
+  pausePlay() {
+    if (!this.isLoaded) {
+      this.loadAudio();
     }
     if (this.audio.paused) {
       this.audio.play();
@@ -49,7 +76,6 @@ export class AudioPlayerComponent implements OnInit {
     } else {
 
       this.audio.pause();
-      this.audio.currentTime = 0;
       this.isPlaying = false;
     }
   }
