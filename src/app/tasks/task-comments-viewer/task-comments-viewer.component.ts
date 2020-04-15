@@ -43,7 +43,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     this.loading = true;
 
     // Must have project for task to be mapped
-    if (changes.task.currentValue?.project != null) {
+    if (changes.task?.currentValue?.project != null) {
       this.project = changes.task.currentValue.project();
       this.TaskComment.query({
         project_id: this.project.project_id,

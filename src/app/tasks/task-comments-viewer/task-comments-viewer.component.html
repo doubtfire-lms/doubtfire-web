@@ -20,7 +20,7 @@
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
 
-    <div [hidden]="loading">
+    <div *ngIf="task" class="comments-scroll-content" [hidden]="loading">
       <span>
         <div
           id="comment-{{ comment.id }}"
