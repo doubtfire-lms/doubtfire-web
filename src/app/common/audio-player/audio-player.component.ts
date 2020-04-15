@@ -11,6 +11,7 @@ export class AudioPlayerComponent implements OnInit {
   @Input() project: {};
   @Input() task: {};
   @Input() comment: {};
+  @Input() audioSrc: { src: string };
 
   @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
 
@@ -18,7 +19,6 @@ export class AudioPlayerComponent implements OnInit {
   isLoaded = false;
   isPlaying = false;
   audioProgress = 0;
-  audioBuffer = 0;
   currentTime = 0;
   audio: HTMLAudioElement = <HTMLAudioElement>document.createElement('AUDIO');
 
@@ -26,9 +26,6 @@ export class AudioPlayerComponent implements OnInit {
     this.audio.ontimeupdate = () => {
       let percentagePlayed = this.audio.currentTime / this.audio.duration;
       this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
-
-      let bufferPercentage = this.audio.buffered.end(0) / this.audio.duration;
-      this.audioBuffer = (isNaN(bufferPercentage) ? 0 : bufferPercentage) * 100;
     };
 
 
@@ -59,10 +56,21 @@ export class AudioPlayerComponent implements OnInit {
     }
   }
 
+  public setSrc(src: string) {
+    this.audio.src = src;
+    this.audio.load();
+    this.audio.onloadeddata = () => {
+      this.setTime(0);
+    };
+    this.audioProgress = 0;
+  }
+
   loadAudio() {
-    if (!this.isLoaded) {
       this.isLoaded = true;
-      this.audio.src = this.Task.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+      if (this.project && this.task && this.comment) {
+        this.audio.src = this.Task.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+      } else if (this.audioSrc) {
+        this.audio.src = this.audioSrc.src;
     }
   }
 

@@ -14,35 +14,56 @@
         Warning: The student has opened the discussion prompts without sending a
         response.
       </div>
-      <div [hidden]="!responseAvailable" class="audio-comment-container">
-        <mat-button-toggle-group #group="matButtonToggleGroup">
-          <mat-button-toggle (click)="setPromptTrack('prompt', 0)" aria-label="Prompt toggle">
-            P1
-          </mat-button-toggle>
-          <mat-button-toggle *ngIf="discussion.number_of_prompts > 1" (click)="setPromptTrack('prompt', 1)" aria-label="Prompt toggle">
-            P2
-          </mat-button-toggle>
-          <mat-button-toggle (click)="setPromptTrack('prompt', 2)" *ngIf="discussion.number_of_prompts > 2" aria-label="Prompt toggle">
-            P3
-          </mat-button-toggle>
-          <mat-button-toggle (click)="setPromptTrack('response')" aria-label="Response Toggle">
-            Response
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-        <button class="play-button" (click)="playResponseAudio()">
-          <mat-icon aria-label="play audio"
-            >{{
-              !audio.paused ? "stop_circle_outline" : "play_circle_filled_white"
-            }}
-          </mat-icon>
-        </button>
-        <mat-progress-bar
-          color="white"
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+        [hidden]="!responseAvailable"
+        class="audio-comment-container"
+      >
+        <audio-player #player></audio-player>
+        <!-- <mat-progress-bar
           class="progress-bar-container"
           mode="determinate"
           [value]="audioProgress"
-        >
-        </mat-progress-bar>
+        > -->
+        <!-- </mat-progress-bar> -->
+        <mat-button-toggle-group value="response">
+          <mat-button-toggle
+            matTooltip="Plays the first discussion prompt"
+            matTooltipPosition="above"
+            (click)="setPromptTrack('prompt', 0)"
+            aria-label="Prompt toggle"
+          >
+            P1
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the second discussion prompt"
+            matTooltipPosition="above"
+            *ngIf="discussion.number_of_prompts > 1"
+            (click)="setPromptTrack('prompt', 1)"
+            aria-label="Prompt toggle"
+          >
+            P2
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the third discussion prompt"
+            matTooltipPosition="above"
+            (click)="setPromptTrack('prompt', 2)"
+            *ngIf="discussion.number_of_prompts > 2"
+            aria-label="Prompt toggle"
+          >
+            P3
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the prompts, followed by the students response"
+            matTooltipPosition="above"
+            value="response"
+            (click)="setPromptTrack('response')"
+            aria-label="Response Toggle"
+          >
+            Response
+          </mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
     </div>
 

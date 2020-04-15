@@ -1,10 +1,11 @@
-import { Component, Inject, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
 
 interface DiscussionComment {
   created_at: string;
@@ -23,11 +24,11 @@ interface DiscussionComment {
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService]
 })
-export class IntelligentDiscussionPlayerComponent implements OnInit {
+export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
   @Input() task: any;
+  @ViewChild('player') audioPlayer: AudioPlayerComponent;
   loading: boolean = false;
-  audio: HTMLAudioElement;
   audioProgress: number = 0;
 
   constructor(
@@ -36,12 +37,8 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    this.audio = new Audio();
-    this.audio.ontimeupdate = () => {
-      const percentagePlayed = this.audio.currentTime / this.audio.duration;
-      this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
-    };
+  ngAfterViewInit() {
+    this.setPromptTrack('response');
   }
 
   get responseAvailable() {
@@ -60,21 +57,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
       url = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
     }
 
-    this.audio.src = url;
-    this.audio.load();
-    this.audio.play();
-  }
-
-  playResponseAudio() {
-    if (this.audio.paused) {
-      this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
-      this.audio.load();
-      this.audio.play();
-    } else {
-      this.audio.pause();
-      this.audio.currentTime = 0;
-    }
-
+    this.audioPlayer.setSrc(url);
   }
 
   beginDiscussion(): void {
@@ -84,7 +67,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
       data: {
         dc: this.discussion,
         task: this.task,
-        audioRef: this.audio
+        audioRef: this.audioPlayer.audio
       },
       maxWidth: '800px',
       disableClose: true
