@@ -14,6 +14,7 @@ interface DiscussionComment {
   time_started: string;
   response: string;
   status: string;
+  number_of_prompts: number;
 }
 
 @Component({
@@ -51,6 +52,19 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     return this.task.project().unit().my_role !== 'Student';
   }
 
+  setPromptTrack(track: string, promptNumber?: number) {
+    let url: string = '';
+    if (track === 'prompt') {
+      url = this.discussionService.getDiscussionPromptUrl(this.task, this.discussion.id, promptNumber);
+    } else {
+      url = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
+    }
+
+    this.audio.src = url;
+    this.audio.load();
+    this.audio.play();
+  }
+
   playResponseAudio() {
     if (this.audio.paused) {
       this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
@@ -83,6 +97,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     });
   }
 }
+
 
 // The Dialog Component
 @Component({
