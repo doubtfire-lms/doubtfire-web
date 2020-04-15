@@ -6,7 +6,7 @@
   (emojiClick)="addEmoji($event)"
 ></emoji-mart>
 
-<div id="replyContainer" [hidden]="originalComment == null">
+<div id="replyContainer" *ngIf="task" [hidden]="originalComment == null">
   <div>
     <div class="replying-wrap">
       Replying to:
