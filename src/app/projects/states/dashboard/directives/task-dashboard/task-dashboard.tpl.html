@@ -42,10 +42,11 @@
       <task-outcomes-card task-def="task.definition" unit="task.unit()"></task-outcomes-card>
     </div><!--/task-description-column-->
   </div><!--/panel-body-->
-  <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
+  <div class="has-pdf" ng-if="isCurrentView('task')">
     <pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.has_pdf">
+    <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
     <pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.has_pdf">

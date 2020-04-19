@@ -112,6 +112,7 @@ import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { SafePipe } from './common/pipes/safe.pipe';
+import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 
 @NgModule({
   // components
@@ -144,6 +145,7 @@ import { SafePipe } from './common/pipes/safe.pipe';
     DragDropDirective,
     PdfViewerComponent,
     SafePipe,
+    PdfViewerPanelComponent,
   ],
   // Module Imports
   imports: [
