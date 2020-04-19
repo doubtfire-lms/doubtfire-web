@@ -70,10 +70,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       taskDefinition: null
     }, this.filters);
 
-    this.tutorials = [...this.unit.tutorials, ...[
-      { id: 'all', description: 'All tutorials', abbreviation: '__all' },
-      { id: 'mine', description: 'Just my tutorials', abbreviation: '__mine' }
-    ]];
+    this.tutorials = [...[
+      { id: 'all', inbox_description: 'All tutorials', abbreviation: '__all' },
+      { id: 'mine', inbox_description: 'Just my tutorials', abbreviation: '__mine' }],
+    ...this.unit.tutorials];
 
     this.tutorials = this.tutorials.map(tutorial => {
       if (!['all', 'mine'].includes(tutorial.id)) {
@@ -153,11 +153,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   taskDefinitionIdChanged() {
-    this.submissionsUrl = this.taskDef.getSubmissionsUrl(this.unit.id, this.filters.taskDefinitionIdSelected)
-    this.submissionsPdfsUrl = this.taskDef.getSubmissionsPdfsUrl(this.unit.id, this.filters.taskDefinitionIdSelected)
+    this.submissionsUrl = this.taskDef.getSubmissionsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
+    this.submissionsPdfsUrl = this.taskDef.getSubmissionsPdfsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
     let taskDefId = this.filters.taskDefinitionIdSelected;
     if (taskDefId) {
-      let taskDef = this.unit.taskDef(taskDefId);
+      let taskDef = this.unit.taskDef(taskDefId.id);
       this.filters.taskDefinition = taskDef;
     }
     if (this.isTaskDefMode) {

@@ -1,5 +1,5 @@
 <div>
-  <div class="omnisearch">
+  <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
     <div fxLayout="row">
       <button mat-icon-button aria-label="Seach Icon" disabled>
         <mat-icon>search</mat-icon>
@@ -7,7 +7,7 @@
 
       <mat-form-field
         appearance="none"
-        style="width: 100%; margin-top: -0.4em; padding-bottom: 0;"
+        style="width: 100%; margin-top: -0.4em; margin-bottom: -30px;"
         floatLabel="never"
       >
         <input
@@ -40,11 +40,15 @@
     </div>
 
     <mat-accordion>
-      <mat-expansion-panel disabled hideToggle [expanded]="showSearchOptions">
+      <mat-expansion-panel
+        class="search-settings-panel mat-elevation-z0"
+        disabled
+        hideToggle
+        [expanded]="showSearchOptions"
+      >
         <form class="search-options">
           <div class="task-definition">
             <div class="dropdown" dropdown>
-              <label>Task Definition</label>
               <i
                 *ngIf="isTaskDefMode"
                 class="fa fa-download pull-right dropdown-toggle"
@@ -60,12 +64,14 @@
                 </li>
               </ul>
             </div>
-            <mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Task Definition</mat-label>
               <mat-select
                 [(ngModel)]="filters.taskDefinitionIdSelected"
                 name="taskDefID"
-                (change)="taskDefinitionIdChanged()"
+                (selectionChange)="taskDefinitionIdChanged()"
               >
+                <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
                 <mat-option
                   *ngFor="let td of unit.task_definitions"
                   [value]="td"
@@ -73,30 +79,28 @@
                   {{ td.abbreviation + " - " + td.name }}
                 </mat-option>
               </mat-select>
+              <mat-hint>
+                Display submissions of a specific task definition.
+              </mat-hint>
             </mat-form-field>
-            <p class="help-block">
-              You can choose to display submissions of a specific task
-              definition here.
-            </p>
           </div>
           <!--/task-definition-->
 
-          <div class="form-group tutorial">
+          <mat-form-field class="full-width">
             <mat-label>Tutorials</mat-label>
             <mat-select
               [(ngModel)]="filters.tutorialIdSelected"
               name="tutorial"
-              (change)="tutorialIdChanged()"
+              (selectionChange)="tutorialIdChanged()"
             >
               <mat-option *ngFor="let t of tutorials" [value]="t">
                 {{ t.inbox_description }}
               </mat-option>
             </mat-select>
             <mat-hint>
-              You can choose to display submissions from all tutorials or just
-              your tutorials.
+              Display submissions from all tutorials or just your tutorials.
             </mat-hint>
-          </div>
+          </mat-form-field>
 
           <!--/tutorial-->
         </form>
