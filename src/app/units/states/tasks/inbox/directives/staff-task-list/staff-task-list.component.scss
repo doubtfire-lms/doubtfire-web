@@ -1,10 +1,23 @@
 .omnisearch {
-  border-radius: 50px;
+  border-radius: 1em;
   background-color: rgba(0, 0, 0, 0.04);
   font-size: 15px;
   min-height: 36px;
   padding-right: 16px;
   text-align: left;
+
+  mat-form-field {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.search-settings-panel {
+  background-color: transparent;
 }
 
 user-icon {
