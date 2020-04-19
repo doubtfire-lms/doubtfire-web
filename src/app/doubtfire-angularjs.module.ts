@@ -142,7 +142,6 @@ import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
 import 'build/src/app/units/states/plagiarism/directives/directives.js';
 import 'build/src/app/units/states/plagiarism/plagiarism.js';
-import 'build/src/app/units/states/tasks/inbox/directives/staff-task-list/staff-task-list.js';
 import 'build/src/app/units/states/tasks/inbox/directives/directives.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
@@ -285,6 +284,7 @@ import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-c
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
+import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -316,7 +316,7 @@ DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService',
   downgradeInjectable(CampusService));
-  DoubtfireAngularJSModule.factory('emojiService',
+DoubtfireAngularJSModule.factory('emojiService',
   downgradeInjectable(EmojiService));
 
 // directive -> component
@@ -335,9 +335,9 @@ DoubtfireAngularJSModule.directive('institutionSettings',
 DoubtfireAngularJSModule.directive('commentBubbleAction',
   downgradeComponent({ component: CommentBubbleActionComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList',
-    downgradeComponent({ component: UnitTutorialsListComponent }));
+  downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsManager',
-    downgradeComponent({ component: UnitTutorialsManagerComponent }));
+  downgradeComponent({ component: UnitTutorialsManagerComponent }));
 DoubtfireAngularJSModule.directive('unitStudentsEditor',
   downgradeComponent({ component: UnitStudentsEditorComponent }));
 DoubtfireAngularJSModule.directive('studentTutorialSelect',
@@ -352,6 +352,8 @@ DoubtfireAngularJSModule.directive('pdfViewer',
   downgradeComponent({ component: PdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel',
   downgradeComponent({ component: PdfViewerPanelComponent }));
+DoubtfireAngularJSModule.directive('staffTaskList',
+  downgradeComponent({ component: StaffTaskListComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

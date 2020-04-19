@@ -55,7 +55,9 @@ import {
   userProvider,
   currentUser,
   TaskCommentProvider,
-  commentsModalProvider
+  commentsModalProvider,
+  taskDefinitionProvider,
+  groupServiceProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -113,6 +115,11 @@ import { DragDropDirective } from './common/directives/drag-drop.directive';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { SafePipe } from './common/pipes/safe.pipe';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
+import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import { FiltersPipe } from './common/filters/filters.pipe';
+import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-definition.pipe';
+import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
+import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
 
 @NgModule({
   // components
@@ -146,6 +153,11 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
     PdfViewerComponent,
     SafePipe,
     PdfViewerPanelComponent,
+    StaffTaskListComponent,
+    FiltersPipe,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe,
   ],
   // Module Imports
   imports: [
@@ -197,8 +209,10 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
     ActivityTypeService,
     EmojiService,
     userProvider,
+    groupServiceProvider,
     unitProvider,
     commentsModalProvider,
+    taskDefinitionProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
@@ -226,7 +240,10 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
-    DoubtfireConstants
+    DoubtfireConstants,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe
   ]
 })
 // There is no longer any requirement for an EntryComponants section

@@ -36,7 +36,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       refreshData()
 
     # Sets the new filteredTasks variable
-    applyFilters = ->
+     applyFilters  = ->
       filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
       filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
       filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
@@ -70,6 +70,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
           tutorial.description = tutorial.abbreviation + ' - ' + tutorial.description
       tutorial
     )
+    
     $scope.tutorialIdChanged = ->
       tutorialId = $scope.filters.tutorialIdSelected
       if tutorialId == 'mine'
