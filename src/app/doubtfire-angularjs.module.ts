@@ -190,6 +190,7 @@ import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
+import 'build/src/app/common/status-icon/status-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/header/header.js';
@@ -286,6 +287,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -357,6 +359,8 @@ DoubtfireAngularJSModule.directive('taskCommentsViewer',
   downgradeComponent({ component: TaskCommentsViewerComponent }));
 DoubtfireAngularJSModule.directive('userIcon',
   downgradeComponent({ component: UserIconComponent }));
+DoubtfireAngularJSModule.directive('pdfViewer',
+  downgradeComponent({ component: PdfViewerComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
