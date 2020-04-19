@@ -1,10 +1,11 @@
 <div class="panel-full-screen">
   <staff-task-list
-    show-search-options="showSearchOptions"
-    filters="filters"
-    task-data="taskData"
-    unit="unit"
-    unit-role="unitRole"
+    ng-if="taskData"
+    [show-search-options]="showSearchOptions"
+    [filters]="filters"
+    [task-data]="taskData"
+    [unit]="unit"
+    [unit-role]="unitRole"
     class="col-xs-12 col-md-3"
     ><!--/panel-1-->
   </staff-task-list>
