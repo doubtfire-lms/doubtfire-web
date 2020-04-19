@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-pdf-viewer',
+  selector: 'pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
 })
