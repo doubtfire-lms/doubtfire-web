@@ -1,5 +1,48 @@
-staff-task-list {
-  // @include task-list();
+.omnisearch {
+  border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0.04);
+  font-size: 15px;
+  min-height: 36px;
+  padding-right: 16px;
+  text-align: left;
+}
+
+user-icon {
+  margin-right: 10px;
+}
+
+.muted {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.task-list-data {
+  padding-top: 3px;
+  h4 {
+    margin-bottom: -5px;
+  }
+  p {
+    margin-bottom: -5px;
+  }
+}
+
+.mat-list-item {
+  height: 60px;
+  border-radius: 20px;
+  border: none;
+}
+.mat-list-item:hover {
+  cursor: pointer;
+}
+
+.mat-list-item.selected {
+  background-color: rgba(0, 0, 0, 0.04);
+  height: 100px;
+}
+
+:host {
+  ::ng-deep.mat-pseudo-checkbox {
+    display: none !important;
+  }
 }
 
 .list-group-item-text-extended {

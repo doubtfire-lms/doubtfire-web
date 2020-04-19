@@ -23,15 +23,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   submissionsPdfsUrl: string;
   submissionsUrl: string;
   userHasTutorials: boolean;
-  filteredTasks: any[];
-
-  tutorials: any[];
-
-  tasks: any[];
-
-  studentNameChanged: any;
+  filteredTasks: any[] = null;
+  tutorials: any[] = null;
+  tasks: any[] = null;
 
   watchingTaskKey: any;
+
+  panelOpenState = false;
 
   isTaskDefMode: boolean;
   // Let's call having a source of tasksForDefinition plus having a task definition
@@ -44,11 +42,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
-
-    private tasksOfTaskDefinition: TasksOfTaskDefinitionPipe,
-    private tasksInTutorials: TasksInTutorialsPipe,
-    private tasksWithStudentName: TasksWithStudentNamePipe,
-
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,19 +95,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
 
 
-    // this.tutorialIdChanged();
+    this.tutorialIdChanged();
 
     this.setTaskDefFromTaskKey(this.taskData.taskKey);
-
-    // Student Name options
-    this.studentNameChanged = this.applyFilters;
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
   }
 
   refreshTasks(): void {
-     this.refreshData();
+    this.refreshData();
   }
 
   applyFilters() {
@@ -122,9 +112,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     let pipe2 = new TasksInTutorialsPipe();
     let pipe3 = new TasksWithStudentNamePipe();
 
-    let filteredTasks = pipe1.transform(this.tasks, this.filters?.taskDefinition);
-    filteredTasks = pipe2.transform(filteredTasks, this.filters?.tutorials);
-    filteredTasks = pipe3.transform(filteredTasks, this.filters?.studentName);
+    let filteredTasks = pipe1.transform(this.tasks, this.filters.taskDefinition);
+    filteredTasks = pipe2.transform(filteredTasks, this.filters.tutorials);
+    filteredTasks = pipe3.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
     // Fix selected task.
