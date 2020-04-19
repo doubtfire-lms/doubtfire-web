@@ -5,17 +5,22 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TasksInTutorialsPipe implements PipeTransform {
 
+
   transform(tasks, tutorialIds: number[]): any[] {
     if (!tasks) { return tasks; }
     if (tutorialIds.length === 0) { return []; }
-    tasks.filter(task => {
+    const result = tasks.filter(task => {
       if (task.isGroupTask()) {
         if (task.group() != null) {
-          return tutorialIds.includes(task.group()?.tutorial_id);
-        } else {
-          return task.project().tutorial_enrolments.filter(enrolment => tutorialIds.includes(enrolment.tutorial_id)).length > 0;
+          let tute_id = task.group().tutorial_id;
+          console.log(tute_id);
+          return tutorialIds.includes(tute_id);
         }
+      } else {
+        const enrolments = task.project().tutorial_enrolments;
+        return enrolments.filter(enrolment => tutorialIds.includes(enrolment.tutorial_id)).length > 0;
       }
     });
+    return result;
   }
 }

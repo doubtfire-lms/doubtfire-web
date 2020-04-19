@@ -1,90 +1,112 @@
-<div class="panel panel-primary">
-  <div class="panel-heading">
-    <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="filters.studentName"
-        (change)="studentNameChanged()"
-        placeholder="Search students..."
-      />
-      <span class="input-group-btn">
-        <button
-          class="btn btn-default btn-search-opts-toggle"
-          type="button"
-          [(ngModel)]="showSearchOptions"
-          btn-checkbox
-        >
-          <i class="fa fa-chevron-{{ showSearchOptions ? 'up' : 'down' }}"></i>
-        </button>
-        <button class="btn btn-default" type="button" (click)="refreshTasks()">
-          <i class="fa fa-refresh"></i>
-        </button>
-      </span>
-      <!--/search-options-toggle-->
-    </div>
-    <!--/search-->
-  </div>
-  <form class="panel-body search-options" [hidden]="!showSearchOptions">
-    <div class="task-definition">
-      <div class="dropdown" dropdown>
-        <label>Task Definition</label>
-        <i
-          *ngIf="isTaskDefMode"
-          class="fa fa-download pull-right dropdown-toggle"
-          style="cursor: pointer; padding-top: 8px; padding-right: 8px;"
-          dropdown-toggle
-        ></i>
-        <ul class="dropdown-menu pull-right">
-          <li>
-            <a [href]="submissionsPdfsUrl">Bulk Export Submission PDFs</a>
-          </li>
-          <li>
-            <a [href]="submissionsUrl">Bulk Export Submission Files</a>
-          </li>
-        </ul>
-      </div>
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="filters.taskDefinitionIdSelected"
-          name="taskDefID"
-          (change)="taskDefinitionIdChanged()"
-        >
-          <mat-option
-            *ngFor="let td of unit.task_definitions"
-            [value]="td.value"
-          >
-            {{ td.abbreviation + " - " + td.name }}
-          </mat-option>
-        </mat-select>
+<div>
+  <div class="omnisearch">
+    <div fxLayout="row">
+      <button mat-icon-button aria-label="Seach Icon" disabled>
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <mat-form-field
+        appearance="none"
+        style="width: 100%; margin-top: -0.4em; padding-bottom: 0;"
+        floatLabel="never"
+      >
+        <input
+          matInput
+          autocomplete="off"
+          spellcheck="false"
+          type="text"
+          placeholder="Search Tasks"
+          [(ngModel)]="filters.studentName"
+          (ngModelChange)="applyFilters()"
+        />
       </mat-form-field>
-      <p class="help-block">
-        You can choose to display submissions of a specific task definition
-        here.
-      </p>
+      <button
+        mat-icon-button
+        aria-label="Inbox search dropdown"
+        (click)="showSearchOptions = !showSearchOptions"
+      >
+        <mat-icon>{{
+          showSearchOptions ? "arrow_drop_up" : "arrow_drop_down"
+        }}</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        aria-label="Refresh Inbox"
+        (click)="refreshTasks()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
-    <!--/task-definition-->
-    <div class="form-group tutorial">
-      <label>Tutorials</label>
-      <div class="input-group col-sm-12">
-        <select
-          [(ngModel)]="filters.tutorialIdSelected"
-          ng-options="t.id as t.inbox_description for t in tutorials | orderBy:'abbreviation'"
-          (change)="tutorialIdChanged()"
-          class="form-control input-md"
-        >
-        </select>
-      </div>
-      <p class="help-block">
-        You can choose to display submissions from all tutorials or just your
-        tutorials.
-      </p>
-    </div>
-    <!--/tutorial-->
-  </form>
+
+    <mat-accordion>
+      <mat-expansion-panel disabled hideToggle [expanded]="showSearchOptions">
+        <form class="search-options">
+          <div class="task-definition">
+            <div class="dropdown" dropdown>
+              <label>Task Definition</label>
+              <i
+                *ngIf="isTaskDefMode"
+                class="fa fa-download pull-right dropdown-toggle"
+                style="cursor: pointer; padding-top: 8px; padding-right: 8px;"
+                dropdown-toggle
+              ></i>
+              <ul class="dropdown-menu pull-right">
+                <li>
+                  <a [href]="submissionsPdfsUrl">Bulk Export Submission PDFs</a>
+                </li>
+                <li>
+                  <a [href]="submissionsUrl">Bulk Export Submission Files</a>
+                </li>
+              </ul>
+            </div>
+            <mat-form-field>
+              <mat-select
+                [(ngModel)]="filters.taskDefinitionIdSelected"
+                name="taskDefID"
+                (change)="taskDefinitionIdChanged()"
+              >
+                <mat-option
+                  *ngFor="let td of unit.task_definitions"
+                  [value]="td"
+                >
+                  {{ td.abbreviation + " - " + td.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <p class="help-block">
+              You can choose to display submissions of a specific task
+              definition here.
+            </p>
+          </div>
+          <!--/task-definition-->
+
+          <div class="form-group tutorial">
+            <mat-label>Tutorials</mat-label>
+            <mat-select
+              [(ngModel)]="filters.tutorialIdSelected"
+              name="tutorial"
+              (change)="tutorialIdChanged()"
+            >
+              <mat-option *ngFor="let t of tutorials" [value]="t">
+                {{ t.inbox_description }}
+              </mat-option>
+            </mat-select>
+            <mat-hint>
+              You can choose to display submissions from all tutorials or just
+              your tutorials.
+            </mat-hint>
+          </div>
+
+          <!--/tutorial-->
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
   <!--/search-options-->
-  <ul class="list-group">
-    <li
+  <mat-list>
+    <mat-list-item
       class="list-group-item list-group-item-task clearfix {{
         task.statusClass()
       }}"
@@ -93,71 +115,71 @@
       [ngClass]="{ selected: isSelectedTask(task) }"
       *ngFor="let task of filteredTasks"
     >
-      <user-icon
-        [user]="task.project()"
-        [email]="task.project().student_email"
-        [size]="50"
-      >
-      </user-icon>
-      <div class="task-data">
-        <h4 class="list-group-item-heading">
-          {{ task.project().name }}
-        </h4>
-        <p class="list-group-item-text">
-          {{ task.definition.abbreviation }} - {{ task.definition.name }}
-        </p>
-        <div
-          class="list-group-item-text-extended"
-          [hidden]="!isSelectedTask(task)"
+      <div fxLayout="row" fxLayoutAlign="center">
+        <user-icon
+          fxFlexAlign="center"
+          [user]="task.project()"
+          [email]="task.project().student_email"
+          [size]="45"
         >
-          <p>
-            {{ task.project().shortTutorialDescription() }}
+        </user-icon>
+        <div class="task-list-data">
+          <h4 class="mat-h4">{{ task.project().name }}</h4>
+          <p class="mat-small">
+            {{ task.definition.abbreviation }} - {{ task.definition.name }}
           </p>
-          <p>Submitted {{ task.submission_date }}</p>
-          <p [hidden]="!(task.times_assessed > 0)">
-            Assessed {{ task.times_assessed }} time{{
-              task.times_assessed == 1 ? "" : "s"
-            }}
-          </p>
+          <div class="muted" [hidden]="!isSelectedTask(task)">
+            <p class="mat-small">
+              {{ task.project().shortTutorialDescription() }}
+            </p>
+            <p class="mat-small">
+              Submitted {{ task.submission_date | humanizedDate }}
+            </p>
+            <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
+              Assessed {{ task.times_assessed }} time{{
+                task.times_assessed == 1 ? "" : "s"
+              }}
+            </p>
+          </div>
         </div>
-      </div>
-      <!--/task-data-->
-      <div class="task-badges">
-        <!-- <status-icon status="task.status"></status-icon> -->
-        <div class="task-superscript-badges">
-          <span
-            class="task-superscript-badge new-comments-badge"
-            *ngIf="task.num_new_comments > 0"
-          >
-            {{ task.num_new_comments }}
-          </span>
-          <span
-            class="task-superscript-badge plagiarism-detected-badge"
-            *ngIf="task.plagiarismDetected()"
-          >
-            <i class="fa fa-eye"></i>
-          </span>
-        </div>
-        <div class="task-subscript-badges">
-          <span
-            class="task-subscript-badge grade-badge"
-            *ngIf="task.hasGrade()"
-          >
-            {{ task.gradeDesc() }}
-          </span>
-          <span
-            class="task-subscript-badge quality-badge"
-            *ngIf="task.hasQualityPoints()"
-          >
-            <sup>{{ task.quality_pts }}</sup
-            >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
-          </span>
+        <!--/task-data-->
+        <div class="task-badges">
+          <!-- <status-icon status="task.status"></status-icon> -->
+          <div class="task-superscript-badges">
+            <span
+              class="task-superscript-badge new-comments-badge"
+              *ngIf="task.num_new_comments > 0"
+            >
+              {{ task.num_new_comments }}
+            </span>
+            <span
+              class="task-superscript-badge plagiarism-detected-badge"
+              *ngIf="task.plagiarismDetected()"
+            >
+              <i class="fa fa-eye"></i>
+            </span>
+          </div>
+          <div class="task-subscript-badges">
+            <span
+              class="task-subscript-badge grade-badge"
+              *ngIf="task.hasGrade()"
+            >
+              {{ task.gradeDesc() }}
+            </span>
+            <span
+              class="task-subscript-badge quality-badge"
+              *ngIf="task.hasQualityPoints()"
+            >
+              <sup>{{ task.quality_pts }}</sup
+              >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
+            </span>
+          </div>
         </div>
       </div>
       <!--/badges-->
-    </li>
+    </mat-list-item>
     <!--/task-->
-    <li
+    <mat-list-item
       [hidden]="filteredTasks.length != 0"
       class="list-group-item text-center text-muted"
     >
@@ -165,6 +187,6 @@
         <img src="/assets/images/empty_task_inbox.svg" alt="Empty task inbox" />
         No tasks to display!
       </div>
-    </li>
-  </ul>
+    </mat-list-item>
+  </mat-list>
 </div>

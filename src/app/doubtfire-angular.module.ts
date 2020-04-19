@@ -19,6 +19,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -197,6 +198,7 @@ import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-na
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatExpansionModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
