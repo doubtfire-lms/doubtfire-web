@@ -114,6 +114,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
+import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 
 @NgModule({
   // Components we declare
@@ -147,6 +148,7 @@ import { DragDropDirective } from './common/directives/drag-drop.directive';
     MarkedPipe,
     HumanizedDatePipe,
     DragDropDirective,
+    PdfViewerComponent,
   ],
   // Module Imports
   imports: [
