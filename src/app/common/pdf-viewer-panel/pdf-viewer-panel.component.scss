@@ -1,0 +1,15 @@
+@import '../../../styles/common/doubtfire-panel.scss';
+
+.pdf-viewer-panel {
+  .pdf-viewer-body {
+    padding: 0;
+    position: relative;
+    overflow: inherit !important;
+    background-color: #d1d1d1;
+    height: 60vh;
+    @include doubtfire-scroll-panel;
+  }
+  .pdf-viewer-footer {
+    height: 60px;
+  }
+}

@@ -4,10 +4,7 @@ angular.module("doubtfire.common", [
   'doubtfire.common.modals'
   'doubtfire.common.header'
   'doubtfire.common.file-uploader'
-  'doubtfire.common.pdf-panel-viewer'
   'doubtfire.common.grade-icon'
   'doubtfire.common.content-editable'
   'doubtfire.common.alert-list'
-  # New
-  'doubtfire.common.pdf-panel-viewer'
 ])

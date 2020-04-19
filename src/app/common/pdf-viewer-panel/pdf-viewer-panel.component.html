@@ -1,0 +1,21 @@
+<div class="pdf-viewer-panel">
+  <div class="pdf-viewer-body">
+      <pdf-viewer [pdfUrl]="pdfUrl"></pdf-viewer>
+      <!-- <pdf-viewer *ngIf="pdfUrl" [pdfUrl]="pdfUrl"></pdf-viewer> -->
+  </div>
+  <!--/panel-body-->
+  <div class="pdf-viewer-footer" *ngIf="!hideFooter">
+      <div class="pull-left text-muted" [hidden]="!footerText">
+          <strong>Note:</strong> {{footerText}}
+      </div>
+      <div class="pull-right btn-group">
+          <a (click)="downloadEvent('Resources')" [href]="resourcesUrl" class="btn btn-primary" *ngIf="resourcesUrl">
+          <i class="fa fa-download"></i><span> Resources</span>
+      </a>
+          <a (click)="downloadEvent('PDF')" [href]="pdfUrl + '&as_attachment=true'" class="btn btn-success">
+          <i class="fa fa-download"></i><span [hidden]="!resourcesUrl"> PDF</span>
+      </a>
+      </div>
+  </div>
+  <!--/panel-footer-->
+</div>

@@ -186,7 +186,7 @@ TODO:
 - [ ] ./src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.coffee
 - [ ] ./src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee
-- [ ] ./src/app/common/pdf-panel-viewer/pdf-panel-viewer.coffee
+- [ ] ./src/app/common/pdf-viewer-panel/pdf-viewer-panel.coffee
 - [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/long-press/on-long-press.coffee
 - [ ] ./src/app/common/content-editable/content-editable.coffee
