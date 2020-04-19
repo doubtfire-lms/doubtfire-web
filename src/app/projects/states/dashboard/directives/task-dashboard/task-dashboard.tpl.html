@@ -43,10 +43,10 @@
     </div><!--/task-description-column-->
   </div><!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
-    <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
+    <pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.has_pdf">
-    <pdf-viewer pdf-url="urls.taskSubmissionPdfUrl"></pdf-viewer>
+    <pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer>
   </div><!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.has_pdf">
     <i class="fa fa-file-pdf-o"></i>

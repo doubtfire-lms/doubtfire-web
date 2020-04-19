@@ -10,6 +10,5 @@ angular.module("doubtfire.common", [
   'doubtfire.common.content-editable'
   'doubtfire.common.alert-list'
   # New
-  'doubtfire.common.pdf-viewer'
   'doubtfire.common.pdf-panel-viewer'
 ])

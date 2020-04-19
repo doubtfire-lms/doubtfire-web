@@ -1,6 +1,6 @@
 <div class="pdf-panel-viewer">
     <div class="panel-body">
-        <pdf-viewer ng-if="showViewer" pdf-url="pdfUrl"></pdf-viewer>
+        <pdf-viewer ng-if="showViewer" [pdf-url]="pdfUrl"></pdf-viewer>
     </div>
     <!--/panel-body-->
     <div class="panel-footer" ng-if="!hideFooter">
