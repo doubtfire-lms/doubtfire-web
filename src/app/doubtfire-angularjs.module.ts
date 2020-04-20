@@ -187,8 +187,6 @@ import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
 import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
-import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
-import 'build/src/app/common/status-icon/status-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/header/header.js';
