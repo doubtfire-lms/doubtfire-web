@@ -24,7 +24,7 @@
     "@angular/core": "~9.1.2",
     "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~9.1.2",
-    "@angular/material": "^9.2.0",
+    "@angular/material": "^9.2.1",
     "@angular/platform-browser": "~9.1.2",
     "@angular/platform-browser-dynamic": "~9.1.2",
     "@angular/router": "~9.1.2",
@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.7",
-    "@angular/cdk": "^9.2.0",
+    "@angular/cdk": "^9.2.1",
     "@angular/cli": "^9.1.1",
     "@angular/compiler": "^9.1.2",
     "@angular/compiler-cli": "^9.1.2",
