@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
