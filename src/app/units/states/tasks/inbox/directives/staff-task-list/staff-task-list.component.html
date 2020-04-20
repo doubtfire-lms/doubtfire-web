@@ -21,6 +21,8 @@
         />
       </mat-form-field>
       <button
+        matTooltip="Filter options"
+        matTooltipPosition="above"
         mat-icon-button
         aria-label="Inbox search dropdown"
         (click)="showSearchOptions = !showSearchOptions"
@@ -31,6 +33,8 @@
       </button>
 
       <button
+        matTooltip="Refresh the task inbox"
+        matTooltipPosition="above"
         mat-icon-button
         aria-label="Refresh Inbox"
         (click)="refreshTasks()"
@@ -71,7 +75,9 @@
                 name="taskDefID"
                 (selectionChange)="taskDefinitionIdChanged()"
               >
-                <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
+                <mat-option value="" [hidden]="isTaskDefMode"
+                  >All Task Definitions</mat-option
+                >
                 <mat-option
                   *ngFor="let td of unit.task_definitions"
                   [value]="td"
@@ -118,8 +124,16 @@
       (click)="setSelectedTask(task)"
       [ngClass]="{ selected: isSelectedTask(task) }"
       *ngFor="let task of filteredTasks"
+      style="padding: 0"
     >
-      <div fxLayout="row" fxLayoutAlign="center">
+      <div
+        class="inbox-entry"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        [ngClass]="{ hover: task.hover }"
+        (mouseover)="task.hover = true"
+        (mouseout)="task.hover = false"
+      >
         <user-icon
           fxFlexAlign="center"
           [user]="task.project()"
@@ -146,9 +160,10 @@
             </p>
           </div>
         </div>
+        <span fxFlex></span>
         <!--/task-data-->
         <div class="task-badges">
-          <!-- <status-icon status="task.status"></status-icon> -->
+          <status-icon [status]="task.status"></status-icon>
           <div class="task-superscript-badges">
             <span
               class="task-superscript-badge new-comments-badge"
@@ -178,6 +193,11 @@
               >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
             </span>
           </div>
+        </div>
+        <div class="overflow">
+          <button [hidden]="!task.hover" mat-icon-button aria-label="task-overflow">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
         </div>
       </div>
       <!--/badges-->

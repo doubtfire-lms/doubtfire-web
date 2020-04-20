@@ -1,3 +1,7 @@
+@import "../../../../../../../styles/mixins/task-list.scss";
+
+@include task-list();
+
 .omnisearch {
   border-radius: 1em;
   background-color: rgba(0, 0, 0, 0.04);
@@ -10,6 +14,15 @@
     margin-top: 0.5em;
     margin-bottom: 0.5em;
   }
+}
+
+.task-badges {
+  width: 50px;
+  height: 35px;
+}
+
+.inbox-entry {
+  width: 100%;
 }
 
 .full-width {
@@ -36,6 +49,12 @@ user-icon {
   p {
     margin-bottom: -5px;
   }
+}
+
+.overflow {
+  min-width: 40px;
+  width: 40px;
+  margin-right: -10px;
 }
 
 .mat-list-item {
