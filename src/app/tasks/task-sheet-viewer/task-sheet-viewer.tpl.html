@@ -11,7 +11,7 @@
   <div class="panel-body assessment-details-alignment-panel" ng-if="showAssessmentPanel">
     <div class="assessment-item current-status" ng-if="assessmentPanels.feedback.show">
       <aside>
-        <status-icon status="task.status"></status-icon>
+        <status-icon [status]="task.status"></status-icon>
       </aside>
       <div class="content">
         <h4>{{activeStatusData.help.detail}}</h4>
