@@ -18,7 +18,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() unit;
   @Input() unitRole;
   @Input() filters;
-  @Input() showSearchOptions;
+  @Input() showSearchOptions = false;
 
   submissionsPdfsUrl: string;
   submissionsUrl: string;
@@ -153,13 +153,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   taskDefinitionIdChanged() {
+    let taskDef;
     this.submissionsUrl = this.taskDef.getSubmissionsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
     this.submissionsPdfsUrl = this.taskDef.getSubmissionsPdfsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
-    let taskDefId = this.filters.taskDefinitionIdSelected;
+    const taskDefId = this.filters.taskDefinitionIdSelected;
     if (taskDefId) {
-      let taskDef = this.unit.taskDef(taskDefId.id);
-      this.filters.taskDefinition = taskDef;
+      taskDef = this.unit.taskDef(taskDefId);
+    } else {
+      taskDef = null;
     }
+    this.filters.taskDefinition = taskDef;
     if (this.isTaskDefMode) {
       this.refreshData();
     }
