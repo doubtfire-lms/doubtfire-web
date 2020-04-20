@@ -1,3 +1,5 @@
+@import '../../../styles/mixins/scrollable.scss';
+
 $comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
@@ -25,20 +27,8 @@ $comment-inner-border-radius: 4px;
 
 .comments-body {
   overflow-y: auto;
-}
-.comments-body::-webkit-scrollbar {
-  height: 10px;
-  width: 8px;
-  border-radius: 4px;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-.comments-body::-webkit-scrollbar:hover {
-  background: #c6c7ca;
-}
-.comments-body::-webkit-scrollbar-thumb {
-  background: #969699;
-  border-radius: 4px;
+
+  @include scrollable();
 }
 
 .comments-scroll-content {
