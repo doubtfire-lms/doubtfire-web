@@ -1,4 +1,4 @@
-<div class="scrollable">
+<div div fxLayout="column" fxLayoutAlign=" none" style="height: 100%;">
   <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
     <div fxLayout="row">
       <button mat-icon-button aria-label="Seach Icon" disabled>
@@ -80,7 +80,7 @@
                 >
                 <mat-option
                   *ngFor="let td of unit.task_definitions"
-                  [value]="td"
+                  [value]="td.id"
                 >
                   {{ td.abbreviation + " - " + td.name }}
                 </mat-option>
@@ -99,7 +99,7 @@
               name="tutorial"
               (selectionChange)="tutorialIdChanged()"
             >
-              <mat-option *ngFor="let t of tutorials" [value]="t">
+              <mat-option *ngFor="let t of tutorials" [value]="t.id">
                 {{ t.inbox_description }}
               </mat-option>
             </mat-select>
@@ -115,104 +115,109 @@
   </div>
 
   <!--/search-options-->
-  <mat-list>
-    <mat-list-item
-      class="list-group-item list-group-item-task clearfix {{
-        task.statusClass()
-      }}"
-      id="{{ task.taskKeyToIdString() }}"
-      (click)="setSelectedTask(task)"
-      [ngClass]="{ selected: isSelectedTask(task) }"
-      *ngFor="let task of filteredTasks"
-      style="padding: 0;"
-    >
-      <div
-        class="inbox-entry"
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        [ngClass]="{ hover: task.hover }"
-        (mouseover)="task.hover = true"
-        (mouseout)="task.hover = false"
+  <div class="scrollable">
+    <mat-list *ngIf="filteredTasks">
+      <mat-list-item
+        class="list-group-item list-group-item-task clearfix {{
+          task.statusClass()
+        }}"
+        id="{{ task.taskKeyToIdString() }}"
+        (click)="setSelectedTask(task)"
+        [ngClass]="{ selected: isSelectedTask(task) }"
+        *ngFor="let task of filteredTasks"
+        style="padding: 0;"
       >
-        <user-icon
-          fxFlexAlign="center"
-          [user]="task.project()"
-          [email]="task.project().student_email"
-          [size]="45"
+        <div
+          class="inbox-entry"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          [ngClass]="{ hover: task.hover }"
+          (mouseover)="task.hover = true"
+          (mouseout)="task.hover = false"
         >
-        </user-icon>
-        <div class="task-list-data">
-          <h4 class="mat-h4">{{ task.project().name }}</h4>
-          <p class="mat-small">
-            {{ task.definition.abbreviation }} - {{ task.definition.name }}
-          </p>
-          <div class="muted" [hidden]="!isSelectedTask(task)">
-            <p class="mat-small">
-              {{ task.project().shortTutorialDescription() }}
-            </p>
-            <p class="mat-small">
-              Submitted {{ task.submission_date | humanizedDate }}
-            </p>
-            <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
-              Assessed {{ task.times_assessed }} time{{
-                task.times_assessed == 1 ? "" : "s"
-              }}
-            </p>
-          </div>
-        </div>
-        <span fxFlex></span>
-        <!--/task-data-->
-        <div class="task-badges">
-          <status-icon [status]="task.status"></status-icon>
-          <div class="task-subscript-badges">
-            <span
-              class="task-subscript-badge grade-badge"
-              *ngIf="task.hasGrade()"
-            >
-              {{ task.gradeDesc() }}
-            </span>
-            <span
-              class="task-subscript-badge quality-badge"
-              *ngIf="task.hasQualityPoints()"
-            >
-              <sup>{{ task.quality_pts }}</sup
-              >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
-            </span>
-          </div>
-        </div>
-        <div class="overflow">
-          <button
-            [hidden]="task.hover"
-            mat-icon-button
-            aria-label="task-overflow"
+          <user-icon
+            fxFlexAlign="center"
+            [user]="task.project()"
+            [email]="task.project().student_email"
+            [size]="45"
           >
-            <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()"
-              >remove_red_eye</mat-icon
-            >
-            <div class="new_comments" *ngIf="(task.num_new_comments > 0) && !task.plagiarismDetected()">
-              {{ task.num_new_comments }}
+          </user-icon>
+          <div class="task-list-data">
+            <h4 class="mat-h4">{{ task.project().name }}</h4>
+            <p class="mat-small">
+              {{ task.definition.abbreviation }} - {{ task.definition.name }}
+            </p>
+            <div class="muted" [hidden]="!isSelectedTask(task)">
+              <p class="mat-small">
+                {{ task.project().shortTutorialDescription() }}
+              </p>
+              <p class="mat-small">
+                Submitted {{ task.submission_date | humanizedDate }}
+              </p>
+              <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
+                Assessed {{ task.times_assessed }} time{{
+                  task.times_assessed == 1 ? "" : "s"
+                }}
+              </p>
             </div>
-          </button>
-          <button
-            [hidden]="!task.hover"
-            mat-icon-button
-            aria-label="task-overflow"
-          >
-            <mat-icon>more_horiz</mat-icon>
-          </button>
+          </div>
+          <span fxFlex></span>
+          <!--/task-data-->
+          <div class="task-badges">
+            <status-icon [status]="task.status"></status-icon>
+            <span *ngIf="isSelectedTask(task)">
+              <span style="width: 20px; height: 20px;" *ngIf="task.hasGrade()">
+                {{ task.gradeDesc() }}
+              </span>
+              <span
+                style="width: 20px; height: 20px;"
+                *ngIf="task.hasQualityPoints()"
+              >
+                <sup>{{ task.quality_pts }}</sup
+                >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
+              </span>
+            </span>
+          </div>
+          <div class="overflow">
+            <button
+              [hidden]="task.hover"
+              mat-icon-button
+              aria-label="task-overflow"
+            >
+              <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()"
+                >remove_red_eye</mat-icon
+              >
+              <div
+                class="new_comments"
+                *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()"
+              >
+                {{ task.num_new_comments }}
+              </div>
+            </button>
+            <button
+              [hidden]="!task.hover"
+              mat-icon-button
+              aria-label="task-overflow"
+            >
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
-      <!--/badges-->
-    </mat-list-item>
-    <!--/task-->
-    <mat-list-item
-      [hidden]="filteredTasks.length != 0"
-      class="list-group-item text-center text-muted"
-    >
-      <div id="empty-task-inbox">
-        <img src="/assets/images/empty_task_inbox.svg" alt="Empty task inbox" />
-        No tasks to display!
-      </div>
-    </mat-list-item>
-  </mat-list>
+        <!--/badges-->
+      </mat-list-item>
+      <!--/task-->
+      <mat-list-item
+        [hidden]="filteredTasks.length != 0"
+        class="list-group-item text-center text-muted"
+      >
+        <div id="empty-task-inbox">
+          <img
+            src="/assets/images/empty_task_inbox.svg"
+            alt="Empty task inbox"
+          />
+          No tasks to display!
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>
