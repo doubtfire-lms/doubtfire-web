@@ -250,7 +250,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
     TasksWithStudentNamePipe
   ]
 })
-// There is no longer any requirement for an EntryComponants section
+// There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
 
 export class DoubtfireAngularModule {
