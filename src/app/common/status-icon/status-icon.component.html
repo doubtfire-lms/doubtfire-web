@@ -1,0 +1,9 @@
+<div
+  [ngClass]="statusClass(status)"
+  class="status-icon-bubble"
+  [matTooltipDisabled]="!showTooltip"
+  matTooltip="{{ statusLabel(status) }}"
+  matTooltipPosition="above"
+>
+  <i class="fa {{ statusIcon(status) }}"></i>
+</div>
