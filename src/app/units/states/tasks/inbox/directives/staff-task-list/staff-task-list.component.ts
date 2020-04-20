@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation, HostListener } from '@angular/core';
 import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
@@ -36,6 +36,22 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.metaKey) {
+      switch (event.key) {
+        case 'ArrowDown':
+          this.nextTask();
+          break;
+        case 'ArrowUp':
+          this.previousTask();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   constructor(
     @Inject(taskDefinition) private taskDef,
     @Inject(Unit) private Unit,
@@ -52,9 +68,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
-
-    console.log(this.unitRole);
-
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name)?.length > 0;
 
@@ -78,7 +91,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     this.tutorials = this.tutorials.map(tutorial => {
       if (!['all', 'mine'].includes(tutorial.id)) {
         if (tutorial.description.indexOf(tutorial.abbreviation) === -1) {
-          console.log(tutorial);
           tutorial.inbox_description = `${tutorial.abbreviation} - ${tutorial.description}`;
         }
       }
@@ -189,7 +201,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     // Tasks for feedback or tasks for task, depending on the data source
     this.taskData.source.query({ id: this.unit.id, task_def_id: this.filters?.taskDefinitionIdSelected },
       (response) => {
-        console.log(response);
         this.tasks = this.unit.incorporateTasks(response, this.applyFilters.bind(this));
         // If loading via task definitions, fill
         if (this.isTaskDefMode) {
@@ -255,7 +266,23 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   // TODO: This
   // $timeout openTaskDefs if this.isTaskDefMode
+  nextTask(): void {
+    const currentTaskIndex = this.filteredTasks.findIndex(task => this.isSelectedTask(task));
+    if (currentTaskIndex >= this.filteredTasks.length) { return; }
+    const newTask = this.filteredTasks[currentTaskIndex + 1];
+    if (newTask) {
+      this.setSelectedTask(newTask);
+    }
+  }
 
+  previousTask(): void {
+    const currentTaskIndex = this.filteredTasks.findIndex(task => this.isSelectedTask(task));
+    if (currentTaskIndex === 0) { return; }
+    const newTask = this.filteredTasks[currentTaskIndex - 1];
+    if (newTask) {
+      this.setSelectedTask(newTask);
+    }
+  }
 }
 
 //   controller: (this, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
