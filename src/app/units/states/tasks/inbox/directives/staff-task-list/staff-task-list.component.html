@@ -124,7 +124,7 @@
       (click)="setSelectedTask(task)"
       [ngClass]="{ selected: isSelectedTask(task) }"
       *ngFor="let task of filteredTasks"
-      style="padding: 0"
+      style="padding: 0;"
     >
       <div
         class="inbox-entry"
@@ -164,20 +164,6 @@
         <!--/task-data-->
         <div class="task-badges">
           <status-icon [status]="task.status"></status-icon>
-          <div class="task-superscript-badges">
-            <span
-              class="task-superscript-badge new-comments-badge"
-              *ngIf="task.num_new_comments > 0"
-            >
-              {{ task.num_new_comments }}
-            </span>
-            <span
-              class="task-superscript-badge plagiarism-detected-badge"
-              *ngIf="task.plagiarismDetected()"
-            >
-              <i class="fa fa-eye"></i>
-            </span>
-          </div>
           <div class="task-subscript-badges">
             <span
               class="task-subscript-badge grade-badge"
@@ -195,7 +181,23 @@
           </div>
         </div>
         <div class="overflow">
-          <button [hidden]="!task.hover" mat-icon-button aria-label="task-overflow">
+          <button
+            [hidden]="task.hover"
+            mat-icon-button
+            aria-label="task-overflow"
+          >
+            <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()"
+              >remove_red_eye</mat-icon
+            >
+            <div class="new_comments" *ngIf="(task.num_new_comments > 0) && !task.plagiarismDetected()">
+              {{ task.num_new_comments }}
+            </div>
+          </button>
+          <button
+            [hidden]="!task.hover"
+            mat-icon-button
+            aria-label="task-overflow"
+          >
             <mat-icon>more_horiz</mat-icon>
           </button>
         </div>
