@@ -286,6 +286,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -363,6 +364,8 @@ DoubtfireAngularJSModule.directive('pdfViewerPanel',
   downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList',
   downgradeComponent({ component: StaffTaskListComponent }));
+DoubtfireAngularJSModule.directive('statusIcon',
+  downgradeComponent({ component: StatusIconComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
