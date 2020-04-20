@@ -121,6 +121,7 @@ import { FiltersPipe } from './common/filters/filters.pipe';
 import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
 
 @NgModule({
   // components
@@ -159,6 +160,7 @@ import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-na
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksWithStudentNamePipe,
+    StatusIconComponent,
   ],
   // Module Imports
   imports: [
