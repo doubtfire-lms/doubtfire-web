@@ -16,7 +16,6 @@ export class PdfViewerPanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.pdfUrl);
   }
 
   downloadEvent(type: string) {

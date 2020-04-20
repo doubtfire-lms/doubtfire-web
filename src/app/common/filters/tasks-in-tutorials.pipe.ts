@@ -13,7 +13,6 @@ export class TasksInTutorialsPipe implements PipeTransform {
       if (task.isGroupTask()) {
         if (task.group() != null) {
           let tute_id = task.group().tutorial_id;
-          console.log(tute_id);
           return tutorialIds.includes(tute_id);
         }
       } else {
