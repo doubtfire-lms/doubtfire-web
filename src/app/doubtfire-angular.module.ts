@@ -23,6 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -123,6 +124,7 @@ import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 
+
 @NgModule({
   // components
   declarations: [
@@ -180,6 +182,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
     MatStepperModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatChipsModule,
     MatButtonToggleModule,
     MatTooltipModule,
     MatButtonModule,
