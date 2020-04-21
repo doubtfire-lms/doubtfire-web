@@ -147,7 +147,7 @@
             [size]="45"
           >
           </user-icon>
-          <div class="task-list-data">
+          <div class="task-list-data truncate" fxFlex>
             <h4 class="mat-h4">{{ task.project().name }}</h4>
             <p class="mat-small">
               {{ task.definition.abbreviation }} - {{ task.definition.name }}
@@ -166,7 +166,7 @@
               </p>
             </div>
           </div>
-          <span fxFlex></span>
+          <!-- <span fxFlex></span> -->
           <!--/task-data-->
           <div class="task-badges">
             <status-icon [status]="task.status"></status-icon>
