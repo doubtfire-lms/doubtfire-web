@@ -31,6 +31,16 @@ $warn-color: #dd6666;
   }
 }
 
+.truncate {
+  min-width: 0;
+  h4,
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .warn-icon {
   color: darken($warn-color, 10%);
 }
