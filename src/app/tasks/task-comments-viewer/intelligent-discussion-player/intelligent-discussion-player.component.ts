@@ -1,10 +1,11 @@
-import { Component, Inject, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
 import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
 
 interface DiscussionComment {
   created_at: string;
@@ -14,6 +15,7 @@ interface DiscussionComment {
   time_started: string;
   response: string;
   status: string;
+  number_of_prompts: number;
 }
 
 @Component({
@@ -22,11 +24,11 @@ interface DiscussionComment {
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService]
 })
-export class IntelligentDiscussionPlayerComponent implements OnInit {
+export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
   @Input() task: any;
+  @ViewChild('player') audioPlayer: AudioPlayerComponent;
   loading: boolean = false;
-  audio: HTMLAudioElement;
   audioProgress: number = 0;
 
   constructor(
@@ -35,12 +37,8 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    this.audio = new Audio();
-    this.audio.ontimeupdate = () => {
-      const percentagePlayed = this.audio.currentTime / this.audio.duration;
-      this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
-    };
+  ngAfterViewInit() {
+    this.setPromptTrack('response');
   }
 
   get responseAvailable() {
@@ -51,16 +49,15 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     return this.task.project().unit().my_role !== 'Student';
   }
 
-  playResponseAudio() {
-    if (this.audio.paused) {
-      this.audio.src = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
-      this.audio.load();
-      this.audio.play();
+  setPromptTrack(track: string, promptNumber?: number) {
+    let url: string = '';
+    if (track === 'prompt') {
+      url = this.discussionService.getDiscussionPromptUrl(this.task, this.discussion.id, promptNumber);
     } else {
-      this.audio.pause();
-      this.audio.currentTime = 0;
+      url = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
     }
 
+    this.audioPlayer.setSrc(url);
   }
 
   beginDiscussion(): void {
@@ -70,7 +67,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
       data: {
         dc: this.discussion,
         task: this.task,
-        audioRef: this.audio
+        audioRef: this.audioPlayer.audio
       },
       maxWidth: '800px',
       disableClose: true
@@ -83,6 +80,7 @@ export class IntelligentDiscussionPlayerComponent implements OnInit {
     });
   }
 }
+
 
 // The Dialog Component
 @Component({

@@ -26,7 +26,7 @@
             <tbody>
               <tr ng-repeat="staff in unit.staff">
                 <td style="width: 35px;">
-                    <user-icon size="50" user="staff" email="staff.email" style="max-width: 35px; max-height: 35px; font-size: 14px;"></user-icon>
+                    <user-icon [size]="50" [user]="staff" email="staff.email" style="max-width: 35px; max-height: 35px; font-size: 14px;"></user-icon>
                 </td>
                 <td>
                     {{staff.name}}

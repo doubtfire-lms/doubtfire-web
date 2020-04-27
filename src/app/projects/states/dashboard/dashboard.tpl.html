@@ -17,8 +17,8 @@
     ng-if="taskData.selectedTask">
   </task-dashboard><!--/panel-2-->
   <task-comments-viewer
-    task="taskData.selectedTask"
-    project="project"
+    [task]="taskData.selectedTask"
+    [project]="project"
     class="col-xs-12 col-md-3"
     refocus-on-task-change="true"
     ng-if="taskData.selectedTask">

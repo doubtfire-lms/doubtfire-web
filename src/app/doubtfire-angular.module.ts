@@ -19,9 +19,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -54,7 +56,11 @@ import {
   AudioRecorderServiceProvider,
   userProvider,
   currentUser,
-  TaskCommentProvider
+  TaskCommentProvider,
+  commentsModalProvider,
+  taskDefinitionProvider,
+  groupServiceProvider,
+  plagiarismReportModalProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -103,6 +109,23 @@ import { environment } from 'src/environments/environment';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
+import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
+import { MarkedPipe } from './common/pipes/marked.pipe';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
+import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
+import { DragDropDirective } from './common/directives/drag-drop.directive';
+import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { SafePipe } from './common/pipes/safe.pipe';
+import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
+import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import { FiltersPipe } from './common/filters/filters.pipe';
+import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-definition.pipe';
+import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
+import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
+import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+
 
 @NgModule({
   // components
@@ -126,7 +149,23 @@ import { EmojiService } from './common/services/emoji.service';
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
     StudentTutorialSelectComponent,
-    StudentCampusSelectComponent
+    StudentCampusSelectComponent,
+    TaskCommentsViewerComponent,
+    UserIconComponent,
+    AudioPlayerComponent,
+    MarkedPipe,
+    HumanizedDatePipe,
+    DragDropDirective,
+    PdfViewerComponent,
+    SafePipe,
+    PdfViewerPanelComponent,
+    StaffTaskListComponent,
+    FiltersPipe,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe,
+    StatusIconComponent,
+    TaskPlagiarismCardComponent,
   ],
   // Module Imports
   imports: [
@@ -146,6 +185,7 @@ import { EmojiService } from './common/services/emoji.service';
     MatStepperModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatChipsModule,
     MatButtonToggleModule,
     MatTooltipModule,
     MatButtonModule,
@@ -159,6 +199,7 @@ import { EmojiService } from './common/services/emoji.service';
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatExpansionModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
@@ -178,7 +219,10 @@ import { EmojiService } from './common/services/emoji.service';
     ActivityTypeService,
     EmojiService,
     userProvider,
+    groupServiceProvider,
     unitProvider,
+    commentsModalProvider,
+    taskDefinitionProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
@@ -192,6 +236,7 @@ import { EmojiService } from './common/services/emoji.service';
     TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,
@@ -206,10 +251,13 @@ import { EmojiService } from './common/services/emoji.service';
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
-    DoubtfireConstants
+    DoubtfireConstants,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe
   ]
 })
-// There is no longer any requirement for an EntryComponants section
+// There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
 
 export class DoubtfireAngularModule {

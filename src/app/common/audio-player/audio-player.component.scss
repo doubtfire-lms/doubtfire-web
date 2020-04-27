@@ -1,0 +1,69 @@
+.audio-comment-container {
+  button:focus {
+    outline: 0;
+  }
+
+  button.play-button {
+    border: none;
+    background-image: none;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    i {
+      font-size: 25px;
+      margin-left: -5px;
+    }
+  }
+
+  // display: flex;
+  vertical-align: middle;
+  padding: 0%;
+  width: 100%;
+
+  i {
+    color: white;
+  }
+
+  p#currentTime {
+    float: right;
+    white-space: nowrap;
+    font-size: 12px;
+    transform: translateY(16%);
+    padding-left: 10px;
+  }
+
+  .progress-bar-container {
+    &:hover {
+      cursor: pointer;
+    }
+
+    background-color: white;
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    margin-bottom: 3px;
+
+    .progress {
+      box-shadow: 0px;
+    }
+  }
+
+  :ng-deep .mat-progress-bar-fill::after {
+    background-color: white;
+  }
+
+  :ng-deep .mat-progress-bar-buffer {
+    background: #2650c3;
+  }
+
+  :ng-deep
+    .mat-progress-bar-primary.mat-progress-bar-fill.mat-progress-bar-element {
+    pointer-events: none;
+  }
+  #progressContainer {
+    width: 100%;
+    background-color: red;
+  }
+}

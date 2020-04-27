@@ -27,7 +27,7 @@
           <input class="form-control text-center input-lg" placeholder="Student ID" ng-model="user.student_id">
         </div><!--/student-id-step-->
         <div ng-show="currentStep == steps.avatarStep">
-          <user-icon size="60" style="width: 60px; height: 60px; font-size: 2em"></user-icon>
+          <user-icon [size]="60" style="width: 60px; height: 60px; font-size: 2em"></user-icon>
           <p style="margin-top: 1.5em;">
             <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank" class="btn btn-lg btn-default">Change Avatar</a>
           </p>
