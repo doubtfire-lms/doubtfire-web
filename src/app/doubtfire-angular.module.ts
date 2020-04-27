@@ -60,7 +60,8 @@ import {
   gradeServiceProvider,
   commentsModalProvider,
   taskDefinitionProvider,
-  groupServiceProvider
+  groupServiceProvider,
+  plagiarismReportModalProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -243,6 +244,7 @@ import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directi
     TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,

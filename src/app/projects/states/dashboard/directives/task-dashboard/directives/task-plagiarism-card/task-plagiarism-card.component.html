@@ -1,11 +1,12 @@
-
-<mat-icon svgIcon="warning" aria-hidden="false" aria-label="Warning icon">warning</mat-icon>
-<mat-card class="danger-card" [hidden]="task.plagiarismDetected()">
+<mat-card class="danger-card" [hidden]="!task.plagiarismDetected()">
   <mat-card-header>
-    <mat-icon svgIcon="warning" aria-hidden="false" aria-label="Warning icon">warning</mat-icon>
     <mat-card-title>
-      <mat-icon svgIcon="warning" aria-hidden="false" aria-label="Warning icon">warning</mat-icon>
-      Similarities Detected
+      <span class="with-icon">
+        <mat-icon aria-hidden="false" aria-label="Warning icon">
+          warning
+        </mat-icon>
+        Similarities Detected
+      </span>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>

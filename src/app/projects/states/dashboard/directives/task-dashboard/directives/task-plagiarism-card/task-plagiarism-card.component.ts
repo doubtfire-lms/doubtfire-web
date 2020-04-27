@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { plagiarismReportModal } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'task-plagiarism-card',
@@ -6,15 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./task-plagiarism-card.component.scss']
 })
 export class TaskPlagiarismCardComponent implements OnInit {
+  @Input() task: any;
 
-  constructor() { }
+  constructor(
+    @Inject(plagiarismReportModal) private plagiarismModal: any,
+  ) { }
 
-  task;
   ngOnInit(): void {
   }
 
   viewReport() {
-
+    this.plagiarismModal.show(this.task);
   }
 
 }
