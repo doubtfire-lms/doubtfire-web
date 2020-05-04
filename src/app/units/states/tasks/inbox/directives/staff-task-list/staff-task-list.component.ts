@@ -129,9 +129,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     filteredTasks = pipe3.transform(filteredTasks, this.filters.studentName);
 
 
-    this.filteredTasks = [].concat(...Array.from({ length: 50 }, () => filteredTasks));
+    // this.filteredTasks = [].concat(...Array.from({ length: 300 }, () => filteredTasks));
 
-    // this.filteredTasks = filteredTasks;
+    this.filteredTasks = filteredTasks;
     // this.filteredTasks = Array(300).fill(this.filteredTasks);
 
     // Fix selected task.

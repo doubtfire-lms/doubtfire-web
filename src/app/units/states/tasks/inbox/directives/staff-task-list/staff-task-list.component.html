@@ -122,7 +122,6 @@
     minBufferPx="200"
     maxBufferPx="400"
   >
-    <!-- task.statusClass() -->
     <mat-list>
       <mat-list-item
         class="clearfix"
@@ -133,11 +132,11 @@
           style="width: 100%;"
           id="{{ task.taskKeyToIdString() }}"
           *ngIf="task"
-          class="item-content {{task.statusClass()}}"
-          (click)="setSelectedTask(task)"
+          class="item-content {{ task.statusClass() }}"
           [ngClass]="{ selected: isSelectedTask(task) }"
         >
           <div
+            (click)="setSelectedTask(task)"
             class="inbox-entry"
             fxLayout="row"
             fxLayoutAlign="start center"
@@ -155,7 +154,8 @@
             <div class="task-list-data truncate" fxFlex>
               <h4 class="mat-h4">{{ task.project().name }}</h4>
               <p class="mat-small">
-                {{ task.definition.abbreviation }} - {{ task.definition.name }}
+                {{ task.definition.abbreviation }} -
+                {{ task.definition.name }}
               </p>
               <div class="muted" [hidden]="!isSelectedTask(task)">
                 <p class="mat-small">
