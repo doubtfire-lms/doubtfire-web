@@ -245,6 +245,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.scrollToTaskInList(task);
     }
   }
+
   private scrollToTaskInList(task) {
     let taskEl = <any>document.querySelector(`staff-task-list #${task.taskKeyToIdString()}`);
     if (!taskEl) {
@@ -282,6 +283,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (newTask) {
       this.setSelectedTask(newTask);
     }
+  }
+
+  togglePin(task) {
+    console.log(task);
+    // toggle the tasks pin for user
   }
 }
 
