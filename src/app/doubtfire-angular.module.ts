@@ -125,6 +125,7 @@ import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 @NgModule({
@@ -175,6 +176,7 @@ import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directi
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
     MatAutocompleteModule,
