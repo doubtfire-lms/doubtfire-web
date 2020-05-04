@@ -1,17 +1,11 @@
 @import "../../../../../../../styles/mixins/task-list.scss";
 @import "../../../../../../../styles/mixins/scrollable.scss";
-
 // @include task-list();
 
 $warn-color: #dd6666;
 
 .scrollable {
-  &:hover {
-    overflow-y: scroll;
-  }
-  overflow: hidden;
   height: 100%;
-  // scrollbar-width: none;
   @include scrollable();
 }
 
