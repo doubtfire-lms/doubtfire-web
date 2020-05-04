@@ -1,4 +1,4 @@
-<mat-card class="danger-card" [hidden]="!task.plagiarismDetected()">
+<mat-card class="danger-card" *ngIf="task" [hidden]="!task.plagiarismDetected()">
   <mat-card-header>
     <mat-card-title>
       <span class="with-icon">
