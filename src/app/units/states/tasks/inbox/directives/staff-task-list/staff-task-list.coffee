@@ -15,6 +15,13 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
   controller: ($scope, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
+
+    # UI call to change currently selected task
+    $scope.setSelectedTask = (task) ->
+      $scope.taskData.selectedTask = task
+      $scope.taskData.onSelectedTaskChange?(task)
+      scrollToTaskInList(task) if task?
+
     # Check taskSource exists
     unless $scope.taskData?.source?
       throw Error "Invalid taskData.source provided for task list; supply one of Unit.tasksForTaskInbox, Unit.tasksRequiringFeedback, Unit.taskByTaskDefinition"
@@ -144,11 +151,6 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
       return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
       refreshData()
-    # UI call to change currently selected task
-    $scope.setSelectedTask = (task) ->
-      $scope.taskData.selectedTask = task
-      $scope.taskData.onSelectedTaskChange?(task)
-      scrollToTaskInList(task) if task?
     scrollToTaskInList = (task) ->
       taskEl = document.querySelector("staff-task-list ##{task.taskKeyToIdString()}")
       return unless taskEl?

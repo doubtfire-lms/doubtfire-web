@@ -54,7 +54,8 @@ import {
   AudioRecorderServiceProvider,
   userProvider,
   currentUser,
-  TaskCommentProvider
+  TaskCommentProvider,
+  gradeServiceProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -103,9 +104,12 @@ import { environment } from 'src/environments/environment';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
+import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
+import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 
 @NgModule({
-  // components
+  // Components we declare
   declarations: [
     AboutDoubtfireModalContent,
     TaskCommentComposerComponent,
@@ -126,7 +130,10 @@ import { EmojiService } from './common/services/emoji.service';
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
     StudentTutorialSelectComponent,
-    StudentCampusSelectComponent
+    StudentCampusSelectComponent,
+    TaskListItemComponent,
+    CreatePortfolioTaskListItemComponent,
+    StatusIconComponent
   ],
   // Module Imports
   imports: [
@@ -169,7 +176,7 @@ import { EmojiService } from './common/services/emoji.service';
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
   ],
-  // Services
+  // Services we provide
   providers: [
     CampusService,
     TutorialService,
@@ -182,6 +189,7 @@ import { EmojiService } from './common/services/emoji.service';
     authProvider,
     currentUserProvider,
     taskServiceProvider,
+    gradeServiceProvider,
     analyticsServiceProvider,
     taskProvider,
     alertServiceProvider,

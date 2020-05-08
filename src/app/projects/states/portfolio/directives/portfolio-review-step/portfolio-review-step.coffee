@@ -27,6 +27,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
       Project.update { id: $scope.project.project_id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
         $scope.portfolioIsCompiling = true
         $scope.canCompilePortfolio  = false
+        $scope.project.portfolio_status = 0.5
 
     #
     # PDF Local Funcs
@@ -37,6 +38,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
           id: $scope.project.project_id
         }, (response) ->
           $scope.project.portfolio_available = false
+          $scope.project.portfolio_status = 0
           alertService.add('info', "Portfolio has been deleted!", 5000)
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
 )
