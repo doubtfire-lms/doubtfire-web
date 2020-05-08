@@ -92,6 +92,8 @@ angular.module("doubtfire.common.services.units", [])
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorialService.createInstanceFrom(tutorial, unit)
         )
+        unit.groups = _.map(unit.groups, (grp) -> unitService.mapGroupToUnit(unit, grp))
+
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
           taskDef.seq = index
@@ -302,6 +304,9 @@ angular.module("doubtfire.common.services.units", [])
       .sortBy((a) -> a.ilo.ilo_number)
       .value()
 
+    unit.findGroupById = (id) ->
+      _.find unit.groups, (grp) -> grp.id == id
+
     # Actually make the request to refresh and load unit data
     unit.refresh(onSuccess, onFailure)
     unit
@@ -329,6 +334,7 @@ angular.module("doubtfire.common.services.units", [])
   unitService.mapGroupToUnit = (unit, group) ->
     group.tutorial = -> unit.tutorialFromId(group.tutorial_id)
     group.unit = -> unit
+    group.projects = []
     group
 
   #
@@ -526,7 +532,10 @@ angular.module("doubtfire.common.services.units", [])
 
     student.inGroup = (grp) -> grp? && _.find(student.groups, {id: grp.id})?
 
-    student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+    if student.groups?
+      student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+    else
+      student.groups = _.chain(unit.group_memberships).filter((gm) -> gm.project_id == student.project_id).map((gm) -> unit.findGroupById(gm.group_id)).value()
 
     student.tutorials = () ->
       _.chain(student.tutorial_enrolments)
