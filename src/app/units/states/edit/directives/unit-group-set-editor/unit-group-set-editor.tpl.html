@@ -102,6 +102,12 @@
                 <button ng-click="gsRowform.$show()" class="btn btn-default btn-sm">
                   <i class="fa fa-pencil"></i> Edit
                 </button>
+                <a class="btn btn-sm"
+                  ng-class="{true: 'btn-warning', false: 'btn-info'}[!gs.locked]"
+                  ng-click="gs.locked = !gs.locked">
+                <i ng-class="{true: 'fa fa-lock', false: 'fa fa-unlock'}[!gs.locked]"></i>
+                  {{!gs.locked && "Lock" || "Unlock"}}
+                </a>
                 <button ng-click="removeGroupSet(gs)" class="btn btn-danger btn-sm">
                   <i class="fa fa-trash-o"></i> Delete
                 </button>
