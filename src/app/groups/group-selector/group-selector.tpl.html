@@ -128,9 +128,9 @@
             <button ng-click="groupRowForm.$show()" class="btn btn-default btn-sm">
               <i class="fa fa-pencil"></i> Edit
             </button>
-            <a class="btn btn-sm"
+            <a class="btn btn-sm" 
               ng-class="{true: 'btn-warning', false: 'btn-info'}[!group.locked]"
-              ng-click="group.locked = !group.locked">
+              ng-click="toggleLocked(group)">
               <i ng-class="{true: 'fa fa-lock', false: 'fa fa-unlock'}[!group.locked]"></i>
               {{!group.locked && "Lock" || "Unlock"}}
             </a>
