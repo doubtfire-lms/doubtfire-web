@@ -3,19 +3,14 @@
     {{ task.definition.name }}
   </h4>
   <p class="list-group-item-text">
-    <i class="fa fa-users" aria-hidden="true" [hidden]="!task.isGroupTask()"></i
-    ><i class="fa fa-user" aria-hidden="true" [hidden]="task.isGroupTask()"></i>
-    {{ task.definition.abbreviation }} -
-    {{ gradeNames[task.definition.target_grade] }} Task
-    <span
-      class="due-time"
-      [hidden]="!(task.isBeforeStartDate() && !task.inSubmittedState())"
-      ><i class="fa fa-hourglass-start"></i> {{ task.timeToStart() }}</span
-    ><span
-      class="due-time"
-      [hidden]="task.isBeforeStartDate() || task.inSubmittedState()"
-      ><i class="fa fa-hourglass-end"></i> {{ task.timeToDue() }}</span
-    >
+    <i class="fa fa-users" matTooltip="Group Task" matTooltipPosition="below" aria-hidden="true" *ngIf="task.isGroupTask()"></i>
+    <i class="fa fa-user" matTooltip="Individual Task" matTooltipPosition="below" aria-hidden="true" *ngIf="!task.isGroupTask()"></i> {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task 
+    <span class="due-time" *ngIf="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-start" matTooltip="Start task in {{task.timeToStart()}}" matTooltipPosition="below"></i> {{task.timeToStart()}}
+    </span>
+    <span class="due-time" *ngIf="!task.isBeforeStartDate() && !task.inSubmittedState()">
+      <i class="fa fa-hourglass-end" *ngIf="!task.isOverdue()" matTooltip="Complete task in {{task.timeToDue()}}" matTooltipPosition="below"></i>
+      <i class="fa fa-hourglass-end" *ngIf="task.isOverdue()" matTooltip="Task Overdue!" matTooltipPosition="below"></i>{{task.timeToDue()}}
+    </span>
   </p>
 </div>
 <!--/task-data-->

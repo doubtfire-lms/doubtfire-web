@@ -167,7 +167,8 @@ angular.module("doubtfire.common.services.projects", [])
 
     # Is the task past the deadline
     task.isOverdue = ->
-      task.timePastDeadlineDate() > 0 && (task.status in taskService.overdueStates)
+      task.daysUntilDueDate() < 0
+      
     # Are we approaching the deadline?
     task.isDeadlineSoon = ->
       task.daysUntilDeadlineDate() <= 14 && task.timePastDeadlineDate() < 0 && ! task.inFinalState()
