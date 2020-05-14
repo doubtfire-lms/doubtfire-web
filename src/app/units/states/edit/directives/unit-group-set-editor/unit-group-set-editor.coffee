@@ -40,6 +40,26 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
         (response) -> alertService.add("danger", "Failed to update group set. #{response.data.error}", 6000)
       )
 
+    $scope.toggleLocked = (gs) ->
+      GroupSet.update(
+        {
+          unit_id: $scope.unit.id
+          id: gs.id
+          group_set:
+            {
+              locked: !gs.locked
+            }
+        }
+
+        (response) ->
+          alertService.add("success", "#{if response.locked then 'Locked' else 'Unlocked'} #{gs.name}", 2000)
+          gs.locked = response.locked
+          $scope.$broadcast 'UnitGroupSetEditor/SelectedGroupSetChanged', { id: gs.id }
+
+        (response) ->
+          alertService.add("danger", "Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}", 6000)
+      )
+
     $scope.removeGroupSet = (gs) ->
       GroupSet.delete(
         { unit_id: $scope.unit.id, id: gs.id },
