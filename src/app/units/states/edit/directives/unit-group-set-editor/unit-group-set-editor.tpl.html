@@ -104,7 +104,7 @@
                 </button>
                 <a class="btn btn-sm"
                   ng-class="{true: 'btn-warning', false: 'btn-info'}[!gs.locked]"
-                  ng-click="gs.locked = !gs.locked">
+                  ng-click="toggleLocked(gs)">
                 <i ng-class="{true: 'fa fa-lock', false: 'fa fa-unlock'}[!gs.locked]"></i>
                   {{!gs.locked && "Lock" || "Unlock"}}
                 </a>
