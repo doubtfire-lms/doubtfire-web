@@ -1,16 +1,16 @@
 .task-ilo-alignment-rater {
   &.colorful {
-    $base-color: hsl(219, 74%, 83%);
-
+    $base-color: #101010;
+    // Defining colors
+    $rating_colors_map: ('1': '#F7F6CA', '2': '#E2E095', '3': '#EDEB4C', '4': '#FFDF00', '5': '#FFD700');
     // Generates colors for 0..5 stars
-    @for $i from 1 through 5 {
-      $color: darken($base-color, $i * 10%);
-      .rating-static-tooltip .badge.rating-#{$i}, .compact-rating.rating-#{$i} {
-        background-color: $color !important;
+    @each $rating, $rating_color in $rating_colors_map {
+      .rating-static-tooltip .badge.rating-1, .compact-rating.rating-1 {
+        background-color: #{$rating_color} !important;
         color: white;
       }
       .rating-area {
-        i:nth-of-type(#{$i}) { color: $color; }
+        i:nth-of-type(#{$rating}) { color: #{$rating_color}; }
       }
     }
   }
@@ -21,6 +21,7 @@
     width: 1.5em;
     cursor: pointer;
     margin: 0 auto;
+    border-color: black;
   }
   .rating-area {
     & + *:not(.ng-hide) {

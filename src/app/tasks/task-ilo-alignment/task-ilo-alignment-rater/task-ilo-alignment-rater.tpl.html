@@ -1,10 +1,12 @@
 <div class="task-ilo-alignment-rater" ng-class="{colorful: colorful}">
-  <rating ng-hide="compact" on-leave="setHoverValue(null)" on-hover="setHoverValue(value)" titles="null" ng-model="ngModel.rating" max="max" state-on="'fa fa-2x fa-circle'" state-off="'fa fa-2x fa-circle-o'" tooltip="{{label}}" tooltip-placement="right" tooltip-class="tooltip-rating-{{hoveringOver}}" tooltip-append-to-body="true" tooltip-popup-delay="200" tooltip-enable="showTooltips" readonly="readonly" class="rating-area"></rating>
-  <div ng-show="!hideLabels && selectedTooltip && !showTooltips && !compact" class="text-center rating-static-tooltip">
-    <span class="rating-{{hoveringOver || ngModel.rating}} badge" ng-hide="(hoveringOver || ngModel.rating) == 0">{{tooltips[(hoveringOver || ngModel.rating)]}}</span>
-    <span class="text-muted" ng-show="showZeroRating && !hoveringOver && ngModel.rating == 0">This task is not related to this outcome at all</span>
-  </div>
-  <div ng-show="compact && readonly" class="compact-rating rating-{{ngModel.rating}}" tooltip="{{tooltips[ngModel.rating]}}" tooltip-class="tooltip-rating-{{ngModel.rating}}" tooltip-append-to-body="true">
-    {{ngModel.rating}}
-  </div>
-</div>
+
+  <rating ng-hide="compact" on-leave="setHoverValue(null)" on-hover="setHoverValue(value)" titles="null" ng-model="ngModel.rating" max="max" state-on="'fa fa-2x fa-star'" state-off="'fa fa-star'" tooltip="{{label}}" tooltip-placement="right" tooltip-class="tooltip-rating-{{hoveringOver}}" tooltip-append-to-body="true" tooltip-popup-delay="200" tooltip-enable="showTooltips" readonly="readonly" class="rating-area"></rating> 
+ <div ng-show="!hideLabels && selectedTooltip && !showTooltips && !compact" class="text-center rating-static-tooltip">
+   <span class="rating-{{hoveringOver || ngModel.rating}} badge" ng-hide="(hoveringOver || ngModel.rating) == 0">{{tooltips[(hoveringOver || ngModel.rating)]}}</span>
+   <span class="text-muted" ng-show="showZeroRating && !hoveringOver && ngModel.rating == 0">This task is not related to this outcome at all</span>
+ </div>
+
+ <div ng-show="compact && readonly" class="compact-rating rating-{{ngModel.rating}}" tooltip="{{tooltips[ngModel.rating]}}" tooltip-class="tooltip-rating-{{ngModel.rating}}" tooltip-append-to-body="true">
+   {{ngModel.rating}}
+ </div> 
+</div> 
