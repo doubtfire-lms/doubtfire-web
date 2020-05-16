@@ -441,6 +441,9 @@ angular.module("doubtfire.common.services.projects", [])
   projectService.tasksInTargetGrade = (project) ->
     $filter('byGrade')(project.tasks, project.target_grade)
 
+  projectService.gradedTasks = (project) ->
+    $filter('tasksWithGrade')(project.tasks)
+
   projectService.tasksByStatus = (project, statusKey) ->
     tasksToConsider = projectService.tasksInTargetGrade(project)
     _.filter(tasksToConsider, {status: statusKey})

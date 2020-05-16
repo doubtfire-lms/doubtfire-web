@@ -47,19 +47,40 @@
         </div><!--/pie-chart-heading-->
         <div class="card-body">
           <student-task-status-pie-chart
-            project="project"
-            update-data="renderTaskStatusPieChart">
+            project="project">
           </student-task-status-pie-chart>
-        </div><!--/pie-chart-body-->
+        </div><!--/pie-chart-body--> 
         <div class="card-footer">
-          You have completed
+          You have completed            
           <strong>{{numberOfTasks.completed}}</strong>
           tasks and have
           <strong>{{numberOfTasks.remaining}}</strong>
-          left to complete to achieve a
+          left to complete to achieve a 
           <strong>{{grades.names[project.target_grade]}}</strong>.
         </div><!--/pie-chart-footer-->
-      </div><!--/pie-chart-card-->
+      </div><!--/pie-chart-card--> 
     </div><!--/pie-chart-column-->
-  </div><!--/panel-body-->
+
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-default card-lg card-pie-chart">
+        <div class="card-heading">
+          <h4>Gradeed Tasks</h4>
+          <div class="text-muted">
+            Breakdown summary of each of your task statuses.
+          </div>
+        </div>
+        <div class="card-body">
+          <student-task-status-bar-chart
+            project="project">
+          </student-task-status-bar-chart>
+        </div> 
+        <div class="card-footer">                  
+          Number of graded tasks is <strong>{{numberOfTasks.graded}}</strong>
+        </div> 
+      </div> 
+  </div><!--/panel-body--> 
+</div><!--/pie-chart-column-->
+</div><!--/panel-body-->
 </div>
+
+ 

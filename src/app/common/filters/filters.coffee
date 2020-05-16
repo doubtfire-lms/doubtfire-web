@@ -158,6 +158,14 @@ angular.module("doubtfire.common.filters", [])
     _.filter tasks, (task) -> _.includes(statusKeys, task.status)
 )
 
+.filter('tasksWithGrade', ->
+  (input) ->
+    if input
+      _.filter input, (task) -> (task?) && task.hasQualityPoints()
+    else
+      input
+)
+
 .filter('tasksInTutorials', ->
   (tasks, tutorialIds) ->
     return tasks unless tasks?

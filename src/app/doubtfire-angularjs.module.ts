@@ -33,6 +33,7 @@ import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';
 import 'build/src/app/visualisations/student-task-status-pie-chart.js';
+import 'build/src/app/visualisations/student-task-status-bar-chart.js';
 import 'build/src/app/visualisations/progress-burndown-chart.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
 import 'build/src/app/visualisations/task-status-pie-chart.js';
@@ -55,6 +56,7 @@ import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
+import 'build/src/app/tasks/task-viewer/task-viewer.js';
 import 'build/src/app/tasks/tasks.js';
 import 'build/src/app/tasks/task-feedback-assessor/task-feedback-assessor.js';
 import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.js';
@@ -192,6 +194,7 @@ import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
+import 'build/src/app/common/status-icon/status-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/user-icon/user-icon.js';
@@ -284,9 +287,6 @@ import { CampusService } from './api/models/campus/campus.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
-import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
-import { StatusIconComponent } from './common/status-icon/status-icon.component';
-import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -346,14 +346,7 @@ DoubtfireAngularJSModule.directive('studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent }));
 DoubtfireAngularJSModule.directive('studentCampusSelect',
   downgradeComponent({ component: StudentCampusSelectComponent }));
-DoubtfireAngularJSModule.directive('taskListItem',
-  downgradeComponent({ component: TaskListItemComponent }));
-DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
-  downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
-DoubtfireAngularJSModule.directive('statusIcon',
-  downgradeComponent({ component: StatusIconComponent }));
-
-  // Global configuration
+// Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {
