@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, UnitRole, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod, TaskDefinition) ->
   #
   # The unit service object
   #
@@ -110,6 +110,15 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.localDueDate = ()  ->
             due = new Date(taskDef.target_date)
             return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
+
+          taskDef.questions = ['Question 1', 'Question 2', 'Question 3']
+
+          TaskDefinition.taskAssessment.query {
+            unit_id: unit.id,
+            task_def_id: taskDef.id
+          }, (response) ->
+            taskDef.questions = response
+
           taskDef
         )
         # If loading students, call the onSuccess callback as unit.refreshStudents callback
@@ -121,7 +130,7 @@ angular.module("doubtfire.common.services.units", [])
         onFailure?(response)
       # Make request
       Unit.get({ id: unitId }, successCallback, failureCallback)
-
+          
     # Allow the caller to fetch a task definition from the unit based on its id
     unit.taskDef = (taskDef) ->
       unless _.isObject(taskDef) || _.isNumber(taskDef)

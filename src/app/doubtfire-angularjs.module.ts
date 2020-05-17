@@ -132,6 +132,7 @@ import 'build/src/app/groups/group-selector/group-selector.js';
 import 'build/src/app/groups/group-set-manager/group-set-manager.js';
 import 'build/src/app/groups/groups.js';
 import 'build/src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.js';
+import 'build/src/app/groups/group-member-contribution-assessment/group-member-contribution-assessment.js';
 import 'build/src/app/groups/group-member-list/group-member-list.js';
 import 'build/src/app/groups/group-set-selector/group-set-selector.js';
 import 'build/src/app/groups/tutor-group-manager/tutor-group-manager.js';

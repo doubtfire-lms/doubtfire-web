@@ -14,7 +14,8 @@
       </span>
     </h3>
   </div><!--/modal-header-->
-  <div class="modal-body">
+  <div class="modal-body"> 
+
     <div 
       class="state state-group"
       ng-class="{'state-hidden-left': isHidden('group').left,
@@ -43,6 +44,31 @@
         </group-member-contribution-assigner><!--/group-member-contribution-->
       </div><!--/card-group-->
     </div><!--/state-group-->
+
+     <div 
+      class="state state-peer"
+      ng-class="{'state-hidden-left': isHidden('peer').left,
+                 'state-hidden-right': isHidden('peer').right}">
+      <div class="card card-default">
+        <div class="card-heading">
+          <h4>
+            Team Members Peer assessement  
+          </h4>
+          <p>
+            Please answer the follwing questions for peer asseessment on working on {{task.definition.name}} 
+            by selecting the rate [1-5]. 
+          </p> 
+        </div>
+        <!--/card-heading-->
+        <group-member-contribution-assessment 
+          task="task"
+          class="card-body"
+          project="task.project()"
+          team="team">
+        </group-member-contribution-assessment><!--/group-member-contribution-->
+      </div><!--/card-group-->
+    </div><!--/state-group-->
+
     <div class="state state-files" ng-class="{'state-hidden-left': isHidden('files').left,
                  'state-hidden-right': isHidden('files').right,
                  'state-files-uploading': uploader.isUploading}">
@@ -136,6 +162,7 @@
         </div><!--/comments-for-alignment-->
       </div><!--/card-alignment-->
     </div><!--/state-alignment-->
+    
     <div 
       class="state state-comments" 
       ng-class="{'state-hidden-left': isHidden('comments').left,

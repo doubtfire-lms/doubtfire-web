@@ -1,0 +1,18 @@
+<div class="group-member-contribution-assessment">
+  <table class="table table-condensed table-hover">
+    <thead> 
+        <tr>
+         <th colspan="2"> Question </th>  
+        <th ng-repeat="member in team.members | orderBy:memberSortOrder:reverse"> {{member.student_name}}</th> 
+      </tr>                                             
+    </thead>
+    <tbody>
+      <tr ng-repeat="question in task.definition.questions">
+        <td colspan="2">({{question.id}}) {{question.description}}</td> 
+        <td ng-repeat="member in team.members | orderBy:memberSortOrder:reverse"> 
+          <select ng-model="selectedName" ng-options="x for x in evalValues"> </select>
+        </td> 
+      </tr>
+    </tbody>
+  </table>                                  
+</div>

@@ -74,7 +74,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   # States functionality
   states = {
     # All possible states
-    all: ['group', 'files', 'alignment', 'comments', 'uploading']
+    all: ['group', 'peer', 'files', 'alignment', 'comments', 'uploading']
     # Only states which are shown (populated in initialise)
     shown: []
     # The currently active state (set in initialise)

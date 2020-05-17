@@ -1,0 +1,19 @@
+.group-member-contribution-assessment {
+  .group-member-contribution-rating {
+    &:focus {
+      outline: none;
+    }
+    i {
+      font-size: 2em;
+      cursor: pointer;
+    }
+    .icon-colorful {
+      color: rgb(255, 247, 141);
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: orange;
+    }
+    .icon-disable {
+      color: #ccc;
+    }
+  }
+}
