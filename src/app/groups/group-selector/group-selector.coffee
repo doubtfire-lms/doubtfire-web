@@ -173,6 +173,10 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.updateGroup(newGroup,
         (success) ->
           group.locked = success.locked
+          $scope.$emit('GroupSelector/GroupLockToggled', {
+            groupSetId: $scope.selectedGroupSet.id,
+            allLocked: _.every($scope.selectedGroupSet.groups, (g) -> g.locked),
+          })
       )
 
     # Watch selected group set changes
