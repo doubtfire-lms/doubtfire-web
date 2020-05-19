@@ -10,14 +10,45 @@
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
+
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown" dropdown if-role="Admin Convenor">
+        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a ui-sref="admin/teachingperiods" if-role="Admin">Manage Teaching Periods</a></li>
+          <li><a ui-sref="institutionsettings" if-role="Admin">Institution Settings</a></li>
+          <li><a ui-sref="admin/units">Manage Units</a></li>
+          <li><a ui-sref="admin/users">Manage Users</a></li>
+        </ul>
+      </li><!--/administration-->
+      <li class="dropdown" dropdown>
+        <a class="dropdown-toggle dropdown-user" dropdown-toggle>
+          <user-icon size="25"></user-icon>
+          {{currentUser.name}} {{currentUser.nickname ? '(' + currentUser.nickname + ')' : ''}}
+          <i class="caret"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="openUserSettings()">Profile</a></li>
+          <li><a ng-click="openNotificationSettings()">Notifications</a></li>
+          <li class="divider"></li>
+          <li><a ng-click="openAboutModal()">About</a></li>
+          <li class="divider"></li>
+          <li><a ui-sref="sign_out">Sign Out</a></li>
+        </ul>
+      </li><!--/current-user-->
+    </ul><!--/navbar-right-->
+  </div><!--/navbar-collapse-->
+  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
     <ul class="nav navbar-nav navbar-left">
-      <ul class="breadcrumb">
-        <li>
-          <a class="home" ui-sref="home">
-            <i class="logo"></i>
-          </a>
-        </li><!--/home-->
-        <li>
+      <ul style="list-style: none; padding:5px">
+<!--        <li>-->
+<!--          <a class="home" ui-sref="home">-->
+<!--            <i class="logo"></i>-->
+<!--          </a>-->
+<!--        </li>&lt;!&ndash;/home&ndash;&gt;-->
+        <li style="padding:0">
+
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <label class="label label-unit" ng-if="unit">
@@ -29,8 +60,9 @@
             </button>
             <unit-dropdown></unit-dropdown>
           </div>
+
         </li><!--/selected-unit-->
-        <li ng-if="task && tutor">
+        <li ng-if="task && tutor" style="padding:0">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <span>Staff Tasks</span>
@@ -70,9 +102,9 @@
                 <a ui-sref="units/analytics({unitId: project.unit_id})">Unit Analytics</a>
               </li>
             </ul><!--/teaching-tasks-->
-          <div>
-        </li>
-        <li ng-if="task" ng-if="tutor">
+          </div>
+        </li >
+        <li ng-if="task" ng-if="tutor" style="padding:0">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <span ng-bind="task"></span>
@@ -138,31 +170,5 @@
         </li><!--/task-dropdown-->
       </ul><!--breadcrumbs-->
     </ul><!--/nav-left-->
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown if-role="Admin Convenor">
-        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a ui-sref="admin/teachingperiods" if-role="Admin">Manage Teaching Periods</a></li>
-          <li><a ui-sref="institutionsettings" if-role="Admin">Institution Settings</a></li>
-          <li><a ui-sref="admin/units">Manage Units</a></li>
-          <li><a ui-sref="admin/users">Manage Users</a></li>
-        </ul>
-      </li><!--/administration-->
-      <li class="dropdown" dropdown>
-        <a class="dropdown-toggle dropdown-user" dropdown-toggle>
-          <user-icon size="25"></user-icon>
-          {{currentUser.name}} {{currentUser.nickname ? '(' + currentUser.nickname + ')' : ''}}
-          <i class="caret"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a ng-click="openUserSettings()">Profile</a></li>
-          <li><a ng-click="openNotificationSettings()">Notifications</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="openAboutModal()">About</a></li>
-          <li class="divider"></li>
-          <li><a ui-sref="sign_out">Sign Out</a></li>
-        </ul>
-      </li><!--/current-user-->
-    </ul><!--/navbar-right-->
-  </div><!--/navbar-collapse-->
+  </div>
 </nav>
