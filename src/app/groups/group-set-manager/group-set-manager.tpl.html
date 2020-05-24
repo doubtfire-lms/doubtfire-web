@@ -10,9 +10,16 @@
 </group-selector>
 <div class="panel panel-default panel-group-memberships" ng-show="selectedGroup">
   <div class="panel-heading">
-    <h4 class="panel-title">
-      Members of <a editable-text="selectedGroup.name" class="strong" ng-show="unitRole || selectedGroupSet.allow_students_to_manage_groups" onbeforesave="updateGroup($data)">{{selectedGroup.name}}</a>
-    </h4>
+    <div class="row">
+      <div class="col-xs-11">
+        <h4 class="panel-title">
+          Members of <a editable-text="selectedGroup.name" class="strong" ng-show="unitRole || selectedGroupSet.allow_students_to_manage_groups" onbeforesave="updateGroup($data)">{{selectedGroup.name}}</a>
+        </h4>
+      </div>
+      <div class="col-xs-1 text-right">
+        <i class="fa fa-lock" ng-show="selectedGroup.locked" tooltip="This group is locked."></i>
+      </div>
+    </div>
   </div><!--/panel-heading-->
   <div class="panel-body panel-toolbar" ng-show="showMemberPanelToolbar">
     <form
