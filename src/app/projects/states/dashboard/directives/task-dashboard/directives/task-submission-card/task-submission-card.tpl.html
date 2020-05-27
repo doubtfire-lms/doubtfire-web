@@ -56,5 +56,26 @@
         </li>
       </ul>
     </div><!--/more-dropdown-->
+    <br>
+    <div class="group-member-contribution-assessment">
+    <table class="table table-condensed table-hover">
+    <thead> 
+        <tr> 
+          <th> Comment </th>
+          <th> Type </th>
+          <th> Marker </th>
+          <th> Read Date </th>
+        </tr>                                             
+    </thead>
+    <tbody>
+      <tr ng-repeat="comment in task.comments">
+        <td>{{ comment.comment}}</td>         
+        <td>{{ comment.type}}</td>          
+        <td>{{ comment.author.name}}</td>
+        <td>{{ comment.recipient_read_time}}</td>       
+      </tr>
+    </tbody>
+  </table>                  
+</div>
   </div><!--/card-footer-->
 </div><!--/card-->
