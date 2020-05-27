@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -7,48 +8,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+    <a class="navbar-brand " ui-sref="home">
+      <i class="logo"></i>
+    </a>
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
-
-
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown if-role="Admin Convenor">
-        <a class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-wrench"></span> Administration<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a ui-sref="admin/teachingperiods" if-role="Admin">Manage Teaching Periods</a></li>
-          <li><a ui-sref="institutionsettings" if-role="Admin">Institution Settings</a></li>
-          <li><a ui-sref="admin/units">Manage Units</a></li>
-          <li><a ui-sref="admin/users">Manage Users</a></li>
-        </ul>
-      </li><!--/administration-->
-      <li class="dropdown" dropdown>
-        <a class="dropdown-toggle dropdown-user" dropdown-toggle>
-          <user-icon size="25"></user-icon>
-          {{currentUser.name}} {{currentUser.nickname ? '(' + currentUser.nickname + ')' : ''}}
-          <i class="caret"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a ng-click="openUserSettings()">Profile</a></li>
-          <li><a ng-click="openNotificationSettings()">Notifications</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="openAboutModal()">About</a></li>
-          <li class="divider"></li>
-          <li><a ui-sref="sign_out">Sign Out</a></li>
-        </ul>
-      </li><!--/current-user-->
-    </ul><!--/navbar-right-->
-  </div><!--/navbar-collapse-->
-  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-show="!navCollapsed">
     <ul class="nav navbar-nav navbar-left">
-      <ul style="list-style: none; padding:5px">
-<!--        <li>-->
-<!--          <a class="home" ui-sref="home">-->
-<!--            <i class="logo"></i>-->
-<!--          </a>-->
-<!--        </li>&lt;!&ndash;/home&ndash;&gt;-->
-        <li style="padding:0">
 
+
+
+        <li class="nav-custom">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <label class="label label-unit" ng-if="unit">
@@ -62,49 +32,9 @@
           </div>
 
         </li><!--/selected-unit-->
-        <li ng-if="task && tutor" style="padding:0">
-          <div class="btn-group" dropdown>
-            <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-              <span>Staff Tasks</span>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-tasks" dropdown-menu>
-              <li>
-                <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
-              </li>
-              <li>
-                <a ui-sref="units/tasks/feedback({unitId: project.unit_id})">Give Student Feedback</a>
-              </li>
-              <li>
-                <a ui-sref="units/tasks/definition({unitId: project.unit_id})">Mark By Definition</a>
-              </li>
-              <li>
-                <a ui-sref="units/tasks/offline({unitId: project.unit_id})">Mark Tasks Offline</a>
-              </li>
-              <li>
-                <a ui-sref="units/tasks/viewer({unitId: project.unit_id})">Task List</a>
-              </li>
-              <li class="divider"></li><!--/task-related-->
-              <li>
-                <a ui-sref="units/students/list({unitId: project.unit_id})">Student List</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/groups({unitId: project.unit_id})">Student Groups</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/plagiarism({unitId: project.unit_id})">Student Plagiarism</a>
-              </li>
-              <li>
-                <a ui-sref="units/students/portfolios({unitId: project.unit_id})">Student Portfolios</a>
-              </li>
-              <li class="divider"></li><!--/student-related-->
-              <li>
-                <a ui-sref="units/analytics({unitId: project.unit_id})">Unit Analytics</a>
-              </li>
-            </ul><!--/teaching-tasks-->
-          </div>
-        </li >
-        <li ng-if="task" ng-if="tutor" style="padding:0">
+        <li ng-if="task && tutor" class="nav-custom">
+
+        <li ng-if="task" ng-if="tutor" class="nav-custom" id="desktopdropdown1">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
               <span ng-bind="task"></span>
@@ -168,7 +98,9 @@
             </ul><!--/teaching-tasks-->
           </div>
         </li><!--/task-dropdown-->
-      </ul><!--breadcrumbs-->
+
+
     </ul><!--/nav-left-->
   </div>
 </nav>
+

@@ -9,8 +9,9 @@
         the minus icon to withdraw from your current tutorial.
       </p>
     </div>
-    <table class="table table-condensed table-hover">
-      <thead>
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
         <tr>
           <th class="stream" ng-show="unit.tutorial_streams.length > 0">
             <a ng-click="sortOrder='tutorial_stream.name'; reverse=!reverse">Stream</a>
@@ -37,10 +38,10 @@
             Actions
           </th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr ng-repeat="tutorial in unit.tutorials | tutorialCampusFilter:project | orderBy:sortOrder:reverse"
-          ng-class="{'info': tutorial == project.tutorial}">
+            ng-class="{'info': tutorial == project.tutorial}">
           <td ng-show="unit.tutorial_streams.length > 0">{{tutorial.tutorial_stream.name || 'All'}}</td>
           <td>{{tutorial.campus.name || 'All'}}</td>
           <td>{{tutorial.abbreviation}}</td>
@@ -51,12 +52,13 @@
           <td>
             <button
               class="btn btn-default btn-sm"
-              ng-click ="project.switchToTutorial(tutorial)">
+              ng-click="project.switchToTutorial(tutorial)">
               <div ng-hide="project.isEnrolledIn(tutorial.id)"><i class="fa fa-plus"></i> Enrol</div>
               <div ng-show="project.isEnrolledIn(tutorial.id)"><i class="fa fa-minus"></i> Withdraw</div>
             </button>
           </td>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
