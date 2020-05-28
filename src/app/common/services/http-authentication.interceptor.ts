@@ -3,11 +3,13 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpParams
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { currentUser } from 'src/app/ajs-upgraded-providers';
+import { currentUser, UnitStudentEnrolmentModalProvider } from 'src/app/ajs-upgraded-providers';
 import API_URL from 'src/app/config/constants/apiURL';
+import { Param } from '@uirouter/angular';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
@@ -18,12 +20,11 @@ export class TokenInterceptor implements HttpInterceptor {
     if (request.url.startsWith(API_URL) && this.currentUser.authenticationToken) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.currentUser.authenticationToken}`
+          Authorization: `Bearer ${this.currentUser.authenticationToken}`,
+          'username' : this.currentUser.profile.username
         },
-        params: request.params.append('auth_token', this.currentUser.authenticationToken)
-      });
+        })
     }
     return next.handle(request);
-
   }
 }
