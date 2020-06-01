@@ -32,7 +32,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     # Search option filters
     $scope.filteredTasks = []
     $scope.filters = _.extend({
-      studentName: null
+      searchText: null
       tutorialIdSelected: if ($scope.unitRole.role == 'Tutor' || 'Convenor') && $scope.userHasTutorials then 'mine' else 'all'
       tutorials: []
       taskDefinitionIdSelected: null
@@ -46,7 +46,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     applyFilters = ->
       filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
       filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
-      filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
+      filteredTasks = $filter('tasksWithSearchText')(filteredTasks, $scope.filters.searchText)
       $scope.filteredTasks = filteredTasks
 
       # Fix selected task.
@@ -110,7 +110,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       $scope.filters.taskDefinition = taskDef
     setTaskDefFromTaskKey($scope.taskData.taskKey)
     # Student Name options
-    $scope.studentNameChanged = applyFilters
+    $scope.searchTextChanged = applyFilters
     # Finds a task (or null) given its task key
     findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
     # Initially not watching the task key

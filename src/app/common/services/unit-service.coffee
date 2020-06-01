@@ -553,12 +553,19 @@ angular.module("doubtfire.common.services.units", [])
           enrol.tutor.name.toLowerCase().indexOf(matchText) >= 0
       ).length > 0
 
+    # Search through the student's groups for a match
+    student.matchesGroup = (matchText) ->
+      _.find(student.groups, (grp) ->
+        grp.name.toLowerCase().indexOf(matchText) >= 0
+      )
+
     # Check if this student should match the passed in text filter
     student.matches = (matchText) ->
       student.student_id.indexOf(matchText) >= 0 ||
       student.name.toLowerCase().indexOf(matchText) >= 0 ||
       student.campus().matches(matchText) ||
-      student.matchesTutorialEnrolments(matchText)
+      student.matchesTutorialEnrolments(matchText) ||
+      student.matchesGroup(matchText)
 
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)
