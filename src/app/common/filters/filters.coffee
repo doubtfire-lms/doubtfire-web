@@ -174,12 +174,13 @@ angular.module("doubtfire.common.filters", [])
 
 )
 
-.filter('tasksWithStudentName', ->
-  (tasks, searchName) ->
-    return tasks unless (searchName? && tasks?)
-    searchName = searchName.toLowerCase()
+.filter('tasksWithSearchText', ->
+  (tasks, searchText) ->
+    return tasks unless (searchText? && tasks?)
+    searchText = searchText.toLowerCase()
     _.filter tasks, (task) ->
-      task.project().name.toLowerCase().indexOf(searchName) >= 0
+      p = task.project()
+      p.matches(searchText)
 )
 
 .filter('tutorialCampusFilter', ->

@@ -15,6 +15,13 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
   controller: ($scope, $timeout, $filter, $window, Unit, taskService, alertService, currentUser, groupService, listenerService, dateService, projectService, TaskDefinition) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
+
+    # UI call to change currently selected task
+    $scope.setSelectedTask = (task) ->
+      $scope.taskData.selectedTask = task
+      $scope.taskData.onSelectedTaskChange?(task)
+      scrollToTaskInList(task) if task?
+
     # Check taskSource exists
     unless $scope.taskData?.source?
       throw Error "Invalid taskData.source provided for task list; supply one of Unit.tasksForTaskInbox, Unit.tasksRequiringFeedback, Unit.taskByTaskDefinition"
@@ -25,7 +32,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     # Search option filters
     $scope.filteredTasks = []
     $scope.filters = _.extend({
-      studentName: null
+      searchText: null
       tutorialIdSelected: if ($scope.unitRole.role == 'Tutor' || 'Convenor') && $scope.userHasTutorials then 'mine' else 'all'
       tutorials: []
       taskDefinitionIdSelected: null
@@ -39,7 +46,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     applyFilters = ->
       filteredTasks = $filter('tasksOfTaskDefinition')($scope.tasks, $scope.filters.taskDefinition)
       filteredTasks = $filter('tasksInTutorials')(filteredTasks, $scope.filters.tutorials)
-      filteredTasks = $filter('tasksWithStudentName')(filteredTasks, $scope.filters.studentName)
+      filteredTasks = $filter('tasksWithSearchText')(filteredTasks, $scope.filters.searchText)
       $scope.filteredTasks = filteredTasks
 
       # Fix selected task.
@@ -103,7 +110,7 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
       $scope.filters.taskDefinition = taskDef
     setTaskDefFromTaskKey($scope.taskData.taskKey)
     # Student Name options
-    $scope.studentNameChanged = applyFilters
+    $scope.searchTextChanged = applyFilters
     # Finds a task (or null) given its task key
     findTaskForTaskKey = (key) -> _.find($scope.tasks, (t) -> t.hasTaskKey(key))
     # Initially not watching the task key
@@ -144,11 +151,6 @@ angular.module('doubtfire.units.states.tasks.inbox.directives.staff-task-list', 
     listeners.push $scope.$watch 'unit.id', (newUnitId, oldUnitId) ->
       return if !newUnitId? || (newUnitId == oldUnitId && $scope.tasks?)
       refreshData()
-    # UI call to change currently selected task
-    $scope.setSelectedTask = (task) ->
-      $scope.taskData.selectedTask = task
-      $scope.taskData.onSelectedTaskChange?(task)
-      scrollToTaskInList(task) if task?
     scrollToTaskInList = (task) ->
       taskEl = document.querySelector("staff-task-list ##{task.taskKeyToIdString()}")
       return unless taskEl?
