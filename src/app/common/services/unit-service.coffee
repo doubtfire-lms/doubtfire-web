@@ -567,6 +567,18 @@ angular.module("doubtfire.common.services.units", [])
       student.matchesTutorialEnrolments(matchText) ||
       student.matchesGroup(matchText)
 
+    # Get the status of the portfolio
+    student.portfolioTaskStatus = ->
+      if student.portfolio_available
+        return 'complete'
+      else if student.compile_portfolio
+        return 'working_on_it'
+      else
+        return 'not_started'
+
+    student.portfolioTaskStatusClass = ->
+      return taskService.statusClass(student.portfolioTaskStatus())
+
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)
     student.updateTaskStats(student.stats) if student.stats?
