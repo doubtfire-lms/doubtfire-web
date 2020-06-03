@@ -18,18 +18,11 @@ export class CreatePortfolioTaskListItemComponent {
   }
 
   public status(): string {
-    if (this.hasPortfolio()) {
-      return 'complete';
-    }
-    return 'not_started';
+    return this.project.portfolioTaskStatus()
   }
 
   public statusClass(): string {
-    return this.ts.statusClass(this.status());
-  }
-
-  public hasPortfolio(): boolean {
-    return this.project.portfolio_status > 0;
+    return this.project.portfolioTaskStatusClass()
   }
 
   public switchToPortfolioCreation() {
