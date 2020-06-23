@@ -144,7 +144,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns all tutorials where the tutor name matches the user name provided
     unit.tutorialsForUserName = (userName) ->
-      _.filter unit.tutorials, (tutorial) -> tutorial.tutor.name is userName
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutorName is userName
 
     # Refresh callback for reloading students
     unit.refreshStudents = (onSuccess, onFailure) ->
@@ -319,7 +319,7 @@ angular.module("doubtfire.common.services.units", [])
     result = []
     angular.forEach(unit.tutorials, (tute) ->
       result.push(tute.abbreviation)
-      result.push(tute.tutor.name)
+      result.push(tute.tutorName)
     )
     angular.forEach(unit.students, (student) ->
       result.push(student.name)
@@ -488,13 +488,13 @@ angular.module("doubtfire.common.services.units", [])
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
     student.tutorNames = ->
       _.chain(student.tutorials())
-        .map (tute) -> tute.tutor.name.split(' ')[0]
+        .map (tute) -> tute.tutorName.split(' ')[0]
         .uniq()
         .join()
         .value() || 'None'
 
     student.hasTutor = (tutorName) ->
-      _.find(student.tutorials(), (tute) -> tute.tutor.name == tutorName)?
+      _.find(student.tutorials(), (tute) -> tute.tutorName == tutorName)?
 
     # Students task statistics (for bar)
     student.task_stats = [
@@ -550,7 +550,7 @@ angular.module("doubtfire.common.services.units", [])
     student.matchesTutorialEnrolments = (matchText) ->
       _.filter(student.tutorials(), (enrol) ->
         enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-          enrol.tutor.name.toLowerCase().indexOf(matchText) >= 0
+          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0
       ).length > 0
 
     # Search through the student's groups for a match

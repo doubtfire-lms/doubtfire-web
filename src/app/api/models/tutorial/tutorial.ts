@@ -144,7 +144,12 @@ export class Tutorial extends Entity {
       campusPart = "";
     }
 
-    return `${this.meeting_day.slice(0, 3)} at ${this.meeting_time} by ${this.tutor.name} in ${this.meeting_location}${campusPart}`;
+    return `${this.meeting_day.slice(0, 3)} at ${this.meeting_time} by ${this.tutorName} in ${this.meeting_location}${campusPart}`;
+  }
+
+  public get tutorName(): string {
+    if ( this.tutor ) return this.tutor.name;
+    else return "";
   }
 
   public get key(): string {
