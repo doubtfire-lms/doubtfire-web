@@ -166,6 +166,15 @@ angular.module('doubtfire.groups.group-selector', [])
           applyFilters()
       )
 
+    # Toggle lockable group
+    $scope.toggleLocked = (group) ->
+      newGroup = _.clone(group)
+      newGroup.locked = !newGroup.locked
+      $scope.unit.updateGroup(newGroup,
+        (success) ->
+          group.locked = success.locked
+      )
+
     # Watch selected group set changes
     listeners.push $scope.$on 'UnitGroupSetEditor/SelectedGroupSetChanged', (evt, args) ->
       newGroupSet = $scope.unit.findGroupSet(args.id)

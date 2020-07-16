@@ -111,9 +111,14 @@
       </td><!--/capacity-->
       <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         <div ng-show="project">
-          <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm" ng-show="group.hasSpace()">
-            <i class="fa fa-plus"></i> Join
-          </button>
+          <span ng-show="group.hasSpace()">
+            <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm joinButton" ng-show="!group.locked && !selectedGroupSet.locked">
+              <i class="fa fa-plus"></i> Join
+            </button>
+            <button class="btn btn-sm joinButton" ng-show="group.locked || selectedGroupSet.locked">
+              <i class="fa fa-lock"></i> Locked 
+            </button>
+          </span>
         </div>
         <div ng-show="unitRole">
           <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
@@ -128,6 +133,12 @@
             <button ng-click="groupRowForm.$show()" class="btn btn-default btn-sm">
               <i class="fa fa-pencil"></i> Edit
             </button>
+            <a class="btn btn-sm lockButton" 
+              ng-class="{true: 'btn-warning', false: 'btn-info'}[!group.locked]"
+              ng-click="toggleLocked(group)">
+              <i ng-class="{true: 'fa fa-lock', false: 'fa fa-unlock'}[!group.locked]"></i>
+              {{!group.locked && "Lock" || "Unlock"}}
+            </a>
             <button ng-click="deleteGroup(group)" class="btn btn-danger btn-sm">
               <i class="fa fa-trash-o"></i> Delete
             </button>
