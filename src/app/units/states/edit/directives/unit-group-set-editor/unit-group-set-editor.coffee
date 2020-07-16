@@ -8,8 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.tpl.html'
   replace: true
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal, listenerService) ->
-    listeners = listenerService.listenTo($scope)
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
 
     $scope.addGroupSet = ->
       gsCount = $scope.unit.group_sets.length
@@ -55,16 +54,10 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
         (response) ->
           alertService.add("success", "#{if response.locked then 'Locked' else 'Unlocked'} #{gs.name}", 2000)
           gs.locked = response.locked
-          $scope.$broadcast 'UnitGroupSetEditor/SelectedGroupSetChanged', { id: gs.id }
 
         (response) ->
           alertService.add("danger", "Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}", 6000)
       )
-
-    # Listen for groups all groups being locked.
-    listeners.push $scope.$on 'GroupSelector/GroupLockToggled', (e, args) ->
-      if args.groupSetId == $scope.selectedGroupSet.id
-        $scope.selectedGroupSet.locked = args.allLocked
 
     $scope.removeGroupSet = (gs) ->
       GroupSet.delete(

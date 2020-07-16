@@ -112,11 +112,11 @@
       <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         <div ng-show="project">
           <span ng-show="group.hasSpace()">
-            <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm joinButton" ng-show="!group.locked">
+            <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm joinButton" ng-show="!group.locked && !selectedGroupSet.locked">
               <i class="fa fa-plus"></i> Join
             </button>
-            <button class="btn btn-sm joinButton" ng-show="group.locked">
-              <i class="fa fa-lock"></i> Locked
+            <button class="btn btn-sm joinButton" ng-show="group.locked || selectedGroupSet.locked">
+              <i class="fa fa-lock"></i> Locked 
             </button>
           </span>
         </div>
