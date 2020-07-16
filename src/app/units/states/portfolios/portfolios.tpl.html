@@ -79,6 +79,11 @@
               </a>
             </th>
             <th>
+              <a ng-click="sortOrder='submitted_grade'; reverse=!reverse">
+                Submitted as <i ng-show="sortOrder=='submitted_grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              </a>
+            </th>
+            <th>
               <a ng-click="sortOrder='orderScale'; reverse=!reverse">
                 Stats<i ng-show="sortOrder=='orderScale'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
@@ -103,6 +108,9 @@
             <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
               <grade-icon grade="student.target_grade"></grade-icon>
+            </td>
+            <td class="flags-data">
+              <grade-icon grade="student.submitted_grade"></grade-icon>
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
