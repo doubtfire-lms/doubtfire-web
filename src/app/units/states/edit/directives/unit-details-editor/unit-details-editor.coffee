@@ -56,6 +56,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           active: $scope.unit.active
           auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
           send_notifications: $scope.unit.send_notifications
+          draft_task_id: $scope.unit.draft_task_id
         }
       else
         saveData = {
@@ -67,6 +68,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
           active: $scope.unit.active
           auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
           send_notifications: $scope.unit.send_notifications
+          draft_task_id: $scope.unit.draft_task_id
         }
 
       if $scope.unit.id == -1
