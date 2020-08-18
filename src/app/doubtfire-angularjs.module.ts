@@ -270,6 +270,7 @@ import {
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
+import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
@@ -310,6 +311,8 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('CalendarModal',
+  downgradeInjectable(CalendarModalService));
 DoubtfireAngularJSModule.factory('TaskCommentService',
   downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService',

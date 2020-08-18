@@ -79,6 +79,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
+import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
@@ -124,6 +125,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     CampusListComponent,
     ActivityTypeListComponent,
     ExtensionModalComponent,
+    CalendarModalComponent,
     InstitutionSettingsComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
