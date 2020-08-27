@@ -1,4 +1,8 @@
 <h3 mat-dialog-title>Download your calendar</h3>
 <div mat-dialog-content>
-  <p>Webcal link goes here!</p>
+
+  <div *ngIf="webcal !== null">
+    {{webcalUrl}}
+  </div>
+
 </div>

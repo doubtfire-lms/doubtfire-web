@@ -282,6 +282,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { CampusService } from './api/models/campus/campus.service';
+import { WebcalService } from './api/models/webcal/webcal.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
@@ -321,6 +322,8 @@ DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService',
   downgradeInjectable(CampusService));
+DoubtfireAngularJSModule.factory('webcalService',
+  downgradeInjectable(WebcalService));
   DoubtfireAngularJSModule.factory('emojiService',
   downgradeInjectable(EmojiService));
 
