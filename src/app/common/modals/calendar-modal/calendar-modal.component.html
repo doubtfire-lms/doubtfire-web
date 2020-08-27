@@ -1,8 +1,51 @@
-<h3 mat-dialog-title>Download your calendar</h3>
-<div mat-dialog-content>
+<div class="calendar-modal-component mat-typography">
 
-  <div *ngIf="webcal !== null">
-    {{webcalUrl}}
+  <!-- Dialog header -->
+  <div class="d-flex d-flex-row">
+    <div class="d-flex-grow">
+      <h2 mat-dialog-title>Web calendar</h2>
+    </div>
+    <mat-slide-toggle
+      #webcalToggle
+      [matTooltip]="webcal ? 'Disable the web calendar' : 'Enable the web calendar'"
+      matTooltipPosition="above"
+      [checked]="!!(webcal)"
+      [disabled]="working"
+      (click)="onWebcalToggle()">
+    </mat-slide-toggle>
   </div>
 
+  <!-- Dialog content -->
+  <div mat-dialog-content>
+
+    <small>Your web calendar is currently {{ webcal ? 'enabled' : 'disabled' }}.</small>
+
+    <div *ngIf="!webcal">
+      <p>
+        The web calendar displays due dates of your tasks in an iCalendar that can be added to any iCalendar client
+        (e.g. Outlook/Google/iCloud calendar).
+      </p>
+    </div>
+
+    <div *ngIf="webcal">
+      <p>
+        Use the following URL to subscribe to your web calendar from your iCalendar client (e.g. Outlook/Google/iCloud
+        Calendar).
+      </p>
+      <div class="d-flex d-flex-row">
+        <div class="d-flex-grow webcal-url-container">
+          <a [href]="webcalUrl">{{webcalUrl}}</a>
+        </div>
+        <button
+          mat-icon-button
+          matTooltip="Regenerate the web calendar link"
+          matTooltipPosition="above"
+          [disabled]="working"
+          (click)="onChangeWebcalUrl()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
 </div>

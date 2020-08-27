@@ -22,6 +22,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -158,6 +159,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     MatSelectModule,
     MatButtonToggleModule,
     MatTooltipModule,
+    MatSlideToggleModule,
     MatButtonModule,
     MatMenuModule,
     MatCardModule,

@@ -11,7 +11,6 @@ export class CalendarModalService {
 
   public show(task: any) {
     let dialogRef: MatDialogRef<CalendarModalComponent, any>;
-
     dialogRef = this.dialog.open(CalendarModalComponent);
   }
 }

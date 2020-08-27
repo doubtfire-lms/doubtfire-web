@@ -13,21 +13,13 @@ export class Webcal extends Entity {
   include_start_dates: Date;
   user_id: number;
 
-  /**
-   * Gets the url for this webcal relative to an api base url.
-   */
-  public getUrl(apiBaseUrl: string): string{
-    return `${apiBaseUrl}/webcal/${this.id}`;
-  }  
-
-  //#region Abstract members of Entity
   toJson(): any {
     return {
       webcal: super.toJsonWithKeys(KEYS)
     };
   }
 
-  public updateFromJson(data: any): void {
+  public updateFromJson(data: any) {
     this.setFromJson(data, KEYS);
   }
 
@@ -38,5 +30,13 @@ export class Webcal extends Entity {
   public keyForJson(json: any): string {
     return json.id;
   }
-  //#endregion
+
+  /**
+   * Gets the URL for this Webcal relative to the specified API base URL.
+   */
+  public getUrl(apiBaseUrl: string): URL {
+    const url = new URL(`${apiBaseUrl}/webcal/${this.id}`);
+    url.protocol = 'webcal';
+    return url;
+  }
 }

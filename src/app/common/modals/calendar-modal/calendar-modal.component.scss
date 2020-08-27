@@ -1,0 +1,24 @@
+.calendar-modal-component {
+  max-width: 600px;
+
+  .d-flex {
+    display: flex;
+
+    &.d-flex-row {
+      flex-direction: row;
+    }
+
+    .d-flex-grow {
+      flex-grow: 1;
+    }
+  }
+
+  .w-100 {
+    width: 100%;
+  }
+
+  .webcal-url-container {
+    display: flex;
+    align-items: center;
+  }
+}
