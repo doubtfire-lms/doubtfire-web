@@ -125,6 +125,7 @@ import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskSubmissionViewerComponent } from './tasks/task-submission-viewer/task-submission-viewer.component';
 
 
 @NgModule({
@@ -166,6 +167,7 @@ import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directi
     TasksWithStudentNamePipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    TaskSubmissionViewerComponent,
   ],
   // Module Imports
   imports: [

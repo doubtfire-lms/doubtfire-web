@@ -9,7 +9,6 @@ angular.module('doubtfire.tasks', [
   'doubtfire.tasks.task-plagiarism-report-viewer'
   'doubtfire.tasks.task-sheet-viewer'
   'doubtfire.tasks.task-status-selector'
-  'doubtfire.tasks.task-submission-viewer'
   'doubtfire.tasks.task-submission-wizard'
   'doubtfire.tasks.task-viewer'
 ])

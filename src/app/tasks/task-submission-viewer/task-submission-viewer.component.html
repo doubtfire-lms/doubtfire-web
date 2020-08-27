@@ -1,0 +1,29 @@
+<div class="panel-body task-submission-viewer">
+    <div class="large-notice-block" [hidden]="!(notSubmitted(task) || task.processing_pdf || loadingDetails(task))">
+      <div [hidden]="!(notSubmitted(task) && ! loadingDetails(task))">
+        <i class="fa fa-upload fa-2x"></i>
+        <p>Upload submission before viewing</p>
+      </div><!--/no-pdf-->
+      <div [hidden]="!(task.processing_pdf && ! loadingDetails(task))">
+          <i class="fa fa-clock-o fa-2x"></i>
+          <p>
+            Submission is still being processed
+            <p class="small text-muted">
+              Please check again shortly
+            <!-- </p> -->
+          </p>
+      </div><!--/pdf-in-process-->
+      <div [hidden]="!loadingDetails(task)">
+          <i class="fa fa-spinner fa-pulse fa-2x"></i>
+          <p>Fetching Submission Details</p>
+      </div><!--/loading details-->
+    </div>
+    <div *ngIf="task.has_pdf">
+      <pdf-viewer-panel
+        pdf-url="taskUrl"
+        resources-url="taskFilesURL"
+        footer-text="{{task.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
+        [hidden]="notSubmitted(task) || task.processing_pdf">
+      </pdf-viewer-panel>
+    </div>
+  </div>
