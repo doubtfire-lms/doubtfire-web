@@ -8,10 +8,19 @@ const KEYS =
   ];
 
 export class Webcal extends Entity {
-  id: number;
+
+  id: string;
   include_start_dates: Date;
   user_id: number;
 
+  /**
+   * Gets the url for this webcal relative to an api base url.
+   */
+  public getUrl(apiBaseUrl: string): string{
+    return `${apiBaseUrl}/webcal/${this.id}`;
+  }  
+
+  //#region Abstract members of Entity
   toJson(): any {
     return {
       webcal: super.toJsonWithKeys(KEYS)
@@ -23,14 +32,11 @@ export class Webcal extends Entity {
   }
 
   public get key(): string {
-    return this.id.toString();
+    return this.id;
   }
 
   public keyForJson(json: any): string {
     return json.id;
   }
-
-  public getUrl(apiBaseUrl: string): string{
-    return `${apiBaseUrl}/webcal/${this.id}`;
-  }  
+  //#endregion
 }
