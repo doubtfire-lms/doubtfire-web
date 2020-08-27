@@ -34,11 +34,11 @@
       </p>
       <div class="d-flex d-flex-row">
         <div class="d-flex-grow webcal-url-container">
-          <a [href]="webcalUrl">{{webcalUrl}}</a>
+          <a [href]="bypass(webcalUrl)">{{webcalUrl}}</a>
         </div>
         <button
           mat-icon-button
-          matTooltip="Regenerate the web calendar link"
+          matTooltip="Regenerate the web calendar URL"
           matTooltipPosition="above"
           [disabled]="working"
           (click)="onChangeWebcalUrl()">

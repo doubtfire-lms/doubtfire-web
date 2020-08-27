@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { WebcalService } from 'src/app/api/models/webcal/webcal.service';
 import { Webcal } from 'src/app/api/models/webcal/webcal';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -15,6 +16,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   constructor(
     private webcalService: WebcalService,
     private constants: DoubtfireConstants,
+    private sanitizer: DomSanitizer,
     dialogRef: MatDialogRef<CalendarModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -73,5 +75,12 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       this.webcal = webcal;
       this.working = false;
     })
+  }
+
+  /**
+   * Bypasses sanitization of the specified URL.
+   */
+  bypass(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 }
