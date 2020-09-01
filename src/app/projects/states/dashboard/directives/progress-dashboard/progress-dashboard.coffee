@@ -18,7 +18,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
       $scope.data = []
       $scope.values = []
       _.each $scope.gradedTasks, (task) ->
-        $scope.values.push([task.definition.name, (task.quality_pts * 100) / task.definition.max_quality_pts])
+        $scope.values.push([task.definition.name, (task.grade)])
+        #$scope.values.push([task.definition.name, (task.quality_pts * 100) / task.definition.max_quality_pts])
       $scope.data.push {key: 'key',values: $scope.values}
 
     $scope.$on 'TaskStatusUpdated', $scope.updateData

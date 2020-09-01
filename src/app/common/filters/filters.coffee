@@ -161,7 +161,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('tasksWithGrade', ->
   (input) ->
     if input
-      _.filter input, (task) -> (task?) && task.hasQualityPoints()
+      _.filter input, (task) -> (task?) && task.hasGrade()
     else
       input
 )
