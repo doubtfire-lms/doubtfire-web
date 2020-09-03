@@ -8,7 +8,6 @@ import { TaskFeedback } from 'src/app/ajs-upgraded-providers';
 })
 
 export class TaskSubmissionViewerComponent implements OnInit {
-
   @Input() project: any;
   @Input() task: any;
 
@@ -26,16 +25,14 @@ export class TaskSubmissionViewerComponent implements OnInit {
     return (!task.has_pdf && (!task.processing_pdf))
   }
 
-  loadingDetails(task): boolean {
-    return (task.needsSubmissionDetails())
-  }
+  // loadingDetails(task): boolean {
+  //   return (task.needsSubmissionDetails())
+  // }
 
   ngOnChanges(changes: SimpleChanges): void {
-    changes.task.previousValue;
     let newTask = changes.task.currentValue;
     newTask.getSubmissionDetails();
     this.taskUrl = this.TaskFeedback.getTaskUrl(newTask);
     this.taskUrl = this.TaskFeedback.getTaskFilesUrl(newTask);
   }
-
 }
