@@ -5,6 +5,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { WebcalService } from 'src/app/api/models/webcal/webcal.service';
 import { Webcal } from 'src/app/api/models/webcal/webcal';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'calendar-modal',
@@ -12,7 +13,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
   styleUrls: ['./calendar-modal.component.scss']
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
-
+ 
   constructor(
     private webcalService: WebcalService,
     private constants: DoubtfireConstants,
@@ -75,6 +76,23 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       this.webcal = webcal;
       this.working = false;
     })
+  }
+
+  /**
+   * Copies webcal URL to the users clipboard.
+   */
+  copyWebcalUrl() {
+    const e = document.createElement('textarea');
+    e.style.position = 'fixed';
+    e.style.left = '0';
+    e.style.top = '0';
+    e.style.opacity = '0';
+    e.value = this.webcalUrl;
+    document.body.appendChild(e);
+    e.focus();
+    e.select();
+    document.execCommand('copy');
+    document.body.removeChild(e);
   }
 
   /**

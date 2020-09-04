@@ -36,16 +36,24 @@
         <div class="d-flex-grow webcal-url-container">
           <a [href]="bypass(webcalUrl)">{{webcalUrl}}</a>
         </div>
-        <button
-          mat-icon-button
-          matTooltip="Regenerate the web calendar URL"
-          matTooltipPosition="above"
-          [disabled]="working"
-          (click)="onChangeWebcalUrl()">
-          <mat-icon>refresh</mat-icon>
-        </button>
+        <div>
+          <button
+            mat-icon-button
+            matTooltip="Copy URL"
+            matTooltipPosition="above"
+            (click)="copyWebcalUrl()">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Regenerate URL"
+            matTooltipPosition="above"
+            [disabled]="working"
+            (click)="onChangeWebcalUrl()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
-
   </div>
 </div>
