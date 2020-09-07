@@ -54,6 +54,15 @@
           </button>
         </div>
       </div>
+      <mat-card class="webcal-options-card">
+        <h3>Options</h3>
+        <mat-checkbox
+          [checked]="webcal.include_start_dates"
+          [disabled]="working"
+          (change)="toggleIncludeTaskStartDates()">
+            Include task start dates in web calendar
+        </mat-checkbox>
+      </mat-card>
     </div>
   </div>
 </div>

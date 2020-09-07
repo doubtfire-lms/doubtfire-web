@@ -96,6 +96,19 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Includes task 'Start Dates' in the Webcal.
+   */
+  toggleIncludeTaskStartDates() {
+    this.working = true;
+    this.webcalService.updateWebcal({
+      include_start_dates: !this.webcal.include_start_dates,
+    }).subscribe((webcal) => {
+      this.webcal = webcal;
+      this.working = false;
+    });;
+  }
+
+  /**
    * Bypasses sanitization of the specified URL.
    */
   bypass(url: string): SafeUrl {

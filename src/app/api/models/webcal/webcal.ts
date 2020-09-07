@@ -10,7 +10,7 @@ const KEYS =
 export class Webcal extends Entity {
 
   id: string;
-  include_start_dates: Date;
+  include_start_dates: boolean;
   user_id: number;
 
   toJson(): any {
