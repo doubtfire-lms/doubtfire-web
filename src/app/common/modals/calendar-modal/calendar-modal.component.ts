@@ -5,7 +5,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { WebcalService } from 'src/app/api/models/webcal/webcal.service';
 import { Webcal } from 'src/app/api/models/webcal/webcal';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { ClipboardModule } from '@angular/cdk/clipboard';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'calendar-modal',
@@ -13,11 +13,12 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
   styleUrls: ['./calendar-modal.component.scss']
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
- 
+
   constructor(
     private webcalService: WebcalService,
     private constants: DoubtfireConstants,
     private sanitizer: DomSanitizer,
+    @Inject(alertService) private alerts: any,
     dialogRef: MatDialogRef<CalendarModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -66,6 +67,14 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Displays a notification that the webcal URL has been copied.
+   * `cdkCopyToClipboard` is expected do the actual copying.
+   */
+  onCopyWebcalUrl() {
+    this.alerts.add('success', 'Web calendar URL copied to the clipboard');
+  }
+
+  /**
    * Invoked when the user requests their webcal URL to be changed.
    */
   onChangeWebcalUrl() {
@@ -76,23 +85,6 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       this.webcal = webcal;
       this.working = false;
     })
-  }
-
-  /**
-   * Copies webcal URL to the users clipboard.
-   */
-  copyWebcalUrl() {
-    const e = document.createElement('textarea');
-    e.style.position = 'fixed';
-    e.style.left = '0';
-    e.style.top = '0';
-    e.style.opacity = '0';
-    e.value = this.webcalUrl;
-    document.body.appendChild(e);
-    e.focus();
-    e.select();
-    document.execCommand('copy');
-    document.body.removeChild(e);
   }
 
   /**

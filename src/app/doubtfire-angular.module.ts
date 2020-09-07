@@ -4,6 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -147,6 +148,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    ClipboardModule,
     MatToolbarModule,
     MatFormFieldModule,
     MatAutocompleteModule,

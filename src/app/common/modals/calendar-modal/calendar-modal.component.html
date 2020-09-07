@@ -41,7 +41,8 @@
             mat-icon-button
             matTooltip="Copy URL"
             matTooltipPosition="above"
-            (click)="copyWebcalUrl()">
+            [cdkCopyToClipboard]="webcalUrl"
+            (click)="onCopyWebcalUrl()">
             <mat-icon>content_copy</mat-icon>
           </button>
           <button
