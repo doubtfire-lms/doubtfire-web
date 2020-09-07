@@ -71,7 +71,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * `cdkCopyToClipboard` is expected do the actual copying.
    */
   onCopyWebcalUrl() {
-    this.alerts.add('success', 'Web calendar URL copied to the clipboard');
+    this.alerts.add('success', 'Web calendar URL copied to the clipboard', 2000);
   }
 
   /**
