@@ -3,13 +3,15 @@ import { Entity } from '../entity';
 const KEYS =
   [
     'id',
+    'guid',
     'include_start_dates',
     'user_id',
   ];
 
 export class Webcal extends Entity {
 
-  id: string;
+  id: number;
+  guid: string;
   include_start_dates: boolean;
   user_id: number;
 
@@ -24,7 +26,7 @@ export class Webcal extends Entity {
   }
 
   public get key(): string {
-    return this.id;
+    return this.id.toString();
   }
 
   public keyForJson(json: any): string {
@@ -35,7 +37,7 @@ export class Webcal extends Entity {
    * Gets the URL for this Webcal relative to the specified API base URL.
    */
   public getUrl(apiBaseUrl: string): URL {
-    const url = new URL(`${apiBaseUrl}/webcal/${this.id}`);
+    const url = new URL(`${apiBaseUrl}/webcal/${this.guid}`);
     url.protocol = 'webcal';
     return url;
   }

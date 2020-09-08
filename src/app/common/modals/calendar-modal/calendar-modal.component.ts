@@ -80,7 +80,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   onChangeWebcalUrl() {
     this.working = true;
     this.webcalService.updateWebcal({
-      should_change_id: true,
+      should_change_guid: true,
     }).subscribe((webcal) => {
       this.webcal = webcal;
       this.working = false;

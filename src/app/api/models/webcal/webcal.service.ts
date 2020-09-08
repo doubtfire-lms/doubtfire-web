@@ -7,7 +7,7 @@ import { EntityService } from '../entity.service';
 
 interface WebcalUpdateParams {
   enabled?: boolean;
-  should_change_id?: boolean;
+  should_change_guid?: boolean;
   include_start_dates?: boolean;
 }
 
