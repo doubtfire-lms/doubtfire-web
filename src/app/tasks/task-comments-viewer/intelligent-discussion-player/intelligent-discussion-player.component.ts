@@ -101,9 +101,11 @@ export class IntelligentDiscussionDialog implements OnInit {
   count: number = 3 * 60 * 1000; // 3 minutes
   activePromptId: number = 0;
   counter: Subscription;
+  guide = { text: 'Click start to begin'};
 
   @ViewChild('testRecorder', { static: true }) testRecorder: MicrophoneTesterComponent;
   @ViewChild('discussionRecorder', { static: true }) discussionRecorder: IntelligentDiscussionRecorderComponent;
+
 
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
@@ -129,6 +131,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   finishDiscussion() {
     this.discussionComplete = true;
     this.inDiscussion = false;
+    this.guide = { text: '' };
     this.discussionRecorder.stopRecording();
     this.data.audioRef.pause();
     this.data.audioRef.currentTime = 0;
@@ -168,10 +171,23 @@ export class IntelligentDiscussionDialog implements OnInit {
     }
   }
 
+
+
   setPrompt() {
     this.data.audioRef.src = this.discussionService.getDiscussionPromptUrl(this.data.task, this.data.dc.id, this.activePromptId);
+    this.guide.text = 'Listening to prompt';
     this.data.audioRef.load();
     this.data.audioRef.play();
+    let _this = this;
+    this.data.audioRef.addEventListener('ended', function () {
+      setTimeout(() => {
+        let audio = new Audio();
+        audio.src = '/assets/sounds/discussion-start-signal.wav';
+        audio.load();
+        audio.play();
+        _this.guide.text = 'Start responding';
+      }, 400);
+    });
   }
 
   responseConfirmed(e: any) {
