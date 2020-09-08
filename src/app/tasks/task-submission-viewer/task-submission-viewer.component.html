@@ -1,29 +1,27 @@
 <div class="panel-body task-submission-viewer">
-    <div class="large-notice-block" [hidden]="!(notSubmitted(task) || task.processing_pdf || task.needsSubmissionDetails())">
-      <div [hidden]="!(notSubmitted(task) && ! task.needsSubmissionDetails())">
-        <i class="fa fa-upload fa-2x"></i>
-        <p>Upload submission before viewing</p>
-      </div><!--/no-pdf-->
-      <div [hidden]="!(task.processing_pdf && ! task.needsSubmissionDetails())">
-          <i class="fa fa-clock-o fa-2x"></i>
-          <p>
-            Submission is still being processed
-            <p class="small text-muted">Please check again shortly</p>
-          </p>
-      </div><!--/pdf-in-process-->
-      <div [hidden]="!task.needsSubmissionDetails()">
-          <i class="fa fa-spinner fa-pulse fa-2x"></i>
-          <!-- TODO: add styles for mat-spinner -->
-          <!-- <mat-spinner></mat-spinner> -->
-          <p>Fetching Submission Details</p>
-      </div><!--/loading details-->
-    </div>
-    <div *ngIf="task.has_pdf">
-      <pdf-viewer-panel
-        pdf-url="taskUrl"
-        resources-url="taskFilesURL"
-        footer-text="{{task.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
-        [hidden]="notSubmitted(task) || task.processing_pdf">
-      </pdf-viewer-panel>
-    </div>
+  <div class="large-notice-block" [hidden]="!(notSubmitted(task) || task.processing_pdf || task.needsSubmissionDetails())">
+    <div [hidden]="!(notSubmitted(task) && ! task.needsSubmissionDetails())">
+      <i class="fa fa-upload fa-2x"></i>
+      <p>Upload submission before viewing</p>
+    </div><!--/no-pdf-->
+    <div [hidden]="!(task.processing_pdf && ! task.needsSubmissionDetails())">
+        <i class="fa fa-clock-o fa-2x"></i>
+        <p>
+          Submission is still being processed
+          <p class="small text-muted">Please check again shortly
+        </p>
+    </div><!--/pdf-in-process-->
+    <div [hidden]="!task.needsSubmissionDetails()">
+        <mat-spinner strokeWidth="2" diameter="100"></mat-spinner>
+        <p>Fetching Submission Details</p>
+    </div><!--/loading details-->
   </div>
+  <div *ngIf="task.has_pdf">
+    <pdf-viewer-panel
+      pdf-url="taskUrl"
+      resources-url="taskFilesURL"
+      footer-text="{{task.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
+      [hidden]="notSubmitted(task) || task.processing_pdf">
+    </pdf-viewer-panel>
+  </div>
+</div>

@@ -25,10 +25,6 @@ export class TaskSubmissionViewerComponent implements OnInit {
     return (!task.has_pdf && (!task.processing_pdf))
   }
 
-  // loadingDetails(task): boolean {
-  //   return (task.needsSubmissionDetails())
-  // }
-
   ngOnChanges(changes: SimpleChanges): void {
     let newTask = changes.task.currentValue;
     newTask.getSubmissionDetails();
