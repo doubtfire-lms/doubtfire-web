@@ -88,7 +88,7 @@ import 'build/src/app/projects/states/states.js';
 import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
+// import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
@@ -285,6 +285,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -358,6 +359,8 @@ DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
+DoubtfireAngularJSModule.directive('taskAssessmentCard',
+  downgradeComponent({ component: TaskAssessmentCardComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

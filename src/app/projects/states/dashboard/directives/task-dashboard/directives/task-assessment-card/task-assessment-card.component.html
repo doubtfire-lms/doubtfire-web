@@ -1,10 +1,11 @@
+<h1>Hello world</h1>
 <div class="card card-default card-sm" [hidden]="!(task.definition.is_graded || task.definition.max_quality_pts > 0)">
     <div class="card-heading">
       <h4>Assessment Information</h4>
     </div>
     <div class="card-body">
       <div [hidden]="!task.definition.is_graded">
-        <h5>This task {{assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
+        <h5>This task {{task.assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
         <div [hidden]="hasBeenGraded(task)" >
           <p>
             This task will be graded against a grade standard. Your work will

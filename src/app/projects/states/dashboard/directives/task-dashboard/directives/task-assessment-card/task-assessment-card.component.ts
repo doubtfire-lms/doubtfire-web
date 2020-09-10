@@ -10,12 +10,12 @@ import {taskService,gradeService} from 'src/app/ajs-upgraded-providers'
 })
 export class TaskAssessmentCardComponent implements OnInit {
   @Input() task: any;
-
+  gradeNames: Array<string>;
   constructor(
     @Inject(taskService) private taskService: any,
     @Inject(gradeService) private gradeService: any
   ) { 
-     gradeNames: Array = gradeService.grades;
+     this.gradeNames = gradeService.grades;
   }
 
   ngOnInit(): void {
