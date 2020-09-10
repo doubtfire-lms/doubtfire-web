@@ -21,6 +21,7 @@ export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
+export const gradeService = new InjectionToken('gradeService');
 
 
 // Define a provider for the above injection token...
@@ -139,4 +140,9 @@ export const UnitStudentEnrolmentModalProvider = {
   deps: ['$injector']
 };
 
+export const gradeServiceProvider = {
+  provide: gradeService,
+  useFactory: (i: any) => i.get('gradeService'),
+  deps: ['$injector']
+};
 
