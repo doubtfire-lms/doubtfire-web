@@ -12,6 +12,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.calOptions = {
       startOpened: false
       endOpened: false
+      portfolioAutoGenerationOpened: false
     }
 
     # Get the confugurable, external name of Doubtfire
@@ -28,9 +29,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       if pickerData == 'start'
         $scope.calOptions.startOpened = ! $scope.calOptions.startOpened
         $scope.calOptions.endOpened = false
-      else
+        $scope.calOptions.portfolioAutoGenerationOpened = false
+      else if pickerData == 'end'
         $scope.calOptions.startOpened = false
         $scope.calOptions.endOpened = ! $scope.calOptions.endOpened
+        $scope.calOptions.portfolioAutoGenerationOpened = false
+      else if pickerData == 'autogen'
+        $scope.calOptions.startOpened = false
+        $scope.calOptions.endOpened = false
+        $scope.calOptions.portfolioAutoGenerationOpened = ! $scope.calOptions.portfolioAutoGenerationOpened
 
     $scope.dateOptions = {
       formatYear: 'yy',
@@ -57,6 +64,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_id: $scope.unit.draft_task_id
+        portfolio_auto_generation_date: $scope.unit.portfolio_auto_generation_date
       }
 
       if $scope.unit.teaching_period_id
