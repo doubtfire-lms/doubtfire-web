@@ -1,5 +1,6 @@
-import { OnInit } from '@angular/core';
+import { OnInit, Directive } from '@angular/core';
 
+@Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {
 
   protected mediaRecorder: any = null;
