@@ -291,7 +291,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   togglePin(task) {
-    console.log(task);
+    // console.log(task);
     // toggle the tasks pin for user
   }
 }
