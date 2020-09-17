@@ -191,7 +191,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (!this.isTaskDefMode) {
       return;
     }
-    let taskDef = this.unit.task_definitions.find({ abbreviation: taskKey?.taskDefAbbr }) || this.unit.task_definitions[0];
+    // let key = { abbreviation: taskKey?.taskDefAbbr }
+    let temp = this.unit.task_definitions.find(x => x.abbreviation === taskKey?.taskDefAbbr);
+    let taskDef = temp || this.unit.task_definitions[0];
     this.filters.taskDefinitionIdSelected = taskDef.id;
     this.filters.taskDefinition = taskDef;
   }
@@ -224,17 +226,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         // using new array of tasks loaded from the new taskKey
         if (!this.watchingTaskKey) {
           this.watchingTaskKey = true;
-          // TODO: Investigate
-          // listeners.push this.$watch 'taskData.taskKey', (newKey, oldKey) ->
-          // return if _.isEqual(newKey, oldKey) || !newKey ?
-          // // Task def mode and key assignment change ? Reload data with new key
-          // if this.isTaskDefMode && newKey.taskDefAbbr != oldKey?.taskDefAbbr
-          // setTaskDefFromTaskKey(this.taskData.taskKey)
-          // refreshData()
-          // else {
-          //   //  Set initial filters if not taskDefMode to set correct task def
-          //   this.setSelectedTask(findTaskForTaskKey(newKey))
-          // }
         }
       },
       (error) => { this.alertService.add('danger', error.data.error, 6000); }
