@@ -260,9 +260,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     return sameProject && sameTaskDef;
   }
 
-
-  // TODO: This
-  // $timeout openTaskDefs if this.isTaskDefMode
   nextTask(): void {
     const currentTaskIndex = this.filteredTasks.findIndex(task => this.isSelectedTask(task));
     if (currentTaskIndex >= this.filteredTasks.length) { return; }
@@ -282,7 +279,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   togglePin(task) {
-    // console.log(task);
     // toggle the tasks pin for user
   }
 }
