@@ -72,7 +72,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     this.userHasTutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name)?.length > 0;
 
     // Search option filters
-    this.filteredTasks = [];
+    // this.filteredTasks = [];
 
 
     this.filters = Object.assign({
@@ -127,7 +127,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     let filteredTasks = pipe1.transform(this.tasks, this.filters.taskDefinition);
     filteredTasks = pipe2.transform(filteredTasks, this.filters.tutorials);
     filteredTasks = pipe3.transform(filteredTasks, this.filters.studentName);
+
+
+    // this.filteredTasks = [].concat(...Array.from({ length: 300 }, () => filteredTasks));
+
     this.filteredTasks = filteredTasks;
+    // this.filteredTasks = Array(300).fill(this.filteredTasks);
 
     // Fix selected task.
     if (this.taskData.selectedTask && (filteredTasks.includes(this.taskData.selectedTask))) {

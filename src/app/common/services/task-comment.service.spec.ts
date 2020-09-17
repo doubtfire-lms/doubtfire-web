@@ -6,7 +6,7 @@ describe('TaskCommentService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: TaskCommentService = TestBed.get(TaskCommentService);
+    const service: TaskCommentService = TestBed.inject(TaskCommentService);
     expect(service).toBeTruthy();
   });
 });
