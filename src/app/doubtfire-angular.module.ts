@@ -111,7 +111,6 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
-import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/marked.pipe';

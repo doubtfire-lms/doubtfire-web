@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, OnInit } from '@angular/core';
 import { taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({

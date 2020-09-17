@@ -3,7 +3,7 @@ import { taskService, analyticsService, alertService } from 'src/app/ajs-upgrade
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Component({

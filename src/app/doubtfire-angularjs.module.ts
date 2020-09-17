@@ -279,7 +279,6 @@ import { StudentTutorialSelectComponent } from './units/states/edit/directives/u
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
-import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
@@ -351,8 +350,6 @@ DoubtfireAngularJSModule.directive('taskListItem',
   downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
   downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
-DoubtfireAngularJSModule.directive('statusIcon',
-  downgradeComponent({ component: StatusIconComponent }));
 
   // Global configuration
 DoubtfireAngularJSModule.directive('taskCommentsViewer',
