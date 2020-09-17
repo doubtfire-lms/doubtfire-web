@@ -57,6 +57,7 @@
     "bootstrap-sass": "~3.3.6",
     "codemirror": "^5.45.0",
     "core-js": "^2.5.4",
+    "d3": "^3.5.4",
     "es5-shim": "^4.5.12",
     "font-awesome": "~4.6.3",
     "jquery": "2.1.4",
