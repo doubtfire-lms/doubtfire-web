@@ -27,7 +27,7 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import { PopoverModule } from 'ngx-bootstrap';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
