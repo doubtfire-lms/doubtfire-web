@@ -50,6 +50,7 @@
 </mat-action-list>
 
 <form
+  [hidden]="!this.task"
   style="display: flex; width: 100%;"
   class="input-group col-sm-12 comment-submitter"
   ng-submit="addComment()"
