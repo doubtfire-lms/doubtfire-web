@@ -74,7 +74,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
-    const layoutChanges = this.breakpointObserver.observe('(max-width: 1200px)');
+    const layoutChanges = this.breakpointObserver.observe('(max-width: 1000px)');
 
     layoutChanges.subscribe((state: BreakpointState) => {
       this.isNarrow = state.matches;
