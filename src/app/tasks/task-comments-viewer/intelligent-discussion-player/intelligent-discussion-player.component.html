@@ -1,12 +1,12 @@
 <div class="comment-bubble discussion-comment-player">
   <mat-spinner [hidden]="!loading"></mat-spinner>
   <div [hidden]="loading">
-    <h3 id="discussion-title">
+    <h4 id="discussion-title">
       Discussion {{ discussion.status }}
       <mat-icon aria-label="discussion comment status"
         >question_answer</mat-icon
       >
-    </h3>
+    </h4>
     <mat-divider></mat-divider>
     <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
@@ -21,12 +21,6 @@
         class="audio-comment-container"
       >
         <audio-player #player></audio-player>
-        <!-- <mat-progress-bar
-          class="progress-bar-container"
-          mode="determinate"
-          [value]="audioProgress"
-        > -->
-        <!-- </mat-progress-bar> -->
         <mat-button-toggle-group value="response">
           <mat-button-toggle
             matTooltip="Plays the first discussion prompt"
