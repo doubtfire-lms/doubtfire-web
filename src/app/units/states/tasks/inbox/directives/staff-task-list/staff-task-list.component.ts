@@ -3,6 +3,7 @@ import { taskDefinition, Unit, currentUser, groupService, alertService } from 's
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from 'src/app/common/filters/tasks-with-student-name.pipe';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'staff-task-list',
@@ -19,6 +20,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() unitRole;
   @Input() filters;
   @Input() showSearchOptions = false;
+
+  isNarrow: boolean;
 
   submissionsPdfsUrl: string;
   submissionsUrl: string;
@@ -53,12 +56,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   constructor(
+    private breakpointObserver: BreakpointObserver,
     @Inject(taskDefinition) private taskDef,
     @Inject(Unit) private Unit,
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
-  ) { }
+  ) {
+
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ((changes.unit.currentValue.id) && ((changes.unit.previousValue.id !== changes.unit.currentValue.id)) || (this.tasks == null)) {
@@ -68,6 +74,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
+    const layoutChanges = this.breakpointObserver.observe('(max-width: 1200px)');
+
+    layoutChanges.subscribe((state: BreakpointState) => {
+      this.isNarrow = state.matches;
+    });
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name)?.length > 0;
 

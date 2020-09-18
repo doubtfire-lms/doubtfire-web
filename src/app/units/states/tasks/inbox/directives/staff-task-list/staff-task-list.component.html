@@ -1,5 +1,5 @@
-<div div fxLayout="column" fxLayoutAlign=" none" style="height: 100%;">
-  <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
+<div class="task-inbox" [ngClass]="isNarrow? 'narrow-width':'full-width'" div fxLayout="column" fxLayoutAlign="none">
+  <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }" [hidden]="isNarrow">
     <div fxLayout="row">
       <button mat-icon-button aria-label="Seach Icon" disabled>
         <mat-icon>search</mat-icon>
@@ -86,7 +86,7 @@
                 </mat-option>
               </mat-select>
               <mat-hint>
-                Display submissions of a specific task definition.
+                Display specific task definitions.
               </mat-hint>
             </mat-form-field>
           </div>
@@ -104,7 +104,7 @@
               </mat-option>
             </mat-select>
             <mat-hint>
-              Display submissions from all tutorials or just your tutorials.
+              Filter tutorials.
             </mat-hint>
           </mat-form-field>
 
@@ -151,7 +151,7 @@
               [size]="45"
             >
             </user-icon>
-            <div class="task-list-data truncate" fxFlex>
+            <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project().name }}</h4>
               <p class="mat-small">
                 {{ task.definition.abbreviation }} -
@@ -173,7 +173,7 @@
             </div>
             <!-- <span fxFlex></span> -->
             <!--/task-data-->
-            <div class="task-badges">
+            <div class="task-badges" [hidden]="isNarrow">
               <status-icon [status]="task.status"></status-icon>
               <span *ngIf="isSelectedTask(task)">
                 <span
@@ -191,7 +191,7 @@
                 </span>
               </span>
             </div>
-            <div class="overflow">
+            <div class="overflow" [hidden]="isNarrow">
               <button
                 [hidden]="task.hover"
                 mat-icon-button

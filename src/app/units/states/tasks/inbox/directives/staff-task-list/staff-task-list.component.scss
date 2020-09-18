@@ -2,7 +2,42 @@
 @import "../../../../../../../styles/mixins/scrollable.scss";
 // @include task-list();
 
+:host {
+  margin-right: 10px; 
+}
+
+.task-inbox.full-width
+{
+  max-width: 450px;
+  min-width: 450px;
+
+  .inbox-entry {
+    padding-right: 20px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 $warn-color: #dd6666;
+
+.task-inbox {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.task-inbox.narrow-width {
+  max-width: 60px;
+  width: 60px;
+  min-width: 60px;
+  margin: 0;
+
+  .inbox-entry {
+    padding-right: 0px;
+    width: 45px;
+    height: 100%;
+    padding-left: 5px;
+  }
+}
 
 .scrollable {
   height: 100%;
@@ -67,11 +102,7 @@ $warn-color: #dd6666;
   height: 35px;
 }
 
-.inbox-entry {
-  padding-right: 20px;
-  width: 100%;
-  height: 100%;
-}
+
 
 .full-width {
   width: 100%;
