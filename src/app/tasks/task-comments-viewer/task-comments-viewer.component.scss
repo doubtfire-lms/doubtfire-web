@@ -1,5 +1,11 @@
 @import '../../../styles/mixins/scrollable.scss';
 
+:host {
+  max-width: 450px;
+  width: 350px;
+  min-width: 300px;
+}
+
 $comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
