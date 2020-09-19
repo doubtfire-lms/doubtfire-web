@@ -2,11 +2,11 @@
 @import "../../../../../../../styles/mixins/scrollable.scss";
 
 :host {
-  --background-gray: rgba(0, 0, 0, 0.04); 
-  padding-right: 8px; 
-  border-right-color:rgba(0, 0, 0, 0.1);
-  border-right-style:solid;
-  border-right-width:1px;
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+  border-right-color: rgba(0, 0, 0, 0.1);
+  border-right-style: solid;
+  border-right-width: 1px;
 }
 
 .task-inbox.full-width {
@@ -112,8 +112,6 @@ $warn-color: #dd6666;
   height: 35px;
 }
 
-
-
 .full-width {
   width: 100%;
 }
@@ -195,6 +193,6 @@ user-icon {
 
   .mat-icon {
     font-size: 50px;
-    color:  rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.2);
   }
 }
