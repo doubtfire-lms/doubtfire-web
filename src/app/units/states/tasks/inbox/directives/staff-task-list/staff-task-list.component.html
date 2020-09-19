@@ -265,4 +265,7 @@
 <!-- Narrow width search dialog -->
 <ng-template #searchDialog >
   <ng-container *ngTemplateOutlet="OmnisearchTemplate;context:{collapsable:true}"></ng-container>
+  <div mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close] >OK</button>
+  </div>
 </ng-template>
