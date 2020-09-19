@@ -1,22 +1,12 @@
-<div
-  style="height: 100%;"
-  class="comments-panel"
-  appDragDrop
-  (onFileDropped)="uploadFiles($event)"
-  fxLayout="column"
->
+<div style="height: 100%" class="comments-panel" appDragDrop (onFileDropped)="uploadFiles($event)" fxLayout="column">
+  <!-- TODO: Redesign components when all are migrated in view -->
   <!-- <div fxFlex="50px" class="comments-header">
     <div class="mat-h2 header-text">
       Chat
     </div>
   </div> -->
   <div fxFlex class="comments-body">
-    <div
-      [hidden]="!loading"
-      style="height: 100%;"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-    >
+    <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
 
@@ -39,19 +29,14 @@
               'new-comment': comment.is_new
             }"
           >
-            <div
-              *ngIf="shouldShowAuthorIcon(comment.type)"
-              fxFlex="30px"
-              style="display: flex;"
-            >
+            <div *ngIf="shouldShowAuthorIcon(comment.type)" fxFlex="36px" style="display: flex">
               <user-icon
-                *ngIf="
-                  comment.should_show_avatar &&
-                  shouldShowAuthorIcon(comment.type)
-                "
-                [size]="32"
+                *ngIf="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)"
+                [size]="36"
                 [user]="comment.author"
                 [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
+                matTooltip="{{ comment.author.name }}"
+                matTooltipPosition="left"
               >
               </user-icon>
             </div>
@@ -69,47 +54,28 @@
                 >
                   <p class="reply-text">
                     <i class="fa fa-reply"></i>
-                    {{
-                      comment.original_comment
-                        ? comment.original_comment.comment
-                        : "comment removed"
-                    }}
+                    {{ comment.original_comment ? comment.original_comment.comment : 'comment removed' }}
                   </p>
                 </a>
                 <div *ngSwitchCase="'extension'" class="comment-extension">
-                  <extension-comment [task]="task" [comment]="comment">
-                  </extension-comment>
+                  <extension-comment [task]="task" [comment]="comment"> </extension-comment>
                 </div>
 
                 <div *ngSwitchCase="'text'" class="comment-text">
-                  <div
-                    class="markdown-to-html"
-                    [innerHTML]="comment.comment | marked"
-                  ></div>
+                  <div class="markdown-to-html" [innerHTML]="comment.comment | marked"></div>
                 </div>
 
                 <div *ngSwitchCase="'audio'" class="comment-audio">
-                  <audio-player
-                    [task]="task"
-                    [project]="project"
-                    [comment]="comment"
-                  ></audio-player>
+                  <audio-player [task]="task" [project]="project" [comment]="comment"></audio-player>
                 </div>
 
                 <div *ngSwitchCase="'discussion'" class="comment-discussion">
-                  <intelligent-discussion-player
-                    [task]="task"
-                    [discussion]="comment"
-                  ></intelligent-discussion-player>
+                  <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
                 </div>
 
                 <div *ngSwitchCase="'image'" class="comment-image">
                   <a (click)="openCommentsModal(comment)">
-                    <img
-                      [src]="getCommentAttachment(comment)"
-                      width="100%"
-                      height="100%"
-                    />
+                    <img [src]="getCommentAttachment(comment)" width="100%" height="100%" />
                   </a>
                 </div>
 
@@ -119,10 +85,7 @@
                   </a>
                 </div>
               </div>
-              <div
-                *ngIf="isBubbleComment(comment.type)"
-                class="comment-overflow"
-              >
+              <div *ngIf="isBubbleComment(comment.type)" class="comment-overflow">
                 <comment-bubble-action
                   [hidden]="!comment.hover"
                   [task]="task"
@@ -133,9 +96,7 @@
           </div>
           <div *ngIf="comment.last_read && shouldShowReadReceipt()" class="read-receipt">
             <user-icon
-              matTooltip="Read {{
-                comment.recipient_read_time | humanizedDate
-              }} by {{ comment.recipient.name }}"
+              matTooltip="Read {{ comment.recipient_read_time | humanizedDate }} by {{ comment.recipient.name }}"
               matTooltipPosition="above"
               size="22"
               [user]="comment.recipient"

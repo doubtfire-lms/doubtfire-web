@@ -168,14 +168,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     this.filteredTasks = filteredTasks;
 
     // Fix selected task.
-    if (this.taskData.selectedTask && filteredTasks.includes(this.taskData.selectedTask)) {
+    if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
       this.setSelectedTask(null);
     }
   }
 
   openTaskDefs() {
     // Automatically "open" the task definition select element if in task def mode
-    // TODO: Remove any here
     const selectEl: any = document.querySelector('select[ng-model="filters.taskDefinitionIdSelected"]') as any;
     selectEl.size = 10;
     selectEl.focus();
@@ -220,7 +219,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   private setTaskDefFromTaskKey(taskKey) {
-    //  Only applicable in taskDefMode
+    // Only applicable in taskDefMode
     if (!this.isTaskDefMode) {
       return;
     }
@@ -230,12 +229,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     this.filters.taskDefinition = taskDef;
   }
 
-  // # Finds a task (or null) given its task key
+  // Finds a task (or null) given its task key
   private findTaskForTaskKey(key) {
     this.tasks.find((t) => t.hasTaskKey(key));
   }
 
-  //  Callback to refresh data from the task source
+  // Callback to refresh data from the task source
   private refreshData() {
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
@@ -248,14 +247,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
           const unstartedTasks = this.unit.fillWithUnStartedTasks(this.tasks, this.filters.taskDefinitionIdSelected);
           Object.assign(this.tasks, unstartedTasks);
         }
-        //  Apply initial filters
+        // Apply initial filters
         this.applyFilters();
         this.loading = false;
         // Load initial set task, either the one provided(by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
         const task = this.findTaskForTaskKey(this.taskData.taskKey);
-        // $timeout((-> this.setSelectedTask(task)), 500);
         this.setSelectedTask(task);
         // For when URL has been manually changed, set the selected task
         // using new array of tasks loaded from the new taskKey
@@ -299,9 +297,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const sameProject = this.taskData.selectedTask?.project().project_id === task.project().project_id;
     const sameTaskDef = this.taskData.selectedTask?.task_definition_id === task.task_definition_id;
     return sameProject && sameTaskDef;
-    // console.log(this.taskData.selectedTask);
-    // console.trace(result)
-    // return result;
   }
 
   nextTask(): void {
