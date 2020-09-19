@@ -148,8 +148,7 @@
           style="width: 100%"
           id="{{ task.taskKeyToIdString() }}"
           *ngIf="task"
-          class="item-content {{ task.statusClass() }}"
-          [ngClass]="{ selected: isSelectedTask(task) }"
+          [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }"
         >
           <div
             (click)="setSelectedTask(task)"
