@@ -16,3 +16,4 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-learnin
       $scope.projectHasDraftLearningSummaryReport = false
       $scope.acceptUploadNewLearningSummary = false
       $scope.forceLSRSubmit = false
+)
