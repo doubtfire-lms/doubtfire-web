@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from 'src/app/common/filters/tasks-with-student-name.pipe';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'staff-task-list',
@@ -11,6 +12,8 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
   styleUrls: ['./staff-task-list.component.scss']
 })
 export class StaffTaskListComponent implements OnInit, OnChanges {
+
+  @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
 
   @Input() task: any;
   @Input() project: any;
@@ -62,6 +65,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
+    public dialog: MatDialog
   ) {
 
   }
@@ -124,6 +128,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(this.searchDialog);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   refreshTasks(): void {
