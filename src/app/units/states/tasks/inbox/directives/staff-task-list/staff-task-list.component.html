@@ -22,7 +22,7 @@
         />
       </mat-form-field>
       <button
-        *ngIf="!collapsable"
+        *ngIf="collapsable"
         matTooltip="Filter options"
         matTooltipPosition="above"
         mat-icon-button
@@ -50,7 +50,7 @@
         class="search-settings-panel mat-elevation-z0"
         disabled
         hideToggle
-        [expanded]=" collapsable || showSearchOptions"
+        [expanded]="!collapsable || showSearchOptions"
       >
         <form class="search-options">
           <div class="task-definition">
@@ -125,7 +125,7 @@
   </div>
 
   <div [hidden]="isNarrow">
-    <ng-container *ngTemplateOutlet="OmnisearchTemplate;context:{collapsable:false}" ></ng-container>
+    <ng-container *ngTemplateOutlet="OmnisearchTemplate;context:{collapsable:true}" ></ng-container>
   </div>
   
 
@@ -264,7 +264,7 @@
 
 <!-- Narrow width search dialog -->
 <ng-template #searchDialog >
-  <ng-container *ngTemplateOutlet="OmnisearchTemplate;context:{collapsable:true}"></ng-container>
+  <ng-container *ngTemplateOutlet="OmnisearchTemplate;context:{collapsable:false}"></ng-container>
   <div mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close] >OK</button>
   </div>
