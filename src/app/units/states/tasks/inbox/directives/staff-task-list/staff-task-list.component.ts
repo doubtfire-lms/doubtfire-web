@@ -36,6 +36,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   watchingTaskKey: any;
 
   panelOpenState = false;
+  loading = true;
 
   isTaskDefMode: boolean;
   // Let's call having a source of tasksForDefinition plus having a task definition
@@ -85,10 +86,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     });
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name)?.length > 0;
-
-    // Search option filters
-    // this.filteredTasks = [];
-
 
     this.filters = Object.assign({
       studentName: null,
@@ -234,6 +231,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         }
         //  Apply initial filters
         this.applyFilters();
+        this.loading = false;
         // Load initial set task, either the one provided(by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
