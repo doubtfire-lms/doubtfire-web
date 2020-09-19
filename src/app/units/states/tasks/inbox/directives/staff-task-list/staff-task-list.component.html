@@ -130,7 +130,7 @@
     <mat-icon>hourglass_bottom</mat-icon>
   </div>
 
-  <div class="center-task-list" [hidden]="filteredTasks?.length !== 0 || isNarrow">
+  <div class="center-task-list" [hidden]="loading || filteredTasks?.length !== 0 || isNarrow">
     <mat-icon>done_all</mat-icon>
   </div>
 
