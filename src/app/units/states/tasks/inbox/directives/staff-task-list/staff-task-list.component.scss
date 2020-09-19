@@ -2,6 +2,7 @@
 @import "../../../../../../../styles/mixins/scrollable.scss";
 
 :host {
+  --background-gray: rgba(0, 0, 0, 0.04); 
   padding-right: 8px; 
   border-right-color:rgba(0, 0, 0, 0.1);
   border-right-style:solid;
@@ -49,13 +50,13 @@ $warn-color: #dd6666;
   border-radius: 40px;
   width: 40px;
   height: 40px;
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--background-gray);
   align-self: center;
 }
 
 .omnisearch {
   border-radius: 1em;
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--background-gray);
   font-size: 15px;
   min-height: 36px;
   max-height: 220px;
@@ -163,7 +164,7 @@ user-icon {
 }
 
 .mat-list-item .item-content.selected {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--background-gray);
   height: 100px;
 }
 
@@ -187,10 +188,13 @@ user-icon {
   height: 100%;
 }
 
-#empty-task-inbox {
-  width: 50%;
+.center-task-list {
+  align-self: center;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(50%);
+  top: calc(50% + 40px);
+
+  .mat-icon {
+    font-size: 50px;
+    color:  rgba(0, 0, 0, 0.2);
+  }
 }
