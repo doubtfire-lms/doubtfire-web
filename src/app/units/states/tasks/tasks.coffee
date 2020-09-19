@@ -1,6 +1,5 @@
 angular.module('doubtfire.units.states.tasks', [
   'doubtfire.units.states.tasks.inbox'
-  'doubtfire.units.states.tasks.feedback'
   'doubtfire.units.states.tasks.definition'
   'doubtfire.units.states.tasks.offline'
   'doubtfire.units.states.tasks.viewer'

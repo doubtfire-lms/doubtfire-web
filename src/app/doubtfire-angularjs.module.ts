@@ -144,7 +144,6 @@ import 'build/src/app/units/states/plagiarism/plagiarism.js';
 import 'build/src/app/units/states/tasks/inbox/directives/directives.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
-import 'build/src/app/units/states/tasks/feedback/feedback.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
 import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';

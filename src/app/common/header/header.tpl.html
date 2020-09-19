@@ -41,9 +41,6 @@
                 <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/feedback({unitId: project.unit_id})">Give Student Feedback</a>
-              </li>
-              <li>
                 <a ui-sref="units/tasks/definition({unitId: project.unit_id})">Mark By Definition</a>
               </li>
               <li>
@@ -100,9 +97,6 @@
             <ul class="dropdown-menu dropdown-tasks" dropdown-menu ng-if="unitRole">
               <li>
                 <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task Inbox</a>
-              </li>
-              <li>
-                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Give Student Feedback</a>
               </li>
               <li>
                 <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark By Definition</a>
