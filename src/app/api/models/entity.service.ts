@@ -6,13 +6,17 @@ import API_URL from '../../config/constants/apiURL';
 import { Injectable } from '@angular/core';
 
 export interface HttpOptions {
-  headers?: HttpHeaders | {
-    [header: string]: string | string[];
-  };
+  headers?:
+    | HttpHeaders
+    | {
+        [header: string]: string | string[];
+      };
   observe?: 'body';
-  params?: HttpParams | {
-    [param: string]: string | string[];
-  };
+  params?:
+    | HttpParams
+    | {
+        [param: string]: string | string[];
+      };
   reportProgress?: boolean;
   responseType?: 'json';
   withCredentials?: boolean;
@@ -23,13 +27,7 @@ export interface HttpOptions {
  * all resources which inherit form it.
  */
 @Injectable()
-export abstract class EntityService<T extends Entity>  {
-
-  abstract entityName: string;
-  get serverKey(): string {
-    return this.entityName.replace(/(.)([A-Z][a-z]+)/, '$1_$2').replace(/([a-z0-9])([A-Z])/, '$1_$2').toLowerCase();
-  }
-
+export abstract class EntityService<T extends Entity> {
   /**
    * Provide a string template for the endpoint URLs in the format
    * 'path/to/:id1:/other/:id2:' where ':id1:' and ':id2:' are placeholders for id values
@@ -42,8 +40,15 @@ export abstract class EntityService<T extends Entity>  {
    */
   protected abstract readonly endpointFormat: string;
 
-  constructor(private httpClient: HttpClient) {
+  abstract entityName: string;
+  get serverKey(): string {
+    return this.entityName
+      .replace(/(.)([A-Z][a-z]+)/, '$1_$2')
+      .replace(/([a-z0-9])([A-Z])/, '$1_$2')
+      .toLowerCase();
   }
+
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Helper function to convert end point format strings to final path
@@ -52,13 +57,13 @@ export abstract class EntityService<T extends Entity>  {
    * @param object the object to get id values from for the placeholder.
    * @returns {string} The endpoint.
    */
-  private buildEndpoint(path: string, object?: Object): string {
+  private buildEndpoint(path: string, object?: object): string {
     // Replace any keys with provided values
     if (object) {
       for (const key in object) {
         if (object.hasOwnProperty(key)) {
           // If the key is undefined, just replace with an empty string.
-          path = path.replace(`:${key}:`, (object[key] ? object[key] : ''));
+          path = path.replace(`:${key}:`, object[key] ? object[key] : '');
         }
       }
     }
@@ -84,32 +89,29 @@ export abstract class EntityService<T extends Entity>  {
    *                resulting from this get request.
    * @param options Optional http options
    */
-  public get(pathIds: number, other?: any, options?: HttpOptions): Observable<T>;
-  public get(pathIds: object, other?: any, options?: HttpOptions): Observable<T>;
+  public get(pathIds: number | object, other?: any, options?: HttpOptions): Observable<T>;
   public get(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
-    let object = { ...pathIds };
+    const object = { ...pathIds };
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
     }
     const path = this.buildEndpoint(this.endpointFormat, object);
 
-    return this.httpClient.get(path, options)
-      .pipe(map(rawData => this.createInstanceFrom(rawData, other)));  // Turn the raw JSON returned into the object T
+    return this.httpClient.get(path, options).pipe(map((rawData) => this.createInstanceFrom(rawData, other))); // Turn the raw JSON returned into the object T
   }
 
   /**
- * Make a query request (get all) to the end point, using the supplied parameters to determine path.
- *
- * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
- * @param options Optional http options
- * @returns {Observable} a new cold observable
- */
-  public query(pathIds?: Object, options?: HttpOptions): Observable<T[]> {
+   * Make a query request (get all) to the end point, using the supplied parameters to determine path.
+   *
+   * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
+   * @param options Optional http options
+   * @returns {Observable} a new cold observable
+   */
+  public query(pathIds?: object, options?: HttpOptions): Observable<T[]> {
     const path = this.buildEndpoint(this.endpointFormat, pathIds);
-    return this.httpClient.get(path, options)
-      .pipe(
-        map(rawData => this.convertCollection(rawData instanceof Array ? rawData : [rawData]))
-      );
+    return this.httpClient
+      .get(path, options)
+      .pipe(map((rawData) => this.convertCollection(rawData instanceof Array ? rawData : [rawData])));
   }
 
   /**
@@ -119,9 +121,10 @@ export abstract class EntityService<T extends Entity>  {
    * @param options Optional http options
    */
   public update(obj: T, options?: HttpOptions): Observable<T> {
-    return this.put<Object>(obj, options).pipe(
-      map(rawData => {
-        obj.updateFromJson(rawData); return obj;
+    return this.put<object>(obj, options).pipe(
+      map((rawData) => {
+        obj.updateFromJson(rawData);
+        return obj;
       })
     );
   }
@@ -134,10 +137,10 @@ export abstract class EntityService<T extends Entity>  {
    * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
    * @param options Optional http options
    */
-  public put<S>(pathIds: Object, options?: HttpOptions): Observable<S>;
+  public put<S>(pathIds: object, options?: HttpOptions): Observable<S>;
   public put<S>(pathIds: any, options?: HttpOptions): Observable<S> {
-    let object = { ...pathIds };
-    const json = (typeof pathIds === 'object') ? pathIds.toJson() : pathIds;
+    const object = { ...pathIds };
+    const json = typeof pathIds === 'object' ? pathIds.toJson() : pathIds;
     const path = this.buildEndpoint(this.endpointFormat, object);
 
     return this.httpClient.put(path, json, options) as Observable<S>;
@@ -151,15 +154,12 @@ export abstract class EntityService<T extends Entity>  {
    * @param options Optional http options
    * @returns {Observable} a new cold observable with the newly created @type {T}
    */
-  public create(pathIds?: Object, other?: any, options?: HttpOptions): Observable<T>;
+  public create(pathIds?: object, other?: any, options?: HttpOptions): Observable<T>;
   public create(pathIds?: any, other?: any, options?: HttpOptions): Observable<T> {
-    let object = { ...pathIds };
-    const json = (typeof pathIds.toJson === 'function') ? pathIds.toJson() : pathIds;
+    const object = { ...pathIds };
+    const json = typeof pathIds.toJson === 'function' ? pathIds.toJson() : pathIds;
     const path = this.buildEndpoint(this.endpointFormat, object);
-    return this.httpClient.post(path, json, options)
-      .pipe(
-        map(rawData => this.createInstanceFrom(rawData, other))
-      );
+    return this.httpClient.post(path, json, options).pipe(map((rawData) => this.createInstanceFrom(rawData, other)));
   }
 
   /**
@@ -171,19 +171,16 @@ export abstract class EntityService<T extends Entity>  {
    *                this delete request.
    * @param options Optional http options
    */
-  public delete(pathIds: number, other?: any, options?: HttpOptions): Observable<T>;
-  public delete(pathIds: Object, other?: any, options?: HttpOptions): Observable<T>;
+  public delete(pathIds: number | object, other?: any, options?: HttpOptions): Observable<T>;
   public delete(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
-    let object = { ...pathIds };
+    const object = { ...pathIds };
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
     }
     const path = this.buildEndpoint(this.endpointFormat, object);
 
-    return this.httpClient.delete(path, options)
-      .pipe(map(rawData => this.createInstanceFrom(rawData, other)));
+    return this.httpClient.delete(path, options).pipe(map((rawData) => this.createInstanceFrom(rawData, other)));
   }
-
 
   /**
    * Instantiates an array of elements as objects from the JSON returned
@@ -202,5 +199,4 @@ export abstract class EntityService<T extends Entity>  {
    * @returns string containing the unique key value
    */
   public abstract keyForJson(json: any): string;
-
 }
