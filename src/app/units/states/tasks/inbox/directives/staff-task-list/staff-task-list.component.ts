@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewEncapsulation, HostListener, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
@@ -150,12 +150,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     let filteredTasks = pipe1.transform(this.tasks, this.filters.taskDefinition);
     filteredTasks = pipe2.transform(filteredTasks, this.filters.tutorials);
     filteredTasks = pipe3.transform(filteredTasks, this.filters.studentName);
-
-
-    // this.filteredTasks = [].concat(...Array.from({ length: 300 }, () => filteredTasks));
-
     this.filteredTasks = filteredTasks;
-    // this.filteredTasks = Array(300).fill(this.filteredTasks);
 
     // Fix selected task.
     if (this.taskData.selectedTask && (filteredTasks.includes(this.taskData.selectedTask))) {
@@ -274,13 +269,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (!funcName) {
       return;
     }
-    taskEl[funcName]({ behavior: 'smooth', block: 'top' })
+    taskEl[funcName]({ behavior: 'smooth', block: 'top' });
   }
 
   isSelectedTask(task) {
     let sameProject = this.taskData.selectedTask?.project().project_id === task.project().project_id;
     let sameTaskDef = this.taskData.selectedTask?.task_definition_id === task.task_definition_id;
     return sameProject && sameTaskDef;
+    // console.log(this.taskData.selectedTask);
+    // console.trace(result)
+    // return result;
   }
 
   nextTask(): void {
