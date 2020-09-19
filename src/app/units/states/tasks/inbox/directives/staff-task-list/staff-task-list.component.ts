@@ -244,6 +244,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         this.tasks = this.unit.incorporateTasks(response, this.applyFilters.bind(this));
         // If loading via task definitions, fill
         if (this.isTaskDefMode) {
+          // Filter out any empty tasks
+          // TODO: need to investigate how these are getting here.
+          this.tasks = this.tasks.filter((n) => n);
           const unstartedTasks = this.unit.fillWithUnStartedTasks(this.tasks, this.filters.taskDefinitionIdSelected);
           Object.assign(this.tasks, unstartedTasks);
         }

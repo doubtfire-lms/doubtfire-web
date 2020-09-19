@@ -286,8 +286,7 @@ angular.module("doubtfire.common.services.units", [])
       # Now fill for the students in the unit
       _.map unit.students, (p) ->
         t = _.find tasks, (t) ->
-          if t?
-            t.project_id == p.project_id && t.task_definition_id == taskDef.id
+          t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
           t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
         # If a group task but group data not loaded, go fetch it
