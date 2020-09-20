@@ -12,7 +12,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
     @Inject(taskService) private ts: any,
-    @Inject(alertService) private alerts: any,
+    @Inject(alertService) private alerts: any
   ) {
     super(mediaRecorderService);
   }
@@ -24,24 +24,27 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
 
   init(): void {
     super.init();
-    this.canvas = <HTMLCanvasElement>document.getElementById('audio-recorder-visualiser');
-    this.audio = <HTMLAudioElement>document.getElementById('audioPlayer');
+    this.canvas = document.getElementById('audio-recorder-visualiser') as HTMLCanvasElement;
+    this.audio = document.getElementById('audioPlayer') as HTMLAudioElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
   sendRecording(): void {
     this.isSending = true;
     if (this.blob && this.blob.size > 0) {
-      this.ts.addMediaComment(this.task, this.blob,
+      this.ts.addMediaComment(
+        this.task,
+        this.blob,
         () => {
           this.ts.scrollDown();
           this.isSending = false;
         },
-        (failure: { data: { error: any; }; }) => {
-          this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+        (failure: { data: { error: any } }) => {
+          this.alerts.add('danger', `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`);
           this.isSending = false;
-        });
-      this.blob = <Blob>{};
+        }
+      );
+      this.blob = {} as Blob;
       this.recordingAvailable = false;
       this.ts.scrollDown();
     }

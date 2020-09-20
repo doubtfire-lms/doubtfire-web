@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StaffTaskListComponent } from './staff-task-list.component';
 
@@ -6,12 +6,13 @@ describe('StaffTaskListComponent', () => {
   let component: StaffTaskListComponent;
   let fixture: ComponentFixture<StaffTaskListComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ StaffTaskListComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [StaffTaskListComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StaffTaskListComponent);

@@ -1,9 +1,9 @@
 import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[appDragDrop]'
-}) export class DragDropDirective {
-
+  selector: '[appDragDrop]',
+})
+export class DragDropDirective {
   @Output() onFileDropped = new EventEmitter<any>();
 
   // @HostBinding('style.background-color') private background = '#f5fcff';
@@ -31,10 +31,9 @@ import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@ang
     evt.stopPropagation();
     // this.background = '#f5fcff';
     // this.opacity = '1';
-    let files = evt.dataTransfer.files;
+    const files = evt.dataTransfer.files;
     if (files.length > 0) {
       this.onFileDropped.emit(files);
     }
   }
-
 }

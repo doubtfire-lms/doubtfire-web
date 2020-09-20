@@ -6,14 +6,16 @@ import * as moment from 'moment';
 @Component({
   selector: 'extension-modal',
   templateUrl: './extension-modal.component.html',
-  styleUrls: ['./extension-modal.component.scss']
+  styleUrls: ['./extension-modal.component.scss'],
 })
 export class ExtensionModalComponent implements OnInit {
   weeksRequested: number;
   reason: string = '';
-  constructor(public dialogRef: MatDialogRef<ExtensionModalComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<ExtensionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Inject(alertService) private alerts: any, ) { }
+    @Inject(alertService) private alerts: any
+  ) {}
 
   ngOnInit() {
     this.weeksRequested = this.minWeeksCanExtend + 1;
@@ -40,16 +42,18 @@ export class ExtensionModalComponent implements OnInit {
   }
 
   submitApplication() {
-    this.data.task.applyForExtension(this.reason, this.weeksRequested,
+    this.data.task.applyForExtension(
+      this.reason,
+      this.weeksRequested,
       ((result) => {
         this.alerts.add('success', 'Extension requested.', 2000);
         this.data.task.comments.push(result.data);
         this.data.task.scrollCommentsToBottom();
-        if (this.data.afterApplication as Function) {
+        if (typeof this.data.afterApplication === 'function') {
           this.data.afterApplication();
         }
       }).bind(this),
-      (error) => this.alerts.add('danger', 'Error ' + error.data.error));
+      (error) => this.alerts.add('danger', 'Error ' + error.data.error)
+    );
   }
-
 }

@@ -9,9 +9,7 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;
 
-  constructor(
-    @Inject(audioRecorderService) mediaRecorderService: any,
-  ) {
+  constructor(@Inject(audioRecorderService) mediaRecorderService: any) {
     super(mediaRecorderService);
   }
 
@@ -22,15 +20,14 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
   }
 
   // We need to override default behaviour of the parent class.
-  ngOnInit() { }
+  ngOnInit() {}
 
   init(): void {
     super.init();
-    this.canvas = <HTMLCanvasElement>document.getElementById('micTesterVisualiser');
-    this.audio = <HTMLAudioElement>document.getElementById('micTesterAudioPlayer');
+    this.canvas = document.getElementById('micTesterVisualiser') as HTMLCanvasElement;
+    this.audio = document.getElementById('micTesterAudioPlayer') as HTMLAudioElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  sendRecording(): void {
-  }
+  sendRecording(): void {}
 }
