@@ -89,7 +89,7 @@ import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/pr
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.js';
+//import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
@@ -261,7 +261,7 @@ import 'build/src/i18n/resources-locale_en-US.js';
 import 'build/src/i18n/resources-locale_en-AU.js';
 import 'build/src/i18n/resources-locale_en-GB.js';
 //#endregion
-
+import { TaskPlagiarismCardComponent } from 'src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -303,7 +303,7 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.visualisations']);
 
 // Downgrade angular modules that we need...
-// factory -> service
+// factory -> service 
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
   downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory('DoubtfireConstants',
@@ -352,6 +352,8 @@ DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
   downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
 DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
+DoubtfireAngularJSModule.directive('taskPlagiarismCard',
+  downgradeComponent({ component: TaskPlagiarismCardComponent }));
 
   // Global configuration
 
