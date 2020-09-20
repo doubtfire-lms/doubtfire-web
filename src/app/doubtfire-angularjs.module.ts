@@ -48,7 +48,6 @@ import 'build/src/app/home/states/home/home.js';
 import 'build/src/app/home/states/new-user-wizard/new-user-wizard.js';
 import 'build/src/app/home/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
-import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
@@ -286,6 +285,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskStatusSelectorComponent } from './tasks/task-status-selector/task-status-selector.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -359,6 +359,9 @@ DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
+
+  DoubtfireAngularJSModule.directive('taskStatusSelector',
+  downgradeComponent({ component: TaskStatusSelectorComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
