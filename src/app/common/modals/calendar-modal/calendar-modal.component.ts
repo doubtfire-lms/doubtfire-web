@@ -29,12 +29,18 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   webcal: Webcal | null;
   working: boolean = false;
 
+  // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
+  // because they are resettable.
+  newReminderActive: boolean = false;
+  newReminderTime: number | null = null;
+  newReminderUnit: string | null = null;
+
   ngOnInit() {
     // Retrieve current webcal.
     this.working = true;
     this.webcalService.get({}).subscribe(
       (webcal) => {
-        this.webcal = webcal;
+        this.loadWebcal(webcal);
         this.working = false;
       }
     );
@@ -54,14 +60,14 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Invoked when the user clicks the
+   * Invoked when the user toggles the webcal.
    */
   onWebcalToggle() {
     this.working = true;
     this.webcalService.updateWebcal({
       enabled: !this.webcalToggle.checked,
     }).subscribe((webcal) => {
-      this.webcal = webcal;
+      this.loadWebcal(webcal);
       this.working = false;
     });
   }
@@ -82,9 +88,70 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService.updateWebcal({
       should_change_guid: true,
     }).subscribe((webcal) => {
-      this.webcal = webcal;
+      this.loadWebcal(webcal);
       this.working = false;
     })
+  }
+
+  /**
+   * Invoked when the user toggles the "has reminder" option.
+   */
+  onToggleReminderActive() {
+
+    // If the option is enabled...
+    if (this.newReminderActive) {
+
+      // ...and a reminder doesn't exist already, default it to 1 week, but don't save the value yet.
+      if (!this.webcal.reminder) {
+        this.newReminderTime = 1;
+        this.newReminderUnit = 'W';
+      }
+
+    // If the option is disabled...
+    } else {
+
+      // ...and a reminder does exist, make backend request to remove it.
+      if (this.webcal.reminder) {
+        this.working = true;
+        this.webcalService.updateWebcal({
+          reminder: null,
+        }).subscribe((webcal) => {
+          this.loadWebcal(webcal);
+          this.working = false;
+        })
+
+      // ...otherwise, reset.
+      } else {
+        this.loadWebcal(this.webcal);
+      }
+    }
+  }
+
+  /**
+   * Invoked when the user saves the edited reminder time & unit.
+   */
+  onSaveReminderEdits() {
+    if (this.newReminderTime > 0) {
+      this.working = true;
+      this.webcalService.updateWebcal({
+        reminder: {
+          time: this.newReminderTime,
+          unit: this.newReminderUnit,
+        },
+      }).subscribe((webcal) => {
+        this.loadWebcal(webcal);
+        this.working = false;
+      })
+    } else {
+      this.alerts.add('danger', 'Please specify a valid reminder time', 2000);
+    }
+  }
+
+  /**
+   * Invoked when the user cancels their edits to the reminder option, reverting the webcal to its original state.
+   */
+  onCancelReminderEdits() {
+    this.loadWebcal(this.webcal);
   }
 
   /**
@@ -95,7 +162,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService.updateWebcal({
       include_start_dates: !this.webcal.include_start_dates,
     }).subscribe((webcal) => {
-      this.webcal = webcal;
+      this.loadWebcal(webcal);
       this.working = false;
     });;
   }
@@ -105,5 +172,22 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   bypass(url: string): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  /**
+   * Resets the state of this modal according to match the specified webcal.
+   */
+  private loadWebcal(webcal: Webcal) {
+    this.webcal = webcal;
+    if (webcal) {
+      if (webcal.reminder) {
+        this.newReminderActive = true;
+        this.newReminderTime = webcal.reminder.time;
+        this.newReminderUnit = webcal.reminder.unit;
+      } else {
+        this.newReminderActive = false;
+        this.newReminderTime = this.newReminderUnit = null;
+      }
+    }
   }
 }

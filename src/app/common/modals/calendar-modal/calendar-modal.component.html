@@ -1,6 +1,5 @@
 <div class="calendar-modal-component mat-typography">
 
-  <!-- Dialog header -->
   <div class="d-flex d-flex-row">
     <div class="d-flex-grow">
       <h2 mat-dialog-title>Web calendar</h2>
@@ -13,24 +12,24 @@
       [disabled]="working"
       (click)="onWebcalToggle()">
     </mat-slide-toggle>
-  </div>
+  </div><!--/header-->
 
-  <!-- Dialog content -->
   <div mat-dialog-content>
 
     <small>Your web calendar is currently {{ webcal ? 'enabled' : 'disabled' }}.</small>
 
     <div *ngIf="!webcal">
       <p>
-        The web calendar displays due dates of your tasks in an iCalendar that can be added to any iCalendar client
-        (e.g. Outlook/Google/iCloud calendar).
+        The web calendar displays due dates of your tasks as calendar events in an iCalendar that can be added to any
+        iCalendar client (e.g. Outlook/Google/iCloud calendar).
       </p>
-    </div>
+    </div><!--/content-when-webcal-absent-->
 
     <div *ngIf="webcal">
+
       <p>
-        Use the following URL to subscribe to your web calendar from your iCalendar client (e.g. Outlook/Google/iCloud
-        Calendar).
+        The web calendar displays due dates of your tasks as calendar events. Use the following URL to subscribe to your
+        web calendar from your iCalendar client.
       </p>
       <div class="d-flex d-flex-row">
         <div class="d-flex-grow webcal-url-container">
@@ -54,16 +53,73 @@
             <mat-icon>refresh</mat-icon>
           </button>
         </div>
-      </div>
+      </div><!--/webcal-url-->
+
       <mat-card class="webcal-options-card">
-        <h3>Options</h3>
+        <h3 style="margin-bottom: 0;">Options</h3>
+
+        <mat-checkbox
+          [(ngModel)]="newReminderActive"
+          (change)="onToggleReminderActive()"
+          [disabled]="working">
+          Remind me
+        </mat-checkbox>
+        <mat-form-field style="width: 5em; margin-left: 1em">
+          <mat-label>Time</mat-label>
+          <input matInput
+            type="number"
+            min="1"
+            [(ngModel)]="newReminderTime"
+            [disabled]="working || !newReminderActive">
+        </mat-form-field>
+        <mat-form-field style="width: 7em; margin-left: 1em">
+          <mat-label>Unit</mat-label>
+          <mat-select
+            [(ngModel)]="newReminderUnit"
+            [disabled]="working || !newReminderActive">
+            <mat-option value="W">Weeks</mat-option>
+            <mat-option value="D">Days</mat-option>
+            <mat-option value="H">Hours</mat-option>
+            <mat-option value="M">Minutes</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span style="margin-left: 1em; font-weight: bold">before each event</span>
+        <!--
+          Show controls to save & cancel reminder edits only if the user enables the reminder option when it was
+          previously disabled, or edits the time & unit of the reminder that previously exits.
+        -->
+        <ng-container *ngIf="(!webcal.reminder && newReminderActive) || (webcal.reminder && (newReminderTime !== webcal.reminder.time || newReminderUnit !== webcal.reminder.unit))">
+          <button mat-icon-button
+            matTooltip="Save changes"
+            matTooltipPosition="above"
+            style="margin-left: 1em"
+            color="primary"
+            [disabled]="working"
+            (click)="onSaveReminderEdits()">
+            <mat-icon>save</mat-icon>
+          </button>
+          <button mat-icon-button
+            matTooltip="Cancel"
+            matTooltipPosition="above"
+            [disabled]="working"
+            (click)="onCancelReminderEdits()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-container><!--/reminder-option-->
+
+        <br>
+
         <mat-checkbox
           [checked]="webcal.include_start_dates"
           [disabled]="working"
           (change)="toggleIncludeTaskStartDates()">
             Include task start dates in web calendar
-        </mat-checkbox>
-      </mat-card>
-    </div>
-  </div>
+        </mat-checkbox><!--/include-start-dates-option-->
+
+      </mat-card><!--/webcal-options-->
+
+    </div><!--/content-when-webcal-exists-->
+
+  </div><!--/content-->
+
 </div>

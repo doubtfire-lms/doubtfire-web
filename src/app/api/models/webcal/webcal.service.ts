@@ -9,6 +9,10 @@ interface WebcalUpdateParams {
   enabled?: boolean;
   should_change_guid?: boolean;
   include_start_dates?: boolean;
+  reminder?: null | {
+    time: number;
+    unit: string;
+  };
 }
 
 @Injectable()
