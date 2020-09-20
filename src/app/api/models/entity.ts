@@ -30,7 +30,7 @@ export abstract class Entity {
    *
    * @param initialData An optional object storing the data to initialise the Entity with, calls @method updateFromJson with the data.
    */
-  constructor(initialData?: Object
+  constructor(initialData?: object
   ) {
     if (initialData) {
       this.updateFromJson(initialData);
@@ -62,7 +62,7 @@ export abstract class Entity {
    *              specific values from the json where a straight data copy is not
    *              appropriate/possible.
    */
-  protected setFromJson(data: any, keys: string[], ignoredKeys?: string[], maps?: Object): void {
+  protected setFromJson(data: any, keys: string[], ignoredKeys?: string[], maps?: object): void {
     keys.forEach(key => {
       if (maps && maps[key]) {
         this[key] = maps[key](data[key]);
@@ -91,8 +91,8 @@ export abstract class Entity {
    *              specific values from the entity where a straight data copy is not
    *              appropriate/possible.
    */
-  protected toJsonWithKeys(keys: string[], maps?: Object): Object {
-    let json: Object = {};
+  protected toJsonWithKeys(keys: string[], maps?: object): object {
+    let json: object = {};
     keys.forEach(key => {
       if (maps && maps[key]) {
         json[key] = maps[key](this, key);

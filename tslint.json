@@ -6,15 +6,42 @@
     },
     "forin": true,
     "label-position": true,
-    "label-undefined": true,
     "member-access": false,
-    "member-ordering": [true, "static-before-instance", "variables-before-functions"],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          {
+            "name": "static field",
+            "kinds": ["public-static-field", "protected-static-field", "private-static-field"]
+          },
+          {
+            "name": "instance field",
+            "kinds": ["public-instance-field", "protected-instance-field", "private-instance-field"]
+          },
+          {
+            "name": "static method",
+            "kinds": ["public-static-method", "private-static-method", "protected-static-method"]
+          },
+          {
+            "name": "instance method",
+            "kinds": [
+              "public-constructor",
+              "protected-constructor",
+              "private-constructor",
+              "public-instance-method",
+              "protected-instance-method",
+              "private-instance-method"
+            ]
+          }
+        ]
+      }
+    ],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,
-    "no-duplicate-key": true,
     "no-duplicate-variable": true,
     "no-empty": false,
     "no-eval": true,
@@ -22,7 +49,6 @@
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-unused-expression": true,
-    "no-unreachable": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "radix": true,
