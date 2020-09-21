@@ -29,6 +29,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
 
   webcal: Webcal | null;
   working: boolean = false;
+  copying: boolean = false;
 
   // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
   // because they are resettable.
@@ -76,9 +77,15 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   /**
    * Displays a notification that the webcal URL has been copied.
    * `cdkCopyToClipboard` is expected do the actual copying.
+   * Changes mat-icon temporarily for a second after copying.
    */
   onCopyWebcalUrl() {
     this.alerts.add('success', 'Web calendar URL copied to the clipboard', 2000);
+    this.copying = true;
+    new Promise((resolve) => setTimeout(() => {
+      this.copying = false;
+      resolve();
+    }, 1000));
   }
 
   /**

@@ -42,7 +42,8 @@
             matTooltipPosition="above"
             [cdkCopyToClipboard]="webcalUrl"
             (click)="onCopyWebcalUrl()">
-            <mat-icon>content_copy</mat-icon>
+            <mat-icon *ngIf="copying">done</mat-icon>
+            <mat-icon *ngIf="!copying">content_copy</mat-icon>
           </button>
           <button
             mat-icon-button
@@ -58,7 +59,7 @@
       <mat-card class="webcal-options-card">
         <h3 style="margin-bottom: 0;">Options</h3>
 
-        <div class="d-flex d-valign">
+        <div class="d-flex d-valign webcal-options-exclusions">
           <span style="font-weight: bold; margin-right: 1em;">Exclude these units from my calendar:</span>
           <mat-chip-list>
             <mat-chip 
