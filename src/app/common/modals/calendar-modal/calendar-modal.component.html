@@ -1,10 +1,11 @@
 <div class="calendar-modal-component mat-typography">
 
-  <div class="d-flex d-flex-row">
-    <div class="d-flex-grow">
+  <div fxLayout="row">
+    <div fxFlex="grow">
       <h2 mat-dialog-title>Web calendar</h2>
     </div>
     <mat-slide-toggle
+      fxFlex
       #webcalToggle
       [matTooltip]="(webcal && webcal.enabled) ? 'Disable the web calendar' : 'Enable the web calendar'"
       matTooltipPosition="above"
@@ -42,11 +43,11 @@
           The web calendar displays due dates of your tasks as calendar events. Use the following URL to subscribe to your
           web calendar from your iCalendar client.
         </p>
-        <div class="d-flex d-flex-row">
-          <div class="d-flex-grow webcal-url-container">
+        <div fxLayout="row">
+          <div fxFlex="grow" class="webcal-url-container">
             <a [href]="bypass(webcalUrl)">{{webcalUrl}}</a>
           </div>
-          <div>
+          <div fxLayout="row">
             <button
               mat-icon-button
               matTooltip="Copy URL"
@@ -70,7 +71,7 @@
         <mat-card class="webcal-options-card">
           <h3 style="margin-bottom: 0;">Options</h3>
 
-          <div class="d-flex d-valign webcal-options-exclusions">
+          <div fxLayout="row" fxLayoutAlign="start center" class="webcal-options-exclusions">
             <span style="font-weight: bold; margin-right: 1em;">Exclude these units from my calendar:</span>
             <mat-chip-list>
               <mat-chip
