@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
       <div [hidden]="!task.definition.is_graded">
-        <h5>This task {{task.assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
+        <h5>This task {{hasBeenGraded(task) ? 'has been' : 'will be'}} assigned a grade</h5>
         <div [hidden]="hasBeenGraded(task)" >
           <p>
             This task will be graded against a grade standard. Your work will
@@ -43,6 +43,7 @@
         <div [hidden]= "!hasBeenGivenStars(task)">
           <rating
             class="task-quality-rating"
+            ngDefaultControl
             [(ngModel)]="task.quality_pts"
             max="task.definition.max_quality_pts"
             state-on="'fa fa-star rating-outline'"

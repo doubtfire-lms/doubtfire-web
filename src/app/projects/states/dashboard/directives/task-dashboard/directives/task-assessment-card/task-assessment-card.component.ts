@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Inject} from'@angular/core';
-import * as _ from 'lodash';
 
 
 import {taskService,gradeService} from 'src/app/ajs-upgraded-providers'
@@ -11,14 +10,16 @@ import {taskService,gradeService} from 'src/app/ajs-upgraded-providers'
 })
 export class TaskAssessmentCardComponent implements OnInit {
   @Input() task: any;
-  gradeNames: Array<string>;
+
   constructor(
     @Inject(taskService) private taskService: any,
-    @Inject(gradeService) private gradeService: any,
+    @Inject(gradeService) private gradeService: any
   ) { 
-     this.gradeNames = this.gradeService.grades;
+    //  this.gradeNames = this.gradeService.grades;
   }
-
+  gradeNames: Array<string> = this.gradeService.grades;
+  
+  
   ngOnInit(): void {
 
   }
