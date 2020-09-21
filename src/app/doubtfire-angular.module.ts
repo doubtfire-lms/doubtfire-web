@@ -48,6 +48,7 @@ import {
   TaskCommentServiceProvider,
   analyticsServiceProvider,
   taskProvider,
+  projectServiceProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
@@ -89,6 +90,7 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
+import { MatChipsModule } from '@angular/material/chips';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
@@ -176,6 +178,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
+    MatChipsModule,
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
@@ -200,6 +203,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     gradeServiceProvider,
     analyticsServiceProvider,
     taskProvider,
+    projectServiceProvider,
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,

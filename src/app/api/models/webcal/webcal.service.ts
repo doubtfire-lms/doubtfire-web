@@ -13,6 +13,7 @@ interface WebcalUpdateParams {
     time: number;
     unit: string;
   };
+  unit_exclusions?: number[];
 }
 
 @Injectable()

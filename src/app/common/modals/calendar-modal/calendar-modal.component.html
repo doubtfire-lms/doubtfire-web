@@ -58,6 +58,33 @@
       <mat-card class="webcal-options-card">
         <h3 style="margin-bottom: 0;">Options</h3>
 
+        <div class="d-flex d-valign">
+          <span style="font-weight: bold; margin-right: 1em;">Exclude these units from my calendar:</span>
+          <mat-chip-list>
+            <mat-chip 
+              *ngFor="let project of excludedProjects"
+              [selectable]="true"
+              [removable]="true"
+              (removed)="removeExclusion(project)">
+              {{ project.unit_code }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <mat-chip 
+              *ngIf="includedProjects.length > 0"
+              [matMenuTriggerFor]="menu">
+              <mat-icon>add</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button 
+                  mat-menu-item 
+                  *ngFor="let project of includedProjects" 
+                  (click)="includeExclusion(project)">
+                  {{ project.unit_code }}: {{ project.unit_name }}
+                </button>
+              </mat-menu>
+            </mat-chip>
+          </mat-chip-list>
+        </div><!--/unit-exclusions-options-->
+
         <mat-checkbox
           [(ngModel)]="newReminderActive"
           (change)="onToggleReminderActive()"

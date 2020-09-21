@@ -7,6 +7,7 @@ const KEYS =
     'include_start_dates',
     'user_id',
     'reminder',
+    'unit_exclusions',
   ];
 
 export class Webcal extends Entity {
@@ -19,6 +20,7 @@ export class Webcal extends Entity {
     time: number;
     unit: string;
   };
+  unit_exclusions: number[];
 
   toJson(): any {
     return {

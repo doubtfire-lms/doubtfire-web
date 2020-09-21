@@ -5,7 +5,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { WebcalService } from 'src/app/api/models/webcal/webcal.service';
 import { Webcal } from 'src/app/api/models/webcal/webcal';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService, projectService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'calendar-modal',
@@ -19,6 +19,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private sanitizer: DomSanitizer,
     @Inject(alertService) private alerts: any,
+    @Inject(projectService) private projects: any,
     dialogRef: MatDialogRef<CalendarModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -107,7 +108,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
         this.newReminderUnit = 'W';
       }
 
-    // If the option is disabled...
+      // If the option is disabled...
     } else {
 
       // ...and a reminder does exist, make backend request to remove it.
@@ -120,7 +121,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
           this.working = false;
         })
 
-      // ...otherwise, reset.
+        // ...otherwise, reset.
       } else {
         this.loadWebcal(this.webcal);
       }
@@ -165,6 +166,46 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       this.loadWebcal(webcal);
       this.working = false;
     });;
+  }
+
+  /**
+  * Retrieves a list of excluded projects
+  */
+  get excludedProjects() {
+    return this.projects.loadedProjects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) !== -1);
+  }
+
+  /**
+  * Retrieves a list of included projects
+  */
+  get includedProjects() {
+    return this.projects.loadedProjects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) === -1);
+  }
+
+  /**
+  * Removes a previously excluded project from the webcal
+  */
+  removeExclusion(project) {
+    this.working = true;
+    this.webcalService.updateWebcal({
+      unit_exclusions: this.webcal.unit_exclusions.filter((p) => p !== project.unit_id),
+    }).subscribe((webcal) => {
+      this.loadWebcal(webcal);
+      this.working = false;
+    });
+  }
+
+  /**
+  * Excludes a project from the webcal
+  */
+  includeExclusion(project) {
+    this.working = true;
+    this.webcalService.updateWebcal({
+      unit_exclusions: [...this.webcal.unit_exclusions, project.unit_id],
+    }).subscribe((webcal) => {
+      this.loadWebcal(webcal);
+      this.working = false;
+    });
   }
 
   /**

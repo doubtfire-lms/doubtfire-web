@@ -9,6 +9,10 @@
       flex-direction: row;
     }
 
+    &.d-valign {
+      align-items: center;
+    }
+
     .d-flex-grow {
       flex-grow: 1;
     }
