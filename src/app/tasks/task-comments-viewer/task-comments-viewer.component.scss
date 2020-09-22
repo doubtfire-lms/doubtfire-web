@@ -1,0 +1,486 @@
+@import '../../../styles/mixins/scrollable.scss';
+
+:host {
+  max-width: 400px;
+  width: 350px;
+  min-width: 300px;
+}
+
+$comment-bubble-color: rgb(0, 153, 255);
+$comment-bubble-color-darker: darken($comment-bubble-color, 10%);
+$comment-bubble-color-other-user: rgb(241, 240, 240);
+$comment-bubble-color-other-user-darker: darken(
+  $comment-bubble-color-other-user,
+  10%
+);
+$comment-author-bubble-size: 38px;
+$comment-text-padding: 8px;
+
+$discussion-comment-bubble-color: linear-gradient(#794da5, #546acc);
+
+$border-width: 0.7em;
+$comment-border-radius: $border-width * 1.9; // Leave the 1.9
+$comment-inner-border-radius: 4px;
+
+.header-text {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 32px;
+  justify-content: center;
+  margin: 0;
+}
+
+.comments-body {
+  overflow-y: auto;
+
+  @include scrollable();
+}
+
+.comments-scroll-content {
+  padding-right: 10px;
+}
+
+.comments-footer {
+  task-comment-composer {
+    width: 100%;
+  }
+}
+
+.comments-header {
+  font-size: 14px;
+  padding: 0;
+  align-items: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  padding-left: 16px;
+  border-bottom: none;
+  box-sizing: border-box;
+  padding: 8px;
+  position: relative;
+  text-align: center;
+  z-index: 201;
+}
+
+:host {
+  overflow-x: none;
+  p#commentTimestamp {
+    color: #9696969d;
+    font-size: 11px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .comments-body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    ::-webkit-scrollbar-track {
+      display: none;
+    }
+    height: 100%;
+    font-size: 15px;
+    width: 100%;
+  }
+  .comments-body::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  .dragover {
+    margin: 0;
+    border: 5px dashed #333333;
+  }
+
+  .comment-container {
+    display: flex;
+    flex-grow: 2;
+
+    .comment-overflow {
+      max-width: 50px;
+      min-width: 38px;
+      flex-shrink: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .comment-by-other-user .comment-container {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-grow: 2;
+
+    .original-comment {
+      .reply-text {
+        margin-left: 1em;
+        color: rgba(0, 0, 0, 0.7);
+      }
+    }
+  }
+
+  .comment-container .comment-extension {
+    width: 100%;
+  }
+
+  .comment-container .comment-status {
+    width: 100%;
+    align-self: flex-end;
+
+    hr {
+      margin: 0;
+    }
+
+    .hr-text {
+      line-height: 1em;
+      position: relative;
+      outline: 0;
+      border: 0;
+      color: black;
+      text-align: center;
+      height: 1.5em;
+      opacity: 0.8;
+      &:before {
+        content: "";
+        background: linear-gradient(
+          to right,
+          transparent,
+          #9696969d,
+          transparent
+        );
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+      }
+      &:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: black;
+        padding: 0 0.5em;
+        line-height: 1.5em;
+        color: #9696969d;
+        background-color: #fff;
+      }
+    }
+  }
+
+  // Primary comment div
+  .comment {
+    display: flex;
+    &.new-comment .text-bubble {
+      animation: fade-in-comment-animation;
+      animation-duration: 5s;
+      @keyframes fade-in-comment-animation {
+        0% {
+          background: rgba(33, 150, 243, 0.4);
+        }
+        0% {
+          border: rgba(33, 150, 243, 1);
+        }
+        0% {
+          box-shadow: 0 0 6px rgba(33, 150, 243, 1);
+        }
+        100% {
+          border: rgba(255, 255, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+        }
+      }
+    }
+    &.comment-by-other-user {
+      flex-direction: row-reverse;
+
+      .bubble {
+        float: right;
+      }
+    }
+
+    .original-comment {
+      .reply-text {
+        margin: 0 0.4em 1em 0;
+        max-lines: 2;
+        max-height: 30px;
+        line-clamp: 2;
+        line-height: 15.36px;
+        margin-left: 0.8em;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-font-smoothing: antialiased;
+        overflow-wrap: break-word;
+        text-align: left;
+        text-rendering: optimizelegibility;
+        user-select: text;
+        white-space: normal;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  // Author Bubble
+  .comment user-icon {
+    margin-right: -37px;
+    // display: inline-block;
+    align-self: flex-end;
+    line-height: $comment-author-bubble-size - 2px;
+  }
+
+  .comment.comment-by-other-user user-icon .user-icon-initials {
+    box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
+    background: $comment-bubble-color-other-user;
+    background: linear-gradient(
+      to left,
+      $comment-bubble-color-other-user,
+      $comment-bubble-color-other-user-darker
+    );
+    // color: $text-color;
+    color: black;
+  }
+  .comment.comment-by-other-user .user-icon {
+    margin-left: -37px;
+    margin-right: 0;
+  }
+
+  img {
+    border-radius: $comment-border-radius;
+    color: #eeeeee;
+    border-style: solid;
+    border-width: 1px;
+  }
+
+  .bubble {
+    border-top-left-radius: $comment-inner-border-radius;
+    border-top-right-radius: $comment-border-radius;
+    border-bottom-left-radius: $comment-inner-border-radius;
+    border-bottom-right-radius: $comment-border-radius;
+    margin-bottom: 1px;
+    margin-top: 1px;
+  }
+
+  .comment.comment-by-other-user .bubble {
+    border-top-left-radius: $comment-border-radius;
+    border-bottom-left-radius: $comment-border-radius;
+    border-top-right-radius: $comment-inner-border-radius;
+    border-bottom-right-radius: $comment-inner-border-radius;
+    margin-bottom: 1px;
+    margin-top: 1px;
+  }
+
+  .comment.comment-by-other-user .bubble.first-in-series {
+    border-top-right-radius: $comment-border-radius;
+    border-top-left-radius: $comment-border-radius;
+    border-bottom-right-radius: $comment-inner-border-radius;
+    margin-top: 0.2em;
+  }
+
+  .comment.comment-by-other-user .bubble.last-in-series {
+    border-bottom-right-radius: $comment-border-radius;
+    border-top-left-radius: $comment-border-radius;
+    border-top-right-radius: $comment-inner-border-radius;
+    margin-bottom: 0.4em;
+  }
+
+  .comment.comment-by-other-user .bubble.first-in-series.last-in-series {
+    border-radius: $comment-border-radius;
+  }
+
+  .bubble.first-in-series {
+    border-top-left-radius: $comment-border-radius;
+    border-top-right-radius: $comment-border-radius;
+    margin-top: 0.2em;
+  }
+
+  .bubble.last-in-series {
+    border-radius: $comment-border-radius;
+    border-top-left-radius: $comment-inner-border-radius;
+    margin-bottom: 0.4em;
+  }
+
+  .bubble.first-in-series.last-in-series {
+    border-radius: $comment-border-radius;
+  }
+
+  @mixin base-bubble {
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    color: #fff;
+    font-size: 1em;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 0;
+    line-height: 1.5em;
+    background: $comment-bubble-color;
+
+    .comment-text,
+    .comment-pdf,
+    .comment-discussion,
+    .markdown-to-html {
+      padding-right: 6px;
+      padding-left: 4px;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+    }
+    .comment-audio {
+      display: inline-block;
+      margin: 0 auto 0 $comment-text-padding;
+      padding-right: $comment-text-padding;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+
+  .comment .extension-bubble {
+    width: 100%;
+    background-color: transparent;
+  }
+
+  // text comments
+  .comment .text-bubble,
+  .comment .pdf-bubble {
+    @include base-bubble;
+    display: inline-block;
+
+    a p,
+    a {
+      color: white;
+      margin-bottom: 0px;
+    }
+
+    .markdown-to-html {
+      padding-left: $comment-text-padding;
+      padding-right: $comment-text-padding;
+    }
+
+    .markdown-to-html > *:last-child {
+      margin-bottom: 0px;
+    }
+
+    .markdown-to-html > pre:last-child {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  .pdf-bubble {
+    @include base-bubble;
+    display: inline-block;
+  }
+
+  // Audio comments
+  .comment .audio-bubble {
+    @include base-bubble;
+    display: inline-block;
+    width: 70%;
+    max-width: 300px;
+    margin-right: 0;
+    padding-right: 0;
+
+    .comment-audio {
+      width: 80%;
+      margin-right: 0;
+      padding-right: 0;
+    }
+    .markdown-to-html > *:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  // Image comments
+  .bubble.image-bubble {
+    @include base-bubble;
+    background: transparent;
+  }
+
+  // Disucssion comments
+  .comment .discussion-bubble {
+    @include base-bubble;
+    max-width: 300px;
+    mat-stepper {
+      background-color: white;
+    }
+
+    background: $discussion-comment-bubble-color;
+  }
+
+  .comment.comment-by-other-user .text-bubble {
+    background: $comment-bubble-color-other-user;
+    // color: $text-color;
+    color: black;
+    // margin-right: 50px;
+    margin-left: 0;
+  }
+
+  .comment.comment-by-other-user .pdf-bubble {
+    background: $comment-bubble-color-other-user;
+    // color: $text-color;
+    color: black;
+    color: black;
+    margin-right: 50px;
+    margin-left: 0;
+
+    a p {
+      // color: $text-color;
+      color: black;
+      margin-bottom: 0;
+    }
+  }
+
+  .comment.comment-by-other-user .audio-bubble {
+    margin-right: 5px;
+    margin-left: 0;
+  }
+
+  .comment.comment-by-other-user .discussion-bubble {
+    margin-right: 5px;
+    margin-left: 0;
+  }
+
+  .comment.comment-by-other-user .image-bubble {
+    background: transparent;
+    margin-right: 5px;
+    margin-left: 0;
+  }
+
+  .read-receipt {
+    width: 100%;
+
+    user-icon {
+      float: right;
+    }
+  }
+
+  // Footer
+  .panel-footer {
+    padding: 0;
+    font-size: 15px;
+    background-color: white;
+  }
+
+  // Editor & submitter
+  .markdown-editor .markdown-editor-inner-context {
+    border: 0;
+    width: 100%;
+    box-shadow: none;
+    border-radius: none;
+    min-height: 54px;
+  }
+  .comment-submitter {
+    display: flex;
+    word-wrap: break-word;
+    hyphens: auto;
+    .markdown-editor {
+      padding: 0;
+      width: 100%;
+    }
+  }
+
+  #contextOverlay {
+    position: absolute;
+  }
+}

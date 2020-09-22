@@ -1,30 +1,27 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, OnInit } from '@angular/core';
 import { taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'status-icon',
   templateUrl: './status-icon.component.html',
-  styleUrls: ['status-icon.component.scss']
+  styleUrls: ['./status-icon.component.scss'],
 })
-export class StatusIconComponent {
-  @Input() status: string;
-  @Input() showTooltip: boolean = true;
+export class StatusIconComponent implements OnInit {
+  @Input() status;
+  @Input() showTooltip: boolean;
 
-  constructor (
-    @Inject(taskService) private ts: any
-  ) {
+  statusIcon;
+  statusLabel;
+  statusClass;
+
+  constructor(@Inject(taskService) private TaskService) {}
+
+  ngOnInit(): void {
+    if (this.showTooltip == null) {
+      this.showTooltip = true;
+    }
+    this.statusIcon = (status) => this.TaskService.statusIcons[status];
+    this.statusLabel = (status) => this.TaskService.statusLabels[status];
+    this.statusClass = (status) => this.TaskService.statusClass(status);
   }
-
-  public statusIcon (status: string) : string {
-    return this.ts.statusIcons[status];
-  }
-
-  public statusLabel (status: string) : string {
-    return this.ts.statusLabels[status];
-  }
-
-  public statusClass (status: string) : string {
-    return this.ts.statusClass(status);
-  }
-
 }

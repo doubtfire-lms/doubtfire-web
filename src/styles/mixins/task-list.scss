@@ -1,3 +1,6 @@
+@import './task-status-colors-generator.scss';
+@import '../common/variables.scss';
+
 @mixin custom-box-shadow($color) {
       box-shadow: -15px 0 $color inset;
     }
@@ -11,7 +14,7 @@
     height: 34px;
   }
   .search-options .task-definition select:not([size="0"]) {
-    border-radius: $input-border-radius !important;
+    // border-radius: $input-border-radius !important;
   }
   .list-group {
     overflow: scroll;
@@ -35,7 +38,7 @@
     &:hover, &:focus {
       cursor: pointer;
       text-decoration: none;
-      background-color: $list-group-hover-bg;
+      // background-color: $list-group-hover-bg;
       &.ready-to-mark     { @include custom-box-shadow(lighten(task-status-color('ready-to-mark'), 15%)); }
       &.not-started       { @include custom-box-shadow(lighten(task-status-color('not-started'), 5%)); }
       &.working-on-it     { @include custom-box-shadow(lighten(task-status-color('working-on-it'), 15%)); }
@@ -142,7 +145,7 @@
         }
       }
     }
-    .user-icon {
+    user-icon {
       font-size: 1.5em;
       margin-right: 1.5ex;
     }
@@ -154,7 +157,7 @@
       overflow: hidden;
       white-space: nowrap;
     }
-    .task-badges, .user-icon {
+    .task-badges, user-icon {
       align-self: center;
     }
     .task-data > * {

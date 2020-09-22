@@ -1,7 +1,8 @@
 <div ng-show="users == null" class="large-notice-block">
   <i class="fa fa-2x fa-spinner fa-pulse"></i>
   <p>Loading...</p>
-</div><!--/loading-->
+</div>
+<!--/loading-->
 <div ng-if="users != null">
   <h2>
     {{externalName.value}} Users
@@ -17,16 +18,20 @@
           Modify users registered with {{externalName.value}}
         </div>
         <form role="search" class="pull-right form-horizontal">
-          <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search" ng-model="search" autocomplete="off" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
-          <p ng-show="filteredUsers.length < students.length && filteredUsers.length != 0">Showing {{filteredUsers.length}} of {{users.length}} users.</p>
+          <input id="searchbar" class="input-md form-control" placeholder="Search for users..." type="search"
+            ng-model="search" autocomplete="off"
+            typeahead="user.name for user in users | filter:$viewValue | limitTo:8" />
+          <p ng-show="filteredUsers.length < students.length && filteredUsers.length != 0">Showing
+            {{filteredUsers.length}} of {{users.length}} users.</p>
           <p ng-show="filteredUsers.length < students.length && filteredUsers.length == 0">No students found.</p>
         </form>
       </div>
       <div class="panel-body">
-        <div class="callout callout-info" ng-hide="users.length > 0">No users have been registered with {{externalName.value}} yet</div>
-        <div style="position: relative;
-                    overflow: auto;">
-          <table class="table table-condensed table-hover" style= "min-width: 720px;">
+        <div class="callout callout-info" ng-hide="users.length > 0">No users have been registered with
+          {{externalName.value}} yet</div>
+
+        <div style="position: relative; overflow: auto;">
+          <table class="table table-condensed table-hover" style="min-width: 720px;">
             <thead>
               <tr>
                 <th>Avatar</th>
@@ -39,9 +44,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="pointer" ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-click="showUserModal(user)">
+              <tr class="pointer"
+                ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+                ng-click="showUserModal(user)">
                 <td>
-                <user-icon size="20" user="user" email="user.email" style="max-width: 20px; max-height: 20px; font-size: 12px;"></user-icon>
+                  <user-icon [size]="35" [user]="user" [email]="user.email"></user-icon>
                 </td>
                 <td>{{user.id}}</td>
                 <td>{{user.first_name}}</td>
@@ -60,9 +67,10 @@
         <a href class="btn btn-success pull-right" ng-click="showUserModal()">
           <i class="fa fa-user"></i>
           <i class="fa fa-plus"></i>
-           Add New User
+          Add New User
         </a>
-        <pagination total-items="filteredUsers.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
+        <pagination total-items="filteredUsers.length" ng-model="currentPage" items-per-page="pageSize"
+          max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       </div>
     </div>
   </div>
@@ -73,9 +81,7 @@
         Import users using a CSV containing: email, first_name, last_name, username, nickname, role
       </div>
       <div class="panel-body">
-        <file-uploader
-          url="file_data.batchUserUrl"
-          files="file_data.batchUserFiles"
+        <file-uploader url="file_data.batchUserUrl" files="file_data.batchUserFiles"
           on-success="file_data.onBatchUserSuccess"></file-uploader>
       </div>
       <div class="panel-heading">

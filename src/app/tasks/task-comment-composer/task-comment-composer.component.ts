@@ -1,20 +1,31 @@
-import { Component, OnInit, Inject, Input, ViewChildren, QueryList, KeyValueDiffers, KeyValueDiffer, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  Input,
+  ViewChildren,
+  QueryList,
+  KeyValueDiffers,
+  KeyValueDiffer,
+  ElementRef,
+} from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
-import { PopoverDirective } from 'ngx-bootstrap';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Component({
   selector: 'task-comment-composer',
-  templateUrl: './task-comment-composer.html',
+  templateUrl: './task-comment-composer.component.html',
+  styleUrls: ['./task-comment-composer.component.scss'],
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
   comment = {
     text: '',
-    type: 'text'
+    type: 'text',
   };
   audioPopover: string = 'audioRecorderPopover.html';
 
@@ -36,7 +47,7 @@ export class TaskCommentComposerComponent implements OnInit {
     private emojiService: EmojiService,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
-    @Inject(alertService) private alerts: any,
+    @Inject(alertService) private alerts: any
   ) {
     this.differ = this.differs.find({}).create();
   }
@@ -45,7 +56,7 @@ export class TaskCommentComposerComponent implements OnInit {
     // Check to see if the commentReplyId has changed in the taskService
     const change = this.differ.diff(this.commentReplyID);
     if (change) {
-      change.forEachChangedItem(item => {
+      change.forEachChangedItem((item) => {
         // If it has changed to be an actual comment
         if (item != null) {
           // Set the input field as focused, so the user can start typing
@@ -64,7 +75,7 @@ export class TaskCommentComposerComponent implements OnInit {
 
   get originalComment() {
     if (this.task.comments != null) {
-      const original = this.task.comments.find(x => x.id === this.commentReplyID.id);
+      const original = this.task.comments.find((x) => x.id === this.commentReplyID.id);
       if (original != null) {
         return original;
       }
@@ -82,8 +93,7 @@ export class TaskCommentComposerComponent implements OnInit {
     return isWebkit ? 'plaintext-only' : 'true';
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   formatImageName(imageName) {
     const index = imageName.indexOf('.');
@@ -141,28 +151,31 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   emojiSelected(emoji: string) {
-    this.input.first.nativeElement.innerText = this.input.first.nativeElement.innerText.replace(`:${this.emojiMatch}`, emoji);
+    this.input.first.nativeElement.innerText = this.input.first.nativeElement.innerText.replace(
+      `:${this.emojiMatch}`,
+      emoji
+    );
     this.emojiSearchMode = false;
   }
 
   private caretOffset() {
-    let element = this.input.first.nativeElement;
+    const element = this.input.first.nativeElement;
     let caretOffset: number = 0;
-    let doc = element.ownerDocument || element.document;
-    let win = doc.defaultView || doc.parentWindow;
+    const doc = element.ownerDocument || element.document;
+    const win = doc.defaultView || doc.parentWindow;
     let sel;
     if (typeof win.getSelection !== 'undefined') {
       sel = win.getSelection();
       if (sel.rangeCount > 0) {
-        let range = win.getSelection().getRangeAt(0);
-        let preCaretRange = range.cloneRange();
+        const range = win.getSelection().getRangeAt(0);
+        const preCaretRange = range.cloneRange();
         preCaretRange.selectNodeContents(element);
         preCaretRange.setEnd(range.endContainer, range.endOffset);
         caretOffset = preCaretRange.toString().length;
       }
-    } else if ((sel = doc.selection) && sel.type !== 'Control') {
-      let textRange = sel.createRange();
-      let preCaretTextRange = doc.body.createTextRange();
+    } else if (sel === doc.selection && sel.type !== 'Control') {
+      const textRange = sel.createRange();
+      const preCaretTextRange = doc.body.createTextRange();
       preCaretTextRange.moveToElementText(element);
       preCaretTextRange.setEndPoint('EndToEnd', textRange);
       caretOffset = preCaretTextRange.text.length;
@@ -170,8 +183,7 @@ export class TaskCommentComposerComponent implements OnInit {
     return caretOffset;
   }
 
-  addEmoji(e: string): void;
-  addEmoji(e: Event): void;
+  addEmoji(e: string | Event): void;
   addEmoji(e: any): void {
     let char: string;
     if (typeof e === 'string') {
@@ -195,7 +207,7 @@ export class TaskCommentComposerComponent implements OnInit {
         task: this.task,
       },
       maxWidth: '800px',
-      disableClose: true
+      disableClose: true,
     });
 
     // dialogRef.afterOpened().subscribe((result: any) => {
@@ -211,32 +223,31 @@ export class TaskCommentComposerComponent implements OnInit {
       this.cancelReply();
     }
     const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
-    this.ts.addComment(this.task, text, 'text', originalCommentID,
+    this.ts.addComment(
+      this.task,
+      text,
+      'text',
+      originalCommentID,
       (success: any) => {
         this.input.first.nativeElement.innerText = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();
         this.task.comments = this.ts.mapComments(this.task.comments);
       },
-      (failure: any) =>
-        this.alerts.add('danger', failure.data.error, 2000)
+      (failure: any) => this.alerts.add('danger', failure.data.error, 2000)
     );
   }
 }
 
-
 // The discussion prompt composer fialog Component
+// tslint:disable-next-line: max-classes-per-file
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
-  constructor(
-    public dialogRef: MatDialogRef<DiscussionComposerDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

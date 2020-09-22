@@ -1,6 +1,6 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Injectable({
   providedIn: 'root'

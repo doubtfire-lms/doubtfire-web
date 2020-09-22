@@ -20,14 +20,16 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import { PopoverModule } from 'ngx-bootstrap';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
@@ -58,7 +60,11 @@ import {
   userProvider,
   currentUser,
   TaskCommentProvider,
-  gradeServiceProvider
+  gradeServiceProvider,
+  commentsModalProvider,
+  taskDefinitionProvider,
+  groupServiceProvider,
+  plagiarismReportModalProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -90,7 +96,6 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { MatChipsModule } from '@angular/material/chips';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
@@ -111,8 +116,25 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
-import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
+import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
+import { MarkedPipe } from './common/pipes/marked.pipe';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
+import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
+import { DragDropDirective } from './common/directives/drag-drop.directive';
+import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { SafePipe } from './common/pipes/safe.pipe';
+import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
+import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import { FiltersPipe } from './common/filters/filters.pipe';
+import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-definition.pipe';
+import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
+import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
+import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 
 @NgModule({
   // Components we declare
@@ -140,7 +162,23 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     StudentCampusSelectComponent,
     TaskListItemComponent,
     CreatePortfolioTaskListItemComponent,
-    StatusIconComponent
+    StatusIconComponent,
+    TaskCommentsViewerComponent,
+    UserIconComponent,
+    AudioPlayerComponent,
+    MarkedPipe,
+    HumanizedDatePipe,
+    DragDropDirective,
+    PdfViewerComponent,
+    SafePipe,
+    PdfViewerPanelComponent,
+    StaffTaskListComponent,
+    FiltersPipe,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe,
+    StatusIconComponent,
+    TaskPlagiarismCardComponent,
   ],
   // Module Imports
   imports: [
@@ -151,6 +189,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     FormsModule,
     HttpClientModule,
     ClipboardModule,
+    ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -175,6 +214,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatExpansionModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
@@ -196,7 +236,10 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     ActivityTypeService,
     EmojiService,
     userProvider,
+    groupServiceProvider,
     unitProvider,
+    commentsModalProvider,
+    taskDefinitionProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
@@ -212,6 +255,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
+    plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,
@@ -226,10 +270,13 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
-    DoubtfireConstants
+    DoubtfireConstants,
+    TasksOfTaskDefinitionPipe,
+    TasksInTutorialsPipe,
+    TasksWithStudentNamePipe
   ]
 })
-// There is no longer any requirement for an EntryComponants section
+// There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
 
 export class DoubtfireAngularModule {

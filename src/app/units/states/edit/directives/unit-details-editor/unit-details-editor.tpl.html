@@ -103,9 +103,41 @@
               When true, emails will be set to students each week to indicate progress and suggest future tasks for them to work on.
             </span>
           </div>
-        </div><!--/active-->
+        </div><!--/send_notifications-->
 
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Synchronise enrolments</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn btn-{{unit.enable_sync_enrolments ? 'success' : 'default'}}" ng-model="unit.enable_sync_enrolments" btn-radio="true" uncheckable>
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-{{unit.enable_sync_enrolments ? 'default' : 'danger'}}" ng-model="unit.enable_sync_enrolments" btn-radio="false" uncheckable>
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true student enrolments will be synchronised with other systems where this is possible.
+            </span>
+          </div>
+        </div><!--/sync_enrolments-->
 
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Synchronise Timetable</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn btn-{{unit.enable_sync_timetable ? 'success' : 'default'}}" ng-model="unit.enable_sync_timetable" btn-radio="true" uncheckable>
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn btn-{{unit.enable_sync_timetable ? 'default' : 'danger'}}" ng-model="unit.enable_sync_timetable" btn-radio="false" uncheckable>
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true timetable data will be synchronised with other systems where this is possible.
+            </span>
+          </div>
+        </div><!--/sync_timetable-->
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
           <div class="col-sm-9">

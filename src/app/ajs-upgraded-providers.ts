@@ -19,6 +19,10 @@ export const csvResultModalService = new InjectionToken('CsvResultModalAngular')
 export const taskComment = new InjectionToken('TaskComment');
 export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
+export const commentsModal = new InjectionToken('CommentsModal');
+export const taskDefinition = new InjectionToken('TaskDefinition');
+export const groupService = new InjectionToken('groupService');
+export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
 
 
 // Define a provider for the above injection token...
@@ -27,6 +31,30 @@ export const unitProvider = {
   provide: Unit,                          // When you need 'Unit' you
   useFactory: (i: any) => i.get('Unit'),  // get the AngularJS module
   deps: ['$injector']                     // using the upgrade injector.
+};
+
+export const taskDefinitionProvider = {
+  provide: taskDefinition,
+  useFactory: (i: any) => i.get('TaskDefinition'),
+  deps: ['$injector']
+};
+
+export const plagiarismReportModalProvider = {
+  provide: plagiarismReportModal,
+  useFactory: (i: any) => i.get('PlagiarismReportModal'),
+  deps: ['$injector']
+};
+
+export const groupServiceProvider = {
+  provide: groupService,
+  useFactory: (i: any) => i.get('groupService'),
+  deps: ['$injector']
+};
+
+export const commentsModalProvider = {
+  provide: commentsModal,
+  useFactory: (i: any) => i.get('CommentsModal'),
+  deps: ['$injector']
 };
 
 export const userProvider = {

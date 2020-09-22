@@ -6,7 +6,6 @@
  */
 export type TypeMapFunction = (object: any) => any;
 
-
 /**
  * Entity class is used to represent an object within the main application model. This
  * entity can be transferred to/from the server, and there are functions to assist with
@@ -24,14 +23,12 @@ export type TypeMapFunction = (object: any) => any;
  *    for CRUD operations.
  */
 export abstract class Entity {
-
   /**
    * Construct an Entity object
    *
    * @param initialData An optional object storing the data to initialise the Entity with, calls @method updateFromJson with the data.
    */
-  constructor(initialData?: Object
-  ) {
+  constructor(initialData?: object) {
     if (initialData) {
       this.updateFromJson(initialData);
     }
@@ -62,11 +59,11 @@ export abstract class Entity {
    *              specific values from the json where a straight data copy is not
    *              appropriate/possible.
    */
-  protected setFromJson(data: any, keys: string[], ignoredKeys?: string[], maps?: Object): void {
-    keys.forEach(key => {
+  protected setFromJson(data: any, keys: string[], ignoredKeys?: string[], maps?: object): void {
+    keys.forEach((key) => {
       if (maps && maps[key]) {
         this[key] = maps[key](data[key]);
-      } else if (ignoredKeys && ignoredKeys.indexOf(key) < 0 || !ignoredKeys) {
+      } else if ((ignoredKeys && ignoredKeys.indexOf(key) < 0) || !ignoredKeys) {
         this[key] = data[key];
       }
     });
@@ -91,9 +88,9 @@ export abstract class Entity {
    *              specific values from the entity where a straight data copy is not
    *              appropriate/possible.
    */
-  protected toJsonWithKeys(keys: string[], maps?: Object): Object {
-    let json: Object = {};
-    keys.forEach(key => {
+  protected toJsonWithKeys(keys: string[], maps?: object): object {
+    const json: object = {};
+    keys.forEach((key) => {
       if (maps && maps[key]) {
         json[key] = maps[key](this, key);
       } else {

@@ -64,6 +64,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
         max_quality_pts: 0
         auto_apply_extension_before_deadline: true
         send_notifications: true
+        enable_sync_timetable: true
+        enable_sync_enrolments: true
         tutorial_stream: $scope.unit.tutorial_streams[0]?.abbreviation
       }
       $scope.taskAdminData.selectedTask = task

@@ -4,12 +4,11 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class CampusService extends CacheableEntityService<Campus> {
-
   protected readonly endpointFormat = 'campuses/:id:';
   entityName = 'Campus';
 
   protected createInstanceFrom(json: any, other?: any): Campus {
-    let campus = new Campus();
+    const campus = new Campus();
     campus.updateFromJson(json);
     return campus;
   }

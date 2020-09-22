@@ -15,9 +15,15 @@ import { Sort } from '@angular/material/sort';
   templateUrl: 'about-doubtfire-modal-content.tpl.html',
 })
 export class AboutDoubtfireModalContent {
-  public displayedColumns: string[] = ['contributor', 'contributions', 'api-contributions', 'web-contributions', 'io-contributions' ];
+  public displayedColumns: string[] = [
+    'contributor',
+    'contributions',
+    'api-contributions',
+    'web-contributions',
+    'io-contributions',
+  ];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: AboutDialogData) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: AboutDialogData) {}
 
   public sortData(sort: Sort) {
     this.data.sortData(sort);
@@ -27,22 +33,24 @@ export class AboutDoubtfireModalContent {
 /**
  * The about doubtfire modal service - used to create and show the modal
  */
+// tslint:disable-next-line: max-classes-per-file
 @Injectable()
 export class AboutDoubtfireModal {
-
   private loaded: boolean;
   private aboutDialogData: AboutDialogData;
 
-  constructor(public dialog: MatDialog,
+  constructor(
+    public dialog: MatDialog,
     private constants: DoubtfireConstants,
-    private aboutDoubtfireModalService: AboutDoubtfireModalService) {
+    private aboutDoubtfireModalService: AboutDoubtfireModalService
+  ) {
     this.loaded = false;
     this.aboutDialogData = new AboutDialogData();
 
-    this.aboutDialogData.mainContributors = <GithubProfile[]>this.constants.mainContributors.map(c => ({
+    this.aboutDialogData.mainContributors = this.constants.mainContributors.map((c) => ({
       avatar_url: '/assets/images/person-unknown.gif',
-      login: c
-    }));
+      login: c,
+    })) as GithubProfile[];
   }
 
   public show(): void {
@@ -54,32 +62,31 @@ export class AboutDoubtfireModal {
       this.getContributorData();
     }
     // Show dialog while the data above is being fetched
-    this.dialog.open(AboutDoubtfireModalContent,
-      {
-        width: '900px',
-        data: this.aboutDialogData
-      });
+    this.dialog.open(AboutDoubtfireModalContent, {
+      width: '900px',
+      data: this.aboutDialogData,
+    });
   }
 
   private getExternalName(): void {
-    this.constants.ExternalName
-      .subscribe(result => {
-        this.aboutDialogData.externalName = result;
-      });
+    this.constants.ExternalName.subscribe((result) => {
+      this.aboutDialogData.externalName = result;
+    });
   }
 
   private getMainContributorDetails() {
     // loop over each main contributor
     this.aboutDialogData.mainContributors.forEach((item: GithubProfile, i) => {
       // async get profile from github
-      this.aboutDoubtfireModalService.getGithubProfiles(item.login)
+      this.aboutDoubtfireModalService
+        .getGithubProfiles(item.login)
         // when a response arrives... update the array with data
-        .subscribe(response => {
+        .subscribe((response) => {
           this.aboutDialogData.mainContributors[i] = {
             avatar_url: response.avatar_url,
             name: response.name,
             html_url: response.html_url,
-            login: response.login
+            login: response.login,
           };
         });
     });
