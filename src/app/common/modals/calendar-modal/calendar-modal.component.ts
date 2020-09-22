@@ -57,8 +57,8 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   /**
    * Retrieves the URL of the webcal relative to current API URL.
    */
-  get webcalUrl(): string {
-    return this.webcal ? this.webcal.getUrl(this.constants.API_URL).toString() : null;
+  get webcalUrl(): string | null {
+    return this.webcal?.getUrl(this.constants.API_URL).toString();
   }
 
   /**

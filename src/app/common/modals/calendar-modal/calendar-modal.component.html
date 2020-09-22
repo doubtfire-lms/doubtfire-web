@@ -19,10 +19,10 @@
 
     <ng-container *ngIf="!webcal">
       <mat-progress-spinner
+        class="webcal-progress-spinner"
         color="accent"
         mode="indeterminate"
-        [diameter]="36"
-        style="margin: 0 auto">
+        [diameter]="36">
       </mat-progress-spinner>
     </ng-container><!--/content-when-webcal loading-->
 
@@ -54,8 +54,7 @@
               matTooltipPosition="above"
               [cdkCopyToClipboard]="webcalUrl"
               (click)="onCopyWebcalUrl()">
-              <mat-icon *ngIf="copying">done</mat-icon>
-              <mat-icon *ngIf="!copying">content_copy</mat-icon>
+              <mat-icon>{{ copying ? 'done' : 'content_copy' }}</mat-icon>
             </button>
             <button
               mat-icon-button
