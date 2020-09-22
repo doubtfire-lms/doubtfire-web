@@ -1,0 +1,48 @@
+<div class="card card-default card-sm">
+    <div class="card-heading">
+      <h4>Description</h4>
+    </div><!--/description-heading-->
+    <div class="card-body">
+       <div class="markdown-to-pdf" [innerHTML]="taskDef.description | marked"></div>
+    </div><!--/description-body-->
+    <div class="card-footer" *ngIf="taskDef || task">
+      <h5>Key Information</h5>
+      <ul>
+        <li>
+          <strong>{{grades.names[taskDef.target_grade]}} Task</strong>
+        </li>
+        <li>
+          <strong>Start Date</strong>
+          &mdash;
+          Aim to start this task by <strong>{{startDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
+        </li>
+        <li>
+          <strong>Due Date</strong>
+          &mdash;
+          Aim to complete by <strong>{{dueDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
+        </li>
+      </ul>
+    </div><!--/key-info-footer-->
+    <div class="card-footer" [hidden]="!(taskDef.has_task_sheet || taskDef.has_task_resources)">
+      <a
+        (click)="downloadEvent('PDF')"
+        [href]="urls.taskSheet"
+        [hidden]="!taskDef.has_task_sheet"
+        target="_blank"
+        class="btn btn-primary">
+        <i class="fa fa-download"></i>
+        Download Task Sheet
+      </a>
+      <a
+        (click)="downloadEvent('Resources')"
+        [href]="urls.resources"
+        [hidden]="!taskDef.has_task_resources"
+        target="_blank"
+        class="btn btn-primary">
+        <i class="fa fa-download"></i>
+        Download Resources
+      </a>
+    </div><!--/description-footer-->
+  </div>
+  
+

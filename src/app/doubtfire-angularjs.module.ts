@@ -94,7 +94,7 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/direct
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.js';
+//import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
@@ -286,6 +286,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -359,6 +360,8 @@ DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
+  DoubtfireAngularJSModule.directive('taskDescriptionCard',
+  downgradeComponent({ component: TaskDescriptionCardComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
