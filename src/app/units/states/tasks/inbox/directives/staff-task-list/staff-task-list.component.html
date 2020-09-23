@@ -191,7 +191,7 @@
                 </span>
               </span>
             </div>
-            <div class="overflow" [hidden]="isNarrow">
+            <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
                 <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
