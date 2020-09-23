@@ -239,13 +239,6 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Bypasses sanitization of the specified URL.
-   */
-  bypass(url: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-  }
-
-  /**
    * Resets the state of this modal according to match the specified webcal.
    */
   private loadWebcal(webcal: Webcal) {

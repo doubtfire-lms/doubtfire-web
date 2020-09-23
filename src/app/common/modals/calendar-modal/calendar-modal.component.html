@@ -40,7 +40,7 @@
         </p>
         <div fxLayout="row">
           <div fxFlex="grow" class="webcal-url-container">
-            <a [href]="bypass(webcalUrl)">{{ webcalUrl }}</a>
+            <a [href]="webcalUrl | safe">{{ webcalUrl }}</a>
           </div>
           <div fxLayout="row">
             <button
