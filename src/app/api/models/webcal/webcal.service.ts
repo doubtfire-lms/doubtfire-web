@@ -4,12 +4,11 @@ import { EntityService } from '../entity.service';
 
 @Injectable()
 export class WebcalService extends EntityService<Webcal> {
-
   protected readonly endpointFormat = 'webcal';
   entityName = 'Webcal';
 
   protected createInstanceFrom(json: any, other?: any): Webcal {
-    let webcal = new Webcal();
+    const webcal = new Webcal();
     webcal.updateFromJson(json);
     return webcal;
   }
