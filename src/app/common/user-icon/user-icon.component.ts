@@ -25,7 +25,7 @@ export class UserIconComponent implements AfterViewInit {
 
   get backgroundUrl(): string {
     let hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
-    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size}`;
+    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 10}`;
   }
 
   get initials(): string {
