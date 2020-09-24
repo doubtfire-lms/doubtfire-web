@@ -42,7 +42,7 @@ export class UserIconComponent implements AfterViewInit {
   }
 
   get radius(): number {
-    return Math.min(this.size / 2, 4);
+    return Math.max(this.size / 2, 4);
   }
 
   private generateLines(): any[] {
