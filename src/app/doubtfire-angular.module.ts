@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -33,7 +34,7 @@ import { setTheme } from 'ngx-bootstrap/utils';
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {
   AboutDoubtfireModal,
-  AboutDoubtfireModalContent
+  AboutDoubtfireModalContent,
 } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
@@ -61,23 +62,21 @@ import {
   commentsModalProvider,
   taskDefinitionProvider,
   groupServiceProvider,
-  plagiarismReportModalProvider
+  plagiarismReportModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
-  DiscussionComposerDialog
+  DiscussionComposerDialog,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContenteditableModule } from '@ng-stack/contenteditable';
 import { AudioCommentRecorderComponent } from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
-import {
-  DiscussionPromptComposerComponent
-} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
+import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   IntelligentDiscussionPlayerComponent,
-  IntelligentDiscussionDialog
+  IntelligentDiscussionDialog,
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
@@ -129,7 +128,6 @@ import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-na
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-
 
 @NgModule({
   // Components we declare
@@ -187,6 +185,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
+    MatBadgeModule,
     MatRadioModule,
     MatListModule,
     MatOptionModule,
@@ -216,7 +215,10 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     EmojiModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately',
+    }),
   ],
   // Services we provide
   providers: [
@@ -251,24 +253,23 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-      deps: [currentUser]
+      deps: [currentUser],
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true
+      multi: true,
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
     DoubtfireConstants,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
-    TasksWithStudentNamePipe
-  ]
+    TasksWithStudentNamePipe,
+  ],
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
-
 export class DoubtfireAngularModule {
   constructor(
     injector: Injector,
@@ -279,14 +280,14 @@ export class DoubtfireAngularModule {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
 
-    this.constants.ExternalName.subscribe(result => {
+    this.constants.ExternalName.subscribe((result) => {
       this.title.setTitle(result);
     });
   }
 
   ngDoBootstrap() {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
-      strictDi: false
+      strictDi: false,
     });
   }
 }
