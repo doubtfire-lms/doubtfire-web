@@ -1,0 +1,7 @@
+.inbox-panel-full-screen {
+  height: $main-view-max-height;
+  & > *, & > * > .panel {
+    height: 100%;
+  }
+  display: flex;
+}

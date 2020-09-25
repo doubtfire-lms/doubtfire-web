@@ -26,52 +26,45 @@
             <a href="{{urls.taskFilesUrl}}">Download Submitted Files</a>
           </li>
         </ul>
-      </div><!--/download-dropdown-->
+      </div>
+      <!--/download-dropdown-->
     </div>
-  </div><!--/panel-header-->
+  </div>
+  <!--/panel-header-->
   <div class="panel-body" ng-show="isCurrentView('details')">
     <div class="col-sm-12 col-xl-6">
-      <task-plagiarism-card task="task"></task-plagiarism-card>
+      <task-plagiarism-card [task]="task"></task-plagiarism-card>
       <task-status-card task="task"></task-status-card>
       <task-due-card task="task"></task-due-card>
       <task-description-card task-def="task.definition" task="task" unit="task.unit()"></task-description-card>
-    </div><!--/task-description-column-->
+    </div>
+    <!--/task-description-column-->
     <div class="col-sm-12 col-xl-6">
       <task-assessment-card task="task"></task-assessment-card>
       <task-submission-card task="task"></task-submission-card>
       <task-outcomes-card task-def="task.definition" unit="task.unit()"></task-outcomes-card>
-    </div><!--/task-description-column-->
-  </div><!--/panel-body-->
-  <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
-    <pdf-viewer pdf-url="urls.taskSheetPdfUrl"></pdf-viewer>
-  </div><!--/panel-body-->
+    </div>
+    <!--/task-description-column-->
+  </div>
+  <!--/panel-body-->
+  <div class="has-pdf" ng-if="isCurrentView('task')">
+    <pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></pdf-viewer>
+  </div>
+  <!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.has_pdf">
-    <pdf-viewer pdf-url="urls.taskSubmissionPdfUrl"></pdf-viewer>
-  </div><!--/panel-body-->
+    <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
+    <pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer>
+  </div>
+  <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.has_pdf">
     <i class="fa fa-file-pdf-o"></i>
-    <span ng-show="task && task.processing_pdf">
-      PDF Still Processing
-    </span>
-    <span ng-show="task && !task.processing_pdf">
-      No Submission Uploaded
-    </span>
-    <span ng-hide="task">
-      No Task Selected
-    </span>
-  </div><!--/panel-body-without-pdf-->
+    <span ng-show="task && task.processing_pdf"> PDF Still Processing </span>
+    <span ng-show="task && !task.processing_pdf"> No Submission Uploaded </span>
+    <span ng-hide="task"> No Task Selected </span>
+  </div>
+  <!--/panel-body-without-pdf-->
   <div class="panel-footer" ng-if="task && showFooter">
-    <div class="visible-sm visible-xs">
-      <select
-        ng-change="triggerTransition(status)"
-        ng-model="task.status"
-        class="form-control input-lg">
-        <option ng-repeat="status in taskStatusData.keys" value="{{taskStatusData.keys[$index]}}">
-          {{taskStatusData.labels[status]}}
-        </option>
-      </select>
-    </div><!--/mobile-select-task-status-->
-    <div class="btn-group task-status hidden-sm hidden-xs">
+    <div class="btn-group task-status">
       <label
         ng-repeat="status in taskStatusData.keys"
         ng-model="task.status"
@@ -79,10 +72,12 @@
         class="btn btn-default btn-status {{taskStatusData.class(status)}}"
         tooltip-html-unsafe="<h5>Mark as <strong>{{taskStatusData.labels[status]}}</strong></h5><hr><p>{{taskStatusData.help[status].reason}}</p>"
         tooltip-popup-delay="500"
-        tooltip-append-to-body="true"
-        btn-radio="'{{status}}'">
+        btn-radio="'{{status}}'"
+      >
         <i class="fa {{taskStatusData.icons[status]}}"></i>
       </label>
-    </div><!--/desktop-select-task-status-->
-  </div><!--/panel-footer-->
+    </div>
+    <!--/desktop-select-task-status-->
+  </div>
+  <!--/panel-footer-->
 </div>

@@ -1,3 +1,0 @@
-[submodule ".git-hooks"]
-	path = .git-hooks
-	url = https://github.com/dstil/git-hooks

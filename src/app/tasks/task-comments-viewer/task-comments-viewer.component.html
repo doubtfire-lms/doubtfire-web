@@ -1,0 +1,114 @@
+<div style="height: 100%" class="comments-panel" appDragDrop (onFileDropped)="uploadFiles($event)" fxLayout="column">
+  <!-- TODO: Redesign components when all are migrated in view -->
+  <!-- <div fxFlex="50px" class="comments-header">
+    <div class="mat-h2 header-text">
+      Chat
+    </div>
+  </div> -->
+  <div fxFlex class="comments-body">
+    <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
+      <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
+    </div>
+
+    <div *ngIf="task" class="comments-scroll-content" [hidden]="loading">
+      <span>
+        <div
+          id="comment-{{ comment.id }}"
+          *ngFor="let comment of task.comments"
+          (mouseover)="comment.hover = true"
+          (mouseout)="comment.hover = false"
+          class="anchor"
+        >
+          <p id="commentTimestamp" *ngIf="comment.should_show_timestamp">
+            {{ comment.author.name }} {{ comment.created_at | humanizedDate }}
+          </p>
+          <div
+            class="comment"
+            [ngClass]="{
+              'comment-by-other-user': !comment.author_is_me,
+              'new-comment': comment.is_new
+            }"
+          >
+            <div *ngIf="shouldShowAuthorIcon(comment.type)" fxFlex="36px" style="display: flex">
+              <user-icon
+                *ngIf="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)"
+                [size]="36"
+                [user]="comment.author"
+                [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
+                matTooltip="{{ comment.author.name }}"
+                matTooltipPosition="left"
+              >
+              </user-icon>
+            </div>
+
+            <div fxFlex class="comment-container" [ngSwitch]="comment.type">
+              <div *ngSwitchCase="'status'" class="comment-status">
+                <hr class="hr-text" [attr.data-content]="comment.comment" />
+              </div>
+
+              <div class="bubble" [ngClass]="commentClasses(comment)">
+                <a
+                  (click)="scrollToComment(comment.original_comment.id)"
+                  class="original-comment"
+                  *ngIf="!!comment.reply_to_id"
+                >
+                  <p class="reply-text">
+                    <i class="fa fa-reply"></i>
+                    {{ comment.original_comment ? comment.original_comment.comment : 'comment removed' }}
+                  </p>
+                </a>
+                <div *ngSwitchCase="'extension'" class="comment-extension">
+                  <extension-comment [task]="task" [comment]="comment"> </extension-comment>
+                </div>
+
+                <div *ngSwitchCase="'text'" class="comment-text">
+                  <div class="markdown-to-html" [innerHTML]="comment.comment | marked"></div>
+                </div>
+
+                <div *ngSwitchCase="'audio'" class="comment-audio">
+                  <audio-player [task]="task" [project]="project" [comment]="comment"></audio-player>
+                </div>
+
+                <div *ngSwitchCase="'discussion'" class="comment-discussion">
+                  <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
+                </div>
+
+                <div *ngSwitchCase="'image'" class="comment-image">
+                  <a (click)="openCommentsModal(comment)">
+                    <img [src]="getCommentAttachment(comment)" width="100%" height="100%" />
+                  </a>
+                </div>
+
+                <div *ngSwitchCase="'pdf'" class="comment-pdf">
+                  <a (click)="openCommentsModal(comment)">
+                    <p><i class="fa fa-file-pdf-o"></i> view pdf</p>
+                  </a>
+                </div>
+              </div>
+              <div *ngIf="isBubbleComment(comment.type)" class="comment-overflow">
+                <comment-bubble-action
+                  [hidden]="!comment.hover"
+                  [task]="task"
+                  [comment]="comment"
+                ></comment-bubble-action>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="comment.last_read && shouldShowReadReceipt()" class="read-receipt">
+            <user-icon
+              matTooltip="Read {{ comment.recipient_read_time | humanizedDate }} by {{ comment.recipient.name }}"
+              matTooltipPosition="above"
+              size="22"
+              [user]="comment.recipient"
+            >
+            </user-icon>
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <!--/comment-list-->
+  <div class="comments-footer" id="commentComposerFoter">
+    <task-comment-composer [task]="task"></task-comment-composer>
+  </div>
+</div>

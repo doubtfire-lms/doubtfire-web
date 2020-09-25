@@ -5,5 +5,4 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   'doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-submission-card'
   'doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-due-card'
   'doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-outcomes-card'
-  'doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-plagiarism-card'
 ])

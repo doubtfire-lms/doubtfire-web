@@ -74,8 +74,6 @@ install_web() {
 	sudo apt-get install -y nodejs
 	gem install sass
 	rbenv rehash
-	overcommit --install
-	overcommit --sign
 	npm install
 }
 

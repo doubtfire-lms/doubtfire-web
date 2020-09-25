@@ -13,125 +13,167 @@
         <p class="strong">{{currentStep.subtitle}}</p>
         <div ng-show="currentStep == steps.nameStep" class="col-sm-12">
           <div class="form-group col-sm-6">
-            <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.first_name">
+            <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.first_name" />
           </div>
           <div class="form-group col-sm-6">
-            <input class="form-control text-center input-lg" placeholder="Last Name"  ng-model="user.last_name">
+            <input class="form-control text-center input-lg" placeholder="Last Name" ng-model="user.last_name" />
           </div>
-        </div><!--/name-step-->
+        </div>
+        <!--/name-step-->
         <div ng-show="currentStep == steps.nicknameStep">
-          <input class="form-control text-center input-lg" placeholder="Nickname or Preferred Name"  ng-model="user.nickname">
+          <input
+            class="form-control text-center input-lg"
+            placeholder="Nickname or Preferred Name"
+            ng-model="user.nickname"
+          />
           <p class="help-block col-sm-12 text-center">You can choose to leave this blank</p>
-        </div><!--/nickname-step-->
+        </div>
+        <!--/nickname-step-->
         <div ng-show="currentStep == steps.studentIdStep">
-          <input class="form-control text-center input-lg" placeholder="Student ID" ng-model="user.student_id">
-        </div><!--/student-id-step-->
+          <input class="form-control text-center input-lg" placeholder="Student ID" ng-model="user.student_id" />
+        </div>
+        <!--/student-id-step-->
         <div ng-show="currentStep == steps.avatarStep">
-          <user-icon size="60" style="width: 60px; height: 60px; font-size: 2em"></user-icon>
-          <p style="margin-top: 1.5em;">
-            <a href="http://en.gravatar.com/support/activating-your-account/" target="_blank" class="btn btn-lg btn-default">Change Avatar</a>
+          <user-icon [size]="60"></user-icon>
+          <p style="margin-top: 1.5em">
+            <a
+              href="http://en.gravatar.com/support/activating-your-account/"
+              target="_blank"
+              class="btn btn-lg btn-default"
+              >Change Avatar</a
+            >
           </p>
           <p class="help-block">
-            Once you set your avatar on Gravatar, it will automatically be updated when you next login. If you are creating a new
-            Gravatar account, be sure to sign up using <strong>{{user.email}}</strong>.
+            Once you set your avatar on Gravatar, it will automatically be updated when you next login. If you are
+            creating a new Gravatar account, be sure to sign up using <strong>{{user.email}}</strong>.
           </p>
-        </div><!--/avatar-step-->
+        </div>
+        <!--/avatar-step-->
         <div ng-show="currentStep == steps.emailStep">
           <div class="form-group">
-            <input class="form-control input-lg text-center" placeholder="Email Address"  ng-model="user.email">
+            <input class="form-control input-lg text-center" placeholder="Email Address" ng-model="user.email" />
           </div>
-            <hr ng-hide="isStaff">
-            <div class="form-group clearfix" ng-hide="isStaff">
-              <div class="col-sm-12">
-                <label>Task Notifications</label>
-                <p class="help-block">
-                  Recieve email notifications when new tasks become avaliable
-                </p>
-              </div>
-              <div class="col-sm-12">
-                <div class="btn-group">
-                  <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
-                    <i class="fa fa-check"></i>
-                  </label>
-                  <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
-                    <i class="fa fa-close"></i>
-                  </label>
-                </div>
-              </div>
+          <hr ng-hide="isStaff" />
+          <div class="form-group clearfix" ng-hide="isStaff">
+            <div class="col-sm-12">
+              <label>Task Notifications</label>
+              <p class="help-block">Recieve email notifications when new tasks become avaliable</p>
             </div>
-            <hr>
-            <div class="form-group clearfix">
-              <div class="col-sm-12">
-                <label>Feedback Notifications</label>
-                <p class="help-block">
-                  Recieve feedback and weekly status email notifications
-                </p>
-              </div>
-              <div class="col-sm-12">
-                <div class="btn-group">
-                  <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
-                    <i class="fa fa-check"></i>
-                  </label>
-                  <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
-                    <i class="fa fa-close"></i>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <hr  ng-hide="isStaff">
-            <div class="form-group clearfix" ng-hide="isStaff">
-              <div class="col-sm-12">
-                <label>Portfolio Notifications</label>
-                <p class="help-block">
-                  Recieve email notifications when your portfolio is ready to mark
-                </p>
-              </div>
-              <div class="col-sm-12">
-                <div class="btn-group">
-                  <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
-                    <i class="fa fa-check"></i>
-                  </label>
-                  <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
-                    <i class="fa fa-close"></i>
-                  </label>
-                </div>
-              </div>
-            </div>
-        </div><!--/email-step-->
-        <div ng-show="currentStep == steps.targetGradeStep">
-          <div ng-repeat="project in projects">
-            <div class="clearfix">
-              <p>
-                Select your target grade for {{project.unit_name}}
-              </p>
-              <div class="btn-group col-sm-12">
-                <label ng-repeat="grade in grades" class="btn btn-default col-sm-3" ng-model="project.target_grade" btn-radio="{{$index}}">
-                  <grade-icon grade="grade" class="text-{{project.target_grade == grades.indexOf(grade) ? 'primary' : 'muted'}}"></grade-icon>
+            <div class="col-sm-12">
+              <div class="btn-group">
+                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
+                  <i class="fa fa-check"></i>
+                </label>
+                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
+                  <i class="fa fa-close"></i>
                 </label>
               </div>
             </div>
-            <hr>
+          </div>
+          <hr />
+          <div class="form-group clearfix">
+            <div class="col-sm-12">
+              <label>Feedback Notifications</label>
+              <p class="help-block">Recieve feedback and weekly status email notifications</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="btn-group">
+                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
+                  <i class="fa fa-check"></i>
+                </label>
+                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
+                  <i class="fa fa-close"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+          <hr ng-hide="isStaff" />
+          <div class="form-group clearfix" ng-hide="isStaff">
+            <div class="col-sm-12">
+              <label>Portfolio Notifications</label>
+              <p class="help-block">Recieve email notifications when your portfolio is ready to mark</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="btn-group">
+                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
+                  <i class="fa fa-check"></i>
+                </label>
+                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
+                  <i class="fa fa-close"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/email-step-->
+        <div ng-show="currentStep == steps.targetGradeStep">
+          <div ng-repeat="project in projects">
+            <div class="clearfix">
+              <p>Select your target grade for {{project.unit_name}}</p>
+              <div class="btn-group col-sm-12">
+                <label
+                  ng-repeat="grade in grades"
+                  class="btn btn-default col-sm-3"
+                  ng-model="project.target_grade"
+                  btn-radio="{{$index}}"
+                >
+                  <grade-icon
+                    grade="grade"
+                    class="text-{{project.target_grade == grades.indexOf(grade) ? 'primary' : 'muted'}}"
+                  ></grade-icon>
+                </label>
+              </div>
+            </div>
+            <hr />
           </div>
           <p class="help-block">You can change this target at any time while you are enrolled.</p>
-        </div><!--/target-grade-step-->
+        </div>
+        <!--/target-grade-step-->
         <div ng-show="currentStep == steps.optInToResearchStep">
           <div class="col-sm-12 text-center">
             <div class="btn-group">
-              <label class="btn btn-default" ng-change="optInOnly && done(user)" ng-model="user.opt_in_to_research" btn-radio="true">
+              <label
+                class="btn btn-default"
+                ng-change="optInOnly && done(user)"
+                ng-model="user.opt_in_to_research"
+                btn-radio="true"
+              >
                 <i class="fa fa-check"></i> Yes, I'll help
               </label>
-              <label class="btn btn-default" ng-change="optInOnly && done(user)" ng-model="user.opt_in_to_research" btn-radio="false">
+              <label
+                class="btn btn-default"
+                ng-change="optInOnly && done(user)"
+                ng-model="user.opt_in_to_research"
+                btn-radio="false"
+              >
                 <i class="fa fa-close"></i> No, thank you
               </label>
             </div>
-            <p class="help-block"> You may choose to opt-in or out later at any time. </p>
+            <p class="help-block">You may choose to opt-in or out later at any time.</p>
           </div>
-        </div><!--/research-step-->
+        </div>
+        <!--/research-step-->
       </div>
       <div class="panel-footer clearfix" ng-hide="optInOnly">
-        <button class="btn btn-primary pull-left" ng-click="moveStep(-1)" ng-hide="currentStep == firstStep"><i class="fa fa-arrow-left"></i> Back</button>
-        <button class="btn btn-primary pull-right" ng-click="moveStep(1)" ng-disabled="determineDisabledForCurrentStep()" ng-hide="currentStep == lastStep">Next <i class="fa fa-arrow-right"></i></button>
-        <button class="btn btn-success pull-right" ng-click="done()" ng-disabled="determineDisabledForCurrentStep()" ng-show="currentStep == lastStep">Done <i class="fa fa-check"></i></a>
+        <button class="btn btn-primary pull-left" ng-click="moveStep(-1)" ng-hide="currentStep == firstStep">
+          <i class="fa fa-arrow-left"></i> Back
+        </button>
+        <button
+          class="btn btn-primary pull-right"
+          ng-click="moveStep(1)"
+          ng-disabled="determineDisabledForCurrentStep()"
+          ng-hide="currentStep == lastStep"
+        >
+          Next <i class="fa fa-arrow-right"></i>
+        </button>
+        <button
+          class="btn btn-success pull-right"
+          ng-click="done()"
+          ng-disabled="determineDisabledForCurrentStep()"
+          ng-show="currentStep == lastStep"
+        >
+          Done <i class="fa fa-check"></i>
+        </button>
       </div>
     </div>
   </div>

@@ -1,3 +1,11 @@
-<div class="status-icon-bubble {{statusClass(status)}}">
-  <i class="fa {{statusIcon(status)}}" [matTooltipDisabled]="!showTooltip" [matTooltip]="statusLabel(status)" [matTooltipShowDelay]="100"></i>
-</div>
+<mat-chip-list aria-label="Task Status Icon">
+  <mat-chip
+    tabindex="-1"
+    disableRipple
+    [ngClass]="statusClass(status)"
+    matTooltip="{{ statusLabel(status) }}"
+    matTooltipPosition="above"
+    [matTooltipDisabled]="!showTooltip"
+    ><i class="fa {{ statusIcon(status) }}"></i>
+  </mat-chip>
+</mat-chip-list>

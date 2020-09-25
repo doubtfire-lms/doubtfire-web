@@ -1,14 +1,15 @@
 import { Component, OnInit, Inject, Input, ViewChildren, QueryList, KeyValueDiffers, KeyValueDiffer, ElementRef } from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
-import { PopoverDirective } from 'ngx-bootstrap';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/public_api';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Component({
   selector: 'task-comment-composer',
-  templateUrl: './task-comment-composer.html',
+  templateUrl: './task-comment-composer.component.html',
+  styleUrls: ['./task-comment-composer.component.scss'],
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};

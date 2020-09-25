@@ -5,6 +5,7 @@
 A modern, lightweight learning management system.
 
 > ## 🛠 Migration Status: In Development
+>
 > Doubtfire web migration from AngularJS/Coffeescript to Angular/Typescirpt, including refactoring all components, is currently in development.
 >
 > See the progress of component migration below.
@@ -186,7 +187,7 @@ TODO:
 - [ ] ./src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.coffee
 - [ ] ./src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee
-- [ ] ./src/app/common/pdf-panel-viewer/pdf-panel-viewer.coffee
+- [ ] ./src/app/common/pdf-viewer-panel/pdf-viewer-panel.coffee
 - [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/long-press/on-long-press.coffee
 - [ ] ./src/app/common/content-editable/content-editable.coffee
@@ -304,25 +305,18 @@ $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 $ sudo apt-get install nodejs
 ```
 
-Install [overcommit](https://github.com/brigade/overcommit) and Ruby [SASS](http://sass-lang.com):
+Install Ruby [SASS](http://sass-lang.com):
 
 ```
-$ gem install overcommit sass
+$ gem install sass
 ```
 
-If `gem` fails, you should read the Doubfire API README to install ruby. If you are *not* using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
+If `gem` fails, you should read the Doubfire API README to install ruby. If you are _not_ using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
 
 If using `rbenv`, rehash to ensure each of the gems are on your `PATH`:
 
 ```
 $ rbenv rehash
-```
-
-Install and sign the git hooks using `overcommit`:
-
-```
-$ overcommit --install
-$ overcommit --sign
 ```
 
 Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) globally:
@@ -357,8 +351,8 @@ $ grunt deploy
 
 You may prefix this command with the following environment variables:
 
-* `DF_API_URL` - the URL of the API (e.g., `https://doubtfire.com/api`). This will default to `window.location.host` if not set and dynamically generate a URL.
-* `DF_EXTERNAL_NAME` - a new name that removes references to the _Doubtfire_ name should you so want to not use such its original name (😢).
+- `DF_API_URL` - the URL of the API (e.g., `https://doubtfire.com/api`). This will default to `window.location.host` if not set and dynamically generate a URL.
+- `DF_EXTERNAL_NAME` - a new name that removes references to the _Doubtfire_ name should you so want to not use such its original name (😢).
 
 ## Resources
 
