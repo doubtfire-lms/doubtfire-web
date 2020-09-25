@@ -7,9 +7,8 @@ import * as d3 from 'd3';
 @Component({
   selector: 'user-icon',
   templateUrl: './user-icon.component.html',
-  styleUrls: ['./user-icon.component.scss']
+  styleUrls: ['./user-icon.component.scss'],
 })
-
 export class UserIconComponent implements AfterViewInit {
   @Input() user: User = this.currentUser.profile;
   @Input() size: number = 100;
@@ -19,18 +18,16 @@ export class UserIconComponent implements AfterViewInit {
 
   lineHeight = 12;
 
-  constructor(
-    @Inject(currentUser) private currentUser: any,
-  ) { }
+  constructor(@Inject(currentUser) private currentUser: any) {}
 
   get backgroundUrl(): string {
     let hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
-    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 10}`;
+    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
   }
 
   get initials(): string {
-    let result = (this.user?.name != null) ? this.user.name.split(' ') : '  ';
-    return (result.length > 1) ? (`${result[0][0]}${result[1][0]}`).toUpperCase() : '  ';
+    let result = this.user?.name != null ? this.user.name.split(' ') : '  ';
+    return result.length > 1 ? `${result[0][0]}${result[1][0]}`.toUpperCase() : '  ';
   }
 
   get words(): string[] {
@@ -83,14 +80,16 @@ export class UserIconComponent implements AfterViewInit {
       textRadius = Math.max(textRadius, Math.sqrt(dx ** 2 + dy ** 2));
     }
 
-    const svg = d3.select(this.svg.nativeElement)
+    const svg = d3
+      .select(this.svg.nativeElement)
       .style('font', '10px sans-serif')
       .attr('width', this.size)
       .attr('height', this.size)
       .attr('text-anchor', 'middle');
 
     function appendCircle(selection, size, radius) {
-      selection.append('circle')
+      selection
+        .append('circle')
         .attr('cx', size / 2)
         .attr('cy', size / 2)
         .attr('r', radius);
@@ -99,27 +98,29 @@ export class UserIconComponent implements AfterViewInit {
     const id = this.generateUniqueId();
 
     let defs = svg.append('defs');
-    defs.append('clipPath')
-      .attr('id', `image-clip-${id}`)
-      .call(appendCircle, this.size, this.radius);
+    defs.append('clipPath').attr('id', `image-clip-${id}`).call(appendCircle, this.size, this.radius);
 
-    svg.append('circle')
+    svg
+      .append('circle')
       .attr('cx', this.size / 2)
       .attr('cy', this.size / 2)
       .attr('r', this.radius)
       .attr('fill', '#9e9e9e');
 
-    svg.append('text')
+    svg
+      .append('text')
       .attr('transform', `translate(${this.size / 2},${this.size / 2}) scale(${this.radius / textRadius})`)
       .selectAll('tspan')
       .data(lines)
-      .enter().append('tspan')
+      .enter()
+      .append('tspan')
       .attr('x', 0)
       .attr('y', (d, i) => (i - 1 / 2 + 0.8) * this.lineHeight)
       .attr('fill', 'white')
-      .text(d => d.text);
+      .text((d) => d.text);
 
-    svg.append('image')
+    svg
+      .append('image')
       .attr('xlink:href', this.backgroundUrl)
       .attr('width', this.size)
       .attr('height', this.size)
