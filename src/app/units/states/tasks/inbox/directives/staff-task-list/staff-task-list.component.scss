@@ -1,5 +1,5 @@
-@import "../../../../../../../styles/mixins/task-list.scss";
-@import "../../../../../../../styles/mixins/scrollable.scss";
+@import '../../../../../../../styles/mixins/task-list.scss';
+@import '../../../../../../../styles/mixins/scrollable.scss';
 
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
@@ -15,6 +15,7 @@
 
   .inbox-entry {
     padding-right: 10px;
+    padding-left: 10px;
     width: 100%;
     height: 100%;
   }

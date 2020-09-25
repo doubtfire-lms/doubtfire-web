@@ -22,7 +22,7 @@ export class UserIconComponent implements AfterViewInit {
 
   get backgroundUrl(): string {
     const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
-    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size}`;
+    return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
   }
 
   get initials(): string {
@@ -39,7 +39,7 @@ export class UserIconComponent implements AfterViewInit {
   }
 
   get radius(): number {
-    return Math.min(this.size, this.size) / 2 - 4;
+    return Math.max(this.size / 2, 4);
   }
 
   private generateLines(): any[] {
@@ -96,8 +96,8 @@ export class UserIconComponent implements AfterViewInit {
     }
 
     const id = this.generateUniqueId();
-
     const defs = svg.append('defs');
+
     defs.append('clipPath').attr('id', `image-clip-${id}`).call(appendCircle, this.size, this.radius);
 
     svg

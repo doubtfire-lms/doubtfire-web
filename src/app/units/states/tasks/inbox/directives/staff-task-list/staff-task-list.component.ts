@@ -231,7 +231,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   // Finds a task (or null) given its task key
   private findTaskForTaskKey(key) {
-    this.tasks.find((t) => t.hasTaskKey(key));
+    this.tasks.find((t) => t?.hasTaskKey(key));
   }
 
   // Callback to refresh data from the task source

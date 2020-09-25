@@ -159,7 +159,7 @@
             (mouseover)="task.hover = true"
             (mouseout)="task.hover = false"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project()" [email]="task.project().student_email" [size]="45">
+            <user-icon fxFlexAlign="center" [user]="task.project()" [email]="task.project().student_email" [size]="40">
             </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project().name }}</h4>
@@ -177,21 +177,17 @@
                 </p>
               </div>
             </div>
-            <!-- <span fxFlex></span> -->
-            <!--/task-data-->
-            <div class="task-badges" [hidden]="isNarrow">
-              <status-icon [status]="task.status"></status-icon>
-              <span *ngIf="isSelectedTask(task)">
-                <span style="width: 20px; height: 20px" *ngIf="task.hasGrade()">
-                  {{ task.gradeDesc() }}
-                </span>
-                <span style="width: 20px; height: 20px" *ngIf="task.hasQualityPoints()">
-                  <sup>{{ task.quality_pts }}</sup
-                  >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
-                </span>
-              </span>
+            <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
+              <mat-chip style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip>
             </div>
-            <div class="overflow" [hidden]="isNarrow">
+            <status-icon
+              [hidden]="isNarrow"
+              matBadge="{{ task.quality_pts }}/{{ task.definition.max_quality_pts }}"
+              [matBadgeHidden]="!task.hasQualityPoints() || !task.quality_pts"
+              matBadgePosition="before"
+              [status]="task.status"
+            ></status-icon>
+            <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
                 <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
