@@ -10,7 +10,7 @@ import * as d3 from 'd3';
   styleUrls: ['./user-icon.component.scss'],
 })
 export class UserIconComponent implements AfterViewInit {
-  @Input() user: User = this.currentUser.profile;
+  @Input() user: User = this.currentUserRef.profile;
   @Input() size: number = 100;
   @Input() email: string = this.user.email;
 
@@ -18,15 +18,15 @@ export class UserIconComponent implements AfterViewInit {
 
   lineHeight = 12;
 
-  constructor(@Inject(currentUser) private currentUser: any) {}
+  constructor(@Inject(currentUser) private currentUserRef: any) {}
 
   get backgroundUrl(): string {
-    let hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
+    const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
   }
 
   get initials(): string {
-    let result = this.user?.name != null ? this.user.name.split(' ') : '  ';
+    const result = this.user?.name != null ? this.user.name.split(' ') : '  ';
     return result.length > 1 ? `${result[0][0]}${result[1][0]}`.toUpperCase() : '  ';
   }
 
@@ -47,8 +47,8 @@ export class UserIconComponent implements AfterViewInit {
     let lineWidth0 = Infinity;
     const result = [];
     for (let i = 0, n = this.words.length; i < n; ++i) {
-      let lineText1 = (line ? line.text + ' ' : '') + this.words[i];
-      let lineWidth1 = this.measureWidth(lineText1);
+      const lineText1 = (line ? line.text + ' ' : '') + this.words[i];
+      const lineWidth1 = this.measureWidth(lineText1);
       if ((lineWidth0 + lineWidth1) / 2 < this.targetWidth) {
         line.width = lineWidth0 = lineWidth1;
         line.text = lineText1;
@@ -96,8 +96,8 @@ export class UserIconComponent implements AfterViewInit {
     }
 
     const id = this.generateUniqueId();
+    const defs = svg.append('defs');
 
-    let defs = svg.append('defs');
     defs.append('clipPath').attr('id', `image-clip-${id}`).call(appendCircle, this.size, this.radius);
 
     svg

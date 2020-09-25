@@ -25,7 +25,7 @@ describe('CampusService', () => {
   });
 
   it('should return expected campuses (HttpClient called once)', fakeAsync(() => {
-    let c = new Campus();
+    const c = new Campus();
     c.updateFromJson({
       name: 'Melbourne',
       mode: 'automatic',

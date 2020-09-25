@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TaskPlagiarismCardComponent } from './task-plagiarism-card.component';
 
@@ -6,12 +6,13 @@ describe('TaskPlagiarismCardComponent', () => {
   let component: TaskPlagiarismCardComponent;
   let fixture: ComponentFixture<TaskPlagiarismCardComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TaskPlagiarismCardComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TaskPlagiarismCardComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskPlagiarismCardComponent);

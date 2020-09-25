@@ -25,7 +25,7 @@ describe('UserService', () => {
   });
 
   it('should return expected users (HttpClient called once)', fakeAsync(() => {
-    let u = new User();
+    const u = new User();
     u.updateFromJson({
       id: 1,
       name: 'jake',
@@ -56,7 +56,7 @@ describe('UserService', () => {
   }));
 
   it('should create a new user', fakeAsync(() => {
-    let user = new User();
+    const user = new User();
     user.updateFromJson({
       name: 'jake',
       last_name: 'renzella',
@@ -77,7 +77,7 @@ describe('UserService', () => {
       expect(result).toEqual(user, 'expected users');
     });
 
-    let expectedUser = user;
+    const expectedUser = user;
     expectedUser.id = 1;
 
     const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
@@ -111,7 +111,7 @@ describe('UserService', () => {
   }));
 
   it('Test updating a User', fakeAsync(() => {
-    let u = new User();
+    const u = new User();
     u.updateFromJson({
       id: 1,
       name: 'jake',
@@ -151,7 +151,7 @@ describe('UserService', () => {
   }));
 
   it('should cache the result of a get request', fakeAsync(() => {
-    let user = new User();
+    const user = new User();
     user.updateFromJson({
       name: 'jake',
       last_name: 'renzella',
@@ -170,12 +170,12 @@ describe('UserService', () => {
 
     userService.get(1).subscribe((data) => {});
 
-    let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('GET');
       return true;
     });
-    let user2 = user;
+    const user2 = user;
     user2.id = 1;
     req.flush(user2);
     tick();
@@ -217,7 +217,7 @@ describe('UserService', () => {
       return true;
     });
 
-    let user2 = new User();
+    const user2 = new User();
     user2.updateFromJson(user);
     user2.id = 1;
     req.flush(user2);
@@ -236,7 +236,7 @@ describe('UserService', () => {
       expect(request.method).toBe('GET');
       return true;
     });
-    let user4 = new User();
+    const user4 = new User();
     user4.updateFromJson(user2);
     user4.name = 'fred';
     req.flush(user4);

@@ -8,13 +8,12 @@ export class TutorialStreamService extends EntityService<TutorialStream> {
   protected readonly endpointFormat = '';
   entityName = 'Stream';
 
-  constructor(httpClient: HttpClient
-  ) {
+  constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
   protected createInstanceFrom(json: any, other?: any): TutorialStream {
-    let stream = new TutorialStream(json);
+    const stream = new TutorialStream(json);
     stream.updateFromJson(json);
     return stream;
   }

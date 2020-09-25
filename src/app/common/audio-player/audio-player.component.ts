@@ -4,10 +4,9 @@ import { Task } from 'src/app/ajs-upgraded-providers';
 @Component({
   selector: 'audio-player',
   templateUrl: './audio-player.component.html',
-  styleUrls: ['./audio-player.component.scss']
+  styleUrls: ['./audio-player.component.scss'],
 })
 export class AudioPlayerComponent implements OnInit {
-
   @Input() project: {};
   @Input() task: {};
   @Input() comment: {};
@@ -20,22 +19,20 @@ export class AudioPlayerComponent implements OnInit {
   isPlaying = false;
   audioProgress = 0;
   currentTime = 0;
-  audio: HTMLAudioElement = <HTMLAudioElement>document.createElement('AUDIO');
+  audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
 
-  constructor(@Inject(Task) private Task) {
+  constructor(@Inject(Task) private TaskModel) {
     this.audio.ontimeupdate = () => {
-      let percentagePlayed = this.audio.currentTime / this.audio.duration;
+      const percentagePlayed = this.audio.currentTime / this.audio.duration;
       this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
     };
-
 
     this.audio.onended = () => {
       this.isPlaying = false;
     };
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   setTime(percent: number) {
     const newTime = percent * this.audio.duration;
@@ -66,11 +63,11 @@ export class AudioPlayerComponent implements OnInit {
   }
 
   loadAudio() {
-      this.isLoaded = true;
-      if (this.project && this.task && this.comment) {
-        this.audio.src = this.Task.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
-      } else if (this.audioSrc) {
-        this.audio.src = this.audioSrc.src;
+    this.isLoaded = true;
+    if (this.project && this.task && this.comment) {
+      this.audio.src = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+    } else if (this.audioSrc) {
+      this.audio.src = this.audioSrc.src;
     }
   }
 
@@ -82,7 +79,6 @@ export class AudioPlayerComponent implements OnInit {
       this.audio.play();
       this.isPlaying = true;
     } else {
-
       this.audio.pause();
       this.isPlaying = false;
     }

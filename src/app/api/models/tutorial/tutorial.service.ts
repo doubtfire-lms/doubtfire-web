@@ -9,16 +9,17 @@ export class TutorialService extends EntityService<Tutorial> {
   protected readonly endpointFormat = 'tutorials/:id:';
   entityName = 'Tutorial';
 
-  constructor(httpClient: HttpClient,
-    @Inject(currentUser) private currentUser: any,
-    @Inject(auth) private auth: any,
-    @Inject(analyticsService) private analyticsService: any,
+  constructor(
+    httpClient: HttpClient,
+    @Inject(currentUser) private CurrentUser: any,
+    @Inject(auth) private Auth: any,
+    @Inject(analyticsService) private AnalyticsService: any
   ) {
     super(httpClient);
   }
 
   protected createInstanceFrom(json: any, other?: any): Tutorial {
-    let tutorial = new Tutorial(json, other);
+    const tutorial = new Tutorial(json, other);
     tutorial.updateFromJson(json);
     return tutorial;
   }

@@ -2,7 +2,6 @@ import { OnInit, Directive } from '@angular/core';
 
 @Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {
-
   protected mediaRecorder: any = null;
   public recordingAvailable: boolean = false;
   public isRecording: boolean = false;
@@ -19,10 +18,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     return Boolean(navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
-  constructor(
-    private mediaRecorderService: any,
-  ) {
-  }
+  constructor(private mediaRecorderService: any) {}
 
   ngOnInit() {
     if (this.canRecord) {
@@ -97,7 +93,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   // virtual implementation of visualise
   // Which can be overridden
   protected visualise(): void {
-    let draw = () => {
+    const draw = () => {
       const WIDTH = this.canvas.width;
       const HEIGHT = this.canvas.height;
       requestAnimationFrame(draw);
@@ -117,10 +113,10 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
       }
     };
 
-    let analyser = this.mediaRecorder.analyserNode;
+    const analyser = this.mediaRecorder.analyserNode;
     analyser.fftSize = 2048;
     const bufferLength = analyser.frequencyBinCount;
-    let dataArray = new Uint8Array(bufferLength);
+    const dataArray = new Uint8Array(bufferLength);
     draw();
   }
 

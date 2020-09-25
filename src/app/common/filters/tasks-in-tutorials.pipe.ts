@@ -11,10 +11,11 @@ export class TasksInTutorialsPipe implements PipeTransform {
     if (tutorialIds.length === 0) {
       return [];
     }
+
     const result = tasks?.filter((task) => {
       if (task?.isGroupTask()) {
         if (task.group() != null) {
-          let tute_id = task.group().tutorial_id;
+          const tute_id = task.group().tutorial_id;
           return tutorialIds.includes(tute_id);
         }
       } else {
