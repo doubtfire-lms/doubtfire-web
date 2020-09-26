@@ -88,16 +88,15 @@
           <label class="col-sm-2 control-label" for="portfolioautogenerationdate">Portfolio Automation Date</label>
           <div class="col-sm-9">
             <div class="col-sm-4 input-group">
-              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.portfolioAutoGenerationOpened" type="text" class="form-control" id="portfolioautogenerationdate" ng-model="unit.portfolio_auto_generation_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-if="!unit.teaching_period_id" />
-              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.portfolioAutoGenerationOpened" type="text" class="form-control" id="portfolioautogenerationdate" ng-model="tp.portfolio_auto_generation_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-disabled="unit.teaching_period_id" ng-repeat="tp in teachingPeriods.loadedPeriods" ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id" />
+              <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.portfolioAutoGenerationOpened" type="text" class="form-control" id="portfolioautogenerationdate" ng-model="unit.portfolio_auto_generation_date" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close"/>
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="open($event,'autogen')" ng-disabled="unit.teaching_period_id">
+                <button class="btn btn-default" type="button" ng-click="open($event,'autogen')">
                   <i class="fa fa-calendar"></i>
                 </button>
               </span>
             </div>
             <span class="help-block">
-              When a date is selected, this will allow the automation of student portfolios in the event a student has not submitted a portfolio by the due date.
+              When a date is selected, student portfolios will automatically compile on this date if the student has not compiled one themselves.
             </span>
           </div>
         </div><!--/portfolio-auto-generation-date-->

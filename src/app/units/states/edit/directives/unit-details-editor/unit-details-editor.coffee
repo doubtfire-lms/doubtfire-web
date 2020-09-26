@@ -35,8 +35,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.calOptions.endOpened = ! $scope.calOptions.endOpened
         $scope.calOptions.portfolioAutoGenerationOpened = false
       else if pickerData == 'autogen'
-        $scope.calOptions.startOpened = false
-        $scope.calOptions.endOpened = false
         $scope.calOptions.portfolioAutoGenerationOpened = ! $scope.calOptions.portfolioAutoGenerationOpened
 
     $scope.dateOptions = {
@@ -53,6 +51,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
+      if $scope.unit.portfolio_auto_generation_date && $scope.unit.portfolio_auto_generation_date.getMonth
+        $scope.unit.portfolio_auto_generation_date = "#{$scope.unit.portfolio_auto_generation_date.getFullYear()}-#{$scope.unit.portfolio_auto_generation_date.getMonth() + 1}-#{$scope.unit.portfolio_auto_generation_date.getDate()}"
 
       saveData = {
         name: $scope.unit.name
