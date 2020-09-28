@@ -1,0 +1,35 @@
+<p>task-plagiarism-file-viewer works!</p>
+<p>task-plagiarism-file-viewer works!</p>
+<div class="card card-default task-plagiarism-file-viewer">
+    <div class="card-heading clearfix">
+      <div class="pull-left">
+        <h5 class="panel-title">
+          <strong>{{match.username || "Other Student"}}</strong>
+          {{match.name}}
+        </h5>
+        <span [hidden]="!other">
+          Match is <strong>{{match.pct}}% similar</strong> to a student in {{match.tutor}}'s tutorial, {{match.tutorial}}.
+        </span>
+        <span [hidden]="other">
+          Similarities detected in your work.
+        </span>
+      </div>
+    </div>
+    <div class="card-body plagiarism-panel" [innerHTML]="match.html" [hidden]="!match.html">
+    </div>
+    <div class="card-body plagiarism-panel text-center strong" [hidden]="match.html">
+      <i class="fa fa-low-vision fa-2x"></i>
+      <p>Match data hidden</p>
+    </div>
+    <div class="card-footer text-right">
+      <a class="btn btn-default" [hidden]="!match.url" [href]="match.url" target="new">
+        <i class="fa fa-file-text-o"></i> View Report
+      </a>
+      <button class="btn btn-danger" [hidden]="match.dismissed" *ngIf="canDismiss" (click)="dismiss_similarity(true)">
+        <i class="fa fa-check-square-o"></i> Mark as Resolved
+      </button>
+      <button class="btn btn-danger" [hidden]="!match.dismissed" *ngIf="canDismiss" (click)="dismiss_similarity(false)">
+        <i class="fa fa-square-o"></i> Mark as Unresolved
+      </button>
+    </div>
+  </div>
