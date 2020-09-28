@@ -35,6 +35,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.calOptions.endOpened = ! $scope.calOptions.endOpened
         $scope.calOptions.portfolioAutoGenerationOpened = false
       else if pickerData == 'autogen'
+        $scope.calOptions.startOpened = false
+        $scope.calOptions.endOpened = false
         $scope.calOptions.portfolioAutoGenerationOpened = ! $scope.calOptions.portfolioAutoGenerationOpened
 
     $scope.dateOptions = {
