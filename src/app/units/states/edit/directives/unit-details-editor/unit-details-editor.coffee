@@ -56,6 +56,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         send_notifications: $scope.unit.send_notifications
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
+        draft_task_definition_id: $scope.unit.draft_task_definition_id
       }
 
       if $scope.unit.teaching_period_id

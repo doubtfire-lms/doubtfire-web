@@ -52,6 +52,9 @@ angular.module('doubtfire.projects.states.portfolio', [
   $scope.projectHasLearningSummaryReport = ->
     _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
 
+  # Determine whether project is using draft learning summary
+  $scope.projectHasDraftLearningSummaryReport = $scope.project.uses_draft_learning_summary
+
   # Portfolio submission object
   $scope.portfolioSubmission = PortfolioSubmission($scope.project)
 
@@ -95,6 +98,8 @@ angular.module('doubtfire.projects.states.portfolio', [
   # Jump to a step
   if $scope.project.portfolio_available or $scope.project.compile_portfolio
     $scope.setActiveTab $scope.tabs.reviewStep
+  else if $scope.projectHasDraftLearningSummaryReport
+    $scope.setActiveTab $scope.tabs.summaryStep
   else if $scope.projectHasLearningSummaryReport()
     $scope.setActiveTab $scope.tabs.taskStep
   else

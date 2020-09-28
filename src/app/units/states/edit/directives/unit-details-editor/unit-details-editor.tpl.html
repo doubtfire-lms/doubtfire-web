@@ -42,6 +42,19 @@
         </div><!--/teaching-period-date-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="">Draft Learning Summary</label>
+          <div class="col-sm-9">
+            <select class="form-control" ng-model="unit.draft_task_definition_id">
+              <option value="">None</option>
+              <option ng-value="td.id" value="{{td.id}}" ng-repeat="td in unit.task_definitions">{{td.abbreviation}}-{{td.name}} </option>
+            </select>
+            <span class="help-block">
+              When a draft learning summary task is selected, this will ensure a students uploaded draft is automatically added to the students portfolio.
+            </span>
+          </div>
+        </div><!--/draft-learning-summary-->
+
+        <div class="form-group">
           <label tooltip="Date for the start of teaching in the unit." class="col-sm-2 control-label" for="startdate">Start Date</label>
           <div class="col-sm-9">
             <div class="col-sm-4 input-group">
