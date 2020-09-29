@@ -4,6 +4,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
@@ -49,6 +51,7 @@ import {
   TaskCommentServiceProvider,
   analyticsServiceProvider,
   taskProvider,
+  projectServiceProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
@@ -84,6 +87,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
+import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
@@ -102,6 +106,7 @@ import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-str
 import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UserService } from './api/models/user/user.service';
+import { WebcalService } from './api/models/webcal/webcal.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -145,6 +150,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CampusListComponent,
     ActivityTypeListComponent,
     ExtensionModalComponent,
+    CalendarModalComponent,
     InstitutionSettingsComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
@@ -180,6 +186,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    ClipboardModule,
     ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
@@ -192,9 +199,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatStepperModule,
     MatPaginatorModule,
     MatSelectModule,
-    MatChipsModule,
     MatButtonToggleModule,
     MatTooltipModule,
+    MatSlideToggleModule,
     MatButtonModule,
     MatMenuModule,
     MatCardModule,
@@ -210,6 +217,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
+    MatChipsModule,
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
@@ -226,6 +234,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TutorialService,
     TutorialStreamService,
     UserService,
+    WebcalService,
     ActivityTypeService,
     EmojiService,
     userProvider,
@@ -239,6 +248,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     gradeServiceProvider,
     analyticsServiceProvider,
     taskProvider,
+    projectServiceProvider,
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,

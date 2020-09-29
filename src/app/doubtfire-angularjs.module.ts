@@ -263,6 +263,7 @@ import {
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
+import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
@@ -274,6 +275,7 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { CampusService } from './api/models/campus/campus.service';
+import { WebcalService } from './api/models/webcal/webcal.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
@@ -309,6 +311,8 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('CalendarModal',
+  downgradeInjectable(CalendarModalService));
 DoubtfireAngularJSModule.factory('TaskCommentService',
   downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService',
@@ -317,6 +321,8 @@ DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService',
   downgradeInjectable(CampusService));
+DoubtfireAngularJSModule.factory('webcalService',
+  downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService',
   downgradeInjectable(EmojiService));
 
