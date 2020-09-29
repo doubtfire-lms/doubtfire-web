@@ -5,7 +5,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
   scope:
     project: '='
     unit: '='
-  controller: ($scope, Visualisation, listenerService, d3) ->
+  controller: ($scope, Visualisation, listenerService) ->
     listeners = listenerService.listenTo($scope)
 
     $scope.data = []

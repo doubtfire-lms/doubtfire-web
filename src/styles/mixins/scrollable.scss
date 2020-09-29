@@ -1,7 +1,13 @@
+$thumb-color: #969699;
+
 @mixin scrollable {
+  scrollbar-track-color: transparent;
+  scrollbar-color: $thumb-color transparent;
+  overflow-y: scroll;
+  scrollbar-width: thin;
   &::-webkit-scrollbar {
     height: 10px;
-    width: 8px;
+    width: 6px;
     border-radius: 4px;
     background: transparent;
     transition: all 0.3s ease;
@@ -10,7 +16,7 @@
     background: #c6c7ca;
   }
   &::-webkit-scrollbar-thumb {
-    background: #969699;
+    background: $thumb-color;
     border-radius: 4px;
   }
 }
