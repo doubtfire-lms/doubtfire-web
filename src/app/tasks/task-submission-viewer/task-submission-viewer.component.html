@@ -1,20 +1,18 @@
 <div class="panel-body task-submission-viewer">
   <div class="large-notice-block" [hidden]="!(notSubmitted(task) || task.processing_pdf || task.needsSubmissionDetails())">
-    <div [hidden]="!(notSubmitted(task) && ! task.needsSubmissionDetails())">
-      <i class="fa fa-upload fa-2x"></i>
+    <mat-card-content [hidden]="!(notSubmitted(task) && ! task.needsSubmissionDetails())">
+      <mat-icon>cloud_upload</mat-icon>
       <p>Upload submission before viewing</p>
-    </div><!--/no-pdf-->
-    <div [hidden]="!(task.processing_pdf && ! task.needsSubmissionDetails())">
-        <i class="fa fa-clock-o fa-2x"></i>
-        <p>
-          Submission is still being processed
-          <p class = "muted-text mat-small">Please check again shortly
-        </p>
-    </div><!--/pdf-in-process-->
-    <div [hidden]="!task.needsSubmissionDetails()">
-        <mat-spinner strokeWidth="2" diameter="100"></mat-spinner>
+    </mat-card-content><!--/no-pdf-->
+    <mat-card-content [hidden]="!(task.processing_pdf && ! task.needsSubmissionDetails())">
+        <mat-icon>access_time</mat-icon>
+        <p>Submission is still being processed</p>
+        <mat-card-subtitle>Please check again shortly</mat-card-subtitle>
+    </mat-card-content><!--/pdf-in-process-->
+    <mat-card-content [hidden]="!task.needsSubmissionDetails()">
+        <mat-spinner strokeWidth="2" diameter="70"></mat-spinner>
         <p>Fetching Submission Details</p>
-    </div><!--/loading details-->
+    </mat-card-content><!--/loading details-->
   </div>
   <div *ngIf="task.has_pdf">
     <pdf-viewer-panel
