@@ -333,15 +333,26 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   togglePin(task) {
-    console.log(task);
-    this.TaskService.pin(
-      task,
-      (sucess: any) => {
-        task.pinned = true;
-      },
-      (error: any) => {
-        this.alertService.add('danger', error.data.error, 6000);
-      }
-    );
+    if (task.pinned) {
+      this.TaskService.unpin(
+        task,
+        (sucess: any) => {
+          task.pinned = false;
+        },
+        (error: any) => {
+          this.alertService.add('danger', error.data.error, 6000);
+        }
+      );
+    } else {
+      this.TaskService.pin(
+        task,
+        (sucess: any) => {
+          task.pinned = true;
+        },
+        (error: any) => {
+          this.alertService.add('danger', error.data.error, 6000);
+        }
+      );
+    }
   }
 }
