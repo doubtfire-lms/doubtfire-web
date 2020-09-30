@@ -11,7 +11,14 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
+import {
+  taskDefinition,
+  Unit,
+  currentUser,
+  groupService,
+  alertService,
+  taskService,
+} from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksWithStudentNamePipe } from 'src/app/common/filters/tasks-with-student-name.pipe';
@@ -82,6 +89,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
+    @Inject(taskService) private TaskService,
     public dialog: MatDialog
   ) {}
 
@@ -325,6 +333,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   togglePin(task) {
-    // toggle the tasks pin for user
+    console.log(task);
+    this.TaskService.pin(
+      task,
+      (sucess: any) => {
+        task.pinned = true;
+      },
+      (error: any) => {
+        this.alertService.add('danger', error.data.error, 6000);
+      }
+    );
   }
 }
