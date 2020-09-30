@@ -21,7 +21,12 @@
   }
 }
 
-$warn-color: #dd6666;
+$warn-color: #f44336;
+
+.pin-icon.mat-icon {
+  padding-top: 10px;
+  color: gray;
+}
 
 .task-inbox {
   height: 100%;
@@ -98,7 +103,7 @@ $warn-color: #dd6666;
   margin-left: 10px;
   box-sizing: initial;
 
-  background: darken($warn-color, 10%);
+  background: $warn-color;
   -webkit-font-smoothing: antialiased;
   color: #fff;
   text-align: center;
