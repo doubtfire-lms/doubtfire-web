@@ -25,26 +25,41 @@
       Your <strong>reflections</strong> are a personal comment on what you have
       learnt in the unit, and how your knowledge and skills have developed.
     </p>
-    <div class="card card-success" ng-class="{'card-danger': 'projectHasLearningSummaryReport() && !forceLSRSubmit', 'card-success': '!(projectHasLearningSummaryReport() && !forceLSRSubmit)'}">
-      <div class="card-heading" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit">
+    <div class="card card-danger" ng-show="projectHasDraftLearningSummaryReport">
+      <div class="card-heading">
+        <h4>
+          <i class="fa fa-warning"></i> Before you submit your portfolio...
+        </h4>
+        Your draft learning summary has already been copied over,
+        it is <strong>advised</strong> you upload a revised copy.
+      </div>
+      <div class="card-body text-center" style="font-size: 1.25em;">
+        <input type="checkbox" class="pointer" id="agree-read" ng-model="acceptUploadNewLearningSummary">
+        <label class="pointer" for="agree-read">I would like to upload a revised learning summary</label>
+      </div>
+    </div> <!--/confirmed-revised-learning-summary-->
+
+    <div class="card card-success" ng-class="{'card-danger': 'projectHasLearningSummaryReport() && !forceLSRSubmit', 'card-success': '!(projectHasLearningSummaryReport() && !forceLSRSubmit)'}" collapse="!acceptUploadNewLearningSummary && projectHasDraftLearningSummaryReport">
+      <div class="card-heading" ng-show="projectHasLearningSummaryReport() && !forceLSRSubmit && !acceptUploadNewLearningSummary">
         <h4>
           <i class="fa fa-check"></i> Learning Summary Report Submitted
         </h4>
         Click <a ng-click="forceLSRSubmit = true">here</a> to re-upload a new Learning Summary Report
       </div><!--/lsr-uploaded-->
-      <div class="card-heading" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit">
+
+      <div class="card-heading" ng-hide="projectHasLearningSummaryReport() && !forceLSRSubmit && !acceptUploadNewLearningSummary">
         <h4>
           <i class="fa fa-warning"></i> Before you submit the Learning Summary Report...
         </h4>
         Remember to <strong>provide a justification</strong> for why you believe
         you have achieved a {{targetGrade}} in {{unit.name}}.
       </div>
-      <div class="card-body" ng-show="!projectHasLearningSummaryReport() || (projectHasLearningSummaryReport() && forceLSRSubmit)">
+      <div class="card-body" ng-show="!projectHasLearningSummaryReport() || (projectHasLearningSummaryReport() && (forceLSRSubmit || acceptUploadNewLearningSummary))">
         <file-uploader
           files="portfolioSubmission.learningSummaryReportFileUploadData.type"
           payload="portfolioSubmission.learningSummaryReportFileUploadData.payload"
           url="portfolioSubmission.portfolioUrl"
-          on-success="addNewFilesToPortfolio"></file-uploader>
+          on-success="addNewFile"></file-uploader>
       </div>
     </div>
   </div>
