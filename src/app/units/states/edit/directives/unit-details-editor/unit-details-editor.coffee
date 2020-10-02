@@ -66,6 +66,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_definition_id: $scope.unit.draft_task_definition_id
+        portfolio_auto_generation_date: $scope.unit.portfolio_auto_generation_date
       }
 
       if $scope.unit.teaching_period_id
@@ -73,9 +74,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       else
         saveData.start_date = $scope.unit.start_date
         saveData.end_date = $scope.unit.end_date
-
-      if $scope.unit.portfolio_auto_generation_date
-        saveData.portfolio_auto_generation_date = $scope.unit.portfolio_auto_generation_date
 
       if $scope.unit.id == -1
         Unit.create { unit: saveData },
