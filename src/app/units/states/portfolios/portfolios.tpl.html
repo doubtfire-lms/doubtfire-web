@@ -176,10 +176,10 @@
         <i class="fa fa-book"></i>
         <p>No Portfolio Submitted</p>
       </div>
-      <pdf-panel-viewer
+      <pdf-viewer-panel
         ng-if="project.portfolio_available"
         pdf-url="project.portfolioUrl()">
-      </pdf-panel-viewer>
+      </pdf-viewer-panel>
     </div>
 
     <div class="panel panel-primary" ng-show="activeTab == tabs.assessPortfolio">

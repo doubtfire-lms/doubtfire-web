@@ -6,7 +6,7 @@ import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
 @Component({
   selector: 'intelligent-discussion-recorder',
   templateUrl: './intelligent-discussion-recorder.component.html',
-  styleUrls: ['./intelligent-discussion-recorder.component.css']
+  styleUrls: ['./intelligent-discussion-recorder.component.css'],
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() discussion: any = {};
@@ -17,13 +17,12 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(IntelligentDiscussionPlayerService) private dps: any,
+    @Inject(IntelligentDiscussionPlayerService) private dps: any
   ) {
     super(mediaRecorderService);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.canRecord) {
@@ -33,7 +32,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   init(): void {
     super.init();
-    this.canvas = <HTMLCanvasElement>document.getElementById('mainDiscussionRecorderVisualiser');
+    this.canvas = document.getElementById('mainDiscussionRecorderVisualiser') as HTMLCanvasElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
@@ -53,13 +52,18 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   sendRecording() {
     if (this.blob && this.blob.size > 0) {
-      this.dps.addDiscussionReply(this.task, this.discussion.id, this.blob, () => {
-        this.isSending = false;
-      }, (failure: { data: { error: any; }; }) => {
-        console.error(failure);
-      });
-      this.blob = <Blob>{};
-
+      this.dps.addDiscussionReply(
+        this.task,
+        this.discussion.id,
+        this.blob,
+        () => {
+          this.isSending = false;
+        },
+        (failure: { data: { error: any } }) => {
+          console.error(failure);
+        }
+      );
+      this.blob = {} as Blob;
     }
   }
 }

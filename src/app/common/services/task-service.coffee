@@ -596,7 +596,7 @@ angular.module("doubtfire.common.services.tasks", [])
   #SCROLL DOWN
   taskService.scrollDown = ->
     $timeout ->
-      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      objDiv = document.querySelector("task-comments-viewer .comments-body")
       wrappedResult = angular.element(objDiv)
       wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
@@ -639,7 +639,7 @@ angular.module("doubtfire.common.services.tasks", [])
         onError(response)
 
     $timeout ->
-      objDiv = document.querySelector("task-comments-viewer .panel-body")
+      objDiv = document.querySelector("task-comments-viewer .comments-body")
       wrappedResult = angular.element(objDiv)
       wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 

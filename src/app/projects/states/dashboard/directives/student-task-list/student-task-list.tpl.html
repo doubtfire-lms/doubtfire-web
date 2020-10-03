@@ -25,31 +25,45 @@
       id="{{task.taskKeyToIdString()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
-    >
-      <task-list-item
-        [task]="task"
-        [set-selected-task]="setSelectedTask"
-        [is-selected-task]="isSelectedTask"
-      >
-      </task-list-item>
-    </li>
-
-    <li
-      class="list-group-item list-group-item-task clearfix {{project.portfolioTaskStatusClass()}}"
-      ng-show="showCreatePortfolio && !nearEnd()"
-    >
-      <create-portfolio-task-list-item
-        [project]="project"
-        [set-selected-task]="setSelectedTask"
-      >
-      </create-portfolio-task-list-item>
-    </li>
-
-    <li
-      ng-show="filteredTasks.length == 0 && !showCreatePortfolio"
-      class="list-group-item text-center text-muted"
-    >
+      ng-repeat="task in filteredTasks | orderBy: 'topWeight'">
+      <div class="task-data">
+        <h4 class="list-group-item-heading">
+          {{task.definition.name}}
+        </h4>
+        <p class="list-group-item-text">
+          <i class="fa fa-users" aria-hidden="true" ng-show="task.isGroupTask()"></i><i class="fa fa-user" aria-hidden="true" ng-hide="task.isGroupTask()"></i> {{task.definition.abbreviation}} - {{gradeNames[task.definition.target_grade]}} Task <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}</span><span class="due-time" ng-if="!task.isBeforeStartDate() && !task.inSubmittedState()"><i class="fa fa-hourglass-end"></i> {{task.timeToDue()}}</span>
+        </p>
+      </div><!--/task-data-->
+      <div class="task-badges">
+        <status-icon [status]="task.status"></status-icon>
+        <div class="task-superscript-badges">
+          <span class="task-superscript-badge new-comments-badge" ng-if="task.num_new_comments > 0">
+            {{task.num_new_comments}}
+          </span>
+          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.plagiarismDetected()">
+            <i class="fa fa-eye"></i>
+          </span>
+        </div>
+        <div class="task-subscript-badges">
+          <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
+            {{task.gradeDesc()}}
+          </span>
+          <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
+            <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
+          </span>
+          <span class="task-subscript-badge soon-badge" ng-if="task.isDueSoon() && !task.inFinalState()">
+            <i class="fa fa-clock-o"></i>
+          </span>
+          <span class="task-subscript-badge due-badge" ng-if="task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()">
+            <i class="fa fa-clock-o"></i>
+          </span>
+          <span class="task-subscript-badge due-badge" ng-if="task.isPastDeadline() && !task.inFinalState()">
+            <i class="fa fa-clock-o"></i><strong>!</strong>
+          </span>
+        </div>
+      </div><!--/badges-->
+    </li><!--/task-->
+    <li ng-show="filteredTasks.length == 0" class="list-group-item text-center text-muted">
       No tasks to display.
     </li>
   </ul>

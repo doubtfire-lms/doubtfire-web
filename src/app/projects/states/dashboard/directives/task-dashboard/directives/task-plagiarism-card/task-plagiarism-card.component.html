@@ -1,0 +1,23 @@
+<mat-card class="danger-card" *ngIf="task" [hidden]="!task.plagiarismDetected()">
+  <mat-card-header>
+    <mat-card-title>
+      <span class="with-icon">
+        <mat-icon aria-hidden="false" aria-label="Warning icon">
+          warning
+        </mat-icon>
+        Similarities Detected
+      </span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      Similarities with other student work has been detected on your submission.
+      View the report by clicking the button below.
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="warn" (click)="viewReport()">
+      View Similarity Report
+    </button>
+  </mat-card-actions>
+</mat-card>

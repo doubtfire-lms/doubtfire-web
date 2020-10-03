@@ -41,9 +41,6 @@
                 <a ui-sref="units/tasks/inbox({unitId: project.unit_id})">Task Inbox</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/feedback({unitId: project.unit_id})">Give Student Feedback</a>
-              </li>
-              <li>
                 <a ui-sref="units/tasks/definition({unitId: project.unit_id})">Mark By Definition</a>
               </li>
               <li>
@@ -102,9 +99,6 @@
                 <a ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Task Inbox</a>
               </li>
               <li>
-                <a ui-sref="units/tasks/feedback({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Give Student Feedback</a>
-              </li>
-              <li>
                 <a ui-sref="units/tasks/definition({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'">Mark By Definition</a>
               </li>
               <li>
@@ -150,13 +144,14 @@
       </li><!--/administration-->
       <li class="dropdown" dropdown>
         <a class="dropdown-toggle dropdown-user" dropdown-toggle>
-          <user-icon size="25"></user-icon>
+          <user-icon [size]="25"></user-icon>
           {{currentUser.name}} {{currentUser.nickname ? '(' + currentUser.nickname + ')' : ''}}
           <i class="caret"></i>
         </a>
         <ul class="dropdown-menu">
           <li><a ng-click="openUserSettings()">Profile</a></li>
           <li><a ng-click="openNotificationSettings()">Notifications</a></li>
+          <li><a ng-click="openCalendar()">Calendar</a></li>
           <li class="divider"></li>
           <li><a ng-click="openAboutModal()">About</a></li>
           <li class="divider"></li>

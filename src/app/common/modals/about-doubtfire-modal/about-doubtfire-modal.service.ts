@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { GithubProfile } from './github-profile';
-import { ContributorData } from "./contributor-data";
+import { ContributorData } from './contributor-data';
 import { AboutDialogData } from './about-dialog-data';
 
 interface GithubContributors {
@@ -29,21 +29,19 @@ interface GithubContributors {
 
 @Injectable()
 export class AboutDoubtfireModalService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   public getGithubProfiles(handler: string) {
     return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
   }
 
-  private findOrCreateContributor(data: AboutDialogData, profile: GithubContributors) : ContributorData {
-    var contributor: ContributorData;
-    contributor = data.allContributors.value.find( 
-      c => { return c.login == profile.login; });
+  private findOrCreateContributor(data: AboutDialogData, profile: GithubContributors): ContributorData {
+    let contributor: ContributorData;
+    contributor = data.allContributors.value.find((c) => {
+      return c.login === profile.login;
+    });
     if (!contributor) {
-      contributor = new ContributorData(
-        profile.login,
-        profile.html_url,
-        profile.avatar_url);
+      contributor = new ContributorData(profile.login, profile.html_url, profile.avatar_url);
 
       data.addContributor(contributor);
     }
@@ -51,14 +49,13 @@ export class AboutDoubtfireModalService {
   }
 
   private getContributors(url: string, data: AboutDialogData, key: string) {
-    return this.http.get<GithubContributors[]>(url)
-      .subscribe(response => {
-        response.forEach( profile => {
-          var contributor = this.findOrCreateContributor(data, profile);
-          contributor[key] = profile.contributions;
-        });
-        data.sortData({active: 'contributions', direction: 'desc' });
+    return this.http.get<GithubContributors[]>(url).subscribe((response) => {
+      response.forEach((profile) => {
+        const contributor = this.findOrCreateContributor(data, profile);
+        contributor[key] = profile.contributions;
       });
+      data.sortData({ active: 'contributions', direction: 'desc' });
+    });
   }
 
   public getDoubtfireIOWebContributors(data: AboutDialogData) {

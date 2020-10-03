@@ -14,13 +14,13 @@ export class AboutDialogData {
   public allContributors: BehaviorSubject<ContributorData[]>;
 
   constructor() {
-    this.externalName = "";
+    this.externalName = '';
     this.mainContributors = [];
     this.allContributors = new BehaviorSubject<ContributorData[]>([]);
   }
 
   public addContributor(contributor: ContributorData) {
-    var value = this.allContributors.value;
+    const value = this.allContributors.value;
     value.push(contributor);
     this.allContributors.next(value);
   }
@@ -30,23 +30,30 @@ export class AboutDialogData {
       return;
     }
 
-    var original = this.allContributors.value;
+    const original = this.allContributors.value;
 
-    this.allContributors.next(original.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'contributor': return compare(a.login, b.login, isAsc);
-        case 'contributions': return compare(a.totalContributions(), b.totalContributions(), isAsc);
-        case 'api-contributions': return compare(a.apiContributions, b.apiContributions, isAsc);
-        case 'web-contributions': return compare(a.webContributions, b.webContributions, isAsc);
-        case 'io-contributions': return compare(a.ioContributions, b.ioContributions, isAsc);
-        default: return 0;
-      }
-    }));
+    this.allContributors.next(
+      original.sort((a, b) => {
+        const isAsc = sort.direction === 'asc';
+        switch (sort.active) {
+          case 'contributor':
+            return compare(a.login, b.login, isAsc);
+          case 'contributions':
+            return compare(a.totalContributions(), b.totalContributions(), isAsc);
+          case 'api-contributions':
+            return compare(a.apiContributions, b.apiContributions, isAsc);
+          case 'web-contributions':
+            return compare(a.webContributions, b.webContributions, isAsc);
+          case 'io-contributions':
+            return compare(a.ioContributions, b.ioContributions, isAsc);
+          default:
+            return 0;
+        }
+      })
+    );
   }
 }
 
-
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}  
+}

@@ -17,28 +17,48 @@
           <table class="table table-condensed table-hover">
             <thead>
               <tr>
-                <th colspan="2"> Name </th>
-                <th> Role </th>
-                <th> Main Convenor </th>
-                <th> Actions </th>
+                <th colspan="2">Name</th>
+                <th>Role</th>
+                <th>Main Convenor</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="staff in unit.staff">
-                <td style="width: 35px;">
-                    <user-icon size="50" user="staff" email="staff.email" style="max-width: 35px; max-height: 35px; font-size: 14px;"></user-icon>
+                <td style="width: 35px">
+                  <user-icon [size]="35" [user]="staff" email="staff.email"></user-icon>
                 </td>
-                <td>
-                    {{staff.name}}
-                </td>
+                <td>{{staff.name}}</td>
                 <td>
                   <div class="btn-group">
-                    <label class="btn btn-default" tooltip="Tutors deliver unit content." ng-model="staff.role" btn-radio="'Tutor'" ng-click="changeRole(staff,2)">Tutor</label>
-                    <label class="btn btn-default" tooltip="Convenors manage the unit." ng-model="staff.role" btn-radio="'Convenor'" ng-click="changeRole(staff,3)">Convenor</label>
+                    <label
+                      class="btn btn-default"
+                      tooltip="Tutors deliver unit content."
+                      ng-model="staff.role"
+                      btn-radio="'Tutor'"
+                      ng-click="changeRole(staff,2)"
+                      >Tutor</label
+                    >
+                    <label
+                      class="btn btn-default"
+                      tooltip="Convenors manage the unit."
+                      ng-model="staff.role"
+                      btn-radio="'Convenor'"
+                      ng-click="changeRole(staff,3)"
+                      >Convenor</label
+                    >
                   </div>
                 </td>
                 <td>
-                  <button ng-show="staff.role == 'Convenor'" ng-disabled="staff.id == unit.main_convenor_id" type="button" class="btn btn-default" ng-model="unit.main_convenor_id" ng-click="changeMainConvenor(staff)" btn-checkbox>
+                  <button
+                    ng-show="staff.role == 'Convenor'"
+                    ng-disabled="staff.id == unit.main_convenor_id"
+                    type="button"
+                    class="btn btn-default"
+                    ng-model="unit.main_convenor_id"
+                    ng-click="changeMainConvenor(staff)"
+                    btn-checkbox
+                  >
                     <i class="fa fa-{{staff.id == unit.main_convenor_id ? 'check' : 'times'}}"></i>
                   </button>
                 </td>
@@ -66,7 +86,8 @@
           typeahead-wait-ms="200"
           typeahead-template-url="staffAvatar.html"
           typeahead-select-on-exact="true"
-          typeahead-on-select="addSelectedStaff()">
+          typeahead-on-select="addSelectedStaff()"
+        />
 
         <span class="input-group-btn">
           <button class="btn btn-success pull-right" ng-click="addSelectedStaff()">

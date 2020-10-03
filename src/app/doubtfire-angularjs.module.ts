@@ -14,6 +14,7 @@ import 'node_modules/angular-cookies/angular-cookies.js';
 import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
 import 'node_modules/angular-resource/angular-resource.js';
 import 'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js';
+import 'node_modules/d3/d3.js';
 import 'node_modules/angular-nvd3/dist/angular-nvd3.js';
 import 'node_modules/angular-file-upload/angular-file-upload.js';
 import 'node_modules/ng-file-upload/dist/ng-file-upload-all.min.js';
@@ -48,7 +49,6 @@ import 'build/src/app/home/states/new-user-wizard/new-user-wizard.js';
 import 'build/src/app/home/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
-import 'build/src/app/tasks/task-comments-viewer/task-comments-viewer.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
@@ -89,7 +89,6 @@ import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/pr
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
@@ -142,11 +141,9 @@ import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
 import 'build/src/app/units/states/plagiarism/directives/directives.js';
 import 'build/src/app/units/states/plagiarism/plagiarism.js';
-import 'build/src/app/units/states/tasks/inbox/directives/staff-task-list/staff-task-list.js';
 import 'build/src/app/units/states/tasks/inbox/directives/directives.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
-import 'build/src/app/units/states/tasks/feedback/feedback.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
 import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';
@@ -179,11 +176,9 @@ import 'build/src/app/units/states/analytics/directives/task-completion-stats/ta
 import 'build/src/app/units/states/analytics/directives/directives.js';
 import 'build/src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.js';
 import 'build/src/app/units/states/analytics/analytics.js';
-import 'build/src/app/common/pdf-panel-viewer/pdf-panel-viewer.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/long-press/on-long-press.js';
 import 'build/src/app/common/content-editable/content-editable.js';
-import 'build/src/app/common/audio-player/audio-player.js';
 import 'build/src/app/common/alert-list/alert-list.js';
 import 'build/src/app/common/modals/confirmation-modal/confirmation-modal.js';
 import 'build/src/app/common/modals/comments-modal/comments-modal.js';
@@ -191,10 +186,8 @@ import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
 import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
-import 'build/src/app/common/pdf-viewer/pdf-viewer.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
-import 'build/src/app/common/user-icon/user-icon.js';
 import 'build/src/app/common/header/header.js';
 import 'build/src/app/common/header/unit-dropdown/unit-dropdown.js';
 import 'build/src/app/common/services/task-service.js';
@@ -270,6 +263,7 @@ import {
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
+import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
@@ -281,12 +275,19 @@ import { TutorialService } from './api/models/tutorial/tutorial.service';
 import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { CampusService } from './api/models/campus/campus.service';
+import { WebcalService } from './api/models/webcal/webcal.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
-import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
+import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
+import { UserIconComponent } from './common/user-icon/user-icon.component';
+import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
+import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import { StatusIconComponent } from './common/status-icon/status-icon.component';
+import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -310,6 +311,8 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants',
   downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal',
   downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('CalendarModal',
+  downgradeInjectable(CalendarModalService));
 DoubtfireAngularJSModule.factory('TaskCommentService',
   downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService',
@@ -318,7 +321,9 @@ DoubtfireAngularJSModule.factory('streamService',
   downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService',
   downgradeInjectable(CampusService));
-  DoubtfireAngularJSModule.factory('emojiService',
+DoubtfireAngularJSModule.factory('webcalService',
+  downgradeInjectable(WebcalService));
+DoubtfireAngularJSModule.factory('emojiService',
   downgradeInjectable(EmojiService));
 
 // directive -> component
@@ -337,9 +342,9 @@ DoubtfireAngularJSModule.directive('institutionSettings',
 DoubtfireAngularJSModule.directive('commentBubbleAction',
   downgradeComponent({ component: CommentBubbleActionComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList',
-    downgradeComponent({ component: UnitTutorialsListComponent }));
+  downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsManager',
-    downgradeComponent({ component: UnitTutorialsManagerComponent }));
+  downgradeComponent({ component: UnitTutorialsManagerComponent }));
 DoubtfireAngularJSModule.directive('unitStudentsEditor',
   downgradeComponent({ component: UnitStudentsEditorComponent }));
 DoubtfireAngularJSModule.directive('studentTutorialSelect',
@@ -350,10 +355,23 @@ DoubtfireAngularJSModule.directive('taskListItem',
   downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
   downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
-DoubtfireAngularJSModule.directive('statusIcon',
-  downgradeComponent({ component: StatusIconComponent }));
 
   // Global configuration
+DoubtfireAngularJSModule.directive('taskCommentsViewer',
+  downgradeComponent({ component: TaskCommentsViewerComponent }));
+DoubtfireAngularJSModule.directive('userIcon',
+  downgradeComponent({ component: UserIconComponent }));
+DoubtfireAngularJSModule.directive('pdfViewer',
+  downgradeComponent({ component: PdfViewerComponent }));
+DoubtfireAngularJSModule.directive('pdfViewerPanel',
+  downgradeComponent({ component: PdfViewerPanelComponent }));
+DoubtfireAngularJSModule.directive('staffTaskList',
+  downgradeComponent({ component: StaffTaskListComponent }));
+DoubtfireAngularJSModule.directive('statusIcon',
+  downgradeComponent({ component: StatusIconComponent }));
+DoubtfireAngularJSModule.directive('taskPlagiarismCard',
+  downgradeComponent({ component: TaskPlagiarismCardComponent }));
+// Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {

@@ -14,6 +14,6 @@
     </span>
   </div><!--/panel-body-without-pdf-->
   <div class="panel-body has-pdf" ng-if="hasPdf">
-    <pdf-viewer pdf-url="urls.taskPdfUrl"></pdf-viewer>
+    <pdf-viewer [pdf-url]="urls.taskPdfUrl"></pdf-viewer>
   </div><!--/panel-body-with-pdf-->
 </div>

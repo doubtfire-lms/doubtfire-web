@@ -19,11 +19,11 @@
     </div><!--/loading details-->
   </div>
   <div ng-if="task.has_pdf">
-    <pdf-panel-viewer
+    <pdf-viewer-panel
       pdf-url="taskUrl"
       resources-url="taskFilesURL"
       footer-text="{{task.status != 'ready_to_mark' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
       ng-hide="notSubmitted(task) || task.processing_pdf">
-    </pdf-panel-viewer>
+    </pdf-viewer-panel>
   </div>
 </div>

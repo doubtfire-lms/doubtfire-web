@@ -1,36 +1,56 @@
-@import '../../../styles/mixins/task-status-colors-generator.scss';
+@import "../../../styles/mixins/task-status-colors-generator.scss";
 
 :host {
-  min-width: 40px;
-  min-height: 40px;
-  font-size: 1.25em;
+  font-size: 1em;
   display: inline-block;
 }
 
 @mixin status-icon($status) {
-  $background-color: task-status-color($status);
-  $foreground-color: task-status-color($status, fore);
-  background-color: $background-color;
-  color: $foreground-color;
+  background-color: task-status-color($status);
+  color: task-status-color($status, fore);
 }
 
-.status-icon-bubble {
-  width: 100%;
-  height: 100%;
-  border-radius: 1.25em;
-  padding: 0.15em;
+.mat-chip.mat-standard-chip {
   text-align: center;
-
-  &.ready-to-mark     { @include status-icon('ready-to-mark');    }
-  &.not-started       { @include status-icon('not-started');      }
-  &.working-on-it     { @include status-icon('working-on-it');    }
-  &.need-help         { @include status-icon('need-help');        }
-  &.fix-and-resubmit  { @include status-icon('fix-and-resubmit'); }
-  &.do-not-resubmit   { @include status-icon('do-not-resubmit');  }
-  &.time-exceeded     { @include status-icon('time-exceeded');    }
-  &.redo              { @include status-icon('redo');             }
-  &.discuss           { @include status-icon('discuss');          }
-  &.demonstrate       { @include status-icon('demonstrate');      }
-  &.complete          { @include status-icon('complete');         }
-  &.fail              { @include status-icon('fail');             }
+  i {
+    display: inline-block;
+    flex: 1;
+  }
+  width: 50px;
+  &.ready-to-mark {
+    @include status-icon("ready-to-mark");
+  }
+  &.not-started {
+    @include status-icon("not-started");
+  }
+  &.working-on-it {
+    @include status-icon("working-on-it");
+  }
+  &.need-help {
+    @include status-icon("need-help");
+  }
+  &.fix-and-resubmit {
+    @include status-icon("fix-and-resubmit");
+  }
+  &.do-not-resubmit {
+    @include status-icon("do-not-resubmit");
+  }
+  &.time-exceeded {
+    @include status-icon("time-exceeded");
+  }
+  &.redo {
+    @include status-icon("redo");
+  }
+  &.discuss {
+    @include status-icon("discuss");
+  }
+  &.demonstrate {
+    @include status-icon("demonstrate");
+  }
+  &.complete {
+    @include status-icon("complete");
+  }
+  &.fail {
+    @include status-icon("fail");
+  }
 }

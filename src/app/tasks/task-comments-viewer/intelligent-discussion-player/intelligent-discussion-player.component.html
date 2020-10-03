@@ -1,29 +1,75 @@
 <div class="comment-bubble discussion-comment-player">
   <mat-spinner [hidden]="!loading"></mat-spinner>
   <div [hidden]="loading">
-    <h3 id="discussion-title">
-      Discussion {{discussion.status}}
-      <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
-    </h3>
+    <h4 id="discussion-title">
+      Discussion {{ discussion.status }}
+      <mat-icon aria-label="discussion comment status"
+        >question_answer</mat-icon
+      >
+    </h4>
     <mat-divider></mat-divider>
     <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
       <div *ngIf="discussion.status === 'opened' && isNotStudent">
-        Warning: The student has opened the discussion prompts without sending a response.
+        Warning: The student has opened the discussion prompts without sending a
+        response.
       </div>
-      <div [hidden]="!responseAvailable" class="audio-comment-container">
-        <button class="play-button" (click)="playResponseAudio()">
-          <mat-icon aria-label="play audio">{{!audio.paused ? 'stop_circle_outline' : 'play_circle_filled_white' }}
-          </mat-icon>
-        </button>
-        <mat-progress-bar color="white" class="progress-bar-container" mode="determinate" [value]="audioProgress">
-        </mat-progress-bar>
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+        [hidden]="!responseAvailable"
+        class="audio-comment-container"
+      >
+        <audio-player #player></audio-player>
+        <mat-button-toggle-group value="response">
+          <mat-button-toggle
+            matTooltip="Plays the first discussion prompt"
+            matTooltipPosition="above"
+            (click)="setPromptTrack('prompt', 0)"
+            aria-label="Prompt toggle"
+          >
+            P1
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the second discussion prompt"
+            matTooltipPosition="above"
+            *ngIf="discussion.number_of_prompts > 1"
+            (click)="setPromptTrack('prompt', 1)"
+            aria-label="Prompt toggle"
+          >
+            P2
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the third discussion prompt"
+            matTooltipPosition="above"
+            (click)="setPromptTrack('prompt', 2)"
+            *ngIf="discussion.number_of_prompts > 2"
+            aria-label="Prompt toggle"
+          >
+            P3
+          </mat-button-toggle>
+          <mat-button-toggle
+            matTooltip="Plays the prompts, followed by the students response"
+            matTooltipPosition="above"
+            value="response"
+            (click)="setPromptTrack('response')"
+            aria-label="Response Toggle"
+          >
+            Response
+          </mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
     </div>
 
     <div [hidden]="responseAvailable || isNotStudent">
       <p>Your tutor would like to discuss this task with you.</p>
-      <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
+      <button
+        id="startDiscussionBtn"
+        mat-flat-button
+        (click)="beginDiscussion()"
+      >
+        Begin
+      </button>
     </div>
   </div>
 </div>

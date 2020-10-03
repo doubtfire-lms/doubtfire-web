@@ -1,4 +1,3 @@
-import { Unit } from '../../../../../../ajs-upgraded-providers';
 import { Component, Input, OnInit } from '@angular/core';
 import { Campus } from 'src/app/api/models/campus/campus';
 import { CampusService } from 'src/app/api/models/campus/campus.service';
@@ -7,7 +6,7 @@ import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'student-campus-select',
   templateUrl: 'student-campus-select.component.html',
-  styleUrls: ['student-campus-select.component.scss']
+  styleUrls: ['student-campus-select.component.scss'],
 })
 export class StudentCampusSelectComponent implements OnInit {
   @Input() unit: any;
@@ -17,8 +16,7 @@ export class StudentCampusSelectComponent implements OnInit {
   campuses: Campus[];
   private originalCampusId: number;
 
-  constructor ( private campusService: CampusService ) {
-  }
+  constructor(private campusService: CampusService) {}
 
   ngOnChanges() {
     this.originalCampusId = this.student.campus_id;
@@ -31,10 +29,8 @@ export class StudentCampusSelectComponent implements OnInit {
   }
 
   campusChange(event: MatSelectChange) {
-    if(this.update) {
-      this.student.switchToCampus(event.value, this.originalCampusId, () => this.ngOnChanges())
+    if (this.update) {
+      this.student.switchToCampus(event.value, this.originalCampusId, () => this.ngOnChanges());
     }
   }
-
-
 }
