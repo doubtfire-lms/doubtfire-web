@@ -126,6 +126,7 @@ import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-na
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ProgressDashboardComponent } from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 
 
 @NgModule({
@@ -167,6 +168,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TasksWithStudentNamePipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    ProgressDashboardComponent,
   ],
   // Module Imports
   imports: [

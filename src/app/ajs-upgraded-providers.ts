@@ -8,6 +8,7 @@ export const auth = new InjectionToken('auth');
 export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
+export const projectService = new InjectionToken('projectService');
 export const analyticsService = new InjectionToken('analyticsService');
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
@@ -139,4 +140,10 @@ export const UnitStudentEnrolmentModalProvider = {
   deps: ['$injector']
 };
 
+
+export const projectServiceProvider = {
+  provide: projectService,
+  useFactory: (i: any) => i.get('projectService'),
+  deps: ['$injector']
+};
 
