@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Inject} from'@angular/core';
 
-
 import {taskService,gradeService} from 'src/app/ajs-upgraded-providers'
 
 @Component({
@@ -26,15 +25,15 @@ export class TaskAssessmentCardComponent implements OnInit {
 
   hasBeenGivenStars(t): boolean{
 
-    return( t == null && (t.quality_pts > 0 || this.taskService.gradeableStatuses.includes(t.status)))
+    return( t != null && (t.quality_pts > 0 || this.taskService.gradeableStatuses.includes(t.status)))
 
-    // t? && (t.quality_pts > 0 || _.includes(taskService.gradeableStatuses, t.status))
+    // return t == null && (t.quality_pts > 0 || _.includes(this.taskService.gradeableStatuses, t.status))
     
   }
 
   hasBeenGraded(t): boolean{
 
-    return(t == null && (!isNaN(t.grade)))
+    return(t != null && (!isNaN(t.grade)))
 
     // t? && (_.isNumber(t.grade))
   }
