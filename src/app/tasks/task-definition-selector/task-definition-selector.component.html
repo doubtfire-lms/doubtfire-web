@@ -1,0 +1,37 @@
+<div class="btn-group task-definition-selector dropdown" dropdown>
+    <button class="btn btn-{{buttonStyle}} dropdown-toggle col-sm-12" type="button" dropdown-toggle>
+    <span [hidden]="!selectedDefinition">
+    Task
+    <label class="label label-info" [hidden]="!selectedDefinition" tooltip="{{selectedDefinition.name}}"
+    tooltip-append-to-body="true">
+    {{selectedDefinition.abbreviation}}
+    </label>
+    </span>
+    <span [hidden]="selectedDefinition">Select Task</span>
+    <div class="pull-right">
+    <span class="caret"></span>
+    </div>
+    </button>
+    <!--/dropdown-button-->
+    <ul class="dropdown-menu project-tasks-list">
+    <div *ngFor="let relatedTaskDefs of unit.task_definitions | groupBy: 'group_set_id'" class="col-sm-12">
+    <mat-label class="group-set-name" [hidden]="hideGroupSetName">
+    {{groupSetName(relatedTaskDefs)}}
+    </mat-label>
+    <h5 class="col-xs-4 col-sm-3" *ngFor="let taskDef of relatedTaskDefs | orderBy: 'seq'">
+    <button type="button" class="col-xs-12 btn btn-default"
+    [ngclass]="{'active' : taskDef == selectedDefinition}" (click)="setSelectedDefinition(taskDef)"
+    tooltip-popup-delay='200' tooltip-placement="bottom" tooltip="{{taskDef.name}}">
+    {{taskDef.abbreviation}}
+    </button>
+    </h5>
+    <li class="col-xs-4 col-sm-3 pull-right" *ngIf="showClear">
+    <button type="button" class="col-xs-12 btn btn-warning" (click)="setSelectedDefinition()"
+    tooltip="Clear selection" tooltip-popup-delay='200' tooltip-placement="bottom">
+    <i class="fa fa-times"></i>
+    </button>
+    </li>
+    </div>
+    </ul>
+    </div>
+    
