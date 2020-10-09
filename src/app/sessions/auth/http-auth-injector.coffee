@@ -13,7 +13,9 @@ angular.module("doubtfire.sessions.auth.http-auth-injector", [])
       if _.startsWith(request.url, DoubtfireConstants.API_URL) and currentUser.authenticationToken?
         request.headers = {'auth_token'} unless _.has request, "headers"
         request.headers.auth_token = currentUser.authenticationToken
+        request.headers.username = currentUser.profile.username
       request or $q.when request
+
       
     #
     # Inject handlers for 419 and 401 response errors

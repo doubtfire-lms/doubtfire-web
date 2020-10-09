@@ -1,11 +1,16 @@
 import { User } from './user';
 import { CacheableEntityService } from '../cacheable-entity.service';
 import { Inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
+import {EntityService} from 'src/app/api/models/entity.service'
 
 @Injectable()
 export class UserService extends CacheableEntityService<User> {
+  static getUser() {
+    throw new Error('Method not implemented.');
+  }
   entityName: string = 'User';
   protected readonly endpointFormat = 'users/:id:';
 
@@ -39,5 +44,8 @@ export class UserService extends CacheableEntityService<User> {
         );
       }
     }
+  }
+  public User111(){
+    return "sainath";
   }
 }

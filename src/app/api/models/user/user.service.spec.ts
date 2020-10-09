@@ -3,22 +3,24 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { UserService } from './user.service';
 import { User } from './user';
 import { HttpRequest } from '@angular/common/http/http';
-
+import {EntityService} from 'src/app/api/models/entity.service'
 
 describe('UserService', () => {
   let injector: TestBed;
+  //console.log(UserService)
   let userService: UserService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserService]
+      providers: [{provide:UserService, useValue:UserService}]
     });
 
     injector = getTestBed();
     userService = injector.get(UserService);
     httpMock = injector.get(HttpTestingController);
+    //console.log(userService)
   });
 
   afterEach(() => {
@@ -33,13 +35,11 @@ describe('UserService', () => {
       student_id: '1', username: 'test', opt_in_to_research: true, receive_portfolio_notifications: false,
       receive_feedback_notifications: false, receive_task_notifications: false
     });
-    const expectedUsers: User[] =
-      [u];
-
+    const expectedUsers: User[] = [u];
+    console.log(userService)
     userService.query().subscribe(
-      users => expect(users).toEqual(expectedUsers, 'expected users')
+      user => expect(user).toEqual(expectedUsers, 'expected users')
     );
-
     const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/');
       expect(request.method).toBe('GET');
