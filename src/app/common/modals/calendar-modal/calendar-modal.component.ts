@@ -18,6 +18,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   webcal: Webcal | null;
   working: boolean = true;
   copying: boolean = false;
+  projects: any[] = [];
 
   // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
   // because they are resettable.
@@ -30,17 +31,23 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private sanitizer: DomSanitizer,
     @Inject(alertService) private alerts: any,
-    @Inject(projectService) private projects: any,
+    @Inject(projectService) private projectService: any,
     dialogRef: MatDialogRef<CalendarModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit() {
+
     // Retrieve current webcal.
     this.working = true;
     this.webcalService.get({}).subscribe((webcal) => {
       this.loadWebcal(webcal);
       this.working = false;
+    });
+
+    // Allow selection of units with active projects.
+    this.projectService.getProjects(false, (projects) => {
+      this.projects = projects.filter((p) => p.teachingPeriod()?.active() ?? true);
     });
   }
 
@@ -194,14 +201,14 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Retrieves a list of excluded projects.
    */
   get excludedProjects() {
-    return this.projects.loadedProjects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) !== -1);
+    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) !== -1);
   }
 
   /**
    * Retrieves a list of included projects.
    */
   get includedProjects() {
-    return this.projects.loadedProjects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) === -1);
+    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) === -1);
   }
 
   /**
