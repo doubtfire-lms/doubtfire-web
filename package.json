@@ -21,6 +21,7 @@
   "dependencies": {
     "@angular/animations": "^10.1.2",
     "@angular/cdk": "~10.2.1",
+    "@angular/cli": "^11.0.0",
     "@angular/common": "~10.1.2",
     "@angular/core": "~10.1.2",
     "@angular/flex-layout": "^10.0.0-beta.32",
@@ -77,7 +78,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.2",
-    "@angular/cli": "^10.1.2",
     "@angular/compiler": "^10.1.2",
     "@angular/compiler-cli": "^10.1.2",
     "@angular/language-service": "^10.1.2",
