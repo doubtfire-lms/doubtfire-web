@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod) ->
+.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants) ->
   projectService = {}
 
   injectFunctionalityInProject = (project) ->
@@ -168,7 +168,7 @@ angular.module("doubtfire.common.services.projects", [])
     # Is the task past the deadline
     task.isOverdue = ->
       task.daysUntilDueDate() < 0
-      
+
     # Are we approaching the deadline?
     task.isDeadlineSoon = ->
       task.daysUntilDeadlineDate() <= 14 && task.timePastDeadlineDate() < 0 && ! task.inFinalState()
@@ -330,6 +330,22 @@ angular.module("doubtfire.common.services.projects", [])
             task.due_date = response['due_date']
           (response) ->
             console.log("Failed to refresh tasks on extension #{response.data.error}")
+
+    task.pin = (taskID, onSuccess, onError) ->
+      $http.post("#{DoubtfireConstants.API_URL}/tasks/#{taskID}/pin").then(
+        (data) ->
+          task.pinned = true
+          onSuccess(data)
+        (response) -> onError(response)
+      )
+
+    task.unpin = (taskID, onSuccess, onError) ->
+      $http.delete("#{DoubtfireConstants.API_URL}/tasks/#{taskID}/pin").then(
+        (data) ->
+          task.pinned = false
+          onSuccess(data)
+        (response) -> onError(response)
+      )
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->

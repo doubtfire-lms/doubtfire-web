@@ -190,8 +190,22 @@
             <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
-                <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
-                  {{ task.num_new_comments }}
+
+                <div
+                  *ngIf="task.pinned"
+                  matBadge="{{ task.num_new_comments }}"
+                  [matBadgeHidden]="task.num_new_comments <= 0 || task.plagiarismDetected()"
+                  matBadgePosition="before"
+                  matBadgeSize="small"
+                  matBadgeColor="warn"
+                >
+                  <mat-icon class="pin-icon">push_pin</mat-icon>
+                </div>
+
+                <div *ngIf="!task.pinned">
+                  <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
+                    {{ task.num_new_comments }}
+                  </div>
                 </div>
               </button>
               <!-- Disable button until pin feature actice on backend -->
@@ -205,8 +219,8 @@
               </button>
               <mat-menu #overflowMenu="matMenu" yPosition="below">
                 <button [disabled] mat-menu-item (click)="togglePin(task)">
-                  <mat-icon>add_alert</mat-icon>
-                  <span>Keep in inbox (coming soon)</span>
+                  <mat-icon> {{ task.pinned ? 'remove_circle' : 'add_alert' }} </mat-icon>
+                  <span>{{ task.pinned ? 'unpin from inbox' : 'pin to inbox' }} </span>
                 </button>
               </mat-menu>
             </div>
