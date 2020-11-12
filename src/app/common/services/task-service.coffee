@@ -671,21 +671,5 @@ angular.module("doubtfire.common.services.tasks", [])
 
     Task.assessExtension(task, taskCommentID, assessment, interceptSuccess, onError)
 
-  taskService.pin = (task, onSuccess, onError) ->
-    Task.pin(task.id,
-    (response) ->
-      onSuccess(response)
-    (response) ->
-      onError(response)
-    )
-
-  taskService.unpin = (task, onSuccess, onError) ->
-    Task.unpin(task.id,
-    (response) ->
-      onSuccess(response)
-    (response) ->
-      onError(response)
-    )
-
   taskService
 )

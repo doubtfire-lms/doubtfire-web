@@ -19,18 +19,6 @@ angular.module("doubtfire.api.models.task", [])
       (response) -> onError(response)
     )
 
-  Task.pin = (taskID, onSuccess, onError) ->
-    $http.post("#{DoubtfireConstants.API_URL}/tasks/#{taskID}/pin").then(
-      (data) -> onSuccess(data)
-      (response) -> onError(response)
-    )
-
-  Task.unpin = (taskID, onSuccess, onError) ->
-    $http.delete("#{DoubtfireConstants.API_URL}/tasks/#{taskID}/pin").then(
-      (data) -> onSuccess(data)
-      (response) -> onError(response)
-    )
-
   #
   # Generates a url for the given task
   #
