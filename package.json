@@ -89,7 +89,7 @@
     "@types/node": "^12.11.1",
     "autoprefixer": "^6.3.3",
     "canonical-path": "0.0.2",
-    "codelyzer": "^5.2.2",
+    "codelyzer": "^6.0.1",
     "concurrently": "^3.2.0",
     "grunt": "^1.0.4",
     "grunt-browser-sync": "^2.2.0",
