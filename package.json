@@ -24,7 +24,6 @@
     "@angular/cli": "^11.0.0",
     "@angular/common": "~11.0.0",
     "@angular/core": "~11.0.0",
-    "@angular/flex-layout": "^10.0.0-beta.32",
     "@angular/forms": "~11.0.0",
     "@angular/material": "^10.2.1",
     "@angular/platform-browser": "~11.0.0",
