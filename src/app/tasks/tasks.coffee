@@ -4,7 +4,6 @@ angular.module('doubtfire.tasks', [
   'doubtfire.tasks.project-tasks-list'
   'doubtfire.tasks.task-definition-editor'
   'doubtfire.tasks.task-definition-selector'
-  'doubtfire.tasks.task-feedback-assessor'
   'doubtfire.tasks.task-plagiarism-file-viewer'
   'doubtfire.tasks.task-plagiarism-report-viewer'
   'doubtfire.tasks.task-sheet-viewer'
