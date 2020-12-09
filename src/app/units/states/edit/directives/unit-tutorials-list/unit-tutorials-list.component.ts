@@ -48,7 +48,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
-    this.tutorials = this.unit.tutorials.filter((tutorial) => tutorial.tutorial_stream === this.stream);
+    this.tutorials = this.unit.tutorials.filter((tutorial) => tutorial.tutorial_stream == this.stream);
     this.dataSource = new MatTableDataSource(this.tutorials);
   }
 
@@ -115,6 +115,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // Handle the deletion of a stream
   deleteStream() {
     this.unit.deleteStream(this.stream);
+  }
+
+  /**
+   * Ensure that the unit is passed to the Tutorial entity when create it called.
+   */
+  protected otherOnCreate() : any {
+    return this.unit;
   }
 
   // Sorting function to sort data when sort
