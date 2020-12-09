@@ -56,7 +56,6 @@ import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
 import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/tasks/task-feedback-assessor/task-feedback-assessor.js';
 import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.js';
 import 'build/src/app/tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
