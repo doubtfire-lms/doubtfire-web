@@ -308,6 +308,7 @@ angular.module("doubtfire.common.services.projects", [])
       task.definition.max_quality_pts > 0 && (task.status in taskService.gradeableStatuses)
     task.matches = (matchText) ->
       project = task.project()
+      taskService.statusLabels[task.status].toLowerCase().indexOf(matchText) >= 0 ||
       task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       project? && project.matches(matchText)

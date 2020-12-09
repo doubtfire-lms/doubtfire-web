@@ -129,7 +129,7 @@ import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/st
 import { FiltersPipe } from './common/filters/filters.pipe';
 import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
-import { TasksWithStudentNamePipe } from './common/filters/tasks-with-student-name.pipe';
+import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -174,7 +174,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
-    TasksWithStudentNamePipe,
+    TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
   ],
@@ -275,7 +275,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     DoubtfireConstants,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
-    TasksWithStudentNamePipe,
+    TasksForInboxSearchPipe,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
