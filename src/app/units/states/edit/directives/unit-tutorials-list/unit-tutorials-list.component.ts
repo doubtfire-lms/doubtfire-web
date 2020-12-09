@@ -117,6 +117,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.unit.deleteStream(this.stream);
   }
 
+  /**
+   * Ensure that the unit is passed to the Tutorial entity when create it called.
+   */
+  protected otherOnCreate() : any {
+    return this.unit;
+  }
+
   // Sorting function to sort data when sort
   // event is triggered
   sortTableData(sort: Sort) {
