@@ -16,6 +16,11 @@
         &mdash;
         Aim to start this task by <strong>{{startDate() | date  : 'EEE d MMM' : '+0000'}}</strong>.
       </li>
+      <li ng-show="task.extensions > 0">
+        <strong>Extension</strong>
+        &mdash;
+        You have an extension for <strong>{{task.extensions}} week{{task.extensions > 1 ? "s" : ""}}</strong>.
+      </li>
       <li>
         <strong>Due Date</strong>
         &mdash;
