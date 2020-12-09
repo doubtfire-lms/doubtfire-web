@@ -11,10 +11,9 @@ export class TasksForInboxSearchPipe implements PipeTransform {
     searchText = searchText.toLowerCase();
     // return tasks.filter(task => task.project().name.toLowerCase().indexOf(searchText) >= 0);
 
-    return tasks.filter( (task: { project: () => any; }) =>
+    return tasks.filter( (task: { matches: (text: string) => boolean }) =>
       {
-        const p: any = task.project();
-        return p.matches(searchText);
+        return task.matches(searchText);
       }
     );
   }
