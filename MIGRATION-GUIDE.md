@@ -69,4 +69,7 @@ Then we should make sure to push this back to GitHub so that others can see our 
 git push --set-upstream origin migrate/task-description-card
 ```
 
-Checkout this commit [here](933df7b673b5d57dc162fb42f79c511444f5fbe3).
+You should see a suggestion to create a pull request when you add this branch. This is also a good idea. At this stage you can create a [Draft Pull Request](https://github.blog/2019-02-14-introducing-draft-pull-requests/) which will get updated as you push your changes. Use this to get a quick screenshot of the component in action currently. Then you can include this as a "from" image.
+
+See the resulting [commit](933df7b673b5d57dc162fb42f79c511444f5fbe3) and [pull request](https://github.com/doubtfire-lms/doubtfire-web/pull/321). Its great that you can go back and see how things evolved.
+
