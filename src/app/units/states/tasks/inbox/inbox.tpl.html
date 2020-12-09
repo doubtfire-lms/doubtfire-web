@@ -6,20 +6,19 @@
     [task-data]="taskData"
     [unit]="unit"
     [unit-role]="unitRole"
-    ><!--/panel-1-->
+  >
   </staff-task-list>
   <task-dashboard
-    style="flex:1; margin-right:10px; margin-left: 10px"
+    style="flex-grow: 3; margin-right: 10px; margin-left: 10px"
     task="taskData.selectedTask"
     show-footer="true"
     show-submission="true"
   >
-  </task-dashboard
-  ><!--/panel-2-->
+  </task-dashboard>
   <task-comments-viewer
+    style="min-width: 300px; flex-grow: 1"
     [task]="taskData.selectedTask"
     [project]="taskData.selectedTask.project()"
   >
-  </task-comments-viewer
-  ><!--/panel-3-->
+  </task-comments-viewer>
 </div>

@@ -1,18 +1,13 @@
 @import '../../../styles/mixins/scrollable.scss';
 
 :host {
-  max-width: 400px;
-  width: 350px;
-  min-width: 300px;
+  min-width: 230px;
 }
 
 $comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
-$comment-bubble-color-other-user-darker: darken(
-  $comment-bubble-color-other-user,
-  10%
-);
+$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
 $comment-author-bubble-size: 38px;
 $comment-text-padding: 8px;
 
@@ -142,13 +137,8 @@ $comment-inner-border-radius: 4px;
       height: 1.5em;
       opacity: 0.8;
       &:before {
-        content: "";
-        background: linear-gradient(
-          to right,
-          transparent,
-          #9696969d,
-          transparent
-        );
+        content: '';
+        background: linear-gradient(to right, transparent, #9696969d, transparent);
         position: absolute;
         left: 0;
         top: 50%;
@@ -234,11 +224,7 @@ $comment-inner-border-radius: 4px;
   .comment.comment-by-other-user user-icon .user-icon-initials {
     box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
     background: $comment-bubble-color-other-user;
-    background: linear-gradient(
-      to left,
-      $comment-bubble-color-other-user,
-      $comment-bubble-color-other-user-darker
-    );
+    background: linear-gradient(to left, $comment-bubble-color-other-user, $comment-bubble-color-other-user-darker);
     // color: $text-color;
     color: black;
   }
