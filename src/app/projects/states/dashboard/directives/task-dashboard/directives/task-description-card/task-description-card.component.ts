@@ -6,6 +6,9 @@ import { Component, Input, Inject } from '@angular/core';
   styleUrls: ['task-description-card.component.scss']
 })
 export class TaskDescriptionCardComponent {
+  @Input() task: any;
+  @Input() taskDef: any;
+  @Input() unit: any;
 
   constructor(
   ) {
