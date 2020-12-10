@@ -6,6 +6,26 @@ This guide will provide the basic steps you can follow in order to successfully 
 
 Here we will demonstrate what to do using the changes associated with the Task Description card.
 
+## Step 0 - Come up with a plan
+
+Before you really get started you need to identify a suitable component to migrate, and come up with a plan for the components new styling.
+
+### Identifying a suitable component to migrate
+
+When picking a component make sure your component **DOES NOT** have any other Angular.js components nested within it. Always start at the bottom and work our way up to the "bigger" components. 
+
+Look for components that should be easy to migrate. It will be easier to migrate things that just present data, but in general remember you already have a working component. So it should mostly be a matter of mapping the code across, and changing the styling to switch from bootstrap to material design.
+
+When in doubt... ask. We are happy to make suggestions for components that should be beneficial to migrate.
+
+We picked the Task Description Card for this guide as it was relatively straightforward in terms of functionality, and it does not have any other Doubtfire components nested within it.
+
+### Plan your components new styling
+
+Explore the [Angular Material](https://material.angular.io) details. Look for similar [components](https://material.angular.io/components/categories) to the bootstrap components being used in the component you are migrating. Where there is a simple mapping you can probably just proceed, but if you want to make bigger changes (which is good) then please mock something up and discuss with the team first. We do not want you wasting effort if your ideas are not in line with what we will accept.
+
+For the Task Description Card there is a matching [card component](https://material.angular.io/components/card/overview) in Angular Material with a suitable [example](https://material.angular.io/components/card/examples) we can build from. We can do a first pass and then make any styling fixes if needed at the end.
+
 ## Step 1 - Create a branch
 
 Ok, this should be a given but it is always going to be important to isolate the changes for these migrations. So start by checking out a new branch for this change.
@@ -114,3 +134,11 @@ npm start
 Open your local copy of Doubtfire and navigate somewhere that you can see the lack of the old component. As we have no HTML yet, there should be nothing in its place but we are mostly checking that we have connected this all up correctly.
 
 See the resulting [commit](52eeb9b598aa1bd5218d76857901dd77fe364c1c) for all of these changes.
+
+Once things are working make sure to commit and push your changes. This will update your draft pull request as well.
+
+Now we are on to the "real" work.
+
+## Step 4 - Migrate the HTML, CoffeeScript, and SCSS
+
+This is where things are going to depend on what you are migrating. Hopefully you have already got a plan for this...
