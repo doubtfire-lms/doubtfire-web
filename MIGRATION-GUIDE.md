@@ -124,6 +124,29 @@ There are a few files we need to update to achieve this.
     ```typescript
     DoubtfireAngularJSModule.directive('taskDescriptionCard', downgradeComponent({ component: TaskDescriptionCardComponent}));
     ```
+- Update attributes on the new component usage.
+  - Search for all of the places where the component was already used (i.e. search for the component HTML tag).
+  - Update the property binding style to use the Angular form which is `[property]="value"`.
+
+    For example:
+    ```html
+    <task-description-card task-def="task.definition" task="task" unit="task.unit()"></task-description-card>
+    ```
+    
+    Needs to change to:
+    ```html
+    <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit()"></task-description-card>
+    ```
+- Add matching inputs into your components typescript declaration. These use the syntax `@Input() name: type;`. For the task description card we use:
+
+  ```ts
+  export class TaskDescriptionCardComponent {
+    @Input() task: any;
+    @Input() taskDef: any;
+    @Input() unit: any;
+    ...
+  }
+  ```
 
 Now we can compile to see if this has all worked... :crossed_fingers:. When you change the config in this way I generally find you need to kill any old build processes and start them again. So we can compile now using:
 
