@@ -156,7 +156,7 @@ npm start
 
 Open your local copy of Doubtfire and navigate somewhere that you can see the lack of the old component. As we have no HTML yet, there should be nothing in its place but we are mostly checking that we have connected this all up correctly.
 
-See the resulting [commit](52eeb9b598aa1bd5218d76857901dd77fe364c1c) for all of these changes.
+See the resulting [commit](81563fa3bc04ba4c1afc40a682dbce0703dfc10b) for all of these changes.
 
 Once things are working make sure to commit and push your changes. This will update your draft pull request as well.
 
@@ -165,3 +165,27 @@ Now we are on to the "real" work.
 ## Step 4 - Migrate the HTML, CoffeeScript, and SCSS
 
 This is where things are going to depend on what you are migrating. Hopefully you have already got a plan for this...
+
+For the task description card I used the [mat-card](https://material.angular.io/components/card/examples) as the main component I needed to migrate to. I did this with the following steps:
+
+1. Copy in the current bootstrap HTML
+2. Identify update to wrap in the material card component (save and test)
+3. Update the header (save and test)
+4. Update the footer to actions (save and test)
+5. Scan for other bootstrap tags and replace.
+
+As I needed it I copied across the CoffeeScript code into the TypeScript component. This included switching the hyperlinks to use buttons, and including the addition of the file saver to make it easy to save the downloaded task sheets and resources as a click action rather than opening a new page with the links.
+
+At the end I made sure to check that **all functionality** from the old component had a matching set of code in the new component.
+
+Check the [final commit](eaa7e6e51aad3b0f35e750416f8b00943ff9ae6d) with all of these changes.
+
+Now it is time to update the Pull Request. Mostly we need to grab a screenshot of the new component in action. Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
+
+You can check out how this [pull request](https://github.com/doubtfire-lms/doubtfire-web/pull/321) went... :crossed_fingers:
+
+## Conclusion
+
+Hopefully this has provided some useful steps that will mean you can quickly and efficiently migrate the Doubtfire components. We are all really looking forward to switching to the new Angular approach, and trying to keep things more up to date going forward.
+
+Many thanks for your contributions on behalf of the Doubtfire team!
