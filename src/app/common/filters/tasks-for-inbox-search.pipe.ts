@@ -1,20 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { any } from '@uirouter/angular';
 
 @Pipe({
   name: 'tasksWithStudentName'
 })
 export class TasksForInboxSearchPipe implements PipeTransform {
 
-  transform(tasks, searchText): any[] {
+  transform(tasks: any[], searchText: string): any[] {
     if ((searchText == null) || (tasks == null)) { return tasks; }
-    searchText = searchText.toLowerCase();
-    // return tasks.filter(task => task.project().name.toLowerCase().indexOf(searchText) >= 0);
+    const searchTerms = searchText.toLowerCase().split(/&|[|]|,/).map(term => term.trim());
+    const operators = searchText.replace(/[^&|,]/g, "").split("")
 
-    return tasks.filter( (task: { matches: (text: string) => boolean }) =>
-      {
-        return task.matches(searchText);
-      }
-    );
+    return tasks.filter((task: { matches: (text: string) => boolean }) =>
+      searchTerms.map((term: string) => task.matches(term))
+        .reduce((prev: boolean, current: boolean, currentIndex: number) => operators[currentIndex - 1] == '&' ? prev && current : prev || current));
   }
 }
