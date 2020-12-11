@@ -186,7 +186,7 @@ Here are a few things to watch out for when doing this migration:
 
 Once things are all working... you can delete the old CoffeeScript, HTML and SCSS files. These are no longer needed... so they can go!
 
-Check the [final commit](85df19efd4c4127a406a9e0d96994debe78de2cf) with all of these changes.
+Check the [final commit](f889b0d9cb24be85b64ee9dbbdbfd65cacdbbb57) with all of these changes.
 
 Now it is time to update the Pull Request. Mostly we need to grab a screenshot of the new component in action. Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
 
