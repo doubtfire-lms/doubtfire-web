@@ -178,7 +178,15 @@ As I needed it I copied across the CoffeeScript code into the TypeScript compone
 
 At the end I made sure to check that **all functionality** from the old component had a matching set of code in the new component.
 
-Check the [final commit](eaa7e6e51aad3b0f35e750416f8b00943ff9ae6d) with all of these changes.
+Here are a few things to watch out for when doing this migration:
+
+- Switching ```ng-show``` to ```[hidden]``` remember to change the boolean expression.
+- Font awesome icons needs to change to Material Design icons using [mat-icon](https://material.angular.io/components/icon/overview) - check out the [icon list]<https://material.io/resources/icons/?style=baseline>.
+- Make sure to add [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-hidden_attribute) and [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute) to ensure icons and images are screen reader friendly.
+
+Once things are all working... you can delete the old CoffeeScript, HTML and SCSS files. These are no longer needed... so they can go!
+
+Check the [final commit](85df19efd4c4127a406a9e0d96994debe78de2cf) with all of these changes.
 
 Now it is time to update the Pull Request. Mostly we need to grab a screenshot of the new component in action. Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
 
