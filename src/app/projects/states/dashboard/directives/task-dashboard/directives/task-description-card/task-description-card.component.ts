@@ -43,10 +43,7 @@ export class TaskDescriptionCardComponent {
   }
 
   public startDate() : Moment {
-    if (this.taskDef)
-      return this.taskDef.start_date;
-    else
-      return undefined;
+      return this.taskDef?.start_date;
   }
 
   public shouldShowDeadline() : boolean {
