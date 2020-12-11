@@ -48,7 +48,7 @@
                 ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
                 ng-click="showUserModal(user)">
                 <td>
-                  <user-icon [size]="35" [user]="user" [email]="user.email"></user-icon>
+                  <user-icon [size]="30" [user]="user"></user-icon>
                 </td>
                 <td>{{user.id}}</td>
                 <td>{{user.first_name}}</td>

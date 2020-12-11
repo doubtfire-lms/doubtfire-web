@@ -98,7 +98,7 @@
             <user-icon
               matTooltip="Read {{ comment.recipient_read_time | humanizedDate }} by {{ comment.recipient.name }}"
               matTooltipPosition="above"
-              size="22"
+              [size]="22"
               [user]="comment.recipient"
             >
             </user-icon>

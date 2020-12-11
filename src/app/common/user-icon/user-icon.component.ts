@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
 import { User } from 'src/app/api/models/user/user';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -9,10 +9,9 @@ import * as d3 from 'd3';
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss'],
 })
-export class UserIconComponent implements AfterViewInit {
+export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() user: User = this.currentUserRef.profile;
   @Input() size: number = 100;
-  @Input() email: string = this.user.email;
 
   @ViewChild('svg') svg;
 
@@ -23,6 +22,10 @@ export class UserIconComponent implements AfterViewInit {
   get backgroundUrl(): string {
     const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
+  }
+
+  get email(): string {
+    return this.user?.email
   }
 
   get initials(): string {
@@ -71,6 +74,17 @@ export class UserIconComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.redraw();
+    console.log('After init: User name', this.user.email);
+  }
+
+  ngOnChanges(changes) {
+    console.log('Changes: User name', this.user.email, ' ', this.size);
+    // this.redraw();
+    // console.log('Changed', changes.property.currentValue, changes.property.previousValue);
+  }
+
+  private redraw(): void {
     const lines = this.generateLines();
 
     let textRadius = 0;
