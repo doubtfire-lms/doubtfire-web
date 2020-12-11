@@ -16,12 +16,12 @@ export class TaskDescriptionCardComponent {
   public grades: {names: any, acronyms: any};
 
   constructor(
-    @Inject(gradeService) private gradeService: any,
+    @Inject(gradeService) private GradeService: any,
     @Inject(Task) private taskAPI: any,
   ) {
     this.grades = {
-      names: gradeService.grades,
-      acronyms: gradeService.gradeAcronyms
+      names: GradeService.grades,
+      acronyms: GradeService.gradeAcronyms
     };
   }
 
