@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { User } from 'src/app/api/models/user/user';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -9,7 +9,7 @@ import * as d3 from 'd3';
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss'],
 })
-export class UserIconComponent implements AfterViewInit, OnChanges {
+export class UserIconComponent implements AfterViewInit {
   @Input() user: User = this.currentUserRef.profile;
   @Input() size: number = 100;
 
@@ -74,17 +74,6 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit(): void {
-    this.redraw();
-    console.log('After init: User name', this.user.email);
-  }
-
-  ngOnChanges(changes) {
-    console.log('Changes: User name', this.user.email, ' ', this.size);
-    // this.redraw();
-    // console.log('Changed', changes.property.currentValue, changes.property.previousValue);
-  }
-
-  private redraw(): void {
     const lines = this.generateLines();
 
     let textRadius = 0;
