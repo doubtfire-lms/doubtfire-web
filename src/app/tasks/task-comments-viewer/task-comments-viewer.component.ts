@@ -52,7 +52,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
           const lastReadComment = this.task.comments
             .slice()
             .reverse()
-            .find((comment) => comment.recipient_read_time != null || !comment.author_is_me);
+            .find((comment) => comment.recipient_read_time != null && !comment.recipient_is_me);
           if (lastReadComment) {
             lastReadComment.last_read = true;
           }
