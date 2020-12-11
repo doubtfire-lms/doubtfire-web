@@ -1,7 +1,6 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Task Details</mat-card-title>
-    <mat-card-subtitle>Key Information</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="markdown-to-pdf" [innerHTML]="taskDef.description | marked"></div>
@@ -28,10 +27,10 @@
   </mat-card-content>
   <mat-card-actions [hidden]="!(taskDef.has_task_sheet || taskDef.has_task_resources)">
     <button mat-button [hidden]="!taskDef.has_task_sheet" (click)="downloadTaskSheet()">
-      <i class="fa fa-download"></i> Download Task Sheet
+      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Task Sheet
     </button>
     <button mat-button [hidden]="!taskDef.has_task_resources" (click)="downloadResources()">
-      <i class="fa fa-download"></i> Download Resources
+      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Resources
     </button>
   </mat-card-actions>
 </mat-card>
