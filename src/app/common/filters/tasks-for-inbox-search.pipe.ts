@@ -12,6 +12,6 @@ export class TasksForInboxSearchPipe implements PipeTransform {
 
     return tasks.filter((task: { matches: (text: string) => boolean }) =>
       searchTerms.map((term: string) => task.matches(term))
-        .reduce((prev: boolean, current: boolean, currentIndex: number) => operators[currentIndex - 1] == '&' ? prev && current : prev || current));
+        .reduce((prev: boolean, current: boolean, currentIndex: number) => operators[currentIndex - 1] === '&' ? prev && current : prev || current));
   }
 }
