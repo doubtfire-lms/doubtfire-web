@@ -30,7 +30,7 @@ export class TaskDescriptionCardComponent {
   }
 
   public downloadResources() {
-    saveAs(this.taskAPI.getTaskResourcesUrl(this.unit, `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`));
+    saveAs(this.taskAPI.getTaskResourcesUrl(this.unit, this.taskDef), `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`);
   }
 
   public dueDate() : Moment {
