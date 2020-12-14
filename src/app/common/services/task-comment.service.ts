@@ -2,10 +2,9 @@ import { Injectable, Inject } from '@angular/core';
 import { taskComment, taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class TaskCommentService {
-
+export class TaskCommentViewService {
   commentResourceUrl: string = '';
   commentType: string = '';
   task: string = '';
@@ -15,8 +14,8 @@ export class TaskCommentService {
     @Inject(taskComment) private tc: any,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
-    @Inject(alertService) private alerts: any,
-  ) { }
+    @Inject(alertService) private alerts: any
+  ) {}
 
   setResourceUrl(resourceURL) {
     if (resourceURL) {
@@ -37,7 +36,7 @@ export class TaskCommentService {
   }
 
   replyToComment(originalCommentID) {
-    this.ts.currentReplyID.id =  originalCommentID;
+    this.ts.currentReplyID.id = originalCommentID;
   }
 
   // reactToComment(originalComment) {
@@ -59,13 +58,14 @@ export class TaskCommentService {
     this.tc.delete(
       { project_id: task.project().project_id, task_definition_id: task.task_definition_id, id: comment.id },
       (success) => {
-        let comments = task.comments.filter(e => e.id !== comment.id);
+        let comments = task.comments.filter((e) => e.id !== comment.id);
         comments = this.ts.mapComments(comments);
         task.comments = comments;
         this.analytics.event('View Task Comments', 'Deleted existing comment');
       },
       (error) => {
         this.alerts.add('danger', error.data.error, 2000);
-      });
+      }
+    );
   }
 }

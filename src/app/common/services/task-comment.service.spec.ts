@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskCommentService } from './task-comment.service';
+import { TaskCommentViewService } from './task-comment.service';
 
-describe('TaskCommentService', () => {
+describe('TaskCommentViewService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: TaskCommentService = TestBed.inject(TaskCommentService);
+    const service: TaskCommentViewService = TestBed.inject(TaskCommentViewService);
     expect(service).toBeTruthy();
   });
 });

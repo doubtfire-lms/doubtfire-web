@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { TaskCommentService } from 'src/app/common/services/task-comment.service';
+import { TaskCommentViewService } from 'src/app/common/services/task-comment.service';
 import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 
 interface Comment {
@@ -27,7 +27,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   @Input() refocusOnTaskChange: boolean;
 
   constructor(
-    private taskCommentService: TaskCommentService,
+    private taskCommentViewService: TaskCommentViewService,
     @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModalRef: any,
     @Inject(Task) private TaskModel: any,
@@ -62,7 +62,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
         }
       );
 
-      this.taskCommentService.setTask(this.task);
+      this.taskCommentViewService.setTask(this.task);
     } else {
       this.loading = false;
     }
@@ -84,7 +84,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
     this.ts.addMediaComment(
-      this.taskCommentService.task,
+      this.taskCommentViewService.task,
       file,
       (success) => this.ts.scrollDown(),
       (failure) => this.alerts.add('danger', 'Failed to post image. #{failure.data?.error}')
