@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TaskCommentViewService } from 'src/app/common/services/task-comment.service';
+import { TaskComment } from 'src/app/api/models/doubtfire-model';
+import { TaskCommentComposerData } from '../../task-comment-composer/task-comment-composer.component';
 
 @Component({
   selector: 'comment-bubble-action',
@@ -7,29 +8,17 @@ import { TaskCommentViewService } from 'src/app/common/services/task-comment.ser
   styleUrls: ['./comment-bubble-action.component.scss'],
 })
 export class CommentBubbleActionComponent implements OnInit {
-  @Input() comment: any;
-  @Input() task: any;
+  @Input() comment: TaskComment;
+  @Input() sharedData: TaskCommentComposerData;
 
-  constructor(private taskCommentViewService: TaskCommentViewService) {}
+  constructor() {}
   ngOnInit() {}
 
-  get canEditComment(): boolean {
-    return this.taskCommentViewService.canUserEdit(this.comment, this.task.project());
-  }
-
-  get canReplyToComment(): boolean {
-    return true;
-  }
-
-  react() {
-    // this.taskCommentViewService.reactToComment(this.comment.id);
-  }
-
   reply() {
-    this.taskCommentViewService.replyToComment(this.comment.id);
+    this.sharedData.originalComment = this.comment;
   }
 
   delete() {
-    this.taskCommentViewService.deleteComment(this.task, this.comment);
+    this.comment.delete();
   }
 }

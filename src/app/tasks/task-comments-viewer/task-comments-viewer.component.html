@@ -5,7 +5,7 @@
       Chat
     </div>
   </div> -->
-  <div fxFlex class="comments-body">
+  <div fxFlex class="comments-body" #commentsBody>
     <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
@@ -19,42 +19,42 @@
           (mouseout)="comment.hover = false"
           class="anchor"
         >
-          <p id="commentTimestamp" *ngIf="comment.should_show_timestamp">
-            {{ comment.author.name }} {{ comment.created_at | humanizedDate }}
+          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp">
+            {{ comment.author.name }} {{ comment.timeOfMessage | humanizedDate }}
           </p>
           <div
             class="comment"
             [ngClass]="{
-              'comment-by-other-user': !comment.author_is_me,
-              'new-comment': comment.is_new
+              'comment-by-other-user': !comment.authorIsMe,
+              'new-comment': comment.isNew
             }"
           >
-            <div *ngIf="shouldShowAuthorIcon(comment.type)" fxFlex="36px" style="display: flex">
+            <div *ngIf="shouldShowAuthorIcon(comment.commentType)" fxFlex="36px" style="display: flex">
               <user-icon
-                *ngIf="comment.should_show_avatar && shouldShowAuthorIcon(comment.type)"
+                *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
                 [size]="36"
                 [user]="comment.author"
-                [ngClass]="{ 'hidden-xs hidden-sm': comment.author_is_me }"
+                [ngClass]="{ 'hidden-xs hidden-sm': comment.authorIsMe }"
                 matTooltip="{{ comment.author.name }}"
                 matTooltipPosition="left"
               >
               </user-icon>
             </div>
 
-            <div fxFlex class="comment-container" [ngSwitch]="comment.type">
+            <div fxFlex class="comment-container" [ngSwitch]="comment.commentType">
               <div *ngSwitchCase="'status'" class="comment-status">
-                <hr class="hr-text" [attr.data-content]="comment.comment" />
+                <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
               <div class="bubble" [ngClass]="commentClasses(comment)">
                 <a
-                  (click)="scrollToComment(comment.original_comment.id)"
+                  (click)="scrollToComment(comment.originalComment.id)"
                   class="original-comment"
-                  *ngIf="!!comment.reply_to_id"
+                  *ngIf="!!comment.replyToId"
                 >
                   <p class="reply-text">
                     <i class="fa fa-reply"></i>
-                    {{ comment.original_comment ? comment.original_comment.comment : 'comment removed' }}
+                    {{ comment.originalComment ? comment.originalComment.text : 'comment removed' }}
                   </p>
                 </a>
                 <div *ngSwitchCase="'extension'" class="comment-extension">
@@ -62,7 +62,7 @@
                 </div>
 
                 <div *ngSwitchCase="'text'" class="comment-text">
-                  <div class="markdown-to-html" [innerHTML]="comment.comment | marked"></div>
+                  <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                 </div>
 
                 <div *ngSwitchCase="'audio'" class="comment-audio">
@@ -85,18 +85,18 @@
                   </a>
                 </div>
               </div>
-              <div *ngIf="isBubbleComment(comment.type)" class="comment-overflow">
+              <div *ngIf="comment.isBubbleComment" class="comment-overflow">
                 <comment-bubble-action
                   [hidden]="!comment.hover"
-                  [task]="task"
                   [comment]="comment"
+                  [sharedData]="sharedComposerData"
                 ></comment-bubble-action>
               </div>
             </div>
           </div>
-          <div *ngIf="comment.last_read && shouldShowReadReceipt()" class="read-receipt">
+          <div *ngIf="comment.lastRead && shouldShowReadReceipt()" class="read-receipt">
             <user-icon
-              matTooltip="Read {{ comment.recipient_read_time | humanizedDate }} by {{ comment.recipient.name }}"
+              matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{ comment.recipient.name }}"
               matTooltipPosition="above"
               [size]="22"
               [user]="comment.recipient"
@@ -109,6 +109,10 @@
   </div>
   <!--/comment-list-->
   <div class="comments-footer" id="commentComposerFoter">
-    <task-comment-composer [task]="task"></task-comment-composer>
+    <task-comment-composer
+      [task]="task"
+      [sharedData]="sharedComposerData"
+      (commentAdded)="scrollDown()"
+    ></task-comment-composer>
   </div>
 </div>
