@@ -1,7 +1,6 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { ActivityType } from 'src/app/api/models/activity-type/activity-type';
-import { ActivityTypeService } from 'src/app/api/models/activity-type/activity-type.service';
+import { ActivityType, ActivityTypeService } from 'src/app/api/models/doubtfire-model';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 import { FormControl, Validators } from '@angular/forms';
@@ -10,7 +9,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 @Component({
   selector: 'activity-type-list',
   templateUrl: 'activity-type-list.component.html',
-  styleUrls: ['activity-type-list.component.scss']
+  styleUrls: ['activity-type-list.component.scss'],
 })
 export class ActivityTypeListComponent extends EntityFormComponent<ActivityType> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
@@ -23,17 +22,10 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
-  constructor(
-    private activityTypeService: ActivityTypeService,
-    @Inject(alertService) private alerts: any
-  ) {
+  constructor(private activityTypeService: ActivityTypeService, @Inject(alertService) private alerts: any) {
     super({
-      name: new FormControl('', [
-        Validators.required
-      ]),
-      abbreviation: new FormControl('', [
-        Validators.required
-      ])
+      name: new FormControl('', [Validators.required]),
+      abbreviation: new FormControl('', [Validators.required]),
     });
   }
 
@@ -74,7 +66,8 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
     }
     switch (sort.active) {
       case 'name':
-      case 'abbreviation': return super.sortTableData(sort);
+      case 'abbreviation':
+        return super.sortTableData(sort);
     }
   }
 }

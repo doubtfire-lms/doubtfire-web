@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
-import { Tutorial } from './tutorial';
+import { Tutorial } from 'src/app/api/models/doubtfire-model';
 import { EntityService } from '../entity.service';
 
 @Injectable()

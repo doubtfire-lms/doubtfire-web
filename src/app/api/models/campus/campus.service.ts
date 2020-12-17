@@ -1,3 +1,4 @@
+import { Campus } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService } from '../cached-entity.service';
 import { Injectable } from '@angular/core';
 

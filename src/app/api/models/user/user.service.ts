@@ -1,3 +1,4 @@
+import { User } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService } from '../cached-entity.service';
 import { Inject, Injectable } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';

@@ -3,14 +3,13 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { FormControl, Validators } from '@angular/forms';
-import { CampusService } from 'src/app/api/models/campus/campus.service';
-import { Campus } from 'src/app/api/models/campus/campus';
+import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 
 @Component({
   selector: 'campus-list',
   templateUrl: 'campus-list.component.html',
-  styleUrls: ['campus-list.component.scss']
+  styleUrls: ['campus-list.component.scss'],
 })
 export class CampusListComponent extends EntityFormComponent<Campus> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
@@ -25,21 +24,12 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
-  constructor(
-    private campusService: CampusService,
-    @Inject(alertService) private alerts: any
-  ) {
+  constructor(private campusService: CampusService, @Inject(alertService) private alerts: any) {
     super({
-      abbreviation: new FormControl('', [
-        Validators.required
-      ]),
-      name: new FormControl('', [
-        Validators.required
-      ]),
-      mode: new FormControl('', [
-        Validators.required
-      ]),
-      active: new FormControl(false)
+      abbreviation: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      mode: new FormControl('', [Validators.required]),
+      active: new FormControl(false),
     });
   }
 
@@ -82,7 +72,8 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
       case 'name':
       case 'abbreviation':
       case 'mode':
-      case 'active': return super.sortTableData(sort);
+      case 'active':
+        return super.sortTableData(sort);
     }
   }
 }

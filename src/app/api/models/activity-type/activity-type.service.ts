@@ -1,4 +1,5 @@
 import { CachedEntityService } from '../cached-entity.service';
+import { ActivityType } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()

@@ -1,7 +1,6 @@
 import { Unit } from './../../../../../../ajs-upgraded-providers';
 import { Component, Input } from '@angular/core';
-import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
-import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
+import { Tutorial, TutorialStream } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'student-tutorial-select',
