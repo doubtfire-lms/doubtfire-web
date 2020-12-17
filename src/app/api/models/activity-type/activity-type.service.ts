@@ -1,9 +1,8 @@
-import { CacheableEntityService } from '../cacheable-entity.service';
-import { ActivityType } from './activity-type';
+import { CachedEntityService } from '../cached-entity.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class ActivityTypeService extends CacheableEntityService<ActivityType> {
+export class ActivityTypeService extends CachedEntityService<ActivityType> {
   protected readonly endpointFormat = 'activity_types/:id:';
   entityName = 'ActivityType';
 
