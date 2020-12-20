@@ -48,7 +48,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
-    this.tutorials = this.unit.tutorials.filter((tutorial) => tutorial.tutorial_stream === this.stream);
+    this.tutorials = this.unit.tutorials.filter(
+      (tutorial) => tutorial.tutorial_stream === this.stream || (!tutorial.tutorial_stream && !this.stream)
+    );
     this.dataSource = new MatTableDataSource(this.tutorials);
   }
 
@@ -120,7 +122,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   /**
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
-  protected otherOnCreate() : any {
+  protected otherOnCreate(): any {
     return this.unit;
   }
 
