@@ -126,7 +126,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
         response = service.update(this.selected);
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
-        response = service.create(this.formDataToNewObject(service.serverKey));
+        response = service.create(this.formDataToNewObject(service.serverKey), this.otherOnCreate());
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
         alertService.add('danger', `${service.entityName} was not changed`, 6000);
@@ -177,6 +177,18 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
       }
     }
     return changes;
+  }
+
+  /**
+   * Returns the data that needs to be passed as the other parameter to the
+   * EntityService's create method when this control is used to create an Entity object.
+   *
+   * Override this in child classes to provide any other details needed to be passed
+   * to the entity constructor when an object is created. This is then passed along
+   * in the `create` call as the `other` value to the EntityService's create method.
+   */
+  protected otherOnCreate(): any {
+    return undefined;
   }
 
   /**

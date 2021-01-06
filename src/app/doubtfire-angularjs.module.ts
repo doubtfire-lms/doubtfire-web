@@ -56,7 +56,6 @@ import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
 import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/tasks/task-feedback-assessor/task-feedback-assessor.js';
 import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.js';
 import 'build/src/app/tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
@@ -93,7 +92,6 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/direct
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
@@ -281,6 +279,7 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
+import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component'
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
@@ -355,6 +354,8 @@ DoubtfireAngularJSModule.directive('taskListItem',
   downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
   downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
+DoubtfireAngularJSModule.directive('taskDescriptionCard',
+  downgradeComponent({ component: TaskDescriptionCardComponent}));
 
   // Global configuration
 DoubtfireAngularJSModule.directive('taskCommentsViewer',

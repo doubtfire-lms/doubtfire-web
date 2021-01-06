@@ -14,7 +14,7 @@ import {
 import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
-import { TasksWithStudentNamePipe } from 'src/app/common/filters/tasks-with-student-name.pipe';
+import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -53,7 +53,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
-  taskWithSTudentNamePipe = new TasksWithStudentNamePipe();
+  taskWithSTudentNamePipe = new TasksForInboxSearchPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions

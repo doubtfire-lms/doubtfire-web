@@ -552,6 +552,7 @@ angular.module("doubtfire.common.services.tasks", [])
       initials = comments[i].author.name.split(" ")
       comments[i].initials = ("#{initials[0][0]}#{initials[1][0]}").toUpperCase()
       comments[i].author_is_me = comments[i].author.id == currentUser.profile.id
+      comments[i].recipient_is_me = comments[i].recipient.id == currentUser.profile.id
 
       authorID = comments[i].author.id
       timeOfMessage = comments[i].created_at
