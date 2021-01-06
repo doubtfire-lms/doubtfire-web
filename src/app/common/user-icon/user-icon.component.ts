@@ -12,7 +12,6 @@ import * as d3 from 'd3';
 export class UserIconComponent implements AfterViewInit {
   @Input() user: User = this.currentUserRef.profile;
   @Input() size: number = 100;
-  @Input() email: string = this.user.email;
 
   @ViewChild('svg') svg;
 
@@ -23,6 +22,10 @@ export class UserIconComponent implements AfterViewInit {
   get backgroundUrl(): string {
     const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
+  }
+
+  get email(): string {
+    return this.user?.email
   }
 
   get initials(): string {
