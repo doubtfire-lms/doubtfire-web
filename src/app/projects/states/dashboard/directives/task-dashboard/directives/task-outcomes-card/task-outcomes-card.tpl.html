@@ -19,15 +19,7 @@
           </h4>
           <p>{{alignment.label}} Click to expand</p>
         </div><!--/alignment-label-->
-        <task-ilo-alignment-rater
-          readonly="true"
-          hide-labels="true"
-          unit="taskDef.unit()"
-          ng-model="alignment">
-        </task-ilo-alignment-rater><!--/alignment-rater-->
-        <task-ilo-alignment-rater1
-          [alignment]="alignment">
-        </task-ilo-alignment-rater1>
+        <task-ilo-alignment-rater class="task-ilo-alignment-rater" [unit]="taskDef.unit()" [alignment]="alignment"></task-ilo-alignment-rater>
       </heading>
       <div class="panel panel-default" collapse="!alignment.collapsed">
         <div class="panel-body">

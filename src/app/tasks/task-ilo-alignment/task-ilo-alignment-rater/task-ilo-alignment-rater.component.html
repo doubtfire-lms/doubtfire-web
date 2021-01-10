@@ -1,0 +1,10 @@
+<div class="task-ilo-alignment-rater colorful">
+    <rating [hidden]="compact" [(ngModel)]="alignment.rating" [max]="max" [readonly]="readonly" (onLeave)="setHoverValue($event)" (onHover)="setHoverValue($event)" class="rating-area"></rating>
+    <div [hidden]="!showLabels" class="text-center rating-static-tooltip">
+        <span [hidden]="(hoveringOver || alignment.rating) == 0">{{labels[(hoveringOver || alignment.rating)]}}</span>
+        <span class="text-muted" [hidden]="hoveringOver != 0 || alignment.rating != 0">This task is not related to this outcome at all</span>
+    </div>
+    <div [hidden]="!compact"  class="compact-rating">
+        {{alignment.rating}}
+    </div>
+</div>

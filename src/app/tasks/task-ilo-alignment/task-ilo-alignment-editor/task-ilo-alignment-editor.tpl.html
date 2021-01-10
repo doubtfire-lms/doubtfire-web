@@ -55,8 +55,8 @@
               <td ng-repeat="ilo in unit.ilos | orderBy: 'abbreviation'" class="ilo-alignment text-center">
                 {{alignment = alignmentForTaskAndIlo(task, ilo); ''}}
                 <button ng-click="showAlignmentModal(task, ilo, alignment)" class="btn btn-sm btn-default btn-alignment">
-                  <task-ilo-alignment-rater ng-if="alignment" ng-model="alignment" compact="true"></task-ilo-alignment-rater>
-                  <i ng-hide="alignment" class="fa fa-circle-o fa-3x text-danger" tooltip-append-to-body="true" tooltip="You decided {{task.definition.abbreviation}} is not aligned to {{ilo.abbreviation}}"></i>
+                  <task-ilo-alignment-rater ng-if="alignment" [alignment]="alignment" [compact]="true"></task-ilo-alignment-rater>
+                  <div class="empty-alignment" ng-hide="alignment">0</div>
                 </button>
               </td>
               <td ng-if="showIncludeTasks" class="include-in-portfolio">

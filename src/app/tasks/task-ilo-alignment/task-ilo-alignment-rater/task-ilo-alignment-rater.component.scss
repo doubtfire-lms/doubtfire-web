@@ -1,5 +1,5 @@
 .task-ilo-alignment-rater {
-  &.colorful {
+  .colorful {
     $base-color: hsl(219, 74%, 83%);
 
     // Generates colors for 0..5 stars
@@ -23,19 +23,9 @@
     margin: 0 auto;
   }
   .rating-area {
-    & + *:not(.ng-hide) {
-      margin-top: 10px;
-    }
     width: 100%;
     text-align: center;
     display: flex;
     flex-wrap: nowrap;
-    &:focus {
-      outline: none;
-    }
-    i {
-      cursor: pointer;
-      padding: 0 10px;
-    }
   }
 }

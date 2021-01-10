@@ -11,11 +11,7 @@
             </h3>
           </div>
           <div class="col-sm-6 pull-right clearfix header-item">
-            <task-ilo-alignment-rater
-              ng-hide="summaryOnly"
-              readonly="true"
-              unit="unit"
-              ng-model="align"></task-ilo-alignment-rater>
+            <task-ilo-alignment-rater ng-hide="summaryOnly" [unit]="unit" [alignment]="align"></task-ilo-alignment-rater>
             <div ng-if="ilo && classStats && summaryOnly">
               <alignment-bullet-chart
                 show-legend="false"
@@ -59,13 +55,7 @@
                 <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
                   <div class="clearfix">
                     {{taskDef = unit.taskDef(align.task_definition_id); ''}}
-                    <task-ilo-alignment-rater
-                      class="pull-right"
-                      readonly="true"
-                      unit="unit"
-                      show-tooltips="true"
-                      ng-model="align">
-                    </task-ilo-alignment-rater>
+                    <task-ilo-alignment-rater class="pull-right" [unit]="unit" [alignment]="align"></task-ilo-alignment-rater>
                     <div class="task-def-alignment-item">
                       <label class="label label-info task-def-label pull-left">{{taskDef.abbreviation}}</label>
                       <span class="col-sm-6">{{taskDef.name}}</span>

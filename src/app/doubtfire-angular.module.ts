@@ -32,7 +32,7 @@ import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
-
+import { RatingModule } from 'ngx-bootstrap/rating';
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {
   AboutDoubtfireModal,
@@ -135,7 +135,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { TaskIloAlignmentRater1Component } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater1.component';
+import { TaskIloAlignmentRaterComponent } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.component';
 
 @NgModule({
   // Components we declare
@@ -181,7 +181,7 @@ import { TaskIloAlignmentRater1Component } from './tasks/task-ilo-alignment/task
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
-    TaskIloAlignmentRater1Component,
+    TaskIloAlignmentRaterComponent,
   ],
   // Module Imports
   imports: [
@@ -227,6 +227,7 @@ import { TaskIloAlignmentRater1Component } from './tasks/task-ilo-alignment/task
     PickerModule,
     EmojiModule,
     PopoverModule.forRoot(),
+    RatingModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

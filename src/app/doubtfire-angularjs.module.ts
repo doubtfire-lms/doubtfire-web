@@ -60,7 +60,6 @@ import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report
 import 'build/src/app/tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
-import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
@@ -287,7 +286,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { TaskIloAlignmentRater1Component } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater1.component';
+import { TaskIloAlignmentRaterComponent } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -373,8 +372,8 @@ DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
-DoubtfireAngularJSModule.directive('taskIloAlignmentRater1',
-  downgradeComponent({ component: TaskIloAlignmentRater1Component }));
+DoubtfireAngularJSModule.directive('taskIloAlignmentRater',
+  downgradeComponent({ component: TaskIloAlignmentRaterComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

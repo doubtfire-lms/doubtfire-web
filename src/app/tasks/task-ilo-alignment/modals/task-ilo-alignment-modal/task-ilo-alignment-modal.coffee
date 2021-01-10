@@ -52,6 +52,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
         if response.data.error?
           alertService.add("danger", "Error: " + response.data.error, 6000)
     )
+    $scope.closeModal()
 
   updateAlignment = ->
     data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
@@ -64,12 +65,12 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
           alertService.add("danger", "Error: " + response.data.error, 6000)
     )
 
-  addAlignment = ->
+  addAlignment = (defaultRating) ->
     $scope.alignment = data = {
       unit_id: $scope.unit.id
       learning_outcome_id: $scope.ilo.id
       task_definition_id: $scope.task.definition.id
-      rating: $scope.alignment.rating
+      rating: defaultRating
       description: null
     }
 
@@ -87,13 +88,12 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
           alertService.add("danger", "Error: " + response.data.error, 6000)
 
   $scope.updateRating = (alignment) ->
-    unless $scope.alignment.id?
-      addAlignment alignment
-    else
-      updateAlignment alignment
+    updateAlignment alignment
 
   $scope.closeModal = ->
     if $scope.editingRationale
       $scope.updateRating $scope.alignment
     $modalInstance.close $scope.alignment
+  if !$scope.alignment?
+    addAlignment 1
 )
