@@ -8,7 +8,7 @@
     <p class="help-block col-sm-12 text-center">
       Hover and click over a rating value below
     </p>
-    <task-ilo-alignment-rater ng-show="true" [alignment]="alignment" [on-rating-changed]="updateRating" [readonly]="false" [show-labels]="true"></task-ilo-alignment-rater>
+    <task-ilo-alignment-rater [alignment]="alignment" [on-rating-changed]="updateRating" [readonly]="false" [show-labels]="true"></task-ilo-alignment-rater>
     <div class="col-sm-12 rationale-wrapper" ng-show="alignment.rating > 0">
       <div tooltip="Click to edit rationale" tooltip-placement="left" tooltip-append-to-body="false" tooltip-popup-delay="300" tooltip-enable="alignment.description != null" ng-click="toggleEditRationale()" class="rationale" ng-class="{'no-rationale': alignment.description == null}" ng-hide="editingRationale">
         <label class="text-muted" ng-show="alignment.description != null">

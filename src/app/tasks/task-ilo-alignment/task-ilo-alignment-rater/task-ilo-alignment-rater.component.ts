@@ -8,15 +8,12 @@ import { outcomeService } from 'src/app/ajs-upgraded-providers';
 }) 
 export class TaskIloAlignmentRaterComponent implements OnInit {
   @Input() readonly: boolean = true;
-  // Alignment object
   @Input() alignment: any;
-  // Unit object
   @Input() unit: any;
-  // Function to call when rating is changed
   @Input() onRatingChanged: any;
   @Input() showLabels: boolean = false;
   @Input() compact: boolean = false;
-  // Maximum rate
+
   max: number = 5;
   labels: string;
   hoveringOver: number = 0;
@@ -28,8 +25,11 @@ export class TaskIloAlignmentRaterComponent implements OnInit {
   ngOnInit() {
     // Retrieve tooltip text
     this.labels = this.outcomeService.alignmentLabels;
+    // Create an empty object for rating component
+    if(this.alignment == undefined) {
+      this.alignment = { rating: 0 }
+    }
     this.oldAlignmentRating = this.alignment.rating;
-    
   }
 
   setHoverValue(value) {
@@ -38,8 +38,12 @@ export class TaskIloAlignmentRaterComponent implements OnInit {
   }
 
   ngDoCheck() {
+    // When alignment is removed, gives alignment a default value that prevents crash
+    if(this.alignment == undefined) {
+        this.alignment = { rating: 0 };
+    }
     if(this.onRatingChanged == null || this.alignment == null) return;
-    if(this.alignment.rating != this.oldAlignmentRating){
+    if(this.alignment.rating != this.oldAlignmentRating) {
       this.onRatingChanged(this.alignment);
       this.oldAlignmentRating=this.alignment.rating;
     }
