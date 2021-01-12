@@ -1,0 +1,105 @@
+<div
+  *ngIf="(!task.inFinalState() || (task.inTimeExceeded() && !task.isPastDeadline())) && !task.inAwaitingFeedbackState()">
+  <!--Only show this if it matters... not in final or waiting for tutor input-->
+  <div *ngIf="(task.isDueSoon() && !task.pastDueDate())">
+    <!--Due soon-->
+    <mat-card [ngClass]="{'card':true,'card-warning':true,'card-sm':true}" [ngStyle]="{'padding':0}">
+      <mat-card-header [ngClass]="{'card-heading':true}">
+        <mat-card-title>
+          <h4>Aim To Complete Soon - Due in {{task.timeUntilDueDateDescription()}}</h4>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="task.inDiscussState()">
+        <!--Due and not in discuss-->
+        <p>
+          This task's due date is <strong>{{task.localDueDateString()}}</strong>.
+          You should aim to complete this task before then to keep your progress on track.
+        </p>
+      </mat-card-content>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="!task.inDiscussState()">
+        <!--Due but in discuss-->
+        <p>
+          This task's due date is <strong>{{task.localDueDateString()}}</strong>.
+          Make sure to discuss this task with your tutor as soon as possible.
+        </p>
+        <p [ngClass]="{'text-muted':true}">
+          Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work
+          with you.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="task.betweenDueDateAndDeadlineDate()">
+    <mat-card [ngClass]="{'card':true,'card-danger':true,'card-sm':true}" [ngStyle]="{'padding':0}">
+      <mat-card-header [ngClass]="{'card-heading':true}">
+        <mat-card-title>
+          <h4>Past Due Date By {{task.timePastDueDateDescription()}}</h4>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="task.inDiscussState()">
+        <!--Not in submitted state and overdue-->
+        <p>
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
+          Try and finish it as soon as possible to avoid falling behind. You will need to
+          request an extension in order to have this task checked and marked as complete by
+          your tutor.
+        </p>
+      </mat-card-content>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="!task.inDiscussState()">
+        <!--Not discussed-->
+        <p>
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
+          Make sure to discuss this task with your tutor as soon as possible. If this task remains on
+          this state for an extended period, it will be marked as Time Exceeded.
+        </p>
+        <p [ngClass]="{'text-muted':true}">
+          Tasks are only considered <strong>completed</strong> once your tutor has
+          <strong>discussed</strong> your work with you.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!--/between due date and deadline-->
+  <div *ngIf="task.isPastDeadline()">
+    <mat-card [ngClass]="{'card':true,'card-danger':true,'card-sm':true}" [ngStyle]="{'padding':0}">
+      <mat-card-header [ngClass]="{'card-heading':true}">
+        <mat-card-title>
+          <h4>Passed Due Date By {{task.timePastDueDateDescription()}}</h4>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="task.inDiscussState()">
+        <!--Past deadline and not submitted-->
+        <p>
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
+          This task is now past the deadline and will be marked as <em>Time Exceeded</em> when submitted. You should
+          consult with the unit assessment details to determine the impact of failing to complete this task within
+          the allocated time.
+        </p>
+      </mat-card-content>
+      <mat-card-content [ngClass]="{'card-body':true}" [hidden]="!task.inDiscussState()">
+        <!--Past deadline but in discuss or awaiting feedback-->
+        <p>
+          You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
+          Make sure to discuss this task with your tutor as soon as possible.
+        </p>
+        <p [ngClass]="{'text-muted':true}">
+          Tasks are only considered <strong>Completed</strong> once it demonstrates the required standard, and it is
+          <strong>discussed</strong> with your tutor.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!--/past deadline-->
+<mat-card [ngClass]="{'card':true,'card-info':true,'card-sm':true}" [ngStyle]="{'padding':0}"
+  [hidden]="!task.inAwaitingFeedbackState()">
+  <mat-card-header [ngClass]="{'card-heading':true}">
+    <mat-card-title>Wait for Tutor Feedback</mat-card-title>
+  </mat-card-header>
+  <mat-card-content [ngClass]="{'card-body':true}">
+    You have submitted this task and should now wait for feedback from your tutor.
+    <span [hidden]="!task.isPastDeadline()">Do not re-upload new files at this time as the status will be changed to
+      <strong>Time Exceeded</strong>.</span>
+  </mat-card-content>
+</mat-card>
+
