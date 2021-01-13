@@ -1,4 +1,4 @@
-*Any italic text should be deleted from the final Pull Request text*
+*Any italic text should be deleted from the final Pull Request text, including this line*
 
 # Description
 
