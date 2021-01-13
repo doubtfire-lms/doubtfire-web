@@ -197,7 +197,9 @@ Once things are all working... you can delete the old CoffeeScript, HTML and SCS
 
 Check the [final commit](9c8a62c1d70e8f950f8c72b3a7a48c0d7274f670) with all of these changes.
 
-Now it is time to update the Pull Request. Mostly we need to grab a screenshot of the new component in action. Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
+## Step 5 - Create the Pull Request
+
+Now it is time to update the Pull Request. Please ensure the pull request contains two screenshots for each use-case of the component, showing the old component (before) and the new component (after). The component can also be demonstrated in a video which can be directly uploaded to the Pull Request (please do not link to another hosting platform). Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
 
 You can check out how this [pull request](https://github.com/doubtfire-lms/doubtfire-web/pull/321) went... :crossed_fingers:
 
