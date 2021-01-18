@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TaskDueCardComponent } from './task-due-card.component';
-describe('TaskPlagiarismCardComponent', () => {
+describe('TaskDueCardComponent', () => {
     let component: TaskDueCardComponent;
     let fixture: ComponentFixture<TaskDueCardComponent>;
   
