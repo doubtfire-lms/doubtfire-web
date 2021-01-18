@@ -14,4 +14,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     listeners.push $scope.$watch('taskDef.id', ->
       $scope.alignments = $scope.unit.staffAlignmentsForTaskDefinition($scope.taskDef)
     )
+    # Preventing the div be collpase when clicking the rating component
+    $scope.buttonClick = ($event,alignment) ->
+      if($event.target.className.indexOf("mat-slider") == -1)
+        alignment.collapsed = !alignment.collapsed
 )

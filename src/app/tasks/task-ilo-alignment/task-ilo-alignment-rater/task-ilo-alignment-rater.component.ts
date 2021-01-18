@@ -16,9 +16,6 @@ export class TaskIloAlignmentRaterComponent implements OnInit {
 
   max: number = 5;
   labels: string;
-  hoveringOver: number = 0;
-  // For watching
-  oldAlignmentRating: number;
 
   constructor(@Inject(outcomeService) private outcomeService:any) { }
 
@@ -29,23 +26,31 @@ export class TaskIloAlignmentRaterComponent implements OnInit {
     if(this.alignment == undefined) {
       this.alignment = { rating: 0 }
     }
-    this.oldAlignmentRating = this.alignment.rating;
   }
 
-  setHoverValue(value) {
-    if(this.readonly) return this.alignment;
-    this.hoveringOver = value;
+  changeValue($event) {
+    // Submission Modal
+    if(this.onRatingChanged == null) {
+      this.alignment.rating = $event.source.value;
+      return
+    }
+    // Admin
+    if($event.value == 0){
+      $event.source.value = this.alignment.rating;
+      return;
+    }
+    this.alignment.rating = $event.value;
+    this.onRatingChanged(this.alignment);
+  }
+
+  formatLabel(value: number) {
+    return value;
   }
 
   ngDoCheck() {
-    // When alignment is removed, gives alignment a default value that prevents crash
-    if(this.alignment == undefined) {
-        this.alignment = { rating: 0 };
-    }
-    if(this.onRatingChanged == null || this.alignment == null) return;
-    if(this.alignment.rating != this.oldAlignmentRating) {
-      this.onRatingChanged(this.alignment);
-      this.oldAlignmentRating=this.alignment.rating;
+    // Preventing the component from crashing after alignment be deleted
+    if(this.compact) {
+      if(this.alignment == undefined) this.alignment = { rating: 0 }
     }
   }
 }

@@ -1,10 +1,10 @@
-<div class="task-ilo-alignment-rater colorful" [matTooltipDisabled]="!compact" matTooltip="{{labels[alignment.rating]}}" matTooltipPosition="above">
-    <rating [hidden]="compact" [(ngModel)]="alignment.rating" [max]="max" [readonly]="readonly" (onLeave)="setHoverValue($event)" (onHover)="setHoverValue($event)" class="rating-area"></rating>
-    <div [hidden]="!showLabels" class="text-center rating-static-tooltip">
-        <span [hidden]="(hoveringOver || alignment.rating) == 0">{{labels[(hoveringOver || alignment.rating)]}}</span>
-        <span class="text-muted" [hidden]="hoveringOver != 0 || alignment.rating != 0">This task is not related to this outcome at all</span>
+<div class="task-ilo-alignment-rater" matTooltip="{{labels[alignment.rating]}}" matTooltipPosition="above">
+    <mat-slider [hidden]="compact" (input)="changeValue($event)"
+    thumbLabel [displayWith]="formatLabel" value={{alignment.rating}} tickInterval="1" min="0" max="5" [disabled]="readonly"></mat-slider>
+    <div [hidden]="!showLabels" class="text-center">
+        <span class="label-{{alignment.rating}} badge">{{labels[alignment.rating]}}</span>
     </div>
-    <div [hidden]="!compact"  class="compact-rating">
+    <div [hidden]="!compact"  class="compact-rating-{{alignment.rating}}">
         {{alignment.rating}}
     </div>
 </div>

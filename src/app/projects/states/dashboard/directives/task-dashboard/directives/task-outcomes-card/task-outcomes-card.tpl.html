@@ -10,7 +10,7 @@
     <button
       class="clearfix list-group-item"
       ng-repeat="alignment in alignments"
-      ng-click="alignment.collapsed = !alignment.collapsed">
+      ng-click="buttonClick($event,alignment)">
       <heading>
         <div>
           <h4>
