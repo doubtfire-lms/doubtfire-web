@@ -9,7 +9,6 @@ import { outcomeService } from 'src/app/ajs-upgraded-providers';
 export class TaskIloAlignmentRaterComponent implements OnInit {
   @Input() readonly: boolean = true;
   @Input() alignment: any;
-  @Input() unit: any;
   @Input() onRatingChanged: any;
   @Input() showLabels: boolean = false;
   @Input() compact: boolean = false;
