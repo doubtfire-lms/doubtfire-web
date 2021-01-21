@@ -136,7 +136,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TaskIloAlignmentRaterComponent } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.component';
-import { TaskOutcomesCard1Component } from './projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card1.component';
+import { TaskOutcomesCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.component';
 
 @NgModule({
   // Components we declare
@@ -183,7 +183,7 @@ import { TaskOutcomesCard1Component } from './projects/states/dashboard/directiv
     StatusIconComponent,
     TaskPlagiarismCardComponent,
     TaskIloAlignmentRaterComponent,
-    TaskOutcomesCard1Component,
+    TaskOutcomesCardComponent,
   ],
   // Module Imports
   imports: [
