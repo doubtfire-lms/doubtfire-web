@@ -1,0 +1,23 @@
+<mat-card [hidden]="alignments.length == 0">
+    <mat-card-header>
+        <mat-card-title>Intended Learning Outcomes</mat-card-title>
+        <mat-card-subtitle>Teaching staff believe that completing this task will help you achieve the outcomes listed below.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-expansion-panel *ngFor="let alignment of alignments">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <strong>{{alignment.ilo.abbreviation}}</strong>
+                    &nbsp;<small>{{alignment.ilo.name}}</small>
+                    <task-ilo-alignment-rater [alignment]="alignment"></task-ilo-alignment-rater>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="alignment-info">
+                <p>Outcome Description</p>
+                {{alignment.ilo.description}}
+                <p class="alignment-rationale">Rationale</p>
+                {{alignment.description}}
+            </div>
+        </mat-expansion-panel>
+    </mat-card-content>
+</mat-card>

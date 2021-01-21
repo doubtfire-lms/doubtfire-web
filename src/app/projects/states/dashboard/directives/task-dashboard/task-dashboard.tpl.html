@@ -39,9 +39,10 @@
       <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit()"></task-description-card>
     </div>
     <!--/task-description-column-->
-    <div class="col-sm-12 col-xl-6">
+    <div class="col-sm-12 col-xl-6 mt-3">
       <task-assessment-card task="task"></task-assessment-card>
       <task-submission-card task="task"></task-submission-card>
+      <task-outcomes-card1 [task-def]="task.definition" [unit]="task.unit()"></task-outcomes-card1>
       <task-outcomes-card task-def="task.definition" unit="task.unit()"></task-outcomes-card>
     </div>
     <!--/task-description-column-->

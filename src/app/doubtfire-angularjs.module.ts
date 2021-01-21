@@ -287,6 +287,7 @@ import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskIloAlignmentRaterComponent } from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.component';
+import { TaskOutcomesCard1Component } from './projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card1.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -374,6 +375,8 @@ DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
 DoubtfireAngularJSModule.directive('taskIloAlignmentRater',
   downgradeComponent({ component: TaskIloAlignmentRaterComponent }));
+DoubtfireAngularJSModule.directive('taskOutcomesCard1',
+  downgradeComponent({ component: TaskOutcomesCard1Component }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
