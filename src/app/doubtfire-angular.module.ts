@@ -66,6 +66,7 @@ import {
   taskDefinitionProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
+  projectProvider
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -134,6 +135,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { PortfolioGradeSelectStep1 } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step1.component';
 
 @NgModule({
   // Components we declare
@@ -179,6 +181,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    PortfolioGradeSelectStep1,
   ],
   // Module Imports
   imports: [
@@ -260,6 +263,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
+    projectProvider,
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,

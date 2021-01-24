@@ -23,6 +23,7 @@ export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
+export const project = new InjectionToken('Project');
 
 
 // Define a provider for the above injection token...
@@ -150,6 +151,12 @@ export const TaskCommentServiceProvider = {
 export const UnitStudentEnrolmentModalProvider = {
   provide: unitStudentEnrolmentModal,
   useFactory: (i: any) => i.get('UnitStudentEnrolmentModal'),
+  deps: ['$injector']
+};
+
+export const projectProvider = {
+  provide: project,
+  useFactory: (i: any) => i.get('Project'),
   deps: ['$injector']
 };
 
