@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-card-title>Select Grade</mat-card-title>
+    <mat-card-content>
+      <p>In preparing your portfolio, you need to undertake a self assessment. Use the unit's assessment criteria to determine the grade your portfolio should be awarded.</p>
+      <!-- Warning -->
+      <mat-card class="card-nested card-warn">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>warning</mat-icon>
+            Read the assessment criteria
+          </mat-card-title>
+          <mat-card-subtitle>Make sure that you have reviewed the Assessment Criteria for the grade you are applying for. Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve that grade.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-checkbox [(ngModel)]="scope.agreedToAssessmentCriteria"><strong>I have read the Assessment Criteria for this unit</strong></mat-checkbox>
+        </mat-card-content>
+      </mat-card>
+      <!-- Grade selector -->
+      <mat-card class="card-nested card-grade-select" [hidden]="!scope.agreedToAssessmentCriteria">
+        <mat-card-header>
+          <mat-card-title>
+            Grade Application
+          </mat-card-title>
+          <mat-card-subtitle>Select the <b>grade</b> you are applying for {{scope.unit.name}} below.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-button-toggle-group class="grade-group" #group="matButtonToggleGroup">
+            <mat-button-toggle *ngFor="let grade of scope.grades; index as i" (click)="chooseGrade(i)" [checked]="scope.project.submitted_grade == i">
+              <grade-icon1 [grade]="grade"></grade-icon1>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <p>Make sure your <b>Learning Summary Report</b> justifies how your portfolio demonstrates you have <b>met all unit learning outcomes to a High Distinction level</b></p>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+    <mat-card-footer class="card-footer">
+      <mat-card-actions class="card-actions">
+        <button mat-flat-button class="button-back" (click)="scope.advanceActiveTab(-1)"><mat-icon>arrow_back</mat-icon>Back</button>
+        <button mat-flat-button [disabled]="!scope.agreedToAssessmentCriteria" class="button-next" (click)="scope.advanceActiveTab(1)">Next<mat-icon>arrow_forward</mat-icon></button>
+      </mat-card-actions>
+    </mat-card-footer>
+</mat-card>

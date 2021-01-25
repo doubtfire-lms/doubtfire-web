@@ -99,7 +99,6 @@ import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
@@ -287,7 +286,8 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { PortfolioGradeSelectStep1 } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step1.component';
+import { PortfolioGradeSelectStepComponent } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import { GradeIcon1Component } from './common/grade-icon/grade-icon1.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -373,8 +373,10 @@ DoubtfireAngularJSModule.directive('statusIcon',
   downgradeComponent({ component: StatusIconComponent }));
 DoubtfireAngularJSModule.directive('taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent }));
-DoubtfireAngularJSModule.directive('portfolioGradeSelectStep1',
-  downgradeComponent({ component: PortfolioGradeSelectStep1 }));
+DoubtfireAngularJSModule.directive('portfolioGradeSelectStep',
+  downgradeComponent({ component: PortfolioGradeSelectStepComponent }));
+DoubtfireAngularJSModule.directive('gradeIcon1',
+  downgradeComponent({ component: GradeIcon1Component }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

@@ -135,7 +135,8 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { PortfolioGradeSelectStep1 } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step1.component';
+import { PortfolioGradeSelectStepComponent } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import { GradeIcon1Component } from './common/grade-icon/grade-icon1.component';
 
 @NgModule({
   // Components we declare
@@ -181,7 +182,8 @@ import { PortfolioGradeSelectStep1 } from './projects/states/portfolio/directive
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
-    PortfolioGradeSelectStep1,
+    PortfolioGradeSelectStepComponent,
+    GradeIcon1Component,
   ],
   // Module Imports
   imports: [
