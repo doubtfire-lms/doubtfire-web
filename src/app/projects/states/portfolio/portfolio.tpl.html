@@ -6,7 +6,7 @@
       </tab-heading>
     </tab>
   </tabset><!--/tabs-->
-  <portfolio-welcome-step ng-if="activeTab == tabs.welcomeStep"></portfolio-welcome-step>
+  <portfolio-welcome-step ng-if="activeTab == tabs.welcomeStep" [advance-active-tab]="advanceActiveTab" [external-name]="externalName"></portfolio-welcome-step>
   <portfolio-grade-select-step ng-if="activeTab == tabs.gradeStep"></portfolio-grade-select-step>
   <portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep"></portfolio-learning-summary-report-step>
   <portfolio-tasks-step ng-if="activeTab == tabs.taskStep"></portfolio-tasks-step>

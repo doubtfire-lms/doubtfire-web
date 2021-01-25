@@ -134,7 +134,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-
+import { PortfolioWelcomeStepComponent } from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 @NgModule({
   // Components we declare
   declarations: [
@@ -179,6 +179,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    PortfolioWelcomeStepComponent
   ],
   // Module Imports
   imports: [

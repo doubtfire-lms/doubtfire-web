@@ -100,7 +100,6 @@ import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
 import 'build/src/app/projects/states/portfolio/portfolio.js';
@@ -287,6 +286,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { PortfolioWelcomeStepComponent } from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -356,6 +356,8 @@ DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
   downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
 DoubtfireAngularJSModule.directive('taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent}));
+DoubtfireAngularJSModule.directive('portfolioWelcomeStep',
+  downgradeComponent({ component: PortfolioWelcomeStepComponent}));
 
   // Global configuration
 DoubtfireAngularJSModule.directive('taskCommentsViewer',
