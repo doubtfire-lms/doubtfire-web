@@ -10,8 +10,8 @@ export class TaskSubmissionnCardComponent implements OnInit {
   @Input() task: any;
 
   submission_date: String;
-  public canReuploadEvidence: any;
-  public canRegeneratePdf: any;
+  public canReuploadEvidence: boolean;
+  public canRegeneratePdf: boolean;
   submission = {};
   urls = { pdf: '', files: '' };
 

@@ -39,8 +39,10 @@
     </button>
     <!-- #docregion sub-menu -->
     <mat-menu #downloads="matMenu">
-      <button mat-menu-item (click)="uploadAlternateFiles()">Upload Alternate Files</button>
-      <button mat-menu-item (click)="regeneratePdf()">Regenerate PDF</button>
+      <button mat-menu-item [hidden]="!canReuploadEvidence" (click)="uploadAlternateFiles()">
+        Upload Alternate Files
+      </button>
+      <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">Regenerate PDF</button>
     </mat-menu>
     <mat-menu #downloads="matMenu">
       <button mat-menu-item>
