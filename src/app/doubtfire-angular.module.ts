@@ -32,7 +32,6 @@ import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
-import { RatingModule } from 'ngx-bootstrap/rating';
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {
   AboutDoubtfireModal,
@@ -227,7 +226,6 @@ import { TaskIloAlignmentRaterComponent } from './tasks/task-ilo-alignment/task-
     PickerModule,
     EmojiModule,
     PopoverModule.forRoot(),
-    RatingModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
