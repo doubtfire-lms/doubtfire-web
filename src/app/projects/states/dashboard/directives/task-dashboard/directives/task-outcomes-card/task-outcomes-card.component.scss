@@ -1,0 +1,59 @@
+task-outcomes-card .card .list-group {
+    @media (min-width: 768px) {
+      heading {
+        display: flex;
+      }
+      .task-ilo-alignment-rater {
+        align-self: center;
+        margin-left: auto;
+      }
+    }
+    @media (max-width: 768px) {
+      .task-ilo-alignment-rater {
+        margin: 1em;
+      }
+    }
+  }
+  .task-ilo-alignment-rater {
+    &.colorful {
+      $base-color: hsl(219, 74%, 83%);
+  
+      // Generates colors for 0..5 stars
+      @for $i from 1 through 5 {
+        $color: darken($base-color, $i * 10%);
+        .rating-static-tooltip .badge.rating-#{$i}, .compact-rating.rating-#{$i} {
+          background-color: $color !important;
+          color: white;
+        }
+        .rating-area {
+          i:nth-of-type(#{$i}) { color: $color; }
+        }
+      }
+    }
+    .compact-rating {
+      border-radius: 2em;
+      font-size: 2em;
+      text-align: center;
+      width: 1.5em;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+    .rating-area {
+      & + *:not(.ng-hide) {
+        margin-top: 10px;
+      }
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-wrap: nowrap;
+      &:focus {
+        outline: none;
+      }
+      i {
+        cursor: pointer;
+        padding: 0 10px;
+      }
+    }
+  }
+  
+  

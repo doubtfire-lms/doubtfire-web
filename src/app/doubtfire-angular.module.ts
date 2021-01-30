@@ -27,6 +27,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+import { CommonModule } from "@angular/common";
+
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -66,6 +68,8 @@ import {
   taskDefinitionProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
+  outcomeService,
+  outcomeServiceProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -117,6 +121,8 @@ import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
+import { TaskSubmissionnCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
+import { TaskOutcomeCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card-component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { MarkedPipe } from './common/pipes/marked.pipe';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
@@ -134,6 +140,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {TaskIloAssignmentRater} from './tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater'
 
 @NgModule({
   // Components we declare
@@ -162,6 +169,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TaskListItemComponent,
     CreatePortfolioTaskListItemComponent,
     TaskDescriptionCardComponent,
+    TaskSubmissionnCardComponent,
+    TaskOutcomeCardComponent,
     StatusIconComponent,
     TaskCommentsViewerComponent,
     UserIconComponent,
@@ -179,12 +188,14 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    TaskIloAssignmentRater,
   ],
   // Module Imports
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ContenteditableModule,
+    CommonModule,
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
@@ -240,6 +251,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ActivityTypeService,
     EmojiService,
     userProvider,
+    outcomeServiceProvider,
     groupServiceProvider,
     unitProvider,
     commentsModalProvider,

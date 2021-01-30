@@ -9,6 +9,7 @@ export const currentUser = new InjectionToken('currentUser');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const gradeService = new InjectionToken('gradeService');
+export const outcomeService = new InjectionToken('outcomeService');
 export const analyticsService = new InjectionToken('analyticsService');
 export const projectService = new InjectionToken('projectService');
 export const alertService = new InjectionToken('AlertService');
@@ -48,6 +49,12 @@ export const plagiarismReportModalProvider = {
 export const groupServiceProvider = {
   provide: groupService,
   useFactory: (i: any) => i.get('groupService'),
+  deps: ['$injector']
+};
+
+export const outcomeServiceProvider = {
+  provide: outcomeService,
+  useFactory: (i: any) => i.get('outcomeService'),
   deps: ['$injector']
 };
 
