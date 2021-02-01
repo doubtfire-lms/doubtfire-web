@@ -14,10 +14,12 @@
   padding: 0;
   border: 1px solid #ddd;
   box-shadow: none;
+  background-color: #f5f5f5;
+  .mat-card-subtitle {
+    margin-bottom: 0px;
+  }
   .mat-card-title {
-    background-color: #f5f5f5;
     padding-left: 16px;
-    color: #333;
     font-size: 16px;
     font-weight: 400;
     border-bottom: 1px solid #ddd;
@@ -26,6 +28,8 @@
   }
   .mat-card-content {
     padding: 15px;
+    background-color: white;
+    margin-bottom: 0px;
     p {
       font-size: 12px;
     }
@@ -34,7 +38,7 @@
     width: 90%;
     .mat-card-header-text {
       margin: 0;
-      width:100%;
+      width: 100%;
     }
     .mat-card-title {
       border: none;
@@ -51,35 +55,12 @@
     }
     .mat-card-content {
       text-align: center;
-      padding-top: 4px;
-    }
-  }
-  .card-warn {
-    .mat-card-title, .mat-card-subtitle {
-      background-color: #d9534f;
-      color: #fff;
-    }
-  }
-  .card-grade-select {
-    margin-top: 8px;
-    .mat-card-title {
-      background-color: #f5f5f5;
-      padding-left: 17px;
-    }
-    .mat-card-subtitle {
-      background-color: #f5f5f5;
-    }
-    p {
-      color: #737373;
-    }
-    .mat-button-toggle-button {
-      padding: 5px 0;
+      padding-top: 20px;
     }
   }
   .card-footer {
     margin: 0;
     border-top: 1px solid #ddd;
-    background-color: #f5f5f5;
   }
   .card-actions {
     margin: 0;
@@ -111,6 +92,25 @@
     button[disabled] {
       cursor: not-allowed;
       background-color: #739cc0;
+    }
+  }
+  .card-warn {
+    .mat-card-title,
+    .mat-card-subtitle {
+      background-color: #d9534f;
+      color: #fff;
+    }
+  }
+  .card-grade-select {
+    margin-top: 8px;
+    .mat-card-title {
+      padding-left: 17px;
+    }
+    p {
+      color: #737373;
+    }
+    .mat-button-toggle-button {
+      padding: 5px 0;
     }
   }
 }
