@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject } from '@angular/core';
+import { Component, Input, Inject } from '@angular/core';
 import { gradeService, project } from 'src/app/ajs-upgraded-providers';
 
 @Component({
@@ -9,7 +9,7 @@ import { gradeService, project } from 'src/app/ajs-upgraded-providers';
 export class PortfolioGradeSelectStepComponent {
     @Input() scope: any;
 
-    constructor(@Inject(gradeService) private gradeService:any, @Inject(project) private projectFactory) { }
+    constructor(@Inject(gradeService) private gradeService:any, @Inject(project) private projectFactory: any) { }
 
     ngOnInit() {
         this.scope.grades = this.gradeService.grades;
