@@ -1,4 +1,6 @@
 ![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
+![Node.js CI](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/Node.js%20CI/badge.svg)
+![CodeQL](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/CodeQL/badge.svg)
 
 # Doubtfire Web
 
