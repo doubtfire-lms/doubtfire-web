@@ -19,7 +19,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
 
   public addComment(
     task: any,
-    data: string | File,
+    data: string | File | Blob,
     commentType: string,
     originalComment?: TaskComment
   ): Observable<TaskComment> {
