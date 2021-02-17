@@ -57,6 +57,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_definition_id: $scope.unit.draft_task_definition_id
+        allow_student_extension_requests: $scope.unit.allow_student_extension_requests,
+        extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
       }
 
       if $scope.unit.teaching_period_id

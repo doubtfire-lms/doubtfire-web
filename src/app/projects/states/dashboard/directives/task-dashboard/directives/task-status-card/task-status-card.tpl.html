@@ -1,47 +1,55 @@
 <div class="card card-default card-sm card-status">
   <div class="card-heading task-trigger-dropdown" ng-show="triggers.length > 0">
     <div class="task-status hidden-sm hidden-xs" dropdown>
-      <button
-        type="button"
-        class="btn btn-default form-control input-lg {{task.statusClass()}}"
-        dropdown-toggle>
-        <span class="pull-left">
-          <i class="{{task.statusIcon()}}"></i> {{task.statusLabel()}}
-        </span>
+      <button type="button" class="btn btn-default form-control input-lg {{task.statusClass()}}" dropdown-toggle>
+        <span class="pull-left"> <i class="{{task.statusIcon()}}"></i> {{task.statusLabel()}} </span>
         <span class="pull-right">
           <i class="fa fa-caret-down"></i>
-        </span>
-      </button><!--/select-button-->
+        </span></button
+      ><!--/select-button-->
       <ul class="dropdown-menu" dropdown-menu>
         <li
           ng-repeat="trigger in triggers"
           tooltip="{{trigger.help.reason}}"
           tooltip-append-to-body="true"
           tooltip-popup-delay="1000"
-          tooltip-placement="right">
+          tooltip-placement="right"
+        >
           <a ng-click="triggerTransition(trigger.status)">
             <status-icon [status]="trigger.status" [show-tooltip]="false"></status-icon>
             {{trigger.label}}
           </a>
         </li>
-      </ul><!--/select-options-->
-    </div><!--/desktop-dropdown-->
+      </ul>
+      <!--/select-options-->
+    </div>
+    <!--/desktop-dropdown-->
     <select
       class="form-control input-lg visible-sm visible-xs"
       ng-options="trigger.status as trigger.label for trigger in triggers"
       ng-model="task.status"
-      ng-change="triggerTransition(task.status)">
-    </select>
-  </div><!--/trigger-heading-->
+      ng-change="triggerTransition(task.status)"
+    ></select>
+  </div>
+  <!--/trigger-heading-->
   <div class="card-heading static-task-status" ng-hide="triggers.length > 0">
     <status-icon class="pull-right" [status]="task.status" [show-tooltip]="false"></status-icon>
     <h4>{{task.statusLabel()}}</h4>
-  </div><!--/static-status-label-->
+  </div>
+  <!--/static-status-label-->
   <div class="card-body">
     <p>{{task.statusHelp().reason}} {{task.statusHelp().action}}</p>
-  </div><!--/status-body-->
-  <div class="card-footer clearfix" ng-if="task.canApplyForExtension() || (task.inSubmittedState() && task.requiresFileUpload())">
-    <a ng-click="applyForExtension()" ng-if="task.canApplyForExtension()" class="btn btn-success">
+  </div>
+  <!--/status-body-->
+  <div
+    class="card-footer clearfix"
+    ng-if="task.unit().my_role != 'Student' || task.canApplyForExtension() || (task.inSubmittedState() && task.requiresFileUpload())"
+  >
+    <a
+      ng-click="applyForExtension()"
+      ng-if="task.unit().my_role != 'Student' || task.canApplyForExtension()"
+      class="btn btn-success"
+    >
       <i class="fa fa-medkit"></i>
       Request Extension
     </a>
@@ -51,9 +59,12 @@
       class="btn btn-primary"
       tooltip="This allows you to update files for your portfolio, but does not update the task status."
       tooltip-popup-delay="250"
-      tooltip-append-to-body="true">
+      tooltip-append-to-body="true"
+    >
       <i class="fa fa-upload"></i>
       Upload new files for submission
     </a>
-  </div><!--/status-footer-->
-</div><!--/status-card-->
+  </div>
+  <!--/status-footer-->
+</div>
+<!--/status-card-->
