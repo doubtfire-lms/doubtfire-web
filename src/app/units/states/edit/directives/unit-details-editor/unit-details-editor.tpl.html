@@ -234,6 +234,32 @@
         <!--/auto apply extension-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Allow students to change tutorial</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label
+                class="btn btn-{{unit.allow_student_change_tutorial ? 'success' : 'default'}}"
+                ng-model="unit.allow_student_change_tutorial"
+                btn-radio="true"
+                uncheckable
+              >
+                <i class="fa fa-check"></i>
+              </label>
+              <label
+                class="btn btn-{{unit.allow_student_change_tutorial ? 'default' : 'danger'}}"
+                ng-model="unit.allow_student_change_tutorial"
+                btn-radio="false"
+                uncheckable
+              >
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block"> When false only staff can change student tutorials. </span>
+          </div>
+        </div>
+        <!--/allow_student_change_tutorial-->
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Send notification emails</label>
           <div class="col-sm-9">
             <div class="btn-group">
