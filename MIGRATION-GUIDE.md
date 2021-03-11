@@ -185,11 +185,21 @@ Here are a few things to watch out for when doing this migration:
 - Make sure to add [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-hidden_attribute) and [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute) to ensure icons and images are screen reader friendly.
 - Make sure to run ```ng lint``` at the end of this process to make sure your TypeScript code is looking good!
 
+### A note on porting the CSS of components
+In Doubtfire's AngularJS codebase, the components use bootstrap classes such as `card-sm` or `card-danger`. The eventual goal of the rewrite is to remove this Bootstrap dependancy as we are moving to Angular Material. As such, when the new components are being created, these styles need to be replaced with Angular Material equivalents, or a similar component design needs to be written which can replace the old one.
+
+These bootstrap components are usually bassed into the `class` of the components, for example:
+
+* `class="card-heading"`, `class="card-body"` would need to be recreated with: https://material.angular.io/components/card/overview
+* `class="text-muted"` would be recreated with: https://material.angular.io/guide/typography
+
 Once things are all working... you can delete the old CoffeeScript, HTML and SCSS files. These are no longer needed... so they can go!
 
 Check the [final commit](9c8a62c1d70e8f950f8c72b3a7a48c0d7274f670) with all of these changes.
 
-Now it is time to update the Pull Request. Mostly we need to grab a screenshot of the new component in action. Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
+## Step 5 - Create the Pull Request
+
+Now it is time to update the Pull Request. Please ensure the pull request contains two screenshots for each use-case of the component, showing the old component (before) and the new component (after). The component can also be demonstrated in a video which can be directly uploaded to the Pull Request (please do not link to another hosting platform). Once you have added this, make sure to note any changes that the team should check. You want to make sure that you dont break things when then is merged in. If you think everything is ready then switch from a draft to full PR... As long as things are tidy, and you have clear screenshots to show that everything is working, you can expect things to be merged quickly or for you to get some instructions on what to change.
 
 You can check out how this [pull request](https://github.com/doubtfire-lms/doubtfire-web/pull/321) went... :crossed_fingers:
 

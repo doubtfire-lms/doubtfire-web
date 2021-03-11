@@ -1,10 +1,12 @@
-$roboto-path: "./fonts/roboto";
+// TODO: Evaluate when this file can be removed
+
+$roboto-path: './fonts/roboto';
 
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url('#{$roboto-path}/Roboto-Light.woff') format('woff'),
+  src: local('Roboto Light'), local('Roboto-Light'), url('#{$roboto-path}/Roboto-Light.woff') format('woff');
 }
 @font-face {
   font-family: 'Roboto';
@@ -29,4 +31,8 @@ $roboto-path: "./fonts/roboto";
   font-style: italic;
   font-weight: 400;
   src: local('Roboto Italic'), local('Roboto-Italic'), url('#{$roboto-path}/Roboto-Italic.woff') format('woff');
+}
+
+.mat-icon {
+  font-family: 'Material Icons' !important;
 }

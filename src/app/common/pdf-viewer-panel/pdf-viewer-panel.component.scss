@@ -6,7 +6,7 @@
     position: relative;
     overflow: inherit !important;
     background-color: #d1d1d1;
-    height: 60vh;
+    min-height: 75vh;
     @include doubtfire-scroll-panel;
   }
   .pdf-viewer-footer {
