@@ -556,26 +556,6 @@ angular.module("doubtfire.common.services.tasks", [])
       wrappedResult = angular.element(objDiv)
       wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
 
-  #============================================================================
-  #ADD MEDIA COMMENT
-  taskService.addMediaComment = (task, media, onSuccess, onError) ->
-    form = new FormData()
-    form.append 'attachment', media
-
-    if taskService.currentReplyID.id?
-      reply_to_id = taskService.currentReplyID.id
-      taskService.currentReplyID.id = null
-
-    TaskComment.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, reply_to_id: reply_to_id}, form,
-      (response) -> #success
-        unless task.comments?
-          task.comments = []
-        task.comments.push(response)
-        taskService.mapComments(task.comments)
-        onSuccess(response)
-      (response) -> #failure
-        onError(response)
-
   #Add discussion comment
   taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
     form = new FormData()
