@@ -20,6 +20,10 @@ export interface HttpOptions {
   reportProgress?: boolean;
   responseType?: 'json';
   withCredentials?: boolean;
+  /**
+   * Use the alternate end point format to override the end point used.
+   */
+  alternateEndpointFormat?: string;
 }
 
 /**
@@ -96,7 +100,7 @@ export abstract class EntityService<T extends Entity> {
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
     }
-    const path = this.buildEndpoint(this.endpointFormat, object);
+    const path = this.buildEndpoint(options?.alternateEndpointFormat || this.endpointFormat, object);
 
     return this.httpClient.get(path, options).pipe(map((rawData) => this.createInstanceFrom(rawData, other))); // Turn the raw JSON returned into the object T
   }
@@ -111,7 +115,7 @@ export abstract class EntityService<T extends Entity> {
    * @returns {Observable} a new cold observable
    */
   public query(pathIds?: object, other?: object, options?: HttpOptions): Observable<T[]> {
-    const path = this.buildEndpoint(this.endpointFormat, pathIds);
+    const path = this.buildEndpoint(options?.alternateEndpointFormat || this.endpointFormat, pathIds);
     return this.httpClient
       .get(path, options)
       .pipe(map((rawData) => this.convertCollection(rawData instanceof Array ? rawData : [rawData], other)));
@@ -146,7 +150,7 @@ export abstract class EntityService<T extends Entity> {
   public put<S>(pathIds: any, data?: FormData | object, options?: HttpOptions): Observable<S> {
     const object = { ...pathIds };
     const json = data ? data : typeof pathIds.toJson === 'function' ? pathIds.toJson() : pathIds;
-    const path = this.buildEndpoint(this.endpointFormat, object);
+    const path = this.buildEndpoint(options?.alternateEndpointFormat || this.endpointFormat, object);
 
     return this.httpClient.put(path, json, options) as Observable<S>;
   }
@@ -164,7 +168,7 @@ export abstract class EntityService<T extends Entity> {
   public create(pathIds?: any, data?: FormData | object, other?: any, options?: HttpOptions): Observable<T> {
     const object = { ...pathIds };
     const json = data ? data : typeof pathIds.toJson === 'function' ? pathIds.toJson() : pathIds;
-    const path = this.buildEndpoint(this.endpointFormat, object);
+    const path = this.buildEndpoint(options?.alternateEndpointFormat || this.endpointFormat, object);
     return this.httpClient.post(path, json, options).pipe(map((rawData) => this.createInstanceFrom(rawData, other)));
   }
 
@@ -181,7 +185,7 @@ export abstract class EntityService<T extends Entity> {
     if (typeof pathIds === 'number') {
       object['id'] = pathIds;
     }
-    const path = this.buildEndpoint(this.endpointFormat, object);
+    const path = this.buildEndpoint(options?.alternateEndpointFormat || this.endpointFormat, object);
 
     return this.httpClient.delete(path, options);
   }
