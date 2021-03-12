@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { TaskCommentViewService } from 'src/app/common/services/task-comment.service';
 import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
@@ -17,7 +16,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   project: any = {};
   loading: boolean = true;
 
-  sharedComposerData: TaskCommentComposerData = {
+  sharedCommentComposerData: TaskCommentComposerData = {
     originalComment: null,
   };
 
@@ -36,13 +35,17 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   @Input() refocusOnTaskChange: boolean;
 
   constructor(
-    private taskCommentViewService: TaskCommentViewService,
     private taskCommentService: TaskCommentService,
     @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModalRef: any,
     @Inject(Task) private TaskModel: any,
     @Inject(alertService) private alerts: any
-  ) {}
+  ) {
+    const self = this;
+    this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
+      self.scrollDown();
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -79,30 +82,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
           this.scrollDown();
         });
-
-      // );
-      // this.taskCommentService.cacheSource = this.task.commentCache;
-      // this.taskCommentService.query(
-      //   {
-      //     project_id: this.project.project_id,
-      //     task_definition_id: this.task.task_definition_id,
-      //   },
-      //   (response: any) => {
-      //     this.task.comments = this.ts.mapComments(response);
-      //     const lastReadComment = this.task.comments
-      //       .slice()
-      //       .reverse()
-      //       .find((comment) => comment.recipientReadTime != null && !comment.recipient_is_me);
-      //     if (lastReadComment) {
-      //       lastReadComment.last_read = true;
-      //     }
-      //     this.task.num_new_comments = 0;
-      //     this.ts.scrollDown();
-      //     this.loading = false;
-      //   }
-      // );
-
-      // this.taskCommentViewService.setTask(this.task);
     } else {
       this.loading = false;
     }
@@ -129,6 +108,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
           'audio/mp4',
           'audio/ogg',
           'audio/wav',
+          'audio/x-wav',
           'audio/webm',
           'image/png',
           'image/pdf',
@@ -136,7 +116,9 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
           'image/gif',
           'image/jpg',
           'image/jpeg',
-        ].includes(file.type)
+        ].includes(file.type) ||
+        file.type.startsWith('audio/') ||
+        file.type.startsWith('image/')
       ) {
         this.postAttachmentComment(file);
       } else {
@@ -151,9 +133,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     const self: TaskCommentsViewerComponent = this;
 
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {
-        self.scrollDown();
-      },
+      (tc: TaskComment) => {},
       (error: any) => {
         this.alerts.add('danger', error || error?.message, 2000);
       }

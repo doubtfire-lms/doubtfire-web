@@ -38,7 +38,6 @@ export interface TaskCommentComposerData {
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
   @Input() sharedData: TaskCommentComposerData;
-  @Output() commentAdded = new EventEmitter<any>();
 
   comment = {
     text: '',
@@ -209,6 +208,8 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   openDiscussionComposer() {
+    const self = this;
+
     this.popovers.forEach((popover: PopoverDirective) => {
       popover.hide();
     });
@@ -239,7 +240,6 @@ export class TaskCommentComposerComponent implements OnInit {
     this.taskCommentService.addComment(this.task, text, 'text', originalComment).subscribe(
       (tc: TaskComment) => {
         this.input.first.nativeElement.innerText = '';
-        this.commentAdded.emit(null);
       },
       (error: any) => {
         this.alerts.add('danger', error || error?.message, 2000);

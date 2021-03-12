@@ -89,7 +89,7 @@
                 <comment-bubble-action
                   [hidden]="!comment.hover"
                   [comment]="comment"
-                  [sharedData]="sharedComposerData"
+                  [sharedData]="sharedCommentComposerData"
                 ></comment-bubble-action>
               </div>
             </div>
@@ -109,10 +109,6 @@
   </div>
   <!--/comment-list-->
   <div class="comments-footer" id="commentComposerFoter">
-    <task-comment-composer
-      [task]="task"
-      [sharedData]="sharedComposerData"
-      (commentAdded)="scrollDown()"
-    ></task-comment-composer>
+    <task-comment-composer [task]="task" [sharedData]="sharedCommentComposerData"></task-comment-composer>
   </div>
 </div>
