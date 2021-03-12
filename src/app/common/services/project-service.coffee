@@ -195,8 +195,6 @@ angular.module("doubtfire.common.services.projects", [])
         (tc) -> success(tc)
         (error) -> failure(error)
       )
-    task.scrollCommentsToBottom = ->
-      taskService.scrollDown()
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
       Task.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
     task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->

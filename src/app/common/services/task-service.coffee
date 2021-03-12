@@ -531,54 +531,6 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.hasTaskKey = (task, key) ->
     _.isEqual(task?.taskKey(), key)
 
-
-  #============================================================================
-  #ADD COMMENT
-  taskService.addComment = (task, textString, commentType, replyID, success, failure) ->
-    TaskComment.create { project_id: task.project().project_id, task_definition_id: task.task_definition_id, comment: textString, type: commentType, reply_to_id: replyID},
-      (response) ->
-        unless task.comments?
-          task.comments = []
-        task.comments.push(response)
-        taskService.mapComments(task.comments)
-        if success? and _.isFunction success
-          success(response)
-        analyticsService.event "View Task Comments", "Added new comment"
-      (response) ->
-        if failure? and _.isFunction failure
-          failure(response)
-
-  #============================================================================
-  #SCROLL DOWN
-  taskService.scrollDown = ->
-    $timeout ->
-      objDiv = document.querySelector("task-comments-viewer .comments-body")
-      wrappedResult = angular.element(objDiv)
-      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
-
-  #Add discussion comment
-  taskService.addDiscussionComment = (task, prompts, onSuccess, onError) ->
-    form = new FormData()
-    temp = []
-
-    for prompt in prompts
-      form.append('attachments[]', prompt)
-
-    res = DiscussionComment.createDiscussion.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, type: "discussion"}, form,
-      (response) -> #success
-        unless task.comments?
-          task.comments = []
-        task.comments.push(response)
-        taskService.mapComments(task.comments)
-        onSuccess(response)
-      (response) -> #failure
-        onError(response)
-
-    $timeout ->
-      objDiv = document.querySelector("task-comments-viewer .comments-body")
-      wrappedResult = angular.element(objDiv)
-      wrappedResult[0].scrollTop = wrappedResult[0].scrollHeight
-
   taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
     form = new FormData()
     form.append 'attachment', replyAudio
