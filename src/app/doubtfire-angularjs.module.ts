@@ -264,7 +264,6 @@ import { CampusListComponent } from './admin/states/campuses/campus-list/campus-
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
-import { TaskCommentViewService } from './common/services/task-comment.service';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
@@ -285,6 +284,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskCommentService } from './api/models/doubtfire-model';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -307,7 +307,7 @@ DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(Abou
 DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
-DoubtfireAngularJSModule.factory('TaskCommentViewService', downgradeInjectable(TaskCommentViewService));
+DoubtfireAngularJSModule.factory('TaskCommentService', downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService', downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));

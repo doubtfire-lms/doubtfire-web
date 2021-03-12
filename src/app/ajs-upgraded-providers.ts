@@ -17,7 +17,7 @@ export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
 export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const taskComment = new InjectionToken('TaskComment');
-export const taskCommentViewService = new InjectionToken('TaskCommentViewService');
+export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
@@ -140,9 +140,9 @@ export const TaskCommentProvider = {
   deps: ['$injector'],
 };
 
-export const TaskCommentViewServiceProvider = {
-  provide: taskCommentViewService,
-  useFactory: (i: any) => i.get('TaskCommentViewService'),
+export const TaskCommentServiceProvider = {
+  provide: taskCommentService,
+  useFactory: (i: any) => i.get('TaskCommentService'),
   deps: ['$injector'],
 };
 
