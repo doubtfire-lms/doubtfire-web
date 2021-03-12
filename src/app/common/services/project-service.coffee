@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants) ->
+.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants, TaskCommentService) ->
   projectService = {}
 
   injectFunctionalityInProject = (project) ->
@@ -191,7 +191,10 @@ angular.module("doubtfire.common.services.projects", [])
     task.group = ->
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
-      taskService.addComment(task, textString, success, failure)
+      TaskCommentService.addComment(task, textString).subscribe(
+        (tc) -> success(tc)
+        (error) -> failure(error)
+      )
     task.scrollCommentsToBottom = ->
       taskService.scrollDown()
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
