@@ -88,12 +88,14 @@ export abstract class CachedEntityService<T extends Entity> extends EntityServic
    *
    * @param pathIds Either the id, if a number and maps simple to ':id', otherwise an object
    *                with keys the match the placeholders within the endpointFormat string.
+   * @param other   Any other data that is needed to be passed to the creation of entities
+   *                resulting from this get request.
    * @param options Optional http options
    */
-  public fetch(pathIds: number | string | Entity | object, options?: HttpOptions): Observable<T>;
-  public fetch(pathIds: any, options?: HttpOptions): Observable<T> {
+  public fetch(pathIds: number | string | Entity | object, other?: any, options?: HttpOptions): Observable<T>;
+  public fetch(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
     const key: string = this.keyFromPathIds(pathIds);
-    return super.get(pathIds, options).pipe(
+    return super.get(pathIds, other, options).pipe(
       map((entity: T) => {
         if (this.hasEntityInCache(key)) {
           const cachedEntity = this.cache.get(key);
@@ -144,15 +146,17 @@ export abstract class CachedEntityService<T extends Entity> extends EntityServic
    *
    * @param pathIds Either the id, if a number and maps simple to ':id', otherwise an object
    *                with keys the match the placeholders within the endpointFormat string.
+   * @param other   Any other data that is needed to be passed to the creation of entities
+   *                resulting from this get request.
    * @param options Optional http options
    */
-  public get(pathIds: number | string | object, options?: HttpOptions): Observable<T>;
-  public get(pathIds: any, options?: HttpOptions): Observable<T> {
+  public get(pathIds: number | string | object, other?: any, options?: HttpOptions): Observable<T>;
+  public get(pathIds: any, other?: any, options?: HttpOptions): Observable<T> {
     const key: string = this.keyFromPathIds(pathIds);
     if (this.cache.has(key)) {
       return new Observable((observer: any) => observer.next(this.getFromCache(key)));
     } else {
-      return super.get(pathIds, options).pipe(tap((entity: T) => this.addEntityToCache(entity.key, entity)));
+      return super.get(pathIds, other, options).pipe(tap((entity: T) => this.addEntityToCache(entity.key, entity)));
     }
   }
 
@@ -162,11 +166,12 @@ export abstract class CachedEntityService<T extends Entity> extends EntityServic
    *
    * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
    * @param data    A FormData or object with the values to pass up in the body of the update/put request.
+   * @param other   Any other data needed to be passed to the entity on creation
    * @param options Optional http options
    * @returns {Observable} a new cold observable with the newly created @type {T}
    */
-  public create(pathIds?: object, data?: FormData | object, options?: HttpOptions): Observable<T> {
-    return super.create(pathIds, data, options).pipe(tap((entity) => this.addEntityToCache(entity.key, entity)));
+  public create(pathIds?: object, data?: FormData | object, other?: any, options?: HttpOptions): Observable<T> {
+    return super.create(pathIds, data, other, options).pipe(tap((entity) => this.addEntityToCache(entity.key, entity)));
   }
 
   /**
