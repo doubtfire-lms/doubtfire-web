@@ -116,6 +116,7 @@ export class TaskComment extends Entity {
       .subscribe(
         (response: object) => {
           this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
+          this.task.refreshCommentData();
         },
         (error: any) => {
           AppInjector.get<any>(alertService).add('danger', error?.message || error || 'Unknown error', 2000);
