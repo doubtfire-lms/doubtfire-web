@@ -293,6 +293,7 @@ $comment-inner-border-radius: 4px;
   }
 
   @mixin base-bubble {
+    max-width: 300px;
     margin-left: 5px;
     margin-right: 5px;
     display: flex;

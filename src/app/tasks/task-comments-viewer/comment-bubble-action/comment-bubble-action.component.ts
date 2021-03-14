@@ -1,38 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TaskCommentService } from 'src/app/common/services/task-comment.service';
+import { TaskComment } from 'src/app/api/models/doubtfire-model';
+import { TaskCommentComposerData } from '../../task-comment-composer/task-comment-composer.component';
 
 @Component({
   selector: 'comment-bubble-action',
   templateUrl: './comment-bubble-action.component.html',
-  styleUrls: ['./comment-bubble-action.component.scss']
+  styleUrls: ['./comment-bubble-action.component.scss'],
 })
 export class CommentBubbleActionComponent implements OnInit {
+  @Input() comment: TaskComment;
+  @Input() sharedData: TaskCommentComposerData;
 
-  @Input() comment: any;
-  @Input() task: any;
-
-  constructor(private taskCommentService: TaskCommentService,
-  ) { }
-  ngOnInit() {
-  }
-
-  get canEditComment(): boolean {
-    return this.taskCommentService.canUserEdit(this.comment, this.task.project());
-  }
-
-  get canReplyToComment(): boolean {
-    return true;
-  }
-
-  react() {
-    // this.taskCommentService.reactToComment(this.comment.id);
-  }
+  constructor() {}
+  ngOnInit() {}
 
   reply() {
-    this.taskCommentService.replyToComment(this.comment.id);
+    this.sharedData.originalComment = this.comment;
   }
 
   delete() {
-    this.taskCommentService.deleteComment(this.task, this.comment);
+    this.comment.delete();
   }
 }

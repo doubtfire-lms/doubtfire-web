@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants) ->
+.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants, TaskCommentService) ->
   projectService = {}
 
   injectFunctionalityInProject = (project) ->
@@ -91,6 +91,88 @@ angular.module("doubtfire.common.services.projects", [])
     # Add in the related definition object
     task.definition = td
 
+    task.commentCache = new Map()
+
+    hoursBetween = (time1, time2) ->
+      return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
+
+    task.refreshCommentData = () ->
+      comments = task.comments
+      return if !comments? || comments.length == 0
+      comments[0].shouldShowTimestamp = true
+
+      for i in [0...comments.length]
+        authorID = comments[i].author.id
+        timeOfMessage = comments[i].created_at
+
+        # if the comment is proceeded by a different author's comment, or the time between comments
+        # is significant, mark it as start of end of series, then start a new series proceeding.
+        if (authorID != comments[i+1]?.author.id || hoursBetween(timeOfMessage, comments[i+1]?.created_at) > 3) # IDs match
+          comments[i].shouldShowAvatar = true
+          comments[i+1]?.shouldShowTimestamp = true
+        else
+          comments[i].shouldShowAvatar = false
+          comments[i+1]?.shouldShowTimestamp = false
+
+        # if the comment is preceeded by a non-conent comment, mark it as start of series.
+        if (comments[i].isBubbleComment && !comments[i-1]?.isBubbleComment)
+          comments[i].firstInSeries = true
+
+        # if the comment is proceeded by a non-conent comment, mark it as end of series.
+        if (comments[i].isBubbleComment && !comments[i+1]?.isBubbleComment)
+          comments[i].shouldShowAvatar = true
+
+        # Link in original messages for replies
+        if (comments[i].replyToId)
+          comments[i].originalComment = comments.find((tc) -> tc.id == comments[i].replyToId)
+
+      comments[comments.length-1].shouldShowAvatar = true
+      comments
+
+      # In type script...
+      # private hoursBetween(time1, time2) {
+      #   return Math.floor(Math.abs(new Date(time1).valueOf() - new Date(time2).valueOf()) / 1000 / 60 / 60)
+      # }
+      # for (let i = 0; i < comments.length; i++) {
+      #       const authorID: number = comments[i].author.id;
+      #       const timeOfMessage: string = comments[i].timeOfMessage;
+      #       const prevComment: TaskComment = comments[i - 1];
+      #       const nextComment: TaskComment = comments[i + 1];
+
+      #       // if the comment is proceeded by a different author's comment, or the time between comments
+      #       // is significant, mark it as start of end of series, then start a new series proceeding.
+      #       if (authorID !== comments[i + 1]?.author.id || this.hoursBetween(timeOfMessage, comments[i + 1]?.timeOfMessage) > 3) { // IDs match or long time
+      #         comments[i].shouldShowAvatar = true;
+      #         if (nextComment) nextComment.shouldShowTimestamp = true;
+      #       }
+      #       else {
+      #         comments[i].shouldShowAvatar = false
+      #         if (nextComment) nextComment.shouldShowTimestamp = false;
+      #       }
+
+      #       // if the comment is preceeded by a non-content comment, mark it as start of series.
+      #       if (comments[i].isBubbleComment && (!prevComment || !prevComment.isBubbleComment)) {
+      #         comments[i].firstInSeries = true
+      #       }
+
+      #       // if the comment is proceeded by a non-conent comment, mark it as end of series.
+      #       if (comments[i].isBubbleComment && (!nextComment || !nextComment.isBubbleComment)) {
+      #         comments[i].shouldShowAvatar = true
+      #       }
+
+      #       // Link in original messages for replies
+      #       if (comments[i].replyToId) {
+      #         comments[i].originalComment = comments.find((tc: TaskComment) => tc.id === comments[i].replyToId);
+      #       }
+      #     } // end for each comment...
+
+      #     // make sure to show timestamp for first comment
+      #     comments[0].shouldShowTimestamp = true
+
+      #     // make sure we show the avatar of the last comment...
+      #     comments[comments.length - 1].shouldShowAvatar = true
+      #   }
+
     # must be function to avoid cyclic structure
     task.project = -> project
     task.unit = -> unit
@@ -109,9 +191,10 @@ angular.module("doubtfire.common.services.projects", [])
     task.group = ->
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
-      taskService.addComment(task, textString, success, failure)
-    task.scrollCommentsToBottom = ->
-      taskService.scrollDown()
+      TaskCommentService.addComment(task, textString).subscribe(
+        (tc) -> success(tc)
+        (error) -> failure(error)
+      )
     task.applyForExtension = (reason, weeksRequested, onSuccess, onError) ->
       Task.applyForExtension(task, reason, weeksRequested, onSuccess, onError)
     task.assessExtension = (taskCommentID, assessment, onSuccess, onError) ->
@@ -415,6 +498,9 @@ angular.module("doubtfire.common.services.projects", [])
         projectService.updateGroups(currentTask.project(), callback, true)
       callback?()
       currentTask
+
+    project.currentUserIsStaff = () ->
+      project.unit().my_role != 'Student'
 
     project.refresh = (unit_obj) ->
       Project.get { id: project.project_id }, (response) ->

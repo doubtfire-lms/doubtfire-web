@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Campus } from 'src/app/api/models/campus/campus';
-import { CampusService } from 'src/app/api/models/campus/campus.service';
+import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
