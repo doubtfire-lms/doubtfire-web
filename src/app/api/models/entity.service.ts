@@ -129,7 +129,7 @@ export abstract class EntityService<T extends Entity> {
    */
   public update(obj: T, options?: HttpOptions): Observable<T> {
     // need to pass object through as path id and form data
-    return this.put<T>(obj, obj, options).pipe(
+    return this.put<T>(obj, undefined, options).pipe(
       map((rawData) => {
         obj.updateFromJson(rawData);
         return obj;
