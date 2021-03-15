@@ -15,7 +15,7 @@ interface DiscussionComment {
   time_started: string;
   response: string;
   status: string;
-  number_of_prompts: number;
+  numberOfPrompts: number;
 }
 
 @Component({
@@ -115,7 +115,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   get numberOfPrompts(): number {
-    return this.data.dc.number_of_prompts;
+    return this.data.dc.numberOfPrompts;
   }
 
   finishDiscussion() {

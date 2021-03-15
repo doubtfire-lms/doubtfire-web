@@ -53,10 +53,11 @@ export class TaskComment extends Entity {
     }
   }
 
+  /**
+   * Not used for TaskComments as they are not updated.
+   */
   toJson(): any {
-    return {
-      task_comment: super.toJsonWithKeys(KEYS),
-    };
+    return undefined;
   }
 
   public get key(): string {
