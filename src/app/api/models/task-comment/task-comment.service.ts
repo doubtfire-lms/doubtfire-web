@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CachedEntityService } from '../cached-entity.service';
 import { HttpOptions } from '../entity.service';
+import { DiscussionComment } from './discussion-comment';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
@@ -16,8 +17,15 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   protected readonly endpointFormat = this.commentEndpointFormat;
   entityName = 'TaskComment';
 
+  /**
+   * Create a Task Comment - use the type to determine the exact object type to return.
+   */
   protected createInstanceFrom(json: any, other?: any): TaskComment {
-    return new TaskComment(json, other);
+    if (json.type === 'discussion') {
+      return new DiscussionComment(json, other);
+    } else {
+      return new TaskComment(json, other);
+    }
   }
 
   public keyForJson(json: any): string {
