@@ -218,7 +218,7 @@ angular.module("doubtfire.common.services.projects", [])
     # The due date for a task is the date it is due for this student... this starts at the target date, and can get extended to the deadline date.
     task.localDueDate = ->
       if task.due_date?
-        due = new Date(task.due_date)
+        due = new Date(task.due_date.slice(0,10)) # remove timezone to ensure correct date
         return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate() , hour: 23 , minute: 59, second: 59, millisecond :999})
       else
         return task.definition.localDueDate()
