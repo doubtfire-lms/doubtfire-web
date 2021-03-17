@@ -15,7 +15,7 @@ export class ExtensionComment extends TaskComment {
   weeksRequested: number;
 
   taskStatus: string;
-  taskDueDate: any;
+  taskDueDate: string;
   taskExtensions: number;
 
   // Do we need this do you think?
@@ -35,7 +35,7 @@ export class ExtensionComment extends TaskComment {
     this.weeksRequested = data.weeks_requested;
 
     this.taskStatus = data.task_status;
-    this.taskDueDate = new Date(data.due_date);
+    this.taskDueDate = data.due_date;
     this.taskExtensions = data.extensions;
   }
 
