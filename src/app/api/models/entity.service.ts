@@ -127,9 +127,11 @@ export abstract class EntityService<T extends Entity> {
    * @param obj An object with keys which match the placeholders within the endpointFormat string.
    * @param options Optional http options
    */
-  public update(obj: T, options?: HttpOptions): Observable<T> {
+  public update(pathIds: object | T, obj?: T, options?: HttpOptions): Observable<T>;
+  public update(pathIds: any, obj?: T, options?: HttpOptions): Observable<T> {
+    if (obj === undefined) obj = pathIds as T;
     // need to pass object through as path id and form data
-    return this.put<T>(obj, undefined, options).pipe(
+    return this.put<T>(pathIds, obj.toJson(), options).pipe(
       map((rawData) => {
         obj.updateFromJson(rawData);
         return obj;

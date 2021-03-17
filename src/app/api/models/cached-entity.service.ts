@@ -55,10 +55,10 @@ export abstract class CachedEntityService<T extends Entity> extends EntityServic
    * @param pathIds An object with keys which match the placeholders within the endpointFormat string.
    * @param options Optional http options
    */
-  public update(pathIds: object, options?: HttpOptions): Observable<T>;
-  public update(pathIds: any, options?: HttpOptions): Observable<T> {
+  public update(pathIds: object | T, obj?: T, options?: HttpOptions): Observable<T>;
+  public update(pathIds: any, obj?: T, options?: HttpOptions): Observable<T> {
     return super
-      .update(pathIds, options)
+      .update(pathIds, obj, options)
       .pipe(tap((updatedEntity) => this.addEntityToCache(updatedEntity.key, updatedEntity)));
   }
   /**
