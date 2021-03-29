@@ -117,6 +117,7 @@ import { AudioPlayerComponent } from './common/audio-player/audio-player.compone
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { TaskSubmissionnCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { SafePipe } from './common/pipes/safe.pipe';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
@@ -164,6 +165,7 @@ import {
     TaskListItemComponent,
     CreatePortfolioTaskListItemComponent,
     TaskDescriptionCardComponent,
+    TaskSubmissionnCardComponent,
     StatusIconComponent,
     TaskCommentsViewerComponent,
     UserIconComponent,
