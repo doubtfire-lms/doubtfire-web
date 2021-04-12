@@ -12,7 +12,7 @@ Before you really get started you need to identify a suitable component to migra
 
 ### Identifying a suitable component to migrate
 
-When picking a component make sure your component **DOES NOT** have any other Angular.js components nested within it. Always start at the bottom and work our way up to the "bigger" components.
+When picking a component make sure your component **DOES NOT** have any other Angular.js components nested within it. Always start at the bottom and work our way up to the "bigger" components. 
 
 Look for components that should be easy to migrate. It will be easier to migrate things that just present data, but in general remember you already have a working component. So it should mostly be a matter of mapping the code across, and changing the styling to switch from bootstrap to material design.
 
@@ -52,7 +52,7 @@ In the same folder we can start by creating the following files:
 - task-description-card.component.html
 - task-description-card.component.scss
 
-Notice the naming convention. When migrating a component we use the format _name_.**component**._extension_.
+Notice the naming convention. When migrating a component we use the format *name*.**component**.*extension*.
 
 Add the start of the typescript using something based on the following:
 
@@ -62,10 +62,14 @@ import { Component, Input, Inject } from '@angular/core';
 @Component({
   selector: 'task-description-card',
   templateUrl: 'task-description-card.component.html',
-  styleUrls: ['task-description-card.component.scss'],
+  styleUrls: ['task-description-card.component.scss']
 })
 export class TaskDescriptionCardComponent {
-  constructor() {}
+
+  constructor(
+  ) {
+  }
+
 }
 ```
 
@@ -96,18 +100,14 @@ We want to make sure we can see our progress as quickly as possible. So lets sta
 There are a few files we need to update to achieve this.
 
 - Remove link to component from the angular module.
-
   - Open the component's CoffeeScript file and make a note of the name of the module.
-
     ```coffeescript
     angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-description-card', [])
     ```
 
     The name is `doubtfire.projects.states.dashboard.directives.task-dashboard.directives.task-description-card`
-
   - Search for where this is referenced. For the task-description-card this was in file `src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.coffee`... hence the suggestion to search :satisfied:.
   - Remove the reference. This will mean that the component is no longer loaded by angular.js.
-
 - Setup the new component in **doubtfire-angular.module.ts**
   - Import like this:
     ```ts
@@ -119,31 +119,24 @@ There are a few files we need to update to achieve this.
     ```typescript
     import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.js';
     ```
-  - Import the new component... _it is the same code as importing to the angular module_.
+  - Import the new component... *it is the same code as importing to the angular module*.
   - Downgrade to make the new component available to Angular.js
     ```typescript
-    DoubtfireAngularJSModule.directive(
-      'taskDescriptionCard',
-      downgradeComponent({ component: TaskDescriptionCardComponent })
-    );
+    DoubtfireAngularJSModule.directive('taskDescriptionCard', downgradeComponent({ component: TaskDescriptionCardComponent}));
     ```
 - Update attributes on the new component usage.
-
   - Search for all of the places where the component was already used (i.e. search for the component HTML tag).
   - Update the property binding style to use the Angular form which is `[property]="value"`.
 
     For example:
-
     ```html
     <task-description-card task-def="task.definition" task="task" unit="task.unit()"></task-description-card>
     ```
-
+    
     Needs to change to:
-
     ```html
     <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit()"></task-description-card>
     ```
-
 - Add matching inputs into your components typescript declaration. These use the syntax `@Input() name: type;`. For the task description card we use:
 
   ```ts
@@ -187,19 +180,18 @@ At the end I made sure to check that **all functionality** from the old componen
 
 Here are a few things to watch out for when doing this migration:
 
-- Switching `ng-show` to `[hidden]` remember to change the boolean expression.
+- Switching ```ng-show``` to ```[hidden]``` remember to change the boolean expression.
 - Font awesome icons needs to change to Material Design icons using [mat-icon](https://material.angular.io/components/icon/overview) - check out the [icon list]<https://material.io/resources/icons/?style=baseline>.
 - Make sure to add [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-hidden_attribute) and [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute) to ensure icons and images are screen reader friendly.
-- Make sure to run `ng lint` at the end of this process to make sure your TypeScript code is looking good!
+- Make sure to run ```ng lint``` at the end of this process to make sure your TypeScript code is looking good!
 
 ### A note on porting the CSS of components
-
 In Doubtfire's AngularJS codebase, the components use bootstrap classes such as `card-sm` or `card-danger`. The eventual goal of the rewrite is to remove this Bootstrap dependancy as we are moving to Angular Material. As such, when the new components are being created, these styles need to be replaced with Angular Material equivalents, or a similar component design needs to be written which can replace the old one.
 
 These bootstrap components are usually bassed into the `class` of the components, for example:
 
-- `class="card-heading"`, `class="card-body"` would need to be recreated with: https://material.angular.io/components/card/overview
-- `class="text-muted"` would be recreated with: https://material.angular.io/guide/typography
+* `class="card-heading"`, `class="card-body"` would need to be recreated with: https://material.angular.io/components/card/overview
+* `class="text-muted"` would be recreated with: https://material.angular.io/guide/typography
 
 Once things are all working... you can delete the old CoffeeScript, HTML and SCSS files. These are no longer needed... so they can go!
 

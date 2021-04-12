@@ -1,14 +1,14 @@
-_Any italic text should be deleted from the final Pull Request text, including this line_
+*Any italic text should be deleted from the final Pull Request text, including this line*
 
 # Description
 
-_Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change._
+*Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.*
 
 Fixes # (issue)
 
 ## Type of change
 
-_Please delete options that are not relevant._
+*Please delete options that are not relevant.*
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -17,7 +17,7 @@ _Please delete options that are not relevant._
 
 # How Has This Been Tested?
 
-_Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration_
+*Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration*
 
 ## Testing Checklist:
 

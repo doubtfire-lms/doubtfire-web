@@ -315,67 +315,31 @@ DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalServ
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
 
 // directive -> component
-DoubtfireAngularJSModule.directive(
-  'taskCommentComposer',
-  downgradeComponent({ component: TaskCommentComposerComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'intelligentDiscussionPlayer',
-  downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
-);
+DoubtfireAngularJSModule.directive('taskCommentComposer', downgradeComponent({ component: TaskCommentComposerComponent }));
+DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer', downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
-DoubtfireAngularJSModule.directive(
-  'institutionSettings',
-  downgradeComponent({ component: InstitutionSettingsComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'commentBubbleAction',
-  downgradeComponent({ component: CommentBubbleActionComponent })
-);
+DoubtfireAngularJSModule.directive('institutionSettings', downgradeComponent({ component: InstitutionSettingsComponent }));
+DoubtfireAngularJSModule.directive('commentBubbleAction', downgradeComponent({ component: CommentBubbleActionComponent }));
 DoubtfireAngularJSModule.directive('unitTutorialsList', downgradeComponent({ component: UnitTutorialsListComponent }));
-DoubtfireAngularJSModule.directive(
-  'unitTutorialsManager',
-  downgradeComponent({ component: UnitTutorialsManagerComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'unitStudentsEditor',
-  downgradeComponent({ component: UnitStudentsEditorComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'studentTutorialSelect',
-  downgradeComponent({ component: StudentTutorialSelectComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'studentCampusSelect',
-  downgradeComponent({ component: StudentCampusSelectComponent })
-);
+DoubtfireAngularJSModule.directive('unitTutorialsManager', downgradeComponent({ component: UnitTutorialsManagerComponent }));
+DoubtfireAngularJSModule.directive('unitStudentsEditor', downgradeComponent({ component: UnitStudentsEditorComponent }));
+DoubtfireAngularJSModule.directive('studentTutorialSelect', downgradeComponent({ component: StudentTutorialSelectComponent }));
+DoubtfireAngularJSModule.directive('studentCampusSelect', downgradeComponent({ component: StudentCampusSelectComponent }));
 DoubtfireAngularJSModule.directive('taskListItem', downgradeComponent({ component: TaskListItemComponent }));
-DoubtfireAngularJSModule.directive(
-  'createPortfolioTaskListItem',
-  downgradeComponent({ component: CreatePortfolioTaskListItemComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'taskDescriptionCard',
-  downgradeComponent({ component: TaskDescriptionCardComponent })
-);
+DoubtfireAngularJSModule.directive('createPortfolioTaskListItem', downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
+DoubtfireAngularJSModule.directive('taskDescriptionCard', downgradeComponent({ component: TaskDescriptionCardComponent }));
 DoubtfireAngularJSModule.directive('taskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
 
 // Global configuration
-DoubtfireAngularJSModule.directive(
-  'taskCommentsViewer',
-  downgradeComponent({ component: TaskCommentsViewerComponent })
-);
+DoubtfireAngularJSModule.directive('taskCommentsViewer', downgradeComponent({ component: TaskCommentsViewerComponent }));
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
 DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));
-DoubtfireAngularJSModule.directive(
-  'taskPlagiarismCard',
-  downgradeComponent({ component: TaskPlagiarismCardComponent })
-);
+DoubtfireAngularJSModule.directive('taskPlagiarismCard', downgradeComponent({ component: TaskPlagiarismCardComponent }));
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
