@@ -1,6 +1,7 @@
 import { Component, Inject, Input, ViewChild, ElementRef } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService, alertService } from 'src/app/ajs-upgraded-providers';
+import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'discussion-prompt-composer',
@@ -9,6 +10,7 @@ import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upg
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
+
   @ViewChild('discussionPromptComposerCanvas', { static: true }) canvasRef: ElementRef;
   @ViewChild('discussionPromptComposerAudio', { static: true }) audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
@@ -27,7 +29,7 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any,
+    @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
     @Inject(alertService) private alerts: any
   ) {
     super(mediaRecorderService);
@@ -69,21 +71,20 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
   }
 
   sendRecording(): void {
-    this.ts.addDiscussionComment(
-      this.task,
-      this.recordings,
-      () => {
-        this.ts.scrollDown();
+    this.taskCommentService.addComment(this.task, undefined, 'discussion', undefined, this.recordings).subscribe(
+      (tc: TaskComment) => {
         this.isSending = false;
       },
-      (failure: { data: { error: any } }) => {
-        this.alerts.add('danger', `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`);
+      (failure: any) => {
+        this.alerts.add(
+          'danger',
+          `Failed to create discussion comment. ${failure.data != null ? failure.data.error : failure}`
+        );
         this.isSending = false;
       }
     );
     this.blob = {} as Blob;
     this.recordingAvailable = false;
-    this.ts.scrollDown();
   }
 
   visualise(): void {

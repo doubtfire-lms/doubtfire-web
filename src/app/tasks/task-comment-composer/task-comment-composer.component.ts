@@ -8,6 +8,8 @@ import {
   KeyValueDiffers,
   KeyValueDiffer,
   ElementRef,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -15,7 +17,19 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
+import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 
+/**
+ * The task comment viewer needs to share data with the Task Comment Composer. The data needed
+ * id defined through this interface.
+ */
+export interface TaskCommentComposerData {
+  originalComment: TaskComment;
+}
+
+/**
+ * The task comment composer is responsible for creating and adding comments to a given task.
+ */
 @Component({
   selector: 'task-comment-composer',
   templateUrl: './task-comment-composer.component.html',
@@ -23,6 +37,8 @@ import { EmojiService } from 'src/app/common/services/emoji.service';
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
+  @Input() sharedData: TaskCommentComposerData;
+
   comment = {
     text: '',
     type: 'text',
@@ -32,7 +48,7 @@ export class TaskCommentComposerComponent implements OnInit {
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
 
-  commentReplyID: { id: any } = this.ts.currentReplyID;
+  // commentReplyID: { id: any } = this.ts.currentReplyID;
   differ: KeyValueDiffer<string, any>;
   showEmojiPicker: boolean = false;
   emojiSearchMode: boolean = false;
@@ -47,14 +63,15 @@ export class TaskCommentComposerComponent implements OnInit {
     private emojiService: EmojiService,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
+    @Inject(TaskCommentService) private taskCommentService: TaskCommentService
   ) {
     this.differ = this.differs.find({}).create();
   }
 
   ngDoCheck() {
-    // Check to see if the commentReplyId has changed in the taskService
-    const change = this.differ.diff(this.commentReplyID);
+    // Check to see if the sharedData has changed
+    const change = this.differ.diff(this.sharedData);
     if (change) {
       change.forEachChangedItem((item) => {
         // If it has changed to be an actual comment
@@ -69,22 +86,16 @@ export class TaskCommentComposerComponent implements OnInit {
     }
   }
 
+  get originalComment(): TaskComment {
+    return this.sharedData.originalComment;
+  }
+
   get isStaff() {
     return this.task.project().unit().my_role !== 'Student';
   }
 
-  get originalComment() {
-    if (this.task.comments != null) {
-      const original = this.task.comments.find((x) => x.id === this.commentReplyID.id);
-      if (original != null) {
-        return original;
-      }
-    }
-    return null;
-  }
-
   cancelReply() {
-    this.ts.currentReplyID.id = null;
+    this.sharedData.originalComment = null;
   }
 
   contentEditableValue() {
@@ -146,7 +157,7 @@ export class TaskCommentComposerComponent implements OnInit {
             this.emojiSearchResults = results.slice(0, 15);
           }
         }
-      } // timeout to ensure that the innerhtml is updated with the new character.
+      } // timeout to ensure that the inner html is updated with the new character.
     }, 0);
   }
 
@@ -197,6 +208,8 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   openDiscussionComposer() {
+    const self = this;
+
     this.popovers.forEach((popover: PopoverDirective) => {
       popover.hide();
     });
@@ -218,28 +231,24 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   addComment() {
-    const originalCommentID = this.originalComment ? this.originalComment.id : null;
-    if (originalCommentID != null) {
+    const originalComment = this.sharedData.originalComment;
+    if (originalComment != null) {
       this.cancelReply();
     }
     const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
-    this.ts.addComment(
-      this.task,
-      text,
-      'text',
-      originalCommentID,
-      (success: any) => {
+
+    this.taskCommentService.addComment(this.task, text, 'text', originalComment).subscribe(
+      (tc: TaskComment) => {
         this.input.first.nativeElement.innerText = '';
-        this.analytics.event('Vie Comments', 'Added new comment');
-        this.ts.scrollDown();
-        this.task.comments = this.ts.mapComments(this.task.comments);
       },
-      (failure: any) => this.alerts.add('danger', failure.data.error, 2000)
+      (error: any) => {
+        this.alerts.add('danger', error || error?.message, 2000);
+      }
     );
   }
 }
 
-// The discussion prompt composer fialog Component
+// The discussion prompt composer dialog Component
 // tslint:disable-next-line: max-classes-per-file
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { User } from 'src/app/api/models/user/user';
+import { User } from 'src/app/api/models/doubtfire-model';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'ts-md5/dist/md5';
 import * as d3 from 'd3';
@@ -25,7 +25,7 @@ export class UserIconComponent implements AfterViewInit {
   }
 
   get email(): string {
-    return this.user?.email
+    return this.user?.email;
   }
 
   get initials(): string {

@@ -6,17 +6,7 @@ import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
-
-interface DiscussionComment {
-  created_at: string;
-  id: number;
-  task_comment_id: number;
-  time_completed: string;
-  time_started: string;
-  response: string;
-  status: string;
-  number_of_prompts: number;
-}
+import { DiscussionComment } from 'src/app/api/models/task-comment/discussion-comment';
 
 @Component({
   selector: 'intelligent-discussion-player',
@@ -115,7 +105,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   get numberOfPrompts(): number {
-    return this.data.dc.number_of_prompts;
+    return this.data.dc.numberOfPrompts;
   }
 
   finishDiscussion() {

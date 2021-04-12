@@ -124,9 +124,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
     this.tutorials = this.tutorials.map((tutorial) => {
       if (!['all', 'mine'].includes(tutorial.id)) {
-        if (tutorial.description.indexOf(tutorial.abbreviation) === -1) {
-          tutorial.inbox_description = `${tutorial.abbreviation} - ${tutorial.description}`;
-        }
+        tutorial.inbox_description = `${tutorial.abbreviation} - ${tutorial.description}`;
       }
       return tutorial;
     });

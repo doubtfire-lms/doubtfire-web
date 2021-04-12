@@ -1,11 +1,11 @@
-import { User } from './user';
-import { CacheableEntityService } from '../cacheable-entity.service';
+import { User } from 'src/app/api/models/doubtfire-model';
+import { CachedEntityService } from '../cached-entity.service';
 import { Inject, Injectable } from '@angular/core';
 import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
-export class UserService extends CacheableEntityService<User> {
+export class UserService extends CachedEntityService<User> {
   entityName: string = 'User';
   protected readonly endpointFormat = 'users/:id:';
 

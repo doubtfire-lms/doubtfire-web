@@ -35,7 +35,7 @@ export abstract class Entity {
   }
 
   /**
-   * Conver the entity object to json.
+   * Convert the entity object to json.
    *
    * @returns A json representation of the entity.
    */
