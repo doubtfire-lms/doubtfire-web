@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EntityService } from '../entity.service';
-import { TutorialStream } from './tutorial-stream';
+import { TutorialStream } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()

@@ -3,16 +3,13 @@
   <div [hidden]="loading">
     <h4 id="discussion-title">
       Discussion {{ discussion.status }}
-      <mat-icon aria-label="discussion comment status"
-        >question_answer</mat-icon
-      >
+      <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
     </h4>
     <mat-divider></mat-divider>
     <div>
       <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
       <div *ngIf="discussion.status === 'opened' && isNotStudent">
-        Warning: The student has opened the discussion prompts without sending a
-        response.
+        Warning: The student has opened the discussion prompts without sending a response.
       </div>
       <div
         fxLayout="column"
@@ -33,7 +30,7 @@
           <mat-button-toggle
             matTooltip="Plays the second discussion prompt"
             matTooltipPosition="above"
-            *ngIf="discussion.number_of_prompts > 1"
+            *ngIf="discussion.numberOfPrompts > 1"
             (click)="setPromptTrack('prompt', 1)"
             aria-label="Prompt toggle"
           >
@@ -43,7 +40,7 @@
             matTooltip="Plays the third discussion prompt"
             matTooltipPosition="above"
             (click)="setPromptTrack('prompt', 2)"
-            *ngIf="discussion.number_of_prompts > 2"
+            *ngIf="discussion.numberOfPrompts > 2"
             aria-label="Prompt toggle"
           >
             P3
@@ -63,13 +60,7 @@
 
     <div [hidden]="responseAvailable || isNotStudent">
       <p>Your tutor would like to discuss this task with you.</p>
-      <button
-        id="startDiscussionBtn"
-        mat-flat-button
-        (click)="beginDiscussion()"
-      >
-        Begin
-      </button>
+      <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
     </div>
   </div>
 </div>

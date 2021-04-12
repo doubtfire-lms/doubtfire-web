@@ -1,7 +1,7 @@
 import { OnInit, Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
-import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
+import { EntityService } from 'src/app/api/models/entity.service';
 import { Observable } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -126,7 +126,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
         response = service.update(this.selected);
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
-        response = service.create(this.formDataToNewObject(service.serverKey), this.otherOnCreate());
+        const data = this.formDataToNewObject(service.serverKey); // sent as path id and body
+        response = service.create(data, data, this.otherOnCreate());
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
         alertService.add('danger', `${service.entityName} was not changed`, 6000);

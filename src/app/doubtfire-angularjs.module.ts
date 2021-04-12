@@ -255,9 +255,7 @@ import 'build/src/i18n/resources-locale_en-GB.js';
 import { AboutDoubtfireModal } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import {
-  IntelligentDiscussionPlayerComponent
-} from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
+import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
@@ -265,7 +263,6 @@ import { CampusListComponent } from './admin/states/campuses/campus-list/campus-
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
-import { TaskCommentService } from './common/services/task-comment.service';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { TutorialService } from './api/models/tutorial/tutorial.service';
@@ -278,7 +275,7 @@ import { StudentCampusSelectComponent } from './units/states/edit/directives/uni
 import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
-import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component'
+import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
 import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
@@ -287,6 +284,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
+import { TaskCommentService } from './api/models/doubtfire-model';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -300,84 +298,93 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.tasks',
   'doubtfire.projects',
   'doubtfire.groups',
-  'doubtfire.visualisations']);
+  'doubtfire.visualisations',
+]);
 
 // Downgrade angular modules that we need...
 // factory -> service
-DoubtfireAngularJSModule.factory('AboutDoubtfireModal',
-  downgradeInjectable(AboutDoubtfireModal));
-DoubtfireAngularJSModule.factory('DoubtfireConstants',
-  downgradeInjectable(DoubtfireConstants));
-DoubtfireAngularJSModule.factory('ExtensionModal',
-  downgradeInjectable(ExtensionModalService));
-DoubtfireAngularJSModule.factory('CalendarModal',
-  downgradeInjectable(CalendarModalService));
-DoubtfireAngularJSModule.factory('TaskCommentService',
-  downgradeInjectable(TaskCommentService));
-DoubtfireAngularJSModule.factory('tutorialService',
-  downgradeInjectable(TutorialService));
-DoubtfireAngularJSModule.factory('streamService',
-  downgradeInjectable(TutorialStreamService));
-DoubtfireAngularJSModule.factory('campusService',
-  downgradeInjectable(CampusService));
-DoubtfireAngularJSModule.factory('webcalService',
-  downgradeInjectable(WebcalService));
-DoubtfireAngularJSModule.factory('emojiService',
-  downgradeInjectable(EmojiService));
+DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
+DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
+DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
+DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
+DoubtfireAngularJSModule.factory('TaskCommentService', downgradeInjectable(TaskCommentService));
+DoubtfireAngularJSModule.factory('tutorialService', downgradeInjectable(TutorialService));
+DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialStreamService));
+DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));
+DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
+DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
 
 // directive -> component
-DoubtfireAngularJSModule.directive('taskCommentComposer',
-  downgradeComponent({ component: TaskCommentComposerComponent }));
-DoubtfireAngularJSModule.directive('intelligentDiscussionPlayer',
-  downgradeComponent({ component: IntelligentDiscussionPlayerComponent }));
-DoubtfireAngularJSModule.directive('extensionComment',
-  downgradeComponent({ component: ExtensionCommentComponent }));
-DoubtfireAngularJSModule.directive('campusList',
-  downgradeComponent({ component: CampusListComponent }));
-DoubtfireAngularJSModule.directive('activityTypeList',
-  downgradeComponent({ component: ActivityTypeListComponent }));
-DoubtfireAngularJSModule.directive('institutionSettings',
-  downgradeComponent({ component: InstitutionSettingsComponent }));
-DoubtfireAngularJSModule.directive('commentBubbleAction',
-  downgradeComponent({ component: CommentBubbleActionComponent }));
-DoubtfireAngularJSModule.directive('unitTutorialsList',
-  downgradeComponent({ component: UnitTutorialsListComponent }));
-DoubtfireAngularJSModule.directive('unitTutorialsManager',
-  downgradeComponent({ component: UnitTutorialsManagerComponent }));
-DoubtfireAngularJSModule.directive('unitStudentsEditor',
-  downgradeComponent({ component: UnitStudentsEditorComponent }));
-DoubtfireAngularJSModule.directive('studentTutorialSelect',
-  downgradeComponent({ component: StudentTutorialSelectComponent }));
-DoubtfireAngularJSModule.directive('studentCampusSelect',
-  downgradeComponent({ component: StudentCampusSelectComponent }));
-DoubtfireAngularJSModule.directive('taskListItem',
-  downgradeComponent({ component: TaskListItemComponent }));
-DoubtfireAngularJSModule.directive('createPortfolioTaskListItem',
-  downgradeComponent({ component: CreatePortfolioTaskListItemComponent }));
-DoubtfireAngularJSModule.directive('taskDescriptionCard',
-  downgradeComponent({ component: TaskDescriptionCardComponent}));
-DoubtfireAngularJSModule.directive('taskDueCard',
-  downgradeComponent({ component: TaskDueCardComponent}));
-  // Global configuration
-DoubtfireAngularJSModule.directive('taskCommentsViewer',
-  downgradeComponent({ component: TaskCommentsViewerComponent }));
-DoubtfireAngularJSModule.directive('userIcon',
-  downgradeComponent({ component: UserIconComponent }));
-DoubtfireAngularJSModule.directive('pdfViewer',
-  downgradeComponent({ component: PdfViewerComponent }));
-DoubtfireAngularJSModule.directive('pdfViewerPanel',
-  downgradeComponent({ component: PdfViewerPanelComponent }));
-DoubtfireAngularJSModule.directive('staffTaskList',
-  downgradeComponent({ component: StaffTaskListComponent }));
-DoubtfireAngularJSModule.directive('statusIcon',
-  downgradeComponent({ component: StatusIconComponent }));
-DoubtfireAngularJSModule.directive('taskPlagiarismCard',
-  downgradeComponent({ component: TaskPlagiarismCardComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskCommentComposer',
+  downgradeComponent({ component: TaskCommentComposerComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'intelligentDiscussionPlayer',
+  downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
+);
+DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
+DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
+DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
+DoubtfireAngularJSModule.directive(
+  'institutionSettings',
+  downgradeComponent({ component: InstitutionSettingsComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'commentBubbleAction',
+  downgradeComponent({ component: CommentBubbleActionComponent })
+);
+DoubtfireAngularJSModule.directive('unitTutorialsList', downgradeComponent({ component: UnitTutorialsListComponent }));
+DoubtfireAngularJSModule.directive(
+  'unitTutorialsManager',
+  downgradeComponent({ component: UnitTutorialsManagerComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'unitStudentsEditor',
+  downgradeComponent({ component: UnitStudentsEditorComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'studentTutorialSelect',
+  downgradeComponent({ component: StudentTutorialSelectComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'studentCampusSelect',
+  downgradeComponent({ component: StudentCampusSelectComponent })
+);
+DoubtfireAngularJSModule.directive('taskListItem', downgradeComponent({ component: TaskListItemComponent }));
+DoubtfireAngularJSModule.directive(
+  'createPortfolioTaskListItem',
+  downgradeComponent({ component: CreatePortfolioTaskListItemComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'taskDescriptionCard',
+  downgradeComponent({ component: TaskDescriptionCardComponent })
+);
+DoubtfireAngularJSModule.directive('taskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
+
+// Global configuration
+DoubtfireAngularJSModule.directive(
+  'taskCommentsViewer',
+  downgradeComponent({ component: TaskCommentsViewerComponent })
+);
+DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
+DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
+DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
+DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
+DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskPlagiarismCard',
+  downgradeComponent({ component: TaskPlagiarismCardComponent })
+);
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
-const otherwiseConfigBlock = ['$urlRouterProvider', '$locationProvider', ($urlRouterProvider: any, $locationProvider: any) => {
-  $locationProvider.hashPrefix('');
-  $urlRouterProvider.otherwise('/home');
-}];
+const otherwiseConfigBlock = [
+  '$urlRouterProvider',
+  '$locationProvider',
+  ($urlRouterProvider: any, $locationProvider: any) => {
+    $locationProvider.hashPrefix('');
+    $urlRouterProvider.otherwise('/home');
+  },
+];
 DoubtfireAngularJSModule.config(otherwiseConfigBlock);

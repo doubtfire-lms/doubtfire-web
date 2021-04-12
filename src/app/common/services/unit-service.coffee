@@ -103,14 +103,14 @@ angular.module("doubtfire.common.services.units", [])
 
           # Local deadline date is the last moment in the local time zone
           taskDef.localDeadlineDate = ()  ->
-            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
             return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
           # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
           taskDef.finalDeadlineDate = ()  ->
-            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
             return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59}, '-12:00')
           taskDef.localDueDate = ()  ->
-            due = new Date(taskDef.target_date)
+            due = new Date(taskDef.target_date.slice(0,10))
             return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
           taskDef
         )

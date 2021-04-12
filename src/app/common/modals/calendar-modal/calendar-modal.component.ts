@@ -2,8 +2,7 @@ import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/co
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { WebcalService } from 'src/app/api/models/webcal/webcal.service';
-import { Webcal } from 'src/app/api/models/webcal/webcal';
+import { Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { alertService, projectService } from 'src/app/ajs-upgraded-providers';
 

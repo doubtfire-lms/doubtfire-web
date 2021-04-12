@@ -48,7 +48,6 @@ import {
   currentUserProvider,
   authProvider,
   taskServiceProvider,
-  TaskCommentServiceProvider,
   analyticsServiceProvider,
   taskProvider,
   projectServiceProvider,
@@ -97,16 +96,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
-import { ActivityTypeService } from './api/models/activity-type/activity-type.service';
 import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
-import { TutorialService } from './api/models/tutorial/tutorial.service';
-import { TutorialStreamService } from './api/models/tutorial-stream/tutorial-stream.service';
-import { CampusService } from './api/models/campus/campus.service';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
-import { UserService } from './api/models/user/user.service';
-import { WebcalService } from './api/models/webcal/webcal.service';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -135,6 +128,15 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {
+  ActivityTypeService,
+  CampusService,
+  TaskCommentService,
+  TutorialService,
+  TutorialStreamService,
+  UserService,
+  WebcalService,
+} from './api/models/doubtfire-model';
 
 @NgModule({
   // Components we declare
@@ -257,7 +259,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CsvUploadModalProvider,
     CsvResultModalProvider,
     UnitStudentEnrolmentModalProvider,
-    TaskCommentServiceProvider,
+    TaskCommentService,
     TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,

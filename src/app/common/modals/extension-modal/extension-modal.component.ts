@@ -2,6 +2,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import * as moment from 'moment';
+import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
+import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { AppInjector } from 'src/app/app-injector';
 
 @Component({
   selector: 'extension-modal',
@@ -41,19 +44,33 @@ export class ExtensionModalComponent implements OnInit {
     return this.data.task.minWeeksCanExtend();
   }
 
+  private scrollCommentsDown(): void {
+    setTimeout(() => {
+      const objDiv = document.querySelector('div.comments-body');
+      // let wrappedResult = angular.element(objDiv);
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }, 50);
+  }
+
   submitApplication() {
-    this.data.task.applyForExtension(
-      this.reason,
-      this.weeksRequested,
-      ((result) => {
+    const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
+    tcs.cacheSource = this.data.task.commentCache;
+
+    const self = this;
+
+    tcs.requestExtension(this.reason, this.weeksRequested, this.data.task).subscribe({
+      next: ((tc: TaskComment) => {
         this.alerts.add('success', 'Extension requested.', 2000);
-        this.data.task.comments.push(result.data);
-        this.data.task.scrollCommentsToBottom();
+        this.data.task.comments.push(tc);
+        this.scrollCommentsDown();
         if (typeof this.data.afterApplication === 'function') {
           this.data.afterApplication();
         }
       }).bind(this),
-      (error) => this.alerts.add('danger', 'Error ' + error.data.error)
-    );
+
+      error: ((response: any) => {
+        this.alerts.add('danger', 'Error requesting extension ' + response);
+      }).bind(this),
+    });
   }
 }

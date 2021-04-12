@@ -1,6 +1,6 @@
 ![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
 
-# Doubtfire Web
+# Doubtfire Web ![Node.js CI](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/Node.js%20CI/badge.svg) ![CodeQL](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/CodeQL/badge.svg)
 
 A modern, lightweight learning management system.
 
