@@ -1,18 +1,55 @@
-@import "../../../node_modules/@angular/material/theming";
+@import '../../../node_modules/@angular/material/theming';
 
 $app-primary: mat-palette($mat-grey);
-$app-accent:  mat-palette($mat-light-blue);
-$app-warn:    mat-palette($mat-red);
+$app-accent: mat-palette($mat-light-blue);
+$app-warn: mat-palette($mat-red);
 
 $primary: mat-color($app-primary);
 $accent: mat-color($app-accent);
 $warn: mat-color($app-warn);
 
 @mixin doubtfire-card {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 .mat-card.danger-card {
-
   @include doubtfire-card();
+}
+
+.mat-card.info-card .mat-card-header {
+  background-color: #5bc0de;
+}
+
+.mat-card.warn-card .mat-card-header {
+  background-color: #f0ad4e;
+}
+
+.mat-card.danger-card .mat-card-header {
+  background-color: #d9534f;
+}
+
+.mat-card.danger-card,
+.mat-card.warn-card,
+.mat-card.info-card {
+  border-radius: 0;
+  padding: 0px;
+  .mat-card-header {
+    padding: 15px 20px;
+    .mat-card-header-text {
+      margin: 0;
+      .mat-card-title {
+        margin: 0;
+        font-size: 18px;
+        color: #fff;
+      }
+    }
+  }
+  .mat-card-content {
+    padding: 15px;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .muted-text {
+    color: #777;
+  }
 }
