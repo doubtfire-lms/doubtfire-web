@@ -14,7 +14,8 @@
     "watch:angular1": "grunt delta",
     "deploy:clean_api": "../doubtfire-api/clean_ui.sh",
     "deploy:build2api": "ng build --deleteOutputPath=false --optimization=true --prod --output-path ../doubtfire-api/public",
-    "deploy": "run-s -l build:angular1 deploy:clean_api deploy:build2api"
+    "deploy:post-build": "node ./post-build.js",
+    "deploy": "run-s -l build:angular1 deploy:clean_api deploy:build2api deploy:post-build"
   },
   "keywords": [],
   "author": "",

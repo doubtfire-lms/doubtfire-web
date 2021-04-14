@@ -136,6 +136,7 @@ import {
   UserService,
   WebcalService,
 } from './api/models/doubtfire-model';
+import { VersionCheckService } from './common/services/version-check.service';
 
 @NgModule({
   // Components we declare
@@ -280,6 +281,7 @@ import {
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
+    VersionCheckService,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
@@ -289,6 +291,7 @@ export class DoubtfireAngularModule {
     injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
+    private versionCheckService: VersionCheckService,
     private title: Title
   ) {
     setAppInjector(injector);
@@ -297,6 +300,10 @@ export class DoubtfireAngularModule {
     this.constants.ExternalName.subscribe((result) => {
       this.title.setTitle(result);
     });
+
+    setTimeout(() => {
+      this.versionCheckService.initVersionCheck(`${this.constants.API_URL}/version`);
+    }, 2000);
   }
 
   ngDoBootstrap() {
