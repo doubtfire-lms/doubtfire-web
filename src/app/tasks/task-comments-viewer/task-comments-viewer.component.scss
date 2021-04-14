@@ -28,7 +28,6 @@ $comment-inner-border-radius: 4px;
 
 .comments-body {
   overflow-y: auto;
-
   @include scrollable();
 }
 
@@ -308,11 +307,15 @@ $comment-inner-border-radius: 4px;
     .comment-text,
     .comment-pdf,
     .comment-discussion,
-    .markdown-to-html {
+    .markdown-to-html p {
       padding-right: 6px;
       padding-left: 4px;
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
+    }
+
+    .comment-text .markdown-to-html p {
+      margin: 0 0 0 0 !important;
     }
     .comment-audio {
       display: inline-block;
@@ -340,17 +343,21 @@ $comment-inner-border-radius: 4px;
       margin-bottom: 0px;
     }
 
-    .markdown-to-html {
+    .markdown-to-html p {
       padding-left: $comment-text-padding;
       padding-right: $comment-text-padding;
     }
 
-    .markdown-to-html > *:last-child {
+    .text-bubble .comment-text .markdown-to-html p {
+      margin: 0 0 0 0px !important;
+    }
+
+    .markdown-to-html p > *:last-child {
       margin-bottom: 0px;
     }
 
-    .markdown-to-html > pre:last-child {
-      margin-bottom: 0.5em;
+    .markdown-to-html p > pre:last-child {
+      margin-bottom: 0em;
     }
   }
 
