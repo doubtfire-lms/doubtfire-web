@@ -27,7 +27,7 @@ export class CheckForUpdateService {
     });
 
     this.updates.available.subscribe((event) => {
-      let snackBarRef = this._snackBar.open(
+      const snackBarRef = this._snackBar.open(
         'An update to the app has been found, would you like to refresh now?',
         'refresh'
       );

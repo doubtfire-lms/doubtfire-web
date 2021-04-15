@@ -23,6 +23,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -223,6 +224,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatChipsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
@@ -292,7 +294,7 @@ export class DoubtfireAngularModule {
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
     private title: Title,
-    private updater: CheckForUpdateService,
+    private updater: CheckForUpdateService
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
