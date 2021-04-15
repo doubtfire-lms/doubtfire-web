@@ -23,6 +23,7 @@ export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
+export const taskFeedbackService  = new InjectionToken('TaskFeedbackService ');
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
@@ -151,3 +152,10 @@ export const UnitStudentEnrolmentModalProvider = {
   useFactory: (i: any) => i.get('UnitStudentEnrolmentModal'),
   deps: ['$injector'],
 };
+
+export const TaskFeedbackServiceProvider = {
+  provide: taskFeedbackService, 
+  useFactory: (i: any) => i.get('TaskFeedbackService'), 
+  deps: ['$injector'], 
+};
+

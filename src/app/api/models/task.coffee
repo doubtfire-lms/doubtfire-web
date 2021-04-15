@@ -40,14 +40,6 @@ angular.module("doubtfire.api.models.task", [])
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
 
-  Task.getTaskUrl = (task, asAttachment = false) ->
-    url = "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
-    url += "&as_attachment=true" if asAttachment
-    return url
-
-  Task.getTaskFilesUrl = (task) ->
-    "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submission_files?auth_token=#{currentUser.authenticationToken}"
-
   Task.getTaskResourcesUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_resources.json?auth_token=#{currentUser.authenticationToken}"
 

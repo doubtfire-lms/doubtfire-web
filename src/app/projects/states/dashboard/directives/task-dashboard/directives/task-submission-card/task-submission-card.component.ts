@@ -1,5 +1,5 @@
 import { Component, Input, Inject, OnInit } from '@angular/core';
-import { gradeService, Task, taskService } from 'src/app/ajs-upgraded-providers';
+import { taskFeedbackService, taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'task-submission-card',
@@ -15,7 +15,7 @@ export class TaskSubmissionnCardComponent implements OnInit {
   submission = {};
   urls = { pdf: '', files: '' };
 
-  constructor(@Inject(Task) private taskAPI: any, @Inject(taskService) private ts: any) {}
+  constructor(@Inject(taskFeedbackService) private taskFeedbackService: any, @Inject(taskService) private ts: any) {}
   ngOnInit(): void {
     this.canReuploadEvidence = this.task.canReuploadEvidence();
     this.task.getSubmissionDetails((details) => {
@@ -25,8 +25,8 @@ export class TaskSubmissionnCardComponent implements OnInit {
         isUploaded: details.has_pdf,
       };
       this.urls = {
-        pdf: this.taskAPI.getTaskUrl(this.task, true),
-        files: this.taskAPI.getTaskFilesUrl(this.task),
+        pdf: this.taskFeedbackService.getTaskUrl(this.task, true),
+        files: this.taskFeedbackService.getTaskFilesUrl(this.task),
       };
     });
   }
