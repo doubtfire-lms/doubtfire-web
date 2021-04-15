@@ -159,11 +159,10 @@
             (mouseover)="task.hover = true"
             (mouseout)="task.hover = false"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30">
-            </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project().name }}</h4>
-              <p class="mat-small">
+              <p class="mat-small truncate">
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
               </p>
