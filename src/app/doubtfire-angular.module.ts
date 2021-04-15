@@ -127,6 +127,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import {
   ActivityTypeService,
   CampusService,
@@ -241,6 +242,7 @@ import {
     WebcalService,
     ActivityTypeService,
     EmojiService,
+    CheckForUpdateService,
     userProvider,
     groupServiceProvider,
     unitProvider,
@@ -289,7 +291,8 @@ export class DoubtfireAngularModule {
     injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
-    private title: Title
+    private title: Title,
+    private updater: CheckForUpdateService,
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
