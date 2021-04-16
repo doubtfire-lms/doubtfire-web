@@ -4,7 +4,7 @@
 angular.module('doubtfire.common.header', [
   'doubtfire.common.header.unit-dropdown'
 ])
-.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, UserNotificationSettingsModal, CalendarModal, UserSettingsModal, currentUser, AboutDoubtfireModal, $transitions, $document, $filter) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, UserNotificationSettingsModal, CalendarModal, UserSettingsModal, currentUser, AboutDoubtfireModal, checkForUpdateService, $transitions, $document, $filter) ->
   $scope.currentUser = currentUser.profile
 
   $scope.tutor = $state.params?.tutor?
@@ -26,6 +26,12 @@ angular.module('doubtfire.common.header', [
   #
   $scope.openCalendar = ->
     CalendarModal.show()
+
+  #
+  # Checks for updates
+  #
+  $scope.update = ->
+    checkForUpdateService.checkForupdate()
 
   #
   # Opens the about DF modal

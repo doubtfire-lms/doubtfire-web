@@ -23,6 +23,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -127,6 +128,7 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import {
   ActivityTypeService,
   CampusService,
@@ -222,6 +224,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatChipsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
@@ -241,6 +244,7 @@ import {
     WebcalService,
     ActivityTypeService,
     EmojiService,
+    CheckForUpdateService,
     userProvider,
     groupServiceProvider,
     unitProvider,
@@ -289,7 +293,8 @@ export class DoubtfireAngularModule {
     injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
-    private title: Title
+    private title: Title,
+    private updater: CheckForUpdateService
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
