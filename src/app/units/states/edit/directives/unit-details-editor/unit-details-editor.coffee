@@ -40,8 +40,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.studentSearch = ""
 
     $scope.saveUnit = ->
-      if $scope.unit.convenors then delete $scope.unit.convenors
-
       if $scope.unit.start_date && $scope.unit.start_date.getMonth
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth

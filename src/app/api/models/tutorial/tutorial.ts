@@ -151,4 +151,8 @@ export class Tutorial extends Entity {
   public keyForJson(json: any): string {
     return json.id;
   }
+
+  public hasCapacity(): boolean {
+    return this.capacity === -1 || this.capacity < this.num_students;
+  }
 }
