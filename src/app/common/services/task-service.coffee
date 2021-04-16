@@ -8,7 +8,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.statusKeys = [
     'not_started'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'redo'
     'need_help'
     'working_on_it'
@@ -51,7 +51,7 @@ angular.module("doubtfire.common.services.tasks", [])
   # not waiting on a new submission =  either waiting for the tutor
   # to mark it, or waiting on a discussion between student and tutor.
   taskService.submittedStatuses = [
-    'do_not_resubmit'
+    'feedback_exceeded'
     'ready_to_mark'
     'discuss'
     'demonstrate'
@@ -78,7 +78,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.finalStatuses = [
     'complete'
     'fail'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'time_exceeded'
   ]
 
@@ -111,7 +111,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'time_exceeded'
     'fail'
     'fix_and_resubmit'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'redo'
   ]
 
@@ -124,7 +124,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'redo'
     'fail'
     'fix_and_resubmit'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'discuss'
     'demonstrate'
     'complete'
@@ -136,7 +136,7 @@ angular.module("doubtfire.common.services.tasks", [])
     WRK: 'working_on_it'
     HLP: 'need_help'
     RDO: 'redo'
-    DNR: 'do_not_resubmit'
+    DNR: 'feedback_exceeded'
     FIX: 'fix_and_resubmit'
     DIS: 'discuss'
     DEM: 'demonstrate'
@@ -150,7 +150,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      0.0
     need_help:          0.0
     redo:               0.1
-    do_not_resubmit:    0.1
+    feedback_exceeded:    0.1
     fix_and_resubmit:   0.3
     ready_to_mark:      0.5
     discuss:            0.8
@@ -164,7 +164,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'WRK'
     need_help:          'HLP'
     redo:               'RDO'
-    do_not_resubmit:    "DNR"
+    feedback_exceeded:    "DNR"
     fix_and_resubmit:   'FIX'
     discuss:            'DIS'
     demonstrate:        'DEM'
@@ -178,7 +178,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'Working On It'
     need_help:          'Need Help'
     redo:               'Redo'
-    do_not_resubmit:    'Feedback Exceeded'
+    feedback_exceeded:    'Feedback Exceeded'
     fix_and_resubmit:   'Resubmit'
     discuss:            'Discuss'
     demonstrate:        'Demonstrate'
@@ -192,7 +192,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
-    do_not_resubmit:    'fa fa-low-vision'
+    feedback_exceeded:    'fa fa-low-vision'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-commenting'
     demonstrate:        'fa fa-commenting'
@@ -207,7 +207,7 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:     '#EB8F06'
     need_help:         '#a48fce'
     fix_and_resubmit:  '#f2d85c'
-    do_not_resubmit:   '#d46b54'
+    feedback_exceeded:   '#d46b54'
     redo:              '#804000'
     discuss:           '#31b0d5'
     demonstrate:       '#428bca'
@@ -218,7 +218,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.statusSeq =
     not_started:        1
     fail:               2
-    do_not_resubmit:    3
+    feedback_exceeded:    3
     time_exceeded:      4
     redo:               5
     need_help:          6
@@ -254,7 +254,7 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "Start this task from scratch"
       reason: "You appeared to have misunderstood what is required for this task, many deliverables were missing or the marking criteria was largely not met."
       action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor and/or lecturer."
-    do_not_resubmit:
+    feedback_exceeded:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
       action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio."
@@ -301,7 +301,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'demonstrate'
       'fix_and_resubmit'
       'redo'
-      'do_not_resubmit'
+      'feedback_exceeded'
       'fail'
     ]
 
@@ -316,7 +316,7 @@ angular.module("doubtfire.common.services.tasks", [])
       demonstrate:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fix_and_resubmit:  []
       redo:  []
-      do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      feedback_exceeded:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
       fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
 

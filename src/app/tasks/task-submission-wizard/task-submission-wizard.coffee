@@ -73,18 +73,18 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
         icon: taskService.statusIcons['ready_to_mark']
         text: taskService.statusLabels['ready_to_mark']
         class: 'ready-to-mark'
-        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
       need_help:
         icon: taskService.statusIcons['need_help']
         text: taskService.statusLabels['need_help']
         class: 'need-help'
-        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
       reupload_evidence:
         icon: 'fa fa-recycle'
         text: "new evidence for portfolio"
         class: 'btn-info'
         # Upload evidence only okay in a final state
-        hide: $scope.task.status not in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+        hide: $scope.task.status not in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
 
     # Switch the status if the upload type matches a state
     $scope.setUploadType = (type) ->
