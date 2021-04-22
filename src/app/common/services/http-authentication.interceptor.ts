@@ -18,9 +18,9 @@ export class TokenInterceptor implements HttpInterceptor {
     if (request.url.startsWith(API_URL) && this.currentUser.authenticationToken) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.currentUser.authenticationToken}`
-        },
-        params: request.params.append('auth_token', this.currentUser.authenticationToken)
+          'Auth-Token': `Bearer ${this.currentUser.authenticationToken}`,
+          'Username': `Bearer ${this.currentUser.username}`
+        }
       });
     }
     return next.handle(request);
