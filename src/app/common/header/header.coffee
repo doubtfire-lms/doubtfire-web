@@ -4,7 +4,7 @@
 angular.module('doubtfire.common.header', [
   'doubtfire.common.header.unit-dropdown'
 ])
-.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, UserNotificationSettingsModal, UserSettingsModal, currentUser, AboutDoubtfireModal, $transitions, $document, $filter) ->
+.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, UserNotificationSettingsModal, CalendarModal, UserSettingsModal, currentUser, AboutDoubtfireModal, $transitions, $document, $filter) ->
   $scope.currentUser = currentUser.profile
 
   $scope.tutor = $state.params?.tutor?
@@ -22,6 +22,12 @@ angular.module('doubtfire.common.header', [
     UserNotificationSettingsModal.show $scope.currentUser
 
   #
+  # Opens the webcal menu
+  #
+  $scope.openCalendar = ->
+    CalendarModal.show()
+
+  #
   # Opens the about DF modal
   #
   $scope.openAboutModal = ->
@@ -36,7 +42,10 @@ angular.module('doubtfire.common.header', [
     $scope.unit =
       code: context.unit_code || context.unit().code
       name: context.unit_name || context.unit().name
+      role: context.my_role   || context.unit?().my_role || context.role || "Unknown"
     $scope[if context.role? then "unitRole" else "project"] = context
+
+    $scope.tutor = $scope.project? && ($scope.unit.role == "Convenor" || $scope.unit.role == "Tutor" || $scope.unit.role == "Admin")
 
   $scope.task = $state.current.data.task
 

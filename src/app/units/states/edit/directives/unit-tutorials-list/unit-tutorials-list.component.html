@@ -141,7 +141,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutor </th>
       <td mat-cell *matCellDef="let tutorial">
         <div *ngIf="!editing(tutorial) else edit">
-          {{ tutorial.tutor.name }}
+          {{ tutorial.tutorName }}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">

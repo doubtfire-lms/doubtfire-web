@@ -31,7 +31,7 @@
             <a ng-click="sortOrder='meeting_location'; reverse=!reverse">Room</a>
           </th>
           <th class="tutor">
-            <a ng-click="sortOrder='tutor.name'; reverse=!reverse">Tutor</a>
+            <a ng-click="sortOrder='tutorName'; reverse=!reverse">Tutor</a>
           </th>
           <th class="actions">
             Actions
@@ -47,7 +47,7 @@
           <td>{{tutorial.meeting_day}}</td>
           <td>{{tutorial.meeting_time | date: 'shortTime'}}</td>
           <td>{{tutorial.meeting_location}}</td>
-          <td>{{tutorial.tutor.name}}</td>
+          <td>{{tutorial.tutorName}}</td>
           <td>
             <button
               class="btn btn-default btn-sm"

@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-grade-s
     $scope.grades = gradeService.grades
     $scope.agreedToAssessmentCriteria = $scope.projectHasLearningSummaryReport()
     $scope.chooseGrade = (idx) ->
-      Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
-        $scope.project.target_grade = project.target_grade
+      Project.update { id: $scope.project.project_id, submitted_grade: idx }, (project) ->
+        $scope.project.submitted_grade = project.submitted_grade
         $scope.project.burndown_chart_data = project.burndown_chart_data
 )

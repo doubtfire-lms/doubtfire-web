@@ -59,10 +59,10 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
-.filter('studentsWithTargetGrade', ->
+.filter('studentsWithSubmittedGrade', ->
   (input, grade) ->
     if input && grade > -1
-      _.filter  input, (student) -> (student?) && student.target_grade == grade
+      _.filter  input, (student) -> (student?) && student.submitted_grade == grade
     else
       input
 )
@@ -174,12 +174,13 @@ angular.module("doubtfire.common.filters", [])
 
 )
 
-.filter('tasksWithStudentName', ->
-  (tasks, searchName) ->
-    return tasks unless (searchName? && tasks?)
-    searchName = searchName.toLowerCase()
+.filter('tasksWithSearchText', ->
+  (tasks, searchText) ->
+    return tasks unless (searchText? && tasks?)
+    searchText = searchText.toLowerCase()
     _.filter tasks, (task) ->
-      task.project().name.toLowerCase().indexOf(searchName) >= 0
+      p = task.project()
+      p.matches(searchText)
 )
 
 .filter('tutorialCampusFilter', ->

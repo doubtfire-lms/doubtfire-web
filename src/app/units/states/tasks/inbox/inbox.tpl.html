@@ -1,23 +1,24 @@
-<div class="panel-full-screen">
+<div class="inbox-panel-full-screen">
   <staff-task-list
-    show-search-options="showSearchOptions"
-    filters="filters"
-    task-data="taskData"
-    unit="unit"
-    unit-role="unitRole"
-    class="col-xs-12 col-md-3"><!--/panel-1-->
+    ng-if="taskData"
+    [show-search-options]="showSearchOptions"
+    [filters]="filters"
+    [task-data]="taskData"
+    [unit]="unit"
+    [unit-role]="unitRole"
+  >
   </staff-task-list>
   <task-dashboard
+    style="flex-grow: 3; margin-right: 10px; margin-left: 10px"
     task="taskData.selectedTask"
     show-footer="true"
     show-submission="true"
-    class="col-xs-12 col-md-6">
-  </task-dashboard><!--/panel-2-->
+  >
+  </task-dashboard>
   <task-comments-viewer
-    task="taskData.selectedTask"
-    project="taskData.selectedTask.project()"
-    class="col-xs-12 col-md-3"
-    refocus-on-task-change="true"
-    ng-if="taskData.selectedTask">
-  </task-comments-viewer><!--/panel-3-->
+    style="min-width: 300px; flex-grow: 1; max-width: 400px"
+    [task]="taskData.selectedTask"
+    [project]="taskData.selectedTask.project()"
+  >
+  </task-comments-viewer>
 </div>

@@ -47,7 +47,7 @@
                 <label class="label label-info">{{task.definition.abbreviation}}</label>
               </td>
               <td class="task-status-icon" ng-if="source === project">
-                <status-icon status="task.status"></status-icon>
+                <status-icon [status]="task.status"></status-icon>
               </td>
               <td class="task-name" ng-show="showTaskName">
                 {{task.definition.name}}

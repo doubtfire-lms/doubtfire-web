@@ -2,19 +2,21 @@ import { Component, Input, Inject, ViewChild, Output, EventEmitter } from '@angu
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { Tutorial } from 'src/app/api/models/tutorial/tutorial';
+import {
+  Tutorial,
+  TutorialService,
+  Campus,
+  CampusService,
+  User,
+  TutorialStream,
+} from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { TutorialService } from 'src/app/api/models/tutorial/tutorial.service';
 import { FormControl, Validators } from '@angular/forms';
-import { Campus } from 'src/app/api/models/campus/campus';
-import { CampusService } from 'src/app/api/models/campus/campus.service';
-import { User } from 'src/app/api/models/user/user';
-import { TutorialStream } from 'src/app/api/models/tutorial-stream/tutorial-stream';
 
 @Component({
   selector: 'unit-tutorials-list',
   templateUrl: 'unit-tutorials-list.component.html',
-  styleUrls: ['unit-tutorials-list.component.scss']
+  styleUrls: ['unit-tutorials-list.component.scss'],
 })
 export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
@@ -31,36 +33,26 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   constructor(
     private tutorialService: TutorialService,
     private campusService: CampusService,
-    @Inject(alertService) private alerts: any,
+    @Inject(alertService) private alerts: any
   ) {
     super({
-      meeting_day: new FormControl('', [
-        Validators.required
-      ]),
-      meeting_time: new FormControl(null, [
-        Validators.required
-      ]),
-      meeting_location: new FormControl('', [
-        Validators.required
-      ]),
-      abbreviation: new FormControl('', [
-        Validators.required
-      ]),
+      meeting_day: new FormControl('', [Validators.required]),
+      meeting_time: new FormControl(null, [Validators.required]),
+      meeting_location: new FormControl('', [Validators.required]),
+      abbreviation: new FormControl('', [Validators.required]),
       campus: new FormControl(null, []),
-      capacity: new FormControl('', [
-        Validators.required
-      ]),
-      tutor: new FormControl(null, [
-        Validators.required
-      ]),
+      capacity: new FormControl('', [Validators.required]),
+      tutor: new FormControl(null, [Validators.required]),
     });
   }
 
   ngOnInit() {
-    this.campusService.query().subscribe(campuses => {
+    this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
-    this.tutorials = this.unit.tutorials.filter(tutorial => tutorial.tutorial_stream == this.stream);
+    this.tutorials = this.unit.tutorials.filter(
+      (tutorial) => tutorial.tutorial_stream === this.stream || (!tutorial.tutorial_stream && !this.stream)
+    );
     this.dataSource = new MatTableDataSource(this.tutorials);
   }
 
@@ -82,7 +74,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
 
   // Handle the removal of a tutorial
   private deleteTutorial(tutorial: Tutorial) {
-    this.tutorialService.delete(tutorial).subscribe(result => {
+    this.tutorialService.delete(tutorial).subscribe((result) => {
       this.cancelEdit();
       this.tutorials.splice(this.tutorials.indexOf(tutorial), 1);
       this.renderTable();
@@ -100,8 +92,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
   }
 
-  protected formDataToNewObject(endPointKey: string, associations?: Object): Object {
-    let result = super.formDataToNewObject(endPointKey);
+  protected formDataToNewObject(endPointKey: string, associations?: object): object {
+    const result = super.formDataToNewObject(endPointKey);
     if (this.stream) {
       result['tutorial']['tutorial_stream_abbr'] = this.stream.abbreviation;
     }
@@ -129,6 +121,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     this.unit.deleteStream(this.stream);
   }
 
+  /**
+   * Ensure that the unit is passed to the Tutorial entity when create it called.
+   */
+  protected otherOnCreate(): any {
+    return this.unit;
+  }
+
   // Sorting function to sort data when sort
   // event is triggered
   sortTableData(sort: Sort) {
@@ -140,14 +139,18 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
       case 'location':
       case 'day':
       case 'time':
-      case 'capacity': return super.sortTableData(sort);
+      case 'capacity':
+        return super.sortTableData(sort);
     }
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'campus': return this.sortCompare(a.campus ? a.campus.abbreviation : "", b.campus ? b.campus.abbreviation : "", isAsc);
-        case 'tutor': return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
-        default: return 0;
+        case 'campus':
+          return this.sortCompare(a.campus ? a.campus.abbreviation : '', b.campus ? b.campus.abbreviation : '', isAsc);
+        case 'tutor':
+          return this.sortCompare(a.tutorName, b.tutorName, isAsc);
+        default:
+          return 0;
       }
     });
   }

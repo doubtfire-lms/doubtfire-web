@@ -74,7 +74,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   # Pagination details
   $scope.currentPage = 1
   $scope.maxSize = 5
-  $scope.pageSize = 5
+  $scope.pageSize = 10
 
   $scope.filterOptions = {selectedGrade: -1}
   $scope.grades = gradeService.grades

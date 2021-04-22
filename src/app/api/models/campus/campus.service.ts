@@ -1,15 +1,14 @@
-import { Campus } from './campus';
-import { CacheableEntityService } from '../cacheable-entity.service';
+import { Campus } from 'src/app/api/models/doubtfire-model';
+import { CachedEntityService } from '../cached-entity.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class CampusService extends CacheableEntityService<Campus> {
-
+export class CampusService extends CachedEntityService<Campus> {
   protected readonly endpointFormat = 'campuses/:id:';
   entityName = 'Campus';
 
   protected createInstanceFrom(json: any, other?: any): Campus {
-    let campus = new Campus();
+    const campus = new Campus();
     campus.updateFromJson(json);
     return campus;
   }

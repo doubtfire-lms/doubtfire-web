@@ -1,4 +1,9 @@
-import { Unit, csvUploadModalService, csvResultModalService, unitStudentEnrolmentModal } from './../../../../../ajs-upgraded-providers';
+import {
+  Unit,
+  csvUploadModalService,
+  csvResultModalService,
+  unitStudentEnrolmentModal,
+} from './../../../../../ajs-upgraded-providers';
 import { ViewChild, Component, Input, Inject } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -9,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
-  styleUrls: ['unit-students-editor.component.scss']
+  styleUrls: ['unit-students-editor.component.scss'],
 })
 export class UnitStudentsEditorComponent {
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
@@ -17,7 +22,16 @@ export class UnitStudentsEditorComponent {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @Input() unit: any;
 
-  columns: string[] = ['student_id', 'first_name', 'last_name', 'student_email', 'campus', 'tutorial', 'enrolled', 'goto'];
+  columns: string[] = [
+    'student_id',
+    'first_name',
+    'last_name',
+    'student_email',
+    'campus',
+    'tutorial',
+    'enrolled',
+    'goto',
+  ];
   dataSource: MatTableDataSource<any>;
 
   // Calls the parent's constructor, passing in an object
@@ -29,11 +43,9 @@ export class UnitStudentsEditorComponent {
     @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(csvResultModalService) private csvResultModal: any
-  ) {
-  }
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   // The paginator is inside the table
   ngAfterViewInit() {
@@ -41,7 +53,6 @@ export class UnitStudentsEditorComponent {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-
   }
 
   applyFilter(event: Event) {
@@ -69,15 +80,18 @@ export class UnitStudentsEditorComponent {
         case 'first_name':
         case 'last_name':
         case 'student_email':
-        case 'enrolled': return this.sortCompare(a[sort.active], b[sort.active], isAsc);
-        case 'campus': return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
-        default: return 0;
+        case 'enrolled':
+          return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+        case 'campus':
+          return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
+        default:
+          return 0;
       }
     });
   }
 
   public gotoStudent(student: any) {
-    student.viewProject(true)
+    student.viewProject(true);
   }
 
   enrolStudent() {
@@ -121,9 +135,9 @@ export class UnitStudentsEditorComponent {
 
     this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
       (response) => {
-        let binaryData = [];
+        const binaryData = [];
         binaryData.push(response.body);
-        let downloadLink = document.createElement('a');
+        const downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'text/csv' }));
         downloadLink.target = '_blank';
         const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;

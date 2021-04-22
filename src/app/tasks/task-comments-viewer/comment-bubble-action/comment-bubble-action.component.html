@@ -9,7 +9,6 @@
     matTooltip="Reply to this comment"
     matTooltipPosition="above"
     aria-label="Example icon-button with a heart icon"
-    [hidden]="!canReplyToComment"
   >
     reply</mat-icon
   >
@@ -19,7 +18,7 @@
     matTooltip="Delete this comment"
     matTooltipPosition="above"
     aria-label="Example icon-button with a heart icon"
-    [hidden]="!canEditComment"
+    [hidden]="!comment.currentUserCanEdit"
   >
     delete</mat-icon
   >

@@ -90,7 +90,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
         group: {
           name: group.name,
           tutorial_id: group.tutorial_id,
-          capacity_adjustment: group.capacity_adjustment
+          capacity_adjustment: group.capacity_adjustment,
+          locked: group.locked,
         }
       }
       (success) ->

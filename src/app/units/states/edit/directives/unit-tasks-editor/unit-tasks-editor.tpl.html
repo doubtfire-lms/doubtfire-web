@@ -18,7 +18,8 @@
           <div class="callout callout-info" ng-hide="unit.task_definitions.length > 0">
             This unit has no tasks
           </div>
-          <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer">
+          <div style="overflow: auto; position: relative;">
+           <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer" style="min-width: 720px;">
             <thead>
               <tr>
                 <th>
@@ -96,6 +97,7 @@
               </tr>
             </tbody>
           </table><!--/task-table-->
+         </div>
         </div>
         <div class="panel-footer clearfix">
           <pagination  ng-show="filteredTaskDefs.length > taskAdminPager.pageSize" total-items="filteredTaskDefs.length" ng-model="taskAdminPager.currentPage" items-per-page="taskAdminPager.pageSize" max-size="taskAdminPager.maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>

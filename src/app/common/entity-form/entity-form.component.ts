@@ -1,7 +1,7 @@
 import { OnInit, Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
-import { EntityService, HttpOptions } from 'src/app/api/models/entity.service';
+import { EntityService } from 'src/app/api/models/entity.service';
 import { Observable } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,7 +10,6 @@ export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
 export class EntityFormComponent<T extends Entity> implements OnInit {
-
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
@@ -57,8 +56,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /**
    * Cancel edit of current selected value.
@@ -67,7 +65,6 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     this.formData.reset(this.defaultFormData);
     this.selected = null;
   }
-
 
   /**
    * Mark @param resource for edit, which copies the data of resource
@@ -119,7 +116,6 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     // See form validatoin:   https://angular.io/guide/form-validation
     // See CampusListComponent for reference to use of FormControls and validations
     if (this.formData.valid) {
-
       // If there is a selected value and there are changes made to that value
       // then the form is being used to edit data, which means we'll want to update
       // rather than create
@@ -128,11 +124,12 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
         // Then send it off
         this.copyChangesFromForm();
         response = service.update(this.selected);
-      } else if (!this.selected) { // Nothing selected, which means we're creating something new
-        response = service.create(
-          this.formDataToNewObject(service.serverKey)
-        );
-      } else { // Nothing has changed if the selected value, so we want to inform the user
+      } else if (!this.selected) {
+        // Nothing selected, which means we're creating something new
+        const data = this.formDataToNewObject(service.serverKey); // sent as path id and body
+        response = service.create(data, data, this.otherOnCreate());
+      } else {
+        // Nothing has changed if the selected value, so we want to inform the user
         alertService.add('danger', `${service.entityName} was not changed`, 6000);
         return;
       }
@@ -152,7 +149,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
           // Reset the form to default values
           this.formData.reset(this.defaultFormData);
         },
-        error => {
+        (error) => {
           // Whoops - an error
           // Restore the form data from backup if applicable
           if (this.selected) {
@@ -173,8 +170,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @returns mapping of any changes made
    */
-  getFormDataChanges(): Object {
-    let changes = {};
+  getFormDataChanges(): object {
+    const changes = {};
     for (const key of Object.keys(this.formData.controls)) {
       if (this.selected[key] !== this.formData.get(`${key}`).value) {
         changes[key] = this.formData.get(`${key}`).value;
@@ -184,12 +181,24 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
   }
 
   /**
+   * Returns the data that needs to be passed as the other parameter to the
+   * EntityService's create method when this control is used to create an Entity object.
+   *
+   * Override this in child classes to provide any other details needed to be passed
+   * to the entity constructor when an object is created. This is then passed along
+   * in the `create` call as the `other` value to the EntityService's create method.
+   */
+  protected otherOnCreate(): any {
+    return undefined;
+  }
+
+  /**
    * Copy changes in data related to the FromControls into
    * the selected value. This is called in preperation to send
    * data to the server.
    */
   copyChangesFromForm() {
-    let changes = this.getFormDataChanges();
+    const changes = this.getFormDataChanges();
     for (const key of Object.keys(changes)) {
       this.backup[key] = this.selected[key];
       this.selected[key] = changes[key];
@@ -221,8 +230,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @returns object representation of form data.
    */
-  protected formDataToNewObject(endPointKey: string): Object {
-    let result = {};
+  protected formDataToNewObject(endPointKey: string): object {
+    const result = {};
     result[endPointKey] = {};
     for (const key of Object.keys(this.formData.controls)) {
       result[endPointKey][key] = this.formData.get(`${key}`).value;

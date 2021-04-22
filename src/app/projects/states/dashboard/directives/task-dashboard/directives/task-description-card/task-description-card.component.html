@@ -1,0 +1,37 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Task Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
+    <ul>
+      <li>
+        <strong>{{ grades.names[taskDef?.target_grade] }} Task</strong>
+      </li>
+      <li>
+        <strong>Start Date</strong>
+        &mdash; Aim to start this task by <strong>{{ startDate() | date: 'EEE d MMM':'+0000' }}</strong
+        >.
+      </li>
+      <li [hidden]="!task?.extensions || task?.extensions <= 0">
+        <strong>Extension</strong>
+        &mdash; You have an extension for
+        <strong>{{ task?.extensions }} week{{ task?.extensions > 1 ? 's' : '' }}</strong
+        >.
+      </li>
+      <li>
+        <strong>Due Date</strong>
+        &mdash; Aim to complete by <strong>{{ dueDate() | date: 'EEE d MMM':'+0000' }}</strong
+        >.
+      </li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions [hidden]="!(taskDef?.has_task_sheet || taskDef?.has_task_resources)">
+    <button mat-button [hidden]="!taskDef?.has_task_sheet" (click)="downloadTaskSheet()">
+      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Task Sheet
+    </button>
+    <button mat-button [hidden]="!taskDef?.has_task_resources" (click)="downloadResources()">
+      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Resources
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -9,4 +9,11 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-learnin
   templateUrl: 'projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.tpl.html'
   controller: ($scope) ->
     $scope.forceLSRSubmit = false
+    $scope.acceptUploadNewLearningSummary = false
+
+    $scope.addNewFile = (newFile) ->
+      $scope.addNewFilesToPortfolio(newFile)
+      $scope.projectHasDraftLearningSummaryReport = false
+      $scope.acceptUploadNewLearningSummary = false
+      $scope.forceLSRSubmit = false
 )

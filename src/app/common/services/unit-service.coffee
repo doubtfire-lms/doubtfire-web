@@ -92,6 +92,8 @@ angular.module("doubtfire.common.services.units", [])
         unit.tutorials = _.map(unit.tutorials, (tutorial) ->
           tutorialService.createInstanceFrom(tutorial, unit)
         )
+        unit.groups = _.map(unit.groups, (grp) -> unitService.mapGroupToUnit(unit, grp))
+
         # Add a sequence from the order fetched from server
         unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
           taskDef.seq = index
@@ -101,14 +103,14 @@ angular.module("doubtfire.common.services.units", [])
 
           # Local deadline date is the last moment in the local time zone
           taskDef.localDeadlineDate = ()  ->
-            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
             return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
           # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
           taskDef.finalDeadlineDate = ()  ->
-            deadline = new Date(taskDef.due_date) #TODO: Change backend to return this as "deadline_date"
+            deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
             return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59}, '-12:00')
           taskDef.localDueDate = ()  ->
-            due = new Date(taskDef.target_date)
+            due = new Date(taskDef.target_date.slice(0,10))
             return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
           taskDef
         )
@@ -142,7 +144,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Returns all tutorials where the tutor name matches the user name provided
     unit.tutorialsForUserName = (userName) ->
-      _.filter unit.tutorials, (tutorial) -> tutorial.tutor.name is userName
+      _.filter unit.tutorials, (tutorial) -> tutorial.tutorName is userName
 
     # Refresh callback for reloading students
     unit.refreshStudents = (onSuccess, onFailure) ->
@@ -283,7 +285,8 @@ angular.module("doubtfire.common.services.units", [])
 
       # Now fill for the students in the unit
       _.map unit.students, (p) ->
-        t = _.find tasks, (t) -> t.project_id == p.project_id && t.task_definition_id == taskDef.id
+        t = _.find tasks, (t) ->
+          t.project_id == p.project_id && t.task_definition_id == taskDef.id
         unless t?
           t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
         # If a group task but group data not loaded, go fetch it
@@ -302,6 +305,9 @@ angular.module("doubtfire.common.services.units", [])
       .sortBy((a) -> a.ilo.ilo_number)
       .value()
 
+    unit.findGroupById = (id) ->
+      _.find unit.groups, (grp) -> grp.id == id
+
     # Actually make the request to refresh and load unit data
     unit.refresh(onSuccess, onFailure)
     unit
@@ -314,7 +320,7 @@ angular.module("doubtfire.common.services.units", [])
     result = []
     angular.forEach(unit.tutorials, (tute) ->
       result.push(tute.abbreviation)
-      result.push(tute.tutor.name)
+      result.push(tute.tutorName)
     )
     angular.forEach(unit.students, (student) ->
       result.push(student.name)
@@ -329,6 +335,7 @@ angular.module("doubtfire.common.services.units", [])
   unitService.mapGroupToUnit = (unit, group) ->
     group.tutorial = -> unit.tutorialFromId(group.tutorial_id)
     group.unit = -> unit
+    group.projects = []
     group
 
   #
@@ -482,13 +489,13 @@ angular.module("doubtfire.common.services.units", [])
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
     student.tutorNames = ->
       _.chain(student.tutorials())
-        .map (tute) -> tute.tutor.name.split(' ')[0]
+        .map (tute) -> tute.tutorName.split(' ')[0]
         .uniq()
         .join()
         .value() || 'None'
 
     student.hasTutor = (tutorName) ->
-      _.find(student.tutorials(), (tute) -> tute.tutor.name == tutorName)?
+      _.find(student.tutorials(), (tute) -> tute.tutorName == tutorName)?
 
     # Students task statistics (for bar)
     student.task_stats = [
@@ -526,7 +533,10 @@ angular.module("doubtfire.common.services.units", [])
 
     student.inGroup = (grp) -> grp? && _.find(student.groups, {id: grp.id})?
 
-    student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+    if student.groups?
+      student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
+    else
+      student.groups = _.chain(unit.group_memberships).filter((gm) -> gm.project_id == student.project_id).map((gm) -> unit.findGroupById(gm.group_id)).value()
 
     student.tutorials = () ->
       _.chain(student.tutorial_enrolments)
@@ -541,15 +551,34 @@ angular.module("doubtfire.common.services.units", [])
     student.matchesTutorialEnrolments = (matchText) ->
       _.filter(student.tutorials(), (enrol) ->
         enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-          enrol.tutor.name.toLowerCase().indexOf(matchText) >= 0
+          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0
       ).length > 0
+
+    # Search through the student's groups for a match
+    student.matchesGroup = (matchText) ->
+      _.find(student.groups, (grp) ->
+        grp.name.toLowerCase().indexOf(matchText) >= 0
+      )
 
     # Check if this student should match the passed in text filter
     student.matches = (matchText) ->
       student.student_id.indexOf(matchText) >= 0 ||
       student.name.toLowerCase().indexOf(matchText) >= 0 ||
       student.campus().matches(matchText) ||
-      student.matchesTutorialEnrolments(matchText)
+      student.matchesTutorialEnrolments(matchText) ||
+      student.matchesGroup(matchText)
+
+    # Get the status of the portfolio
+    student.portfolioTaskStatus = ->
+      if student.portfolio_available
+        return 'complete'
+      else if student.compile_portfolio
+        return 'working_on_it'
+      else
+        return 'not_started'
+
+    student.portfolioTaskStatusClass = ->
+      return taskService.statusClass(student.portfolioTaskStatus())
 
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)

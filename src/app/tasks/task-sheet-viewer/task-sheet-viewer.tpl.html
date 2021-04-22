@@ -11,7 +11,7 @@
   <div class="panel-body assessment-details-alignment-panel" ng-if="showAssessmentPanel">
     <div class="assessment-item current-status" ng-if="assessmentPanels.feedback.show">
       <aside>
-        <status-icon status="task.status"></status-icon>
+        <status-icon [status]="task.status"></status-icon>
       </aside>
       <div class="content">
         <h4>{{activeStatusData.help.detail}}</h4>
@@ -119,16 +119,16 @@
     </a>
   </div>
   <div ng-if="showTaskSheet && hasPDF && hasResources">
-    <pdf-panel-viewer
+    <pdf-viewer-panel
       pdf-url="taskPDFUrl"
       resources-url="resourceUrl"
       hide-footer="true">
-    </pdf-panel-viewer>
+    </pdf-viewer-panel>
   </div>
   <div ng-if="showTaskSheet && hasPDF && !hasResources">
-    <pdf-panel-viewer
+    <pdf-viewer-panel
       pdf-url="taskPDFUrl"
       hide-footer="true">
-    </pdf-panel-viewer>
+    </pdf-viewer-panel>
   </div><!--viewing-task-sheet-->
 </div>

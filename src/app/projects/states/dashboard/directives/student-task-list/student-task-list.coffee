@@ -25,6 +25,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
     applyFilters = ->
       filteredTasks = $filter('tasksWithName')($scope.project.activeTasks(), $scope.filters.taskName)
       $scope.filteredTasks = filteredTasks
+      $scope.showCreatePortfolio = !$scope.filters.taskName? || 'create portfolio'.indexOf($scope.filters.taskName.toLowerCase()) >= 0
     # Apply filters first-time
     applyFilters()
     # Sort the tasks according to priority.
@@ -53,5 +54,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
     $scope.isSelectedTask = (task) ->
       # Compare by definition
       task.definition.id == $scope.taskData?.selectedTask?.definition.id
+    $scope.nearEnd = () ->
+      lateDate = new Date($scope.project.unit().end_date) # Get end date as date
+      lateDate.setDate(lateDate.getDate() - 21) # subtract 21 days
+      new Date() > lateDate
 
 )

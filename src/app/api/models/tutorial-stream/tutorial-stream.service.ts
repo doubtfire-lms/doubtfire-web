@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EntityService } from '../entity.service';
-import { TutorialStream } from './tutorial-stream';
+import { TutorialStream } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -8,13 +8,12 @@ export class TutorialStreamService extends EntityService<TutorialStream> {
   protected readonly endpointFormat = '';
   entityName = 'Stream';
 
-  constructor(httpClient: HttpClient
-  ) {
+  constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
   protected createInstanceFrom(json: any, other?: any): TutorialStream {
-    let stream = new TutorialStream(json);
+    const stream = new TutorialStream(json);
     stream.updateFromJson(json);
     return stream;
   }

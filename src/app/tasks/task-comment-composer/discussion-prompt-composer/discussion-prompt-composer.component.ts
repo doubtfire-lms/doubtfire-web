@@ -1,14 +1,16 @@
 import { Component, Inject, Input, ViewChild, ElementRef } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { audioRecorderService, alertService } from 'src/app/ajs-upgraded-providers';
+import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'discussion-prompt-composer',
   templateUrl: './discussion-prompt-composer.component.html',
-  styleUrls: ['./discussion-prompt-composer.component.scss']
+  styleUrls: ['./discussion-prompt-composer.component.scss'],
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: {};
+
   @ViewChild('discussionPromptComposerCanvas', { static: true }) canvasRef: ElementRef;
   @ViewChild('discussionPromptComposerAudio', { static: true }) audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
@@ -22,13 +24,14 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
   }
 
   get canSendPrompt(): boolean {
-    return this.recordings.length > 0 && (this.blob.size === 0);
+    return this.recordings.length > 0 && this.blob.size === 0;
   }
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(taskService) private ts: any,
-    @Inject(alertService) private alerts: any, ) {
+    @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
+    @Inject(alertService) private alerts: any
+  ) {
     super(mediaRecorderService);
   }
 
@@ -68,22 +71,24 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
   }
 
   sendRecording(): void {
-    this.ts.addDiscussionComment(this.task, this.recordings,
-      () => {
-        this.ts.scrollDown();
+    this.taskCommentService.addComment(this.task, undefined, 'discussion', undefined, this.recordings).subscribe(
+      (tc: TaskComment) => {
         this.isSending = false;
       },
-      (failure: { data: { error: any; }; }) => {
-        this.alerts.add('danger', `Failed to post audio. ${(failure.data != null ? failure.data.error : undefined)}`);
+      (failure: any) => {
+        this.alerts.add(
+          'danger',
+          `Failed to create discussion comment. ${failure.data != null ? failure.data.error : failure}`
+        );
         this.isSending = false;
-      });
-    this.blob = <Blob>{};
+      }
+    );
+    this.blob = {} as Blob;
     this.recordingAvailable = false;
-    this.ts.scrollDown();
   }
 
   visualise(): void {
-    let draw = () => {
+    const draw = () => {
       const WIDTH = this.canvas.width;
       const HEIGHT = this.canvas.height;
       requestAnimationFrame(draw);
@@ -103,10 +108,10 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
       }
     };
 
-    let analyser = this.mediaRecorder.analyserNode;
+    const analyser = this.mediaRecorder.analyserNode;
     analyser.fftSize = 2048;
     const bufferLength = analyser.frequencyBinCount;
-    let dataArray = new Uint8Array(bufferLength);
+    const dataArray = new Uint8Array(bufferLength);
     draw();
   }
 }

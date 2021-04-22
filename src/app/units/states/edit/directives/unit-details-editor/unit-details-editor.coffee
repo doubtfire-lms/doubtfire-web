@@ -47,27 +47,26 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
 
+      saveData = {
+        name: $scope.unit.name
+        code: $scope.unit.code
+        description: $scope.unit.description
+        active: $scope.unit.active
+        auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
+        send_notifications: $scope.unit.send_notifications
+        enable_sync_timetable: $scope.unit.enable_sync_timetable
+        enable_sync_enrolments: $scope.unit.enable_sync_enrolments
+        draft_task_definition_id: $scope.unit.draft_task_definition_id
+        allow_student_extension_requests: $scope.unit.allow_student_extension_requests,
+        extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request,
+        allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
+      }
+
       if $scope.unit.teaching_period_id
-        saveData = {
-          name: $scope.unit.name
-          code: $scope.unit.code
-          description: $scope.unit.description
-          teaching_period_id: $scope.unit.teaching_period_id
-          active: $scope.unit.active
-          auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
-          send_notifications: $scope.unit.send_notifications
-        }
+        saveData.teaching_period_id = $scope.unit.teaching_period_id
       else
-        saveData = {
-          name: $scope.unit.name
-          code: $scope.unit.code
-          description: $scope.unit.description
-          start_date: $scope.unit.start_date
-          end_date: $scope.unit.end_date
-          active: $scope.unit.active
-          auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
-          send_notifications: $scope.unit.send_notifications
-        }
+        saveData.start_date = $scope.unit.start_date
+        saveData.end_date = $scope.unit.end_date
 
       if $scope.unit.id == -1
         Unit.create { unit: saveData },
