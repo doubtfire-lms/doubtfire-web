@@ -65,7 +65,7 @@ import {
   taskDefinitionProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
-  TaskFeedbackServiceProvider,
+  taskFeedbackServiceProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -265,7 +265,7 @@ import {
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
-    TaskFeedbackServiceProvider,
+    taskFeedbackServiceProvider,
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,

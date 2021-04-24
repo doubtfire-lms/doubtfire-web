@@ -1,35 +1,35 @@
-<mat-card>
+<mat-card [hidden]="!(submission.isProcessing || submission.isUploaded)">
+ <!-- *ngIf="submission.isUploaded || submission.isProcessing"   [hidden]="!submission.isProcessing"  
+             submission.isUploaded || submission.isProcessing   !(submission['isProcessing'] || submission['isProcessing'])
+            Add processing in later, API doesnt process so it wont show. -->
   <mat-card-header>
-    <mat-card-title class="card-heading">Submission</mat-card-title>   
+      <mat-card-title class="card-heading">Submission<span >Processing</span></mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>You can chooose to download your submission or the files you uploaded below</p>
-    <p>You uploaded this submission on <strong>{{ task.submission_date | humanizedDate }}</strong>.</p>
-    <p>If you feel there has been an error in your submission, you can request Doubtfire to regenerate your submission under the 'Actions' dropdown menu.</p>
-    <p> If you would like to submit alternate evidene for use in your portfolio, you can upload alternative files under the 'Actions' dropdown menu.</p>
+    <p ng-show="submission.isProcessing">
+        Your submission is being processed and will be avaliable to view soon. You will also
+        be able to download your most recently submitted files.
+      </p>
+      <p [hidden]="!submission.isUploaded">You can chooose to download your submission or the files you uploaded below</p>
+      <p [hidden]="submission.isUploaded">You uploaded this submission on <strong>{{ task.submission_date | humanizedDate }}</strong>.</p>
+      <p [hidden]="!canRegeneratePdf">If you feel there has been an error in your submission, you can request Doubtfire to regenerate your submission under the 'Actions' dropdown menu.</p>
+      <p [hidden]="!canReuploadEvidence"> If you would like to submit alternate evidence for use in your portfolio, you can upload alternative files under the 'Actions' dropdown menu.</p>
   </mat-card-content>
   <mat-card-actions>
-    <button
-      style="border: 1px solid black; background-color: #337ab7; color: white"
-      mat-button
-      [matMenuTriggerFor]="downloads">
-      <mat-icon>download</mat-icon>Download Submissions<span class="caret"></span>
-    </button>
-    <button
-      style="border: 1px solid black; background-color: #337ab7; color: white"
-      [hidden]="!(canReuploadEvidence || canRegeneratePdf)"
-      mat-button
-      [matMenuTriggerFor]="downloads">
-      Actions <span class="caret"></span>
-    </button>
-    <!-- #docregion sub-menu -->
-    <mat-menu #downloads="matMenu">
-      <button mat-menu-item [hidden]="!canReuploadEvidence" (click)="uploadAlternateFiles()">Upload Alternate Files</button>
-      <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">Regenerate PDF</button>
-    </mat-menu>
-    <mat-menu #downloads="matMenu">
-      <button mat-menu-item><a href="{{ urls.pdf }}" target="_blank">Download Submission</a></button>
-      <button mat-menu-item><a href="{{ urls.files }}" target="_blank">Download Uploaded Files</a></button>
-    </mat-menu>
+      <button mat-button [matMenuTriggerFor]="downloads">
+    <mat-icon>download</mat-icon>Downloads<span class="caret"></span>
+  </button>
+      <button [hidden]="!(canReuploadEvidence || canRegeneratePdf)" mat-button [matMenuTriggerFor]="uploads">
+    Actions <span class="caret"></span>
+  </button>
+      <!-- #decorate sub-menu -->
+      <mat-menu #uploads="matMenu">
+          <button mat-menu-item [hidden]="!canReuploadEvidence" (click)="uploadAlternateFiles()">Upload Alternate Files</button>
+          <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">Regenerate PDF</button>
+      </mat-menu>
+      <mat-menu #downloads="matMenu">
+          <button mat-menu-item (click)="download(urls.pdf)">Download Submission</button>
+          <button mat-menu-item (click)="download(urls.files)"> Download Uploaded Files </button>
+      </mat-menu>
   </mat-card-actions>
 </mat-card>

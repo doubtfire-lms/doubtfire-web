@@ -1,36 +1,49 @@
-import { Component, Input, Inject, OnInit } from '@angular/core';
+import { Component, Input, Inject} from '@angular/core';
 import { taskFeedbackService, taskService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'task-submission-card',
   templateUrl: 'task-submission-card.component.html',
-  styleUrls: ['task-submission-card.component.scss'],
+  styleUrls: ['task-submission-card.component.scss']
 })
-export class TaskSubmissionnCardComponent implements OnInit {
+export class TaskSubmissionnCardComponent {
   @Input() task: any;
 
   submission_date: String;
   public canReuploadEvidence: boolean;
   public canRegeneratePdf: boolean;
-  submission = {};
+  submission = {
+    isProcessing: false,
+    isUploaded: false,
+  };
+  currentTask: any;
   urls = { pdf: '', files: '' };
 
-  constructor(@Inject(taskFeedbackService) private taskFeedbackService: any, @Inject(taskService) private ts: any) {}
-  ngOnInit(): void {
-    this.canReuploadEvidence = this.task.canReuploadEvidence();
-    this.task.getSubmissionDetails((details) => {
-      this.canRegeneratePdf = this.ts.pdfRegeneratableStatuses.includes(details.status) && details.has_pdf;
+  public reapplySubmissionData(){
+    this.task.getSubmissionDetails(()=>{
+      this.canReuploadEvidence = this.task.canReuploadEvidence();
+      this.canRegeneratePdf = this.ts.pdfRegeneratableStatuses.includes(this.task.status) && this.task.has_pdf;
+      console.log(this.task)
+  
       this.submission = {
-        isProcessing: details.processing_pdf,
-        isUploaded: details.has_pdf,
-      };
+        isProcessing: this.task.processing_pdf,
+        isUploaded: this.task.has_pdf,
+      };      
+      console.log(this.submission)
       this.urls = {
         pdf: this.taskFeedbackService.getTaskUrl(this.task, true),
         files: this.taskFeedbackService.getTaskFilesUrl(this.task),
       };
-    });
+    })
   }
 
+  constructor(@Inject(taskFeedbackService) private taskFeedbackService: any, @Inject(taskService) private ts: any) {}
+  ngDoCheck() {
+    if (this.currentTask != this.task) {
+      this.currentTask = this.task;
+      this.reapplySubmissionData()
+    }
+  }
   public uploadAlternateFiles() {
     this.ts.presentTaskSubmissionModal(this.task, this.task.status, true);
   }
@@ -38,4 +51,15 @@ export class TaskSubmissionnCardComponent implements OnInit {
   public regeneratePdf() {
     this.task.recreateSubmissionPdf();
   }
+
+  public download(url) {
+    console.log(url)
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', url);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
 }
+
