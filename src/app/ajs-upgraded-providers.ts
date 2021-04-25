@@ -1,4 +1,4 @@
-iimport { InjectionToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string

@@ -6,7 +6,7 @@ import { taskFeedbackService, taskService } from 'src/app/ajs-upgraded-providers
   templateUrl: 'task-submission-card.component.html',
   styleUrls: ['task-submission-card.component.scss']
 })
-export class TaskSubmissionnCardComponent {
+export class TaskSubmissionCardComponent {
   @Input() task: any;
 
   submission_date: String;
