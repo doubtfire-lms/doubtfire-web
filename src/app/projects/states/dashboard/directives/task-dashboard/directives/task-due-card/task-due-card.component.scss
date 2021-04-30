@@ -1,1 +1,39 @@
-@import '../../../../../../../../styles/common/doubtfire-cards.scss';
+:host ::ng-deep {
+    .mat-card.info-card .mat-card-header {
+        background-color: #5bc0de;
+    }
+
+    .mat-card.warn-card .mat-card-header {
+        background-color: #f0ad4e;
+    }
+
+    .mat-card.danger-card .mat-card-header {
+        background-color: #d9534f;
+    }
+
+    .mat-card.danger-card,
+    .mat-card.warn-card,
+    .mat-card.info-card {
+        border-radius: 0;
+        padding: 0px;
+        .mat-card-header {
+            padding: 15px 20px;
+            .mat-card-header-text {
+                margin: 0;
+                .mat-card-title {
+                    margin: 0;
+                    font-size: 18px;
+                    color: #fff;
+                }
+            }
+        }
+        .mat-card-content {
+            padding: 15px;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+        .muted-text {
+            color: #777;
+        }
+    }
+}
