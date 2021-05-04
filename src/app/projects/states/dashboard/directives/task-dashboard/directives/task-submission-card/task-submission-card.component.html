@@ -13,16 +13,16 @@
       <p [hidden]="!canReuploadEvidence"> If you would like to submit alternate evidence for use in your portfolio, you can upload alternative files under the 'Actions' dropdown menu.</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button (click)="download(urls.pdf)"><mat-icon>download</mat-icon>Download Submission</button>
-      <button mat-button [matMenuTriggerFor]="downloads">
-    <span class="caret"></span>
-  </button>
+     
+      <button mat-button [matMenuTriggerFor]="downloads">Download Submission <span class="caret"></span>
+    </button>
       <button [hidden]="!(canReuploadEvidence || canRegeneratePdf)" mat-button [matMenuTriggerFor]="uploads">
-    Actions <span class="caret"></span>
-  </button>
+      Actions <span class="caret"></span>
+     </button>
       <!-- #decorate sub-menu -->
       <mat-menu #downloads="matMenu">
           <button mat-menu-item (click)="download(urls.files)"> Download Uploaded Files </button>
+          <button mat-menu-item (click)="download(urls.pdf)"> Download Submission </button>
       </mat-menu>  
       
       <mat-menu #uploads="matMenu">
