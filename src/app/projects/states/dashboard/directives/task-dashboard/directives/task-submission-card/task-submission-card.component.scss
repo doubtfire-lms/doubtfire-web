@@ -10,9 +10,6 @@
 }
 .mat-card-actions {
     position: relative;
-   // margin-bottom: 36px ;
-    //margin-left: 8px ;
-   // margin-right: 8px ;
     padding: 20px ;  
     
     display: flex;
@@ -37,11 +34,6 @@
         position:relative;
         float: right;
         margin-left: auto;
-        /* ON hover colours, implement later
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #adadad;
-        */
         border: 1px solid;
         border-color: #ccc ;
     }
