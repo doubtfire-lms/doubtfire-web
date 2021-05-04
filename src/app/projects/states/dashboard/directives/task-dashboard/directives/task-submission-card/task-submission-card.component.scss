@@ -2,6 +2,7 @@
     padding:0 ;
 
 .mat-card-title{
+    display:inline;
     font-weight: 400;
     font-size: 18px;
     margin-top: 10px  ;
@@ -11,8 +12,8 @@
 .mat-card-actions {
     position: relative;
     padding: 20px ;  
-    
     display: flex;
+    margin-bottom: 10px;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
     .mat-button:first-of-type {
         
@@ -27,10 +28,7 @@
         
         color: #333;
         background-color: #fff ;
-        
-        
         right: 0;
-     
         position:relative;
         float: right;
         margin-left: auto;
@@ -49,7 +47,6 @@
     background-color: #337ab7;
     border-color: #2e6da4;
     display:inline-block;
-    
     font-weight: 400;
     text-align: center;
     vertical-align: middle;
