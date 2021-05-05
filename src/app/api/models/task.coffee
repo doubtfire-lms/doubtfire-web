@@ -35,7 +35,7 @@ angular.module("doubtfire.api.models.task", [])
     "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.task_definition_id}/comments/#{commentID}/discussion_comment/response?as_attachment=false&auth_token=#{currentUser.authenticationToken}"
 
   Task.generateSubmissionUrl = (project, task) ->
-    "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission"
 
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
