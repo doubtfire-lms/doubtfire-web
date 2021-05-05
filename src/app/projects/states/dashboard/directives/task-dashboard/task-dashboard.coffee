@@ -11,7 +11,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     task: '='
     showFooter: '@?'
     showSubmission: '@?'
-  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService) ->
+  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService, fileDownloaderService) ->
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
@@ -38,6 +38,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
         taskSubmissionPdfAttachmentUrl: TaskFeedback.getTaskUrl($scope.task, true)
         taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
       }
+
       updateCurrentView()
     )
 
@@ -61,6 +62,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       # Triggers a new update to the task status
       $scope.triggerTransition = (status) ->
         taskService.updateTaskStatus $scope.task.project().unit(), $scope.task.project(), $scope.task, status
+
+      $scope.downloadSubmission = () ->
+        fileDownloaderService.downloadFile($scope.urls.taskSubmissionPdfAttachmentUrl)
+
+      $scope.downloadSubmittedFiles = () ->
+        fileDownloaderService.downloadFile($scope.urls.taskFilesUrl)
 
 
 )
