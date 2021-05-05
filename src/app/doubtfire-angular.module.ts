@@ -136,6 +136,7 @@ import {
   UserService,
   WebcalService,
 } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
 
 @NgModule({
   // Components we declare
@@ -241,6 +242,7 @@ import {
     WebcalService,
     ActivityTypeService,
     EmojiService,
+    FileDownloaderService,
     userProvider,
     groupServiceProvider,
     unitProvider,

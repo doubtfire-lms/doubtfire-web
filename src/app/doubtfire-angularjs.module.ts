@@ -285,6 +285,7 @@ import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskCommentService } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -313,6 +314,7 @@ DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialSt
 DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
+DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(FileDownloaderService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(

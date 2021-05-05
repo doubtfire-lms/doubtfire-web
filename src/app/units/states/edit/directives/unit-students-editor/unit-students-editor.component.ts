@@ -10,6 +10,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Component({
   selector: 'unit-students-editor',
@@ -42,7 +43,8 @@ export class UnitStudentsEditorComponent {
     @Inject(alertService) private alerts: any,
     @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(csvResultModalService) private csvResultModal: any
+    @Inject(csvResultModalService) private csvResultModal: any,
+    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
   ) {}
 
   ngOnInit() {}
@@ -133,28 +135,6 @@ export class UnitStudentsEditorComponent {
   downloadEnrolments() {
     const url: string = this.unitService.enrolStudentsCSVUrl(this.unit);
 
-    this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
-      (response) => {
-        const binaryData = [];
-        binaryData.push(response.body);
-        const downloadLink = document.createElement('a');
-        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'text/csv' }));
-        downloadLink.target = '_blank';
-        const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
-        if (matches != null && matches[1]) {
-          const filename = matches[1].replace(/['']/g, '');
-          downloadLink.setAttribute('download', filename);
-        } else {
-          downloadLink.setAttribute('download', `${this.unit.code}-enrolments.csv`);
-        }
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        downloadLink.parentNode.removeChild(downloadLink);
-      },
-      (error) => {
-        this.alerts.add('danger', `Error downloading enrolments - ${error}`);
-      }
-    );
+    this.fileDownloader.downloadFile(url, `${this.unit.code}-students.csv`);
   }
 }
