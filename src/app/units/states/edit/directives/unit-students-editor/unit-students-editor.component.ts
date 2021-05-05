@@ -121,7 +121,7 @@ export class UnitStudentsEditorComponent {
       'Upload Students to Withdraw',
       'Test message',
       { file: { name: 'Withdraw CSV Data', type: 'csv' } },
-      this.unitService.enrolStudentsCSVUrl(this.unit),
+      this.unitService.withdrawStudentsCSVUrl(this.unit),
       (response: any) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);

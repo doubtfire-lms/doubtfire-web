@@ -9,7 +9,7 @@ angular.module("doubtfire.api.models.unit", [])
   Unit.getAllTaskSubmissionsUrl = (unit, td) ->
     "#{DoubtfireConstants.API_URL}/submission/unit/#{unit?.id}/task_definitions/#{td?.id}/download_submissions?auth_token=#{currentUser.authenticationToken}"
   Unit.taskUploadUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/task_pdfs?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/task_pdfs"
   Unit.taskSheetUploadUrl = (unit, taskDefinition) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_sheet?auth_token=#{currentUser.authenticationToken}"
   Unit.taskResourcesUploadUrl = (unit, taskDefinition) ->
@@ -17,9 +17,9 @@ angular.module("doubtfire.api.models.unit", [])
   Unit.allResourcesDownloadUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/all_resources?auth_token=#{currentUser.authenticationToken}"
   Unit.enrolStudentsCSVUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}/withdraw?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}/withdraw"
 
   Unit.learningProgressClassStats = resourcePlus "/units/:id/learning_alignments/class_stats", { id: "@id" }
   Unit.learningProgressClassDetails = resourcePlus "/units/:id/learning_alignments/class_details", {id: "@id"}
