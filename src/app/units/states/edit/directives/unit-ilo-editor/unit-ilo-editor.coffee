@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-ilo-editor',[])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.tpl.html'
-  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CsvResultModal, UnitILOEditModal) ->
+  controller: ($scope, $modal, $rootScope, IntendedLearningOutcome, alertService, CsvResultModal, UnitILOEditModal, fileDownloaderService) ->
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchOutcomeUrl = ->
       IntendedLearningOutcome.getOutcomeBatchUploadUrl($scope.unit)
@@ -21,6 +21,9 @@ angular.module('doubtfire.units.states.edit.directives.unit-ilo-editor',[])
 
     $scope.createILO = ->
       $scope.editILO()
+
+    $scope.downloadCSV = ->
+      fileDownloaderService.downloadFile($scope.batchOutcomeUrl(), "#{$scope.unit.code}-learning-outcomes.csv")
 
     $scope.deleteILO = (ilo) ->
       IntendedLearningOutcome.delete { id: ilo.id, unit_id: $scope.unit.id },
