@@ -137,6 +137,7 @@ import {
   WebcalService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 
 @NgModule({
   // Components we declare
@@ -151,6 +152,7 @@ import { FileDownloaderService } from './common/file-downloader/file-downloader'
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
+    PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
     ExtensionModalComponent,
