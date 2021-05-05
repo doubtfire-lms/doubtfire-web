@@ -7,13 +7,13 @@
   <div class="pdf-viewer-footer" *ngIf="!hideFooter">
     <div class="pull-left text-muted" [hidden]="!footerText"><strong>Note:</strong> {{ footerText }}</div>
     <div class="pull-right btn-group">
-      <a (click)="downloadEvent('Resources')" [href]="resourcesUrl" class="btn btn-primary" *ngIf="resourcesUrl">
+      <a (click)="downloadResources()" class="btn btn-primary" *ngIf="resourcesUrl">
         <i class="fa fa-download"></i><span> Resources</span>
       </a>
-      <a (click)="downloadEvent('PDF')" [href]="pdfUrl + '&as_attachment=true'" class="btn btn-success">
+      <button (click)="downloadPdf()" class="btn btn-success">
         <i class="fa fa-download"></i><span [hidden]="!resourcesUrl"> PDF</span>
-      </a>
+      </button>
     </div>
   </div>
-  <!--/panel-footer-->
+  <!--/panel-footer-->''
 </div>
