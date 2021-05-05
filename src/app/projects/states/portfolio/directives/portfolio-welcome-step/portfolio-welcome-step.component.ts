@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'portfolio-welcome-step',
@@ -7,7 +7,7 @@ import { Component, Input, OnInit, Inject } from '@angular/core';
 })
 export class PortfolioWelcomeStepComponent 
 {
-  @Input() advanceActiveTab: any;
+  @Input() advanceActiveTab: number;
   @Input() externalName: any;
   constructor() 
   {
