@@ -1,5 +1,7 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Task } from 'src/app/ajs-upgraded-providers';
+import { alertService, Task } from 'src/app/ajs-upgraded-providers';
+import { FileDownloaderService } from '../file-downloader/file-downloader';
 
 @Component({
   selector: 'audio-player',
@@ -21,7 +23,11 @@ export class AudioPlayerComponent implements OnInit {
   currentTime = 0;
   audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
 
-  constructor(@Inject(Task) private TaskModel) {
+  constructor(
+    @Inject(Task) private TaskModel,
+    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
+    @Inject(alertService) private alerts: any
+  ) {
     this.audio.ontimeupdate = () => {
       const percentagePlayed = this.audio.currentTime / this.audio.duration;
       this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
@@ -43,14 +49,9 @@ export class AudioPlayerComponent implements OnInit {
     const offset = evt.offsetX;
     const percent = offset / this.progressBar.nativeElement.offsetWidth;
 
-    if (!this.isLoaded) {
-      this.loadAudio();
-      this.audio.onloadeddata = () => {
-        this.setTime(percent);
-      };
-    } else {
+    this.execWithAudio(true, () => {
       this.setTime(percent);
-    }
+    });
   }
 
   public setSrc(src: string) {
@@ -62,25 +63,51 @@ export class AudioPlayerComponent implements OnInit {
     this.audioProgress = 0;
   }
 
-  loadAudio() {
-    this.isLoaded = true;
-    if (this.project && this.task && this.comment) {
-      this.audio.src = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
-    } else if (this.audioSrc) {
-      this.audio.src = this.audioSrc.src;
+  private execWithAudio(onLoad: boolean, fn: () => void) {
+    if (this.isLoaded) {
+      fn();
+    } else {
+      let url: string;
+      if (this.project && this.task && this.comment) {
+        url = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+      } else if (this.audioSrc) {
+        url = this.audioSrc.src;
+      }
+
+      this.fileDownloader.downloadBlob(
+        url,
+        ((blobUrl: string, response: HttpResponse<Blob>) => {
+          this.isLoaded = true;
+          this.setSrc(blobUrl);
+          this.audio.src = blobUrl;
+          this.audio.load();
+          if (onload) {
+            this.audio.onloadeddata = () => {
+              fn();
+            };
+          } else {
+            fn();
+          }
+        }).bind(this),
+        ((error: any) => {
+          this.alerts.add('danger', `Error loading audio. ${error}`, 6000);
+        }).bind(this)
+      );
     }
   }
 
   pausePlay() {
-    if (!this.isLoaded) {
-      this.loadAudio();
-    }
-    if (this.audio.paused) {
-      this.audio.play();
-      this.isPlaying = true;
-    } else {
-      this.audio.pause();
-      this.isPlaying = false;
-    }
+    this.execWithAudio(
+      true,
+      (() => {
+        if (this.audio.paused) {
+          this.audio.play();
+          this.isPlaying = true;
+        } else {
+          this.audio.pause();
+          this.isPlaying = false;
+        }
+      }).bind(this)
+    );
   }
 }
