@@ -105,7 +105,9 @@
         Download a CSV of all users registered with {{externalName.value}}.
       </div>
       <div class="panel-body text-center">
-        <a href="batchUserUrl" class="btn btn-primary btn-download"> <i class="fa fa-download"></i> Download </a>
+        <button ng-click="downloadUsersCSV()" class="btn btn-primary btn-download">
+          <i class="fa fa-download"></i> Download
+        </button>
       </div>
     </div>
   </div>
