@@ -7,7 +7,7 @@ import { Component, Input} from '@angular/core';
 })
 export class PortfolioWelcomeStepComponent 
 {
-  @Input() advanceActiveTab: number;
+  @Input() advanceActiveTab: any;
   @Input() externalName: any;
   constructor() 
   {
