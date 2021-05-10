@@ -1,4 +1,5 @@
 import { Component, Input} from '@angular/core';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'portfolio-welcome-step',
@@ -7,11 +8,16 @@ import { Component, Input} from '@angular/core';
 })
 export class PortfolioWelcomeStepComponent 
 {
-  @Input() advanceActiveTab: any;
-  @Input() externalName: any;
-  constructor() 
-  {
-
-  }
-} 
+  @Input() advanceActiveTab: number;
   
+  @Input() externalName: string;
+  
+  constructor(private constants: DoubtfireConstants) 
+  {
+    constants.ExternalName.subscribe((result) => {​​​​​​​​
+       this.externalName = result;
+      }​​​​​​​​);
+    }​​​​​​​​
+  
+
+} 
