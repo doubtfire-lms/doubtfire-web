@@ -4,9 +4,9 @@ angular.module("doubtfire.api.models.task-alignment", [])
   TaskAlignment = {}
   TaskAlignment.taskAlignmentCSVUploadUrl = (unit, project_id) ->
     if project_id?
-      "#{DoubtfireConstants.API_URL}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}&auth_token=#{currentUser.authenticationToken}"
+      "#{DoubtfireConstants.API_URL}/units/#{unit.id}/learning_alignments/csv.json?project_id=#{project_id}"
     else
-      "#{DoubtfireConstants.API_URL}/units/#{unit.id}/learning_alignments/csv.json?auth_token=#{currentUser.authenticationToken}"
+      "#{DoubtfireConstants.API_URL}/units/#{unit.id}/learning_alignments/csv.json"
 
   TaskAlignment.downloadCSV = (unit, project_id) ->
     if project_id?
