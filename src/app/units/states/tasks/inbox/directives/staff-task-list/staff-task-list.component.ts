@@ -37,8 +37,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   isNarrow: boolean;
 
-  submissionsPdfsUrl: string;
-  submissionsUrl: string;
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
   tutorials: any[] = null;
@@ -134,17 +132,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.filters?.taskDefinitionIdSelected &&
       this.showSearchOptions;
 
-    if (this.isTaskDefMode) {
-      this.submissionsPdfsUrl = this.taskDef.getSubmissionsPdfsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
-      this.submissionsUrl = this.taskDef.getSubmissionsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
-    }
-
     this.tutorialIdChanged();
 
     this.setTaskDefFromTaskKey(this.taskData.taskKey);
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
+  }
+
+  downloadSubmissionPdfs() {
+    this.taskDef.downloadSubmissionsPdfs(this.unit, this.filters.taskDefinition);
+  }
+
+  downloadSubmissions() {
+    this.taskDef.downloadSubmissions(this.unit, this.filters.taskDefinition);
   }
 
   openDialog() {
@@ -201,8 +202,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   taskDefinitionIdChanged() {
     let taskDef;
-    this.submissionsUrl = this.taskDef.getSubmissionsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
-    this.submissionsPdfsUrl = this.taskDef.getSubmissionsPdfsUrl(this.unit.id, this.filters.taskDefinitionIdSelected);
     const taskDefId = this.filters.taskDefinitionIdSelected;
     if (taskDefId) {
       taskDef = this.unit.taskDef(taskDefId);

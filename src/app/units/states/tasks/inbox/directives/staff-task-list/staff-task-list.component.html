@@ -52,19 +52,18 @@
       >
         <form class="search-options">
           <div class="task-definition">
-            <div class="dropdown" dropdown>
+            <div *ngIf="isTaskDefMode" class="dropdown" dropdown>
               <i
-                *ngIf="isTaskDefMode"
                 class="fa fa-download pull-right dropdown-toggle"
                 style="cursor: pointer; padding-top: 8px; padding-right: 8px"
                 dropdown-toggle
               ></i>
               <ul class="dropdown-menu pull-right">
                 <li>
-                  <a [href]="submissionsPdfsUrl">Bulk Export Submission PDFs</a>
+                  <a (click)="downloadSubmissionPdfs()">Bulk Export Submission PDFs</a>
                 </li>
                 <li>
-                  <a [href]="submissionsUrl">Bulk Export Submission Files</a>
+                  <a (click)="downloadSubmissions()">Bulk Export Submission Files</a>
                 </li>
               </ul>
             </div>
@@ -159,8 +158,7 @@
             (mouseover)="task.hover = true"
             (mouseout)="task.hover = false"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30">
-            </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project().name }}</h4>
               <p class="mat-small">
