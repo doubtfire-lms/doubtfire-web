@@ -6,8 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable()
 export class CheckForUpdateService {
   constructor(appRef: ApplicationRef, private updates: SwUpdate, private _snackBar: MatSnackBar) {
-    console.log('Checking for updates every 6 hours');
-
     // Allow the app to stabilize first, before starting polling for updates with `interval()`.
     // const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
 
@@ -16,7 +14,6 @@ export class CheckForUpdateService {
     // const updateIntervalOnceAppIsStable$ = concat(appIsStable$, updateInterval$);
 
     updateInterval$.subscribe(() => {
-      console.log('Checking for updates');
       // If uncommented, will alert the user that it's checking for updates
 
       // let snackBarRef = this._snackBar.open('Checking for app updates');
@@ -42,7 +39,6 @@ export class CheckForUpdateService {
   }
 
   checkForupdate() {
-    console.log('Checking for udpate');
     this.updates.checkForUpdate();
   }
 }

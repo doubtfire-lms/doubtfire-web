@@ -151,7 +151,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(this.searchDialog);
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      // console.log(`Dialog result: ${result}`);
     });
   }
 

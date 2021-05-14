@@ -9,6 +9,10 @@
   border-right-width: 1px;
 }
 
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
 .task-inbox.full-width {
   max-width: 350px;
   min-width: 350px;
@@ -81,7 +85,6 @@ $warn-color: #f44336;
 
 .truncate {
   min-width: 0;
-  max-width: 150px;
   h4,
   p {
     white-space: nowrap;
