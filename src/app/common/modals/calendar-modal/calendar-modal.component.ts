@@ -89,7 +89,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     new Promise((resolve) =>
       setTimeout(() => {
         this.copying = false;
-        resolve();
+        resolve(null);
       }, 1000)
     ).then();
   }
