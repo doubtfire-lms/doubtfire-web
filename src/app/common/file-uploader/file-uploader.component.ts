@@ -409,7 +409,7 @@ export class FileUploaderComponent {
             }
           };
           xhr.upload.onprogress = function (event) {
-            $scope.uploadingInfo.progress = parseInt((event.position * 100.0) / event.totalSize);
+            $scope.uploadingInfo.progress = Math.floor((event.position * 100.0) / event.totalSize);
             return $scope.$apply();
           };
           if ($scope.method == null) {
