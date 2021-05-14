@@ -1,4 +1,4 @@
-angular.module('doubtfire.common.file-uploader', [])
+angular.module('doubtfire.src.app.common.file-uploader', [])
 
 .directive 'fileUploader', ->
   restrict: 'E'

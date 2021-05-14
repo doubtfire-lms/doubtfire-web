@@ -1,8 +1,9 @@
 import { Component, Input, Inject } from '@angular/core';
+import { UpgradeAdapter } from '@angular/upgrade';
 import * as angular from 'angular';
 import * as _ from 'lodash';
 import {} from 'src/app/ajs-upgraded-providers';
-
+//import  {}  from 'src/app/common/file-uploader/file-uploader.component';
 @Component({
   selector: 'file-uploader',
   templateUrl: 'file-uploader.component.html',
