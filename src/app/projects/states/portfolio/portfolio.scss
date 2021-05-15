@@ -1,10 +1,153 @@
-#portfolio-state > .panel {
-  width: 75%;
-  margin: 0 auto;
-  .card {
-    margin-top: 1.5em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+#portfolio-state>.panel {
+    width: 75%;
+    margin: 0 auto;
+    .card {
+        margin-top: 1.5em;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+    }
+}
+#portfolio-state{
+ 
+  .mat-card{
+    margin: 0 auto;
+    padding: 0px;
+    background-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(221, 221, 221);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-style: solid;
+    border-bottom-width: 1.25px;
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(221, 221, 221);
+    border-left-style: solid;
+    border-left-width: 1.25px;
+    border-right-color: rgb(221, 221, 221);
+    border-right-style: solid;
+    border-right-width: 1.25px;
+    border-top-color: rgb(221, 221, 221);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-style: solid;
+    border-top-width: 1.25px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    font-family: "Roboto", Helvetica;
+    font-size: 12px;
+    line-height: 24px;
+    width: 75%;
+ 
+
+.mat-card-title{
+    
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 17.6px;
+
+  background-color: rgb(245, 245, 245);
+  border-bottom-color: rgb(221, 221, 221);
+  border-bottom-style: solid;
+  border-bottom-width: 1.25px;
+  border-left-color: rgb(221, 221, 221);
+  border-right-color: rgb(221, 221, 221);
+  border-top-color: rgb(221, 221, 221);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  box-sizing: border-box;
+  color: rgb(51, 51, 51);
+  font-family: "Roboto", Helvetica;
+  
+  
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+
+    
+}
+.mat-card-footer {
+
+
+margin: 0;
+}
+.mat-card-actions {
+ 
+  display: flex;
+  margin: 0;
+  border-top: 1px solid rgba(160, 160, 160, 0.2);
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  
+}
+
+.mat-card-content{
+  padding:16px ;
+  margin-bottom: 0;
+}
+.mat-flat-button{
+
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #204d74;
+
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  border-radius: 4px;
+
+
+  
+  display:inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+
+}
+
+.mat-card-header{
+  background-color: #f5f5f5;
+  border-bottom: 1px solid hsla(0,0%,62.7%,.2);
+  box-sizing: border-box;
+  font-family: Roboto,Helvetica;
+  font-size: 1.2em;
+  line-height: 2;
+  font-weight: 400;
+  padding:15px 20px ;
+
+  
+}
+h4{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 400 ;
+  margin: 8px  ;
+  
+  
+}
+.card.card-default > .card-heading
+{
+  background-color: #f5f5f5;
+  padding: 15px 20px;
+}
+.mat-card-header .mat-card-title {
+   margin-bottom:0px; 
+ }
+
+
+
   }
 }

@@ -8,16 +8,17 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 })
 export class PortfolioWelcomeStepComponent 
 {
-  @Input() advanceActiveTab: number;
   
-  @Input() externalName: string;
+  @Input() advanceActiveTab: (TabNumber : number) => void;
+  //HTML componenet is read first so externalName is defiined to prevent compilation errors
+  externalName = {
+    value: ""
+  };
   
   constructor(private constants: DoubtfireConstants) 
   {
     constants.ExternalName.subscribe((result) => {​​​​​​​​
-       this.externalName = result;
+       this.externalName.value = result;
       }​​​​​​​​);
     }​​​​​​​​
-  
-
 } 
