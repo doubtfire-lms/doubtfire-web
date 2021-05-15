@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, fileDownloaderService) ->
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
@@ -74,8 +74,11 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.changeTaskStream = (task, stream) ->
       task.tutorial_stream = stream
 
-    $scope.taskPDFUrl = ->
-      "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
+    $scope.downloadTaskPDFUrl = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
+
+    $scope.downloadTaskResources = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
 
     $scope.removeTaskSheet = (task) ->
       TaskDefinition.taskSheet.delete { unit_id: $scope.unit.id, task_def_id: task.id},
@@ -103,10 +106,6 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.onTaskResourcesSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.has_task_resources = true
-
-    $scope.resourceUrl = ->
-      Task.getTaskResourcesUrl($scope.unit, $scope.task)
-
 
     #
     # Sets the active tab

@@ -1,7 +1,7 @@
 import { Component, Input, Inject } from '@angular/core';
 import { Moment } from 'moment';
 import { gradeService, Task } from 'src/app/ajs-upgraded-providers';
-import { saveAs } from 'file-saver';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Component({
   selector: 'task-description-card',
@@ -15,7 +15,11 @@ export class TaskDescriptionCardComponent {
 
   public grades: { names: any; acronyms: any };
 
-  constructor(@Inject(gradeService) private GradeService: any, @Inject(Task) private taskAPI: any) {
+  constructor(
+    @Inject(gradeService) private GradeService: any,
+    @Inject(Task) private taskAPI: any,
+    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
+  ) {
     this.grades = {
       names: GradeService.grades,
       acronyms: GradeService.gradeAcronyms,
@@ -23,14 +27,14 @@ export class TaskDescriptionCardComponent {
   }
 
   public downloadTaskSheet() {
-    saveAs(
+    this.fileDownloader.downloadFile(
       this.taskAPI.getTaskPDFUrl(this.unit, this.taskDef),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskSheet.pdf`
     );
   }
 
   public downloadResources() {
-    saveAs(
+    this.fileDownloader.downloadFile(
       this.taskAPI.getTaskResourcesUrl(this.unit, this.taskDef),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`
     );
