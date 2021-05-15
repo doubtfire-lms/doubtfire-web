@@ -74,8 +74,7 @@
     "ts-md5": "^1.2.7",
     "tslib": "^2.0.0",
     "underscore.string": "2.3.3",
-    "zone.js": "~0.10.3",
-    "file-saver": "^2.0.5"
+    "zone.js": "~0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.2",
