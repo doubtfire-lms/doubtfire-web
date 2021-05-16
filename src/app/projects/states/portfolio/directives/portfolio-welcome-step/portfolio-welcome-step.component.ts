@@ -10,7 +10,7 @@ export class PortfolioWelcomeStepComponent
 {
   
   @Input() advanceActiveTab: (TabNumber : number) => void;
-  //HTML componenet is read first so externalName is defiined to prevent compilation errors
+  //HTML componenet is read first so externalName is defined to prevent compilation errors
   externalName = {
     value: ""
   };
