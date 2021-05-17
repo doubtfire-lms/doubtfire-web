@@ -3,19 +3,17 @@ angular.module("doubtfire.api.models.unit", [])
 .factory("Unit", (resourcePlus, currentUser, $window, DoubtfireConstants) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
   Unit.getGradesUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit?.id}/grades?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit?.id}/grades"
   Unit.getPortfoliosUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/submission/unit/#{unit?.id}/portfolio?auth_token=#{currentUser.authenticationToken}"
-  Unit.getAllTaskSubmissionsUrl = (unit, td) ->
-    "#{DoubtfireConstants.API_URL}/submission/unit/#{unit?.id}/task_definitions/#{td?.id}/download_submissions?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/submission/unit/#{unit?.id}/portfolio"
   Unit.taskUploadUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/task_pdfs"
   Unit.taskSheetUploadUrl = (unit, taskDefinition) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_sheet?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_sheet"
   Unit.taskResourcesUploadUrl = (unit, taskDefinition) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_resources?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_resources"
   Unit.allResourcesDownloadUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/all_resources?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/all_resources"
   Unit.enrolStudentsCSVUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
