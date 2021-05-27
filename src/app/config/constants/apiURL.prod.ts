@@ -1,4 +1,4 @@
 let API_URL: string;
 
-API_URL = `https://${window.location.host}/api`;
+API_URL = `${window.location.origin}/api`;
 export default API_URL;
