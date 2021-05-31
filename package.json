@@ -9,7 +9,7 @@
     "build": "run-s -l build:angular1 build:angular12",
     "build:angular1": "grunt build",
     "build:angular12": "ng build",
-    "serve:angular12": "ng serve --host 0.0.0.0 --sourceMap='true'",
+    "serve:angular12": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --host 0.0.0.0 --sourceMap='true'",
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular12",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --deleteOutputPath=true --optimization=true --prod --output-path dist",
