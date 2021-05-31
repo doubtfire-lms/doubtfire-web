@@ -13,7 +13,8 @@
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular12",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --deleteOutputPath=true --optimization=true --prod --output-path dist",
-    "deploy": "run-s -l build:angular1 deploy:build2api"
+    "deploy": "run-s -l build:angular1 deploy:build2api",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -86,6 +87,8 @@
     "@angular-eslint/template-parser": "12.0.0",
     "@angular/compiler-cli": "^12.0.2",
     "@angular/language-service": "^12.0.2",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@types/d3": "^5.7.2",
     "@types/file-saver": "^2.0.1",
     "@types/jasmine": "~2.8.6",
@@ -124,7 +127,7 @@
     "grunt-preprocess": "5.1.0",
     "grunt-sass": "^3.0.2",
     "grunt-sass-globbing": "^1.4.0",
-    "husky": "^4.3.6",
+    "husky": "^6.0.0",
     "ip": "^1.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -146,10 +149,5 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "~4.2.4",
     "underscore": "^1.8.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint"
-    }
   }
 }
