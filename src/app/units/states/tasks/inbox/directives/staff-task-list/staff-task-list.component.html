@@ -172,7 +172,7 @@
                 </p>
                 <p class="mat-small">Submitted {{ task.submission_date | humanizedDate }}</p>
                 <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
-                  Assessed {{ task.times_assessed }} time{{ task.times_assessed == 1 ? '' : 's' }}
+                  Assessed {{ task.times_assessed }} time{{ task.times_assessed === 1 ? '' : 's' }}
                 </p>
               </div>
             </div>
