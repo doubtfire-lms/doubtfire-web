@@ -1,4 +1,4 @@
-// tslint:disable: no-shadowed-variable
+/* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 
 import {
   Component,
