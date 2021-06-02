@@ -66,7 +66,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
 }
 
 // The Dialog Component
-// tslint:disable-next-line: max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 @Component({
   selector: 'intelligent-discussion-dialog',
   templateUrl: 'intelligent-discussion-dialog.html',

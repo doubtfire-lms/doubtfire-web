@@ -8,7 +8,7 @@ export class TasksForInboxSearchPipe implements PipeTransform {
   transform(tasks: any[], searchText: string): any[] {
     if ((searchText == null) || (tasks == null)) { return tasks; }
     const searchTerms = searchText.toLowerCase().split(/&|[|]|,/).map(term => term.trim());
-    const operators = searchText.replace(/[^&|,]/g, "").split("")
+    const operators = searchText.replace(/[^&|,]/g, '').split('')
 
     return tasks.filter((task: { matches: (text: string) => boolean }) =>
       searchTerms.map((term: string) => task.matches(term))
