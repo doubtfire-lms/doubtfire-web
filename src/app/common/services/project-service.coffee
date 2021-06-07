@@ -191,7 +191,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.group = ->
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
-      TaskCommentService.addComment(task, textString).subscribe(
+      TaskCommentService.addComment(task, textString, 'text').subscribe(
         (tc) -> success(tc)
         (error) -> failure(error)
       )
