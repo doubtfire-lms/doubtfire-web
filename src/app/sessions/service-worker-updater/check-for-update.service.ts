@@ -15,15 +15,14 @@ export class CheckForUpdateService {
 
     updateInterval$.subscribe(() => {
       // If uncommented, will alert the user that it's checking for updates
-
-      // let snackBarRef = this._snackBar.open('Checking for app updates');
       // snackBarRef.onAction().subscribe(result => {
-      //     updates.activateUpdate().then(() => document.location.reload());
-      // });
+        //     updates.activateUpdate().then(() => document.location.reload());
+        // });
+      console.log('Checking for updates')
       this.updates.checkForUpdate();
     });
 
-    this.updates.available.subscribe((event) => {
+    this.updates.available.subscribe(event => {
       const snackBarRef = this._snackBar.open(
         'An update to the app has been found, would you like to refresh now?',
         'refresh'
@@ -33,8 +32,10 @@ export class CheckForUpdateService {
       });
     });
 
-    this.updates.unrecoverable.subscribe((event) => {
-      document.location.reload();
+    this.updates.unrecoverable.subscribe(event => {
+      this._snackBar.open(
+        'An error occured during update, please refresh the page'
+      );
     });
   }
 
