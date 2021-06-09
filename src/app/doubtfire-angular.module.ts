@@ -1,3 +1,6 @@
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -139,6 +142,7 @@ import {
   WebcalService,
 } from './api/models/doubtfire-model';
 
+
 @NgModule({
   // Components we declare
   declarations: [
@@ -232,7 +236,7 @@ import {
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerImmediately',
+      registrationStrategy: () => interval(6000).pipe(take(1))
     }),
   ],
   // Services we provide
