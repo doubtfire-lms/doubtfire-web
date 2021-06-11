@@ -143,7 +143,7 @@
     maxBufferPx="400"
   >
     <mat-list>
-      <mat-list-item class="clearfix" *cdkVirtualFor="let task of filteredTasks" style="padding: 0">
+      <mat-list-item class="clearfix" *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0" style="padding: 0">
         <div
           style="width: 100%"
           id="{{ task.taskKeyToIdString() }}"
