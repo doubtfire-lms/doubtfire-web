@@ -93,7 +93,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -297,8 +297,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const funcName = taskEl.scrollIntoViewIfNeeded
       ? 'scrollIntoViewIfNeeded'
       : taskEl.scrollIntoView
-      ? 'scrollIntoView'
-      : '';
+        ? 'scrollIntoView'
+        : '';
     if (!funcName) {
       return;
     }
@@ -337,7 +337,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (task.pinned) {
       task.unpin(
         task.id,
-        (sucess: any) => {},
+        (sucess: any) => { },
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }
@@ -345,7 +345,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     } else {
       task.pin(
         task.id,
-        (sucess: any) => {},
+        (sucess: any) => { },
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }
