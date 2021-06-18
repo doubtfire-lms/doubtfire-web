@@ -66,6 +66,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   taskDefSort = 0
   tutorialSort = 0
+  originalFilteredTasks: any[] = null;
 
   @HostListener('document:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -173,6 +174,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
+    this.originalFilteredTasks = filteredTasks;
 
     // Fix selected task.
     if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
