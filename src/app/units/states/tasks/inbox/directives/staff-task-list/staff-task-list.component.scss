@@ -130,6 +130,10 @@ $warn-color: #f44336;
   background-color: transparent;
 }
 
+:host ::ng-deep div.mat-expansion-panel-body{
+  padding-right: 0 !important;
+}
+
 user-icon {
   margin-right: 10px;
 }
