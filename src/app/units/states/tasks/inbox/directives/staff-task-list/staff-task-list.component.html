@@ -51,9 +51,11 @@
                 </mat-select>
                 <mat-hint> Display specific task definitions. </mat-hint>
               </mat-form-field>
-              <button mat-icon-button aria-label="Sort by task definition icon" (click)="toggleTaskDefSort()">
+              <button [disabled]="(filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === '')"
+                mat-icon-button aria-label="Sort by task definition icon"(click)="toggleTaskDefSort()">
                 <mat-icon>{{states[taskDefSort].icon}}</mat-icon>
               </button>
+              {{filters.taskDefinitionIdSelected}}
             </div>
           </div>
           <!--/task-definition-->
