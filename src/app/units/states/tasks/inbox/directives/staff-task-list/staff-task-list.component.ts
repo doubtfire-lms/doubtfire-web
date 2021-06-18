@@ -175,6 +175,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
     this.originalFilteredTasks = filteredTasks;
+    this.taskDefSort = 0
+    this.tutorialSort = 0
 
     // Fix selected task.
     if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
@@ -333,6 +335,23 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
   }
 
+  toggleTaskDefSort() {
+    this.taskDefSort = this.taskDefSort < 2 ? ++this.taskDefSort : 0;
+    if (this.originalFilteredTasks == null) {
+      this.originalFilteredTasks = [...this.filteredTasks];
+    }
+    if (this.states[this.taskDefSort].sort == 'ascending') {
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq)]
+    }
+
+    else if (this.states[this.taskDefSort].sort == 'descending') {
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq)]
+    }
+
+    else {
+      this.filteredTasks = this.originalFilteredTasks
+    }
+  }
   togglePin(task) {
     if (task.pinned) {
       task.unpin(
