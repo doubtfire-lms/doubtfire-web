@@ -53,10 +53,19 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
-  taskWithSTudentNamePipe = new TasksForInboxSearchPipe();
+  taskWithStudentNamePipe = new TasksForInboxSearchPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
+
+  states = [
+    { sort: 'default', icon: 'horizontal_rule' },
+    { sort: 'ascending', icon: 'arrow_upward' },
+    { sort: 'descending', icon: 'arrow_downward' }
+  ]
+
+  taskDefSort = 0
+  tutorialSort = 0
 
   @HostListener('document:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
