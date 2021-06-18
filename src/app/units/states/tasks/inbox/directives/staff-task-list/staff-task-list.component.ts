@@ -175,6 +175,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
+    if (this.filteredTasks != null) {
+      this.originalFilteredTasks = [...this.filteredTasks];
+    }
+
+    this.taskDefSort = 0
+    this.tutorialSort = 0
+
     // Fix selected task.
     if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
       this.setSelectedTask(null);
@@ -261,10 +268,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         // Apply initial filters
         this.applyFilters();
         this.loading = false;
-
-        this.originalFilteredTasks = [...this.filteredTasks];
-        this.taskDefSort = 0
-        this.tutorialSort = 0
         // Load initial set task, either the one provided(by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
