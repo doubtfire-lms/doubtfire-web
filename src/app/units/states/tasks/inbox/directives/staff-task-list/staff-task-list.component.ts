@@ -171,7 +171,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
-    filteredTasks = this.taskWithSTudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
     // Fix selected task.
