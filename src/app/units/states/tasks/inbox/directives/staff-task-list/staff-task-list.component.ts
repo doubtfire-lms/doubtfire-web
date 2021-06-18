@@ -352,6 +352,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.filteredTasks = this.originalFilteredTasks
     }
   }
+
+  // toggleTutorialSort() {
+  // }
+
   togglePin(task) {
     if (task.pinned) {
       task.unpin(
