@@ -350,7 +350,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
 
     else {
-      this.filteredTasks = this.originalFilteredTasks
+      this.filteredTasks = [...this.originalFilteredTasks]
     }
   }
 
