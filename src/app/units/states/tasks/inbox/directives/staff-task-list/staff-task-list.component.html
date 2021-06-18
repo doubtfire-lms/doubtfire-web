@@ -39,37 +39,39 @@
                 </li>
               </ul>
             </div>
-            <mat-form-field class="full-width">
-              <mat-label>Task Definition</mat-label>
-              <mat-select
-                [(ngModel)]="filters.taskDefinitionIdSelected"
-                name="taskDefID"
-                (selectionChange)="taskDefinitionIdChanged()"
-              >
-                <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
-                <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
-                  {{ td.abbreviation + ' - ' + td.name }}
-                </mat-option>
-              </mat-select>
-              <mat-hint> Display specific task definitions. </mat-hint>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <mat-form-field fxFlex>
+                <mat-label>Task Definition</mat-label>
+                <mat-select [(ngModel)]="filters.taskDefinitionIdSelected" name="taskDefID"
+                  (selectionChange)="taskDefinitionIdChanged()">
+                  <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
+                  <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
+                    {{ td.abbreviation + ' - ' + td.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-hint> Display specific task definitions. </mat-hint>
+              </mat-form-field>
+              <button mat-icon-button aria-label="Sort by task definition icon" (click)="toggleTaskDefSort()">
+                <mat-icon>{{states[taskDefSort].icon}}</mat-icon>
+              </button>
+            </div>
           </div>
           <!--/task-definition-->
-
-          <mat-form-field class="full-width">
-            <mat-label>Tutorials</mat-label>
-            <mat-select
-              [(ngModel)]="filters.tutorialIdSelected"
-              name="tutorial"
-              (selectionChange)="tutorialIdChanged()"
-            >
-              <mat-option *ngFor="let t of tutorials" [value]="t.id">
-                {{ t.inbox_description }}
-              </mat-option>
-            </mat-select>
-            <mat-hint> Filter tutorials. </mat-hint>
-          </mat-form-field>
-
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field fxFlex>
+              <mat-label>Tutorials</mat-label>
+              <mat-select [(ngModel)]="filters.tutorialIdSelected" name="tutorial"
+                (selectionChange)="tutorialIdChanged()">
+                <mat-option *ngFor="let t of tutorials" [value]="t.id">
+                  {{ t.inbox_description }}
+                </mat-option>
+              </mat-select>
+              <mat-hint> Filter tutorials. </mat-hint>
+            </mat-form-field>
+            <button mat-icon-button aria-label="Sort by tutorial icon" (click)="toggleTutorialSort()">
+              <mat-icon>{{states[tutorialSort].icon}}</mat-icon>
+            </button>
+          </div>
           <!--/tutorial-->
         </form>
       </mat-expansion-panel>
