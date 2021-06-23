@@ -61,6 +61,10 @@
                   <extension-comment [task]="task" [comment]="comment"> </extension-comment>
                 </div>
 
+                <div *ngSwitchCase="'assessment'" class="comment-assessment" *ngIf="overseerEnabled">
+                  <task-assessment-comment [task]="task" [comment]="comment"></task-assessment-comment>
+                </div>
+
                 <div *ngSwitchCase="'text'" class="comment-text">
                   <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                 </div>

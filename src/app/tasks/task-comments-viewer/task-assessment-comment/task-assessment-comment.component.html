@@ -1,0 +1,21 @@
+<div>
+    <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress" style="width: 100%">
+      <hr class="hr-text" [attr.data-content]="comment.created_at | date:'medium'" />
+      <mat-card>
+          <mat-card-subtitle style="text-align: center">
+            <strong>Assessment Summary</strong>
+          </mat-card-subtitle>
+
+          <mat-card-content style="white-space: pre-line">{{comment.comment}} </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-button (click)="showTaskAssessmentResult()" class="btn btn-primary">View full report</button>
+        </mat-card-actions>
+      </mat-card>
+      <hr class="hr-fade" />
+    </div>
+
+    <ng-template #testsInProgress style="width: 100%">
+      <hr class="hr-text" data-content="Tests in Progress" />
+    </ng-template>
+</div>

@@ -258,6 +258,7 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
 import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
@@ -286,6 +287,10 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskCommentService } from './api/models/doubtfire-model';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskSubmissionService } from './common/services/task-submission.service';
+import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -362,6 +367,13 @@ DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
+
+DoubtfireAngularJSModule.directive('taskAssessor',
+  downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive('taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent }));
+DoubtfireAngularJSModule.directive('taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
