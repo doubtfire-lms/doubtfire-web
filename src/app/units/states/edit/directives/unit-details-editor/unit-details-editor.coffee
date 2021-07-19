@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     }
 
     # Get docker images available for automated task assessment for the unit.
-    TaskSubmission.getDockerImagesAsPromise($scope.unit.id).then (images) ->
+    TaskSubmission.getDockerImagesAsPromise().then (images) ->
       $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire
@@ -65,7 +65,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
         allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
         assessment_enabled: $scope.unit.assessment_enabled
-        docker_image_name_tag: $scope.unit.docker_image_name_tag
+        overseer_image_id: $scope.unit.overseer_image_id
       }
 
       if $scope.unit.teaching_period_id

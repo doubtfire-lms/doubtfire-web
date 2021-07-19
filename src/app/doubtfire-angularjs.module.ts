@@ -261,9 +261,9 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
-import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
-import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
-import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CampusListComponent } from './admin/institution-settings/campuses/campus-list/campus-list.component';
+import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
+import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
@@ -320,6 +320,8 @@ DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusServ
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
 DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(CheckForUpdateService));
+DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
+DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -389,6 +391,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

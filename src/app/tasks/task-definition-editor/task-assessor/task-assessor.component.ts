@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { taskService, Task, alertService } from 'src/app/ajs-upgraded-providers';
+import { Component, Input, Inject, OnChanges } from '@angular/core';
+import { taskService, alertService, currentUser } from 'src/app/ajs-upgraded-providers';
+import { OverseerAssessment } from 'src/app/api/models/doubtfire-model';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 
@@ -8,54 +9,58 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
   templateUrl: './task-assessor.component.html',
   styleUrls: ['./task-assessor.component.scss']
 })
-export class TaskAssessorComponent implements OnInit {
-  @Input() task: any;
+export class TaskAssessorComponent implements OnChanges {
+  @Input() taskDefinition: any;
   @Input() unit: any;
   public _hasAnySubmissions: boolean;
+  public currentUserTask: any; // Task
 
   constructor(
     @Inject(alertService) private alerts: any,
     @Inject(taskService) private ts: any,
-    @Inject(TaskAssessmentModalService) private modalService: TaskAssessmentModalService,
-    @Inject(TaskSubmissionService) private submissions: TaskSubmissionService) { }
+    @Inject(currentUser) private currentUser: any,
+    private modalService: TaskAssessmentModalService,
+    private submissions: TaskSubmissionService) {
+  }
 
   private handleError(error: any) {
     this.alerts.add('danger', 'Error: ' + error, 6000);
   }
 
-  ngOnInit() {
-    this.hasAnySubmissions();
-  }
-
   ngOnChanges() {
+    const proj = this.unit.findProjectForUsername(this.currentUser.profile.username);
+    this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
+
     this.hasAnySubmissions();
   }
 
   testSubmission() {
-    this.task.unit_id = this.unit.id;
-    this.ts.presentTaskSubmissionModal(this.task, this.task.status, false, true);
+    this.taskDefinition.unit_id = this.unit.id;
+    this.ts.presentTaskSubmissionModal(this.currentUserTask, this.taskDefinition.status, false, true);
   }
 
   testSubmissionHistory() {
-    this.modalService.show(this.task);
+    this.modalService.show(this.currentUserTask);
   }
 
   hasAnySubmissions() {
-    this.submissions.getLatestSubmissionsTimestamps(this.task)
-    .subscribe(
-      (result) => {
+    if (!this.currentUserTask) return;
+
+    this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask)
+    .subscribe({
+      next: ((result: OverseerAssessment[]) => {
         if (result.length === 0) {
           this._hasAnySubmissions = false;
-          this.task.has_any_submissions = false;
+          this.currentUserTask.has_any_submissions = false;
         } else {
           this._hasAnySubmissions = true;
-          this.task.has_any_submissions = true;
+          this.currentUserTask.has_any_submissions = true;
         }
-      },
-      (error) => {
+      }).bind(this),
+      error: ((error) => {
         this._hasAnySubmissions = false;
-        this.task.has_any_submissions = false;
-      }
-    );
+        this.currentUserTask.has_any_submissions = false;
+      }).bind(this)
+    });
   }
 }

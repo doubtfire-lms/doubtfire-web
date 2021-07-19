@@ -6,8 +6,6 @@ import {TaskAssessmentModalComponent} from './task-assessment-modal.component';
   providedIn: 'root'
 })
 export class TaskAssessmentModalService {
-
-
   constructor(
     public dialog: MatDialog,
     ) { }
@@ -16,6 +14,7 @@ export class TaskAssessmentModalService {
     let dialogRef: MatDialogRef<TaskAssessmentModalComponent, any>;
     dialogRef = this.dialog.open(TaskAssessmentModalComponent, {
       data: task,
+      width: '80%',
       panelClass: 'submission-history-modal'
     });
   }

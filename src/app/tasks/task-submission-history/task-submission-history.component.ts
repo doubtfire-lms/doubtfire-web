@@ -3,6 +3,7 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
 import { map } from 'rxjs/operators';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Subject } from 'rxjs';
+import { OverseerAssessmentService } from 'src/app/api/models/overseer-models/overseer-assessment/overseer-assessment.service';
 
 export interface ISubmissionTab {
   id?: number;
@@ -48,7 +49,8 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
   constructor(
     @Inject(alertService) private alerts: any,
-    @Inject(TaskSubmissionService) private submissions: TaskSubmissionService,
+    private submissions: TaskSubmissionService,
+    private overseerAssessmentService: OverseerAssessmentService
   ) { }
 
   ngOnInit() {
@@ -64,24 +66,24 @@ export class TaskSubmissionHistoryComponent implements OnInit {
   }
 
   fillTabs(): void {
-    this.submissions.getLatestSubmissionsTimestamps(this.task);
-    let transformedData = this.submissions.getLatestSubmissionsTimestamps(this.task).pipe(
-      map(data => {
-        return data.result.map((ts: any) => {
-          return {
-            timestamp: new Date(ts.submission_timestamp * 1000),
-            content: '',
-            timestampString: ts.submission_timestamp,
-            taskStatus: ts.result_task_status,
-            submissionStatus: ts.status,
-            createdAt: ts.created_at,
-            updatedAt: ts.updated_at,
-            taskId: ts.task_id};
-        });
-      })
-    );
+    // this.submissions.getLatestSubmissionsTimestamps(this.task);
+    // let transformedData = this.overseerAssessmentService.queryForTask(this.task).pipe(
+    //   map(data => {
+    //     return data.map((ts: any) => {
+    //       let result = new SubmissionTab();
+    //         timestamp: new Date(ts.submission_timestamp * 1000),
+    //         content: '',
+    //         timestampString: ts.submission_timestamp,
+    //         taskStatus: ts.result_task_status,
+    //         submissionStatus: ts.status,
+    //         createdAt: ts.created_at,
+    //         updatedAt: ts.updated_at,
+    //         taskId: ts.task_id};
+    //     });
+    //   })
+    // );
 
-    transformedData.subscribe(
+    this.overseerAssessmentService.queryForTask(this.task).subscribe(
       tabs => {
         if (tabs.length === 0) {
           this.tabs = [{timestamp: new Date()}];
@@ -89,11 +91,11 @@ export class TaskSubmissionHistoryComponent implements OnInit {
         } else {
           this.tabs = tabs;
         }
-        if (this.selectedTab.timestampString) {
-          this.openSubmission(tabs.filter(x => x.timestampString === this.selectedTab.timestampString)[0]);
-        } else {
-          this.openSubmission(tabs[0]);
-        }
+        // if (this.selectedTab.timestampString) {
+        //   this.openSubmission(tabs.filter(x => x.timestampString === this.selectedTab.timestampString)[0]);
+        // } else {
+        //   this.openSubmission(tabs[0]);
+        // }
       },
       error => {
         this.handleError(error);

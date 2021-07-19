@@ -21,7 +21,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.startPicker = { open: false }
 
     # Get docker images available for automated task assessment for the unit.
-    TaskSubmission.getDockerImagesAsPromise($scope.unit.id).then (images) ->
+    TaskSubmission.getDockerImagesAsPromise().then (images) ->
       $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire

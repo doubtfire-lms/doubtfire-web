@@ -59,7 +59,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Upload files
   $scope.uploader = {
-    url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit_id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
+    url: Task.generateSubmissionUrl($scope.task.project(), $scope.task)
+    # url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit_id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
     files: _.chain(task.definition.upload_requirements).map((file) ->
       [file.key, { name: file.name, type: file.type }]
     ).fromPairs().value()
@@ -73,6 +74,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
     onSuccess: (response) ->
       $scope.uploader.response = response
+      if $scope.task.isTestSubmission then $scope.task.project_id = response.project_id
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
       $modalInstance.close(task)
