@@ -53,7 +53,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
-  taskWithSTudentNamePipe = new TasksForInboxSearchPipe();
+  taskWithStudentNamePipe = new TasksForInboxSearchPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
@@ -162,7 +162,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
-    filteredTasks = this.taskWithSTudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
     // Fix selected task.
