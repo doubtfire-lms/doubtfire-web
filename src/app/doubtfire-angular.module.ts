@@ -151,8 +151,6 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
-import { TaskStatusIconComponent } from './common/task-status-icon/task-status-icon.component';
-
 @NgModule({
   // Components we declare
   declarations: [
@@ -202,7 +200,6 @@ import { TaskStatusIconComponent } from './common/task-status-icon/task-status-i
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
-    TaskStatusIconComponent,
   ],
   // Module Imports
   imports: [

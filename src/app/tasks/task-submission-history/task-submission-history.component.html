@@ -8,7 +8,7 @@
           *ngFor="let tab of tabs"
           (click)="openSubmission(tab)">
           <div style="-webkit-box-flex: 1; flex: 1;">{{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}</div>
-           &nbsp; <task-status-icon [taskStatus]="tab.taskStatus" ></task-status-icon>
+           &nbsp; <status-icon [status]="tab.taskStatus" ></status-icon>
         </mat-list-item>
       </mat-list>
     </div>
