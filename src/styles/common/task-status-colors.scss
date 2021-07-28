@@ -12,7 +12,7 @@ $task-status-foreground-color-light: #fff;
 $task-status-foreground-color-dark: #444;
 
 $task-status-colors: (
-  ready-to-mark: (
+  ready-for-feedback: (
     base: #0079d8,
     dark: darken(#0079d8, 15%),
     light: lighten(#0079d8, 15%),

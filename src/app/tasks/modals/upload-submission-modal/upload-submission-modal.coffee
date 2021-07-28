@@ -113,13 +113,13 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     }
     # Conditions on which to remove specific states
     removed: ->
-      # Only show some states if RTM
-      isRtm = $scope.submissionType == 'ready_to_mark'
+      # Only show some states if RFF
+      isRFF = $scope.submissionType == 'ready_for_feedback'
       isTestSubmission = $scope.submissionType == 'test_submission'
       removed = []
       # Remove group and alignment states
-      removed.push('group') if !isRtm || !task.isGroupTask()
-      removed.push('alignment') if !isRtm || !task.unit().ilos.length > 0
+      removed.push('group') if !isRFF || !task.isGroupTask()
+      removed.push('alignment') if !isRFF || !task.unit().ilos.length > 0
       removed.push('comments') if isTestSubmission
       removed
     # Initialises the states

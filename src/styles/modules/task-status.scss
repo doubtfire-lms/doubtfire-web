@@ -2,8 +2,8 @@
 // Styling for all task status classes
 //
 .task-status {
-  &.ready-to-mark {
-    @include task-status-color-ready-to-mark;
+  &.ready-for-feedback {
+    @include task-status-color-ready-for-feedback;
   }
   &.not-started {
     @include task-status-color-not-started;
@@ -39,8 +39,8 @@
     @include task-status-color-time-exceeded;
   }
 
-  &.ready-to-mark:hover {
-    background-color: task-status-color('ready-to-mark');
+  &.ready-for-feedback:hover {
+    background-color: task-status-color('ready-for-feedback');
   }
   &.not-started:hover {
     background-color: task-status-color('not-started');
@@ -78,10 +78,10 @@
 }
 
 .task-status > .btn-default {
-  &.ready-to-mark,
-  &.ready-to-mark.active,
-  &.ready-to-mark:hover {
-    @include task-status-color-ready-to-mark;
+  &.ready-for-feedback,
+  &.ready-for-feedback.active,
+  &.ready-for-feedback:hover {
+    @include task-status-color-ready-for-feedback;
   }
   &.not-started,
   &.not-started.active,
@@ -139,8 +139,8 @@
     @include task-status-color-time-exceeded;
   }
 
-  &.ready-to-mark {
-    background-color: lighten(task-status-color('ready-to-mark'), 15%);
+  &.ready-for-feedback {
+    background-color: lighten(task-status-color('ready-for-feedback'), 15%);
   }
   &.not-started {
     background-color: lighten(task-status-color('not-started'), 15%);
