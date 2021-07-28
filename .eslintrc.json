@@ -9,6 +9,9 @@
       },
       "extends": ["plugin:@angular-eslint/recommended"],
       "rules": {
+        "@angular-eslint/no-empty-lifecycle-method": "warn",
+        "@angular-eslint/component-class-suffix":"warn",
+        "@angular-eslint/no-output-on-prefix":"warn",
         "@angular-eslint/directive-selector": [
           "error",
           {
