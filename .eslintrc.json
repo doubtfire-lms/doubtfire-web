@@ -12,22 +12,24 @@
         "@angular-eslint/no-empty-lifecycle-method": "warn",
         "@angular-eslint/component-class-suffix":"warn",
         "@angular-eslint/no-output-on-prefix":"warn",
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            // "type": "attribute",
-            "prefix": "df",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            // "type": "element",
-            "prefix": "df",
-            "style": "kebab-case"
-          }
-        ],
+        "@angular-eslint/component-selector":"warn",
+        "@angular-eslint/directive-selector":"warn",
+        // "@angular-eslint/directive-selector": [
+        //   "error",
+        //   {
+        //     "type": "attribute",
+        //     "prefix": "df",
+        //     "style": "camelCase"
+        //   }
+        // ],
+        // "@angular-eslint/component-selector": [
+        //   "error",
+        //   {
+        //     "type": "element",
+        //     "prefix": "df",
+        //     "style": "kebab-case"
+        //   }
+        // ],
         "quotes": [
           "error",
           "single",
