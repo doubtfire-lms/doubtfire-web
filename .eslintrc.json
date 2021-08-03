@@ -9,8 +9,11 @@
       },
       "extends": ["plugin:@angular-eslint/recommended"],
       "rules": {
+        "@angular-eslint/no-empty-lifecycle-method": "warn",
+        "@angular-eslint/component-class-suffix":"warn",
+        "@angular-eslint/no-output-on-prefix":"warn",
         "@angular-eslint/directive-selector": [
-          "error",
+          "warn",
           {
             "type": "attribute",
             "prefix": "df",
@@ -18,7 +21,7 @@
           }
         ],
         "@angular-eslint/component-selector": [
-          "error",
+          "warn",
           {
             "type": "element",
             "prefix": "df",
@@ -26,7 +29,7 @@
           }
         ],
         "quotes": [
-          "error",
+          "warn",
           "single",
           {
             "allowTemplateLiterals": true
@@ -39,7 +42,7 @@
       "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {
         "max-len": [
-          "error",
+          "warn",
           {
             "code": 140
           }
