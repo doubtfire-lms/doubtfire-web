@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-0](https://github.com/macite/doubtfire-deploy/compare/v4.0.0...v5.0.0-0) (2021-08-04)
+
+
+### Features
+
+* incorporate updated overseer ui ([9ac0e2e](https://github.com/macite/doubtfire-deploy/commit/9ac0e2ed6b9622da1f9a356a1e92de815ac33eca))
+
+
+### Bug Fixes
+
+*  remove Ant Design import from task assessment modal. ([c7c1ec2](https://github.com/macite/doubtfire-deploy/commit/c7c1ec286cb3c8a1be19d5b9d756151b222541ac))
+*  use updated task object after submission if Overseer is enabled. ([d513db3](https://github.com/macite/doubtfire-deploy/commit/d513db3c842aaaa43e8c485268b4acb35c9d2279))
+* add input binding to taskStatus to task status icon template. ([a69387a](https://github.com/macite/doubtfire-deploy/commit/a69387a75b5124c322fa4a5ed9d01e276418b92c))
+* correct typo in student name pipe ([c08226d](https://github.com/macite/doubtfire-deploy/commit/c08226d6bde1e0d523019d6a3187533d6fe24463))
+* Fix a small typo. ([fb6c4c1](https://github.com/macite/doubtfire-deploy/commit/fb6c4c131d91d6e3a959473fe8b58ca66011e8d2))
+* fix incorrect comparison on submission history ([64eb74a](https://github.com/macite/doubtfire-deploy/commit/64eb74a52df07bb20d0aa0206ab3bfd3eec13f98))
+* fix linting error in coffeescript that prevented doubtfire-web from starting. ([bd87778](https://github.com/macite/doubtfire-deploy/commit/bd87778b3bdeb05404a45b8b9483b2ff5e5bc3f0))
+* hide task assessment tab in admin UI if the overseer is disabled. ([972e7e7](https://github.com/macite/doubtfire-deploy/commit/972e7e7e65e81f87f64907acdae9c87b6ef6101a))
+* hide the error popup when the latest submission isn't processed yet. ([c47f15d](https://github.com/macite/doubtfire-deploy/commit/c47f15d242610e80084e6fb2a1c59241b7edbdfb))
+* make IsOverseerEnabled a regular boolean instead of BehaviorSubject. ([447129c](https://github.com/macite/doubtfire-deploy/commit/447129c8349c7cda960e32fc3bb3cb22b97812a9))
+* open previously selected tab when Refresh button is clicked. ([c5ab7bf](https://github.com/macite/doubtfire-deploy/commit/c5ab7bf4633aa25aa12846ec25e5ac588f02624c))
+* remove And Design from package.json and styles. ([813bb23](https://github.com/macite/doubtfire-deploy/commit/813bb237717a8048d345ec908d9407ad7a0a781c))
+* remove Ant Design imports from Angular module. ([9663734](https://github.com/macite/doubtfire-deploy/commit/96637342c7c278df391331103fef7f30db4165da))
+* remove duplicate status icon component ([d308df6](https://github.com/macite/doubtfire-deploy/commit/d308df63ddae216b49ca9c711d4d61d62d180b5b))
+* remove some issues from angular module ([aabb475](https://github.com/macite/doubtfire-deploy/commit/aabb475b94ef6a68fb282c77fab46b690d978db9))
+* use unit_id only instead of passing the whole unit to task on test submission. ([54fc10d](https://github.com/macite/doubtfire-deploy/commit/54fc10ddbd6aad34cbac02a54553830255e8a17e))
+
 ## 6.0.0 (2021-07-29)
 
 
