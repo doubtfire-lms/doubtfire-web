@@ -4,7 +4,7 @@
       <div class="panel-heading panel-title submission-heading">Submissions</div>
       <mat-list class="list-group">
         <mat-list-item class="list-group-item"
-          [class.selected]="tab.timestampString == selectedTab.timestampString"
+          [class.selected]="tab.timestampString === selectedTab.timestampString"
           *ngFor="let tab of tabs"
           (click)="openSubmission(tab)">
           <div style="-webkit-box-flex: 1; flex: 1;">{{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}</div>
