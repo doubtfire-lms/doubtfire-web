@@ -814,8 +814,6 @@ All notable changes to this project will be documented in this file. See [standa
 * xl screen sizes and modify breadcrumbs ([0779046](https://github.com/doubtfire-lms/doubtfire-deploy/commit/0779046dea1e60d0fd4ac160059b47f253e02eb9))
 
 ## 4.0.0 (2021-05-31)
-
-
 ### Bug Fixes
 
 *  Sorting on unit tutorials ([bcdba1c](https://github.com/doubtfire-lms/doubtfire-deploy/commit/bcdba1c9d7435570a994ed1724a9b300a6f0f4cd))
