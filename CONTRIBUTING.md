@@ -5,17 +5,49 @@ Please read through this document before contributing to Doubtfire.
 Before continuing, **please read the [contributing document](https://github.com/doubtfire-lms/doubtfire-api/blob/development/CONTRIBUTING.md) of the API**, as this outlines the Git workflow you should be following.
 
 ## Commit Styles
-Type must be one of the following:
+Commit Message Format
 
-build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
-docs: Documentation only changes
-feat: A new feature
-fix: A bug fix
-perf: A code change that improves performance
-refactor: A code change that neither fixes a bug nor adds a feature
-style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-test: Adding missing tests or correcting existing tests
+We have very precise rules over how our Git commit messages must be formatted. This format leads to easier to read commit history.
+
+Each commit message consists of a header, a body, and a footer.
+```
+<header>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+The `header` is mandatory and must conform to the Commit Message Header format.
+
+The `body` is mandatory for all commits except for those of type "docs". When the body is present it must be at least 20 characters long and must conform to the Commit Message Body format.
+
+The `footer` is optional. The Commit Message Footer format describes what the footer is used for and the structure it must have.
+
+Any line of the commit message cannot be longer than 100 characters.
+```
+Commit Message Header
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope (optional): animations|common|style|forms|http|router|service-worker|
+  │                                     upgrade|changelog|dev-infra|docs-infra|migrations|
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+```
+The `<type>` and `<summary>` fields are mandatory, the (<scope>) field is optional.
+
+Type
+Must be one of the following:
+
+**build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+**ci**: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
+**docs**: Documentation only changes
+**feat**: A new feature
+**fix**: A bug fix
+**perf**: A code change that improves performance
+**refactor**: A code change that neither fixes a bug nor adds a feature
+**test**: Adding missing tests or correcting existing tests
 
 ## Coding Guidelines
 
