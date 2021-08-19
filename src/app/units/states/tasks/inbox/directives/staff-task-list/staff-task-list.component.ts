@@ -1,4 +1,4 @@
-// tslint:disable: no-shadowed-variable
+/* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 
 import {
   Component,
@@ -19,7 +19,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'staff-task-list',
+  selector: 'df-staff-task-list',
   templateUrl: './staff-task-list.component.html',
   styleUrls: ['./staff-task-list.component.scss'],
 })
@@ -53,10 +53,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
-  taskWithSTudentNamePipe = new TasksForInboxSearchPipe();
+  taskWithStudentNamePipe = new TasksForInboxSearchPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
+
+  states = [
+    { sort: 'default', icon: 'horizontal_rule' },
+    { sort: 'ascending', icon: 'arrow_upward' },
+    { sort: 'descending', icon: 'arrow_downward' }
+  ]
+
+  taskDefSort = 0
+  tutorialSort = 0
+  originalFilteredTasks: any[] = null;
 
   @HostListener('document:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -83,7 +93,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -151,7 +161,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(this.searchDialog);
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      // console.log(`Dialog result: ${result}`);
     });
   }
 
@@ -162,8 +172,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
-    filteredTasks = this.taskWithSTudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
+
+    if (this.filteredTasks != null) {
+      this.originalFilteredTasks = [...this.filteredTasks];
+    }
+
+    this.taskDefSort = 0
+    this.tutorialSort = 0
 
     // Fix selected task.
     if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
@@ -286,8 +303,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const funcName = taskEl.scrollIntoViewIfNeeded
       ? 'scrollIntoViewIfNeeded'
       : taskEl.scrollIntoView
-      ? 'scrollIntoView'
-      : '';
+        ? 'scrollIntoView'
+        : '';
     if (!funcName) {
       return;
     }
@@ -322,11 +339,32 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
   }
 
+  toggleTaskDefSort() {
+    this.taskDefSort = this.taskDefSort < 2 ? ++this.taskDefSort : 0;
+    if (this.originalFilteredTasks == null) {
+      this.originalFilteredTasks = [...this.filteredTasks];
+    }
+    if (this.states[this.taskDefSort].sort == 'ascending') {
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq)]
+    }
+
+    else if (this.states[this.taskDefSort].sort == 'descending') {
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq)]
+    }
+
+    else {
+      this.filteredTasks = [...this.originalFilteredTasks]
+    }
+  }
+
+  // toggleTutorialSort() {
+  // }
+
   togglePin(task) {
     if (task.pinned) {
       task.unpin(
         task.id,
-        (sucess: any) => {},
+        (sucess: any) => { },
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }
@@ -334,7 +372,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     } else {
       task.pin(
         task.id,
-        (sucess: any) => {},
+        (sucess: any) => { },
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }

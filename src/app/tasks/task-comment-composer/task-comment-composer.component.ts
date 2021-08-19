@@ -246,10 +246,23 @@ export class TaskCommentComposerComponent implements OnInit {
       }
     );
   }
+
+  addCommentWithType(comment: string, type: string) {
+    this.ts.addComment(this.task, comment, type,
+      (success: any) => {
+        this.comment.text = '';
+        this.analytics.event('Vie Comments', 'Added new comment');
+        this.ts.scrollDown();
+        this.task.comments = this.ts.mapComments(this.task.comments);
+      },
+      (failure: any) =>
+        this.alerts.add('danger', failure.data.error, 2000)
+    );
+  }
 }
 
 // The discussion prompt composer dialog Component
-// tslint:disable-next-line: max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',

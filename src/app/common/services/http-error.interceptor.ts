@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, retryWhen, concatMap, delay } from 'rxjs/operators';
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -35,7 +35,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             errorMessage = `Error: ${error.error.message}`;
           } else {
             // server-side error
-            errorMessage = `${error.error.error}`;
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.error}`;
           }
           return throwError(errorMessage);
         })

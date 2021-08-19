@@ -8,11 +8,17 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod, TaskSubmission) ->
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+
     $scope.calOptions = {
       startOpened: false
       endOpened: false
     }
+
+    # Get docker images available for automated task assessment for the unit.
+    TaskSubmission.getDockerImagesAsPromise().then (images) ->
+      $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
@@ -40,8 +46,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.studentSearch = ""
 
     $scope.saveUnit = ->
-      if $scope.unit.convenors then delete $scope.unit.convenors
-
       if $scope.unit.start_date && $scope.unit.start_date.getMonth
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
@@ -57,9 +61,11 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_definition_id: $scope.unit.draft_task_definition_id
-        allow_student_extension_requests: $scope.unit.allow_student_extension_requests,
-        extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request,
+        allow_student_extension_requests: $scope.unit.allow_student_extension_requests
+        extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
         allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
+        assessment_enabled: $scope.unit.assessment_enabled
+        overseer_image_id: $scope.unit.overseer_image_id
       }
 
       if $scope.unit.teaching_period_id
@@ -86,3 +92,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         )
 
 )
+
+
+
+

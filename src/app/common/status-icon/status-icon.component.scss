@@ -1,4 +1,4 @@
-@import "../../../styles/mixins/task-status-colors-generator.scss";
+@import '../../../styles/mixins/task-status-colors-generator.scss';
 
 :host {
   font-size: 1em;
@@ -17,40 +17,40 @@
     flex: 1;
   }
   width: 50px;
-  &.ready-to-mark {
-    @include status-icon("ready-to-mark");
+  &.ready-for-feedback {
+    @include status-icon('ready-for-feedback');
   }
   &.not-started {
-    @include status-icon("not-started");
+    @include status-icon('not-started');
   }
   &.working-on-it {
-    @include status-icon("working-on-it");
+    @include status-icon('working-on-it');
   }
   &.need-help {
-    @include status-icon("need-help");
+    @include status-icon('need-help');
   }
   &.fix-and-resubmit {
-    @include status-icon("fix-and-resubmit");
+    @include status-icon('fix-and-resubmit');
   }
-  &.do-not-resubmit {
-    @include status-icon("do-not-resubmit");
+  &.feedback-exceeded {
+    @include status-icon('feedback-exceeded');
   }
   &.time-exceeded {
-    @include status-icon("time-exceeded");
+    @include status-icon('time-exceeded');
   }
   &.redo {
-    @include status-icon("redo");
+    @include status-icon('redo');
   }
   &.discuss {
-    @include status-icon("discuss");
+    @include status-icon('discuss');
   }
   &.demonstrate {
-    @include status-icon("demonstrate");
+    @include status-icon('demonstrate');
   }
   &.complete {
-    @include status-icon("complete");
+    @include status-icon('complete');
   }
   &.fail {
-    @include status-icon("fail");
+    @include status-icon('fail');
   }
 }

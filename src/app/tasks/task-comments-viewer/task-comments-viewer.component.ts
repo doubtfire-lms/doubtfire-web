@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
 
 @Component({
@@ -36,6 +37,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
   constructor(
     private taskCommentService: TaskCommentService,
+    private constants: DoubtfireConstants,
     @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModalRef: any,
     @Inject(Task) private TaskModel: any,
@@ -99,6 +101,10 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     return this.task.comments.slice(-1)[0]?.authorIsMe;
   }
 
+  get overseerEnabled(): boolean {
+    return this.constants.IsOverseerEnabled.value;
+  }
+
   uploadFiles(event) {
     [...event].forEach((file) => {
       if (
@@ -150,7 +156,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   }
 
   shouldShowAuthorIcon(commentType: string) {
-    return !(commentType === 'extension' || commentType === 'status');
+    return !(commentType === 'extension' || commentType === 'status' || commentType == 'assessment');
   }
 
   getCommentAttachment(comment: TaskComment) {

@@ -1,12 +1,16 @@
+@use '../../../node_modules/@angular/material' as mat;
 @import '../../../node_modules/@angular/material/theming';
-$app-primary: mat-palette($mat-grey);
-$app-accent: mat-palette($mat-light-blue);
-$app-warn: mat-palette($mat-red);
-$primary: mat-color($app-primary);
-$accent: mat-color($app-accent);
-$warn: mat-color($app-warn);
+
+$app-primary: mat.define-palette(mat.$grey-palette);
+$app-accent: mat.define-palette(mat.$light-blue-palette);
+$app-warn: mat.define-palette(mat.$red-palette);
+
+$primary: mat.get-color-from-palette($app-primary);
+$accent: mat.get-color-from-palette($app-accent);
+$warn: mat.get-color-from-palette($app-warn);
+
 @mixin doubtfire-card {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 .mat-card.danger-card {
@@ -15,6 +19,7 @@ $warn: mat-color($app-warn);
 
 .mat-card.info-card .mat-card-header {
     background-color: #5bc0de;
+  @include doubtfire-card();
 }
 
 .mat-card.warn-card .mat-card-header {

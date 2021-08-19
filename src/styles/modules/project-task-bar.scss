@@ -14,12 +14,12 @@
     font-size: 8pt;
   }
 
-  &[aria-valuenow="1"],
-  &[aria-valuenow="2"] {
+  &[aria-valuenow='1'],
+  &[aria-valuenow='2'] {
     min-width: 0px;
   }
 
-  &[aria-valuenow="0"] {
+  &[aria-valuenow='0'] {
     min-width: 0px;
   }
 }
@@ -33,7 +33,8 @@
   }
 }
 
-.task-progress-accordion, .progress-progress-bar {
+.task-progress-accordion,
+.progress-progress-bar {
   .panel-heading {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -42,22 +43,52 @@
   }
 }
 
-.progress-bar-ready-to-mark     { @include task-status-color-ready-to-mark;     }
-.progress-bar-not-started       { @include task-status-color-not-started;       }
-.progress-bar-working-on-it     { @include task-status-color-working-on-it;     }
-.progress-bar-need-help         { @include task-status-color-need-help;         }
-.progress-bar-fix-and-resubmit  { @include task-status-color-fix-and-resubmit;  }
-.progress-bar-do-not-resubmit   { @include task-status-color-do-not-resubmit;   }
-.progress-bar-fail              { @include task-status-color-fail;              }
-.progress-bar-redo              { @include task-status-color-redo;              }
-.progress-bar-discuss           { @include task-status-color-discuss;           }
-.progress-bar-demonstrate       { @include task-status-color-demonstrate;       }
-.progress-bar-complete          { @include task-status-color-complete;          }
+.progress-bar-ready-for-feedback {
+  @include task-status-color-ready-for-feedback;
+}
+.progress-bar-not-started {
+  @include task-status-color-not-started;
+}
+.progress-bar-working-on-it {
+  @include task-status-color-working-on-it;
+}
+.progress-bar-need-help {
+  @include task-status-color-need-help;
+}
+.progress-bar-fix-and-resubmit {
+  @include task-status-color-fix-and-resubmit;
+}
+.progress-bar-feedback-exceeded {
+  @include task-status-color-feedback-exceeded;
+}
+.progress-bar-fail {
+  @include task-status-color-fail;
+}
+.progress-bar-redo {
+  @include task-status-color-redo;
+}
+.progress-bar-discuss {
+  @include task-status-color-discuss;
+}
+.progress-bar-demonstrate {
+  @include task-status-color-demonstrate;
+}
+.progress-bar-complete {
+  @include task-status-color-complete;
+}
 
-.progress-bar-not-started       { @include task-status-color-not-started;       }
-.progress-bar-one-week-late     { @include task-status-color-working-on-it;     }
-.progress-bar-two-weeks-late    { @include task-status-color-fail;              }
-.progress-bar-on-time           { @include task-status-color-complete;          }
+.progress-bar-not-started {
+  @include task-status-color-not-started;
+}
+.progress-bar-one-week-late {
+  @include task-status-color-working-on-it;
+}
+.progress-bar-two-weeks-late {
+  @include task-status-color-fail;
+}
+.progress-bar-on-time {
+  @include task-status-color-complete;
+}
 
 .progress-progress-bar {
   height: 30px;

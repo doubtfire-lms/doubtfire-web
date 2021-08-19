@@ -78,7 +78,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="taskDef in filteredTaskDefs = (allTaskDefs = ( unit.task_definitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(taskDef)" ng-class="{'info': taskAdminData.selectedTask == taskDef}">
+              <tr ng-repeat="taskDef in filteredTaskDefs = (allTaskDefs = ( unit.task_definitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(unit, taskDef)" ng-class="{'info': taskAdminData.selectedTask == taskDef}">
                 <td><strong>{{taskDef.abbreviation}}</strong> - {{taskDef.name}}</td>
                 <td>{{grades[taskDef.target_grade]}}</td>
                 <td>{{taskDef.start_date | date : 'EEE d MMM' : '+0000'}}</td>

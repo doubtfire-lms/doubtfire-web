@@ -6,16 +6,16 @@
   (emojiClick)="addEmoji($event)"
 ></emoji-mart>
 
-<div id="replyContainer" *ngIf="task" [hidden]="originalComment == null">
+<div id="replyContainer" *ngIf="task" [hidden]="originalComment === null">
   <div>
     <div class="replying-wrap">
       Replying to:
-      <b>{{ originalComment != null ? originalComment.author.name : '' }}</b>
+      <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
       <button id="cancelReplyButton" (click)="cancelReply()" mat-button mat-icon-button aria-label="Close reply">
         <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
       </button>
     </div>
-    <p>{{ originalComment != null ? originalComment.text : '' }}</p>
+    <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
   </div>
 </div>
 

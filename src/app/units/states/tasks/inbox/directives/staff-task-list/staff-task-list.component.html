@@ -6,59 +6,30 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <mat-form-field
-        appearance="none"
-        style="width: 100%; margin-top: -0.4em; margin-bottom: -30px"
-        floatLabel="never"
-      >
-        <input
-          matInput
-          autocomplete="off"
-          spellcheck="false"
-          type="text"
-          placeholder="Search Inbox"
-          [(ngModel)]="filters.studentName"
-          (ngModelChange)="applyFilters()"
-        />
+      <mat-form-field appearance="none" style="width: 100%; margin-top: -0.4em; margin-bottom: -30px"
+        floatLabel="never">
+        <input matInput autocomplete="off" spellcheck="false" type="text" placeholder="Search Inbox"
+          [(ngModel)]="filters.studentName" (ngModelChange)="applyFilters()" />
       </mat-form-field>
-      <button
-        *ngIf="collapsable"
-        matTooltip="Filter options"
-        matTooltipPosition="above"
-        mat-icon-button
-        aria-label="Inbox search dropdown"
-        (click)="showSearchOptions = !showSearchOptions"
-      >
+      <button *ngIf="collapsable" matTooltip="Filter options" matTooltipPosition="above" mat-icon-button
+        aria-label="Inbox search dropdown" (click)="showSearchOptions = !showSearchOptions">
         <mat-icon>{{ showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
       </button>
 
-      <button
-        matTooltip="Refresh the task inbox"
-        matTooltipPosition="above"
-        mat-icon-button
-        aria-label="Refresh Inbox"
-        (click)="refreshTasks()"
-      >
+      <button matTooltip="Refresh the task inbox" matTooltipPosition="above" mat-icon-button aria-label="Refresh Inbox"
+        (click)="refreshTasks()">
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
 
     <mat-accordion>
-      <mat-expansion-panel
-        class="search-settings-panel mat-elevation-z0"
-        disabled
-        hideToggle
-        [expanded]="!collapsable || showSearchOptions"
-      >
+      <mat-expansion-panel class="search-settings-panel mat-elevation-z0" disabled hideToggle
+        [expanded]="!collapsable || showSearchOptions">
         <form class="search-options">
           <div class="task-definition">
             <div class="dropdown" dropdown>
-              <i
-                *ngIf="isTaskDefMode"
-                class="fa fa-download pull-right dropdown-toggle"
-                style="cursor: pointer; padding-top: 8px; padding-right: 8px"
-                dropdown-toggle
-              ></i>
+              <i *ngIf="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle"
+                style="cursor: pointer; padding-top: 8px; padding-right: 8px" dropdown-toggle></i>
               <ul class="dropdown-menu pull-right">
                 <li>
                   <a [href]="submissionsPdfsUrl">Bulk Export Submission PDFs</a>
@@ -68,37 +39,40 @@
                 </li>
               </ul>
             </div>
-            <mat-form-field class="full-width">
-              <mat-label>Task Definition</mat-label>
-              <mat-select
-                [(ngModel)]="filters.taskDefinitionIdSelected"
-                name="taskDefID"
-                (selectionChange)="taskDefinitionIdChanged()"
-              >
-                <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
-                <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
-                  {{ td.abbreviation + ' - ' + td.name }}
-                </mat-option>
-              </mat-select>
-              <mat-hint> Display specific task definitions. </mat-hint>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <mat-form-field fxFlex>
+                <mat-label>Task Definition</mat-label>
+                <mat-select [(ngModel)]="filters.taskDefinitionIdSelected" name="taskDefID"
+                  (selectionChange)="taskDefinitionIdChanged()">
+                  <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
+                  <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
+                    {{ td.abbreviation + ' - ' + td.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-hint> Display specific task definitions. </mat-hint>
+              </mat-form-field>
+              <button [disabled]="(filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === '')"
+                mat-icon-button aria-label="Sort by task definition icon"(click)="toggleTaskDefSort()">
+                <mat-icon>{{states[taskDefSort].icon}}</mat-icon>
+              </button>
+            </div>
           </div>
           <!--/task-definition-->
-
-          <mat-form-field class="full-width">
-            <mat-label>Tutorials</mat-label>
-            <mat-select
-              [(ngModel)]="filters.tutorialIdSelected"
-              name="tutorial"
-              (selectionChange)="tutorialIdChanged()"
-            >
-              <mat-option *ngFor="let t of tutorials" [value]="t.id">
-                {{ t.inbox_description }}
-              </mat-option>
-            </mat-select>
-            <mat-hint> Filter tutorials. </mat-hint>
-          </mat-form-field>
-
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field fxFlex>
+              <mat-label>Tutorials</mat-label>
+              <mat-select [(ngModel)]="filters.tutorialIdSelected" name="tutorial"
+                (selectionChange)="tutorialIdChanged()">
+                <mat-option *ngFor="let t of tutorials" [value]="t.id">
+                  {{ t.inbox_description }}
+                </mat-option>
+              </mat-select>
+              <mat-hint> Filter tutorials. </mat-hint>
+            </mat-form-field>
+            <button disabled mat-icon-button aria-label="Sort by tutorial icon" (click)="toggleTutorialSort()">
+              <mat-icon>{{states[tutorialSort].icon}}</mat-icon>
+            </button>
+          </div>
           <!--/tutorial-->
         </form>
       </mat-expansion-panel>
@@ -135,35 +109,19 @@
   </div>
 
   <!--/search-options-->
-  <cdk-virtual-scroll-viewport
-    *ngIf="filteredTasks"
-    class="tasks-viewport scrollable"
-    itemSize="60"
-    minBufferPx="200"
-    maxBufferPx="400"
-  >
+  <cdk-virtual-scroll-viewport *ngIf="filteredTasks" class="tasks-viewport scrollable" itemSize="60" minBufferPx="200"
+    maxBufferPx="400">
     <mat-list>
-      <mat-list-item class="clearfix" *cdkVirtualFor="let task of filteredTasks" style="padding: 0">
-        <div
-          style="width: 100%"
-          id="{{ task.taskKeyToIdString() }}"
-          *ngIf="task"
-          [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }"
-        >
-          <div
-            (click)="setSelectedTask(task)"
-            class="inbox-entry"
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            [ngClass]="{ hover: task.hover }"
-            (mouseover)="task.hover = true"
-            (mouseout)="task.hover = false"
-          >
-            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30">
-            </user-icon>
+      <mat-list-item class="clearfix" *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
+        style="padding: 0">
+        <div style="width: 100%" id="{{ task.taskKeyToIdString() }}" *ngIf="task"
+          [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }">
+          <div (click)="setSelectedTask(task)" class="inbox-entry" fxLayout="row" fxLayoutAlign="start center"
+            [ngClass]="{ hover: task.hover }" (mouseover)="task.hover = true" (mouseout)="task.hover = false">
+            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project().name }}</h4>
-              <p class="mat-small">
+              <p class="mat-small truncate">
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
               </p>
@@ -173,32 +131,23 @@
                 </p>
                 <p class="mat-small">Submitted {{ task.submission_date | humanizedDate }}</p>
                 <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
-                  Assessed {{ task.times_assessed }} time{{ task.times_assessed == 1 ? '' : 's' }}
+                  Assessed {{ task.times_assessed }} time{{ task.times_assessed === 1 ? '' : 's' }}
                 </p>
               </div>
             </div>
             <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
               <mat-chip style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip>
             </div>
-            <status-icon
-              [hidden]="isNarrow"
-              matBadge="{{ task.quality_pts }}/{{ task.definition.max_quality_pts }}"
-              [matBadgeHidden]="!task.hasQualityPoints() || !task.quality_pts"
-              matBadgePosition="before"
-              [status]="task.status"
-            ></status-icon>
+            <status-icon [hidden]="isNarrow" matBadge="{{ task.quality_pts }}/{{ task.definition.max_quality_pts }}"
+              [matBadgeHidden]="!task.hasQualityPoints() || !task.quality_pts" matBadgePosition="before"
+              [status]="task.status"></status-icon>
             <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
 
-                <div
-                  *ngIf="task.pinned"
-                  matBadge="{{ task.num_new_comments }}"
-                  [matBadgeHidden]="task.num_new_comments <= 0 || task.plagiarismDetected()"
-                  matBadgePosition="before"
-                  matBadgeSize="small"
-                  matBadgeColor="warn"
-                >
+                <div *ngIf="task.pinned" matBadge="{{ task.num_new_comments }}"
+                  [matBadgeHidden]="task.num_new_comments <= 0 || task.plagiarismDetected()" matBadgePosition="before"
+                  matBadgeSize="small" matBadgeColor="warn">
                   <mat-icon class="pin-icon">push_pin</mat-icon>
                 </div>
 
@@ -208,13 +157,8 @@
                   </div>
                 </div>
               </button>
-              <!-- Disable button until pin feature actice on backend -->
-              <button
-                [hidden]="!task.hover"
-                mat-icon-button
-                aria-label="task overflow"
-                [matMenuTriggerFor]="overflowMenu"
-              >
+              <button [hidden]="!task.hover" mat-icon-button aria-label="task overflow"
+                [matMenuTriggerFor]="overflowMenu">
                 <mat-icon>more_horiz</mat-icon>
               </button>
               <mat-menu #overflowMenu="matMenu" yPosition="below">

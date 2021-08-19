@@ -11,12 +11,18 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission) ->
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+
     $scope.grades = gradeService.grades
 
     $scope.targetPicker = { open: false }
     $scope.duePicker = { open: false }
     $scope.startPicker = { open: false }
+
+    # Get docker images available for automated task assessment for the unit.
+    TaskSubmission.getDockerImagesAsPromise().then (images) ->
+      $scope.dockerImages = images
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
@@ -57,6 +63,14 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           seq: 4
           active: false
 
+    if $scope.overseer_enabled.value
+      $scope.taskAdmin.tabsData.taskAssessmentResources = {
+        title: "Task Assessment Resources"
+        subtitle: "Upload the bash script and other resources for this task assessment"
+        icon: "fa-wpforms"
+        seq: 5
+        active: false}
+
     #
     # The task sheet uploader...
     #
@@ -93,6 +107,21 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
 
+    $scope.removeTaskAssessmentResources = (task) ->
+      TaskDefinition.taskAssessmentResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+        (success) ->
+          task.has_task_assessment_resources = false
+          alertService.add("success", "Deleted task assessment resources", 2000)
+        (error) ->
+          alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
+
+    # $scope.removeTaskAssessmentTests = (task) ->
+    #   TaskDefinition.taskAssessmentTests.delete { unit_id: $scope.unit.id, task_def_id: task.id},
+    #     (success) ->
+    #       task.has_task_assessment_tests = false
+    #       alertService.add("success", "Deleted task assessment tests", 2000)
+    #     (error) ->
+    #       alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
 
     #
     # The task resources uploader...
@@ -106,6 +135,33 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.resourceUrl = ->
       Task.getTaskResourcesUrl($scope.unit, $scope.task)
+
+
+    # #
+    # # The assessment resources uploader...
+    # #
+    $scope.taskAssessmentResources = { file: { name: 'Task Assessment Resources', type: 'zip' } }
+    $scope.taskAssessmentResourcesUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+
+    $scope.onTaskAssessmentResourcesSuccess = (response) ->
+      alertService.add("success", "Task assessment resources uploaded", 2000)
+      $scope.task.has_task_assessment_resources = true
+
+    $scope.taskAssessmentResourcesUrl = ->
+      Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task)
+
+    # #
+    # # The assessment tests uploader...
+    # #
+    # $scope.taskAssessmentTests = { file: { name: 'Task Assessment Resources', type: 'zip' } }
+    # $scope.taskAssessmentTestsUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+
+    # $scope.onTaskAssessmentTestsSuccess = (response) ->
+    #   alertService.add("success", "Task assessment tests uploaded", 2000)
+    #   $scope.task.has_task_assessment_tests = true
+
+    # $scope.taskAssessmentTestsUrl = ->
+    #   Task.getTaskAssessmentTestsUrl($scope.unit, $scope.task)
 
 
     #

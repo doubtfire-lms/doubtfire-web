@@ -344,6 +344,60 @@
         </div>
         <!--/sync_timetable-->
 
+        <div class="form-group" ng-if="overseer_enabled.value">
+          <label class="col-sm-2 control-label">Overseer Assessment</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label
+                class="btn btn-{{unit.assessment_enabled ? 'success' : 'default'}}"
+                ng-model="unit.assessment_enabled"
+                btn-radio="true"
+                uncheckable
+              >
+                <i class="fa fa-check"></i>
+              </label>
+              <label
+                class="btn btn-{{unit.assessment_enabled ? 'default' : 'danger'}}"
+                ng-model="unit.assessment_enabled"
+                btn-radio="false"
+                uncheckable
+              >
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              If true, unit tasks will be able to make use of Overseer automated checking.
+            </span>
+          </div>
+        </div><!--/task-assessment-enabled-->
+
+        <div class="form-group" ng-if="overseer_enabled.value">
+          <label class="col-sm-2 control-label">Docker Image Name</label>
+          <div class="col-sm-9">
+            <select class="form-control" ng-model="unit.overseer_image_id" ng-options="image.id as image.description for image in dockerImages" />
+            <span class="help-block">
+              Use this to select the default container used to check tasks with Overseer.
+            </span>
+          </div>
+        </div> <!--/docker-image-name-->
+
+        <!-- An attempt to use angular component as part of angularJS form. Unfortunately, AngularJS form doesn't track changes from it.-->
+        <!-- <div class="form-group">
+          {{unit.docker_image_name_tag}}
+          <label class="col-sm-2 control-label">Docker Image Name</label>
+          <div class="col-sm-9">
+            <docker-image-select
+            (valueChange)="alert()"
+            later-name="docker-image-select"
+            class="form-control"
+            [unit]="unit"
+            ng-model="unit.docker_image_name_tag"
+            ng-model-options="{ updateOn: 'default valueChange' }"
+            required>
+            </docker-image-select>
+          </div>
+        </div> -->
+
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
           <div class="col-sm-9">
@@ -365,6 +419,9 @@
                 <i class="fa fa-times"></i>
               </label>
             </div>
+            <span class="help-block">
+              Set to false to hide unit from students and tutors.
+            </span>
           </div>
         </div>
         <!--/active-->

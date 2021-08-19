@@ -46,6 +46,10 @@
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
+              <div *ngSwitchCase="'assessment'" class="comment-assessment">
+                <app-task-assessment-comment [task]="task" [comment]="comment" *ngIf="overseerEnabled"></app-task-assessment-comment>
+              </div>
+
               <div class="bubble" [ngClass]="commentClasses(comment)">
                 <a
                   (click)="scrollToComment(comment.originalComment.id)"

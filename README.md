@@ -14,7 +14,7 @@ A modern, lightweight learning management system.
 
 SUMMARY:
 
-18 / 225 components migrated
+30 / 213 components migrated
 
 MIGRATED:
 
@@ -22,11 +22,17 @@ MIGRATED:
 - [x] ./src/app/tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component.ts
+- [x] ./src/app/tasks/task-comments-viewer/task-comments-viewer.component.ts
 - [x] ./src/app/tasks/task-comment-composer/task-comment-composer.component.ts
 - [x] ./src/app/tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component.ts
+- [x] ./src/app/projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component.ts
+- [x] ./src/app/projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component.ts
+- [x] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component.ts
+- [x] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component.ts
 - [x] ./src/app/admin/states/campuses/campus-list/campus-list.component.ts
 - [x] ./src/app/admin/states/activities/activity-type-list/activity-type-list.component.ts
 - [x] ./src/app/units/states/institution-settings/institution-settings.component.ts
+- [x] ./src/app/units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component.ts
@@ -34,8 +40,14 @@ MIGRATED:
 - [x] ./src/app/units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component.ts
 - [x] ./src/app/common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder.ts
 - [x] ./src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component.ts
+- [x] ./src/app/common/audio-player/audio-player.component.ts
 - [x] ./src/app/common/modals/extension-modal/extension-modal.component.ts
 - [x] ./src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component.ts
+- [x] ./src/app/common/modals/calendar-modal/calendar-modal.component.ts
+- [x] ./src/app/common/pdf-viewer/pdf-viewer.component.ts
+- [x] ./src/app/common/status-icon/status-icon.component.ts
+- [x] ./src/app/common/user-icon/user-icon.component.ts
+- [x] ./src/app/common/pdf-viewer-panel/pdf-viewer-panel.component.ts
 
 TODO:
 
@@ -57,7 +69,6 @@ TODO:
 - [ ] ./src/app/tasks/task-submission-viewer/task-submission-viewer.coffee
 - [ ] ./src/app/tasks/task-status-selector/task-status-selector.coffee
 - [ ] ./src/app/tasks/tasks.coffee
-- [ ] ./src/app/tasks/task-comments-viewer/task-comments-viewer.coffee
 - [ ] ./src/app/tasks/task-sheet-viewer/task-sheet-viewer.coffee
 - [ ] ./src/app/tasks/modals/modals.coffee
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
@@ -97,11 +108,9 @@ TODO:
 - [ ] ./src/app/projects/states/dashboard/directives/student-task-list/student-task-list.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
@@ -151,10 +160,8 @@ TODO:
 - [ ] ./src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.coffee
 - [ ] ./src/app/units/states/plagiarism/plagiarism.coffee
 - [ ] ./src/app/units/states/tasks/inbox/directives/directives.coffee
-- [ ] ./src/app/units/states/tasks/inbox/directives/staff-task-list/staff-task-list.coffee
 - [ ] ./src/app/units/states/tasks/inbox/inbox.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
-- [ ] ./src/app/units/states/tasks/feedback/feedback.coffee
 - [ ] ./src/app/units/states/tasks/viewer/directives/directives.coffee
 - [ ] ./src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.coffee
 - [ ] ./src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.coffee
@@ -186,11 +193,9 @@ TODO:
 - [ ] ./src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.coffee
 - [ ] ./src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee
-- [ ] ./src/app/common/pdf-viewer-panel/pdf-viewer-panel.coffee
 - [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/long-press/on-long-press.coffee
 - [ ] ./src/app/common/content-editable/content-editable.coffee
-- [ ] ./src/app/common/audio-player/audio-player.coffee
 - [ ] ./src/app/common/alert-list/alert-list.coffee
 - [ ] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
 - [ ] ./src/app/common/modals/comments-modal/comments-modal.coffee
@@ -198,9 +203,7 @@ TODO:
 - [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
 - [ ] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [ ] ./src/app/common/grade-icon/grade-icon.coffee
-- [ ] ./src/app/common/pdf-viewer/pdf-viewer.coffee
 - [ ] ./src/app/common/file-uploader/file-uploader.coffee
-- [ ] ./src/app/common/user-icon/user-icon.coffee
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/header/header.coffee
 - [ ] ./src/app/common/header/unit-dropdown/unit-dropdown.coffee

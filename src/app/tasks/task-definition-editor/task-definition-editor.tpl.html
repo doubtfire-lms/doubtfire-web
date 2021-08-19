@@ -126,6 +126,29 @@
                     </div>
                   </div>
                 </div><!--/due-date-->
+
+                <div class="form-group" ng-if="overseer_enabled.value">
+                  <label class="col-sm-3 control-label">Overseer Assessment</label>
+                  <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" ng-model="task.assessment_enabled" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                      <i class="fa fa-{{task.assessment_enabled ? 'check' : 'times'}}"></i>
+                    </button>
+                    <span class="help-block">
+                      If true, the task will be automatically assessed.
+                    </span>
+                  </div>
+                </div><!--/task-assessment-enabled-->
+
+                <div class="form-group" ng-if="overseer_enabled.value">
+                  <label class="col-sm-3 control-label">Docker Image Name</label>
+                  <div class="col-sm-8">
+                    <select class="form-control" ng-model="task.overseer_image_id" ng-options="image.id as image.description for image in dockerImages" />
+                    <span class="help-block">
+                       Docker image used for automated task checking using Overseer.
+                    </span>
+                  </div>
+                </div> <!--/docker-image-name-->
+
               </div>
 
               <div ng-show="activeTab == taskAdmin.tabsData.rareSettings">
@@ -231,6 +254,7 @@
                     </a>
                   </div>
                 </div>
+
               </div>
               <div ng-show="activeTab == taskAdmin.tabsData.plagiarismChecks" class="form-group">
                 <div class="panel-body plagiarism-check" ng-required="isNew">
@@ -269,6 +293,38 @@
                   </div>
                 </div>
               </div><!--/plagiarism checks-->
+              <div ng-show="activeTab == taskAdmin.tabsData.taskAssessmentResources">
+                <div class="panel-body large-notice-block" ng-hide="task && task.id">
+                </div>
+                <task-assessor [task-definition]="task" [unit]="unit" ng-if="task">
+                  <div ng-if="task && task.id">
+                    <file-uploader
+                      files="taskAssessmentResources"
+                      url="taskAssessmentResourcesUploadUrl()"
+                      on-success="onTaskAssessmentResourcesSuccess">
+                    </file-uploader>
+                    <a href="{{taskAssessmentResourcesUrl()}}" ng-show="task.has_task_assessment_resources" target="_blank" class="btn btn-info col-sm-12">
+                      <i class="fa fa-download"></i> Download Assessment Resources
+                    </a>
+                    <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.has_task_assessment_resources" class="btn btn-danger col-sm-12">
+                      <i class="fa fa-trash-o"></i> Delete Assessment Resources
+                    </a>
+                    <!-- <div class="col-sm-6">
+                        <file-uploader
+                          files="taskAssessmentTests"
+                          url="taskAssessmentTestsUploadUrl()"
+                          on-success="onTaskAssessmentTestsSuccess">
+                        </file-uploader>
+                        <a href="{{taskAssessmentTestsUrl()}}" ng-show="task.has_task_assessment_tests" target="_blank" class="btn btn-info col-sm-12">
+                          <i class="fa fa-download"></i> Download Assessment Tests
+                        </a>
+                        <a ng-click="removeTaskAssessmentTests(task)" ng-show="task.has_task_assessment_tests" class="btn btn-danger col-sm-12">
+                          <i class="fa fa-trash-o"></i> Delete Assessment Tests
+                        </a>
+                      </div> -->
+                  </div>
+                </task-assessor>
+              </div> <!--/ upload task assessment resources-->
             </div><!--/panel-body-area-->
             <div class="panel-footer text-right" ng-show="activeTab == taskAdmin.tabsData.fileUpload">
               <button type="button" ng-click="addUpReq()" class="btn btn-success">

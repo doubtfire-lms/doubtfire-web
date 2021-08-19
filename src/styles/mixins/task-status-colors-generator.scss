@@ -15,7 +15,7 @@
 
 @mixin task-status-color($status) {
   color: task-status-color($status, fore);
-  $base-color:  task-status-color($status);
+  $base-color: task-status-color($status);
   background-color: $base-color;
   @if $status == 'complete' {
     $lighter-color: task-status-color($status, light);
@@ -23,8 +23,8 @@
   }
 }
 
-@mixin task-status-color-ready-to-mark {
-  @include task-status-color('ready-to-mark');
+@mixin task-status-color-ready-for-feedback {
+  @include task-status-color('ready-for-feedback');
 }
 @mixin task-status-color-not-started {
   @include task-status-color('not-started');
@@ -38,8 +38,8 @@
 @mixin task-status-color-fix-and-resubmit {
   @include task-status-color('fix-and-resubmit');
 }
-@mixin task-status-color-do-not-resubmit {
-  @include task-status-color('do-not-resubmit');
+@mixin task-status-color-feedback-exceeded {
+  @include task-status-color('feedback-exceeded');
 }
 @mixin task-status-color-redo {
   @include task-status-color('redo');

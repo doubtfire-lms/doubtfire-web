@@ -17,7 +17,7 @@
 
 <div mat-dialog-actions style="float: right">
   <button mat-dialog-close style="margin-right: 10px;" mat-stroked-button color="primary" mat-button
-    [disabled]="weeksRequested == 0 || reason.length < 15" (click)="submitApplication()">Request {{weeksRequested}}
-    {{weeksRequested == 1 ? 'week' : 'weeks'}}</button>
+    [disabled]="weeksRequested === 0 || reason.length < 15" (click)="submitApplication()">Request {{weeksRequested}}
+    {{weeksRequested === 1 ? 'week' : 'weeks'}}</button>
   <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
 </div>

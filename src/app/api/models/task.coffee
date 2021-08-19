@@ -37,6 +37,9 @@ angular.module("doubtfire.api.models.task", [])
   Task.generateSubmissionUrl = (project, task) ->
     "#{DoubtfireConstants.API_URL}/projects/#{project.project_id}/task_def_id/#{task.definition.id}/submission?auth_token=#{currentUser.authenticationToken}"
 
+  Task.generateTestSubmissionUrl = (unitId, task_def) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unitId}/task_definitions/#{task_def.id}/test_overseer_assessment?auth_token=#{currentUser.authenticationToken}"
+
   Task.getTaskPDFUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_pdf.json?auth_token=#{currentUser.authenticationToken}"
 
@@ -48,6 +51,18 @@ angular.module("doubtfire.api.models.task", [])
 
   Task.getTaskMarkingUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/submission/assess.json?unit_id=#{unit.id}&auth_token=#{currentUser.authenticationToken}"
+
+  Task.getTaskAssessmentResourcesUrl = (unit, task_def) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_assessment_resources.json?auth_token=#{currentUser.authenticationToken}"
+
+  Task.generateLatestAssessmentUrl = (task) ->
+    "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submissions/latest?auth_token=#{currentUser.authenticationToken}"
+
+  Task.getLatestTimestampsUrl = (task) ->
+    "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submissions/timestamps?auth_token=#{currentUser.authenticationToken}"
+
+  Task.getSubmissionByTimestampUrl = (task, timestamp) ->
+    "#{DoubtfireConstants.API_URL}/projects/#{task.project().project_id}/task_def_id/#{task.definition.id}/submissions/timestamps/#{timestamp}?auth_token=#{currentUser.authenticationToken}"
 
   Task.generateMarkingSubmissionUrl = ->
 

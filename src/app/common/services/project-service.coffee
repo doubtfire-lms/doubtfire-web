@@ -191,7 +191,7 @@ angular.module("doubtfire.common.services.projects", [])
     task.group = ->
       projectService.getGroupForTask(task.project(), task)
     task.addComment = (textString, success, failure) ->
-      TaskCommentService.addComment(task, textString).subscribe(
+      TaskCommentService.addComment(task, textString, 'text').subscribe(
         (tc) -> success(tc)
         (error) -> failure(error)
       )
@@ -394,7 +394,8 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.statusLabels[task.status].toLowerCase().indexOf(matchText) >= 0 ||
       task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
-      project? && project.matches(matchText)
+      (task.has_extensions && 'extension'.indexOf(matchText) == 0) ||
+      (project? && project.matches(matchText))
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.project_id, task_definition_id: task.definition.id },

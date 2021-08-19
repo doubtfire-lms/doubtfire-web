@@ -14,8 +14,8 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
   templateUrl: 'tasks/task-submission-wizard/task-submission-wizard.tpl.html'
   controller: ($scope, $timeout, Task, taskService, alertService, projectService, groupService, analyticsService) ->
     # Upload types which are also task states
-    UPLOAD_STATUS_TYPES = ['ready_to_mark', 'need_help']
-    UPLOAD_TYPES = ['ready_to_mark', 'need_help', 'reupload_evidence']
+    UPLOAD_STATUS_TYPES = ['ready_for_feedback', 'need_help']
+    UPLOAD_TYPES = ['ready_for_feedback', 'need_help', 'reupload_evidence']
 
     # States in the Wizard
     $scope.states = {
@@ -39,7 +39,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       revertChanges(oldTask)
       # Copy in the old status
       $scope.oldStatus = angular.copy $scope.task.status
-      # If already set to RTM or needs help, then default to one of these,
+      # If already set to RFF or needs help, then default to one of these,
       # otherwise it's null
       $scope.uploadType  = if task.status in UPLOAD_STATUS_TYPES then task.status
       # Redo the file uploader details
@@ -69,22 +69,22 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
 
     # The variant upload states
     $scope.uploadTypes =
-      ready_to_mark:
-        icon: taskService.statusIcons['ready_to_mark']
-        text: taskService.statusLabels['ready_to_mark']
-        class: 'ready-to-mark'
-        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+      ready_for_feedback:
+        icon: taskService.statusIcons['ready_for_feedback']
+        text: taskService.statusLabels['ready_for_feedback']
+        class: 'ready-for-feedback'
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
       need_help:
         icon: taskService.statusIcons['need_help']
         text: taskService.statusLabels['need_help']
         class: 'need-help'
-        hide: $scope.task.status in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+        hide: $scope.task.status in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
       reupload_evidence:
         icon: 'fa fa-recycle'
         text: "new evidence for portfolio"
         class: 'btn-info'
         # Upload evidence only okay in a final state
-        hide: $scope.task.status not in ['demonstrate', 'discuss', 'do_not_resubmit', 'complete', 'fail']
+        hide: $scope.task.status not in ['demonstrate', 'discuss', 'feedback_exceeded', 'complete', 'fail']
 
     # Switch the status if the upload type matches a state
     $scope.setUploadType = (type) ->
@@ -124,7 +124,7 @@ angular.module('doubtfire.tasks.task-submission-wizard', [])
       # No callback
       taskService.recreatePDF $scope.task, null
 
-    $scope.allowRegeneratePdf = $scope.task.status in ['demonstrate', 'ready_to_mark', 'discuss', 'complete'] and $scope.task.has_pdf
+    $scope.allowRegeneratePdf = $scope.task.status in ['demonstrate', 'ready_for_feedback', 'discuss', 'complete'] and $scope.task.has_pdf
 
     # Keep track of team contributions for upload of group tasks
     $scope.team = {members: []}

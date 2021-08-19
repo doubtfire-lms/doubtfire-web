@@ -9,6 +9,10 @@
   border-right-width: 1px;
 }
 
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
 .task-inbox.full-width {
   max-width: 350px;
   min-width: 350px;
@@ -81,7 +85,6 @@ $warn-color: #f44336;
 
 .truncate {
   min-width: 0;
-  max-width: 190px;
   h4,
   p {
     white-space: nowrap;
@@ -125,6 +128,10 @@ $warn-color: #f44336;
 
 .search-settings-panel {
   background-color: transparent;
+}
+
+:host ::ng-deep div.mat-expansion-panel-body{
+  padding-right: 0 !important;
 }
 
 user-icon {

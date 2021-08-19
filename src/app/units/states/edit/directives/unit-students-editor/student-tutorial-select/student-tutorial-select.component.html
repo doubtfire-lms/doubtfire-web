@@ -2,16 +2,22 @@
   <mat-label>Tutorial</mat-label>
   <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorial_enrolments">
     <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">
-      <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student)" [value]="tutorial"
-        (click)="switchToTutorial(tutorial)">
-        {{tutorial.abbreviation}}
+      <mat-option
+        *ngFor="let tutorial of tutorialsForStreamAndStudent(student)"
+        [value]="tutorial"
+        (click)="student.switchToTutorial(tutorial)"
+      >
+        {{ tutorial.abbreviation }}
       </mat-option>
     </mat-optgroup>
     <div *ngFor="let stream of unit.tutorial_streams">
       <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student, stream).length > 0" [label]="stream.name">
-        <mat-option *ngFor="let tutorial of tutorialsForStreamAndStudent(student, stream)" [value]="tutorial"
-          (click)="student.switchToTutorial(tutorial)">
-          {{tutorial.abbreviation}}
+        <mat-option
+          *ngFor="let tutorial of tutorialsForStreamAndStudent(student, stream)"
+          [value]="tutorial"
+          (click)="student.switchToTutorial(tutorial)"
+        >
+          {{ tutorial.abbreviation }}
         </mat-option>
       </mat-optgroup>
     </div>

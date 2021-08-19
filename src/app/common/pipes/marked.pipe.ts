@@ -1,15 +1,26 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as marked from 'marked';
+import marked from 'marked';
 
 @Pipe({
-  name: 'marked'
+  name: 'marked',
 })
-
 export class MarkedPipe implements PipeTransform {
-  private renderer = new marked.Renderer();
+  // Set the options for the markdown renderer
+  constructor() {
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      pedantic: false,
+      gfm: true,
+      breaks: false,
+      smartLists: true,
+      smartypants: false,
+      xhtml: false,
+    });
+  }
+
   transform(value: string, ...args: any[]): string {
     if (value && value.length > 0) {
-      return marked.inlineLexer(value, [], {});
+      return marked(value);
     }
     return value;
   }

@@ -14,6 +14,8 @@ angular.module("doubtfire.api.models.unit", [])
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_sheet?auth_token=#{currentUser.authenticationToken}"
   Unit.taskResourcesUploadUrl = (unit, taskDefinition) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_resources?auth_token=#{currentUser.authenticationToken}"
+  Unit.taskAssessmentResourcesUploadUrl = (unit, taskDefinition) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{taskDefinition.id}/task_assessment_resources?auth_token=#{currentUser.authenticationToken}"
   Unit.allResourcesDownloadUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/all_resources?auth_token=#{currentUser.authenticationToken}"
   Unit.enrolStudentsCSVUrl = (unit) ->

@@ -4,6 +4,10 @@
   min-width: 230px;
 }
 
+::ng-deep .text-bubble .comment-text .markdown-to-html p {
+  margin: 0 0 0 0px !important;
+}
+
 $comment-bubble-color: rgb(0, 153, 255);
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
@@ -28,7 +32,6 @@ $comment-inner-border-radius: 4px;
 
 .comments-body {
   overflow-y: auto;
-
   @include scrollable();
 }
 
@@ -116,6 +119,10 @@ $comment-inner-border-radius: 4px;
   }
 
   .comment-container .comment-extension {
+    width: 100%;
+  }
+
+  .comment-container .comment-assessment {
     width: 100%;
   }
 
@@ -308,11 +315,16 @@ $comment-inner-border-radius: 4px;
     .comment-text,
     .comment-pdf,
     .comment-discussion,
-    .markdown-to-html {
+    .markdown-to-html p {
       padding-right: 6px;
       padding-left: 4px;
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
+      margin-bottom: 0 !important;
+    }
+
+    .comment-text .markdown-to-html p {
+      margin: 0 0 0 0 !important;
     }
     .comment-audio {
       display: inline-block;
@@ -333,6 +345,8 @@ $comment-inner-border-radius: 4px;
   .comment .pdf-bubble {
     @include base-bubble;
     display: inline-block;
+    padding-left: $comment-text-padding;
+    padding-right: $comment-text-padding;
 
     a p,
     a {
@@ -340,17 +354,16 @@ $comment-inner-border-radius: 4px;
       margin-bottom: 0px;
     }
 
-    .markdown-to-html {
-      padding-left: $comment-text-padding;
-      padding-right: $comment-text-padding;
+    ::ng-deep .text-bubble .comment-text .markdown-to-html p {
+      margin: 0 0 0 0px !important;
     }
 
-    .markdown-to-html > *:last-child {
+    .markdown-to-html p > *:last-child {
       margin-bottom: 0px;
     }
 
-    .markdown-to-html > pre:last-child {
-      margin-bottom: 0.5em;
+    .markdown-to-html p > pre:last-child {
+      margin-bottom: 0em;
     }
   }
 
