@@ -151,4 +151,10 @@ export class Tutorial extends Entity {
   public keyForJson(json: any): string {
     return json.id;
   }
+
+  public get students(): any[] {
+    return this.unit.students.filter((student) => {
+      return student.tutorials().some((tutorial) => tutorial.id === this.id);
+    });
+  }
 }

@@ -127,6 +127,11 @@
               <li class="divider" ng-if="unitRole.role != 'Admin'"></li>
               <!--/task-related-->
               <li>
+                <a ui-sref="units/students/iotrack({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'"
+                  >IOTrack</a
+                >
+              </li>
+              <li>
                 <a ui-sref="units/students/list({unitId: unitRole.unit_id})" ng-if="unitRole.role != 'Admin'"
                   >Student List</a
                 >

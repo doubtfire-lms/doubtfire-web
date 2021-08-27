@@ -18,6 +18,8 @@ angular.module("doubtfire.api.models.unit", [])
     "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}"
   Unit.withdrawStudentsCSVUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}/withdraw"
+  Unit.IOTrackCheckInStudentsURL = (unit) ->
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/iotrack/checked-in-students"
 
   Unit.learningProgressClassStats = resourcePlus "/units/:id/learning_alignments/class_stats", { id: "@id" }
   Unit.learningProgressClassDetails = resourcePlus "/units/:id/learning_alignments/class_details", {id: "@id"}

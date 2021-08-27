@@ -166,6 +166,7 @@ import 'build/src/app/units/states/rollover/directives/directives.js';
 import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
+import 'build/src/app/units/states/iotrack/iotrack.js';
 import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
 import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
 import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
@@ -285,6 +286,7 @@ import { StatusIconComponent } from './common/status-icon/status-icon.component'
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskCommentService } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { IOTrackComponent } from './units/states/iotrack/components/iotrack.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -368,6 +370,7 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskCommentsViewerComponent })
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
+DoubtfireAngularJSModule.directive('ioTrack', downgradeComponent({ component: IOTrackComponent }));
 DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));

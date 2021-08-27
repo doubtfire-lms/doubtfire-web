@@ -130,6 +130,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
   ActivityTypeService,
   CampusService,
+  CheckInService,
   TaskCommentService,
   TutorialService,
   TutorialStreamService,
@@ -138,6 +139,8 @@ import {
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
+import { IOTrackComponent } from './units/states/iotrack/components/iotrack.component';
+import { UserSelectorComponent } from './units/states/iotrack/components/student_selector.component';
 
 @NgModule({
   // Components we declare
@@ -170,6 +173,8 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     StatusIconComponent,
     TaskCommentsViewerComponent,
     UserIconComponent,
+    IOTrackComponent,
+    UserSelectorComponent,
     AudioPlayerComponent,
     MarkedPipe,
     HumanizedDatePipe,
@@ -242,6 +247,7 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     TutorialStreamService,
     UserService,
     WebcalService,
+    CheckInService,
     ActivityTypeService,
     EmojiService,
     FileDownloaderService,

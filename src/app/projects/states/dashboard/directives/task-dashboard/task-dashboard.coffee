@@ -29,7 +29,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
-    listeners.push $scope.$watch('task.id', ->
+    listeners.push $scope.$watch('task', ->
       return unless $scope.task?
       # get the url for the task sheet and the submissions
       $scope.urls = {

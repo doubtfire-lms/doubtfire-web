@@ -1,0 +1,6 @@
+<input type="text" placeholder="Enter name" [formControl]="control" [matAutocomplete]="auto" />
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+  <mat-option *ngFor="let user of filteredUsers | async" [value]="user" (onSelectionChange)="optionSelected(user)">
+    {{ user.name }}
+  </mat-option>
+</mat-autocomplete>

@@ -1,5 +1,9 @@
 // Export all model objects and services for use by other components
 
+// IOTrack
+export * from './check-in/check-in';
+export * from './check-in/check-in.service';
+
 // Comments -- tasks have many comments
 export * from './task-comment/task-comment';
 export * from './task-comment/task-comment.service';
@@ -21,3 +25,5 @@ export * from './user/user.service';
 // WebCal -- calendars used to track task due dates
 export * from './webcal/webcal';
 export * from './webcal/webcal.service';
+
+export type Project = any;

@@ -159,6 +159,16 @@ angular.module("doubtfire.common.services.units", [])
       requestToLoadAll = !options?.loadOnlyEnrolledStudents || options?.loadAllStudents
       Students.query({ unit_id: unit.id, all: requestToLoadAll }, successCallback, failureCallback)
 
+    # Refresh callback for reloading students
+    unit.refreshCheckedInStudents = (JustForTesting = true) ->
+      successCallback = (students) ->
+        # extend the students with their tutorial data
+        unit.checked_in_students = _.map(students, (s) -> unitService.mapStudentToUnit(unit, s))
+      failureCallback = (response) ->
+        alertService.add("danger", "Failed to load students. #{response?.data?.error}", 8000)
+      # Fetch the students for the unit
+      Students.query({ unit_id: unit.id, checked_in: JustForTesting }, successCallback, failureCallback)
+
     # Returns whether the specified project ID is of an enrolled student or not
     unit.studentEnrolled = (id) ->
       unit.findStudent(id)?.enrolled
@@ -168,6 +178,11 @@ angular.module("doubtfire.common.services.units", [])
       unless unit.students?
         throw Error "Students not yet mapped to unit (unit.students is undefined)"
       _.find(unit.students, {project_id: id})
+
+    unit.findStudentUsername = (username) ->
+      unless unit.students?
+        throw Error "Students not yet mapped to unit (unit.students is undefined)"
+      _.find(unit.students, {student_id: username})
 
     # Delete a unit's stream
     unit.deleteStream = (stream) ->

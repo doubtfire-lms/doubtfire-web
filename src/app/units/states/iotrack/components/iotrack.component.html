@@ -1,0 +1,57 @@
+<h2>IoTrack</h2>
+{{ unit.name }}
+<div *ngIf="selectedTutorial === null; else elseBlock">
+  <table style="width: 100%">
+    <thead>
+      <tr>
+        <th>Tutorial Abbr.</th>
+        <th>Tutorial location</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tutorial of unit.tutorials" style="cursor: pointer" (click)="updateTutorial(tutorial)">
+        <td>{{ tutorial.abbreviation }}</td>
+        <td>{{ tutorial.meeting_location }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #elseBlock>
+  <div>
+    <button type="button" (click)="refreshCheckins()" style="float: right; margin: 0 5px">Refresh</button>
+    <button type="button" (click)="checkoutEveryone(selectedTutorial)" style="float: right">
+      Checkout out everyone from room {{ selectedTutorial.meeting_location }}
+    </button>
+
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th style="width: 50%">Student Name</th>
+          <th style="width: 20%">Seat</th>
+          <th style="width: 30%"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let checkin of checkins">
+          <td style="padding-bottom: 8px">
+            <span *ngIf="checkin.user">
+              {{ checkin.user.name }}
+            </span>
+            <span *ngIf="!checkin.user" style="position: relative">
+              <user-selector
+                [userList]="selectedTutorial.students"
+                [disableAfterSelection]="true"
+                (userSelected)="userSelected($event, checkin)"
+              ></user-selector>
+            </span>
+          </td>
+          <td>{{ checkin.seat }}</td>
+          <td>
+            <button type="button" (click)="checkout(checkin)">Checkout</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
