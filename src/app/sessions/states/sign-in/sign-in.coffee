@@ -36,7 +36,8 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.api = DoubtfireConstants.API_URL
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
   $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
-    $scope.aafLogin = response.data.redirect_to || false
+
+    $scope.aafLogin = response.data.redirect_to || response.data || false
 
     if $scope.aafLogin
       if $stateParams.authToken
