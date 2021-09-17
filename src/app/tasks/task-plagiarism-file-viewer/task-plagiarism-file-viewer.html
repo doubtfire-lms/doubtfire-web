@@ -1,0 +1,33 @@
+<div class="card card-default task-plagiarism-file-viewer">
+  <div class="card-heading clearfix">
+    <div class="pull-left">
+      <h5 class="panel-title">
+        <strong>{{match.username || "Other Student"}}</strong>
+        {{match.name}}
+      </h5>
+      <span ng-show="other">
+        Match is <strong>{{match.pct}}% similar</strong> to a student in {{match.tutor}}'s tutorial, {{match.tutorial}}.
+      </span>
+      <span ng-hide="other">
+        Similarities detected in your work.
+      </span>
+    </div>
+  </div>
+  <div class="card-body plagiarism-panel" ng-bind-html="match.html" ng-show="match.html">
+  </div>
+  <div class="card-body plagiarism-panel text-center strong" ng-hide="match.html">
+    <i class="fa fa-low-vision fa-2x"></i>
+    <p>Match data hidden</p>
+  </div>
+  <div class="card-footer text-right">
+    <a class="btn btn-default" ng-show="match.url" ng-href="{{match.url}}" target="new">
+      <i class="fa fa-file-text-o"></i> View Report
+    </a>
+    <button class="btn btn-danger" ng-hide="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(true)">
+      <i class="fa fa-check-square-o"></i> Mark as Resolved
+    </button>
+    <button class="btn btn-danger" ng-show="match.dismissed" ng-if="canDismiss" ng-click="dismiss_similarity(false)">
+      <i class="fa fa-square-o"></i> Mark as Unresolved
+    </button>
+  </div>
+</div>

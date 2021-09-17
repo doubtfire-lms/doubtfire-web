@@ -1,0 +1,40 @@
+<div class="task-ilo-alignment-modal">
+  <div class="modal-header text-center">
+    <h3>
+      How much does <label class="label label-info" tooltip="{{task.definition.name}}">{{task.definition.abbreviation}}</label> relate to <label class="label label-info" tooltip="{{ilo.name}}">{{ilo.abbreviation}}</label>?
+    </h3>
+  </div>
+  <div class="modal-body clearfix">
+    <p class="help-block col-sm-12 text-center">
+      Hover and click over a rating value below
+    </p>
+    <task-ilo-alignment-rater ng-model="alignment" on-rating-changed="updateRating"></task-ilo-alignment-rater>
+    <div class="col-sm-12 rationale-wrapper" ng-show="alignment.rating > 0">
+      <div tooltip="Click to edit rationale" tooltip-placement="left" tooltip-append-to-body="false" tooltip-popup-delay="300" tooltip-enable="alignment.description != null" ng-click="toggleEditRationale()" class="rationale" ng-class="{'no-rationale': alignment.description == null}" ng-hide="editingRationale">
+        <label class="text-muted" ng-show="alignment.description != null">
+          Provided Rationale
+        </label>
+        <div ng-bind-html="(alignment.description || 'No rationale provided') | markdown"></div>
+        <div class="small" ng-hide="alignment.description">Click to add one</div>
+      </div>
+      <div ng-if="editingRationale" class="clearfix">
+        <!-- <markdown-editor
+          height="200"
+          ng-model="alignment.description"
+          placeholder="Edit rationale..."
+          autofocus="true">
+        </markdown-editor> -->
+        <div contenteditable ng-model="alignment.description" placeholder="Edit rationale here..." autofocus="true" style="border-style: solid; border-width: thin; height: 200px" ></div>
+        <a ng-click="toggleEditRationale(alignment)" class="pull-right">Done Editing</a>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button ng-click="closeModal()" class="btn btn-primary">
+      <i class="fa fa-check"></i>
+    </button>
+    <button ng-click="removeAlignmentItem(alignment)" ng-if="alignment" tooltip="Remove this alignment" tooltip-append-to-body="true" class="btn btn-danger">
+      <i class="fa fa-trash-o"></i>
+    </button>
+  </div>
+</div>
