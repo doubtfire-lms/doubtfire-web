@@ -28,9 +28,13 @@ export class IOTrackComponent implements OnInit {
   ) {
     // TODO: doesn't work on initial load
     transitionService.onFinish({}, (transition) => {
+      if (transition.targetState().name() !== 'units/students/iotrack') return;
+
       this._selectedTutorial = this.unit.tutorials.find((tutorial) => {
         return tutorial.id === transition.targetState().params().tutorial;
       });
+
+      if (!this._selectedTutorial) return;
 
       this.checkInService
         .query({}, this.unit, { params: { room_number: this._selectedTutorial.meeting_location } })
@@ -88,6 +92,10 @@ export class IOTrackComponent implements OnInit {
     CheckIn.checkoutEveryone(tutorial, tutorial.meeting_location).subscribe((_) => {
       this.refreshCheckins();
     });
+  }
+
+  goToStudentView(checkin: CheckIn) {
+    checkin.user.viewProject(true);
   }
 
   public get selectedTutorial(): Tutorial {

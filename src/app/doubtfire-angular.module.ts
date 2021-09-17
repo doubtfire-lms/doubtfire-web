@@ -141,6 +141,7 @@ import { FileDownloaderService } from './common/file-downloader/file-downloader'
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { IOTrackComponent } from './units/states/iotrack/components/iotrack.component';
 import { UserSelectorComponent } from './units/states/iotrack/components/student_selector.component';
+import { IotrackQrCodeLogin } from './iotrack/qrcode-login/qrcode-login';
 
 @NgModule({
   // Components we declare
@@ -161,6 +162,7 @@ import { UserSelectorComponent } from './units/states/iotrack/components/student
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
+    IotrackQrCodeLogin,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,

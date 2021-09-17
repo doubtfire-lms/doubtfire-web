@@ -11,7 +11,7 @@ export class CheckIn extends Entity {
   card: number;
   username: string;
   seat: string;
-  user: User;
+  user: Project;
 
   public static checkoutEveryone(tutorial: Tutorial, room_number: string) {
     const cis: CheckInService = AppInjector.get(CheckInService);

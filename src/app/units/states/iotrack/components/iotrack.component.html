@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let checkin of checkins">
+        <tr *ngFor="let checkin of checkins" style="cursor: pointer" (click)="goToStudentView(checkin)">
           <td style="padding-bottom: 8px">
             <span *ngIf="checkin.user">
               {{ checkin.user.name }}
