@@ -1,13 +1,13 @@
-FROM node:12
+FROM node:14-alpine
 
 WORKDIR /doubtfire-web
 
-EXPOSE 4200
+COPY package*.json ./
 
-ENV NODE_ENV docker
+RUN npm ci
 
-# Install packages within the container
-COPY package.json /doubtfire-web/
-RUN npm install
+COPY . .
+
+RUN npm run deploy
 
 # CMD npm start
