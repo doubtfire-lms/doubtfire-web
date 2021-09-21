@@ -10,6 +10,6 @@ ENV NODE_ENV docker
 
 # Install packages within the container
 COPY package.json package-lock.json /doubtfire-web/
-RUN npm install
+RUN npm ci
 
 CMD npm start
