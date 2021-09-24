@@ -24,7 +24,7 @@
       <i class="logo"></i> {{externalName.value}}
       <p class="lead">Learning Management System<p>
     </h1>
-    <form name="form" ng-submit="signIn()" ng-if="aafLogin === false">
+    <form name="form" ng-submit="signIn()" ng-if="SSOLogin === false">
       <div class="username-password-entry" ng-class="{'invalid-credentials': invalidCredentials}">
         <input autofocus class="form-control" name="username" type="username" placeholder="Username" ng-model="session.username" auto-fill-sync required />
         <input class="form-control" name="password" type="password" placeholder="Password" ng-model="session.password" password-validate auto-fill-sync required />
@@ -38,8 +38,8 @@
         <span>Remember Me</span>
       </label>
     </form>
-    <form name="form" ng-if="aafLogin">
-      <a class="btn btn-lg btn-primary btn-block text-center" ng-href="{{aafLogin}}">
+    <form name="form" ng-if="SSOLogin">
+      <a class="btn btn-lg btn-primary btn-block text-center" ng-href="{{SSOLoginUrl}}">
         Click to Sign In...
       </a>
     </form>
