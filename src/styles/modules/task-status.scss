@@ -2,59 +2,179 @@
 // Styling for all task status classes
 //
 .task-status {
-  &.ready-to-mark     { @include task-status-color-ready-to-mark;     }
-  &.not-started       { @include task-status-color-not-started;       }
-  &.working-on-it     { @include task-status-color-working-on-it;     }
-  &.need-help         { @include task-status-color-need-help;         }
-  &.fix-and-resubmit  { @include task-status-color-fix-and-resubmit;  }
-  &.do-not-resubmit   { @include task-status-color-do-not-resubmit;   }
-  &.fail              { @include task-status-color-fail;              }
-  &.redo              { @include task-status-color-redo;              }
-  &.discuss           { @include task-status-color-discuss;           }
-  &.demonstrate       { @include task-status-color-demonstrate;       }
-  &.complete          { @include task-status-color-complete;          }
-  &.time-exceeded     { @include task-status-color-time-exceeded;     }
+  &.ready-for-feedback {
+    @include task-status-color-ready-for-feedback;
+  }
+  &.not-started {
+    @include task-status-color-not-started;
+  }
+  &.working-on-it {
+    @include task-status-color-working-on-it;
+  }
+  &.need-help {
+    @include task-status-color-need-help;
+  }
+  &.fix-and-resubmit {
+    @include task-status-color-fix-and-resubmit;
+  }
+  &.feedback-exceeded {
+    @include task-status-color-feedback-exceeded;
+  }
+  &.fail {
+    @include task-status-color-fail;
+  }
+  &.redo {
+    @include task-status-color-redo;
+  }
+  &.discuss {
+    @include task-status-color-discuss;
+  }
+  &.demonstrate {
+    @include task-status-color-demonstrate;
+  }
+  &.complete {
+    @include task-status-color-complete;
+  }
+  &.time-exceeded {
+    @include task-status-color-time-exceeded;
+  }
 
-  &.ready-to-mark:hover     { background-color: task-status-color('ready-to-mark');      }
-  &.not-started:hover       { background-color: task-status-color('not-started');        }
-  &.working-on-it:hover     { background-color: task-status-color('working-on-it');      }
-  &.need-help:hover         { background-color: task-status-color('need-help');          }
-  &.fix-and-resubmit:hover  { background-color: task-status-color('fix-and-resubmit');   }
-  &.do-not-resubmit:hover   { background-color: task-status-color('do-not-resubmit');    }
-  &.fail:hover              { background-color: task-status-color('fail');               }
-  &.redo:hover              { background-color: task-status-color('redo');               }
-  &.discuss:hover           { background-color: task-status-color('discuss');            }
-  &.demonstrate:hover       { background-color: task-status-color('demonstrate');        }
-  &.complete:hover          { background-color: task-status-color('complete');           }
-  &.time-exceeded:hover     { background-color: task-status-color('time-exceeded');      }
+  &.ready-for-feedback:hover {
+    background-color: task-status-color('ready-for-feedback');
+  }
+  &.not-started:hover {
+    background-color: task-status-color('not-started');
+  }
+  &.working-on-it:hover {
+    background-color: task-status-color('working-on-it');
+  }
+  &.need-help:hover {
+    background-color: task-status-color('need-help');
+  }
+  &.fix-and-resubmit:hover {
+    background-color: task-status-color('fix-and-resubmit');
+  }
+  &.feedback-exceeded:hover {
+    background-color: task-status-color('feedback-exceeded');
+  }
+  &.fail:hover {
+    background-color: task-status-color('fail');
+  }
+  &.redo:hover {
+    background-color: task-status-color('redo');
+  }
+  &.discuss:hover {
+    background-color: task-status-color('discuss');
+  }
+  &.demonstrate:hover {
+    background-color: task-status-color('demonstrate');
+  }
+  &.complete:hover {
+    background-color: task-status-color('complete');
+  }
+  &.time-exceeded:hover {
+    background-color: task-status-color('time-exceeded');
+  }
 }
 
 .task-status > .btn-default {
-  &.ready-to-mark,     &.ready-to-mark.active,    &.ready-to-mark:hover     { @include task-status-color-ready-to-mark;    }
-  &.not-started,       &.not-started.active,      &.not-started:hover       { @include task-status-color-not-started;      }
-  &.working-on-it,     &.working-on-it.active,    &.working-on-it:hover     { @include task-status-color-working-on-it;    }
-  &.need-help,         &.need-help.active,        &.need-help:hover         { @include task-status-color-need-help;        }
-  &.fix-and-resubmit,  &.fix-and-resubmit.active, &.fix-and-resubmit:hover  { @include task-status-color-fix-and-resubmit; }
-  &.do-not-resubmit,   &.do-not-resubmit.active,  &.do-not-resubmit:hover   { @include task-status-color-do-not-resubmit;  }
-  &.fail,              &.fail.active,             &.fail:hover              { @include task-status-color-fail;             }
-  &.redo,              &.redo.active,             &.redo:hover              { @include task-status-color-redo;             }
-  &.discuss,           &.discuss.active,          &.discuss:hover           { @include task-status-color-discuss;          }
-  &.demonstrate,       &.demonstrate.active,      &.demonstrate:hover       { @include task-status-color-demonstrate;      }
-  &.complete,          &.complete.active,         &.complete:hover          { @include task-status-color-complete;         }
-  &.time-exceeded,     &.time-exceeded.active,    &.time-exceeded:hover     { @include task-status-color-time-exceeded;    }
+  &.ready-for-feedback,
+  &.ready-for-feedback.active,
+  &.ready-for-feedback:hover {
+    @include task-status-color-ready-for-feedback;
+  }
+  &.not-started,
+  &.not-started.active,
+  &.not-started:hover {
+    @include task-status-color-not-started;
+  }
+  &.working-on-it,
+  &.working-on-it.active,
+  &.working-on-it:hover {
+    @include task-status-color-working-on-it;
+  }
+  &.need-help,
+  &.need-help.active,
+  &.need-help:hover {
+    @include task-status-color-need-help;
+  }
+  &.fix-and-resubmit,
+  &.fix-and-resubmit.active,
+  &.fix-and-resubmit:hover {
+    @include task-status-color-fix-and-resubmit;
+  }
+  &.feedback-exceeded,
+  &.feedback-exceeded.active,
+  &.feedback-exceeded:hover {
+    @include task-status-color-feedback-exceeded;
+  }
+  &.fail,
+  &.fail.active,
+  &.fail:hover {
+    @include task-status-color-fail;
+  }
+  &.redo,
+  &.redo.active,
+  &.redo:hover {
+    @include task-status-color-redo;
+  }
+  &.discuss,
+  &.discuss.active,
+  &.discuss:hover {
+    @include task-status-color-discuss;
+  }
+  &.demonstrate,
+  &.demonstrate.active,
+  &.demonstrate:hover {
+    @include task-status-color-demonstrate;
+  }
+  &.complete,
+  &.complete.active,
+  &.complete:hover {
+    @include task-status-color-complete;
+  }
+  &.time-exceeded,
+  &.time-exceeded.active,
+  &.time-exceeded:hover {
+    @include task-status-color-time-exceeded;
+  }
 
-  &.ready-to-mark     { background-color: lighten(task-status-color('ready-to-mark'), 15%);     }
-  &.not-started       { background-color: lighten(task-status-color('not-started'), 15%);       }
-  &.working-on-it     { background-color: lighten(task-status-color('working-on-it'), 15%);     }
-  &.need-help         { background-color: lighten(task-status-color('need-help'), 10%);         }
-  &.fix-and-resubmit  { background-color: lighten(task-status-color('fix-and-resubmit'), 15%);  }
-  &.do-not-resubmit   { background-color: lighten(task-status-color('do-not-resubmit'), 15%);   }
-  &.fail              { background-color: lighten(task-status-color('fail'), 15%);              }
-  &.redo              { background-color: lighten(task-status-color('redo'), 15%);              }
-  &.discuss           { background-color: lighten(task-status-color('discuss'), 15%);           }
-  &.demonstrate       { background-color: lighten(task-status-color('demonstrate'), 15%);       }
-  &.complete          { background-color: lighten(task-status-color('complete'), 15%);          }
-  &.time-exceeded     { background-color: lighten(task-status-color('time-exceeded'), 15%);          }
+  &.ready-for-feedback {
+    background-color: lighten(task-status-color('ready-for-feedback'), 15%);
+  }
+  &.not-started {
+    background-color: lighten(task-status-color('not-started'), 15%);
+  }
+  &.working-on-it {
+    background-color: lighten(task-status-color('working-on-it'), 15%);
+  }
+  &.need-help {
+    background-color: lighten(task-status-color('need-help'), 10%);
+  }
+  &.fix-and-resubmit {
+    background-color: lighten(task-status-color('fix-and-resubmit'), 15%);
+  }
+  &.feedback-exceeded {
+    background-color: lighten(task-status-color('feedback-exceeded'), 15%);
+  }
+  &.fail {
+    background-color: lighten(task-status-color('fail'), 15%);
+  }
+  &.redo {
+    background-color: lighten(task-status-color('redo'), 15%);
+  }
+  &.discuss {
+    background-color: lighten(task-status-color('discuss'), 15%);
+  }
+  &.demonstrate {
+    background-color: lighten(task-status-color('demonstrate'), 15%);
+  }
+  &.complete {
+    background-color: lighten(task-status-color('complete'), 15%);
+  }
+  &.time-exceeded {
+    background-color: lighten(task-status-color('time-exceeded'), 15%);
+  }
 }
 
 i.task-status-icon {

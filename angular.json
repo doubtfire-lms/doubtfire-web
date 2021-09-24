@@ -13,13 +13,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist",
             "index": "build/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "showCircularDependencies": false,
             "assets": ["src/assets", "src/manifest.webmanifest"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
@@ -43,7 +41,13 @@
               "node_modules/codemirror/addon/display/placeholder.js",
               "node_modules/codemirror/mode/markdown/markdown.js",
               "node_modules/showdown/dist/showdown.js"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -66,9 +70,7 @@
               "optimization": true,
               "outputHashing": "bundles",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -111,10 +113,9 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
           }
         },
         "eslint": {
@@ -133,6 +134,7 @@
     }
   },
   "cli": {
-    "analytics": "d9f70e12-eb87-48a0-a953-29ebd31202d7"
+    "analytics": "d9f70e12-eb87-48a0-a953-29ebd31202d7",
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

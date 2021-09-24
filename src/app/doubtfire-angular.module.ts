@@ -1,3 +1,6 @@
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -23,6 +26,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -84,7 +88,7 @@ import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microph
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
-import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
+import { CampusListComponent } from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -94,9 +98,9 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
-import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
@@ -127,9 +131,12 @@ import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import {
   ActivityTypeService,
   CampusService,
+  OverseerImageService,
+  OverseerAssessmentService,
   TaskCommentService,
   TutorialService,
   TutorialStreamService,
@@ -138,6 +145,13 @@ import {
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
+import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
+
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
+import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
+
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
 @NgModule({
   // Components we declare
@@ -155,6 +169,7 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
+    OverseerImageListComponent,
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
@@ -184,6 +199,10 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    TaskAssessorComponent,
+    TaskAssessmentCommentComponent,
+    TaskAssessmentModalComponent,
+    TaskSubmissionHistoryComponent,
   ],
   // Module Imports
   imports: [
@@ -221,10 +240,15 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     MatProgressSpinnerModule,
     MatSliderModule,
     MatExpansionModule,
+    MatCardModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatTabsModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
     MatChipsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
@@ -232,7 +256,7 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerImmediately',
+      registrationStrategy: () => interval(6000).pipe(take(1))
     }),
   ],
   // Services we provide
@@ -243,8 +267,11 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     UserService,
     WebcalService,
     ActivityTypeService,
+    OverseerImageService,
+    OverseerAssessmentService,
     EmojiService,
     FileDownloaderService,
+    CheckForUpdateService,
     userProvider,
     groupServiceProvider,
     unitProvider,
@@ -276,7 +303,7 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true,
+      multi: true
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -284,7 +311,7 @@ import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-  ],
+  ]
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
@@ -293,7 +320,8 @@ export class DoubtfireAngularModule {
     injector: Injector,
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
-    private title: Title
+    private title: Title,
+    private updater: CheckForUpdateService
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'

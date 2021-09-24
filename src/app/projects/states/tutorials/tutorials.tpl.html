@@ -5,8 +5,8 @@
     </div>
     <div class="panel-body">
       <p>
-        Click the plus on the specific tutorial to enrol in that tutorial, or click
-        the minus icon to withdraw from your current tutorial.
+        Click the plus on the specific tutorial to enrol in that tutorial, or click the minus icon to withdraw from your
+        current tutorial.
       </p>
     </div>
     <table class="table table-condensed table-hover">
@@ -33,14 +33,14 @@
           <th class="tutor">
             <a ng-click="sortOrder='tutorName'; reverse=!reverse">Tutor</a>
           </th>
-          <th class="actions">
-            Actions
-          </th>
+          <th class="actions">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tutorial in unit.tutorials | tutorialCampusFilter:project | orderBy:sortOrder:reverse"
-          ng-class="{'info': tutorial == project.tutorial}">
+        <tr
+          ng-repeat="tutorial in unit.tutorials | tutorialCampusFilter:project | orderBy:sortOrder:reverse"
+          ng-class="{'info': tutorial == project.tutorial}"
+        >
           <td ng-show="unit.tutorial_streams.length > 0">{{tutorial.tutorial_stream.name || 'All'}}</td>
           <td>{{tutorial.campus.name || 'All'}}</td>
           <td>{{tutorial.abbreviation}}</td>
@@ -51,11 +51,20 @@
           <td>
             <button
               class="btn btn-default btn-sm"
-              ng-click ="project.switchToTutorial(tutorial)">
-              <div ng-hide="project.isEnrolledIn(tutorial.id)"><i class="fa fa-plus"></i> Enrol</div>
-              <div ng-show="project.isEnrolledIn(tutorial.id)"><i class="fa fa-minus"></i> Withdraw</div>
+              ng-click="project.switchToTutorial(tutorial)"
+              ng-hide="project.isEnrolledIn(tutorial.id) || !tutorial.hasCapacity()"
+            >
+              <i class="fa fa-plus"></i> Enrol
+            </button>
+            <button
+              class="btn btn-default btn-sm"
+              ng-click="project.switchToTutorial(tutorial)"
+              ng-show="project.isEnrolledIn(tutorial.id)"
+            >
+              <i class="fa fa-minus"></i> Withdraw
             </button>
           </td>
+        </tr>
       </tbody>
     </table>
   </div>

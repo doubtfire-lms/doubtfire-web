@@ -2,8 +2,8 @@
 @import '../common/variables.scss';
 
 @mixin custom-box-shadow($color) {
-      box-shadow: -15px 0 $color inset;
-    }
+  box-shadow: -15px 0 $color inset;
+}
 
 @mixin task-list {
   .panel {
@@ -13,7 +13,7 @@
   .panel-heading .form-control {
     height: 34px;
   }
-  .search-options .task-definition select:not([size="0"]) {
+  .search-options .task-definition select:not([size='0']) {
     // border-radius: $input-border-radius !important;
   }
   .list-group {
@@ -24,9 +24,11 @@
     transition: all 200ms ease-out;
     transition-property: box-shadow, padding-right;
     display: flex;
-    &:hover, &:focus, &.selected {
+    &:hover,
+    &:focus,
+    &.selected {
       padding-right: 30px;
-      @include custom-box-shadow(task-status-color('ready-to-mark'));
+      @include custom-box-shadow(task-status-color('ready-for-feedback'));
     }
 
     .due-time {
@@ -35,36 +37,85 @@
       font-weight: lighter;
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       cursor: pointer;
       text-decoration: none;
       // background-color: $list-group-hover-bg;
-      &.ready-to-mark     { @include custom-box-shadow(lighten(task-status-color('ready-to-mark'), 15%)); }
-      &.not-started       { @include custom-box-shadow(lighten(task-status-color('not-started'), 5%)); }
-      &.working-on-it     { @include custom-box-shadow(lighten(task-status-color('working-on-it'), 15%)); }
-      &.need-help         { @include custom-box-shadow(lighten(task-status-color('need-help'), 15%)); }
-      &.fix-and-resubmit  { @include custom-box-shadow(lighten(task-status-color('fix-and-resubmit'), 15%)); }
-      &.do-not-resubmit   { @include custom-box-shadow(lighten(task-status-color('do-not-resubmit'), 15%)); }
-      &.fail              { @include custom-box-shadow(lighten(task-status-color('fail'), 15%)); }
-      &.redo              { @include custom-box-shadow(lighten(task-status-color('redo'), 15%)); }
-      &.discuss           { @include custom-box-shadow(lighten(task-status-color('discuss'), 15%)); }
-      &.demonstrate       { @include custom-box-shadow(lighten(task-status-color('demonstrate'), 15%)); }
-      &.complete          { @include custom-box-shadow(lighten(task-status-color('complete'), 15%)); }
-      &.time-exceeded     { @include custom-box-shadow(lighten(task-status-color('time-exceeded'), 15%)); }
+      &.ready-for-feedback {
+        @include custom-box-shadow(lighten(task-status-color('ready-for-feedback'), 15%));
+      }
+      &.not-started {
+        @include custom-box-shadow(lighten(task-status-color('not-started'), 5%));
+      }
+      &.working-on-it {
+        @include custom-box-shadow(lighten(task-status-color('working-on-it'), 15%));
+      }
+      &.need-help {
+        @include custom-box-shadow(lighten(task-status-color('need-help'), 15%));
+      }
+      &.fix-and-resubmit {
+        @include custom-box-shadow(lighten(task-status-color('fix-and-resubmit'), 15%));
+      }
+      &.feedback-exceeded {
+        @include custom-box-shadow(lighten(task-status-color('feedback-exceeded'), 15%));
+      }
+      &.fail {
+        @include custom-box-shadow(lighten(task-status-color('fail'), 15%));
+      }
+      &.redo {
+        @include custom-box-shadow(lighten(task-status-color('redo'), 15%));
+      }
+      &.discuss {
+        @include custom-box-shadow(lighten(task-status-color('discuss'), 15%));
+      }
+      &.demonstrate {
+        @include custom-box-shadow(lighten(task-status-color('demonstrate'), 15%));
+      }
+      &.complete {
+        @include custom-box-shadow(lighten(task-status-color('complete'), 15%));
+      }
+      &.time-exceeded {
+        @include custom-box-shadow(lighten(task-status-color('time-exceeded'), 15%));
+      }
     }
     &.selected {
-      &.ready-to-mark     { @include custom-box-shadow(task-status-color('ready-to-mark')); }
-      &.not-started       { @include custom-box-shadow(task-status-color('not-started')); }
-      &.working-on-it     { @include custom-box-shadow(task-status-color('working-on-it')); }
-      &.need-help         { @include custom-box-shadow(task-status-color('need-help')); }
-      &.fix-and-resubmit  { @include custom-box-shadow(task-status-color('fix-and-resubmit')); }
-      &.do-not-resubmit   { @include custom-box-shadow(task-status-color('do-not-resubmit')); }
-      &.fail              { @include custom-box-shadow(task-status-color('fail')); }
-      &.redo              { @include custom-box-shadow(task-status-color('redo')); }
-      &.discuss           { @include custom-box-shadow(task-status-color('discuss')); }
-      &.demonstrate       { @include custom-box-shadow(task-status-color('demonstrate')); }
-      &.complete          { @include custom-box-shadow(task-status-color('complete')); }
-      &.time-exceeded     { @include custom-box-shadow(task-status-color('time-exceeded')); }
+      &.ready-for-feedback {
+        @include custom-box-shadow(task-status-color('ready-for-feedback'));
+      }
+      &.not-started {
+        @include custom-box-shadow(task-status-color('not-started'));
+      }
+      &.working-on-it {
+        @include custom-box-shadow(task-status-color('working-on-it'));
+      }
+      &.need-help {
+        @include custom-box-shadow(task-status-color('need-help'));
+      }
+      &.fix-and-resubmit {
+        @include custom-box-shadow(task-status-color('fix-and-resubmit'));
+      }
+      &.feedback-exceeded {
+        @include custom-box-shadow(task-status-color('feedback-exceeded'));
+      }
+      &.fail {
+        @include custom-box-shadow(task-status-color('fail'));
+      }
+      &.redo {
+        @include custom-box-shadow(task-status-color('redo'));
+      }
+      &.discuss {
+        @include custom-box-shadow(task-status-color('discuss'));
+      }
+      &.demonstrate {
+        @include custom-box-shadow(task-status-color('demonstrate'));
+      }
+      &.complete {
+        @include custom-box-shadow(task-status-color('complete'));
+      }
+      &.time-exceeded {
+        @include custom-box-shadow(task-status-color('time-exceeded'));
+      }
     }
     .task-badges {
       width: 50px;
@@ -100,7 +151,7 @@
             font-size: 9px;
           }
           &.soon-badge {
-            background-color: lighten(#EB8F06, 15%);
+            background-color: lighten(#eb8f06, 15%);
             color: black;
           }
           &.due-badge {
@@ -157,7 +208,8 @@
       overflow: hidden;
       white-space: nowrap;
     }
-    .task-badges, user-icon {
+    .task-badges,
+    user-icon {
       align-self: center;
     }
     .task-data > * {

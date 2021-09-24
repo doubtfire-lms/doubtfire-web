@@ -6,5 +6,8 @@
     <mat-tab label="Activities">
       <activity-type-list></activity-type-list>
     </mat-tab>
+    <mat-tab label="Overseer Images" *ngIf="overseerEnabled">
+      <overseer-image-list></overseer-image-list>
+    </mat-tab>
   </mat-tab-group>
 </div>

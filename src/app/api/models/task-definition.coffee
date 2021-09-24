@@ -5,6 +5,7 @@ angular.module("doubtfire.api.models.task-definition", [])
 
   TaskDefinition.taskSheet = resourcePlus "/units/:unit_id/task_definitions/:task_def_id/task_sheet", { unit_id: "@unit_id", task_def_id: "@task_def_id" }
   TaskDefinition.taskResources = resourcePlus "/units/:unit_id/task_definitions/:task_def_id/task_resources", { unit_id: "@unit_id", task_def_id: "@task_def_id" }
+  TaskDefinition.taskAssessmentResources = resourcePlus "/units/:unit_id/task_definitions/:task_def_id/task_assessment_resources", { unit_id: "@unit_id", task_def_id: "@task_def_id" }
 
   TaskDefinition.downloadSubmissions = (unit, task_def) ->
     fileDownloaderService.downloadFile("#{DoubtfireConstants.API_URL}/submission/unit/#{unit.id}/task_definitions/#{task_def.id}/download_submissions", "#{unit.code}-#{task_def.abbreviation}-submissions.zip")

@@ -24,10 +24,6 @@ export class StudentTutorialSelectComponent {
     return aEntity.id === bEntity.tutorial_id;
   }
 
-  private switchToTutorial(tutorial: Tutorial) {
-    this.student.switchToTutorial(tutorial);
-  }
-
   public tutorialsForStreamAndStudent(student: any, stream?: TutorialStream) {
     return this.unit.tutorials.filter((tutorial) => {
       const result: boolean =

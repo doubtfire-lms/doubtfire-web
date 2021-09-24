@@ -8,12 +8,12 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.statusKeys = [
     'not_started'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'redo'
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'ready_to_mark'
+    'ready_for_feedback'
     'discuss'
     'demonstrate'
     'complete'
@@ -28,7 +28,7 @@ angular.module("doubtfire.common.services.tasks", [])
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'ready_to_mark'
+    'ready_for_feedback'
     'discuss'
     'demonstrate'
   ]
@@ -51,8 +51,8 @@ angular.module("doubtfire.common.services.tasks", [])
   # not waiting on a new submission =  either waiting for the tutor
   # to mark it, or waiting on a discussion between student and tutor.
   taskService.submittedStatuses = [
-    'do_not_resubmit'
-    'ready_to_mark'
+    'feedback_exceeded'
+    'ready_for_feedback'
     'discuss'
     'demonstrate'
     'complete'
@@ -61,7 +61,7 @@ angular.module("doubtfire.common.services.tasks", [])
   ]
 
   taskService.awaitingFeedbackStatuses = [
-    'ready_to_mark'
+    'ready_for_feedback'
   ]
 
   # Which states can a task be considered to be overdue
@@ -71,14 +71,14 @@ angular.module("doubtfire.common.services.tasks", [])
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'ready_to_mark'
+    'ready_for_feedback'
   ]
 
   # Which states are considered final
   taskService.finalStatuses = [
     'complete'
     'fail'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'time_exceeded'
   ]
 
@@ -99,24 +99,24 @@ angular.module("doubtfire.common.services.tasks", [])
     'need_help'
     'working_on_it'
     'fix_and_resubmit'
-    'ready_to_mark'
+    'ready_for_feedback'
     'time_exceeded'
   ]
 
   taskService.pdfRegeneratableStatuses = [
     'demonstrate'
-    'ready_to_mark'
+    'ready_for_feedback'
     'discuss'
     'complete'
     'time_exceeded'
     'fail'
     'fix_and_resubmit'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'redo'
   ]
 
   taskService.submittableStatuses = [
-    'ready_to_mark'
+    'ready_for_feedback'
     'need_help'
   ]
 
@@ -124,19 +124,19 @@ angular.module("doubtfire.common.services.tasks", [])
     'redo'
     'fail'
     'fix_and_resubmit'
-    'do_not_resubmit'
+    'feedback_exceeded'
     'discuss'
     'demonstrate'
     'complete'
   ]
 
   taskService.acronymKey =
-    RTM: 'ready_to_mark'
+    RFF: 'ready_for_feedback'
     NOS: 'not_started'
     WRK: 'working_on_it'
     HLP: 'need_help'
     RDO: 'redo'
-    DNR: 'do_not_resubmit'
+    DNR: 'feedback_exceeded'
     FIX: 'fix_and_resubmit'
     DIS: 'discuss'
     DEM: 'demonstrate'
@@ -150,21 +150,21 @@ angular.module("doubtfire.common.services.tasks", [])
     working_on_it:      0.0
     need_help:          0.0
     redo:               0.1
-    do_not_resubmit:    0.1
+    feedback_exceeded:    0.1
     fix_and_resubmit:   0.3
-    ready_to_mark:      0.5
+    ready_for_feedback:      0.5
     discuss:            0.8
     demonstrate:        0.8
     complete:           1.0
     time_exceeded:      0.3
 
   taskService.statusAcronym =
-    ready_to_mark:      'RTM'
+    ready_for_feedback:      'RFF'
     not_started:        'NOS'
     working_on_it:      'WRK'
     need_help:          'HLP'
     redo:               'RDO'
-    do_not_resubmit:    "DNR"
+    feedback_exceeded:    "DNR"
     fix_and_resubmit:   'FIX'
     discuss:            'DIS'
     demonstrate:        'DEM'
@@ -173,12 +173,12 @@ angular.module("doubtfire.common.services.tasks", [])
     time_exceeded:      'TIE'
 
   taskService.statusLabels =
-    ready_to_mark:      'Ready for Feedback'
+    ready_for_feedback:      'Ready for Feedback'
     not_started:        'Not Started'
     working_on_it:      'Working On It'
     need_help:          'Need Help'
     redo:               'Redo'
-    do_not_resubmit:    'Feedback Exceeded'
+    feedback_exceeded:    'Feedback Exceeded'
     fix_and_resubmit:   'Resubmit'
     discuss:            'Discuss'
     demonstrate:        'Demonstrate'
@@ -187,12 +187,12 @@ angular.module("doubtfire.common.services.tasks", [])
     time_exceeded:      'Time Exceeded'
 
   taskService.statusIcons =
-    ready_to_mark:      'fa fa-thumbs-o-up'
+    ready_for_feedback:      'fa fa-thumbs-o-up'
     not_started:        'fa fa-pause'
     working_on_it:      'fa fa-bolt'
     need_help:          'fa fa-question-circle'
     redo:               'fa fa-refresh'
-    do_not_resubmit:    'fa fa-low-vision'
+    feedback_exceeded:    'fa fa-low-vision'
     fix_and_resubmit:   'fa fa-wrench'
     discuss:            'fa fa-commenting'
     demonstrate:        'fa fa-commenting'
@@ -202,12 +202,12 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.statusColors =
     # Please make sure this matches task-status-colors.less
-    ready_to_mark:     '#0079D8'
+    ready_for_feedback:     '#0079D8'
     not_started:       '#CCCCCC'
     working_on_it:     '#EB8F06'
     need_help:         '#a48fce'
     fix_and_resubmit:  '#f2d85c'
-    do_not_resubmit:   '#d46b54'
+    feedback_exceeded:   '#d46b54'
     redo:              '#804000'
     discuss:           '#31b0d5'
     demonstrate:       '#428bca'
@@ -218,12 +218,12 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.statusSeq =
     not_started:        1
     fail:               2
-    do_not_resubmit:    3
+    feedback_exceeded:    3
     time_exceeded:      4
     redo:               5
     need_help:          6
     working_on_it:      7
-    ready_to_mark:      8
+    ready_for_feedback:      8
     fix_and_resubmit:   9
     discuss:           10
     demonstrate:       11
@@ -234,7 +234,7 @@ angular.module("doubtfire.common.services.tasks", [])
     # detail = in a brief context to the student
     # reason = reason for this status
     # action = action student can take
-    ready_to_mark:
+    ready_for_feedback:
       detail: "Submitted this task for feedback"
       reason: "You have finished working on the task and have uploaded it for your tutor to assess."
       action: "No further action is required. Your tutor will change this task status once they have assessed it."
@@ -254,7 +254,7 @@ angular.module("doubtfire.common.services.tasks", [])
       detail: "Start this task from scratch"
       reason: "You appeared to have misunderstood what is required for this task, many deliverables were missing or the marking criteria was largely not met."
       action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor and/or lecturer."
-    do_not_resubmit:
+    feedback_exceeded:
       detail: "Feedback will no longer be given"
       reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
       action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio."
@@ -293,7 +293,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'not_started'
       'working_on_it'
       'need_help'
-      'ready_to_mark'
+      'ready_for_feedback'
     ]
     tutor: [
       'complete'
@@ -301,7 +301,7 @@ angular.module("doubtfire.common.services.tasks", [])
       'demonstrate'
       'fix_and_resubmit'
       'redo'
-      'do_not_resubmit'
+      'feedback_exceeded'
       'fail'
     ]
 
@@ -310,15 +310,15 @@ angular.module("doubtfire.common.services.tasks", [])
       not_started: []
       working_on_it: []
       need_help: []
-      ready_to_mark: []
-      complete: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      discuss:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      demonstrate:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      ready_for_feedback: []
+      complete: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+      discuss:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+      demonstrate:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
       fix_and_resubmit:  []
       redo:  []
-      do_not_resubmit:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
-      fail:  ['ready_to_mark', 'not_started', 'working_on_it', 'need_help']
+      feedback_exceeded:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+      time_exceeded: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+      fail:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
 
   taskService.currentReplyID = { id: null }
 
@@ -359,7 +359,7 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.triggerTransition = (task, status, unitRole) ->
     throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
     return if task.status == status
-    requiresFileUpload = _.includes(['ready_to_mark', 'need_help'], status) && task.requiresFileUpload()
+    requiresFileUpload = _.includes(['ready_for_feedback', 'need_help'], status) && task.requiresFileUpload()
     if requiresFileUpload
       taskService.presentTaskSubmissionModal(task, status)
     else
@@ -367,10 +367,10 @@ angular.module("doubtfire.common.services.tasks", [])
       asUser = if unitRole? then unitRole.role else 'Student'
       analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
-  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence) ->
+  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence, isTestSubmission = false) ->
     oldStatus = task.status
     task.status = status
-    modal = UploadSubmissionModal.show(task, reuploadEvidence)
+    modal = UploadSubmissionModal.show(task, reuploadEvidence, isTestSubmission)
     # Modal failed to present
     unless modal?
       task.status = oldStatus
@@ -378,6 +378,7 @@ angular.module("doubtfire.common.services.tasks", [])
     modal.result.then(
       # Grade was selected (modal closed with result)
       (response) ->
+        task.has_any_submissions = true
         null
       # Grade was not selected (modal was dismissed)
       (dismissed) ->
@@ -423,6 +424,9 @@ angular.module("doubtfire.common.services.tasks", [])
     result
 
   taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+    if response.updated_task
+      response = response.updated_task
+
     task.id = response.id
     task.times_assessed = response.times_assessed
     task.submisson_date = response.submisson_date
