@@ -188,18 +188,15 @@
         rotate="false"
       ></pagination>
       <div class="pull-right">
-        <!-- <a
+        <!-- <button
           class="btn btn-info"
-          href="{{portfolioDownloadUrl}}"
-          target="_blank"
+          ng-click="downloadPortfolios()"
           tooltip-html-unsafe="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all portfolios may take a long time"
           tooltip-append-to-body="true"
         >
           <i class="fa fa-download"></i> Download All Portfolios
-        </a> -->
-        <a class="btn btn-success" href="{{gradeDownloadUrl}}" target="_blank">
-          <i class="fa fa-download"></i> Download Grades
-        </a>
+        </button> -->
+        <button ng-click="downloadGrades()"><i class="fa fa-download"></i> Download Grades</button>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { taskService, alertService, taskComment, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
+import { taskService, alertService, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
@@ -157,10 +157,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
   shouldShowAuthorIcon(commentType: string) {
     return !(commentType === 'extension' || commentType === 'status' || commentType == 'assessment');
-  }
-
-  getCommentAttachment(comment: TaskComment) {
-    return this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, comment);
   }
 
   commentClasses(comment: TaskComment): object {

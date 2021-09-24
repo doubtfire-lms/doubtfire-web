@@ -15,7 +15,7 @@ angular.module('doubtfire.units.states.tasks.offline', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller('OfflineMarkingStateCtrl', ($scope, alertService, Task, CsvResultModal) ->
+.controller('OfflineMarkingStateCtrl', ($scope, alertService, Task, CsvResultModal, fileDownloaderService) ->
   $scope.zipMarkingFiles = { file: { name: 'Zip of annotated task PDFs and marks.csv', type: 'zip' } }
   $scope.csvMarkingFiles = { file: { name: 'Modified marks.csv', type: 'csv' } }
   $scope.uploadSubmissionUrl = $scope.readyToMarkSubmissionsUrl =
@@ -30,4 +30,6 @@ angular.module('doubtfire.units.states.tasks.offline', [])
   $scope.activeTab = 'download'
   $scope.setActiveTab = (newTab) ->
     $scope.activeTab = newTab
+  $scope.downloadTasksToMark = () ->
+    fileDownloaderService.downloadFile($scope.readyToMarkSubmissionsUrl, "#{$scope.unit.code}-offline-tasks.zip")
 )

@@ -66,7 +66,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/t
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
-import 'build/src/app/tasks/task-submission-wizard/task-submission-wizard.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
@@ -286,6 +285,7 @@ import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskCommentService } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskSubmissionService } from './common/services/task-submission.service';
@@ -319,6 +319,7 @@ DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialSt
 DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
+DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(FileDownloaderService));
 DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(CheckForUpdateService));
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));

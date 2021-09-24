@@ -85,7 +85,6 @@ TODO:
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee
 - [ ] ./src/app/tasks/task-definition-editor/task-definition-editor.coffee
-- [ ] ./src/app/tasks/task-submission-wizard/task-submission-wizard.coffee
 - [ ] ./src/app/config/privacy-policy/privacy-policy.coffee
 - [ ] ./src/app/config/config.coffee
 - [ ] ./src/app/config/runtime/runtime.coffee

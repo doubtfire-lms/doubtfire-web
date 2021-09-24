@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
   restrict: 'E'
   replace: true
   templateUrl: 'projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.tpl.html'
-  controller: ($scope, alertService, Project, DoubtfireConstants, ConfirmationModal) ->
+  controller: ($scope, alertService, Project, DoubtfireConstants, ConfirmationModal, fileDownloaderService) ->
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
@@ -41,4 +41,8 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
           $scope.project.portfolio_status = 0
           alertService.add('info', "Portfolio has been deleted!", 5000)
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
+
+    # Download the pdf
+    $scope.downloadPortfolio = ->
+      fileDownloaderService.downloadFile($scope.project.portfolioUrlAsAttachment(), "#{$scope.project.student_id}-portfolio.pdf")
 )

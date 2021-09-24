@@ -5,27 +5,23 @@ import { UIRouter } from '@uirouter/angular';
 @Component({
   selector: 'create-portfolio-task-list-item',
   templateUrl: 'create-portfolio-task-list-item.component.html',
-  styleUrls: ['create-portfolio-task-list-item.component.scss']
+  styleUrls: ['create-portfolio-task-list-item.component.scss'],
 })
 export class CreatePortfolioTaskListItemComponent {
   @Input() setSelectedTask: any;
   @Input() project: any;
 
-  constructor(
-    @Inject(taskService) private ts: any,
-    @Inject(UIRouter) private router: UIRouter
-  ) {
-  }
+  constructor(@Inject(taskService) private ts: any, @Inject(UIRouter) private router: UIRouter) {}
 
   public status(): string {
-    return this.project.portfolioTaskStatus()
+    return this.project.portfolioTaskStatus();
   }
 
   public statusClass(): string {
-    return this.project.portfolioTaskStatusClass()
+    return this.project.portfolioTaskStatusClass();
   }
 
   public switchToPortfolioCreation() {
-    this.router.stateService.go('projects/portfolio')
+    this.router.stateService.go('projects/portfolio');
   }
 }

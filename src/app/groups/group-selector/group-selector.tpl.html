@@ -1,53 +1,75 @@
 <div class="panel-heading">
   <h4 class="panel-title">
     Groups in
-    <strong ng-hide="showGroupSetSelector">
-      {{selectedGroupSet.name}}
-    </strong>
+    <strong ng-hide="showGroupSetSelector"> {{selectedGroupSet.name}} </strong>
     <group-set-selector
       ng-show="showGroupSetSelector"
       unit="unit"
       ng-model="selectedGroupSet"
-      on-change="selectGroupSet">
+      on-change="selectGroupSet"
+    >
     </group-set-selector>
   </h4>
-</div><!--/panel-heading-->
-<div class="panel-body panel-toolbar" ng-show="loaded && canCreateGroups && (unitRole || project.tutorials().length > 0)">
+</div>
+<!--/panel-heading-->
+<div
+  class="panel-body panel-toolbar"
+  ng-show="loaded && canCreateGroups && (unitRole || project.tutorials().length > 0)"
+>
   <div class="clearfix">
     <div class="input-group pull-left col-md-6 staff-filter" ng-if="unitRole">
       <div class="btn-group">
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'all'" ng-click="setStaffFilter('all')">
+        <label
+          class="btn btn-default col-sm-6"
+          ng-model="staffFilter"
+          btn-radio="'all'"
+          ng-click="setStaffFilter('all')"
+        >
           <i class="fa fa-university"></i> All Tutorials
         </label>
-        <label class="btn btn-default col-sm-6" ng-model="staffFilter" btn-radio="'mine'" ng-click="setStaffFilter('mine')">
+        <label
+          class="btn btn-default col-sm-6"
+          ng-model="staffFilter"
+          btn-radio="'mine'"
+          ng-click="setStaffFilter('mine')"
+        >
           <i class="fa fa-pencil"></i> My Tutorials
         </label>
       </div>
-    </div><!--/staff-filter-button-group-->
-    <form name="newGroupForm" class="input-group pull-right col-md-6" ng-if="canCreateGroups" ng-submit="addGroup(newGroupName)">
-      <input class="form-control" placeholder="Group Name" ng-model="newGroupName">
+    </div>
+    <!--/staff-filter-button-group-->
+    <form
+      name="newGroupForm"
+      class="input-group pull-right col-md-6"
+      ng-if="canCreateGroups"
+      ng-submit="addGroup(newGroupName)"
+    >
+      <input class="form-control" placeholder="Group Name" ng-model="newGroupName" />
       <span class="input-group-btn">
-        <button type="submit" class="btn btn-success">
-          <i class="fa fa-plus"></i> Create Group
-        </button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Create Group</button>
       </span>
-    </form><!--/group-name-create-->
+    </form>
+    <!--/group-name-create-->
   </div>
-</div><!--/creation-options-->
-<div class="panel-body panel-loading" ng-show="!loaded">
-  <i class="fa fa-spinner fa-pulse"></i> Loading Groups...
-</div><!--/loading-spinner-->
+</div>
+<!--/creation-options-->
+<div class="panel-body panel-loading" ng-show="!loaded"><i class="fa fa-spinner fa-pulse"></i> Loading Groups...</div>
+<!--/loading-spinner-->
 <div class="panel-body" ng-show="loaded && shownGroups.length == 0">
   <div class="callout callout-primary row">
     <h4>No Groups To Show</h4>
     <p>
-      There are no groups available for <strong>{{selectedGroupSet.name}}</strong>{{staffFilter == 'mine' || selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : "."}}
+      There are no groups available for <strong>{{selectedGroupSet.name}}</strong>{{staffFilter == 'mine' ||
+      selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : "."}}
     </p>
     <p ng-show="selectedGroupSet.keep_groups_in_same_class">
-      Please make sure that you are enrolled in the correct tutorial. You can only join a group that is running in your allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial enrolment.
+      Please make sure that you are enrolled in the correct tutorial. You can only join a group that is running in your
+      allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to
+      check and update your tutorial enrolment.
     </p>
   </div>
-</div><!--/no-groups-->
+</div>
+<!--/no-groups-->
 <table ng-show="loaded && shownGroups.length > 0" class="table table-condensed table-hover table-pointer">
   <thead>
     <tr>
@@ -58,74 +80,99 @@
       </th>
       <th class="tutorial">
         <a ng-click="sortTableBy('tutorial_id')">
-          Tutorial <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          Tutorial
+          <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th class="capacity_adjustment" ng-show="unitRole">
         <a ng-click="sortTableBy('capacity_adjustment')">
-          Capacity Adjustment <i ng-show="tableSort.order == 'capacity_adjustment'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          Capacity Adjustment
+          <i
+            ng-show="tableSort.order == 'capacity_adjustment'"
+            class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"
+          ></i>
         </a>
       </th>
       <th class="capacity">
         <a ng-click="sortTableBy('hasSpace()')">
-          Capacity <i ng-show="tableSort.order == 'hasSpace()'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          Capacity
+          <i ng-show="tableSort.order == 'hasSpace()'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th class="actions" ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         Actions
       </th>
     </tr>
-  </thead><!--/header-->
+  </thead>
+  <!--/header-->
   <tbody>
     <tr
       ng-class="{info: group == selectedGroup}"
-      ng-repeat="group in shownGroups = (filteredGroups | groupsForStudent:project:selectedGroupSet)">
+      ng-repeat="group in shownGroups = (filteredGroups | groupsForStudent:project:selectedGroupSet)"
+    >
       <th ng-click="selectGroup(group)">
-        <span
-          editable-text="group.name"
-          e-name="name"
-          e-form="groupRowForm"
-          e-required>
+        <span editable-text="group.name" e-name="name" e-form="groupRowForm" e-required>
           {{ group.name || 'Not Set' }}
         </span>
-      </th><!--/group-name-->
+      </th>
+      <!--/group-name-->
       <td ng-click="selectGroup(group)">
         <span
           editable-select="group.tutorial_id"
           e-name="tutorial_id"
           e-form="groupRowForm"
-          e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials | orderBy: 'abbreviation'">
+          e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials | orderBy: 'abbreviation'"
+        >
           <span tooltip="{{group.tutorial().description}}" tooltip-popup-delay="200" tooltip-append-to-body="true">
             {{group.tutorial().abbreviation}}
           </span>
         </span>
-      </td><!--/group-tutorial-->
+      </td>
+      <!--/group-tutorial-->
       <td ng-show="unitRole" ng-click="selectGroup(group)">
         <span editable-text="group.capacity_adjustment" e-form="groupRowForm" e-name="capacity_adjustment">
           {{group.capacity_adjustment}}
         </span>
-      </td><!--/capacity_adjustment-->
+      </td>
+      <!--/capacity_adjustment-->
       <td ng-click="selectGroup(group)">
         <span ng-show="group.hasSpace()">Available</span>
         <span ng-hide="group.hasSpace()">Full</span>
-      </td><!--/capacity-->
+      </td>
+      <!--/capacity-->
       <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
         <div ng-show="project">
           <span ng-show="group.hasSpace()">
-            <button ng-click="joinGroup(group)" ng-disabled="projectInGroup(group)" class="btn btn-success btn-sm joinButton" ng-show="!group.locked && !selectedGroupSet.locked">
+            <button
+              ng-click="joinGroup(group)"
+              ng-disabled="projectInGroup(group)"
+              class="btn btn-success btn-sm joinButton"
+              ng-show="!group.locked && !selectedGroupSet.locked"
+            >
               <i class="fa fa-plus"></i> Join
             </button>
             <button class="btn btn-sm joinButton" ng-show="group.locked || selectedGroupSet.locked">
-              <i class="fa fa-lock"></i> Locked 
+              <i class="fa fa-lock"></i> Locked
             </button>
           </span>
         </div>
         <div ng-show="unitRole">
-          <form editable-form name="groupRowForm" onbeforesave="updateGroup($data, group.id)" ng-show="groupRowForm.$visible" shown="inserted == group">
+          <form
+            editable-form
+            name="groupRowForm"
+            onbeforesave="updateGroup($data, group.id)"
+            ng-show="groupRowForm.$visible"
+            shown="inserted == group"
+          >
             <button type="submit" ng-disabled="groupRowForm.$waiting" class="btn btn-default btn-sm">
               <i class="fa fa-floppy-o"></i> Save
             </button>
-            <button type="button" ng-disabled="groupRowForm.$waiting" ng-click="groupRowForm.$cancel()" class="btn btn-default btn-sm">
+            <button
+              type="button"
+              ng-disabled="groupRowForm.$waiting"
+              ng-click="groupRowForm.$cancel()"
+              class="btn btn-default btn-sm"
+            >
               <i class="fa fa-times"></i> Cancel
             </button>
           </form>
@@ -133,22 +180,28 @@
             <button ng-click="groupRowForm.$show()" class="btn btn-default btn-sm">
               <i class="fa fa-pencil"></i> Edit
             </button>
-            <a class="btn btn-sm lockButton" 
+            <a
+              class="btn btn-sm lockButton"
               ng-class="{true: 'btn-warning', false: 'btn-info'}[!group.locked]"
-              ng-click="toggleLocked(group)">
+              ng-click="toggleLocked(group)"
+            >
               <i ng-class="{true: 'fa fa-lock', false: 'fa fa-unlock'}[!group.locked]"></i>
               {{!group.locked && "Lock" || "Unlock"}}
             </a>
             <button ng-click="deleteGroup(group)" class="btn btn-danger btn-sm">
               <i class="fa fa-trash-o"></i> Delete
             </button>
-          </div><!--/actions-->
+          </div>
+          <!--/actions-->
         </div>
       </td>
     </tr>
   </tbody>
 </table>
-<div class="panel-footer text-center" ng-show="pagination.show || selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
+<div
+  class="panel-footer text-center"
+  ng-show="pagination.show || selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole"
+>
   <pagination
     ng-show="pagination.show"
     total-items="pagination.totalSize"
@@ -158,10 +211,13 @@
     max-size="pagination.maxSize"
     class="pagination-sm"
     boundary-links="true"
-    rotate="false">
+    rotate="false"
+  >
   </pagination>
 
   <p ng-show="selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
-    Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial enrolment if needed.
+    Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the
+    <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial
+    enrolment if needed.
   </p>
 </div>

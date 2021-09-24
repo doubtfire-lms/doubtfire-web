@@ -2,12 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
 @Pipe({
-  name: 'humanizedDate'
+  name: 'humanizedDate',
 })
 export class HumanizedDatePipe implements PipeTransform {
-
   transform(value: unknown, ...args: unknown[]): unknown {
-
     if (value == null) {
       return;
     }
@@ -17,7 +15,7 @@ export class HumanizedDatePipe implements PipeTransform {
       nextWeek: '[this] dddd',
       lastDay: '[yesterday]',
       lastWeek: '[last] dddd',
-      sameElse: 'DD/MM/YYYY'
+      sameElse: 'DD/MM/YYYY',
     });
   }
 }

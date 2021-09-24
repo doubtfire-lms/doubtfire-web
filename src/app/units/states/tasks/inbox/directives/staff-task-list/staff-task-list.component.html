@@ -32,10 +32,10 @@
                 style="cursor: pointer; padding-top: 8px; padding-right: 8px" dropdown-toggle></i>
               <ul class="dropdown-menu pull-right">
                 <li>
-                  <a [href]="submissionsPdfsUrl">Bulk Export Submission PDFs</a>
+                  <a (click)="downloadSubmissionPdfs()">Bulk Export Submission PDFs</a>
                 </li>
                 <li>
-                  <a [href]="submissionsUrl">Bulk Export Submission Files</a>
+                  <a (click)="downloadSubmissions()">Bulk Export Submission Files</a>
                 </li>
               </ul>
             </div>

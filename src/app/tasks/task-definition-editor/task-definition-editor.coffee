@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission, fileDownloaderService) ->
     $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.grades = gradeService.grades
@@ -88,8 +88,11 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.changeTaskStream = (task, stream) ->
       task.tutorial_stream = stream
 
-    $scope.taskPDFUrl = ->
-      "#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true"
+    $scope.downloadTaskPDFUrl = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
+
+    $scope.downloadTaskResources = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
 
     $scope.removeTaskSheet = (task) ->
       TaskDefinition.taskSheet.delete { unit_id: $scope.unit.id, task_def_id: task.id},

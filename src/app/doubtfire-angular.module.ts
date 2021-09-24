@@ -143,6 +143,8 @@ import {
   UserService,
   WebcalService,
 } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -164,6 +166,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
+    PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
     OverseerImageListComponent,
@@ -267,6 +270,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     OverseerImageService,
     OverseerAssessmentService,
     EmojiService,
+    FileDownloaderService,
     CheckForUpdateService,
     userProvider,
     groupServiceProvider,

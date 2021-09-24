@@ -8,6 +8,8 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run deploy
+# Install packages within the container
+COPY package.json package-lock.json /doubtfire-web/
+RUN npm ci
 
 # CMD npm start

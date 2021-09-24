@@ -58,8 +58,7 @@
     background: #2650c3;
   }
 
-  :ng-deep
-    .mat-progress-bar-primary.mat-progress-bar-fill.mat-progress-bar-element {
+  :ng-deep .mat-progress-bar-primary.mat-progress-bar-fill.mat-progress-bar-element {
     pointer-events: none;
   }
   #progressContainer {

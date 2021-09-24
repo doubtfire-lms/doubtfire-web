@@ -4,7 +4,7 @@ angular.module("doubtfire.api.models.intended-learning-outcome", [])
   IntendedLearningOutcome = resourcePlus "/units/:unit_id/outcomes/:id", { id: "@id", unit_id: "@unit_id" }
 
   IntendedLearningOutcome.getOutcomeBatchUploadUrl = (unit) ->
-    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/outcomes/csv?auth_token=#{currentUser.authenticationToken}"
+    "#{DoubtfireConstants.API_URL}/units/#{unit.id}/outcomes/csv"
 
   IntendedLearningOutcome
 )
