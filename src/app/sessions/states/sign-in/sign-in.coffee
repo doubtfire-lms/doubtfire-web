@@ -37,15 +37,16 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
   $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
 
-    $scope.aafLogin = response.data.redirect_to || response.data || false
+    $scope.SSOLogin = response.data.method == "aaf" || response.data.method == "saml"
 
-    if $scope.aafLogin
+    if $scope.SSOLogin
+      $scope.SSOLoginUrl = response.data.redirect_to || response.data
       if $stateParams.authToken
         # This is AAF and we just got an auth_token? Must request to sign in
         $scope.signIn({ auth_token: $stateParams.authToken })
       else
         # We are AAF and no auth token so we can must redirect to AAF login provider
-        window.location.assign($scope.aafLogin)
+        window.location.assign($scope.SSOLoginUrl)
     else
       $scope.authMethodLoaded = true
       $timeout.cancel(timeoutPromise)
