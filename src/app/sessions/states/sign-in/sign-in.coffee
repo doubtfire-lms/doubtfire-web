@@ -41,6 +41,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
     if $scope.SSOLoginUrl
       if $stateParams.authToken
+        console.log $stateParams
         # This is AAF and we just got an auth_token? Must request to sign in
         $scope.signIn({ auth_token: $stateParams.authToken, username: $stateParams.username })
       else
