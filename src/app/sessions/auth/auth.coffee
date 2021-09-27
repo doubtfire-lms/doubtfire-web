@@ -79,6 +79,8 @@ angular.module("doubtfire.sessions.auth", [
         role: response.user.system_role
         profile: response.user
 
+      console.log user
+
       $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), 1000*60*60
 
       if tryChangeUser user
