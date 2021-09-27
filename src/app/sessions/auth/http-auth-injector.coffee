@@ -13,10 +13,6 @@ angular.module("doubtfire.sessions.auth.http-auth-injector", [])
       if _.startsWith(request.url, DoubtfireConstants.API_URL) and currentUser.authenticationToken?
         request.headers = {} unless _.has(request, "headers")
         request.headers.Auth_Token = currentUser.authenticationToken
-        console.log("In http-auth-inject:")
-        console.log(currentUser.authenticationToken)
-        console.log(currentUser)
-        console.log(request.headers.Auth_Token)
         request.headers.Username = currentUser.profile.username
       request or $q.when request
 
