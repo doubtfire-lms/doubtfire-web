@@ -5,7 +5,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 #
 .config(($stateProvider) ->
   signInStateData =
-    url: "/sign_in?dest&params&authToken"
+    url: "/sign_in?dest&params&authToken&username"
     views:
       main:
         controller: "SignInCtrl"
