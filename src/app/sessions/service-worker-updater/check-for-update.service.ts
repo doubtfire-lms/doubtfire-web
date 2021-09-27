@@ -37,7 +37,6 @@ export class CheckForUpdateService {
   }
 
   checkForUpdate() {
-    console.log('Checking for updates');
     if(this.updates.isEnabled) {
       this.updates.checkForUpdate();
     }
