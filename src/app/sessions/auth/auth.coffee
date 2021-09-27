@@ -31,7 +31,7 @@ angular.module("doubtfire.sessions.auth", [
       currentUser.authenticationToken = response.auth_token
       saveCurrentUser()
 
-      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), 1000*60*60
+      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth"), 1000*60*60
     )
 
   # Private factory methods.
@@ -79,7 +79,7 @@ angular.module("doubtfire.sessions.auth", [
         role: response.user.system_role
         profile: response.user
 
-      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), 1000*60*60
+      $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth"), 1000*60*60
 
       if tryChangeUser user
         success()
@@ -88,14 +88,17 @@ angular.module("doubtfire.sessions.auth", [
     ).error error
 
   auth.signOut = () ->
-    if currentUser?.authenticationToken?
-      $http.delete("#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json")
+    doSignOut = () ->
+      tryChangeUser defaultAnonymousUser
+      $rootScope.$broadcast "signOut"
+      localStorageService.remove(usernameCookie)
+      localStorageService.set(rememberDoubtfireCredentialsCookie, false)
+      localStorageService.remove(doubtfireLoginTimeCookie)
 
-    tryChangeUser defaultAnonymousUser
-    $rootScope.$broadcast "signOut"
-    localStorageService.remove(usernameCookie)
-    localStorageService.set(rememberDoubtfireCredentialsCookie, false)
-    localStorageService.remove(doubtfireLoginTimeCookie)
+    if currentUser?.authenticationToken?
+      $http.delete("#{DoubtfireConstants.API_URL}/auth").success (response) -> doSignOut()
+    else
+      doSignOut()
 
   # If the user is logged in then check if we should update their token
   if checkAuth()
@@ -106,7 +109,7 @@ angular.module("doubtfire.sessions.auth", [
     if delayTime < 100
       delayTime = 100
 
-    $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth/#{currentUser.authenticationToken}.json"), delayTime
+    $timeout (( ) -> updateAuth "#{DoubtfireConstants.API_URL}/auth"), delayTime
 
   # Return the auth object
   auth
