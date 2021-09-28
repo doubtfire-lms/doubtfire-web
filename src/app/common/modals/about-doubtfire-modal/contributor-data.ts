@@ -20,7 +20,7 @@ export class ContributorData {
     this.ioContributions = 0;
     this.deployContributions = 0;
   }
-  totalContributions(): number {
-    return this.apiContributions + this.webContributions + this.ioContributions;
+  get totalContributions(): number {
+    return this.apiContributions + this.webContributions + this.ioContributions + this.deployContributions;
   }
 }
