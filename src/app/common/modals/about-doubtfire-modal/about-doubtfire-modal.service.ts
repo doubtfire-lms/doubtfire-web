@@ -66,6 +66,14 @@ export class AboutDoubtfireModalService {
     );
   }
 
+  public getDeployContributors(data: AboutDialogData) {
+    this.getContributors(
+      'https://api.github.com/repos/doubtfire-lms/doubtfire-deploy/contributors',
+      data,
+      'deployContributions'
+    );
+  }
+
   public getWebContributors(data: AboutDialogData) {
     this.getContributors(
       'https://api.github.com/repos/doubtfire-lms/doubtfire-web/contributors',

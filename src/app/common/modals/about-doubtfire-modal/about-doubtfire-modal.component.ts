@@ -20,6 +20,7 @@ export class AboutDoubtfireModalContent {
     'contributions',
     'api-contributions',
     'web-contributions',
+    'deploy-contributions',
     'io-contributions',
   ];
 
@@ -96,5 +97,6 @@ export class AboutDoubtfireModal {
     this.aboutDoubtfireModalService.getAPIContributors(this.aboutDialogData);
     this.aboutDoubtfireModalService.getWebContributors(this.aboutDialogData);
     this.aboutDoubtfireModalService.getDoubtfireIOWebContributors(this.aboutDialogData);
+    this.aboutDoubtfireModalService.getDeployContributors(this.aboutDialogData);
   }
 }

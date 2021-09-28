@@ -44,6 +44,11 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Web </th>
         <td mat-cell *matCellDef="let element"> {{element.webContributions}} </td>
       </ng-container>
+      <!-- Deploy Contributions Column -->
+      <ng-container matColumnDef="deploy-contributions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Deploy </th>
+        <td mat-cell *matCellDef="let element"> {{element.deployContributions}} </td>
+      </ng-container>
       <!-- Doubtfire.io Contributions Column -->
       <ng-container matColumnDef="io-contributions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> doubtfire.io </th>
