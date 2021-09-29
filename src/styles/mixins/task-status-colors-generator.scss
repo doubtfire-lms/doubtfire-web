@@ -23,8 +23,8 @@
   }
 }
 
-@mixin task-status-color-ready-to-mark {
-  @include task-status-color('ready-to-mark');
+@mixin task-status-color-ready-for-feedback {
+  @include task-status-color('ready-for-feedback');
 }
 @mixin task-status-color-not-started {
   @include task-status-color('not-started');

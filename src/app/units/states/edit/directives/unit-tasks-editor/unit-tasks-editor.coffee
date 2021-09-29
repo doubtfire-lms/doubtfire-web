@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal) ->
+  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -26,7 +26,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
     }
 
     # Modal Events
-    $scope.editTask = (task) ->
+    $scope.editTask = (unit, task) ->
+      # if task is just a task definition, add a project_id to enable test submission.
+      unless task.project
+        project = {project_id: unit.project_id}
+        task.project = -> project
+
+      unless task.definition
+        task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
+
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = false
 
@@ -79,7 +87,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       if $scope.unit.task_definitions.length > 0
         # Delete
         if newLength < oldLength
-          $scope.editTask _.first $scope.unit.task_definitions
+          $scope.editTask($scope.unit, _.first $scope.unit.task_definitions)
         else
           $scope.editTask _.last $scope.unit.task_definitions
       else
@@ -96,8 +104,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
     $scope.batchTaskUrl = ->
       Task.getTaskDefinitionBatchUploadUrl($scope.unit)
-    $scope.allResourceUrl = ->
-      Unit.allResourcesDownloadUrl($scope.unit)
+    $scope.downloadAllResource = ->
+      fileDownloaderService.downloadFile(Unit.allResourcesDownloadUrl($scope.unit), "#{$scope.unit.code}-all-resources.zip")
 
     $scope.onBatchTaskSuccess = (response) ->
       CsvResultModal.show "Task CSV Upload Results", response

@@ -169,6 +169,13 @@ angular.module("doubtfire.common.services.units", [])
         throw Error "Students not yet mapped to unit (unit.students is undefined)"
       _.find(unit.students, {project_id: id})
 
+    # Fina a project/student from a username
+    unit.findProjectForUsername = (username) ->
+      unless unit.students?
+        throw Error "Students not yet mapped to unit (unit.students is undefined)"
+
+      _.find(unit.students, {student_id: username})
+
     # Delete a unit's stream
     unit.deleteStream = (stream) ->
       successCallback = () ->

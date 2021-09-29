@@ -1,21 +1,19 @@
 import { Entity } from '../entity';
 
-const KEYS =
-  [
-    'enabled',
-    'id',
-    'guid',
-    'include_start_dates',
-    'user_id',
-    'reminder',
-    'unit_exclusions',
+const KEYS = [
+  'enabled',
+  'id',
+  'guid',
+  'include_start_dates',
+  'user_id',
+  'reminder',
+  'unit_exclusions',
 
-    // Only used when updating the webcal.
-    'should_change_guid',
-  ];
+  // Only used when updating the webcal.
+  'should_change_guid',
+];
 
 export class Webcal extends Entity {
-
   enabled: boolean;
   id: number;
   guid: string;
@@ -32,7 +30,7 @@ export class Webcal extends Entity {
 
   toJson(): any {
     return {
-      webcal: super.toJsonWithKeys(KEYS)
+      webcal: super.toJsonWithKeys(KEYS),
     };
   }
 

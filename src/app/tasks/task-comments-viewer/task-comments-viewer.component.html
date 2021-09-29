@@ -46,6 +46,10 @@
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
+              <div *ngSwitchCase="'assessment'" class="comment-assessment">
+                <app-task-assessment-comment [task]="task" [comment]="comment" *ngIf="overseerEnabled"></app-task-assessment-comment>
+              </div>
+
               <div class="bubble" [ngClass]="commentClasses(comment)">
                 <a
                   (click)="scrollToComment(comment.originalComment.id)"
@@ -74,15 +78,11 @@
                 </div>
 
                 <div *ngSwitchCase="'image'" class="comment-image">
-                  <a (click)="openCommentsModal(comment)">
-                    <img [src]="getCommentAttachment(comment)" width="100%" height="100%" />
-                  </a>
+                  <pdf-image-comment [comment]="comment" [project]="project" [task]="task"></pdf-image-comment>
                 </div>
 
                 <div *ngSwitchCase="'pdf'" class="comment-pdf">
-                  <a (click)="openCommentsModal(comment)">
-                    <p><i class="fa fa-file-pdf-o"></i> view pdf</p>
-                  </a>
+                  <pdf-image-comment [comment]="comment" [project]="project" [task]="task"></pdf-image-comment>
                 </div>
               </div>
               <div *ngIf="comment.isBubbleComment" class="comment-overflow">

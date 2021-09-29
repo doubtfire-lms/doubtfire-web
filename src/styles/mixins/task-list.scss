@@ -28,7 +28,7 @@
     &:focus,
     &.selected {
       padding-right: 30px;
-      @include custom-box-shadow(task-status-color('ready-to-mark'));
+      @include custom-box-shadow(task-status-color('ready-for-feedback'));
     }
 
     .due-time {
@@ -42,8 +42,8 @@
       cursor: pointer;
       text-decoration: none;
       // background-color: $list-group-hover-bg;
-      &.ready-to-mark {
-        @include custom-box-shadow(lighten(task-status-color('ready-to-mark'), 15%));
+      &.ready-for-feedback {
+        @include custom-box-shadow(lighten(task-status-color('ready-for-feedback'), 15%));
       }
       &.not-started {
         @include custom-box-shadow(lighten(task-status-color('not-started'), 5%));
@@ -80,8 +80,8 @@
       }
     }
     &.selected {
-      &.ready-to-mark {
-        @include custom-box-shadow(task-status-color('ready-to-mark'));
+      &.ready-for-feedback {
+        @include custom-box-shadow(task-status-color('ready-for-feedback'));
       }
       &.not-started {
         @include custom-box-shadow(task-status-color('not-started'));

@@ -4,11 +4,12 @@ import { BehaviorSubject } from 'rxjs';
 
 import API_URL from 'src/app/config/constants/apiURL';
 
-interface ExternalNameResponseFormat {
+interface SettingsResponseFormat {
   externalName: string;
-}
+  overseer_enabled: boolean;
+};
 
-interface SignoutUrlResponseFormat {
+interface SignOutUrlResponseFormat {
   auth_signout_url: string;
 }
 
@@ -29,6 +30,9 @@ export class DoubtfireConstants {
 
   // initialise exernal name to loading.
   public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
+
+  public IsOverseerEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   private readonly settingsUrl: string = `${this.API_URL}/settings`;
 
   constructor(handler: HttpBackend) {
@@ -41,7 +45,7 @@ export class DoubtfireConstants {
   private loadSignoutUrl() {
     const url: string = `${this.API_URL}/auth/signout_url`;
 
-    this.http.get<SignoutUrlResponseFormat>(url).subscribe(
+    this.http.get<SignOutUrlResponseFormat>(url).subscribe(
       (result) => (this.SignoutURL = result.auth_signout_url),
       (error) => console.error(error)
     );
@@ -50,7 +54,10 @@ export class DoubtfireConstants {
   // publish update to ExternalName when get request finishes.
   private loadExternalName() {
     this.http
-      .get<ExternalNameResponseFormat>(this.settingsUrl)
-      .subscribe((result) => this.ExternalName.next(result.externalName));
+      .get<SettingsResponseFormat>(this.settingsUrl)
+      .subscribe((result) => {
+        this.ExternalName.next(result.externalName);
+        this.IsOverseerEnabled.next(result.overseer_enabled);
+      });
   }
 }

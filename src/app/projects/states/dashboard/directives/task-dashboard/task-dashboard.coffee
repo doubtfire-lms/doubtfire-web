@@ -11,11 +11,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     task: '='
     showFooter: '@?'
     showSubmission: '@?'
-  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService) ->
+  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
+    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
-    $scope.dashboardViews = ["details", "submission", "task"]
+    $scope.dashboardViews = ["details", "submission", "task", "submission-history"]
 
     # set the current dashboard view to details by default
     updateCurrentView = ->
@@ -38,6 +39,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
         taskSubmissionPdfAttachmentUrl: TaskFeedback.getTaskUrl($scope.task, true)
         taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
       }
+
       updateCurrentView()
     )
 
@@ -48,6 +50,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Is the current view?
     $scope.isCurrentView = (view) ->
       return $scope.currentView == view
+
+    $scope.showSubmissionHistoryModal = ->
+      TaskAssessmentModal.show($scope.task)
 
     # Now also load in the assessment details
     if $scope.showFooter
@@ -61,6 +66,12 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       # Triggers a new update to the task status
       $scope.triggerTransition = (status) ->
         taskService.updateTaskStatus $scope.task.project().unit(), $scope.task.project(), $scope.task, status
+
+      $scope.downloadSubmission = () ->
+        fileDownloaderService.downloadFile($scope.urls.taskSubmissionPdfAttachmentUrl)
+
+      $scope.downloadSubmittedFiles = () ->
+        fileDownloaderService.downloadFile($scope.urls.taskFilesUrl)
 
 
 )

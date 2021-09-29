@@ -88,7 +88,7 @@ import { MicrophoneTesterComponent } from './common/audio-recorder/audio/microph
 import { IntelligentDiscussionRecorderComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
-import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
+import { CampusListComponent } from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import { ExtensionModalComponent } from './common/modals/extension-modal/extension-modal.component';
 import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -98,9 +98,9 @@ import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
-import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
+import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
-import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
@@ -135,13 +135,23 @@ import { CheckForUpdateService } from './sessions/service-worker-updater/check-f
 import {
   ActivityTypeService,
   CampusService,
+  OverseerImageService,
+  OverseerAssessmentService,
   TaskCommentService,
   TutorialService,
   TutorialStreamService,
   UserService,
   WebcalService,
 } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
+import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
+import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
+
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
 @NgModule({
   // Components we declare
@@ -156,8 +166,10 @@ import {
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
     ExtensionCommentComponent,
+    PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
+    OverseerImageListComponent,
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
@@ -187,6 +199,10 @@ import {
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
+    TaskAssessorComponent,
+    TaskAssessmentCommentComponent,
+    TaskAssessmentModalComponent,
+    TaskSubmissionHistoryComponent,
   ],
   // Module Imports
   imports: [
@@ -224,6 +240,10 @@ import {
     MatProgressSpinnerModule,
     MatSliderModule,
     MatExpansionModule,
+    MatCardModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatTabsModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
@@ -247,7 +267,10 @@ import {
     UserService,
     WebcalService,
     ActivityTypeService,
+    OverseerImageService,
+    OverseerAssessmentService,
     EmojiService,
+    FileDownloaderService,
     CheckForUpdateService,
     userProvider,
     groupServiceProvider,
@@ -280,7 +303,7 @@ import {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true,
+      multi: true
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -288,7 +311,7 @@ import {
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-  ],
+  ]
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer

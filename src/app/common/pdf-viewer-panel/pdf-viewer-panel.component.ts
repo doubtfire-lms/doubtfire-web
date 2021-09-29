@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
+import { FileDownloaderService } from '../file-downloader/file-downloader';
 
 @Component({
   selector: 'pdf-viewer-panel',
@@ -11,12 +11,16 @@ export class PdfViewerPanelComponent implements OnInit {
   @Input() footerText: string;
   @Input() resourcesUrl: string;
   @Input() hideFooter: boolean;
-  constructor(@Inject(analyticsService) private AnalyticsService: any) {}
+  constructor(@Inject(FileDownloaderService) private fileDownloader: FileDownloaderService) {}
 
   ngOnInit(): void {}
 
-  downloadEvent(type: string) {
-    this.AnalyticsService.event('Task Sheet', `Downloaded ${type}`);
+  downloadPdf() {
+    this.fileDownloader.downloadFile(this.pdfUrl, 'displayed-pdf.pdf');
+  }
+
+  downloadResources() {
+    this.fileDownloader.downloadFile(this.resourcesUrl, 'resources.zip');
   }
 
   // #$scope.$watch 'pdfUrl', (newUrl) ->

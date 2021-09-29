@@ -43,8 +43,8 @@
   }
 }
 
-.progress-bar-ready-to-mark {
-  @include task-status-color-ready-to-mark;
+.progress-bar-ready-for-feedback {
+  @include task-status-color-ready-for-feedback;
 }
 .progress-bar-not-started {
   @include task-status-color-not-started;

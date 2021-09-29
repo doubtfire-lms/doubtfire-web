@@ -66,7 +66,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/t
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
-import 'build/src/app/tasks/task-submission-wizard/task-submission-wizard.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
@@ -258,11 +257,12 @@ import { TaskCommentComposerComponent } from 'src/app/tasks/task-comment-compose
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { IntelligentDiscussionPlayerComponent } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
-import { CampusListComponent } from './admin/states/campuses/campus-list/campus-list.component';
-import { ActivityTypeListComponent } from './admin/states/activities/activity-type-list/activity-type-list.component';
-import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { CampusListComponent } from './admin/institution-settings/campuses/campus-list/campus-list.component';
+import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
+import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import { UnitTutorialsManagerComponent } from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
@@ -285,7 +285,12 @@ import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/st
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { TaskCommentService } from './api/models/doubtfire-model';
+import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
+import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
+import { TaskSubmissionService } from './common/services/task-submission.service';
+import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
+import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -314,7 +319,10 @@ DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialSt
 DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
+DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(FileDownloaderService));
 DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(CheckForUpdateService));
+DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
+DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -363,6 +371,13 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
+DoubtfireAngularJSModule.directive('taskAssessor',
+  downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive('taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent }));
+DoubtfireAngularJSModule.directive('taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+
 // Global configuration
 DoubtfireAngularJSModule.directive(
   'taskCommentsViewer',
@@ -377,6 +392,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`

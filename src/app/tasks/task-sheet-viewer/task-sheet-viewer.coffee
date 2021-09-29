@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     unit: '='
     project: '='
 
-  controller: ($scope, $filter, $timeout, currentUser, Task, taskService, gradeService, analyticsService) ->
+  controller: ($scope, $filter, $timeout, currentUser, Task, taskService, gradeService, analyticsService, fileDownloaderService) ->
     # Default for showing the task sheet
     $scope.showTaskSheet = false
 
@@ -59,6 +59,12 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
       $scope.hasResources = task.definition.has_task_resources
       $scope.taskPDFUrl = Task.getTaskPDFUrl($scope.unit, task.definition)
       $scope.resourceUrl = Task.getTaskResourcesUrl($scope.unit, task.definition)
+
+    $scope.downloadTaskPdf = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskPDFUrl($scope.unit, task.definition)}?as_attachment=true")
+
+    $scope.downloadResources = ->
+      fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, task.definition)}?as_attachment=true")
 
     #
     # Watch for changes when the active task status changes

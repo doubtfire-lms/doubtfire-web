@@ -17,8 +17,8 @@
     flex: 1;
   }
   width: 50px;
-  &.ready-to-mark {
-    @include status-icon('ready-to-mark');
+  &.ready-for-feedback {
+    @include status-icon('ready-for-feedback');
   }
   &.not-started {
     @include status-icon('not-started');

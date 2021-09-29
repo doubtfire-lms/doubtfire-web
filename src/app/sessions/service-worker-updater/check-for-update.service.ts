@@ -15,29 +15,30 @@ export class CheckForUpdateService {
     const updateInterval$ = interval(4 * 60 * 60 * 1000);
     const updateIntervalOnceAppIsStable$ = concat(appIsStable$, updateInterval$);
 
-    updateIntervalOnceAppIsStable$.subscribe(() => {
-      console.log('Checking for updates')
-      this.updates.checkForUpdate();
-    });
+    updateIntervalOnceAppIsStable$.subscribe((() => {
+      this.checkForUpdate();
+    }).bind(this));
 
     this.updates.available.subscribe(event => {
-      const snackBarRef = this._snackBar.open(
+      const snackBarRef = _snackBar.open(
         'An update to the app has been found, would you like to refresh now?',
         'refresh'
       );
       snackBarRef.onAction().subscribe((result) => {
-        this.updates.activateUpdate().then(() => document.location.reload());
+        updates.activateUpdate().then(() => document.location.reload());
       });
     });
 
     this.updates.unrecoverable.subscribe(event => {
-      this._snackBar.open(
-        'An error occured during update, please refresh the page'
+      _snackBar.open(
+        'An error occurred during update, please refresh the page'
       );
     });
   }
 
-  checkForupdate() {
-    this.updates.checkForUpdate();
+  checkForUpdate() {
+    if(this.updates.isEnabled) {
+      this.updates.checkForUpdate();
+    }
   }
 }

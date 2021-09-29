@@ -1,6 +1,6 @@
 import { NgHybridStateDeclaration } from '@uirouter/angular-hybrid';
 import { Ng2ViewDeclaration } from '@uirouter/angular';
-import { InstitutionSettingsComponent } from './units/states/institution-settings/institution-settings.component';
+import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.

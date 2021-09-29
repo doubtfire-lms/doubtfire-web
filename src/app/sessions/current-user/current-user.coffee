@@ -8,4 +8,5 @@ angular.module("doubtfire.sessions.current-user", [])
   profile:
     name: "Anonymous"
     nickname: "anon"
+    username: null
 )
