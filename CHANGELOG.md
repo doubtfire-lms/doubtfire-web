@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-3](https://github.com/macite/doubtfire-deploy/compare/v5.0.0-2...v5.0.0-3) (2021-10-08)
+
+
+### Features
+
+* Add support for files from Elements of Computer Systems ([#416](https://github.com/macite/doubtfire-deploy/issues/416)) ([947f4f3](https://github.com/macite/doubtfire-deploy/commit/947f4f3a1232a5e7cec4a0a3a7f538b2b8c7f564))
+
+
+### Bug Fixes
+
+* Add username to signin redirection ([1451ffb](https://github.com/macite/doubtfire-deploy/commit/1451ffb54050697062bfc4f147c790ee7d13f330))
+* ensure service working is enabled before checking updates ([fe6c533](https://github.com/macite/doubtfire-deploy/commit/fe6c53304d85980f71fbc4f0dc7dca9965b71b3e))
+* Get remaining unit URLs to work without auth token ([b2c9d71](https://github.com/macite/doubtfire-deploy/commit/b2c9d7140b5bcd7f394e005e34e926573d44f81a))
+* incorrect comparison check in pdf image comment ([a48aa86](https://github.com/macite/doubtfire-deploy/commit/a48aa864fefc7ed7e1c82641758c6dd934ce9f8c))
+* Move auth for student csv batch enrol and withdraw ([6285cba](https://github.com/macite/doubtfire-deploy/commit/6285cba2102c939c439d5d1d45ded1e57f3cb71d))
+* Remove auth token from project portfolio url ([39b4f2e](https://github.com/macite/doubtfire-deploy/commit/39b4f2e8282f17c0f06532a0998a5d9093f235e7))
+* Remove auth token from task alignment csv upload ([a6aae03](https://github.com/macite/doubtfire-deploy/commit/a6aae0363cb5edc6dc0a99d0754943b9cea5fcce))
+* Remove auth token from task urls ([b3e4565](https://github.com/macite/doubtfire-deploy/commit/b3e4565fc30e461fbd9b1c42862c849aaa9bd2f0))
+* Remove auth tokens from task completion url ([3d9a5cf](https://github.com/macite/doubtfire-deploy/commit/3d9a5cfa38fb30960b80dd8ce90dc5daf8f6c8c6))
+* Remove Bearer from auth headers ([9766334](https://github.com/macite/doubtfire-deploy/commit/97663342c025187a919c963bbe5abaf0c54f6f79))
+* switch task alignment download to file downloader ([e7e9059](https://github.com/macite/doubtfire-deploy/commit/e7e90598ec3962ba2852a4ac55f1ae59f3f1ded4))
+* Switch task completion csv download ([295c2c3](https://github.com/macite/doubtfire-deploy/commit/295c2c3f4b9e636e1a0b261ce0bda8d69e60cde7))
+* update auth urls to remove token ([278e2f4](https://github.com/macite/doubtfire-deploy/commit/278e2f4d72cf4dc279939db7cb3352137318b857))
+* Use file downloader for task submissions ([858f805](https://github.com/macite/doubtfire-deploy/commit/858f8057ddc89e32798128b93c277c20f6c6ed53))
+
 ## [5.0.0-2](https://github.com/macite/doubtfire-deploy/compare/v5.0.0-1...v5.0.0-2) (2021-08-09)
 
 ## [5.0.0-1](https://github.com/macite/doubtfire-deploy/compare/v5.0.0-0...v5.0.0-1) (2021-08-05)
