@@ -1,11 +1,7 @@
 <div id="student-portfolios" class="container">
   <tabset>
-    <tab
-      ng-repeat="tab in tabs | toArray | orderBy: 'seq'"
-      active="tab.active"
-      disable="!selectedStudent"
-      ng-click="selectedStudent && setActiveTab(tab)"
-    >
+    <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" disable="!selectedStudent"
+      ng-click="selectedStudent && setActiveTab(tab)">
       <tab-heading>{{tab.title}}</tab-heading>
     </tab>
   </tabset>
@@ -20,11 +16,8 @@
         <div class="buttons">
           <div class="btn-group">
             <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'allStudents'">
-              <i
-                class="fa fa-globe"
-                tooltip-placement="top"
-                tooltip="Show all students, even those without portfolios"
-              ></i>
+              <i class="fa fa-globe" tooltip-placement="top"
+                tooltip="Show all students, even those without portfolios"></i>
             </label>
             <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'withPortfolio'">
               <i class="fa fa-book" tooltip-placement="top" tooltip="Show only students with portfolios"></i>
@@ -40,43 +33,25 @@
           </div>
           <div class="btn-group btn-group-sm select-portfolio-grade">
             <label class="btn btn-default text-center" ng-model="filterOptions.selectedGrade" btn-radio="-1">
-              <span
-                class="grade-icon"
-                tooltip="Show all portfolios"
-                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"
-                >All</span
-              >
+              <span class="grade-icon" tooltip="Show all portfolios"
+                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}">All</span>
             </label>
           </div>
           <div class="btn-group btn-group-sm select-portfolio-grade">
-            <label
-              ng-repeat="grade in grades"
-              class="btn btn-default col-sm-3 text-center"
-              ng-model="filterOptions.selectedGrade"
-              btn-radio="{{$index}}"
-            >
-              <grade-icon
-                grade="grade"
-                tooltip="Select to show student's aiming for {{grade}}"
+            <label ng-repeat="grade in grades" class="btn btn-default col-sm-3 text-center"
+              ng-model="filterOptions.selectedGrade" btn-radio="{{$index}}">
+              <grade-icon grade="grade" tooltip="Select to show student's aiming for {{grade}}"
                 tooltip-append-to-body="true"
-                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"
-              ></grade-icon>
+                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"></grade-icon>
             </label>
           </div>
         </div>
         <!--/buttons-->
         <form role="search" class="form-horizontal">
-          <input
-            id="searchbar"
-            class="input-md form-control"
-            placeholder="Search..."
-            type="search"
-            ng-model="search"
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search"
             autocomplete="off"
             typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8"
-            typeahead-wait-ms="200"
-            autofocus
-          />
+            typeahead-wait-ms="200" autofocus />
           <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">
             Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.
           </p>
@@ -144,12 +119,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            class="task-progress-row"
+          <tr class="task-progress-row"
             ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithSubmittedGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
-            ng-class="{'info': selectedStudent == student}"
-            ng-click="selectStudent(student)"
-          >
+            ng-class="{'info': selectedStudent == student}" ng-click="selectStudent(student)">
             <td>{{student.student_id}}</td>
             <td>{{student.name}}</td>
             <td>{{student.tutorNames()}}</td>
@@ -162,11 +134,8 @@
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
-                <bar
-                  ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
-                  value="bar.value"
-                  type="{{statusClass(bar.key)}}"
-                >
+                <bar ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index" value="bar.value"
+                  type="{{statusClass(bar.key)}}">
                   <span ng-hide="bar.value < 10">{{bar.value}}%</span>
                 </bar>
               </progress>
@@ -178,15 +147,8 @@
       </table>
     </div>
     <div class="panel-footer clearfix">
-      <pagination
-        total-items="filteredStudents.length"
-        ng-model="currentPage"
-        items-per-page="pageSize"
-        max-size="maxSize"
-        class="pagination-sm pull-left"
-        boundary-links="true"
-        rotate="false"
-      ></pagination>
+      <pagination total-items="filteredStudents.length" ng-model="currentPage" items-per-page="pageSize"
+        max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       <div class="pull-right">
         <!-- <a
           class="btn btn-info"
@@ -253,50 +215,33 @@
       </div>
       <div class="panel-body alignment-rater">
         <div class="col-sm-12 rationale-wrapper">
-          <div
-            tooltip="Click to edit rationale"
-            tooltip-placement="left"
-            tooltip-append-to-body="false"
-            tooltip-popup-delay="300"
-            tooltip-enable="project.grade_rationale != null"
-            ng-click="toggleEditRationale()"
-            class="rationale"
-            ng-class="{'no-rationale': project.grade_rationale == null}"
-            ng-hide="editingRationale"
-          >
-            <label class="text-muted" ng-show="project.grade_rationale != null"> Provided Rationale </label>
+          <div ng-click="toggleEditRationale()" class="rationale"
+            ng-class="{'no-rationale': project.grade_rationale == null}" ng-hide="editingRationale">
             <div ng-bind-html="(project.grade_rationale || 'No rationale provided') | markdown"></div>
             <div class="small" ng-hide="project.grade_rationale">Click to add one</div>
           </div>
           <div ng-if="editingRationale" class="clearfix">
-            <!-- <markdown-editor
-              height="200"
-              ng-model="project.grade_rationale"
-              placeholder="Edit rationale..."
-              autofocus="true">
-            </markdown-editor> -->
-            <div
-              contenteditable
-              ng-model="project.grade_rationale"
-              placeholder="Edit rationale here..."
-              style="border-style: solid; border-width: thin; height: 200px"
-            ></div>
-            <a ng-click="toggleEditRationale(alignment)" class="pull-right">Done Editing</a>
+            <textarea ng-model="project.grade_rationale" class="col-sm-12" style="height:auto; min-height: 140px;">
+            </textarea>
           </div>
         </div>
+        <div class="col-sm-12">
+          <a ng-click="toggleEditRationale()" class="pull-right">{{ editingRationale ? "View" : "Edit" }}</a>
+        </div>
 
-        <div ng-repeat="results in gradeResults">
+        <div ng-repeat="results in gradeResults" class="clearfix">
           <h5 class="col-sm-2">{{results.name}}</h5>
           <p class="btn-group col-sm-10">
-            <label
-              ng-repeat="resultScore in results.scores"
-              ng-click="project.assignGrade(resultScore, project.grade_rationale)"
-              class="btn col-sm-2 text-center {{project.grade == resultScore ? 'btn-primary' : 'btn-default'}}"
-            >
+            <label ng-repeat="resultScore in results.scores"
+              ng-click="newGrade.score = resultScore"
+              class="btn col-sm-2 text-center {{newGrade.score === resultScore ? 'btn-primary' : 'btn-default'}}">
               {{resultScore}}
             </label>
           </p>
         </div>
+      </div>
+      <div class="panel-footer clearfix">
+        <a class="btn btn-primary col-sm-2 pull-right" ng-click="project.assignGrade(newGrade.score, project.grade_rationale)" ng-disabled="!project.grade_rationale"> Save</a>
       </div>
     </div>
   </div>

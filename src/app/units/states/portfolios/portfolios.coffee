@@ -114,6 +114,8 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.toggleEditRationale = ->
     $scope.editingRationale = !$scope.editingRationale
 
+  $scope.newGrade = { score: null }
+
 
   analyticsService.watchEvent $scope, 'studentFilter', 'Teacher View - Grading Tab'
   analyticsService.watchEvent $scope, 'sortOrder', 'Teacher View - Grading Tab'
@@ -124,6 +126,8 @@ angular.module('doubtfire.units.states.portfolios', [])
     $scope.project = null
     projectService.getProject student, $scope.unit, (project) ->
       $scope.project = project
+      $scope.newGrade.score = project.grade
+      $scope.editingRationale = false
     analyticsService.event 'Teacher View - Grading Tab', 'Selected Student'
 
 )
