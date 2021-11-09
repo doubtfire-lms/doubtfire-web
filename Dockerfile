@@ -12,4 +12,9 @@ ENV NODE_ENV docker
 COPY package.json package-lock.json /doubtfire-web/
 RUN npm ci
 
-CMD npm start
+# Move the node modules out of the working directory.
+# They can then be copied back and into the project on launch
+RUN mv /doubtfire-web/node_modules /
+
+# Launch - copy in the node modules (to volume linked with code) and then run npm start
+CMD launch.sh
