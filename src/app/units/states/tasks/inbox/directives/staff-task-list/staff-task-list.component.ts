@@ -59,11 +59,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   states = [
     { sort: 'default', icon: 'horizontal_rule' },
     { sort: 'ascending', icon: 'arrow_upward' },
-    { sort: 'descending', icon: 'arrow_downward' }
-  ]
+    { sort: 'descending', icon: 'arrow_downward' },
+  ];
 
-  taskDefSort = 0
-  tutorialSort = 0
+  taskDefSort = 0;
+  tutorialSort = 0;
   originalFilteredTasks: any[] = null;
 
   @HostListener('document:keydown', ['$event'])
@@ -91,7 +91,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -161,9 +161,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // console.log(`Dialog result: ${result}`);
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   refreshTasks(): void {
@@ -180,8 +178,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.originalFilteredTasks = [...this.filteredTasks];
     }
 
-    this.taskDefSort = 0
-    this.tutorialSort = 0
+    this.taskDefSort = 0;
+    this.tutorialSort = 0;
 
     // Fix selected task.
     if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
@@ -302,8 +300,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const funcName = taskEl.scrollIntoViewIfNeeded
       ? 'scrollIntoViewIfNeeded'
       : taskEl.scrollIntoView
-        ? 'scrollIntoView'
-        : '';
+      ? 'scrollIntoView'
+      : '';
     if (!funcName) {
       return;
     }
@@ -344,15 +342,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.originalFilteredTasks = [...this.filteredTasks];
     }
     if (this.states[this.taskDefSort].sort == 'ascending') {
-      this.filteredTasks = [...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq)]
-    }
-
-    else if (this.states[this.taskDefSort].sort == 'descending') {
-      this.filteredTasks = [...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq)]
-    }
-
-    else {
-      this.filteredTasks = [...this.originalFilteredTasks]
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq)];
+    } else if (this.states[this.taskDefSort].sort == 'descending') {
+      this.filteredTasks = [...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq)];
+    } else {
+      this.filteredTasks = [...this.originalFilteredTasks];
     }
   }
 
@@ -363,7 +357,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (task.pinned) {
       task.unpin(
         task.id,
-        (sucess: any) => { },
+        (sucess: any) => {},
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }
@@ -371,7 +365,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     } else {
       task.pin(
         task.id,
-        (sucess: any) => { },
+        (sucess: any) => {},
         (error: any) => {
           this.alertService.add('danger', error.data.error, 6000);
         }

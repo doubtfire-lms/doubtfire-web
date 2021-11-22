@@ -9,6 +9,8 @@ export class ContributorData {
   apiContributions: number;
   webContributions: number;
   ioContributions: number;
+  deployContributions: number;
+
   constructor(login: string, htmlUrl: string, avatarUrl: string) {
     this.login = login;
     this.htmlUrl = htmlUrl;
@@ -16,8 +18,9 @@ export class ContributorData {
     this.apiContributions = 0;
     this.webContributions = 0;
     this.ioContributions = 0;
+    this.deployContributions = 0;
   }
-  totalContributions(): number {
-    return this.apiContributions + this.webContributions + this.ioContributions;
+  get totalContributions(): number {
+    return this.apiContributions + this.webContributions + this.ioContributions + this.deployContributions;
   }
 }

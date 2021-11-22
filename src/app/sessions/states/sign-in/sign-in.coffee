@@ -5,7 +5,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 #
 .config(($stateProvider) ->
   signInStateData =
-    url: "/sign_in?dest&params&authToken"
+    url: "/sign_in?dest&params&authToken&username"
     views:
       main:
         controller: "SignInCtrl"
@@ -32,19 +32,20 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName
 
-  # Check for AAF login
+  # Check for SSO login
   $scope.api = DoubtfireConstants.API_URL
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
   $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
-    $scope.aafLogin = response.data.redirect_to || false
 
-    if $scope.aafLogin
+    $scope.SSOLoginUrl = response.data.redirect_to || false
+
+    if $scope.SSOLoginUrl
       if $stateParams.authToken
-        # This is AAF and we just got an auth_token? Must request to sign in
+        # This is SSO and we just got an auth_token? Must request to sign in
         $scope.signIn({ auth_token: $stateParams.authToken, username: $stateParams.username })
       else
-        # We are AAF and no auth token so we can must redirect to AAF login provider
-        window.location.assign($scope.aafLogin)
+        # We are SSO and no auth token so we can must redirect to SSO login provider
+        window.location.assign($scope.SSOLoginUrl)
     else
       $scope.authMethodLoaded = true
       $timeout.cancel(timeoutPromise)
