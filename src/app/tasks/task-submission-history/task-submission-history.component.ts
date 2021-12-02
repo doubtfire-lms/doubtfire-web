@@ -35,6 +35,7 @@ export class SubmissionTab implements ISubmissionTab {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'task-submission-history',
   templateUrl: './task-submission-history.component.html',
   styleUrls: ['./task-submission-history.component.scss'],
