@@ -291,6 +291,7 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { UnitIloEditModal2Component } from './units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal2.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -392,6 +393,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+DoubtfireAngularJSModule.directive('unitIloEditModal2',downgradeComponent({ component: UnitIloEditModal2Component }));
 
 // Global configuration
 
