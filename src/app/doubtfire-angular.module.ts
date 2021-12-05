@@ -152,6 +152,7 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { UpdatedNewUserWizard } from './home/states/new-user-wizard/updated-new-user-wizard.component';
 
 @NgModule({
   // Components we declare
@@ -187,6 +188,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     UserIconComponent,
     AudioPlayerComponent,
     MarkedPipe,
+    UpdatedNewUserWizard,
     HumanizedDatePipe,
     DragDropDirective,
     PdfViewerComponent,

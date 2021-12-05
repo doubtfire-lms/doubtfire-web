@@ -1,6 +1,7 @@
 import { NgHybridStateDeclaration } from '@uirouter/angular-hybrid';
 import { Ng2ViewDeclaration } from '@uirouter/angular';
 import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
+import { UpdatedNewUserWizard } from './home/states/new-user-wizard/updated-new-user-wizard.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -28,6 +29,27 @@ const institutionSettingsState: NgHybridStateDeclaration = {
 };
 
 /**
+ * Define the institution settings state - used to edit campus data.
+ */
+ const updatedNewUserWizard: NgHybridStateDeclaration = {
+  name: 'updated-new-user-wizard',                            
+  url: '/updated-new-user-wizard',                     // You get here with this url
+  views: {                                                // These are the 2 views - the header and main from the body of DF
+    header: {                                             // Header is still angularjs
+      controller: 'BasicHeaderCtrl',                      // This is the angularjs controller
+      templateUrl: 'common/header/header.tpl.html'        // and the related template html
+    } as unknown as Ng2ViewDeclaration,                   // Need dodgy cast to get compiler to ignore type data
+    main: {                                               // Main body links to angular component
+      component: UpdatedNewUserWizard
+    },
+  },
+  data: {                                                 // Add data used by header
+    pageTitle: '_Welcome to Updated Doubtfire_',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
+  }
+};
+
+/**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState];
+export const doubtfireStates = [institutionSettingsState, updatedNewUserWizard];
