@@ -152,6 +152,10 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import{AlignmentBarChartComponent} from './visualisations/alignment-bar-chart.component';
+import { NvD3Module } from 'ng2-nvd3';
+import 'd3';
+import 'nvd3';
 
 @NgModule({
   // Components we declare
@@ -203,6 +207,8 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
+    AlignmentBarChartComponent
+
   ],
   // Module Imports
   imports: [
@@ -252,6 +258,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    NvD3Module,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {

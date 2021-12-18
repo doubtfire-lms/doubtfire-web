@@ -41,7 +41,6 @@ import 'build/src/app/visualisations/task-completion-box-plot.js';
 import 'build/src/app/visualisations/visualisations.js';
 import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
-import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
 import 'build/src/app/home/home.js';
 import 'build/src/app/home/states/home/home.js';
@@ -291,6 +290,7 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import {AlignmentBarChartComponent} from './visualisations/alignment-bar-chart.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -392,7 +392,10 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
-
+DoubtfireAngularJSModule.directive(
+  'alignmentBarChart',
+  downgradeComponent({ component: AlignmentBarChartComponent })
+);
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
