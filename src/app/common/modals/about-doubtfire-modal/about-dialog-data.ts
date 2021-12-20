@@ -39,11 +39,13 @@ export class AboutDialogData {
           case 'contributor':
             return compare(a.login, b.login, isAsc);
           case 'contributions':
-            return compare(a.totalContributions(), b.totalContributions(), isAsc);
+            return compare(a.totalContributions, b.totalContributions, isAsc);
           case 'api-contributions':
             return compare(a.apiContributions, b.apiContributions, isAsc);
           case 'web-contributions':
             return compare(a.webContributions, b.webContributions, isAsc);
+          case 'deploy-contributions':
+            return compare(a.deployContributions, b.deployContributions, isAsc);
           case 'io-contributions':
             return compare(a.ioContributions, b.ioContributions, isAsc);
           default:

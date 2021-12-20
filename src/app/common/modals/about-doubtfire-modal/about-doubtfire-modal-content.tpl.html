@@ -4,10 +4,10 @@
     <h1 class="full logo">
       {{data.externalName}}
       <small [hidden]="data.externalName == 'Doubtfire'">
-        Powered By Doubtfire
+        Powered By Doubtfire 6
       </small>
       <small [hidden]="data.externalName != 'Doubtfire'">
-        Version 5
+        Version 6
       </small>
     </h1>
   </div>
@@ -32,7 +32,7 @@
       <!-- Contributions Column -->
       <ng-container matColumnDef="contributions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Contributions </th>
-        <td mat-cell *matCellDef="let element"> {{element.totalContributions()}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.totalContributions}} </td>
       </ng-container>
       <!-- API Contributions Column -->
       <ng-container matColumnDef="api-contributions">
@@ -44,6 +44,11 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Web </th>
         <td mat-cell *matCellDef="let element"> {{element.webContributions}} </td>
       </ng-container>
+      <!-- Deploy Contributions Column -->
+      <ng-container matColumnDef="deploy-contributions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Deploy </th>
+        <td mat-cell *matCellDef="let element"> {{element.deployContributions}} </td>
+      </ng-container>
       <!-- Doubtfire.io Contributions Column -->
       <ng-container matColumnDef="io-contributions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> doubtfire.io </th>
@@ -54,7 +59,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <p class="text-muted text-center">
-      &copy; 2012&ndash;2020. Made in Melbourne.
+      &copy; 2012&ndash;2021. Made in Melbourne.
     </p>
     <p class="text-muted text-center logo-smallprint">
       Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under <strong>GNU
