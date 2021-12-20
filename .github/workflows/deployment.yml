@@ -3,6 +3,9 @@ on:
   push:
     tags:
       - 'v*'
+    branch:
+      - 'development'
+      - 'main'
   deployment:
   workflow_dispatch:
 jobs:
