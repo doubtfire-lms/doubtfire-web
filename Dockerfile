@@ -9,18 +9,12 @@ ENV PATH="/home/node/.npm-global/bin:${PATH}"
 # 👉 The `--global` install dir
 ENV NPM_CONFIG_PREFIX="/home/node/.npm-global"
 
-COPY package*.json ./
-
-RUN npm ci
-
 USER "${USER}"
 
 # Pre-create the target dir for global install.
 RUN mkdir -p "${NPM_CONFIG_PREFIX}/lib"
 
 WORKDIR /doubtfire-web
-
-COPY . .
 
 # Install global packages
 RUN npm --global config set user "${USER}"
