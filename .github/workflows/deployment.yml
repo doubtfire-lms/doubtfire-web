@@ -4,12 +4,13 @@ on:
     tags:
       - 'v*'
     branches:
+      - '*.x'
       - 'development'
       - 'main'
   deployment:
   workflow_dispatch:
 jobs:
-  docker-api-server:
+  docker-web-server:
     environment: deployment-secrets
     runs-on: ubuntu-latest
     steps:
