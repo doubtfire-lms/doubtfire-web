@@ -20,5 +20,11 @@ WORKDIR /doubtfire-web
 RUN npm --global config set user "${USER}"
 RUN npm install -g angular-cli husky
 
+# Copy in resources
+COPY --chown="${USER}":root . .
+
+# Setup within container
+RUN npm install
+
 # Launch - install on launch so that node_modules are updated in volume
 CMD /bin/bash -c 'npm install; npm start'
