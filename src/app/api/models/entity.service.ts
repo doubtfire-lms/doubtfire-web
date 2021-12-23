@@ -53,7 +53,7 @@ export abstract class EntityService<T extends Entity> {
       .toLowerCase();
   }
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(protected httpClient: HttpClient) {}
 
   /**
    * Helper function to convert end point format strings to final path
