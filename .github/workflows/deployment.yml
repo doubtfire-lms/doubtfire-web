@@ -11,6 +11,7 @@ on:
   workflow_dispatch:
 jobs:
   docker-web-server:
+    if: github.repository_owner == 'doubtfire-lms'
     environment: deployment-secrets
     runs-on: ubuntu-latest
     steps:
