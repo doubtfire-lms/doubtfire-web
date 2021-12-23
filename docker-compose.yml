@@ -53,10 +53,10 @@ services:
       DF_PRODUCTION_DB_PASSWORD: pwd
 
       # Overseer - disabled!
-      OVERSEER_ENABLED: 0
-      # RABBITMQ_HOSTNAME: doubtfire-mq
-      # RABBITMQ_USERNAME: secure_credentials
-      # RABBITMQ_PASSWORD: secure_credentials
+      OVERSEER_ENABLED: 1
+      RABBITMQ_HOSTNAME: doubtfire-mq
+      RABBITMQ_USERNAME: secure_credentials
+      RABBITMQ_PASSWORD: secure_credentials
 
   dev-db:
     container_name: doubtfire-dev-db
