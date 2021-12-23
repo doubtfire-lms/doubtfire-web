@@ -16,6 +16,7 @@
       <mat-tab-group dynamicHeight>
         <mat-tab *ngFor="let selTab of selectedTab.content" label="{{selTab.label}}">
           <pre class="terminal-output">{{selTab.result}} </pre>
+          <button mat-button mat-flat-button [hidden]="selTab.label !== 'Error'" (click)="triggerOverseer(selectedTab)">Run Again</button>
         </mat-tab>
       </mat-tab-group>
     </div>

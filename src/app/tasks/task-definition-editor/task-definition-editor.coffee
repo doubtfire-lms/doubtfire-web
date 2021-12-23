@@ -150,8 +150,8 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       alertService.add("success", "Task assessment resources uploaded", 2000)
       $scope.task.has_task_assessment_resources = true
 
-    $scope.taskAssessmentResourcesUrl = ->
-      Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task)
+    $scope.downloadTaskAssessmentResources = ->
+      fileDownloaderService.downloadFile(Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task), "#{$scope.unit.code}-#{$scope.task.abbreviation}-task-assessment-resources.zip")
 
     # #
     # # The assessment tests uploader...

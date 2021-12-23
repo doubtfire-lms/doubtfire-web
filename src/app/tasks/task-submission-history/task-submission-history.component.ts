@@ -4,35 +4,7 @@ import { map } from 'rxjs/operators';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Subject } from 'rxjs';
 import { OverseerAssessmentService } from 'src/app/api/models/overseer-models/overseer-assessment/overseer-assessment.service';
-
-export interface ISubmissionTab {
-  id?: number;
-  label?: string;
-  timestamp: Date;
-  timestampString?: string;
-  content?: [{ label: string; result: string }];
-  task?: any;
-  taskStatus?: any;
-  submissionStatus?: any;
-  createdAt?: any;
-  updatedAt?: any;
-  taskId?: any;
-}
-
-export class SubmissionTab implements ISubmissionTab {
-  timestamp = new Date();
-  id?: number;
-  label?: string;
-  timestampString?: string;
-  content?: [{ label: string; result: string }];
-  task?: any;
-  taskStatus?: any;
-  submissionStatus?: any;
-  createdAt?: any;
-  updatedAt?: any;
-  taskId?: any;
-  constructor() {}
-}
+import { OverseerAssessment } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'task-submission-history',
@@ -42,9 +14,9 @@ export class SubmissionTab implements ISubmissionTab {
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: any;
   @Output() hasNoData = new EventEmitter<boolean>();
-  tabs: SubmissionTab[];
-  timestamps: string[];
-  selectedTab: SubmissionTab = new SubmissionTab();
+  tabs: OverseerAssessment[];
+  // timestamps: string[];
+  selectedTab: OverseerAssessment = new OverseerAssessment({}, undefined);
   @Input() refreshTrigger: Subject<boolean>;
 
   constructor(
@@ -86,7 +58,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     this.overseerAssessmentService.queryForTask(this.task).subscribe(
       tabs => {
         if (tabs.length === 0) {
-          this.tabs = [{timestamp: new Date()}];
+          this.tabs = [new OverseerAssessment({}, undefined)];
           this.selectedTab.content = [{label: 'No Data', result: 'There are no submissions for this task at the moment.' }];
         } else {
           this.tabs = tabs;
@@ -103,11 +75,19 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     );
   }
 
-  openSubmission(tab: SubmissionTab) {
-    this.selectedTab.timestamp = tab.timestamp;
-    this.selectedTab.timestampString = tab.timestampString;
-    this.selectedTab.taskStatus = tab.taskStatus;
-    this.selectedTab.submissionStatus = tab.submissionStatus;
+  triggerOverseer(tab: OverseerAssessment) {
+    this.overseerAssessmentService.triggerOverseer(tab).subscribe(
+      (response: OverseerAssessment) => { this.alerts.add('success', 'Overseer assessment will be run again.', 2000); },
+      (response: any) => { this.alerts.add('danger', 'Error requesting overseer assessment.', 6000); }
+    );
+  }
+
+  openSubmission(tab: OverseerAssessment) {
+    this.selectedTab = tab;
+    // this.selectedTab.timestamp = tab.timestamp;
+    // this.selectedTab.timestampString = tab.timestampString;
+    // this.selectedTab.taskStatus = tab.taskStatus;
+    // this.selectedTab.submissionStatus = tab.submissionStatus;
 
     this.submissions.getSubmissionByTimestamp(this.task, tab.timestampString)
       .subscribe(

@@ -12,7 +12,6 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
 export class TaskAssessorComponent implements OnChanges {
   @Input() taskDefinition: any;
   @Input() unit: any;
-  public _hasAnySubmissions: boolean;
   public currentUserTask: any; // Task
 
   constructor(
@@ -29,14 +28,24 @@ export class TaskAssessorComponent implements OnChanges {
 
   ngOnChanges() {
     const proj = this.unit.findProjectForUsername(this.currentUser.profile.username);
-    this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
-
-    this.hasAnySubmissions();
+    if ( proj ) {
+      this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
+      this.hasAnySubmissions();
+    }
   }
 
   testSubmission() {
     this.taskDefinition.unit_id = this.unit.id;
-    this.ts.presentTaskSubmissionModal(this.currentUserTask, this.taskDefinition.status, false, true);
+    var task = this.currentUserTask
+    if ( ! task ) {
+      task = {
+        definition: this.taskDefinition
+      }
+    }
+    task.id = this.taskDefinition.id;
+    task.unit_id = this.unit.id,
+
+    this.ts.presentTaskSubmissionModal(task, this.taskDefinition.status, false, true, this.unit);
   }
 
   testSubmissionHistory() {
@@ -48,19 +57,8 @@ export class TaskAssessorComponent implements OnChanges {
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask)
     .subscribe({
-      next: ((result: OverseerAssessment[]) => {
-        if (result.length === 0) {
-          this._hasAnySubmissions = false;
-          this.currentUserTask.has_any_submissions = false;
-        } else {
-          this._hasAnySubmissions = true;
-          this.currentUserTask.has_any_submissions = true;
-        }
-      }).bind(this),
-      error: ((error) => {
-        this._hasAnySubmissions = false;
-        this.currentUserTask.has_any_submissions = false;
-      }).bind(this)
+      next: (result: OverseerAssessment[]) => {},
+      error: (error) => {}
     });
   }
 }

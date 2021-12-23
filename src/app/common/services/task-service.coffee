@@ -368,17 +368,18 @@ angular.module("doubtfire.common.services.tasks", [])
       analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
   taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence, isTestSubmission = false) ->
-    oldStatus = task.status
-    task.status = status
+    if (!isTestSubmission)
+      oldStatus = task.status
+      task.status = status
     modal = UploadSubmissionModal.show(task, reuploadEvidence, isTestSubmission)
     # Modal failed to present
     unless modal?
-      task.status = oldStatus
+      if (task)
+        task.status = oldStatus
       return
     modal.result.then(
       # Grade was selected (modal closed with result)
       (response) ->
-        task.has_any_submissions = true
         null
       # Grade was not selected (modal was dismissed)
       (dismissed) ->

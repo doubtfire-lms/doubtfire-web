@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class OverseerAssessmentService extends EntityService<OverseerAssessment> {
   protected readonly endpointFormat = 'projects/:project_id:/task_def_id/:td_id:/submissions/timestamps/:timestamp:';
+  protected readonly triggerEndpointFormat = 'projects/:project_id:/task_def_id/:td_id:/overseer_assessment/:id:/trigger';
   entityName = 'OverseerAssessment';
 
   protected createInstanceFrom(json: any, other?: any): OverseerAssessment {
@@ -25,6 +26,15 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     };
 
     return this.query(pathIds, task);
+  }
+
+  public triggerOverseer(assessment: OverseerAssessment) : Observable<OverseerAssessment> {
+    const pathIds = {
+      project_id: assessment.task.project().project_id,
+      td_id: assessment.task.task_definition_id,
+      id: assessment.id
+    }
+    return this.put(pathIds, {}, { alternateEndpointFormat: this.triggerEndpointFormat });
   }
 
 }

@@ -379,7 +379,7 @@
                     >
                     </file-uploader>
                     <button
-                      ng-click="downloadTaskResources()}}"
+                      ng-click="downloadTaskResources()"
                       ng-show="task.has_task_resources"
                       target="_blank"
                       class="btn btn-info col-sm-12"
@@ -453,7 +453,7 @@
                       url="taskAssessmentResourcesUploadUrl()"
                       on-success="onTaskAssessmentResourcesSuccess">
                     </file-uploader>
-                    <a href="{{taskAssessmentResourcesUrl()}}" ng-show="task.has_task_assessment_resources" target="_blank" class="btn btn-info col-sm-12">
+                    <a ng-click="downloadTaskAssessmentResources()" ng-show="task.has_task_assessment_resources" class="btn btn-info col-sm-12">
                       <i class="fa fa-download"></i> Download Assessment Resources
                     </a>
                     <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.has_task_assessment_resources" class="btn btn-danger col-sm-12">
