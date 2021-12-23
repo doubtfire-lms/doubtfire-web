@@ -1,3 +1,190 @@
-<div>
-  <p>Hello World</p>
+<div id="home">
+    <div class="text-center" ng-show="notEnrolled()">
+        <h1>
+          You are not enrolled in NAMEHERE <!--{{externalName.value}}.-->
+        </h1>
+        <p class="lead">
+          Contact your unit convenor or tutor to enrol you in a subject.
+        </p>
+    </div>
+    <mat-card>
+        <mat-grid-list cols="2" rowHeight="2:1">
+            <mat-grid-tile>
+                <mat-card>
+                    <mat-card-title class="card-heading" ng-hide="notEntrolled()" if-role="Tutor Convenor Admin">Units You Teach</mat-card-title>
+                    <!-- Units with a teaching period should be listed first -->
+                    <mat-card-content  ng-show="filteredUnitRoles.length > 0">
+                    <mat-nav-list>
+                        <!-- For units with a teaching period -->
+                        <a mat-list-item href='#' ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)"
+                        ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" 
+                        ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()">
+                          <header>
+                            <!--{{unitRole.unit_name}}--> Unit Name
+                          </header>
+                          <p>
+                            <label class="label label-default"><!--{{unitRole.teachingPeriod().name()}}--></label>
+                            <label class="label label-info"><!--{{unitRole.unit_code}}--></label>
+                            <label class="label label-primary"><!--{{unitRole.role}}--></label>
+                          </p>
+                        </a>
+                        <!-- For units without a teaching period -->
+                        <a mat-list-item href="#" ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)"
+                        ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" 
+                        ng-if="!unitRole.teachingPeriod()">
+                        <header>
+                          <!--{{unitRole.unit_name}}--> Unit Name
+                        </header>
+                        <p>
+                          <label class="label label-default"><!--{{showDate(unitRole.start_date)}}--></label>
+                          <label class="label label-info"><!--{{unitRole.unit_code}}--></label>
+                          <label class="label label-primary"><!--{{unitRole.role}}--></label>
+                        </p>
+                        </a>
+                        <a mat-list-item href='#'class="text-right" ui-sref="view-all-units">
+                            View All
+                            <span class="glyphicon glyphicon-share-alt"></span>
+                        </a>
+                    </mat-nav-list>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-card ng-hide="notEntrolled()">
+                    <mat-card-title>Units You Study</mat-card-title>
+                    <!-- Units with a teaching period should be listed first -->
+                    <mat-card-content ng-show="projects.length > 0"></mat-card-content>
+                    <mat-nav-list>
+                        <a mat-list-item href='#' ng-repeat="project in projects"
+                        ui-sref='projects/dashboard({projectId: project.project_id, taskAbbr: ""})' 
+                        ng-if="project.teachingPeriod() && project.teachingPeriod().active()">
+                            <header>
+                                <!--{{project.unit_name}}--> Project unit name
+                            </header>
+                            <p>
+                                <label class="label label-default"><!--{{project.teachingPeriod().name()}}--></label>
+                                <label class="label label-info"><!--{{project.unit_code}}--></label>
+                            </p>
+                        </a>
+                        <!-- For units without a teaching period -->
+                        <a mat-list-item href='#' ng-repeat="project in projects"
+                        ui-sref='projects/dashboard({projectId: project.project_id, taskAbbr: ""})' 
+                        ng-if="!project.teachingPeriod()">
+                        <header>
+                          <!--{{project.unit_name}}-->
+                        </header>
+                        <p>
+                          <label class="label label-default"><!--{{showDate(project.start_date)}}--></label>
+                          <label class="label label-info"><!--{{project.unit_code}}--></label>
+                        </p>
+                        </a>
+                        <a mat-list-item href='#' ui-sref="view-all-projects">
+                            View All
+                            <span class="glyphicon glyphicon-share-alt"></span>
+                        </a>
+                    </mat-nav-list> 
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <!-- old html to be deleted -->
+        <div class="row">
+            <div class="col-md-4">
+              <div class="cards" ng-hide="notEntrolled()">
+                <div class="card card-primary" if-role="Tutor Convenor Admin">
+                  <div class="card-heading">
+                    <h4>Units You Teach</h4>
+                  </div>
+                  <!-- Units with a teaching period should be listed first -->
+                  <div class="list-group" ng-show="filteredUnitRoles.length > 0">
+                    <!-- For units with a teaching period -->
+                    <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)"
+                      ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item"
+                      ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()">
+                      <header>
+                        <!--{{unitRole.unit_name}}--> Unit Name
+                      </header>
+                      <p>
+                        <label class="label label-default"><!--{{unitRole.teachingPeriod().name()}}--></label>
+                        <label class="label label-info"><!--{{unitRole.unit_code}}--></label>
+                        <label class="label label-primary"><!--{{unitRole.role}}--></label>
+                      </p>
+                    </a>
+                    <!-- For units without a teaching period -->
+                    <a ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole)"
+                      ui-sref="units/tasks/inbox({unitId: unitRole.unit_id})" class="list-group-item"
+                      ng-if="!unitRole.teachingPeriod()">
+                      <header>
+                        <!--{{unitRole.unit_name}}--> Unit Name
+                      </header>
+                      <p>
+                        <label class="label label-default"><!--{{showDate(unitRole.start_date)}}--></label>
+                        <label class="label label-info"><!--{{unitRole.unit_code}}--></label>
+                        <label class="label label-primary"><!--{{unitRole.role}}--></label>
+                      </p>
+                    </a>
+                  </div>
+                  <div class="list-group">
+                    <a class="list-group-item text-right" ui-sref="view-all-units">
+                      View All
+                      <span class="glyphicon glyphicon-share-alt"></span>
+                    </a>
+                  </div>
+                  <div class="card-body" ng-hide="filteredUnitRoles.length > 0">
+                    You do not teach any active units
+                  </div>
+                </div>
+                <!--/units-taught-->
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="cards" ng-hide="notEntrolled()">
+                <div class="card card-primary" ng-show="projects.length > 0">
+                  <div class="card-heading">
+                    <h4>Units You Study</h4>
+                  </div>
+                  <!-- Units with a teaching period should be listed first -->
+                  <div class="list-group">
+                    <!-- For units with a teaching period -->
+                    <a ng-repeat="project in projects"
+                      ui-sref='projects/dashboard({projectId: project.project_id, taskAbbr: ""})' class="list-group-item"
+                      ng-if="project.teachingPeriod() && project.teachingPeriod().active()">
+                      <header>
+                        <!--{{project.unit_name}}--> Project unit name
+                      </header>
+                      <p>
+                        <label class="label label-default"><!--{{project.teachingPeriod().name()}}--></label>
+                        <label class="label label-info"><!--{{project.unit_code}}--></label>
+                      </p>
+                    </a>
+                    <!-- For units without a teaching period -->
+                    <a ng-repeat="project in projects"
+                      ui-sref='projects/dashboard({projectId: project.project_id, taskAbbr: ""})' class="list-group-item"
+                      ng-if="!project.teachingPeriod()">
+                      <header>
+                        <!--{{project.unit_name}}-->
+                      </header>
+                      <p>
+                        <label class="label label-default"><!--{{showDate(project.start_date)}}--></label>
+                        <label class="label label-info"><!--{{project.unit_code}}--></label>
+                      </p>
+                    </a>
+                  </div>
+                  <div class="list-group">
+                    <a class="list-group-item text-right" ui-sref="view-all-projects">
+                      View All
+                      <span class="glyphicon glyphicon-share-alt"></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--/units-taught-->
+          </div>
+    </mat-card>
+    <!--<div class="spinner" ng-hide="dataLoaded">
+        <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
+      </div>  -->
 </div>
+
+

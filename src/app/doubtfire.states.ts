@@ -30,7 +30,7 @@ const institutionSettingsState: NgHybridStateDeclaration = {
 };
 
 /**
- * Define the institution settings state - used to edit campus data.
+ * Define the new home state.
  */
  const newHomeState: NgHybridStateDeclaration = {
   name: 'new-home',

@@ -31,6 +31,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -152,6 +153,7 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { NewHomeComponent } from './home/states/home/home.component';
 
 @NgModule({
   // Components we declare
@@ -173,6 +175,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
+    NewHomeComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
@@ -241,6 +244,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     MatSliderModule,
     MatExpansionModule,
     MatCardModule,
+    MatGridListModule,
     MatSelectModule,
     MatToolbarModule,
     MatTabsModule,
