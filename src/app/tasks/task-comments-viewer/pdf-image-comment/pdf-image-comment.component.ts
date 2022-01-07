@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { blob } from 'd3-fetch';
 import { alertService, commentsModal, Task } from 'src/app/ajs-upgraded-providers';
 import { TaskComment } from 'src/app/api/models/doubtfire-model';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
