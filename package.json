@@ -34,7 +34,7 @@
     "@angular/router": "~13.1.1",
     "@angular/service-worker": "~13.1.1",
     "@angular/upgrade": "~13.1.1",
-    "@ctrl/ngx-emoji-mart": "^6.0.0",
+    "@ctrl/ngx-emoji-mart": "^6.1.1",
     "@ng-stack/contenteditable": "^1.1.1",
     "@uirouter/angular": "^9.1.0",
     "@uirouter/angular-hybrid": "13.0.0",
