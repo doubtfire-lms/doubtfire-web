@@ -10,16 +10,10 @@ i.logo {
   display: inline-block;
   width: 1em;
   height: 1em;
-  background-color: $doubtfire-color;
-  background-image: url('/assets/images/doubtfire-logo-person-white.svg');
+  background-image: url('/assets/images/logo.svg');
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: 10%;
-}
-
-a:hover > i.logo {
-  background-color: lighten($doubtfire-color, 10%);
 }
 
 .welcome-to-doubtfire {
