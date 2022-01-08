@@ -156,6 +156,7 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HomeComponent } from './home/states/home/home.component';
+import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
 
 @NgModule({
   // Components we declare
@@ -193,6 +194,7 @@ import { HomeComponent } from './home/states/home/home.component';
     AudioPlayerComponent,
     MarkedPipe,
     HumanizedDatePipe,
+    IsActiveUnitRole,
     DragDropDirective,
     PdfViewerComponent,
     SafePipe,
