@@ -34,7 +34,7 @@ const institutionSettingsState: NgHybridStateDeclaration = {
  */
  const HomeState: NgHybridStateDeclaration = {
   name: 'home',
-  url: '/home',                     // You get here with this url
+  url: '/home',                                           // You get here with this url
   views: {                                                // These are the 2 views - the header and main from the body of DF
     header: {                                             // Header is still angularjs
       controller: 'BasicHeaderCtrl',                      // This is the angularjs controller
