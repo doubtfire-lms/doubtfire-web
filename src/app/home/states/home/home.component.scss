@@ -2,6 +2,24 @@
   padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
+
+  .spinner {
+    position: fixed;
+    background: #f0f2f5;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ::ng-deep .mat-progress-spinner circle,
+    .mat-spinner circle {
+      stroke: gray;
+    }
+  }
 }
 
 .removeStyle {

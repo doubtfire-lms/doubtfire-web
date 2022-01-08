@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, ComponentFactoryResolver, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import {
   analyticsService,
@@ -7,6 +7,7 @@ import {
   projectService,
   unitService,
 } from 'src/app/ajs-upgraded-providers';
+import { UIRouter } from '@uirouter/angular';
 
 @Component({
   selector: 'home',
@@ -18,6 +19,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   unitRoles: any;
   showSpinner: boolean;
   dataLoaded: boolean;
+  notEnrolled: boolean;
+  ifAdmin: boolean;
+  ifConvenor: boolean;
+  showingWizard: any;
   constructor(
     private renderer: Renderer2,
     private constants: DoubtfireConstants,
@@ -25,7 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     @Inject(unitService) private UnitService: any,
     @Inject(dateService) private DateService: any,
     @Inject(projectService) private ProjectService: any,
-    @Inject(currentUser) private CurrentUser: any
+    @Inject(currentUser) private CurrentUser: any,
+    @Inject(UIRouter) private router: UIRouter
   ) {
     this.renderer.setStyle(document.body, 'background-color', '#f0f2f5'); //.addClass(document.body, 'body-class');
   }
@@ -38,8 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(document.body, 'background-color', '#fff');
   }
   ngOnInit(): void {
-    // $scope.showDate = dateService.showDate
-
     this.AnalyticsService.event('Home', 'Viewed Home page');
 
     let hasRoles = false;
@@ -53,8 +57,23 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.showSpinner = false;
         this.dataLoaded = true;
         hasProjects = true;
+        this.testForStateChanges();
       });
     });
+
+    this.notEnrolled = this.checkEnrolled();
+
+    this.ifAdmin = this.CurrentUser.role === 'Admin';
+    this.ifConvenor = this.CurrentUser.role === 'Convenor';
+  }
+
+  checkEnrolled(): boolean {
+    if (this.unitRoles != null || this.projects != null) return false;
+
+    return (
+      (this.unitRoles?.length === 0 && this.CurrentUser.role === 'Tutor') ||
+      (this.projects?.length === 0 && this.CurrentUser.role === 'Student')
+    );
   }
 
   showDate = this.DateService.showDate;
@@ -78,4 +97,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   // Not enrolled if a student and no projects
   //      (this.projects.length is 0 and this.currentUser.role === 'Student')
   // }
+
+  testForStateChanges() {
+    this.showingWizard = this.testForNewUserWizard();
+  }
+
+  testForNewUserWizard() {
+    let firstTimeUser = this.CurrentUser.profile.has_run_first_time_setup === false;
+    let userHasNotOptedIn = this.CurrentUser.profile.opt_in_to_research === null;
+
+    let showNewUserWizard = firstTimeUser || userHasNotOptedIn;
+    userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;
+
+    if (showNewUserWizard) {
+      console.log('trying to go to new user wizard');
+      console.log(this.router.stateRegistry);
+
+      this.router.stateService.go('home#new-user-wizard', { optInOnly: userHasNotOptedIn });
+    }
+
+    // return showNewUserWizard;
+  }
 }
