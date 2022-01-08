@@ -1,7 +1,7 @@
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { NgModule, Injector } from '@angular/core';
+import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
@@ -315,7 +315,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
-export class DoubtfireAngularModule {
+export class DoubtfireAngularModule implements DoBootstrap {
   constructor(
     injector: Injector,
     private upgrade: UpgradeModule,
