@@ -1,0 +1,142 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+// ? Importing `Work Sans` font for headings, you can change this if you want
+// @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap");
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-formatif: (
+  50: #e7e7ff,
+  100: #c4c4ff,
+  200: #9c9cff,
+  300: #7474ff,
+  400: #5757ff,
+  500: #3939ff,
+  600: #3333ff,
+  700: #2c2cff,
+  800: #2424ff,
+  900: #1717ff,
+  A100: #ffffff,
+  A200: #fcfcff,
+  A400: #c9c9ff,
+  A700: #b0b0ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$md-formatif-accent: (
+  50: #e8f2fe,
+  100: #c6dffc,
+  200: #a0cafa,
+  300: #7ab4f7,
+  400: #5ea4f6,
+  500: #4194f4,
+  600: #3b8cf3,
+  700: #3281f1,
+  800: #2a77ef,
+  900: #1c65ec,
+  A100: #ffffff,
+  A200: #edf3ff,
+  A400: #bad0ff,
+  A700: #a1bfff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$md-formatif-warn: (
+  50: #fff6e7,
+  100: #ffe9c2,
+  200: #ffda99,
+  300: #ffcb70,
+  400: #ffc052,
+  500: #ffb533,
+  600: #ffae2e,
+  700: #ffa527,
+  800: #ff9d20,
+  900: #ff8d14,
+  A100: #ffffff,
+  A200: #fffdfb,
+  A400: #ffe2c8,
+  A700: #ffd5ae,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$font-family-primary: "'Grotesk'";
+$font-family-accent: "'open-sans', 'Roboto'";
+
+$mat-typography-primary-config: mat.define-typography-config(
+  $display-4: mat.define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
+  $display-3: mat.define-typography-level(56px, 56px, 400, $font-family-primary, $letter-spacing: -0.02em),
+  $display-2: mat.define-typography-level(45px, 48px, 400, $font-family-primary, $letter-spacing: -0.005em),
+  $display-1: mat.define-typography-level(34px, 40px, 400, $font-family-primary),
+  $headline: mat.define-typography-level(24px, 32px, 400, $font-family-primary),
+  $title: mat.define-typography-level(20px, 32px, 500, $font-family-primary),
+  $subheading-2: mat.define-typography-level(16px, 28px, 400, $font-family-primary),
+  $subheading-1: mat.define-typography-level(15px, 24px, 400, $font-family-accent),
+  $body-2: mat.define-typography-level(14px, 24px, 500, $font-family-accent),
+  $body-1: mat.define-typography-level(14px, 20px, 400, $font-family-accent),
+  $caption: mat.define-typography-level(12px, 20px, 400, $font-family-accent),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-family-accent),
+  $input: mat.define-typography-level(inherit, 1.125, 400, $font-family-accent),
+);
+
+$my-primary: mat.define-palette($md-formatif, 500);
+$my-accent: mat.define-palette($md-formatif-accent, 500);
+$my-warn: mat.define-palette($md-formatif-warn, 500);
+
+$my-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+    ),
+    typography: $mat-typography-primary-config,
+  )
+);
+
+@include mat.all-component-themes($my-theme);
+@include mat.core($mat-typography-primary-config);
