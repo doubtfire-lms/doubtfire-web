@@ -21,6 +21,7 @@ i.logo {
   margin-bottom: 3em;
   h1, p {
     @include logo-font-rendering;
+    font-family: "Grotesk";
   }
   p.lead {
     color: #666;

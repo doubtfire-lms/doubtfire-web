@@ -33,6 +33,24 @@ $roboto-path: './fonts/roboto';
   src: local('Roboto Italic'), local('Roboto-Italic'), url('#{$roboto-path}/Roboto-Italic.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'Grotesk';
+  font-style: normal;
+  src: local('Grotesk'), url(./fonts/Grotesk/Grotesk-Regular.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Grotesk';
+  font-style: italic;
+  src: local('Grotesk'), url(./fonts/Grotesk/Grotesk-Italic.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Grotesk';
+  font-style: bold;
+  src: local('Grotesk'), url(./fonts/Grotesk/Grotesk-Bold.otf) format('opentype');
+}
+
 .mat-icon {
   font-family: 'Material Icons' !important;
   font-display: block !important;
