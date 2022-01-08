@@ -155,7 +155,7 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
-import { NewHomeComponent } from './home/states/home/home.component';
+import { HomeComponent } from './home/states/home/home.component';
 
 @NgModule({
   // Components we declare
@@ -177,7 +177,7 @@ import { NewHomeComponent } from './home/states/home/home.component';
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
-    NewHomeComponent,
+    HomeComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,

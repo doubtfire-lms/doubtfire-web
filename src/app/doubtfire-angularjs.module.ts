@@ -42,8 +42,6 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/home/home.js';
-import 'build/src/app/home/states/home/home.js';
 import 'build/src/app/home/states/new-user-wizard/new-user-wizard.js';
 import 'build/src/app/home/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
@@ -297,7 +295,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
-  'doubtfire.home',
   'doubtfire.admin',
   'doubtfire.units',
   'doubtfire.tasks',
