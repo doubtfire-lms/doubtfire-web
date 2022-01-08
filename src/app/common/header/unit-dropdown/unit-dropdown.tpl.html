@@ -1,5 +1,5 @@
 <ul class="dropdown-menu dropdown-units" dropdown-menu>
-  <li ng-hide="filteredUnitRoles.length == 0" class="dropdown-header">Units You Teach {{filteredUnitRoles.length}}</li>
+  <li ng-hide="filteredUnitRoles.length == 0" class="dropdown-header">Units You Teach</li>
   <li ng-repeat="unitRole in filteredUnitRoles = (unitRoles | isActiveUnitRole) | filter:isUniqueUnitRole " ng-if="unitRole.teachingPeriod() && unitRole.teachingPeriod().active()">
     <a ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
         <small class="unit-info">
