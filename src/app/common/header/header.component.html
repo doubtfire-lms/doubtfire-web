@@ -1,0 +1,23 @@
+<mat-toolbar div fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon
+    svgIcon="formatif-logo"
+    class="formatif-icon"
+    aria-hidden="false"
+    aria-label="Example user verified icon"
+  ></mat-icon>
+
+  <!-- Unit Dropdown -->
+  <unit-dropdown [unit]="unit"></unit-dropdown>
+
+  <!-- Unit Navigator Dropdown -->
+  <!-- <div *ngIf="task && tutor"></div> -->
+
+  <span fxFlex></span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>

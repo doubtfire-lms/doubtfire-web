@@ -1,3 +1,5 @@
+<!-- <app-header></app-header> -->
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -25,10 +27,11 @@
                 <span ng-bind="unit.code"></span>
               </label>
               <span class="unit-name" ng-bind="unit.name" ng-if="unit"></span>
+              {{unit.name}}
               <span class="unit-name" ng-if="!unit">Select Unit</span>
               <span class="caret"></span>
             </button>
-            <unit-dropdown></unit-dropdown>
+            <unit-dropdown [unit]="unit"></unit-dropdown>
           </div>
         </li>
         <!--/selected-unit-->

@@ -2,7 +2,7 @@ import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
-import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -17,7 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
@@ -72,6 +72,11 @@ import {
   taskDefinitionProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
+  userSettingsModalProvider,
+  rootScopeProvider,
+  aboutDoubtfireModalProvider,
+  calendarModalProvider,
+  userNotificationSettingsModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -157,6 +162,8 @@ import { TaskAssessmentModalComponent } from './common/modals/task-assessment-mo
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HomeComponent } from './home/states/home/home.component';
 import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
+import { HeaderComponent } from './common/header/header.component';
+import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 
 @NgModule({
   // Components we declare
@@ -210,6 +217,8 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
+    HeaderComponent,
+    UnitDropdownComponent,
   ],
   // Module Imports
   imports: [
@@ -264,7 +273,7 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: () => interval(6000).pipe(take(1))
+      registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
   ],
   // Services we provide
@@ -285,6 +294,11 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
     unitProvider,
     commentsModalProvider,
     taskDefinitionProvider,
+    userSettingsModalProvider,,
+    rootScopeProvider,
+    userNotificationSettingsModalProvider,
+    calendarModalProvider,
+    aboutDoubtfireModalProvider,
     authProvider,
     currentUserProvider,
     taskServiceProvider,
@@ -313,7 +327,7 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true
+      multi: true,
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -321,7 +335,8 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-  ]
+    IsActiveUnitRole,
+  ],
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
@@ -331,7 +346,9 @@ export class DoubtfireAngularModule implements DoBootstrap {
     private upgrade: UpgradeModule,
     private constants: DoubtfireConstants,
     private title: Title,
-    private updater: CheckForUpdateService
+    private updater: CheckForUpdateService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
@@ -339,6 +356,11 @@ export class DoubtfireAngularModule implements DoBootstrap {
     this.constants.ExternalName.subscribe((result) => {
       this.title.setTitle(result);
     });
+
+    this.matIconRegistry.addSvgIcon(
+      'formatif-logo',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg')
+    );
   }
 
   ngDoBootstrap() {

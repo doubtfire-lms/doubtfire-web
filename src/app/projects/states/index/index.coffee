@@ -17,7 +17,7 @@ angular.module('doubtfire.projects.states.index', [])
   }
 )
 
-.controller("ProjectsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
+.controller("ProjectsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService, GlobalStateService) ->
   # Error - required projectId is missing!
   projectId = +$stateParams.projectId
   return $state.go('home') unless projectId
@@ -34,6 +34,7 @@ angular.module('doubtfire.projects.states.index', [])
         $scope.project = $scope.unit.mapStudentToUnit(project)
         # Broadcast change in project
         $rootScope.$broadcast 'ProjectChanged', { context: $scope.project }
+        # GlobalStateService.setProject($scope.project)
       )
     (failure) ->
       $state.go('home')

@@ -23,6 +23,11 @@ export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
+export const userSettingsModal = new InjectionToken('UserSettingsModal');
+export const rootScope = new InjectionToken('$rootScope');
+export const userNotificationSettingsModal = new InjectionToken('UserNotificationSettingsModal');
+export const calendarModal = new InjectionToken('CalendarModal');
+export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
 
@@ -37,6 +42,36 @@ export const unitProvider = {
 export const taskDefinitionProvider = {
   provide: taskDefinition,
   useFactory: (i: any) => i.get('TaskDefinition'),
+  deps: ['$injector'],
+};
+
+export const calendarModalProvider = {
+  provide: calendarModal,
+  useFactory: (i: any) => i.get('CalendarModal'),
+  deps: ['$injector'],
+};
+
+export const userSettingsModalProvider = {
+  provide: userSettingsModal,
+  useFactory: (i: any) => i.get('UserSettingsModal'),
+  deps: ['$injector'],
+};
+
+export const rootScopeProvider = {
+  provide: rootScope,
+  useFactory: (i: any) => i.get('$rootScope'),
+  deps: ['$injector'],
+};
+
+export const aboutDoubtfireModalProvider = {
+  provide: aboutDoubtfireModal,
+  useFactory: (i: any) => i.get('AboutDoubtfireModal'),
+  deps: ['$injector'],
+};
+
+export const userNotificationSettingsModalProvider = {
+  provide: userNotificationSettingsModal,
+  useFactory: (i: any) => i.get('UserNotificationSettingsModal'),
   deps: ['$injector'],
 };
 
