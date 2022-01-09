@@ -38,4 +38,11 @@
   .mat-progress-bar {
     height: 20px;
   }
+
+  h4 {
+    max-height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
 }
