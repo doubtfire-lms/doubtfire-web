@@ -33,7 +33,11 @@
   margin-right: 15px;
   margin-bottom: 15px;
   border-radius: 15px;
-  overflow: clip;
+  overflow: hidden;
+  clip: auto;
+
+  // safari only hack
+  -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
 
   .mat-progress-bar {
     height: 20px;
