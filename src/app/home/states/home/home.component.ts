@@ -110,12 +110,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;
 
     if (showNewUserWizard) {
-      console.log('trying to go to new user wizard');
-      console.log(this.router.stateRegistry);
-
-      this.router.stateService.go('home#new-user-wizard', { optInOnly: userHasNotOptedIn });
+      this.router.stateService.go('welcome', { optInOnly: userHasNotOptedIn });
     }
 
-    // return showNewUserWizard;
+    return showNewUserWizard;
   }
 }
