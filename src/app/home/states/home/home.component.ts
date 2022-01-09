@@ -86,17 +86,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     //use Math.abs to avoid sign
     const q = Math.abs(today.valueOf() - start.valueOf());
     const d = Math.abs(end.valueOf() - start.valueOf());
-    // alert('Rounded: ' + Math.round((q / d) * 100) + '%');
-    // alert('Fraction: ' + (q / d) * 100 + '%');
     return Math.round((q / d) * 100);
   }
-
-  // notEnrolled() {
-  //   // Not enrolled if a tutor and no unitRoles
-  //   (this.unitRoles.length is 0 and this.currentUser.role === 'Tutor') ||
-  //   // Not enrolled if a student and no projects
-  //      (this.projects.length is 0 and this.currentUser.role === 'Student')
-  // }
 
   testForStateChanges() {
     this.showingWizard = this.testForNewUserWizard();
