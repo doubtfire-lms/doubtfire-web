@@ -6,10 +6,11 @@
 
   <div fxLayout="row wrap" [hidden]="notEnrolled">
     <div fxFlex>
-      <h1 class="mat-headline">Enrolled courses</h1>
+      <h1 class="mat-headline">Enrolled units</h1>
       <div fxLayout="row wrap" fxLayoutAlign="start center">
         <div *ngFor="let project of projects">
           <a
+            *ngIf="!project.teachingPeriod() || project.teachingPeriod()?.active()"
             uiSref="projects/dashboard"
             [uiParams]="{ projectId: project.project_id, taskAbbr: '' }"
             class="removeStyle"
@@ -39,7 +40,13 @@
           </a>
         </div>
         <a uiSref="view-all-projects">
-          <button matTooltip="Show all" matTooltipPosition="above" color="primary" mat-mini-fab aria-label="view all projects">
+          <button
+            matTooltip="Show all"
+            matTooltipPosition="above"
+            color="primary"
+            mat-mini-fab
+            aria-label="view all projects"
+          >
             <mat-icon style="color: white">history</mat-icon>
           </button>
         </a>
@@ -49,7 +56,12 @@
         <h1 style="margin-top: 30px" class="mat-headline">Courses you teach</h1>
         <div fxLayout="row wrap" fxLayoutAlign="start center">
           <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
-            <a uiSref="units/tasks/inbox" [uiParams]="{ unitId: unitRole.unit_id }" class="removeStyle">
+            <a
+              uiSref="units/tasks/inbox"
+              [uiParams]="{ unitId: unitRole.unit_id }"
+              class="removeStyle"
+              *ngIf="!unitRole.teachingPeriod() || unitRole.teachingPeriod()?.active()"
+            >
               <mat-card class="unit-card">
                 <h4>{{ unitRole.unit_name }}</h4>
                 <mat-card-subtitle>{{ unitRole.unit_code }}</mat-card-subtitle>
@@ -76,11 +88,17 @@
             </a>
           </div>
           <mat-card class="unit-card" [hidden]="(unitRoles | isActiveUnitRole)?.length > 0">
-            <mat-card-content> <p>You do not teach any active courses</p> </mat-card-content></mat-card
+            <mat-card-content> <p>You do not teach any active units</p> </mat-card-content></mat-card
           >
 
           <a uiSref="view-all-units">
-            <button matTooltip="Show all" matTooltipPosition="above" color="primary" mat-mini-fab aria-label="view all units">
+            <button
+              matTooltip="Show all"
+              matTooltipPosition="above"
+              color="primary"
+              mat-mini-fab
+              aria-label="view all units"
+            >
               <mat-icon style="color: white">history</mat-icon>
             </button>
           </a>
