@@ -1,5 +1,6 @@
-<!-- <app-header></app-header> -->
+task: {{ task }} tutor: {{ tutor }}
 
+<!-- <app-header></app-header> -->
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -35,6 +36,7 @@
           </div>
         </li>
         <!--/selected-unit-->
+        {{task && tutor}}
         <li ng-if="task && tutor">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
@@ -80,6 +82,8 @@
             <!--/teaching-tasks-->
           </div>
         </li>
+        <!-- {{task}} -->
+        proejct: '{{project}}''
         <li ng-if="task">
           <div class="btn-group" dropdown>
             <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>

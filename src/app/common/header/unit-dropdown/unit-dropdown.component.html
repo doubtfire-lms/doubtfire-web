@@ -1,7 +1,18 @@
-{{unit?.name || 'Select Unit'}}
+<!-- {{unit?.name || 'Select Unit'}} -->
 
 <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-  Select Unit <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-chip-list
+      *ngIf="unit"
+      style="float: right"
+      aria-label="Unit selection"
+      style="margin-left: 10px; margin-right: 10px"
+    >
+      <mat-chip selected color="primary">{{ unit?.code }}</mat-chip>
+    </mat-chip-list>
+    {{ unit ? unit.name : 'Select Unit' }}
+    <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+  </div>
 </button>
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   <div mat-subheader [hidden]="filteredRoles?.length === 0">Units you teach</div>

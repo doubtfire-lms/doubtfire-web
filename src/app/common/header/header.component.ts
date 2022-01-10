@@ -3,12 +3,12 @@ import {
   aboutDoubtfireModal,
   calendarModal,
   currentUser,
-  rootScope,
   userNotificationSettingsModal,
   userSettingsModal,
 } from 'src/app/ajs-upgraded-providers';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import { UIRouter } from '@uirouter/angular';
+import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,23 +16,35 @@ import { UIRouter } from '@uirouter/angular';
 })
 export class HeaderComponent implements OnInit {
   currentUser: any;
-  unit: { code: any; name: any; role: any };
+  unit: any = null;
   task: any;
+  data: { isTutor: boolean } = {
+    isTutor: false,
+  };
+  project: any;
+  unitRole: any;
   constructor(
     @Inject(currentUser) private CurrentUser,
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
     @Inject(calendarModal) private CalendarModal,
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
-    @Inject(rootScope) private rootScope,
     private checkForUpdateService: CheckForUpdateService,
-    private router: UIRouter
+    private router: UIRouter,
+    private globalState: GlobalStateService
   ) {
     this.currentUser = this.CurrentUser.profile;
 
     // This a hacky, temporary workaround which uses the upgraded rootScope
-    this.rootScope.$on('UnitRoleChanged', this.updateSelectedUnit.bind(this));
-    this.rootScope.$on('ProjectChanged', this.updateSelectedUnit.bind(this));
+    this.globalState.project.subscribe((project) => {
+      this.updateSelectedProject(project);
+    });
+
+    this.globalState.unitRole.subscribe((unitRole) => {
+      this.updateSelectedUnitRole(unitRole);
+    });
+    // this.rootScope.$on('UnitRoleChanged', this.updateSelectedUnit.bind(this));
+    // this.rootScope.$on('ProjectChanged', this.updateSelectedUnit.bind(this));
 
     // this.router.transitionService.onSuccess(
     //   { to: '**' },
@@ -56,20 +68,37 @@ export class HeaderComponent implements OnInit {
       .bind(this);
   }
 
-  updateSelectedUnit(event, data) {
-    let context = data.context;
-    if (context == null) return;
-
+  updateSelectedProject(project) {
     this.unit = {
-      code: context.unit_code || context.unit().code,
-      name: context.unit_name || context.unit().name,
+      code: project.unit().code,
+      name: project.unit().name,
       role:
-        context.my_role ||
-        (typeof context.unit === 'function' ? context.unit().my_role : undefined) ||
-        context.role ||
+        project.my_role ||
+        (typeof project.unit === 'function' ? project.unit().my_role : undefined) ||
+        project.role ||
         'Unknown',
     };
-    this[context.role != null ? 'unitRole' : 'project'] = context;
+    this.project = project;
+    this.updateTutor();
+  }
+
+  updateTutor() {
+    this.data.isTutor =
+      this.project != null && (this.unit.role == 'Convenor' || this.unit.role == 'Tutor' || this.unit.role == 'Admin');
+  }
+
+  updateSelectedUnitRole(unitRole) {
+    this.unit = {
+      code: unitRole.unit_code,
+      name: unitRole.unit_name,
+      role:
+        unitRole.my_role ||
+        (typeof unitRole.unit === 'function' ? unitRole.unit().my_role : undefined) ||
+        unitRole.role ||
+        'Unknown',
+    };
+    this.unitRole = unitRole;
+    this.updateTutor();
   }
 
   openUserSettings() {
@@ -88,7 +117,5 @@ export class HeaderComponent implements OnInit {
     this.CalendarModal.show();
   }
 
-  ngOnInit(): void {
-    // throw new Error('Method not implemented.');
-  }
+  ngOnInit(): void {}
 }

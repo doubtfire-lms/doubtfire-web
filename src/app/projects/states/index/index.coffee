@@ -34,7 +34,7 @@ angular.module('doubtfire.projects.states.index', [])
         $scope.project = $scope.unit.mapStudentToUnit(project)
         # Broadcast change in project
         $rootScope.$broadcast 'ProjectChanged', { context: $scope.project }
-        # GlobalStateService.setProject($scope.project)
+        GlobalStateService.setProject($scope.project)
       )
     (failure) ->
       $state.go('home')
