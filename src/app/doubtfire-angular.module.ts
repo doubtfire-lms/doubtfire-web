@@ -1,7 +1,7 @@
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { NgModule, Injector } from '@angular/core';
+import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
@@ -31,6 +31,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
@@ -53,6 +54,8 @@ import {
   authProvider,
   taskServiceProvider,
   analyticsServiceProvider,
+  unitServiceProvider,
+  dateServiceProvider,
   taskProvider,
   projectServiceProvider,
   alertServiceProvider,
@@ -152,6 +155,8 @@ import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/tas
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { HomeComponent } from './home/states/home/home.component';
+import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
 
 @NgModule({
   // Components we declare
@@ -173,6 +178,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     ExtensionModalComponent,
     CalendarModalComponent,
     InstitutionSettingsComponent,
+    HomeComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
@@ -188,6 +194,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     AudioPlayerComponent,
     MarkedPipe,
     HumanizedDatePipe,
+    IsActiveUnitRole,
     DragDropDirective,
     PdfViewerComponent,
     SafePipe,
@@ -241,6 +248,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     MatSliderModule,
     MatExpansionModule,
     MatCardModule,
+    MatGridListModule,
     MatSelectModule,
     MatToolbarModule,
     MatTabsModule,
@@ -282,6 +290,8 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
     taskServiceProvider,
     gradeServiceProvider,
     analyticsServiceProvider,
+    unitServiceProvider,
+    dateServiceProvider,
     taskProvider,
     projectServiceProvider,
     alertServiceProvider,
@@ -315,7 +325,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
 })
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
-export class DoubtfireAngularModule {
+export class DoubtfireAngularModule implements DoBootstrap {
   constructor(
     injector: Injector,
     private upgrade: UpgradeModule,

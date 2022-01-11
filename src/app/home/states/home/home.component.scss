@@ -1,0 +1,52 @@
+#home {
+  padding-top: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+
+  .spinner {
+    position: fixed;
+    background: #f0f2f5;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ::ng-deep .mat-progress-spinner circle,
+    .mat-spinner circle {
+      stroke: gray;
+    }
+  }
+}
+
+.removeStyle {
+  text-decoration: none;
+}
+
+.unit-card {
+  width: 300px;
+  max-width: 300px;
+  max-height: 200px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+  clip: auto;
+
+  // safari only hack
+  -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+
+  .mat-progress-bar {
+    height: 20px;
+  }
+
+  h4 {
+    max-height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+}

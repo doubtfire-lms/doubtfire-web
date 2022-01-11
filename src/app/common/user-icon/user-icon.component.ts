@@ -2,7 +2,8 @@ import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@ang
 import { User } from 'src/app/api/models/doubtfire-model';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'ts-md5/dist/md5';
-import * as d3 from 'd3';
+
+declare var d3: any
 
 @Component({
   selector: 'user-icon',

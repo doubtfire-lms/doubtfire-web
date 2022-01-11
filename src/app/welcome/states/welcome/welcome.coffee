@@ -1,19 +1,19 @@
-angular.module('doubtfire.home.states.new-user-wizard', [])
+angular.module('doubtfire.welcome.states.welcome', [])
 
 .config(($stateProvider) ->
-  newUserWizardStateData =
-    url: "/home#new-user-wizard?optInOnly"
+  welcomeStateData =
+    url: "/welcome?optInOnly"
     views:
       main:
-        controller: "NewUserWizardCtrl"
-        templateUrl: "home/states/new-user-wizard/new-user-wizard.tpl.html"
+        controller: "WelcomeCtrl"
+        templateUrl: "welcome/states/welcome/welcome.tpl.html"
     data:
       pageTitle: "_Welcome to Doubtfire_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  $stateProvider.state 'new-user-wizard', newUserWizardStateData
+  $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('NewUserWizardCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
   # Define steps for wizard
   # MUST ADD TO ABOVE NOTE!
   $scope.steps = {

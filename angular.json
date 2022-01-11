@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": false
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -20,7 +24,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/assets", "src/manifest.webmanifest"],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/theme.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./build/assets/doubtfire.css",
@@ -76,6 +80,14 @@
               "buildOptimizer": true,
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
@@ -105,8 +117,7 @@
             "karmaConfig": "src/karma.conf.js",
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.css",
-              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"
             ],
             "scripts": [],
             "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"]
@@ -135,6 +146,9 @@
   },
   "cli": {
     "analytics": "d9f70e12-eb87-48a0-a953-29ebd31202d7",
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "cache": {
+      "enabled": true
+    }
   }
 }

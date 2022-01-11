@@ -10,6 +10,8 @@ export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
+export const unitService = new InjectionToken('unitService');
+export const dateService = new InjectionToken('dateService');
 export const projectService = new InjectionToken('projectService');
 export const alertService = new InjectionToken('AlertService');
 export const audioRecorder = new InjectionToken('audioRecorder');
@@ -101,6 +103,18 @@ export const projectServiceProvider = {
 export const analyticsServiceProvider = {
   provide: analyticsService,
   useFactory: (i: any) => i.get('analyticsService'),
+  deps: ['$injector'],
+};
+
+export const unitServiceProvider = {
+  provide: unitService,
+  useFactory: (i: any) => i.get('unitService'),
+  deps: ['$injector'],
+};
+
+export const dateServiceProvider = {
+  provide: dateService,
+  useFactory: (i: any) => i.get('dateService'),
   deps: ['$injector'],
 };
 

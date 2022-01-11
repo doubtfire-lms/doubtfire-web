@@ -8,7 +8,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   protected isPlaying: boolean = false;
   protected audio: HTMLAudioElement;
 
-  abstract isSending: boolean = false;
+  abstract isSending;
   abstract canvas: HTMLCanvasElement;
   abstract canvasCtx: CanvasRenderingContext2D;
 
@@ -21,6 +21,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   constructor(private mediaRecorderService: any) {}
 
   ngOnInit() {
+    this.isSending = false;
     if (this.canRecord) {
       this.init();
     }

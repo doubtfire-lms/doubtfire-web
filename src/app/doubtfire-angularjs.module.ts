@@ -14,7 +14,6 @@ import 'node_modules/angular-cookies/angular-cookies.js';
 import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
 import 'node_modules/angular-resource/angular-resource.js';
 import 'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js';
-import 'node_modules/d3/d3.js';
 import 'node_modules/angular-nvd3/dist/angular-nvd3.js';
 import 'node_modules/angular-file-upload/angular-file-upload.js';
 import 'node_modules/ng-file-upload/dist/ng-file-upload-all.min.js';
@@ -43,10 +42,9 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/home/home.js';
-import 'build/src/app/home/states/home/home.js';
-import 'build/src/app/home/states/new-user-wizard/new-user-wizard.js';
-import 'build/src/app/home/states/states.js';
+import 'build/src/app/welcome/welcome.js';
+import 'build/src/app/welcome/states/welcome/welcome.js';
+import 'build/src/app/welcome/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
@@ -298,11 +296,11 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
-  'doubtfire.home',
   'doubtfire.admin',
   'doubtfire.units',
   'doubtfire.tasks',
   'doubtfire.projects',
+  'doubtfire.welcome',
   'doubtfire.groups',
   'doubtfire.visualisations',
 ]);
