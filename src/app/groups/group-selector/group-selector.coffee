@@ -80,7 +80,7 @@ angular.module('doubtfire.groups.group-selector', [])
     # Sets the placeholder text (useful to know named
     # groups are technically optional)
     resetNewGroupForm = () ->
-      @newGroupForm?.reset()
+      $scope.newGroupName = ""
 
     # Group set selector
     $scope.selectedGroupSet ?= _.first($scope.unit.group_sets)
