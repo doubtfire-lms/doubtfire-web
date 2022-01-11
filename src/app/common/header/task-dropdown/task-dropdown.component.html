@@ -1,4 +1,13 @@
-task: {{ task }} tutor: {{ data.isTutor }}
+<!-- <button mat-button [matMenuTriggerFor]="menu">Task Inbox</button>
+<mat-menu #menu="matMenu">
+  <ng-container *ngFor="let listEntry of taskDropdownData">
+    <button *ngIf="listEntry.visible" mat-menu-item>
+      {{ listEntry.title }}
+      {{ listEntry.visible }}
+    </button>
+  </ng-container>
+</mat-menu> -->
+
 <span *ngIf="task && data.isTutor">
   <button mat-button [matMenuTriggerFor]="menu">a</button>
   <mat-menu #menu="matMenu">
@@ -19,7 +28,6 @@ task: {{ task }} tutor: {{ data.isTutor }}
   </mat-menu>
 </span>
 
-project: '{{ project }}'
 <span *ngIf="task">
   <button mat-button [matMenuTriggerFor]="menu2">{{ task }}</button>
   <mat-menu #menu2="matMenu">
