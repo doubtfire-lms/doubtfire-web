@@ -208,6 +208,17 @@ angular.module("doubtfire.common.filters", [])
     _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
 )
 
+.filter('groupsWithName', ->
+  (input, searchName) ->
+    return input unless (searchName? && input?)
+    searchName = searchName.toLowerCase()
+    _.filter(input, (group) ->
+      # Search using name or abbreviation
+      group.name.toLowerCase().indexOf(searchName) >= 0
+    )
+)
+
+
 .filter('paginateAndSort', ($filter) ->
   (input, pagination, tableSort) ->
     return unless input? && tableSort? && pagination?
