@@ -36,19 +36,19 @@ $roboto-path: './fonts/roboto';
 @font-face {
   font-family: 'Grotesk';
   font-style: normal;
-  src: local('Grotesk'), url(./fonts/grotesk/grotesk-Regular.otf) format('opentype');
+  src: local('Grotesk'), url(./fonts/grotesk/grotesk-regular.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'Grotesk';
   font-style: italic;
-  src: local('Grotesk'), url(./fonts/grotesk/grotesk-Italic.otf) format('opentype');
+  src: local('Grotesk'), url(./fonts/grotesk/grotesk-italic.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'Grotesk';
   font-style: bold;
-  src: local('Grotesk'), url(./fonts/grotesk/grotesk-Bold.otf) format('opentype');
+  src: local('Grotesk'), url(./fonts/grotesk/grotesk-bold.otf) format('opentype');
 }
 
 .mat-icon {
