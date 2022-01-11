@@ -6,7 +6,7 @@
 
   <div fxLayout="row wrap" [hidden]="notEnrolled">
     <div fxFlex>
-      <h1 class="mat-headline">Enrolled courses</h1>
+      <h1 class="mat-headline">Enrolled units</h1>
       <div fxLayout="row wrap" fxLayoutAlign="start center">
         <div *ngFor="let project of projects">
           <a
@@ -53,7 +53,7 @@
       </div>
 
       <div>
-        <h1 style="margin-top: 30px" class="mat-headline">Courses you teach</h1>
+        <h1 style="margin-top: 30px" class="mat-headline">Units you teach</h1>
         <div fxLayout="row wrap" fxLayoutAlign="start center">
           <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
             <a
@@ -88,7 +88,7 @@
             </a>
           </div>
           <mat-card class="unit-card" [hidden]="(unitRoles | isActiveUnitRole)?.length > 0">
-            <mat-card-content> <p>You do not teach any active courses</p> </mat-card-content></mat-card
+            <mat-card-content> <p>You do not teach any active units</p> </mat-card-content></mat-card
           >
 
           <a uiSref="view-all-units">
