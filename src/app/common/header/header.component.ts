@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
   currentView: ViewType;
   showHeader: boolean = true;
   constructor(
-    @Inject(currentUser) private CurrentUser,
+    @Inject(currentUser) public CurrentUser,
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
     @Inject(calendarModal) private CalendarModal,
@@ -129,6 +129,10 @@ export class HeaderComponent implements OnInit {
 
   openUserSettings() {
     this.UserSettingsModal.show(this.currentUser);
+  }
+
+  openNotificationSettings() {
+    this.UserNotificationSettingsModal.show(this.currentUser);
   }
 
   update() {
