@@ -1,0 +1,62 @@
+#
+# Controllers and providers related to the header/nav bar
+#
+angular.module('doubtfire.common.header', [
+])
+.controller("BasicHeaderCtrl", ($scope, $state, $rootScope, UserNotificationSettingsModal, CalendarModal, UserSettingsModal, currentUser, AboutDoubtfireModal, checkForUpdateService, $transitions, $document, $filter) ->
+  $scope.currentUser = currentUser.profile
+
+  $scope.tutor = $state.params?.tutor?
+
+  #
+  # Opens the user settings modal
+  #
+  $scope.openUserSettings = ->
+    UserSettingsModal.show $scope.currentUser
+
+  #
+  # Opens the notification settings modal
+  #
+  $scope.openNotificationSettings = ->
+    UserNotificationSettingsModal.show $scope.currentUser
+
+  #
+  # Opens the webcal menu
+  #
+  $scope.openCalendar = ->
+    CalendarModal.show()
+
+  #
+  # Checks for updates
+  #
+  $scope.update = ->
+    checkForUpdateService.checkForupdate()
+
+  #
+  # Opens the about DF modal
+  #
+  $scope.openAboutModal = ->
+    AboutDoubtfireModal.show()
+
+  #
+  # Updates the context of the selected unit
+  #
+  updateSelectedUnit = (event, data) ->
+    context = data.context
+    return unless context?
+    $scope.unit =
+      code: context.unit_code || context.unit().code
+      name: context.unit_name || context.unit().name
+      role: context.my_role   || context.unit?().my_role || context.role || "Unknown"
+    $scope[if context.role? then "unitRole" else "project"] = context
+    $scope.tutor = $scope.project? && ($scope.unit.role == "Convenor" || $scope.unit.role == "Tutor" || $scope.unit.role == "Admin")
+
+  $scope.task = $state.current.data.task
+
+  # Watch for state transitions and update the task details for the dropdown
+  $transitions.onSuccess { to: '**' }, (trans) ->
+    $scope.task = trans.to().data?.task
+
+  $rootScope.$on 'UnitRoleChanged', updateSelectedUnit
+  $rootScope.$on 'ProjectChanged', updateSelectedUnit
+)
