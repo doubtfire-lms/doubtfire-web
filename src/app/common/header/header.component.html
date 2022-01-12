@@ -1,11 +1,13 @@
-<mat-toolbar div fxLayout="row" fxLayoutAlign="start center">
-  <mat-icon
-    style="margin-right: 20px"
-    svgIcon="formatif-logo"
-    class="formatif-icon"
-    aria-hidden="false"
-    aria-label="Example user verified icon"
-  ></mat-icon>
+  <a uiSref='home'>
+    <mat-icon
+      uiSref="home"
+      style="margin-right: 20px; margin-left: 20px"
+      svgIcon="formatif-logo"
+      class="formatif-icon"
+      aria-hidden="false"
+      aria-label="Example user verified icon"
+    ></mat-icon>
+  </a>
   <div style="color: rgb(216, 216, 216)">/</div>
 
   <unit-dropdown [unit]="currentUnitOrProject" [unitRoles]="filteredUnitRoles" [projects]="projects"></unit-dropdown>
