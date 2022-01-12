@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { projectService, unitService } from 'src/app/ajs-upgraded-providers';
 
 export class DoubtfireViewState {
@@ -52,6 +52,8 @@ export class GlobalStateService {
    */
   public projectsSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
+  public showHideHeader: Subject<boolean> = new Subject<boolean>();
+
   constructor(@Inject(unitService) private UnitService: any, @Inject(projectService) private ProjectService: any) {
     this.loadUnitsAndProjects();
   }
@@ -83,5 +85,19 @@ export class GlobalStateService {
    */
   public setView(kind: ViewType, entity?: any) {
     this.currentViewAndEntitySubject.next({ viewType: kind, entity: entity });
+  }
+
+  /**
+   * Show the header
+   */
+  public showHeader() {
+    this.showHideHeader.next(true);
+  }
+
+  /**
+   * Show the header
+   */
+  public hideHeader() {
+    this.showHideHeader.next(false);
   }
 }

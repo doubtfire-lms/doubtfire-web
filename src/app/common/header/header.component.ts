@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   filteredUnitRoles: any;
   currentUnitOrProject: any;
   currentView: ViewType;
+  showHeader: boolean = true;
   constructor(
     @Inject(currentUser) private CurrentUser,
     @Inject(userSettingsModal) private UserSettingsModal,
@@ -38,6 +39,13 @@ export class HeaderComponent implements OnInit {
     private globalState: GlobalStateService
   ) {
     this.currentUser = this.CurrentUser.profile;
+
+    this.globalState.showHideHeader.subscribe({
+      next: (shouldShow) => {
+        this.showHeader = shouldShow;
+      },
+      error: (err) => {},
+    });
 
     this.globalState.unitRolesSubject.subscribe({
       next: (unitRoles) => {

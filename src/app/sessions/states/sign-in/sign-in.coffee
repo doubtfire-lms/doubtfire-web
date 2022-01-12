@@ -18,6 +18,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
 .controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal, GlobalStateService) ->
   GlobalStateService.setView("OTHER")
+  GlobalStateService.hideHeader() # we aren't logged in yet...
   isIE = ->
     window.navigator.appName is "Microsoft Internet Explorer"
   ieVersion = ->
@@ -82,6 +83,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
 
   if auth.isAuthenticated()
     $state.go "home"
+    GlobalStateService.showHeader()
   else
     $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
