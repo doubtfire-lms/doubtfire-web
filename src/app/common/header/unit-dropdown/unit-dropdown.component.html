@@ -1,17 +1,30 @@
-<button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-  <div fxLayout="row" fxLayoutAlign="start center">
-    <mat-chip-list
-      *ngIf="unit"
-      style="float: right"
-      aria-label="Unit selection"
-      style="margin-left: 10px; margin-right: 10px"
+<div fxLayout="row" fxLayoutAlign="start center">
+  <mat-chip-list
+    matTooltip="{{ unit.name }}"
+    *ngIf="unit"
+    style="float: right"
+    aria-label="Unit selection"
+    style="margin-left: 10px; margin-right: 10px"
+  >
+    <mat-chip
+      style="cursor: pointer"
+      [matMenuTriggerFor]="menu"
+      #menuState="matMenuTrigger"
+      selected="true"
+      color="primary"
     >
-      <mat-chip selected color="primary">{{ unit?.code }}</mat-chip>
-    </mat-chip-list>
-    {{ unit ? unit.name : 'Select Unit' }}
-    <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-  </div>
-</button>
+      {{ unit?.code }}
+      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <ng-container *ngIf="!unit">
+    <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
+      Select Unit
+      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+    </button>
+  </ng-container>
+</div>
+
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <div *ngFor="let unitRole of unitRoles">

@@ -18,11 +18,25 @@
   ></task-dropdown>
 
   <span fxFlex></span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>favorite</mat-icon>
+
+  <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
+    <mat-icon>admin_panel_settings</mat-icon>
   </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <mat-icon>share</mat-icon>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Manage Teaching Periods</button>
+    <button mat-menu-item>Institution Settings</button>
+    <button mat-menu-item>Manage Units</button>
+    <button mat-menu-item>Manage Users</button>
+  </mat-menu>
+
+  <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
+    <user-icon [size]="40"></user-icon>
   </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Profile</button>
+    <button mat-menu-item>Notifications</button>
+    <button mat-menu-item>Calendar</button>
+    <button mat-menu-item>About</button>
+    <button mat-menu-item>Sign Out</button>
+  </mat-menu>
 </mat-toolbar>
