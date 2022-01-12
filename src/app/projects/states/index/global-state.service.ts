@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { projectService, unitService } from 'src/app/ajs-upgraded-providers';
 
 export class DoubtfireViewState {
@@ -27,30 +27,32 @@ export class GlobalStateService {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject: ReplaySubject<{ viewType: ViewType; entity: {} }> = new ReplaySubject<{
+  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: {} }> = new BehaviorSubject<{
     viewType: ViewType;
     entity: {};
-  }>();
+  } | null>(null);
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
    */
-  public unitRoleSubject: ReplaySubject<any> = new ReplaySubject<any>();
+  public unitRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  /**
+   * The current activity, ie. Dashboard, Task Inbox, etc. Mostly used to be able to set the task dropdown
+   */
+  public currentActivitySubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   /**
    * The list of all of the units taught by the current user
    */
-  public unitRolesSubject: ReplaySubject<any> = new ReplaySubject<any>();
+  public unitRolesSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   /**
    * The list of all of the units studied by the current user
    */
-  public projectsSubject: ReplaySubject<any> = new ReplaySubject<any>();
+  public projectsSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(
-    @Inject(unitService) private UnitService: any,
-    @Inject(projectService) private ProjectService: any
-  ) {
+  constructor(@Inject(unitService) private UnitService: any, @Inject(projectService) private ProjectService: any) {
     this.loadUnitsAndProjects();
   }
 
