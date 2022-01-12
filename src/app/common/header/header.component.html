@@ -9,7 +9,12 @@
   <!-- Unit Dropdown -->
   <unit-dropdown [unit]="currentUnitOrProject" [unitRoles]="filteredUnitRoles" [projects]="projects"></unit-dropdown>
 
-  <task-dropdown [unit]="currentUnitOrProject" [task]="task" [data]="data" [project]="project" [unitRole]="unitRole"></task-dropdown>
+  <task-dropdown
+    [unit]="currentUnitOrProject"
+    [currentView]="currentView"
+    [data]="data"
+    [unitRole]="unitRole"
+  ></task-dropdown>
 
   <span fxFlex></span>
   <span class="example-spacer"></span>
