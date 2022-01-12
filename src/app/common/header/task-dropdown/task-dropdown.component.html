@@ -1,86 +1,58 @@
-<!-- <button mat-button [matMenuTriggerFor]="menu">Task Inbox</button>
-<mat-menu #menu="matMenu">
-  <ng-container *ngFor="let listEntry of taskDropdownData">
-    <button *ngIf="listEntry.visible" mat-menu-item>
-      {{ listEntry.title }}
-      {{ listEntry.visible }}
+<div fxLayout="row" fxLayoutAlign=" center">
+  <span  fxLayout="row" fxLayoutAlign=" center" *ngIf="currentView === 'PROJECT' && unit != null && data.isTutor === true">
+    <div style="color: rgb(216, 216, 216)">/</div>
+    <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
+      Staff Tasks <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
-  </ng-container>
-</mat-menu> -->
-
-<span *ngIf="task && data.isTutor">
-  <button mat-button [matMenuTriggerFor]="menu">a</button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Task Inbox</button>
-    <button mat-menu-item>Mark By Definition</button>
-    <button mat-menu-item>Mark Tasks Offline</button>
-    <button mat-menu-item>Task List</button>
-    <mat-divider></mat-divider>
-    <button mat-menu-item>Student List</button>
-    <button mat-menu-item>Student Groups</button>
-    <button mat-menu-item>Student Plagiarism</button>
-    <button mat-menu-item>Student Portfolios</button>
-    <span>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Task Inbox</button>
+      <button mat-menu-item>Mark By Definition</button>
+      <button mat-menu-item>Mark Tasks Offline</button>
+      <button mat-menu-item>Task List</button>
       <mat-divider></mat-divider>
-      <button mat-menu-item>Unit Analytics</button>
-      <button *ngIf="unit?.role === 'Convenor' || unit?.role === 'Admin'" mat-menu-item>Unit Administration</button>
-    </span>
-  </mat-menu>
-</span>
+      <button mat-menu-item>Student List</button>
+      <button mat-menu-item>Student Groups</button>
+      <button mat-menu-item>Student Plagiarism</button>
+      <button mat-menu-item>Student Portfolios</button>
+      <span>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>Unit Analytics</button>
+        <button *ngIf="unit?.role === 'Convenor' || unit?.role === 'Admin'" mat-menu-item>Unit Administration</button>
+      </span>
+    </mat-menu>
+  </span>
 
-<span *ngIf="task">
-  <button mat-button [matMenuTriggerFor]="menu2">{{ task }}</button>
-  <mat-menu #menu2="matMenu">
-    <button mat-menu-item *ngIf="project != null">Dashboard</button>
-    <mat-divider *ngIf="project != null"></mat-divider>
-    <button mat-menu-item *ngIf="project != null">Learning Outcomes</button>
-    <button mat-menu-item *ngIf="project != null">Portfolio Creation</button>
-    <mat-divider *ngIf="project != null"></mat-divider>
-    <button mat-menu-item *ngIf="project != null">Groups List</button>
-    <button mat-menu-item *ngIf="project != null">Tutorial List</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Task Inbox</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Mark By Definition</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Mark Tasks Offline</button>
-    <mat-divider *ngIf="unitRole != null && unitRole?.role !== 'Admin'"></mat-divider>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Student List</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Student Groups</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Student Plagiarism</button>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Student Portfolios</button>
-
-    <mat-divider *ngIf="unitRole != null && unitRole?.role !== 'Admin'"></mat-divider>
-    <button mat-menu-item *ngIf="unitRole != null && unitRole?.role !== 'Admin'">Unit Analytics</button>
-    <button
-      *ngIf="(unitRole != null && unitRole?.role === 'Convenor') || (unitRole != null && unitRole?.role === 'Admin')"
-      mat-menu-item
-    >
-      Unit Administration
+  <span *ngIf="currentActivity">
+    <span style="color: rgb(216, 216, 216)">/</span>
+    <button mat-button [matMenuTriggerFor]="menu2" #menuState="matMenuTrigger">
+      {{ currentActivity }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
-  </mat-menu>
-  <!-- </span> -->
-</span>
-<!-- student tasks ngIf unitRole-->
+    <mat-menu #menu2="matMenu">
+      <ng-container *ngIf="unit != null && currentView === 'PROJECT'">
+        <button mat-menu-item>Dashboard</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>Learning Outcomes</button>
+        <button mat-menu-item>Portfolio Creation</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>Groups List</button>
+        <button mat-menu-item>Tutorial List</button>
+      </ng-container>
+      <ng-container *ngIf="unitRole && currentView === 'UNIT'">
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Task Inbox</button>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Mark By Definition</button>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Mark Tasks Offline</button>
+        <mat-divider *ngIf="unitRole.role !== 'Admin'"></mat-divider>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Student List</button>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Student Groups</button>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Student Plagiarism</button>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Student Portfolios</button>
 
-<!--
-<button mat-button [matMenuTriggerFor]="aboveMenu">Above</button>
-<mat-menu #aboveMenu="matMenu" yPosition="above">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
-
-<button mat-button [matMenuTriggerFor]="belowMenu">Below</button>
-<mat-menu #belowMenu="matMenu" yPosition="below">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
-
-<button mat-button [matMenuTriggerFor]="beforeMenu">Before</button>
-<mat-menu #beforeMenu="matMenu" xPosition="before">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
-
-<button mat-button [matMenuTriggerFor]="afterMenu">After</button>
-<mat-menu #afterMenu="matMenu" xPosition="after">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item </button>
-</mat-menu> -->
+        <mat-divider *ngIf="unitRole.role !== 'Admin'"></mat-divider>
+        <button mat-menu-item *ngIf="unitRole.role !== 'Admin'">Unit Analytics</button>
+        <button *ngIf="unitRole.role === 'Convenor' || unitRole.role === 'Admin'" mat-menu-item>
+          Unit Administration
+        </button>
+      </ng-container>
+    </mat-menu>
+  </span>
+</div>
