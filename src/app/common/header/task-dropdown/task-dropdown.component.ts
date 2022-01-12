@@ -10,7 +10,7 @@ import { ViewType } from 'src/app/projects/states/index/global-state.service';
 export class TaskDropdownComponent {
   currentActivity: any;
   @Input() data: { isTutor: boolean };
-  @Input() unit: any;
+  @Input() currentUnitOrProject: any;
   @Input() currentView: any;
   @Input() unitRole: any;
 

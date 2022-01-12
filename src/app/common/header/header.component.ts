@@ -83,6 +83,8 @@ export class HeaderComponent implements OnInit {
 
   updateSelectedProject(project) {
     this.currentUnitOrProject = {
+      project_id: project.project_id,
+      unit_id: project.unit().id,
       code: project.unit().code,
       name: project.unit().name,
       role:
