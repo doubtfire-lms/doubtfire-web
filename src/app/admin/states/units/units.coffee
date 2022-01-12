@@ -18,8 +18,10 @@ angular.module('doubtfire.admin.states.units', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService) ->
+.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService, GlobalStateService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
+
+  GlobalStateService.setView("OTHER")
 
   # Map unit role
   unitService.getUnitRoles (unitRoles) ->

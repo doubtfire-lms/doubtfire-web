@@ -36,7 +36,9 @@ angular.module('doubtfire.units.states.index', [])
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?
     $rootScope.$broadcast('UnitRoleChanged', { context: $scope.unitRole })
-    GlobalStateService.setUnitRole($scope.unitRole)
+
+    GlobalStateService.setView("UNIT", $scope.unitRole)
+
     unitService.getUnit(unitId, {loadOnlyEnrolledStudents: true}, (unit)->
       $scope.unit = unit
     )

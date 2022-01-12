@@ -13,8 +13,10 @@ angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teachi
   headerServiceProvider.state "admin/teachingperiods/edit", teachingPeriodsAdminViewStateData
 )
 
-.controller("EditTeachingPeriodStateCtrl", ($scope, $state, TeachingPeriod, alertService, analyticsService) ->
+.controller("EditTeachingPeriodStateCtrl", ($scope, $state, TeachingPeriod, alertService, analyticsService, GlobalStateService) ->
   analyticsService.event 'Edit Teaching Period View', "Started Edit Teaching Period View"
+
+  GlobalStateService.setView("OTHER")
 
   TeachingPeriod.get( Number($state.params.teachingPeriodId)
     (success) ->
