@@ -1,13 +1,8 @@
-import { Component, ComponentFactoryResolver, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import {
-  analyticsService,
-  currentUser,
-  dateService,
-  projectService,
-  unitService,
-} from 'src/app/ajs-upgraded-providers';
+import { analyticsService, currentUser, dateService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
+import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'home',
@@ -22,49 +17,61 @@ export class HomeComponent implements OnInit, OnDestroy {
   notEnrolled: boolean;
   ifAdmin: boolean;
   ifConvenor: boolean;
-  showingWizard: any;
+  loadingUnitRoles: boolean;
+  loadingProjects: boolean;
+
   constructor(
     private renderer: Renderer2,
     private constants: DoubtfireConstants,
+    private globalState: GlobalStateService,
     @Inject(analyticsService) private AnalyticsService: any,
-    @Inject(unitService) private UnitService: any,
     @Inject(dateService) private DateService: any,
-    @Inject(projectService) private ProjectService: any,
     @Inject(currentUser) private CurrentUser: any,
     @Inject(UIRouter) private router: UIRouter
   ) {
-    this.renderer.setStyle(document.body, 'background-color', '#f0f2f5'); //.addClass(document.body, 'body-class');
+    this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
+    globalState.loadUnitsAndProjects();
   }
 
   public externalName = this.constants.ExternalName;
   public userFirstName = this.CurrentUser.profile.nickname || this.CurrentUser.profile.first_name;
 
-  // public showDate = this.dateService.showDate;
   ngOnDestroy(): void {
     this.renderer.setStyle(document.body, 'background-color', '#fff');
   }
   ngOnInit(): void {
     this.AnalyticsService.event('Home', 'Viewed Home page');
+    this.globalState.setView(ViewType.OTHER);
 
-    let hasRoles = false;
-    let hasProjects = false;
+    this.testForNewUserWizard();
 
-    this.UnitService.getUnitRoles((roles: any) => {
-      this.unitRoles = roles;
-      hasRoles = true;
-      this.ProjectService.getProjects(false, (projects: any) => {
-        this.projects = projects;
-        this.showSpinner = false;
-        this.dataLoaded = true;
-        hasProjects = true;
-        this.testForStateChanges();
-      });
+    this.loadingUnitRoles = true;
+    this.loadingProjects = true;
+
+    this.globalState.unitRolesSubject.subscribe({
+      next: (unitRoles) => this.unitRolesLoaded(unitRoles),
+      error: (err) => {},
+    });
+
+    this.globalState.projectsSubject.subscribe({
+      next: (projects) => this.projectsLoaded(projects),
+      error: (err) => {},
     });
 
     this.notEnrolled = this.checkEnrolled();
 
     this.ifAdmin = this.CurrentUser.role === 'Admin';
     this.ifConvenor = this.CurrentUser.role === 'Convenor';
+  }
+
+  unitRolesLoaded(unitRoles: any): void {
+    this.unitRoles = unitRoles;
+    this.loadingUnitRoles = false;
+  }
+
+  projectsLoaded(projects: any): void {
+    this.projects = projects;
+    this.loadingProjects = false;
   }
 
   checkEnrolled(): boolean {
@@ -87,10 +94,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     const q = Math.abs(today.valueOf() - start.valueOf());
     const d = Math.abs(end.valueOf() - start.valueOf());
     return Math.round((q / d) * 100);
-  }
-
-  testForStateChanges() {
-    this.showingWizard = this.testForNewUserWizard();
   }
 
   testForNewUserWizard() {
