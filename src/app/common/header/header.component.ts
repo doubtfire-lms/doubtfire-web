@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
     // get the current active unit or project
     this.globalState.currentViewAndEntitySubject.subscribe({
       next: (currentViewAndEntity) => {
-        this.currentView = currentViewAndEntity.viewType;
+        this.currentView = currentViewAndEntity?.viewType;
 
         if (this.currentView == ViewType.PROJECT) {
           this.updateSelectedProject(currentViewAndEntity.entity);
