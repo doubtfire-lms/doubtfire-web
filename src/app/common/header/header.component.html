@@ -7,11 +7,9 @@
   ></mat-icon>
 
   <!-- Unit Dropdown -->
-  <unit-dropdown [unit]="unit"></unit-dropdown>
+  <unit-dropdown [unit]="currentUnitOrProject" [unitRoles]="filteredUnitRoles" [projects]="projects"></unit-dropdown>
 
-  <task-dropdown [task]="task" [data]="data" [unit]="unit" [project]="project" [unitRole]="unitRole"></task-dropdown>
-  <!-- <div *ngIf="task && tutor"> -->
-
+  <task-dropdown [unit]="currentUnitOrProject" [task]="task" [data]="data" [project]="project" [unitRole]="unitRole"></task-dropdown>
 
   <span fxFlex></span>
   <span class="example-spacer"></span>

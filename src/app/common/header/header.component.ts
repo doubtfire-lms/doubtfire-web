@@ -7,8 +7,8 @@ import {
   userSettingsModal,
 } from 'src/app/ajs-upgraded-providers';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import { UIRouter } from '@uirouter/angular';
-import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
+import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,60 +16,73 @@ import { GlobalStateService } from 'src/app/projects/states/index/global-state.s
 })
 export class HeaderComponent implements OnInit {
   currentUser: any;
-  unit: any = null;
   task: any;
   data: { isTutor: boolean } = {
     isTutor: false,
   };
   project: any;
-  unitRole: any;
+  unitRole: any = null;
+  unitRoles: any;
+  projects: any;
+  filteredUnitRoles: any;
+  currentUnitOrProject: any;
+  currentView: ViewType;
   constructor(
     @Inject(currentUser) private CurrentUser,
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
     @Inject(calendarModal) private CalendarModal,
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
+    private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
-    private router: UIRouter,
     private globalState: GlobalStateService
   ) {
     this.currentUser = this.CurrentUser.profile;
 
-    // This a hacky, temporary workaround which uses the upgraded rootScope
-    this.globalState.project.subscribe((project) => {
-      this.updateSelectedProject(project);
+    this.globalState.unitRolesSubject.subscribe({
+      next: (unitRoles) => {
+        if (unitRoles == null) return; // might be signing out, or the data has been cleared
+        this.unitRoles = unitRoles;
+
+        this.filteredUnitRoles = this.isActiveUnitRole
+          .transform(this.unitRoles)
+          .filter((role) => this.isUniqueRole(role));
+      },
+      error: (err) => {},
     });
 
-    this.globalState.unitRole.subscribe((unitRole) => {
-      this.updateSelectedUnitRole(unitRole);
+    this.globalState.projectsSubject.subscribe({
+      next: (projects) => {
+        if (projects == null) return;
+        this.projects = projects;
+      },
+      error: (err) => {},
     });
-    // this.rootScope.$on('UnitRoleChanged', this.updateSelectedUnit.bind(this));
-    // this.rootScope.$on('ProjectChanged', this.updateSelectedUnit.bind(this));
 
-    // this.router.transitionService.onSuccess(
-    //   { to: '**' },
-    //   (trans) => (this.task = __guard__(trans.to().data, (x) => x.task))
-    // );
-    // function __guard__(value, transform) {
-    //   return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
-    // }
+    // get the current active unit or project
+    this.globalState.currentViewAndEntitySubject.subscribe({
+      next: (currentViewAndEntity) => {
+        this.currentView = currentViewAndEntity.viewType;
 
-    this.router.transitionService
-      .onSuccess(
-        {
-          to: '**',
-        },
-        (trans) => {
-          let ref1;
-          this.task = (ref1 = trans.to().data) != null ? ref1.task : void 0;
-          console.log(this.task);
+        if (this.currentView == ViewType.PROJECT) {
+          this.updateSelectedProject(currentViewAndEntity.entity);
+        } else if (this.currentView == ViewType.UNIT) {
+          this.updateSelectedUnitRole(currentViewAndEntity.entity);
+        } else {
+          this.currentUnitOrProject = null;
         }
-      )
-      .bind(this);
+      },
+      error: (err) => {},
+    });
   }
 
+  isUniqueRole = (unit) => {
+    let units = this.unitRoles.filter((role: any) => role.unit_id === unit.unit_id);
+    return units.length == 1 || unit.role == 'Tutor';
+  };
+
   updateSelectedProject(project) {
-    this.unit = {
+    this.currentUnitOrProject = {
       code: project.unit().code,
       name: project.unit().name,
       role:
@@ -82,13 +95,8 @@ export class HeaderComponent implements OnInit {
     this.updateTutor();
   }
 
-  updateTutor() {
-    this.data.isTutor =
-      this.project != null && (this.unit.role == 'Convenor' || this.unit.role == 'Tutor' || this.unit.role == 'Admin');
-  }
-
   updateSelectedUnitRole(unitRole) {
-    this.unit = {
+    this.currentUnitOrProject = {
       code: unitRole.unit_code,
       name: unitRole.unit_name,
       role:
@@ -99,6 +107,14 @@ export class HeaderComponent implements OnInit {
     };
     this.unitRole = unitRole;
     this.updateTutor();
+  }
+
+  updateTutor() {
+    this.data.isTutor =
+      this.project != null &&
+      (this.currentUnitOrProject.role === 'Convenor' ||
+        this.currentUnitOrProject.role === 'Tutor' ||
+        this.currentUnitOrProject.role === 'Admin');
   }
 
   openUserSettings() {
