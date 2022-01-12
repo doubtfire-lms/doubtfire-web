@@ -25,20 +25,20 @@
     <mat-icon>admin_panel_settings</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>Manage Teaching Periods</button>
-    <button mat-menu-item>Institution Settings</button>
-    <button mat-menu-item>Manage Units</button>
-    <button mat-menu-item>Manage Users</button>
+    <button mat-menu-item uiSref="admin/teachingperiods">Manage Teaching Periods</button>
+    <button mat-menu-item uiSref="institutionsettings">Institution Settings</button>
+    <button mat-menu-item uiSref="admin/units">Manage Units</button>
+    <button mat-menu-item uiSref="admin/users" *ngIf="CurrentUser.role === 'Admin'">Manage Users</button>
   </mat-menu>
 
-  <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
+  <button mat-button [matMenuTriggerFor]="menu2">
     <user-icon [size]="40"></user-icon>
   </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Profile</button>
-    <button mat-menu-item>Notifications</button>
-    <button mat-menu-item>Calendar</button>
-    <button mat-menu-item>About</button>
-    <button mat-menu-item>Sign Out</button>
+  <mat-menu #menu2="matMenu">
+    <button mat-menu-item (click)="openUserSettings()">Profile</button>
+    <button mat-menu-item (click)="openNotificationSettings()">Notifications</button>
+    <button mat-menu-item (click)="openCalendar()">Calendar</button>
+    <button mat-menu-item (click)="openAboutModal()">About</button>
+    <button mat-menu-item uiSref="sign_out">Sign Out</button>
   </mat-menu>
 </mat-toolbar>
