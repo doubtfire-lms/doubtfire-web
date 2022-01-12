@@ -1,5 +1,3 @@
-<!-- {{unit?.name || 'Select Unit'}} -->
-
 <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
   <div fxLayout="row" fxLayoutAlign="start center">
     <mat-chip-list
@@ -15,8 +13,8 @@
   </div>
 </button>
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
-  <div mat-subheader [hidden]="filteredRoles?.length === 0">Units you teach</div>
-  <div *ngFor="let unitRole of filteredRoles">
+  <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
+  <div *ngFor="let unitRole of unitRoles">
     <button
       *ngIf="!unitRole.teachingPeriod() || unitRole.teachingPeriod()?.active()"
       uiSref="units/tasks/inbox"
@@ -33,7 +31,7 @@
     </button>
   </div>
 
-  <mat-divider [hidden]="filteredRoles?.length === 0 || projects?.length === 0"></mat-divider>
+  <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
   <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
   <div *ngFor="let project of projects">
     <button
@@ -52,30 +50,3 @@
     </button>
   </div>
 </mat-menu>
-
-<!-- <mat-menu #menu="matMenu">
-  <button mat-menu-item *ngFor="let project of excludedProjects" (click)="removeExclusion(project)">
-    {{ project.unit_code }}: {{ project.unit_name }}
-  </button>
-</mat-menu> -->
-
-<!-- <mat-nav-list> -->
-<!-- | filter: isUniqueUnitRole  -->
-<!-- <mat-list-item *ngFor="let unitRole of filteredRoles">
-    <a mat-list-item uiSref="units/tasks/inbox" [uiParams]="{ unitId: unitRole.unit_id }">
-      <mat-chip-list aria-label="Fish selection">
-        <mat-chip>{{ unitRole.unit_code }}</mat-chip>
-      </mat-chip-list>
-      <div mat-line>{{ unitRole.unit_name }}</div>
-      <div mat-line>{{ showDate(unitRole.start_date) }}</div>
-    </a>
-  </mat-list-item> -->
-
-<!-- <mat-divider></mat-divider> -->
-<!-- <div mat-subheader>Notes</div> -->
-<!-- <mat-list-item *ngFor="let note of notes"> -->
-<!-- <mat-icon mat-list-icon>note</mat-icon>
-    <div mat-line>{{ note.name }}</div>
-    <div mat-line>{{ note.updated | date }}</div> -->
-<!-- </mat-list-item> -->
-<!-- </mat-nav-list> -->
