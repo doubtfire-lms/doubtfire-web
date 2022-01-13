@@ -22,12 +22,21 @@
 
   <span fxFlex></span>
 
-  <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
+  <button
+    #menuState="matMenuTrigger"
+    mat-button
+    [matMenuTriggerFor]="menu"
+    *ngIf="CurrentUser.role === 'Admin' || CurrentUser.role === 'Convenor'"
+  >
     <mat-icon>admin_panel_settings</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item uiSref="admin/teachingperiods">Manage Teaching Periods</button>
-    <button mat-menu-item uiSref="institutionsettings">Institution Settings</button>
+    <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="CurrentUser.role === 'Admin'">
+      Manage Teaching Periods
+    </button>
+    <button mat-menu-item uiSref="institutionsettings" *ngIf="CurrentUser.role === 'Admin'">
+      Institution Settings
+    </button>
     <button mat-menu-item uiSref="admin/units">Manage Units</button>
     <button mat-menu-item uiSref="admin/users" *ngIf="CurrentUser.role === 'Admin'">Manage Users</button>
   </mat-menu>
