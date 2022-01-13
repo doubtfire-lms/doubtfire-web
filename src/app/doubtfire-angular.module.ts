@@ -296,7 +296,7 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
     unitProvider,
     commentsModalProvider,
     taskDefinitionProvider,
-    userSettingsModalProvider,,
+    userSettingsModalProvider,
     rootScopeProvider,
     userNotificationSettingsModalProvider,
     calendarModalProvider,
