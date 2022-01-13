@@ -13,7 +13,9 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth, GlobalStateService) ->
+
+  GlobalStateService.setView('OTHER')
   # Define steps for wizard
   # MUST ADD TO ABOVE NOTE!
   $scope.steps = {

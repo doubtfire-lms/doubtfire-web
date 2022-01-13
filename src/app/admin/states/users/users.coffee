@@ -16,7 +16,10 @@ angular.module('doubtfire.admin.states.users', [])
   headerServiceProvider.state "admin/users", usersAdminViewStateData
 )
 
-.controller("AdministerUsersCtrl", ($scope, $modal, User, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService) ->
+.controller("AdministerUsersCtrl", ($scope, $modal, User, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService, GlobalStateService) ->
+  # We are not showing a particlar unit or project
+  GlobalStateService.setView("OTHER")
+
   $scope.file_data =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response

@@ -13,8 +13,9 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   headerServiceProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, currentUser, unitService, analyticsService, dateService) ->
+.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, currentUser, unitService, analyticsService, dateService, GlobalStateService) ->
   analyticsService.event 'view-all-units', 'viewed all-units list'
+  GlobalStateService.setView('OTHER')
 
   $scope.externalName = DoubtfireConstants.ExternalName
 

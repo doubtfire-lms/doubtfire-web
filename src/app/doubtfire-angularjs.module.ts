@@ -184,7 +184,6 @@ import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/header/header.js';
-import 'build/src/app/common/header/unit-dropdown/unit-dropdown.js';
 import 'build/src/app/common/services/task-service.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
@@ -289,6 +288,8 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { HeaderComponent } from './common/header/header.component';
+import { GlobalStateService } from './projects/states/index/global-state.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -321,11 +322,16 @@ DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(Fi
 DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(CheckForUpdateService));
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
+DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'appHeader',
+  downgradeComponent({ component: HeaderComponent })
 );
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',

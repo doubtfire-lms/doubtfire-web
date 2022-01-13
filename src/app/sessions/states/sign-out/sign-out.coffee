@@ -14,8 +14,11 @@ angular.module("doubtfire.sessions.states.sign-out", [])
       pageTitle: "_Sign Out_"
   $stateProvider.state "sign_out", signOutStateData
 )
-.controller("SignOutCtrl", ($state, $timeout, $http, auth, DoubtfireConstants, currentUser) ->
+.controller("SignOutCtrl", ($state, $timeout, $http, auth, DoubtfireConstants, currentUser, GlobalStateService) ->
   auth.signOut()
+  GlobalStateService.hideHeader()
+  GlobalStateService.setView("OTHER")
+  GlobalStateService.clearUnitsAndProjects()
 
   if DoubtfireConstants.SignoutURL?
     window.location.assign(DoubtfireConstants.SignoutURL)

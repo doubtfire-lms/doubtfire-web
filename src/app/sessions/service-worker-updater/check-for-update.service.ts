@@ -36,7 +36,7 @@ export class CheckForUpdateService {
     });
   }
 
-  checkForUpdate() {
+  public checkForUpdate() {
     if(this.updates.isEnabled) {
       this.updates.checkForUpdate();
     }
