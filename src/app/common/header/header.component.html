@@ -1,5 +1,4 @@
-<mat-toolbar [hidden]="!showHeader" fxLayout="row" fxLayoutAlign="start center">
-  <a uiSref='home'>
+<mat-toolbar *ngIf="showHeader" fxLayout="row" fxLayoutAlign="start center">
     <mat-icon
       uiSref="home"
       style="margin-right: 20px; margin-left: 20px"
