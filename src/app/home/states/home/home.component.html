@@ -11,7 +11,7 @@
 
   <div fxLayout="row wrap" [hidden]="notEnrolled">
     <div fxFlex>
-      <div style="margin-bottom: 30px;" [hidden]="unitRoles?.length === 0">
+      <div style="margin-bottom: 30px" [hidden]="unitRoles?.length === 0">
         <h1 class="mat-headline">Units you teach</h1>
         <div [hidden]="unitRolesLoaded" style="height: 185px">
           <mat-spinner diameter="40" color="accent"></mat-spinner>
@@ -66,7 +66,7 @@
           </a>
         </div>
       </div>
-      <div [hidden]="projects?.length === 0">
+      <div style="margin-bottom: 30px" [hidden]="projects?.length === 0">
         <h1 class="mat-headline">Enrolled units</h1>
         <div [hidden]="projectsLoaded" style="height: 185px">
           <mat-spinner diameter="40" color="accent"></mat-spinner>
