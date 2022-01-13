@@ -109,7 +109,7 @@ export class UserIconComponent implements AfterViewInit {
       .attr('cx', this.size / 2)
       .attr('cy', this.size / 2)
       .attr('r', this.radius)
-      .attr('fill', '#9e9e9e');
+      .attr('fill', '#e86615');
 
     svg
       .append('text')
