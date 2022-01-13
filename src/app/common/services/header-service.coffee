@@ -11,23 +11,8 @@ angular.module("doubtfire.common.services.header", [])
   #
   headerServiceProvider.$get = ($rootScope) ->
     # Internal object that stores the menus
-    $rootScope.headerMenuData = []
-    # Internal object that stores the visbility of the header
-    $rootScope.showHeader = true
 
     headerService = {}
-
-    #
-    # Show the header
-    #
-    headerService.showHeader = ->
-      $rootScope.showHeader = true
-
-    #
-    # Hide the header
-    #
-    headerService.hideHeader = ->
-      $rootScope.showHeader = false
 
     headerService
 

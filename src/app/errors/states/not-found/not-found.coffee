@@ -15,4 +15,6 @@ angular.module("doubtfire.errors.states.not-found", [])
   headerServiceProvider.state 'not_found', stateData
 )
 
-.controller("NotFoundCtrl", ($scope) ->)
+.controller("NotFoundCtrl", ($scope, GlobalStateService) ->
+  GlobalStateService.setView("OTHER")
+)
