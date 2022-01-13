@@ -1,11 +1,8 @@
-<!-- uiSref="projects/dashboard"
-            [uiParams]="{ projectId: project.project_id, taskAbbr: '' }" -->
-
 <div fxLayout="row" fxLayoutAlign=" center">
   <span
     fxLayout="row"
     fxLayoutAlign=" center"
-    *ngIf="currentView === 'PROJECT' && currentUnitOrProject != null && data.isTutor === true"
+    *ngIf="currentView === 'PROJECT' && currentUnitOrProject !== null && data.isTutor === true"
   >
     <div style="color: rgb(216, 216, 216)">/</div>
     <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
@@ -60,7 +57,7 @@
       {{ currentActivity }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu2="matMenu">
-      <ng-container *ngIf="currentUnitOrProject != null && currentView === 'PROJECT'">
+      <ng-container *ngIf="currentUnitOrProject !== null && currentView === 'PROJECT'">
         <button
           uiSref="projects/dashboard"
           [uiParams]="{ projectId: currentUnitOrProject.project_id, taskAbbr: '' }"
