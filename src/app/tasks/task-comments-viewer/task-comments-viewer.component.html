@@ -1,10 +1,4 @@
 <div style="height: 100%" class="comments-panel" appDragDrop (onFileDropped)="uploadFiles($event)" fxLayout="column">
-  <!-- TODO: Redesign components when all are migrated in view -->
-  <!-- <div fxFlex="50px" class="comments-header">
-    <div class="mat-h2 header-text">
-      Chat
-    </div>
-  </div> -->
   <div fxFlex class="comments-body" #commentsBody>
     <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
@@ -29,10 +23,10 @@
               'new-comment': comment.isNew
             }"
           >
-            <div *ngIf="shouldShowAuthorIcon(comment.commentType)" fxFlex="36px" style="display: flex">
+            <div *ngIf="shouldShowAuthorIcon(comment.commentType)" fxFlex="28px" style="display: flex">
               <user-icon
                 *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
-                [size]="36"
+                [size]="28"
                 [user]="comment.author"
                 [ngClass]="{ 'hidden-xs hidden-sm': comment.authorIsMe }"
                 matTooltip="{{ comment.author.name }}"

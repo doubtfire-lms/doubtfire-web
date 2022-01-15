@@ -3,7 +3,7 @@ import { User } from 'src/app/api/models/doubtfire-model';
 import { currentUser } from 'src/app/ajs-upgraded-providers';
 import { Md5 } from 'ts-md5/dist/md5';
 
-declare var d3: any
+declare var d3: any;
 
 @Component({
   selector: 'user-icon',
@@ -65,6 +65,32 @@ export class UserIconComponent implements AfterViewInit {
     return result;
   }
 
+  private generateUniqueBackgroundColor(username: string): string {
+    const colors = [
+      '#546E7A',
+      '#D32F2F',
+      '#D81B60',
+      '#9C27B0',
+      '#673AB7',
+      '#3F51B5',
+      '#1976D2',
+      '#006064',
+      '#00796B',
+      '#2E7D32',
+      '#33691E',
+      '#BF360C',
+      '#8D6E63',
+      '#4A148C',
+      '#5C6BC0',
+    ];
+
+    var sum = 0;
+    for (var i = 0; i < username.length; i++) {
+      sum += username.charCodeAt(i);
+    }
+    return colors[sum % colors.length];
+  }
+
   private generateUniqueId(): string {
     return Math.random().toString(36).substring(2);
   }
@@ -86,8 +112,10 @@ export class UserIconComponent implements AfterViewInit {
 
     const svg = d3
       .select(this.svg.nativeElement)
-      .style('font', '10px sans-serif')
+      .style('font', '8px sans-serif')
       .attr('width', this.size)
+      .attr('shape-rendering', 'geometricPrecision')
+      .attr('font-smooth', 'antialiased')
       .attr('height', this.size)
       .attr('text-anchor', 'middle');
 
@@ -109,7 +137,7 @@ export class UserIconComponent implements AfterViewInit {
       .attr('cx', this.size / 2)
       .attr('cy', this.size / 2)
       .attr('r', this.radius)
-      .attr('fill', '#e86615');
+      .attr('fill', this.generateUniqueBackgroundColor(this.user.name));
 
     svg
       .append('text')
@@ -119,7 +147,7 @@ export class UserIconComponent implements AfterViewInit {
       .enter()
       .append('tspan')
       .attr('x', 0)
-      .attr('y', (d, i) => (i - 1 / 2 + 0.8) * this.lineHeight)
+      .attr('y', (d, i) => (i - 1 / 2 + 0.75) * this.lineHeight)
       .attr('fill', 'white')
       .text((d) => d.text);
 

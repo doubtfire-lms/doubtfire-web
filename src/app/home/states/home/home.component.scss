@@ -1,6 +1,11 @@
 #home {
+  /* Mobile */
+  @media screen and (max-width: 380px) {
+    padding-left: 0px;
+  }
+
   padding-top: 10px;
-  padding-left: 40px;
+  padding-left: 10%;
   padding-right: 40px;
 
   .spinner {
@@ -38,6 +43,7 @@
 
   // safari only hack
   -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
 
   .mat-progress-bar {
     height: 20px;

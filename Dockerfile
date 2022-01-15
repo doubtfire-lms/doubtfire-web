@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV USER=node
@@ -18,7 +18,6 @@ WORKDIR /doubtfire-web
 
 # Install global packages
 RUN npm --global config set user "${USER}"
-RUN npm install -g angular-cli husky
 
 # Copy in resources
 COPY --chown="${USER}":root . .
