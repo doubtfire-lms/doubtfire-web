@@ -13,10 +13,10 @@
     <div fxFlex>
       <div style="margin-bottom: 30px" [hidden]="unitRoles?.length === 0">
         <h1 class="mat-headline">Units you teach</h1>
-        <div [hidden]="unitRolesLoaded" style="height: 185px">
+        <div [hidden]="!loadingUnitRoles" style="height: 185px">
           <mat-spinner diameter="40" color="accent"></mat-spinner>
         </div>
-        <div [hidden]="!projectsLoaded" fxLayout="row wrap" fxLayoutAlign="start center">
+        <div [hidden]="loadingUnitRoles" fxLayout="row wrap" fxLayoutAlign="start center">
           <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
             <a
               uiSref="units/tasks/inbox"
@@ -68,11 +68,11 @@
       </div>
       <div style="margin-bottom: 30px" [hidden]="projects?.length === 0">
         <h1 class="mat-headline">Enrolled units</h1>
-        <div [hidden]="projectsLoaded" style="height: 185px">
+        <div [hidden]="!loadingProjects" style="height: 185px">
           <mat-spinner diameter="40" color="accent"></mat-spinner>
         </div>
 
-        <div [hidden]="!projectsLoaded" fxLayout="row wrap" fxLayoutAlign="start center">
+        <div [hidden]="loadingProjects" fxLayout="row wrap" fxLayoutAlign="start center">
           <div *ngFor="let project of projects">
             <a
               *ngIf="!project.teachingPeriod() || project.teachingPeriod()?.active()"
