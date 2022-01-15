@@ -18,7 +18,7 @@ WORKDIR /doubtfire-web
 
 # Install global packages
 RUN npm --global config set user "${USER}"
-RUN npm install -g angular-cli husky
+RUN npm install -g @angular/cli
 
 # Copy in resources
 COPY --chown="${USER}":root . .
