@@ -65,10 +65,10 @@ export class GlobalStateService {
     //TODO: Consider sequence here? Can we adjust to fail once.
     this.UnitService.getUnitRoles((roles: any) => {
       this.unitRolesSubject.next(roles);
-    });
 
-    this.ProjectService.getProjects(false, (projects: any) => {
-      this.projectsSubject.next(projects);
+      this.ProjectService.getProjects(false, (projects: any) => {
+        this.projectsSubject.next(projects);
+      });
     });
   }
 
