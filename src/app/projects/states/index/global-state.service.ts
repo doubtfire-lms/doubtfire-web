@@ -70,7 +70,7 @@ export class GlobalStateService {
 
         setTimeout(() => {
           this.isLoadingSubject.next(false);
-        }, 2000);
+        }, 1000);
       } else {
         console.log('GSS is not auth, going to sign in');
         this.router.stateService.go('sign_in');
