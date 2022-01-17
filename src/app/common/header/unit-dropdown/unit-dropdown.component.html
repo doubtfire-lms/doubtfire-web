@@ -36,7 +36,7 @@
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div>{{ unitRole.unit_name }}</div>
+      <div class='unitName'>{{ unitRole.unit_name }}</div>
       <span fxFlex></span>
       <mat-chip-list style="float: right" aria-label="Unit selection" style="margin-left: 10px">
         <mat-chip selected color="primary">{{ unitRole.unit_code }}</mat-chip>
@@ -55,7 +55,7 @@
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div>{{ project.unit_name }}</div>
+      <div class='unitName'>{{ project.unit_name }}</div>
       <span fxFlex></span>
       <mat-chip-list aria-label="Unit selection" style="margin-left: 10px">
         <mat-chip selected color="primary">{{ project.unit_code }}</mat-chip>
