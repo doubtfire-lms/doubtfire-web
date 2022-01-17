@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM lmsdoubtfire/doubtfire-web:6.0.x AS build
+FROM lmsdoubtfire/doubtfire-web:6.0.x-dev AS build
 
 USER "root"
 
