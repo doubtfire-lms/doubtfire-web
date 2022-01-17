@@ -82,11 +82,9 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     AboutDoubtfireModal.show()
 
   if auth.isAuthenticated()
-    console.log "is authenticated, going home"
     $state.go "home"
     GlobalStateService.showHeader()
   else
-    console.log "is not authenticated, going to sign in"
     $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
       signInFunc = ->
@@ -106,7 +104,6 @@ angular.module("doubtfire.sessions.states.sign-in", [])
               localStorageService.remove(doubtfireLoginTimeCookie)
             alertService.clearAll()
             $state.go "home", {}
-            console.log "going home, authenticated"
           (response) ->
             $scope.session.password = ''
             $scope.signingIn = false
