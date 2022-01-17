@@ -92,6 +92,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const today = new Date();
 
     //use Math.abs to avoid sign
+    if (today <= start) return 0;
+    if (today >= end) return 100;
+
     const q = Math.abs(today.valueOf() - start.valueOf());
     const d = Math.abs(end.valueOf() - start.valueOf());
     return Math.round((q / d) * 100);
