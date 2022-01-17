@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM lmsdoubtfire/doubtfire-web:6.0.x-dev AS build
+FROM lmsdoubtfire/doubtfire-web:6.0.x AS build
 
 USER "root"
 
@@ -16,16 +16,16 @@ RUN npm run-script deploy
 
 
 ### STAGE 2: Host ###
-FROM nginx:1.21
+# FROM nginx:1.21
 
-# Remove the default Nginx configuration file
-RUN rm -v /etc/nginx/nginx.conf
+# # Remove the default Nginx configuration file
+# RUN rm -v /etc/nginx/nginx.conf
 
-# Copy a configuration file from the current directory
-ADD nginx.conf /etc/nginx/
+# # Copy a configuration file from the current directory
+# ADD nginx.conf /etc/nginx/
 
-COPY --from=build /doubtfire-web/dist /usr/share/nginx/html
+# COPY --from=build /doubtfire-web/dist /usr/share/nginx/html
 
-# Expose ports
-EXPOSE 80
+# # Expose ports
+# EXPOSE 80
 
