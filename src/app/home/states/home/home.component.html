@@ -41,7 +41,7 @@
                 </mat-card-actions>
                 <mat-card-footer>
                   <mat-progress-bar
-                    matTooltip="Progress in the course"
+                    matTooltip="{{ generateUnitProgress(unitRole) }}% through the unit."
                     mode="determinate"
                     [value]="generateUnitProgress(unitRole)"
                   ></mat-progress-bar>
@@ -96,7 +96,7 @@
                 </mat-card-actions>
                 <mat-card-footer>
                   <mat-progress-bar
-                    matTooltip="Progress in the course"
+                    matTooltip="{{ generateUnitProgress(project) }}% through the unit."
                     mode="determinate"
                     [value]="generateUnitProgress(project)"
                   ></mat-progress-bar>
