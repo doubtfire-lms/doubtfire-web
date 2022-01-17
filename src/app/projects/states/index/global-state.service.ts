@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
+import { UIRouter } from '@uirouter/angular';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { projectService, unitService } from 'src/app/ajs-upgraded-providers';
+import { auth, projectService, unitService } from 'src/app/ajs-upgraded-providers';
 
 export class DoubtfireViewState {
   public EntityObject: any; // Unit | Project | undefined
@@ -52,10 +53,26 @@ export class GlobalStateService {
    */
   public projectsSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
+  public isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
   public showHideHeader: Subject<boolean> = new Subject<boolean>();
 
-  constructor(@Inject(unitService) private UnitService: any, @Inject(projectService) private ProjectService: any) {
-    this.loadUnitsAndProjects();
+  constructor(
+    @Inject(unitService) private UnitService: any,
+    @Inject(projectService) private ProjectService: any,
+    @Inject(auth) private Auth: any,
+    @Inject(UIRouter) private router: UIRouter
+  ) {
+    if (this.Auth.isAuthenticated()) {
+      this.loadUnitsAndProjects();
+
+      setTimeout(() => {
+        this.isLoadingSubject.next(false);
+      }, 2000);
+
+    } else {
+      this.router.stateService.go('sign_in');
+    }
   }
 
   /**
