@@ -46,7 +46,6 @@ import {
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { TokenInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
@@ -325,11 +324,6 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
       useClass: TokenInterceptor,
       multi: true,
       deps: [currentUser],
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true,
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
