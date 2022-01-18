@@ -25,6 +25,9 @@
   <button
     #menuState="matMenuTrigger"
     mat-button
+    fxShow.sm="true"
+    fxShow.gt-md="true"
+    fxShow="false"
     [matMenuTriggerFor]="menu"
     *ngIf="CurrentUser.role === 'Admin' || CurrentUser.role === 'Convenor'"
   >
