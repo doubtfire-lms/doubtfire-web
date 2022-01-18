@@ -66,14 +66,10 @@ export class GlobalStateService {
     setTimeout(() => {
       if (this.Auth.isAuthenticated()) {
         this.loadUnitsAndProjects();
-
-        setTimeout(() => {
-          this.isLoadingSubject.next(false);
-        }, 1000);
       } else {
         this.router.stateService.go('sign_in');
       }
-    }, 1000);
+    }, 800);
   }
 
   /**
@@ -86,6 +82,10 @@ export class GlobalStateService {
 
       this.ProjectService.getProjects(false, (projects: any) => {
         this.projectsSubject.next(projects);
+
+        setTimeout(() => {
+          this.isLoadingSubject.next(false);
+        }, 800);
       });
     });
   }
