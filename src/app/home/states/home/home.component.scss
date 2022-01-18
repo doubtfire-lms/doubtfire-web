@@ -1,12 +1,5 @@
 #home {
-  /* Mobile */
-  @media screen and (max-width: 380px) {
-    padding-left: 0px;
-  }
-
   padding-top: 10px;
-  padding-left: 10%;
-  padding-right: 40px;
 
   .spinner {
     position: fixed;
@@ -31,10 +24,7 @@
   text-decoration: none;
 }
 
-.unit-card {
-  width: 300px;
-  max-width: 300px;
-  max-height: 200px;
+.base-card {
   margin-right: 15px;
   margin-bottom: 15px;
   border-radius: 15px;
@@ -56,4 +46,18 @@
     width: 100%;
     overflow: hidden;
   }
+}
+
+.admin-card {
+  @extend .base-card;
+  width: 250px;
+  max-width: none;
+  height: auto;
+}
+
+.unit-card {
+  @extend .base-card;
+  width: 300px;
+  max-width: 300px;
+  max-height: 200px;
 }
