@@ -15,7 +15,6 @@ import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  currentUser: any;
   task: any;
   data: { isTutor: boolean } = {
     isTutor: false,
@@ -38,7 +37,6 @@ export class HeaderComponent implements OnInit {
     private checkForUpdateService: CheckForUpdateService,
     private globalState: GlobalStateService
   ) {
-    this.currentUser = this.CurrentUser.profile;
 
     this.globalState.showHideHeader.subscribe({
       next: (shouldShow) => {
@@ -128,11 +126,11 @@ export class HeaderComponent implements OnInit {
   }
 
   openUserSettings() {
-    this.UserSettingsModal.show(this.currentUser);
+    this.UserSettingsModal.show(this.CurrentUser.profile);
   }
 
   openNotificationSettings() {
-    this.UserNotificationSettingsModal.show(this.currentUser);
+    this.UserNotificationSettingsModal.show(this.CurrentUser.profile);
   }
 
   update() {
