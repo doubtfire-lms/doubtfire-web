@@ -46,7 +46,6 @@ import {
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { TokenInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
@@ -165,6 +164,7 @@ import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
 import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
+import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 
 @NgModule({
   // Components we declare
@@ -221,6 +221,7 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
     HeaderComponent,
     UnitDropdownComponent,
     TaskDropdownComponent,
+    SplashScreenComponent,
   ],
   // Module Imports
   imports: [
@@ -325,11 +326,6 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
       useClass: TokenInterceptor,
       multi: true,
       deps: [currentUser],
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true,
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
