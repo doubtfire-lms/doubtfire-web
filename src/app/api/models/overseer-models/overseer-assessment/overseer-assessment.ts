@@ -41,7 +41,6 @@ export class OverseerAssessment extends Entity {
     this.timestamp = new Date(data['submission_timestamp'] * 1000);
     this.timestampString = data['submission_timestamp'];
     this.taskStatus = data['result_task_status'];
-    this.submissionStatus = data['status'];
     this.createdAt = data['created_at'];
     this.updatedAt = data['updated_at'];
     this.taskId = data['task_id'];
