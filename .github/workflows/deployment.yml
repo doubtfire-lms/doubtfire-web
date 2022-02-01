@@ -33,9 +33,9 @@ jobs:
           tags: |
             type=ref,event=tag
             type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern=prod-{{version}}
+            type=semver,pattern=prod-{{major}}.{{minor}}
+            type=semver,pattern=prod-{{major}}
       - name: Build and push web server
         id: docker_build
         uses: docker/build-push-action@v2
