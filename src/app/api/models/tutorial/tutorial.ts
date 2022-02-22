@@ -153,6 +153,6 @@ export class Tutorial extends Entity {
   }
 
   public hasCapacity(): boolean {
-    return this.capacity === -1 || this.capacity < this.num_students;
+    return this.capacity === -1 || this.capacity > this.num_students;
   }
 }
