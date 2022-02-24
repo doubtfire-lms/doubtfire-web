@@ -1,7 +1,7 @@
 ### STAGE 1: Build ###
 FROM lmsdoubtfire/doubtfire-web:6.0.x-dev AS build
 
-USER "root"
+USER node
 
 # Setup builder to create doubtfire-web
 # Copy in doubtfire-web code
@@ -9,7 +9,8 @@ WORKDIR /doubtfire-web
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY --chown=node:node . .
+RUN chmod 777 src
 
 # Launch - build to dist folder
 RUN npm run-script deploy
