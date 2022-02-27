@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.3](https://github.com/macite/doubtfire-deploy/compare/v6.0.2...v6.0.3) (2022-02-27)
+
+
+### Bug Fixes
+
+* ensure CORs return blob, data, and ws ([60cfd30](https://github.com/macite/doubtfire-deploy/commit/60cfd30069467f09adbcaf4dd98c9d92e4f042c3))
+
 ### [6.0.2](https://github.com/macite/doubtfire-deploy/compare/v6.0.1...v6.0.2) (2022-02-24)
 
 ### [6.0.1](https://github.com/macite/doubtfire-deploy/compare/v6.0.0...v6.0.1) (2022-02-22)
