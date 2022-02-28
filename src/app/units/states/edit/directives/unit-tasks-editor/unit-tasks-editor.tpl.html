@@ -130,12 +130,12 @@
               </div>
               <div class="panel-body text-center">
                 <div class="btn-group col-sm-12">
-                  <a tooltip="Download a CSV with details of all tasks" tooltip-append-to-body="true" target="_blank" ng-href="{{batchTaskUrl()}}" class="btn btn-primary col-sm-6">
+                  <button tooltip="Download a CSV with details of all tasks" tooltip-append-to-body="true" class="btn btn-primary col-sm-6" ng-click="downloadTasksCSV()">
                     <i class="fa fa-download"></i> <i class="fa fa-file-excel-o"></i> CSV
-                  </a>
-                  <a tooltip="Download task resources and task sheets for all tasks" tooltip-append-to-body="true" target="_blank" ng-href="{{allResourceUrl()}}" class="btn btn-info col-sm-6">
+                  </button>
+                  <button tooltip="Download task resources and task sheets for all tasks" tooltip-append-to-body="true" ng-click="downloadAllResource()" class="btn btn-info col-sm-6">
                     <i class="fa fa-download"></i> <i class="fa fa-file-zip-o"></i> Zip
-                  </a>
+                  </button>
                 </div>
               </div>
               <div class="panel-heading">
