@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, listenerService, TaskFeedback, taskService, UploadSubmissionModal) ->
+  controller: ($scope, listenerService, TaskFeedback, taskService, UploadSubmissionModal, fileDownloaderService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Evaluate changes to submission data
@@ -34,5 +34,11 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
       taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
     $scope.regeneratePdf = ->
       $scope.task.recreateSubmissionPdf()
+
+    $scope.downloadSubmission = () ->
+      fileDownloaderService.downloadFile($scope.urls.pdf, "#{$scope.task.definition.abbreviation}.pdf")
+
+    $scope.downloadSubmissionFiles = () ->
+      fileDownloaderService.downloadFile($scope.urls.files, "#{$scope.task.definition.abbreviation}.zip")
 
 )
