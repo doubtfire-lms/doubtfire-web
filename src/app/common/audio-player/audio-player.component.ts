@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Inject, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Inject, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { alertService, Task } from 'src/app/ajs-upgraded-providers';
 import { FileDownloaderService } from '../file-downloader/file-downloader';
 
@@ -8,7 +8,7 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
 })
-export class AudioPlayerComponent implements OnInit {
+export class AudioPlayerComponent implements OnDestroy {
   @Input() project: {};
   @Input() task: {};
   @Input() comment: {};
@@ -16,12 +16,10 @@ export class AudioPlayerComponent implements OnInit {
 
   @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
 
-  barWidth: number;
-  isLoaded = false;
-  isPlaying = false;
-  audioProgress = 0;
-  currentTime = 0;
-  audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
+  private isLoaded = false;
+  public isPlaying = false;
+  public audioProgress = 0;
+  public audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
 
   constructor(
     @Inject(Task) private TaskModel,
@@ -38,14 +36,19 @@ export class AudioPlayerComponent implements OnInit {
     };
   }
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    // Clean up the blob
+    if ( this.audio.src ) {
+      this.fileDownloader.releaseBlob(this.audio.src);
+    }
+  }
 
-  setTime(percent: number) {
+  private setTime(percent: number) {
     const newTime = percent * this.audio.duration;
     this.audio.currentTime = newTime;
   }
 
-  seek(evt: MouseEvent) {
+  public seek(evt: MouseEvent) {
     const offset = evt.offsetX;
     const percent = offset / this.progressBar.nativeElement.offsetWidth;
 
@@ -55,6 +58,10 @@ export class AudioPlayerComponent implements OnInit {
   }
 
   public setSrc(src: string) {
+    // If there was an old blob, then free the memory it uses
+    if ( this.audio.src ) {
+      this.fileDownloader.releaseBlob(this.audio.src);
+    }
     this.audio.src = src;
     this.audio.load();
     this.audio.onloadeddata = () => {
@@ -96,7 +103,7 @@ export class AudioPlayerComponent implements OnInit {
     }
   }
 
-  pausePlay() {
+  public pausePlay() {
     this.execWithAudio(
       true,
       (() => {
