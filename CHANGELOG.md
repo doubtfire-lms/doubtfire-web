@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.6](https://github.com/macite/doubtfire-deploy/compare/v6.0.5...v6.0.6) (2022-02-28)
+
+
+### Bug Fixes
+
+* ensure submission history only shows for overseer tasks ([b2fc395](https://github.com/macite/doubtfire-deploy/commit/b2fc395193dc79b67f4243e43534250eb0b94626))
+
 ### [6.0.5](https://github.com/macite/doubtfire-deploy/compare/v6.0.4...v6.0.5) (2022-02-28)
 
 ### [6.0.4](https://github.com/macite/doubtfire-deploy/compare/v6.0.3...v6.0.4) (2022-02-28)
