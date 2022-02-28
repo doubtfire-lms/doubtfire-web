@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.4](https://github.com/macite/doubtfire-deploy/compare/v6.0.3...v6.0.4) (2022-02-28)
+
+
+### Bug Fixes
+
+* correct date representations ([655c512](https://github.com/macite/doubtfire-deploy/commit/655c5125115cc17bff43122ef0fd1f0413357b4a))
+* correct link to task inbox ([92fe194](https://github.com/macite/doubtfire-deploy/commit/92fe1945221c893ce07d90a6c27bc0a0c2e34ae0))
+* correct PDF viewer updating when url changes ([dc4b372](https://github.com/macite/doubtfire-deploy/commit/dc4b3729e8a5c883edbca1c9752fda2413d53ebd))
+* ensure audio blob is freed in player ([240ef9a](https://github.com/macite/doubtfire-deploy/commit/240ef9a67b9f8cac21484571687928105a1ecf8f))
+* ensure task definition CSV and zip can be downloaded ([b8ba310](https://github.com/macite/doubtfire-deploy/commit/b8ba310f22a7265092d0b5c7fb7adef0c075750a))
+
 ### [6.0.3](https://github.com/macite/doubtfire-deploy/compare/v6.0.2...v6.0.3) (2022-02-27)
 
 
