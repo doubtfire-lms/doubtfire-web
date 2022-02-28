@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.7](https://github.com/macite/doubtfire-deploy/compare/v6.0.6...v6.0.7) (2022-02-28)
+
+
+### Bug Fixes
+
+* download submission needs header in task submission card ([7c207d3](https://github.com/macite/doubtfire-deploy/commit/7c207d3eef0d7070de3348ef7603a28173b9d651))
+
 ### [6.0.6](https://github.com/macite/doubtfire-deploy/compare/v6.0.5...v6.0.6) (2022-02-28)
 
 
