@@ -17,7 +17,10 @@ angular.module("doubtfire.common.services.recorder-service", [])
 
       @usingMediaRecorder = window.MediaRecorder || false
 
-      @encoderMimeType = 'audio/wav'
+      # MediaRecording on Safari is broken for us in some specific way which I'm not sure how to fix yet.
+      if /^((?!chrome|android).)*safari/i.test(navigator.userAgent) then @usingMediaRecorder = false
+
+      @encoderMimeType
 
       @config = {
         broadcastAudioProcessEvents: false,
@@ -31,6 +34,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
         userMediaConstraints: {
           audio: true
         }
+        audioBitsPerSecond: 128000
       }
       return
 
@@ -134,7 +138,7 @@ angular.module("doubtfire.common.services.recorder-service", [])
       @outputGainNode.connect(@destinationNode)
 
       if (@usingMediaRecorder)
-        @mediaRecorder = new MediaRecorder(@destinationNode.stream)
+        @mediaRecorder = new MediaRecorder(@destinationNode.stream, { audioBitsPerSecond: @config.audioBitsPerSecond })
         that = this
         @mediaRecorder.addEventListener('dataavailable', (evt) -> that._onDataAvailable(evt))
         @mediaRecorder.addEventListener('error', (evt) -> @_onError(evt))
