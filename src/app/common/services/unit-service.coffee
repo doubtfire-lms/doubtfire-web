@@ -315,6 +315,9 @@ angular.module("doubtfire.common.services.units", [])
     unit.findGroupById = (id) ->
       _.find unit.groups, (grp) -> grp.id == id
 
+    unit.overseerEnabled = () ->
+      unit.assessment_enabled && unit.overseer_image_id?
+
     # Actually make the request to refresh and load unit data
     unit.refresh(onSuccess, onFailure)
     unit

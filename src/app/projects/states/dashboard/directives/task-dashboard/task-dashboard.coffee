@@ -13,6 +13,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     showSubmission: '@?'
   controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
     $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+
+    $scope.overseerEnabled = () ->
+      DoubtfireConstants.IsOverseerEnabled.value && $scope.task.overseerEnabled()
+
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed

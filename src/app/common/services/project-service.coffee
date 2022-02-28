@@ -431,6 +431,10 @@ angular.module("doubtfire.common.services.projects", [])
           onSuccess(data)
         (response) -> onError(response)
       )
+
+    task.overseerEnabled = () ->
+      task.unit().overseerEnabled() && task.definition.assessment_enabled && task.definition.has_task_assessment_resources
+
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
