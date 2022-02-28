@@ -18,11 +18,13 @@ angular.module("doubtfire.common.modals.comments-modal", [])
   # $scope.commentResourceUrl = $sce.trustAsResourceUrl(commentResourceUrl)
   $scope.commentType = commentType
   $scope.close = ->
+    fileDownloaderService.releaseBlob($scope.rawResourceUrl)
     $modalInstance.dismiss()
 
   fileDownloaderService.downloadBlob(
     commentResourceUrl,
     (url, response) ->
+      $scope.rawResourceUrl = url
       $scope.commentResourceUrl = $sce.trustAsResourceUrl(url)
     (error) ->
       alertService.add('danger', "Error downloading comment: #{error}")

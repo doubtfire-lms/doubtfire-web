@@ -28,6 +28,10 @@ export class FileDownloaderService {
     );
   }
 
+  public releaseBlob(url: string): void {
+    window.URL.revokeObjectURL(url);
+  }
+
   public downloadFile(url: string, defaultFilename: string) {
     this.downloadBlob(
       url,
