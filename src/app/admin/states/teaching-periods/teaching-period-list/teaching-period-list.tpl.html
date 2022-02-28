@@ -23,9 +23,9 @@
           <tbody>
             <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
               <td>{{teachingperiod.name()}}</td>
-              <td>{{teachingperiod.start_date | date: 'EEE d MMM' : '+0000'}}</td>
-              <td>{{teachingperiod.end_date | date: 'EEE d MMM' : '+0000'}}</td>
-              <td>{{teachingperiod.active_until | date: 'EEE d MMM' : '+0000'}}</td>
+              <td>{{teachingperiod.start_date | date: 'EEE d MMM'}}</td>
+              <td>{{teachingperiod.end_date | date: 'EEE d MMM'}}</td>
+              <td>{{teachingperiod.active_until | date: 'EEE d MMM'}}</td>
             </tr>
           </tbody>
         </table>

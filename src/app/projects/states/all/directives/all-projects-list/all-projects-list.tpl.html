@@ -32,8 +32,8 @@
             <td>{{project.unit_name}}</td>
             <td ng-if="project.teachingPeriod()">{{(project.teachingPeriod().name())}}</td>
             <td ng-if="!project.teachingPeriod()">Custom</td>
-            <td>{{project.start_date | date : 'EEE d MMM' : '+0000'}}</td>
-            <td>{{project.end_date | date : 'EEE d MMM' : '+0000'}}</td>
+            <td>{{project.start_date | date : 'EEE d MMM'}}</td>
+            <td>{{project.end_date | date : 'EEE d MMM'}}</td>
             <td ng-if="project.teachingPeriod()">
               <i ng-if="project.teachingPeriod().active() && project.active" class="fa fa-check"></i>
               <i ng-if="!project.teachingPeriod().active() || !project.active" class="fa fa-times"></i>

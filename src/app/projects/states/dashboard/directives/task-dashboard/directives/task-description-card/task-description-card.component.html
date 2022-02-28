@@ -10,7 +10,7 @@
       </li>
       <li>
         <strong>Start Date</strong>
-        &mdash; Aim to start this task by <strong>{{ startDate() | date: 'EEE d MMM':'+0000' }}</strong
+        &mdash; Aim to start this task by <strong>{{ startDate() | date: 'EEE d MMM' }}</strong
         >.
       </li>
       <li [hidden]="!task?.extensions || task?.extensions <= 0">
@@ -21,7 +21,7 @@
       </li>
       <li>
         <strong>Due Date</strong>
-        &mdash; Aim to complete by <strong>{{ dueDate() | date: 'EEE d MMM':'+0000' }}</strong
+        &mdash; Aim to complete by <strong>{{ dueDate() | date: 'EEE d MMM' }}</strong
         >.
       </li>
     </ul>

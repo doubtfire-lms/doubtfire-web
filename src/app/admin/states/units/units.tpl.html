@@ -81,8 +81,8 @@
               <td>{{(unit.unitRole.role | ucfirst) || "N/A"}}</td>
               <td ng-if="unit.teachingPeriod">{{unit.teachingPeriod.name()}}</td>
               <td ng-if="!unit.teachingPeriod">Custom</td>
-              <td>{{unit.start_date | date : 'EEE d MMM y' : '+0000'}}</td>
-              <td>{{unit.end_date | date : 'EEE d MMM y' : '+0000'}}</td>
+              <td>{{unit.start_date | date : 'EEE d MMM y'}}</td>
+              <td>{{unit.end_date | date : 'EEE d MMM y'}}</td>
               <td ng-if="unit.teachingPeriod">
                 <i ng-if="unit.teachingPeriod.active() && unit.active" class="fa fa-check"></i>
                 <i ng-if="!unit.teachingPeriod.active() || !unit.active" class="fa fa-times"></i>
