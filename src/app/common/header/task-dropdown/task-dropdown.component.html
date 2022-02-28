@@ -9,7 +9,7 @@
       Staff Tasks <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button uiSref="units/task/inbox" [uiParams]="{ unitId: currentUnitOrProject.unit_id }" mat-menu-item>
+      <button uiSref="units/tasks/inbox" [uiParams]="{ unitId: currentUnitOrProject.unit_id }" mat-menu-item>
         Task Inbox
       </button>
       <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{ unitId: currentUnitOrProject.unit_id }">
