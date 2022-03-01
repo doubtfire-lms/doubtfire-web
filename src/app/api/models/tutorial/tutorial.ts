@@ -121,7 +121,10 @@ export class Tutorial extends Entity {
   public updateFromJson(data: any): void {
     this.setFromJson(data, READ_KEYS, IGNORE, {
       meeting_time: (dateString: string) => {
-        const time = new Date(dateString).toLocaleTimeString();
+        const date = Date.parse(dateString);
+        // Check that date is valid... i.e. is it NaN?
+        if ( date !== date ) return dateString;
+        const time = new Date(date).toLocaleTimeString();
         return time.slice(0, time.lastIndexOf(':'));
       },
     });
