@@ -71,11 +71,11 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       $scope.triggerTransition = (status) ->
         taskService.updateTaskStatus $scope.task.project().unit(), $scope.task.project(), $scope.task, status
 
-      $scope.downloadSubmission = () ->
-        fileDownloaderService.downloadFile($scope.urls.taskSubmissionPdfAttachmentUrl)
+    $scope.downloadSubmission = () ->
+      fileDownloaderService.downloadFile($scope.urls.taskSubmissionPdfAttachmentUrl)
 
-      $scope.downloadSubmittedFiles = () ->
-        fileDownloaderService.downloadFile($scope.urls.taskFilesUrl)
+    $scope.downloadSubmittedFiles = () ->
+      fileDownloaderService.downloadFile($scope.urls.taskFilesUrl)
 
 
 )
