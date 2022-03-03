@@ -9,6 +9,7 @@ import {
   CampusService,
   User,
   TutorialStream,
+  TutorialStreamService,
 } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 import { FormControl, Validators } from '@angular/forms';
@@ -30,8 +31,17 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
   tutorials: Tutorial[];
 
+  private editingStream: boolean = false;
+
+  /**
+   * The original stream abbreviation is required to update the stream - as it may change but is used in the url.
+   */
+  private origStreamAbbr: string;
+  private origName: string;
+
   constructor(
     private tutorialService: TutorialService,
+    private tutorialStreamService: TutorialStreamService,
     private campusService: CampusService,
     @Inject(alertService) private alerts: any
   ) {
@@ -47,13 +57,46 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   }
 
   ngOnInit() {
+    if (this.stream) {
+      this.origStreamAbbr = this.stream.abbreviation;
+      this.origName = this.stream.name;
+    }
     this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
+    this.filterTutorials();
+    this.dataSource = new MatTableDataSource(this.tutorials);
+  }
+
+  private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
       (tutorial) => tutorial.tutorial_stream === this.stream || (!tutorial.tutorial_stream && !this.stream)
     );
-    this.dataSource = new MatTableDataSource(this.tutorials);
+  }
+
+  public saveStream() {
+    this.tutorialStreamService.update( {abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, this.stream).subscribe(
+      {
+        next: (stream: TutorialStream) => {
+          this.stream = stream;
+          this.origStreamAbbr = stream.abbreviation;
+          this.origName = stream.name;
+          this.editingStream = false;
+          this.alerts.add('success', 'Stream updated successfully', 2000);
+        },
+        error: (error: any) => {
+          this.alerts.add('danger', 'Something went wrong - ' + JSON.stringify(error.error), 6000);
+        }
+      }
+    )
+  }
+
+  public setEditStream(value: boolean): void {
+    if (!value) {
+      this.stream.abbreviation = this.origStreamAbbr;
+      this.stream.name = this.origName;
+    }
+    this.editingStream = value;
   }
 
   // This method is passed to the submit method on the parent
@@ -73,10 +116,11 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   }
 
   // Handle the removal of a tutorial
-  private deleteTutorial(tutorial: Tutorial) {
+  public deleteTutorial(tutorial: Tutorial) {
     this.tutorialService.delete(tutorial).subscribe((result) => {
       this.cancelEdit();
-      this.tutorials.splice(this.tutorials.indexOf(tutorial), 1);
+      this.unit.tutorials.splice(this.tutorials.indexOf(tutorial), 1);
+      this.filterTutorials();
       this.renderTable();
     });
   }

@@ -16,9 +16,7 @@ export class TutorialStream extends Entity {
   activity_type: string;
 
   toJson(): any {
-    return {
-      stream: super.toJsonWithKeys(KEYS)
-    };
+    return super.toJsonWithKeys(KEYS);
   }
 
   public updateFromJson(data: any): void {

@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TutorialStreamService extends EntityService<TutorialStream> {
-  protected readonly endpointFormat = '';
-  entityName = 'Stream';
+  protected readonly endpointFormat = 'units/:unit_id:/tutorial_streams/:abbreviation:';
+  entityName = 'TutorialStream';
 
   constructor(httpClient: HttpClient) {
     super(httpClient);

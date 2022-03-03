@@ -1,11 +1,36 @@
 <div>
   <div class="header">
     <div *ngIf="stream else noStream">
-      <h4>{{stream.name}} - {{stream.abbreviation}}</h4>
-      <button mat-icon-button color="warn" (click)="deleteStream()">
-        <mat-icon>delete</mat-icon>
-      </button>
+      <div *ngIf="!editingStream; else doStreamEdit">
+        <h4>{{stream.name}} - {{stream.abbreviation}}</h4>
+        <button mat-icon-button>
+          <mat-icon color="primary" (click)="setEditStream(true)" >edit</mat-icon>
+        </button>
+      </div>
+
+      <ng-template #doStreamEdit>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="stream.name">
+        </mat-form-field>
+        <span>-</span>
+        <mat-form-field>
+          <mat-label>Abbreviation</mat-label>
+          <input matInput [(ngModel)]="stream.abbreviation">
+        </mat-form-field>
+
+        <button mat-icon-button doStreamEdit>
+          <mat-icon color="warn" (click)="setEditStream(false)" >cancel</mat-icon>
+        </button>
+        <button mat-icon-button #doStreamEditt>
+          <mat-icon color="warn" (click)="saveStream()" >save</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteStream()" #doStreamEdit>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-template>
     </div>
+
     <ng-template #noStream>
       <h4>Tutorials without a stream</h4>
     </ng-template>
@@ -191,15 +216,9 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let tutorial">
         <div class="right" *ngIf="!editing(tutorial) else edit">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
+          <button mat-icon-button (click)="flagEdit(tutorial)">
+            <mat-icon color="primary">edit</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="flagEdit(tutorial)">
-              <mat-icon color="primary">edit</mat-icon>
-              <span>Edit</span>
-            </button>
-          </mat-menu>
         </div>
         <ng-template #edit>
           <div class="edit-actions right">
