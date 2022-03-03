@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.8](https://github.com/macite/doubtfire-deploy/compare/v6.0.7...v6.0.8) (2022-03-03)
+
+
+### Bug Fixes
+
+* avoid mediaRecorder for Safari ([7f6bff3](https://github.com/macite/doubtfire-deploy/commit/7f6bff3073277edecbdb05d5de58f559511e89f8))
+* provide ui to edit tutorial streams ([582148e](https://github.com/macite/doubtfire-deploy/commit/582148e3ce9f344292f1a102cd1c5c4e2a66192b))
+* tutorial time can be any string ([bd76698](https://github.com/macite/doubtfire-deploy/commit/bd7669833e1335eff0af1da30d9ca36946a7dd58))
+
 ### [6.0.7](https://github.com/macite/doubtfire-deploy/compare/v6.0.6...v6.0.7) (2022-02-28)
 
 
