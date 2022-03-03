@@ -1,4 +1,5 @@
 // Parts copied from https://github.com/chris-rudmin/Recorderjs
+// TODO: migrate to https://github.com/chris-rudmin/opus-recorder
 var BYTES_PER_SAMPLE = 2;
 var recorded = [];
 
