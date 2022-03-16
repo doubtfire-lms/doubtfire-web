@@ -9,6 +9,8 @@ ENV PATH="/home/node/.npm-global/bin:${PATH}"
 # 👉 The `--global` install dir
 ENV NPM_CONFIG_PREFIX="/home/node/.npm-global"
 
+EXPOSE 4200
+
 USER "${USER}"
 
 # Pre-create the target dir for global install.
