@@ -372,7 +372,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 
 ## Contributing
 
-Refer to CONTRIBUTING.md
+Refer to [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
