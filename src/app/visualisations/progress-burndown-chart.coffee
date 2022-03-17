@@ -85,7 +85,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
         tooltip:
           contentGenerator: (data) ->
             # Need to generate this so as to not include NOW key
-            date = data.value
+            date =(new Date(data.value*1000)).toLocaleDateString()
             series = data.series
             html = "<table class='col-sm-6'><thead><tr><td colspan='3'><strong class='x-value'>#{date}</strong></td></tr></thead><tbody>"
             html += ("<tr><td class='legend-color-guide'><div style='background-color: #{d.color};'></div></td><td class='key'>#{d.key}</td><td class='value'>#{d3.format(',%')(d.value)}</td></tr><tr>" for d in series when d.key isnt 'NOW').join('')
