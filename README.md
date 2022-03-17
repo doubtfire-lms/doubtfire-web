@@ -280,58 +280,58 @@ Before you get started, make sure you have the [Doubtfire API](https://github.co
 
 First, clone the web repository, and change to the root directory:
 
-```
-$ git clone https://github.com/doubtfire-lms/doubtfire-web.git
-$ cd ./doubtfire-web
+```sh
+git clone https://github.com/doubtfire-lms/doubtfire-web.git
+cd ./doubtfire-web
 ```
 
 You can automate the installation process by running the automated setup script:
 
-```
-$ ./setup.sh
+```sh
+./setup.sh
 ```
 
 Or, you can continue following the below steps to manually install `doubtfire-web`.
 
 Install [Node.js](http://nodejs.org/) either by [downloading it](http://nodejs.org/download/) and installing it manually, or via [Homebrew](http://brew.sh) on OS X:
 
-```
-$ brew install node
+```sh
+brew install node
 ```
 
 _or_ by using `apt-get` on Linux:
 
-```
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-$ sudo apt-get install nodejs
+```sh
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install nodejs
 ```
 
 Install Ruby [SASS](http://sass-lang.com):
 
-```
-$ gem install sass
+```sh
+gem install sass
 ```
 
 If `gem` fails, you should read the Doubfire API README to install ruby. If you are _not_ using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
 
 If using `rbenv`, rehash to ensure each of the gems are on your `PATH`:
 
-```
-$ rbenv rehash
+```sh
+rbenv rehash
 ```
 
 Install all node dependencies using `npm`, as well as [grunt-cli](http://gruntjs.com/using-the-cli) globally:
 
-```
-$ npm install
+```sh
+npm install
 ```
 
 **Note:** You may need to install `grunt-cli` globally in Linux using `sudo`.
 
 Lastly, to compile and run a watch server and web server, use `npm start`:
 
-```
-$ npm start
+```sh
+npm start
 ```
 
 This will automatically run the angular 1 `grunt watch`, and the angular 7 `ng serve`.
@@ -342,12 +342,12 @@ You can then navigate to the Doubtfire web interface at **http://localhost:8000*
 
 To compile the front-end, ensure `doubtfire-api` is placed as a sibling directory to `doubtfire-web`, then run:
 
-```
-$ cd /path/to/repos
-$ ls
+```sh
+cd /path/to/repos
+ls
 doubtfire-api    doubtfire-web
-$ cd ./doubtfire-api
-$ grunt deploy
+cd ./doubtfire-api
+grunt deploy
 ```
 
 You may prefix this command with the following environment variables:
@@ -372,7 +372,7 @@ Doubtfire Web is an [Angular](http://angularjs.org) application built using [Boo
 
 ## Contributing
 
-Refer to CONTRIBUTING.md
+Refer to [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
