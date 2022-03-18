@@ -47,14 +47,14 @@
                     Deadline <i ng-show="taskAdminPager.sortOrder=='due_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
-                <th>
-                  <a ng-click="taskAdminPager.sortOrder='tutorial_stream'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorial_stream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
-                  </a>
-                </th>
                 <th ng-show="unit.hasGroupwork()">
                   <a ng-click="taskAdminPager.sortOrder='group_set_id'; taskAdminPager.reverse=!taskAdminPager.reverse">
                     Group Set <i ng-show="taskAdminPager.sortOrder=='group_set_id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  </a>
+                </th>
+                <th>
+                  <a ng-click="taskAdminPager.sortOrder='tutorial_stream'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorial_stream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th ng-show="unit.hasStreams()">
