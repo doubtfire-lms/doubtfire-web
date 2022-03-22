@@ -1,13 +1,14 @@
 <div fxLayout="row" fxLayoutAlign="space-evenly center">
-  <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress"
-    fxLayout="column" fxLayoutAlign="space-around center">
-    <hr class="hr-text" data-content="Assessment Summary" />
-    <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
-    <button mat-button (click)="showTaskAssessmentResult()">view report</button>
-    <hr class="hr-fade" />
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <div *ngIf="(comment.assessment_result && comment.assessment_result.is_successful); else testsInProgress">
+      <hr class="hr-text" data-content="Assessment Summary" />
+      <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
+      <button mat-button (click)="showTaskAssessmentResult()">view report</button>
+      <hr class="hr-fade" />
+    </div>
+
+    <ng-template #testsInProgress>
+      <hr class="hr-text" data-content="Tests in Progress" />
+    </ng-template>
   </div>
 </div>
-
-<ng-template #testsInProgress fxLayout="column" fxLayoutAlign="space-around center">
-  <hr class="hr-text" data-content="Tests in Progress" />
-</ng-template>
