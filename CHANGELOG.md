@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.11](https://github.com/macite/doubtfire-deploy/compare/v6.0.10...v6.0.11) (2022-03-22)
+
+
+### Bug Fixes
+
+* fix the data for group and stream not align ([575a819](https://github.com/macite/doubtfire-deploy/commit/575a819a9f4a348ed78578ea5910ac96ac739ec7))
+* improve overseer integration ([182370d](https://github.com/macite/doubtfire-deploy/commit/182370d6ea40150b4ce8224ee5ca656a2746e440))
+
 ### [6.0.10](https://github.com/macite/doubtfire-deploy/compare/v6.0.9...v6.0.10) (2022-03-17)
 
 ### [6.0.9](https://github.com/macite/doubtfire-deploy/compare/v6.0.8...v6.0.9) (2022-03-03)
