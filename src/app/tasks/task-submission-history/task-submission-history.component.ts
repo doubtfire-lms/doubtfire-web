@@ -96,7 +96,8 @@ export class TaskSubmissionHistoryComponent implements OnInit {
           this.hasNoData.emit(false);
         },
         error => {
-          this.selectedTab.content = [{label: 'Error', result: error }];
+          // TODO: make error handling more readable...
+          this.selectedTab.content = [{label: 'Error', result: error?.error?.error}];
           this.hasNoData.emit(true);
         }
       );
