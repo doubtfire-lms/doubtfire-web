@@ -12,15 +12,13 @@
 }
 
 .star-gold {
-  color: orange;
+  color: #ffd019;
 }
 
-// make all stars orange
 .star-rating-animation:hover .star-hover {
-  color: orange;
+  color: #ffd019;
 }
 
-// make all stars right from selected gray
 .star-rating-animation .star-hover:hover ~ .star-hover {
   color: #ddd;
 }
