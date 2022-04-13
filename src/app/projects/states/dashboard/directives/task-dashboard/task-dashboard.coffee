@@ -44,6 +44,20 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
         taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
       }
 
+      # add the target grade based on the index:
+      # 0: pass, 1: credit and so on
+      switch $scope.task.project().target_grade
+        when 0
+          $scope.task.project().target_grade_word = "Pass"
+        when 1
+          $scope.task.project().target_grade_word = "Credit"
+        when 2
+          $scope.task.project().target_grade_word = "Distinction"
+        when 3
+          $scope.task.project().target_grade_word = "High Distinction"
+        else
+          $scope.task.project().target_grade_word = "Unknown"
+      
       updateCurrentView()
     )
 
