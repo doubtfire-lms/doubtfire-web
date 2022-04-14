@@ -17,7 +17,8 @@
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --deleteOutputPath=true --optimization=true --configuration production --output-path dist",
     "deploy": "run-s -l build:angular1 deploy:build2api",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "ng test"
   },
   "keywords": [],
   "author": "",
