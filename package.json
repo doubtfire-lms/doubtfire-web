@@ -24,7 +24,7 @@
   "dependencies": {
     "@angular/animations": "^13.1.1",
     "@angular/cdk": "~13.1.1",
-    "@angular/cli": "~13.1.2",
+    "@angular/cli": "~13.1.1",
     "@angular/common": "~13.1.1",
     "@angular/compiler": "~13.1.1",
     "@angular/core": "~13.1.1",
@@ -37,6 +37,7 @@
     "@angular/router": "~13.1.1",
     "@angular/service-worker": "~13.1.1",
     "@angular/upgrade": "~13.1.1",
+    "@babel/runtime": "^7.17.9",
     "@ctrl/ngx-emoji-mart": "^6.1.1",
     "@ng-stack/contenteditable": "^1.1.1",
     "@uirouter/angular": "^9.1.0",
@@ -63,7 +64,7 @@
     "bootstrap": "3.4.1",
     "bootstrap-sass": "3.3.7",
     "codemirror": "5.65.0",
-    "core-js": "^2.5.4",
+    "core-js": "^3.21.1",
     "d3": "3.5.17",
     "es5-shim": "^4.5.12",
     "file-saver": "^2.0.5",
@@ -84,7 +85,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.1.2",
+    "@angular-devkit/build-angular": "^13.1.1",
     "@angular-eslint/builder": "^13.0.1",
     "@angular-eslint/eslint-plugin": "13.0.1",
     "@angular-eslint/eslint-plugin-template": "13.0.1",
@@ -134,7 +135,7 @@
     "grunt-sass-globbing": "^1.4.0",
     "husky": "^7.0.4",
     "ip": "^1.1.2",
-    "jasmine-core": "~3.5.0",
+    "jasmine-core": "~4.1.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "^6.3.4",
     "karma-chrome-launcher": "~3.1.0",
