@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UIRouter } from '@uirouter/core';
-import { ViewType } from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'task-dropdown',
