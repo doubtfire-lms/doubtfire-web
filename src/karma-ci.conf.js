@@ -26,15 +26,7 @@ module.exports = function (config) {
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
-    colors: true,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
-    customLaunchers: {
-      ChromeDebug: {
-        base: 'Chrome',
-        flags: ['--remote-debugging-port=9333'],
-      },
-    },
+    singleRun: true,
+    browsers: ['ChromeHeadless'],
   });
 };
