@@ -96,7 +96,7 @@ describe('UserService', () => {
     tick();
   }));
 
-  it('should delete a user', fakeAsync(() => {
+  xit('should delete a user', fakeAsync(() => {
     // let user = new User();
     // user.updateFromJson({
     //   name: 'jake', last_name: 'renzella', first_name: 'Jake', nickname: 'jake',
@@ -116,7 +116,7 @@ describe('UserService', () => {
     // tick();
   }));
 
-  it('Test updating a User', fakeAsync(() => {
+  it('should update a User', fakeAsync(() => {
     const u = new User();
     u.updateFromJson({
       id: 1,
