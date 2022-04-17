@@ -16,6 +16,7 @@ jobs:
         node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
+      - uses: browser-actions/setup-chrome@latest
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -23,4 +24,5 @@ jobs:
       - run: npm install -g @angular/cli
       - run: npm ci
       - run: ng lint
+      - run: npm run test:ci
       - run: npm run build --if-present

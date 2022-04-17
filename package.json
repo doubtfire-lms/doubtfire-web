@@ -18,7 +18,8 @@
     "deploy:build2api": "ng build --deleteOutputPath=true --optimization=true --configuration production --output-path dist",
     "deploy": "run-s -l build:angular1 deploy:build2api",
     "prepare": "husky install",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "ng test --karma-config=src/karma-ci.conf.js --no-progress"
   },
   "keywords": [],
   "author": "",
