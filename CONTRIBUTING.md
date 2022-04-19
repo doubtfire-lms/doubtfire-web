@@ -13,13 +13,20 @@ Before continuing, **please read the [contributing document](https://github.com/
 - [Contributing to Doubtfire Web](#contributing-to-doubtfire-web)
   - [Table of Contents](#table-of-contents)
   - [Project structure](#project-structure)
+  - [Testing](#testing)
   - [Migrating components](#migrating-components)
-
-
 
 ## Project structure
 
 Coming...
+
+## Testing
+
+After installing all the dependencies, to run the front-end Angular tests, run the following command:
+
+```sh
+npm test
+```
 
 ## Migrating components
 
