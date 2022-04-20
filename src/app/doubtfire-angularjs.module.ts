@@ -257,6 +257,7 @@ import { ExtensionCommentComponent } from './tasks/task-comments-viewer/extensio
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { ExtensionModalService } from './common/modals/extension-modal/extension-modal.service';
 import { CalendarModalService } from './common/modals/calendar-modal/calendar-modal.service';
+import { UserSettingsModalService } from './admin/modals/user-settings-modal/user-settings-modal.service';
 import { CampusListComponent } from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
@@ -312,6 +313,7 @@ DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(Abou
 DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
+DoubtfireAngularJSModule.factory('UserSettingsModal', downgradeInjectable(UserSettingsModalService));
 DoubtfireAngularJSModule.factory('TaskCommentService', downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('tutorialService', downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialStreamService));

@@ -106,6 +106,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
+import { UserSettingsModalComponent } from './admin/modals/user-settings-modal/user-settings-modal.component';
 import { UnitStudentsEditorComponent } from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { UnitTutorialsListComponent } from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
@@ -182,6 +183,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
+    UserSettingsModalComponent,
     OverseerImageListComponent,
     ExtensionModalComponent,
     CalendarModalComponent,
