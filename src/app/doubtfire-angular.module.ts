@@ -165,6 +165,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { AchievementBoxPlotComponent } from './visualisations/achievement-box-plot/achievement-box-plot.component';
 
 @NgModule({
   // Components we declare
@@ -222,6 +223,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    AchievementBoxPlotComponent,
   ],
   // Module Imports
   imports: [

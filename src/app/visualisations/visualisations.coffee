@@ -7,7 +7,6 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.task-status-pie-chart'
   'doubtfire.visualisations.target-grade-pie-chart'
   'doubtfire.visualisations.task-completion-box-plot'
-  'doubtfire.visualisations.achievement-box-plot'
   'doubtfire.visualisations.achievement-custom-bar-chart'
 ])
 
