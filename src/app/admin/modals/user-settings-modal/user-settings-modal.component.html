@@ -41,7 +41,7 @@
       </div>
     </div>
     <hr />
-    <div class="form-group" *ngIf="user.system_role == 'Student'">
+    <div class="form-group" *ngIf="user.system_role === 'Student'">
       <label class="col-sm-3 control-label">Student ID</label>
       <div class="col-sm-7">
         <input [(ngModel)]="user.student_id" type="input" class="form-control" placeholder="1744070" />
@@ -82,12 +82,12 @@
             Student
           </mat-radio-button>
         </mat-radio-group>
-        <p *ngIf="user.id == CurrentUser.id" class="help-block text-center">
+        <p *ngIf="user.id === CurrentUser.id" class="help-block text-center">
           You cannot modify your own permissions
         </p>
       </div>
     </div>
-    <div *ngIf="!isNew && user.id == CurrentUser.id">
+    <div *ngIf="!isNew && user.id === CurrentUser.id">
       <hr />
       <div class="form-group">
         <label class="col-sm-3 control-label">Allow Analytics</label>
