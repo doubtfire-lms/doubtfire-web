@@ -512,6 +512,13 @@ angular.module("doubtfire.common.services.projects", [])
         _.extend project, response
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
+    
+    project.targetGradeWord = () ->
+      # the array only have four element so use this if statement to make sure it's not undefined
+      if project.target_grade >= 0 and project.target_grade <= 3
+        gradeService.grades[project.target_grade]
+      else
+        "Unknown"
 
     project
 

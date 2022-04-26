@@ -1,9 +1,16 @@
 <div class="panel panel-pdf panel-default panel-scrollable">
   <div class="panel-heading" ng-show="task">
     <div class="panel-title">
-      {{task.definition.name}} <span ng-show="tutor || showFooter">by {{task.project().student_name}}</span>
+      {{task.definition.name}}
+      <span ng-show="tutor || showFooter"
+        >by {{task.project().student_name}} (Aiming at {{task.project().targetGradeWord()}})</span
+      >
 
-      <div class="dropdown pull-right" dropdown ng-show="task.has_pdf || task.definition.has_task_sheet || overseer_enabled.value">
+      <div
+        class="dropdown pull-right"
+        dropdown
+        ng-show="task.has_pdf || task.definition.has_task_sheet || overseer_enabled.value"
+      >
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
           <i class="fa fa-search"></i>
           <span class="caret"></span>
