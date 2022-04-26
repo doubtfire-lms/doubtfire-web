@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.12](https://github.com/macite/doubtfire-deploy/compare/v6.0.11...v6.0.12) (2022-04-26)
+
+
+### Features
+
+* add feature tutor can see the student target grade when marking ([c24e13b](https://github.com/macite/doubtfire-deploy/commit/c24e13b20a89f42619ffd68a67d56bda16e1253b))
+
+
+### Bug Fixes
+
+* permission policy allows microphone access ([cd65424](https://github.com/macite/doubtfire-deploy/commit/cd654241a12a7ab3f7eff634f44940c2bce54b69))
+
 ### [6.0.11](https://github.com/macite/doubtfire-deploy/compare/v6.0.10...v6.0.11) (2022-03-22)
 
 
