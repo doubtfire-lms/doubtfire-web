@@ -475,16 +475,15 @@ angular.module("doubtfire.common.services.tasks", [])
           failure?()
     # Must provide grade if graded and in a final complete state
     if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
-      GradeTaskModal.show(task)?.result.then(
-        # Grade was selected (modal closed with result)
+      GradeTaskModal.show(task).then(
         (response) ->
-          task.grade = response.selectedGrade
-          task.quality_pts = response.qualityPts
-          updateFunc()
-        # Grade was not selected (modal was dismissed)
-        ->
-          task.status = oldStatus
-          alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
+          if (response)
+            task.grade = response.selectedGrade
+            task.quality_pts = response.qualityPts
+            updateFunc()
+          else
+            task.status = oldStatus
+            alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
       )
     else
       updateFunc()
