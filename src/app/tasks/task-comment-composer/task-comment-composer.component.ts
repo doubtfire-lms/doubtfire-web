@@ -91,7 +91,7 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   get isStaff() {
-    return this.task.project().unit().my_role !== 'Student';
+    return this.task?.project()?.unit()?.my_role !== 'Student';
   }
 
   cancelReply() {
