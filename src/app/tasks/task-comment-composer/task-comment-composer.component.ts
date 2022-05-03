@@ -8,8 +8,7 @@ import {
   KeyValueDiffers,
   KeyValueDiffer,
   ElementRef,
-  Output,
-  EventEmitter,
+  ViewChild,
 } from '@angular/core';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -18,6 +17,7 @@ import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { TaskCommentsViewerComponent } from '../task-comments-viewer/task-comments-viewer.component';
 
 /**
  * The task comment viewer needs to share data with the Task Comment Composer. The data needed
@@ -26,6 +26,22 @@ import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-mo
 export interface TaskCommentComposerData {
   originalComment: TaskComment;
 }
+
+const ACCEPTED_FILE_TYPES = [
+  'audio/mpeg',
+  'audio/vorbis',
+  'audio/mp4',
+  'audio/ogg',
+  'audio/wav',
+  'audio/x-wav',
+  'audio/webm',
+  'image/png',
+  'image/pdf',
+  'application/pdf',
+  'image/gif',
+  'image/jpg',
+  'image/jpeg',
+];
 
 /**
  * The task comment composer is responsible for creating and adding comments to a given task.
@@ -47,6 +63,7 @@ export class TaskCommentComposerComponent implements OnInit {
 
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
+  @ViewChild('uploader') uploader: ElementRef;
 
   // commentReplyID: { id: any } = this.ts.currentReplyID;
   differ: KeyValueDiffer<string, any>;
@@ -61,6 +78,7 @@ export class TaskCommentComposerComponent implements OnInit {
     public dialog: MatDialog,
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
+    private commentsViewer: TaskCommentsViewerComponent,
     @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
     @Inject(alertService) private alerts: any,
@@ -248,15 +266,43 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   addCommentWithType(comment: string, type: string) {
-    this.ts.addComment(this.task, comment, type,
+    this.ts.addComment(
+      this.task,
+      comment,
+      type,
       (success: any) => {
         this.comment.text = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();
         this.task.comments = this.ts.mapComments(this.task.comments);
       },
-      (failure: any) =>
-        this.alerts.add('danger', failure.data.error, 2000)
+      (failure: any) => this.alerts.add('danger', failure.data.error, 2000)
+    );
+  }
+
+  openFile() {
+    this.uploader.nativeElement.click();
+  }
+
+  uploadFiles(event) {
+    [...event].forEach((file) => {
+      if (ACCEPTED_FILE_TYPES.includes(file.type) || file.type.startsWith('audio/') || file.type.startsWith('image/')) {
+        this.postAttachmentComment(file);
+      } else {
+        this.alerts.add('danger', 'I cannot upload that file - only images, audio, and PDFs.', 4000);
+      }
+    });
+  }
+
+  // # Upload image files as comments to a given task
+  postAttachmentComment(file) {
+    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
+      (tc: TaskComment) => {
+        this.commentsViewer.scrollDown();
+      },
+      (error: any) => {
+        this.alerts.add('danger', error || error?.message, 2000);
+      }
     );
   }
 }
