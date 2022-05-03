@@ -55,6 +55,8 @@ export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
   @Input() sharedData: TaskCommentComposerData;
 
+  inputActive: boolean = false;
+
   comment = {
     text: '',
     type: 'text',

@@ -38,15 +38,84 @@
   ng-submit="addComment()"
   role="form"
 >
-  <div fxLayout="column" fxLayoutAlign="space-around center" style="width: 100%">
-    <div id="textFieldContainer">
+  <div fxLayout="row" fxLayoutAlign="space-around end" style="width: 100%">
+    <div class="composer-action-group">
+      <!-- if active -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button
+          [hidden]="!inputActive"
+          matTooltip="Expand action buttons"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="Expand action buttons"
+          style="margin-right: -6px; margin-left: -4px"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <button
+          [hidden]="inputActive"
+          *ngIf="isStaff"
+          matTooltip="Create a Real Talk discussion"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="launch real talk took"
+          (click)="openDiscussionComposer()"
+        >
+          <mat-icon>mark_chat_read</mat-icon>
+        </button>
+
+        <button
+          [hidden]="inputActive"
+          matTooltip="Attach a file"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          (click)="openFile()"
+          aria-label="attach a file icon button"
+        >
+          <mat-icon>attach_file</mat-icon>
+          <input
+            #uploader
+            type="file"
+            multiple="multiple"
+            accept="audio/*,image/*,.pdf"
+            style="display: none"
+            (change)="uploadFiles($event.target.files)"
+          />
+        </button>
+
+        <button
+          [hidden]="inputActive"
+          matTooltip="Send a recording"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          [popover]="audioDiscussionTemplate"
+          aria-label="audio recording popover button"
+        >
+          <mat-icon>mic</mat-icon>
+        </button>
+      </div>
+    </div>
+    <!-- {{ inputActive }} -->
+    <div id="textFieldContainer" fxFlex="grow">
       <div
+        (focus)="inputActive = !inputActive"
+        (blur)="inputActive = !inputActive"
+        [class.active]="!inputActive"
         #commentInput
         id="textField"
         [attr.contenteditable]="contentEditableValue()"
         (keydown.enter)="send($event)"
         (keydown)="keyTyped()"
-        placeholder="Type a message..."
+        placeholder="Aa"
         name="commentComposer"
       ></div>
       <div id="innerButtons">
@@ -59,53 +128,6 @@
           aria-label="Emoji picker button"
           >emoji_emotions</mat-icon
         >
-      </div>
-    </div>
-    <div class="composer-action-group" fxLayout="row" fxLayoutAlign="start center">
-      <button
-        matTooltip="Attach a file"
-        matTooltipShowDelay="400"
-        mat-icon-button
-        class="btn-no-outline"
-        type="button"
-        (click)="openFile()"
-        aria-label="attach a file icon button"
-      >
-        <mat-icon>attach_file</mat-icon>
-        <input
-          #uploader
-          type="file"
-          multiple="multiple"
-          accept="audio/*,image/*,.pdf"
-          style="display: none"
-          (change)="uploadFiles($event.target.files)"
-        />
-      </button>
-
-      <button
-        matTooltip="Send a recording"
-        matTooltipShowDelay="400"
-        mat-icon-button
-        class="btn-no-outline"
-        type="button"
-        [popover]="audioDiscussionTemplate"
-        aria-label="audio recording popover button"
-      >
-        <mat-icon>mic</mat-icon>
-      </button>
-
-      <div *ngIf="isStaff">
-        <button
-          matTooltip="Create a Real Talk discussion"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          aria-label="launch real talk took"
-          (click)="openDiscussionComposer()"
-        >
-          <mat-icon>mark_chat_read</mat-icon>
-        </button>
       </div>
     </div>
   </div>
