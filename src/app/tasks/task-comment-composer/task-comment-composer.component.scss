@@ -1,3 +1,5 @@
+$emoji-color: lighten($color: black, $amount: 25);
+
 #commentComposerFoter {
   border-top: none;
 }
@@ -23,6 +25,7 @@
   height: 24px;
   width: 24px;
   cursor: pointer;
+  color: $emoji-color;
 }
 
 .emoji-picker {
@@ -127,7 +130,6 @@
   font-size: 1em;
   cursor: pointer;
   &:hover {
-    // color: $brand-primary;
   }
 }
 
@@ -153,7 +155,7 @@ form {
 }
 
 .popup:after {
-  content: "";
+  content: '';
   width: 20px;
   height: 20px;
   transform: rotate(-45deg);
@@ -171,21 +173,14 @@ form {
   border-color: #ddd;
 }
 
-button.btn-recorder {
-  span {
-    font-size: 1.3em;
-    position: absolute;
-    bottom: 1.3em;
-    left: 0.9em;
-  }
-  outline: none;
-  width: 30px;
-  height: 30px;
-  margin-left: 0.4em;
-  border: none;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.42857;
-  background: none;
-  color: black;
+.composer-action-group {
+  width: 100%;
+}
+
+button.btn-no-outline {
+  transform: scale(0.78);
+  padding: 0;
+  margin-top: -10px;
+  margin-right: -10px;
+  color: $emoji-color;
 }
