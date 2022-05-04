@@ -1,9 +1,15 @@
 <div class="progress-modal">
   <div class="modal-header clearfix">
     <h3 class="modal-title">
-      <i class="fa fa-2x fa-spinner pull-left"></i>
-      <div>{{ title }}</div>
-      <small>{{ message }}</small>
+      <div class="spinner__container">
+        <div class="spin">
+          <i class="fa fa-2x fa-spinner fa-pulse"></i>
+        </div>
+        <div class="message__container">
+          <div>{{ title }}</div>
+          <small>{{ message }}</small>
+        </div>
+      </div>
     </h3>
   </div>
   <div class="modal-body">

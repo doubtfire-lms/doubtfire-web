@@ -8,15 +8,15 @@ import { ProgressModalComponent } from './progress-modal.component';
 export class ProgressModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(title: any, message: any) {
+  public show(title: any, message: any, promise: any) {
     let dialogRef: MatDialogRef<ProgressModalComponent, any>;
     dialogRef = this.dialog.open(ProgressModalComponent, {
       data: {
         title,
         message,
+        promise,
       },
     });
-    dialogRef.afterOpened().subscribe((result: any) => {});
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    return promise != null ? promise.finally(() => dialogRef.close()) : undefined;
   }
 }
