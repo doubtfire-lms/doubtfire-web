@@ -22,7 +22,6 @@ export class ConfirmationModalComponent {
     this.title = this.data.title;
     this.message = this.data.message;
     this.action = this.data.action;
-    console.log(this.alert);
   }
 
   confirmAction() {
