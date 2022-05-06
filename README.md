@@ -1,12 +1,12 @@
 ![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
 
-# Doubtfire Web ![Node.js CI](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/Node.js%20CI/badge.svg) ![CodeQL](https://github.com/OnTrack-UG-Squad/doubtfire-web/workflows/CodeQL/badge.svg)
+# Doubtfire Web [![CI](https://img.shields.io/github/workflow/status/thoth-tech/doubtfire-web/Node.js%20CI?label=CI&logo=GitHub)](https://github.com/thoth-tech/doubtfire-web/actions/workflows/nodejs-ci.yml)
 
 A modern, lightweight learning management system.
 
 > ## 🛠 Migration Status: In Development
 >
-> Doubtfire web migration from AngularJS/Coffeescript to Angular/Typescirpt, including refactoring all components, is currently in development.
+> Doubtfire web migration from AngularJS/Coffeescript to Angular/Typescript, including refactoring all components, is currently in development.
 >
 > See the progress of component migration below.
 
@@ -312,7 +312,7 @@ Install Ruby [SASS](http://sass-lang.com):
 gem install sass
 ```
 
-If `gem` fails, you should read the Doubfire API README to install ruby. If you are _not_ using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
+If `gem` fails, you should read the Doubtfire API README to install ruby. If you are _not_ using `rbenv`, e.g., using Docker instead, you may need to prepend `sudo` to the above commands to have root write access.
 
 If using `rbenv`, rehash to ensure each of the gems are on your `PATH`:
 
