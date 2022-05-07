@@ -1,0 +1,60 @@
+<mat-card class="grade-task-modal">
+  <mat-card-title>
+    Assess Task Quality
+  </mat-card-title>
+  <mat-card-content>
+    <!-- For Grade Tasks -->
+    <div *ngIf="task.definition.is_graded">
+      <p>
+        Please provide a grade for task
+        <label class="task-label">
+          {{task.definition.abbreviation}}
+        </label>
+      </p>
+
+      <!-- TODO: Awaiting grade-icon merge -->
+
+    </div>
+    <!-- For Quality Points Tasks -->
+    <div *ngIf="task.definition.max_quality_pts > 0">
+      <p>
+        Please provide a quality rating for task
+        <label class="task-label">
+          {{task.definition.abbreviation}}
+        </label>
+      </p>
+      <mat-slider
+        [ngClass]="'slider'"
+        (input)="updateRating($event.value)"
+        [value]="data.rating"
+        [max]="totalRating"
+        [min]="1"
+        [step]="1"
+        [thumbLabel]="true"
+        [tickInterval]="auto"
+        aria-labelledby="task-rating-slider"
+      >
+      </mat-slider>
+      <div class="label-rating">
+        <p>Rating: {{newRating}} / {{totalRating}}</p>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="buttons">
+    <button
+      mat-raised-button
+      (click)="dismiss()"
+    >
+      Dismiss
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="close()"
+      [disabled]="task.is_graded && data.desiredGrade == null"
+    >
+      Submit
+    </button>
+  </mat-card-actions>
+</mat-card>
