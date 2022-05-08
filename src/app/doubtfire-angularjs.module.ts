@@ -33,9 +33,8 @@ import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';
 import 'build/src/app/visualisations/student-task-status-pie-chart.js';
-import 'build/src/app/visualisations/progress-burndown-chart.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
-import 'build/src/app/visualisations/task-status-pie-chart.js';
+import 'build/src/app/visualisations/progress-burndown-chart.js';
 import 'build/src/app/visualisations/task-completion-box-plot.js';
 import 'build/src/app/visualisations/visualisations.js';
 import 'build/src/app/visualisations/alignment-bullet-chart.js';
@@ -47,6 +46,7 @@ import 'build/src/app/welcome/states/welcome/welcome.js';
 import 'build/src/app/welcome/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
+import 'build/src/app/tasks/task-sheet-viewer/task-sheet-viewer.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
@@ -287,6 +287,7 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
+import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-chart.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 
@@ -373,6 +374,11 @@ DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
+DoubtfireAngularJSModule.directive(
+  'taskStatusPieChart',
+  downgradeComponent({ component: TaskStatusPieChartComponent })
+);
+
 
 DoubtfireAngularJSModule.directive('taskAssessor',
   downgradeComponent({ component: TaskAssessorComponent }));
