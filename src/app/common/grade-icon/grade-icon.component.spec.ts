@@ -10,27 +10,22 @@ describe('GradeIconComponent', () => {
   beforeEach(
     waitForAsync(() => {
       gradeServiceStub = {
-        grades: [
-          'Pass',
-          'Credit',
-          'Distinction',
-          'High Distinction'
-        ],
+        grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
         gradeAcronyms: {
-          'Fail': 'F',
-          'Pass': 'P',
-          'Credit': 'C',
-          'Distinction': 'D',
+          Fail: 'F',
+          Pass: 'P',
+          Credit: 'C',
+          Distinction: 'D',
           'High Distinction': 'HD',
           0: 'P',
           1: 'C',
           2: 'D',
           3: 'HD',
-        }
+        },
       };
 
       gradeServiceStub.grades[-1] = 'Fail';
-      gradeServiceStub.gradeAcronyms[-1] = "F";
+      gradeServiceStub.gradeAcronyms[-1] = 'F';
 
       TestBed.configureTestingModule({
         declarations: [GradeIconComponent],
@@ -58,12 +53,12 @@ describe('GradeIconComponent', () => {
 
   it('should set the grade to Fail when given invalid input', () => {
     component.index = undefined;
-    component.grade = "Tomato";
+    component.grade = 'Tomato';
     component.ngOnInit();
 
     expect(component.index).toEqual(-1);
-    expect(component.gradeText).toEqual("Fail");
-    expect(component.gradeLetter).toEqual("F");
+    expect(component.gradeText).toEqual('Fail');
+    expect(component.gradeLetter).toEqual('F');
   });
 
   it('should appropriate set the grade when passed a grade value', () => {
@@ -75,7 +70,7 @@ describe('GradeIconComponent', () => {
       expect(component.index).toEqual(gradeServiceStub.grades.indexOf(grade));
       expect(component.gradeText).toEqual(grade);
       expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[grade]);
-    })
+    });
   });
 
   it('should appropriate set the grade when passed a grade index', () => {
@@ -86,6 +81,6 @@ describe('GradeIconComponent', () => {
       expect(component.index).toEqual(index - 1);
       expect(component.gradeText).toEqual(gradeServiceStub.grades[component.index]);
       expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[component.gradeText]);
-    })
+    });
   });
 });
