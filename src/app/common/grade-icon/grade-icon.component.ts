@@ -13,9 +13,7 @@ export class GradeIconComponent implements OnInit {
   gradeText: string;
   gradeLetter: string;
 
-  constructor(
-    @Inject(gradeService) private GradeService: any,
-  ) {}
+  constructor(@Inject(gradeService) private GradeService: any) {}
 
   ngOnInit(): void {
     if (this.index == undefined) {
