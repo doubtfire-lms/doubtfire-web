@@ -24,10 +24,31 @@ Coming...
 
 After installing all the dependencies, to run the front-end Angular tests, run the following command:
 
-```sh
+```shell
 npm test
+```
+
+### Formatting
+
+- [ESLint] is used in the project to enforce code style and should be
+  configured in your [editor](https://eslint.org/docs/user-guide/integrations).
+- [Prettier] is also used and apply automatically by ESLint.
+
+You can check this manually by running:
+
+```shell
+npm run format:check
+```
+
+You can ask ESLint to fix issues by running:
+
+```shell
+npm run format
 ```
 
 ## Migrating components
 
-See Migrating.md
+See [MIGRATION-GUIDE.md](MIGRATION-GUIDE.md)
+
+[ESLint](https://eslint.org/)
+[Prettier](https://prettier.io/)

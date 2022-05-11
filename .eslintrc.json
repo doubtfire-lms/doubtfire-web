@@ -1,5 +1,14 @@
 {
   "root": true,
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "jasmine": true
+  },
   "overrides": [
     {
       "files": ["*.ts"],
@@ -10,8 +19,8 @@
       "extends": ["plugin:@angular-eslint/recommended"],
       "rules": {
         "@angular-eslint/no-empty-lifecycle-method": "warn",
-        "@angular-eslint/component-class-suffix":"warn",
-        "@angular-eslint/no-output-on-prefix":"warn",
+        "@angular-eslint/component-class-suffix": "warn",
+        "@angular-eslint/no-output-on-prefix": "warn",
         "@angular-eslint/directive-selector": [
           "warn",
           {
