@@ -38,41 +38,117 @@
   ng-submit="addComment()"
   role="form"
 >
-  <button class="btn-recorder" type="button" [popover]="audioDiscussionTemplate">
-    <span class="fa fa-microphone"></span>
-  </button>
-  <div id="textFieldContainer">
-    <div
-      #commentInput
-      id="textField"
-      [attr.contenteditable]="contentEditableValue()"
-      (keydown.enter)="send($event)"
-      (keydown)="keyTyped()"
-      placeholder="Type a message..."
-      name="commentComposer"
-    ></div>
-    <div id="innerButtons">
-      <mat-icon
-        id="emojiButton"
-        (click)="this.showEmojiPicker = !this.showEmojiPicker"
-        aria-hidden="false"
-        aria-label="Emoji picker button"
-        >emoji_emotions</mat-icon
-      >
+  <div fxLayout="row" fxLayoutAlign="space-around end" class="composer-container">
+    <div class="composer-action-group" [@shrinkgrow]="shrinkGrowToggle">
+      <!-- if active -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button
+          [hidden]="!shrinkGrowToggle"
+          (click)="toggleActionsVisible()"
+          matTooltip="Expand action buttons"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="Expand action buttons"
+          style="margin-right: -6px; margin-left: -4px"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <!-- <button
+          [hidden]="shrinkGrowToggle"
+          *ngIf="isStaff"
+          matTooltip="Create a Real Talk discussion"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="launch real talk took"
+          (click)="openDiscussionComposer()"
+        >
+          <mat-icon>crisis_alert</mat-icon>
+        </button> -->
+
+        <button
+          [hidden]="shrinkGrowToggle"
+          *ngIf="isStaff"
+          matTooltip="Create a Real Talk discussion"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="launch real talk took"
+          (click)="openDiscussionComposer()"
+        >
+          <mat-icon>mark_chat_read</mat-icon>
+        </button>
+
+        <button
+          [hidden]="shrinkGrowToggle"
+          matTooltip="Attach a file"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          (click)="openFile()"
+          aria-label="attach a file icon button"
+        >
+          <mat-icon>attach_file</mat-icon>
+          <input
+            #uploader
+            type="file"
+            multiple="multiple"
+            accept="audio/*,image/*,.pdf"
+            style="display: none"
+            (change)="uploadFiles($event.target.files)"
+          />
+        </button>
+
+        <button
+          [hidden]="shrinkGrowToggle"
+          matTooltip="Send a recording"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          [popover]="audioDiscussionTemplate"
+          aria-label="audio recording popover button"
+        >
+          <mat-icon>mic</mat-icon>
+        </button>
+      </div>
+    </div>
+    <!-- {{ shrinkGrowToggle }} -->
+    <div id="textFieldContainer" [class.active]="shrinkGrowToggle">
+      <div
+        (focus)="toggleActionsVisible()"
+        (blur)="toggleActionsVisible()"
+        [class.active]="!shrinkGrowToggle"
+        #commentInput
+        id="textField"
+        [attr.contenteditable]="contentEditableValue()"
+        (keydown.enter)="send($event)"
+        (keydown)="keyTyped()"
+        placeholder="Aa"
+        name="commentComposer"
+      ></div>
+      <div id="innerButtons">
+        <mat-icon
+          matTooltip="Choose an emoji"
+          matTooltipShowDelay="400"
+          id="emojiButton"
+          (click)="this.showEmojiPicker = !this.showEmojiPicker"
+          aria-hidden="false"
+          aria-label="Emoji picker button"
+          >emoji_emotions</mat-icon
+        >
+      </div>
     </div>
   </div>
 </form>
 
 <!-- The HTML which will be injected -->
 <ng-template #audioDiscussionTemplate>
-  <div *ngIf="isStaff">
-    <p>New! Try out the beta for the new intelligent discussion feature.</p>
-    <div fxLayout="row" fxLayoutAlign="center center" style="margin-bottom: 20px; padding-top: 10px">
-      <button style="align-items: flex-end" type="button" (click)="openDiscussionComposer()" mat-stroked-button>
-        Create Discussion
-      </button>
-    </div>
-    <mat-divider></mat-divider>
-  </div>
   <audio-comment-recorder [task]="task"></audio-comment-recorder>
 </ng-template>

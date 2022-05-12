@@ -76,13 +76,14 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
             .reverse()
             .find((comment: TaskComment) => comment.recipientReadTime != null && !comment.recipientIsMe);
 
-          this.loading = false;
+          setTimeout(() => {
+            this.loading = false;
+            this.scrollDown();
+          }, 1000);
 
           if (lastReadComment) {
             lastReadComment.lastRead = true;
           }
-
-          this.scrollDown();
         });
     } else {
       this.loading = false;

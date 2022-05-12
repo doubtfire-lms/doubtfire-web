@@ -1,16 +1,54 @@
-#commentComposerFoter {
-  border-top: none;
-}
+$emoji-color: lighten(
+  $color: black,
+  $amount: 25,
+);
 
-#textFieldContainer {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 18px;
+.composer-container {
   display: flex;
-  flex: 1 1 auto;
-  margin: 8px 8px 8px 0;
-  width: 100%;
-  min-width: 100px;
-  padding: 0 8px 0 12px;
+  flex-grow: 1;
+  #textFieldContainer {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+    display: flex;
+    flex: 1 1 auto;
+    margin: 8px 8px 8px 0;
+    padding: 0 8px 0 12px;
+  }
+
+  #textField {
+    width: 100%;
+    font-size: 14px;
+    max-height: 144px;
+    min-height: 18px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 9px 0;
+    vertical-align: middle;
+    box-shadow: none;
+    border: none;
+    resize: none;
+    outline: none;
+    line-height: 1.5em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+  }
+
+  #textField[placeholder]:empty::before {
+    padding: 9px 0;
+    -webkit-font-smoothing: antialiased;
+    content: attr(placeholder);
+    color: #555;
+    cursor: text;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  #textField.active {
+    max-height: 39px;
+    max-lines: 1;
+    overflow: hidden;
+  }
 }
 
 #innerButtons {
@@ -23,6 +61,7 @@
   height: 24px;
   width: 24px;
   cursor: pointer;
+  color: $emoji-color;
 }
 
 .emoji-picker {
@@ -77,23 +116,6 @@
   }
 }
 
-#textField {
-  flex: 1;
-  font-size: 14px;
-  max-height: 144px;
-  min-height: 18px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 9px 0;
-  vertical-align: middle;
-  box-shadow: none;
-  border: none;
-  resize: none;
-  outline: none;
-  line-height: 1.5em;
-  -webkit-font-smoothing: antialiased;
-}
-
 .selected-files {
   width: 100%;
   min-height: 5em;
@@ -103,17 +125,6 @@
     padding: 10px;
     display: inline-block;
   }
-}
-
-#textField[placeholder]:empty::before {
-  padding: 9px 0;
-  -webkit-font-smoothing: antialiased;
-  content: attr(placeholder);
-  color: #555;
-  cursor: text;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
 }
 
 .markdown-editor-actions {
@@ -126,9 +137,6 @@
   color: grey;
   font-size: 1em;
   cursor: pointer;
-  &:hover {
-    // color: $brand-primary;
-  }
 }
 
 .emoji-details {
@@ -153,7 +161,7 @@ form {
 }
 
 .popup:after {
-  content: "";
+  content: '';
   width: 20px;
   height: 20px;
   transform: rotate(-45deg);
@@ -171,21 +179,23 @@ form {
   border-color: #ddd;
 }
 
-button.btn-recorder {
-  span {
-    font-size: 1.3em;
-    position: absolute;
-    bottom: 1.3em;
-    left: 0.9em;
-  }
-  outline: none;
-  width: 30px;
-  height: 30px;
-  margin-left: 0.4em;
-  border: none;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.42857;
-  background: none;
-  color: black;
+.composer-action-group {
+  margin-left: -10px;
+  margin-right: 6px;
+  margin-bottom: 16px;
+}
+
+button.btn-no-outline {
+  transform: scale(0.8);
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  padding: 0;
+  color: $emoji-color;
+}
+
+#commentComposerFoter {
+  border-top: none;
 }
