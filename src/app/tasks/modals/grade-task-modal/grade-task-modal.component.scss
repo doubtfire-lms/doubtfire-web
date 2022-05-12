@@ -59,3 +59,12 @@ $primary-blue: #3939ff;
   display:flex;
   justify-content: end;
 }
+
+.grade-toggle-group {
+  display: flex;
+  justify-content: center;
+}
+
+.grade-toggle {
+  padding: 0.5rem 0;
+}

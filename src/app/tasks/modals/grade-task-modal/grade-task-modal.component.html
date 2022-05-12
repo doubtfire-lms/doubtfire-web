@@ -11,9 +11,24 @@
           {{task.definition.abbreviation}}
         </label>
       </p>
-
-      <!-- TODO: Awaiting grade-icon merge -->
-
+      <div class="grade-toggle-group">
+        <mat-button-toggle-group
+          #group="matButtonToggleGroup"
+          (change)="updateGrade($event.value)"
+        >
+          <mat-button-toggle
+            *ngFor="let idx of gradeValues"
+            class="grade-toggle"
+            value="{{idx}}"
+            aria-label="{{grades[idx]}}"
+            matTooltip="This student completed the task to a {{grades[idx]}} standard"
+            [matTooltipShowDelay]="500"
+            aria-describedby="This student completed the task to a {{grades[idx]}} standard"
+          >
+            <grade-icon [grade]="grades[idx]"></grade-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
     </div>
     <!-- For Quality Points Tasks -->
     <div *ngIf="task.definition.max_quality_pts > 0">
@@ -24,9 +39,9 @@
         </label>
       </p>
       <mat-slider
-        [ngClass]="'slider'"
+        class="slider"
         (input)="updateRating($event.value)"
-        [value]="data.rating"
+        [value]="rating"
         [max]="totalRating"
         [min]="1"
         [step]="1"
@@ -36,7 +51,7 @@
       >
       </mat-slider>
       <div class="label-rating">
-        <p>Rating: {{newRating}} / {{totalRating}}</p>
+        <p>Rating: {{rating}} / {{totalRating}}</p>
       </div>
     </div>
   </mat-card-content>
@@ -52,7 +67,7 @@
       mat-raised-button
       color="primary"
       (click)="close()"
-      [disabled]="task.is_graded && data.desiredGrade == null"
+      [disabled]="task.definition.is_graded && selectedGrade === undefined"
     >
       Submit
     </button>
