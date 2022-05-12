@@ -38,12 +38,13 @@
   ng-submit="addComment()"
   role="form"
 >
-  <div fxLayout="row" fxLayoutAlign="space-around end" style="width: 100%">
-    <div class="composer-action-group">
+  <div fxLayout="row" fxLayoutAlign="space-around end" class="composer-container">
+    <div class="composer-action-group" [@shrinkgrow]="shrinkGrowToggle">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         <button
-          [hidden]="!inputActive"
+          [hidden]="!shrinkGrowToggle"
+          (click)="toggleActionsVisible()"
           matTooltip="Expand action buttons"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -55,8 +56,22 @@
           <mat-icon>chevron_right</mat-icon>
         </button>
 
+        <!-- <button
+          [hidden]="shrinkGrowToggle"
+          *ngIf="isStaff"
+          matTooltip="Create a Real Talk discussion"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="launch real talk took"
+          (click)="openDiscussionComposer()"
+        >
+          <mat-icon>crisis_alert</mat-icon>
+        </button> -->
+
         <button
-          [hidden]="inputActive"
+          [hidden]="shrinkGrowToggle"
           *ngIf="isStaff"
           matTooltip="Create a Real Talk discussion"
           matTooltipShowDelay="400"
@@ -70,7 +85,7 @@
         </button>
 
         <button
-          [hidden]="inputActive"
+          [hidden]="shrinkGrowToggle"
           matTooltip="Attach a file"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -91,7 +106,7 @@
         </button>
 
         <button
-          [hidden]="inputActive"
+          [hidden]="shrinkGrowToggle"
           matTooltip="Send a recording"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -104,12 +119,12 @@
         </button>
       </div>
     </div>
-    <!-- {{ inputActive }} -->
-    <div id="textFieldContainer" fxFlex="grow">
+    <!-- {{ shrinkGrowToggle }} -->
+    <div id="textFieldContainer" [class.active]="shrinkGrowToggle">
       <div
-        (focus)="inputActive = !inputActive"
-        (blur)="inputActive = !inputActive"
-        [class.active]="!inputActive"
+        (focus)="toggleActionsVisible()"
+        (blur)="toggleActionsVisible()"
+        [class.active]="!shrinkGrowToggle"
         #commentInput
         id="textField"
         [attr.contenteditable]="contentEditableValue()"

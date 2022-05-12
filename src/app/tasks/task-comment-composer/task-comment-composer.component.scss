@@ -3,19 +3,52 @@ $emoji-color: lighten(
   $amount: 25,
 );
 
-#commentComposerFoter {
-  border-top: none;
-}
-
-#textFieldContainer {
-  width: 50px;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 18px;
+.composer-container {
   display: flex;
-  flex: 1 1 auto;
-  margin: 8px 8px 8px 0;
-  min-width: 100px;
-  padding: 0 8px 0 12px;
+  flex-grow: 1;
+  #textFieldContainer {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+    display: flex;
+    flex: 1 1 auto;
+    margin: 8px 8px 8px 0;
+    padding: 0 8px 0 12px;
+  }
+
+  #textField {
+    width: 100%;
+    font-size: 14px;
+    max-height: 144px;
+    min-height: 18px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 9px 0;
+    vertical-align: middle;
+    box-shadow: none;
+    border: none;
+    resize: none;
+    outline: none;
+    line-height: 1.5em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+  }
+
+  #textField[placeholder]:empty::before {
+    padding: 9px 0;
+    -webkit-font-smoothing: antialiased;
+    content: attr(placeholder);
+    color: #555;
+    cursor: text;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  #textField.active {
+    max-height: 39px;
+    max-lines: 1;
+    overflow: hidden;
+  }
 }
 
 #innerButtons {
@@ -83,30 +116,6 @@ $emoji-color: lighten(
   }
 }
 
-#textField {
-  flex: 1;
-  font-size: 14px;
-  max-height: 144px;
-  min-height: 18px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 9px 0;
-  vertical-align: middle;
-  box-shadow: none;
-  border: none;
-  resize: none;
-  outline: none;
-  line-height: 1.5em;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizelegibility;
-}
-
-#textField.active {
-  max-height: 39px;
-  max-lines: 1;
-  overflow: hidden;
-}
-
 .selected-files {
   width: 100%;
   min-height: 5em;
@@ -116,17 +125,6 @@ $emoji-color: lighten(
     padding: 10px;
     display: inline-block;
   }
-}
-
-#textField[placeholder]:empty::before {
-  padding: 9px 0;
-  -webkit-font-smoothing: antialiased;
-  content: attr(placeholder);
-  color: #555;
-  cursor: text;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
 }
 
 .markdown-editor-actions {
@@ -139,8 +137,6 @@ $emoji-color: lighten(
   color: grey;
   font-size: 1em;
   cursor: pointer;
-  &:hover {
-  }
 }
 
 .emoji-details {
@@ -198,4 +194,8 @@ button.btn-no-outline {
   margin-right: 4px;
   padding: 0;
   color: $emoji-color;
+}
+
+#commentComposerFoter {
+  border-top: none;
 }

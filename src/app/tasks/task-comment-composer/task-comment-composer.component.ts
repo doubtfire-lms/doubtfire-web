@@ -10,6 +10,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -18,6 +19,7 @@ import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { TaskCommentsViewerComponent } from '../task-comments-viewer/task-comments-viewer.component';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * The task comment viewer needs to share data with the Task Comment Composer. The data needed
@@ -50,12 +52,18 @@ const ACCEPTED_FILE_TYPES = [
   selector: 'task-comment-composer',
   templateUrl: './task-comment-composer.component.html',
   styleUrls: ['./task-comment-composer.component.scss'],
+  animations: [
+    trigger('shrinkgrow', [
+      transition('true => false', [style({ width: 14 }), animate('150ms 0ms ease-in-out', style({ width: 96 }))]),
+      transition('false => true', [style({ width: 96 }), animate('150ms 0ms ease-in-out', style({ width: 14 }))]),
+    ]),
+  ],
 })
 export class TaskCommentComposerComponent implements OnInit {
   @Input() task: any = {};
   @Input() sharedData: TaskCommentComposerData;
 
-  inputActive: boolean = false;
+  public inputActive = new BehaviorSubject<boolean>(false);
 
   comment = {
     text: '',
@@ -74,6 +82,7 @@ export class TaskCommentComposerComponent implements OnInit {
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
+  shrinkGrowToggle: boolean = false;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -114,6 +123,10 @@ export class TaskCommentComposerComponent implements OnInit {
     return this.task?.project()?.unit()?.my_role !== 'Student';
   }
 
+  toggleActionsVisible() {
+    this.inputActive.next(!this.inputActive.value);
+  }
+
   cancelReply() {
     this.sharedData.originalComment = null;
   }
@@ -124,7 +137,17 @@ export class TaskCommentComposerComponent implements OnInit {
     return isWebkit ? 'plaintext-only' : 'true';
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.inputActive.subscribe((value) => {
+      // we are toggling the composer buttons, need to trigger animation.
+      // the animation definition is watching shrinkGrowStart's updated value
+      if (value == true) {
+        this.shrinkGrowToggle = false;
+      } else {
+        this.shrinkGrowToggle = true;
+      }
+    });
+  }
 
   formatImageName(imageName) {
     const index = imageName.indexOf('.');
