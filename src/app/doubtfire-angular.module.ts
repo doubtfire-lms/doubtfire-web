@@ -165,6 +165,8 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import TeachingPeriodBreaks from './admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   // Components we declare
@@ -222,6 +224,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    TeachingPeriodBreaks
   ],
   // Module Imports
   imports: [
@@ -272,6 +275,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    CommonModule,
     PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -334,6 +338,10 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    {
+      provide:'CreateBreakModal',
+      useFactory:(i:any)=>{ return i.get('CreateBreakModal') }, deps: ['$injector']
+    },
   ],
 })
 // There is no longer any requirement for an EntryComponents section

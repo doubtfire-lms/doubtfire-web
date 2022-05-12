@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <div class="pull-left">
+        <h4 class="panel-title">Breaks</h4>
+        Breaks in {{teachingperiod?.name()}}
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="callout callout-info" *ngIf="teachingperiod?.breaks.length == 0">No breaks have been registered with {{teachingperiod?.name()}} yet</div>
+      <table *ngIf="teachingperiod?.breaks.length > 0" class="table table-hover table-pointer">
+        <thead>
+          <tr>
+            <th><a (click)="sortOrder='start_date'; reverse=!reverse">Start Date <i *ngIf="sortOrder!='start_date'" [class]="caretClass()"></i></a></th>
+            <th><a (click)="sortOrder='duration'; reverse=!reverse">Duration <i [hidden]="sortOrder!='duration'" [class]="caretClass()"></i></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let break of teachingperiod.breaks ">
+            <td>{{break?.start_date | date: 'EEE d MMM'}}</td>
+            <td>{{break?.number_of_weeks}} week</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer clearfix">
+      <button class="btn btn-success pull-right" (click)="addBreak(teachingperiod)">
+        <i class="fa fa-university"></i>
+        <i class="fa fa-plus"></i>
+        Add Break
+      </button>
+    </div>
+  </div>
+</div>

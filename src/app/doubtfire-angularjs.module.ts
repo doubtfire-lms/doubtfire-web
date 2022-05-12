@@ -115,7 +115,7 @@ import 'build/src/app/admin/states/states.js';
 import 'build/src/app/admin/states/units/units.js';
 import 'build/src/app/admin/states/users/users.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
+// import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-units/teaching-period-units.js';
 import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/directives.js';
@@ -290,6 +290,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import TeachingPeriodBreaks from './admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -374,7 +375,10 @@ DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
-
+DoubtfireAngularJSModule.directive(
+  'teachingPeriodBreaks',
+  downgradeComponent({ component: TeachingPeriodBreaks })
+);
 DoubtfireAngularJSModule.directive('taskAssessor',
   downgradeComponent({ component: TaskAssessorComponent }));
 DoubtfireAngularJSModule.directive('taskAssessmentComment',
