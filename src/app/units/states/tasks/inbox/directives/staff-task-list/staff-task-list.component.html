@@ -73,6 +73,13 @@
               <mat-icon>{{states[tutorialSort].icon}}</mat-icon>
             </button>
           </div>
+          <div *ngIf="filters.tutorialIdSelected !== 'all'" >
+            <div fxLayout="row" fxLayoutAlign=" center">
+              <mat-checkbox [(ngModel)]="filters.forceStream" name="stream" (change)="applyFilters()"></mat-checkbox>
+              <span style="margin-left: 7px;">Show only tasks assigned to the tutorial</span>
+              <mat-hint [hidden]="filters.forceStream" class="mat-form-field-subscript-wrapper" style="margin-top: 0px;">Showing all tasks for students in the tutorial.</mat-hint>
+            </div>
+          </div>
           <!--/tutorial-->
         </form>
       </mat-expansion-panel>
@@ -127,7 +134,7 @@
               </p>
               <div class="muted" [hidden]="!isSelectedTask(task)">
                 <p class="mat-small">
-                  {{ task.project().shortTutorialDescription() }}
+                  {{ task.shortTutorialDescription() }}
                 </p>
                 <p class="mat-small">Submitted {{ task.submission_date | humanizedDate }}</p>
                 <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
