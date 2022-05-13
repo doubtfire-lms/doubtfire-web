@@ -154,7 +154,7 @@ export class EntityFormComponent<T extends Entity>  {
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.add('danger', `${service.entityName} save failed: ${error.error.error}`, 6000);
+          alertService.add('danger', `${service.entityName} save failed: ${error.error.error? error.error.error: error.statusText}`, 6000);
         }
       }
         
