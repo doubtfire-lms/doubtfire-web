@@ -14,6 +14,7 @@ Before continuing, **please read the [contributing document](https://github.com/
   - [Table of Contents](#table-of-contents)
   - [Project structure](#project-structure)
   - [Testing](#testing)
+  - [Formatting](#formatting)
   - [Migrating components](#migrating-components)
 
 ## Project structure
@@ -34,17 +35,24 @@ npm test
   configured in your [editor](https://eslint.org/docs/user-guide/integrations).
 - [Prettier] is also used and apply automatically by ESLint.
 
+We also use a number of framework plugins:
+
+- [TypeScript ESLint]
+- [Angular ESLint]
+
 You can check this manually by running:
 
 ```shell
-npm run format:check
+npm run lint
 ```
 
 You can ask ESLint to fix issues by running:
 
 ```shell
-npm run format
+npm run lint:fix
 ```
+
+Please note that not all issues can be fixed by ESLint and Prettier.
 
 ## Migrating components
 
@@ -52,3 +60,5 @@ See [MIGRATION-GUIDE.md](MIGRATION-GUIDE.md)
 
 [ESLint](https://eslint.org/)
 [Prettier](https://prettier.io/)
+[TypeScript ESLint](https://github.com/typescript-eslint/typescript-eslint)
+[Angular ESLint](https://github.com/angular-eslint/angular-eslint)
