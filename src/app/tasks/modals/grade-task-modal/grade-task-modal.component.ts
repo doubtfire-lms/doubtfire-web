@@ -23,7 +23,7 @@ export class GradeTaskModalComponent implements OnInit {
     public dialogRef: MatDialogRef<GradeTaskModalComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     @Inject(gradeService) private gradeService: any
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.task = this.dialogData.task;
@@ -41,12 +41,12 @@ export class GradeTaskModalComponent implements OnInit {
     // Pass values back to service
     this.dialogRef.close({
       qualityPts: this.rating,
-      selectedGrade: this.selectedGrade
+      selectedGrade: this.selectedGrade,
     });
   }
 
   updateRating(value: number) {
-    if (value <= this.totalRating) {
+    if (value > 0 && value <= this.totalRating) {
       this.rating = value;
     }
   }
@@ -56,5 +56,4 @@ export class GradeTaskModalComponent implements OnInit {
       this.selectedGrade = grade;
     }
   }
-
 }
