@@ -30,26 +30,36 @@ export class TaskStatusCardComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.unit.my_role !== 'Student', this.canApplyForExtension, this.inSubmittedState, this.requiresFileUpload);
+    console.log(this.task);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.task?.currentValue?.id) {
-      this.statusLabel = this.task.statusLabel();
-      this.statusHelp = this.task.statusHelp();
-      this.unit = this.task.unit();
-      this.canApplyForExtension = this.task.canApplyForExtension();
-      this.inSubmittedState = this.task.inSubmittedState();
-      this.requiresFileUpload = this.task.requiresFileUpload();
-
+    if (changes.task?.currentValue) {
       this.reapplyTriggers();
     }
   }
 
   private reapplyTriggers() {
-    let statusKeys = _.map(this.ts.statusKeys, this.ts.statusData);
-    return this.triggers = statusKeys;
-  };
+    this.statusLabel = this.task.statusLabel();
+    this.statusHelp = this.task.statusHelp();
+    this.unit = this.task.unit();
+    this.canApplyForExtension = this.task.canApplyForExtension();
+    this.inSubmittedState = this.task.inSubmittedState();
+    this.requiresFileUpload = this.task.requiresFileUpload();
 
+    const { student, tutor } = this.ts.switchableStates
+    console.log(student)
+    console.log(tutor, 'tutor')
+
+    if (tutor != null) {
+      this.triggers =  _.map(this.ts.statusKeys, this.ts.statusData);
+    } else {
+      let studentTriggers =  _.map(student, this.ts.statusData)
+      this.triggers = this.task.filterFutureStates(studentTriggers);
+    }
+
+  };
   public triggerTransition(trigger) {
     return this.task.triggerTransition(trigger);
   }

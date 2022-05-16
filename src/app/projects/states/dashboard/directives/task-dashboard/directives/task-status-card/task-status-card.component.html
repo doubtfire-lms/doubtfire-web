@@ -44,8 +44,8 @@
   </div>
   <!--/status-body-->
   <div class="card-footer clearfix"
-    *ngIf="unit.my_role != 'Student' || canApplyForExtension || (inSubmittedState && requiresFileUpload)">
-    <a (click)="applyForExtension()" *ngIf="unit.my_role != 'Student' || canApplyForExtension"
+    *ngIf="unit.my_role !== 'Student' || canApplyForExtension || (inSubmittedState && requiresFileUpload)">
+    <a (click)="applyForExtension()" *ngIf="unit.my_role !== 'Student' || canApplyForExtension"
       class="btn btn-success">
       <i class="fa fa-medkit"></i>
       Request Extension
