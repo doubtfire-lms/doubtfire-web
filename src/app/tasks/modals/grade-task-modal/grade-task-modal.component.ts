@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { gradeService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
-  selector: 'grade-task-modal',
+  selector: 'df-grade-task-modal',
   templateUrl: './grade-task-modal.component.html',
   styleUrls: ['./grade-task-modal.component.scss'],
 })
