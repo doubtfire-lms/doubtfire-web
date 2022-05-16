@@ -8,7 +8,7 @@ import * as _ from 'lodash'
   styleUrls: ['task-status-card.component.scss'],
 })
 export class TaskStatusCardComponent implements OnInit, OnChanges {
-  // 该组件可传递的参数
+
   @Input() task: any = {};
 
   triggers: any = [];
