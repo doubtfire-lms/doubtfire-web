@@ -30,6 +30,7 @@
         </mat-button-toggle-group>
       </div>
     </div>
+    <br *ngIf="task.definition.is_graded && task.definition.max_quality_pts > 0" />
     <!-- For Quality Points Tasks -->
     <div *ngIf="task.definition.max_quality_pts > 0">
       <p>
