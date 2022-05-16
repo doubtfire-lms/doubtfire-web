@@ -30,6 +30,7 @@ export const calendarModal = new InjectionToken('CalendarModal');
 export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
+export const extensionModal = new InjectionToken('ExtensionModal');
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
@@ -78,6 +79,12 @@ export const userNotificationSettingsModalProvider = {
 export const plagiarismReportModalProvider = {
   provide: plagiarismReportModal,
   useFactory: (i: any) => i.get('PlagiarismReportModal'),
+  deps: ['$injector'],
+};
+
+export const extensionModalProvider = {
+  provide: extensionModal,
+  useFactory: (i: any) => i.get('ExtensionModal'),
   deps: ['$injector'],
 };
 

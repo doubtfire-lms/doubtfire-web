@@ -1,0 +1,63 @@
+<div class="card card-default card-sm card-status">
+  <div class="card-heading task-trigger-dropdown" *ngIf="triggers.length > 0">
+    <mat-form-field style="width: 100%; font-size: 18px;">
+      <mat-select [(value)]="task.status" (change)="triggerTransition(task.status)">
+        <mat-option *ngFor="let trigger of triggers" [value]="trigger.status">
+          <status-icon [status]="trigger.status" [show-tooltip]="false"></status-icon>
+          <span style="padding-left: 10px; font-size: 18px;">{{ trigger.label }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <div class="task-status hidden-sm hidden-xs" dropdown>
+      <button type="button" class="btn btn-default form-control input-lg {{task.statusClass()}}" dropdown-toggle>
+        <span class="pull-left"> <i class="{{task.statusIcon()}}"></i> {{task.statusLabel()}} </span>
+        <span class="pull-right">
+          <i class="fa fa-caret-down"></i>
+        </span></button>
+      <ul class="dropdown-menu" dropdown-menu>
+        <li *ngFor="let trigger of triggers" tooltip="{{trigger.help.reason}}" tooltip-append-to-body="true"
+          tooltip-popup-delay="1000" tooltip-placement="right">
+          <a (click)="triggerTransition(trigger.status)">
+            <status-icon [status]="trigger.status" [show-tooltip]="false"></status-icon>
+            {{trigger.label}}
+          </a>
+        </li>
+      </ul>
+    </div> -->
+    <!--/desktop-dropdown-->
+    <!-- <select [(value)]="task.status" class="form-control input-lg visible-sm visible-xs"
+      (change)="triggerTransition(task.status)">
+      <option *ngFor="let trigger of triggers" [value]="trigger.status">
+        {{ trigger.label }}
+      </option>
+    </select> -->
+  </div>
+  <!--/trigger-heading-->
+  <div class="card-heading static-task-status" *ngIf="triggers.length === 0">
+    <status-icon class="pull-right" [status]="task.status" [show-tooltip]="false"></status-icon>
+    <h4>{{ statusLabel }}</h4>
+  </div>
+  <!--/static-status-label-->
+  <div class="card-body">
+    <p>{{ statusHelp.reason}} {{ statusHelp.action }}</p>
+  </div>
+  <!--/status-body-->
+  <div class="card-footer clearfix"
+    *ngIf="unit.my_role != 'Student' || canApplyForExtension || (inSubmittedState && requiresFileUpload)">
+    <a (click)="applyForExtension()" *ngIf="unit.my_role != 'Student' || canApplyForExtension"
+      class="btn btn-success">
+      <i class="fa fa-medkit"></i>
+      Request Extension
+    </a>
+    <a *ngIf="inSubmittedState && requiresFileUpload" (click)="updateFilesInSubmission()"
+      class="btn btn-primary"
+      tooltip="This allows you to update files for your portfolio, but does not update the task status."
+      tooltip-popup-delay="250" tooltip-append-to-body="true">
+      <i class="fa fa-upload"></i>
+      Upload new files for submission
+    </a>
+  </div>
+  <!--/status-footer-->
+</div>
+<!--/status-card-->

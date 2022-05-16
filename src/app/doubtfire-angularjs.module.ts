@@ -89,7 +89,6 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/direct
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
@@ -275,6 +274,7 @@ import { TaskListItemComponent } from './projects/states/dashboard/directives/st
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
+import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
@@ -374,6 +374,10 @@ DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
+DoubtfireAngularJSModule.directive(
+  'taskStatusCard',
+  downgradeComponent({ component: TaskStatusCardComponent })
+)
 
 DoubtfireAngularJSModule.directive('taskAssessor',
   downgradeComponent({ component: TaskAssessorComponent }));
