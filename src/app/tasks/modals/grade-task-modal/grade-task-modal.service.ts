@@ -3,22 +3,23 @@ import { MatDialog } from '@angular/material/dialog';
 import { GradeTaskModalComponent } from './grade-task-modal.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GradeTaskModalService {
-  constructor(
-    public dialog: MatDialog,
-    ) { }
+  constructor(public dialog: MatDialog) {}
 
   public show(task: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.dialog.open(GradeTaskModalComponent, {
-        data: {
-          task: task
-        }
-      }).afterClosed().subscribe(result => {
-        resolve(result);
-      })
+      this.dialog
+        .open(GradeTaskModalComponent, {
+          data: {
+            task: task,
+          },
+        })
+        .afterClosed()
+        .subscribe((result) => {
+          resolve(result);
+        });
     });
   }
 }

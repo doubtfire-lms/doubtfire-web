@@ -104,7 +104,7 @@ describe('GradeTaskModalComponent', () => {
     expect(component.totalRating).toEqual(newRatingTask.definition.max_quality_pts);
   });
 
-  it("should not allow a rating higher than the max rating", () => {
+  it('should not allow a rating higher than the max rating', () => {
     component.ngOnInit();
     component.rating = 1;
     component.totalRating = 10;
@@ -114,7 +114,7 @@ describe('GradeTaskModalComponent', () => {
     expect(component.totalRating).toEqual(10);
   });
 
-  it("should not allow a rating lower than 0", () => {
+  it('should not allow a rating lower than 0', () => {
     component.ngOnInit();
     component.totalRating = 10;
     component.updateRating(-10);
