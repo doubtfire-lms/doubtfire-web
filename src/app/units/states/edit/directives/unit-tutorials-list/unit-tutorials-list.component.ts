@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Inject, ViewChild, OnInit } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
@@ -15,11 +15,11 @@ import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.comp
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'unit-tutorials-list',
+  selector: 'df-unit-tutorials-list',
   templateUrl: 'unit-tutorials-list.component.html',
   styleUrls: ['unit-tutorials-list.component.scss'],
 })
-export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
+export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> implements OnInit{
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() stream: TutorialStream;
