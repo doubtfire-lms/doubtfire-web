@@ -165,6 +165,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { RolloverTeachingPeriodModalComponent } from './admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.component';
 
 @NgModule({
   // Components we declare
@@ -222,6 +223,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    RolloverTeachingPeriodModalComponent,
   ],
   // Module Imports
   imports: [

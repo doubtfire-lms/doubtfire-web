@@ -28,4 +28,3 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
       (response) ->
         alertService.add("danger", response.data.error, 6000)
 )
-

@@ -10,7 +10,7 @@
           type="input"
           class="form-control"
           placeholder="Name"
-          value="{{teachingperiod.name()}}"
+          value="{{teachingPeriod.name()}}"
           ng-disabled="true"
         />
       </div>
@@ -18,8 +18,8 @@
     <div class="form-group">
       <label class="col-sm-3 control-label" for="teachingperiod">Rollover To:</label>
       <div class="col-sm-7">
-        <select class="form-control" ng-model="rolloverTo" ng-required="true">
-          <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">
+        <select class="form-control" required="true">
+          <option value="{{tp.id}}" *ngFor="let tp of teachingPeriod.loadedPeriods" [ngValue]="tp.id">
             {{tp.period}}-{{tp.year}}
           </option>
         </select>
@@ -29,5 +29,4 @@
       <input type="submit" class="btn btn-primary" value="Rollover" />
     </div>
   </form>
-  >
 </div>
