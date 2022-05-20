@@ -31,14 +31,14 @@ npm test
 
 ### Formatting
 
-- [ESLint] is used in the project to enforce code style and should be
+- [ESLint](https://eslint.org/) is used in the project to enforce code style and should be
   configured in your [editor](https://eslint.org/docs/user-guide/integrations).
-- [Prettier] is also used and apply automatically by ESLint.
+- [Prettier](https://prettier.io/) is also used and apply automatically by ESLint.
 
 We also use a number of framework plugins:
 
-- [TypeScript ESLint]
-- [Angular ESLint]
+- [TypeScript ESLint](https://github.com/typescript-eslint/typescript-eslint)
+- [Angular ESLint](https://github.com/angular-eslint/angular-eslint)
 
 You can check this manually by running:
 
@@ -57,8 +57,3 @@ Please note that not all issues can be fixed by ESLint and Prettier.
 ## Migrating components
 
 See [MIGRATION-GUIDE.md](MIGRATION-GUIDE.md)
-
-[ESLint](https://eslint.org/)
-[Prettier](https://prettier.io/)
-[TypeScript ESLint](https://github.com/typescript-eslint/typescript-eslint)
-[Angular ESLint](https://github.com/angular-eslint/angular-eslint)
