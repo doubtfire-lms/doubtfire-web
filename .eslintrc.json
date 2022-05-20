@@ -1,5 +1,14 @@
 {
   "root": true,
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "warn"
+  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "jasmine": true
+  },
   "overrides": [
     {
       "files": ["*.ts"],
@@ -7,11 +16,11 @@
         "project": ["tsconfig.*?.json"],
         "createDefaultProgram": true
       },
-      "extends": ["plugin:@angular-eslint/recommended"],
+      "extends": ["plugin:@typescript-eslint/recommended", "plugin:@angular-eslint/recommended"],
       "rules": {
         "@angular-eslint/no-empty-lifecycle-method": "warn",
-        "@angular-eslint/component-class-suffix":"warn",
-        "@angular-eslint/no-output-on-prefix":"warn",
+        "@angular-eslint/component-class-suffix": "warn",
+        "@angular-eslint/no-output-on-prefix": "warn",
         "@angular-eslint/directive-selector": [
           "warn",
           {
@@ -28,13 +37,23 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/no-inferrable-types": "warn",
+        "@typescript-eslint/no-this-alias": "warn",
+        "no-dupe-class-members": "warn",
+        "no-prototype-builtins": "warn",
+        "no-unused-vars": "warn",
+        "no-useless-escape": "warn",
+        "no-var": "warn",
         "quotes": [
           "warn",
           "single",
           {
             "allowTemplateLiterals": true
           }
-        ]
+        ],
+        "prefer-const": "warn"
       }
     },
     {
