@@ -76,6 +76,7 @@ import {
   aboutDoubtfireModalProvider,
   calendarModalProvider,
   userNotificationSettingsModalProvider,
+  teachingPeriodProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -336,6 +337,7 @@ import { RolloverTeachingPeriodModalComponent } from './admin/modals/rollover-te
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    teachingPeriodProvider,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
