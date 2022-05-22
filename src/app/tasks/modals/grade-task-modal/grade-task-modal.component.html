@@ -2,7 +2,10 @@
   <mat-card-title> Assess Task Quality </mat-card-title>
   <mat-card-content>
     <!-- For Grade Tasks -->
-    <div *ngIf="task.definition.is_graded">
+    <div
+      class="grade-task-item"
+      *ngIf="task.definition.is_graded"
+    >
       <p>
         Please provide a grade for task
         <label class="task-label">
@@ -27,8 +30,8 @@
     </div>
     <!-- For Quality Points Tasks -->
     <div
+      class="grade-task-item"
       *ngIf="task.definition.max_quality_pts > 0"
-      [ngStyle]="{ 'margin-top': task.definition.is_graded && task.definition.max_quality_pts > 0 ? '1.75rem' : '0' }"
     >
       <p>
         Please provide a quality rating for task

@@ -71,3 +71,7 @@ $primary-blue: #3939ff;
 .grade-toggle {
   padding: 0.5rem 0;
 }
+
+.grade-task-item + .grade-task-item {
+  padding-top: 2rem;
+}
