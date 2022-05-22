@@ -32,8 +32,9 @@ import 'node_modules/angular-md5/angular-md5.js';
 import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';
-import 'build/src/app/visualisations/progress-burndown-chart.js';
+import 'build/src/app/visualisations/student-task-status-pie-chart.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
+import 'build/src/app/visualisations/progress-burndown-chart.js';
 import 'build/src/app/visualisations/task-completion-box-plot.js';
 import 'build/src/app/visualisations/visualisations.js';
 import 'build/src/app/visualisations/alignment-bullet-chart.js';
@@ -286,9 +287,12 @@ import { TaskAssessorComponent } from './tasks/task-definition-editor/task-asses
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
-import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-chart.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-chart.component';
+import { VisulizationService } from './visualisations/visulization.service';
+
+
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -322,6 +326,7 @@ DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(Ch
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
+DoubtfireAngularJSModule.factory('VisulizationService', downgradeInjectable(VisulizationService)); 
 
 // directive -> component
 DoubtfireAngularJSModule.directive(

@@ -2,6 +2,7 @@ import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
+import { NvD3Module } from "ng2-nvd3";
 import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
@@ -166,6 +167,8 @@ import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdo
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-chart.component';
+import { VisulizationService } from './visualisations/visulization.service';
+
 
 
 @NgModule({
@@ -228,6 +231,7 @@ import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-ch
   ],
   // Module Imports
   imports: [
+    NvD3Module,
     BrowserModule,
     BrowserAnimationsModule,
     ContenteditableModule,
@@ -314,6 +318,7 @@ import { TaskStatusPieChartComponent } from './visualisations/task-status-pie-ch
     dateServiceProvider,
     taskProvider,
     projectServiceProvider,
+    VisulizationService,
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
