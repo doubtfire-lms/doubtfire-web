@@ -28,7 +28,7 @@ export class GradeTaskModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.task = this.dialogData.task;
-    this.rating = this.task.quality_pts || 1;
+    this.rating = this.task.quality_pts || 0;
     this.totalRating = this.task.definition.max_quality_pts || 5;
     this.gradeValues = this.gradeService.allGradeValues;
     this.grades = this.gradeService.grades;
@@ -47,8 +47,15 @@ export class GradeTaskModalComponent implements OnInit {
     });
   }
 
+  isValid() {
+    return (
+      (this.task.definition.is_graded && this.selectedGrade) ||
+      (this.task.definition.max_quality_pts > 0 && this.rating)
+    );
+  }
+
   updateRating(value: number) {
-    if (value > 0 && value <= this.totalRating) {
+    if (value >= 0 && value <= this.totalRating) {
       this.rating = value;
       this.updateRatingLabel();
     }

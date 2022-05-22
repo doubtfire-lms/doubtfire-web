@@ -44,7 +44,7 @@
         (input)="updateRating($event.value)"
         [value]="rating"
         [max]="totalRating"
-        [min]="1"
+        [min]="0"
         [step]="1"
         [thumbLabel]="true"
         [tickInterval]="auto"
@@ -63,7 +63,7 @@
       mat-raised-button
       color="primary"
       (click)="close()"
-      [disabled]="task.definition.is_graded && selectedGrade === undefined"
+      [disabled]="!isValid()"
     >
       Submit
     </button>
