@@ -15,6 +15,7 @@ export class GradeTaskModalComponent implements OnInit {
   // Task Rating
   totalRating: number;
   rating: number;
+  ratingLabel: string;
 
   // Grade Select
   selectedGrade: number;
@@ -31,6 +32,7 @@ export class GradeTaskModalComponent implements OnInit {
     this.totalRating = this.task.definition.max_quality_pts || 5;
     this.gradeValues = this.gradeService.allGradeValues;
     this.grades = this.gradeService.grades;
+    this.updateRatingLabel();
   }
 
   dismiss() {
@@ -48,7 +50,12 @@ export class GradeTaskModalComponent implements OnInit {
   updateRating(value: number) {
     if (value > 0 && value <= this.totalRating) {
       this.rating = value;
+      this.updateRatingLabel();
     }
+  }
+
+  updateRatingLabel() {
+    this.ratingLabel = `${this.rating} / ${this.totalRating}`;
   }
 
   updateGrade(grade: number) {
