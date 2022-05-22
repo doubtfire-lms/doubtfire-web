@@ -119,7 +119,7 @@ describe('GradeTaskModalComponent', () => {
     component.totalRating = 10;
     component.updateRating(-10);
 
-    expect(component.rating).toEqual(1);
+    expect(component.rating).toEqual(0);
     expect(component.totalRating).toEqual(10);
   });
 
