@@ -1,6 +1,5 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { is } from '@uirouter/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Injectable({

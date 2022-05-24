@@ -86,7 +86,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     private breakpointObserver: BreakpointObserver,
     @Inject(taskDefinition) private taskDef,
     @Inject(Unit) private Unit,
-
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
