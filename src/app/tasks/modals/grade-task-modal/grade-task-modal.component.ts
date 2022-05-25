@@ -62,6 +62,7 @@ export class GradeTaskModalComponent implements OnInit {
   }
 
   updateRatingLabel() {
+    console.log(this.totalRating)
     this.ratingLabel = `${this.rating} / ${this.totalRating}`;
   }
 

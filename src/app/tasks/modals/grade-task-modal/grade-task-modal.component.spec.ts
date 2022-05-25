@@ -132,6 +132,23 @@ describe('GradeTaskModalComponent', () => {
     expect(component.totalRating).toEqual(10);
   });
 
+  it('should reflect the rating in the rating label', () => {
+    component.ngOnInit();
+    expect(component.ratingLabel).toEqual('0 / 5');
+
+    component.updateRating(-1);
+    expect(component.ratingLabel).toEqual('0 / 5');
+
+    component.updateRating(12);
+    expect(component.ratingLabel).toEqual('0 / 5');
+
+    component.updateRating(2);
+    expect(component.ratingLabel).toEqual('2 / 5');
+
+    component.updateRating(5);
+    expect(component.ratingLabel).toEqual('5 / 5');
+  });
+
   /**
    * For Graded Tasks
    */
