@@ -1,14 +1,5 @@
 {
   "root": true,
-  "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": "warn"
-  },
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
-  "env": {
-    "browser": true,
-    "jasmine": true
-  },
   "overrides": [
     {
       "files": ["*.ts"],
@@ -16,7 +7,16 @@
         "project": ["tsconfig.*?.json"],
         "createDefaultProgram": true
       },
-      "extends": ["plugin:@typescript-eslint/recommended", "plugin:@angular-eslint/recommended"],
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "env": {
+        "browser": true,
+        "jasmine": true
+      },
       "rules": {
         "@angular-eslint/no-empty-lifecycle-method": "warn",
         "@angular-eslint/component-class-suffix": "warn",
@@ -43,7 +43,7 @@
         "@typescript-eslint/no-this-alias": "warn",
         "no-dupe-class-members": "warn",
         "no-prototype-builtins": "warn",
-        "no-unused-vars": "warn",
+        "no-unused-vars": "off",
         "no-useless-escape": "warn",
         "no-var": "warn",
         "quotes": [
@@ -53,19 +53,21 @@
             "allowTemplateLiterals": true
           }
         ],
-        "prefer-const": "warn"
+        "prefer-const": "warn",
+        "prettier/prettier": "warn"
       }
     },
     {
       "files": ["*.component.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "extends": ["plugin:@angular-eslint/template/recommended", "plugin:prettier/recommended"],
       "rules": {
         "max-len": [
           "warn",
           {
             "code": 140
           }
-        ]
+        ],
+        "prettier/prettier": "warn"
       }
     },
     {
