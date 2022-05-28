@@ -6,7 +6,7 @@ angular.module('doubtfire.config.root-controller', [])
 .controller("AppCtrl", (TeachingPeriod, campusService) ->
 
   # Ensure that campuses are loaded
-  campusService.query().subscribe()
+  campusService.fetchAll().subscribe()
 
   # Ensure that teaching periods are loaded
   TeachingPeriod.query()

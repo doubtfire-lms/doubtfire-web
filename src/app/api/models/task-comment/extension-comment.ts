@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppInjector } from 'src/app/app-injector';
 import { TaskComment } from './task-comment';
-import { TaskCommentService } from './task-comment.service';
+import { TaskCommentService } from '../../services/task-comment.service';
 
 /**
  * Create a Discussion Comment, extending the base TaskComment class
@@ -26,7 +26,7 @@ export class ExtensionComment extends TaskComment {
   /**
    * Update the Discussion Comment with details from the passed in json data
    */
-  public updateFromJson(data: any): void {
+   public updateFromJson(data: any, params?: any): void  {
     super.updateFromJson(data);
     this.assessed = data.assessed;
     this.extensionResponse = data.extension_response;

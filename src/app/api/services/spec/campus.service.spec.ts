@@ -1,7 +1,8 @@
 import { TestBed, getTestBed, tick, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
+import { Campus } from 'src/app/api/models/doubtfire-model';
 import { HttpRequest } from '@angular/common/http/http';
+import { CampusService } from '../campus.service';
 
 describe('CampusService', () => {
   let injector: TestBed;

@@ -1,44 +1,54 @@
-// import {
-//   HttpEvent,
-//   HttpInterceptor,
-//   HttpHandler,
-//   HttpRequest,
-//   HttpErrorResponse
-// } from '@angular/common/http';
-// import { Observable, throwError, of } from 'rxjs';
-// import { catchError, retryWhen, concatMap, delay } from 'rxjs/operators';
-// import { Injectable } from '@angular/core';
+import {
+  HttpEvent,
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
 
-// @Injectable()
-// export class HttpErrorInterceptor implements HttpInterceptor {
-//   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-//     const retryTimes: number = 3;
-//     const delayDuration: number = 100;
+@Injectable()
+export class HttpErrorInterceptor implements HttpInterceptor {
+  constructor(
+    private globalState: GlobalStateService
+  ){}
 
-//     return next.handle(request)
-//       .pipe(
-//         retryWhen(errors => errors
-//           .pipe(
-//             concatMap((error, count) => {
-//               if (count < retryTimes && (error.status === 400 || error.status === 0)) {
-//                 return of(error.status);
-//               }
-//               return throwError(error);
-//             }),
-//             delay(delayDuration)
-//           )
-//         ),
-//         catchError((error: HttpErrorResponse) => {
-//           let errorMessage: string = '';
-//           if (error.error instanceof ErrorEvent) {
-//             // client-side error
-//             errorMessage = `Error: ${error.error.message}`;
-//           } else {
-//             // server-side error
-//             errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.error}`;
-//           }
-//           return throwError(errorMessage);
-//         })
-//       );
-//   }
-// }
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // const retryTimes: number = 3;
+    // const delayDuration: number = 100;
+
+    return next.handle(request)
+      .pipe(
+        // retryWhen(errors => errors
+        //   .pipe(
+        //     concatMap((error, count) => {
+        //       if (count < retryTimes && (error.status === 400 || error.status === 0)) {
+        //         return of(error.status);
+        //       }
+        //       return throwError(error);
+        //     }),
+        //     delay(delayDuration)
+        //   )
+        // ),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage: string = '';
+          if (error.error instanceof ErrorEvent) {
+            // client-side error
+            errorMessage = `Error: ${error.error.message}`;
+          } else {
+            // server-side error
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.error}`;
+          }
+
+          if(error.status === 419) {
+            this.globalState.signOut();
+          }
+
+          return throwError(() => errorMessage);
+        })
+      );
+  }
+}

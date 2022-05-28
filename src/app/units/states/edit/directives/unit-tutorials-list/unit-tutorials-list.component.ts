@@ -53,15 +53,15 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
       campus: new FormControl(null, []),
       capacity: new FormControl('', [Validators.required]),
       tutor: new FormControl(null, [Validators.required]),
-    });
+    }, "Tutorial");
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     if (this.stream) {
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
     }
-    this.campusService.query().subscribe((campuses) => {
+    this.campusService.fetchAll().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
     this.filterTutorials();
@@ -75,7 +75,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   }
 
   public saveStream() {
-    this.tutorialStreamService.update( {abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, this.stream).subscribe(
+    this.tutorialStreamService.update( {abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, { entity: this.stream} ).subscribe(
       {
         next: (stream: TutorialStream) => {
           this.stream = stream;
@@ -111,6 +111,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
+    if (!value) return;
     value instanceof Array ? this.tutorials.push(...value) : this.tutorials.push(value);
     this.renderTable();
   }

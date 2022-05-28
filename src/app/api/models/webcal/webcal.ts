@@ -1,49 +1,24 @@
-import { Entity } from '../entity';
-
-const KEYS = [
-  'enabled',
-  'id',
-  'guid',
-  'include_start_dates',
-  'user_id',
-  'reminder',
-  'unit_exclusions',
-
-  // Only used when updating the webcal.
-  'should_change_guid',
-];
+import { Entity, EntityMapping } from 'ngx-entity-service';
 
 export class Webcal extends Entity {
   enabled: boolean;
   id: number;
   guid: string;
-  include_start_dates: boolean;
-  user_id: number;
+  includeStartDates: boolean;
+  userId: number;
   reminder: {
     time: number;
     unit: string;
   };
-  unit_exclusions: number[];
+  unitExclusions: number[];
 
   // Used only when updating the webcal. Never returned from the API.
-  should_change_guid?: boolean;
+  shouldChangeGuid?: boolean;
 
-  toJson(): any {
+  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
-      webcal: super.toJsonWithKeys(KEYS),
+      webcal: super.toJson(mappingData, ignoreKeys),
     };
-  }
-
-  public updateFromJson(data: any) {
-    this.setFromJson(data, KEYS);
-  }
-
-  public get key(): string {
-    return this.id.toString();
-  }
-
-  public keyForJson(json: any): string {
-    return json.id;
   }
 
   /**

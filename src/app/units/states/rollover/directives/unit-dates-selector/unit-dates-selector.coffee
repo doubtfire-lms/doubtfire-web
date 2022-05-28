@@ -39,7 +39,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
 
     $scope.saveUnit = ->
       #Assign unit roles to null, otherwise it will not update the role in unit list
-      unitService.loadedUnitRoles = null
+      # unitService.loadedUnitRoles = null
 
       if $scope.unit.start_date && $scope.unit.start_date.getMonth
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"

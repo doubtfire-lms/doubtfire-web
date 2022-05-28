@@ -17,7 +17,7 @@ export class DiscussionComment extends TaskComment {
   /**
    * Update the Discussion Comment with details from the passed in json data
    */
-  public updateFromJson(data: any): void {
+   public updateFromJson(data: any, params?: any): void  {
     super.updateFromJson(data);
     this.status = data.status;
     this.numberOfPrompts = data.number_of_prompts;

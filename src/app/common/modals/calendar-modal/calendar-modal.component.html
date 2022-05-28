@@ -154,7 +154,7 @@
           <br />
 
           <mat-checkbox
-            [checked]="webcal.include_start_dates"
+            [(ngModel)]="webcal.includeStartDates"
             [disabled]="working"
             (change)="toggleIncludeTaskStartDates()"
           >

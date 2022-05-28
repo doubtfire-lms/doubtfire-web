@@ -52,24 +52,21 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let activityType">
         <div class="right" *ngIf="!editing(activityType) else edit">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
+          <button mat-icon-button (click)="flagEdit(activityType)" aria-label="edit activity type">
+            <mat-icon>edit</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="flagEdit(activityType)">
-              <mat-icon color="primary">edit</mat-icon>
-              <span>Edit</span>
-            </button>
-          </mat-menu>
         </div>
         <ng-template #edit>
           <div class="edit-actions right">
             <span>
-              <button mat-icon-button color="warn" (click)="cancelEdit()">
+              <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
                 <mat-icon>cancel</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="submit()">
+              <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
                 <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteActivity(activityType)" aria-label="delete activity type">
+                <mat-icon color="primary">delete</mat-icon>
               </button>
             </span>
           </div>

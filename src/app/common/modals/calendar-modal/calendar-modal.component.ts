@@ -32,7 +32,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     @Inject(alertService) private alerts: any,
     @Inject(projectService) private ProjectService: any,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Retrieve current webcal.
@@ -102,7 +102,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService
       .update(
         this.currentWebcalWith({
-          should_change_guid: true,
+          shouldChangeGuid: true,
         })
       )
       .subscribe((webcal) => {
@@ -183,11 +183,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   toggleIncludeTaskStartDates() {
     this.working = true;
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          include_start_dates: !this.webcal.include_start_dates,
-        })
-      )
+      .update( this.webcal )
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -198,14 +194,14 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Retrieves a list of excluded projects.
    */
   get excludedProjects() {
-    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) !== -1);
+    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit_id) !== -1);
   }
 
   /**
    * Retrieves a list of included projects.
    */
   get includedProjects() {
-    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) === -1);
+    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit_id) === -1);
   }
 
   /**
@@ -216,7 +212,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService
       .update(
         this.currentWebcalWith({
-          unit_exclusions: this.webcal.unit_exclusions.filter((p) => p !== project.unit_id),
+          unitExclusions: this.webcal.unitExclusions.filter((p) => p !== project.unit_id),
         })
       )
       .subscribe((webcal) => {
@@ -233,7 +229,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService
       .update(
         this.currentWebcalWith({
-          unit_exclusions: [...this.webcal.unit_exclusions, project.unit_id],
+          unitExclusions: [...this.webcal.unitExclusions, project.unit_id],
         })
       )
       .subscribe((webcal) => {
@@ -263,6 +259,6 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Returns a new `Webcal` based off `this.webcal`, that includes the attributes of `o`.
    */
   private currentWebcalWith(o: Partial<Webcal>): Webcal {
-    return new Webcal({ ...this.webcal.toJson(), ...o });
+    return this.webcalService.buildInstance({ ...this.webcal.toJson(this.webcalService.mapping), ...o });
   }
 }

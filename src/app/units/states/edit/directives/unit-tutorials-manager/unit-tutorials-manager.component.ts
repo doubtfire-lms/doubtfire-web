@@ -16,7 +16,7 @@ export class UnitTutorialsManagerComponent {
 
   ngOnInit() {
     // Get the activity types
-    this.activityTypeService.query().subscribe((activityTypes) => {
+    this.activityTypeService.fetchAll().subscribe((activityTypes) => {
       this.activityTypes.push(...activityTypes);
     });
   }

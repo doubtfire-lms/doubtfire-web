@@ -1,7 +1,7 @@
 import { alertService, currentUser } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { EmojiService } from 'src/app/common/services/emoji.service';
-import { Entity } from '../entity';
+import { Entity } from 'ngx-entity-service';
 import { TaskCommentService } from 'src/app/api/models/doubtfire-model';
 
 const KEYS = ['id'];
@@ -64,23 +64,15 @@ export class TaskComment extends Entity {
     return this.id.toString();
   }
 
-  public updateFromJson(data: any): void {
-    this.setFromJson(data, KEYS);
+  public override updateFromJson(data: any, params?: any): void  {
 
-    const es: EmojiService = AppInjector.get(EmojiService);
-
-    this.text = es.colonsToNative(data.comment);
 
     const names: string[] = data.author.name.split(' ');
     this.initials = `${names[0][0]}${names[1][0]}`.toUpperCase();
 
-    this.author = data.author;
-    this.recipient = data.recipient;
     this.timeOfMessage = data.created_at;
-    this.recipientReadTime = data.recipient_read_time;
     this.commentType = data.type || 'text';
-    this.replyToId = data.reply_to_id;
-    this.isNew = data.is_new;
+
   }
 
   public keyForJson(json: any): string {
@@ -111,17 +103,17 @@ export class TaskComment extends Entity {
 
   public delete() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
-    tcs.cacheSource = this.task.commentCache;
     tcs
-      .delete({ projectId: this.project.project_id, taskDefinitionId: this.task.task_definition_id, id: this.id })
-      .subscribe(
-        (response: object) => {
+      .delete({ projectId: this.project.project_id, taskDefinitionId: this.task.task_definition_id, id: this.id }, { cache: this.task.commentCache })
+      .subscribe({
+        next: (response: object) => {
           this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
           this.task.refreshCommentData();
         },
-        (error: any) => {
+        error: (error: any) => {
           AppInjector.get<any>(alertService).add('danger', error?.message || error || 'Unknown error', 2000);
         }
+      }
       );
   }
 }

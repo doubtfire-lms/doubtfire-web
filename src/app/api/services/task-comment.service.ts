@@ -2,10 +2,13 @@ import { TaskComment } from 'src/app/api/models/doubtfire-model';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CachedEntityService } from '../cached-entity.service';
-import { HttpOptions } from '../entity.service';
-import { DiscussionComment } from './discussion-comment';
-import { ExtensionComment } from './extension-comment';
+import { CachedEntityService } from 'ngx-entity-service';
+import { DiscussionComment } from '../models/task-comment/discussion-comment';
+import { ExtensionComment } from '../models/task-comment/extension-comment';
+import { RequestOptions } from 'ngx-entity-service/lib/request-options';
+import { HttpClient } from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiURL';
+import { EmojiService } from 'src/app/common/services/emoji.service';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
@@ -19,12 +22,39 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     'projects/:projectId:/task_def_id/:taskDefinitionId:/request_extension';
 
   protected readonly endpointFormat = this.commentEndpointFormat;
-  entityName = 'TaskComment';
+
+  constructor(
+    httpClient: HttpClient,
+    private emojiService: EmojiService
+  ) {
+    super(httpClient, API_URL);
+
+    this.mapping.addKeys(
+      'id',
+      'author',
+      'recipient',
+      'recipientReadTime',
+      'replyToId',
+      'isNew',
+      {
+        keys: ['text', 'comment'],
+        toEntityFn: (data, key, entity) => {
+          return this.emojiService.colonsToNative(data['comment']);
+        }
+      },
+      {
+        keys: ['createdAt'],
+        toEntityFn: (data, key, entity) => {
+          return data['created_at'];
+        }
+      }
+    );
+  }
 
   /**
    * Create a Task Comment - use the type to determine the exact object type to return.
    */
-  protected createInstanceFrom(json: any, other?: any): TaskComment {
+  public createInstanceFrom(json: any, other?: any): TaskComment {
     switch (json.type) {
       case 'discussion':
         return new DiscussionComment(json, other);
@@ -35,10 +65,6 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     }
   }
 
-  public keyForJson(json: any): string {
-    return json.id;
-  }
-
   /**
    * Query for task comments, and update unread message count.
    *
@@ -46,11 +72,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
    * @param other Contains the related Tasks used to construct the TaskComments
    * @param options
    */
-  public query(pathIds?: object, other?: object, options?: HttpOptions): Observable<TaskComment[]> {
-    return super.query(pathIds, other, options).pipe(
+  public query(pathIds?: object, other?: object, options?: RequestOptions<TaskComment>): Observable<TaskComment[]> {
+    return super.query(pathIds, options).pipe(
       tap((result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
-        const task = other as any;
+        const task = other as any; //TODO: change to Task object
         task.num_new_comments = 0;
       })
     );
@@ -73,13 +99,13 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       body.append('reply_to_id', originalComment?.id.toString());
     }
 
-    const opts: HttpOptions = { alternateEndpointFormat: this.commentEndpointFormat };
+    const opts: RequestOptions<TaskComment> = { endpointFormat: this.commentEndpointFormat };
 
     // Based on the comment type - add to the body and configure the end point
     if (commentType === 'text') {
       body.append('comment', data);
     } else if (commentType === 'discussion') {
-      opts.alternateEndpointFormat = this.discussionEndpointFormat;
+      opts.endpointFormat = this.discussionEndpointFormat;
       for (const prompt of prompts) {
         body.append('attachments[]', prompt);
       }
@@ -87,9 +113,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       body.append('attachment', data);
     }
 
-    this.cacheSource = task.commentCache;
+    opts.cache = task.commentCache;
+    opts.body = body;
     const self = this;
-    return this.create(pathId, body, task, opts).pipe(
+
+    return this.create(pathId, opts).pipe(
       tap((tc: TaskComment) => {
         task.comments.push(tc);
         task.refreshCommentData();
@@ -99,8 +127,9 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   }
 
   public assessExtension(extension: ExtensionComment): Observable<TaskComment> {
-    const opts: HttpOptions = {
-      alternateEndpointFormat: this.extensionGrantEndpointFormat,
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.extensionGrantEndpointFormat,
+      entity: extension,
     };
 
     return super.update(
@@ -109,25 +138,24 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         projectId: extension.project.project_id,
         taskDefinitionId: extension.task.task_definition_id,
       },
-      extension,
       opts
     );
   }
 
   public requestExtension(reason: string, weeksRequested: number, task: any): Observable<TaskComment> {
-    const opts: HttpOptions = {
-      alternateEndpointFormat: this.requestExtensionEndpointFormat,
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.requestExtensionEndpointFormat,
+      body: {
+        comment: reason,
+        weeks_requested: weeksRequested,
+      },
+      cache: task.commentCache
     };
     return super.create(
       {
         projectId: task.project().project_id,
         taskDefinitionId: task.task_definition_id,
       },
-      {
-        comment: reason,
-        weeks_requested: weeksRequested,
-      },
-      task,
       opts
     );
   }

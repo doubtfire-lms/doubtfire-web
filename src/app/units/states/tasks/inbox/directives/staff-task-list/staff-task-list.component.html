@@ -45,7 +45,7 @@
                 <mat-select [(ngModel)]="filters.taskDefinitionIdSelected" name="taskDefID"
                   (selectionChange)="taskDefinitionIdChanged()">
                   <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
-                  <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
+                  <mat-option *ngFor="let td of unit.taskDefinitions.values | async" [value]="td.id">
                     {{ td.abbreviation + ' - ' + td.name }}
                   </mat-option>
                 </mat-select>

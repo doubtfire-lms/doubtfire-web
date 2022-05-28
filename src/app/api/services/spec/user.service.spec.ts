@@ -124,7 +124,7 @@ describe('UserService', () => {
     });
 
     userService.update(u).subscribe((result) => {
-      expect(result.first_name).toBe(u.first_name);
+      expect(result.firstName).toBe(u.firstName);
     }, fail);
 
     let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
@@ -135,9 +135,9 @@ describe('UserService', () => {
     req.flush(u);
     tick();
 
-    u.first_name = 'andrew';
+    u.firstName = 'andrew';
     userService.update(u).subscribe((result) => {
-      expect(result.first_name).toBe('andrew');
+      expect(result.firstName).toBe('andrew');
     }, fail);
 
     req = httpMock.expectOne((request: HttpRequest<any>): boolean => {

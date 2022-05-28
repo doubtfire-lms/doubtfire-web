@@ -53,7 +53,7 @@ import {
   authProvider,
   taskServiceProvider,
   analyticsServiceProvider,
-  unitServiceProvider,
+  oldUnitServiceProvider,
   dateServiceProvider,
   taskProvider,
   projectServiceProvider,
@@ -142,13 +142,19 @@ import { CheckForUpdateService } from './sessions/service-worker-updater/check-f
 import {
   ActivityTypeService,
   CampusService,
+  GroupSetService,
   OverseerImageService,
   OverseerAssessmentService,
   TaskCommentService,
+  TeachingPeriodService,
+  TeachingPeriodBreakService,
   TutorialService,
   TutorialStreamService,
+  UnitService,
+  UnitRoleService,
   UserService,
   WebcalService,
+  LearningOutcomeService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -165,6 +171,10 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
+import { UIRouter } from '@uirouter/angular';
+import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TaskDefinitionService } from './api/services/task-definition.service';
 
 @NgModule({
   // Components we declare
@@ -282,6 +292,13 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
   // Services we provide
   providers: [
     CampusService,
+    GroupSetService,
+    UnitService,
+    UnitRoleService,
+    LearningOutcomeService,
+    TaskDefinitionService,
+    TeachingPeriodService,
+    TeachingPeriodBreakService,
     TutorialService,
     TutorialStreamService,
     UserService,
@@ -307,7 +324,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     taskServiceProvider,
     gradeServiceProvider,
     analyticsServiceProvider,
-    unitServiceProvider,
+    oldUnitServiceProvider,
     dateServiceProvider,
     taskProvider,
     projectServiceProvider,
@@ -326,6 +343,12 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
       useClass: TokenInterceptor,
       multi: true,
       deps: [currentUser],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+      deps: [GlobalStateService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,

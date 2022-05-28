@@ -10,7 +10,7 @@ export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
 export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
-export const unitService = new InjectionToken('unitService');
+export const oldUnitService = new InjectionToken('oldUnitService');
 export const dateService = new InjectionToken('dateService');
 export const projectService = new InjectionToken('projectService');
 export const alertService = new InjectionToken('AlertService');
@@ -141,8 +141,8 @@ export const analyticsServiceProvider = {
   deps: ['$injector'],
 };
 
-export const unitServiceProvider = {
-  provide: unitService,
+export const oldUnitServiceProvider = {
+  provide: oldUnitService,
   useFactory: (i: any) => i.get('unitService'),
   deps: ['$injector'],
 };

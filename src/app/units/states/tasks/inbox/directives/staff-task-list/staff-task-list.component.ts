@@ -11,12 +11,15 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { taskDefinition, Unit, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
+import { taskDefinition, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
+import { Unit } from 'src/app/api/models/unit';
+import { UnitRole } from 'src/app/api/models/unit-role';
+import { Tutorial } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -30,8 +33,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() project: any;
 
   @Input() taskData;
-  @Input() unit;
-  @Input() unitRole;
+  @Input() unit: Unit;
+  @Input() unitRole: UnitRole;
   @Input() filters;
   @Input() showSearchOptions = false;
 
@@ -46,8 +49,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   panelOpenState = false;
   loading = true;
-
-  isTaskDefMode: boolean;
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
@@ -85,8 +86,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   constructor(
     private breakpointObserver: BreakpointObserver,
     @Inject(taskDefinition) private taskDef,
-    @Inject(Unit) private Unit,
-
     @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
@@ -127,7 +126,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         { id: 'all', inbox_description: 'All tutorials', abbreviation: '__all' },
         { id: 'mine', inbox_description: 'Just my tutorials', abbreviation: '__mine' },
       ],
-      ...this.unit.tutorials,
+      ...this.unit.tutorials.currentValues,
     ];
 
     this.tutorials = this.tutorials.map((tutorial) => {
@@ -137,17 +136,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       return tutorial;
     });
 
-    this.isTaskDefMode =
-      this.taskData?.source === this.Unit.tasksForDefinition &&
-      this.filters?.taskDefinitionIdSelected &&
-      this.showSearchOptions;
-
     this.tutorialIdChanged();
 
     this.setTaskDefFromTaskKey(this.taskData.taskKey);
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
+  }
+
+  public get isTaskDefMode(): boolean {
+    console.log("implement isTaskDefMode");
+    return false;
+    // return this.taskData?.source === this.Unit.tasksForDefinition &&
+    // this.filters?.taskDefinitionIdSelected &&
+    // this.showSearchOptions;
   }
 
   downloadSubmissionPdfs() {
@@ -200,7 +202,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name);
     } else if (tutorialId === 'all') {
       // Students not in tutorials but submitting work
-      this.filters.tutorials = this.unit.tutorials.concat([{ id: null }]);
+      this.filters.tutorials = this.unit.tutorials.currentValues.concat([Tutorial.NoTutorial]);
     } else {
       this.filters.tutorials = [this.unit.tutorialFromId(tutorialId)];
     }
@@ -210,7 +212,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   //  Task definition options
   groupSetName(id: number) {
-    if (this.unit.hasGroupwork()) {
+    if (this.unit.hasGroupwork) {
       this.groupService.groupSetName(id, this.unit);
     }
   }
@@ -236,7 +238,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       return;
     }
     const taskDef =
-      this.unit.task_definitions.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.task_definitions[0];
+      this.unit.taskDefinitions.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.taskDefinitions.currentValues[0];
     this.filters.taskDefinitionIdSelected = taskDef.id;
     this.filters.taskDefinition = taskDef;
   }

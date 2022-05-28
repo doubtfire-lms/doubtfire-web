@@ -1,15 +1,15 @@
-import { OnInit, Directive } from '@angular/core';
+import { AfterViewInit, Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { Entity } from 'src/app/api/models/entity';
-import { EntityService } from 'src/app/api/models/entity.service';
-import { Observable } from 'rxjs';
+import { Entity } from 'ngx-entity-service';
+import { EntityService } from 'ngx-entity-service';
+import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
-export class EntityFormComponent<T extends Entity> implements OnInit {
+export abstract class EntityFormComponent<T extends Entity> implements AfterViewInit {
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
@@ -47,7 +47,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @param controls the FormControls that will make up the form.
    */
-  constructor(controls: { [key: string]: AbstractControl }) {
+  constructor(controls: { [key: string]: AbstractControl }, protected entityName: string) {
     this.formData = new FormGroup(controls);
     // Iterate over the FormControls passed in and assign the default values
     // For each based on the values that they are constructed with
@@ -56,7 +56,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngAfterViewInit() {}
 
   /**
    * Cancel edit of current selected value.
@@ -96,6 +96,15 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     return false;
   }
 
+  private get serverKey(): string {
+    return this.entityName
+      .replace(/( )/, '')
+      .replace(/(.)([A-Z][a-z]+)/, '$1_$2')
+      .replace(/([a-z0-9])([A-Z])/, '$1_$2')
+      .toLowerCase();
+  }
+
+
   /**
    * Submit the form data to the server and create or update an entity
    * based on the form's state. A new entity will be created if there is
@@ -126,18 +135,18 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
         response = service.update(this.selected);
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
-        const data = this.formDataToNewObject(service.serverKey); // sent as path id and body
-        response = service.create(data, data, this.otherOnCreate());
+        const data = this.formDataToNewObject(this.serverKey); // sent as path id and body
+        response = service.create(data, this.otherOnCreate());
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
-        alertService.add('danger', `${service.entityName} was not changed`, 6000);
+        alertService.add('danger', `${this.entityName} was not changed`, 6000);
         return;
       }
 
       // Handle the response
-      response.subscribe(
-        (result: T) => {
-          alertService.add('success', `${service.entityName} saved`, 2000);
+      response.subscribe( {
+        next: (result: T) => {
+          alertService.add('success', `${this.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
           success(result, this.selected ? false : true);
@@ -149,21 +158,32 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
           // Reset the form to default values
           this.formData.reset(this.defaultFormData);
         },
-        (error) => {
+        error: (error) => {
           // Whoops - an error
           // Restore the form data from backup if applicable
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.add('danger', `${service.entityName} save failed: ${error}`, 6000);
+          alertService.add('danger', `${this.entityName} save failed: ${error}`, 6000);
         }
-      );
+      });
     } else {
       // Once we mark forms as touched, erroneous state will be rendered
       // In the form's template accordingly
       this.formData.markAllAsTouched();
     }
   }
+
+  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<object> {
+    return service.delete(entity).pipe(tap(
+      (obj) => {
+        this.cancelEdit();
+        entities.splice( entities.indexOf(entity), 1);
+        this.dataSource.data = entities;
+      })
+    );
+  }
+
   /**
    * Get changes denoted by key, in which differences in data between
    * the FormControls and the selected value are returned.

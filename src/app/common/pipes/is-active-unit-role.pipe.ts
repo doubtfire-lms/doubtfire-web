@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { UnitRole } from 'src/app/api/models/unit-role';
 
 @Pipe({
   name: 'isActiveUnitRole',
 })
 export class IsActiveUnitRole implements PipeTransform {
-  transform(value: any, ...args: unknown[]): any[] {
-    if (value == null) {
+  transform(array: UnitRole[], ...args: any[]): UnitRole[] {
+    if (array == null) {
       return;
     }
-    const array = [...value];
-    return array.filter((ur) => ur.active);
+    return array.filter((ur) => ur.unit?.active);
   }
 }

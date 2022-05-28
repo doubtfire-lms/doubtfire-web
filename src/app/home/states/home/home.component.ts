@@ -3,6 +3,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { analyticsService, currentUser, dateService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
+import { UnitRole } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'home',
@@ -11,7 +12,7 @@ import { GlobalStateService, ViewType } from 'src/app/projects/states/index/glob
 })
 export class HomeComponent implements OnInit, OnDestroy {
   projects: any;
-  unitRoles: any;
+  unitRoles: UnitRole[];
   showSpinner: boolean;
   dataLoaded: boolean;
   notEnrolled: boolean;
@@ -65,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ifConvenor = this.CurrentUser.role === 'Convenor';
   }
 
-  unitRolesLoaded(unitRoles: any): void {
+  unitRolesLoaded(unitRoles: UnitRole[]): void {
     this.unitRoles = unitRoles;
     this.loadingUnitRoles = false;
   }

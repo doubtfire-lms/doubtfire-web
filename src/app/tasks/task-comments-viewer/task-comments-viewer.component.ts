@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { EntityCache } from 'ngx-entity-service';
 import { taskService, alertService, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -26,12 +27,12 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     task_definition_id: number;
     comments: TaskComment[];
     refreshCommentData: any;
-    commentCache: Map<string, TaskComment>;
+    commentCache: EntityCache<TaskComment>;
   } = {
     task_definition_id: null,
     comments: [],
     refreshCommentData: null,
-    commentCache: new Map<string, TaskComment>(),
+    commentCache: new EntityCache<TaskComment>()
   }; // TODO: Update to task when migrated
   @Input() refocusOnTaskChange: boolean;
 
@@ -57,14 +58,16 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     // Must have project for task to be mapped
     if (changes.task?.currentValue?.project != null) {
       this.project = changes.task.currentValue.project();
-      this.taskCommentService.cacheSource = this.task.commentCache;
       this.taskCommentService
         .query(
           {
             projectId: this.project.project_id,
             taskDefinitionId: this.task.task_definition_id,
           },
-          this.task
+          this.task,
+          {
+            cache: this.task.commentCache,
+          }
         )
         .subscribe((comments) => {
           this.task.comments = comments;

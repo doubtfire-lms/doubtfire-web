@@ -17,14 +17,15 @@ angular.module('doubtfire.units.states.index', [])
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService, currentUser, GlobalStateService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, projectService, listenerService, currentUser, GlobalStateService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
 
-  # Load assessing unit role
-  unitService.getUnitRoles (unitRoles) ->
-    $scope.unitRole = _.find(unitRoles, { unit_id: unitId })
+  GlobalStateService.onLoad () ->
+    # Load assessing unit role
+    $scope.unitRole = GlobalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
+
     if (! $scope.unitRole?) && ( currentUser.role == "Admin" )
       $scope.unitRole = {
         role: 'Admin',
@@ -33,13 +34,14 @@ angular.module('doubtfire.units.states.index', [])
         unit_name: 'Unit admin mode',
         unit_code: '---'
       }
+
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?
-    $rootScope.$broadcast('UnitRoleChanged', { context: $scope.unitRole })
 
     GlobalStateService.setView("UNIT", $scope.unitRole)
 
-    unitService.getUnit(unitId, {loadOnlyEnrolledStudents: true}, (unit)->
-      $scope.unit = unit
+    newUnitService.fetch(unitId, {params: {loadOnlyEnrolledStudents: true}}).subscribe(
+      (unit)->
+        $scope.unit = unit
     )
 )

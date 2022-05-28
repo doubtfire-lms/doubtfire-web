@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { UIRouter } from '@uirouter/angular';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { auth, projectService, unitService } from 'src/app/ajs-upgraded-providers';
+import { EntityCache } from 'ngx-entity-service';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { auth, oldUnitService, projectService } from 'src/app/ajs-upgraded-providers';
+import { Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
 
 export class DoubtfireViewState {
   public EntityObject: any; // Unit | Project | undefined
@@ -34,9 +36,19 @@ export class GlobalStateService {
   } | null>(null);
 
   /**
+   * The unit roles loaded from the server
+   */
+   private loadedUnitRoles: EntityCache<UnitRole>;
+
+  /**
+   * The loaded units.
+   */
+  private loadedUnits: EntityCache<Unit>;
+
+  /**
    * A Unit Role for when a tutor is viewing a Project.
    */
-  public unitRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  // public get unitRoleSubject(): Observable<UnitRole>;
 
   /**
    * The current activity, ie. Dashboard, Task Inbox, etc. Mostly used to be able to set the task dropdown
@@ -46,7 +58,9 @@ export class GlobalStateService {
   /**
    * The list of all of the units taught by the current user
    */
-  public unitRolesSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public get unitRolesSubject(): Observable<UnitRole[]> {
+    return this.loadedUnitRoles.values;
+  }
 
   /**
    * The list of all of the units studied by the current user
@@ -58,11 +72,16 @@ export class GlobalStateService {
   public showHideHeader: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    @Inject(unitService) private UnitService: any,
+    private unitRoleService: UnitRoleService,
+    private unitService: UnitService,
+    private userService: UserService,
     @Inject(projectService) private ProjectService: any,
     @Inject(auth) private Auth: any,
     @Inject(UIRouter) private router: UIRouter
   ) {
+    this.loadedUnitRoles = this.unitRoleService.cache;
+    this.loadedUnits = this.unitService.cache;
+
     setTimeout(() => {
       if (this.Auth.isAuthenticated()) {
         this.loadUnitsAndProjects();
@@ -72,29 +91,54 @@ export class GlobalStateService {
     }, 800);
   }
 
+  public signOut() {
+    this.clearUnitsAndProjects();
+    this.Auth.signOut();
+    this.router.stateService.go('sign_in');
+  }
+
   /**
    * Query the API for the units taught and studied by the current user.
    */
   public loadUnitsAndProjects() {
+
     //TODO: Consider sequence here? Can we adjust to fail once.
-    this.UnitService.getUnitRoles((roles: any) => {
-      this.unitRolesSubject.next(roles);
+    this.unitRoleService.query().subscribe(
+      {
+        next: (unitRoles: UnitRole[]) => {
+          console.log(unitRoles);
 
-      this.ProjectService.getProjects(false, (projects: any) => {
-        this.projectsSubject.next(projects);
+          this.ProjectService.getProjects(false, (projects: any) => {
+            this.projectsSubject.next(projects);
 
-        setTimeout(() => {
-          this.isLoadingSubject.next(false);
-        }, 800);
-      });
-    });
+            setTimeout(() => {
+              this.isLoadingSubject.next(false);
+            }, 800);
+          });
+        }
+      }
+    );
+  }
+
+  public onLoad(run: () => void) {
+    const subscription = this.isLoadingSubject.subscribe(
+      (loading: boolean) => {
+        if ( !loading ) {
+          run();
+          subscription.unsubscribe();
+        }
+      }
+    )
   }
 
   /**
    * Clear all of the project and unit role data on sign out
    */
   public clearUnitsAndProjects() {
-    this.unitRolesSubject.next(null);
+    this.loadedUnits.clear();
+    this.loadedUnitRoles.clear();
+    this.userService.cache.clear();
+
     this.projectsSubject.next(null);
   }
 

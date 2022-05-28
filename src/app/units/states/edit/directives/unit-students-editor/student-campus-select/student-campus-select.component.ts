@@ -22,7 +22,7 @@ export class StudentCampusSelectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campusService.query().subscribe((campuses) => {
+    this.campusService.fetchAll().subscribe((campuses) => {
       this.campuses = campuses;
     });
   }

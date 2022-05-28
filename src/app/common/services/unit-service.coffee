@@ -1,13 +1,13 @@
 angular.module("doubtfire.common.services.units", [])
 
-.factory("unitService", (Unit, UnitRole, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
+.factory("unitService", (Unit, Students, Group, campusService, tutorialService, streamService, projectService, groupService, gradeService, taskService, $filter, $rootScope, analyticsService, PortfolioSubmission, ConfirmationModal, ProgressModal, alertService, Project, $state, TeachingPeriod) ->
   #
   # The unit service object
   #
   unitService = {}
 
   unitService.loadedUnits = {}
-  unitService.loadedUnitRoles = null
+
 
   injectFunctionalityInUnitRole = (unitRole) ->
     unless unitRole.teachingPeriod?
@@ -23,17 +23,6 @@ angular.module("doubtfire.common.services.units", [])
 
   $rootScope.$on 'signOut', ->
     unitService.loadedUnits = {}
-    unitService.loadedUnitRoles = null
-
-  unitService.getUnitRoles = (callback) ->
-    fireCallback = ->
-      callback(unitService.loadedUnitRoles) if _.isFunction(callback)
-    unless unitService.loadedUnitRoles?
-      UnitRole.query (roles) ->
-        unitService.loadedUnitRoles = _.map roles, (r) -> injectFunctionalityInUnitRole(r)
-        fireCallback()
-    else
-      fireCallback()
 
   #
   # Gets a unit by its ID number

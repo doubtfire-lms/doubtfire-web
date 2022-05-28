@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { AppInjector } from 'src/app/app-injector';
+import { RequestOptions } from 'ngx-entity-service/lib/request-options';
 
 @Component({
   selector: 'extension-modal',
@@ -54,9 +55,6 @@ export class ExtensionModalComponent implements OnInit {
 
   submitApplication() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
-    tcs.cacheSource = this.data.task.commentCache;
-
-    const self = this;
 
     tcs.requestExtension(this.reason, this.weeksRequested, this.data.task).subscribe({
       next: ((tc: TaskComment) => {
