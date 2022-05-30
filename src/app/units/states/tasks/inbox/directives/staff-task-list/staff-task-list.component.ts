@@ -118,6 +118,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         tutorials: [],
         taskDefinitionIdSelected: null,
         taskDefinition: null,
+        forceStream: true
       },
       this.filters
     );
@@ -170,7 +171,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
-    filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
+    if (this.filters.tutorials) {
+      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials, this.filters.forceStream);
+    }
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
@@ -199,12 +202,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name);
     } else if (tutorialId === 'all') {
-      // Students not in tutorials but submitting work
-      this.filters.tutorials = this.unit.tutorials.concat([{ id: null }]);
+      // Ignore tutorials filter
+      this.filters.tutorials = null;
     } else {
       this.filters.tutorials = [this.unit.tutorialFromId(tutorialId)];
     }
-    this.filters.tutorials = this.filters.tutorials.map((t) => t.id);
+
+    if (this.filters.tutorials) {
+      this.filters.tutorials = this.filters.tutorials.map((t) => t.id);
+    }
     this.applyFilters();
   }
 
