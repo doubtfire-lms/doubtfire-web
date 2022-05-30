@@ -16,10 +16,30 @@
         <mat-icon>{{ showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
       </button>
 
-      <button matTooltip="Refresh the task inbox" matTooltipPosition="above" mat-icon-button aria-label="Refresh Inbox"
+      <button *ngIf="! isTaskDefMode" matTooltip="Refresh the task inbox" matTooltipPosition="above" mat-icon-button aria-label="Refresh Inbox"
         (click)="refreshTasks()">
         <mat-icon>refresh</mat-icon>
       </button>
+
+      <button *ngIf="isTaskDefMode" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu to download submission files">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item matTooltip="Refresh the task inbox" matTooltipPosition="above" aria-label="Refresh Inbox"
+        (click)="refreshTasks()">
+          <mat-icon>refresh</mat-icon>
+          <span>Refresh Tasks</span>
+        </button>
+        <button mat-menu-item (click)="downloadSubmissionPdfs()">
+          <mat-icon>download</mat-icon>
+          <span>Bulk Export Submission PDFs</span>
+        </button>
+        <button mat-menu-item (click)="downloadSubmissions()">
+          <mat-icon>download</mat-icon>
+          <span>Bulk Export Submission Files</span>
+        </button>
+      </mat-menu>
+
     </div>
 
     <mat-accordion>
@@ -27,18 +47,6 @@
         [expanded]="!collapsable || showSearchOptions">
         <form class="search-options">
           <div class="task-definition">
-            <div class="dropdown" dropdown>
-              <i *ngIf="isTaskDefMode" class="fa fa-download pull-right dropdown-toggle"
-                style="cursor: pointer; padding-top: 8px; padding-right: 8px" dropdown-toggle></i>
-              <ul class="dropdown-menu pull-right">
-                <li>
-                  <a (click)="downloadSubmissionPdfs()">Bulk Export Submission PDFs</a>
-                </li>
-                <li>
-                  <a (click)="downloadSubmissions()">Bulk Export Submission Files</a>
-                </li>
-              </ul>
-            </div>
             <div fxLayout="row" fxLayoutAlign="space-between center">
               <mat-form-field fxFlex>
                 <mat-label>Task Definition</mat-label>
