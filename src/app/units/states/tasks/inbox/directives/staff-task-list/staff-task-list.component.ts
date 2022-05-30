@@ -39,7 +39,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
-  tutorials: any[] = null;
+  studentFilter: any[] = null;
   tasks: any[] = null;
 
   watchingTaskKey: any;
@@ -123,25 +123,25 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.filters
     );
 
-    this.tutorials = [
-      ...[
-        { id: 'all', inbox_description: 'All tutorials', abbreviation: '__all' },
-        { id: 'mine', inbox_description: 'Just my tutorials', abbreviation: '__mine' },
-      ],
-      ...this.unit.tutorials,
-    ];
-
-    this.tutorials = this.tutorials.map((tutorial) => {
-      if (!['all', 'mine'].includes(tutorial.id)) {
-        tutorial.inbox_description = `${tutorial.abbreviation} - ${tutorial.description}`;
-      }
-      return tutorial;
-    });
-
     this.isTaskDefMode =
       this.taskData?.source === this.Unit.tasksForDefinition &&
       this.filters?.taskDefinitionIdSelected &&
       this.showSearchOptions;
+
+    this.studentFilter = [
+      ...[
+        { id: 'all', inbox_description: 'All Students', abbreviation: '__all', forceStream: false },
+        { id: 'mine', inbox_description: 'My Students', abbreviation: '__mine', forceStream: !this.isTaskDefMode },
+      ],
+      ...this.unit.tutorials.map((t) => {
+        return {
+          id: t.id,
+          inbox_description: `Students in ${t.abbreviation} - ${t.description}`,
+          abbreviation: t.abbreviation,
+          forceStream: true
+        };
+      }),
+    ];
 
     this.tutorialIdChanged();
 
@@ -199,13 +199,18 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   tutorialIdChanged(): void {
     const tutorialId = this.filters.tutorialIdSelected;
+
+    const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
+
+    this.filters.forceStream = filterOption.forceStream;
+
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name);
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
       this.filters.tutorials = null;
     } else {
-      this.filters.tutorials = [this.unit.tutorialFromId(tutorialId)];
+      this.filters.tutorials = [filterOption];
     }
 
     if (this.filters.tutorials) {
@@ -271,7 +276,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         // Apply initial filters
         this.applyFilters();
         this.loading = false;
-        // Load initial set task, either the one provided(by the URL)
+        // Load initial set task, either the one provided (by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
         const task = this.findTaskForTaskKey(this.taskData.taskKey);
