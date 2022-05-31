@@ -1,9 +1,12 @@
 <emoji-mart
+  [darkMode]="false"
+  [isNative]="true"
+  [hideRecent]="false"
   [hidden]="!this.showEmojiPicker"
   class="emoji-picker"
   title="Pick your emoji…"
   emoji="thumbsup"
-  (emojiClick)="addEmoji($event)"
+  (emojiSelect)="addEmoji($event)"
 ></emoji-mart>
 
 <div id="replyContainer" *ngIf="task" [hidden]="originalComment === null">
