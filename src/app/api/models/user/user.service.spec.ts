@@ -1,20 +1,27 @@
-import { TestBed, getTestBed, tick, fakeAsync } from '@angular/core/testing';
+import { TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { HttpRequest } from '@angular/common/http/http';
+import { analyticsService, auth, currentUser } from 'src/app/ajs-upgraded-providers';
 
 describe('UserService', () => {
-  let injector: TestBed;
   let userService: UserService;
   let httpMock: HttpTestingController;
+  let currentUserStub: jasmine.SpyObj<any>;
+  let authStub: jasmine.SpyObj<any>;
+  let analyticsServiceStub: jasmine.SpyObj<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserService],
+      providers: [
+        UserService,
+        { provide: currentUser, useValue: currentUserStub },
+        { provide: auth, useValue: authStub },
+        { provide: analyticsService, useValue: analyticsServiceStub },
+      ],
     });
 
-    injector = getTestBed();
     userService = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -89,7 +96,7 @@ describe('UserService', () => {
     tick();
   }));
 
-  it('should delete a user', fakeAsync(() => {
+  xit('should delete a user', fakeAsync(() => {
     // let user = new User();
     // user.updateFromJson({
     //   name: 'jake', last_name: 'renzella', first_name: 'Jake', nickname: 'jake',
@@ -109,7 +116,7 @@ describe('UserService', () => {
     // tick();
   }));
 
-  it('Test updating a User', fakeAsync(() => {
+  it('should update a User', fakeAsync(() => {
     const u = new User();
     u.updateFromJson({
       id: 1,
