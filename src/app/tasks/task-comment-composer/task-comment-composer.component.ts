@@ -9,6 +9,7 @@ import {
   KeyValueDiffer,
   ElementRef,
   ViewChild,
+  DoCheck,
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
@@ -59,11 +60,11 @@ const ACCEPTED_FILE_TYPES = [
     ]),
   ],
 })
-export class TaskCommentComposerComponent implements OnInit {
+export class TaskCommentComposerComponent implements DoCheck {
   @Input() task: any = {};
   @Input() sharedData: TaskCommentComposerData;
 
-  public inputActive = new BehaviorSubject<boolean>(false);
+  public $expandInput = new BehaviorSubject<boolean>(false);
 
   comment = {
     text: '',
@@ -75,14 +76,12 @@ export class TaskCommentComposerComponent implements OnInit {
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
-  // commentReplyID: { id: any } = this.ts.currentReplyID;
   differ: KeyValueDiffer<string, any>;
   showEmojiPicker: boolean = false;
   emojiSearchMode: boolean = false;
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
-  shrinkGrowToggle: boolean = false;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -123,10 +122,6 @@ export class TaskCommentComposerComponent implements OnInit {
     return this.task?.project()?.unit()?.my_role !== 'Student';
   }
 
-  toggleActionsVisible() {
-    this.inputActive.next(!this.inputActive.value);
-  }
-
   cancelReply() {
     this.sharedData.originalComment = null;
   }
@@ -135,18 +130,6 @@ export class TaskCommentComposerComponent implements OnInit {
     const UA = navigator.userAgent;
     const isWebkit = /WebKit/.test(UA) && !/Edge/.test(UA);
     return isWebkit ? 'plaintext-only' : 'true';
-  }
-
-  ngOnInit() {
-    this.inputActive.subscribe((value) => {
-      // we are toggling the composer buttons, need to trigger animation.
-      // the animation definition is watching shrinkGrowStart's updated value
-      if (value == true) {
-        this.shrinkGrowToggle = false;
-      } else {
-        this.shrinkGrowToggle = true;
-      }
-    });
   }
 
   formatImageName(imageName) {

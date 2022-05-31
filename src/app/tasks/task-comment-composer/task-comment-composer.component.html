@@ -39,12 +39,12 @@
   role="form"
 >
   <div fxLayout="row" fxLayoutAlign="space-around end" class="composer-container">
-    <div class="composer-action-group" [@shrinkgrow]="shrinkGrowToggle">
+    <div class="composer-action-group" [@shrinkgrow]="($expandInput | async)">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         <button
-          [hidden]="!shrinkGrowToggle"
-          (click)="toggleActionsVisible()"
+          [hidden]="($expandInput | async) === false"
+          (click)="$expandInput.next(true)"
           matTooltip="Expand action buttons"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -71,7 +71,7 @@
         </button> -->
 
         <button
-          [hidden]="shrinkGrowToggle"
+          [hidden]="$expandInput | async"
           *ngIf="isStaff"
           matTooltip="Create a Real Talk discussion"
           matTooltipShowDelay="400"
@@ -85,7 +85,7 @@
         </button>
 
         <button
-          [hidden]="shrinkGrowToggle"
+          [hidden]="($expandInput | async)"
           matTooltip="Attach a file"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -106,7 +106,7 @@
         </button>
 
         <button
-          [hidden]="shrinkGrowToggle"
+          [hidden]="$expandInput | async"
           matTooltip="Send a recording"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -119,12 +119,11 @@
         </button>
       </div>
     </div>
-    <!-- {{ shrinkGrowToggle }} -->
-    <div id="textFieldContainer" [class.active]="shrinkGrowToggle">
+    <div id="textFieldContainer" [class.active]="$expandInput | async">
       <div
-        (focus)="toggleActionsVisible()"
-        (blur)="toggleActionsVisible()"
-        [class.active]="!shrinkGrowToggle"
+        (focus)="$expandInput.next(true)"
+        (blur)="$expandInput.next(false)"
+        [class.active]="($expandInput | async) === false"
         #commentInput
         id="textField"
         [attr.contenteditable]="contentEditableValue()"
