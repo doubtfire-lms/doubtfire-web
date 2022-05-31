@@ -1,4 +1,4 @@
-import { OnInit, Directive } from '@angular/core';
+import { Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
 import { EntityService } from 'src/app/api/models/entity.service';
@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
-export class EntityFormComponent<T extends Entity> implements OnInit {
+export class EntityFormComponent<T extends Entity>  {
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
@@ -56,7 +56,6 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     }
   }
 
-  ngOnInit() {}
 
   /**
    * Cancel edit of current selected value.
@@ -135,8 +134,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
       }
 
       // Handle the response
-      response.subscribe(
-        (result: T) => {
+      response.subscribe({
+        next: (result: T) => {
           alertService.add('success', `${service.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
@@ -149,14 +148,16 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
           // Reset the form to default values
           this.formData.reset(this.defaultFormData);
         },
-        (error) => {
+        error: (error) => {
           // Whoops - an error
           // Restore the form data from backup if applicable
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.add('danger', `${service.entityName} save failed: ${error}`, 6000);
+          alertService.add('danger', `${service.entityName} save failed: ${error.error.error? error.error.error: error.statusText}`, 6000);
         }
+      }
+        
       );
     } else {
       // Once we mark forms as touched, erroneous state will be rendered

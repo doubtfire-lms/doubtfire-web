@@ -14,7 +14,7 @@ export class StatusIconComponent implements OnInit {
   statusLabel;
   statusClass;
 
-  constructor(@Inject(taskService) private TaskService) {}
+  constructor(@Inject(taskService) private TaskService: any) {}
 
   ngOnInit(): void {
     if (this.showTooltip == null) {
