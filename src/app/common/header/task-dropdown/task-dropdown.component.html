@@ -13,7 +13,7 @@
         Task Inbox
       </button>
       <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{ unitId: currentUnitOrProject.unit_id }">
-        Mark By Definition
+        Task Explorer
       </button>
       <button mat-menu-item uiSref="units/tasks/offline" [uiParams]="{ unitId: currentUnitOrProject.unit_id }">
         Mark Tasks Offline
@@ -111,7 +111,7 @@
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Mark By Definition
+          Task Explorer
         </button>
         <button
           uiSref="units/tasks/offline"

@@ -15,7 +15,7 @@ angular.module('doubtfire.units.states.tasks.definition', [
     params:
       taskKey: dynamic: true
     data:
-      task: "Mark by Task Definition"
+      task: "Task Explorer"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
