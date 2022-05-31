@@ -27,5 +27,7 @@ COPY --chown="${USER}":root . .
 # Setup within container
 RUN npm install
 
+EXPOSE 9876
+
 # Launch - install on launch so that node_modules are updated in volume
 CMD /bin/bash -c 'npm install; npm start'

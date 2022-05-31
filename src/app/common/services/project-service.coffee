@@ -435,6 +435,14 @@ angular.module("doubtfire.common.services.projects", [])
     task.overseerEnabled = () ->
       task.unit().overseerEnabled() && task.definition.assessment_enabled && task.definition.has_task_assessment_resources
 
+    task.shortTutorialDescription = () ->
+      stream = task.unit().tutorialStreamForAbbr(task.definition.tutorial_stream)
+      tutorial = task?.project().tutorialForStream(stream)
+      if (tutorial)
+        tutorial.abbreviation
+      else
+        "None"
+
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
@@ -512,7 +520,7 @@ angular.module("doubtfire.common.services.projects", [])
         _.extend project, response
         if unit_obj
           projectService.addTaskDetailsToProject(project, unit_obj)
-    
+
     project.targetGradeWord = () ->
       # the array only have four element so use this if statement to make sure it's not undefined
       if project.target_grade >= 0 and project.target_grade <= 3

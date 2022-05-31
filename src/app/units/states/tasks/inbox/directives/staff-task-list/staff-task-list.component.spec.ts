@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { alertService, currentUser, groupService, taskDefinition, Unit } from 'src/app/ajs-upgraded-providers';
 
 import { StaffTaskListComponent } from './staff-task-list.component';
@@ -24,7 +25,10 @@ describe('StaffTaskListComponent', () => {
 
       TestBed.configureTestingModule({
         declarations: [StaffTaskListComponent],
-        imports: [MatDialogModule],
+        imports: [
+          MatDialogModule,
+          MatMenuModule
+        ],
         providers: [
           { provide: taskDefinition, useValue: taskDefinitionStub },
           { provide: Unit, useValue: unitStub },
