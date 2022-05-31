@@ -136,7 +136,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       ...this.unit.tutorials.map((t) => {
         return {
           id: t.id,
-          inbox_description: `Students in ${t.abbreviation} - ${t.description}`,
+          inbox_description: `${t.abbreviation} - ${t.description}`,
           abbreviation: t.abbreviation,
           forceStream: true
         };
