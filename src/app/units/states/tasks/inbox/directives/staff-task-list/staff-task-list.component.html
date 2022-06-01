@@ -49,7 +49,7 @@
           <div class="task-definition">
             <div fxLayout="row" fxLayoutAlign="space-between center">
               <mat-form-field fxFlex>
-                <mat-label>Task Definition</mat-label>
+                <mat-label>Task</mat-label>
                 <mat-select [(ngModel)]="filters.taskDefinitionIdSelected" name="taskDefID"
                   (selectionChange)="taskDefinitionIdChanged()">
                   <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
