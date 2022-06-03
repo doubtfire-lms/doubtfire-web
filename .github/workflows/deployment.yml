@@ -12,7 +12,7 @@ on:
 jobs:
   docker-deploy-development-image:
     if: github.repository_owner == 'doubtfire-lms'
-    environment: doubtfire
+    environment: deployment-secrets
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
