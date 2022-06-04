@@ -12,7 +12,7 @@ import {
   TutorialStreamService,
 } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'df-unit-tutorials-list',
@@ -46,13 +46,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     @Inject(alertService) private alerts: any
   ) {
     super({
-      meeting_day: new FormControl('', [Validators.required]),
-      meeting_time: new FormControl(null, [Validators.required]),
-      meeting_location: new FormControl('', [Validators.required]),
-      abbreviation: new FormControl('', [Validators.required]),
-      campus: new FormControl(null, []),
-      capacity: new FormControl('', [Validators.required]),
-      tutor: new FormControl(null, [Validators.required]),
+      meeting_day: new UntypedFormControl('', [Validators.required]),
+      meeting_time: new UntypedFormControl(null, [Validators.required]),
+      meeting_location: new UntypedFormControl('', [Validators.required]),
+      abbreviation: new UntypedFormControl('', [Validators.required]),
+      campus: new UntypedFormControl(null, []),
+      capacity: new UntypedFormControl('', [Validators.required]),
+      tutor: new UntypedFormControl(null, [Validators.required]),
     });
   }
 
