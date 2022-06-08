@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation, taskService, fileDownloaderService) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, Visualisation, taskService, fileDownloaderService, newUserService) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
 
   $scope.downloadGrades = -> fileDownloaderService.downloadFile(Unit.getGradesUrl($scope.unit),"#{$scope.unit.code}-grades.csv")
@@ -67,7 +67,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.grades = gradeService.grades
   $scope.unitService = unitService
 
-  $scope.tutorName = currentUser.profile.name
+  $scope.tutorName = newUserService.currentUser.name
 
   $scope.search = ""
 

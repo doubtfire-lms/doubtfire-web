@@ -13,7 +13,7 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   headerServiceProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, currentUser, unitService, analyticsService, dateService, GlobalStateService) ->
+.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, unitService, analyticsService, dateService, GlobalStateService, newUserService) ->
   analyticsService.event 'view-all-units', 'viewed all-units list'
   GlobalStateService.setView('OTHER')
 
@@ -42,16 +42,16 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
     return if !$scope.unitRoles?
     $scope.notEnrolled = ->
       # Not enrolled if a tutor and no unitRoles
-      ($scope.unitRoles.length is 0 and currentUser.role is 'Tutor')
+      ($scope.unitRoles.length is 0 and newUserService.currentUser.role is 'Tutor')
 
   $scope.$watch 'unitRoles', checkEnrolled
 
-  if currentUser.role isnt 'Student'
+  if newUserService.currentUser.role isnt 'Student'
     Unit.query (units) ->
       $scope.units = units
 
   $scope.unit = (unitId) ->
     _.find($scope.units, {id: unitId})
 
-  $scope.currentUser = currentUser
+  $scope.currentUser = newUserService.currentUser
 )

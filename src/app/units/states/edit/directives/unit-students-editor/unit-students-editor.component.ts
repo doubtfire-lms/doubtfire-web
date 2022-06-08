@@ -25,8 +25,8 @@ export class UnitStudentsEditorComponent {
 
   columns: string[] = [
     'student_id',
-    'first_name',
-    'last_name',
+    'firstName',
+    'lastName',
     'student_email',
     'campus',
     'tutorial',
@@ -79,8 +79,8 @@ export class UnitStudentsEditorComponent {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'student_id':
-        case 'first_name':
-        case 'last_name':
+        case 'firstName':
+        case 'lastName':
         case 'student_email':
         case 'enrolled':
           return this.sortCompare(a[sort.active], b[sort.active], isAsc);

@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   TeachingPeriodSettingsModal
 )
 
-.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, currentUser, TeachingPeriod, teachingperiod, auth) ->
+.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, TeachingPeriod, teachingperiod) ->
   $scope.teachingperiod = teachingperiod or { }
   $scope.isNew = teachingperiod?.id is undefined
 
@@ -28,8 +28,6 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
 
   if $scope.isNew
     $scope.teachingperiods = TeachingPeriod.query()
-
-  $scope.currentUser = currentUser
 
   $scope.modalState = {}
 

@@ -28,18 +28,18 @@ describe('UserService', () => {
     u.updateFromJson({
       id: 1,
       name: 'jake',
-      last_name: 'renzella',
-      first_name: 'Jake',
+      lastName: 'renzella',
+      firstName: 'Jake',
       nickname: 'jake',
-      system_role: 'admin',
-      has_run_first_time_setup: false,
+      systemRole: 'admin',
+      hasRunFirstTimeSetup: false,
       email: 'jake@jake.jake',
       student_id: '1',
       username: 'test',
-      opt_in_to_research: true,
-      receive_portfolio_notifications: false,
-      receive_feedback_notifications: false,
-      receive_task_notifications: false,
+      optInToResearch: true,
+      receivePortfolioNotifications: false,
+      receiveFeedbackNotifications: false,
+      receiveTaskNotifications: false,
     });
     const expectedUsers: User[] = [u];
 
@@ -58,18 +58,18 @@ describe('UserService', () => {
     const user = new User();
     user.updateFromJson({
       name: 'jake',
-      last_name: 'renzella',
-      first_name: 'Jake',
+      lastName: 'renzella',
+      firstName: 'Jake',
       nickname: 'jake',
-      system_role: 'admin',
-      has_run_first_time_setup: false,
+      systemRole: 'admin',
+      hasRunFirstTimeSetup: false,
       email: 'jake@jake.jake',
       student_id: '1',
       username: 'test',
-      opt_in_to_research: true,
-      receive_portfolio_notifications: false,
-      receive_feedback_notifications: false,
-      receive_task_notifications: false,
+      optInToResearch: true,
+      receivePortfolioNotifications: false,
+      receiveFeedbackNotifications: false,
+      receiveTaskNotifications: false,
     });
 
     userService.create(user).subscribe((result) => {
@@ -92,10 +92,10 @@ describe('UserService', () => {
   it('should delete a user', fakeAsync(() => {
     // let user = new User();
     // user.updateFromJson({
-    //   name: 'jake', last_name: 'renzella', first_name: 'Jake', nickname: 'jake',
-    //   system_role: 'admin', has_run_first_time_setup: false, email: 'jake@jake.jake',
-    //   student_id: '1', username: 'test', opt_in_to_research: true, receive_portfolio_notifications: false,
-    //   receive_feedback_notifications: false, receive_task_notifications: false
+    //   name: 'jake', lastName: 'renzella', firstName: 'Jake', nickname: 'jake',
+    //   systemRole: 'admin', hasRunFirstTimeSetup: false, email: 'jake@jake.jake',
+    //   student_id: '1', username: 'test', optInToResearch: true, receivePortfolioNotifications: false,
+    //   receiveFeedbackNotifications: false, receiveTaskNotifications: false
     // });
     // userService.delete(1).subscribe(
     //   result => expect(result).toEqual(user, 'expected users')
@@ -114,10 +114,10 @@ describe('UserService', () => {
     u.updateFromJson({
       id: 1,
       name: 'jake',
-      last_name: 'renzella',
-      first_name: 'Jake',
+      lastName: 'renzella',
+      firstName: 'Jake',
       nickname: 'jake',
-      system_role: 'admin',
+      systemRole: 'admin',
       email: 'jake@jake.jake',
       student_id: '1',
       username: 'test',
@@ -153,18 +153,18 @@ describe('UserService', () => {
     const user = new User();
     user.updateFromJson({
       name: 'jake',
-      last_name: 'renzella',
-      first_name: 'Jake',
+      lastName: 'renzella',
+      firstName: 'Jake',
       nickname: 'jake',
-      system_role: 'admin',
-      has_run_first_time_setup: false,
+      systemRole: 'admin',
+      hasRunFirstTimeSetup: false,
       email: 'jake@jake.jake',
       student_id: '1',
       username: 'test',
-      opt_in_to_research: true,
-      receive_portfolio_notifications: false,
-      receive_feedback_notifications: false,
-      receive_task_notifications: false,
+      optInToResearch: true,
+      receivePortfolioNotifications: false,
+      receiveFeedbackNotifications: false,
+      receiveTaskNotifications: false,
     });
 
     userService.get(1).subscribe((data) => {});
@@ -191,18 +191,18 @@ describe('UserService', () => {
     let user = new User();
     user.updateFromJson({
       name: 'jake',
-      last_name: 'renzella',
-      first_name: 'Jake',
+      lastName: 'renzella',
+      firstName: 'Jake',
       nickname: 'jake',
-      system_role: 'admin',
-      has_run_first_time_setup: false,
+      systemRole: 'admin',
+      hasRunFirstTimeSetup: false,
       email: 'jake@jake.jake',
       student_id: '1',
       username: 'test',
-      opt_in_to_research: true,
-      receive_portfolio_notifications: false,
-      receive_feedback_notifications: false,
-      receive_task_notifications: false,
+      optInToResearch: true,
+      receivePortfolioNotifications: false,
+      receiveFeedbackNotifications: false,
+      receiveTaskNotifications: false,
     });
 
     // 1 request here

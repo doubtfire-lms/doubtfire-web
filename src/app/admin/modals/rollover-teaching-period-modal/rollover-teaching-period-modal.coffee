@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
   RolloverTeachingPeriodModal
 )
 
-.controller('RolloverTeachingPeriodModal', ($scope, $modalInstance, alertService, analyticsService, currentUser, TeachingPeriod, teachingperiod, auth) ->
+.controller('RolloverTeachingPeriodModal', ($scope, $modalInstance, alertService, analyticsService, TeachingPeriod, teachingperiod) ->
   $scope.teachingperiod = teachingperiod
   $scope.teachingPeriods = TeachingPeriod.query()
 

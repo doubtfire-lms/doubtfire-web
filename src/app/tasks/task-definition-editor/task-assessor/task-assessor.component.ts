@@ -1,6 +1,6 @@
 import { Component, Input, Inject, OnChanges } from '@angular/core';
-import { taskService, alertService, currentUser } from 'src/app/ajs-upgraded-providers';
-import { OverseerAssessment } from 'src/app/api/models/doubtfire-model';
+import { taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { OverseerAssessment, User, UserService } from 'src/app/api/models/doubtfire-model';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 
@@ -17,7 +17,7 @@ export class TaskAssessorComponent implements OnChanges {
   constructor(
     @Inject(alertService) private alerts: any,
     @Inject(taskService) private ts: any,
-    @Inject(currentUser) private currentUser: any,
+    private userService: UserService,
     private modalService: TaskAssessmentModalService,
     private submissions: TaskSubmissionService) {
   }
@@ -27,11 +27,15 @@ export class TaskAssessorComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    const proj = this.unit.findProjectForUsername(this.currentUser.profile.username);
+    const proj = this.unit.findProjectForUsername(this.currentUser.username);
     if ( proj ) {
       this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
       this.hasAnySubmissions();
     }
+  }
+
+  get currentUser(): User {
+    return this.userService.currentUser;
   }
 
   testSubmission() {

@@ -1,6 +1,6 @@
 angular.module("doubtfire.api.models.unit", [])
 
-.factory("Unit", (resourcePlus, currentUser, $window, DoubtfireConstants) ->
+.factory("Unit", (resourcePlus, $window, DoubtfireConstants) ->
   Unit = resourcePlus "/units/:id", { id: "@id" }
   Unit.getGradesUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit?.id}/grades"

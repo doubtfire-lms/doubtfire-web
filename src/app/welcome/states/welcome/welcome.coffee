@@ -13,7 +13,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, currentUser, alertService, analyticsService, auth, GlobalStateService) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
 
   GlobalStateService.setView('OTHER')
   # Define steps for wizard
@@ -60,32 +60,14 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $scope.lastStep  = _.find $scope.steps, { seq: _.keys($scope.steps).length - 1 }
   # Skip to opt in if opt in step only
   $scope.currentStep = if $scope.optInOnly then $scope.steps.optInToResearchStep else $scope.firstStep
+
+  $scope.user = newUserService.currentUser
+
   # If using opt in, we don't need a blank slate user, except ensure that
   # opt in is null
   if $scope.optInOnly
-    $scope.user = currentUser.profile
-    $scope.user.opt_in_to_research = null
-  else
-    firstName = null
-    lastName = null
-    email = null
-    studentId = ""
-    unless currentUser.profile.first_name.toLowerCase() is 'first name' or currentUser.profile.last_name.toLowerCase() is 'last name'
-      firstName = currentUser.profile.first_name
-      lastName = currentUser.profile.last_name
-      email = currentUser.profile.email
-    $scope.user = {
-      first_name: firstName
-      last_name: lastName
-      nickname: null
-      email: email
-      student_id: studentId
-      receive_feedback_notifications: true
-      receive_portfolio_notifications: true
-      receive_task_notifications: true
-      opt_in_to_research: true
-      has_run_first_time_setup: true
-    }
+    $scope.user.optInToResearch = null
+
   # Progress through wizard
   $scope.moveStep = (skip) ->
     # if about to enter grade step and no grades? skip twice
@@ -97,14 +79,16 @@ angular.module('doubtfire.welcome.states.welcome', [])
       else if skip is -1 and $scope.currentStep is stepAfterTargetStep
         skip -= 1
     $scope.currentStep = _.find $scope.steps, { seq: $scope.currentStep.seq + skip }
+
   # Alises for grade step
   $scope.gradeAcronyms = gradeService.gradeAcronyms
   $scope.grades        = gradeService.grades
+
   # Determine if 'next' is disabled (i.e., validity for each step)
   $scope.determineDisabledForCurrentStep = ->
     switch $scope.currentStep
       when $scope.steps.nameStep
-        state = $scope.user.first_name?.trim().length > 0 and $scope.user.last_name?.trim().length > 0
+        state = $scope.user.firstName?.trim().length > 0 and $scope.user.lastName?.trim().length > 0
       when $scope.steps.nicknameStep, $scope.steps.targetGradeStep, $scope.steps.avatarStep
         state = true
       when $scope.steps.studentIdStep
@@ -113,12 +97,13 @@ angular.module('doubtfire.welcome.states.welcome', [])
         state = $scope.user.email?.trim().length > 0
         state =
           state &&
-          _.isBoolean($scope.user.receive_feedback_notifications) &&
-          _.isBoolean($scope.user.receive_portfolio_notifications) &&
-          _.isBoolean($scope.user.receive_task_notifications)
+          _.isBoolean($scope.user.receiveFeedbackNotifications) &&
+          _.isBoolean($scope.user.receivePortfolioNotifications) &&
+          _.isBoolean($scope.user.receiveTaskNotifications)
       when $scope.steps.optInToResearchStep
-        state = _.isBoolean($scope.user.opt_in_to_research)
+        state = _.isBoolean($scope.user.optInToResearch)
     not state
+
   # POST changes to API
   $scope.done = (user) ->
     user = if user? then user else $scope.user
@@ -129,13 +114,12 @@ angular.module('doubtfire.welcome.states.welcome', [])
     for project in $scope.projects
       promises.push Project.update(null, { id: project.project_id, target_grade: project.target_grade }, null, errorFn).$promise
     # user update
-    promises.push User.update(null, { id: currentUser.id, user: $scope.user }, ((user) -> currentUser.profile = user), errorFn).$promise
+    user.hasRunFirstTimeSetup = true
+    promises.push newUserService.update(undefined, user, ((user) -> ), errorFn).$promise
     $q.all(promises).then ->
-      analyticsService.event "Doubtfire Analytics", "User opted in research" if $scope.user.opt_in_to_research
-      auth.saveCurrentUser()
       $state.go('home')
 
-  $scope.userFirstName = currentUser.profile.first_name
+  $scope.userFirstName = currentUser.firstName
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName

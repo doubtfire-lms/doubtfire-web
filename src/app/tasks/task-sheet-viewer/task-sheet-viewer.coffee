@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     unit: '='
     project: '='
 
-  controller: ($scope, $filter, $timeout, currentUser, Task, taskService, gradeService, analyticsService, fileDownloaderService) ->
+  controller: ($scope, $filter, $timeout, Task, taskService, gradeService, analyticsService, fileDownloaderService) ->
     # Default for showing the task sheet
     $scope.showTaskSheet = false
 

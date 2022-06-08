@@ -1,6 +1,6 @@
 angular.module("doubtfire.api.models.task-feedback", [])
 
-.factory("TaskFeedback", (DoubtfireConstants, currentUser, $window, resourcePlus) ->
+.factory("TaskFeedback", (DoubtfireConstants, $window, resourcePlus) ->
   TaskFeedback = resourcePlus "/projects/:project_id/task_def_id/:task_definition_id/submission", { task_definition_id: "@task_definition_id", project_id: "@project_id" }
 
   TaskFeedback.getTaskUrl = (task, asAttachment = false) ->

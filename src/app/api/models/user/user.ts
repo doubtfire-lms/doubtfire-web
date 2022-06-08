@@ -4,7 +4,6 @@ export type Tutor = User;
 
 export class User extends Entity {
   id: number;
-  name: string;
   firstName: string;
   lastName: string;
   optInToResearch: boolean;
@@ -17,6 +16,7 @@ export class User extends Entity {
   receivePortfolioNotifications: boolean;
   receiveFeedbackNotifications: boolean;
   hasRunFirstTimeSetup: boolean;
+  authenticationToken: string;
 
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
@@ -24,4 +24,14 @@ export class User extends Entity {
     };
   }
 
+  public get role(): string {
+    return this.systemRole;
+  }
+
+  public get name(): string {
+    const fn = this.firstName.slice(0, 11);
+    const sn = this.lastName.slice(0, 11);
+    const nn = this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
+    return `${fn} ${sn}${nn}`;
+  }
 }

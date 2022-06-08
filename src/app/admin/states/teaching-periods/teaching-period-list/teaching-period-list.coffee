@@ -15,7 +15,7 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
       roleWhitelist: ['Admin']
   headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
 )
-.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, DoubtfireConstants, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal, analyticsService, GlobalStateService) ->
+.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, DoubtfireConstants, alertService, TeachingPeriod, TeachingPeriodSettingsModal, analyticsService, GlobalStateService) ->
   analyticsService.event 'Edit Teaching Periods View', "Started Edit Teaching Periods View"
 
   GlobalStateService.setView("OTHER")

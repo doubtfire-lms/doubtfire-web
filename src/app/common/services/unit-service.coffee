@@ -471,7 +471,7 @@ angular.module("doubtfire.common.services.units", [])
     # TODO: (@alexcu) change these to use functions...
 
     # Assigns the student's full name
-    student.name = "#{student.first_name} #{student.last_name}"
+    student.name = "#{student.firstName} #{student.lastName}"
 
     # Assigns the student's portfolio status (1 if has porfolio, 0.5 if currently compiling)
     if student.has_portfolio

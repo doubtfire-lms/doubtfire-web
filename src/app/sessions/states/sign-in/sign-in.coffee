@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal, GlobalStateService) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, $timeout, $http, $modal, alertService, localStorageService, AboutDoubtfireModal, GlobalStateService, newUserService, authenticationService) ->
   GlobalStateService.setView("OTHER")
   GlobalStateService.hideHeader() # we aren't logged in yet...
   isIE = ->
@@ -81,27 +81,18 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.openAboutModal = ->
     AboutDoubtfireModal.show()
 
-  if auth.isAuthenticated()
+  if authenticationService.isAuthenticated()
     $state.go "home"
     GlobalStateService.showHeader()
   else
     $scope.signIn = (signInCredentials) ->
       $scope.signingIn = true
       signInFunc = ->
-        signInCredentials ?=
-          username: $scope.session.username
-          password: $scope.session.password
-          remember: $scope.session.remember_me
-        auth.signIn("#{DoubtfireConstants.API_URL}/auth", signInCredentials,
+        authenticationService.signIn(
+          $scope.session.username,
+          $scope.session.password,
+          $scope.session.remember_me,
           (response) ->
-            if $scope.session.remember_me
-              localStorageService.set(usernameCookie, currentUser)
-              localStorageService.set(rememberDoubtfireCredentialsCookie, true)
-              localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())
-            else
-              localStorageService.remove(usernameCookie)
-              localStorageService.set(rememberDoubtfireCredentialsCookie, false)
-              localStorageService.remove(doubtfireLoginTimeCookie)
             alertService.clearAll()
             $state.go "home", {}
           (response) ->

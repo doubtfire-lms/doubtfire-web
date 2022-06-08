@@ -8,7 +8,7 @@ angular.module("doubtfire.api.resource-plus", [
 # - the addition of the authentication token
 # - change save to use PUT for update and POST for create
 #
-.factory("resourcePlus", ($resource, DoubtfireConstants, currentUser) ->
+.factory("resourcePlus", ($resource, DoubtfireConstants) ->
   (url, paramDefaults, actions) ->
     # Prefix specified relative url with API endpoint.
     url = DoubtfireConstants.API_URL + url

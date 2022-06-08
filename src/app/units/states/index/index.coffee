@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.index', [])
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, projectService, listenerService, currentUser, GlobalStateService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, projectService, listenerService, GlobalStateService, newUserService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
@@ -26,11 +26,11 @@ angular.module('doubtfire.units.states.index', [])
     # Load assessing unit role
     $scope.unitRole = GlobalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
 
-    if (! $scope.unitRole?) && ( currentUser.role == "Admin" )
+    if (! $scope.unitRole?) && ( newUserService.currentUser.role == "Admin" )
       $scope.unitRole = {
         role: 'Admin',
         unit_id: unitId,
-        name: currentUser.Name,
+        name: newUserService.currentUser.Name,
         unit_name: 'Unit admin mode',
         unit_code: '---'
       }

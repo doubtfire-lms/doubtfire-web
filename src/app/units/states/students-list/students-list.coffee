@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService, projectService) ->
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, unitService, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
   # Filtering
   applyFilters = ->
     filteredStudents = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
@@ -46,7 +46,7 @@ angular.module('doubtfire.units.states.students', [])
   }[$scope.unitRole.role]
 
   # Scope for student name
-  $scope.tutorName = currentUser.profile.name
+  $scope.tutorName = newUserService.currentUser.name
 
   # Send initial apply filter
   applyFilters()

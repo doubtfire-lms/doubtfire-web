@@ -16,22 +16,18 @@ angular.module("doubtfire.admin.modals.user-notification-settings-modal", [])
   UserNotificationSettingsModal
 )
 
-.controller('UserNotificationSettingsModalCtrl', ($scope, $modalInstance, alertService, currentUser, User, user, auth) ->
+.controller('UserNotificationSettingsModalCtrl', ($scope, $modalInstance, alertService, newUserService, user) ->
   $scope.user = user
-  $scope.currentUser = currentUser
   $scope.modalState = {}
 
   $scope.saveNotifications = ->
-    User.update( { id: $scope.user.id, user: $scope.user } ).$promise.then (
-      (response) ->
-        $modalInstance.close(response)
-        user.name = user.first_name + " " + user.last_name
-        if user == currentUser.profile
-          auth.saveCurrentUser()
-    ),
-    (
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
+    newUserService.update( { id: $scope.user.id, user: $scope.user } ).subscribe(
+      {
+        next: (response) ->
+          $modalInstance.close(response)
+        error: (response) ->
+          if response.data.error?
+            alertService.add("danger", "Error: " + response.data.error, 6000)
+      }
     )
 )

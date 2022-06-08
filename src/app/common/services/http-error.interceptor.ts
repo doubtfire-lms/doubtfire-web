@@ -9,11 +9,12 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { AuthenticationService } from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(
-    private globalState: GlobalStateService
+    private authenticationService: AuthenticationService
   ){}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -40,11 +41,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             errorMessage = `Error: ${error.error.message}`;
           } else {
             // server-side error
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.error}`;
+            errorMessage = `Error Code: ${error.status}<br \>Message: ${error.error.error}`;
           }
 
           if(error.status === 419) {
-            this.globalState.signOut();
+            this.authenticationService.timeoutAuthentication();
           }
 
           return throwError(() => errorMessage);

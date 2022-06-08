@@ -1,6 +1,6 @@
 angular.module('doubtfire.sessions', [
-  'doubtfire.sessions.auth'
+  "doubtfire.sessions.auth.http-auth-injector"
+  "doubtfire.sessions.auth.roles"
   'doubtfire.sessions.cookies'
-  'doubtfire.sessions.current-user'
   'doubtfire.sessions.states'
 ])

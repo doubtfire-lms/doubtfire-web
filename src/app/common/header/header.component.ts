@@ -2,13 +2,14 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {
   aboutDoubtfireModal,
   calendarModal,
-  currentUser,
   userNotificationSettingsModal,
   userSettingsModal,
 } from 'src/app/ajs-upgraded-providers';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
+import { UserService } from 'src/app/api/services/user.service';
+import { User } from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -28,14 +29,14 @@ export class HeaderComponent implements OnInit {
   currentView: ViewType;
   showHeader: boolean = true;
   constructor(
-    @Inject(currentUser) public CurrentUser,
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
     @Inject(calendarModal) private CalendarModal,
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
     private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
-    private globalState: GlobalStateService
+    private globalState: GlobalStateService,
+    private userService: UserService
   ) {
 
     this.globalState.showHideHeader.subscribe({
@@ -126,11 +127,11 @@ export class HeaderComponent implements OnInit {
   }
 
   openUserSettings() {
-    this.UserSettingsModal.show(this.CurrentUser.profile);
+    this.UserSettingsModal.show(this.currentUser);
   }
 
   openNotificationSettings() {
-    this.UserNotificationSettingsModal.show(this.CurrentUser.profile);
+    this.UserNotificationSettingsModal.show(this.currentUser);
   }
 
   update() {
@@ -143,6 +144,10 @@ export class HeaderComponent implements OnInit {
 
   openCalendar() {
     this.CalendarModal.show();
+  }
+
+  get currentUser(): User {
+    return this.userService.currentUser;
   }
 
   ngOnInit(): void {}

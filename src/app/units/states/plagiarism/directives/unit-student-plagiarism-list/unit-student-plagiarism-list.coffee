@@ -10,13 +10,13 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
   scope:
     unit: '='
     unitRole: '='
-  controller: ($scope, $filter, currentUser, gradeService, projectService) ->
+  controller: ($scope, $filter, gradeService, projectService, newUserService) ->
     $scope.grades = gradeService.grades
 
     $scope.view = "students"
     studentFilter = "allStudents"
 
-    $scope.tutorName = currentUser.profile.name
+    $scope.tutorName = newUserService.currentUser.name
     $scope.search = ""
     $scope.reverse = false
     $scope.currentPage = 1

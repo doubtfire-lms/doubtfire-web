@@ -51,7 +51,7 @@ angular.module('doubtfire.common.file-uploader', [])
     onClickFailureCancel: '=?'
     # Whether we should reset after upload
     resetAfterUpload: '=?'
-  controller: ($scope, $timeout, currentUser) ->
+  controller: ($scope, $timeout, newUserService) ->
     #
     # Accepted upload types with associated data
     #
@@ -292,7 +292,7 @@ angular.module('doubtfire.common.file-uploader', [])
       xhr.open $scope.method, $scope.url, true
 
       # Add auth details
-      xhr.setRequestHeader('Auth-Token', currentUser.authenticationToken)
-      xhr.setRequestHeader('Username', currentUser.profile.username)
+      xhr.setRequestHeader('Auth-Token', newUserService.currentUser.authenticationToken)
+      xhr.setRequestHeader('Username', newUserService.currentUser.username)
 
       xhr.send form

@@ -46,11 +46,9 @@ import {
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { TokenInterceptor } from './common/services/http-authentication.interceptor';
+import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
-  currentUserProvider,
-  authProvider,
   taskServiceProvider,
   analyticsServiceProvider,
   oldUnitServiceProvider,
@@ -64,7 +62,6 @@ import {
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   userProvider,
-  currentUser,
   TaskCommentProvider,
   gradeServiceProvider,
   commentsModalProvider,
@@ -142,6 +139,7 @@ import { CheckForUpdateService } from './sessions/service-worker-updater/check-f
 import {
   ActivityTypeService,
   CampusService,
+  AuthenticationService,
   GroupSetService,
   OverseerImageService,
   OverseerAssessmentService,
@@ -292,6 +290,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
   // Services we provide
   providers: [
     CampusService,
+    AuthenticationService,
     GroupSetService,
     UnitService,
     UnitRoleService,
@@ -319,8 +318,6 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
     userNotificationSettingsModalProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    authProvider,
-    currentUserProvider,
     taskServiceProvider,
     gradeServiceProvider,
     analyticsServiceProvider,
@@ -340,15 +337,15 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
     UnitStudentsEditorComponent,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HttpAuthenticationInterceptor,
       multi: true,
-      deps: [currentUser],
+      deps: [UserService],
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
-      deps: [GlobalStateService],
+      deps: [AuthenticationService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -356,7 +353,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-    IsActiveUnitRole,
+    IsActiveUnitRole
   ],
 })
 // There is no longer any requirement for an EntryComponents section

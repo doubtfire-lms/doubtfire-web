@@ -203,7 +203,6 @@ import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/sessions/current-user/current-user.js';
 import 'build/src/app/sessions/states/states.js';
 import 'build/src/app/sessions/states/sign-in/sign-in.js';
 import 'build/src/app/sessions/states/sign-out/sign-out.js';
@@ -280,7 +279,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { TaskCommentService, UnitService } from './api/models/doubtfire-model';
+import { TaskCommentService, UnitService, UserService } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -289,6 +288,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { AuthenticationService } from './api/services/authentication.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -315,6 +315,8 @@ DoubtfireAngularJSModule.factory('TaskCommentService', downgradeInjectable(TaskC
 DoubtfireAngularJSModule.factory('tutorialService', downgradeInjectable(TutorialService));
 DoubtfireAngularJSModule.factory('streamService', downgradeInjectable(TutorialStreamService));
 DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusService));
+DoubtfireAngularJSModule.factory('authenticationService', downgradeInjectable(AuthenticationService));
+DoubtfireAngularJSModule.factory('newUserService', downgradeInjectable(UserService));
 DoubtfireAngularJSModule.factory('newUnitService', downgradeInjectable(UnitService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));

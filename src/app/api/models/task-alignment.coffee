@@ -1,6 +1,6 @@
 angular.module("doubtfire.api.models.task-alignment", [])
 
-.factory("TaskAlignment", (resourcePlus, DoubtfireConstants, currentUser, $window, fileDownloaderService) ->
+.factory("TaskAlignment", (resourcePlus, DoubtfireConstants, $window, fileDownloaderService) ->
   TaskAlignment = {}
   TaskAlignment.taskAlignmentCSVUploadUrl = (unit, project_id) ->
     if project_id?

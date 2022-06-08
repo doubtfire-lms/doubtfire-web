@@ -13,7 +13,7 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
   headerServiceProvider.state 'view-all-projects', homeStateData
 )
 
-.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, currentUser, projectService, analyticsService, dateService, GlobalStateService) ->
+.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, projectService, analyticsService, dateService, GlobalStateService, newUserService) ->
   analyticsService.event 'view-all-projects', 'viewed all-projects list'
   GlobalStateService.setView('OTHER')
 
@@ -42,9 +42,9 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
     return if !$scope.projects?
     $scope.notEnrolled = ->
       # Not enrolled if a student and no projects
-      ($scope.projects.length is 0 and currentUser.role is 'Student')
+      ($scope.projects.length is 0 and newUserService.currentUser.role is 'Student')
 
   $scope.$watch 'projects', checkEnrolled
 
-  $scope.currentUser = currentUser
+  $scope.currentUser = newUserService.currentUser
 )

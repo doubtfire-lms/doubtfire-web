@@ -1,26 +1,26 @@
 import { User } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService } from 'ngx-entity-service';
-import { Inject, Injectable } from '@angular/core';
-import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
+import { AppInjector } from 'src/app/app-injector';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
-export class UserService extends CachedEntityService<User> {
-  entityName: string = 'User';
+export class UserService extends CachedEntityService<User> implements OnInit {
   protected readonly endpointFormat = 'users/:id:';
 
+  public readonly csvURL: string;
+
   constructor(
-    httpClient: HttpClient,
-    @Inject(currentUser) private CurrentUser: any,
-    @Inject(auth) private Auth: any,
-    @Inject(analyticsService) private AnalyticsService: any
+    httpClient: HttpClient
   ) {
     super(httpClient, API_URL);
 
+    this.csvURL = API_URL + 'csv/users';
+
     this.mapping.addKeys(
       'id',
-      'name',
       'firstName',
       'lastName',
       'optInToResearch',
@@ -34,20 +34,48 @@ export class UserService extends CachedEntityService<User> {
       'receiveFeedbackNotifications',
       'hasRunFirstTimeSetup',
     );
+
+    this._currentUser = this.anonymousUser;
+
+    this.mapping.mapAllKeysToJsonExcept('id');
+  }
+
+  ngOnInit(): void {
+    AppInjector.get(AuthenticationService).checkUserCookie();
   }
 
   public createInstanceFrom(json: any, other?: any): User {
     return new User();
   }
 
+  public newEmptyUser(): User {
+    return new User();
+  }
+
+  public get anonymousUser(): User {
+    const result = new User();
+    result.firstName = 'Anonymous';
+    result.lastName = 'User';
+    result.nickname = 'anon';
+    return result;
+  }
+
+  private _currentUser: User;
+  public get currentUser(): User {
+    return this._currentUser;
+  }
+
+  public set currentUser(user: User) {
+    this._currentUser = user;
+  }
+
   // Specific to the User entity
   public save(user: User) {
-    user.name = `${user.firstName} ${user.lastName}`;
-    if (user === this.CurrentUser.profile) {
-      this.Auth.saveCurrentUser();
-      if (user.optInToResearch) {
-        this.AnalyticsService.event('Doubtfire Analytics', 'User saved');
-      }
+    if (user === this.currentUser) {
+      AppInjector.get(AuthenticationService).saveCurrentUser();
+    }
+    else {
+      console.log("implement save other users...?");
     }
   }
 }

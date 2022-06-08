@@ -2,8 +2,9 @@ import { Inject, Injectable } from '@angular/core';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { auth, oldUnitService, projectService } from 'src/app/ajs-upgraded-providers';
+import { projectService } from 'src/app/ajs-upgraded-providers';
 import { Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
+import { AuthenticationService } from 'src/app/api/services/authentication.service';
 
 export class DoubtfireViewState {
   public EntityObject: any; // Unit | Project | undefined
@@ -75,15 +76,17 @@ export class GlobalStateService {
     private unitRoleService: UnitRoleService,
     private unitService: UnitService,
     private userService: UserService,
+    private authenticationService: AuthenticationService,
     @Inject(projectService) private ProjectService: any,
-    @Inject(auth) private Auth: any,
     @Inject(UIRouter) private router: UIRouter
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
 
+    this.authenticationService.checkUserCookie();
+
     setTimeout(() => {
-      if (this.Auth.isAuthenticated()) {
+      if (this.authenticationService.isAuthenticated()) {
         this.loadUnitsAndProjects();
       } else {
         this.router.stateService.go('sign_in');
@@ -93,7 +96,7 @@ export class GlobalStateService {
 
   public signOut() {
     this.clearUnitsAndProjects();
-    this.Auth.signOut();
+    this.authenticationService.signOut();
     this.router.stateService.go('sign_in');
   }
 

@@ -21,7 +21,7 @@ angular.module('doubtfire.groups.group-selector', [])
     showGroupSetSelector: '=?'
     # On change of a group
     onSelect: '=?'
-  controller: ($scope, $filter, $timeout, alertService, Group, currentUser, listenerService) ->
+  controller: ($scope, $filter, $timeout, alertService, Group, listenerService, newUserService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -126,7 +126,7 @@ angular.module('doubtfire.groups.group-selector', [])
         tutorialId = $scope.project.tutorials()[0].id || $scope.unit.tutorials[0].id
       # Convenor or Tutor
       else
-        tutorName = $scope.unitRole?.name || currentUser.profile.name
+        tutorName = $scope.unitRole?.name || newUserService.currentUser.name
         tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutorName == tutorName)?.id
         # Default to first tutorial if can't find
         tutorialId ?= _.first($scope.unit.tutorials).id

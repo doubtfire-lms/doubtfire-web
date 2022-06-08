@@ -13,10 +13,10 @@
         <p class="strong">{{currentStep.subtitle}}</p>
         <div ng-show="currentStep == steps.nameStep" class="col-sm-12">
           <div class="form-group col-sm-6">
-            <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.first_name" />
+            <input class="form-control text-center input-lg" placeholder="First Name" ng-model="user.firstName" />
           </div>
           <div class="form-group col-sm-6">
-            <input class="form-control text-center input-lg" placeholder="Last Name" ng-model="user.last_name" />
+            <input class="form-control text-center input-lg" placeholder="Last Name" ng-model="user.lastName" />
           </div>
         </div>
         <!--/name-step-->
@@ -61,10 +61,10 @@
             </div>
             <div class="col-sm-12">
               <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="true">
+                <label class="btn btn-default" ng-model="user.receiveTaskNotifications" btn-radio="true">
                   <i class="fa fa-check"></i>
                 </label>
-                <label class="btn btn-default" ng-model="user.receive_task_notifications" btn-radio="false">
+                <label class="btn btn-default" ng-model="user.receiveTaskNotifications" btn-radio="false">
                   <i class="fa fa-close"></i>
                 </label>
               </div>
@@ -78,10 +78,10 @@
             </div>
             <div class="col-sm-12">
               <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="true">
+                <label class="btn btn-default" ng-model="user.receiveFeedbackNotifications" btn-radio="true">
                   <i class="fa fa-check"></i>
                 </label>
-                <label class="btn btn-default" ng-model="user.receive_feedback_notifications" btn-radio="false">
+                <label class="btn btn-default" ng-model="user.receiveFeedbackNotifications" btn-radio="false">
                   <i class="fa fa-close"></i>
                 </label>
               </div>
@@ -95,10 +95,10 @@
             </div>
             <div class="col-sm-12">
               <div class="btn-group">
-                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="true">
+                <label class="btn btn-default" ng-model="user.receivePortfolioNotifications" btn-radio="true">
                   <i class="fa fa-check"></i>
                 </label>
-                <label class="btn btn-default" ng-model="user.receive_portfolio_notifications" btn-radio="false">
+                <label class="btn btn-default" ng-model="user.receivePortfolioNotifications" btn-radio="false">
                   <i class="fa fa-close"></i>
                 </label>
               </div>
@@ -135,7 +135,7 @@
               <label
                 class="btn btn-default"
                 ng-change="optInOnly && done(user)"
-                ng-model="user.opt_in_to_research"
+                ng-model="user.optInToResearch"
                 btn-radio="true"
               >
                 <i class="fa fa-check"></i> Yes, I'll help
@@ -143,7 +143,7 @@
               <label
                 class="btn btn-default"
                 ng-change="optInOnly && done(user)"
-                ng-model="user.opt_in_to_research"
+                ng-model="user.optInToResearch"
                 btn-radio="false"
               >
                 <i class="fa fa-close"></i> No, thank you

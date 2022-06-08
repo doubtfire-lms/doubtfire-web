@@ -16,18 +16,26 @@ angular.module('doubtfire.admin.states.users', [])
   headerServiceProvider.state "admin/users", usersAdminViewStateData
 )
 
-.controller("AdministerUsersCtrl", ($scope, $modal, User, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService, GlobalStateService) ->
+.controller("AdministerUsersCtrl", ($scope, $modal, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService, GlobalStateService, newUserService) ->
   # We are not showing a particlar unit or project
   GlobalStateService.setView("OTHER")
 
   $scope.file_data =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
-      $scope.users = User.query()
-    batchUserUrl: User.csvUrl()
+      $scope.users = newUserService.query(undefined)
+    batchUserUrl: newUserService.csvUrl
     batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }
 
-  $scope.users = User.query()
+  newUserService.query().subscribe(
+    {
+      next: (response) ->
+        $scope.users = response
+      error: (response) ->
+        if response.error.error?
+          alertService.add("danger", "Error: " + response.error.error, 6000)
+    }
+  )
 
   # Table sort details
   $scope.sortOrder = "id"
@@ -43,9 +51,9 @@ angular.module('doubtfire.admin.states.users', [])
   # User settings/create modal
   $scope.showUserModal = (user) ->
     # If we're given a user, show that user, else create a new one
-    userToShow = if user? then user else new User { }
+    userToShow = if user? then user else newUserService.createInstanceFrom { }
     UserSettingsModal.show userToShow
 
   $scope.downloadUsersCSV = () ->
-    fileDownloaderService.downloadFile(User.csvUrl(), "Users.csv")
+    fileDownloaderService.downloadFile(newUserService.csvUrl, "Users.csv")
 )

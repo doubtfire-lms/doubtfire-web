@@ -11,7 +11,7 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { taskDefinition, currentUser, groupService, alertService } from 'src/app/ajs-upgraded-providers';
+import { taskDefinition, groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
@@ -19,7 +19,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
-import { Tutorial } from 'src/app/api/models/doubtfire-model';
+import { Tutorial, UserService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -86,10 +86,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   constructor(
     private breakpointObserver: BreakpointObserver,
     @Inject(taskDefinition) private taskDef,
-    @Inject(currentUser) private currentUser,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private userService: UserService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -108,7 +108,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.isNarrow = state.matches;
     });
     // Does the current user have any tutorials?
-    this.userHasTutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name)?.length > 0;
+    this.userHasTutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
     this.filters = Object.assign(
       {
@@ -199,7 +199,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   tutorialIdChanged(): void {
     const tutorialId = this.filters.tutorialIdSelected;
     if (tutorialId === 'mine') {
-      this.filters.tutorials = this.unit.tutorialsForUserName(this.currentUser.profile.name);
+      this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
     } else if (tutorialId === 'all') {
       // Students not in tutorials but submitting work
       this.filters.tutorials = this.unit.tutorials.currentValues.concat([Tutorial.NoTutorial]);

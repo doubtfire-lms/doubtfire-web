@@ -1,6 +1,6 @@
 angular.module("doubtfire.api.models.task-definition", [])
 
-.factory("TaskDefinition", (resourcePlus, DoubtfireConstants, currentUser, fileDownloaderService) ->
+.factory("TaskDefinition", (resourcePlus, DoubtfireConstants, fileDownloaderService) ->
   TaskDefinition = resourcePlus "/units/:unit_id/task_definitions/:id", { id: "@id", unit_id: "@unit_id" }
 
   TaskDefinition.taskSheet = resourcePlus "/units/:unit_id/task_definitions/:task_def_id/task_sheet", { unit_id: "@unit_id", task_def_id: "@task_def_id" }
