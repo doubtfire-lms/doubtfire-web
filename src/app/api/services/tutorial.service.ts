@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 import { CampusService, Tutorial, Unit, UserService } from 'src/app/api/models/doubtfire-model';
 import { EntityService } from 'ngx-entity-service';
@@ -13,8 +13,6 @@ export class TutorialService extends EntityService<Tutorial> {
     httpClient: HttpClient,
     private campusService: CampusService,
     private userService: UserService,
-    @Inject(currentUser) private CurrentUser: any,
-    @Inject(auth) private Auth: any,
     @Inject(analyticsService) private AnalyticsService: any
   ) {
     super(httpClient, API_URL);

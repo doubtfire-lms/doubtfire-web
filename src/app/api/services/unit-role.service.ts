@@ -1,7 +1,7 @@
 import { TeachingPeriodService, UnitRole, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService } from 'ngx-entity-service';
 import { Inject, Injectable } from '@angular/core';
-import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 
@@ -14,8 +14,6 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     private userService: UserService,
     private unitService: UnitService,
     private teachingPeriodService: TeachingPeriodService,
-    @Inject(currentUser) private CurrentUser: any,
-    @Inject(auth) private Auth: any,
     @Inject(analyticsService) private AnalyticsService: any
   ) {
     super(httpClient, API_URL);
@@ -46,7 +44,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
           return this.userService.cache.getOrCreate(data['user_id'], userService, {
             id: data['user_id'],
             email: data['email'],
-            name: data['name'],
+            firstName: data['name'],
           });
         },
         toJsonFn: (entity: UnitRole, key: string) => {

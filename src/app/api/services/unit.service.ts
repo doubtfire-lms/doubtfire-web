@@ -1,5 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
-import { currentUser, auth, analyticsService } from 'src/app/ajs-upgraded-providers';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GroupSetService, LearningOutcomeService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
@@ -19,9 +18,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private tutorialStreamService: TutorialStreamService,
     private learningOutcomeService: LearningOutcomeService,
     private taskDefinitionService: TaskDefinitionService,
-    private groupSetService: GroupSetService,
-    @Inject(currentUser) private CurrentUser: any,
-    @Inject(auth) private Auth: any,
+    private groupSetService: GroupSetService
   ) {
     super(httpClient, API_URL);
 
@@ -94,12 +91,12 @@ export class UnitService extends CachedEntityService<Unit> {
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
       // 'learningOutcomes', - map to learning outcomes
-      {
-        keys: 'learningOutcomes',
-        toEntityOp: (data, key, entity) => {
+      // {
+      //   keys: 'learningOutcomes',
+      //   toEntityOp: (data, key, entity) => {
 
-        }
-      },
+      //   }
+      // },
       // 'tutorialStreams', - map to tutorial streams
       {
         keys: 'tutorialStreams',

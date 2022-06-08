@@ -1,8 +1,8 @@
-import { alertService, currentUser } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
-import { EmojiService } from 'src/app/common/services/emoji.service';
 import { Entity } from 'ngx-entity-service';
 import { TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { UserService } from '../../services/user.service';
 
 const KEYS = ['id'];
 
@@ -80,13 +80,13 @@ export class TaskComment extends Entity {
   }
 
   public get authorIsMe(): boolean {
-    const cu: any = AppInjector.get(currentUser);
-    return this.author.id === cu.profile.id;
+    const userService: any = AppInjector.get(UserService);
+    return this.author.id === userService.currentUser.id;
   }
 
   public get recipientIsMe(): boolean {
-    const cu: any = AppInjector.get(currentUser);
-    return this.recipient.id === cu.profile.id;
+    const userService: any = AppInjector.get(UserService);
+    return this.recipient.id === userService.currentUser.id;
   }
 
   public get isBubbleComment(): boolean {

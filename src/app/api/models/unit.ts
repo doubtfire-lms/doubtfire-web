@@ -1,6 +1,7 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
-import { OverseerImage, User, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService} from './doubtfire-model';
+import { ProjectService } from '../services/project.service';
+import { OverseerImage, User, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 import { UnitRole } from './unit-role';
 
@@ -33,19 +34,21 @@ export class Unit extends Entity {
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
 
-  readonly learningOutcomes: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
+  // readonly learningOutcomes: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
   readonly tutorialStreams: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
   readonly tutorials: EntityCache<Tutorial> = new EntityCache<Tutorial>();
-  readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
+  // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
   readonly taskDefinitions: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
-  readonly taskOutcomeAlignments: EntityCache<TaskOutcomeAlignment>;
+  // readonly taskOutcomeAlignments: EntityCache<TaskOutcomeAlignment>;
 
   readonly staff: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
-  groupSets: EntityCache<GroupSet>;
+  readonly groupSets: EntityCache<GroupSet> = new EntityCache<GroupSet>();
   groups: EntityCache<Group>;
 
   groupMemberships: Array<GroupMembership>;
+
+  readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
 
   analytics: {} = {};
 
@@ -79,6 +82,10 @@ export class Unit extends Entity {
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
     const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
     return Math.round((startToNow / totalDuration) * 100);
+  }
+
+  public get students(): Array<Project> {
+    return this.studentCache.currentValues;
   }
 
   public tutorialsForUserName(userName: string): Array<Tutorial> {
@@ -146,4 +153,5 @@ export class Unit extends Entity {
   public taskDef(taskDefId: number): TaskDefinition {
     return this.taskDefinitions.get(taskDefId.toString());
   }
+
 }
