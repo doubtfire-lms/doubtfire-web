@@ -2,8 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { projectService } from 'src/app/ajs-upgraded-providers';
-import { Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
+import { Project, ProjectService, Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 
 export class DoubtfireViewState {
@@ -77,7 +76,7 @@ export class GlobalStateService {
     private unitService: UnitService,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    @Inject(projectService) private ProjectService: any,
+    private projectService: ProjectService,
     @Inject(UIRouter) private router: UIRouter
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
@@ -111,12 +110,15 @@ export class GlobalStateService {
         next: (unitRoles: UnitRole[]) => {
           console.log(unitRoles);
 
-          this.ProjectService.getProjects(false, (projects: any) => {
-            this.projectsSubject.next(projects);
+          this.projectService.query(undefined, {params: {include_inactive: false}}).subscribe(
+            {
+              next: (projects: Project[]) => {
+                this.projectsSubject.next(projects);
 
-            setTimeout(() => {
-              this.isLoadingSubject.next(false);
-            }, 800);
+                setTimeout(() => {
+                  this.isLoadingSubject.next(false);
+                }, 800);
+              }
           });
         }
       }

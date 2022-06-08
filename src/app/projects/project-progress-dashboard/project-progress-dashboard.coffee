@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?

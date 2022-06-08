@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
-import { Observable, tap } from 'rxjs';
+import { firstValueFrom, Observable, tap } from 'rxjs';
+import { TaskService } from './task.service';
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -15,18 +16,20 @@ export class ProjectService extends CachedEntityService<Project> {
   constructor(
     httpClient: HttpClient,
     private campusService: CampusService,
-    private userService: UserService
+    private userService: UserService,
+    private taskService: TaskService
   ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
       {
         keys: ['unit', 'unit_id'],
-        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+        toEntityOp: async (data: object, key: string, entity: Project, params?: any) => {
           const unitService: UnitService = AppInjector.get(UnitService);
-          unitService.get(data['unit_id']).subscribe(unit => {
-            entity.unit = unit;
-          });
+          // unitService.get(data['unit_id']).subscribe(unit => {
+          //   entity.unit = unit;
+          // });
+          entity.unit = await firstValueFrom(unitService.fetch(data['unit_id']));
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
@@ -40,7 +43,7 @@ export class ProjectService extends CachedEntityService<Project> {
         }
       },
       {
-        keys: 'studentId',
+        keys: ['student', 'student_id'],
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
           const userData = {
             id: data['student_id'],
@@ -71,6 +74,14 @@ export class ProjectService extends CachedEntityService<Project> {
       'taskStats',
       'burndownChartData',
       // 'tasks',
+      {
+        keys: 'tasks',
+        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+          data['tasks'].forEach(taskData => {
+            entity.tasks.getOrCreate(taskData['id'], this.taskService, taskData, entity);
+          });
+        }
+      },
       // 'tutorialEnrolments',
       // 'groups',
       // 'taskOutcomeAlignments',

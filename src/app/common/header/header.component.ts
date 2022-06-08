@@ -9,7 +9,7 @@ import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/c
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
-import { User } from 'src/app/api/models/doubtfire-model';
+import { Project, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,11 +20,11 @@ export class HeaderComponent implements OnInit {
   data: { isTutor: boolean } = {
     isTutor: false,
   };
-  project: any;
+  project: Project;
   unitRole: any = null;
   unitRoles: any;
-  projects: any;
-  filteredUnitRoles: any;
+  projects: Project[];
+  filteredUnitRoles: UnitRole[];
   currentUnitOrProject: any;
   currentView: ViewType;
   showHeader: boolean = true;
@@ -54,6 +54,7 @@ export class HeaderComponent implements OnInit {
         this.filteredUnitRoles = this.isActiveUnitRole
           .transform(this.unitRoles)
           .filter((role) => this.isUniqueRole(role));
+        console.log(this.filteredUnitRoles);
       },
       error: (err) => {},
     });
@@ -84,21 +85,17 @@ export class HeaderComponent implements OnInit {
   }
 
   isUniqueRole = (unit) => {
-    let units = this.unitRoles.filter((role: any) => role.unit_id === unit.unit_id);
+    let units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
     return units.length == 1 || unit.role == 'Tutor';
   };
 
   updateSelectedProject(project) {
     this.currentUnitOrProject = {
-      project_id: project.project_id,
-      unit_id: project.unit().id,
-      code: project.unit().code,
-      name: project.unit().name,
-      role:
-        project.my_role ||
-        (typeof project.unit === 'function' ? project.unit().my_role : undefined) ||
-        project.role ||
-        'Unknown',
+      project_id: project.id,
+      unit_id: project.unit.id,
+      code: project.unit.code,
+      name: project.unit.name,
+      role: project.myRole || 'Unknown',
     };
     this.project = project;
     this.updateTutor();
@@ -106,13 +103,9 @@ export class HeaderComponent implements OnInit {
 
   updateSelectedUnitRole(unitRole) {
     this.currentUnitOrProject = {
-      code: unitRole.unit_code,
-      name: unitRole.unit_name,
-      role:
-        unitRole.my_role ||
-        (typeof unitRole.unit === 'function' ? unitRole.unit().my_role : undefined) ||
-        unitRole.role ||
-        'Unknown',
+      code: unitRole.unit.code,
+      name: unitRole.unit.name,
+      role: unitRole.role || 'Unknown',
     };
     this.unitRole = unitRole;
     this.updateTutor();

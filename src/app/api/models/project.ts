@@ -1,12 +1,12 @@
-import { Entity } from 'ngx-entity-service';
-import { Campus, Unit, User } from './doubtfire-model';
+import { Entity, EntityCache } from 'ngx-entity-service';
+import { Campus, Task, Unit, User } from './doubtfire-model';
 
 
 export class Project extends Entity {
 
   public unit: Unit;
   public campus: Campus;
-  public user: User;
+  public student: User;
 
   public targetGrade: number; //TODO: range
   public submittedGrade: number; //TODO: range
@@ -28,7 +28,7 @@ export class Project extends Entity {
   };
 
   public burndownChartData: {key: string, values: number[]}[];
-  // public tasks: ;
+  public readonly tasks: EntityCache<Task> = new EntityCache<Task>();
   // public tutorialEnrolments: ;
   // public groups: ;
   // public taskOutcomeAlignments: ;
@@ -41,4 +41,11 @@ export class Project extends Entity {
     this.unit = unit;
   }
 
+  public get myRole(): string {
+    return this.unit.myRole;
+  }
+
+  public activeTasks(): Task[] {
+    return this.tasks.currentValues.filter(task => task.definition.targetGrade <= this.targetGrade);
+  }
 }

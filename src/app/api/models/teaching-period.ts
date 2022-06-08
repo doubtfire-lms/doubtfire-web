@@ -35,6 +35,10 @@ export class TeachingPeriod extends Entity {
     };
   }
 
+  public name(): string {
+    return `${this.period} ${this.year}`;
+  }
+
   public addBreak(breakEntity: TeachingPeriodBreak) : Observable<TeachingPeriodBreak> {
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 

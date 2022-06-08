@@ -36,6 +36,8 @@ export * from './webcal/webcal';
 
 export * from '../services/authentication.service';
 export * from '../services/unit.service';
+export * from '../services/project.service';
+export * from '../services/task.service';
 export * from '../services/tutorial.service';
 export * from '../services/tutorial-stream.service';
 export * from '../services/overseer-assessment.service';

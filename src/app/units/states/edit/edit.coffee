@@ -83,7 +83,7 @@ angular.module('doubtfire.units.states.edit', [
   Tutor.query(
     (tutors) ->
       $scope.staff = _.map(tutors, (tutor) ->
-        return { id: tutor.id, full_name: tutor.first_name + ' ' + tutor.last_name }
+        return { id: tutor.id, full_name: tutor.firstName + ' ' + tutor.lastName }
       )
   )
 )

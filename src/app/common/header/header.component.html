@@ -11,7 +11,11 @@
   </a>
   <div style="color: rgb(216, 216, 216)">/</div>
 
-  <unit-dropdown [unit]="currentUnitOrProject" [unitRoles]="filteredUnitRoles" [projects]="projects"></unit-dropdown>
+  <unit-dropdown
+    [unit]="currentUnitOrProject"
+    [unitRoles]="filteredUnitRoles"
+    [projects]="projects">
+  </unit-dropdown>
 
   <task-dropdown
     [currentUnitOrProject]="currentUnitOrProject"

@@ -20,7 +20,7 @@ angular.module('doubtfire.projects.states.dashboard', [
    }
 )
 
-.controller("ProjectsDashboardStateCtrl", ($scope, $rootScope, $urlRouter, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
+.controller("ProjectsDashboardStateCtrl", ($scope, $rootScope, $urlRouter, $state, $stateParams, listenerService) ->
   # Cleanup
   listeners = listenerService.listenTo($scope)
 

@@ -287,6 +287,7 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 import { AuthenticationService } from './api/services/authentication.service';
+import { ProjectService } from './api/services/project.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -316,6 +317,7 @@ DoubtfireAngularJSModule.factory('campusService', downgradeInjectable(CampusServ
 DoubtfireAngularJSModule.factory('authenticationService', downgradeInjectable(AuthenticationService));
 DoubtfireAngularJSModule.factory('newUserService', downgradeInjectable(UserService));
 DoubtfireAngularJSModule.factory('newUnitService', downgradeInjectable(UnitService));
+DoubtfireAngularJSModule.factory('newProjectService', downgradeInjectable(ProjectService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
 DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(FileDownloaderService));

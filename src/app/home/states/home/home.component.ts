@@ -3,7 +3,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { analyticsService, dateService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
-import { UnitRole, User, UserService } from 'src/app/api/models/doubtfire-model';
+import { Project, UnitRole, User, UserService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'home',
@@ -11,7 +11,7 @@ import { UnitRole, User, UserService } from 'src/app/api/models/doubtfire-model'
   styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  projects: any;
+  projects: Project[];
   unitRoles: UnitRole[];
   showSpinner: boolean;
   dataLoaded: boolean;
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadingUnitRoles = false;
   }
 
-  projectsLoaded(projects: any): void {
+  projectsLoaded(projects: Project[]): void {
     this.projects = projects;
     this.loadingProjects = false;
   }
