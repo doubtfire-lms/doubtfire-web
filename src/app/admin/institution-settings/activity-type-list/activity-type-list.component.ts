@@ -31,7 +31,7 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
 
   ngAfterViewInit() {
     // Get all the activity types and add them to the table
-    this.activityTypeService.fetchAll().subscribe((activityTypes) => {
+    this.activityTypeService.query().subscribe((activityTypes) => {
       this.pushToTable(activityTypes);
     });
   }

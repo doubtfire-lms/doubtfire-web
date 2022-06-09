@@ -22,7 +22,7 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
   $scope.campuses = []
   $scope.data = { campus_id: 1 } # need in object for observing
 
-  campusService.fetchAll().subscribe( (campuses) ->
+  campusService.query().subscribe( (campuses) ->
     $scope.campuses = campuses
     $scope.data.campus_id = campuses[0].id
   )

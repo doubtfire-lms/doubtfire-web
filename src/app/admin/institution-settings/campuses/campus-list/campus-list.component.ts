@@ -35,7 +35,7 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
 
   ngAfterViewInit() {
     // Get all the campuses and add them to the table
-    this.campusService.fetchAll().subscribe((campuses) => {
+    this.campusService.query().subscribe((campuses) => {
       this.pushToTable(campuses);
     });
   }

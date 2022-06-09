@@ -40,8 +40,9 @@ angular.module('doubtfire.units.states.index', [])
 
     GlobalStateService.setView("UNIT", $scope.unitRole)
 
-    newUnitService.fetch(unitId, {params: {loadOnlyEnrolledStudents: true}}).subscribe(
+    newUnitService.get(unitId).subscribe(
       (unit)->
         $scope.unit = unit
+        unit.loadEnrolledStudents()
     )
 )

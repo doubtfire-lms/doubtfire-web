@@ -61,7 +61,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
     }
-    this.campusService.fetchAll().subscribe((campuses) => {
+    this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
     this.filterTutorials();

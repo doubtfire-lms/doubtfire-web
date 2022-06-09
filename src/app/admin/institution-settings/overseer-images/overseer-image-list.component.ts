@@ -31,7 +31,7 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
 
   ngAfterViewInit() {
     // Get all the activity types and add them to the table
-    this.overseerImageService.fetchAll().subscribe((response) => {
+    this.overseerImageService.query().subscribe((response) => {
       this.pushToTable(response);
     });
   }
