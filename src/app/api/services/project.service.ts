@@ -23,19 +23,17 @@ export class ProjectService extends CachedEntityService<Project> {
 
     this.mapping.addKeys(
       {
-        keys: ['unit', 'unit_id'],
-        toEntityOp: async (data: object, key: string, entity: Project, params?: any) => {
+        keys: 'unit',
+        toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
           const unitService: UnitService = AppInjector.get(UnitService);
-          // unitService.get(data['unit_id']).subscribe(unit => {
-          //   entity.unit = unit;
-          // });
-          entity.unit = await firstValueFrom(unitService.fetch(data['unit_id']));
+          const unitData = data['unit'];
+          return unitService.cache.getOrCreate(unitData.id, unitService, unitData);
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
         }
       },
-      ['id', 'project_id'],
+      'id',
       {
         keys: ['campus','campus_id'],
         toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
@@ -43,22 +41,9 @@ export class ProjectService extends CachedEntityService<Project> {
         }
       },
       {
-        keys: ['student', 'student_id'],
+        keys: ['student'],
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
-          const userData = {
-            id: data['student_id'],
-            firstName: data['student_firstName'],
-            lastName: data['student_lastName'],
-            nickname: data['student_nickname'],
-          };
-
-          if (data['student_email']) {
-            userData['email'] = data['student_email'];
-          }
-
-          if (data['student_username']) {
-            userData['username'] = data['student_username'];
-          }
+          const userData = data['student'];
 
           return this.userService.cache.getOrCreate(userData.id, this.userService, userData);
         }

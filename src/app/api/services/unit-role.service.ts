@@ -21,31 +21,16 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     this.mapping.addKeys(
       'id',
       {
-        keys: ['unit', 'unit_id'],
+        keys: 'unit',
         toEntityFn: (data, key, entity) => {
-          return this.unitService.cache.getOrCreate(
-            data['unit_id'],
-            unitService,
-            {
-              id: data['unit_id'],
-              active: data['active'],
-              code: data['unit_code'],
-              name: data['unit_name'],
-              start_date: data['start_date'],
-              end_date: data['end_date'],
-              teaching_period_id: data['teaching_period_id']
-            }
-          );
+          const unitData = data['unit'];
+          return this.unitService.cache.getOrCreate(unitData.id, unitService, unitData);
         }
       },
       {
-        keys: ['user','user_id'],
+        keys: 'user',
         toEntityFn: (data: object, key: string, entity: UnitRole, params?: any) => {
-          return this.userService.cache.getOrCreate(data['user_id'], userService, {
-            id: data['user_id'],
-            email: data['email'],
-            firstName: data['name'],
-          });
+          return this.userService.cache.getOrCreate(data['user']['id'], userService, data['user']);
         },
         toJsonFn: (entity: UnitRole, key: string) => {
           return entity.user?.id;
