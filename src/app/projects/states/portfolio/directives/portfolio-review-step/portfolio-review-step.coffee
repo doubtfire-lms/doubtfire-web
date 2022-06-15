@@ -24,7 +24,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     #
     $scope.toggleCompileProject = ->
       $scope.project.compile_portfolio = not $scope.project.compile_portfolio
-      Project.update { id: $scope.project.project_id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
+      Project.update { id: $scope.project.id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
         $scope.portfolioIsCompiling = true
         $scope.canCompilePortfolio  = false
         $scope.project.portfolio_status = 0.5
@@ -35,7 +35,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     $scope.deletePortfolio = ->
       doDelete = ->
         $scope.portfolioSubmission.delete {
-          id: $scope.project.project_id
+          id: $scope.project.id
         }, (response) ->
           $scope.project.portfolio_available = false
           $scope.project.portfolio_status = 0

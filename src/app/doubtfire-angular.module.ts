@@ -73,6 +73,9 @@ import {
   aboutDoubtfireModalProvider,
   calendarModalProvider,
   userNotificationSettingsModalProvider,
+  uploadSubmissionModal,
+  gradeTaskModalProvider,
+  uploadSubmissionModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -175,6 +178,7 @@ import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 
 @NgModule({
   // Components we declare
@@ -312,6 +316,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
     EmojiService,
     FileDownloaderService,
     CheckForUpdateService,
+    TaskOutcomeAlignmentService,
     userProvider,
     groupServiceProvider,
     unitProvider,
@@ -324,6 +329,8 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
     aboutDoubtfireModalProvider,
     taskServiceProvider,
     gradeServiceProvider,
+    uploadSubmissionModalProvider,
+    gradeTaskModalProvider,
     analyticsServiceProvider,
     oldUnitServiceProvider,
     dateServiceProvider,

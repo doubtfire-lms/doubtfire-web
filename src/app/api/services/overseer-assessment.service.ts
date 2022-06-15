@@ -37,8 +37,8 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
 
   public queryForTask(task: any): Observable<OverseerAssessment[]> {
     const pathIds = {
-      project_id: task.project().project_id,
-      td_id: task.task_definition_id
+      project_id: task.project.id,
+      td_id: task.definition.id
     };
 
     return this.query(pathIds, task);
@@ -46,8 +46,8 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
 
   public triggerOverseer(assessment: OverseerAssessment) : Observable<OverseerAssessment> {
     const pathIds = {
-      project_id: assessment.task.project().project_id,
-      td_id: assessment.task.task_definition_id,
+      project_id: assessment.task.project.id,
+      td_id: assessment.task.definition.id,
       id: assessment.id
     }
     return this.put(pathIds, { endpointFormat: this.triggerEndpointFormat });

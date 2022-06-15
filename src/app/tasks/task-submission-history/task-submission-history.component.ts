@@ -3,7 +3,7 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
 import { map } from 'rxjs/operators';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Subject } from 'rxjs';
-import { OverseerAssessmentService } from 'src/app/api/models/doubtfire-model';
+import { OverseerAssessmentService, Task } from 'src/app/api/models/doubtfire-model';
 import { OverseerAssessment } from 'src/app/api/models/doubtfire-model';
 
 @Component({
@@ -12,7 +12,7 @@ import { OverseerAssessment } from 'src/app/api/models/doubtfire-model';
   styleUrls: ['./task-submission-history.component.scss'],
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
-  @Input() task: any;
+  @Input() task: Task;
   @Output() hasNoData = new EventEmitter<boolean>();
   tabs: OverseerAssessment[];
   // timestamps: string[];

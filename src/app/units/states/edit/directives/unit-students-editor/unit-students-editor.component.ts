@@ -1,5 +1,4 @@
 import {
-  Unit,
   csvUploadModalService,
   csvResultModalService,
   unitStudentEnrolmentModal,
@@ -11,6 +10,7 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { Unit } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'unit-students-editor',
@@ -21,7 +21,8 @@ export class UnitStudentsEditorComponent {
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @Input() unit: any;
+
+  @Input() unit: Unit;
 
   columns: string[] = [
     'student_id',

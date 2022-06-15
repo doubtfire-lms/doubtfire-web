@@ -6,8 +6,7 @@ import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
-import { DiscussionComment } from 'src/app/api/models/task-comment/discussion-comment';
-
+import { Task, DiscussionComment } from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
@@ -16,7 +15,7 @@ import { DiscussionComment } from 'src/app/api/models/task-comment/discussion-co
 })
 export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
-  @Input() task: any;
+  @Input() task: Task;
   @ViewChild('player') audioPlayer: AudioPlayerComponent;
   loading: boolean = false;
   audioProgress: number = 0;
@@ -32,7 +31,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   get isNotStudent() {
-    return this.task.project().unit().my_role !== 'Student';
+    return this.task.unit.currentUserIsStaff;
   }
 
   setPromptTrack(track: string, promptNumber?: number) {

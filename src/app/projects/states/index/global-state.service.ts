@@ -30,9 +30,9 @@ export class GlobalStateService {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: {} }> = new BehaviorSubject<{
+  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> = new BehaviorSubject<{
     viewType: ViewType;
-    entity: {};
+    entity: Project | Unit | UnitRole;
   } | null>(null);
 
   /**
@@ -44,6 +44,11 @@ export class GlobalStateService {
    * The loaded units.
    */
   private loadedUnits: EntityCache<Unit>;
+
+  /**
+   * The loaded projects.
+   */
+   private currentUserProjects: EntityCache<Project>;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -65,7 +70,7 @@ export class GlobalStateService {
   /**
    * The list of all of the units studied by the current user
    */
-  public projectsSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public projectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>(null);
 
   public isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
@@ -81,6 +86,7 @@ export class GlobalStateService {
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
+    this.currentUserProjects = this.projectService.cache;
 
     this.authenticationService.checkUserCookie();
 

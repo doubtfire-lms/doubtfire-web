@@ -67,7 +67,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.portfolioSubmission.deleteFile($scope.project, file)
 
   # Update targetGrade value on change
-  $scope.$watch 'project.target_grade', (newValue) ->
+  $scope.$watch 'project.targetGrade', (newValue) ->
     $scope.targetGrade = gradeService.grades[newValue]
 
   # Get the confugurable, external name of Doubtfire

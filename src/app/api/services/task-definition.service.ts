@@ -5,6 +5,7 @@ import { TaskDefinition, TutorialStreamService, Unit } from 'src/app/api/models/
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
+import { MappingFunctions } from './mapping-fn';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -23,14 +24,23 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'description',
       'weighting',
       'targetGrade',
-      'targetDate',
-      'dueDate',
-      'startDate',
+      {
+        keys: 'targetDate',
+        toEntityFn: MappingFunctions.mapDateToEndOfDay
+      },
+      {
+        keys: 'dueDate',
+        toEntityFn: MappingFunctions.mapDateToEndOfDay
+      },
+      {
+        keys: 'startDate',
+        toEntityFn: MappingFunctions.mapDateToDay
+      },
       'uploadRequirements',
       {
         keys: ['tutorialStream','tutorial_stream_abbr'],
         toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
-          return taskDef.unit.tutorialStreams.get(data['tutorial_stream_abbr']);
+          return taskDef.unit.tutorialStreamsCache.get(data['tutorial_stream_abbr']);
         },
         toJsonFn: (taskDef: TaskDefinition, key: string) => {
           return taskDef.tutorialStream?.abbreviation;

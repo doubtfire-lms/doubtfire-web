@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { gradeService } from 'src/app/ajs-upgraded-providers';
+import { Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'task-list-item',
@@ -7,7 +8,7 @@ import { gradeService } from 'src/app/ajs-upgraded-providers';
   styleUrls: ['task-list-item.component.scss'],
 })
 export class TaskListItemComponent implements OnInit {
-  @Input() task: any;
+  @Input() task: Task;
   @Input() setSelectedTask: any;
   @Input() isSelectedTask: any;
 
@@ -18,5 +19,6 @@ export class TaskListItemComponent implements OnInit {
   ngOnInit() {
     // Expose grade service names
     this.gradeNames = this.gs.grades;
+
   }
 }

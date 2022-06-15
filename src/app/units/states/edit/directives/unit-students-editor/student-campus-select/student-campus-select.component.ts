@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
+import { Campus, CampusService, Project, Unit } from 'src/app/api/models/doubtfire-model';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
@@ -8,8 +8,8 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['student-campus-select.component.scss'],
 })
 export class StudentCampusSelectComponent implements OnInit {
-  @Input() unit: any;
-  @Input() student: any;
+  @Input() unit: Unit;
+  @Input() student: Project;
   @Input() update: boolean;
 
   campuses: Campus[];
@@ -18,7 +18,7 @@ export class StudentCampusSelectComponent implements OnInit {
   constructor(private campusService: CampusService) {}
 
   ngOnChanges() {
-    this.originalCampusId = this.student.campus_id;
+    this.originalCampusId = this.student.campus.id;
   }
 
   ngOnInit() {

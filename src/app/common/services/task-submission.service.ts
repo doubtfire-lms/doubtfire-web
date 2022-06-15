@@ -1,11 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { alertService, taskService, Task } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Observable } from 'rxjs';
-import { TaskAssessmentComment } from 'src/app/tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
-import { map } from 'rxjs/operators';
-import { OverseerAssessment, OverseerAssessmentService, OverseerImage, OverseerImageService } from 'src/app/api/models/doubtfire-model';
+import { Task, OverseerAssessment, OverseerAssessmentService, OverseerImage, OverseerImageService } from 'src/app/api/models/doubtfire-model';
 
 export interface TaskAssessmentResult {
   id?: number;
@@ -14,21 +12,13 @@ export interface TaskAssessmentResult {
   is_successful?: boolean;
   assessment_date?: Date;
   tests?: TestResult[];
-  task?: any;
+  task?: Task;
 }
 
 export interface TestResult {
   id: number;
   test_name?: string;
   is_successful: boolean;
-}
-
-export interface TaskInfo {
-  id: number;
-  project_id?: number;
-  tutorial_id?: number;
-  task_definition_id: number;
-  status?: string;
 }
 
 export interface DockerImageInfo {
@@ -57,16 +47,16 @@ export class TaskSubmissionService {
     private overseerAssessmentService: OverseerAssessmentService
     ) { }
 
-  public getLatestTaskAssessment(taskInfo: TaskInfo): Observable<any> {
+  public getLatestTaskAssessment(taskInfo: Task): Observable<any> {
     const url = this.TaskLegacy.generateLatestAssessmentUrl(taskInfo);
     return this.http.get<any>(url);
   }
 
-  public getLatestSubmissionsTimestamps(taskInfo: TaskInfo): Observable<OverseerAssessment[]> {
+  public getLatestSubmissionsTimestamps(taskInfo: Task): Observable<OverseerAssessment[]> {
     return this.overseerAssessmentService.queryForTask(taskInfo);
   }
 
-  public getSubmissionByTimestamp(taskInfo: TaskInfo, timestamp: string): Observable<any> {
+  public getSubmissionByTimestamp(taskInfo: Task, timestamp: string): Observable<any> {
     const url = this.TaskLegacy.getSubmissionByTimestampUrl(taskInfo, timestamp);
     return this.http.get<any>(url);
   }

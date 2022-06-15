@@ -3,21 +3,6 @@ import { AppInjector } from '../../../app-injector';
 import { User, Campus, UserService, CampusService, TutorialStream } from 'src/app/api/models/doubtfire-model';
 import { Unit } from '../unit';
 
-const UPDATE_KEYS = [
-  'id',
-  'meeting_day',
-  'meeting_time',
-  'meeting_location',
-  'abbreviation',
-  'campus_id',
-  'capacity',
-  'tutor_id',
-  'unit_id',
-  'tutorial_stream_abbr',
-];
-
-const IGNORE = ['campus_id', 'tutor_name', 'tutor_id'];
-
 export class Tutorial extends Entity {
   unit: Unit; // TODO: Convert to a unit object once this exists
   id: number;
@@ -38,27 +23,27 @@ export class Tutorial extends Entity {
 
   public static NoTutorial: Tutorial = new Tutorial(null);
 
-  /**
-   * Map the passed in data to a json object on create for a tutorial.
-   *
-   * @param data The data to map to json to create a tutorial
-   */
-  public static mapToCreateJson(unit: object, data: object) {
-    const result = { tutorial: {} };
-    for (const key of UPDATE_KEYS) {
-      if (key === 'tutor_id') {
-        result['tutorial']['tutor_id'] = data['tutorial']['tutor']['user_id'];
-      } else if (key === 'campus_id') {
-        if (data['tutorial']['campus']) result['tutorial']['campus_id'] = data['tutorial']['campus']['id'];
-        else result['tutorial']['campus_id'] = -1;
-      } else {
-        result['tutorial'][key] = data['tutorial'][key];
-      }
-    }
-    result['tutorial']['unit_id'] = unit['id'];
+  // /**
+  //  * Map the passed in data to a json object on create for a tutorial.
+  //  *
+  //  * @param data The data to map to json to create a tutorial
+  //  */
+  // public static mapToCreateJson(unit: object, data: object) {
+  //   const result = { tutorial: {} };
+  //   for (const key of UPDATE_KEYS) {
+  //     if (key === 'tutor_id') {
+  //       result['tutorial']['tutor_id'] = data['tutorial']['tutor']['user_id'];
+  //     } else if (key === 'campus_id') {
+  //       if (data['tutorial']['campus']) result['tutorial']['campus_id'] = data['tutorial']['campus']['id'];
+  //       else result['tutorial']['campus_id'] = -1;
+  //     } else {
+  //       result['tutorial'][key] = data['tutorial'][key];
+  //     }
+  //   }
+  //   result['tutorial']['unit_id'] = unit['id'];
 
-    return result;
-  }
+  //   return result;
+  // }
 
   public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {

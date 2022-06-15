@@ -1,28 +1,35 @@
 import { Entity } from 'ngx-entity-service';
-import { User } from './doubtfire-model';
-
-const KEYS =
-  [
-    'id',
-    'project_id',
-    'task_definition_id',
-    'status',
-    'due_date',
-    'extensions',
-    'submission_date',
-    'completion_date',
-    'times_assessed',
-    'grade',
-    'quality_pts',
-    'include_in_portfolio',
-    'pct_similar',
-    'similar_to_count',
-    'similar_to_dismissed_count',
-    'num_new_comments',
-  ];
-
+import { Project, Unit, TaskDefinition, Task } from './doubtfire-model';
+import { LearningOutcome } from './learning-outcome';
 
 export class TaskOutcomeAlignment extends Entity {
+  public within: Unit | Project;
 
+  public id: number;
+  public description: string;
+  public rating: number;
+  public learningOutcome: LearningOutcome;
+  public taskDefinition: TaskDefinition;
+  public task: Task;
 
+  public constructor(within: Unit | Project) {
+    super();
+    this.within = within;
+  }
+
+  public get unit(): Unit {
+    if ( this.within instanceof Unit) {
+      return this.within;
+    } else {
+      return this.within.unit;
+    }
+  }
+
+  public get project(): Project {
+    if ( this.within instanceof Project) {
+      return this.within;
+    }
+
+    return undefined;
+  }
 }

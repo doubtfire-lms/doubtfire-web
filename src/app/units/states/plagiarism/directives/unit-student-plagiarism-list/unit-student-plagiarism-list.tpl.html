@@ -39,7 +39,7 @@
               <tr>
                 <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
                 <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-                <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
+                <th><a href="" ng-click="sortOrder='targetGrade'; reverse=!reverse">Grade</a></th>
                 <!-- <th><a href="" ng-click="sortOrder='similar_to_count'; reverse=!reverse">Tasks Similar</a></th> -->
                 <th><a href="" ng-click="sortOrder='max_pct_copy'; reverse=!reverse">Max Pct Similar</a></th>
                 <th><a href="" ng-click="sortOrder='shortTutorialDescription()'; reverse=!reverse">Tutorial</a></th>
@@ -49,7 +49,7 @@
               <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
                 <td>{{student.student_id}}</td>
                 <td>{{student.name}}</td>
-                <td>{{grades[student.target_grade]}}</td>
+                <td>{{grades[student.targetGrade]}}</td>
                 <!-- <td>{{student.similar_to_count}}</td> -->
                 <td>{{student.max_pct_copy}}%</td>
                 <td><span>{{student.shortTutorialDescription()}}</span></td>

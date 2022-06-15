@@ -26,6 +26,10 @@ export * from './groups/group-set';
 export * from './groups/group-membership';
 export * from './task-outcome-alignment';
 export * from './learning-outcome';
+export * from './grade';
+export * from './task-status';
+export * from './task-comment/discussion-comment';
+export * from '../services/task-outcome-alignment.service';
 
 // Users -- are students or staff
 export * from './user/user';

@@ -35,7 +35,7 @@ angular.module('doubtfire.groups.student-group-manager', [])
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupSet.id,
           group_id: group.id
-          project_id: $scope.project.project_id
+          project_id: $scope.project.id
         },
         (response) ->
           projectService.updateGroups($scope.project) #change groups

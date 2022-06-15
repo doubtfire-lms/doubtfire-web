@@ -10,7 +10,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 
     $scope.data = []
 
-    listeners.push $scope.$watch 'project.burndown_chart_data', (newValue) ->
+    listeners.push $scope.$watch 'project.burndownChartData', (newValue) ->
       return unless newValue?
       now = +new Date().getTime() / 1000
       timeSeries =
@@ -48,21 +48,22 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     # No need to clip x axis
     #
     xAxisClipNegBurndown = (d) ->
-      d[0]
+      d[0] unless !d?
 
     #
     # Clips y to 0 if y < 0
     #
     yAxisClipNegBurndown = (d) ->
-      if d[1] < 0.0 then 0 else d[1]
+      if d?
+        if d[1] < 0.0 then 0 else d[1]
 
     #
     # Graph unit dates as moment.js dates
     #
     dates = {
-      start: moment($scope.unit.start_date)
+      start: moment($scope.unit.startDate)
       # represent the graph as 2 weeks after the unit's end date
-      end:   moment($scope.unit.end_date).add(2, 'weeks')
+      end:   moment($scope.unit.endDate).add(2, 'weeks')
     }
 
     #

@@ -116,8 +116,8 @@
               </a>
             </th>
             <th>
-              <a ng-click="sortOrder='target_grade'; reverse=!reverse">
-                Target <i ng-show="sortOrder=='target_grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              <a ng-click="sortOrder='targetGrade'; reverse=!reverse">
+                Target <i ng-show="sortOrder=='targetGrade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th>
@@ -155,15 +155,15 @@
             <td>{{student.tutorNames()}}</td>
             <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
-              <grade-icon grade="student.target_grade"></grade-icon>
+              <grade-icon grade="student.targetGrade"></grade-icon>
             </td>
             <td class="flags-data">
-              <grade-icon grade="student.submitted_grade"></grade-icon>
+              <grade-icon grade="student.submittedGrade"></grade-icon>
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
                 <bar
-                  ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                  ng-repeat="bar in student.taskStats | filter:barLargerZero track by $index"
                   value="bar.value"
                   type="{{statusClass(bar.key)}}"
                 >

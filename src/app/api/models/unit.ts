@@ -1,7 +1,8 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
+import { Observable } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { ProjectService } from '../services/project.service';
-import { OverseerImage, User, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project} from './doubtfire-model';
+import { OverseerImage, User, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 import { UnitRole } from './unit-role';
 
@@ -13,7 +14,7 @@ export class Unit extends Entity {
 
   active: boolean;
 
-  myRole: string; //TODO: remove myRole?
+  myRole: string; //TODO: add more type details?
   mainConvenor: UnitRole;
 
   teachingPeriod: TeachingPeriod;
@@ -34,12 +35,12 @@ export class Unit extends Entity {
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
 
-  // readonly learningOutcomes: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
-  readonly tutorialStreams: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
-  readonly tutorials: EntityCache<Tutorial> = new EntityCache<Tutorial>();
+  readonly learningOutcomesCache: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
+  readonly tutorialStreamsCache: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
+  readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
-  readonly taskDefinitions: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
-  // readonly taskOutcomeAlignments: EntityCache<TaskOutcomeAlignment>;
+  readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
+  public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> = new EntityCache<TaskOutcomeAlignment>();
 
   readonly staff: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
@@ -58,9 +59,41 @@ export class Unit extends Entity {
     }
   }
 
+  public findStudent(id: number): Project {
+    return this.students.find( (s) => s.id === id);
+  }
+
+  public get currentUserIsStaff(): boolean {
+    return this.myRole !== "Student";
+  }
+
+  public get currentUserIsConvenor(): boolean {
+    return this.myRole === "Convenor" || this.myRole === "Admin";
+  }
+
+  public get taskDefinitions(): TaskDefinition[] {
+    return this.taskDefinitionCache.currentValues;
+  }
+
+  public get tutorialStreams(): TutorialStream[] {
+    return this.tutorialStreamsCache.currentValues;
+  }
+
+  public get tutorials(): Tutorial[] {
+    return this.tutorialsCache.currentValues;
+  }
+
+  public get ilos(): LearningOutcome[] {
+    return this.learningOutcomesCache.currentValues;
+  }
+
+  public get taskDefinitionCount(): number {
+    return this.taskDefinitionCache.size;
+  }
+
   public tutorialStreamForAbbr(abbr: string): TutorialStream {
     if (abbr) {
-      return this.tutorialStreams.currentValues.find(ts => ts.abbreviation === abbr);
+      return this.tutorialStreams.find(ts => ts.abbreviation === abbr);
     } else {
       return null;
     }
@@ -89,7 +122,7 @@ export class Unit extends Entity {
   }
 
   public tutorialsForUserName(userName: string): Array<Tutorial> {
-    return this.tutorials.currentValues.filter(tutorial => tutorial.tutorName === userName);
+    return this.tutorials.filter(tutorial => tutorial.tutorName === userName);
   }
 
   public incorporateTasks(tasks, callback) : Task[] {
@@ -117,7 +150,7 @@ export class Unit extends Entity {
         //   taskDef.seq = index
         //   taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
         //   taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
-        //   taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
+        //   taskDef.targetGrade = () -> gradeService.grades[taskDef.targetGrade]
 
         //   # Local deadline date is the last moment in the local time zone
         //   taskDef.localDeadlineDate = ()  ->
@@ -143,7 +176,7 @@ export class Unit extends Entity {
   }
 
   public tutorialFromId(tutorialId: number): Tutorial {
-    return this.tutorials.get(tutorialId.toString());
+    return this.tutorialsCache.get(tutorialId);
   }
 
   public get hasGroupwork(): boolean {
@@ -151,7 +184,38 @@ export class Unit extends Entity {
   }
 
   public taskDef(taskDefId: number): TaskDefinition {
-    return this.taskDefinitions.get(taskDefId.toString());
+    return this.taskDefinitionCache.get(taskDefId);
   }
+
+  public get taskOutcomeAlignments(): TaskOutcomeAlignment[] {
+    return this.taskOutcomeAlignmentsCache.currentValues;
+  }
+
+  public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
+    return this.taskOutcomeAlignments.filter( (alignment: TaskOutcomeAlignment) => {
+      alignment.taskDefinition.id === td.id;
+    }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
+      return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+    });
+  }
+
+  public nextStream(activityTypeAbbreviation): Observable<TutorialStream> {
+    console.log("implement nextStream");
+    return null;
+  }
+
+  public deleteStream(stream: TutorialStream) {
+    console.log("implement deleteStream");
+    return;
+  }
+
+  public refreshStudents() {
+    console.log("implement refreshStudents");
+  }
+
+  public findProjectForUsername(username: string): Project {
+    return this.students.find( (s) => s.student.username === username);
+  }
+
 
 }

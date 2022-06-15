@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskFeedback, TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
+.factory("taskService", (TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
   #
   # The unit service object
   #
@@ -22,16 +22,16 @@ angular.module("doubtfire.common.services.tasks", [])
   ]
 
   # All status other than those that are final - these are sorted in the student task list
-  taskService.validTopTask = [
-    'not_started'
-    'redo'
-    'need_help'
-    'working_on_it'
-    'fix_and_resubmit'
-    'ready_for_feedback'
-    'discuss'
-    'demonstrate'
-  ]
+  # taskService.validTopTask = [
+  #   'not_started'
+  #   'redo'
+  #   'need_help'
+  #   'working_on_it'
+  #   'fix_and_resubmit'
+  #   'ready_for_feedback'
+  #   'discuss'
+  #   'demonstrate'
+  # ]
 
   taskService.toBeWorkedOn = [
     'not_started'
@@ -40,53 +40,44 @@ angular.module("doubtfire.common.services.tasks", [])
     'working_on_it'
   ]
 
-  taskService.statusToDiscuss = [
-    'need_help'
-    'demonstrate'
-    'discuss'
-  ]
-
   # What are the states that are associated with tutor actions...
   # TODO: This needs to be reworked, this actually means we are
   # not waiting on a new submission =  either waiting for the tutor
   # to mark it, or waiting on a discussion between student and tutor.
-  taskService.submittedStatuses = [
-    'feedback_exceeded'
-    'ready_for_feedback'
-    'discuss'
-    'demonstrate'
-    'complete'
-    'fail'
-    'time_exceeded'
-  ]
+  # taskService.submittedStatuses = [
+  #   'feedback_exceeded'
+  #   'ready_for_feedback'
+  #   'discuss'
+  #   'demonstrate'
+  #   'complete'
+  #   'fail'
+  #   'time_exceeded'
+  # ]
 
-  taskService.awaitingFeedbackStatuses = [
-    'ready_for_feedback'
-  ]
 
   # Which states can a task be considered to be overdue
-  taskService.overdueStates = [
-    'not_started'
-    'redo'
-    'need_help'
-    'working_on_it'
-    'fix_and_resubmit'
-    'ready_for_feedback'
-  ]
+  # taskService.overdueStates = [
+  #   'not_started'
+  #   'redo'
+  #   'need_help'
+  #   'working_on_it'
+  #   'fix_and_resubmit'
+  #   'ready_for_feedback'
+  # ]
 
   # Which states are considered final
-  taskService.finalStatuses = [
-    'complete'
-    'fail'
-    'feedback_exceeded'
-    'time_exceeded'
-  ]
+  # taskService.finalStatuses = [
+  #   'complete'
+  #   'fail'
+  #   'feedback_exceeded'
+  #   'time_exceeded'
+  # ]
 
-  taskService.gradeableStatuses = [
-    'discuss'
-    'demonstrate'
-    'complete'
-  ]
+  # taskService.gradeableStatuses = [
+  #   'discuss'
+  #   'demonstrate'
+  #   'complete'
+  # ]
 
   taskService.discussionStatuses = [
     'discuss'
@@ -306,19 +297,19 @@ angular.module("doubtfire.common.services.tasks", [])
     ]
 
   # Which status should not show up in the task status drop down
-  taskService.rejectFutureStates =
-      not_started: []
-      working_on_it: []
-      need_help: []
-      ready_for_feedback: []
-      complete: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
-      discuss:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
-      demonstrate:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
-      fix_and_resubmit:  []
-      redo:  []
-      feedback_exceeded:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
-      time_exceeded: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
-      fail:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  # taskService.rejectFutureStates =
+  #     not_started: []
+  #     working_on_it: []
+  #     need_help: []
+  #     ready_for_feedback: []
+  #     complete: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  #     discuss:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  #     demonstrate:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  #     fix_and_resubmit:  []
+  #     redo:  []
+  #     feedback_exceeded:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  #     time_exceeded: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
+  #     fail:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
 
   taskService.currentReplyID = { id: null }
 
@@ -326,14 +317,14 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
 
   # This function gets the status text for the indicated status
-  taskService.statusText = (status) -> taskService.statusLabels[status]
+  taskService.statusText =   (status) -> taskService.statusLabels[status]
 
   # This function gets the help text for the indicated status
   taskService.helpDescription = (status) -> taskService.helpDescriptions[status]
 
   taskService.taskDefinitionFn = (unit) ->
     (task) ->
-      unit.taskDef(task.task_definition_id)
+      unit.taskDef(task.definition.id)
 
   # Return an icon and label for the task
   taskService.statusData = (data) ->
@@ -355,37 +346,37 @@ angular.module("doubtfire.common.services.tasks", [])
   taskService.staffAlignmentsForTask = (task) ->
     task.unit().staffAlignmentsForTaskDefinition(task.definition)
 
-  # Trigger for new status
-  taskService.triggerTransition = (task, status, unitRole) ->
-    throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
-    return if task.status == status
-    requiresFileUpload = _.includes(['ready_for_feedback', 'need_help'], status) && task.requiresFileUpload()
-    if requiresFileUpload
-      taskService.presentTaskSubmissionModal(task, status)
-    else
-      taskService.updateTaskStatus(task.unit(), task.project(), task, status)
-      asUser = if unitRole? then unitRole.role else 'Student'
-      analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
+  # # Trigger for new status
+  # # taskService.triggerTransition = (task, status, unitRole) ->
+  # #   throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
+  # #   return if task.status == status
+  # #   requiresFileUpload = _.includes(['ready_for_feedback', 'need_help'], status) && task.requiresFileUpload()
+  # #   if requiresFileUpload
+  # #     taskService.presentTaskSubmissionModal(task, status)
+  # #   else
+  # #     taskService.updateTaskStatus(task.unit(), task.project(), task, status)
+  # #     asUser = if unitRole? then unitRole.role else 'Student'
+  # #     analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
-  taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence, isTestSubmission = false) ->
-    if (!isTestSubmission)
-      oldStatus = task.status
-      task.status = status
-    modal = UploadSubmissionModal.show(task, reuploadEvidence, isTestSubmission)
-    # Modal failed to present
-    unless modal?
-      if (task)
-        task.status = oldStatus
-      return
-    modal.result.then(
-      # Grade was selected (modal closed with result)
-      (response) ->
-        null
-      # Grade was not selected (modal was dismissed)
-      (dismissed) ->
-        task.status = oldStatus
-        alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
-    )
+  # taskService.presentTaskSubmissionModal = (task, status, reuploadEvidence, isTestSubmission = false) ->
+  #   if (!isTestSubmission)
+  #     oldStatus = task.status
+  #     task.status = status
+  #   modal = UploadSubmissionModal.show(task, reuploadEvidence, isTestSubmission)
+  #   # Modal failed to present
+  #   unless modal?
+  #     if (task)
+  #       task.status = oldStatus
+  #     return
+  #   modal.result.then(
+  #     # Grade was selected (modal closed with result)
+  #     (response) ->
+  #       null
+  #     # Grade was not selected (modal was dismissed)
+  #     (dismissed) ->
+  #       task.status = oldStatus
+  #       alertService.add("info", "Submission cancelled. Status was reverted.", 6000)
+  #   )
 
   doDeleteTask = (task, unit, callback = null) ->
     TaskDefinition.delete( { unit_id: unit.id, id: task.id }).$promise.then (
@@ -424,89 +415,89 @@ angular.module("doubtfire.common.services.tasks", [])
       result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
     result
 
-  taskService.processTaskStatusChange = (unit, project, task, status, response) ->
-    if response.updated_task
-      response = response.updated_task
+  # taskService.processTaskStatusChange = (unit, project, task, status, response) ->
+  #   if response.updated_task
+  #     response = response.updated_task
 
-    task.id = response.id
-    task.times_assessed = response.times_assessed
-    task.submisson_date = response.submisson_date
-    task.updateTaskStatus response.status, response.new_stats
-    task.processing_pdf = response.processing_pdf
-    task.due_date = response.due_date
-    task.extensions = response.extensions
-    task.grade = response.grade
-    if response.status == status
-      project.updateBurndownChart?()
-      alertService.add("success", "Status saved.", 2000)
-      if task.inTimeExceeded() && !task.isPastDeadline()
-        alertService.add('warning', "Request an extension, or wait for your extension request to be granted, to have this task assessed.")
+  #   task.id = response.id
+  #   task.times_assessed = response.times_assessed
+  #   task.submisson_date = response.submisson_date
+  #   task.updateTaskStatus response.status, response.new_stats
+  #   task.processingPdf = response.processing_pdf
+  #   task.due_date = response.due_date
+  #   task.extensions = response.extensions
+  #   task.grade = response.grade
+  #   if response.status == status
+  #     project.updateBurndownChart?()
+  #     alertService.add("success", "Status saved.", 2000)
+  #     if task.inTimeExceeded() && !task.isPastDeadline()
+  #       alertService.add('warning', "Request an extension, or wait for your extension request to be granted, to have this task assessed.")
 
-      if response.other_projects?
-        _.each response.other_projects, (details) ->
-          proj = unit.findStudent(details.id) if unit.students?
-          if proj?
-            # Update the other project's task status overview
-            task.updateTaskStatus response.status, details.new_stats
-            # Update the other project's task
-            other_task = proj.findTaskForDefinition(task.definition.id)
-            if other_task?
-              other_task.grade = response.grade
-              other_task.status = response.status
-    else
-      alertService.add("info", "Status change was not changed.", 4000)
+  #     if response.other_projects?
+  #       _.each response.other_projects, (details) ->
+  #         proj = unit.findStudent(details.id) if unit.students?
+  #         if proj?
+  #           # Update the other project's task status overview
+  #           task.updateTaskStatus response.status, details.new_stats
+  #           # Update the other project's task
+  #           other_task = proj.findTaskForDefinition(task.definition.id)
+  #           if other_task?
+  #             other_task.grade = response.grade
+  #             other_task.status = response.status
+  #   else
+  #     alertService.add("info", "Status change was not changed.", 4000)
 
 
-  taskService.updateTaskStatus = (unit, project, task, status, success, failure) ->
-    oldStatus = task.status
-    updateFunc = ->
-      Task.update { project_id: project.project_id, task_definition_id: task.definition.id, trigger: status, grade: task.grade, quality_pts: task.quality_pts },
-        # Success
-        (value) ->
-          taskService.processTaskStatusChange unit, project, task, status, value
-          analyticsService.event 'Task Service', 'Updated Task Status', status
-          analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
-          success?()
-        # Fail
-        (value) ->
-          task.status = oldStatus
-          alertService.add("danger", value.data.error, 6000)
-          analyticsService.event 'Task Service', 'Failed to Update Task Status', status
-          failure?()
-    # Must provide grade if graded and in a final complete state
-    if (task.definition.is_graded or task.definition.max_quality_pts > 0) and status in taskService.gradeableStatuses
-      GradeTaskModal.show(task)?.result.then(
-        # Grade was selected (modal closed with result)
-        (response) ->
-          task.grade = response.selectedGrade
-          task.quality_pts = response.qualityPts
-          updateFunc()
-        # Grade was not selected (modal was dismissed)
-        ->
-          task.status = oldStatus
-          alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
-      )
-    else
-      updateFunc()
+  # taskService.updateTaskStatus = (unit, project, task, status, success, failure) ->
+  #   oldStatus = task.status
+  #   updateFunc = ->
+  #     Task.update { project_id: project.id, task_definition_id: task.definition.id, trigger: status, grade: task.grade, quality_pts: task.quality_pts },
+  #       # Success
+  #       (value) ->
+  #         taskService.processTaskStatusChange unit, project, task, status, value
+  #         analyticsService.event 'Task Service', 'Updated Task Status', status
+  #         analyticsService.event 'Task Service', 'Updated Task Grade', gradeService.grades[value.grade]
+  #         success?()
+  #       # Fail
+  #       (value) ->
+  #         task.status = oldStatus
+  #         alertService.add("danger", value.data.error, 6000)
+  #         analyticsService.event 'Task Service', 'Failed to Update Task Status', status
+  #         failure?()
+  #   # Must provide grade if graded and in a final complete state
+  #   if (task.definition.is_graded or task.definition.maxQualityPts > 0) and status in taskService.gradeableStatuses
+  #     GradeTaskModal.show(task)?.result.then(
+  #       # Grade was selected (modal closed with result)
+  #       (response) ->
+  #         task.grade = response.selectedGrade
+  #         task.quality_pts = response.qualityPts
+  #         updateFunc()
+  #       # Grade was not selected (modal was dismissed)
+  #       ->
+  #         task.status = oldStatus
+  #         alertService.add "info", "No grade was specified to a graded task - status reverted", 6000
+  #     )
+  #   else
+  #     updateFunc()
 
-  taskService.recreateSubmissionPdf = (task, onSuccess, onFailure) ->
-    TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project().project_id },
-      (value) ->  #success
-        if value.result == "false"
-          alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
-          analyticsService.event 'Task Service', 'Failed to Recreate PDF'
-        else
-          task.processing_pdf = true
-          alertService.add("info", "Task PDF will be recreated.", 2000)
-          analyticsService.event 'Task Service', 'Recreated PDF'
-          onSuccess?()
-      (value) -> #fail
-        alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
-        analyticsService.event 'Task Service', 'Failed to Recreate PDF'
-        onFailure?()
+  # taskService.recreateSubmissionPdf = (task, onSuccess, onFailure) ->
+  #   TaskFeedback.update { task_definition_id: task.definition.id, project_id: task.project.id },
+  #     (value) ->  #success
+  #       if value.result == "false"
+  #         alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+  #         analyticsService.event 'Task Service', 'Failed to Recreate PDF'
+  #       else
+  #         task.processingPdf = true
+  #         alertService.add("info", "Task PDF will be recreated.", 2000)
+  #         analyticsService.event 'Task Service', 'Recreated PDF'
+  #         onSuccess?()
+  #     (value) -> #fail
+  #       alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 2000)
+  #       analyticsService.event 'Task Service', 'Failed to Recreate PDF'
+  #       onFailure?()
 
-  taskService.taskIsGraded = (task) ->
-    task? and task.definition.is_graded and task.grade?
+  # taskService.taskIsGraded = (task) ->
+  #   task? and task.definition.is_graded and task.grade?
 
   taskService.taskKeyFromString = (taskKeyString) ->
     taskKeyComponents = taskKeyString?.split('/')
@@ -523,9 +514,9 @@ angular.module("doubtfire.common.services.tasks", [])
     key = task.taskKey()
     "#{key.studentId}/#{key.taskDefAbbr}"
 
-  taskService.taskKeyToIdString = (task) ->
-    key = task.taskKey()
-    "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(/[.#]/g, "-")
+  # taskService.taskKeyToIdString = (task) ->
+  #   key = task.taskKey()
+  #   "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(/[.#]/g, "-")
 
   taskService.taskKey = (task) ->
     {
@@ -540,14 +531,14 @@ angular.module("doubtfire.common.services.tasks", [])
     form = new FormData()
     form.append 'attachment', replyAudio
 
-    DiscussionComment.postDiscussionReply.create_media {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID}, form,
+    DiscussionComment.postDiscussionReply.create_media {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID}, form,
       (response) -> #success)
         onSuccess(response)
       (response) -> #failure
         onError(response)
 
   taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
-    DiscussionComment.getDiscussion.get {project_id: task.project().project_id, task_definition_id: task.task_definition_id, task_comment_id: commentID},
+    DiscussionComment.getDiscussion.get {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID},
       (response) -> #success)
         onSuccess(response)
       (response) -> #failure

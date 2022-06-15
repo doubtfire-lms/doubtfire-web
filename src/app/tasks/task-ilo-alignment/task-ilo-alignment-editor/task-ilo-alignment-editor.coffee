@@ -60,7 +60,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
 
     $scope.includeTaskInPorfolio = (task) ->
       task.include_in_portfolio = !task.include_in_portfolio
-      Task.update { project_id: $scope.project.project_id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
+      Task.update { project_id: $scope.project.id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
         (success) ->
           task.include_in_portfolio = success.include_in_portfolio
 
@@ -69,7 +69,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
     $scope.taskAlignmentCSVUploadUrl = ->
       if $scope.project?
-        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, $scope.project.project_id)
+        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, $scope.project.id)
       else
         TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, null)
     $scope.isTaskCSVUploading = null
@@ -85,7 +85,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
 
     $scope.downloadTaskAlignmentCSV = ->
       if $scope.project?
-        TaskAlignment.downloadCSV($scope.unit, $scope.project.project_id)
+        TaskAlignment.downloadCSV($scope.unit, $scope.project.id)
       else
         TaskAlignment.downloadCSV($scope.unit, null)
 )

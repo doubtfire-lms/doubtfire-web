@@ -9,7 +9,7 @@ import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/c
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
-import { Project, UnitRole, User } from 'src/app/api/models/doubtfire-model';
+import { Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,14 +20,17 @@ export class HeaderComponent implements OnInit {
   data: { isTutor: boolean } = {
     isTutor: false,
   };
-  project: Project;
-  unitRole: any = null;
-  unitRoles: any;
+  unitRoles: UnitRole[];
   projects: Project[];
   filteredUnitRoles: UnitRole[];
-  currentUnitOrProject: any;
+
+  currentUnit: Unit = null;
+  currentProject: Project = null;
+  currentUnitRole: UnitRole = null;
+
   currentView: ViewType;
   showHeader: boolean = true;
+
   constructor(
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
@@ -43,7 +46,7 @@ export class HeaderComponent implements OnInit {
       next: (shouldShow) => {
         this.showHeader = shouldShow;
       },
-      error: (err) => {},
+      error: (err) => { },
     });
 
     this.globalState.unitRolesSubject.subscribe({
@@ -56,7 +59,7 @@ export class HeaderComponent implements OnInit {
           .filter((role) => this.isUniqueRole(role));
         console.log(this.filteredUnitRoles);
       },
-      error: (err) => {},
+      error: (err) => { },
     });
 
     this.globalState.projectsSubject.subscribe({
@@ -64,7 +67,7 @@ export class HeaderComponent implements OnInit {
         if (projects == null) return;
         this.projects = projects;
       },
-      error: (err) => {},
+      error: (err) => { },
     });
 
     // get the current active unit or project
@@ -73,14 +76,15 @@ export class HeaderComponent implements OnInit {
         this.currentView = currentViewAndEntity?.viewType;
 
         if (this.currentView == ViewType.PROJECT) {
-          this.updateSelectedProject(currentViewAndEntity.entity);
+          this.updateSelectedProject(currentViewAndEntity.entity as Project);
         } else if (this.currentView == ViewType.UNIT) {
-          this.updateSelectedUnitRole(currentViewAndEntity.entity);
+          this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
         } else {
-          this.currentUnitOrProject = null;
+          this.currentUnit = null;
+          this.currentProject = null;
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -89,34 +93,18 @@ export class HeaderComponent implements OnInit {
     return units.length == 1 || unit.role == 'Tutor';
   };
 
-  updateSelectedProject(project) {
-    this.currentUnitOrProject = {
-      project_id: project.id,
-      unit_id: project.unit.id,
-      code: project.unit.code,
-      name: project.unit.name,
-      role: project.myRole || 'Unknown',
-    };
-    this.project = project;
-    this.updateTutor();
+  updateSelectedProject(project: Project) {
+    this.currentProject = project;
+    this.currentUnit = project.unit;
+    if (this.currentUnitRole?.unit.id !== this.currentUnit.id) {
+      this.currentUnitRole = null;
+    }
   }
 
-  updateSelectedUnitRole(unitRole) {
-    this.currentUnitOrProject = {
-      code: unitRole.unit.code,
-      name: unitRole.unit.name,
-      role: unitRole.role || 'Unknown',
-    };
-    this.unitRole = unitRole;
-    this.updateTutor();
-  }
-
-  updateTutor() {
-    this.data.isTutor =
-      this.project != null &&
-      (this.currentUnitOrProject.role === 'Convenor' ||
-        this.currentUnitOrProject.role === 'Tutor' ||
-        this.currentUnitOrProject.role === 'Admin');
+  updateSelectedUnitRole(unitRole: UnitRole) {
+    this.currentProject = null;
+    this.currentUnitRole = unitRole;
+    this.currentUnit = unitRole.unit;
   }
 
   openUserSettings() {
@@ -143,5 +131,5 @@ export class HeaderComponent implements OnInit {
     return this.userService.currentUser;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

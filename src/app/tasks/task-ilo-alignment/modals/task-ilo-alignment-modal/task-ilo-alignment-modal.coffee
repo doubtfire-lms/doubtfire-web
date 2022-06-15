@@ -74,7 +74,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
     }
 
     if $scope.project
-      data.project_id = $scope.project.project_id
+      data.project_id = $scope.project.id
       updateRequest data
 
     LearningAlignments.create data,

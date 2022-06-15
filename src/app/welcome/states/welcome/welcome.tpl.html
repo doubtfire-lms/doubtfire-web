@@ -114,12 +114,12 @@
                 <label
                   ng-repeat="grade in grades"
                   class="btn btn-default col-sm-3"
-                  ng-model="project.target_grade"
+                  ng-model="project.targetGrade"
                   btn-radio="{{$index}}"
                 >
                   <grade-icon
                     grade="grade"
-                    class="text-{{project.target_grade == grades.indexOf(grade) ? 'primary' : 'muted'}}"
+                    class="text-{{project.targetGrade == grades.indexOf(grade) ? 'primary' : 'muted'}}"
                   ></grade-icon>
                 </label>
               </div>

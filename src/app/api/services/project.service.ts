@@ -1,11 +1,13 @@
 import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import { CampusService, Project, Unit, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
+import { CampusService, Project, Unit, UnitService, UserService, Task } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
-import { firstValueFrom, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TaskService } from './task.service';
+import { MappingProcess } from 'ngx-entity-service/lib/mapping-process';
+import { TaskOutcomeAlignmentService } from './task-outcome-alignment.service';
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -17,11 +19,73 @@ export class ProjectService extends CachedEntityService<Project> {
     httpClient: HttpClient,
     private campusService: CampusService,
     private userService: UserService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private taskOutcomeAlignmentService: TaskOutcomeAlignmentService
   ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
+      //TODO: stats?
+      'id',
+      {
+        keys: ['campus', 'campus_id'],
+        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+          this.campusService.get(data['campus_id']).subscribe(campus => { entity.campus = campus; });
+        }
+      },
+      {
+        keys: 'student',
+        toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
+          const userData = data['student'];
+
+          return this.userService.cache.getOrCreate(userData.id, this.userService, userData);
+        }
+      },
+      {
+        keys: 'userId',
+        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+          const userId = data['user_id'];
+
+          entity.student = this.userService.cache.get(userId);
+        }
+      },
+      'enrolled',
+      'targetGrade',
+      'submittedGrade',
+      'portfolioFiles',
+      'compilePortfolio',
+      'portfolioAvailable',
+      'usesDraftLearningSummary',
+      'taskStats',
+      'burndownChartData',
+      {
+        keys: 'tutorialEnrolments',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          const unit: Unit = project.unit;
+          data[key].forEach(tutorialEnrolment => {
+            const tutorial = unit.tutorialsCache.get(tutorialEnrolment['tutorial_id']);
+            project.tutorialEnrolmentsCache.add(tutorial);
+          });
+        }
+      },
+      // 'groups',
+      {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          data[key].forEach(alignment => {
+            project.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: project
+              }
+            );
+          });
+        }
+      },
+      'grade',
+      'gradeRationale',
       {
         keys: 'unit',
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
@@ -33,48 +97,48 @@ export class ProjectService extends CachedEntityService<Project> {
           return entity.unit?.id;
         }
       },
-      'id',
       {
-        keys: ['campus','campus_id'],
-        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
-          this.campusService.get(data['campus_id']).subscribe(campus => {entity.campus = campus;});
-        }
-      },
-      {
-        keys: ['student'],
-        toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
-          const userData = data['student'];
-
-          return this.userService.cache.getOrCreate(userData.id, this.userService, userData);
-        }
-      },
-
-      'enrolled',
-      'targetGrade',
-      'submittedGrade',
-      'portfolioFiles',
-      'compilePortfolio',
-      'portfolioAvailable',
-      'usesDraftLearningSummary',
-      'taskStats',
-      'burndownChartData',
-      // 'tasks',
-      {
-        keys: 'tasks',
-        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
-          data['tasks'].forEach(taskData => {
-            entity.tasks.getOrCreate(taskData['id'], this.taskService, taskData, entity);
+        keys: 'unitId',
+        toEntityOpAsync: (process: MappingProcess<Project>) => {
+          const unitService: UnitService = AppInjector.get(UnitService);
+          const unitId = process.data['unit_id'];
+          // Load what we have... or a a stub for now...
+          process.entity.unit = unitService.cache.getOrCreate(unitId, unitService, { id: unitId });
+          return unitService.get(unitId).subscribe(unit => {
+            process.entity.unit = unit;
+            process.continue();
           });
         }
       },
-      // 'tutorialEnrolments',
-      // 'groups',
-      // 'taskOutcomeAlignments',
-      'grade',
-      'gradeRationale',
+      {
+        keys: 'tasks',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          // create tasks from json
+          data['tasks'].forEach(taskData => {
+            project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {constructorParams: project});
+          });
+
+          // create not started tasks...
+          project.unit.taskDefinitions.forEach(taskDefinition => {
+            if (!project.findTaskForDefinition(taskDefinition.id)) {
+              const task = new Task(project);
+              task.definition = taskDefinition;
+              // add to cache using task definition abbreviation as key
+              project.taskCache.set(taskDefinition.abbreviation.toString(), task);
+            }
+          });
+        }
+      },
     );
 
-    this.mapping.mapAllKeysToJsonExcept('id');
+    this.mapping.addJsonKey(
+      'enrolled',
+      'targetGrade',
+      'submittedGrade',
+      'compilePortfolio',
+      'grade',
+      'gradeRationale'
+    );
   }
 
   public createInstanceFrom(json: object, other?: any): Project {

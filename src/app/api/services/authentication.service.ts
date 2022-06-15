@@ -3,6 +3,7 @@ import { Inject, Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { UIRouter, UIRouterGlobals } from '@uirouter/angular';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Injectable()
 export class AuthenticationService {
@@ -10,11 +11,12 @@ export class AuthenticationService {
   constructor(
     private httpClient: HttpClient,
     private userService: UserService,
+    @Inject(alertService) private alertService: any,
     doubtfireConstants: DoubtfireConstants,
     private router: UIRouter,
     private uiRouterGlobals: UIRouterGlobals
   ) {
-    this.AUTH_URL = `${doubtfireConstants.API_URL}/auth`
+    this.AUTH_URL = `${doubtfireConstants.API_URL}/auth`;
   }
 
   public checkUserCookie(): void {
@@ -24,7 +26,7 @@ export class AuthenticationService {
 
     if (userData && this.tryChangeUser(user)) {
       // Ensure current user is in cache
-      this.userService.cache.set(`${user.id}`, user);
+      this.userService.cache.add(user);
       this.userService.currentUser = user;
     }
   }
@@ -168,7 +170,8 @@ export class AuthenticationService {
 
   public timeoutAuthentication() {
     if (this.uiRouterGlobals.current.name !== "timeout") {
-      this.router.stateService.go("timeout");
+      this.alertService.add("danger", "Authentication timed out", 6000);
+      setTimeout(() => this.router.stateService.go("timeout"), 500);
     }
   }
 

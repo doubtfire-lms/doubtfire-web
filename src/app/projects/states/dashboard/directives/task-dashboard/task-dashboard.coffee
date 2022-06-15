@@ -11,7 +11,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     task: '='
     showFooter: '@?'
     showSubmission: '@?'
-  controller: ($scope, $stateParams, Task, TaskFeedback, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
+  controller: ($scope, $stateParams, Task, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
     $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.overseerEnabled = () ->
@@ -38,10 +38,10 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
       return unless $scope.task?
       # get the url for the task sheet and the submissions
       $scope.urls = {
-        taskSheetPdfUrl: Task.getTaskPDFUrl($scope.task.unit(), $scope.task.definition)
-        taskSubmissionPdfUrl: TaskFeedback.getTaskUrl($scope.task)
-        taskSubmissionPdfAttachmentUrl: TaskFeedback.getTaskUrl($scope.task, true)
-        taskFilesUrl: TaskFeedback.getTaskFilesUrl($scope.task)
+        taskSheetPdfUrl: $scope.task.definition.getTaskPDFUrl()
+        taskSubmissionPdfUrl: $scope.task.submissionUrl()
+        taskSubmissionPdfAttachmentUrl: $scope.task.submissionUrl(true)
+        taskFilesUrl: $scope.task.submittedFilesUrl()
       }
 
       updateCurrentView()
@@ -69,7 +69,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
 
       # Triggers a new update to the task status
       $scope.triggerTransition = (status) ->
-        taskService.updateTaskStatus $scope.task.project().unit(), $scope.task.project(), $scope.task, status
+        $scope.task.updateTaskStatus(status)
 
     $scope.downloadSubmission = () ->
       fileDownloaderService.downloadFile($scope.urls.taskSubmissionPdfAttachmentUrl)

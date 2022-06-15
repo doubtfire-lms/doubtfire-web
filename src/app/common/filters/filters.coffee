@@ -38,7 +38,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('byGrade', ->
   (input, grade) ->
     if input
-      _.filter input, (task) -> (task?) && task.definition.target_grade <= grade
+      _.filter input, (task) -> (task?) && task.definition.targetGrade <= grade
     else
       input
 )
@@ -97,7 +97,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('taskDefinitionFilter', ->
   (input, taskDefId) ->
     if input && taskDefId
-      _.filter input, (item) -> item.task_definition_id == taskDefId
+      _.filter input, (item) -> item.definition.id == taskDefId
     else
       input
 )
@@ -168,7 +168,7 @@ angular.module("doubtfire.common.filters", [])
         if task.group()?
           _.includes(tutorialIds, task.group().tutorial_id)
       else
-        _.filter(task.project().tutorial_enrolments, (enrolment) ->
+        _.filter(task.project.tutorialEnrolments, (enrolment) ->
           _.includes(tutorialIds, enrolment.tutorial_id)
         ).length > 0
 
@@ -179,7 +179,7 @@ angular.module("doubtfire.common.filters", [])
     return tasks unless (searchText? && tasks?)
     searchText = searchText.toLowerCase()
     _.filter tasks, (task) ->
-      p = task.project()
+      p = task.project
       p.matches(searchText)
 )
 
@@ -187,14 +187,14 @@ angular.module("doubtfire.common.filters", [])
   (tutorials, project) ->
     return tutorials unless project?
     _.filter tutorials, (tute) ->
-      !project.campus_id? || !tute.campus? || tute.campus.id == project.campus_id
+      !project.campus?.id? || !tute.campus? || tute.campus.id == project.campus.id
 )
 
 .filter('groupsInTutorials', ->
   (input, unitRole, kind) ->
     return unless input? && unitRole? && kind?
     if kind == 'mine'
-      return _.filter(input, (group) -> group.tutorial().tutor.id == unitRole.user_id)
+      return _.filter(input, (group) -> group.tutorial().tutor.id == unitRole.user.id)
     return input
 )
 

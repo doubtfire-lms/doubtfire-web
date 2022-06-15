@@ -44,7 +44,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     #
     evaluateQualityPoints = ->
       $scope.qualityPoints =
-        max: $scope.task.definition.max_quality_pts
+        max: $scope.task.definition.maxQualityPts
         assigned: $scope.task.quality_pts
 
     #
@@ -55,13 +55,13 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
       # don't switch the ordering
       evaluateQualityPoints()
       evaluateAssessmentPanels()
-      $scope.hasPDF = task.definition.has_task_sheet
+      $scope.hasPDF = task.definition.hasTaskSheet
       $scope.hasResources = task.definition.has_task_resources
-      $scope.taskPDFUrl = Task.getTaskPDFUrl($scope.unit, task.definition)
+      $scope.taskPDFUrl = task.definition.getTaskUrl()
       $scope.resourceUrl = Task.getTaskResourcesUrl($scope.unit, task.definition)
 
     $scope.downloadTaskPdf = ->
-      fileDownloaderService.downloadFile("#{Task.getTaskPDFUrl($scope.unit, task.definition)}?as_attachment=true")
+      fileDownloaderService.downloadFile("#{task.definition.getTaskUrl()}?as_attachment=true")
 
     $scope.downloadResources = ->
       fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, task.definition)}?as_attachment=true")
@@ -87,12 +87,12 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
       evaluateAssessmentPanels()
 
     #
-    # Watch task definition's max_quality_pts. UI bootstrap doesn't allow for
+    # Watch task definition's maxQualityPts. UI bootstrap doesn't allow for
     # a watch'ed evaluation on the `max` value. So, to recompile the rating and,
     # therefore update the rating we must destroy it with an `ng-if` and then
     # recompile it again :(
     #
-    $scope.$watch 'task.definition.max_quality_pts', (newPts, oldPts) ->
+    $scope.$watch 'task.definition.maxQualityPts', (newPts, oldPts) ->
       if newPts isnt oldPts
         $scope.assessmentPanels.quality.show = false
         $timeout ->
@@ -101,7 +101,7 @@ angular.module('doubtfire.tasks.task-sheet-viewer', [])
     #
     # Watch task defintiion for realignment visualisation
     #
-    $scope.$watch 'task.task_definition_id', (newTaskDefId) ->
+    $scope.$watch 'task.definition.id', (newTaskDefId) ->
       $scope.alignments = $filter('taskDefinitionFilter')($scope.unit.task_outcome_alignments, newTaskDefId)
 
     #

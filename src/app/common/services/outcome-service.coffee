@@ -61,7 +61,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
       td = unit.taskDef(align.task_definition_id)
       # Store a partial score for this task in the relevant outcomes ( outcomes[outcome id][grade] << score )
       # At this stage it is just rating * taskFactor (1 to 5 times 0 to 1)
-      outcomes[align.learning_outcome_id][td.target_grade].push align.rating * taskStatusFactor(td.id)
+      outcomes[align.learning_outcome_id][td.targetGrade].push align.rating * taskStatusFactor(td.id)
 
     # Finally reduce all of these into one score for each outcome / grade
     _.each outcomes, (outcome, key) ->

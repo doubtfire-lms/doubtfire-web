@@ -6,6 +6,8 @@ export const Unit = new InjectionToken('Unit');
 export const User = new InjectionToken('User');
 export const Task = new InjectionToken('Task');
 export const taskService = new InjectionToken('taskService');
+export const uploadSubmissionModal = new InjectionToken('uploadSubmissionModal');
+export const gradeTaskModal = new InjectionToken('gradeTaskModal');
 export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
 export const oldUnitService = new InjectionToken('oldUnitService');
@@ -100,6 +102,18 @@ export const userProvider = {
 export const taskServiceProvider = {
   provide: taskService,
   useFactory: (i: any) => i.get('taskService'),
+  deps: ['$injector'],
+};
+
+export const uploadSubmissionModalProvider = {
+  provide: uploadSubmissionModal,
+  useFactory: (i: any) => i.get('UploadSubmissionModal'),
+  deps: ['$injector'],
+};
+
+export const gradeTaskModalProvider = {
+  provide: gradeTaskModal,
+  useFactory: (i: any) => i.get('GradeTaskModal'),
   deps: ['$injector'],
 };
 

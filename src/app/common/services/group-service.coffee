@@ -19,8 +19,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
       0
 
   # Returns if the task provided is a group task
-  groupService.isGroupTask = (task) ->
-    task.definition.group_set?
+  # groupService.isGroupTask = (task) ->
+  #   task.definition.group_set?
 
   # Returns the group set name for the given group set ID and unit
   groupService.groupSetName = (id, unit) ->

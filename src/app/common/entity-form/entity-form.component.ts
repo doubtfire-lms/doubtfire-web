@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { Entity } from 'ngx-entity-service';
+import { Entity, RequestOptions } from 'ngx-entity-service';
 import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
@@ -36,7 +36,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
   // and one Campus (object). When sending a Tutorial to the server, it expects not to recieve those
   // particular entities as objects, but rather their unique ids that denote those instances.
   // Before a Tutorial is sent to the server, a tutorial's tutor needs to be mapped as { tutor_id: x }
-  // and the same with campus as { campus_id: y }.
+  // and the same with campus as { campus.id: y }.
   // See unit-tutorials-list.component
   formDataMapping = {};
 
@@ -136,7 +136,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
         const data = this.formDataToNewObject(this.serverKey); // sent as path id and body
-        response = service.create(data, this.otherOnCreate());
+        response = service.create(data, this.optionsOnCreate());
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
         alertService.add('danger', `${this.entityName} was not changed`, 6000);
@@ -208,7 +208,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected otherOnCreate(): any {
+  protected optionsOnCreate(): RequestOptions<T> {
     return undefined;
   }
 

@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th><a ng-click="memberSortOrder='student_name'; reverse=!reverse">Team Member</a></th>
-        <th><a ng-click="memberSortOrder='target_grade'; reverse=!reverse">Target Grade</a></th>
+        <th><a ng-click="memberSortOrder='targetGrade'; reverse=!reverse">Target Grade</a></th>
         <th class="col-sm-4"><a ng-click="memberSortOrder='rating'; reverse=!reverse">Contribution</a></th>
       </tr>
     </thead>
@@ -11,7 +11,7 @@
       <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
         <td>{{member.student_name}}</td>
         <td class="text-left">
-          <grade-icon grade="member.target_grade"></grade-icon>
+          <grade-icon grade="member.targetGrade"></grade-icon>
         </td>
         <td>
           <rating

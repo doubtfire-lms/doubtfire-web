@@ -19,7 +19,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
       $scope.tutorialsForSelector.push {
         text: t.abbreviation + ' - ' + t.tutorName
         id: t.id
-        meeting_time: t.meeting_time
+        meetingTime: t.meetingTime
         tutor: t.tutor
         abbreviation: t.abbreviation
       }
@@ -68,7 +68,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
         $scope.data = $scope.reduceDataToTutorial()
         $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
           {
-            subtitle: "#{t.tutorName} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+            subtitle: "#{t.tutorName} at #{$filter('date')(t.meetingTime, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
             show: _.keys($scope.data[t.id]).length > 0

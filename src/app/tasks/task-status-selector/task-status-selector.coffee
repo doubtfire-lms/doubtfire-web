@@ -20,4 +20,7 @@ angular.module('doubtfire.tasks.task-status-selector',[])
     $scope.taskEngagementConfig =
       studentTriggers: $scope.studentStatuses.map taskService.statusData
       tutorTriggers:   $scope.tutorStatuses.map taskService.statusData
+
+    $scope.futureStates = () ->
+      _.reject $scope.studentStatuses.map(taskService.statusData), (s) -> s.status in taskService.rejectFutureStates[$scope.task.status]
 )

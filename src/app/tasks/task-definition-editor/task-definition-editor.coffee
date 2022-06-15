@@ -79,17 +79,17 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.onTaskSheetSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
-      $scope.task.has_task_sheet = true
+      $scope.task.hasTaskSheet = true
       # $scope.filesUploaded = response
 
     # Assign task the stream - this is called
     # From the template as you can't ngModel
     # With dropdown
     $scope.changeTaskStream = (task, stream) ->
-      task.tutorial_stream = stream
+      task.tutorialStream = stream
 
     $scope.downloadTaskPDFUrl = ->
-      fileDownloaderService.downloadFile("#{Task.getTaskPDFUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
+      fileDownloaderService.downloadFile($scope.task.getTaskUrl())
 
     $scope.downloadTaskResources = ->
       fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
@@ -97,7 +97,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeTaskSheet = (task) ->
       TaskDefinition.taskSheet.delete { unit_id: $scope.unit.id, task_def_id: task.id},
         (success) ->
-          task.has_task_sheet = false
+          task.hasTaskSheet = false
           alertService.add("success", "Deleted task sheet", 2000)
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
@@ -113,7 +113,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.removeTaskAssessmentResources = (task) ->
       TaskDefinition.taskAssessmentResources.delete { unit_id: $scope.unit.id, task_def_id: task.id},
         (success) ->
-          task.has_task_assessment_resources = false
+          task.hasTaskAssessmentResources = false
           alertService.add("success", "Deleted task assessment resources", 2000)
         (error) ->
           alertService.add("danger", "Delete failed, #{error.data?.message}", 6000)
@@ -148,7 +148,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.onTaskAssessmentResourcesSuccess = (response) ->
       alertService.add("success", "Task assessment resources uploaded", 2000)
-      $scope.task.has_task_assessment_resources = true
+      $scope.task.hasTaskAssessmentResources = true
 
     $scope.downloadTaskAssessmentResources = ->
       fileDownloaderService.downloadFile(Task.getTaskAssessmentResourcesUrl($scope.unit, $scope.task), "#{$scope.unit.code}-#{$scope.task.abbreviation}-task-assessment-resources.zip")
@@ -201,12 +201,12 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       pickerData.open = ! pickerData.open
 
     $scope.addUpReq = ->
-      newLength = $scope.task.upload_requirements.length + 1
+      newLength = $scope.task.uploadRequirements.length + 1
       newUpReq = { key: "file#{newLength-1}", name: "", type: "code", language: "Pascal" }
-      $scope.task.upload_requirements.push newUpReq
+      $scope.task.uploadRequirements.push newUpReq
 
     $scope.removeUpReq = (upReq) ->
-      $scope.task.upload_requirements = $scope.task.upload_requirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
+      $scope.task.uploadRequirements = $scope.task.uploadRequirements.filter (anUpReq) -> anUpReq.key isnt upReq.key
 
     $scope.addCheck = ->
       newLength = $scope.task.plagiarism_checks.length + 1
@@ -232,7 +232,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       _.extend(task, $scope.task)
 
       task.weighting = $scope.task.weight
-      task.upload_requirements = JSON.stringify $scope.task.upload_requirements
+      task.uploadRequirements = JSON.stringify $scope.task.uploadRequirements
       task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
       task.tutorial_stream_abbr = $scope.task.tutorial_stream
       if task.group_set

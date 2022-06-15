@@ -17,7 +17,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { Task, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { TaskCommentsViewerComponent } from '../task-comments-viewer/task-comments-viewer.component';
 import { BehaviorSubject } from 'rxjs';
 
@@ -60,7 +60,7 @@ const ACCEPTED_FILE_TYPES = [
   ],
 })
 export class TaskCommentComposerComponent implements OnInit {
-  @Input() task: any = {};
+  @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
   public inputActive = new BehaviorSubject<boolean>(false);
@@ -120,7 +120,7 @@ export class TaskCommentComposerComponent implements OnInit {
   }
 
   get isStaff() {
-    return this.task?.project()?.unit()?.my_role !== 'Student';
+    return this.task?.project?.unit?.currentUserIsStaff;
   }
 
   toggleActionsVisible() {
@@ -299,7 +299,8 @@ export class TaskCommentComposerComponent implements OnInit {
         this.comment.text = '';
         this.analytics.event('Vie Comments', 'Added new comment');
         this.ts.scrollDown();
-        this.task.comments = this.ts.mapComments(this.task.comments);
+        console.log("implement - check map comments");
+        //this.task.comments = this.ts.mapComments(this.task.comments);
       },
       (failure: any) => this.alerts.add('danger', failure.data.error, 2000)
     );

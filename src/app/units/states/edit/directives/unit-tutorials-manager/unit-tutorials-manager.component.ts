@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { ActivityType, ActivityTypeService } from 'src/app/api/models/doubtfire-model';
+import { ActivityType, ActivityTypeService, Unit } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'unit-tutorials-manager',
@@ -7,7 +7,7 @@ import { ActivityType, ActivityTypeService } from 'src/app/api/models/doubtfire-
   styleUrls: ['unit-tutorials-manager.component.scss'],
 })
 export class UnitTutorialsManagerComponent {
-  @Input() unit: any;
+  @Input() unit: Unit;
 
   activityTypes: ActivityType[] = new Array<ActivityType>();
   tutorialsByStream: any[] = new Array<any>();

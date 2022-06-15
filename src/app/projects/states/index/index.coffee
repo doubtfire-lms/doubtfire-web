@@ -22,20 +22,24 @@ angular.module('doubtfire.projects.states.index', [])
   projectId = +$stateParams.projectId
   return $state.go('home') unless projectId
 
-  # Load in project
-  newProjectService.get(projectId).subscribe(
-    {
-      next: (project) ->
-        # Go home if no project was found
-        return $state.go('home') unless project?
-
-        $scope.unit = project.unit
+  GlobalStateService.onLoad () ->
+    # Load in project
+    newProjectService.get(projectId, {
+      mappingCompleteCallback: (project)->
+        # Wait for the project mapping to complete - ensuring unit details are loaded
         $scope.project = project
+        $scope.unit = project.unit
 
         # Broadcast change in project
         GlobalStateService.setView('PROJECT', $scope.project)
-      error: (failure) ->
-        $state.go('home')
-    }
-  )
+    }).subscribe(
+      {
+        next: (project) ->
+          # Go home if no project was found
+          return $state.go('home') unless project?
+
+        error: (failure) ->
+          $state.go('home')
+      }
+    )
 )

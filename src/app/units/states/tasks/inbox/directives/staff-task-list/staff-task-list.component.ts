@@ -19,7 +19,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
-import { Tutorial, UserService } from 'src/app/api/models/doubtfire-model';
+import { Tutorial, UserService, Task, Project } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -29,8 +29,8 @@ import { Tutorial, UserService } from 'src/app/api/models/doubtfire-model';
 export class StaffTaskListComponent implements OnInit, OnChanges {
   @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
 
-  @Input() task: any;
-  @Input() project: any;
+  @Input() task: Task;
+  @Input() project: Project;
 
   @Input() taskData;
   @Input() unit: Unit;
@@ -126,7 +126,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         { id: 'all', inbox_description: 'All tutorials', abbreviation: '__all' },
         { id: 'mine', inbox_description: 'Just my tutorials', abbreviation: '__mine' },
       ],
-      ...this.unit.tutorials.currentValues,
+      ...this.unit.tutorials,
     ];
 
     this.tutorials = this.tutorials.map((tutorial) => {
@@ -202,7 +202,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
     } else if (tutorialId === 'all') {
       // Students not in tutorials but submitting work
-      this.filters.tutorials = this.unit.tutorials.currentValues.concat([Tutorial.NoTutorial]);
+      this.filters.tutorials = this.unit.tutorials.concat([Tutorial.NoTutorial]);
     } else {
       this.filters.tutorials = [this.unit.tutorialFromId(tutorialId)];
     }
@@ -238,7 +238,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       return;
     }
     const taskDef =
-      this.unit.taskDefinitions.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.taskDefinitions.currentValues[0];
+      this.unit.taskDefinitionCache.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.taskDefinitionCache.currentValues[0];
     this.filters.taskDefinitionIdSelected = taskDef.id;
     this.filters.taskDefinition = taskDef;
   }
@@ -310,9 +310,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     taskEl[funcName]({ behavior: 'smooth', block: 'top' });
   }
 
-  isSelectedTask(task) {
-    const sameProject = this.taskData.selectedTask?.project().project_id === task.project().project_id;
-    const sameTaskDef = this.taskData.selectedTask?.task_definition_id === task.task_definition_id;
+  isSelectedTask(task: Task) {
+    const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
+    const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
     return sameProject && sameTaskDef;
   }
 

@@ -65,7 +65,7 @@ angular.module("doubtfire.common.services.units", [])
     #  Get a stream from the unit by abbreviation
     #
     unit.tutorialStreamForAbbr = (abbr) ->
-      _.find(unit.tutorial_streams, (stream) -> stream.abbreviation == abbr) if abbr?
+      _.find(unit.tutorialStreams, (stream) -> stream.abbreviation == abbr) if abbr?
 
     #
     # Refresh the unit with data from the server...
@@ -88,12 +88,12 @@ angular.module("doubtfire.common.services.units", [])
           taskDef.seq = index
           taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
           taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
-          taskDef.targetGrade = () -> gradeService.grades[taskDef.target_grade]
+          taskDef.targetGrade = () -> gradeService.grades[taskDef.targetGrade]
 
           # Local deadline date is the last moment in the local time zone
-          taskDef.localDeadlineDate = ()  ->
-            deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
-            return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
+          # taskDef.localDeadlineDate = ()  ->
+          #   deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
+          #   return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
           # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
           taskDef.finalDeadlineDate = ()  ->
             deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
@@ -117,7 +117,7 @@ angular.module("doubtfire.common.services.units", [])
     unit.taskDef = (taskDef) ->
       unless _.isObject(taskDef) || _.isNumber(taskDef)
         throw Error "Task def must be a number or task definition object"
-      taskDefId = if _.isObject(taskDef) then taskDef.task_definition_id else taskDef
+      taskDefId = if _.isObject(taskDef) then taskDef.definition.id else taskDef
       _.find unit.task_definitions, {id: taskDefId}
 
     # Find an outcome by its outcome id
@@ -153,10 +153,10 @@ angular.module("doubtfire.common.services.units", [])
       unit.findStudent(id)?.enrolled
 
     # Finds a student in this unit given their project ID
-    unit.findStudent = (id) ->
-      unless unit.students?
-        throw Error "Students not yet mapped to unit (unit.students is undefined)"
-      _.find(unit.students, {project_id: id})
+    # unit.findStudent = (id) ->
+    #   unless unit.students?
+    #     throw Error "Students not yet mapped to unit (unit.students is undefined)"
+    #   _.find(unit.students, {id: id})
 
     # Fina a project/student from a username
     unit.findProjectForUsername = (username) ->
@@ -191,7 +191,7 @@ angular.module("doubtfire.common.services.units", [])
     # Adds a new student to this unit
     unit.addStudent = (student) ->
       analyticsService.event 'Unit Service', 'Added Student'
-      foundStudent = unit.findStudent student.project_id
+      foundStudent = unit.findStudent student.id
       studentExists = foundStudent?
       unless studentExists
         # student doesn't exist - push it to the student list
@@ -262,7 +262,7 @@ angular.module("doubtfire.common.services.units", [])
     #
     unit.incorporateTasks = (tasks, callback) ->
       _.map tasks, (t) ->
-        project = unit.findStudent(t.project_id)
+        project = unit.findStudent(t.id)
         if project?
           unless project.incorporateTask?
             projectService.mapTask t, unit, project
@@ -282,24 +282,24 @@ angular.module("doubtfire.common.services.units", [])
       # Now fill for the students in the unit
       _.map unit.students, (p) ->
         t = _.find tasks, (t) ->
-          t.project_id == p.project_id && t.task_definition_id == taskDef.id
+          t.project.id == p.id && t.definition.id == taskDef.id
         unless t?
-          t = _.find p.tasks, (t) -> t.task_definition_id == taskDef.id
+          t = _.find p.tasks, (t) -> t.definition.id == taskDef.id
         # If a group task but group data not loaded, go fetch it
         if t.isGroupTask() and !t.group()?
           projectService.updateGroups(t.project(), null, true)
         t
 
 
-    unit.staffAlignmentsForTaskDefinition = (td) ->
-      return if ! td?
-      filteredAlignments = $filter('taskDefinitionFilter')(unit.task_outcome_alignments, td.id)
-      _.chain(filteredAlignments).map((a) ->
-        a.ilo = unit.outcome(a.learning_outcome_id)
-        a
-      )
-      .sortBy((a) -> a.ilo.ilo_number)
-      .value()
+    # unit.staffAlignmentsForTaskDefinition = (td) ->
+    #   return if ! td?
+    #   filteredAlignments = $filter('taskDefinitionFilter')(unit.task_outcome_alignments, td.id)
+    #   _.chain(filteredAlignments).map((a) ->
+    #     a.ilo = unit.outcome(a.learning_outcome_id)
+    #     a
+    #   )
+    #   .sortBy((a) -> a.ilo.ilo_number)
+    #   .value()
 
     unit.findGroupById = (id) ->
       _.find unit.groups, (grp) -> grp.id == id
@@ -368,58 +368,16 @@ angular.module("doubtfire.common.services.units", [])
       else
         'None'
 
-    student.calcTopTasks = () ->
-      # We will assign current weight to tasks...
-      currentWeight = 0
 
-      #
-      # Assign weights to tasks in final state - complete, fail, etc
-      #
-      sortedCompletedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.inFinalState()), 'definition.seq'), 'definition.start_date')
-      _.forEach sortedCompletedTasks, (task) ->
-        task.topWeight = currentWeight
-        currentWeight++
-
-      #
-      # Sort valid top tasks by start date - tasks in non-final state
-      #
-      sortedTasks = _.sortBy(_.sortBy(_.filter(student.tasks, (task) -> task.isValidTopTask()), 'definition.seq'), 'definition.start_date')
-
-      overdueTasks = _.filter sortedTasks, (task) ->
-        task.daysUntilDueDate() <= 7
-
-      #
-      # Step 2: select tasks not complete that are overdue. Pass tasks are done first.
-      #
-      for grade in gradeService.gradeValues
-        closeGradeTasks = _.filter overdueTasks, (task) ->
-          task.definition.target_grade == grade
-
-        # Sorting needs to be done here according to the days past the target date.
-        closeGradeTasks = _.orderBy(closeGradeTasks, [(task)-> task.daysPastDueDate()], ['desc'])
-
-        _.forEach closeGradeTasks, (task) ->
-          task.topWeight = currentWeight
-          currentWeight++
-
-      #
-      # Step 3: ... up to date, so look forward
-      #
-      toAdd = _.filter sortedTasks, (task) -> task.daysUntilDueDate() > 7
-      # Sort by the target_grade. Pass task are done first if same due date as others.
-      toAdd = _.sortBy(_.sortBy(toAdd, 'definition.target_grade'), 'definition.start_date')
-      _.forEach toAdd, (task) ->
-        task.topWeight = currentWeight
-        currentWeight++
 
     # Check if the student is enrolled in a tutorial
     student.isEnrolledIn = (tutorialId) ->
-      _.find(student.tutorial_enrolments, (enrolment) -> enrolment.tutorial_id == tutorialId)?
+      _.find(student.tutorialEnrolments, (enrolment) -> enrolment.tutorial.id == tutorialId)?
 
     # Updat student enrolment within a unni
     student.updateUnitEnrolment = () ->
       newEnrollment = !student.enrolled
-      Project.update({id: student.project_id, enrolled: !student.enrolled},
+      Project.update({id: student.id, enrolled: !student.enrolled},
       (project) ->
         if newEnrollment == project.enrolled
           alertService.add('success', 'Enrolment changed.', 2000)
@@ -433,7 +391,7 @@ angular.module("doubtfire.common.services.units", [])
       newId = if campus? then (if _.isString(campus) || _.isNumber(campus) then +campus else campus?.id) else -1
 
       # return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
-      Project.update( {id: student.project_id, campus_id: newId},
+      Project.update( {id: student.id, campus_id: newId},
         (response) -> #success
           student.campus_id = if (newId == -1) then null else newId
           alertService.add('success', "Campus changed for #{student.name}", 2000)
@@ -457,12 +415,12 @@ angular.module("doubtfire.common.services.units", [])
 
       fn(
         {
-          id:                     student.unit().id,
-          project_id:             student.project_id
+          id:                     student.unit.id,
+          project_id:             student.id
           tutorial_abbreviation:  tutorial.abbreviation,
         },
         (successResponse) ->
-          student.tutorial_enrolments = successResponse.enrolments
+          student.tutorialEnrolments = successResponse.enrolments
           alertService.add "success", "Tutorial enrolment updated for #{student.name}", 3000
         (response) ->
           alertService.add "danger", "Failed to update tutorial enrolment. #{response?.data?.error}", 8000
@@ -480,10 +438,6 @@ angular.module("doubtfire.common.services.units", [])
       student.portfolio_status = 0.5
     else
       student.portfolio_status = 0
-
-    # Returns a list of all active tasks of the student
-    student.activeTasks = ->
-      _.filter(student.tasks, (task) -> task.definition.target_grade <= student.target_grade)
 
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
     student.tutorNames = ->
@@ -507,7 +461,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Enable the student/project to be able to switch to its view
     student.viewProject = (as_tutor) ->
-      $state.go("projects/dashboard", {projectId: student.project_id, tutor: as_tutor, taskAbbr:''})
+      $state.go("projects/dashboard", {projectId: student.id, tutor: as_tutor, taskAbbr:''})
 
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->
@@ -518,7 +472,7 @@ angular.module("doubtfire.common.services.units", [])
 
     # Assigns a grade to a student
     student.assignGrade = (score, rationale) ->
-      Project.update { id: student.project_id, grade: score, old_grade:student.grade, grade_rationale: rationale },
+      Project.update { id: student.id, grade: score, old_grade:student.grade, grade_rationale: rationale },
         (project) ->
           student.grade = project.grade
           student.grade_rationale = project.grade_rationale
@@ -535,11 +489,11 @@ angular.module("doubtfire.common.services.units", [])
     if student.groups?
       student.groups = _.map student.groups, (grp) -> groupService.mapFuncsToGroup(grp, unit, unit.findGroupSet(grp.group_set_id))
     else
-      student.groups = _.chain(unit.group_memberships).filter((gm) -> gm.project_id == student.project_id).map((gm) -> unit.findGroupById(gm.group_id)).value()
+      student.groups = _.chain(unit.group_memberships).filter((gm) -> gm.id == student.id).map((gm) -> unit.findGroupById(gm.group_id)).value()
 
     student.tutorials = () ->
-      _.chain(student.tutorial_enrolments)
-        .map((enrolment) -> unit.tutorialFromId(enrolment.tutorial_id))
+      _.chain(student.tutorialEnrolments)
+        .map((enrolment) -> enrolment.tutorial) #unit.tutorialFromId(enrolment.tutorial.id))
         .uniq()
         .filter((tutorial) -> tutorial?).value()
 
@@ -567,17 +521,6 @@ angular.module("doubtfire.common.services.units", [])
       student.matchesTutorialEnrolments(matchText) ||
       student.matchesGroup(matchText)
 
-    # Get the status of the portfolio
-    student.portfolioTaskStatus = ->
-      if student.portfolio_available
-        return 'complete'
-      else if student.compile_portfolio
-        return 'working_on_it'
-      else
-        return 'not_started'
-
-    student.portfolioTaskStatusClass = ->
-      return taskService.statusClass(student.portfolioTaskStatus())
 
     # Call projectService update functions to update stats and task details
     projectService.addProjectMethods(student)

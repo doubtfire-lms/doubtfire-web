@@ -8,6 +8,6 @@ export class TasksOfTaskDefinitionPipe implements PipeTransform {
     if (taskDefinition == null || tasks == null) {
       return tasks;
     }
-    return tasks.filter((task) => task?.task_definition_id === taskDefinition.id);
+    return tasks.filter((task) => task?.definition.id === taskDefinition.id);
   }
 }

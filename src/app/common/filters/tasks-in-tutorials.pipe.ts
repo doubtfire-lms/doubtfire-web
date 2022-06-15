@@ -19,7 +19,7 @@ export class TasksInTutorialsPipe implements PipeTransform {
           return tutorialIds.includes(tute_id);
         }
       } else {
-        const enrolments = task?.project().tutorial_enrolments;
+        const enrolments = task?.project.tutorialEnrolments;
         return enrolments?.filter((enrolment) => tutorialIds.includes(enrolment.tutorial_id)).length > 0;
       }
     });

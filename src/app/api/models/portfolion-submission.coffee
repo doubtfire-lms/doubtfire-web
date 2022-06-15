@@ -15,7 +15,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     # PortfolioSubmission object
     #
     resource.portfolioUrl =
-      "#{DoubtfireConstants.API_URL}/submission/project/#{project.project_id}/portfolio"
+      "#{DoubtfireConstants.API_URL}/submission/project/#{project.id}/portfolio"
 
     resource.portfolioUrlAsAttachment =
       resource.portfolioUrl + "?as_attachment=true"
@@ -49,7 +49,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     # Delete file from portfolio
     #
     resource.deleteFile = (project, file) ->
-      data = angular.extend file, { id: project.project_id }
+      data = angular.extend file, { id: project.id }
       successFn = ->
         project.portfolio_files = _.without(project.portfolio_files, file)
       resource.delete data, successFn
@@ -57,7 +57,7 @@ angular.module("doubtfire.api.models.portfolio-submission", [
     resource
 
   PortfolioSubmission.getPortfolioUrl = (project, asAttachment = false) ->
-    url = "#{DoubtfireConstants.API_URL}/submission/project/#{project.project_id}/portfolio"
+    url = "#{DoubtfireConstants.API_URL}/submission/project/#{project.d}/portfolio"
     url += "?as_attachment=true" if asAttachment
     url
 

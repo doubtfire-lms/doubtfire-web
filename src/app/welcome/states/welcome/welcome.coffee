@@ -112,7 +112,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
       alertService.add("danger", "Error: " + response.data.error, 6000)
     # update projects
     for project in $scope.projects
-      promises.push Project.update(null, { id: project.project_id, target_grade: project.target_grade }, null, errorFn).$promise
+      promises.push Project.update(null, { id: project.id, targetGrade: project.targetGrade }, null, errorFn).$promise
     # user update
     user.hasRunFirstTimeSetup = true
     promises.push newUserService.update(undefined, user, ((user) -> ), errorFn).$promise

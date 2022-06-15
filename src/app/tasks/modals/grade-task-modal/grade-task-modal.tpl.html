@@ -11,7 +11,7 @@
         </label>
       </p>
     </div>
-    <div ng-if="task.definition.max_quality_pts > 0">
+    <div ng-if="task.definition.maxQualityPts > 0">
       <p>Please provide a quality rating for task <label class="label label-info">{{task.definition.abbreviation}}</label>.</p>
       <rating class="task-quality-rating" ng-click="checkClearRating()" ng-model="data.rating" on-hover="hoveringOver(value)" on-leave="hoveringOver(null)" max="numStars" state-on="'fa fa-3x fa-star icon-colorful'" state-off="'fa fa-3x fa-star icon-disable'"></rating>
     </div>

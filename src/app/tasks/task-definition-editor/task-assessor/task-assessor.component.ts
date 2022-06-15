@@ -1,6 +1,6 @@
 import { Component, Input, Inject, OnChanges } from '@angular/core';
 import { taskService, alertService } from 'src/app/ajs-upgraded-providers';
-import { OverseerAssessment, User, UserService } from 'src/app/api/models/doubtfire-model';
+import { OverseerAssessment, TaskDefinition, Unit, User, UserService, Task } from 'src/app/api/models/doubtfire-model';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 
@@ -10,9 +10,9 @@ import { TaskSubmissionService } from 'src/app/common/services/task-submission.s
   styleUrls: ['./task-assessor.component.scss']
 })
 export class TaskAssessorComponent implements OnChanges {
-  @Input() taskDefinition: any;
-  @Input() unit: any;
-  public currentUserTask: any; // Task
+  @Input() taskDefinition: TaskDefinition;
+  @Input() unit: Unit;
+  public currentUserTask: Task;
 
   constructor(
     @Inject(alertService) private alerts: any,
@@ -39,17 +39,18 @@ export class TaskAssessorComponent implements OnChanges {
   }
 
   testSubmission() {
-    this.taskDefinition.unit_id = this.unit.id;
-    var task = this.currentUserTask
-    if ( ! task ) {
-      task = {
-        definition: this.taskDefinition
-      }
-    }
-    task.id = this.taskDefinition.id;
-    task.unit_id = this.unit.id,
+    console.log("implement test submission");
+    // this.taskDefinition.unit.id = this.unit.id;
+    // var task = this.currentUserTask
+    // if ( ! task ) {
+    //   task = {
+    //     definition: this.taskDefinition
+    //   }
+    // }
+    // task.id = this.taskDefinition.id;
+    // task.unit_id = this.unit.id,
 
-    this.ts.presentTaskSubmissionModal(task, this.taskDefinition.status, false, true, this.unit);
+    // this.ts.presentTaskSubmissionModal(task, this.taskDefinition.status, false, true, this.unit);
   }
 
   testSubmissionHistory() {

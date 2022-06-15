@@ -41,7 +41,7 @@
         <label>Sort Flags By...</label>
         <div class="input-group">
           <div class="btn-group">
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('target_grade')" btn-radio="'target_grade'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('targetGrade')" btn-radio="'targetGrade'">
               <i class="fa fa-check"></i> Grade
             </button>
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('max_pct_copy')" btn-radio="'max_pct_copy'">
@@ -89,7 +89,7 @@
               Flags
               <i ng-show="
                 tableSort.order == 'max_pct_copy' ||
-                tableSort.order == 'target_grade' ||
+                tableSort.order == 'targetGrade' ||
                 tableSort.order == 'portfolio_status'"
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
@@ -120,7 +120,7 @@
           <td ng-click="viewStudent(student)" class="task-progress-bar">
             <progress class="task-progress" animate="true">
               <bar
-                ng-repeat="bar in student.task_stats"
+                ng-repeat="bar in student.taskStats"
                 value="bar.value"
                 type="{{statusClass(bar.key)}}">
                 <span ng-hide="bar.value < 10">{{bar.value}}%</span>
@@ -130,7 +130,7 @@
           <td class="text-left" ng-click="viewStudent(student)">
             <span class="flags">
               <span class="flag">
-                <grade-icon grade="student.target_grade"></grade-icon>
+                <grade-icon grade="student.targetGrade"></grade-icon>
               </span>
               <span ng-show="student.max_pct_copy > 0" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>

@@ -1,4 +1,4 @@
-import { TaskComment } from 'src/app/api/models/doubtfire-model';
+import { Task, TaskComment, UserService } from 'src/app/api/models/doubtfire-model';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -25,14 +25,27 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
 
   constructor(
     httpClient: HttpClient,
-    private emojiService: EmojiService
+    private emojiService: EmojiService,
+    private userService: UserService
   ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
       'id',
-      'author',
-      'recipient',
+      {
+        keys: 'author',
+        toEntityFn: (data: object, key: string, comment: TaskComment) => {
+          const user = this.userService.cache.getOrCreate(data[key].id, userService, data[key]);
+          comment.initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+          return user;
+        }
+      },
+      {
+        keys: 'recipient',
+        toEntityFn: (data: object, key: string, comment: TaskComment) => {
+          return this.userService.cache.getOrCreate(data[key].id, userService, data[key]);
+        }
+      },
       'recipientReadTime',
       'replyToId',
       'isNew',
@@ -44,10 +57,36 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       },
       {
         keys: ['createdAt'],
-        toEntityFn: (data, key, entity) => {
-          return data['created_at'];
+        toEntityOp: (data, key, entity) => {
+          entity.timeOfMessage = data[key];
         }
-      }
+      },
+      {
+        keys: 'type',
+        toEntityOp: (data: object, key: string, comment:TaskComment) => {
+          comment.commentType = data[key];
+        }
+      },
+      // Extension comments
+      'assessed',
+      'extensionResponse',
+      'granted',
+      'dateAssessed',
+      'weeksRequested',
+      'taskStatus',
+      ['taskDueDate', 'due_date'],
+      ['taskExtensions', 'extensions'],
+
+      // Discussion Comments
+      'status',
+      'numberOfPrompts',
+      'timeDiscussionComplete',
+      'timeDiscussionStarted'
+    );
+
+    this.mapping.addJsonKey(
+      'granted',
+
     );
   }
 
@@ -57,11 +96,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   public createInstanceFrom(json: any, other?: any): TaskComment {
     switch (json.type) {
       case 'discussion':
-        return new DiscussionComment(json, other);
+        return new DiscussionComment(other);
       case 'extension':
-        return new ExtensionComment(json, other);
+        return new ExtensionComment(other);
       default:
-        return new TaskComment(json, other);
+        return new TaskComment(other);
     }
   }
 
@@ -77,21 +116,21 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       tap((result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
         const task = other as any; //TODO: change to Task object
-        task.num_new_comments = 0;
+        task.numNewComments = 0;
       })
     );
   }
 
   public addComment(
-    task: any,
+    task: Task,
     data: string | File | Blob,
     commentType: string,
     originalComment?: TaskComment,
     prompts?: Blob[]
   ): Observable<TaskComment> {
     const pathId: {} = {
-      projectId: task.project().project_id,
-      taskDefinitionId: task.task_definition_id,
+      projectId: task.project.id,
+      taskDefinitionId: task.definition.id,
     };
 
     const body: FormData = new FormData();
@@ -135,8 +174,8 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     return super.update(
       {
         id: extension.id,
-        projectId: extension.project.project_id,
-        taskDefinitionId: extension.task.task_definition_id,
+        projectId: extension.project.id,
+        taskDefinitionId: extension.task.definition.id,
       },
       opts
     );
@@ -153,8 +192,8 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     };
     return super.create(
       {
-        projectId: task.project().project_id,
-        taskDefinitionId: task.task_definition_id,
+        projectId: task.project.id,
+        taskDefinitionId: task.definition.id,
       },
       opts
     );

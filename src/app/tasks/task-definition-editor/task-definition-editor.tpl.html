@@ -55,11 +55,11 @@
                     <div class="btn-group dropdown" dropdown>
                       <span>
                         <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-                          {{task.tutorial_stream ? task.tutorial_stream : 'None'}} <span class="caret"></span>
+                          {{task.tutorialStream ? task.tutorialStream : 'None'}} <span class="caret"></span>
                         </button>
                       </span>
                       <ul class="dropdown-menu">
-                        <li ng-repeat="stream in unit.tutorial_streams | orderBy:'abbreviation'">
+                        <li ng-repeat="stream in unit.tutorialStreams | orderBy:'abbreviation'">
                           <a
                             ng-click="changeTaskStream(task, stream.abbreviation)"
                             ng-hide="stream.abbreviation == task.tutorial_stream"
@@ -85,7 +85,7 @@
                         type="radio"
                         id="target-grade-{{grade}}"
                         value="{{$index}}"
-                        ng-model="task.target_grade"
+                        ng-model="task.targetGrade"
                       />{{grade}}
                     </label>
                   </div>
@@ -271,7 +271,7 @@
                       <label
                         ng-repeat="value in allowedQualityPoints"
                         class="btn btn-sm btn-default"
-                        ng-model="task.max_quality_pts"
+                        ng-model="task.maxQualityPts"
                         btn-radio="{{value}}"
                         >{{value || 'Disabled'}}</label
                       >
@@ -286,14 +286,14 @@
               </div>
               <div ng-show="activeTab == taskAdmin.tabsData.fileUpload">
                 <div class="form-group" ng-required="isNew">
-                  <div class="panel-body large-notice-block" ng-hide="task.upload_requirements.length > 0">
+                  <div class="panel-body large-notice-block" ng-hide="task.uploadRequirements.length > 0">
                     <i class="fa fa-2x fa-upload"></i>
                     <p>Add Submission Requirements</p>
                   </div>
-                  <div ng-show="task.upload_requirements.length > 0">
+                  <div ng-show="task.uploadRequirements.length > 0">
                     <div
                       class="panel-body clearfix submission-requirement"
-                      ng-repeat="upreq in task.upload_requirements"
+                      ng-repeat="upreq in task.uploadRequirements"
                     >
                       <label class="col-sm-3 control-label">Requirement Name</label>
                       <div class="col-sm-7 form-group">
@@ -358,14 +358,14 @@
                     </file-uploader>
                     <button
                       ng-click="downloadTaskPDFUrl()"
-                      ng-show="task.has_task_sheet"
+                      ng-show="task.hasTaskSheet"
                       class="btn btn-info col-sm-12"
                     >
                       <i class="fa fa-download"></i> Download Task Sheet
                     </button>
                     <button
                       ng-click="removeTaskSheet(task)"
-                      ng-show="task.has_task_sheet"
+                      ng-show="task.hasTaskSheet"
                       class="btn btn-danger col-sm-12"
                     >
                       <i class="fa fa-trash-o"></i> Delete Task Sheet
@@ -453,10 +453,10 @@
                       url="taskAssessmentResourcesUploadUrl()"
                       on-success="onTaskAssessmentResourcesSuccess">
                     </file-uploader>
-                    <a ng-click="downloadTaskAssessmentResources()" ng-show="task.has_task_assessment_resources" class="btn btn-info col-sm-12">
+                    <a ng-click="downloadTaskAssessmentResources()" ng-show="task.hasTaskAssessmentResources" class="btn btn-info col-sm-12">
                       <i class="fa fa-download"></i> Download Assessment Resources
                     </a>
-                    <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.has_task_assessment_resources" class="btn btn-danger col-sm-12">
+                    <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.hasTaskAssessmentResources" class="btn btn-danger col-sm-12">
                       <i class="fa fa-trash-o"></i> Delete Assessment Resources
                     </a>
                     <!-- <div class="col-sm-6">

@@ -12,16 +12,17 @@
   <div style="color: rgb(216, 216, 216)">/</div>
 
   <unit-dropdown
-    [unit]="currentUnitOrProject"
+    [unit]="currentUnit"
     [unitRoles]="filteredUnitRoles"
     [projects]="projects">
   </unit-dropdown>
 
   <task-dropdown
-    [currentUnitOrProject]="currentUnitOrProject"
+    [currentUnit]="currentUnit"
+    [currentProject]="currentProject"
     [currentView]="currentView"
     [data]="data"
-    [unitRole]="unitRole"
+    [unitRole]="currentUnitRole"
   ></task-dropdown>
 
   <span fxFlex></span>

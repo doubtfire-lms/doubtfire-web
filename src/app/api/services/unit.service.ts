@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSetService, LearningOutcomeService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
+import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
@@ -18,6 +18,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private tutorialStreamService: TutorialStreamService,
     private learningOutcomeService: LearningOutcomeService,
     private taskDefinitionService: TaskDefinitionService,
+    private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService
   ) {
     super(httpClient, API_URL);
@@ -29,7 +30,6 @@ export class UnitService extends CachedEntityService<Unit> {
       'description',
       'active',
       'myRole',
-      // 'staff', - map to unit roles
       {
         keys: 'staff',
         toEntityOp: (data, key, entity) => {
@@ -41,15 +41,12 @@ export class UnitService extends CachedEntityService<Unit> {
           });
         }
       },
-      // 'mainConvenor', - need to map to unit role
       {
         keys: 'mainConvenor',
         toEntityOp: (data, key, entity) => {
           entity.mainConvenor = entity.staff.get(data['mainConvenor']);
         }
       },
-
-      // 'teachingPeriod', - map to teaching period
       {
         keys: ['teachingPeriod', 'teaching_period_id'],
         toEntityFn: (data, key, entity) => {
@@ -58,7 +55,6 @@ export class UnitService extends CachedEntityService<Unit> {
           }
         }
       },
-
       {
         keys: 'startDate',
         toEntityFn: (data, key, entity, params?) => {
@@ -68,7 +64,6 @@ export class UnitService extends CachedEntityService<Unit> {
           return entity.startDate.toISOString();
         }
       },
-
       {
         keys: 'endDate',
         toEntityFn: (data, key, entity, params?) => {
@@ -90,43 +85,56 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
-      // 'learningOutcomes', - map to learning outcomes
-      // {
-      //   keys: 'learningOutcomes',
-      //   toEntityOp: (data, key, entity) => {
-
-      //   }
-      // },
-      // 'tutorialStreams', - map to tutorial streams
+      {
+        keys: 'learningOutcomes',
+        toEntityOp: (data: object, key: string, unit: Unit) => {
+          data[key].forEach(ilo => {
+            unit.learningOutcomesCache.getOrCreate(ilo['id'], this.learningOutcomeService, ilo);
+          });
+        }
+      },
       {
         keys: 'tutorialStreams',
         toEntityOp: (data, key, entity) => {
           data['tutorial_streams'].forEach((streamJson: object) => {
-            entity.tutorialStreams.add(this.tutorialStreamService.buildInstance(streamJson, entity));
+            entity.tutorialStreamsCache.add(this.tutorialStreamService.buildInstance(streamJson, {constructorParams: entity}));
           });
         }
       },
-      // 'tutorials', - map to tutorials
       {
         keys: 'tutorials',
         toEntityOp: (data, key, entity) => {
           data['tutorials'].forEach((tutorialJson: object) => {
-            entity.tutorials.add(this.tutorialService.buildInstance(tutorialJson, entity));
+            entity.tutorialsCache.add(this.tutorialService.buildInstance(tutorialJson, {constructorParams: entity}));
           });
         }
       },
       // 'tutorialEnrolments', - map to tutorial enrolments
-      // 'taskDefinitions', - map to task definitions
       {
         keys: 'taskDefinitions',
         toEntityOp: (data, key, unit) => {
+          var seq: number = 0;
           data['task_definitions'].forEach((taskDefinitionJson: object) => {
-            unit.taskDefinitions.add(this.taskDefinitionService.buildInstance(taskDefinitionJson, unit));
+            const td = unit.taskDefinitionCache.getOrCreate(taskDefinitionJson['id'], this.taskDefinitionService, taskDefinitionJson, {constructorParams: unit});
+            td.seq = seq++;
           });
         }
       },
-      // 'taskOutcomeAlignments', - map to task outcome alignments
-      // 'groupSets', - map to group sets
+      {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, jsonKey: string, unit: Unit) => {
+          data[jsonKey].forEach( (alignment) => {
+            unit.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              this.taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: unit
+              }
+            );
+          });
+        }
+      },
       {
         keys: 'groupSets',
         toEntityOp: (data, key, unit) => {

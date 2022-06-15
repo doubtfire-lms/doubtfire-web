@@ -15,7 +15,7 @@
     </button>
     </div>
   </li>
-  <li class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in task.filterFutureStates(taskEngagementConfig.studentTriggers)" >
+  <li class="col-xs-6 col-sm-4 col-md-4" ng-repeat="action in futureStates" >
     <div class="row">
       <button class="col-xs-12 btn task-status {{action.class}}" ng-class="{'active' : project.selectedTask.status == action.status}" ng-click="triggerTransition(action.status)" ng-model="project.selectedTask.status" btn-radio="action.status" >
         <i class="{{action.icon}} fa-2x task-status-icon"></i>

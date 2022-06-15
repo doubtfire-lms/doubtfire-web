@@ -61,7 +61,7 @@
     </p>
     <p ng-show="selectedGroupSet.keep_groups_in_same_class">
       Please make sure that you are enrolled in the correct tutorial. You can only join a group that is running in your
-      allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to
+      allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.id})">Tutorial List</a> to
       check and update your tutorial enrolment.
     </p>
   </div>
@@ -214,7 +214,7 @@
 
   <p ng-show="selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
     Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the
-    <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial
+    <a ui-sref="projects/tutorials({projectId: project.id})">Tutorial List</a> to check and update your tutorial
     enrolment if needed.
   </p>
 </div>

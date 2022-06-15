@@ -10,9 +10,11 @@ import {
   User,
   TutorialStream,
   TutorialStreamService,
+  Unit
 } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 import { FormControl, Validators } from '@angular/forms';
+import { RequestOptions } from 'ngx-entity-service';
 
 @Component({
   selector: 'unit-tutorials-list',
@@ -23,7 +25,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() stream: TutorialStream;
-  @Input() unit: any;
+  @Input() unit: Unit;
 
   days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Asynchronous'];
 
@@ -46,9 +48,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     @Inject(alertService) private alerts: any
   ) {
     super({
-      meeting_day: new FormControl('', [Validators.required]),
-      meeting_time: new FormControl(null, [Validators.required]),
-      meeting_location: new FormControl('', [Validators.required]),
+      meetingDay: new FormControl('', [Validators.required]),
+      meetingTime: new FormControl(null, [Validators.required]),
+      meetingLocation: new FormControl('', [Validators.required]),
       abbreviation: new FormControl('', [Validators.required]),
       campus: new FormControl(null, []),
       capacity: new FormControl('', [Validators.required]),
@@ -70,7 +72,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
 
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
-      (tutorial) => tutorial.tutorial_stream === this.stream || (!tutorial.tutorial_stream && !this.stream)
+      (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream)
     );
   }
 
@@ -142,7 +144,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
     if (this.stream) {
       result['tutorial']['tutorial_stream_abbr'] = this.stream.abbreviation;
     }
-    return Tutorial.mapToCreateJson(this.unit, result);
+    return result; //Tutorial.mapToCreateJson(this.unit, result);
   }
 
   // This comparison function is required to determine what campus or user
@@ -169,8 +171,10 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> {
   /**
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
-  protected otherOnCreate(): any {
-    return this.unit;
+  protected optionsOnCreate(): RequestOptions<Tutorial> {
+    return {
+      constructorParams: this.unit
+    };
   }
 
   // Sorting function to sort data when sort

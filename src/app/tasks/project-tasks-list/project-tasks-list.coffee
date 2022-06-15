@@ -24,7 +24,7 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
 
     $scope.taskDisabled = (task) ->
-      $scope.taskDefinition(task).target_grade > $scope.project.target_grade
+      $scope.taskDefinition(task).targetGrade > $scope.project.targetGrade
 
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)
@@ -39,12 +39,12 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
           result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
         else
           result += " (?)"
-      
-      if task.definition.max_quality_pts > 0
-        if task.quality_pts?
-          result += " (" + task.quality_pts + "/" + task.definition.max_quality_pts + ")"
+
+      if task.definition.maxQualityPts > 0
+        if task.qualityPts?
+          result += " (" + task.qualityPts + "/" + task.definition.maxQualityPts + ")"
         else
-          result += " (?/" + task.definition.max_quality_pts + ")"
-      
+          result += " (?/" + task.definition.maxQualityPts + ")"
+
       result
 )

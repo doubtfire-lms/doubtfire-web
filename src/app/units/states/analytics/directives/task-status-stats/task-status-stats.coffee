@@ -37,8 +37,8 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
       $scope.tutorialsForSelector.push {
         text: t.abbreviation + ' - ' + t.tutorName
         id: t.id
-        meeting_time: t.meeting_time
-        tutor_name: t.tutorName
+        meetingTime: t.meetingTime
+        tutorName: t.tutorName
         abbreviation: t.abbreviation
       }
 
@@ -92,7 +92,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
         $scope.data = $scope.reduceDataToTutorial()
         $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
           {
-            subtitle: "#{t.tutorName} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+            subtitle: "#{t.tutorName} at #{$filter('date')(t.meetingTime, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
             show: _.keys($scope.data[t.id]).length > 0
@@ -193,7 +193,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
               show: _.keys($scope.data[t.id]).length > 0
               tutorial: t
               title: t.abbreviation
-              subtitle: "#{t.tutorName} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+              subtitle: "#{t.tutorName} at #{$filter('date')(t.meetingTime, 'shortTime')}"
             }
 
     $scope.resetToOverview = ->
