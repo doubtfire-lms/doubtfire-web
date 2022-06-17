@@ -2,7 +2,7 @@ import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
 import { formatDate } from '@angular/common';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService } from './doubtfire-model';
+import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService, Group } from './doubtfire-model';
 import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -78,7 +78,7 @@ export class Task extends Entity {
   }
 
   public localDueDateString(): string {
-    const locale = AppInjector.get(LOCALE_ID);
+    const locale: string = AppInjector.get(LOCALE_ID);
     return formatDate(this.localDueDate(), "d MMM", locale);
   }
 
@@ -491,4 +491,19 @@ export class Task extends Entity {
   public staffAlignments() {
     return this.unit.taskOutcomeAlignments.find
   }
+
+  public shortTutorialDescription() : string {
+    const stream = this.definition.tutorialStream;
+    const tutorial = this.project.tutorialForStream(stream);
+    if (tutorial) {
+      return tutorial.abbreviation
+    } else {
+      return "None";
+    }
+  }
+
+  public get group(): Group {
+    return this.project.getGroupForTask(this);
+  }
+
 }

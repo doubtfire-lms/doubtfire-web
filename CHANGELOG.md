@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.14](https://github.com/macite/doubtfire-deploy/compare/v6.0.13...v6.0.14) (2022-06-03)
+
+### [6.0.13](https://github.com/macite/doubtfire-deploy/compare/v6.0.12...v6.0.13) (2022-06-03)
+
+
+### Features
+
+* add new comment composer ([e83261e](https://github.com/macite/doubtfire-deploy/commit/e83261ea36f9816519d9036874240cf7e3fa0a79))
+* add smoother loading for task comments ([b6b57ae](https://github.com/macite/doubtfire-deploy/commit/b6b57ae4696ac39255f3060b64113f229d66fb8b))
+* filter tasks in inbox based on task definition stream ([7c996f1](https://github.com/macite/doubtfire-deploy/commit/7c996f110054b7d0e5959eff96cdd90faf289725))
+
+
+### Bug Fixes
+
+* add missing dependencies in component tests ([8a256c6](https://github.com/macite/doubtfire-deploy/commit/8a256c699899b5d79d6caeb3791b1db06b41ded7))
+* can download all task resources ([9343625](https://github.com/macite/doubtfire-deploy/commit/93436254391b6eef0ef9b351f45b355bdfd50f3f))
+* change task definition filter label in inbox ([f580d47](https://github.com/macite/doubtfire-deploy/commit/f580d4795c75d34166dad53ad6566ed19ff666c6))
+* correct and simplify toggle logic ([945a41f](https://github.com/macite/doubtfire-deploy/commit/945a41f74374e4a609d302d36277dd5fc6aa3be8))
+* disable incomplete user service tests ([5422245](https://github.com/macite/doubtfire-deploy/commit/54222459a3fdab44e28bb42b554a0b456f2286e9))
+* ensure test dependencies are compatible ([05ea871](https://github.com/macite/doubtfire-deploy/commit/05ea8711ef680fa5d81227060e3a1c1a10919ce3))
+* ensure that portfolio download gets name from server ([e9a29ae](https://github.com/macite/doubtfire-deploy/commit/e9a29ae30555bc91cbe36cf84384494568a4194a))
+* fix the error message for entity-form ([5fc1285](https://github.com/macite/doubtfire-deploy/commit/5fc128526a42e1bc0d1489e5da904692a0ff4446))
+* reduce text in specific tutorial filter ([b170781](https://github.com/macite/doubtfire-deploy/commit/b1707812a0de9e3f7f1db0ae7b77c701fb0bc3f0))
+* simplify student filter ([8e1b7b7](https://github.com/macite/doubtfire-deploy/commit/8e1b7b7aa8f02e1de2f585a716334409ca8e06cd))
+* update description of student filter ([5c6a89b](https://github.com/macite/doubtfire-deploy/commit/5c6a89b733954828a8e7c6768f521e0ba85c83b2))
+* use nullish coalescing in task comment comp ([4258495](https://github.com/macite/doubtfire-deploy/commit/4258495b6f8e3e4f60d9a01f92f5c5853eab91c0))
+
 ### [6.0.12](https://github.com/macite/doubtfire-deploy/compare/v6.0.11...v6.0.12) (2022-04-26)
 
 

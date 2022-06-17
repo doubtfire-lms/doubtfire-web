@@ -75,6 +75,7 @@ services:
     command: /bin/bash -c 'npm install; npm start'
     ports:
       - "4200:4200"
+      - "9876:9876"
     depends_on:
       - doubtfire-api
     volumes:

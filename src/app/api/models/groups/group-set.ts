@@ -4,5 +4,5 @@ import { User } from '../doubtfire-model';
 
 export class GroupSet extends Entity {
 
-
+  public id: number;
 }

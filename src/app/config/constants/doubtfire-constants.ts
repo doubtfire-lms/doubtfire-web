@@ -7,7 +7,7 @@ import API_URL from 'src/app/config/constants/apiURL';
 interface SettingsResponseFormat {
   externalName: string;
   overseer_enabled: boolean;
-};
+}
 
 interface SignOutUrlResponseFormat {
   auth_signout_url: string;

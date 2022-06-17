@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
     private globalState: GlobalStateService,
     private userService: UserService
   ) {
-
     this.globalState.showHideHeader.subscribe({
       next: (shouldShow) => {
         this.showHeader = shouldShow;

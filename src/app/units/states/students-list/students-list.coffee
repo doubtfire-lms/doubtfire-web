@@ -75,10 +75,6 @@ angular.module('doubtfire.units.states.students', [])
   # Expose typeahead data function
   $scope.unitTypeAheadData = unitService.unitTypeAheadData
 
-  # Switches the student's tutorial
-  $scope.switchToTutorial = (student, tutorial) ->
-    student.switchToTutorial(tutorial)
-
   # CSV header func
   $scope.getCSVHeader = ->
     result = ['student_code', 'name', 'email', 'portfolio']

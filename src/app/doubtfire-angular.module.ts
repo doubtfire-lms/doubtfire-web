@@ -83,7 +83,6 @@ import {
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ContenteditableModule } from '@ng-stack/contenteditable';
 import { AudioCommentRecorderComponent } from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
 import { DiscussionPromptComposerComponent } from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -241,7 +240,6 @@ import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignme
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    ContenteditableModule,
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,

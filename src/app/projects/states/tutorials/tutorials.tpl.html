@@ -52,14 +52,14 @@
             <button
               class="btn btn-default btn-sm"
               ng-click="project.switchToTutorial(tutorial)"
-              ng-hide="project.isEnrolledIn(tutorial.id) || !tutorial.hasCapacity()"
+              ng-hide="project.isEnrolledIn(tutorial) || !tutorial.hasCapacity()"
             >
               <i class="fa fa-plus"></i> Enrol
             </button>
             <button
               class="btn btn-default btn-sm"
               ng-click="project.switchToTutorial(tutorial)"
-              ng-show="project.isEnrolledIn(tutorial.id)"
+              ng-show="project.isEnrolledIn(tutorial)"
             >
               <i class="fa fa-minus"></i> Withdraw
             </button>

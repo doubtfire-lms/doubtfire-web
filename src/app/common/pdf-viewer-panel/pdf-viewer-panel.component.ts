@@ -16,7 +16,7 @@ export class PdfViewerPanelComponent implements OnInit {
   ngOnInit(): void {}
 
   downloadPdf() {
-    this.fileDownloader.downloadFile(this.pdfUrl, 'displayed-pdf.pdf');
+    this.fileDownloader.downloadFile(this.pdfUrl + "?as_attachment=true", 'displayed-pdf.pdf');
   }
 
   downloadResources() {

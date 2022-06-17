@@ -44,8 +44,8 @@ export class Unit extends Entity {
 
   readonly staff: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
-  readonly groupSets: EntityCache<GroupSet> = new EntityCache<GroupSet>();
-  groups: EntityCache<Group>;
+  public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
+  public readonly groupsCache: EntityCache<Group> = new EntityCache<Group>();
 
   groupMemberships: Array<GroupMembership>;
 
@@ -180,7 +180,7 @@ export class Unit extends Entity {
   }
 
   public get hasGroupwork(): boolean {
-    return this.groupSets?.size > 0;
+    return this.groupSetsCache.size > 0;
   }
 
   public taskDef(taskDefId: number): TaskDefinition {
@@ -217,5 +217,12 @@ export class Unit extends Entity {
     return this.students.find( (s) => s.student.username === username);
   }
 
+  public get groups(): Group[] {
+    return this.groupsCache.currentValues;
+  }
+
+  public get groupSets(): GroupSet[] {
+    return this.groupSetsCache.currentValues;
+  }
 
 }

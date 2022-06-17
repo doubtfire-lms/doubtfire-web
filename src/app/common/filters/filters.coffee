@@ -79,7 +79,7 @@ angular.module("doubtfire.common.filters", [])
   (input, gs, group, members) ->
     if input
       if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial_id)) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial)) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
       else
         _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
     else
@@ -166,10 +166,10 @@ angular.module("doubtfire.common.filters", [])
     _.filter tasks, (task) ->
       if task.isGroupTask()
         if task.group()?
-          _.includes(tutorialIds, task.group().tutorial_id)
+          _.includes(tutorialIds, task.group.tutorial.id)
       else
-        _.filter(task.project.tutorialEnrolments, (enrolment) ->
-          _.includes(tutorialIds, enrolment.tutorial_id)
+        _.filter(task.project.tutorials, (tutorial) ->
+          _.includes(tutorialIds, tutorial.id)
         ).length > 0
 
 )
@@ -205,7 +205,7 @@ angular.module("doubtfire.common.filters", [])
     grp = project.groupForGroupSet(groupSet)
     return [grp] if grp
     return input unless groupSet.keep_groups_in_same_class
-    _.filter(input, (group) -> project.isEnrolledIn(group.tutorial_id))
+    _.filter(input, (group) -> project.isEnrolledIn(group.tutorial))
 )
 
 .filter('groupsWithName', ->

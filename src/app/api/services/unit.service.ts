@@ -139,7 +139,7 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: 'groupSets',
         toEntityOp: (data, key, unit) => {
           data['group_sets'].forEach((groupSetJson: object) => {
-            unit.groupSets.add(this.groupSetService.buildInstance(groupSetJson));
+            unit.groupSetsCache.add(this.groupSetService.buildInstance(groupSetJson));
           });
         }
       }

@@ -34,4 +34,12 @@ export class User extends Entity {
     const nn = this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
     return `${fn} ${sn}${nn}`;
   }
+
+  public matches(text: string): boolean {
+    return this.studentId.toLowerCase().indexOf(text) >= 0 ||
+      this.firstName.toLowerCase().indexOf(text) >= 0 ||
+      this.lastName.toLowerCase().indexOf(text) >= 0 ||
+      this.email.toLowerCase().indexOf(text) >= 0 ||
+      this.nickname?.toLowerCase().indexOf(text) >= 0;
+  }
 }

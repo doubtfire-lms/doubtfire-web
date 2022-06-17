@@ -423,6 +423,14 @@ angular.module("doubtfire.common.services.projects", [])
     task.overseerEnabled = () ->
       task.unit().overseerEnabled() && task.definition.assessment_enabled && task.definition.hasTaskAssessmentResources
 
+    # task.shortTutorialDescription = () ->
+    #   stream = task.unit().tutorialStreamForAbbr(task.definition.tutorial_stream)
+    #   tutorial = task?.project().tutorialForStream(stream)
+    #   if (tutorial)
+    #     tutorial.abbreviation
+    #   else
+    #     "None"
+
     task
 
   projectService.addTaskDetailsToProject = (project, unit) ->
@@ -532,13 +540,13 @@ angular.module("doubtfire.common.services.projects", [])
         project.groups = response.groups
         onSuccess?(project)
 
-  projectService.getGroupForTask = (project, task) ->
-    return null unless task.definition.group_set
-    result = _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
-    result || _.find project.unit.groups, (group) -> group.group_set_id == task.definition.group_set.id && project.id in group.projects
+  # projectService.getGroupForTask = (project, task) ->
+  #   return null unless task.definition.group_set
+  #   result = _.find project.groups, (group) -> group.group_set_id == task.definition.group_set.id
+  #   result || _.find project.unit.groups, (group) -> group.group_set_id == task.definition.group_set.id && project.id in group.projects
 
-  projectService.taskFromTaskDefId = (project, task_definition_id) ->
-    project.findTaskForDefinition(task_definition_id)
+  # projectService.taskFromTaskDefId = (project, task_definition_id) ->
+  #   project.findTaskForDefinition(task_definition_id)
 
   projectService.tasksInTargetGrade = (project) ->
     $filter('byGrade')(project.tasks, project.targetGrade)

@@ -42,7 +42,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
-  tutorials: any[] = null;
+  studentFilter: any[] = null;
   tasks: any[] = null;
 
   watchingTaskKey: any;
@@ -117,24 +117,25 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         tutorials: [],
         taskDefinitionIdSelected: null,
         taskDefinition: null,
+        forceStream: true
       },
       this.filters
     );
 
-    this.tutorials = [
+    this.studentFilter = [
       ...[
-        { id: 'all', inbox_description: 'All tutorials', abbreviation: '__all' },
-        { id: 'mine', inbox_description: 'Just my tutorials', abbreviation: '__mine' },
+        { id: 'all', inboxDescription: 'All Students', abbreviation: '__all', forceStream: false },
+        { id: 'mine', inboxDescription: 'My Students', abbreviation: '__mine', forceStream: !this.isTaskDefMode },
       ],
-      ...this.unit.tutorials,
+      ...this.unit.tutorials.map((t) => {
+        return {
+          id: t.id,
+          inboxDescription: `${t.abbreviation} - ${t.description}`,
+          abbreviation: t.abbreviation,
+          forceStream: true
+        };
+      }),
     ];
-
-    this.tutorials = this.tutorials.map((tutorial) => {
-      if (!['all', 'mine'].includes(tutorial.id)) {
-        tutorial.inbox_description = `${tutorial.abbreviation} - ${tutorial.description}`;
-      }
-      return tutorial;
-    });
 
     this.tutorialIdChanged();
 
@@ -172,7 +173,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
-    filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials);
+    if (this.filters.tutorials) {
+      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials, this.filters.forceStream);
+    }
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
@@ -198,15 +201,23 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   tutorialIdChanged(): void {
     const tutorialId = this.filters.tutorialIdSelected;
+
+    const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
+
+    this.filters.forceStream = filterOption.forceStream;
+
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
     } else if (tutorialId === 'all') {
-      // Students not in tutorials but submitting work
-      this.filters.tutorials = this.unit.tutorials.concat([Tutorial.NoTutorial]);
+      // Ignore tutorials filter
+      this.filters.tutorials = null;
     } else {
-      this.filters.tutorials = [this.unit.tutorialFromId(tutorialId)];
+      this.filters.tutorials = [filterOption];
     }
-    this.filters.tutorials = this.filters.tutorials.map((t) => t.id);
+
+    if (this.filters.tutorials) {
+      this.filters.tutorials = this.filters.tutorials.map((t) => t.id);
+    }
     this.applyFilters();
   }
 
@@ -267,7 +278,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         // Apply initial filters
         this.applyFilters();
         this.loading = false;
-        // Load initial set task, either the one provided(by the URL)
+        // Load initial set task, either the one provided (by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
         const task = this.findTaskForTaskKey(this.taskData.taskKey);
