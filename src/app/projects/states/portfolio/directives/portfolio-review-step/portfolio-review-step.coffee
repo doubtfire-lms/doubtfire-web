@@ -16,15 +16,15 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     $scope.$watch 'project.portfolio_available', ->
       $scope.hasLSR = $scope.projectHasLearningSummaryReport()
       $scope.hasTasksSelected = $scope.selectedTasks().length > 0
-      $scope.portfolioIsCompiling = $scope.project.compile_portfolio
+      $scope.portfolioIsCompiling = $scope.project.compilePortfolio
       $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
 
     #
     # Compile portfolio
     #
     $scope.toggleCompileProject = ->
-      $scope.project.compile_portfolio = not $scope.project.compile_portfolio
-      Project.update { id: $scope.project.id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
+      $scope.project.compilePortfolio = not $scope.project.compilePortfolio
+      Project.update { id: $scope.project.id, compile_portfolio: $scope.project.compilePortfolio }, (response) ->
         $scope.portfolioIsCompiling = true
         $scope.canCompilePortfolio  = false
         $scope.project.portfolio_status = 0.5

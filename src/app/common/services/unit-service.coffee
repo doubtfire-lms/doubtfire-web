@@ -432,9 +432,9 @@ angular.module("doubtfire.common.services.units", [])
     student.name = "#{student.firstName} #{student.lastName}"
 
     # Assigns the student's portfolio status (1 if has porfolio, 0.5 if currently compiling)
-    if student.has_portfolio
+    if student.hasPortfolio
       student.portfolio_status = 1
-    else if student.compile_portfolio
+    else if student.compilePortfolio
       student.portfolio_status = 0.5
     else
       student.portfolio_status = 0

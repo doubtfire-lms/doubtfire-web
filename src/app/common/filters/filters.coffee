@@ -46,7 +46,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> (student?) && student.max_pct_copy > 0
+      _.filter  input, (student) -> (student?) && student.maxPctCopy > 0
     else
       input
 )
@@ -54,7 +54,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsWithPortfolio', ->
   (input, option) ->
     if input
-      _.filter  input, (student) ->  option == 'allStudents' || ((student?) && student.has_portfolio > 0)
+      _.filter  input, (student) ->  option == 'allStudents' || ((student?) && student.hasPortfolio > 0)
     else
       input
 )

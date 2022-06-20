@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { alertService, analyticsService } from 'src/app/ajs-upgraded-providers';
 import { HttpClient } from '@angular/common/http';
 import { CampusService, Project, Tutorial, Unit, UserService } from 'src/app/api/models/doubtfire-model';
-import { EntityService, RequestOptions } from 'ngx-entity-service';
+import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class TutorialService extends EntityService<Tutorial> {
+export class TutorialService extends CachedEntityService<Tutorial> {
   protected readonly endpointFormat = 'tutorials/:id:';
   protected readonly switchTutorialEndpointFormat = 'units/:unitId:/tutorials/:tutorialAbbreviation:/enrolments/:projectId:';
 
@@ -88,16 +88,20 @@ export class TutorialService extends EntityService<Tutorial> {
       sourceCache: project.unit.tutorialsCache
     };
 
-    var observer: Observable<object>;
+    var observer: Observable<any>;
     if (isEnrol) {
-      observer = this.create(pathIds, options);
+      observer = this.post(pathIds, options);
     } else {
       observer = this.delete(pathIds, options);
     }
 
     observer.subscribe({
-      next: (value: object) => {
-        this.alertService.add("success", `Tutorial enrolment updated for ${project.student.name}`, 3000)
+      next: (value: {enrolments: {tutorial_id: number}[]}) => {
+        this.alertService.add("success", `Tutorial enrolment updated for ${project.student.name}`, 3000);
+        project.tutorialEnrolmentsCache.clear();
+        for (const enrolment of value.enrolments) {
+          project.tutorialEnrolmentsCache.add(project.unit.tutorialFromId(enrolment['tutorial_id']));
+        }
       },
       error: (error) => {
         this.alertService.add("danger", `Failed to update tutorial enrolment. ${error}`, 8000);

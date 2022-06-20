@@ -16,14 +16,14 @@ export class StudentTutorialSelectComponent {
    * @param aEntity The tutorial itself
    * @param bEntity The tutorial enrolment
    */
-  compareSelection(aEntity: Tutorial, bEntity: any) {
+  compareSelection(aEntity: Tutorial, bEntity: Tutorial) {
     if (!aEntity || !bEntity) {
       return;
     }
-    return aEntity.id === bEntity.tutorial_id;
+    return aEntity.id === bEntity.id;
   }
 
-  public tutorialsForStreamAndStudent(student: any, stream?: TutorialStream) {
+  public tutorialsForStreamAndStudent(student: Project, stream?: TutorialStream) {
     return this.unit.tutorials.filter((tutorial) => {
       const result: boolean =
         student.campus == null || tutorial.campus == null || student.campus.id === tutorial.campus.id;

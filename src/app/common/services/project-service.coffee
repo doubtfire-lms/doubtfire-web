@@ -465,19 +465,19 @@ angular.module("doubtfire.common.services.projects", [])
     #
     # Update the project's task stats from a new stats string
     #
-    project.updateTaskStats = (new_stats) ->
-      updated_stats = project.task_stats
+    # project.updateTaskStats = (new_stats) ->
+    #   updated_stats = project.task_stats
 
-      updated_stats[0].value = Math.round(100 * new_stats.red_pct)
-      updated_stats[1].value = Math.round(100 * new_stats.grey_pct)
-      updated_stats[2].value = Math.round(100 * new_stats.orange_pct)
-      updated_stats[3].value = Math.round(100 * new_stats.blue_pct)
-      updated_stats[4].value = Math.round(100 * new_stats.green_pct)
+    #   updated_stats[0].value = Math.round(100 * new_stats.red_pct)
+    #   updated_stats[1].value = Math.round(100 * new_stats.grey_pct)
+    #   updated_stats[2].value = Math.round(100 * new_stats.orange_pct)
+    #   updated_stats[3].value = Math.round(100 * new_stats.blue_pct)
+    #   updated_stats[4].value = Math.round(100 * new_stats.green_pct)
 
-      # Map the order directly to the project
-      project.orderScale = Math.round(100 * new_stats.order_scale)
+    #   # Map the order directly to the project
+    #   project.orderScale = Math.round(100 * new_stats.order_scale)
 
-      project.task_stats = updated_stats
+    #   project.task_stats = updated_stats
 
     project.updateBurndownChart = ->
       Project.get { id: project.id }, (response) ->

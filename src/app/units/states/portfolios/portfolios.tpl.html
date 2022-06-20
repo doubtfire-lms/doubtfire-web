@@ -132,8 +132,8 @@
               </a>
             </th>
             <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
-              <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
-                Portfolio? <i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              <a ng-click="sortOrder='hasPortfolio'; reverse=!reverse">
+                Portfolio? <i ng-show="sortOrder=='hasPortfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="grade">
@@ -171,7 +171,7 @@
                 </bar>
               </progress>
             </td>
-            <td ng-show="portfolioFilter == 'allStudents'">{{student.has_portfolio ? "Yes" : "No"}}</td>
+            <td ng-show="portfolioFilter == 'allStudents'">{{student.hasPortfolio ? "Yes" : "No"}}</td>
             <td>{{student.grade}}</td>
           </tr>
         </tbody>

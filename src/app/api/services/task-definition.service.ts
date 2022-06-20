@@ -1,7 +1,7 @@
 
 
 import { CachedEntityService } from 'ngx-entity-service';
-import { TaskDefinition, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
+import { TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
@@ -12,8 +12,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   protected readonly endpointFormat = 'units/:unit.id:/task_definitions/:id:';
 
   constructor(
-    httpClient: HttpClient,
-    private tutorialStreamService: TutorialStreamService,
+    httpClient: HttpClient
   ) {
     super(httpClient, API_URL);
 

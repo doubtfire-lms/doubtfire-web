@@ -1,6 +1,6 @@
 import { Entity, EntityCache } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
-import { Campus, Grade, Group, Task, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
+import { Campus, Grade, Group, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 
 
@@ -21,13 +21,10 @@ export class Project extends Entity {
   public portfolioFiles: {kind: string, name: string, idx: number}[];
 
   public taskStats: {
-    red_pct: number,
-    grey_pct: number,
-    orange_pct: number,
-    blue_pct: number,
-    green_pct: number,
-    order_scale: number
-  };
+    key: TaskStatusEnum,
+    value: number
+  }[];
+  public orderScale: number;
 
   public burndownChartData: {key: string, values: number[]}[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();

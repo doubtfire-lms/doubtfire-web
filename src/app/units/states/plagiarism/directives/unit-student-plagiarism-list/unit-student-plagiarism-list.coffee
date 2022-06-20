@@ -33,7 +33,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
         $scope.studentFilter = 'allStudents'
 
       # _.each $scope.unit.students, (student) ->
-      #   if student.max_pct_copy > 0
+      #   if student.maxPctCopy > 0
       #     projectService.getProject student, $scope.unit, (proj) ->
       #       tasksWithCpy = _.filter proj.tasks, (t) -> t.pct_similar > 0
       #       proj.similar_to_count = tasksWithCpy.length

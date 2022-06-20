@@ -21,4 +21,12 @@ export class TutorialStreamService extends CachedEntityService<TutorialStream> {
   public createInstanceFrom(json: any, other?: any): TutorialStream {
     return new TutorialStream();
   }
+
+  public override keyForJson(json: any): string {
+    return json['abbreviation'];
+  }
+
+  public override get keyName(): string {
+    return 'abbreviation';
+  }
 }

@@ -96,7 +96,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     _.sortBy tasks, (t) -> t.definition.seq
 
   # Jump to a step
-  if $scope.project.portfolio_available or $scope.project.compile_portfolio
+  if $scope.project.portfolio_available or $scope.project.compilePortfolio
     $scope.setActiveTab $scope.tabs.reviewStep
   else if $scope.projectHasDraftLearningSummaryReport
     $scope.setActiveTab $scope.tabs.summaryStep

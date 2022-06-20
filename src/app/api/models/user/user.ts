@@ -36,7 +36,7 @@ export class User extends Entity {
   }
 
   public matches(text: string): boolean {
-    return this.studentId.toLowerCase().indexOf(text) >= 0 ||
+    return this.studentId?.toLowerCase().indexOf(text) >= 0 ||
       this.firstName.toLowerCase().indexOf(text) >= 0 ||
       this.lastName.toLowerCase().indexOf(text) >= 0 ||
       this.email.toLowerCase().indexOf(text) >= 0 ||

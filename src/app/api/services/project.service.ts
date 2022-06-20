@@ -1,5 +1,5 @@
 import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import { CampusService, Project, Unit, UnitService, UserService, Task } from 'src/app/api/models/doubtfire-model';
+import { CampusService, Project, Unit, UnitService, UserService, Task, TaskStatus } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
@@ -56,18 +56,37 @@ export class ProjectService extends CachedEntityService<Project> {
       'compilePortfolio',
       'portfolioAvailable',
       'usesDraftLearningSummary',
-      'taskStats',
-      'burndownChartData',
       {
-        keys: 'tutorialEnrolments',
-        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
-          const unit: Unit = project.unit;
-          data[key].forEach(tutorialEnrolment => {
-            const tutorial = unit.tutorialsCache.get(tutorialEnrolment['tutorial_id']);
-            project.tutorialEnrolmentsCache.add(tutorial);
-          });
+        keys: ['taskStats', 'stats'],
+        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+          const values = data[key];
+          entity.taskStats = [
+            {
+              key: "fail",
+              value: Math.round((values['red_pct'] || 0) * 100)
+            },
+            {
+              key: "not_started",
+              value: Math.round((values['grey_pct'] || 1) * 100),
+            },
+            {
+              key: "working_on_it",
+              value: Math.round((values['orange_pct'] ||  0) * 100),
+            },
+            {
+              key: "ready_for_feedback",
+              value: Math.round((values['blue_pct'] || 0) * 100),
+            },
+            {
+              key: "complete",
+              value: Math.round((values['green_pct'] || 0) * 100)
+            }
+          ];
+
+          entity.orderScale = Math.round((values['order_scale'] || 0) * 100);
         }
       },
+      'burndownChartData',
       // 'groups',
       {
         keys: 'taskOutcomeAlignments',
@@ -111,6 +130,18 @@ export class ProjectService extends CachedEntityService<Project> {
         }
       },
       {
+        keys: 'tutorialEnrolments',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          const unit: Unit = project.unit;
+          data[key].forEach((tutorialEnrolment: { tutorial_id: number; }) => {
+            if (tutorialEnrolment.tutorial_id) {
+              const tutorial = unit.tutorialsCache.get(tutorialEnrolment.tutorial_id);
+              project.tutorialEnrolmentsCache.add(tutorial);
+            }
+          });
+        }
+      },
+      {
         keys: 'tasks',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
           // create tasks from json
@@ -145,13 +176,15 @@ export class ProjectService extends CachedEntityService<Project> {
     return new Project(other as Unit);
   }
 
-  public loadStudent(unit: Unit, includeWithdrawnStudents: boolean = false): Observable<Project[]> {
+  public loadStudents(unit: Unit, includeWithdrawnStudents: boolean = false): Observable<Project[]> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
       endpointFormat: this.studentEndpointFormat,
       params: {
-        all: includeWithdrawnStudents
-      }
+        all: includeWithdrawnStudents,
+        unit_id: unit.id
+      },
+      constructorParams: unit
     }
     return super.query(undefined, options);
   }

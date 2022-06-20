@@ -35,11 +35,11 @@ export class Unit extends Entity {
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
 
-  readonly learningOutcomesCache: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
-  readonly tutorialStreamsCache: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
-  readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
+  public readonly learningOutcomesCache: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
+  public readonly tutorialStreamsCache: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
+  public readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
-  readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
+  public readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> = new EntityCache<TaskOutcomeAlignment>();
 
   readonly staff: EntityCache<UnitRole> = new EntityCache<UnitRole>();

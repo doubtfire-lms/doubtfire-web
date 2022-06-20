@@ -178,6 +178,7 @@ import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
+import { GroupService } from './api/services/group.service';
 
 @NgModule({
   // Components we declare
@@ -296,6 +297,7 @@ import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignme
     CampusService,
     AuthenticationService,
     GroupSetService,
+    GroupService,
     UnitService,
     ProjectService,
     UnitRoleService,

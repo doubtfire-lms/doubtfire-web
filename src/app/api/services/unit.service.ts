@@ -6,6 +6,7 @@ import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
 import { AppInjector } from 'src/app/app-injector';
 import { TaskDefinitionService } from './task-definition.service';
+import { GroupService } from './group.service';
 
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
@@ -19,9 +20,12 @@ export class UnitService extends CachedEntityService<Unit> {
     private learningOutcomeService: LearningOutcomeService,
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
-    private groupSetService: GroupSetService
+    private groupSetService: GroupSetService,
+    private groupService: GroupService,
   ) {
     super(httpClient, API_URL);
+
+    this.cacheBehaviourOnGet = 'cacheQuery';
 
     this.mapping.addKeys(
       'id',
@@ -142,8 +146,15 @@ export class UnitService extends CachedEntityService<Unit> {
             unit.groupSetsCache.add(this.groupSetService.buildInstance(groupSetJson));
           });
         }
+      },
+      {
+        keys: 'groups',
+        toEntityOp: (data, key, unit) => {
+          data['groups'].forEach((groupJson: object) => {
+            unit.groupsCache.add(this.groupService.buildInstance(groupJson, {constructorParams: unit}));
+          });
+        }
       }
-      // 'groups', - map to groups
       // 'groupMemberships', - map to group memberships
     );
 

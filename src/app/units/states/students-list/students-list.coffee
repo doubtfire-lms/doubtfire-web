@@ -17,13 +17,13 @@ angular.module('doubtfire.units.states.students', [])
 .controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, unitService, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
   # Filtering
   applyFilters = ->
-    filteredStudents = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
+    filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
     # At this point know the length of all students
-    allStudentsLength = filteredStudents.length
+    allStudentsLength = filteredProjects.length
     # Apply filter for projects and determine to show CSV button
-    filteredStudents = $filter('projectFilter')(filteredStudents, $scope.searchText) if $scope.searchText?.trim().length > 0
+    filteredProjects = $filter('projectFilter')(filteredProjects, $scope.searchText) if $scope.searchText?.trim().length > 0
     # Paginate and sort
-    $scope.filteredStudents = $filter('paginateAndSort')(filteredStudents, $scope.pagination, $scope.tableSort)
+    $scope.filteredProjects = $filter('paginateAndSort')(filteredProjects, $scope.pagination, $scope.tableSort)
 
   # Pagination values
   $scope.pagination =
@@ -88,9 +88,9 @@ angular.module('doubtfire.units.states.students', [])
   # CSV data row func
   $scope.getCSVData = ->
     analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
-    filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName), $scope.searchText)
+    filteredProjects = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName), $scope.searchText)
     result = []
-    angular.forEach(filteredStudents, (student) ->
+    angular.forEach(filteredProjects, (student) ->
       row = {}
       row['student_code'] = student.student_id
       row['name'] = student.name

@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.index', [])
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, projectService, listenerService, GlobalStateService, newUserService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, GlobalStateService, newUserService, alertService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
@@ -40,9 +40,17 @@ angular.module('doubtfire.units.states.index', [])
 
     GlobalStateService.setView("UNIT", $scope.unitRole)
 
-    newUnitService.get(unitId).subscribe(
-      (unit)->
-        $scope.unit = unit
-        unit.loadEnrolledStudents()
-    )
+    newUnitService.get(unitId).subscribe({
+      next: (unit)->
+        newProjectService.loadStudents(unit).subscribe({
+          next: (students)->
+            $scope.unit = unit
+          error: (err)->
+            alertService.add("danger", "Error loading students: " + err, 8000)
+            setTimeout((()-> $state.go('home')), 5000)
+        })
+      error: (err)->
+        alertService.add("danger", "Error loading unit: " + err, 8000)
+        setTimeout((()-> $state.go('home')), 5000)
+    })
 )
