@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.students', [])
 .controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, unitService, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
   # Filtering
   applyFilters = ->
-    filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
+    filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor)
     # At this point know the length of all students
     allStudentsLength = filteredProjects.length
     # Apply filter for projects and determine to show CSV button
@@ -46,7 +46,7 @@ angular.module('doubtfire.units.states.students', [])
   }[$scope.unitRole.role]
 
   # Scope for student name
-  $scope.tutorName = newUserService.currentUser.name
+  $scope.tutor = newUserService.currentUser
 
   # Send initial apply filter
   applyFilters()
@@ -88,14 +88,14 @@ angular.module('doubtfire.units.states.students', [])
   # CSV data row func
   $scope.getCSVData = ->
     analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
-    filteredProjects = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName), $scope.searchText)
+    filteredProjects = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor), $scope.searchText)
     result = []
     angular.forEach(filteredProjects, (student) ->
       row = {}
       row['student_code'] = student.student_id
       row['name'] = student.name
       row['email'] = student.student_email
-      row['portfolio'] = student.portfolio_status
+      row['portfolio'] = student.portfolioStatus
       if $scope.unit.tutorialStreamsCache.size > 0
         _.each $scope.unit.tutorialStreams, (ts) ->
           row[ts.abbreviation] = student.tutorialForStream(ts)?.abbreviation || ''
@@ -111,8 +111,7 @@ angular.module('doubtfire.units.states.students', [])
 
   # View a student
   $scope.viewStudent = (student) ->
-    analyticsService.event 'Teacher View - Students Tab', 'Viewed Student'
-    student.viewProject(true)
+    $state.go("projects/dashboard", {projectId: student.id, tutor: true, taskAbbr:''})
 
   # Sets the flag sorting
   $scope.sortTableByFlag = (flag) ->

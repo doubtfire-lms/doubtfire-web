@@ -56,11 +56,6 @@ export class GlobalStateService {
   // public get unitRoleSubject(): Observable<UnitRole>;
 
   /**
-   * The current activity, ie. Dashboard, Task Inbox, etc. Mostly used to be able to set the task dropdown
-   */
-  public currentActivitySubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
-  /**
    * The list of all of the units taught by the current user
    */
   public get unitRolesSubject(): Observable<UnitRole[]> {
@@ -100,6 +95,7 @@ export class GlobalStateService {
   }
 
   public signOut() {
+    this.isLoadingSubject.next(true);
     this.clearUnitsAndProjects();
     this.authenticationService.signOut();
     this.router.stateService.go('sign_in');
@@ -109,7 +105,6 @@ export class GlobalStateService {
    * Query the API for the units taught and studied by the current user.
    */
   public loadUnitsAndProjects() {
-
     //TODO: Consider sequence here? Can we adjust to fail once.
     this.unitRoleService.query().subscribe(
       {
@@ -136,7 +131,7 @@ export class GlobalStateService {
       (loading: boolean) => {
         if ( !loading ) {
           run();
-          subscription.unsubscribe();
+          setTimeout(() => subscription.unsubscribe());
         }
       }
     )

@@ -8,6 +8,7 @@ import {
   userNotificationSettingsModal,
   userSettingsModal,
 } from 'src/app/ajs-upgraded-providers';
+import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
@@ -31,7 +32,7 @@ describe('HeaderComponent', () => {
       const showHideHeader = new Subject<boolean>();
       const unitRolesSubject = new BehaviorSubject<any>(null);
       const projectsSubject = new BehaviorSubject<any>(null);
-      const currentViewAndEntitySubject = new BehaviorSubject<{ viewType: ViewType; entity: {} }>(null);
+      const currentViewAndEntitySubject = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(null);
 
       currentUserStub = {
         role: 'tutor',

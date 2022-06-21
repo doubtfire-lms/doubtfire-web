@@ -9,10 +9,10 @@ angular.module("doubtfire.common.filters", [])
 )
 
 .filter('showStudents', ->
-  (input, kind, tutorName) ->
+  (input, kind, tutor) ->
     if input
       if kind == "mine" || kind == "myStudents"
-        _.filter  input, (project) -> project.hasTutor(tutorName)
+        _.filter  input, (project) -> project.hasTutor(tutor)
       else
         input
     else

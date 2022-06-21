@@ -10,7 +10,8 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
-import { Unit } from 'src/app/api/models/doubtfire-model';
+import { Project, Unit } from 'src/app/api/models/doubtfire-model';
+import { UIRouter } from '@uirouter/angular';
 
 @Component({
   selector: 'unit-students-editor',
@@ -18,7 +19,7 @@ import { Unit } from 'src/app/api/models/doubtfire-model';
   styleUrls: ['unit-students-editor.component.scss'],
 })
 export class UnitStudentsEditorComponent {
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<Project>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -34,7 +35,7 @@ export class UnitStudentsEditorComponent {
     'enrolled',
     'goto',
   ];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<Project>;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -45,7 +46,8 @@ export class UnitStudentsEditorComponent {
     @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(csvResultModalService) private csvResultModal: any,
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
+    private fileDownloader: FileDownloaderService,
+    private router: UIRouter,
   ) {}
 
   ngOnInit() {}
@@ -79,22 +81,22 @@ export class UnitStudentsEditorComponent {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'student_id':
+        case 'username':
         case 'firstName':
         case 'lastName':
-        case 'student_email':
+        case 'email':
         case 'enrolled':
           return this.sortCompare(a[sort.active], b[sort.active], isAsc);
         case 'campus':
-          return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
+          return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
         default:
           return 0;
       }
     });
   }
 
-  public gotoStudent(student: any) {
-    student.viewProject(true);
+  public gotoStudent(student: Project) {
+    this.router.stateService.go("projects/dashboard", {projectId: student.id, tutor: true, taskAbbr:''})
   }
 
   enrolStudent() {

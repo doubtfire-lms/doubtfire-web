@@ -387,20 +387,20 @@ angular.module("doubtfire.common.services.units", [])
         alertService.add('danger', response.data.error, 5000)
       )
 
-    student.switchToCampus = (campus, oldId, success) ->
-      newId = if campus? then (if _.isString(campus) || _.isNumber(campus) then +campus else campus?.id) else -1
+    # student.switchToCampus = (campus, oldId, success) ->
+    #   newId = if campus? then (if _.isString(campus) || _.isNumber(campus) then +campus else campus?.id) else -1
 
-      # return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
-      Project.update( {id: student.id, campus_id: newId},
-        (response) -> #success
-          student.campus_id = if (newId == -1) then null else newId
-          alertService.add('success', "Campus changed for #{student.name}", 2000)
-          if success? && _.isFunction(success)
-            success()
-        (response) -> #error
-          student.campus_id = oldId
-          alertService.add('danger', response.data.error, 5000)
-      )
+    #   # return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
+    #   Project.update( {id: student.id, campus_id: newId},
+    #     (response) -> #success
+    #       student.campus_id = if (newId == -1) then null else newId
+    #       alertService.add('success', "Campus changed for #{student.name}", 2000)
+    #       if success? && _.isFunction(success)
+    #         success()
+    #     (response) -> #error
+    #       student.campus_id = oldId
+    #       alertService.add('danger', response.data.error, 5000)
+    #   )
 
     # Switch's the student's current tutorial to a new tutorial, either specified
     # by object or id.
@@ -432,12 +432,12 @@ angular.module("doubtfire.common.services.units", [])
     student.name = "#{student.firstName} #{student.lastName}"
 
     # Assigns the student's portfolio status (1 if has porfolio, 0.5 if currently compiling)
-    if student.hasPortfolio
-      student.portfolio_status = 1
-    else if student.compilePortfolio
-      student.portfolio_status = 0.5
-    else
-      student.portfolio_status = 0
+    # if student.hasPortfolio
+    #   student.portfolioStatus = 1
+    # else if student.compilePortfolio
+    #   student.portfolioStatus = 0.5
+    # else
+    #   student.portfolioStatus = 0
 
     # Returns this student's tutor's name or 'N/A' if the student is not in any tutorials
     student.tutorNames = ->
@@ -447,8 +447,8 @@ angular.module("doubtfire.common.services.units", [])
         .join()
         .value() || 'None'
 
-    student.hasTutor = (tutorName) ->
-      _.find(student.tutorials(), (tute) -> tute.tutorName == tutorName)?
+    # student.hasTutor = (tutorName) ->
+    #   _.find(student.tutorials(), (tute) -> tute.tutorName == tutorName)?
 
     # Students task statistics (for bar)
     student.task_stats = [
@@ -460,8 +460,8 @@ angular.module("doubtfire.common.services.units", [])
     ]
 
     # Enable the student/project to be able to switch to its view
-    student.viewProject = (as_tutor) ->
-      $state.go("projects/dashboard", {projectId: student.id, tutor: as_tutor, taskAbbr:''})
+    # student.viewProject = (as_tutor) ->
+    #   $state.go("projects/dashboard", {projectId: student.id, tutor: as_tutor, taskAbbr:''})
 
     # Returns the student's portfolio submission URL
     student.portfolioUrl = ->

@@ -47,7 +47,7 @@
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('maxPctCopy')" btn-radio="'maxPctCopy'">
               <i class="fa fa-eye"></i> Plagiarism
             </button>
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolio_status')" btn-radio="'portfolio_status'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolioStatus')" btn-radio="'portfolioStatus'">
               <i class="fa fa-book"></i> Portfolio Status
             </button>
           </div>
@@ -69,9 +69,9 @@
       <thead>
         <tr>
           <th class="avatar"></th>
-          <th class="student-id">
-            <a ng-click="sortTableBy('student.studentId')">
-              Student ID <i ng-show="tableSort.order == 'student.studentId'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+          <th class="username">
+            <a ng-click="sortTableBy('student.username')">
+              Username <i ng-show="tableSort.order == 'student.username'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/id-column-header-->
           <th class="name">
@@ -90,7 +90,7 @@
               <i ng-show="
                 tableSort.order == 'maxPctCopy' ||
                 tableSort.order == 'targetGrade' ||
-                tableSort.order == 'portfolio_status'"
+                tableSort.order == 'portfolioStatus'"
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/flags-column-header-->
@@ -112,8 +112,8 @@
             <user-icon [size]="30" [user]="project.student"></user-icon>
           </td>
           <td ng-click="viewStudent(project)">
-            {{project.student.studentId || "N/A"}}
-          </td><!--/student-id-column-->
+            {{project.student.username || "N/A"}}
+          </td><!--/username-column-->
           <td ng-click="viewStudent(project)">
             {{project.student.name}}
           </td><!--/name-column-->

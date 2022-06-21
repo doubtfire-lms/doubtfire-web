@@ -27,14 +27,17 @@ angular.module('doubtfire.projects.states.index', [])
     newProjectService.get(projectId, {
       mappingCompleteCallback: (project)->
         # Wait for the project mapping to complete - ensuring unit details are loaded
-        $scope.project = project
         $scope.unit = project.unit
 
-        # Broadcast change in project
-        GlobalStateService.setView('PROJECT', $scope.project)
     }).subscribe(
       {
         next: (project) ->
+          # Broadcast change in project
+          $scope.project = project
+          $scope.unit = project.unit if project.unit.taskDefinitions.length > 0 && project.tasks.length == project.unit.taskDefinitions.length
+
+          GlobalStateService.setView('PROJECT', $scope.project)
+
           # Go home if no project was found
           return $state.go('home') unless project?
 

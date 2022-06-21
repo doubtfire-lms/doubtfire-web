@@ -31,6 +31,9 @@ export class ProjectService extends CachedEntityService<Project> {
         keys: ['campus', 'campus_id'],
         toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
           this.campusService.get(data['campus_id']).subscribe(campus => { entity.campus = campus; });
+        },
+        toJsonFn: (entity: Project, key: string) => {
+          return entity.campus?.id;
         }
       },
       {
@@ -46,7 +49,11 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
           const userId = data['user_id'];
 
-          entity.student = this.userService.cache.get(userId);
+          this.userService.get(userId).subscribe({
+            next: (user) => {
+              entity.student = user;
+            }
+          });
         }
       },
       'enrolled',
@@ -54,6 +61,18 @@ export class ProjectService extends CachedEntityService<Project> {
       'submittedGrade',
       'portfolioFiles',
       'compilePortfolio',
+      {
+        keys: 'hasPortfolio',
+        toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
+          const result = data[key] === true;
+
+          if (result) entity.portfolioStatus = 1;
+          else if (entity.compilePortfolio) entity.portfolioStatus = 0.5;
+          else entity.portfolioStatus = 0;
+
+          return result;
+        }
+      },
       'portfolioAvailable',
       'usesDraftLearningSummary',
       {
@@ -88,21 +107,6 @@ export class ProjectService extends CachedEntityService<Project> {
       },
       'burndownChartData',
       // 'groups',
-      {
-        keys: 'taskOutcomeAlignments',
-        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
-          data[key].forEach(alignment => {
-            project.taskOutcomeAlignmentsCache.getOrCreate(
-              alignment['id'],
-              taskOutcomeAlignmentService,
-              alignment,
-              {
-                constructorParams: project
-              }
-            );
-          });
-        }
-      },
       'grade',
       'gradeRationale',
       {
@@ -126,6 +130,21 @@ export class ProjectService extends CachedEntityService<Project> {
           return unitService.get(unitId).subscribe(unit => {
             process.entity.unit = unit;
             process.continue();
+          });
+        }
+      },
+      {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          data[key].forEach(alignment => {
+            project.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: project
+              }
+            );
           });
         }
       },
@@ -168,7 +187,8 @@ export class ProjectService extends CachedEntityService<Project> {
       'submittedGrade',
       'compilePortfolio',
       'grade',
-      'gradeRationale'
+      'gradeRationale',
+      'campus'
     );
   }
 

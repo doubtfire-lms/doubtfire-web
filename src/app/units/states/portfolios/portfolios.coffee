@@ -67,7 +67,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.grades = gradeService.grades
   $scope.unitService = unitService
 
-  $scope.tutorName = newUserService.currentUser.name
+  $scope.tutor = newUserService.currentUser
 
   $scope.search = ""
 

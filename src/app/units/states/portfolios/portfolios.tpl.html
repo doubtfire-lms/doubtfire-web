@@ -146,7 +146,7 @@
         <tbody>
           <tr
             class="task-progress-row"
-            ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithSubmittedGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+            ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPortfolio:portfolioFilter | studentsWithSubmittedGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
             ng-class="{'info': selectedStudent == student}"
             ng-click="selectStudent(student)"
           >

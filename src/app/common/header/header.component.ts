@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   aboutDoubtfireModal,
   calendarModal,
@@ -10,12 +10,13 @@ import { GlobalStateService, ViewType } from 'src/app/projects/states/index/glob
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
 import { Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   task: any;
   data: { isTutor: boolean } = {
     isTutor: false,
@@ -31,6 +32,8 @@ export class HeaderComponent implements OnInit {
   currentView: ViewType;
   showHeader: boolean = true;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     @Inject(userSettingsModal) private UserSettingsModal,
     @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
@@ -41,51 +44,67 @@ export class HeaderComponent implements OnInit {
     private globalState: GlobalStateService,
     private userService: UserService
   ) {
-    this.globalState.showHideHeader.subscribe({
-      next: (shouldShow) => {
-        this.showHeader = shouldShow;
-      },
-      error: (err) => { },
-    });
+  }
 
-    this.globalState.unitRolesSubject.subscribe({
-      next: (unitRoles) => {
-        if (unitRoles == null) return; // might be signing out, or the data has been cleared
-        this.unitRoles = unitRoles;
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.globalState.showHideHeader.subscribe({
+        next: (shouldShow) => {
+          this.showHeader = shouldShow;
+        },
+        error: (err) => { },
+      })
+    );
 
-        this.filteredUnitRoles = this.isActiveUnitRole
-          .transform(this.unitRoles)
-          .filter((role) => this.isUniqueRole(role));
-        console.log(this.filteredUnitRoles);
-      },
-      error: (err) => { },
-    });
+    this.subscriptions.push(
+      this.globalState.unitRolesSubject.subscribe({
+        next: (unitRoles) => {
+          if (unitRoles == null) return; // might be signing out, or the data has been cleared
+          this.unitRoles = unitRoles;
 
-    this.globalState.projectsSubject.subscribe({
-      next: (projects) => {
-        if (projects == null) return;
-        this.projects = projects;
-      },
-      error: (err) => { },
-    });
+          this.filteredUnitRoles = this.isActiveUnitRole
+            .transform(this.unitRoles)
+            .filter((role) => this.isUniqueRole(role));
+          console.log(this.filteredUnitRoles);
+        },
+        error: (err) => { },
+      })
+    );
+
+    this.subscriptions.push(
+      this.globalState.projectsSubject.subscribe({
+        next: (projects) => {
+          if (projects == null) return;
+          this.projects = projects;
+        },
+        error: (err) => { },
+      })
+    );
 
     // get the current active unit or project
-    this.globalState.currentViewAndEntitySubject.subscribe({
-      next: (currentViewAndEntity) => {
-        this.currentView = currentViewAndEntity?.viewType;
+    this.subscriptions.push(
+      this.globalState.currentViewAndEntitySubject.subscribe({
+        next: (currentViewAndEntity) => {
+          this.currentView = currentViewAndEntity?.viewType;
 
-        if (this.currentView == ViewType.PROJECT) {
-          this.updateSelectedProject(currentViewAndEntity.entity as Project);
-        } else if (this.currentView == ViewType.UNIT) {
-          this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
-        } else {
-          this.currentUnit = null;
-          this.currentProject = null;
-        }
-      },
-      error: (err) => { },
-    });
+          if (this.currentView == ViewType.PROJECT) {
+            this.updateSelectedProject(currentViewAndEntity.entity as Project);
+          } else if (this.currentView == ViewType.UNIT) {
+            this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+          } else {
+            this.currentUnit = null;
+            this.currentProject = null;
+          }
+        },
+        error: (err) => { },
+      })
+    );
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
 
   isUniqueRole = (unit) => {
     let units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
@@ -129,6 +148,4 @@ export class HeaderComponent implements OnInit {
   get currentUser(): User {
     return this.userService.currentUser;
   }
-
-  ngOnInit(): void { }
 }

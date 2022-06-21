@@ -174,8 +174,8 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<object> {
-    return service.delete(entity).pipe(tap(
+  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<any> {
+    return service.delete<any>(entity).pipe(tap(
       (obj) => {
         this.cancelEdit();
         entities.splice( entities.indexOf(entity), 1);

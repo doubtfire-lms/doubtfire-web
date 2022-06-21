@@ -1,6 +1,7 @@
 import { Entity, EntityCache } from 'ngx-entity-service';
+import { Observable } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
-import { Campus, Grade, Group, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
+import { Campus, Grade, Group, ProjectService, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 
 
@@ -18,6 +19,8 @@ export class Project extends Entity {
   public portfolioAvailable: boolean;
   public usesDraftLearningSummary: boolean;
 
+  public hasPortfolio: boolean;
+  public portfolioStatus: number;
   public portfolioFiles: {kind: string, name: string, idx: number}[];
 
   public taskStats: {
@@ -173,9 +176,13 @@ export class Project extends Entity {
     return this.taskCache.currentValues.find((task) => task.definition.id === id);
   }
 
-  switchToCampus(value: any, originalCampusId: number, arg2: () => void) {
-    console.log("implement switch campus");
-    // throw new Error('Method not implemented.');
+  public switchToCampus(newCampus: Campus): Observable<Project> {
+    // return if newId == student.campus_id || newId == -1 && stduent.campus_id == null
+    const projectService = AppInjector.get(ProjectService);
+
+    this.campus = newCampus;
+
+    return projectService.update(this);
   }
 
   public updateBurndownChart() {
@@ -197,6 +204,10 @@ export class Project extends Entity {
 
   public isEnrolledIn(tutorial: Tutorial): boolean {
     return this.tutorials.includes(tutorial);
+  }
+
+  public hasTutor(tutor: User) {
+    return this.tutorials.find(tute => tute.tutor === tutor) !== undefined;
   }
 
   public switchToTutorial(tutorial: Tutorial) {

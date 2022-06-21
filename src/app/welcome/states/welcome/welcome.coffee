@@ -13,7 +13,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
 
   GlobalStateService.setView('OTHER')
   # Define steps for wizard
@@ -115,11 +115,10 @@ angular.module('doubtfire.welcome.states.welcome', [])
       promises.push Project.update(null, { id: project.id, targetGrade: project.targetGrade }, null, errorFn).$promise
     # user update
     user.hasRunFirstTimeSetup = true
-    promises.push newUserService.update(undefined, user, ((user) -> ), errorFn).$promise
-    $q.all(promises).then ->
+    promises.push newUserService.update(user, ((user) -> ), errorFn).$promise
       $state.go('home')
 
-  $scope.userFirstName = currentUser.firstName
+  $scope.userFirstName = $scope.user.firstName
 
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName
@@ -128,9 +127,9 @@ angular.module('doubtfire.welcome.states.welcome', [])
   projectService.getProjects false, (projects) ->
     $scope.projects = projects
     # Only ask for student ID if learning subjects!
-    if projects.length == 0 && currentUser.role != 'Student'
+    if projects.length == 0 && $scope.user.role != 'Student'
       $scope.isStaff = true
-      $scope.user.student_id = null
+      $scope.user.studentId = null
       delete $scope.steps.studentIdStep
       # NOTE: Must add step to below
       for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']

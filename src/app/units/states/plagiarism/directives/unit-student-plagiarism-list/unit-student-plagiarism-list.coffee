@@ -16,7 +16,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
     $scope.view = "students"
     studentFilter = "allStudents"
 
-    $scope.tutorName = newUserService.currentUser.name
+    $scope.tutor = newUserService.currentUser
     $scope.search = ""
     $scope.reverse = false
     $scope.currentPage = 1
@@ -28,7 +28,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
     $scope.studentFilter = 'allStudents'
 
     $scope.$watch 'unit.students', (newUnit) ->
-      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
+      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutor)
       if filteredStudents? && filteredStudents.length == 0
         $scope.studentFilter = 'allStudents'
 

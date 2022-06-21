@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
+              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
                 <td>{{student.student_id}}</td>
                 <td>{{student.name}}</td>
                 <td>{{grades[student.targetGrade]}}</td>

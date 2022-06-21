@@ -4,6 +4,7 @@ import { analyticsService, dateService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { Project, UnitRole, User, UserService } from 'src/app/api/models/doubtfire-model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'home',
@@ -37,9 +38,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   public externalName = this.constants.ExternalName;
   public userFirstName = this.currentUser.nickname || this.currentUser.firstName;
 
+  private subscriptions: Subscription[] = [];
+
   ngOnDestroy(): void {
     this.renderer.setStyle(document.body, 'background-color', '#fff');
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
+
   ngOnInit(): void {
     this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
@@ -50,15 +55,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadingUnitRoles = true;
     this.loadingProjects = true;
 
-    this.globalState.unitRolesSubject.subscribe({
-      next: (unitRoles) => this.unitRolesLoaded(unitRoles),
-      error: (err) => {},
-    });
+    this.subscriptions.push(
+      this.globalState.unitRolesSubject.subscribe({
+        next: (unitRoles) => this.unitRolesLoaded(unitRoles),
+        error: (err) => {},
+      })
+    );
 
-    this.globalState.projectsSubject.subscribe({
-      next: (projects) => this.projectsLoaded(projects),
-      error: (err) => {},
-    });
+    this.subscriptions.push(
+      this.globalState.projectsSubject.subscribe({
+        next: (projects) => this.projectsLoaded(projects),
+        error: (err) => {},
+      })
+    );
 
     this.notEnrolled = this.checkEnrolled();
 

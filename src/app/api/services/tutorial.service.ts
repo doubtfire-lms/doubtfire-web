@@ -32,12 +32,20 @@ export class TutorialService extends CachedEntityService<Tutorial> {
           this.campusService.get(data['campus_id']).subscribe(campus => {entity.campus = campus;});
         }
       },
-
       'capacity',
       {
-        keys: ['tutor', 'tutor_id'],
+        keys: 'tutor',
         toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
-          return this.userService.cache.getOrCreate(data['tutor'].id, userService, data['tutor']);
+          return this.userService.cache.getOrCreate(data[key].id, userService, data[key]);
+        },
+        toJsonFn: (entity: Tutorial, key: string) => {
+          return entity.tutor?.id;
+        }
+      },
+      {
+        keys: 'tutorId',
+        toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
+          return this.userService.cache.get(data[key]);
         },
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.tutor?.id;
@@ -98,9 +106,13 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     observer.subscribe({
       next: (value: {enrolments: {tutorial_id: number}[]}) => {
         this.alertService.add("success", `Tutorial enrolment updated for ${project.student.name}`, 3000);
-        project.tutorialEnrolmentsCache.clear();
-        for (const enrolment of value.enrolments) {
-          project.tutorialEnrolmentsCache.add(project.unit.tutorialFromId(enrolment['tutorial_id']));
+        if (isEnrol) {
+          project.tutorialEnrolmentsCache.clear();
+          for (const enrolment of value.enrolments) {
+            project.tutorialEnrolmentsCache.add(project.unit.tutorialFromId(enrolment['tutorial_id']));
+          }
+        } else {
+          project.tutorialEnrolmentsCache.delete(tutorial);
         }
       },
       error: (error) => {
