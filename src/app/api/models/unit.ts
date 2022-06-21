@@ -63,6 +63,10 @@ export class Unit extends Entity {
     return this.students.find( (s) => s.id === id);
   }
 
+  public studentEnrolled(id: number): boolean {
+    return this.findStudent(id)?.enrolled;
+  }
+
   public get currentUserIsStaff(): boolean {
     return this.myRole !== "Student";
   }

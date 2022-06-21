@@ -77,7 +77,7 @@ angular.module('doubtfire.units.states.students', [])
 
   # CSV header func
   $scope.getCSVHeader = ->
-    result = ['student_code', 'name', 'email', 'portfolio']
+    result = ['username', 'name', 'email', 'portfolio']
     if $scope.unit.tutorialStreamsCache.size > 0
       _.each $scope.unit.tutorialStreams, (ts) ->
         result.push ts.abbreviation
@@ -87,20 +87,19 @@ angular.module('doubtfire.units.states.students', [])
 
   # CSV data row func
   $scope.getCSVData = ->
-    analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
     filteredProjects = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor), $scope.searchText)
     result = []
-    angular.forEach(filteredProjects, (student) ->
+    angular.forEach(filteredProjects, (project) ->
       row = {}
-      row['student_code'] = student.student_id
-      row['name'] = student.name
-      row['email'] = student.student_email
-      row['portfolio'] = student.portfolioStatus
+      row['username'] = project.student.username
+      row['name'] = project.student.name
+      row['email'] = project.student.email
+      row['portfolio'] = project.portfolioStatus
       if $scope.unit.tutorialStreamsCache.size > 0
         _.each $scope.unit.tutorialStreams, (ts) ->
-          row[ts.abbreviation] = student.tutorialForStream(ts)?.abbreviation || ''
+          row[ts.abbreviation] = project.tutorialForStream(ts)?.abbreviation || ''
       else
-        row['tutorial'] = student.tutorials()[0]?.abbreviation || ''
+        row['tutorial'] = project.tutorials()[0]?.abbreviation || ''
       result.push row
     )
     result

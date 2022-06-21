@@ -16,7 +16,7 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 
   UnitStudentEnrolmentModal
 )
-.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService, campusService) ->
+.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, unit, alertService, campusService, newProjectService) ->
   $scope.unit = unit
   $scope.projects = unit.students
   $scope.campuses = []
@@ -31,15 +31,19 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
     if ! campusId?
       alertService.add('danger', 'Campus missing. Please indicate student campus', 5000)
       return
-    Project.create {unit_id: unit.id, student_num: studentId, campus_id: campusId },
-      (project) ->
-        if ! unit.studentEnrolled project.id
-          unit.addStudent project
+
+    newProjectService.create(
+      {}, {
+        cache: unit.studentCache
+        body: {
+          unit_id: unit.id,
+          student_num: studentId,
+          campus_id: campusId
+        }
+      }).subscribe({
+        next: (project) ->
           alertService.add("success", "Student enrolled", 2000)
           $modalInstance.close()
-        else
-          alertService.add("danger", "Student is already enrolled", 2000)
-          $modalInstance.close()
-      (response) ->
-        alertService.add("danger", "Error enrolling student: #{response.data.error}", 6000)
+        error: (message) -> alertService.add("danger", "Error enrolling student: #{message}", 6000)
+      })
 )

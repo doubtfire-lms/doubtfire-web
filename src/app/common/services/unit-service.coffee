@@ -149,8 +149,8 @@ angular.module("doubtfire.common.services.units", [])
       Students.query({ unit_id: unit.id, all: requestToLoadAll }, successCallback, failureCallback)
 
     # Returns whether the specified project ID is of an enrolled student or not
-    unit.studentEnrolled = (id) ->
-      unit.findStudent(id)?.enrolled
+    # unit.studentEnrolled = (id) ->
+    #   unit.findStudent(id)?.enrolled
 
     # Finds a student in this unit given their project ID
     # unit.findStudent = (id) ->
@@ -189,17 +189,17 @@ angular.module("doubtfire.common.services.units", [])
       Unit.tutorialStream.create({id: unit.id, activity_type_abbr: activityTypeAbbreviation}, successCallback, failureCallback)
 
     # Adds a new student to this unit
-    unit.addStudent = (student) ->
-      analyticsService.event 'Unit Service', 'Added Student'
-      foundStudent = unit.findStudent student.id
-      studentExists = foundStudent?
-      unless studentExists
-        # student doesn't exist - push it to the student list
-        unit.students.push student
-      else
-        # student exists - extend the student
-        student = _.extend foundStudent, student
-      unitService.mapStudentToUnit(unit, student)
+    # unit.addStudent = (student) ->
+    #   analyticsService.event 'Unit Service', 'Added Student'
+    #   foundStudent = unit.findStudent student.id
+    #   studentExists = foundStudent?
+    #   unless studentExists
+    #     # student doesn't exist - push it to the student list
+    #     unit.students.push student
+    #   else
+    #     # student exists - extend the student
+    #     student = _.extend foundStudent, student
+    #   unitService.mapStudentToUnit(unit, student)
 
     # Returns all active (enrolled) students in the unit
     unit.activeStudents = ->

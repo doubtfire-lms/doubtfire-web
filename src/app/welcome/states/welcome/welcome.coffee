@@ -13,7 +13,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
 
   GlobalStateService.setView('OTHER')
   # Define steps for wizard
@@ -116,6 +116,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
     # user update
     user.hasRunFirstTimeSetup = true
     promises.push newUserService.update(user, ((user) -> ), errorFn).$promise
+    $q.all(promises).then ->
       $state.go('home')
 
   $scope.userFirstName = $scope.user.firstName
