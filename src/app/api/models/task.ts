@@ -25,8 +25,9 @@ export class Task extends Entity {
   similarToCount: number = 0;
   similarToDismissedCount: number = 0;
   numNewComments: number = 0;
+  hasExtensions: boolean;
 
-  readonly project: Project;
+  project: Project;
   definition: TaskDefinition;
 
   //TODO: map task submission details
@@ -36,9 +37,15 @@ export class Task extends Entity {
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
-  constructor(project?: Project) {
+  private _unit: Unit;
+
+  constructor(data?: Project | Unit) {
     super();
-    this.project = project;
+    if (data instanceof Project) {
+      this.project = data as Project;
+    } else {
+      this._unit = data as Unit;
+    }
   }
 
   public get comments(): TaskComment[] {
@@ -46,7 +53,25 @@ export class Task extends Entity {
   }
 
   public get unit(): Unit {
+    if ( this._unit ) return this._unit;
     return this.project.unit;
+  }
+
+  public matches(matchText: string): boolean {
+    return TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
+      this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+      this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
+      (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
+      this.project.matches(matchText);
+  }
+
+  public hasTaskKey(key: { studentId: number; taskDefAbbr: string; }): boolean {
+    return this.taskKey() === key;
+  }
+
+  public taskKeyToUrlString(): string {
+    const key = this.taskKey();
+    return `${key.studentId}/${key.taskDefAbbr}`;
   }
 
   public get gradeWord(): string {

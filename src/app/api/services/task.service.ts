@@ -1,20 +1,30 @@
-import { Project, Task, Unit } from 'src/app/api/models/doubtfire-model';
+import { Project, Task, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
-import { CachedEntityService } from 'ngx-entity-service';
+import { CachedEntityService, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { MappingFunctions } from './mapping-fn';
+import { Observable, map, tap } from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
   protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
+
+  private readonly taskInboxEndpoint = "/units/:id:/tasks/inbox";
+  private readonly taskExplorerEndpoint = "/units/:id:/task_definitions/:task_def_id:/tasks";
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
       'id',
-      'projectId',
+      {
+        keys: 'projectId',
+        toEntityOp: (data: object, jsonKey: string, task: Task, params: any) => {
+          // Is fetching task outside of project...
+          task.project = task.unit.findStudent(data[jsonKey]);
+        }
+      },
       {
         keys: 'taskDefinitionId',
         toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
@@ -44,6 +54,7 @@ export class TaskService extends CachedEntityService<Task> {
       'similarToDismissedCount',
       'numNewComments',
       'trigger',
+      'hasExtensions',
       {
         keys: "new_stat",
         toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
@@ -79,6 +90,39 @@ export class TaskService extends CachedEntityService<Task> {
 
   public createInstanceFrom(json: object, other?: any): Task {
     return new Task(other as Project);
+  }
+
+  public queryTasksForTaskInbox(unit: Unit, taskDef?: TaskDefinition | number): Observable<Task[]> {
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+
+    return this.query({
+      id: unit.id,
+    }, {
+      endpointFormat: this.taskInboxEndpoint,
+      cache: cache,
+      constructorParams: unit
+    }).pipe(
+      tap( (tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
+      })
+    );
+  }
+
+  public queryTasksForTaskExplorer(unit: Unit, taskDef?: TaskDefinition | number): Observable<Task[]> {
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+    return this.query({
+      id: unit.id,
+      task_def_id: taskDef instanceof TaskDefinition ? taskDef.id : taskDef
+    }, {
+      endpointFormat: this.taskExplorerEndpoint,
+      cache: cache,
+      constructorParams: unit
+    }).pipe(
+      map( (tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
+        return unit.fillWithUnStartedTasks(tasks, taskDef);
+      })
+    );
   }
 
 

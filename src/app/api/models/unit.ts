@@ -1,8 +1,9 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
+import { alertService, alertServiceProvider } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { ProjectService } from '../services/project.service';
-import { OverseerImage, User, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
+import { OverseerImage, User, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 import { UnitRole } from './unit-role';
 
@@ -129,54 +130,61 @@ export class Unit extends Entity {
     return this.tutorials.filter(tutorial => tutorial.tutorName === userName);
   }
 
-  public incorporateTasks(tasks, callback) : Task[] {
-    console.log("implement incorporate tasks");
-    return [];
-  }
-
-  public fillWithUnStartedTasks(tasks: Task[], td: TaskDefinition) {
-    console.log("implement fillWithUnStartedTasks");
-    return [];
-  }
-
-  public refresh(onSuccess: (unit: Unit) => void, onFailure: (response: any) => void) {
-    AppInjector.get(UnitService).get(this.id).subscribe( {
-      next: (unit: Unit) => {
-        console.log(unit === this);
-      },
-      error: (response: any) => {
+  public incorporateTasks(tasks: Task[]) : void {
+    tasks.forEach( (t) => {
+      const project = this.findStudent(t.project.id);
+      if (project) {
+        project.incorporateTask(t);
       }
     });
-        // if
+  }
 
-        // Add a sequence from the order fetched from server
-        // unit.task_definitions = _.map(unit.task_definitions, (taskDef, index, list) ->
-        //   taskDef.seq = index
-        //   taskDef.group_set = _.find(unit.group_sets, {id: taskDef.group_set_id}) if taskDef.group_set_id
-        //   taskDef.hasPlagiarismCheck = -> taskDef.plagiarism_checks.length > 0
-        //   taskDef.targetGrade = () -> gradeService.grades[taskDef.targetGrade]
+  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+    // Make sure the task definition is a task definition object from the unit
+    const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-        //   # Local deadline date is the last moment in the local time zone
-        //   taskDef.localDeadlineDate = ()  ->
-        //     deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
-        //     return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59})
-        //   # Final deadline date should not be shown, but is the actual deadline based on "anywhere on earth" timezone
-        //   taskDef.finalDeadlineDate = ()  ->
-        //     deadline = new Date(taskDef.due_date.slice(0,10)) #TODO: Change backend to return this as "deadline_date"
-        //     return moment({ year: deadline.getFullYear(), month: deadline.getMonth(), day: deadline.getDate(), hour: 23, minute: 59, second: 59}, '-12:00')
-        //   taskDef.localDueDate = ()  ->
-        //     due = new Date(taskDef.target_date.slice(0,10))
-        //     return moment({ year: due.getFullYear(), month: due.getMonth(), day: due.getDate(), hour: 23, minute: 59, second: 59})
-        //   taskDef
-        // )
+    console.log("update fillWithUnStartedTasks - groups");
 
-        // If loading students, call the onSuccess callback as unit.refreshStudents callback
-        // otherwise done!
-      //   return onSuccess?(unit) unless options?.loadOnlyEnrolledStudents || options?.loadAllStudents
-      //   unit.refreshStudents(onSuccess, onFailure)
-      // failureCallback = (response) ->
-      //   alertService.add("danger", "Failed to load unit. #{response?.data?.error}", 8000)
-      //   onFailure?(response)
+    // Now fill for the students in the unit
+    return this.students.map( (p) => {
+      // See if we already have the task
+      var t = tasks.find(t => t.project.id === p.id && t.definition.id === td.id);
+      if (!t) {
+        // No task in array, find task in project
+        t = p.tasks.find( t => t.definition.id == td.id );
+      }
+
+      //TODO: Map groups
+      // If a group task but group data not loaded, go fetch it
+      // if (t.isGroupTask() && !t.group) {
+      //   projectService.updateGroups(t.project, null, true);
+      // }
+      return t;
+    });
+  }
+
+  public refresh(): void {
+    const alerts: any = AppInjector.get(alertService);
+    AppInjector.get(UnitService).fetch(this.id).subscribe({
+      next: (unit) => {},
+      error: (message) => alerts.add("danger", message, 6000)
+    });
+  }
+
+  public setupTasksForStudent(project: Project) {
+    // create not started tasks...
+    this.taskDefinitions.forEach(taskDefinition => {
+      if (!project.findTaskForDefinition(taskDefinition.id)) {
+        const task = new Task(project);
+        task.definition = taskDefinition;
+        // add to cache using task definition abbreviation as key
+        project.taskCache.set(taskDefinition.abbreviation.toString(), task);
+      }
+    });
+  }
+
+  private setupAllStudentTasks(): void {
+
   }
 
   public tutorialFromId(tutorialId: number): Tutorial {
@@ -213,8 +221,9 @@ export class Unit extends Entity {
     return;
   }
 
-  public refreshStudents() {
-    console.log("implement refreshStudents");
+  public refreshStudents(includeWithdrawnStudents: boolean = false) {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    projectService.loadStudents(this, includeWithdrawnStudents, true);
   }
 
   public findProjectForUsername(username: string): Project {

@@ -25,8 +25,8 @@ angular.module("doubtfire.api.models.unit", [])
   Unit.learningProgressClassDetails = resourcePlus "/units/:id/learning_alignments/class_details", {id: "@id"}
 
   Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
-  Unit.tasksForTaskInbox = resourcePlus "/units/:id/tasks/inbox", { id: "@id" }
-  Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
+  # Unit.tasksForTaskInbox = resourcePlus "/units/:id/tasks/inbox", { id: "@id" }
+  # Unit.tasksForDefinition = resourcePlus "/units/:id/task_definitions/:task_def_id/tasks", {id: "@id", task_def_id: "@task_def_id"}
   Unit.taskStatusCountByTutorial = resourcePlus "/units/:id/stats/task_status_pct", {id: "@id"}
   Unit.targetGradeStats = resourcePlus "/units/:id/stats/student_target_grade", {id: "@id"}
   Unit.taskCompletionStats = resourcePlus "/units/:id/stats/task_completion_stats", {id: "@id"}

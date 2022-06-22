@@ -67,6 +67,18 @@ export class Project extends Entity {
     return this.groups.find(grp => grp.name.toLowerCase().indexOf(matchText) >= 0) !== undefined;
   }
 
+  public incorporateTask(task: Task) {
+    const taskInCache = this.findTaskForDefinition(task.definition.id);
+
+    if ( taskInCache ) {
+      // Update the cache object
+      Object.assign(taskInCache, task);
+      // Make sure it has the right key in the cache
+      this.taskCache.add(taskInCache);
+    } else {
+      this.taskCache.add(task);
+    }
+  }
 
   public get tasks(): Task[] {
     return this.taskCache.currentValues;

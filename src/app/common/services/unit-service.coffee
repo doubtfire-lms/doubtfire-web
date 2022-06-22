@@ -273,22 +273,22 @@ angular.module("doubtfire.common.services.units", [])
     #
     # Add any missing tasks and return the new collection
     #
-    unit.fillWithUnStartedTasks = (tasks, taskDef) ->
-      return unless unit.students?
+    # unit.fillWithUnStartedTasks = (tasks, taskDef) ->
+    #   return unless unit.students?
 
-      # Make sure the task definition is a task definition object from the unit
-      taskDef = unit.taskDef(taskDef)
+    #   # Make sure the task definition is a task definition object from the unit
+    #   taskDef = unit.taskDef(taskDef)
 
-      # Now fill for the students in the unit
-      _.map unit.students, (p) ->
-        t = _.find tasks, (t) ->
-          t.project.id == p.id && t.definition.id == taskDef.id
-        unless t?
-          t = _.find p.tasks, (t) -> t.definition.id == taskDef.id
-        # If a group task but group data not loaded, go fetch it
-        if t.isGroupTask() and !t.group()?
-          projectService.updateGroups(t.project(), null, true)
-        t
+    #   # Now fill for the students in the unit
+    #   _.map unit.students, (p) ->
+    #     t = _.find tasks, (t) ->
+    #       t.project.id == p.id && t.definition.id == taskDef.id
+    #     unless t?
+    #       t = _.find p.tasks, (t) -> t.definition.id == taskDef.id
+    #     # If a group task but group data not loaded, go fetch it
+    #     if t.isGroupTask() and !t.group()?
+    #       projectService.updateGroups(t.project(), null, true)
+    #     t
 
 
     # unit.staffAlignmentsForTaskDefinition = (td) ->

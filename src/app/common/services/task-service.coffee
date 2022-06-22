@@ -510,9 +510,9 @@ angular.module("doubtfire.common.services.tasks", [])
       taskDefAbbr: taskDefAbbr
     }
 
-  taskService.taskKeyToUrlString = (task) ->
-    key = task.taskKey()
-    "#{key.studentId}/#{key.taskDefAbbr}"
+  # taskService.taskKeyToUrlString = (task) ->
+  #   key = task.taskKey()
+  #   "#{key.studentId}/#{key.taskDefAbbr}"
 
   # taskService.taskKeyToIdString = (task) ->
   #   key = task.taskKey()
@@ -524,8 +524,8 @@ angular.module("doubtfire.common.services.tasks", [])
       taskDefAbbr: task.definition.abbreviation
     }
 
-  taskService.hasTaskKey = (task, key) ->
-    _.isEqual(task?.taskKey(), key)
+  # taskService.hasTaskKey = (task, key) ->
+  #   _.isEqual(task?.taskKey(), key)
 
   taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
     form = new FormData()

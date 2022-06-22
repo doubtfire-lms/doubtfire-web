@@ -19,7 +19,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
-import { Tutorial, UserService, Task, Project } from 'src/app/api/models/doubtfire-model';
+import { Tutorial, UserService, Task, Project, TaskDefinition } from 'src/app/api/models/doubtfire-model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -32,17 +33,37 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() project: Project;
 
-  @Input() taskData;
+  @Input() taskData: {
+    source: (unit: Unit, taskDef: TaskDefinition | number ) => Observable<Task[]>;
+    selectedTask: Task;
+    taskKey: string;
+    onSelectedTaskChange: (task: Task) => void;
+    taskDefMode: boolean;
+  };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() filters;
+  @Input() filters: {
+    taskDefinition: TaskDefinition;
+    tutorials: Tutorial[];
+    forceStream: boolean;
+    studentName: string;
+    tutorialIdSelected: any;
+    taskDefinitionIdSelected: number | TaskDefinition; };
   @Input() showSearchOptions = false;
 
   isNarrow: boolean;
 
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
-  studentFilter: any[] = null;
+
+  studentFilter: {
+    id: number | string;
+    inboxDescription: string;
+    abbreviation: string;
+    forceStream: boolean;
+    tutorial?: Tutorial;
+  }[] = null;
+
   tasks: any[] = null;
 
   watchingTaskKey: any;
@@ -132,7 +153,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
           id: t.id,
           inboxDescription: `${t.abbreviation} - ${t.description}`,
           abbreviation: t.abbreviation,
-          forceStream: true
+          forceStream: true,
+          tutorial: t
         };
       }),
     ];
@@ -146,11 +168,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   public get isTaskDefMode(): boolean {
-    console.log("implement isTaskDefMode");
-    return false;
-    // return this.taskData?.source === this.Unit.tasksForDefinition &&
-    // this.filters?.taskDefinitionIdSelected &&
-    // this.showSearchOptions;
+    return this.taskData.taskDefMode &&
+      this.filters?.taskDefinitionIdSelected &&
+      this.showSearchOptions;
   }
 
   downloadSubmissionPdfs() {
@@ -174,7 +194,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     if (this.filters.tutorials) {
-      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials, this.filters.forceStream);
+      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials.map(t=> t.id), this.filters.forceStream);
     }
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
@@ -212,12 +232,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       // Ignore tutorials filter
       this.filters.tutorials = null;
     } else {
-      this.filters.tutorials = [filterOption];
+      this.filters.tutorials = [filterOption.tutorial];
     }
 
-    if (this.filters.tutorials) {
-      this.filters.tutorials = this.filters.tutorials.map((t) => t.id);
-    }
     this.applyFilters();
   }
 
@@ -232,7 +249,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     let taskDef;
     const taskDefId = this.filters.taskDefinitionIdSelected;
     if (taskDefId) {
-      taskDef = this.unit.taskDef(taskDefId);
+      taskDef = taskDefId instanceof TaskDefinition ? taskDefId : this.unit.taskDef(taskDefId);
     } else {
       taskDef = null;
     }
@@ -255,49 +272,41 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   // Finds a task (or null) given its task key
-  private findTaskForTaskKey(key) {
-    this.tasks.find((t) => t?.hasTaskKey(key));
+  private findTaskForTaskKey(key): Task {
+    return this.tasks.find((t) => t?.hasTaskKey(key));
   }
 
   // Callback to refresh data from the task source
   private refreshData() {
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
-    this.taskData.source.query(
-      { id: this.unit.id, task_def_id: this.filters?.taskDefinitionIdSelected },
-      (response) => {
-        this.tasks = this.unit.incorporateTasks(response, this.applyFilters.bind(this));
-        // If loading via task definitions, fill
-        if (this.isTaskDefMode) {
-          // Filter out any empty tasks
-          // TODO: need to investigate how these are getting here.
-          this.tasks = this.tasks.filter((n) => n);
-          const unstartedTasks = this.unit.fillWithUnStartedTasks(this.tasks, this.filters.taskDefinitionIdSelected);
-          Object.assign(this.tasks, unstartedTasks);
-        }
-        // Apply initial filters
+    this.taskData.source(this.unit, this.filters?.taskDefinitionIdSelected).subscribe({
+      next: (response) => {
+        this.tasks = response;
         this.applyFilters();
         this.loading = false;
+
         // Load initial set task, either the one provided (by the URL)
         // then load actual task in now or the first task that applies
         // to the given set of filters.
         const task = this.findTaskForTaskKey(this.taskData.taskKey);
         this.setSelectedTask(task);
+
         // For when URL has been manually changed, set the selected task
         // using new array of tasks loaded from the new taskKey
         if (!this.watchingTaskKey) {
           this.watchingTaskKey = true;
         }
       },
-      (error) => {
-        this.alertService.add('danger', error.data.error, 6000);
+      error: (message) => {
+        this.alertService.add('danger', message, 6000);
       }
-    );
+    });
   }
 
-  setSelectedTask(task) {
+  setSelectedTask(task: Task) {
     this.taskData.selectedTask = task;
-    if (typeof this.taskData.onSelectedTaskChange === 'function') {
+    if (this.taskData.onSelectedTaskChange) {
       this.taskData.onSelectedTaskChange(task);
     }
     if (task) {

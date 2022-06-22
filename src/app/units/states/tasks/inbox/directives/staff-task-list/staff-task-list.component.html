@@ -126,7 +126,7 @@
           [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }">
           <div (click)="setSelectedTask(task)" class="inbox-entry" fxLayout="row" fxLayoutAlign="start center"
             [ngClass]="{ hover: task.hover }" (mouseover)="task.hover = true" (mouseout)="task.hover = false">
-            <user-icon fxFlexAlign="center" [user]="task.project" [size]="30"> </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">

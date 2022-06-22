@@ -168,15 +168,7 @@ export class ProjectService extends CachedEntityService<Project> {
             project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {constructorParams: project});
           });
 
-          // create not started tasks...
-          project.unit.taskDefinitions.forEach(taskDefinition => {
-            if (!project.findTaskForDefinition(taskDefinition.id)) {
-              const task = new Task(project);
-              task.definition = taskDefinition;
-              // add to cache using task definition abbreviation as key
-              project.taskCache.set(taskDefinition.abbreviation.toString(), task);
-            }
-          });
+          project.unit.setupTasksForStudent(project);
         }
       },
     );
@@ -196,7 +188,7 @@ export class ProjectService extends CachedEntityService<Project> {
     return new Project(other as Unit);
   }
 
-  public loadStudents(unit: Unit, includeWithdrawnStudents: boolean = false): Observable<Project[]> {
+  public loadStudents(unit: Unit, includeWithdrawnStudents: boolean = false, useFetch: boolean = false): Observable<Project[]> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
       endpointFormat: this.studentEndpointFormat,
@@ -206,6 +198,11 @@ export class ProjectService extends CachedEntityService<Project> {
       },
       constructorParams: unit
     }
-    return super.query(undefined, options);
+
+    if (useFetch) {
+      return super.fetchAll(undefined, options);
+    } else {
+      return super.query(undefined, options);
+    }
   }
 }

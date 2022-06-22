@@ -31,7 +31,7 @@ export class TasksInTutorialsPipe implements PipeTransform {
       } else {
         // either we have a stream, or its not a group task, or the student isn't in a group
 
-        if (forceStream) {
+        if (useStream) {
           // Get the tutorial for the stream... this will return the only tutorial if there is no stream
           const tutorial = task?.project.tutorialForStream(stream);
           // Check it is in the list... enrolment may be null if the student is not enrolled in a tutorial

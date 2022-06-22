@@ -361,14 +361,14 @@ angular.module("doubtfire.common.services.projects", [])
       taskService.taskKey(task)
     # task.recreateSubmissionPdf = (onSuccess, onFailure) ->
     #   taskService.recreateSubmissionPdf(task, onSuccess, onFailure)
-    task.taskKeyToUrlString = ->
-      taskService.taskKeyToUrlString(task)
+    # task.taskKeyToUrlString = ->
+    #   taskService.taskKeyToUrlString(task)
     # task.taskKeyToIdString = ->
     #   taskService.taskKeyToIdString(task)
-    task.taskKeyFromString = (taskKeyString) ->
-      taskService.taskKeyFromString(taskKeyString)
-    task.hasTaskKey = (key) ->
-      taskService.hasTaskKey(task, key)
+    # task.taskKeyFromString = (taskKeyString) ->
+    #   taskService.taskKeyFromString(taskKeyString)
+    # task.hasTaskKey = (key) ->
+    #   taskService.hasTaskKey(task, key)
     # task.filterFutureStates = (states) ->
     #   _.reject states, (s) -> s.status in taskService.rejectFutureStates[task.status]
     # task.gradeDesc = () ->
@@ -377,13 +377,13 @@ angular.module("doubtfire.common.services.projects", [])
     #   task.grade?
     # task.hasQualityPoints = () ->
     #   task.definition.maxQualityPts > 0 && (task.status in taskService.gradeableStatuses)
-    task.matches = (matchText) ->
-      project = task.project()
-      taskService.statusLabels[task.status].toLowerCase().indexOf(matchText) >= 0 ||
-      task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-      task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
-      (task.has_extensions && 'extension'.indexOf(matchText) == 0) ||
-      (project? && project.matches(matchText))
+    # task.matches = (matchText) ->
+    #   project = task.project()
+    #   taskService.statusLabels[task.status].toLowerCase().indexOf(matchText) >= 0 ||
+    #   task.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
+    #   task.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
+    #   (task.has_extensions && 'extension'.indexOf(matchText) == 0) ||
+    #   (project? && project.matches(matchText))
     task.getSubmissionDetails = (onSuccess, onFailure) ->
       return onSuccess?(task) unless task.needsSubmissionDetails()
       Task.SubmissionDetails.get({ id: project.id, task_definition_id: task.definition.id },

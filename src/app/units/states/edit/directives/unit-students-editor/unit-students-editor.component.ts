@@ -113,7 +113,7 @@ export class UnitStudentsEditorComponent {
         // at least one student?
         this.csvResultModal.show('Enrol Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents();
+          this.unit.refreshStudents(true);
         }
       }
     );
@@ -129,7 +129,7 @@ export class UnitStudentsEditorComponent {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents();
+          this.unit.refreshStudents(true);
         }
       }
     );
