@@ -360,7 +360,7 @@ export class TaskStatus {
     };
   }
 
-  public static statusClass(status: TaskStatusEnum): string {
-    return status.replace(/_/g, "-");
+  public static statusClass(status: TaskStatusEnum | undefined): string {
+    return status?.replace(/_/g, "-");
   }
 }
