@@ -1,5 +1,5 @@
 import { Component, Input, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService, confirmationModal } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -45,6 +45,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     private tutorialService: TutorialService,
     private tutorialStreamService: TutorialStreamService,
     private campusService: CampusService,
+    @Inject(confirmationModal) private confirmationModal: any,
     @Inject(alertService) private alerts: any
   ) {
     super({
@@ -164,8 +165,23 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   // Handle the deletion of a stream
-  deleteStream() {
-    this.unit.deleteStream(this.stream);
+  deleteStream(stream: TutorialStream) {
+    this.confirmationModal.show(
+      `Delete Tutorial Stream ${stream.abbreviation}`,
+      'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
+      () => this.unit.deleteStream(stream).subscribe({
+        next: (response: boolean) => {
+          if(response) {
+            this.alerts.add("success", `Deleted stream. ${stream.abbreviation}`, 8000)
+          } else {
+            this.alerts.add("danger", `Failed to delete stream.`, 8000);
+          }
+        },
+        error: (message) => {
+          this.alerts.add("danger", `Failed to delete stream. ${message}`, 8000);
+        }
+      })
+    );
   }
 
   /**

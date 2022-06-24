@@ -16,7 +16,7 @@ export class TaskComment extends Entity {
   abbreviation: string;
   author: User;
   recipient: User;
-  createdAt: string;
+  createdAt: Date;
   timeOfMessage: string;
   recipientReadTime: string;
   commentType: string = "text";

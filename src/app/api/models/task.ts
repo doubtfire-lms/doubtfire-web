@@ -257,39 +257,48 @@ export class Task extends Entity {
     return this.timeBetween(this.localDueDate(), new Date());
   }
 
+  private hoursBetween(time1: Date, time2: Date): number {
+    return Math.floor(Math.abs(time1.getTime() - time2.getTime())/1000/60/60)
+  }
+
   public refreshCommentData(): void {
     const comments: TaskComment[] = this.comments;
     if(comments.length === 0) return;
 
     comments[0].shouldShowTimestamp = true
 
-    // for i in [0...comments.length]
-    //   authorID = comments[i].author.id
-    //   timeOfMessage = comments[i].created_at
+    for (let i = 0; i < comments.length; i++) {
+      const authorID = comments[i].author.id;
+      const timeOfMessage = comments[i].createdAt;
 
-    //   # if the comment is proceeded by a different author's comment, or the time between comments
-    //   # is significant, mark it as start of end of series, then start a new series proceeding.
-    //   if (authorID != comments[i+1]?.author.id || hoursBetween(timeOfMessage, comments[i+1]?.created_at) > 3) # IDs match
-    //     comments[i].shouldShowAvatar = true
-    //     comments[i+1]?.shouldShowTimestamp = true
-    //   else
-    //     comments[i].shouldShowAvatar = false
-    //     comments[i+1]?.shouldShowTimestamp = false
+      if ( i < comments.length - 1 ) {
+        // if the comment is proceeded by a different author's comment, or the time between comments
+        // is significant, mark it as start of end of series, then start a new series proceeding.
+        if (authorID !== comments[i+1]?.author.id || this.hoursBetween(timeOfMessage, comments[i+1].createdAt) > 3) { // IDs match
+          comments[i].shouldShowAvatar = true;
+          comments[i+1].shouldShowTimestamp = true;
+        } else {
+          comments[i].shouldShowAvatar = false;
+          comments[i+1].shouldShowTimestamp = false;
+        }
+      }
 
-    //   # if the comment is preceeded by a non-conent comment, mark it as start of series.
-    //   if (comments[i].isBubbleComment && !comments[i-1]?.isBubbleComment)
-    //     comments[i].firstInSeries = true
+      // if the comment is preceeded by a non-content comment, mark it as start of series.
+      comments[i].firstInSeries = comments[i].isBubbleComment && (i === 0 || !comments[i-1].isBubbleComment);
 
-    //   # if the comment is proceeded by a non-conent comment, mark it as end of series.
-    //   if (comments[i].isBubbleComment && !comments[i+1]?.isBubbleComment)
-    //     comments[i].shouldShowAvatar = true
+      // if the comment is proceeded by a non-conent comment, mark it as end of series.
+      if (comments[i].isBubbleComment && !comments[i+1]?.isBubbleComment) {
+        comments[i].shouldShowAvatar = true;
+      }
 
-    //   # Link in original messages for replies
-    //   if (comments[i].replyToId)
-    //     comments[i].originalComment = comments.find((tc) -> tc.id == comments[i].replyToId)
+      // Link in original messages for replies
+      if (comments[i].replyToId) {
+        comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId)
+      }
+    }
 
-    // comments[comments.length-1].shouldShowAvatar = true
-    // comments
+    comments[comments.length-1].shouldShowAvatar = true
+    comments
   }
 
   public taskKey(): { studentId: number; taskDefAbbr: string; } {
@@ -399,7 +408,7 @@ export class Task extends Entity {
   //   if requiresFileUpload
   //     taskService.presentTaskSubmissionModal(task, status)
   //   else
-  //     taskService.updateTaskStatus(task.unit(), task.project(), task, status)
+  //     taskService.updateTaskStatus(task.unit(), task.project, task, status)
   //     asUser = if unitRole? then unitRole.role else 'Student'
   //     analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 

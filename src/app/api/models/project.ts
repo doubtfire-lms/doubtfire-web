@@ -1,7 +1,9 @@
 import { Entity, EntityCache } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
-import { Campus, Grade, Group, ProjectService, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { Campus, Grade, Group, GroupSet, ProjectService, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 
 
@@ -63,9 +65,18 @@ export class Project extends Entity {
   }
 
   // Search through the student's groups for a match
-  public matchesGroup(matchText): boolean {
+  public matchesGroup(matchText: string): boolean {
     return this.groups.find(grp => grp.name.toLowerCase().indexOf(matchText) >= 0) !== undefined;
   }
+
+  public groupForGroupSet(gs: GroupSet) {
+    return this.groups.find(grp => gs === grp.groupSet);
+  }
+
+  public inGroup(grp): boolean {
+    return grp && (this.groupCache.get(grp.id)?.id === grp.id);
+  }
+
 
   public incorporateTask(task: Task) {
     const taskInCache = this.findTaskForDefinition(task.definition.id);
@@ -88,13 +99,19 @@ export class Project extends Entity {
     return this.tutorialEnrolmentsCache.currentValues;
   }
 
-  public shortTutorialDescription() {
+  public shortTutorialDescription(): string {
     const tutorials = this.tutorials;
     if (tutorials.length > 0) {
       return tutorials.map( tute => tute.abbreviation ).join(",");
     } else {
       return "None";
     }
+  }
+
+  public tutorNames(): string {
+    return this.tutorials.map(tute => {
+      return tute.tutorName;
+    }).filter((value, index, self) => self.indexOf(value) === index).join(' ');
   }
 
   public tutorialForStream(stream: TutorialStream): Tutorial {
@@ -166,6 +183,30 @@ export class Project extends Entity {
     });
   }
 
+  // Assigns a grade to a student
+  public assignGrade(score: number, rationale: string): void {
+    const alerts: any = AppInjector.get(alertService);
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    const oldGrade: number = this.grade;
+    this.grade = score;
+    this.gradeRationale = rationale;
+
+    projectService.update(this, {
+      body: {
+        grade: score,
+        old_grade: oldGrade,
+        grade_rationale: rationale
+      }
+    }).subscribe({
+      next: (project) => {
+        alerts.add("success", "Grade updated.", 2000);
+      },
+      error: (message) => {
+        alerts.add("danger", `Grade was not updated: ${message}`, 8000);
+      }
+    });
+  }
+
   //# Get the status of the portfolio
   public portfolioTaskStatus(): string {
     if(this.portfolioAvailable)
@@ -178,6 +219,10 @@ export class Project extends Entity {
 
   public portfolioTaskStatusClass(): string {
     return this.portfolioTaskStatus().replace(/_/g, '-');
+  }
+
+  public portfolioUrl(asAttachment: boolean = false): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/project/${this.id}/portfolio${asAttachment ? "?as_attachment=true" : ""}`;
   }
 
   public numberTasks(status: string) {
@@ -216,6 +261,24 @@ export class Project extends Entity {
 
   public isEnrolledIn(tutorial: Tutorial): boolean {
     return this.tutorials.includes(tutorial);
+  }
+
+  public updateUnitEnrolment(): void {
+    const expected = this.enrolled = !this.enrolled;
+    const alerts: any = AppInjector.get(alertService);
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    projectService.update(this).subscribe({
+      next: (project) => {
+        if (expected == project.enrolled) {
+          alerts.add('success', 'Enrolment changed.', 2000);
+        } else {
+          alerts.add('danger', 'Enrolment change failed.', 5000);
+        }
+      },
+      error: (message) => {
+        alerts.add('danger', message, 5000)
+      }
+    });
   }
 
   public hasTutor(tutor: User) {

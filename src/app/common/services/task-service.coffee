@@ -344,7 +344,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   # Returns the alignments for this task
   taskService.staffAlignmentsForTask = (task) ->
-    task.unit().staffAlignmentsForTaskDefinition(task.definition)
+    task.unit.staffAlignmentsForTaskDefinition(task.definition)
 
   # # Trigger for new status
   # # taskService.triggerTransition = (task, status, unitRole) ->
@@ -354,7 +354,7 @@ angular.module("doubtfire.common.services.tasks", [])
   # #   if requiresFileUpload
   # #     taskService.presentTaskSubmissionModal(task, status)
   # #   else
-  # #     taskService.updateTaskStatus(task.unit(), task.project(), task, status)
+  # #     taskService.updateTaskStatus(task, task.project, task, status)
   # #     asUser = if unitRole? then unitRole.role else 'Student'
   # #     analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
 
@@ -520,7 +520,7 @@ angular.module("doubtfire.common.services.tasks", [])
 
   taskService.taskKey = (task) ->
     {
-      studentId: task.project().student_id
+      studentId: task.project.student.username
       taskDefAbbr: task.definition.abbreviation
     }
 
@@ -549,8 +549,8 @@ angular.module("doubtfire.common.services.tasks", [])
       task.due_date = response.data.due_date
       task.extensions = response.data.extensions
       task.status = response.data.task_status
-      task.project().updateBurndownChart()
-      task.project().calcTopTasks() # Sort the task list again
+      task.project.updateBurndownChart()
+      task.project.calcTopTasks() # Sort the task list again
       onSuccess(response)
 
     Task.assessExtension(task, taskCommentID, assessment, interceptSuccess, onError)

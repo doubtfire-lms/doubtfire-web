@@ -7,7 +7,7 @@
           All units registered with {{externalName.value}}
         </div>
         <form role="search" class="pull-right form-horizontal">
-          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unitRole.unit_name for unitRole in unitRoles | filter:$viewValue | limitTo:8" />
+          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unitRole.unit.code for unitRole in unitRoles | filter:$viewValue | limitTo:8" />
         </form>
       </div>
       <div class="panel-body">
@@ -28,10 +28,10 @@
             <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
               <td>
                 <label class="label label-info">
-                  {{unitRole.unit_code}}
+                  {{unitRole.unit.code}}
                 </label>
               </td>
-              <td>{{unitRole.unit_name}}</td>
+              <td>{{unitRole.unit.name}}</td>
               <td>{{(unitRole.role | ucfirst) || "N/A"}}</td>
               <td ng-if="unitRole.teachingPeriod()">{{(unitRole.teachingPeriod().name())}}</td>
               <td ng-if="!unitRole.teachingPeriod()">Custom</td>

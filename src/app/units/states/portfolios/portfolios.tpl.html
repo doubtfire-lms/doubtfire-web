@@ -73,7 +73,7 @@
             type="search"
             ng-model="search"
             autocomplete="off"
-            typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8"
+            typeahead="text for text in unit.studentFilterTypeAheadData | filter:$viewValue | limitTo:8"
             typeahead-wait-ms="200"
             autofocus
           />

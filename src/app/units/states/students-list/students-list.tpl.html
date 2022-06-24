@@ -10,7 +10,7 @@
           ng-change="searchTextChanged()"
           typeahead-on-select="searchTextChanged()"
           typeahead="text for text in
-            unitTypeAheadData(unit) |
+            unit.studentFilterTypeAheadData |
             filter:$viewValue |
             limitTo:8"
           typeahead-wait-ms="200"

@@ -250,7 +250,7 @@ angular.module("doubtfire.common.filters", [])
       # Search using name or abbreviation
       td.name.toLowerCase().indexOf(searchName) >= 0 ||
       td.abbreviation.toLowerCase().indexOf(searchName) >= 0 ||
-      td.targetGrade().toLowerCase().indexOf(searchName) >= 0
+      td.targetGradeText.toLowerCase().indexOf(searchName) >= 0
     )
 )
 

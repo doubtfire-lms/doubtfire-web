@@ -84,8 +84,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
   groupService.updateGroup = (group, onSuccess, onFailure) ->
     Group.update(
       {
-        unit_id: group.unit().id,
-        group_set_id: group.groupSet().id,
+        unit_id: group.unit.id,
+        group_set_id: group.groupSet.id,
         id: group.id,
         group: {
           name: group.name,
@@ -108,8 +108,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
       throw Error "Cannot delete group -- group's group_set_id does not match groupSet specified"
     Group.delete(
       {
-        unit_id: group.unit().id,
-        group_set_id: group.groupSet().id,
+        unit_id: group.unit.id,
+        group_set_id: group.groupSet.id,
         id: group.id,
         group: {
           name: group.name,
@@ -129,8 +129,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
   groupService.getGroupMembersForGroup = (group, onSuccess, onFailure) ->
     GroupMember.query(
       {
-        unit_id: group.unit().id,
-        group_set_id: group.groupSet().id,
+        unit_id: group.unit.id,
+        group_set_id: group.groupSet.id,
         group_id: group.id
       }
       (success) ->
@@ -148,8 +148,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
 
     GroupMember.create(
       {
-        unit_id: group.unit().id,
-        group_set_id: group.groupSet().id,
+        unit_id: group.unit.id,
+        group_set_id: group.groupSet.id,
         group_id: group.id
         project_id: member.project_id
       }
@@ -184,8 +184,8 @@ angular.module("doubtfire.common.services.group-service", [  ])
   groupService.removeMemberFromGroup = (group, member, onSuccess, onFailure) ->
     GroupMember.delete(
       {
-        unit_id: group.unit().id,
-        group_set_id: group.groupSet().id,
+        unit_id: group.unit.id,
+        group_set_id: group.groupSet.id,
         group_id: group.id
         id: member.project_id # ID maps to student's project_id!
       }

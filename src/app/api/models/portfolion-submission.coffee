@@ -56,10 +56,10 @@ angular.module("doubtfire.api.models.portfolio-submission", [
 
     resource
 
-  PortfolioSubmission.getPortfolioUrl = (project, asAttachment = false) ->
-    url = "#{DoubtfireConstants.API_URL}/submission/project/#{project.d}/portfolio"
-    url += "?as_attachment=true" if asAttachment
-    url
+  # PortfolioSubmission.getPortfolioUrl = (project, asAttachment = false) ->
+  #   url = "#{DoubtfireConstants.API_URL}/submission/project/#{project.d}/portfolio"
+  #   url += "?as_attachment=true" if asAttachment
+  #   url
 
   PortfolioSubmission
 )

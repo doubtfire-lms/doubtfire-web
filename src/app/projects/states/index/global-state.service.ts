@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -26,7 +26,7 @@ export enum ViewType {
  * - Units taught and subjects studied
  * - Current view and selected entity
  */
-export class GlobalStateService {
+export class GlobalStateService implements OnDestroy {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
@@ -99,6 +99,13 @@ export class GlobalStateService {
     this.clearUnitsAndProjects();
     this.authenticationService.signOut();
     this.router.stateService.go('sign_in');
+  }
+
+  public ngOnDestroy(): void {
+    this.projectsSubject.complete();
+    this.isLoadingSubject.complete();
+    this.showHideHeader.complete();
+    this.currentViewAndEntitySubject.complete();
   }
 
   /**

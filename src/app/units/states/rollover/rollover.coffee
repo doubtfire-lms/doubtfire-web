@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.rollover', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller("RolloverUnitState", ($scope, $state, $stateParams, Convenor, unitService, alertService, analyticsService) ->
+.controller("RolloverUnitState", ($scope, $state, $stateParams, Convenor, newUnitService, alertService, analyticsService) ->
   analyticsService.event 'Unit Rollover View', "Started Unit Rollover View"
   unitService.getUnit $state.params.unitId, (unit) ->
     $scope.unit = unit

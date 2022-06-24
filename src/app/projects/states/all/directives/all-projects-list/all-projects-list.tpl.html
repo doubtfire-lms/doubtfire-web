@@ -30,15 +30,15 @@
               </label>
             </td>
             <td>{{project.unit_name}}</td>
-            <td ng-if="project.teachingPeriod()">{{(project.teachingPeriod().name())}}</td>
-            <td ng-if="!project.teachingPeriod()">Custom</td>
+            <td ng-if="project.unit.teachingPeriod">{{(project.unit.teachingPeriod.name())}}</td>
+            <td ng-if="!project.unit.teachingPeriod">Custom</td>
             <td>{{project.start_date | date : 'EEE d MMM'}}</td>
             <td>{{project.end_date | date : 'EEE d MMM'}}</td>
-            <td ng-if="project.teachingPeriod()">
-              <i ng-if="project.teachingPeriod().active() && project.active" class="fa fa-check"></i>
-              <i ng-if="!project.teachingPeriod().active() || !project.active" class="fa fa-times"></i>
+            <td ng-if="project.unit.teachingPeriod">
+              <i ng-if="project.unit.teachingPeriod.active && project.active" class="fa fa-check"></i>
+              <i ng-if="!project.unit.teachingPeriod.active() || !project.active" class="fa fa-times"></i>
             </td>
-            <td ng-if="!project.teachingPeriod()">
+            <td ng-if="!project.unit.teachingPeriod">
               <i ng-if="project.active" class="fa fa-check"></i>
               <i ng-if="!project.active" class="fa fa-times"></i>
             </td>

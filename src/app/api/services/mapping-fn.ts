@@ -8,4 +8,8 @@ export class MappingFunctions {
     const jsonDate = new Date(data[key]);
     return new Date(jsonDate.getFullYear(), jsonDate.getMonth(), jsonDate.getDate());
   }
+
+  public static mapDate(data, key, entity, params?) {
+    return new Date(data[key]);
+  }
 }

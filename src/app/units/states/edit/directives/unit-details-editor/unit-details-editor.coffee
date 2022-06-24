@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod, TaskSubmission) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, TeachingPeriod, TaskSubmission) ->
     $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.calOptions = {
@@ -42,7 +42,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       formatYear: 'yy',
       startingDay: 1
     }
-    $scope.unitTypeAheadData = unitService.unitTypeAheadData
     $scope.studentSearch = ""
 
     $scope.saveUnit = ->
@@ -61,7 +60,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_definition_id: $scope.unit.draft_task_definition_id
-        allow_student_extension_requests: $scope.unit.allow_student_extension_requests
+        allowStudentExtensionRequests: $scope.unit.allowStudentExtensionRequests
         extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
         allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
         assessment_enabled: $scope.unit.assessment_enabled

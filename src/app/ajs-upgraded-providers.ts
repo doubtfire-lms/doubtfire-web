@@ -10,7 +10,6 @@ export const uploadSubmissionModal = new InjectionToken('uploadSubmissionModal')
 export const gradeTaskModal = new InjectionToken('gradeTaskModal');
 export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
-export const oldUnitService = new InjectionToken('oldUnitService');
 export const dateService = new InjectionToken('dateService');
 export const projectService = new InjectionToken('projectService');
 export const alertService = new InjectionToken('AlertService');
@@ -18,6 +17,7 @@ export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
 export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
+export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const taskComment = new InjectionToken('TaskComment');
 export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
@@ -141,12 +141,6 @@ export const analyticsServiceProvider = {
   deps: ['$injector'],
 };
 
-export const oldUnitServiceProvider = {
-  provide: oldUnitService,
-  useFactory: (i: any) => i.get('unitService'),
-  deps: ['$injector'],
-};
-
 export const dateServiceProvider = {
   provide: dateService,
   useFactory: (i: any) => i.get('dateService'),
@@ -180,6 +174,12 @@ export const CsvUploadModalProvider = {
 export const CsvResultModalProvider = {
   provide: csvResultModalService,
   useFactory: (i: any) => i.get('CsvResultModal'),
+  deps: ['$injector'],
+};
+
+export const ConfirmationModalProvider = {
+  provide: confirmationModal,
+  useFactory: (i: any) => i.get('ConfirmationModal'),
   deps: ['$injector'],
 };
 

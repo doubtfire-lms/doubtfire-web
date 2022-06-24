@@ -44,5 +44,5 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
 
     # Download the pdf
     $scope.downloadPortfolio = ->
-      fileDownloaderService.downloadFile($scope.project.portfolioUrlAsAttachment(), "#{$scope.project.student_id}-portfolio.pdf")
+      fileDownloaderService.downloadFile($scope.project.portfolioUrl(true), "#{$scope.project.student.username}-portfolio.pdf")
 )

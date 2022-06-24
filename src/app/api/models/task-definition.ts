@@ -1,7 +1,7 @@
 import { Entity } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
+import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
 
 export class TaskDefinition extends Entity {
 
@@ -39,11 +39,20 @@ export class TaskDefinition extends Entity {
   }
 
   public localDueDate(): Date {
-    return this.dueDate;
+    return this.targetDate;
   }
 
   public localDeadlineDate(): Date {
     return this.dueDate;
+  }
+
+  /**
+   * The final deadline for task submission.
+   *
+   * @returns the final due date
+   */
+  public finalDeadlineDate(): Date {
+    return this.dueDate; // now in due date
   }
 
   public isGroupTask(): boolean {
@@ -58,6 +67,14 @@ export class TaskDefinition extends Entity {
   public getTaskResourcesUrl(asAttachment: boolean = false) {
     const constants = AppInjector.get(DoubtfireConstants);
     return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources.json${ asAttachment ? "?as_attachment=true" : ""}`;
+  }
+
+  public get targetGradeText(): string {
+    return Grade.GRADES[this.targetGrade];
+  }
+
+  public hasPlagiarismCheck(): boolean {
+    return this.plagiarismChecks.length > 0;
   }
 
 }

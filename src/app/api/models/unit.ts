@@ -1,6 +1,6 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
-import { alertService, alertServiceProvider } from 'src/app/ajs-upgraded-providers';
+import { Observable, tap } from 'rxjs';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { ProjectService } from '../services/project.service';
 import { OverseerImage, User, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
@@ -23,7 +23,7 @@ export class Unit extends Entity {
   endDate: Date; //TODO: or string
 
   assessmentEnabled: boolean;
-  overseerImageId: number; // image needs to be lazy loadaed
+  overseerImageId: number = null; // image needs to be lazy loadaed
 
   autoApplyExtensionBeforeDeadline: boolean;
   sendNotifications: boolean;
@@ -80,6 +80,10 @@ export class Unit extends Entity {
     return this.taskDefinitionCache.currentValues;
   }
 
+  public taskCount(): number {
+    return this.taskDefinitionCache.size;
+  }
+
   public get tutorialStreams(): TutorialStream[] {
     return this.tutorialStreamsCache.currentValues;
   }
@@ -96,6 +100,11 @@ export class Unit extends Entity {
     return this.taskDefinitionCache.size;
   }
 
+  /**
+   * Get a stream from the unit by abbreviation
+   * @param abbr the abbreviation of the stream
+   * @returns the stream object or null
+   */
   public tutorialStreamForAbbr(abbr: string): TutorialStream {
     if (abbr) {
       return this.tutorialStreams.find(ts => ts.abbreviation === abbr);
@@ -124,6 +133,10 @@ export class Unit extends Entity {
 
   public get students(): Array<Project> {
     return this.studentCache.currentValues;
+  }
+
+  public get activeStudents(): Array<Project> {
+    return this.studentCache.currentValues.filter( p => p.enrolled );
   }
 
   public tutorialsForUserName(userName: string): Array<Tutorial> {
@@ -183,16 +196,30 @@ export class Unit extends Entity {
     });
   }
 
-  private setupAllStudentTasks(): void {
-
-  }
-
   public tutorialFromId(tutorialId: number): Tutorial {
     return this.tutorialsCache.get(tutorialId);
   }
 
   public get hasGroupwork(): boolean {
     return this.groupSetsCache.size > 0;
+  }
+
+  public refreshGroups(): void {
+    // return unless unit.groups?.length > 0
+    // # Query the groups within the unit.
+    // Unit.groups.query( {id: unit.id} ,
+    //   (success) ->
+    //     # Save the result as the unit's groups
+    //     unit.groups = success
+    //   (failure) ->
+    //     alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
+    // )
+
+    console.log("implement refresh groups");
+  }
+
+  public findGroupSet(id: number): GroupSet {
+    return this.groupSetsCache.get(id);
   }
 
   public taskDef(taskDefId: number): TaskDefinition {
@@ -211,14 +238,33 @@ export class Unit extends Entity {
     });
   }
 
-  public nextStream(activityTypeAbbreviation): Observable<TutorialStream> {
-    console.log("implement nextStream");
-    return null;
+  public hasStreams() : boolean {
+    return this.tutorialStreamsCache.size > 0;
   }
 
-  public deleteStream(stream: TutorialStream) {
-    console.log("implement deleteStream");
-    return;
+  public nextStream(activityTypeAbbreviation: string): Observable<TutorialStream> {
+    const tutorialStreamService = AppInjector.get(TutorialStreamService);
+
+    return tutorialStreamService.create(
+      {id: this.id, activity_type_abbr: activityTypeAbbreviation},
+      {cache: this.tutorialStreamsCache});
+  }
+
+  public deleteStream(stream: TutorialStream): Observable<boolean> {
+    const tutorialStreamService = AppInjector.get(TutorialStreamService);
+
+    return tutorialStreamService.delete<boolean>(stream, {cache: this.tutorialStreamsCache}).pipe(
+      tap( (response: boolean) => {
+        if(response) {
+          const tutorials = this.tutorialsCache.currentValues;
+          tutorials.forEach((t) => {
+            if (t.tutorialStream === stream) {
+              this.tutorialsCache.delete(t);
+            }
+          });
+        }
+      })
+    );
   }
 
   public refreshStudents(includeWithdrawnStudents: boolean = false) {
@@ -237,5 +283,39 @@ export class Unit extends Entity {
   public get groupSets(): GroupSet[] {
     return this.groupSetsCache.currentValues;
   }
+
+  public findGroupById(id: number): Group {
+    return this.groups.find(grp => grp.id === id);
+  }
+
+  public overseerEnabled(): boolean {
+    return this.assessmentEnabled && this.overseerImageId !== null;
+  }
+
+  public get studentFilterTypeAheadData(): string[] {
+    const result: string[] = [];
+
+    this.tutorials.forEach( tute => {
+      result.push(tute.abbreviation);
+      if(!result.includes(tute.tutorName)) {
+        result.push(tute.tutorName);
+      }
+    });
+
+    this.students.forEach(project => {
+      result.push(project.student.name);
+      result.push(project.student.username);
+    });
+
+    return result;
+  }
+
+  public outcome(id: number): LearningOutcome {
+    return this.learningOutcomesCache.get(id);
+  }
+
+
+
+
 
 }

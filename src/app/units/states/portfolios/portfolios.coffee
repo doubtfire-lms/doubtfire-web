@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, Visualisation, taskService, fileDownloaderService, newUserService) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, Visualisation, taskService, fileDownloaderService, newUserService) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
 
   $scope.downloadGrades = -> fileDownloaderService.downloadFile(Unit.getGradesUrl($scope.unit),"#{$scope.unit.code}-grades.csv")
@@ -65,7 +65,6 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.setActiveTab($scope.tabs.selectStudent)
 
   $scope.grades = gradeService.grades
-  $scope.unitService = unitService
 
   $scope.tutor = newUserService.currentUser
 

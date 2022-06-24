@@ -165,16 +165,16 @@
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.allow_student_extension_requests ? 'success' : 'default'}}"
-                ng-model="unit.allow_student_extension_requests"
+                class="btn btn-{{unit.allowStudentExtensionRequests ? 'success' : 'default'}}"
+                ng-model="unit.allowStudentExtensionRequests"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.allow_student_extension_requests ? 'default' : 'danger'}}"
-                ng-model="unit.allow_student_extension_requests"
+                class="btn btn-{{unit.allowStudentExtensionRequests ? 'default' : 'danger'}}"
+                ng-model="unit.allowStudentExtensionRequests"
                 btn-radio="false"
                 uncheckable
               >
@@ -184,7 +184,7 @@
             <span class="help-block"> When false only staff can request extensions on behalf of students. </span>
           </div>
         </div>
-        <!--/allow_student_extension_requests-->
+        <!--/allowStudentExtensionRequests-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Extension duration on resubmit</label>

@@ -6,17 +6,17 @@ angular.module("doubtfire.common.services.projects", [])
 .factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants, TaskCommentService) ->
   projectService = {}
 
-  injectFunctionalityInProject = (project) ->
-    unless project.teachingPeriod?
-      # Store the linked teaching period in each project
-      project._teachingPeriod = null
-      project.teachingPeriod = () ->
-        # If there is a teaching period and it is not linked... link on first access
-        if project.teaching_period_id? && !project._teachingPeriod?
-          project._teachingPeriod = TeachingPeriod.getTeachingPeriod(project.teaching_period_id)
-        # Return the first role
-        project._teachingPeriod
-    project
+  # injectFunctionalityInProject = (project) ->
+  #   unless project.teachingPeriod?
+  #     # Store the linked teaching period in each project
+  #     project._teachingPeriod = null
+  #     project.teachingPeriod = () ->
+  #       # If there is a teaching period and it is not linked... link on first access
+  #       if project.teaching_period_id? && !project._teachingPeriod?
+  #         project._teachingPeriod = TeachingPeriod.getTeachingPeriod(project.teaching_period_id)
+  #       # Return the first role
+  #       project._teachingPeriod
+  #   project
 
   # This function is used by the task until/to descriptions
   # timeToDescription = (earlyTime, laterTime) ->
@@ -42,10 +42,10 @@ angular.module("doubtfire.common.services.projects", [])
   #       return "1 #{t.charAt(0).toUpperCase() + t.substr(1, t.length - 2)}"
   #   return laterTime.diff(earlyTime, "seconds")
 
-  projectService.loadedProjects = null
+  # projectService.loadedProjects = null
 
-  $rootScope.$on 'signOut', ->
-    projectService.loadedProjects = null
+  # $rootScope.$on 'signOut', ->
+  #   projectService.loadedProjects = null
 
   projectService.getProjects = ( inactive, callback ) ->
     fireCallback = ->
@@ -75,26 +75,26 @@ angular.module("doubtfire.common.services.projects", [])
         onFailure?(failure)
     )
 
-  projectService.mapTask = ( task, unit, project ) ->
-    td = unit.taskDef(task.definition.id)
+  # projectService.mapTask = ( task, unit, project ) ->
+  #   td = unit.taskDef(task.definition.id)
 
-    # Lookup and return the existing projTask task object
-    projTask = project.findTaskForDefinition(td.id)
-    if projTask?
-      _.extend projTask, task
-      if projTask.definition?
-        return projTask
-      else
-        # Augment the existing project task
-        task = projTask
+  #   # Lookup and return the existing projTask task object
+  #   projTask = project.findTaskForDefinition(td.id)
+  #   if projTask?
+  #     _.extend projTask, task
+  #     if projTask.definition?
+  #       return projTask
+  #     else
+  #       # Augment the existing project task
+  #       task = projTask
 
-    # Add in the related definition object
-    task.definition = td
+  #   # Add in the related definition object
+  #   task.definition = td
 
-    task.commentCache = new Map()
+  #   task.commentCache = new Map()
 
-    hoursBetween = (time1, time2) ->
-      return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
+    # hoursBetween = (time1, time2) ->
+    #   return Math.floor(Math.abs(new Date(time1) - new Date(time2))/1000/60/60)
 
     task.refreshCommentData = () ->
       comments = task.comments
@@ -174,7 +174,7 @@ angular.module("doubtfire.common.services.projects", [])
       #   }
 
     # must be function to avoid cyclic structure
-    task.project = -> project
+    # task.project = -> project
     # task.unit = -> unit
     task.status_txt = -> taskService.statusLabels[task.status]
     task.statusSeq = -> taskService.statusSeq[task.status]
@@ -320,7 +320,7 @@ angular.module("doubtfire.common.services.projects", [])
 
     # You can apply for an extension in certain states, if it is before the deadline or was submitted before the deadline, and you can request some extensions still.
     task.canApplyForExtension = ->
-      task.unit().allow_student_extension_requests && task.inStateThatAllowsExtension() && ( !task.isPastDeadline() || task.wasSubmittedOnTime() ) && task.maxWeeksCanExtend() > 0
+      task.unit.allowStudentExtensionRequests && task.inStateThatAllowsExtension() && ( !task.isPastDeadline() || task.wasSubmittedOnTime() ) && task.maxWeeksCanExtend() > 0
 
     # task.inFinalState = ->
     #   task.status in taskService.finalStatuses
@@ -421,10 +421,10 @@ angular.module("doubtfire.common.services.projects", [])
       )
 
     task.overseerEnabled = () ->
-      task.unit().overseerEnabled() && task.definition.assessment_enabled && task.definition.hasTaskAssessmentResources
+      task.unit.overseerEnabled() && task.definition.assessment_enabled && task.definition.hasTaskAssessmentResources
 
     # task.shortTutorialDescription = () ->
-    #   stream = task.unit().tutorialStreamForAbbr(task.definition.tutorial_stream)
+    #   stream = task.unit.tutorialStreamForAbbr(task.definition.tutorial_stream)
     #   tutorial = task?.project().tutorialForStream(stream)
     #   if (tutorial)
     #     tutorial.abbreviation
@@ -494,7 +494,7 @@ angular.module("doubtfire.common.services.projects", [])
         project.tasks.push(projectService.mapTask(newTask, unit, project))
         currentTask = newTask
       if currentTask.isGroupTask() and !currentTask.group()?
-        projectService.updateGroups(currentTask.project(), callback, true)
+        projectService.updateGroups(currentTask.project, callback, true)
       callback?()
       currentTask
 

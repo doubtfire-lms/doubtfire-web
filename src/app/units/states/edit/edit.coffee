@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, alertService, analyticsService) ->
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, alertService, analyticsService) ->
   analyticsService.event 'Edit Unit View', "Started Edit Unit View", 'Unit Tab'
 
   unitService.getUnit $state.params.unitId, {loadAllStudents: true}, (unit) ->

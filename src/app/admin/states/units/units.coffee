@@ -18,7 +18,7 @@ angular.module('doubtfire.admin.states.units', [])
       roleWhitelist: ['Admin', 'Convenor']
   headerServiceProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, unitService, alertService, analyticsService, GlobalStateService) ->
+.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, alertService, analyticsService, GlobalStateService) ->
   analyticsService.event "Unit Admin", "Listed Units to Manage"
 
   GlobalStateService.setView("OTHER")
@@ -38,7 +38,7 @@ angular.module('doubtfire.admin.states.units', [])
     )
 
   # Table sort details
-  $scope.sortOrder = "start_date"
+  $scope.sortOrder = "startDate"
   $scope.reverse = true
 
   # Pagination details

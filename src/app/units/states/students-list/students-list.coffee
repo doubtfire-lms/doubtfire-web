@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, unitService, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
   # Filtering
   applyFilters = ->
     filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor)
@@ -71,9 +71,6 @@ angular.module('doubtfire.units.states.students', [])
 
   # Changing search text reapplies filter
   $scope.searchTextChanged = applyFilters
-
-  # Expose typeahead data function
-  $scope.unitTypeAheadData = unitService.unitTypeAheadData
 
   # CSV header func
   $scope.getCSVHeader = ->

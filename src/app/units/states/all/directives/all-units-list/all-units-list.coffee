@@ -13,7 +13,7 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   headerServiceProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, unitService, analyticsService, dateService, GlobalStateService, newUserService) ->
+.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, analyticsService, dateService, GlobalStateService, newUserService) ->
   analyticsService.event 'view-all-units', 'viewed all-units list'
   GlobalStateService.setView('OTHER')
 
@@ -37,6 +37,13 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
     $scope.dataLoaded = true
     hasRoles = true
     $timeout.cancel(timeoutPromise)
+
+  $scope.typeAhead = (roles) ->
+    result = []
+    _.each roles, (role) ->
+      result.push(role.unit.code)
+      result.push(role.unit.name)
+    .uniq
 
   checkEnrolled = ->
     return if !$scope.unitRoles?
