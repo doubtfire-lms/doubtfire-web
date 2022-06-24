@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, newProjectService, Unit, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, newProjectService, Unit, alertService, gradeService, newTaskService, projectService, analyticsService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?
@@ -37,7 +37,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 
     # Update move to task and project...
     updateTaskCompletionStats = ->
-      $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
+      $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, newTaskService.completeStatus).length
       $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
 
     $scope.$on 'TaskStatusUpdated', ->

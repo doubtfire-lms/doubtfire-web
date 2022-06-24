@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-sheet-view',
   scope:
     taskDef: '='
     unit: '='
-  controller: ($scope, $timeout, taskService, alertService, listenerService, Task, Unit) ->
+  controller: ($scope, $timeout, alertService, listenerService, Task, Unit) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 

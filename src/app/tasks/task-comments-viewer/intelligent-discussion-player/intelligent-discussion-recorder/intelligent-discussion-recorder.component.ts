@@ -2,7 +2,7 @@ import { Component, Inject, AfterViewInit, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
 import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
-import { Task } from 'src/app/api/models/doubtfire-model';
+import { DiscussionComment, Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'intelligent-discussion-recorder',
@@ -10,7 +10,7 @@ import { Task } from 'src/app/api/models/doubtfire-model';
   styleUrls: ['./intelligent-discussion-recorder.component.css'],
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
-  @Input() discussion: any = {};
+  @Input() discussion: DiscussionComment;
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;

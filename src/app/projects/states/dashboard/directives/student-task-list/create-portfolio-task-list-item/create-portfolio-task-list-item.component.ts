@@ -1,5 +1,4 @@
 import { Component, Input, Inject } from '@angular/core';
-import { taskService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
 import { Project, Task } from 'src/app/api/models/doubtfire-model';
 
@@ -12,7 +11,7 @@ export class CreatePortfolioTaskListItemComponent {
   @Input() setSelectedTask: Task;
   @Input() project: Project;
 
-  constructor(@Inject(taskService) private ts: any, @Inject(UIRouter) private router: UIRouter) {}
+  constructor(@Inject(UIRouter) private router: UIRouter) {}
 
   public status(): string {
     return this.project.portfolioTaskStatus();

@@ -9,8 +9,6 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.learning-alignments"
   "doubtfire.api.models.intended-learning-outcome"
   "doubtfire.api.models.task"
-  "doubtfire.api.models.task-comment"
-  "doubtfire.api.models.discussion-comment"
   "doubtfire.api.models.task-definition"
   "doubtfire.api.models.group-member"
   "doubtfire.api.models.group"

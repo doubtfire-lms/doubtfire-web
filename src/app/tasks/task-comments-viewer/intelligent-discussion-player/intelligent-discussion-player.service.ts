@@ -1,13 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
-import { alertService, taskService, Task } from 'src/app/ajs-upgraded-providers';
+import { alertService, Task } from 'src/app/ajs-upgraded-providers';
+import { DiscussionComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
 export class IntelligentDiscussionPlayerService {
   constructor(
-    @Inject(taskService) private ts: any,
     @Inject(Task) private TaskModel: any,
-    @Inject(alertService) private alerts: any
-  ) {}
+    @Inject(alertService) private alerts: any,
+    private taskService: TaskCommentService
+  ) { }
 
   handleError(error: any) {
     this.alerts.add('danger', 'Error: ' + error.data.error, 6000);
@@ -21,13 +22,12 @@ export class IntelligentDiscussionPlayerService {
     return this.TaskModel.generateDiscussionResponseUrl(task, taskCommentID);
   }
 
-  addDiscussionReply(task: any, taskCommentID: number, audio): void {
-    this.ts.postDiscussionReply(
-      task,
-      taskCommentID,
-      audio,
-      () => {},
-      (error: any) => this.handleError(error)
-    );
+  addDiscussionReply(comment: DiscussionComment, audio: Blob): void {
+    this.taskService.postDiscussionReply(
+      comment,
+      audio).subscribe({
+        next: () => { },
+        error: (message) => { this.handleError(message); }
+      });
   }
 }

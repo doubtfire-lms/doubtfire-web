@@ -2,7 +2,7 @@ import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
 import { formatDate } from '@angular/common';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService, Group } from './doubtfire-model';
+import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService, Group, UnitRole } from './doubtfire-model';
 import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -400,18 +400,6 @@ export class Task extends Entity {
     return this.definition.uploadRequirements.length > 0;
   }
 
-  // Trigger for new status
-  // taskService.triggerTransition = (task, status, unitRole) ->
-  //   throw Error "Not a valid status key" unless _.includes(taskService.statusKeys, status)
-  //   return if task.status == status
-  //   requiresFileUpload = _.includes(['ready_for_feedback', 'need_help'], status) && task.requiresFileUpload()
-  //   if requiresFileUpload
-  //     taskService.presentTaskSubmissionModal(task, status)
-  //   else
-  //     taskService.updateTaskStatus(task.unit(), task.project, task, status)
-  //     asUser = if unitRole? then unitRole.role else 'Student'
-  //     analyticsService.event('Task Service', "Updated Status as #{asUser}", taskService.statusLabels[status])
-
   public presentTaskSubmissionModal(status: TaskStatusEnum, reuploadEvidence: boolean = false, isTestSubmission: boolean = false) {
     const oldStatus = this.status;
 
@@ -523,7 +511,7 @@ export class Task extends Entity {
   }
 
   public staffAlignments() {
-    return this.unit.taskOutcomeAlignments.find
+    return this.unit.staffAlignmentsForTaskDefinition(this.definition);
   }
 
   public shortTutorialDescription() : string {

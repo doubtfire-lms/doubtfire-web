@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 import { MappingFunctions } from './mapping-fn';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
@@ -21,13 +22,17 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_extension/:id:';
   private readonly requestExtensionEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/request_extension';
+  private readonly discussionCommentReplyEndpointFormat = "/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/reply";
+  private readonly getDiscussionCommentPromptEndpointFormat = "/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/prompt_number/:prompt_number:";
+
 
   protected readonly endpointFormat = this.commentEndpointFormat;
 
   constructor(
     httpClient: HttpClient,
     private emojiService: EmojiService,
-    private userService: UserService
+    private userService: UserService,
+    private downloader: FileDownloaderService
   ) {
     super(httpClient, API_URL);
 
@@ -197,4 +202,29 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       opts
     );
   }
+
+  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<TaskComment>{
+    const form = new FormData();
+    const pathIds = {
+      project_id: comment.project.id,
+      task_definition_id: comment.task.id,
+      task_comment_id: comment.id
+    };
+
+    form.append('attachment', replyAudio);
+
+    return this.create(pathIds, {body: form, cache: comment.task.commentCache});
+  }
+
+  // public getDiscussionComment() ->
+  // DiscussionComment.getDiscussion.get {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID},
+  //   (response) -> #success)
+  //     onSuccess(response)
+  //   (response) -> #failure
+  //     onError(response)
+
+  // public getDiscussionPrompt() {
+  //   this.downloader.downloadBlob(this.getDiscussionCommentPromptEndpointFormat, )
+  // }: resourcePlus , { project_id: "@project_id", task_definition_id: "@task_definition_id", task_comment_id: "@task_comment_id", prompt_number: "@prompt_number" }
+  // getDiscussion: resourcePlus "/projects/:project_id/task_def_id/:task_definition_id/comments/:task_comment_id/discussion_comment", { project_id: "@project_id", task_definition_id: "@task_definition_id", task_comment_id: "@task_comment_id" }
 }

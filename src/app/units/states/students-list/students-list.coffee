@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, alertService, taskService, gradeService, analyticsService, projectService, newUserService) ->
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, alertService, newTaskService, gradeService, analyticsService, projectService, newUserService) ->
   # Filtering
   applyFilters = ->
     filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor)
@@ -102,8 +102,8 @@ angular.module('doubtfire.units.states.students', [])
     result
 
   # Expose the status labels and classes for the bar stats
-  $scope.statusClass = taskService.statusClass
-  $scope.statusText = taskService.statusText
+  $scope.statusClass = newTaskService.statusClass
+  $scope.statusText = newTaskService.statusText
 
   # View a student
   $scope.viewStudent = (student) ->

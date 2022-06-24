@@ -1,25 +1,25 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (TaskComment, DiscussionComment, Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
+.factory("taskService", (Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
   #
   # The unit service object
   #
   taskService = {}
 
-  taskService.statusKeys = [
-    'not_started'
-    'feedback_exceeded'
-    'redo'
-    'need_help'
-    'working_on_it'
-    'fix_and_resubmit'
-    'ready_for_feedback'
-    'discuss'
-    'demonstrate'
-    'complete'
-    'fail'
-    'time_exceeded'
-  ]
+  # taskService.statusKeys = [
+  #   'not_started'
+  #   'feedback_exceeded'
+  #   'redo'
+  #   'need_help'
+  #   'working_on_it'
+  #   'fix_and_resubmit'
+  #   'ready_for_feedback'
+  #   'discuss'
+  #   'demonstrate'
+  #   'complete'
+  #   'fail'
+  #   'time_exceeded'
+  # ]
 
   # All status other than those that are final - these are sorted in the student task list
   # taskService.validTopTask = [
@@ -33,12 +33,12 @@ angular.module("doubtfire.common.services.tasks", [])
   #   'demonstrate'
   # ]
 
-  taskService.toBeWorkedOn = [
-    'not_started'
-    'redo'
-    'need_help'
-    'working_on_it'
-  ]
+  # taskService.toBeWorkedOn = [
+  #   'not_started'
+  #   'redo'
+  #   'need_help'
+  #   'working_on_it'
+  # ]
 
   # What are the states that are associated with tutor actions...
   # TODO: This needs to be reworked, this actually means we are
@@ -79,222 +79,222 @@ angular.module("doubtfire.common.services.tasks", [])
   #   'complete'
   # ]
 
-  taskService.discussionStatuses = [
-    'discuss'
-    'demonstrate'
-  ]
+  # taskService.discussionStatuses = [
+  #   'discuss'
+  #   'demonstrate'
+  # ]
 
-  taskService.stateThatAllowsExtension = [
-    'not_started'
-    'redo'
-    'need_help'
-    'working_on_it'
-    'fix_and_resubmit'
-    'ready_for_feedback'
-    'time_exceeded'
-  ]
+  # taskService.stateThatAllowsExtension = [
+  #   'not_started'
+  #   'redo'
+  #   'need_help'
+  #   'working_on_it'
+  #   'fix_and_resubmit'
+  #   'ready_for_feedback'
+  #   'time_exceeded'
+  # ]
 
-  taskService.pdfRegeneratableStatuses = [
-    'demonstrate'
-    'ready_for_feedback'
-    'discuss'
-    'complete'
-    'time_exceeded'
-    'fail'
-    'fix_and_resubmit'
-    'feedback_exceeded'
-    'redo'
-  ]
+  # taskService.pdfRegeneratableStatuses = [
+  #   'demonstrate'
+  #   'ready_for_feedback'
+  #   'discuss'
+  #   'complete'
+  #   'time_exceeded'
+  #   'fail'
+  #   'fix_and_resubmit'
+  #   'feedback_exceeded'
+  #   'redo'
+  # ]
 
-  taskService.submittableStatuses = [
-    'ready_for_feedback'
-    'need_help'
-  ]
+  # taskService.submittableStatuses = [
+  #   'ready_for_feedback'
+  #   'need_help'
+  # ]
 
-  taskService.markedStatuses = [
-    'redo'
-    'fail'
-    'fix_and_resubmit'
-    'feedback_exceeded'
-    'discuss'
-    'demonstrate'
-    'complete'
-  ]
+  # taskService.markedStatuses = [
+  #   'redo'
+  #   'fail'
+  #   'fix_and_resubmit'
+  #   'feedback_exceeded'
+  #   'discuss'
+  #   'demonstrate'
+  #   'complete'
+  # ]
 
-  taskService.acronymKey =
-    RFF: 'ready_for_feedback'
-    NOS: 'not_started'
-    WRK: 'working_on_it'
-    HLP: 'need_help'
-    RDO: 'redo'
-    DNR: 'feedback_exceeded'
-    FIX: 'fix_and_resubmit'
-    DIS: 'discuss'
-    DEM: 'demonstrate'
-    COM: 'complete'
-    FAL: 'fail'
-    TIE: 'time_exceeded'
+  # taskService.acronymKey =
+  #   RFF: 'ready_for_feedback'
+  #   NOS: 'not_started'
+  #   WRK: 'working_on_it'
+  #   HLP: 'need_help'
+  #   RDO: 'redo'
+  #   DNR: 'feedback_exceeded'
+  #   FIX: 'fix_and_resubmit'
+  #   DIS: 'discuss'
+  #   DEM: 'demonstrate'
+  #   COM: 'complete'
+  #   FAL: 'fail'
+  #   TIE: 'time_exceeded'
 
-  taskService.learningWeight =
-    fail:               0.0
-    not_started:        0.0
-    working_on_it:      0.0
-    need_help:          0.0
-    redo:               0.1
-    feedback_exceeded:    0.1
-    fix_and_resubmit:   0.3
-    ready_for_feedback:      0.5
-    discuss:            0.8
-    demonstrate:        0.8
-    complete:           1.0
-    time_exceeded:      0.3
+  # taskService.learningWeight =
+  #   fail:               0.0
+  #   not_started:        0.0
+  #   working_on_it:      0.0
+  #   need_help:          0.0
+  #   redo:               0.1
+  #   feedback_exceeded:    0.1
+  #   fix_and_resubmit:   0.3
+  #   ready_for_feedback:      0.5
+  #   discuss:            0.8
+  #   demonstrate:        0.8
+  #   complete:           1.0
+  #   time_exceeded:      0.3
 
-  taskService.statusAcronym =
-    ready_for_feedback:      'RFF'
-    not_started:        'NOS'
-    working_on_it:      'WRK'
-    need_help:          'HLP'
-    redo:               'RDO'
-    feedback_exceeded:    "DNR"
-    fix_and_resubmit:   'FIX'
-    discuss:            'DIS'
-    demonstrate:        'DEM'
-    complete:           'COM'
-    fail:               'FAL'
-    time_exceeded:      'TIE'
+  # taskService.statusAcronym =
+  #   ready_for_feedback:      'RFF'
+  #   not_started:        'NOS'
+  #   working_on_it:      'WRK'
+  #   need_help:          'HLP'
+  #   redo:               'RDO'
+  #   feedback_exceeded:    "DNR"
+  #   fix_and_resubmit:   'FIX'
+  #   discuss:            'DIS'
+  #   demonstrate:        'DEM'
+  #   complete:           'COM'
+  #   fail:               'FAL'
+  #   time_exceeded:      'TIE'
 
-  taskService.statusLabels =
-    ready_for_feedback:      'Ready for Feedback'
-    not_started:        'Not Started'
-    working_on_it:      'Working On It'
-    need_help:          'Need Help'
-    redo:               'Redo'
-    feedback_exceeded:    'Feedback Exceeded'
-    fix_and_resubmit:   'Resubmit'
-    discuss:            'Discuss'
-    demonstrate:        'Demonstrate'
-    complete:           'Complete'
-    fail:               'Fail'
-    time_exceeded:      'Time Exceeded'
+  # taskService.statusLabels =
+  #   ready_for_feedback:      'Ready for Feedback'
+  #   not_started:        'Not Started'
+  #   working_on_it:      'Working On It'
+  #   need_help:          'Need Help'
+  #   redo:               'Redo'
+  #   feedback_exceeded:    'Feedback Exceeded'
+  #   fix_and_resubmit:   'Resubmit'
+  #   discuss:            'Discuss'
+  #   demonstrate:        'Demonstrate'
+  #   complete:           'Complete'
+  #   fail:               'Fail'
+  #   time_exceeded:      'Time Exceeded'
 
-  taskService.statusIcons =
-    ready_for_feedback:      'fa fa-thumbs-o-up'
-    not_started:        'fa fa-pause'
-    working_on_it:      'fa fa-bolt'
-    need_help:          'fa fa-question-circle'
-    redo:               'fa fa-refresh'
-    feedback_exceeded:    'fa fa-low-vision'
-    fix_and_resubmit:   'fa fa-wrench'
-    discuss:            'fa fa-commenting'
-    demonstrate:        'fa fa-commenting'
-    complete:           'fa fa-check'
-    fail:               'fa fa-times'
-    time_exceeded:      'fa fa-clock-o'
+  # taskService.statusIcons =
+  #   ready_for_feedback:      'fa fa-thumbs-o-up'
+  #   not_started:        'fa fa-pause'
+  #   working_on_it:      'fa fa-bolt'
+  #   need_help:          'fa fa-question-circle'
+  #   redo:               'fa fa-refresh'
+  #   feedback_exceeded:    'fa fa-low-vision'
+  #   fix_and_resubmit:   'fa fa-wrench'
+  #   discuss:            'fa fa-commenting'
+  #   demonstrate:        'fa fa-commenting'
+  #   complete:           'fa fa-check'
+  #   fail:               'fa fa-times'
+  #   time_exceeded:      'fa fa-clock-o'
 
-  taskService.statusColors =
-    # Please make sure this matches task-status-colors.less
-    ready_for_feedback:     '#0079D8'
-    not_started:       '#CCCCCC'
-    working_on_it:     '#EB8F06'
-    need_help:         '#a48fce'
-    fix_and_resubmit:  '#f2d85c'
-    feedback_exceeded:   '#d46b54'
-    redo:              '#804000'
-    discuss:           '#31b0d5'
-    demonstrate:       '#428bca'
-    complete:          '#5BB75B'
-    fail:              '#d93713'
-    time_exceeded:     '#d93713'
+  # taskService.statusColors =
+  #   # Please make sure this matches task-status-colors.less
+  #   ready_for_feedback:     '#0079D8'
+  #   not_started:       '#CCCCCC'
+  #   working_on_it:     '#EB8F06'
+  #   need_help:         '#a48fce'
+  #   fix_and_resubmit:  '#f2d85c'
+  #   feedback_exceeded:   '#d46b54'
+  #   redo:              '#804000'
+  #   discuss:           '#31b0d5'
+  #   demonstrate:       '#428bca'
+  #   complete:          '#5BB75B'
+  #   fail:              '#d93713'
+  #   time_exceeded:     '#d93713'
 
-  taskService.statusSeq =
-    not_started:        1
-    fail:               2
-    feedback_exceeded:    3
-    time_exceeded:      4
-    redo:               5
-    need_help:          6
-    working_on_it:      7
-    ready_for_feedback:      8
-    fix_and_resubmit:   9
-    discuss:           10
-    demonstrate:       11
-    complete:          12
+  # taskService.statusSeq =
+  #   not_started:        1
+  #   fail:               2
+  #   feedback_exceeded:    3
+  #   time_exceeded:      4
+  #   redo:               5
+  #   need_help:          6
+  #   working_on_it:      7
+  #   ready_for_feedback:      8
+  #   fix_and_resubmit:   9
+  #   discuss:           10
+  #   demonstrate:       11
+  #   complete:          12
 
 
-  taskService.helpDescriptions =
-    # detail = in a brief context to the student
-    # reason = reason for this status
-    # action = action student can take
-    ready_for_feedback:
-      detail: "Submitted this task for feedback"
-      reason: "You have finished working on the task and have uploaded it for your tutor to assess."
-      action: "No further action is required. Your tutor will change this task status once they have assessed it."
-    not_started:
-      detail: "Task not started"
-      reason: "You have not yet started the Task."
-      action: "Depending on when the target date is, you should start this task soon."
-    working_on_it:
-      detail: "Working on the task"
-      reason: "You are working on the task, but it is not yet ready to assess."
-      action: "Finish working on this task and then set it to ready for feedback."
-    need_help:
-      detail: "Need help for the task"
-      reason: "You are working on the task but would like some help to get it complete."
-      action: "Upload the task with what you have completed so far and add a comment on what you would like help on."
-    redo:
-      detail: "Start this task from scratch"
-      reason: "You appeared to have misunderstood what is required for this task, many deliverables were missing or the marking criteria was largely not met."
-      action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor and/or lecturer."
-    feedback_exceeded:
-      detail: "Feedback will no longer be given"
-      reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
-      action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio."
-    fix_and_resubmit:
-      detail: "Your submission requires some more work"
-      reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
-      action: "Review your submission and the feedback from your tutor. Fix the issues identified, and resubmit it to be reassessed. Make sure to check your submission thoroughly, and note any limit on the number of times each task can be reassessed."
-    discuss:
-      detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor believes it is complete."
-      action: "To mark as complete, attend class and discuss it with your tutor."
-    demonstrate:
-      detail: "You're almost complete!"
-      reason: "Your work looks good and your tutor believes it is complete."
-      action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
-    complete:
-      detail: "You are finished with this task 🎉"
-      reason: "Your tutor is happy with your work and it has been discussed with them."
-      action: "No further action required. Move onto the next task, or go party if everything is done."
-    fail:
-      detail: "You have failed this task"
-      reason: "You have not successfully demonstrated the required learning for this task. This may be due to plagiarism detection or assessment under testing conditions."
-      action: "You should discuss this with your tutor and/or the convenor."
-    time_exceeded:
-      detail: "Time limit exceeded"
-      reason: "This work was submitted after the deadline, having missed both the target date and deadline."
-      action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
-    awaiting_extension:
-      detail: "Time limit exceeded, awaiting extension"
-      reason: "This work was submitted after the deadline, having missed both the target date and deadline but is awaiting an extension."
-      action: "You require an extension to have this work assessed. If an extension is granted the task will be ready for feedback, and will be reviewed by your tutor."
+  # taskService.helpDescriptions =
+  #   # detail = in a brief context to the student
+  #   # reason = reason for this status
+  #   # action = action student can take
+  #   ready_for_feedback:
+  #     detail: "Submitted this task for feedback"
+  #     reason: "You have finished working on the task and have uploaded it for your tutor to assess."
+  #     action: "No further action is required. Your tutor will change this task status once they have assessed it."
+  #   not_started:
+  #     detail: "Task not started"
+  #     reason: "You have not yet started the Task."
+  #     action: "Depending on when the target date is, you should start this task soon."
+  #   working_on_it:
+  #     detail: "Working on the task"
+  #     reason: "You are working on the task, but it is not yet ready to assess."
+  #     action: "Finish working on this task and then set it to ready for feedback."
+  #   need_help:
+  #     detail: "Need help for the task"
+  #     reason: "You are working on the task but would like some help to get it complete."
+  #     action: "Upload the task with what you have completed so far and add a comment on what you would like help on."
+  #   redo:
+  #     detail: "Start this task from scratch"
+  #     reason: "You appeared to have misunderstood what is required for this task, many deliverables were missing or the marking criteria was largely not met."
+  #     action: "You should reconsider your approach to this task. Review the task resources and task guide instructions. Check the deliverables carefully. Consider getting help from your tutor and/or lecturer."
+  #   feedback_exceeded:
+  #     detail: "Feedback will no longer be given"
+  #     reason: "This work is not complete to an acceptable standard and your tutor will not reassess it again."
+  #     action: "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio."
+  #   fix_and_resubmit:
+  #     detail: "Your submission requires some more work"
+  #     reason: "It looks like your work is on the right track, but it does require some extra work to achieve the required standard."
+  #     action: "Review your submission and the feedback from your tutor. Fix the issues identified, and resubmit it to be reassessed. Make sure to check your submission thoroughly, and note any limit on the number of times each task can be reassessed."
+  #   discuss:
+  #     detail: "You're almost complete!"
+  #     reason: "Your work looks good and your tutor believes it is complete."
+  #     action: "To mark as complete, attend class and discuss it with your tutor."
+  #   demonstrate:
+  #     detail: "You're almost complete!"
+  #     reason: "Your work looks good and your tutor believes it is complete."
+  #     action: "To mark as complete, attend class and demonstrate how your submission works to your tutor."
+  #   complete:
+  #     detail: "You are finished with this task 🎉"
+  #     reason: "Your tutor is happy with your work and it has been discussed with them."
+  #     action: "No further action required. Move onto the next task, or go party if everything is done."
+  #   fail:
+  #     detail: "You have failed this task"
+  #     reason: "You have not successfully demonstrated the required learning for this task. This may be due to plagiarism detection or assessment under testing conditions."
+  #     action: "You should discuss this with your tutor and/or the convenor."
+  #   time_exceeded:
+  #     detail: "Time limit exceeded"
+  #     reason: "This work was submitted after the deadline, having missed both the target date and deadline."
+  #     action: "Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio."
+  #   awaiting_extension:
+  #     detail: "Time limit exceeded, awaiting extension"
+  #     reason: "This work was submitted after the deadline, having missed both the target date and deadline but is awaiting an extension."
+  #     action: "You require an extension to have this work assessed. If an extension is granted the task will be ready for feedback, and will be reviewed by your tutor."
 
   # Statuses students/tutors can switch tasks to
-  taskService.switchableStates =
-    student: [
-      'not_started'
-      'working_on_it'
-      'need_help'
-      'ready_for_feedback'
-    ]
-    tutor: [
-      'complete'
-      'discuss'
-      'demonstrate'
-      'fix_and_resubmit'
-      'redo'
-      'feedback_exceeded'
-      'fail'
-    ]
+  # taskService.switchableStates =
+  #   student: [
+  #     'not_started'
+  #     'working_on_it'
+  #     'need_help'
+  #     'ready_for_feedback'
+  #   ]
+  #   tutor: [
+  #     'complete'
+  #     'discuss'
+  #     'demonstrate'
+  #     'fix_and_resubmit'
+  #     'redo'
+  #     'feedback_exceeded'
+  #     'fail'
+  #   ]
 
   # Which status should not show up in the task status drop down
   # taskService.rejectFutureStates =
@@ -311,40 +311,40 @@ angular.module("doubtfire.common.services.tasks", [])
   #     time_exceeded: ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
   #     fail:  ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']
 
-  taskService.currentReplyID = { id: null }
+  # taskService.currentReplyID = { id: null }
 
   # This function gets the status CSS class for the indicated status
-  taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
+  # taskService.statusClass = (status) -> _.trim(_.kebabCase(status))
 
   # This function gets the status text for the indicated status
-  taskService.statusText =   (status) -> taskService.statusLabels[status]
+  # taskService.statusText =   (status) -> taskService.statusLabels[status]
 
   # This function gets the help text for the indicated status
-  taskService.helpDescription = (status) -> taskService.helpDescriptions[status]
+  # taskService.helpDescription = (status) -> taskService.helpDescriptions[status]
 
-  taskService.taskDefinitionFn = (unit) ->
-    (task) ->
-      unit.taskDef(task.definition.id)
+  # taskService.taskDefinitionFn = (unit) ->
+  #   (task) ->
+  #     unit.taskDef(task.definition.id)
 
   # Return an icon and label for the task
-  taskService.statusData = (data) ->
-    # provided a task not a status
-    status = if data.status? then data.status else data
-    {
-      status: status
-      icon: taskService.statusIcons[status]
-      label: taskService.statusLabels[status]
-      class: taskService.statusClass(status)
-      help: taskService.helpDescription(status)
-    }
+  # taskService.statusData = (data) ->
+  #   # provided a task not a status
+  #   status = if data.status? then data.status else data
+  #   {
+  #     status: status
+  #     icon: taskService.statusIcons[status]
+  #     label: taskService.statusLabels[status]
+  #     class: taskService.statusClass(status)
+  #     help: taskService.helpDescription(status)
+  #   }
 
   # Return whether task is a group task
-  taskService.isGroupTask = (task) ->
-    groupService.isGroupTask(task)
+  # taskService.isGroupTask = (task) ->
+  #   groupService.isGroupTask(task)
 
   # Returns the alignments for this task
-  taskService.staffAlignmentsForTask = (task) ->
-    task.unit.staffAlignmentsForTaskDefinition(task.definition)
+  # taskService.staffAlignmentsForTask = (task) ->
+  #   task.unit.staffAlignmentsForTaskDefinition(task.definition)
 
   # # Trigger for new status
   # # taskService.triggerTransition = (task, status, unitRole) ->
@@ -402,18 +402,18 @@ angular.module("doubtfire.common.services.tasks", [])
         promise = doDeleteTask task, unit, null
         ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
-  taskService.plagiarismDetected = (task) ->
-    task.similar_to_count - task.similar_to_dismissed_count > 0
+  # taskService.plagiarismDetected = (task) ->
+  #   task.similar_to_count - task.similar_to_dismissed_count > 0
 
-  taskService.indexOf = (status) ->
-    _.indexOf(taskService.statusKeys, status)
+  # taskService.indexOf = (status) ->
+  #   _.indexOf(taskService.statusKeys, status)
 
-  # Return a list of all the the status values and icons
-  taskService.allStatusData = ->
-    result = []
-    angular.forEach taskService.statusKeys, (sk) ->
-      result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
-    result
+  # # Return a list of all the the status values and icons
+  # taskService.allStatusData = ->
+  #   result = []
+  #   angular.forEach taskService.statusKeys, (sk) ->
+  #     result.push({ icon: taskService.statusIcons[sk], label: taskService.statusLabels[sk], class: taskService.statusClass(sk) })
+  #   result
 
   # taskService.processTaskStatusChange = (unit, project, task, status, response) ->
   #   if response.updated_task
@@ -499,16 +499,16 @@ angular.module("doubtfire.common.services.tasks", [])
   # taskService.taskIsGraded = (task) ->
   #   task? and task.definition.is_graded and task.grade?
 
-  taskService.taskKeyFromString = (taskKeyString) ->
-    taskKeyComponents = taskKeyString?.split('/')
-    if taskKeyComponents
-      studentId = _.first(taskKeyComponents)
-      taskDefAbbr = _.last(taskKeyComponents)
-      return unless _.isString(studentId) && _.isString(taskDefAbbr)
-    {
-      studentId: studentId
-      taskDefAbbr: taskDefAbbr
-    }
+  # taskService.taskKeyFromString = (taskKeyString) ->
+  #   taskKeyComponents = taskKeyString?.split('/')
+  #   if taskKeyComponents
+  #     studentId = _.first(taskKeyComponents)
+  #     taskDefAbbr = _.last(taskKeyComponents)
+  #     return unless _.isString(studentId) && _.isString(taskDefAbbr)
+  #   {
+  #     studentId: studentId
+  #     taskDefAbbr: taskDefAbbr
+  #   }
 
   # taskService.taskKeyToUrlString = (task) ->
   #   key = task.taskKey()
@@ -518,31 +518,31 @@ angular.module("doubtfire.common.services.tasks", [])
   #   key = task.taskKey()
   #   "task-key-#{key.studentId}-#{key.taskDefAbbr}".replace(/[.#]/g, "-")
 
-  taskService.taskKey = (task) ->
-    {
-      studentId: task.project.student.username
-      taskDefAbbr: task.definition.abbreviation
-    }
+  # taskService.taskKey = (task) ->
+  #   {
+  #     studentId: task.project.student.username
+  #     taskDefAbbr: task.definition.abbreviation
+  #   }
 
   # taskService.hasTaskKey = (task, key) ->
   #   _.isEqual(task?.taskKey(), key)
 
-  taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
-    form = new FormData()
-    form.append 'attachment', replyAudio
+  # taskService.postDiscussionReply = (task, commentID, replyAudio, onSuccess, onError) ->
+  #   form = new FormData()
+  #   form.append 'attachment', replyAudio
 
-    DiscussionComment.postDiscussionReply.create_media {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID}, form,
-      (response) -> #success)
-        onSuccess(response)
-      (response) -> #failure
-        onError(response)
+  #   DiscussionComment.postDiscussionReply.create_media {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID}, form,
+  #     (response) -> #success)
+  #       onSuccess(response)
+  #     (response) -> #failure
+  #       onError(response)
 
-  taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
-    DiscussionComment.getDiscussion.get {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID},
-      (response) -> #success)
-        onSuccess(response)
-      (response) -> #failure
-        onError(response)
+  # taskService.getDiscussionComment = (task, commentID, onSuccess, onError) ->
+  #   DiscussionComment.getDiscussion.get {project_id: task.project.id, task_definition_id: task.definition.id, task_comment_id: commentID},
+  #     (response) -> #success)
+  #       onSuccess(response)
+  #     (response) -> #failure
+  #       onError(response)
 
   taskService.assessExtension = (task, taskCommentID, assessment, onSuccess, onError) ->
     interceptSuccess = (response) ->

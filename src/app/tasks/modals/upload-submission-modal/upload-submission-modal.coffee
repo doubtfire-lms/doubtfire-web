@@ -32,14 +32,14 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, taskService, task, reuploadEvidence, groupService, alertService, outcomeService, PrivacyPolicy, newTaskService) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, task, reuploadEvidence, groupService, alertService, outcomeService, PrivacyPolicy) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
 
   # Set up submission types
-  submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
-    [ status, taskService.statusLabels[status] ]
+  submissionTypes = _.chain(newTaskService.submittableStatuses).map((status) ->
+    [ status, newTaskService.statusLabels.get(status) ]
   ).fromPairs().value()
 
   # [[0,"hey"], [1, "he1"]] -> {0: "hey", 1: "he1"} -> ["hey", "he1"]

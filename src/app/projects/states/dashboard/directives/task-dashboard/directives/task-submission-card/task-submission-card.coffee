@@ -7,14 +7,14 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, listenerService, taskService, UploadSubmissionModal, fileDownloaderService, alertService) ->
+  controller: ($scope, listenerService, newTaskService, UploadSubmissionModal, fileDownloaderService, alertService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Evaluate changes to submission data
     reapplySubmissionData = ->
       $scope.task.getSubmissionDetails(->
         $scope.canReuploadEvidence = $scope.task.inSubmittedState()
-        $scope.canRegeneratePdf = _.includes(taskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.hasPdf
+        $scope.canRegeneratePdf = _.includes(newTaskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.hasPdf
         $scope.submission = {
           isProcessing: $scope.task.processingPdf
           isUploaded: $scope.task.hasPdf
@@ -31,7 +31,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     )
     # Functions under action
     $scope.uploadAlternateFiles = ->
-      taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
+      $scope.task.presentTaskSubmissionModal($scope.task.status, true)
     $scope.regeneratePdf = ->
       $scope.task.recreateSubmissionPdf().subscribe(
         {

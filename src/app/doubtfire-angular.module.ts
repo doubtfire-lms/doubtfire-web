@@ -49,7 +49,6 @@ import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
-  taskServiceProvider,
   analyticsServiceProvider,
   dateServiceProvider,
   taskProvider,
@@ -61,7 +60,6 @@ import {
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   userProvider,
-  TaskCommentProvider,
   gradeServiceProvider,
   commentsModalProvider,
   taskDefinitionProvider,
@@ -326,7 +324,6 @@ import { GroupService } from './api/services/group.service';
     userNotificationSettingsModalProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    taskServiceProvider,
     gradeServiceProvider,
     uploadSubmissionModalProvider,
     gradeTaskModalProvider,
@@ -339,7 +336,6 @@ import { GroupService } from './api/services/group.service';
     CsvResultModalProvider,
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
-    TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,

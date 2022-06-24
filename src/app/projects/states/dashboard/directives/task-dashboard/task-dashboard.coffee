@@ -11,7 +11,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     task: '='
     showFooter: '@?'
     showSubmission: '@?'
-  controller: ($scope, $stateParams, Task, listenerService, projectService, taskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
+  controller: ($scope, $stateParams, Task, listenerService, projectService, newTaskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
     $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.overseerEnabled = () ->
@@ -61,11 +61,11 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Now also load in the assessment details
     if $scope.showFooter
       $scope.taskStatusData =
-        keys:   _.sortBy(taskService.markedStatuses, (s) -> taskService.statusSeq[s])
-        help:   taskService.helpDescriptions
-        icons:  taskService.statusIcons
-        labels: taskService.statusLabels
-        class:  taskService.statusClass
+        keys:   _.sortBy(newTaskService.markedStatuses, (s) -> newTaskService.statusSeq.get(s))
+        help:   newTaskService.helpDescriptions
+        icons:  newTaskService.statusIcons
+        labels: newTaskService.statusLabels
+        class:  newTaskService.statusClass
 
       # Triggers a new update to the task status
       $scope.triggerTransition = (status) ->

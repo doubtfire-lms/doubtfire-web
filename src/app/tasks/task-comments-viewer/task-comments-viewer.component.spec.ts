@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { EventEmitter } from '@angular/core';
-import { alertService, commentsModal, Task, taskService } from 'src/app/ajs-upgraded-providers';
+import { alertService, commentsModal, Task } from 'src/app/ajs-upgraded-providers';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
@@ -11,7 +11,6 @@ describe('TaskCommentsViewerComponent', () => {
   let fixture: ComponentFixture<TaskCommentsViewerComponent>;
   let taskCommentServiceStub: Partial<TaskCommentService>;
   let doubtfireConstantsStub: Partial<DoubtfireConstants>;
-  let taskServiceStub: jasmine.SpyObj<any>;
   let commentsModalStub: jasmine.SpyObj<any>;
   let taskStub: jasmine.SpyObj<any>;
   let alertServiceStub: jasmine.SpyObj<any>;
@@ -28,7 +27,6 @@ describe('TaskCommentsViewerComponent', () => {
         providers: [
           { provide: TaskCommentService, useValue: taskCommentServiceStub },
           { provide: DoubtfireConstants, useValue: doubtfireConstantsStub },
-          { provide: taskService, useValue: taskServiceStub },
           { provide: commentsModal, useValue: commentsModalStub },
           { provide: Task, useValue: taskStub },
           { provide: alertService, useValue: alertServiceStub },

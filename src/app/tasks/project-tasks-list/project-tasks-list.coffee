@@ -15,16 +15,15 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     onSelect: "="
     inMenu: '@'
 
-  controller: ($scope, $modal, taskService, groupService, analyticsService, gradeService) ->
+  controller: ($scope, $modal, newTaskService, groupService, analyticsService, gradeService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"
 
     # functions from task service
-    $scope.statusClass = taskService.statusClass
-    $scope.statusText = taskService.statusText
-    $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
+    $scope.statusClass = newTaskService.statusClass
+    $scope.statusText = newTaskService.statusText
 
     $scope.taskDisabled = (task) ->
-      $scope.taskDefinition(task).targetGrade > $scope.project.targetGrade
+      task.definition.targetGrade > $scope.project.targetGrade
 
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)

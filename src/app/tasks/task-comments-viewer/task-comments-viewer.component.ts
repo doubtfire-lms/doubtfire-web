@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { EntityCache } from 'ngx-entity-service';
-import { taskService, alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
+import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { Task, Project, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
@@ -29,7 +29,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   constructor(
     private taskCommentService: TaskCommentService,
     private constants: DoubtfireConstants,
-    @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModalRef: any,
     @Inject(alertService) private alerts: any
   ) {

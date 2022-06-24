@@ -1,5 +1,5 @@
 import { Component, Input, Inject, OnChanges } from '@angular/core';
-import { taskService, alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { OverseerAssessment, TaskDefinition, Unit, User, UserService, Task } from 'src/app/api/models/doubtfire-model';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
@@ -16,7 +16,6 @@ export class TaskAssessorComponent implements OnChanges {
 
   constructor(
     @Inject(alertService) private alerts: any,
-    @Inject(taskService) private ts: any,
     private userService: UserService,
     private modalService: TaskAssessmentModalService,
     private submissions: TaskSubmissionService) {

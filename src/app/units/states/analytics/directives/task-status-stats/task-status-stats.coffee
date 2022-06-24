@@ -11,7 +11,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
   templateUrl: 'units/states/analytics/directives/task-status-stats/task-status-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, $filter, Unit, taskService) ->
+  controller: ($scope, $filter, Unit, newTaskService) ->
     # Required for button press -- shouldn't really have objects directly on
     # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
@@ -125,7 +125,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
                 .values()
                 .reduce(((memo, num) -> memo + num), 0)
                 .value()
-      completedPct = newValue[taskService.acronymKey.COM] / total
+      completedPct = newValue[newTaskService.completeStatus] / total
       if completedPct? && ! isNaN(completedPct)
         $scope.completeStats = {
           completed:  Math.round(completedPct * 100)

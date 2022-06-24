@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.projects", [])
 #
 # Service for handling projects
 #
-.factory("projectService", ($filter, $http, taskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants, TaskCommentService) ->
+.factory("projectService", ($filter, $http, newTaskService, Project, $rootScope, alertService, Task, Visualisation, gradeService, TeachingPeriod, DoubtfireConstants, TaskCommentService) ->
   projectService = {}
 
   # injectFunctionalityInProject = (project) ->
@@ -176,8 +176,8 @@ angular.module("doubtfire.common.services.projects", [])
     # must be function to avoid cyclic structure
     # task.project = -> project
     # task.unit = -> unit
-    task.status_txt = -> taskService.statusLabels[task.status]
-    task.statusSeq = -> taskService.statusSeq[task.status]
+    task.status_txt = -> newTaskService.statusLabels.get(task.status)
+    task.statusSeq = -> newTaskService.statusSeq.get(task.status)
     # task.canReuploadEvidence = ->
     #   task.inSubmittedState()
     # task.requiresFileUpload = ->
@@ -185,7 +185,7 @@ angular.module("doubtfire.common.services.projects", [])
     # task.plagiarismDetected = ->
     #   taskService.plagiarismDetected(task)
     task.isGroupTask = ->
-      taskService.isGroupTask(task)
+      groupService.isGroupTask(task)
     task.studentInAGroup = ->
       task.group()?
     task.group = ->
@@ -204,8 +204,8 @@ angular.module("doubtfire.common.services.projects", [])
     task.minWeeksCanExtend = () ->
       minWeeks = Math.ceil(moment().diff(task.localDueDate(), 'days') / 7)
       if minWeeks < 0 then 0 else minWeeks
-    task.staffAlignments = ->
-      taskService.staffAlignmentsForTask(task)
+    # task.staffAlignments = ->
+    #   taskService.staffAlignmentsForTask(task)
     task.timeToDue = ->
       days = task.daysUntilDueDate()
       if days < 0
@@ -357,8 +357,8 @@ angular.module("doubtfire.common.services.projects", [])
       if (task.betweenDueDateAndDeadlineDate() && task.inTimeExceeded())
         help = taskService.statusData('awaiting_extension').help
       help
-    task.taskKey = ->
-      taskService.taskKey(task)
+    # task.taskKey = ->
+    #   taskService.taskKey(task)
     # task.recreateSubmissionPdf = (onSuccess, onFailure) ->
     #   taskService.recreateSubmissionPdf(task, onSuccess, onFailure)
     # task.taskKeyToUrlString = ->

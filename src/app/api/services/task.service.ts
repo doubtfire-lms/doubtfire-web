@@ -1,4 +1,4 @@
-import { Project, Task, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
+import { Project, Task, TaskDefinition, TaskStatus, TaskStatusEnum, TaskStatusUiData, Unit } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import { CachedEntityService, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { HttpClient } from '@angular/common/http';
@@ -125,5 +125,54 @@ export class TaskService extends CachedEntityService<Task> {
     );
   }
 
+  public readonly statusKeys = TaskStatus.STATUS_KEYS;
+  public readonly toBeWorkedOn = TaskStatus.TO_BE_WORKED_ON;
+  public readonly discussionStatuses = TaskStatus.DISCUSSION_STATES;
+  public readonly gradeableStatuses = TaskStatus.GRADEABLE_STATUSES;
+  public readonly stateThatAllowsExtension = TaskStatus.STATE_THAT_ALLOWS_EXTENSION;
+  public readonly pdfRegeneratableStatuses = TaskStatus.PDF_REGENERATABLE_STATES;
+  public readonly submittableStatuses = TaskStatus.SUBMITTABLE_STATUSES;
+  public readonly completeStatus: TaskStatusEnum = "complete";
+  public readonly learningWeight: Map<TaskStatusEnum, number> = TaskStatus.LEARNING_WEIGHT;
+  public readonly statusAcronym: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ACRONYM;
+  public readonly statusLabels: Map<TaskStatusEnum, string> = TaskStatus.STATUS_LABELS;
+  public readonly markedStatuses = TaskStatus.MARKED_STATUSES;
+  public readonly statusSeq = TaskStatus.STATUS_SEQ;
+  public readonly helpDescriptions = TaskStatus.HELP_DESCRIPTIONS;
+  public readonly statusIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ICONS;
+  public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
+
+  public statusClass(status: TaskStatusEnum): string {
+    return status.replace("_", "-");
+  }
+
+  public readonly statusColors: Map<string, string> = TaskStatus.STATUS_COLORS;
+  public readonly switchableStates = TaskStatus.SWITCHABLE_STATES;
+
+  public statusText(status: TaskStatusEnum): string {
+    return TaskStatus.STATUS_LABELS.get(status);
+  }
+
+  public helpDescription(status: TaskStatusEnum): { detail: string; reason: string; action: string; } {
+    return TaskStatus.HELP_DESCRIPTIONS.get(status);
+  }
+
+  public statusData(data: Task | TaskStatusEnum): TaskStatusUiData {
+    return TaskStatus.statusData(data);
+  }
+
+  public taskKeyFromString(taskKeyString: string): {studentId: string; taskDefAbbr: string} {
+    const taskKeyComponents = taskKeyString?.split('/');
+    if (taskKeyComponents) {
+      const studentId = taskKeyComponents[0];
+      const taskDefAbbr = taskKeyComponents[taskKeyComponents.length - 1];
+      return {
+        studentId: studentId,
+        taskDefAbbr: taskDefAbbr
+      }
+    }
+
+    return null;
+  }
 
 }

@@ -18,7 +18,7 @@ angular.module('doubtfire.projects.states.portfolio', [
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, taskService, gradeService, PortfolioSubmission, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, PortfolioSubmission, analyticsService) ->
   #
   # Active task tab group
   #
@@ -92,7 +92,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     else
       # Filter by included in portfolio
       tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
-    tasks = _.filter tasks, (t) -> !_.includes(taskService.toBeWorkedOn, t.status)
+    tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 
   # Jump to a step
@@ -106,9 +106,9 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.setActiveTab $scope.tabs.welcomeStep
 
   #
-  # Functions from taskService to get data
+  # Functions from newTaskService to get data
   #
-  $scope.statusText = taskService.statusText
-  $scope.statusData = taskService.statusData
-  $scope.statusClass = taskService.statusClass
+  $scope.statusText = newTaskService.statusText
+  $scope.statusData = newTaskService.statusData
+  $scope.statusClass = newTaskService.statusClass
 )

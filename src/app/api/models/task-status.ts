@@ -19,12 +19,27 @@ export type TaskStatusUiData = {
   icon: string;
   label: string;
   class: string;
-  help: string;
+  help: { detail: string, reason: string, action: string };
 };
 
 export class TaskStatus {
 
-  public static readonly VALID_TOP_TASKS = [
+  public static readonly STATUS_KEYS: TaskStatusEnum[] = [
+    "not_started",
+    "feedback_exceeded",
+    "redo",
+    "need_help",
+    "working_on_it",
+    "fix_and_resubmit",
+    "ready_for_feedback",
+    "discuss",
+    "demonstrate",
+    "complete",
+    "fail",
+    "time_exceeded"
+  ];
+
+  public static readonly VALID_TOP_TASKS: TaskStatusEnum[] = [
     "not_started",
     "redo",
     "need_help",
@@ -35,7 +50,7 @@ export class TaskStatus {
     "demonstrate"
   ];
 
-  public static readonly SUBMITTED_STATUSES = [
+  public static readonly SUBMITTED_STATUSES: TaskStatusEnum[] = [
     "feedback_exceeded",
     "ready_for_feedback",
     "discuss",
@@ -45,19 +60,99 @@ export class TaskStatus {
     "time_exceeded",
   ];
 
-  public static readonly FINAL_STATUSES = [
+  public static readonly FINAL_STATUSES: TaskStatusEnum[] = [
     "complete",
     "fail",
     "feedback_exceeded",
     "time_exceeded"
   ];
 
-  public static readonly GRADEABLE_STATUSES = [
+  public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = [
     "fail",
     "discuss",
     "demonstrate",
     "complete",
   ];
+
+  public static readonly TO_BE_WORKED_ON: TaskStatusEnum[] = [
+    "not_started",
+    "redo",
+    "need_help",
+    "working_on_it"
+  ];
+
+  public static readonly DISCUSSION_STATES: TaskStatusEnum[] = [
+    "discuss",
+    "demonstrate"
+  ];
+
+  public static readonly STATE_THAT_ALLOWS_EXTENSION: TaskStatusEnum[] = [
+    "not_started",
+    "redo",
+    "need_help",
+    "working_on_it",
+    "fix_and_resubmit",
+    "ready_for_feedback",
+    "time_exceeded"
+  ];
+
+  public static readonly PDF_REGENERATABLE_STATES: TaskStatusEnum[] = [
+    "demonstrate",
+    "ready_for_feedback",
+    "discuss",
+    "complete",
+    "time_exceeded",
+    "fail",
+    "fix_and_resubmit",
+    "feedback_exceeded",
+    "redo"
+  ];
+
+  public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = [
+    "ready_for_feedback",
+    "need_help"
+  ];
+
+  public static readonly MARKED_STATUSES: TaskStatusEnum[] = [
+    "redo",
+    "fail",
+    "fix_and_resubmit",
+    "feedback_exceeded",
+    "discuss",
+    "demonstrate",
+    "complete"
+  ];
+
+  public static readonly LEARNING_WEIGHT: Map<TaskStatusEnum, number> = new Map<TaskStatusEnum, number>([
+    ["fail",               0.0],
+    ["not_started",        0.0],
+    ["working_on_it",      0.0],
+    ["need_help",          0.0],
+    ["redo",               0.1],
+    ["feedback_exceeded",  0.1],
+    ["fix_and_resubmit",   0.3],
+    ["ready_for_feedback", 0.5],
+    ["discuss",            0.8],
+    ["demonstrate",        0.8],
+    ["complete",           1.0],
+    ["time_exceeded",      0.3]
+  ]);
+
+  public static readonly STATUS_ACRONYM: Map<TaskStatusEnum, string> = new Map<TaskStatusEnum, string>([
+    ["ready_for_feedback", "RFF"],
+    ["not_started",        "NOS"],
+    ["working_on_it",      "WRK"],
+    ["need_help",          "HLP"],
+    ["redo",               "RDO"],
+    ["feedback_exceeded",  "DNR"],
+    ["fix_and_resubmit",   "FIX"],
+    ["discuss",            "DIS"],
+    ["demonstrate",        "DEM"],
+    ["complete",           "COM"],
+    ["fail",               "FAL"],
+    ["time_exceeded",      "TIE"]
+  ]);
+
 
   // Which status should not show up in the task status drop down... for students
   public static readonly REJECT_FUTURE_STATES: Map<TaskStatusEnum, TaskStatusEnum[]> = new Map<TaskStatusEnum, TaskStatusEnum[]>([
@@ -90,7 +185,7 @@ export class TaskStatus {
     ["time_exceeded", "Time Exceeded"],
   ]);
 
-  public static readonly STATUS_ICONS = new Map<string, string>([
+  public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
     ["ready_for_feedback", "fa fa-thumbs-o-up"],
     ["not_started", "fa fa-pause"],
     ["working_on_it", "fa fa-bolt"],
@@ -106,7 +201,7 @@ export class TaskStatus {
   ]);
 
   // Please make sure this matches task-status-colors.less
-  public static readonly STATUS_COLORS = new Map<string, string>([
+  public static readonly STATUS_COLORS = new Map<TaskStatusEnum, string>([
     ["ready_for_feedback", "#0079D8"],
     ["not_started", "#CCCCCC"],
     ["working_on_it", "#EB8F06"],
@@ -121,7 +216,7 @@ export class TaskStatus {
     ["time_exceeded", "#d93713"],
   ]);
 
-  public static readonly STATUS_SEQ = new Map<string, number>([
+  public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
     ["not_started", 1],
     ["fail", 2],
     ["feedback_exceeded", 3],
@@ -135,6 +230,24 @@ export class TaskStatus {
     ["demonstrate", 11],
     ["complete", 12],
   ]);
+
+  public static readonly SWITCHABLE_STATES = {
+    student: [
+      "not_started",
+      "working_on_it",
+      "need_help",
+      "ready_for_feedback"
+    ],
+    tutor: [
+      "complete",
+      "discuss",
+      "demonstrate",
+      "fix_and_resubmit",
+      "redo",
+      "feedback_exceeded",
+      "fail"
+    ]
+  };
 
   // detail = in a brief context to the student
   // reason = reason for this status
@@ -235,15 +348,15 @@ export class TaskStatus {
     // ]
   ]);
 
-  public statusData(data : Task | TaskStatusEnum): TaskStatusUiData {
+  public static statusData(data : Task | TaskStatusEnum): TaskStatusUiData {
     // provided a task not a status
     const status = typeof data !== "string" ? data.status : data;
     return {
       status: status,
-      icon: TaskStatus.STATUS_ICONS[status],
-      label: TaskStatus.STATUS_LABELS[status],
+      icon: TaskStatus.STATUS_ICONS.get(status),
+      label: TaskStatus.STATUS_LABELS.get(status),
       class: TaskStatus.statusClass(status),
-      help: TaskStatus.HELP_DESCRIPTIONS[status]
+      help: TaskStatus.HELP_DESCRIPTIONS.get(status)
     };
   }
 

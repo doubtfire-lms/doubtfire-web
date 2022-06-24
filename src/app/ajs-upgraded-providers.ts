@@ -5,7 +5,6 @@ import { InjectionToken } from '@angular/core';
 export const Unit = new InjectionToken('Unit');
 export const User = new InjectionToken('User');
 export const Task = new InjectionToken('Task');
-export const taskService = new InjectionToken('taskService');
 export const uploadSubmissionModal = new InjectionToken('uploadSubmissionModal');
 export const gradeTaskModal = new InjectionToken('gradeTaskModal');
 export const gradeService = new InjectionToken('gradeService');
@@ -18,8 +17,6 @@ export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
 export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const confirmationModal = new InjectionToken('ConfirmationModal');
-export const taskComment = new InjectionToken('TaskComment');
-export const taskCommentService = new InjectionToken('TaskCommentService');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
 export const taskDefinition = new InjectionToken('TaskDefinition');
@@ -99,12 +96,6 @@ export const userProvider = {
   deps: ['$injector'],
 };
 
-export const taskServiceProvider = {
-  provide: taskService,
-  useFactory: (i: any) => i.get('taskService'),
-  deps: ['$injector'],
-};
-
 export const uploadSubmissionModalProvider = {
   provide: uploadSubmissionModal,
   useFactory: (i: any) => i.get('UploadSubmissionModal'),
@@ -180,18 +171,6 @@ export const CsvResultModalProvider = {
 export const ConfirmationModalProvider = {
   provide: confirmationModal,
   useFactory: (i: any) => i.get('ConfirmationModal'),
-  deps: ['$injector'],
-};
-
-export const TaskCommentProvider = {
-  provide: taskComment,
-  useFactory: (i: any) => i.get('TaskComment'),
-  deps: ['$injector'],
-};
-
-export const TaskCommentServiceProvider = {
-  provide: taskCommentService,
-  useFactory: (i: any) => i.get('TaskCommentService'),
   deps: ['$injector'],
 };
 

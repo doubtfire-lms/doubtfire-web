@@ -38,7 +38,6 @@ export class TaskSubmissionService {
   private readonly overseerImagesEndpointFormat = 'admin/overseer_images';
 
   constructor(
-    // @Inject(taskService) private ts: any,
     @Inject(Task) private TaskLegacy: any,
     @Inject(alertService) private alerts: any,
     private http: HttpClient,

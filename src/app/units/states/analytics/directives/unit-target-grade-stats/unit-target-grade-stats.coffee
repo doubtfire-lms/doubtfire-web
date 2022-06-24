@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
   templateUrl: 'units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, $filter, Unit, taskService) ->
+  controller: ($scope, $filter, Unit) ->
     $scope.overviewSelectors =
       tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
 

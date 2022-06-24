@@ -6,13 +6,13 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
   scope:
     project: '='
     updateData: '=?'
-  controller: ($scope, taskService, projectService, Visualisation) ->
-    colors = taskService.statusColors
+  controller: ($scope, newTaskService, projectService, Visualisation) ->
+    colors = newTaskService.statusColors
     $scope.data = []
 
     $scope.updateData = ->
       $scope.data.length = 0
-      _.each taskService.statusLabels, (label, key) ->
+      _.each newTaskService.statusLabels, (label, key) ->
         count = projectService.tasksByStatus($scope.project, key).length
         $scope.data.push { key: label, y: count, status_key: key }
 
