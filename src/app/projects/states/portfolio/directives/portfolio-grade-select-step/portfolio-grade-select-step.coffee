@@ -8,12 +8,12 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-grade-s
   restrict: 'E'
   replace: true
   templateUrl: 'projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.tpl.html'
-  controller: ($scope, newProjectService, projectService, gradeService) ->
+  controller: ($scope, newProjectService, gradeService) ->
     $scope.grades = gradeService.grades
     $scope.agreedToAssessmentCriteria = $scope.projectHasLearningSummaryReport()
     $scope.chooseGrade = (idx) ->
       $scope.project.submittedGrade = idx
       newProjectService.update($scope.project).subscribe((project) ->
-        # $scope.project.burndownChartData = project.burndownChartData
+        #$scope.project.burndownChartData = project.burndownChartData
       )
 )

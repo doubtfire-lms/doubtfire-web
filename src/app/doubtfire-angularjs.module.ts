@@ -188,7 +188,6 @@ import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/group-service.js';
 import 'build/src/app/common/services/recorder-service.js';
-import 'build/src/app/common/services/project-service.js';
 import 'build/src/app/common/services/media-service.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/grade-service.js';

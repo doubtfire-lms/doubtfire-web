@@ -77,7 +77,6 @@ export class Project extends Entity {
     return grp && (this.groupCache.get(grp.id)?.id === grp.id);
   }
 
-
   public incorporateTask(task: Task) {
     const taskInCache = this.findTaskForDefinition(task.definition.id);
 
@@ -94,6 +93,12 @@ export class Project extends Entity {
   public get tasks(): Task[] {
     return this.taskCache.currentValues;
   }
+
+  public tasksByStatus(statusKey: TaskStatusEnum) {
+    const tasksToConsider = this.activeTasks();
+    return tasksToConsider.filter( t => t.status === statusKey );
+  }
+
 
   public get tutorials(): Tutorial[] {
     return this.tutorialEnrolmentsCache.currentValues;

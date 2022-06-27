@@ -6,7 +6,7 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
     rawData: '=data'
     showLegend: '=?'
     height: '=?'
-  controller: ($scope, $timeout, newTaskService, projectService, Visualisation) ->
+  controller: ($scope, $timeout, newTaskService, Visualisation) ->
     colors = newTaskService.statusColors
 
     updateData = (rawData) ->

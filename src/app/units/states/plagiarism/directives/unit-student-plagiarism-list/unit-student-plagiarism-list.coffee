@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
   scope:
     unit: '='
     unitRole: '='
-  controller: ($scope, $filter, gradeService, projectService, newUserService) ->
+  controller: ($scope, $filter, gradeService, newProjectService, newUserService, alertService) ->
     $scope.grades = gradeService.grades
 
     $scope.view = "students"
@@ -32,12 +32,6 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
       if filteredStudents? && filteredStudents.length == 0
         $scope.studentFilter = 'allStudents'
 
-      # _.each $scope.unit.students, (student) ->
-      #   if student.maxPctCopy > 0
-      #     projectService.getProject student, $scope.unit, (proj) ->
-      #       tasksWithCpy = _.filter proj.tasks, (t) -> t.pct_similar > 0
-      #       proj.similar_to_count = tasksWithCpy.length
-
     $scope.activeStudent = null
     $scope.activeTask = null
     $scope.loadingStudent = true
@@ -46,9 +40,12 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
       $scope.activeStudent = student
       $scope.loadingStudent = true
       if student
-        projectService.getProject student, $scope.unit, (project) ->
-          $scope.activeTask = $filter('taskWithPlagiarism')(student.tasks)[0]
-          $scope.loadingStudent = false
+        newProjectService.loadProject(student, $scope.unit).subscribe({
+          next: (project) ->
+            $scope.activeTask = $filter('taskWithPlagiarism')(student.tasks)[0]
+            $scope.loadingStudent = false
+          error: (message) -> alertService.add("danger", message, 6000)
+        })
 
     $scope.selectTask = (task) ->
       $scope.activeTask = task

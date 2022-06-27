@@ -13,7 +13,7 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
   headerServiceProvider.state 'view-all-projects', homeStateData
 )
 
-.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, projectService, analyticsService, dateService, GlobalStateService, newUserService) ->
+.controller("AllProjectsList", ($scope, $state, $timeout, DoubtfireConstants, newProjectService, analyticsService, dateService, GlobalStateService, newUserService) ->
   analyticsService.event 'view-all-projects', 'viewed all-projects list'
   GlobalStateService.setView('OTHER')
 
@@ -31,12 +31,17 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
   hasProjects = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
-  projectService.getProjects true, (projects) ->
-    $scope.projects = projects
-    $scope.showSpinner = false
-    $scope.dataLoaded = true
-    hasProjects = true
-    $timeout.cancel(timeoutPromise)
+
+  newProjectService.query(undefined, {params: {include_inactive: true}}).subscribe({
+    next: (projects) ->
+      $scope.projects = projects
+      $scope.showSpinner = false
+      $scope.dataLoaded = true
+      hasProjects = true
+      $timeout.cancel(timeoutPromise)
+    error: (message) ->
+      alertService.add("danger", "Failed to load units you study. #{message}", 6000)
+  })
 
   checkEnrolled = ->
     return if !$scope.projects?
@@ -45,6 +50,13 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
       ($scope.projects.length is 0 and newUserService.currentUser.role is 'Student')
 
   $scope.$watch 'projects', checkEnrolled
+
+  $scope.typeAhead = (projects) ->
+    result = []
+    _.each projects, (proj) ->
+      result.push(proj.unit.code)
+      result.push(proj.unit.name)
+    return _.uniq(result)
 
   $scope.currentUser = newUserService.currentUser
 )

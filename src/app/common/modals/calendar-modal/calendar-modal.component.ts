@@ -2,9 +2,9 @@ import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/co
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
+import { ProjectService, Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { alertService, projectService } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'calendar-modal',
@@ -30,7 +30,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private sanitizer: DomSanitizer,
     @Inject(alertService) private alerts: any,
-    @Inject(projectService) private ProjectService: any,
+    private projectService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
@@ -43,7 +43,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     });
 
     // Allow selection of units with active projects.
-    this.ProjectService.getProjects(false, (projects) => {
+    this.projectService.query().subscribe((projects) => {
       this.projects = projects.filter((p) => p.unit.teachingPeriod?.active ?? true);
     });
   }

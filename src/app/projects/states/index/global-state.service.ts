@@ -151,6 +151,7 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnits.clear();
     this.loadedUnitRoles.clear();
     this.userService.cache.clear();
+    this.currentUserProjects.clear();
 
     this.projectsSubject.next(null);
   }

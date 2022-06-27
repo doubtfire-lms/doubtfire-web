@@ -13,7 +13,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, projectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, newProjectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
 
   GlobalStateService.setView('OTHER')
   # Define steps for wizard
@@ -125,15 +125,20 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $scope.externalName = DoubtfireConstants.ExternalName
 
     # Get projects for target grades
-  projectService.getProjects false, (projects) ->
-    $scope.projects = projects
-    # Only ask for student ID if learning subjects!
-    if projects.length == 0 && $scope.user.role != 'Student'
-      $scope.isStaff = true
-      $scope.user.studentId = null
-      delete $scope.steps.studentIdStep
-      # NOTE: Must add step to below
-      for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
-        $scope.steps[step].seq -= 1
-      $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
+  newProjectService.query(undefined, {params: {include_inactive: false}}).subscribe({
+    next: (projects) ->
+      $scope.projects = projects
+      # Only ask for student ID if learning subjects!
+      if projects.length == 0 && $scope.user.role != 'Student'
+        $scope.isStaff = true
+        $scope.user.studentId = null
+        delete $scope.steps.studentIdStep
+
+        # NOTE: Must add step to below
+        for step in ['emailStep', 'targetGradeStep', 'avatarStep', 'optInToResearchStep']
+          $scope.steps[step].seq -= 1
+        $scope.steps.nicknameStep.subtitle = $scope.steps.nicknameStep.subtitle.replace('tutor', 'students')
+    error: (message) ->
+      alertService.add("danger", "Failed to load units you study. #{message}", 6000)
+  })
 )

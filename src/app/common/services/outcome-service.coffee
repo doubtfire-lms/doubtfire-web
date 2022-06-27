@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
 #
 # Services for handling Outcomes
 #
-.factory("outcomeService", (gradeService, projectService, newTaskService) ->
+.factory("outcomeService", (gradeService, newTaskService) ->
   outcomeService = {}
 
   outcomeService.unitTaskStatusFactor = ->
@@ -11,7 +11,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
 
   outcomeService.projectTaskStatusFactor = (project) ->
     (task_definition_id) ->
-      task = projectService.taskFromTaskDefId(project, task_definition_id)
+      task = project.findTaskForDefinition(task_definition_id)
       if task?
         newTaskService.learningWeight.get(task.status)
       else
@@ -29,7 +29,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
   outcomeService.individualTaskStatusFactor = (project, task) ->
     (task_definition_id) ->
       if task.definition.id == task_definition_id
-        newTaskService.learningWeight.get(projectService.taskFromTaskDefId(project, task_definition_id).status)
+        newTaskService.learningWeight.get(project.findTaskForDefinition(task_definition_id).status)
       else
         0
 

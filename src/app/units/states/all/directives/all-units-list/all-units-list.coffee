@@ -31,8 +31,9 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   hasRoles = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
-  unitService.getUnitRoles (roles) ->
-    $scope.unitRoles = roles
+
+  GlobalStateService.onLoad () ->
+    $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues
     $scope.showSpinner = false
     $scope.dataLoaded = true
     hasRoles = true
@@ -43,7 +44,7 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
     _.each roles, (role) ->
       result.push(role.unit.code)
       result.push(role.unit.name)
-    .uniq
+    return _.uniq(result)
 
   checkEnrolled = ->
     return if !$scope.unitRoles?

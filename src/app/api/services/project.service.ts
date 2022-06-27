@@ -205,4 +205,17 @@ export class ProjectService extends CachedEntityService<Project> {
       return super.query(undefined, options);
     }
   }
+
+  public loadProject(proj: Project | number, unit: Unit, useFetch: boolean = false): Observable<Project> {
+    const options: RequestOptions<Project> = {
+      cache: unit.studentCache,
+      constructorParams: unit
+    }
+
+    if (useFetch) {
+      return super.fetch(proj, options);
+    } else {
+      return super.get(proj, options);
+    }
+  }
 }
