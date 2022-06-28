@@ -118,7 +118,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   }
 
   get isStaff() {
-    return this.task?.project?.unit?.currentUserIsStaff;
+    return this.task?.unit?.currentUserIsStaff;
   }
 
   cancelReply() {

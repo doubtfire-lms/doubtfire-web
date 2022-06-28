@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     listeners = listenerService.listenTo($scope)
     # Evaluate changes to submission data
     reapplySubmissionData = ->
-      $scope.task.getSubmissionDetails(->
+      $scope.task.getSubmissionDetails().subscribe(->
         $scope.canReuploadEvidence = $scope.task.inSubmittedState()
         $scope.canRegeneratePdf = _.includes(newTaskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.hasPdf
         $scope.submission = {
@@ -20,7 +20,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
           isUploaded: $scope.task.hasPdf
         }
         $scope.urls = {
-          pdf: $scope.task.submissiomUrl(true)
+          pdf: $scope.task.submissionUrl(true)
           files: $scope.task.submittedFilesUrl()
         }
       )

@@ -55,6 +55,7 @@ export class TaskService extends CachedEntityService<Task> {
       'numNewComments',
       'trigger',
       'hasExtensions',
+      'pinned',
       {
         keys: "new_stat",
         toEntityOp: (data: object, key: string, entity: Task, params?: any) => {

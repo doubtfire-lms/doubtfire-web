@@ -6,8 +6,9 @@ import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus,
 import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { alertService, gradeTaskModal, UnitStudentEnrolmentModalProvider, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
+import { MappingFunctions } from '../services/mapping-fn';
 
 export class Task extends Entity {
   id: number;
@@ -33,6 +34,8 @@ export class Task extends Entity {
   //TODO: map task submission details
   hasPdf: boolean = false;
   processingPdf: boolean = false;
+
+  pinned: boolean = false;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -368,13 +371,21 @@ export class Task extends Entity {
     return this.definition.isGroupTask();
   }
 
-  public getSubmissionDetails(): void {
-    //TODO: implement
-    console.log("implement get submission details");
+  public getSubmissionDetails(): Observable<Task> {
+    const http: HttpClient = AppInjector.get(HttpClient);
 
-    this.hasPdf = false; //response.has_pdf
-    this.processingPdf = false; //response.processing_pdf
-    this.submissionDate = new Date(); //response.submission_date
+    return http.get(`${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission_details`).pipe(
+      map((response: object) => {
+        this.hasPdf = response['has_pdf'];
+        this.processingPdf = response['processing_pdf'];
+        this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
+        return this;
+      })
+    );
+  }
+
+  public overseerEnabled(): boolean {
+    return this.unit.overseerEnabled() && this.definition.assessmentEnabled && this.definition.hasTaskAssessmentResources;
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -526,6 +537,32 @@ export class Task extends Entity {
 
   public get group(): Group {
     return this.project.getGroupForTask(this);
+  }
+
+  public pin(): void {
+    const http = AppInjector.get(HttpClient);
+
+    http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
+      next: (data) => {
+        this.pinned = true;
+      },
+      error: (message) => {
+        (AppInjector.get(alertService) as any).add("danger", message, 6000);
+      }
+    });
+  }
+
+  public unpin(): void {
+    const http = AppInjector.get(HttpClient);
+
+    http.delete(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
+      next: (data) => {
+        this.pinned = false;
+      },
+      error: (message) => {
+        (AppInjector.get(alertService) as any).add("danger", message, 6000);
+      }
+    });
   }
 
 }
