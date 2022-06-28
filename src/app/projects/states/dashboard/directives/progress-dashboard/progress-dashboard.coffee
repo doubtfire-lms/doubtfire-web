@@ -27,7 +27,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
 
     $scope.updateTargetGrade = (newGrade) ->
       $scope.project.targetGrade = newGrade
-      newProjectService.update($scope.project).subscribe(
+      newProjectService.update($scope.project, { body: {target_grade: newGrade} }).subscribe(
         (project) ->
           # $scope.project.burndownChartData = project.burndownChartData
           # $scope.project.updateTaskStats(project.stats)

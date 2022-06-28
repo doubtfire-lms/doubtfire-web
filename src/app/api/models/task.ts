@@ -2,12 +2,12 @@ import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
 import { formatDate } from '@angular/common';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService, Group, UnitRole } from './doubtfire-model';
+import { TaskDefinition, Project, Unit, TaskComment, TaskStatusEnum, TaskStatus, TaskStatusUiData, TaskService, Group, TaskCommentService } from './doubtfire-model';
 import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { alertService, gradeTaskModal, UnitStudentEnrolmentModalProvider, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
+import { alertService, gradeTaskModal, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
 import { MappingFunctions } from '../services/mapping-fn';
 
 export class Task extends Entity {
@@ -55,8 +55,15 @@ export class Task extends Entity {
     return this.commentCache.currentValues;
   }
 
+  public addComment(textString): void {
+    AppInjector.get(TaskCommentService).addComment(this, textString, 'text').subscribe({
+        next: (tc) => {},
+        error: (error) => { console.log(error); }
+    });
+  }
+
   public get unit(): Unit {
-    if ( this._unit ) return this._unit;
+    if (this._unit) return this._unit;
     return this.project.unit;
   }
 
@@ -78,7 +85,7 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if(this.grade)
+    if (this.grade)
       return Grade.GRADES[this.grade];
     else {
       return "Not Graded";
@@ -98,7 +105,7 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if(this.dueDate) {
+    if (this.dueDate) {
       return this.dueDate;
     } else {
       return this.definition.localDueDate();
@@ -121,7 +128,7 @@ export class Task extends Entity {
    * @param date2 to this date
    * @returns the time from date1 to date2
    */
-   private timeBetween(date1: Date, date2: Date): number {
+  private timeBetween(date1: Date, date2: Date): number {
     return date2.getTime() - date1.getTime();
   }
 
@@ -141,7 +148,7 @@ export class Task extends Entity {
     return this.daysBetween(new Date(), this.localDueDate());
   }
 
-  public daysUntilDeadlineDate() : number {
+  public daysUntilDeadlineDate(): number {
     return this.daysBetween(new Date(), this.localDeadlineDate());
   }
 
@@ -154,24 +161,24 @@ export class Task extends Entity {
   }
 
   public isPastDeadline(): boolean {
-    return this.timePastDeadlineDate() > 0 && ! this.inSubmittedState();
+    return this.timePastDeadlineDate() > 0 && !this.inSubmittedState();
   }
 
   public isDueSoon(): boolean {
-    return this.daysUntilDueDate() <= 7 && this.timePastDueDate() < 0 && ! this.inFinalState();
+    return this.daysUntilDueDate() <= 7 && this.timePastDueDate() < 0 && !this.inFinalState();
   }
 
-  public isPastDueDate() : boolean {
-    return this.timePastDueDate() > 0 && ! this.inSubmittedState();
+  public isPastDueDate(): boolean {
+    return this.timePastDueDate() > 0 && !this.inSubmittedState();
   }
 
   // Is the task past the deadline
-  public isOverdue() : boolean {
+  public isOverdue(): boolean {
     return this.daysUntilDueDate() < 0;
   }
 
   public isDueToday(): boolean {
-    return this.daysUntilDueDate() == 0 && ! this.inSubmittedState();
+    return this.daysUntilDueDate() == 0 && !this.inSubmittedState();
   }
 
   public timeUntilStartDate(): number {
@@ -207,7 +214,7 @@ export class Task extends Entity {
       const diff = Math.floor(exactDiff);
 
       // if days are more than 14 then show in week
-      if(exactDiff > 2 && data.period === "weeks") {
+      if (exactDiff > 2 && data.period === "weeks") {
         return `${diff} Weeks`;
       } else if (diff > 1 && data.period !== "weeks") {
         // Always show in days, Hours, Minutes and Seconds.
@@ -220,6 +227,16 @@ export class Task extends Entity {
     return `${Math.floor(timeDiff / 1000)} Seconds`;
   }
 
+  public timeToDue(): string {
+    const days = this.daysUntilDueDate();
+    if (days < 0) {
+      return "!";
+    } else if (days < 11) {
+      return `${days}d`;
+    } else {
+      return `${Math.floor(days / 7)}w`;
+    }
+  }
 
   public timeUntilDueDateDescription() {
     return this.timeToDescription(new Date(), this.localDueDate());
@@ -239,7 +256,7 @@ export class Task extends Entity {
         return `${days}d`;
       }
       else {
-        return `${Math.floor(days/7)}w`;
+        return `${Math.floor(days / 7)}w`;
       }
     }
   }
@@ -247,7 +264,7 @@ export class Task extends Entity {
 
   // Are we approaching the deadline?
   public isDeadlineSoon() {
-    return this.daysUntilDeadlineDate() <= 14 && this.timePastDeadlineDate() < 0 && ! this.inFinalState();
+    return this.daysUntilDeadlineDate() <= 14 && this.timePastDeadlineDate() < 0 && !this.inFinalState();
   }
 
   public betweenDueDateAndDeadlineDate(): boolean {
@@ -261,12 +278,17 @@ export class Task extends Entity {
   }
 
   private hoursBetween(time1: Date, time2: Date): number {
-    return Math.floor(Math.abs(time1.getTime() - time2.getTime())/1000/60/60)
+    return Math.floor(Math.abs(time1.getTime() - time2.getTime()) / 1000 / 60 / 60)
+  }
+
+  public refresh(): void {
+    const taskService: TaskService = AppInjector.get(TaskService);
+    taskService.refreshExtensionDetails(this);
   }
 
   public refreshCommentData(): void {
     const comments: TaskComment[] = this.comments;
-    if(comments.length === 0) return;
+    if (comments.length === 0) return;
 
     comments[0].shouldShowTimestamp = true
 
@@ -274,23 +296,23 @@ export class Task extends Entity {
       const authorID = comments[i].author.id;
       const timeOfMessage = comments[i].createdAt;
 
-      if ( i < comments.length - 1 ) {
+      if (i < comments.length - 1) {
         // if the comment is proceeded by a different author's comment, or the time between comments
         // is significant, mark it as start of end of series, then start a new series proceeding.
-        if (authorID !== comments[i+1]?.author.id || this.hoursBetween(timeOfMessage, comments[i+1].createdAt) > 3) { // IDs match
+        if (authorID !== comments[i + 1]?.author.id || this.hoursBetween(timeOfMessage, comments[i + 1].createdAt) > 3) { // IDs match
           comments[i].shouldShowAvatar = true;
-          comments[i+1].shouldShowTimestamp = true;
+          comments[i + 1].shouldShowTimestamp = true;
         } else {
           comments[i].shouldShowAvatar = false;
-          comments[i+1].shouldShowTimestamp = false;
+          comments[i + 1].shouldShowTimestamp = false;
         }
       }
 
       // if the comment is preceeded by a non-content comment, mark it as start of series.
-      comments[i].firstInSeries = comments[i].isBubbleComment && (i === 0 || !comments[i-1].isBubbleComment);
+      comments[i].firstInSeries = comments[i].isBubbleComment && (i === 0 || !comments[i - 1].isBubbleComment);
 
       // if the comment is proceeded by a non-conent comment, mark it as end of series.
-      if (comments[i].isBubbleComment && !comments[i+1]?.isBubbleComment) {
+      if (comments[i].isBubbleComment && !comments[i + 1]?.isBubbleComment) {
         comments[i].shouldShowAvatar = true;
       }
 
@@ -300,7 +322,7 @@ export class Task extends Entity {
       }
     }
 
-    comments[comments.length-1].shouldShowAvatar = true
+    comments[comments.length - 1].shouldShowAvatar = true
     comments
   }
 
@@ -321,19 +343,27 @@ export class Task extends Entity {
   }
 
   public inFinalState(): boolean {
-    return TaskStatus.FINAL_STATUSES.indexOf(this.status) >= 0;
+    return TaskStatus.FINAL_STATUSES.includes(this.status);
   }
 
   public inCompleteState(): boolean {
     return this.status === 'complete';
   }
 
+  public inDiscussState(): boolean {
+    return TaskStatus.DISCUSSION_STATES.includes(this.status);
+  }
+
   public inTimeExceeded(): boolean {
     return this.status === 'time_exceeded';
   }
 
+  public inStateThatAllowsExtension(): boolean {
+    return TaskStatus.STATE_THAT_ALLOWS_EXTENSION.includes(this.status);
+  }
+
   public isValidTopTask(): boolean {
-    return TaskStatus.VALID_TOP_TASKS.indexOf(this.status) >= 0;
+    return TaskStatus.VALID_TOP_TASKS.includes(this.status);
   }
 
   public inSubmittedState(): boolean {
@@ -363,7 +393,7 @@ export class Task extends Entity {
   public filterFutureStates(states: TaskStatusUiData[]): TaskStatusUiData[] {
     return states.filter((s: TaskStatusUiData): boolean => {
       const rejectStates = TaskStatus.REJECT_FUTURE_STATES.get(this.status);
-      return ! rejectStates.includes(s.status);
+      return !rejectStates.includes(s.status);
     });
   }
 
@@ -389,15 +419,15 @@ export class Task extends Entity {
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission${ asAttachment ? "?as_attachment=true" : "" }`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission${asAttachment ? "?as_attachment=true" : ""}`;
   }
 
   public testSubmissionUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.definition.id}/test_overseer_assessment`;
   }
 
-  public submittedFilesUrl(asAttachment: boolean = false) : string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission_files${ asAttachment ? "?as_attachment=true" : "" }`;
+  public submittedFilesUrl(asAttachment: boolean = false): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission_files${asAttachment ? "?as_attachment=true" : ""}`;
   }
 
   public recreateSubmissionPdf(): Observable<object> {
@@ -421,7 +451,7 @@ export class Task extends Entity {
 
     const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
     // Modal failed to present
-    if(!modal) {
+    if (!modal) {
       if (!isTestSubmission) {
         this.status = oldStatus;
       }
@@ -430,7 +460,7 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (response) => {},
+      (response) => { },
       // Grade was not selected (modal was dismissed)
       (dismissed) => {
         if (!isTestSubmission) {
@@ -471,10 +501,10 @@ export class Task extends Entity {
         }
       };
 
-      taskService.update( {
+      taskService.update({
         projectId: this.project.id,
         taskDefId: this.definition.id,
-      }, options ).subscribe({
+      }, options).subscribe({
         next: (response) => {
           this.processTaskStatusChange(status, alerts);
         },
@@ -492,16 +522,16 @@ export class Task extends Entity {
       if (modal) {
         modal.result.then(
           // Grade was selected (modal closed with result)
-        (response) => {
-          this.grade = response.selectedGrade;
-          this.qualityPts = response.qualityPts;
-          updateFunc();
-        },
-        // Grade was not selected (modal was dismissed)
-        () => {
-          this.status = oldStatus;
-          alerts.add("info", "Status reverted, as no grade was specified", 6000);
-        })
+          (response) => {
+            this.grade = response.selectedGrade;
+            this.qualityPts = response.qualityPts;
+            updateFunc();
+          },
+          // Grade was not selected (modal was dismissed)
+          () => {
+            this.status = oldStatus;
+            alerts.add("info", "Status reverted, as no grade was specified", 6000);
+          })
       }
     } else {
       updateFunc();
@@ -509,7 +539,7 @@ export class Task extends Entity {
   }
 
   public triggerTransition(status: TaskStatusEnum): void {
-    if(this.status === status) return;
+    if (this.status === status) return;
 
     const requiresFileUpload = ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
 
@@ -525,7 +555,7 @@ export class Task extends Entity {
     return this.unit.staffAlignmentsForTaskDefinition(this.definition);
   }
 
-  public shortTutorialDescription() : string {
+  public shortTutorialDescription(): string {
     const stream = this.definition.tutorialStream;
     const tutorial = this.project.tutorialForStream(stream);
     if (tutorial) {
@@ -563,6 +593,33 @@ export class Task extends Entity {
         (AppInjector.get(alertService) as any).add("danger", message, 6000);
       }
     });
+  }
+
+  public canApplyForExtension(): boolean {
+    return this.unit.allowStudentExtensionRequests &&
+      this.inStateThatAllowsExtension() &&
+      (!this.isPastDeadline() || this.wasSubmittedOnTime()) && this.maxWeeksCanExtend() > 0
+  }
+
+  public wasSubmittedOnTime() {
+    return this.submissionDate.getTime() <= this.definition.finalDeadlineDate().getTime();
+  }
+
+  public maxWeeksCanExtend(): number {
+    return Math.ceil(this.daysBetween(this.localDueDate(), this.definition.localDeadlineDate()) / 7);
+  }
+
+  /**
+   * Returns the minimum number of weeks the task must be extended to be
+   * able to available for tutors to provide feedback.
+   */
+  public minWeeksCanExtend(): number {
+    const minWeeks = Math.ceil(this.daysBetween(this.localDueDate(), new Date()) / 7);
+    if (minWeeks < 0) {
+      return 0;
+    } else {
+      return minWeeks;
+    }
   }
 
 }

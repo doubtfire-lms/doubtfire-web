@@ -49,6 +49,7 @@ import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
   unitProvider,
+  visualisationsProvider,
   analyticsServiceProvider,
   dateServiceProvider,
   taskProvider,
@@ -313,6 +314,7 @@ import { GroupService } from './api/services/group.service';
     FileDownloaderService,
     CheckForUpdateService,
     TaskOutcomeAlignmentService,
+    visualisationsProvider,
     userProvider,
     groupServiceProvider,
     unitProvider,

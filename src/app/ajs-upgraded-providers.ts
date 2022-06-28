@@ -18,6 +18,7 @@ export const csvResultModalService = new InjectionToken('CsvResultModalAngular')
 export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
+export const visualisations = new InjectionToken('Visualisation');
 export const taskDefinition = new InjectionToken('TaskDefinition');
 export const userSettingsModal = new InjectionToken('UserSettingsModal');
 export const rootScope = new InjectionToken('$rootScope');
@@ -40,6 +41,13 @@ export const taskDefinitionProvider = {
   useFactory: (i: any) => i.get('TaskDefinition'),
   deps: ['$injector'],
 };
+
+export const visualisationsProvider = {
+  provide: visualisations,
+  useFactory: (i: any) => i.get('Visualisation'),
+  deps: ['$injector'],
+};
+
 
 export const calendarModalProvider = {
   provide: calendarModal,

@@ -12,6 +12,7 @@ export class TaskService extends CachedEntityService<Task> {
 
   private readonly taskInboxEndpoint = "/units/:id:/tasks/inbox";
   private readonly taskExplorerEndpoint = "/units/:id:/task_definitions/:task_def_id:/tasks";
+  private readonly refreshTaskEndpoint = "/projects/:projectId:/refresh_tasks/:taskDefinitionId:";
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
@@ -124,6 +125,24 @@ export class TaskService extends CachedEntityService<Task> {
         return unit.fillWithUnStartedTasks(tasks, taskDef);
       })
     );
+  }
+
+  public refreshExtensionDetails(task: Task): void {
+    const pathIds = {
+      projectId: task.project.id,
+      taskDefId: task.definition.id
+    };
+    const options: RequestOptions<Task> = {
+      endpointFormat: this.refreshTaskEndpoint,
+      cache: task.project.taskCache
+    };
+
+    this.get(pathIds, options).subscribe({
+      next: (value: Task) => {},
+      error: (message) => {
+        console.log(`Failed to refresh tasks ${message}`);
+      }
+    });
   }
 
   public readonly statusKeys = TaskStatus.STATUS_KEYS;

@@ -1,6 +1,6 @@
-import { Entity, EntityCache } from 'ngx-entity-service';
+import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
-import { alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService, visualisations } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { Campus, Grade, Group, GroupSet, ProjectService, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
@@ -248,7 +248,20 @@ export class Project extends Entity {
   }
 
   public updateBurndownChart() {
-    console.log("implement updateBurndownChart");
+    this.refresh();
+  }
+
+  public refresh() {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    const options: RequestOptions<Project> = {
+      cache: this.unit.studentCache
+    };
+
+    projectService.get(this, options).subscribe(
+      (response) => {
+        (AppInjector.get(visualisations) as any).refreshAll();
+      }
+    )
   }
 
   public get groups(): Group[] {

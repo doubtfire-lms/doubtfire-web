@@ -25,6 +25,9 @@ angular.module('doubtfire.projects.states.index', [])
   GlobalStateService.onLoad () ->
     # Load in project
     newProjectService.get(projectId, {
+      # Ensure that we cache queries here... so that we get any projects we are in
+      # even when we are also teaching that unit
+      cacheBehaviourOnGet: 'cacheQuery',
       mappingCompleteCallback: (project)->
         # Wait for the project mapping to complete - ensuring unit details are loaded
         $scope.unit = project.unit
