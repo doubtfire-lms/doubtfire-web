@@ -41,7 +41,7 @@
           ng-repeat="tutorial in unit.tutorials | tutorialCampusFilter:project | orderBy:sortOrder:reverse"
           ng-class="{'info': tutorial == project.tutorial}"
         >
-          <td ng-show="unit.tutorialStreamsCache.size > 0">{{tutorial.tutorial_stream.name || 'All'}}</td>
+          <td ng-show="unit.tutorialStreamsCache.size > 0">{{tutorial.tutorialStream.name || 'All'}}</td>
           <td>{{tutorial.campus.name || 'All'}}</td>
           <td>{{tutorial.abbreviation}}</td>
           <td>{{tutorial.meetingDay}}</td>

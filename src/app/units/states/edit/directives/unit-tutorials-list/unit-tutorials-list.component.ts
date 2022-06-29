@@ -143,7 +143,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   protected formDataToNewObject(endPointKey: string, associations?: object): object {
     const result = super.formDataToNewObject(endPointKey);
     if (this.stream) {
-      result['tutorial']['tutorial_stream_abbr'] = this.stream.abbreviation;
+      result['tutorial']['tutorialStream'] = this.stream;
     }
     return result; //Tutorial.mapToCreateJson(this.unit, result);
   }

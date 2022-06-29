@@ -62,7 +62,7 @@
                         <li ng-repeat="stream in unit.tutorialStreams | orderBy:'abbreviation'">
                           <a
                             ng-click="changeTaskStream(task, stream.abbreviation)"
-                            ng-hide="stream.abbreviation == task.tutorial_stream"
+                            ng-hide="stream === task.tutorialStream"
                             >{{stream.abbreviation}}</a
                           >
                         </li>

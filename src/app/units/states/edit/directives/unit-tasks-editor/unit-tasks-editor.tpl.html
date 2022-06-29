@@ -53,8 +53,8 @@
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='tutorial_stream'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorial_stream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='tutorialStream'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorialStream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th ng-show="unit.hasStreams()">
@@ -85,7 +85,7 @@
                 <td>{{taskDef.target_date | date : 'EEE d MMM'}}</td>
                 <td><span ng-show="taskDef.due_date">{{taskDef.due_date | date : 'EEE d MMM' }}</span><span ng-hide="taskDef.due_date">None</span></td>
                 <td ng-show="unit.hasGroupwork()">{{groupSetName(taskDef.group_set_id)}}</td>
-                <td ng-show="unit.hasStreams()">{{taskDef.tutorial_stream}}</td>
+                <td ng-show="unit.hasStreams()">{{taskDef.tutorialStream.abbreviation}}</td>
                 <td>{{taskDef.uploadRequirements.length}}</td>
                 <td><i ng-show="taskDef.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="taskDef.hasPlagiarismCheck()" class="fa fa-times"></i></td>
                 <td><i ng-show="taskDef.restrict_status_updates" class="fa fa-check"></i><i ng-hide="taskDef.restrict_status_updates" class="fa fa-times"></i></td>
