@@ -52,11 +52,11 @@ angular.module("doubtfire.api.models.task", [])
   Task.getTaskAssessmentResourcesUrl = (unit, task_def) ->
     "#{DoubtfireConstants.API_URL}/units/#{unit.id}/task_definitions/#{task_def.id}/task_assessment_resources.json"
 
-  Task.generateLatestAssessmentUrl = (task) ->
-    "#{DoubtfireConstants.API_URL}/projects/#{task.project.id}/task_def_id/#{task.definition.id}/submissions/latest"
+  # Task.generateLatestAssessmentUrl = (task) ->
+  #   "#{DoubtfireConstants.API_URL}/projects/#{task.project.id}/task_def_id/#{task.definition.id}/submissions/latest"
 
-  Task.getSubmissionByTimestampUrl = (task, timestamp) ->
-    "#{DoubtfireConstants.API_URL}/projects/#{task.project.id}/task_def_id/#{task.definition.id}/submissions/timestamps/#{timestamp}"
+  # Task.getSubmissionByTimestampUrl = (task, timestamp) ->
+  #   "#{DoubtfireConstants.API_URL}/projects/#{task.project.id}/task_def_id/#{task.definition.id}/submissions/timestamps/#{timestamp}"
 
   Task.generateMarkingSubmissionUrl = ->
 

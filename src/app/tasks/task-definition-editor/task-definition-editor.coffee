@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     task: "="
     isNew: "="
   controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission, fileDownloaderService) ->
-    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+    $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.grades = gradeService.grades
 
@@ -63,7 +63,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           seq: 4
           active: false
 
-    if $scope.overseer_enabled.value
+    if $scope.overseerEnabled.value
       $scope.taskAdmin.tabsData.taskAssessmentResources = {
         title: "Task Assessment Resources"
         subtitle: "Upload the bash script and other resources for this task assessment"

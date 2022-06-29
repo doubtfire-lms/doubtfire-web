@@ -12,7 +12,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     showFooter: '@?'
     showSubmission: '@?'
   controller: ($scope, $stateParams, Task, listenerService, newTaskService, DoubtfireConstants, TaskAssessmentModal, fileDownloaderService) ->
-    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+    $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.overseerEnabled = () ->
       DoubtfireConstants.IsOverseerEnabled.value && $scope.task?.overseerEnabled()

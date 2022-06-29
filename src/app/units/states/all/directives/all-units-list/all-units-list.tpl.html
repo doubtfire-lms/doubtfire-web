@@ -1,5 +1,9 @@
 <div class="container">
-  <div if-role="Tutor Convenor Admin">
+  <div class="large-notice-block" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-2x fa-spinner"></i>
+    <p>Loading unit details...</p>
+  </div>
+  <div if-role="Tutor Convenor Admin" ng-show="dataLoaded">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
         <div class="pull-left">
@@ -53,8 +57,5 @@
         <pagination ng-show="filteredUnitRoles.length > pageSize" total-items="filteredUnitRoles.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       </div>
     </div>
-  </div>
-  <div class="spinner" ng-hide="dataLoaded">
-    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
   </div>
 </div>

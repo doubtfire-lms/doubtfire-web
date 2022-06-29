@@ -35,6 +35,13 @@ export class UnitService extends CachedEntityService<Unit> {
       'active',
       'myRole',
       {
+        keys: 'unitRole',
+        toEntityFn: (data: object, jsonKey: string, entity: Unit) => {
+          const unitRoleService = AppInjector.get(UnitRoleService);
+          unitRoleService.cache.get(data[jsonKey]);
+        }
+      },
+      {
         keys: 'staff',
         toEntityOp: (data, key, entity) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
@@ -62,19 +69,19 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: 'startDate',
         toEntityFn: (data, key, entity, params?) => {
-          return new Date(data['start_date']);
+          return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.startDate.toISOString();
+          return entity.startDate.toISOString().slice(0,10);
         }
       },
       {
         keys: 'endDate',
         toEntityFn: (data, key, entity, params?) => {
-          return new Date(data['end_date']);
+          return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.endDate.toISOString();
+          return entity.endDate.toISOString().slice(0,10);;
         }
       },
       'assessmentEnabled',

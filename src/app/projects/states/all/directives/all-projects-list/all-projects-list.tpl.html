@@ -1,5 +1,9 @@
 <div class="container">
-  <div class="panel panel-primary">
+  <div class="large-notice-block" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-2x fa-spinner"></i>
+    <p>Loading unit details...</p>
+  </div>
+  <div class="panel panel-primary" ng-show="dataLoaded">
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Units</h4>

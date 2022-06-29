@@ -3,9 +3,8 @@ import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { ProjectService } from '../services/project.service';
-import { OverseerImage, User, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
+import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
-import { UnitRole } from './unit-role';
 
 export class Unit extends Entity {
   id: number;
@@ -16,6 +15,7 @@ export class Unit extends Entity {
   active: boolean;
 
   myRole: string; //TODO: add more type details?
+  unitRole: UnitRole; // mapped unit role during admin edits
   mainConvenor: UnitRole;
 
   teachingPeriod: TeachingPeriod;

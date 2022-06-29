@@ -5,10 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
 import { AuthenticationService } from './authentication.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UserService extends CachedEntityService<User> implements OnInit {
   protected readonly endpointFormat = 'users/:id:';
+  private readonly tutorEndpointFormat = "/users/tutors";
 
   public readonly csvURL: string;
 
@@ -77,5 +79,9 @@ export class UserService extends CachedEntityService<User> implements OnInit {
     else {
       console.log("implement save other users...?");
     }
+  }
+
+  public getTutors(): Observable<User[]> {
+    return this.query(undefined, { endpointFormat: this.tutorEndpointFormat});
   }
 }

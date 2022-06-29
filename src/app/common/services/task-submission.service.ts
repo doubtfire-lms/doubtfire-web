@@ -4,6 +4,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Observable } from 'rxjs';
 import { Task, OverseerAssessment, OverseerAssessmentService, OverseerImage, OverseerImageService } from 'src/app/api/models/doubtfire-model';
+import { AppInjector } from 'src/app/app-injector';
 
 export interface TaskAssessmentResult {
   id?: number;
@@ -38,7 +39,6 @@ export class TaskSubmissionService {
   private readonly overseerImagesEndpointFormat = 'admin/overseer_images';
 
   constructor(
-    @Inject(Task) private TaskLegacy: any,
     @Inject(alertService) private alerts: any,
     private http: HttpClient,
     private constants: DoubtfireConstants,
@@ -47,7 +47,7 @@ export class TaskSubmissionService {
     ) { }
 
   public getLatestTaskAssessment(taskInfo: Task): Observable<any> {
-    const url = this.TaskLegacy.generateLatestAssessmentUrl(taskInfo);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${taskInfo.project.id}/task_def_id/${taskInfo.definition.id}/submissions/latest`;
     return this.http.get<any>(url);
   }
 
@@ -56,7 +56,7 @@ export class TaskSubmissionService {
   }
 
   public getSubmissionByTimestamp(taskInfo: Task, timestamp: string): Observable<any> {
-    const url = this.TaskLegacy.getSubmissionByTimestampUrl(taskInfo, timestamp);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${taskInfo.project.id}/task_def_id/${taskInfo.definition.id}/submissions/timestamps/${timestamp}`;
     return this.http.get<any>(url);
   }
 

@@ -198,19 +198,19 @@
                   </div>
                 </div><!--/due-date-->
 
-                <div class="form-group" ng-if="overseer_enabled.value">
+                <div class="form-group" ng-if="overseerEnabled.value">
                   <label class="col-sm-3 control-label">Overseer Assessment</label>
                   <div class="col-sm-7">
-                    <button type="button" class="btn btn-default" ng-model="task.assessment_enabled" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-                      <i class="fa fa-{{task.assessment_enabled ? 'check' : 'times'}}"></i>
+                    <button type="button" class="btn btn-default" ng-model="task.assessmentEnabled" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                      <i class="fa fa-{{task.assessmentEnabled ? 'check' : 'times'}}"></i>
                     </button>
                     <span class="help-block">
                       If true, the task will be automatically assessed.
                     </span>
                   </div>
-                </div><!--/task-assessment-enabled-->
+                </div><!--/taskAssessmentEnabled-->
 
-                <div class="form-group" ng-if="overseer_enabled.value">
+                <div class="form-group" ng-if="overseerEnabled.value">
                   <label class="col-sm-3 control-label">Docker Image Name</label>
                   <div class="col-sm-8">
                     <select class="form-control" ng-model="task.overseer_image_id" ng-options="image.id as image.description for image in dockerImages" />

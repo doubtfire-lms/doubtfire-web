@@ -80,7 +80,7 @@
           id="convenors"
           placeholder="Staff Name"
           ng-model="selectedStaff"
-          typeahead="staff as staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"
+          typeahead="staff as staff.name for staff in staff | filter: $viewValue | filter: filterStaff"
           autocomplete="off"
           typeahead-editable="false"
           typeahead-wait-ms="200"
