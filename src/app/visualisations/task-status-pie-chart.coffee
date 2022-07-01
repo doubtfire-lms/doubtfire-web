@@ -15,7 +15,7 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
                       .reduce(((memo, num) -> memo + num), 0)
                       .value()
       $scope.data = _.map rawData, (value, status) ->
-        { key: newTaskService.statusLabels.get(status), y: value, status_key: status }
+        { key: newTaskService.statusLabels.get(status), y: value, statusKey: status }
       $timeout ->
         $scope.api.refresh() if $scope.api?.refresh?
 
@@ -27,7 +27,7 @@ angular.module('doubtfire.visualisations.task-status-pie-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'pieChart', 'Task Status Summary Pie Chart', {
       color: (d, i) ->
-        colors[d.status_key]
+        colors.get(d.statusKey)
       x: (d) -> d.key
       y: (d) -> d.y
       showLabels: no

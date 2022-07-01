@@ -17,7 +17,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
       completedTasks = $scope.project.numberTasks("complete")
       $scope.numberOfTasks =
         completed: completedTasks
-        remaining: $scope.project.activeTasks().count - completedTasks
+        remaining: $scope.project.activeTasks().length - completedTasks
     updateTaskCompletionValues()
 
     # Expose grade names and values
@@ -29,8 +29,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
       $scope.project.targetGrade = newGrade
       newProjectService.update($scope.project).subscribe(
         (project) ->
-          # $scope.project.burndownChartData = project.burndownChartData
-          # $scope.project.updateTaskStats(project.stats)
+          project.refreshBurndownChartData()
 
           # Update task completions and re-render task status graph
           updateTaskCompletionValues()

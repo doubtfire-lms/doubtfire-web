@@ -89,7 +89,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       task.tutorialStream = stream
 
     $scope.downloadTaskPDFUrl = ->
-      fileDownloaderService.downloadFile($scope.task.getTaskUrl())
+      fileDownloaderService.downloadFile($scope.task.getTaskPDFUrl())
 
     $scope.downloadTaskResources = ->
       fileDownloaderService.downloadFile("#{Task.getTaskResourcesUrl($scope.unit, $scope.task)}&as_attachment=true", "#{$scope.task.abbreviation}-task-sheet.pdf")
@@ -231,7 +231,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       task = {}
       _.extend(task, $scope.task)
 
-      task.weighting = $scope.task.weight
+      task.weighting = $scope.task.weighting
       task.uploadRequirements = JSON.stringify $scope.task.uploadRequirements
       task.plagiarism_checks = JSON.stringify $scope.task.plagiarism_checks
       task.tutorial_stream_abbr = $scope.task.tutorial_stream

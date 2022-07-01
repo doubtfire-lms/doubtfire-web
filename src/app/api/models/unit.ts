@@ -80,6 +80,10 @@ export class Unit extends Entity {
     return this.taskDefinitionCache.currentValues;
   }
 
+  public taskDefinitionsForGrade(grade: number): TaskDefinition[] {
+    return this.taskDefinitions.filter((td) => td.targetGrade <= grade);
+  }
+
   public taskCount(): number {
     return this.taskDefinitionCache.size;
   }

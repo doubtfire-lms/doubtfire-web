@@ -12,9 +12,10 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
 
     $scope.updateData = ->
       $scope.data.length = 0
-      _.each newTaskService.statusLabels, (label, key) ->
+      newTaskService.statusLabels.forEach( (label, key) ->
         count = $scope.project.tasksByStatus(key).length
-        $scope.data.push { key: label, y: count, status_key: key }
+        $scope.data.push { key: label, y: count, statusKey: key }
+      )
 
       if $scope.api
         $scope.api.update()
@@ -25,7 +26,7 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'pieChart', 'Student Task Status Pie Chart', {
       color: (d, i) ->
-        colors[d.status_key]
+        colors.get(d.statusKey)
       x: (d) -> d.key
       y: (d) -> d.y
       showLabels: no

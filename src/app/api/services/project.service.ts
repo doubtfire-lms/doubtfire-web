@@ -105,7 +105,6 @@ export class ProjectService extends CachedEntityService<Project> {
           entity.orderScale = Math.round((values['order_scale'] || 0) * 100);
         }
       },
-      'burndownChartData',
       // 'groups',
       'grade',
       'gradeRationale',

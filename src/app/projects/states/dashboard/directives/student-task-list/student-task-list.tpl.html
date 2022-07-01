@@ -22,7 +22,7 @@
       id="{{task.taskKeyToIdString()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
+      ng-repeat="task in filteredTasks | orderBy: 'topWeight' track by (task.id || task.definition.abbreviation)"
     >
       <div class="task-data">
         <h4 class="list-group-item-heading">{{task.definition.name}}</h4>

@@ -14,6 +14,6 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-grade-s
     $scope.chooseGrade = (idx) ->
       $scope.project.submittedGrade = idx
       newProjectService.update($scope.project).subscribe((project) ->
-        #$scope.project.burndownChartData = project.burndownChartData
+        $scope.project.refreshBurndownChartData()
       )
 )
