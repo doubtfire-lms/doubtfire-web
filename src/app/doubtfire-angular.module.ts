@@ -176,6 +176,7 @@ import { GlobalStateService } from './projects/states/index/global-state.service
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
+import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 
 @NgModule({
   // Components we declare
@@ -233,6 +234,7 @@ import { GroupService } from './api/services/group.service';
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    ObjectSelectComponent,
   ],
   // Module Imports
   imports: [

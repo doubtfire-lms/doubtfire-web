@@ -25,15 +25,18 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'targetGrade',
       {
         keys: 'targetDate',
-        toEntityFn: MappingFunctions.mapDateToEndOfDay
+        toEntityFn: MappingFunctions.mapDateToEndOfDay,
+        toJsonFn: MappingFunctions.mapDayToJson
       },
       {
         keys: 'dueDate',
-        toEntityFn: MappingFunctions.mapDateToEndOfDay
+        toEntityFn: MappingFunctions.mapDateToEndOfDay,
+        toJsonFn: MappingFunctions.mapDayToJson
       },
       {
         keys: 'startDate',
-        toEntityFn: MappingFunctions.mapDateToDay
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson
       },
       'uploadRequirements',
       {

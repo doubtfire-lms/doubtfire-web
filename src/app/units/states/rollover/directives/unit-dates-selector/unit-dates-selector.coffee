@@ -18,7 +18,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     $scope.externalName = DoubtfireConstants.ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
-    $scope.teachingPeriods = TeachingPeriod.query()
+    newTeachingPeriodService.cache.values.subscribe((tps) -> $scope.teachingPeriods = tps)
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->

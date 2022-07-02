@@ -8,14 +8,12 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
   replace: true
   restrict: 'E'
   templateUrl: 'admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.tpl.html'
-  controller: ($scope, $state, DoubtfireConstants, alertService, TeachingPeriod) ->
+  controller: ($scope, $state, DoubtfireConstants, alertService, newTeachingPeriodService) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
       activeUntilOpened: false
     }
-
-    TeachingPeriod.query()
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
@@ -44,33 +42,19 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
     }
 
     $scope.saveTeachingPeriod = ->
-      if $scope.teachingPeriod.start_date && $scope.teachingPeriod.start_date.getMonth
-        $scope.teachingPeriod.start_date = "#{$scope.teachingPeriod.start_date.getFullYear()}-#{$scope.teachingPeriod.start_date.getMonth() + 1}-#{$scope.teachingPeriod.start_date.getDate()}"
-      if $scope.teachingPeriod.end_date && $scope.teachingPeriod.end_date.getMonth
-        $scope.teachingPeriod.end_date = "#{$scope.teachingPeriod.end_date.getFullYear()}-#{$scope.teachingPeriod.end_date.getMonth() + 1}-#{$scope.teachingPeriod.end_date.getDate()}"
-      if $scope.teachingPeriod.active_until && $scope.teachingPeriod.active_until.getMonth
-        $scope.teachingPeriod.active_until = "#{$scope.teachingPeriod.active_until.getFullYear()}-#{$scope.teachingPeriod.active_until.getMonth() + 1}-#{$scope.teachingPeriod.active_until.getDate()}"
-
-      saveData = {
-        period: $scope.teachingPeriod.period
-        year: $scope.teachingPeriod.year
-        start_date: $scope.teachingPeriod.start_date
-        end_date: $scope.teachingPeriod.end_date
-        active_until: $scope.teachingPeriod.active_until
-      }
-
       if $scope.teachingPeriod.id == -1
-        TeachingPeriod.create { teaching_period: saveData },
-          (createdTeachingPeriod) ->
+        newTeachingPeriodService.create($scope.teachingPeriod).subscribe({
+          next: (createdTeachingPeriod) ->
             $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
             alertService.add("success", "Teaching Period created.", 2000)
-          (response) ->
+          error: (response) ->
             alertService.add("danger", response.data.error, 6000)
+        })
       else
-        TeachingPeriod.update( { id: $scope.teachingPeriod.id, teaching_period: saveData } ).$promise.then (
-          (updatedTeachingPeriod) ->
+        newTeachingPeriodService.update( $scope.teachingPeriod ).subscribe({
+          next: (updatedTeachingPeriod) ->
             alertService.add("success", "Teaching Period updated.", 2000)
-        ),
-        (response) ->
-          alertService.add("danger", "Failed to update teaching period. #{response.data.error}", 6000)
+          error: (response) ->
+            alertService.add("danger", "Failed to update teaching period. #{response}", 6000)
+        })
 )

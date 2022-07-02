@@ -216,12 +216,10 @@ import 'build/src/app/api/models/tutorial.js';
 import 'build/src/app/api/models/task-similarity.js';
 import 'build/src/app/api/models/students.js';
 import 'build/src/app/api/models/convenor.js';
-import 'build/src/app/api/models/break.js';
 import 'build/src/app/api/models/portfolion-submission.js';
 import 'build/src/app/api/models/tutor.js';
 import 'build/src/app/api/models/project.js';
 import 'build/src/app/api/models/task-definition.js';
-import 'build/src/app/api/models/teaching-period.js';
 import 'build/src/app/api/models/group.js';
 import 'build/src/app/api/models/unit.js';
 import 'build/src/app/api/api.js';
@@ -271,7 +269,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { TaskCommentService, TaskService, UnitService, UserService } from './api/models/doubtfire-model';
+import { TaskCommentService, TaskService, TeachingPeriodService, UnitService, UserService } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -282,6 +280,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
+import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -312,6 +311,7 @@ DoubtfireAngularJSModule.factory('authenticationService', downgradeInjectable(Au
 DoubtfireAngularJSModule.factory('newUserService', downgradeInjectable(UserService));
 DoubtfireAngularJSModule.factory('newUnitService', downgradeInjectable(UnitService));
 DoubtfireAngularJSModule.factory('newTaskService', downgradeInjectable(TaskService));
+DoubtfireAngularJSModule.factory('newTeachingPeriodService', downgradeInjectable(TeachingPeriodService));
 DoubtfireAngularJSModule.factory('newProjectService', downgradeInjectable(ProjectService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
@@ -325,6 +325,10 @@ DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(Globa
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'objectSelect',
+  downgradeComponent({ component: ObjectSelectComponent })
 );
 DoubtfireAngularJSModule.directive(
   'appHeader',

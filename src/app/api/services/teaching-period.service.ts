@@ -4,6 +4,7 @@ import { TeachingPeriod, TeachingPeriodBreakService, UnitService } from 'src/app
 import { Injectable } from '@angular/core';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
+import { MappingFunctions } from './mapping-fn';
 
 @Injectable()
 export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
@@ -19,8 +20,16 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
       'id',
       'period',
       'year',
-      'startDate',
-      'endDate',
+      {
+        keys: 'startDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson
+      },
+      {
+        keys: 'endDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson
+      },
       'activeUntil',
       'active',
       {
@@ -29,32 +38,31 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
           data['breaks']?.forEach(breakJson => {
             const teachingPeriod = entity as TeachingPeriod;
             const breakEntity = this.teachingPeriodBreakService.buildInstance(breakJson);
-            teachingPeriod.breaks.add(breakEntity);
+            teachingPeriod.breaksCache.add(breakEntity);
           });
         }
       },
       {
         keys: 'units',
         toEntityOp: (data, key, entity) => {
-          data['units']?.forEach(unitJson => {
+          data[key]?.forEach(unitJson => {
             const unitService: UnitService = AppInjector.get(UnitService);
             const unit = unitService.cache.getOrCreate(
               unitJson['id'],
               unitService,
-              unitJson // has id, name, code, and active
+              unitJson
             );
-            entity.units.add(unit);
+            entity.unitsCache.add(unit);
           });
         }
       }
     );
+
+    this.mapping.mapAllKeysToJsonExcept('id', 'unit', 'breaks');
+    this.cacheBehaviourOnGet = 'cacheQuery';
   }
 
   public createInstanceFrom(json: any, other?: any): TeachingPeriod {
     return new TeachingPeriod();
-  }
-
-  public keyForJson(json: any): string {
-    return json.id;
   }
 }

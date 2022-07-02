@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, TeachingPeriod, TaskSubmission) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission) ->
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.calOptions = {
@@ -24,7 +24,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.externalName = DoubtfireConstants.ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
-    $scope.teachingPeriods = TeachingPeriod.query()
+    newTeachingPeriodService.query().subscribe((periods) ->
+      $scope.teachingPeriods = periods
+      $scope.teachingPeriodValues = [{value: undefined, text: "Custom Period"}]
+      other = _.map periods, (p) -> {value: p, text: "#{p.year} #{p.period}"}
+      _.each other, (d) -> $scope.teachingPeriodValues.push(d)
+    )
+
+    $scope.teachingPeriodSelected = ($event) ->
+      $scope.unit.teachingPeriod = $event
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->

@@ -13,18 +13,21 @@ angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teachi
   headerServiceProvider.state "admin/teachingperiods/edit", teachingPeriodsAdminViewStateData
 )
 
-.controller("EditTeachingPeriodStateCtrl", ($scope, $state, TeachingPeriod, alertService, analyticsService, GlobalStateService) ->
+.controller("EditTeachingPeriodStateCtrl", ($scope, $state, newTeachingPeriodService, alertService, analyticsService, GlobalStateService) ->
   analyticsService.event 'Edit Teaching Period View', "Started Edit Teaching Period View"
 
   GlobalStateService.setView("OTHER")
 
-  TeachingPeriod.get( Number($state.params.teachingPeriodId)
-    (success) ->
-      $scope.teachingPeriod = success
-      $scope.newTeachingPeriod = $scope.teachingPeriod.id == -1
-
-    (failure) -> alertService.add("danger", "Failed to load teaching period. #{failure?.data?.error}", 6000)
-  )
+  GlobalStateService.onLoad () ->
+    tpId = parseInt($state.params.teachingPeriodId, 10)
+    newTeachingPeriodService.get(tpId).subscribe({
+      next: (tp) -> $scope.teachingPeriod = tp
+      error: (response) ->
+        $scope.teachingPeriod = { id: -1 }
+        $scope.newTeachingPeriod = true
+    })
+    #  || { id: -1 }
+    # $scope.newTeachingPeriod = $scope.teachingPeriod.id == -1
 
   #
   # Active tab group

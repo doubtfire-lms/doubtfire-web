@@ -13,6 +13,10 @@ export class MappingFunctions {
     return new Date(data[key]);
   }
 
+  public static mapDayToJson<T>(entity: T, key: string): string {
+    return `${entity[key].getFullYear()}-${entity[key].getMonth() + 1}-${entity[key].getDate()}`;
+  }
+
   public static minutesMs(value: number): number {
     return 1000 * 60 * value;
   }

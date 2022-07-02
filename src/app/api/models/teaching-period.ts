@@ -5,23 +5,21 @@ import { TeachingPeriodBreakService, TeachingPeriodService, Unit, UnitService, U
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
-  startDate: string;
+  startDate: Date;
   numberOfWeeks: number;
-
 }
 
 export class TeachingPeriod extends Entity {
-
   id: number;
   period: string;
   year: string;
-  startDate: string; //TODO: Date
-  endDate: string; //TODO: Date
+  startDate: Date;
+  endDate: Date;
   activeUntil: string;
   active: boolean;
 
-  breaks: EntityCache<TeachingPeriodBreak> = new EntityCache<TeachingPeriodBreak>();
-  units: EntityCache<Unit> = new EntityCache<Unit>();
+  breaksCache: EntityCache<TeachingPeriodBreak> = new EntityCache<TeachingPeriodBreak>();
+  unitsCache: EntityCache<Unit> = new EntityCache<Unit>();
 
   /**
    * Override to json to store in teaching period root node.
@@ -39,10 +37,21 @@ export class TeachingPeriod extends Entity {
     return `${this.period} ${this.year}`;
   }
 
-  public addBreak(breakEntity: TeachingPeriodBreak) : Observable<TeachingPeriodBreak> {
+  public get breaks(): TeachingPeriodBreak[] {
+    return this.breaksCache.currentValues;
+  }
+
+  public get units(): Unit[] {
+    return this.unitsCache.currentValues;
+  }
+
+  public addBreak(startDate: Date, weeks: number) : Observable<TeachingPeriodBreak> {
+    const breakEntity = new TeachingPeriodBreak();
+    breakEntity.startDate = startDate;
+    breakEntity.numberOfWeeks = weeks;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
-    return breakService.store(breakEntity, {cache: this.breaks});
+    return breakService.create({teaching_period_id: this.id}, {cache: this.breaksCache, entity: breakEntity});
   }
 
   public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean) : Observable<boolean> {

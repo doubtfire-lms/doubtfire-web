@@ -41,14 +41,9 @@
         <!--/description-date-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
+          <label class="col-sm-2 control-label" for="teachingPeriod">Teaching Period</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.teachingPeriod">
-              <option value="">Custom Period</option>
-              <option ng-value="tp" value="tp" ng-repeat="tp in teachingPeriods.loadedPeriods">
-                {{tp.period}}-{{tp.year}}
-              </option>
-            </select>
+            <object-select [source]="teachingPeriodValues" [target]="unit.teachingPeriod" (target-change)="teachingPeriodSelected($event)"  />
           </div>
         </div>
         <!--/teaching-period-date-->
@@ -89,18 +84,12 @@
                 ng-if="!unit.teachingPeriod"
               />
               <input
-                datepicker-popup="yyyy-MM-dd"
-                is-open="calOptions.startOpened"
                 type="text"
                 class="form-control"
                 id="startdate"
-                ng-model="tp.startDate"
-                ng-required="true"
-                placeholder="yyyy-MM-dd"
-                close-text="Close"
-                ng-disabled="unit.teachingPeriod"
-                ng-repeat="tp in teachingPeriods.loadedPeriods"
-                ng-if="unit.teachingPeriod && tp.id == unit.teachingPeriod"
+                value="{{unit.teachingPeriod.startDate | date}}"
+                ng-disabled="true"
+                ng-if="unit.teachingPeriod"
               />
               <span class="input-group-btn">
                 <button
@@ -128,22 +117,17 @@
                 class="form-control"
                 ng-model="unit.endDate"
                 is-open="calOptions.endOpened"
-                ng-required="true"
+                ng-required="!unit.teachingPeriod"
                 close-text="Close"
                 ng-if="!unit.teachingPeriod"
               />
               <input
-                datepicker-popup="{{format}}"
                 id="enddate"
                 type="text"
                 class="form-control"
-                ng-model="tp.endDate"
-                is-open="calOptions.endOpened"
-                ng-required="true"
-                close-text="Close"
-                ng-disabled="unit.teachingPeriod"
-                ng-repeat="tp in teachingPeriods.loadedPeriods"
-                ng-if="unit.teachingPeriod && tp == unit.teachingPeriod"
+                ng-value="unit.teachingPeriod.endDate | date"
+                ng-disabled="true"
+                ng-if="unit.teachingPeriod"
               />
               <span class="input-group-btn">
                 <button
@@ -417,7 +401,6 @@
           type="submit"
           value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
           class="btn btn-success"
-          ng-disabled="unitForm.$pristine"
         />
       </div>
     </form>

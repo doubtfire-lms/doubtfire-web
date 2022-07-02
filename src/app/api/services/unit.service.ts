@@ -62,8 +62,11 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: ['teachingPeriod', 'teaching_period_id'],
         toEntityFn: (data, key, entity) => {
           if ( data['teaching_period_id'] ) {
-            entity.teachingPeriod = this.teachingPeriodService.cache.get(data['teaching_period_id']);
-          }
+            return this.teachingPeriodService.cache.get(data['teaching_period_id']);
+          } else { return undefined; }
+        },
+        toJsonFn: (entity: Unit, key: string) => {
+          return entity.teachingPeriod?.id;
         }
       },
       {
@@ -174,6 +177,7 @@ export class UnitService extends CachedEntityService<Unit> {
       // 'teachingPeriod', - map to teaching period
       'startDate',
       'endDate',
+      'teachingPeriod',
       'assessmentEnabled',
       // 'overseerImage', - map to overseer image
       'autoApplyExtensionBeforeDeadline',
