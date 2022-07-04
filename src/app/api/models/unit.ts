@@ -3,6 +3,7 @@ import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { ProjectService } from '../services/project.service';
 import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
@@ -255,6 +256,10 @@ export class Unit extends Entity {
     }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
       return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
     });
+  }
+
+  public getOutcomeBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
   }
 
   public hasStreams() : boolean {

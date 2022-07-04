@@ -98,7 +98,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
       {
-        keys: 'learningOutcomes',
+        keys: 'ilos',
         toEntityOp: (data: object, key: string, unit: Unit) => {
           data[key].forEach(ilo => {
             unit.learningOutcomesCache.getOrCreate(ilo['id'], this.learningOutcomeService, ilo);

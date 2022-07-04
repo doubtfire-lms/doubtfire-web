@@ -204,7 +204,6 @@ import 'build/src/app/sessions/states/sign-out/sign-out.js';
 import 'build/src/app/api/models/group-member.js';
 import 'build/src/app/api/models/user-role.js';
 import 'build/src/app/api/models/learning-alignments.js';
-import 'build/src/app/api/models/intended-learning-outcome.js';
 import 'build/src/app/api/models/group-set.js';
 import 'build/src/app/api/models/task-completion-csv.js';
 import 'build/src/app/api/models/user.js';
@@ -269,7 +268,7 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { TaskCommentService, TaskService, TeachingPeriodService, UnitService, UserService } from './api/models/doubtfire-model';
+import { LearningOutcomeService, TaskCommentService, TaskService, TeachingPeriodService, UnitService, UserService } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -313,7 +312,9 @@ DoubtfireAngularJSModule.factory('newUnitService', downgradeInjectable(UnitServi
 DoubtfireAngularJSModule.factory('newTaskService', downgradeInjectable(TaskService));
 DoubtfireAngularJSModule.factory('newTeachingPeriodService', downgradeInjectable(TeachingPeriodService));
 DoubtfireAngularJSModule.factory('newProjectService', downgradeInjectable(ProjectService));
+
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
+DoubtfireAngularJSModule.factory('newLearningOutcomeService', downgradeInjectable(LearningOutcomeService));
 DoubtfireAngularJSModule.factory('emojiService', downgradeInjectable(EmojiService));
 DoubtfireAngularJSModule.factory('fileDownloaderService', downgradeInjectable(FileDownloaderService));
 DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(CheckForUpdateService));

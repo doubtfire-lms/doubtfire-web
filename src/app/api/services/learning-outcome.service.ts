@@ -6,7 +6,7 @@ import API_URL from 'src/app/config/constants/apiURL';
 
 @Injectable()
 export class LearningOutcomeService extends CachedEntityService<LearningOutcome> {
-  protected readonly endpointFormat = 'units/:unit.id:/outcomes/:id:';
+  protected readonly endpointFormat = 'units/:unitId:/outcomes/:id:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

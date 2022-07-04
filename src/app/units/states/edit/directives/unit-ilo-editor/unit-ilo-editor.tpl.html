@@ -6,10 +6,10 @@
         Add, edit or delete intended learning outcomes for this unit
       </div>
       <div class="panel-body">
-        <div class="callout callout-info" ng-hide="unit.ilos.length > 0">
+        <div class="callout callout-info" ng-hide="ilos.length > 0">
           This unit has no Intended Learning Outcomes
         </div>
-        <div ng-show="unit.ilos.length > 0">
+        <div ng-show="ilos.length > 0">
           <div style="overflow: auto; position: relative">
             <table class="table table-pointer table-hover" style="min-width: 720px">
               <thead>
@@ -22,8 +22,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="ilo in unit.ilos | orderBy:'ilo_number'">
-                  <td ng-click="editILO(ilo)">{{ilo.ilo_number}}</td>
+                <tr ng-repeat="ilo in ilos | orderBy:'iloNumber'">
+                  <td ng-click="editILO(ilo)">{{ilo.iloNumber}}</td>
                   <td ng-click="editILO(ilo)">{{ilo.abbreviation}}</td>
                   <td ng-click="editILO(ilo)">{{ilo.name}}</td>
                   <td ng-click="editILO(ilo)">{{ilo.description}}</td>
@@ -50,7 +50,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">Batch Upload Outcome Definitions</h4>
-        Batch upload learning outcome definitions with a CSV containing: unit_code, ilo_number, abbreviation, name, and
+        Batch upload learning outcome definitions with a CSV containing: unit_code, iloNumber, abbreviation, name, and
         description.
       </div>
       <div class="panel-body">
