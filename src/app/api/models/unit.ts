@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
@@ -133,6 +134,20 @@ export class Unit extends Entity {
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
     const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
     return Math.round((startToNow / totalDuration) * 100);
+  }
+
+  public rolloverTo(body: any): Observable<Unit>  {
+    const unitService = AppInjector.get(UnitService);
+
+    return unitService.create(
+      {
+        id: this.id
+      },
+      {
+        endpointFormat: unitService.rolloverEndpoint,
+        body: body
+      }
+    );
   }
 
   public get students(): Array<Project> {

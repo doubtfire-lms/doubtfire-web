@@ -1,4 +1,4 @@
-import { User } from 'src/app/api/models/doubtfire-model';
+import { UnitRole, UnitService, User } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService } from 'ngx-entity-service';
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -84,4 +84,16 @@ export class UserService extends CachedEntityService<User> implements OnInit {
   public getTutors(): Observable<User[]> {
     return this.query(undefined, { endpointFormat: this.tutorEndpointFormat});
   }
+
+  public adminRoleFor(unitId: number, user: User): UnitRole {
+    const result = new UnitRole();
+    result.role = "Admin";
+    result.user = user;
+
+    const unitService = AppInjector.get(UnitService);
+    result.unit = unitService.cache.getOrCreate(unitId, unitService, { id: unitId });
+
+    return result;
+  }
+
 }

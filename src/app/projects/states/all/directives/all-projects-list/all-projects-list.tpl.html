@@ -23,7 +23,7 @@
             <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             <th><a ng-click="sortOrder='unit.startDate'; reverse=!reverse">Start Date <i ng-show="sortOrder=='unit.startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             <th><a ng-click="sortOrder='unit.endDate'; reverse=!reverse">End Date <i ng-show="sortOrder=='unit.endDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +40,7 @@
             <td>{{project.unit.endDate | date : 'EEE d MMM'}}</td>
             <td ng-if="project.unit.teachingPeriod">
               <i ng-if="project.unit.teachingPeriod.active && project.active" class="fa fa-check"></i>
-              <i ng-if="!project.unit.teachingPeriod.active() || !project.active" class="fa fa-times"></i>
+              <i ng-if="!project.unit.teachingPeriod.active || !project.active" class="fa fa-times"></i>
             </td>
             <td ng-if="!project.unit.teachingPeriod">
               <i ng-if="project.active" class="fa fa-check"></i>

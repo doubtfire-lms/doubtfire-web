@@ -27,13 +27,7 @@ angular.module('doubtfire.units.states.index', [])
     $scope.unitRole = GlobalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
 
     if (! $scope.unitRole?) && ( newUserService.currentUser.role == "Admin" )
-      $scope.unitRole = {
-        role: 'Admin',
-        unit_id: unitId,
-        name: newUserService.currentUser.Name,
-        unit_name: 'Unit admin mode',
-        unit_code: '---'
-      }
+      $scope.unitRole = newUserService.adminRoleFor(unitId, newUserService.currentUser)
 
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?

@@ -11,6 +11,7 @@ import { GroupService } from './group.service';
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
   protected readonly endpointFormat = 'units/:id:';
+  public readonly rolloverEndpoint = 'units/:id:/rollover';
 
   constructor(
     httpClient: HttpClient,
