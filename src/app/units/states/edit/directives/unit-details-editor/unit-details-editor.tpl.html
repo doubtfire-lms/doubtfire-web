@@ -43,7 +43,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="teachingPeriod">Teaching Period</label>
           <div class="col-sm-9">
-            <object-select [source]="teachingPeriodValues" [target]="unit.teachingPeriod" (target-change)="teachingPeriodSelected($event)"  />
+            <object-select [source]="teachingPeriodValues" [target]="unit.teachingPeriod" (target-change)="teachingPeriodSelected($event)" label="Select Teaching Period"  />
           </div>
         </div>
         <!--/teaching-period-date-->
@@ -51,12 +51,8 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="">Draft Learning Summary</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.draftTaskDefinitionId">
-              <option value="">None</option>
-              <option ng-value="td" value="td" ng-repeat="td in unit.taskDefinitions">
-                {{td.abbreviation}}-{{td.name}}
-              </option>
-            </select>
+            <object-select [source]="taskDefinitionValues" [target]="unit.draftTaskDefinition" (target-change)="draftTaskDefSelected($event)" label="Select Learning Summary Task"  />
+
             <span class="help-block">
               When a draft learning summary task is selected, this will ensure a students uploaded draft is
               automatically added to the students portfolio.

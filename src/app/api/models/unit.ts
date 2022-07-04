@@ -30,7 +30,7 @@ export class Unit extends Entity {
   enableSyncEnrolments: boolean;
   enableSyncTimetable: boolean;
 
-  draftTaskDefinitionId: number; // task definition needs to be lazy loaded
+  draftTaskDefinition: TaskDefinition;
 
   allowStudentExtensionRequests: boolean;
   extensionWeeksOnResubmitRequest: number;

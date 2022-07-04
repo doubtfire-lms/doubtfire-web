@@ -93,9 +93,6 @@ export class UnitService extends CachedEntityService<Unit> {
       'sendNotifications',
       'enableSyncEnrolments',
       'enableSyncTimetable',
-
-      'draftTaskDefinitionId',
-
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
@@ -132,6 +129,15 @@ export class UnitService extends CachedEntityService<Unit> {
             const td = unit.taskDefinitionCache.getOrCreate(taskDefinitionJson['id'], this.taskDefinitionService, taskDefinitionJson, {constructorParams: unit});
             td.seq = seq++;
           });
+        }
+      },
+      {
+        keys: ['draftTaskDefinition', 'draft_task_definition_id'],
+        toEntityFn: (data: object, jsonKey: string, unit: Unit) => {
+          return unit.taskDef(data[jsonKey]);
+        },
+        toJsonFn: (unit: Unit, key: string) => {
+          return unit.draftTaskDefinition.id;
         }
       },
       {
@@ -185,7 +191,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncEnrolments',
       'enableSyncTimetable',
 
-      // 'draftTaskDefinition', - map to task definition
+      'draftTaskDefinition', // - map to task definition
 
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',

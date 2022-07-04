@@ -26,13 +26,23 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     # get the teaching periods- gets an object with the loaded teaching periods
     newTeachingPeriodService.query().subscribe((periods) ->
       $scope.teachingPeriods = periods
-      $scope.teachingPeriodValues = [{value: undefined, text: "Custom Period"}]
+      $scope.teachingPeriodValues = [{value: undefined, text: "None"}]
       other = _.map periods, (p) -> {value: p, text: "#{p.year} #{p.period}"}
       _.each other, (d) -> $scope.teachingPeriodValues.push(d)
     )
 
     $scope.teachingPeriodSelected = ($event) ->
       $scope.unit.teachingPeriod = $event
+
+    $scope.unit.taskDefinitionCache.values.subscribe(
+      (taskDefs) ->
+        $scope.taskDefinitionValues = [{value: undefined, text: "None"}]
+        other = _.map taskDefs, (td) -> {value: td, text: "#{td.abbreviation}-#{td.name}"}
+        _.each other, (d) -> $scope.taskDefinitionValues.push(d)
+    )
+
+    $scope.draftTaskDefSelected = ($event) ->
+      $scope.unit.draftTaskDefinition = $event
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->

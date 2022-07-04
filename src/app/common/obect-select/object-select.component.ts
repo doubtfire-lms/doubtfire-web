@@ -14,6 +14,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class ObjectSelectComponent<T> implements OnInit {
   @Input() source: {value: T; text: string}[];
   @Input() target: T;
+  @Input() label: string;
   @Output() targetChange = new EventEmitter<T>();
 
   constructor() { }
