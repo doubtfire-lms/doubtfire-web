@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     @Inject(UIRouter) private router: UIRouter
   ) {
     this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
-    globalState.loadUnitsAndProjects();
+    // projects and units are loaded as part of global state service at login
   }
 
   public externalName = this.constants.ExternalName;

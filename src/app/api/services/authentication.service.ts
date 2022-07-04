@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { UIRouter, UIRouterGlobals } from '@uirouter/angular';
 import { alertService } from 'src/app/ajs-upgraded-providers';
+import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { AppInjector } from 'src/app/app-injector';
 
 @Injectable()
 export class AuthenticationService {
@@ -114,19 +116,21 @@ export class AuthenticationService {
   }
 
   public signIn(
-    username: string,
-    password: string,
-    remember: boolean,
+    userCredentials: {
+      username: string;
+      password: string;
+      remember: boolean;
+    } | {
+      auth_token: string;
+      username: string;
+      remember: boolean;
+    },
     success: () => void,
     error: () => void
   ) {
     this.httpClient.post(
       this.AUTH_URL,
-      {
-        username: username,
-        password: password,
-        remember: remember
-      }
+      userCredentials
     ).subscribe(
       {
         next: (response) => {
@@ -139,7 +143,10 @@ export class AuthenticationService {
 
           user.authenticationToken = response['auth_token'];
 
-          if(this.tryChangeUser(user, remember)) {
+          if(this.tryChangeUser(user, userCredentials.remember)) {
+
+            const globalStateService = AppInjector.get(GlobalStateService);
+            globalStateService.loadGlobals();
             success();
           } else {
             error();

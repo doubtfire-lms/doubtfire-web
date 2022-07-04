@@ -65,7 +65,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.filteredUnitRoles = this.isActiveUnitRole
             .transform(this.unitRoles)
             .filter((role) => this.isUniqueRole(role));
-          console.log(this.filteredUnitRoles);
         },
         error: (err) => { },
       })

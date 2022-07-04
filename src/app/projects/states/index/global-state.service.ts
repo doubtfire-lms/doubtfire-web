@@ -1,8 +1,9 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Project, ProjectService, Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
+import { BehaviorSubject, Observable, Subject, skip, take } from 'rxjs';
+import { alertService } from 'src/app/ajs-upgraded-providers';
+import { CampusService, Project, ProjectService, TeachingPeriodService, Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 
 export class DoubtfireViewState {
@@ -38,7 +39,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The unit roles loaded from the server
    */
-   private loadedUnitRoles: EntityCache<UnitRole>;
+  private loadedUnitRoles: EntityCache<UnitRole>;
 
   /**
    * The loaded units.
@@ -48,7 +49,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The loaded projects.
    */
-   private currentUserProjects: EntityCache<Project>;
+  private currentUserProjects: EntityCache<Project>;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -65,7 +66,9 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The list of all of the units studied by the current user
    */
-  public projectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>(null);
+  public get projectsSubject(): Observable<Project[]> {
+    return this.currentUserProjects.values;
+  }
 
   public isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
@@ -77,7 +80,10 @@ export class GlobalStateService implements OnDestroy {
     private userService: UserService,
     private authenticationService: AuthenticationService,
     private projectService: ProjectService,
-    @Inject(UIRouter) private router: UIRouter
+    private campusService: CampusService,
+    private teachingPeriodService: TeachingPeriodService,
+    @Inject(UIRouter) private router: UIRouter,
+    @Inject(alertService) private alerts: any
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -87,7 +93,7 @@ export class GlobalStateService implements OnDestroy {
 
     setTimeout(() => {
       if (this.authenticationService.isAuthenticated()) {
-        this.loadUnitsAndProjects();
+        this.loadGlobals();
       } else {
         this.router.stateService.go('sign_in');
       }
@@ -102,26 +108,56 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.projectsSubject.complete();
     this.isLoadingSubject.complete();
     this.showHideHeader.complete();
     this.currentViewAndEntitySubject.complete();
   }
 
+  public loadGlobals() {
+    const loadingObserver = new Observable(subscriber => {
+      // Loading campuses
+      this.campusService.query().subscribe({
+        next: (reponse) => {
+          subscriber.next(true);
+        },
+        error: (response) => {
+          this.alerts.add("danger", "Unable to access service. Failed loading campuses.", 6000);
+          console.log(response);
+        }
+      });
+
+      // Loading teaching periods
+      this.teachingPeriodService.query().subscribe({
+        next: (response) => {
+          subscriber.next(true);
+        },
+        error: (response) => {
+          this.alerts.add("danger", "Unable to access service. Failed loading teaching periods.", 6000);
+          console.log(response);
+        }
+      });
+    });
+
+    loadingObserver.pipe(skip(1), take(1)).subscribe({
+      next: () => {
+        this.loadUnitsAndProjects();
+      }
+    })
+  }
+
   /**
    * Query the API for the units taught and studied by the current user.
    */
-  public loadUnitsAndProjects() {
-    //TODO: Consider sequence here? Can we adjust to fail once.
+  private loadUnitsAndProjects() {
     this.unitRoleService.query().subscribe(
       {
         next: (unitRoles: UnitRole[]) => {
-          console.log(unitRoles);
+          // unit roles are now in the cache
 
           this.projectService.query(undefined, {params: {include_inactive: false}}).subscribe(
             {
               next: (projects: Project[]) => {
-                this.projectsSubject.next(projects);
+                // projects updated in cache
 
                 setTimeout(() => {
                   this.isLoadingSubject.next(false);
@@ -136,7 +172,7 @@ export class GlobalStateService implements OnDestroy {
   public onLoad(run: () => void) {
     const subscription = this.isLoadingSubject.subscribe(
       (loading: boolean) => {
-        if ( !loading ) {
+        if (!loading) {
           run();
           setTimeout(() => subscription.unsubscribe());
         }
@@ -152,8 +188,6 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnitRoles.clear();
     this.userService.cache.clear();
     this.currentUserProjects.clear();
-
-    this.projectsSubject.next(null);
   }
 
   /**
