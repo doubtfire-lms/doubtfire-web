@@ -25,6 +25,9 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
         toEntityFn: (data, key, entity) => {
           const unitData = data['unit'];
           return this.unitService.cache.getOrCreate(unitData.id, unitService, unitData);
+        },
+        toJsonFn: (entity: UnitRole, key: string) => {
+          return entity.unit?.id;
         }
       },
       {
@@ -32,12 +35,24 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
         toEntityFn: (data: object, key: string, entity: UnitRole, params?: any) => {
           return this.userService.cache.getOrCreate(data['user']['id'], userService, data['user']);
         },
+      },
+      'role',
+      'roleId',
+      {
+        keys: 'userId',
         toJsonFn: (entity: UnitRole, key: string) => {
           return entity.user?.id;
         }
       },
-      'role'
+      {
+        keys: 'unitId',
+        toJsonFn: (entity: UnitRole, key: string) => {
+          return entity.unit?.id;
+        }
+      },
     );
+
+    this.mapping.addJsonKey('roleId', 'userId', 'unitId', 'role');
   }
 
   public createInstanceFrom(json: any, other?: any): UnitRole {

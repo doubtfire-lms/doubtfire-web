@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Unit, Task, ProgressModal, TaskSubmission, fileDownloaderService) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Task, ProgressModal, TaskSubmission, fileDownloaderService) ->
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.grades = gradeService.grades
@@ -75,7 +75,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # The task sheet uploader...
     #
     $scope.taskSheet = { file: { name: 'Task Sheet', type: 'document'  } }
-    $scope.taskSheetUploadUrl = -> Unit.taskSheetUploadUrl($scope.unit, $scope.task)
+    $scope.taskSheetUploadUrl = -> $scope.task.taskSheetUploadUrl
 
     $scope.onTaskSheetSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
@@ -130,7 +130,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # The task resources uploader...
     #
     $scope.taskResources = { file: { name: 'Task Resources', type: 'zip' } }
-    $scope.taskResourcesUploadUrl = -> Unit.taskResourcesUploadUrl($scope.unit, $scope.task)
+    $scope.taskResourcesUploadUrl = -> $scope.task.taskResourcesUploadUrl
 
     $scope.onTaskResourcesSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
@@ -144,7 +144,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # # The assessment resources uploader...
     # #
     $scope.taskAssessmentResources = { file: { name: 'Task Assessment Resources', type: 'zip' } }
-    $scope.taskAssessmentResourcesUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+    $scope.taskAssessmentResourcesUploadUrl = -> $scope.task.taskAssessmentResourcesUploadUrl
 
     $scope.onTaskAssessmentResourcesSuccess = (response) ->
       alertService.add("success", "Task assessment resources uploaded", 2000)
@@ -157,7 +157,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     # # The assessment tests uploader...
     # #
     # $scope.taskAssessmentTests = { file: { name: 'Task Assessment Resources', type: 'zip' } }
-    # $scope.taskAssessmentTestsUploadUrl = -> Unit.taskAssessmentResourcesUploadUrl($scope.unit, $scope.task)
+    # $scope.taskAssessmentTestsUploadUrl = -> $scope.task.taskAssessmentResourcesUploadUrl
 
     # $scope.onTaskAssessmentTestsSuccess = (response) ->
     #   alertService.add("success", "Task assessment tests uploaded", 2000)

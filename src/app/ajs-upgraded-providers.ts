@@ -2,8 +2,6 @@ import { InjectionToken } from '@angular/core';
 
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string
-export const Unit = new InjectionToken('Unit');
-export const User = new InjectionToken('User');
 export const Task = new InjectionToken('Task');
 export const uploadSubmissionModal = new InjectionToken('uploadSubmissionModal');
 export const gradeTaskModal = new InjectionToken('gradeTaskModal');
@@ -30,12 +28,6 @@ export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal')
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
-export const unitProvider = {
-  provide: Unit, // When you need 'Unit' you
-  useFactory: (i: any) => i.get('Unit'), // get the AngularJS module
-  deps: ['$injector'], // using the upgrade injector.
-};
-
 export const taskDefinitionProvider = {
   provide: taskDefinition,
   useFactory: (i: any) => i.get('TaskDefinition'),
@@ -94,12 +86,6 @@ export const groupServiceProvider = {
 export const commentsModalProvider = {
   provide: commentsModal,
   useFactory: (i: any) => i.get('CommentsModal'),
-  deps: ['$injector'],
-};
-
-export const userProvider = {
-  provide: User,
-  useFactory: (i: any) => i.get('User'),
   deps: ['$injector'],
 };
 

@@ -36,13 +36,17 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         // ),
         catchError((error: HttpErrorResponse) => {
           let errorMessage: string = '';
+          let logMessage: string = '';
           if (error.error instanceof ErrorEvent) {
             // client-side error
             errorMessage = `Error: ${error.error.message}`;
           } else {
             // server-side error
-            errorMessage = `Error Code: ${error.status}<br \>Message: ${error.error.error}`;
+            errorMessage = `<br \>Message: ${error.error.error}`;
+            logMessage = `Error Code: ${error.status}`;
           }
+
+          console.error(`${logMessage}\n${errorMessage}`);
 
           if(error.status === 419) {
             this.authenticationService.timeoutAuthentication();

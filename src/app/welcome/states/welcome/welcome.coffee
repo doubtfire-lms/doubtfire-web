@@ -13,7 +13,7 @@ angular.module('doubtfire.welcome.states.welcome', [])
   $stateProvider.state 'welcome', welcomeStateData
 )
 
-.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, User, Project, newProjectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
+.controller('WelcomeCtrl', ($scope, $state, $stateParams, $q, DoubtfireConstants, Project, newProjectService, gradeService, alertService, analyticsService, GlobalStateService, newUserService) ->
 
   GlobalStateService.setView('OTHER')
   # Define steps for wizard

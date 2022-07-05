@@ -13,8 +13,7 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   headerServiceProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, analyticsService, dateService, GlobalStateService, newUserService) ->
-  analyticsService.event 'view-all-units', 'viewed all-units list'
+.controller("AllUnitsList", ($scope, $state, $timeout, DoubtfireConstants, dateService, GlobalStateService, newUserService, newUnitService) ->
   GlobalStateService.setView('OTHER')
 
   $scope.externalName = DoubtfireConstants.ExternalName
@@ -55,8 +54,10 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   $scope.$watch 'unitRoles', checkEnrolled
 
   if newUserService.currentUser.role isnt 'Student'
-    Unit.query (units) ->
-      $scope.units = units
+    newUnitService.query().subscribe(
+      (units) ->
+        $scope.units = units
+    )
 
   $scope.unit = (unitId) ->
     _.find($scope.units, {id: unitId})

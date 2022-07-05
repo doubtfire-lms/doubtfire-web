@@ -45,7 +45,7 @@ export class Unit extends Entity {
   public readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> = new EntityCache<TaskOutcomeAlignment>();
 
-  readonly staff: EntityCache<UnitRole> = new EntityCache<UnitRole>();
+  readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
   public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
   public readonly groupsCache: EntityCache<Group> = new EntityCache<Group>();
@@ -60,6 +60,10 @@ export class Unit extends Entity {
     return {
       unit: super.toJson(mappingData, ignoreKeys),
     }
+  }
+
+  public get staff(): UnitRole[] {
+    return this.staffCache.currentValues;
   }
 
   public findStudent(id: number): Project {
@@ -338,8 +342,27 @@ export class Unit extends Entity {
     return this.learningOutcomesCache.get(id);
   }
 
+  public get gradesUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades`;
+  }
 
+  public get portfoliosUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.id}/portfolio`;
+  }
 
+  public get taskUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/task_definitions/task_pdfs`;
+  }
 
+  public get allResourcesDownloadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/all_resources`;
+  }
 
+  public get enrolStudentsCSVUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}`;
+  }
+
+  public get withdrawStudentsCSVUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/withdraw`;
+  }
 }

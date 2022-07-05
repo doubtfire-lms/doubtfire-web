@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/rollover/directives/unit-dates-selector/unit-dates-selector.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, RolloverUnit, alertService, newTeachingPeriodService) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, alertService, newTeachingPeriodService) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false

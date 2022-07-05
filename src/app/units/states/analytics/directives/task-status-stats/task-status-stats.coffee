@@ -11,7 +11,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
   templateUrl: 'units/states/analytics/directives/task-status-stats/task-status-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, $filter, Unit, newTaskService) ->
+  controller: ($scope, $filter, newUnitService, newTaskService) ->
     # Required for button press -- shouldn't really have objects directly on
     # the $scope, wrap them in dataModel objects is recommended
     $scope.dataModel = {}
@@ -47,13 +47,12 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
 
     # Load data if not loaded already
     unless $scope.unit.analytics.taskStatusCountByTutorial?
-      Unit.taskStatusCountByTutorial.get {id: $scope.unit.id},
+      newUnitService.taskStatusCountByTutorial($scope.unit.id).subscribe(
         (response) ->
-          delete response.$promise
-          delete response.$resolved
           $scope.unit.analytics.taskStatusCountByTutorial = response
           $scope.dataModel.selectedType = 'unit'
           test = $scope.switchToTasksForTutorial()
+      )
     else
       $scope.dataModel.selectedType = 'unit'
 

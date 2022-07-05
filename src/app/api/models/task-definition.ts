@@ -77,4 +77,17 @@ export class TaskDefinition extends Entity {
     return this.plagiarismChecks.length > 0;
   }
 
+  public get taskSheetUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_sheet`;
+  }
+
+  public get taskResourcesUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources`;
+  }
+
+  public get taskAssessmentResourcesUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources`;
+  }
+
+
 }

@@ -1,4 +1,4 @@
-import { Entity } from 'ngx-entity-service';
+import { Entity, EntityMapping } from 'ngx-entity-service';
 import { User, Unit } from './doubtfire-model';
 
 /**
@@ -11,5 +11,17 @@ export class UnitRole extends Entity {
   role: string;
   user: User;
   unit: Unit;
+
+  /**
+   * The id for updated roles - but we need to move away from this to the role string...
+   * @deprecated
+   */
+  roleId: number;
+
+  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+    return {
+      unit_role: super.toJson(mappingData, ignoreKeys),
+    }
+  }
 
 }

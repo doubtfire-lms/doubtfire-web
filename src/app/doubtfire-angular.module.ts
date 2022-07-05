@@ -48,7 +48,6 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
 import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
-  unitProvider,
   visualisationsProvider,
   analyticsServiceProvider,
   dateServiceProvider,
@@ -59,7 +58,6 @@ import {
   CsvResultModalProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
-  userProvider,
   gradeServiceProvider,
   commentsModalProvider,
   taskDefinitionProvider,
@@ -317,9 +315,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
     CheckForUpdateService,
     TaskOutcomeAlignmentService,
     visualisationsProvider,
-    userProvider,
     groupServiceProvider,
-    unitProvider,
     commentsModalProvider,
     taskDefinitionProvider,
     userSettingsModalProvider,

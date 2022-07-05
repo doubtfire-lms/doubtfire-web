@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
+  controller: ($scope, $rootScope, Task, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -94,7 +94,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
         $scope.taskAdminData.selectedTask = null
 
     $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
-    $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
+    $scope.taskUploadUrl = $scope.unit.taskUploadUrl
 
     $scope.onTaskPDFSuccess = (response) ->
       CsvResultModal.show "Task File Import Results", response
@@ -107,7 +107,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       Task.getTaskDefinitionBatchUploadUrl($scope.unit)
 
     $scope.downloadAllResource = ->
-      fileDownloaderService.downloadFile(Unit.allResourcesDownloadUrl($scope.unit), "#{$scope.unit.code}-all-resources.zip")
+      fileDownloaderService.downloadFile($scope.unit.allResourcesDownloadUrl, "#{$scope.unit.code}-all-resources.zip")
 
     $scope.downloadTasksCSV = ->
       fileDownloaderService.downloadFile(Task.getTaskDefinitionBatchUploadUrl($scope.unit), "#{$scope.unit.code}-task-definitions.csv")

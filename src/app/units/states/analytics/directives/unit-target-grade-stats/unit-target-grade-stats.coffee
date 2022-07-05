@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
   templateUrl: 'units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, $filter, Unit) ->
+  controller: ($scope, $filter, newUnitService) ->
     $scope.overviewSelectors =
       tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
 
@@ -38,12 +38,11 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
 
     # Load data if not loaded already
     unless $scope.unit.analytics.targetGradeStats?
-      Unit.targetGradeStats.query {id: $scope.unit.id},
+      newUnitService.targetGradeStats($scope.unit).subscribe(
         (response) ->
-          delete response.$promise
-          delete response.$resolved
           $scope.unit.analytics.targetGradeStats = response
           $scope.dataModel.selectedType = 'unit'
+      )
     else
       $scope.dataModel.selectedType = 'unit'
 

@@ -57,16 +57,19 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityOp: (data, key, entity) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
           // Add staff
-          entity.staff.clear();
-          data['staff'].forEach(staff => {
-            entity.staff.add(unitRoleService.buildInstance(staff));
+          entity.staffCache.clear();
+          data[key].forEach(staff => {
+            entity.staffCache.add(unitRoleService.buildInstance(staff));
           });
         }
       },
       {
-        keys: 'mainConvenor',
-        toEntityOp: (data, key, entity) => {
-          entity.mainConvenor = entity.staff.get(data['mainConvenor']);
+        keys: ['mainConvenor', 'main_convenor_id'],
+        toEntityFn: (data, key, entity) => {
+          return entity.staffCache.get(data[key]);
+        },
+        toJsonFn: (unit: Unit, key: string) => {
+          return unit.mainConvenor?.id;
         }
       },
       {
@@ -127,7 +130,9 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: 'tutorials',
         toEntityOp: (data, key, entity) => {
           data['tutorials'].forEach((tutorialJson: object) => {
-            entity.tutorialsCache.add(this.tutorialService.buildInstance(tutorialJson, {constructorParams: entity}));
+            if (tutorialJson) {
+              entity.tutorialsCache.add(this.tutorialService.buildInstance(tutorialJson, {constructorParams: entity}));
+            }
           });
         }
       },
@@ -148,7 +153,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return unit.taskDef(data[jsonKey]);
         },
         toJsonFn: (unit: Unit, key: string) => {
-          return unit.draftTaskDefinition.id;
+          return unit.draftTaskDefinition?.id;
         }
       },
       {
@@ -190,20 +195,22 @@ export class UnitService extends CachedEntityService<Unit> {
       'name',
       'description',
       'active',
-      // 'mainConvenor', - need to map to unit role
-      // 'teachingPeriod', - map to teaching period
+
+      'mainConvenor',
+
+      'teachingPeriod',
       'startDate',
       'endDate',
-      'teachingPeriod',
+
       'assessmentEnabled',
       // 'overseerImage', - map to overseer image
+
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
       'enableSyncEnrolments',
       'enableSyncTimetable',
 
-      'draftTaskDefinition', // - map to task definition
-
+      'draftTaskDefinition',
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial'
@@ -226,6 +233,27 @@ export class UnitService extends CachedEntityService<Unit> {
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<IloStats[]>(url);
+  }
+
+  public taskStatusCountByTutorial(unit: Unit): Observable<any> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/task_status_pct`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<any>(url);
+  }
+
+  public targetGradeStats(unit: Unit): Observable<any> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/student_target_grade`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<any>(url);
+  }
+
+  public taskCompletionStats(unit: Unit): Observable<any> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/task_completion_stats`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<any>(url);
   }
 }
 

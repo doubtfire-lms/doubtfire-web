@@ -43,7 +43,6 @@ export class UnitStudentsEditorComponent {
     private httpClient: HttpClient,
     @Inject(unitStudentEnrolmentModal) private enrolModal: any,
     @Inject(alertService) private alerts: any,
-    @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(csvResultModalService) private csvResultModal: any,
     private fileDownloader: FileDownloaderService,
@@ -108,7 +107,7 @@ export class UnitStudentsEditorComponent {
       'Upload Students to Enrol',
       'Test message',
       { file: { name: 'Enrol CSV Data', type: 'csv' } },
-      this.unitService.enrolStudentsCSVUrl(this.unit),
+      this.unit.enrolStudentsCSVUrl,
       (response: any) => {
         // at least one student?
         this.csvResultModal.show('Enrol Student CSV Results', response);
@@ -124,7 +123,7 @@ export class UnitStudentsEditorComponent {
       'Upload Students to Withdraw',
       'Test message',
       { file: { name: 'Withdraw CSV Data', type: 'csv' } },
-      this.unitService.withdrawStudentsCSVUrl(this.unit),
+      this.unit.withdrawStudentsCSVUrl,
       (response: any) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
@@ -136,7 +135,7 @@ export class UnitStudentsEditorComponent {
   }
 
   downloadEnrolments() {
-    const url: string = this.unitService.enrolStudentsCSVUrl(this.unit);
+    const url: string = this.unit.enrolStudentsCSVUrl;
 
     this.fileDownloader.downloadFile(url, `${this.unit.code}-students.csv`);
   }

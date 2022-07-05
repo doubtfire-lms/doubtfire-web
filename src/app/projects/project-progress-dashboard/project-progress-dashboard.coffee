@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, newProjectService, Unit, alertService, gradeService, newTaskService, analyticsService, listenerService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, newProjectService, alertService, gradeService, newTaskService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?
@@ -26,7 +26,6 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       newProjectService.update($scope.project).subscribe(
         (response) ->
           alertService.add("success", "Target updated")
-          analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
       )
       updateTaskCompletionStats()
 

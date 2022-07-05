@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, alertService, analyticsService, newUnitService, newUserService, GlobalStateService) ->
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, GlobalStateService) ->
   GlobalStateService.onLoad () ->
     newUnitService.get($state.params.unitId, {params: {loadAllStudents: true}}).subscribe((unit) ->
       $scope.unit = unit

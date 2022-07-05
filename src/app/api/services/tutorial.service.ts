@@ -36,7 +36,11 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       {
         keys: 'tutor',
         toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
-          return this.userService.cache.getOrCreate(data[key].id, userService, data[key]);
+          if(data[key]){
+            return this.userService.cache.getOrCreate(data[key].id, userService, data[key]);
+          } else {
+            return null;
+          }
         },
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.tutor?.id;
