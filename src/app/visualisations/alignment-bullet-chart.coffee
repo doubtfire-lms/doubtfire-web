@@ -509,7 +509,6 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
           tooltip.hidden(true)
 
         bullet.dispatch.on 'elementMousemove.tooltip', (evt) ->
-          tooltip.position({ top: d3.event.pageY, left: d3.event.pageX })()
           tooltip()
 
         #============================================================

@@ -9,13 +9,14 @@ angular.module('doubtfire.units.states.analytics.directives.unit-achievement-sta
   templateUrl: 'units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit) ->
+  controller: ($scope, newUnitService) ->
     # Load data if not loaded already
     unless $scope.unit.analytics?.learningProgressClassDetails?
-      Unit.learningProgressClassDetails.get {id: $scope.unit.id},
+      newUnitService.loadLearningProgressClassDetails($scope.unit).subscribe(
         (response) ->
           $scope.unit.analytics.learningProgressClassDetails = response
           $scope.data = response.all
+      )
     else
       $scope.data = $scope.unit.analytics.learningProgressClassDetails.all
 

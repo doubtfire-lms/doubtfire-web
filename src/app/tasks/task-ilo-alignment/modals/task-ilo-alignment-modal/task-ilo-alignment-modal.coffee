@@ -31,7 +31,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
 
   if $scope.project
     updateRequest = (data) ->
-      data.task_id = $scope.project.findTaskForDefinition(data.task_definition_id).id
+      data.task_id = $scope.project.findTaskForDefinition(data.taskDefinition.id).id
 
   $scope.editingRationale = false
 
@@ -44,8 +44,8 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
     data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
     LearningAlignments.delete(data,
       (response) ->
-        indexToDelete = $scope.source.task_outcome_alignments.indexOf _.find $scope.source.task_outcome_alignments, { id: $scope.alignment.id }
-        $scope.source.task_outcome_alignments.splice indexToDelete, 1
+        indexToDelete = $scope.source.taskOutcomeAlignments.indexOf _.find $scope.source.taskOutcomeAlignments, { id: $scope.alignment.id }
+        $scope.source.taskOutcomeAlignments.splice indexToDelete, 1
         $scope.alignment = undefined
         $rootScope.$broadcast('UpdateAlignmentChart', data, { remove: true })
       (response) ->
@@ -80,7 +80,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
     LearningAlignments.create data,
       (response) ->
         $scope.alignment.id = response.id
-        $scope.source.task_outcome_alignments.push($scope.alignment)
+        $scope.source.taskOutcomeAlignments.push($scope.alignment)
         $rootScope.$broadcast('UpdateAlignmentChart', response, { created: true })
       (response) ->
         if response.data.error?

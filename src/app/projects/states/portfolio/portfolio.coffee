@@ -87,7 +87,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     if $scope.unitHasILOs
       # Filter by aligned tasks that are included
       tasks = _.filter $scope.project.tasks, (t) ->
-        hasAlignmentsForTask = _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
+        hasAlignmentsForTask = _.find($scope.project.taskOutcomeAlignments, (ta) -> ta.task.id ==  t.id )?
         t.include_in_portfolio and hasAlignmentsForTask
     else
       # Filter by included in portfolio

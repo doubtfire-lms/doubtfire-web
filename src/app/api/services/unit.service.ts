@@ -7,6 +7,16 @@ import { UnitRoleService } from './unit-role.service';
 import { AppInjector } from 'src/app/app-injector';
 import { TaskDefinitionService } from './task-definition.service';
 import { GroupService } from './group.service';
+import { Observable } from 'rxjs';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+
+export type IloStats = {
+  median: number;
+  lower: number;
+  upper: number;
+  min: number;
+  max: number;
+}[];
 
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
@@ -203,4 +213,19 @@ export class UnitService extends CachedEntityService<Unit> {
   public override createInstanceFrom(json: any, other?: any): Unit {
     return new Unit();
   }
+
+  public loadLearningProgressClassStats(unit: Unit): Observable<IloStats> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/learning_alignments/class_stats`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<IloStats>(url);
+  }
+
+  public loadLearningProgressClassDetails(unit: Unit): Observable<IloStats[]> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/learning_alignments/class_details`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<IloStats[]>(url);
+  }
 }
+

@@ -7,11 +7,11 @@ angular.module("doubtfire.common.services.outcome-service", [])
   outcomeService = {}
 
   outcomeService.unitTaskStatusFactor = ->
-    (task_definition_id) -> 1
+    (taskDefinitionId) -> 1
 
   outcomeService.projectTaskStatusFactor = (project) ->
-    (task_definition_id) ->
-      task = project.findTaskForDefinition(task_definition_id)
+    (taskDefinitionId) ->
+      task = project.findTaskForDefinition(taskDefinitionId)
       if task?
         newTaskService.learningWeight.get(task.status)
       else
@@ -27,15 +27,15 @@ angular.module("doubtfire.common.services.outcome-service", [])
   ]
 
   outcomeService.individualTaskStatusFactor = (project, task) ->
-    (task_definition_id) ->
-      if task.definition.id == task_definition_id
-        newTaskService.learningWeight.get(project.findTaskForDefinition(task_definition_id).status)
+    (taskDefinitionId) ->
+      if task.definition.id == taskDefinitionId
+        newTaskService.learningWeight.get(project.findTaskForDefinition(taskDefinitionId).status)
       else
         0
 
   outcomeService.individualTaskPotentialFactor = (project, task) ->
-    (task_definition_id) ->
-      if task.definition.id == task_definition_id then 1 else 0
+    (taskDefinitionId) ->
+      if task.definition.id == taskDefinitionId then 1 else 0
 
   outcomeService.calculateTargets = (unit, source, taskStatusFactor) ->
     outcomes = {}
@@ -56,12 +56,12 @@ angular.module("doubtfire.common.services.outcome-service", [])
       }
 
     # For each outcome / task alignment...
-    _.each source.task_outcome_alignments, (align) ->
+    _.each source.taskOutcomeAlignments, (align) ->
       # Get the task definition
-      td = unit.taskDef(align.task_definition_id)
+      td = unit.taskDef(align.taskDefinition.id)
       # Store a partial score for this task in the relevant outcomes ( outcomes[outcome id][grade] << score )
       # At this stage it is just rating * taskFactor (1 to 5 times 0 to 1)
-      outcomes[align.learning_outcome_id][td.targetGrade].push align.rating * taskStatusFactor(td.id)
+      outcomes[align.learningOutcome.id][td.targetGrade].push align.rating * taskStatusFactor(td.id)
 
     # Finally reduce all of these into one score for each outcome / grade
     _.each outcomes, (outcome, key) ->

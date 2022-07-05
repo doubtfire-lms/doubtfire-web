@@ -21,8 +21,8 @@ angular.module("doubtfire.api.models.unit", [])
   Unit.withdrawStudentsCSVUrl = (unit) ->
     "#{DoubtfireConstants.API_URL}/csv/units/#{unit.id}/withdraw"
 
-  Unit.learningProgressClassStats = resourcePlus "/units/:id/learning_alignments/class_stats", { id: "@id" }
-  Unit.learningProgressClassDetails = resourcePlus "/units/:id/learning_alignments/class_details", {id: "@id"}
+  # Unit.learningProgressClassStats = resourcePlus "/units/:id/learning_alignments/class_stats", { id: "@id" }
+  # Unit.learningProgressClassDetails = resourcePlus "/units/:id/learning_alignments/class_details", {id: "@id"}
 
   Unit.tasksRequiringFeedback = resourcePlus "/units/:id/feedback", { id: "@id" }
   # Unit.tasksForTaskInbox = resourcePlus "/units/:id/tasks/inbox", { id: "@id" }

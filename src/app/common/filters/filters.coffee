@@ -89,7 +89,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('outcomeFilter', ->
   (input, outcomeId) ->
     if input && outcomeId
-      _.filter input, (item) -> item.learning_outcome_id == outcomeId
+      _.filter input, (item) -> item.learningOutcome?.id == outcomeId
     else
       input
 )

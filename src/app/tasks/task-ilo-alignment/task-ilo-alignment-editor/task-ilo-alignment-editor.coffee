@@ -28,15 +28,15 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
       $scope.taskStatusFactor = outcomeService.unitTaskStatusFactor()
 
     alignments = []
-    $scope.$watch 'source.task_outcome_alignments.length', ->
-      return unless $scope.source.task_outcome_alignments?
+    $scope.$watch 'source.taskOutcomeAlignments.length', ->
+      return unless $scope.source.taskOutcomeAlignments?
       alignments =
-        _ .chain($scope.source.task_outcome_alignments)
+        _ .chain($scope.source.taskOutcomeAlignments)
           .filter( (d) -> d.rating > 0 )
           .groupBy('task_definition_id')
           .map (d, i) ->
             d = _ .chain(d)
-                  .groupBy('learning_outcome_id')
+                  .groupBy('learningOutcome.id')
                   .map( (d, i) -> [i, d[0]] )
                   .fromPairs()
                   .value()
