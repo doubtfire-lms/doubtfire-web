@@ -4,6 +4,7 @@ import { Entity } from 'ngx-entity-service';
 import { Project, Task, TaskCommentService, User } from 'src/app/api/models/doubtfire-model';
 import { UserService } from '../../services/user.service';
 import API_URL from 'src/app/config/constants/apiURL';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 export class TaskComment extends Entity {
   // Linked objects
@@ -82,6 +83,6 @@ export class TaskComment extends Entity {
   }
 
   public get attachmentUrl(): string {
-    return `${API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}?as_attachment=false`
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}?as_attachment=false`
   }
 }

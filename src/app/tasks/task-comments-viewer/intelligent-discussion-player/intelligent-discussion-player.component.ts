@@ -37,9 +37,9 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   setPromptTrack(track: string, promptNumber?: number) {
     let url: string = '';
     if (track === 'prompt') {
-      url = this.discussionService.getDiscussionPromptUrl(this.task, this.discussion.id, promptNumber);
+      url = this.discussion.generateDiscussionPromptUrl(promptNumber);
     } else {
-      url = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
+      url = this.discussion.responseUrl;
     }
 
     this.audioPlayer.setSrc(url);
@@ -90,7 +90,11 @@ export class IntelligentDiscussionDialog implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
     private discussionService: IntelligentDiscussionPlayerService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: {
+      dc: DiscussionComment;
+      task: Task;
+      audioRef: HTMLAudioElement;
+    }
   ) {}
 
   ngOnInit() {}
@@ -150,9 +154,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   setPrompt() {
-    this.data.audioRef.src = this.discussionService.getDiscussionPromptUrl(
-      this.data.task,
-      this.data.dc.id,
+    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(
       this.activePromptId
     );
     this.guide.text = 'Listening to prompt';

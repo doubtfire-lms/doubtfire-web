@@ -77,7 +77,7 @@ export class AudioPlayerComponent implements OnDestroy {
     } else {
       let url: string;
       if (this.project && this.task && this.comment) {
-        url = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+        url = this.comment.attachmentUrl;
       } else if (this.audioSrc) {
         url = this.audioSrc.src;
       }

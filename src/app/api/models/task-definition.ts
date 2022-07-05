@@ -89,5 +89,9 @@ export class TaskDefinition extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources`;
   }
 
+  public getTaskAssessmentResourcesUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources.json`;
+  }
+
 
 }

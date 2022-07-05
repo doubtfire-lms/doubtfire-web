@@ -110,7 +110,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       fileDownloaderService.downloadFile($scope.unit.allResourcesDownloadUrl, "#{$scope.unit.code}-all-resources.zip")
 
     $scope.downloadTasksCSV = ->
-      fileDownloaderService.downloadFile(Task.getTaskDefinitionBatchUploadUrl($scope.unit), "#{$scope.unit.code}-task-definitions.csv")
+      fileDownloaderService.downloadFile($scope.unit.getTaskDefinitionBatchUploadUrl(), "#{$scope.unit.code}-task-definitions.csv")
 
     $scope.onBatchTaskSuccess = (response) ->
       CsvResultModal.show "Task CSV Upload Results", response

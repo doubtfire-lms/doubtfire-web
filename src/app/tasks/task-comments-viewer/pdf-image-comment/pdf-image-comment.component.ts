@@ -27,7 +27,7 @@ export class PdfImageCommentComponent implements OnInit {
   }
 
   private downloadCommentResource(fn?: (url: string) => void) {
-    const url = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+    const url = this.comment.attachmentUrl;
 
     this.fileDownloaderService.downloadBlob(
       url,

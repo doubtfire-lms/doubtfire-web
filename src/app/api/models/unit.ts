@@ -365,4 +365,12 @@ export class Unit extends Entity {
   public get withdrawStudentsCSVUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/withdraw`;
   }
+
+  public getTaskMarkingUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/assess.json?unit_id=${this.id}`;
+  }
+
+  public getTaskDefinitionBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/task_definitions?unit_id=${this.id}`;
+  }
 }

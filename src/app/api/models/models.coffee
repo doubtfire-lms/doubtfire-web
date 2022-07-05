@@ -4,7 +4,6 @@ angular.module("doubtfire.api.models", [
   "doubtfire.api.models.tutorial"
   "doubtfire.api.models.learning-alignments"
 
-  "doubtfire.api.models.task"
   "doubtfire.api.models.task-definition"
   "doubtfire.api.models.group-member"
   "doubtfire.api.models.group"
