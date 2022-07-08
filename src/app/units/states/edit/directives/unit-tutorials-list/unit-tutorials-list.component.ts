@@ -64,17 +64,24 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
     }
+
     this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
     });
+
+    this.dataSource = new MatTableDataSource();
     this.filterTutorials();
-    this.dataSource = new MatTableDataSource(this.tutorials);
+
+    this.unit.tutorialsCache.values.subscribe(
+      (_t) => this.filterTutorials()
+    );
   }
 
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
       (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream)
     );
+    this.dataSource.data = this.tutorials;
   }
 
   public saveStream() {
@@ -121,9 +128,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   // Handle the removal of a tutorial
   public deleteTutorial(tutorial: Tutorial) {
-    this.tutorialService.delete(tutorial).subscribe((result) => {
+    this.tutorialService.delete(tutorial, this.optionsOnRequest("delete")).subscribe((_result) => {
       this.cancelEdit();
-      this.unit.tutorials.splice(this.tutorials.indexOf(tutorial), 1);
       this.filterTutorials();
       this.renderTable();
     });
@@ -140,12 +146,12 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
   }
 
-  protected formDataToNewObject(endPointKey: string, associations?: object): object {
-    const result = super.formDataToNewObject(endPointKey);
-    if (this.stream) {
-      result['tutorial']['tutorialStream'] = this.stream;
-    }
-    return result; //Tutorial.mapToCreateJson(this.unit, result);
+  protected formDataToNewObject(endPointKey: string, _associations?: object): object {
+    this.selected = new Tutorial(this.unit);
+    this.copyChangesFromForm();
+    this.selected.tutorialStream = this.stream;
+    super.formDataToNewObject(endPointKey);
+    return this.selected;
   }
 
   // This comparison function is required to determine what campus or user
@@ -165,7 +171,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   // Handle the deletion of a stream
-  deleteStream(stream: TutorialStream) {
+  deleteStream() {
+    const stream: TutorialStream = this.stream;
+
     this.confirmationModal.show(
       `Delete Tutorial Stream ${stream.abbreviation}`,
       'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
@@ -187,9 +195,10 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   /**
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
-  protected optionsOnCreate(): RequestOptions<Tutorial> {
+  protected override optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<Tutorial> {
     return {
-      constructorParams: this.unit
+      constructorParams: this.unit,
+      cache: this.unit.tutorialsCache
     };
   }
 
@@ -213,7 +222,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
         case 'campus':
           return this.sortCompare(a.campus ? a.campus.abbreviation : '', b.campus ? b.campus.abbreviation : '', isAsc);
         case 'tutor':
-          return this.sortCompare(a.tutorName, b.tutorName, isAsc);
+          return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
         default:
           return 0;
       }

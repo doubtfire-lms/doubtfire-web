@@ -70,6 +70,7 @@ import {
   uploadSubmissionModal,
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
+  ConfirmationModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -336,6 +337,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
+    ConfirmationModalProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpAuthenticationInterceptor,

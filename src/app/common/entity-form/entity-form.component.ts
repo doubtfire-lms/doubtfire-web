@@ -132,11 +132,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         // Copy the changes from the form to the data that will be sent to the server
         // Then send it off
         this.copyChangesFromForm();
-        response = service.update(this.selected);
+        response = service.update(this.selected, this.optionsOnRequest('update'));
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
         const data = this.formDataToNewObject(this.serverKey); // sent as path id and body
-        response = service.create(data, this.optionsOnCreate());
+        response = service.create(data, this.optionsOnRequest('create'));
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
         alertService.add('danger', `${this.entityName} was not changed`, 6000);
@@ -175,7 +175,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
   }
 
   protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<any> {
-    return service.delete<any>(entity).pipe(tap(
+    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(tap(
       (obj) => {
         this.cancelEdit();
         entities.splice( entities.indexOf(entity), 1);
@@ -208,7 +208,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected optionsOnCreate(): RequestOptions<T> {
+  protected optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
     return undefined;
   }
 

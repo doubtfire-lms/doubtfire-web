@@ -1,6 +1,6 @@
 angular.module("doubtfire.common.services.tasks", [])
 
-.factory("taskService", (Task, TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
+.factory("taskService", (TaskDefinition, alertService, $filter, $rootScope, $timeout, analyticsService, GradeTaskModal, gradeService, ConfirmationModal, ProgressModal, UploadSubmissionModal, groupService, emojiService) ->
   #
   # The unit service object
   #

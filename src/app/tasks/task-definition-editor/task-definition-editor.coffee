@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     unit: "="
     task: "="
     isNew: "="
-  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, Task, ProgressModal, TaskSubmission, fileDownloaderService) ->
+  controller: ($scope, $filter, DoubtfireConstants, taskService, gradeService, TaskDefinition, alertService, ProgressModal, TaskSubmission, fileDownloaderService) ->
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.grades = gradeService.grades

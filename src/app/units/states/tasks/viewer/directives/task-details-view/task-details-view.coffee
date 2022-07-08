@@ -8,6 +8,6 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-details-view
   scope:
     taskDef: '='
     unit: '='
-  controller: ($scope, Task, listenerService) ->
+  controller: ($scope, listenerService) ->
 
 )

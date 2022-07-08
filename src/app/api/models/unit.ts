@@ -66,6 +66,10 @@ export class Unit extends Entity {
     return this.staffCache.currentValues;
   }
 
+  public get staffUsers(): User[] {
+    return this.staffCache.currentValues.map( (ur) => ur.user);
+  }
+
   public findStudent(id: number): Project {
     return this.students.find( (s) => s.id === id);
   }
@@ -274,14 +278,14 @@ export class Unit extends Entity {
     const tutorialStreamService = AppInjector.get(TutorialStreamService);
 
     return tutorialStreamService.create(
-      {id: this.id, activity_type_abbr: activityTypeAbbreviation},
+      {unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined},
       {cache: this.tutorialStreamsCache});
   }
 
   public deleteStream(stream: TutorialStream): Observable<boolean> {
     const tutorialStreamService = AppInjector.get(TutorialStreamService);
 
-    return tutorialStreamService.delete<boolean>(stream, {cache: this.tutorialStreamsCache}).pipe(
+    return tutorialStreamService.delete<boolean>({unit_id: this.id, abbreviation: stream.abbreviation}, {cache: this.tutorialStreamsCache}).pipe(
       tap( (response: boolean) => {
         if(response) {
           const tutorials = this.tutorialsCache.currentValues;

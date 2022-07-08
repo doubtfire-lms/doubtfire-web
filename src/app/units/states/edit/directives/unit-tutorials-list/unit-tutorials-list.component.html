@@ -166,13 +166,13 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutor </th>
       <td mat-cell *matCellDef="let tutorial">
         <div *ngIf="!editing(tutorial) else edit">
-          {{ tutorial.tutorName }}
+          {{ tutorial.tutor?.name }}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
             <mat-label>Tutor</mat-label>
             <mat-select required [compareWith]="compareSelection" formControlName="tutor">
-              <mat-option *ngFor="let tutor of unit.staff" [value]="tutor">
+              <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
                 {{ tutor.name }}
               </mat-option>
             </mat-select>
@@ -183,7 +183,7 @@
         <mat-form-field class="data-entry">
           <mat-label>Tutor</mat-label>
           <mat-select required formControlName="tutor">
-            <mat-option *ngFor="let tutor of unit.staff" [value]="tutor">
+            <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
               {{ tutor.name }}
             </mat-option>
           </mat-select>

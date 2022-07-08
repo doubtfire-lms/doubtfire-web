@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
+  controller: ($scope, $rootScope, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
