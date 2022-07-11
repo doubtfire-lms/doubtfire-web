@@ -16,7 +16,6 @@ export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
 export const visualisations = new InjectionToken('Visualisation');
-export const taskDefinition = new InjectionToken('TaskDefinition');
 export const userSettingsModal = new InjectionToken('UserSettingsModal');
 export const rootScope = new InjectionToken('$rootScope');
 export const userNotificationSettingsModal = new InjectionToken('UserNotificationSettingsModal');
@@ -27,12 +26,6 @@ export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal')
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
-export const taskDefinitionProvider = {
-  provide: taskDefinition,
-  useFactory: (i: any) => i.get('TaskDefinition'),
-  deps: ['$injector'],
-};
-
 export const visualisationsProvider = {
   provide: visualisations,
   useFactory: (i: any) => i.get('Visualisation'),

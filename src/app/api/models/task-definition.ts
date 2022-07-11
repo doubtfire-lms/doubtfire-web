@@ -1,4 +1,6 @@
-import { Entity } from 'ngx-entity-service';
+import { HttpClient } from '@angular/common/http';
+import { Entity, EntityMapping } from 'ngx-entity-service';
+import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
@@ -36,6 +38,16 @@ export class TaskDefinition extends Entity {
   constructor(unit: Unit) {
     super();
     this.unit = unit;
+  }
+
+  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+    return {
+      task_def: super.toJson(mappingData, ignoreKeys),
+    };
+  }
+
+  public get unitId(): number {
+    return this.unit.id;
   }
 
   public localDueDate(): Date {
@@ -93,5 +105,19 @@ export class TaskDefinition extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources.json`;
   }
 
+  public deleteTaskSheet(): Observable<any> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap( () => this.hasTaskSheet = false ));
+  }
+
+  public deleteTaskResources(): Observable<any> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.delete(this.taskResourcesUploadUrl).pipe(tap( () => this.hasTaskResources = false ));
+  }
+
+  public deleteTaskAssessmentResources(): Observable<any> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.delete(this.taskAssessmentResourcesUploadUrl).pipe(tap( () => this.hasTaskAssessmentResources = false ));
+  }
 
 }

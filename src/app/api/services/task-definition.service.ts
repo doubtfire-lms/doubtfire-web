@@ -9,7 +9,7 @@ import { MappingFunctions } from './mapping-fn';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
-  protected readonly endpointFormat = 'units/:unit.id:/task_definitions/:id:';
+  protected readonly endpointFormat = 'units/:unitId:/task_definitions/:id:';
 
   constructor(
     httpClient: HttpClient
@@ -38,17 +38,27 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson
       },
-      'uploadRequirements',
+      {
+        keys: 'uploadRequirements',
+        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+          return JSON.stringify(taskDef.uploadRequirements);
+        }
+      },
       {
         keys: ['tutorialStream','tutorial_stream_abbr'],
         toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
-          return taskDef.unit.tutorialStreamsCache.get(data['tutorial_stream_abbr']);
+          return taskDef.unit.tutorialStreamsCache.get(data[key]);
         },
         toJsonFn: (taskDef: TaskDefinition, key: string) => {
           return taskDef.tutorialStream?.abbreviation;
         }
       },
-      'plagiarismChecks',
+      {
+        keys: 'plagiarismChecks',
+        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+          return JSON.stringify(taskDef.plagiarismChecks);
+        }
+      },
       'plagiarismReportUrl',
       'plagiarismWarnPct',
       'restrictStatusUpdates',
@@ -59,13 +69,13 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'isGraded',
       'maxQualityPts',
       'overseerImageId',
-      'assessmentEnabled',
+      'assessmentEnabled'
     );
 
-    this.mapping.mapAllKeysToJsonExcept('id');
+    this.mapping.mapAllKeysToJsonExcept('id', 'plagiarismReportUrl', 'hasTaskSheet', 'hasTaskResources', 'hasTaskAssessmentResources');
   }
 
-  public createInstanceFrom(json: object, other?: any): TaskDefinition {
+  public override createInstanceFrom(json: object, other?: any): TaskDefinition {
     return new TaskDefinition(other as Unit);
   }
 }

@@ -14,7 +14,13 @@ export class MappingFunctions {
   }
 
   public static mapDayToJson<T>(entity: T, key: string): string {
-    return `${entity[key].getFullYear()}-${entity[key].getMonth() + 1}-${entity[key].getDate()}`;
+    if (entity[key]) {
+      const month = entity[key].getMonth() + 1;
+      return `${entity[key].getFullYear()}-${month < 10 ? '0' : ''}${month}-${entity[key].getDate()}`;
+    }
+    else {
+      return undefined;
+    }
   }
 
   public static minutesMs(value: number): number {

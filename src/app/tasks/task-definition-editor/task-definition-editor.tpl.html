@@ -55,15 +55,15 @@
                     <div class="btn-group dropdown" dropdown>
                       <span>
                         <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-                          {{task.tutorialStream ? task.tutorialStream : 'None'}} <span class="caret"></span>
+                          {{task.tutorialStream ? task.tutorialStream.description : 'None'}} <span class="caret"></span>
                         </button>
                       </span>
                       <ul class="dropdown-menu">
                         <li ng-repeat="stream in unit.tutorialStreams | orderBy:'abbreviation'">
                           <a
-                            ng-click="changeTaskStream(task, stream.abbreviation)"
+                            ng-click="changeTaskStream(task, stream)"
                             ng-hide="stream === task.tutorialStream"
-                            >{{stream.abbreviation}}</a
+                            >{{stream.description}}</a
                           >
                         </li>
                       </ul>
@@ -133,7 +133,7 @@
                         is-open="startPicker.open"
                         type="text"
                         class="form-control"
-                        ng-model="task.start_date"
+                        ng-model="task.startDate"
                         placeholder="yyyy-MM-dd"
                         close-text="Close"
                       />
@@ -158,7 +158,7 @@
                         is-open="targetPicker.open"
                         type="text"
                         class="form-control"
-                        ng-model="task.target_date"
+                        ng-model="task.targetDate"
                         placeholder="yyyy-MM-dd"
                         close-text="Close"
                       />
@@ -185,7 +185,7 @@
                         is-open="duePicker.open"
                         type="text"
                         class="form-control"
-                        ng-model="task.due_date"
+                        ng-model="task.dueDate"
                         placeholder="yyyy-MM-dd"
                         close-text="Close"
                       />

@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     hidePanel: '=?'
     # select tasks to include in portfolio
     showIncludeTasks: '=?'
-  controller: ($scope, $modal, $rootScope, $filter, alertService, gradeService, LearningAlignments, Visualisation, TaskAlignment, CsvResultModal, outcomeService, TaskILOAlignmentModal) ->
+  controller: ($scope, $modal, $rootScope, $filter, alertService, gradeService, LearningAlignments, Visualisation, TaskAlignment, CsvResultModal, outcomeService, TaskILOAlignmentModal, newTaskService) ->
     $scope.showTaskName = $scope.unit.ilos.length < 5
     $scope.showGraph = false
     $scope.closeGraph = ->
@@ -59,10 +59,12 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
         false
 
     $scope.includeTaskInPorfolio = (task) ->
-      task.include_in_portfolio = !task.include_in_portfolio
-      Task.update { project_id: $scope.project.id, task_definition_id: task.definition.id, include_in_portfolio: task.include_in_portfolio },
-        (success) ->
-          task.include_in_portfolio = success.include_in_portfolio
+      task.includeInPortfolio = !task.includeInPortfolio
+      newTaskService.update(task).subscribe({
+        next: (success) -> alertService.add("success", "Task updated")
+        error: (message) -> alertService.add("danger", message)
+      })
+
 
     # CSV stuff
     $scope.csvImportResponse = {}

@@ -11,7 +11,7 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { taskDefinition, groupService, alertService } from 'src/app/ajs-upgraded-providers';
+import { groupService, alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
@@ -21,6 +21,9 @@ import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
 import { Tutorial, UserService, Task, Project, TaskDefinition } from 'src/app/api/models/doubtfire-model';
 import { Observable } from 'rxjs';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { AppInjector } from 'src/app/app-injector';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -106,9 +109,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    @Inject(taskDefinition) private taskDef,
     @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
+    private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
     private userService: UserService
   ) {}
@@ -174,11 +177,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   downloadSubmissionPdfs() {
-    this.taskDef.downloadSubmissionsPdfs(this.unit, this.filters.taskDefinition);
+    const taskDef = this.filters.taskDefinition;
+    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/student_pdfs`, `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`);
   }
 
   downloadSubmissions() {
-    this.taskDef.downloadSubmissions(this.unit, this.filters.taskDefinition);
+    const taskDef = this.filters.taskDefinition;
+    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/download_submissions`, `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`);
   }
 
   openDialog() {
@@ -240,7 +245,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   //  Task definition options
   groupSetName(id: number) {
-    if (this.unit.hasGroupwork) {
+    if (this.unit.hasGroupwork()) {
       this.groupService.groupSetName(id, this.unit);
     }
   }

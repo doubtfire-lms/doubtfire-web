@@ -5,6 +5,7 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { ProjectService } from '../services/project.service';
+import { TaskDefinitionService } from '../services/task-definition.service';
 import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 
@@ -92,6 +93,16 @@ export class Unit extends Entity {
 
   public taskDefinitionsForGrade(grade: number): TaskDefinition[] {
     return this.taskDefinitions.filter((td) => td.targetGrade <= grade);
+  }
+
+  public deleteTaskDefinition(taskDef: TaskDefinition) {
+    const taskDefinitionService = AppInjector.get(TaskDefinitionService);
+    const alerts: any = AppInjector.get(alertService);
+
+    taskDefinitionService.delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef}).subscribe({
+      next: (response) => {alerts.add("success", "Task Deleted", 2000)},
+      error: (message) => alerts.add("danger", message, 6000)
+    });
   }
 
   public taskCount(): number {
@@ -228,7 +239,7 @@ export class Unit extends Entity {
     return this.tutorialsCache.get(tutorialId);
   }
 
-  public get hasGroupwork(): boolean {
+  public hasGroupwork(): boolean {
     return this.groupSetsCache.size > 0;
   }
 

@@ -9,4 +9,8 @@ export class TutorialStream extends Entity {
   public override get key(): string {
     return this.abbreviation;
   }
+
+  public get description(): string {
+    return `${this.abbreviation}: ${this.name}`;
+  }
 }

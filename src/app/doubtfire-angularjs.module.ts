@@ -212,7 +212,6 @@ import 'build/src/app/api/models/tutorial.js';
 import 'build/src/app/api/models/task-similarity.js';
 import 'build/src/app/api/models/portfolion-submission.js';
 import 'build/src/app/api/models/project.js';
-import 'build/src/app/api/models/task-definition.js';
 import 'build/src/app/api/models/group.js';
 import 'build/src/app/api/api.js';
 import 'build/src/app/api/resource-plus.js';
@@ -273,6 +272,7 @@ import { GlobalStateService } from './projects/states/index/global-state.service
 import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
+import { TaskDefinitionService } from './api/services/task-definition.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -304,6 +304,7 @@ DoubtfireAngularJSModule.factory('newUserService', downgradeInjectable(UserServi
 DoubtfireAngularJSModule.factory('newUnitService', downgradeInjectable(UnitService));
 DoubtfireAngularJSModule.factory('newUnitRoleService', downgradeInjectable(UnitRoleService));
 DoubtfireAngularJSModule.factory('newTaskService', downgradeInjectable(TaskService));
+DoubtfireAngularJSModule.factory('newTaskDefinitionService', downgradeInjectable(TaskDefinitionService));
 DoubtfireAngularJSModule.factory('newTeachingPeriodService', downgradeInjectable(TeachingPeriodService));
 DoubtfireAngularJSModule.factory('newProjectService', downgradeInjectable(ProjectService));
 
