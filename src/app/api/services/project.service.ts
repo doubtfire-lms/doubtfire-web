@@ -187,12 +187,12 @@ export class ProjectService extends CachedEntityService<Project> {
     return new Project(other as Unit);
   }
 
-  public loadStudents(unit: Unit, includeWithdrawnStudents: boolean = false, useFetch: boolean = false): Observable<Project[]> {
+  public loadStudents(unit: Unit, withdrawnOnly: boolean = false, useFetch: boolean = false): Observable<Project[]> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
       endpointFormat: this.studentEndpointFormat,
       params: {
-        all: includeWithdrawnStudents,
+        withdrawn: withdrawnOnly,
         unit_id: unit.id
       },
       constructorParams: unit

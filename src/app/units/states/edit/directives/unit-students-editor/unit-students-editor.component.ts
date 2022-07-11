@@ -3,33 +3,36 @@ import {
   csvResultModalService,
   unitStudentEnrolmentModal,
 } from './../../../../../ajs-upgraded-providers';
-import { ViewChild, Component, Input, Inject } from '@angular/core';
+import { ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
-import { Project, Unit } from 'src/app/api/models/doubtfire-model';
+import { Project, ProjectService, Unit } from 'src/app/api/models/doubtfire-model';
 import { UIRouter } from '@uirouter/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
 })
-export class UnitStudentsEditorComponent {
+export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable, { static: false }) table: MatTable<Project>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   @Input() unit: Unit;
 
+  private subscriptions: Subscription[] = [];
+
   columns: string[] = [
-    'student_id',
+    'username',
     'firstName',
     'lastName',
-    'student_email',
+    'email',
     'campus',
     'tutorial',
     'enrolled',
@@ -47,16 +50,33 @@ export class UnitStudentsEditorComponent {
     @Inject(csvResultModalService) private csvResultModal: any,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
+    private projectService: ProjectService
   ) {}
 
-  ngOnInit() {}
-
   // The paginator is inside the table
-  ngAfterViewInit() {
+  ngOnInit() {
     this.dataSource = new MatTableDataSource(this.unit.students);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+
+    this.subscriptions.push(this.unit.studentCache.values.subscribe(
+      (students) => {
+        this.dataSource.data = students;
+      }
+    ));
+
+    this.subscriptions.push(this.projectService.loadStudents(this.unit, true).subscribe(
+      (projects) => {
+        // projects included in unit...
+        console.log("loaded withdrawn students")
+      }
+    ));
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach( (s) => s.unsubscribe());
   }
 
   applyFilter(event: Event) {

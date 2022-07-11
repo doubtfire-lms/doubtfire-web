@@ -90,7 +90,8 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     const options: RequestOptions<Tutorial> = {
       endpointFormat: this.switchTutorialEndpointFormat,
       cache: project.tutorialEnrolmentsCache,
-      sourceCache: project.unit.tutorialsCache
+      sourceCache: project.unit.tutorialsCache,
+      body: {}
     };
 
     var observer: Observable<any>;

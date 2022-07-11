@@ -19,14 +19,9 @@ angular.module('doubtfire.units.states.edit', [
 )
 .controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, GlobalStateService) ->
   GlobalStateService.onLoad () ->
-    newUnitService.get($state.params.unitId, {params: {loadAllStudents: true}}).subscribe((unit) ->
-      $scope.unit = unit
-      $scope.currentStaff = $scope.unit.staff
+    $scope.currentStaff = $scope.unit.staff
 
-      $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues.filter((role) -> role.unit_id == unit.id)
-      if $scope.unitRoles
-        $scope.assessingUnitRole = $scope.unitRoles[0]
-    )
+    $scope.assessingUnitRole = GlobalStateService.loadedUnitRoles.currentValues.find((role) -> role.unit == $scope.unit)
 
     newUserService.getTutors().subscribe( (tutors) -> $scope.staff = tutors )
 
