@@ -113,8 +113,8 @@
                   <div class="col-sm-8">
                     <select
                       class="form-control"
-                      ng-model="task.group_set"
-                      ng-options="gs.name for gs in unit.group_sets track by gs.id"
+                      ng-model="task.groupSet"
+                      ng-options="gs.name for gs in unit.groupSets track by gs.id"
                     >
                       <option value="">None</option>
                     </select>
@@ -213,7 +213,7 @@
                 <div class="form-group" ng-if="overseerEnabled.value">
                   <label class="col-sm-3 control-label">Docker Image Name</label>
                   <div class="col-sm-8">
-                    <select class="form-control" ng-model="task.overseer_image_id" ng-options="image.id as image.description for image in dockerImages" />
+                    <select class="form-control" ng-model="task.overseerImageId" ng-options="image.id as image.description for image in dockerImages" />
                     <span class="help-block">
                        Docker image used for automated task checking using Overseer.
                     </span>
@@ -229,12 +229,12 @@
                     <button
                       type="button"
                       class="btn btn-default"
-                      ng-model="task.restrict_status_updates"
+                      ng-model="task.restrictStatusUpdates"
                       btn-checkbox
                       btn-checkbox-true="1"
                       btn-checkbox-false="0"
                     >
-                      <i class="fa fa-{{task.restrict_status_updates ? 'check' : 'times'}}"></i>
+                      <i class="fa fa-{{task.restrictStatusUpdates ? 'check' : 'times'}}"></i>
                     </button>
                     <span class="help-block">
                       If true, the status cannot be changed by students after it has been assigned by staff
@@ -249,12 +249,12 @@
                     <button
                       type="button"
                       class="btn btn-default"
-                      ng-model="task.is_graded"
+                      ng-model="task.isGraded"
                       btn-checkbox
                       btn-checkbox-true="1"
                       btn-checkbox-false="0"
                     >
-                      <i class="fa fa-{{task.is_graded ? 'check' : 'times'}}"></i>
+                      <i class="fa fa-{{task.isGraded ? 'check' : 'times'}}"></i>
                     </button>
                     <span class="help-block">
                       If true, the task will be assessed with a grade to a specific standard. For example,
@@ -380,7 +380,7 @@
                     </file-uploader>
                     <button
                       ng-click="downloadTaskResources()"
-                      ng-show="task.has_task_resources"
+                      ng-show="task.hasTaskResources"
                       target="_blank"
                       class="btn btn-info col-sm-12"
                     >
@@ -388,7 +388,7 @@
                     </button>
                     <button
                       ng-click="removeTaskResources(task)"
-                      ng-show="task.has_task_resources"
+                      ng-show="task.hasTaskResources"
                       class="btn btn-danger col-sm-12"
                     >
                       <i class="fa fa-trash-o"></i> Delete Resources
@@ -403,9 +403,9 @@
                   <div class="col-sm-8">
                     <input
                       type="number"
-                      ng-disabled="task.plagiarism_checks.length == 0"
+                      ng-disabled="task.plagiarismChecks.length == 0"
                       class="form-control"
-                      ng-model="task.plagiarism_warn_pct"
+                      ng-model="task.plagiarismWarnPct"
                     />
                     <p class="help-block">The percentage similarity where {{externalName.value}} creates a warning</p>
                   </div>
@@ -414,8 +414,8 @@
                 <div
                   ng-required="isNew"
                   class="panel-body plagiarism-check clearfix"
-                  ng-show="task.plagiarism_checks.length > 0"
-                  ng-repeat="check in task.plagiarism_checks"
+                  ng-show="task.plagiarismChecks.length > 0"
+                  ng-repeat="check in task.plagiarismChecks"
                 >
                   <label class="col-sm-3 control-label">Detect Language</label>
                   <div class="col-sm-7">
@@ -459,19 +459,6 @@
                     <a ng-click="removeTaskAssessmentResources(task)" ng-show="task.hasTaskAssessmentResources" class="btn btn-danger col-sm-12">
                       <i class="fa fa-trash-o"></i> Delete Assessment Resources
                     </a>
-                    <!-- <div class="col-sm-6">
-                        <file-uploader
-                          files="taskAssessmentTests"
-                          url="taskAssessmentTestsUploadUrl()"
-                          on-success="onTaskAssessmentTestsSuccess">
-                        </file-uploader>
-                        <a href="{{taskAssessmentTestsUrl()}}" ng-show="task.has_task_assessment_tests" target="_blank" class="btn btn-info col-sm-12">
-                          <i class="fa fa-download"></i> Download Assessment Tests
-                        </a>
-                        <a ng-click="removeTaskAssessmentTests(task)" ng-show="task.has_task_assessment_tests" class="btn btn-danger col-sm-12">
-                          <i class="fa fa-trash-o"></i> Delete Assessment Tests
-                        </a>
-                      </div> -->
                   </div>
                 </task-assessor>
               </div> <!--/ upload task assessment resources-->
