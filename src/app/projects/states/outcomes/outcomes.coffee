@@ -20,7 +20,7 @@ angular.module('doubtfire.projects.states.outcomes', [])
   $scope.poaView = {
     activeTab: 'list'
   }
-  $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+  $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, $scope.unit.taskStatusFactor)
   $scope.currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 
   $scope.refreshCharts = Visualisation.refreshAll
@@ -28,14 +28,6 @@ angular.module('doubtfire.projects.states.outcomes', [])
   refreshAlignmentData = ->
     $scope.currentProgress.length = 0
     $scope.currentProgress = _.extend $scope.currentProgress, outcomeService.calculateProgress($scope.unit, $scope.project)
-
-  # $scope.$watch 'project', ->
-  #   refreshAlignmentData()
-  #   $rootScope.$broadcast('ProgressUpdated')
-
-  # $scope.$watch 'project.tasks', ->
-  #   refreshAlignmentData()
-  #   $rootScope.$broadcast('ProgressUpdated')
 
   $scope.selectTab = (tab) ->
     if tab is 'progress'

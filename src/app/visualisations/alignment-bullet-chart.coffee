@@ -588,7 +588,4 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
 
     $scope.$on('ProgressUpdated', ->
       updateProgress()
-
-      if $scope.api
-        $scope.api.update()
     )

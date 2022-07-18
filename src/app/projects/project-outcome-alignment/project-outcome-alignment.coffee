@@ -7,7 +7,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
     $scope.poaView = {
       activeTab: 'list'
     }
-    $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+    $scope.targets = outcomeService.calculateTargets($scope.unit, $scope.unit, $scope.unit.taskStatusFactor)
     $scope.currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 
     $scope.refreshCharts = Visualisation.refreshAll

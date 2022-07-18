@@ -4,7 +4,7 @@ import { alertService, visualisations } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { MappingFunctions } from '../services/mapping-fn';
-import { Campus, Grade, Group, GroupSet, ProjectService, Task, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
+import { Campus, Grade, Group, GroupSet, ProjectService, Task, TaskDefinition, TaskStatus, TaskStatusEnum, Tutorial, TutorialService, TutorialStream, Unit, User } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 
 
@@ -126,6 +126,16 @@ export class Project extends Entity {
 
   public get taskOutcomeAlignments(): TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignmentsCache.currentValues;
+  }
+
+  public get taskAlignmentCSVUploadUrl(): string {
+    return `${this.unit.taskAlignmentCSVUploadUrl}?project_id=${this.id}`;
+  }
+
+  public taskStatusFactor(td: TaskDefinition): number {
+    const task = this.findTaskForDefinition(td.id);
+
+    return TaskStatus.LEARNING_WEIGHT.get(task?.status);
   }
 
   public get targetGradeWord(): string {

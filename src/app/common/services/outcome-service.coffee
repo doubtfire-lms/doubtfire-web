@@ -6,16 +6,16 @@ angular.module("doubtfire.common.services.outcome-service", [])
 .factory("outcomeService", (gradeService, newTaskService) ->
   outcomeService = {}
 
-  outcomeService.unitTaskStatusFactor = ->
-    (taskDefinitionId) -> 1
+  # outcomeService.unitTaskStatusFactor = ->
+  #   (taskDefinitionId) -> 1
 
-  outcomeService.projectTaskStatusFactor = (project) ->
-    (taskDefinitionId) ->
-      task = project.findTaskForDefinition(taskDefinitionId)
-      if task?
-        newTaskService.learningWeight.get(task.status)
-      else
-        0
+  # outcomeService.projectTaskStatusFactor = (project) ->
+  #   (taskDefinitionId) ->
+  #     task = project.findTaskForDefinition(taskDefinitionId)
+  #     if task?
+  #       newTaskService.learningWeight.get(task.status)
+  #     else
+  #       0
 
   outcomeService.alignmentLabels = [
     "The task is not related to this outcome at all",
@@ -61,7 +61,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
       td = unit.taskDef(align.taskDefinition.id)
       # Store a partial score for this task in the relevant outcomes ( outcomes[outcome id][grade] << score )
       # At this stage it is just rating * taskFactor (1 to 5 times 0 to 1)
-      outcomes[align.learningOutcome.id][td.targetGrade].push align.rating * taskStatusFactor(td.id)
+      outcomes[align.learningOutcome.id][td.targetGrade].push align.rating * taskStatusFactor(td)
 
     # Finally reduce all of these into one score for each outcome / grade
     _.each outcomes, (outcome, key) ->
@@ -107,7 +107,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
   outcomeService.calculateProgress = (unit, project) ->
     outcome_set = []
 
-    outcome_set[0] = outcomeService.calculateTargets(unit, unit, outcomeService.projectTaskStatusFactor(project))
+    outcome_set[0] = outcomeService.calculateTargets(unit, unit, project.taskStatusFactor.bind(project))
     # outcome_set[1] = outcomeService.calculateTargets(unit, project, outcomeService.projectTaskStatusFactor(project))
 
     _.each outcome_set, (outcomes, key) ->
@@ -122,7 +122,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
 
   outcomeService.targetsByGrade = (unit, source) ->
     result = []
-    outcomes = outcomeService.calculateTargets(unit, source, outcomeService.unitTaskStatusFactor())
+    outcomes = outcomeService.calculateTargets(unit, source, unit.taskStatusFactor)
 
     values = {
       '0': []

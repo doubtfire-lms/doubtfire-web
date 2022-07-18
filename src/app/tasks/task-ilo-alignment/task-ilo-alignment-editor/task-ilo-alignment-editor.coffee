@@ -11,7 +11,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     hidePanel: '=?'
     # select tasks to include in portfolio
     showIncludeTasks: '=?'
-  controller: ($scope, $modal, $rootScope, $filter, alertService, gradeService, LearningAlignments, Visualisation, TaskAlignment, CsvResultModal, outcomeService, TaskILOAlignmentModal, newTaskService) ->
+  controller: ($scope, $modal, $rootScope, $filter, alertService, gradeService, Visualisation, fileDownloaderService, CsvResultModal, outcomeService, TaskILOAlignmentModal, newTaskService, newTaskOutcomeAlignmentService) ->
     $scope.showTaskName = $scope.unit.ilos.length < 5
     $scope.showGraph = false
     $scope.closeGraph = ->
@@ -20,12 +20,17 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     if $scope.project?
       $scope.source = $scope.project
       $scope.tasks = $scope.project.tasks
-      $scope.taskStatusFactor = outcomeService.projectTaskStatusFactor($scope.project)
+      $scope.taskStatusFactor = $scope.project.taskStatusFactor.bind($scope.project)
     else
       $scope.source = $scope.unit
-      $scope.tasks = _.map $scope.unit.task_definitions, (td) ->
-        { definition: td }
-      $scope.taskStatusFactor = outcomeService.unitTaskStatusFactor()
+      #TODO unsubscribe on destroy
+      $scope.unit.taskDefinitionCache.values.subscribe(
+        (taskDefs) ->
+          $scope.tasks = _.map taskDefs, (td) ->
+            { definition: td }
+      )
+
+      $scope.taskStatusFactor = $scope.unit.taskStatusFactor
 
     alignments = []
     $scope.$watch 'source.taskOutcomeAlignments.length', ->
@@ -33,7 +38,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
       alignments =
         _ .chain($scope.source.taskOutcomeAlignments)
           .filter( (d) -> d.rating > 0 )
-          .groupBy('task_definition_id')
+          .groupBy('taskDefinition.id')
           .map (d, i) ->
             d = _ .chain(d)
                   .groupBy('learningOutcome.id')
@@ -49,7 +54,14 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
       TaskILOAlignmentModal.show task, ilo, alignment, $scope.unit, $scope.project, $scope.source
 
     $scope.alignmentForTaskAndIlo = (task, ilo) ->
-      alignments[task.definition.id]?[ilo.id]
+      if task.definition
+        result = alignments[task.definition.id]?[ilo.id]
+        td = task.definition
+      else
+        result = alignments[task.id]?[ilo.id]
+        td = task
+
+      result
 
     $scope.disableInclude = (task) ->
       # if there are no ILOs, you can always include tasks
@@ -69,11 +81,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     # CSV stuff
     $scope.csvImportResponse = {}
     $scope.taskAlignmentCSV = { file: { name: 'Task Outcome Link CSV', type: 'csv'  } }
-    $scope.taskAlignmentCSVUploadUrl = ->
-      if $scope.project?
-        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, $scope.project.id)
-      else
-        TaskAlignment.taskAlignmentCSVUploadUrl($scope.unit, null)
+
     $scope.isTaskCSVUploading = null
     $scope.onTaskAlignmentCSVSuccess = (response) ->
       CsvResultModal.show 'Task CSV upload results.', response
@@ -87,7 +95,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
 
     $scope.downloadTaskAlignmentCSV = ->
       if $scope.project?
-        TaskAlignment.downloadCSV($scope.unit, $scope.project.id)
+        fileDownloaderService.downloadFile($scope.project.taskAlignmentCSVUploadUrl, "#{$scope.project.student.name}-alignments.csv")
       else
-        TaskAlignment.downloadCSV($scope.unit, null)
+        fileDownloaderService.downloadFile($scope.unit.taskAlignmentCSVUploadUrl, "#{$scope.unit.code}-alignments.csv")
 )

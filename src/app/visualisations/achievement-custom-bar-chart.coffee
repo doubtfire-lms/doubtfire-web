@@ -636,7 +636,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
     #
     # Get the data and options for the chart...
     #
-    targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+    targets = outcomeService.calculateTargets($scope.unit, $scope.unit, $scope.unit.taskStatusFactor)
     currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 
     achievementData = {

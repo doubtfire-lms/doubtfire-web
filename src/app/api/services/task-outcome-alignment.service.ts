@@ -7,7 +7,7 @@ import { UnitTutorialsListComponent } from 'src/app/units/states/edit/directives
 
 @Injectable()
 export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcomeAlignment> {
-  protected readonly endpointFormat = 'teaching_periods/:teaching_period.id:/breaks/:id:';
+  protected readonly endpointFormat = 'units/:unit.id:/learning_alignments/:id:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
@@ -17,29 +17,38 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
       'description',
       'rating',
       {
-        keys: 'learningOutcomeId',
-        toEntityOp: (data: object, key: string, entity: TaskOutcomeAlignment) => {
+        keys: ['learningOutcome', 'learning_outcome_id'],
+        toEntityFn: (data: object, key: string, entity: TaskOutcomeAlignment) => {
           const unit = entity.unit;
-          entity.learningOutcome = unit.learningOutcomesCache.get(data[key]);
+          return unit.learningOutcomesCache.get(data[key]);
         },
-      },
-      {
-        keys: 'taskDefinitionId',
-        toEntityOp: (data: object, key: string, entity: TaskOutcomeAlignment) => {
-          const unit = entity.unit;
-          entity.taskDefinition = unit.taskDef(data[key]);
+        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+          return entity.learningOutcome.id;
         }
       },
       {
-        keys: 'taskId',
-        toEntityOp: (data: object, key: string, entity: TaskOutcomeAlignment) => {
+        keys: ['taskDefinition', 'task_definition_id'],
+        toEntityFn: (data: object, key: string, entity: TaskOutcomeAlignment) => {
+          const unit = entity.unit;
+          return unit.taskDef(data[key]);
+        },
+        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+          return entity.taskDefinition.id;
+        }
+      },
+      {
+        keys: ['task', 'task_id'],
+        toEntityFn: (data: object, key: string, entity: TaskOutcomeAlignment) => {
           const project = entity.project;
-          entity.task = project.taskCache.get(data[key]);
+          return project.taskCache.get(data[key]);
+        },
+        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+          return entity.task?.id;
         }
       }
     );
 
-    this.mapping.addJsonKey('id', 'description', 'rating');
+    this.mapping.mapAllKeysToJsonExcept('id');
   }
 
   public override createInstanceFrom(json: any, other?: any): TaskOutcomeAlignment {

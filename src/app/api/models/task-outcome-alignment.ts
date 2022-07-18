@@ -5,7 +5,7 @@ import { LearningOutcome } from './learning-outcome';
 export class TaskOutcomeAlignment extends Entity {
   public within: Unit | Project;
 
-  public id: number;
+  public id: number = undefined;
   public description: string;
   public rating: number;
   public learningOutcome: LearningOutcome;

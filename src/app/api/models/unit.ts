@@ -277,6 +277,14 @@ export class Unit extends Entity {
     });
   }
 
+  public get taskAlignmentCSVUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/learning_alignments/csv.json`;
+  }
+
+  public taskStatusFactor(td: TaskDefinition): number {
+    return 1;
+  }
+
   public getOutcomeBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
   }
