@@ -1,3 +1,16 @@
+.wordmark {
+  p {
+    margin: 0;
+    padding: 0;
+    font-family: 'Grotesk';
+    font-size: 1.5em;
+    color: #fff;
+    // anti-alias
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
 .welcome {
   background: #fff;
   position: fixed;
@@ -21,7 +34,6 @@ h1 {
   padding-top: 50px;
 
   .main {
-
     max-width: 500px;
     display: flex;
     -ms-flex-positive: 1;
@@ -75,19 +87,6 @@ h1 {
     font-weight: bold;
     color: #fff;
     margin: 20px;
-
-    .wordmark {
-      p {
-        margin: 0;
-        padding: 0;
-        font-family: 'Grotesk';
-        font-size: 1.5em;
-        color: #fff;
-        // anti-alias
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-    }
   }
 }
 

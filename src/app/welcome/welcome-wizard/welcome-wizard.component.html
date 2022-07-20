@@ -21,7 +21,11 @@
     <div fxLayout="column" fxLayoutAlign="center start" style="width: 100%; padding: 48px">
       <div class="main-container" fxLayout="row" fxLayoutAlign="center start">
         <div class="main" fxLayout="column" fxLayoutAlign="start center">
-          <h1 style="margin-bottom: 30px" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+          <div class="wordmark" fxLayout="row" fxLayoutAlign="start center" fxHide.gt-sm fxFlexAlign="start">
+            <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" style="padding-right: 6px" />
+            <p style="color: black">{{ externalName.value }}</p>
+          </div>
+          <h1 style="margin-bottom: 30px; color: black" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
           <div fxLayout="row" style="width: 100%">
             <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
               <mat-label>First Name</mat-label>
