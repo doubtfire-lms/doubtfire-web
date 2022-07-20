@@ -174,6 +174,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
+import { WelcomeWizardComponent } from './welcome/welcome-wizard/welcome-wizard.component';
 
 @NgModule({
   // Components we declare
@@ -232,6 +233,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
     TaskDropdownComponent,
     SplashScreenComponent,
     ObjectSelectComponent,
+    WelcomeWizardComponent,
   ],
   // Module Imports
   imports: [

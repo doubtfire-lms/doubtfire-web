@@ -1,0 +1,102 @@
+<div class="welcome" fxLayout="column">
+  <!-- angular layout two columns -->
+  <div fxLayout="row" fxLayoutAlign="start center" style="display: flex; align-items: stretch; height: 100%">
+    <div class="left-banner" fxLayout="column" fxHide.lt-md>
+      <div class="header">
+        <div class="wordmark" fxLayout="row" fxLayoutAlign="start center">
+          <img
+            src="../../../assets/images/logo-white.svg"
+            width="40px"
+            alt="Homepage Logo"
+            style="padding-right: 6px"
+          />
+          <p>{{ externalName.value }}</p>
+        </div>
+        <h1>Manage your learning, with feedback you'll want to receive</h1>
+      </div>
+
+      <div fxFlex></div>
+      <div fxFlex="40" fx fxGrow [ngClass]="'pattern pattern-' + gradientObject.val"></div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center start" style="width: 100%; padding: 48px">
+      <div class="main-container" fxLayout="row" fxLayoutAlign="center start">
+        <div class="main" fxLayout="column" fxLayoutAlign="start center">
+          <h1 style="margin-bottom: 30px" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+          <div fxLayout="row" style="width: 100%">
+            <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
+              <mat-label>First Name</mat-label>
+              <input matInput />
+            </mat-form-field>
+
+            <div fxFlex="3"></div>
+
+            <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
+              <mat-label>Second Name</mat-label>
+              <input matInput />
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" style="width: 100%">
+            <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
+              <mat-label>Pronouns</mat-label>
+              <input matInput />
+            </mat-form-field>
+
+            <div fxFlex="3"></div>
+
+            <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
+              <mat-label>Preferred Name</mat-label>
+              <input matInput />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Student ID</mat-label>
+            <input matInput />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Email</mat-label>
+            <input matInput />
+          </mat-form-field>
+          <button fxFlexAlign="end" mat-flat-button color="primary">Confirm Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <mat-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <form [formGroup]="secondFormGroup">
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-stepper> -->
+</div>
