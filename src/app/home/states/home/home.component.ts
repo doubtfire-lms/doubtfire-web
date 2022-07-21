@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;
 
     if (showNewUserWizard) {
-      this.router.stateService.go('welcome', { optInOnly: userHasNotOptedIn });
+      this.router.stateService.go('welcome');
     }
 
     return showNewUserWizard;

@@ -5,11 +5,11 @@ import { UserService } from 'src/app/api/services/user.service';
 import { StateService } from '@uirouter/core';
 
 @Component({
-  selector: 'f-welcome-wizard',
-  templateUrl: './welcome-wizard.component.html',
-  styleUrls: ['./welcome-wizard.component.scss'],
+  selector: 'f-welcome',
+  templateUrl: './welcome.component.html',
+  styleUrls: ['./welcome.component.scss'],
 })
-export class WelcomeWizardComponent implements OnInit {
+export class WelcomeComponent implements OnInit {
   constructor(private constants: DoubtfireConstants, private userService: UserService, private state: StateService) {}
 
   public externalName = this.constants.ExternalName;
@@ -37,7 +37,10 @@ export class WelcomeWizardComponent implements OnInit {
   public submit(): void {
     this.user.hasRunFirstTimeSetup = true;
     this.user.pronouns = this.pronouns.pronouns;
-    this.userService.save(this.user);
-    this.state.go('home');
+
+    this.userService.update(this.user).subscribe((user) => {
+      this.user = user;
+      this.state.go('home');
+    });
   }
 }
