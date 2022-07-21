@@ -49,7 +49,7 @@
           <div fxLayout="row" fxFlexFill>
             <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
               <mat-label>Pronouns</mat-label>
-              <mat-select [(ngModel)]="pronouns.pronouns" name="pronouns">
+              <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
                 <mat-option value="">Do not show</mat-option>
                 <mat-option value="He/Him">He/Him</mat-option>
                 <mat-option value="She/Her">She/Her</mat-option>
@@ -75,6 +75,7 @@
               [required]="customPronouns"
             />
           </mat-form-field>
+          {{ user.pronouns }}
 
           <mat-form-field appearance="outline" fxFlexFill *ngIf="user.systemRole === 'Student'">
             <mat-label>Student ID</mat-label>

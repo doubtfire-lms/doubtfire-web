@@ -15,9 +15,9 @@ export class WelcomeComponent implements OnInit {
   public externalName = this.constants.ExternalName;
   public gradientObject = { val: 0 };
   public user = this.userService.currentUser;
-  public pronouns = { pronouns: '' };
+  public formPronouns = { pronouns: '' };
   public get customPronouns(): boolean {
-    return this.pronouns.pronouns === '__customPronouns';
+    return this.formPronouns.pronouns === '__customPronouns';
   }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class WelcomeComponent implements OnInit {
 
   public submit(): void {
     this.user.hasRunFirstTimeSetup = true;
-    this.user.pronouns = this.pronouns.pronouns;
+    this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
 
     this.userService.update(this.user).subscribe((user) => {
       this.user = user;
