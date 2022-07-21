@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { interval } from 'rxjs';
 import { UserService } from 'src/app/api/services/user.service';
 import { StateService } from '@uirouter/core';
 
@@ -13,7 +12,6 @@ export class WelcomeComponent implements OnInit {
   constructor(private constants: DoubtfireConstants, private userService: UserService, private state: StateService) {}
 
   public externalName = this.constants.ExternalName;
-  public gradientObject = { val: 0 };
   public user = this.userService.currentUser;
   public formPronouns = { pronouns: '' };
   public get customPronouns(): boolean {
@@ -25,9 +23,6 @@ export class WelcomeComponent implements OnInit {
     this.user.receiveFeedbackNotifications = true;
     this.user.receivePortfolioNotifications = true;
     this.user.receiveTaskNotifications = true;
-    interval(12000).subscribe(
-      (_) => (this.gradientObject.val = this.gradientObject.val < 1 ? this.gradientObject.val + 1 : 0)
-    );
   }
 
   public signOut(): void {
