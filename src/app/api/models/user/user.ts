@@ -17,6 +17,7 @@ export class User extends Entity {
   receiveFeedbackNotifications: boolean;
   hasRunFirstTimeSetup: boolean;
   authenticationToken: string;
+  pronouns: string | null;
 
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {

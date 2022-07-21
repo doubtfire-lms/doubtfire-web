@@ -35,6 +35,7 @@ export class UserService extends CachedEntityService<User> implements OnInit {
       'receivePortfolioNotifications',
       'receiveFeedbackNotifications',
       'hasRunFirstTimeSetup',
+      'pronouns'
     );
 
     this._currentUser = this.anonymousUser;
