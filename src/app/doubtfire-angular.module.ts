@@ -168,8 +168,6 @@ import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdo
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { UIRouter } from '@uirouter/angular';
-import { GlobalStateService } from './projects/states/index/global-state.service';
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
@@ -233,7 +231,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     TaskDropdownComponent,
     SplashScreenComponent,
     ObjectSelectComponent,
-    WelcomeWizardComponent,
+    WelcomeComponent,
   ],
   // Module Imports
   imports: [
@@ -356,7 +354,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-    IsActiveUnitRole
+    IsActiveUnitRole,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
@@ -384,7 +382,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
     );
   }
 
-  ngDoBootstrap() {
+  ngDoBootstrap(): void {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
       strictDi: false,
     });

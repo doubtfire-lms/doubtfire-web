@@ -39,11 +39,7 @@ export class UserService extends CachedEntityService<User> {
     this._currentUser = this.anonymousUser;
 
     this.mapping.mapAllKeysToJsonExcept('id');
-
-    // AppInjector.get(AuthenticationService).checkUserCookie();
   }
-
-  // ngOnInit(): void {}
 
   public createInstanceFrom(json: any, other?: any): User {
     return new User();

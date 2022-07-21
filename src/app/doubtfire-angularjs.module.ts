@@ -254,7 +254,16 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { LearningOutcomeService, TaskCommentService, TaskOutcomeAlignmentService, TaskService, TeachingPeriodService, UnitRoleService, UnitService, UserService } from './api/models/doubtfire-model';
+import {
+  LearningOutcomeService,
+  TaskCommentService,
+  TaskOutcomeAlignmentService,
+  TaskService,
+  TeachingPeriodService,
+  UnitRoleService,
+  UnitService,
+  UserService,
+} from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -278,7 +287,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.units',
   'doubtfire.tasks',
   'doubtfire.projects',
-  'doubtfire.welcome',
   'doubtfire.groups',
   'doubtfire.visualisations',
 ]);
@@ -316,14 +324,8 @@ DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
 );
-DoubtfireAngularJSModule.directive(
-  'objectSelect',
-  downgradeComponent({ component: ObjectSelectComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'appHeader',
-  downgradeComponent({ component: HeaderComponent })
-);
+DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
+DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
@@ -366,12 +368,15 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor',
-  downgradeComponent({ component: TaskAssessorComponent }));
-DoubtfireAngularJSModule.directive('taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent }));
-DoubtfireAngularJSModule.directive('taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+);
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
