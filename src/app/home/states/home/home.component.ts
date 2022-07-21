@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   showDate = this.DateService.showDate;
 
-  generateUnitProgress(project) {
+  generateUnitProgress(project): number {
     const start = new Date(project.start_date);
     const end = new Date(project.end_date);
     const today = new Date();
@@ -114,11 +114,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     return Math.round((q / d) * 100);
   }
 
-  testForNewUserWizard() {
-    let firstTimeUser = this.currentUser.hasRunFirstTimeSetup === false;
+  testForNewUserWizard(): boolean {
+    const firstTimeUser = this.currentUser.hasRunFirstTimeSetup === false;
     let userHasNotOptedIn = this.currentUser.optInToResearch === null;
 
-    let showNewUserWizard = firstTimeUser || userHasNotOptedIn;
+    const showNewUserWizard = firstTimeUser || userHasNotOptedIn;
     userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;
 
     if (showNewUserWizard) {
