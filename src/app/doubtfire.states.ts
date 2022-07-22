@@ -3,6 +3,7 @@ import { Ng2ViewDeclaration } from '@uirouter/angular';
 import { InstitutionSettingsComponent } from './admin/institution-settings/institution-settings.component';
 import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -76,6 +77,23 @@ const WelcomeState: NgHybridStateDeclaration = {
 };
 
 /**
+ * Define the Sign In state.
+ */
+const SignInState: NgHybridStateDeclaration = {
+  name: 'sign_in_2',
+  url: '/sign_in_2?dest&params&authToken&username',
+  views: {
+    main: {
+      component: SignInComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Sign In',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+  },
+};
+
+/**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState];
+export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState];

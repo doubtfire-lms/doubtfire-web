@@ -174,6 +174,7 @@ import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
+import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 
 @NgModule({
   // Components we declare
@@ -234,6 +235,7 @@ import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.compone
     ObjectSelectComponent,
     WelcomeComponent,
     HeroSidebarComponent,
+    SignInComponent,
   ],
   // Module Imports
   imports: [
