@@ -33,9 +33,12 @@ export class WelcomeComponent implements OnInit {
     this.user.hasRunFirstTimeSetup = true;
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
 
-    this.userService.update(this.user).subscribe((user) => {
-      this.user = user;
-      this.state.go('home');
+    this.userService.update(this.user).subscribe({
+      next: (response) => {
+        this.user = response;
+        this.state.go('home');
+      },
+      error: (error) => console.log(error),
     });
   }
 }
