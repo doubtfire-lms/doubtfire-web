@@ -22,7 +22,7 @@
           <div class="panel-body text-center">
             <p class="btn-group">
               <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.target_grade" btn-radio="{{$index}}">
-                <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.target_grade ? 'primary' : 'muted'}}"></grade-icon>
+                <grade-icon [grade]="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true"></grade-icon>
               </label>
             </p>
           </div>

@@ -11,7 +11,7 @@
       <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
         <td>{{member.student_name}}</td>
         <td class="text-left">
-          <grade-icon grade="member.target_grade"></grade-icon>
+          <grade-icon [index]="member.target_grade"></grade-icon>
         </td>
         <td>
           <rating
