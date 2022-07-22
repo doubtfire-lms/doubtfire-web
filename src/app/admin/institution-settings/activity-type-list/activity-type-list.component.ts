@@ -26,10 +26,10 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
     super({
       name: new FormControl('', [Validators.required]),
       abbreviation: new FormControl('', [Validators.required]),
-    });
+    }, "Activity Type");
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Get all the activity types and add them to the table
     this.activityTypeService.query().subscribe((activityTypes) => {
       this.pushToTable(activityTypes);
@@ -47,6 +47,7 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: ActivityType | ActivityType[]) {
+    if (!value) return;
     value instanceof Array ? this.activityTypes.push(...value) : this.activityTypes.push(value);
     this.dataSource.sort = this.sort;
     this.table.renderRows();
@@ -56,6 +57,17 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // which then calls the parent's submit.
   submit() {
     super.submit(this.activityTypeService, this.alerts, this.onSuccess.bind(this));
+  }
+
+  deleteActivity(activity: ActivityType) {
+    this.delete(activity, this.activityTypes, this.activityTypeService).subscribe(
+      {
+        next: () => {
+          this.alerts.add('success', `${activity.name} has been deleted.`, 2000);
+        },
+        error: (response) => {this.alerts.add( 'danger', response.error?.error || "Unable to delete activity type.");}
+      }
+    );
   }
 
   // Sorting function to sort data when sort

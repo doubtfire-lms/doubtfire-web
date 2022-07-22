@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppInjector } from 'src/app/app-injector';
-import { TaskComment } from './task-comment';
-import { TaskCommentService } from './task-comment.service';
+import { TaskCommentService } from '../../services/task-comment.service';
+import { TaskComment, TaskStatusEnum, Task } from '../doubtfire-model';
 
 /**
  * Create a Discussion Comment, extending the base TaskComment class
@@ -11,43 +11,27 @@ export class ExtensionComment extends TaskComment {
   assessed: boolean;
   granted: boolean;
   extensionResponse: string;
-  date_assessed: Date;
+  dateAssessed: Date;
   weeksRequested: number;
 
   taskStatus: string;
-  taskDueDate: string;
+  taskDueDate: Date;
   taskExtensions: number;
 
   // Do we need this do you think?
-  constructor(initialData: object, task: any) {
-    super(initialData, task); // delay update from json
+  constructor(task: Task) {
+    super(task); // delay update from json
   }
 
-  /**
-   * Update the Discussion Comment with details from the passed in json data
-   */
-  public updateFromJson(data: any): void {
-    super.updateFromJson(data);
-    this.assessed = data.assessed;
-    this.extensionResponse = data.extension_response;
-    this.granted = data.granted;
-    this.date_assessed = new Date(data.date_assessed);
-    this.weeksRequested = data.weeks_requested;
+  // public toJson(): any {
+  //   return {
+  //     granted: this.granted ? 1 : 0,
 
-    this.taskStatus = data.task_status;
-    this.taskDueDate = data.due_date;
-    this.taskExtensions = data.extensions;
-  }
-
-  public toJson(): any {
-    return {
-      granted: this.granted ? 1 : 0,
-
-      projectId: this.project.id,
-      taskDefinitionId: this.task.task_definition_id,
-      id: this.id,
-    };
-  }
+  //     projectId: this.project.id,
+  //     taskDefinitionId: this.task.definition.id,
+  //     id: this.id,
+  //   };
+  // }
 
   private assessExtension(): Observable<TaskComment> {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
@@ -56,9 +40,9 @@ export class ExtensionComment extends TaskComment {
         const extension: ExtensionComment = tc as ExtensionComment;
 
         const task = tc.task;
-        task.due_date = extension.taskDueDate;
+        task.dueDate = extension.taskDueDate;
         task.extensions = extension.taskExtensions;
-        task.status = extension.taskStatus;
+        task.status = extension.taskStatus as TaskStatusEnum;
 
         tc.project.updateBurndownChart();
         tc.project.calcTopTasks(); // Sort the task list again

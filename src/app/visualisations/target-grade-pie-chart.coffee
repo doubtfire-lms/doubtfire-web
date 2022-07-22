@@ -7,7 +7,7 @@ angular.module('doubtfire.visualisations.target-grade-pie-chart', [])
     rawData: '=data'
     showLegend: '=?'
     height: '=?'
-  controller: ($scope, $timeout, gradeService, projectService, Visualisation) ->
+  controller: ($scope, $timeout, gradeService, Visualisation) ->
     colors = gradeService.gradeColors
 
     updateData = (rawData) ->

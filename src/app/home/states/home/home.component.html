@@ -23,13 +23,13 @@
             <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
               <a
                 uiSref="units/tasks/inbox"
-                [uiParams]="{ unitId: unitRole.unit_id }"
+                [uiParams]="{ unitId: unitRole.unit?.id }"
                 class="removeStyle"
-                *ngIf="!unitRole.teachingPeriod() || unitRole.teachingPeriod()?.active()"
+                *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
               >
                 <mat-card class="unit-card">
-                  <h4>{{ unitRole.unit_name }}</h4>
-                  <mat-card-subtitle>{{ unitRole.unit_code }}</mat-card-subtitle>
+                  <h4>{{ unitRole.unit?.name }}</h4>
+                  <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
                   <mat-card-content>
                     <!-- <p>{{ project.description }} Unit description goes here...</p> leave until description is returned-->
                   </mat-card-content>
@@ -37,16 +37,16 @@
                   <mat-card-actions>
                     <mat-chip-list aria-label="Unit labels">
                       <mat-chip color="primary" selected>{{
-                        unitRole.teachingPeriod()?.name() || showDate(unitRole.start_date)
+                        unitRole.teachingPeriod?.name() || showDate(unitRole.unit.startDate)
                       }}</mat-chip>
                       <mat-chip color="primary" selected>{{ unitRole.role }}</mat-chip>
                     </mat-chip-list>
                   </mat-card-actions>
                   <mat-card-footer>
                     <mat-progress-bar
-                      matTooltip="{{ generateUnitProgress(unitRole) }}% through the teaching period."
+                      matTooltip="{{ unitRole.unit.teachingPeriodProgress }}% through the teaching period."
                       mode="determinate"
-                      [value]="generateUnitProgress(unitRole)"
+                      [value]="unitRole.unit.teachingPeriodProgress"
                     ></mat-progress-bar>
                   </mat-card-footer>
                 </mat-card>
@@ -78,14 +78,14 @@
           <div [hidden]="loadingProjects" fxLayout="row wrap" fxLayoutAlign="start center">
             <div *ngFor="let project of projects">
               <a
-                *ngIf="!project.teachingPeriod() || project.teachingPeriod()?.active()"
+                *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod?.active"
                 uiSref="projects/dashboard"
-                [uiParams]="{ projectId: project.project_id, taskAbbr: '' }"
+                [uiParams]="{ projectId: project.id, taskAbbr: '' }"
                 class="removeStyle"
               >
                 <mat-card class="unit-card">
-                  <h4>{{ project.unit_name }}</h4>
-                  <mat-card-subtitle>{{ project.unit_code }}</mat-card-subtitle>
+                  <h4>{{ project.unit.name }}</h4>
+                  <mat-card-subtitle>{{ project.unit.code }}</mat-card-subtitle>
                   <mat-card-content>
                     <!-- <p>{{ project.description }} Unit description goes here...</p> leave until description is returned-->
                   </mat-card-content>
@@ -93,15 +93,15 @@
                   <mat-card-actions>
                     <mat-chip-list aria-label="Unit labels">
                       <mat-chip color="primary" selected>{{
-                        project.teachingPeriod()?.name() || showDate(project.start_date)
+                        project.unit.teachingPeriod?.name() || showDate(project.unit.startDate)
                       }}</mat-chip>
                     </mat-chip-list>
                   </mat-card-actions>
                   <mat-card-footer>
                     <mat-progress-bar
-                      matTooltip="{{ generateUnitProgress(project) }}% through the teaching period."
+                      matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period."
                       mode="determinate"
-                      [value]="generateUnitProgress(project)"
+                      [value]="project.unit.teachingPeriodProgress"
                     ></mat-progress-bar>
                   </mat-card-footer>
                 </mat-card>

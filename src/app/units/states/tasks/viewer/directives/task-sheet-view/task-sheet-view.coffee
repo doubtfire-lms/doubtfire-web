@@ -6,7 +6,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-sheet-view',
   scope:
     taskDef: '='
     unit: '='
-  controller: ($scope, $timeout, TaskFeedback, taskService, alertService, listenerService, Task, Unit) ->
+  controller: ($scope, $timeout, alertService, listenerService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -18,8 +18,8 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.task-sheet-view',
     listeners.push $scope.$watch 'taskDef', (newTask) ->
       setDetails = ->
         if newTask?
-          $scope.hasPdf = newTask.has_task_sheet
-          $scope.urls.taskPdfUrl = Task.getTaskPDFUrl($scope.unit, $scope.taskDef)
+          $scope.hasPdf = newTask.hasTaskSheet
+          $scope.urls.taskPdfUrl = $scope.taskDef.getTaskPDFUrl()
       setDetails()
 )
-      
+

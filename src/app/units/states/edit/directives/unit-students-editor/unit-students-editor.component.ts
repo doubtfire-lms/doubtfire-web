@@ -1,39 +1,44 @@
 import {
-  Unit,
   csvUploadModalService,
   csvResultModalService,
   unitStudentEnrolmentModal,
 } from './../../../../../ajs-upgraded-providers';
-import { ViewChild, Component, Input, Inject } from '@angular/core';
+import { ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { Project, ProjectService, Unit } from 'src/app/api/models/doubtfire-model';
+import { UIRouter } from '@uirouter/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
 })
-export class UnitStudentsEditorComponent {
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
+  @ViewChild(MatTable, { static: false }) table: MatTable<Project>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @Input() unit: any;
+
+  @Input() unit: Unit;
+
+  private subscriptions: Subscription[] = [];
 
   columns: string[] = [
-    'student_id',
-    'first_name',
-    'last_name',
-    'student_email',
+    'username',
+    'firstName',
+    'lastName',
+    'email',
     'campus',
     'tutorial',
     'enrolled',
     'goto',
   ];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<Project>;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -41,20 +46,37 @@ export class UnitStudentsEditorComponent {
     private httpClient: HttpClient,
     @Inject(unitStudentEnrolmentModal) private enrolModal: any,
     @Inject(alertService) private alerts: any,
-    @Inject(Unit) private unitService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(csvResultModalService) private csvResultModal: any,
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
+    private fileDownloader: FileDownloaderService,
+    private router: UIRouter,
+    private projectService: ProjectService
   ) {}
 
-  ngOnInit() {}
-
   // The paginator is inside the table
-  ngAfterViewInit() {
+  ngOnInit() {
     this.dataSource = new MatTableDataSource(this.unit.students);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+
+    this.subscriptions.push(this.unit.studentCache.values.subscribe(
+      (students) => {
+        this.dataSource.data = students;
+      }
+    ));
+
+    this.subscriptions.push(this.projectService.loadStudents(this.unit, true).subscribe(
+      (projects) => {
+        // projects included in unit...
+        console.log("loaded withdrawn students")
+      }
+    ));
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach( (s) => s.unsubscribe());
   }
 
   applyFilter(event: Event) {
@@ -78,22 +100,22 @@ export class UnitStudentsEditorComponent {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'student_id':
-        case 'first_name':
-        case 'last_name':
-        case 'student_email':
+        case 'username':
+        case 'firstName':
+        case 'lastName':
+        case 'email':
         case 'enrolled':
           return this.sortCompare(a[sort.active], b[sort.active], isAsc);
         case 'campus':
-          return this.sortCompare(a.campus().abbreviation, b.campus().abbreviation, isAsc);
+          return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
         default:
           return 0;
       }
     });
   }
 
-  public gotoStudent(student: any) {
-    student.viewProject(true);
+  public gotoStudent(student: Project) {
+    this.router.stateService.go("projects/dashboard", {projectId: student.id, tutor: true, taskAbbr:''})
   }
 
   enrolStudent() {
@@ -105,12 +127,12 @@ export class UnitStudentsEditorComponent {
       'Upload Students to Enrol',
       'Test message',
       { file: { name: 'Enrol CSV Data', type: 'csv' } },
-      this.unitService.enrolStudentsCSVUrl(this.unit),
+      this.unit.enrolStudentsCSVUrl,
       (response: any) => {
         // at least one student?
         this.csvResultModal.show('Enrol Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents();
+          this.unit.refreshStudents(true);
         }
       }
     );
@@ -121,19 +143,19 @@ export class UnitStudentsEditorComponent {
       'Upload Students to Withdraw',
       'Test message',
       { file: { name: 'Withdraw CSV Data', type: 'csv' } },
-      this.unitService.withdrawStudentsCSVUrl(this.unit),
+      this.unit.withdrawStudentsCSVUrl,
       (response: any) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {
-          this.unit.refreshStudents();
+          this.unit.refreshStudents(true);
         }
       }
     );
   }
 
   downloadEnrolments() {
-    const url: string = this.unitService.enrolStudentsCSVUrl(this.unit);
+    const url: string = this.unit.enrolStudentsCSVUrl;
 
     this.fileDownloader.downloadFile(url, `${this.unit.code}-students.csv`);
   }

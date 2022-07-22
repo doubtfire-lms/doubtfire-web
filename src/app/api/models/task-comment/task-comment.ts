@@ -1,32 +1,26 @@
-import { alertService, currentUser } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
-import { EmojiService } from 'src/app/common/services/emoji.service';
-import { Entity } from '../entity';
-import { TaskCommentService } from 'src/app/api/models/doubtfire-model';
-
-const KEYS = ['id'];
-
-export interface CommentAuthor {
-  id: number;
-  name: string;
-  email: string;
-}
+import { Entity } from 'ngx-entity-service';
+import { Project, Task, TaskCommentService, User } from 'src/app/api/models/doubtfire-model';
+import { UserService } from '../../services/user.service';
+import API_URL from 'src/app/config/constants/apiURL';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 export class TaskComment extends Entity {
   // Linked objects
-  task: any;
+  task: Task;
   originalComment: TaskComment = null;
 
   // Data returned from the comment service
-  id: number;
+  public id: number;
   text: string;
   abbreviation: string;
-  author: CommentAuthor;
-  recipient: CommentAuthor;
-  createdAt: string;
+  author: User;
+  recipient: User;
+  createdAt: Date;
   timeOfMessage: string;
   recipientReadTime: string;
-  commentType: string;
+  commentType: string = "text";
   isNew: boolean;
   replyToId: number;
 
@@ -45,83 +39,50 @@ export class TaskComment extends Entity {
    * @param initialData the Json data from the server
    * @param task        the Task that contains the comment
    */
-  constructor(initialData: object, task: any) {
+  constructor(task: Task) {
     super(); // delay update from json
     this.task = task;
-    if (initialData) {
-      this.updateFromJson(initialData);
-    }
-  }
-
-  /**
-   * Not used for TaskComments as they are not updated.
-   */
-  toJson(): any {
-    return undefined;
-  }
-
-  public get key(): string {
-    return this.id.toString();
-  }
-
-  public updateFromJson(data: any): void {
-    this.setFromJson(data, KEYS);
-
-    const es: EmojiService = AppInjector.get(EmojiService);
-
-    this.text = es.colonsToNative(data.comment);
-
-    const names: string[] = data.author.name.split(' ');
-    this.initials = `${names[0][0]}${names[1][0]}`.toUpperCase();
-
-    this.author = data.author;
-    this.recipient = data.recipient;
-    this.timeOfMessage = data.created_at;
-    this.recipientReadTime = data.recipient_read_time;
-    this.commentType = data.type || 'text';
-    this.replyToId = data.reply_to_id;
-    this.isNew = data.is_new;
-  }
-
-  public keyForJson(json: any): string {
-    return json.id;
   }
 
   public get authorIsMe(): boolean {
-    const cu: any = AppInjector.get(currentUser);
-    return this.author.id === cu.profile.id;
+    const userService: any = AppInjector.get(UserService);
+    return this.author.id === userService.currentUser.id;
   }
 
   public get recipientIsMe(): boolean {
-    const cu: any = AppInjector.get(currentUser);
-    return this.recipient.id === cu.profile.id;
+    const userService: any = AppInjector.get(UserService);
+    return this.recipient.id === userService.currentUser.id;
   }
 
   public get isBubbleComment(): boolean {
     return ['text', 'discussion', 'audio', 'image', 'pdf'].includes(this.commentType);
   }
 
-  public get project(): any {
-    return this.task.project();
+  public get project(): Project {
+    return this.task.project;
   }
 
   public get currentUserCanEdit() {
-    return this.authorIsMe || this.project?.currentUserIsStaff();
+    return this.authorIsMe || this.project?.unit.currentUserIsStaff;
   }
 
   public delete() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
-    tcs.cacheSource = this.task.commentCache;
     tcs
-      .delete({ projectId: this.project.project_id, taskDefinitionId: this.task.task_definition_id, id: this.id })
-      .subscribe(
-        (response: object) => {
-          this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
+      .delete({ projectId: this.project.id, taskDefinitionId: this.task.definition.id, id: this.id }, { cache: this.task.commentCache })
+      .subscribe({
+        next: (response: object) => {
+          // this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
           this.task.refreshCommentData();
         },
-        (error: any) => {
+        error: (error: any) => {
           AppInjector.get<any>(alertService).add('danger', error?.message || error || 'Unknown error', 2000);
         }
+      }
       );
+  }
+
+  public get attachmentUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}?as_attachment=false`
   }
 }

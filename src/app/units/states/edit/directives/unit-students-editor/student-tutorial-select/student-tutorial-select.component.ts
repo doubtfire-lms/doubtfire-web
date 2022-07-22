@@ -1,6 +1,5 @@
-import { Unit } from './../../../../../../ajs-upgraded-providers';
 import { Component, Input } from '@angular/core';
-import { Tutorial, TutorialStream } from 'src/app/api/models/doubtfire-model';
+import { Project, Tutorial, TutorialStream, Unit } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'student-tutorial-select',
@@ -8,8 +7,8 @@ import { Tutorial, TutorialStream } from 'src/app/api/models/doubtfire-model';
   styleUrls: ['student-tutorial-select.component.scss'],
 })
 export class StudentTutorialSelectComponent {
-  @Input() unit: any;
-  @Input() student: any;
+  @Input() unit: Unit;
+  @Input() student: Project;
 
   /**
    * Compare a tutorial with an enrolment
@@ -17,21 +16,21 @@ export class StudentTutorialSelectComponent {
    * @param aEntity The tutorial itself
    * @param bEntity The tutorial enrolment
    */
-  compareSelection(aEntity: Tutorial, bEntity: any) {
+  compareSelection(aEntity: Tutorial, bEntity: Tutorial) {
     if (!aEntity || !bEntity) {
       return;
     }
-    return aEntity.id === bEntity.tutorial_id;
+    return aEntity.id === bEntity.id;
   }
 
-  public tutorialsForStreamAndStudent(student: any, stream?: TutorialStream) {
+  public tutorialsForStreamAndStudent(student: Project, stream?: TutorialStream) {
     return this.unit.tutorials.filter((tutorial) => {
       const result: boolean =
-        student.campus_id == null || tutorial.campus == null || student.campus_id === tutorial.campus.id;
+        student.campus == null || tutorial.campus == null || student.campus.id === tutorial.campus.id;
       if (!result) return result;
-      if (tutorial.tutorial_stream && stream) {
-        return tutorial.tutorial_stream.abbreviation === stream.abbreviation;
-      } else if (!tutorial.tutorial_stream && !stream) {
+      if (tutorial.tutorialStream && stream) {
+        return tutorial.tutorialStream.abbreviation === stream.abbreviation;
+      } else if (!tutorial.tutorialStream && !stream) {
         return true;
       } else {
         return false;

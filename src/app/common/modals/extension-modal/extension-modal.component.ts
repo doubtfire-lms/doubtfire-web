@@ -1,10 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import * as moment from 'moment';
 import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
 import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { AppInjector } from 'src/app/app-injector';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'extension-modal',
@@ -28,12 +28,16 @@ export class ExtensionModalComponent implements OnInit {
   }
 
   get newDueDate() {
-    const calculatedDueDate = this.data.task.localDueDate().add(this.weeksRequested, 'weeks');
-    const taskDeadlineDate = this.data.task.definition.localDeadlineDate();
+    const calculatedDueDate = new Date(this.data.task.localDueDate().getTime() + this.weeksRequested * 1000 * 60 * 60 * 24 * 7 );
+    const taskDeadlineDate: Date = this.data.task.definition.localDeadlineDate();
+
+    const locale: string = AppInjector.get(LOCALE_ID);
+
     if (calculatedDueDate > taskDeadlineDate) {
-      return taskDeadlineDate.format('DD of MMMM');
+      return formatDate(taskDeadlineDate, 'dd MMMM', locale);
+    } else {
+      return formatDate(calculatedDueDate, 'dd MMMM', locale);
     }
-    return calculatedDueDate.format('DD of MMMM');
   }
 
   get maxWeeksCanExtend() {
@@ -54,9 +58,6 @@ export class ExtensionModalComponent implements OnInit {
 
   submitApplication() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
-    tcs.cacheSource = this.data.task.commentCache;
-
-    const self = this;
 
     tcs.requestExtension(this.reason, this.weeksRequested, this.data.task).subscribe({
       next: ((tc: TaskComment) => {

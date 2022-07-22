@@ -14,17 +14,17 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, Unit, analyticsService, gradeService, projectService, unitService, currentUser, Visualisation, taskService, fileDownloaderService) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, analyticsService, gradeService, newProjectService, Visualisation, newTaskService, fileDownloaderService, newUserService, alertService) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
 
-  $scope.downloadGrades = -> fileDownloaderService.downloadFile(Unit.getGradesUrl($scope.unit),"#{$scope.unit.code}-grades.csv")
-  $scope.downloadPortfolios = -> fileDownloaderService.downloadFile(Unit.getPortfoliosUrl($scope.unit),"#{$scope.unit.code}-portfolios.zip")
+  $scope.downloadGrades = -> fileDownloaderService.downloadFile($scope.unit.gradesUrl, "#{$scope.unit.code}-grades.csv")
+  $scope.downloadPortfolios = -> fileDownloaderService.downloadFile($scope.unit.portfoliosUrl, "#{$scope.unit.code}-portfolios.zip")
 
   $scope.studentFilter = 'allStudents'
   $scope.portfolioFilter = 'withPortfolio'
 
-  $scope.statusClass = taskService.statusClass
-  $scope.statusText = taskService.statusText
+  $scope.statusClass = newTaskService.statusClass
+  $scope.statusText = newTaskService.statusText
 
   refreshCharts = Visualisation.refreshAll
 
@@ -65,9 +65,8 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.setActiveTab($scope.tabs.selectStudent)
 
   $scope.grades = gradeService.grades
-  $scope.unitService = unitService
 
-  $scope.tutorName = currentUser.profile.name
+  $scope.tutor = newUserService.currentUser
 
   $scope.search = ""
 
@@ -122,8 +121,8 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.selectStudent = (student) ->
     $scope.selectedStudent = student
     $scope.project = null
-    projectService.getProject student, $scope.unit, (project) ->
-      $scope.project = project
-    analyticsService.event 'Teacher View - Grading Tab', 'Selected Student'
-
+    newProjectService.loadProject(student, $scope.unit).subscribe({
+      next: (project) -> $scope.project = project
+      error: (message) -> alertService.add('danger', message, 6000)
+    })
 )

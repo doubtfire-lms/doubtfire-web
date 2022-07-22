@@ -6,7 +6,7 @@
     <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
     <ul>
       <li>
-        <strong>{{ grades.names[taskDef?.target_grade] }} Task</strong>
+        <strong>{{ grades.names[taskDef?.targetGrade] }} Task</strong>
       </li>
       <li>
         <strong>Start Date</strong>
@@ -26,11 +26,11 @@
       </li>
     </ul>
   </mat-card-content>
-  <mat-card-actions [hidden]="!(taskDef?.has_task_sheet || taskDef?.has_task_resources)">
-    <button mat-button [hidden]="!taskDef?.has_task_sheet" (click)="downloadTaskSheet()">
+  <mat-card-actions [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)">
+    <button mat-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
       <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Task Sheet
     </button>
-    <button mat-button [hidden]="!taskDef?.has_task_resources" (click)="downloadResources()">
+    <button mat-button [hidden]="!taskDef?.hasTaskResources" (click)="downloadResources()">
       <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Resources
     </button>
   </mat-card-actions>

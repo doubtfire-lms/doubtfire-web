@@ -29,17 +29,17 @@
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <div *ngFor="let unitRole of unitRoles">
     <button
-      *ngIf="!unitRole.teachingPeriod() || unitRole.teachingPeriod()?.active()"
+      *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
       uiSref="units/tasks/inbox"
-      [uiParams]="{ unitId: unitRole.unit_id }"
+      [uiParams]="{ unitId: unitRole.unit.id }"
       fxLayout="row"
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div class='unitName'>{{ unitRole.unit_name }}</div>
+      <div class='unitName'>{{ unitRole.unit.name }}</div>
       <span fxFlex></span>
       <mat-chip-list style="float: right" aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip selected color="primary">{{ unitRole.unit_code }}</mat-chip>
+        <mat-chip selected color="primary">{{ unitRole.unit.code }}</mat-chip>
       </mat-chip-list>
     </button>
   </div>
@@ -48,17 +48,17 @@
   <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
   <div *ngFor="let project of projects">
     <button
-      *ngIf="!project.teachingPeriod() || project.teachingPeriod()?.active()"
+      *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod.active"
       uiSref="projects/dashboard"
-      [uiParams]="{ projectId: project.project_id, taskAbbr: '' }"
+      [uiParams]="{ projectId: project.id, taskAbbr: '' }"
       fxLayout="row"
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div class='unitName'>{{ project.unit_name }}</div>
+      <div class='unitName'>{{ project.unit.name }}</div>
       <span fxFlex></span>
       <mat-chip-list aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip selected color="primary">{{ project.unit_code }}</mat-chip>
+        <mat-chip selected color="primary">{{ project.unit.code }}</mat-chip>
       </mat-chip-list>
     </button>
   </div>

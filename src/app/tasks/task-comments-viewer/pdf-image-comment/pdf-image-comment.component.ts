@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { alertService, commentsModal, Task } from 'src/app/ajs-upgraded-providers';
-import { TaskComment } from 'src/app/api/models/doubtfire-model';
+import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
+import { Project, TaskComment, Task } from 'src/app/api/models/doubtfire-model';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Component({
@@ -10,8 +10,8 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
 })
 export class PdfImageCommentComponent implements OnInit {
   @Input() comment: TaskComment;
-  @Input() project: any;
-  @Input() task: any;
+  @Input() project: Project;
+  @Input() task: Task;
 
   public resourceUrl: string = undefined;
 
@@ -27,7 +27,7 @@ export class PdfImageCommentComponent implements OnInit {
   }
 
   private downloadCommentResource(fn?: (url: string) => void) {
-    const url = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+    const url = this.comment.attachmentUrl;
 
     this.fileDownloaderService.downloadBlob(
       url,

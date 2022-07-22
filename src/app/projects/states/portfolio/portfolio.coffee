@@ -18,7 +18,7 @@ angular.module('doubtfire.projects.states.portfolio', [
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, taskService, gradeService, PortfolioSubmission, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, PortfolioSubmission, analyticsService) ->
   #
   # Active task tab group
   #
@@ -67,7 +67,7 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.portfolioSubmission.deleteFile($scope.project, file)
 
   # Update targetGrade value on change
-  $scope.$watch 'project.target_grade', (newValue) ->
+  $scope.$watch 'project.targetGrade', (newValue) ->
     $scope.targetGrade = gradeService.grades[newValue]
 
   # Get the confugurable, external name of Doubtfire
@@ -87,16 +87,16 @@ angular.module('doubtfire.projects.states.portfolio', [
     if $scope.unitHasILOs
       # Filter by aligned tasks that are included
       tasks = _.filter $scope.project.tasks, (t) ->
-        hasAlignmentsForTask = _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
+        hasAlignmentsForTask = _.find($scope.project.taskOutcomeAlignments, (ta) -> ta.task.id ==  t.id )?
         t.include_in_portfolio and hasAlignmentsForTask
     else
       # Filter by included in portfolio
       tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
-    tasks = _.filter tasks, (t) -> !_.includes(taskService.toBeWorkedOn, t.status)
+    tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 
   # Jump to a step
-  if $scope.project.portfolio_available or $scope.project.compile_portfolio
+  if $scope.project.portfolio_available or $scope.project.compilePortfolio
     $scope.setActiveTab $scope.tabs.reviewStep
   else if $scope.projectHasDraftLearningSummaryReport
     $scope.setActiveTab $scope.tabs.summaryStep
@@ -106,9 +106,9 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.setActiveTab $scope.tabs.welcomeStep
 
   #
-  # Functions from taskService to get data
+  # Functions from newTaskService to get data
   #
-  $scope.statusText = taskService.statusText
-  $scope.statusData = taskService.statusData
-  $scope.statusClass = taskService.statusClass
+  $scope.statusText = newTaskService.statusText
+  $scope.statusData = newTaskService.statusData
+  $scope.statusClass = newTaskService.statusClass
 )

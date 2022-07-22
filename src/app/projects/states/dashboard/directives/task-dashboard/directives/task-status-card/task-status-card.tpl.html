@@ -43,11 +43,11 @@
   <!--/status-body-->
   <div
     class="card-footer clearfix"
-    ng-if="task.unit().my_role != 'Student' || task.canApplyForExtension() || (task.inSubmittedState() && task.requiresFileUpload())"
+    ng-if="task.unit.currentUserIsStaff || task.canApplyForExtension() || (task.inSubmittedState() && task.requiresFileUpload())"
   >
     <a
       ng-click="applyForExtension()"
-      ng-if="task.unit().my_role != 'Student' || task.canApplyForExtension()"
+      ng-if="task.unit.currentUserIsStaff || task.canApplyForExtension()"
       class="btn btn-success"
     >
       <i class="fa fa-medkit"></i>

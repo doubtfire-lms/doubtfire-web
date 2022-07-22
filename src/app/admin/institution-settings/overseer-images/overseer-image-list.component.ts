@@ -26,10 +26,10 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
     super({
       name: new FormControl('', [Validators.required]),
       tag: new FormControl('', [Validators.required]),
-    });
+    }, "Overseer Image");
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Get all the activity types and add them to the table
     this.overseerImageService.query().subscribe((response) => {
       this.pushToTable(response);
@@ -47,9 +47,9 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
+    if (!value) return;
     value instanceof Array ? this.overseerImages.push(...value) : this.overseerImages.push(value);
     this.dataSource.sort = this.sort;
-    this.table.renderRows();
   }
 
   // This method is called when the form is submitted,
@@ -63,7 +63,6 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
       this.cancelEdit();
       this.overseerImages.splice(this.overseerImages.indexOf(image), 1);
       this.dataSource.data = this.overseerImages;
-      this.table.renderRows();
     }).bind(this));
   }
 

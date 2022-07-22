@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
   templateUrl: 'units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, $filter, Unit, taskService) ->
+  controller: ($scope, $filter, newUnitService) ->
     $scope.overviewSelectors =
       tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
 
@@ -19,7 +19,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
       $scope.tutorialsForSelector.push {
         text: t.abbreviation + ' - ' + t.tutorName
         id: t.id
-        meeting_time: t.meeting_time
+        meetingTime: t.meetingTime
         tutor: t.tutor
         abbreviation: t.abbreviation
       }
@@ -38,12 +38,11 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
 
     # Load data if not loaded already
     unless $scope.unit.analytics.targetGradeStats?
-      Unit.targetGradeStats.query {id: $scope.unit.id},
+      newUnitService.targetGradeStats($scope.unit).subscribe(
         (response) ->
-          delete response.$promise
-          delete response.$resolved
           $scope.unit.analytics.targetGradeStats = response
           $scope.dataModel.selectedType = 'unit'
+      )
     else
       $scope.dataModel.selectedType = 'unit'
 
@@ -68,7 +67,7 @@ angular.module('doubtfire.units.states.analytics.directives.unit-target-grade-st
         $scope.data = $scope.reduceDataToTutorial()
         $scope.overviewKeys = _.map $scope.unit.tutorials, (t) ->
           {
-            subtitle: "#{t.tutorName} at #{$filter('date')(t.meeting_time, 'shortTime')}"
+            subtitle: "#{t.tutorName} at #{$filter('date')(t.meetingTime, 'shortTime')}"
             title: t.abbreviation
             data: $scope.data[t.id]
             show: _.keys($scope.data[t.id]).length > 0

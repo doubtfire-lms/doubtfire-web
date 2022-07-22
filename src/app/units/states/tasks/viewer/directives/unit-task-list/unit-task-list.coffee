@@ -9,7 +9,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     refreshTasks: '=?'
     unitTasks: '='
     selectedTaskDef: '='
-  controller: ($scope, $timeout, $filter, gradeService, taskService, listenerService) ->
+  controller: ($scope, $timeout, $filter, gradeService, listenerService) ->
     listeners = listenerService.listenTo($scope)
     # Set up initial filtered tasks
     $scope.filteredTasks = []
@@ -33,7 +33,7 @@ angular.module('doubtfire.units.states.tasks.viewer.directives.unit-task-list', 
     # UI call to change currently selected task
     $scope.setSelectedTask = (task) ->
       $scope.selectedTaskDef = task
-    
+
 
     $scope.isSelectedTask = (task) ->
       # Compare by definition

@@ -20,6 +20,7 @@ angular.module('doubtfire.units.states.tasks.inbox', [
    }
 )
 
-.controller('TaskInboxStateCtrl', ($scope, Unit) ->
-  $scope.taskData.source = Unit.tasksForTaskInbox
+.controller('TaskInboxStateCtrl', ($scope, newTaskService) ->
+  $scope.taskData.source = newTaskService.queryTasksForTaskInbox.bind(newTaskService)
+  $scope.taskData.taskDefMode = false
 )

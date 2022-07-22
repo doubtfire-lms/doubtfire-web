@@ -7,15 +7,15 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, $stateParams, alertService, taskService, listenerService, ConfirmationModal, ExtensionModal, Project) ->
+  controller: ($scope, $stateParams, alertService, newTaskService, listenerService, ConfirmationModal, ExtensionModal, Project) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Reapply triggers available
     reapplyTriggers = ->
       if $stateParams.tutor?
-        $scope.triggers = _.map(taskService.statusKeys, taskService.statusData)
+        $scope.triggers = _.map(newTaskService.statusKeys, newTaskService.statusData)
       else
-        studentTriggers = _.map(taskService.switchableStates.student, taskService.statusData)
+        studentTriggers = _.map(newTaskService.switchableStates.student, newTaskService.statusData)
         filteredStudentTriggers = $scope.task.filterFutureStates(studentTriggers)
         $scope.triggers = filteredStudentTriggers
     # Required changes when task changes
@@ -30,7 +30,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
 
     # Allow upload of new files for an updated submission
     $scope.updateFilesInSubmission = ->
-      taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
+      $scope.task.presentTaskSubmissionModal($scope.task.status, true)
 
     $scope.applyForExtension = () ->
       ExtensionModal.show($scope.task, ()->

@@ -12,8 +12,8 @@
     </div>
     <div class="panel-body">
       <div class="col-sm-12">
-        <div class="callout callout-info" ng-hide="unit.staff.length > 0">This unit has no staff assigned</div>
-        <div ng-show="unit.staff.length > 0">
+        <div class="callout callout-info" ng-hide="unitStaff.length > 0">This unit has no staff assigned</div>
+        <div ng-show="unitStaff.length > 0">
           <table class="table table-condensed table-hover">
             <thead>
               <tr>
@@ -24,11 +24,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="staff in unit.staff">
+              <tr ng-repeat="staff in unitStaff">
                 <td style="width: 30px">
-                  <user-icon [size]="30" [user]="staff"></user-icon>
+                  <user-icon [size]="30" [user]="staff.user"></user-icon>
                 </td>
-                <td>{{staff.name}}</td>
+                <td>{{staff.user.name}}</td>
                 <td>
                   <div class="btn-group">
                     <label
@@ -52,14 +52,14 @@
                 <td>
                   <button
                     ng-show="staff.role == 'Convenor'"
-                    ng-disabled="staff.id == unit.main_convenor_id"
+                    ng-disabled="staff.id == unit.mainConvenor.id"
                     type="button"
                     class="btn btn-default"
-                    ng-model="unit.main_convenor_id"
+                    ng-model="unit.mainConvenor"
                     ng-click="changeMainConvenor(staff)"
                     btn-checkbox
                   >
-                    <i class="fa fa-{{staff.id == unit.main_convenor_id ? 'check' : 'times'}}"></i>
+                    <i class="fa fa-{{staff.id == unit.mainConvenor.id ? 'check' : 'times'}}"></i>
                   </button>
                 </td>
                 <td>
@@ -80,7 +80,7 @@
           id="convenors"
           placeholder="Staff Name"
           ng-model="selectedStaff"
-          typeahead="staff as staff.full_name for staff in staff | filter: $viewValue | filter: filterStaff"
+          typeahead="staff as staff.name for staff in staff | filter: $viewValue | filter: filterStaff"
           autocomplete="off"
           typeahead-editable="false"
           typeahead-wait-ms="200"

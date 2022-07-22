@@ -33,7 +33,7 @@
       </h4>
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
         <p>ILO achievement distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meetingTime}}</p>
       </h4>
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'grade'">
         ILO achievement distribution by Target Grade
@@ -62,7 +62,7 @@
             pct-holder="dataModel"></achievement-box-plot>
         <div class="col-xs-12 caption text-center">
           <strong>{{tutorial.abbreviation}}</strong>
-          <div class="small text-muted">{{tutorial.tutorName}} at {{tutorial.meeting_time | date: shortTime}}</div>
+          <div class="small text-muted">{{tutorial.tutorName}} at {{tutorial.meetingTime}}</div>
         </div>
       </div>
     </div><!--/overview-charts-->

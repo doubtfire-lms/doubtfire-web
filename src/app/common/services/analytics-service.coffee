@@ -2,7 +2,7 @@ angular.module("doubtfire.common.services.analytics", [])
 #
 # Services for analytics
 #
-.factory("analyticsService", ($analytics, currentUser) ->
+.factory("analyticsService", ($analytics, newUserService) ->
   analyticsService = {}
 
   #
@@ -18,7 +18,7 @@ angular.module("doubtfire.common.services.analytics", [])
   analyticsService.event = (category, eventName, label, value) ->
     # Critical! Don't log unless user has opted in
     # Do not remove this as we'd be breaching the law!
-    return unless currentUser.profile.opt_in_to_research
+    return unless newUserService.currentUser.optInToResearch
 
     if value? and typeof value isnt 'Number' and value < 0
       throw new Error "Value needs to be a positive number"

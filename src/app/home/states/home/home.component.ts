@@ -1,8 +1,10 @@
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { analyticsService, currentUser, dateService } from 'src/app/ajs-upgraded-providers';
+import { analyticsService, dateService } from 'src/app/ajs-upgraded-providers';
 import { UIRouter } from '@uirouter/angular';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
+import { Project, UnitRole, User, UserService } from 'src/app/api/models/doubtfire-model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'home',
@@ -10,8 +12,8 @@ import { GlobalStateService, ViewType } from 'src/app/projects/states/index/glob
   styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  projects: any;
-  unitRoles: any;
+  projects: Project[];
+  unitRoles: UnitRole[];
   showSpinner: boolean;
   dataLoaded: boolean;
   notEnrolled: boolean;
@@ -24,21 +26,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
+    private userService: UserService,
     @Inject(analyticsService) private AnalyticsService: any,
     @Inject(dateService) private DateService: any,
-    @Inject(currentUser) private CurrentUser: any,
     @Inject(UIRouter) private router: UIRouter
   ) {
     this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
-    globalState.loadUnitsAndProjects();
+    // projects and units are loaded as part of global state service at login
   }
 
   public externalName = this.constants.ExternalName;
-  public userFirstName = this.CurrentUser.profile.nickname || this.CurrentUser.profile.first_name;
+  public userFirstName = this.currentUser.nickname || this.currentUser.firstName;
+
+  private subscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
     this.renderer.setStyle(document.body, 'background-color', '#fff');
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
+
   ngOnInit(): void {
     this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
@@ -49,28 +55,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadingUnitRoles = true;
     this.loadingProjects = true;
 
-    this.globalState.unitRolesSubject.subscribe({
-      next: (unitRoles) => this.unitRolesLoaded(unitRoles),
-      error: (err) => {},
-    });
+    this.subscriptions.push(
+      this.globalState.unitRolesSubject.subscribe({
+        next: (unitRoles) => this.unitRolesLoaded(unitRoles),
+        error: (err) => {},
+      })
+    );
 
-    this.globalState.projectsSubject.subscribe({
-      next: (projects) => this.projectsLoaded(projects),
-      error: (err) => {},
-    });
+    this.subscriptions.push(
+      this.globalState.projectsSubject.subscribe({
+        next: (projects) => this.projectsLoaded(projects),
+        error: (err) => {},
+      })
+    );
 
     this.notEnrolled = this.checkEnrolled();
 
-    this.ifAdmin = this.CurrentUser.role === 'Admin';
-    this.ifConvenor = this.CurrentUser.role === 'Convenor';
+    this.ifAdmin = this.currentUser.role === 'Admin';
+    this.ifConvenor = this.currentUser.role === 'Convenor';
   }
 
-  unitRolesLoaded(unitRoles: any): void {
+  get currentUser(): User {
+    return this.userService.currentUser;
+  }
+
+  unitRolesLoaded(unitRoles: UnitRole[]): void {
     this.unitRoles = unitRoles;
     this.loadingUnitRoles = false;
   }
 
-  projectsLoaded(projects: any): void {
+  projectsLoaded(projects: Project[]): void {
     this.projects = projects;
     this.loadingProjects = false;
   }
@@ -79,8 +93,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.unitRoles != null || this.projects != null) return false;
 
     return (
-      (this.unitRoles?.length === 0 && this.CurrentUser.role === 'Tutor') ||
-      (this.projects?.length === 0 && this.CurrentUser.role === 'Student')
+      (this.unitRoles?.length === 0 && this.currentUser.role === 'Tutor') ||
+      (this.projects?.length === 0 && this.currentUser.role === 'Student')
     );
   }
 
@@ -101,8 +115,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   testForNewUserWizard() {
-    let firstTimeUser = this.CurrentUser.profile.has_run_first_time_setup === false;
-    let userHasNotOptedIn = this.CurrentUser.profile.opt_in_to_research === null;
+    let firstTimeUser = this.currentUser.hasRunFirstTimeSetup === false;
+    let userHasNotOptedIn = this.currentUser.optInToResearch === null;
 
     let showNewUserWizard = firstTimeUser || userHasNotOptedIn;
     userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;

@@ -5,7 +5,7 @@
   <p class="list-group-item-text">
     <i class="fa fa-users" matTooltip="Group Task" aria-hidden="true" *ngIf="task.isGroupTask()"></i>
     <i class="fa fa-user" matTooltip="Individual Task" aria-hidden="true" *ngIf="!task.isGroupTask()"></i>
-    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.target_grade] }} Task
+    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
 
     <span
       class="due-time"
@@ -31,10 +31,10 @@
   <div class="task-superscript-badges">
     <span
       class="task-superscript-badge new-comments-badge"
-      [hidden]="task.num_new_comments <= 0"
-      matTooltip="{{ task.num_new_comments }} new {{ task.num_new_comments > 1 ? 'comments' : 'comment' }}"
+      [hidden]="task.numNewComments <= 0"
+      matTooltip="{{ task.numNewComments }} new {{ task.numNewComments > 1 ? 'comments' : 'comment' }}"
     >
-      {{ task.num_new_comments }}
+      {{ task.numNewComments }}
     </span>
     <span
       class="task-superscript-badge plagiarism-detected-badge"
@@ -50,8 +50,8 @@
       {{ task.gradeDesc() }}
     </span>
     <span class="task-subscript-badge quality-badge" [hidden]="!task.hasQualityPoints()">
-      <sup>{{ task.quality_pts }}</sup
-      >&frasl;<sub>{{ task.definition.max_quality_pts }}</sub>
+      <sup>{{ task.qualityPts }}</sup
+      >&frasl;<sub>{{ task.definition.maxQualityPts }}</sub>
     </span>
     <span class="task-subscript-badge soon-badge" [hidden]="!(task.isDueSoon() && !task.inFinalState())">
       <i class="fa fa-clock-o"></i>

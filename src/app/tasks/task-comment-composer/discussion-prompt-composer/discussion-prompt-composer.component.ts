@@ -1,7 +1,7 @@
 import { Component, Inject, Input, ViewChild, ElementRef } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import { audioRecorderService, alertService } from 'src/app/ajs-upgraded-providers';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'discussion-prompt-composer',
@@ -9,7 +9,7 @@ import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-mo
   styleUrls: ['./discussion-prompt-composer.component.scss'],
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
-  @Input() task: {};
+  @Input() task: Task;
 
   @ViewChild('discussionPromptComposerCanvas', { static: true }) canvasRef: ElementRef;
   @ViewChild('discussionPromptComposerAudio', { static: true }) audioRef: ElementRef;

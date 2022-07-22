@@ -16,18 +16,18 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     $scope.$watch 'project.portfolio_available', ->
       $scope.hasLSR = $scope.projectHasLearningSummaryReport()
       $scope.hasTasksSelected = $scope.selectedTasks().length > 0
-      $scope.portfolioIsCompiling = $scope.project.compile_portfolio
+      $scope.portfolioIsCompiling = $scope.project.compilePortfolio
       $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
 
     #
     # Compile portfolio
     #
     $scope.toggleCompileProject = ->
-      $scope.project.compile_portfolio = not $scope.project.compile_portfolio
-      Project.update { id: $scope.project.project_id, compile_portfolio: $scope.project.compile_portfolio }, (response) ->
+      $scope.project.compilePortfolio = not $scope.project.compilePortfolio
+      Project.update { id: $scope.project.id, compile_portfolio: $scope.project.compilePortfolio }, (response) ->
         $scope.portfolioIsCompiling = true
         $scope.canCompilePortfolio  = false
-        $scope.project.portfolio_status = 0.5
+        $scope.project.portfolioStatus = 0.5
 
     #
     # PDF Local Funcs
@@ -35,14 +35,14 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     $scope.deletePortfolio = ->
       doDelete = ->
         $scope.portfolioSubmission.delete {
-          id: $scope.project.project_id
+          id: $scope.project.id
         }, (response) ->
           $scope.project.portfolio_available = false
-          $scope.project.portfolio_status = 0
+          $scope.project.portfolioStatus = 0
           alertService.add('info', "Portfolio has been deleted!", 5000)
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
 
     # Download the pdf
     $scope.downloadPortfolio = ->
-      fileDownloaderService.downloadFile($scope.project.portfolioUrlAsAttachment(), "#{$scope.project.student_id}-portfolio.pdf")
+      fileDownloaderService.downloadFile($scope.project.portfolioUrl(true), "#{$scope.project.student.username}-portfolio.pdf")
 )

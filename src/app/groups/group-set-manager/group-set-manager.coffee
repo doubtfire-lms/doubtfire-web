@@ -13,7 +13,7 @@ angular.module('doubtfire.groups.group-set-manager', [])
     project: '='
     selectedGroupSet: '='
     showGroupSetSelector: '=?'
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, projectService) ->
+  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService) ->
     if !$scope.unitRole? && !$scope.project?
       throw Error "Group set group manager must have exactly one unit role or project"
     # Reset member panel toolbar visibility

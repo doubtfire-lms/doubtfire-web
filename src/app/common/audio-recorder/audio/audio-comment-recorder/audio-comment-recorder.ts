@@ -1,11 +1,11 @@
 import { Inject, Input, Component } from '@angular/core';
 import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { audioRecorderService, taskService, alertService } from 'src/app/ajs-upgraded-providers';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { audioRecorderService,  alertService } from 'src/app/ajs-upgraded-providers';
+import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({ selector: 'audio-comment-recorder', templateUrl: './audio-comment-recorder.html' })
 export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
-  @Input() task: {};
+  @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;

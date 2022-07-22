@@ -16,7 +16,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $stateProvider.state "sign_in", signInStateData
 )
 
-.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, usernameCookie, $timeout, $http, $modal, currentUser, auth, alertService, localStorageService, rememberDoubtfireCredentialsCookie, doubtfireLoginTimeCookie, AboutDoubtfireModal, GlobalStateService) ->
+.controller("SignInCtrl", ($scope, $state, $stateParams, DoubtfireConstants, $timeout, $http, $modal, alertService, localStorageService, AboutDoubtfireModal, GlobalStateService, newUserService, authenticationService) ->
   GlobalStateService.setView("OTHER")
   GlobalStateService.hideHeader() # we aren't logged in yet...
   isIE = ->
@@ -33,9 +33,32 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   # Get the confugurable, external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName
 
+  $scope.doSignIn = (signInCredentials) ->
+    $scope.signingIn = true
+    signInFunc = ->
+      authenticationService.signIn(
+        signInCredentials,
+        (response) ->
+          alertService.clearAll()
+          $state.go "home", {}
+        (response) ->
+          $scope.session.password = ''
+          $scope.signingIn = false
+
+          $scope.invalidCredentials = true
+
+          resetInvalidCreds = ->
+            $scope.invalidCredentials = false
+
+          $timeout resetInvalidCreds, 300
+          alertService.add("warning", "Login failed: " + response, 6000)
+      )
+    $timeout signInFunc, 100
+
   # Check for SSO login
   $scope.api = DoubtfireConstants.API_URL
   timeoutPromise = $timeout (-> $scope.waitingAWhile = true), 1500
+
   $http.get("#{DoubtfireConstants.API_URL}/auth/method").then ((response) ->
 
     $scope.SSOLoginUrl = response.data.redirect_to || false
@@ -43,7 +66,7 @@ angular.module("doubtfire.sessions.states.sign-in", [])
     if $scope.SSOLoginUrl
       if $stateParams.authToken
         # This is SSO and we just got an auth_token? Must request to sign in
-        $scope.signIn({ auth_token: $stateParams.authToken, username: $stateParams.username })
+        $scope.doSignIn({ auth_token: $stateParams.authToken, username: $stateParams.username, remember: true })
       else
         # We are SSO and no auth token so we can must redirect to SSO login provider
         window.location.assign($scope.SSOLoginUrl)
@@ -81,40 +104,13 @@ angular.module("doubtfire.sessions.states.sign-in", [])
   $scope.openAboutModal = ->
     AboutDoubtfireModal.show()
 
-  if auth.isAuthenticated()
+  if authenticationService.isAuthenticated()
     $state.go "home"
     GlobalStateService.showHeader()
   else
-    $scope.signIn = (signInCredentials) ->
-      $scope.signingIn = true
-      signInFunc = ->
-        signInCredentials ?=
-          username: $scope.session.username
-          password: $scope.session.password
-          remember: $scope.session.remember_me
-        auth.signIn("#{DoubtfireConstants.API_URL}/auth", signInCredentials,
-          (response) ->
-            if $scope.session.remember_me
-              localStorageService.set(usernameCookie, currentUser)
-              localStorageService.set(rememberDoubtfireCredentialsCookie, true)
-              localStorageService.set(doubtfireLoginTimeCookie, new Date().getTime())
-            else
-              localStorageService.remove(usernameCookie)
-              localStorageService.set(rememberDoubtfireCredentialsCookie, false)
-              localStorageService.remove(doubtfireLoginTimeCookie)
-            alertService.clearAll()
-            $state.go "home", {}
-          (response) ->
-            $scope.session.password = ''
-            $scope.signingIn = false
-            if response.error
-              $scope.invalidCredentials = true
-              resetInvalidCreds = ->
-                $scope.invalidCredentials = false
-              $timeout resetInvalidCreds, 300
-              alertService.add("warning", "Login failed: " + response.error, 6000)
-            else
-              alertService.add("danger", "Login failed: Unable to connect to server", 6000)
-        )
-      $timeout signInFunc, 100
+    $scope.signIn = () -> $scope.doSignIn({
+      username: $scope.session.username,
+      password: $scope.session.password,
+      remember: $scope.session.remember_me,
+    })
 )

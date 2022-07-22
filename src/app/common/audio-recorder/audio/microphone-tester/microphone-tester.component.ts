@@ -1,10 +1,11 @@
 import { Inject, Input, Component, AfterViewInit } from '@angular/core';
 import { BaseAudioRecorderComponent } from '../base-audio-recorder';
 import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
+import { Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({ selector: 'microphone-tester', templateUrl: './microphone-tester-component.html' })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
-  @Input() task: {};
+  @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;

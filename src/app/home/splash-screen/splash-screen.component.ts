@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'splash-screen',
   templateUrl: './splash-screen.component.html',
@@ -15,15 +16,19 @@ import { GlobalStateService } from 'src/app/projects/states/index/global-state.s
     ]),
   ],
 })
-export class SplashScreenComponent implements OnInit {
+export class SplashScreenComponent implements OnInit, OnDestroy {
   constructor(private globalState: GlobalStateService) {}
 
-  showSplash = true;
+  public showSplash = true;
+  private subscription: Subscription;
 
-  ngOnInit(): void {
-    this.globalState.isLoadingSubject.subscribe((isLoading) => {
+  public ngOnInit(): void {
+    this.subscription = this.globalState.isLoadingSubject.subscribe((isLoading) => {
       this.showSplash = isLoading;
     });
+  }
 
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -53,7 +53,7 @@
                 <mat-select [(ngModel)]="filters.taskDefinitionIdSelected" name="taskDefID"
                   (selectionChange)="taskDefinitionIdChanged()">
                   <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
-                  <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
+                  <mat-option *ngFor="let td of unit.taskDefinitionCache.values | async" [value]="td.id">
                     {{ td.abbreviation + ' - ' + td.name }}
                   </mat-option>
                 </mat-select>
@@ -72,7 +72,7 @@
               <mat-select [(ngModel)]="filters.tutorialIdSelected" name="tutorial"
                 (selectionChange)="tutorialIdChanged()">
                 <mat-option *ngFor="let t of studentFilter" [value]="t.id">
-                  {{ t.inbox_description }}
+                  {{ t.inboxDescription }}
                 </mat-option>
               </mat-select>
               <mat-hint> Limit tasks to specific students </mat-hint>
@@ -126,9 +126,9 @@
           [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }">
           <div (click)="setSelectedTask(task)" class="inbox-entry" fxLayout="row" fxLayoutAlign="start center"
             [ngClass]="{ hover: task.hover }" (mouseover)="task.hover = true" (mouseout)="task.hover = false">
-            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30"> </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
-              <h4 class="mat-h4">{{ task.project().name }}</h4>
+              <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
@@ -146,22 +146,22 @@
             <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
               <mat-chip style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip>
             </div>
-            <status-icon [hidden]="isNarrow" matBadge="{{ task.quality_pts }}/{{ task.definition.max_quality_pts }}"
-              [matBadgeHidden]="!task.hasQualityPoints() || !task.quality_pts" matBadgePosition="before"
+            <status-icon [hidden]="isNarrow" matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
+              [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts" matBadgePosition="before"
               [status]="task.status"></status-icon>
             <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
 
-                <div *ngIf="task.pinned" matBadge="{{ task.num_new_comments }}"
-                  [matBadgeHidden]="task.num_new_comments <= 0 || task.plagiarismDetected()" matBadgePosition="before"
+                <div *ngIf="task.pinned" matBadge="{{ task.numNewComments }}"
+                  [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()" matBadgePosition="before"
                   matBadgeSize="small" matBadgeColor="warn">
                   <mat-icon class="pin-icon">push_pin</mat-icon>
                 </div>
 
                 <div *ngIf="!task.pinned">
-                  <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
-                    {{ task.num_new_comments }}
+                  <div class="new_comments" *ngIf="task.numNewComments > 0 && !task.plagiarismDetected()">
+                    {{ task.numNewComments }}
                   </div>
                 </div>
               </button>

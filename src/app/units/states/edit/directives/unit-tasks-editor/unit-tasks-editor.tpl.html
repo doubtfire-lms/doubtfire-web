@@ -11,15 +11,15 @@
           </div>
           <form role="search" class="col-sm-4 form-horizontal pull-right">
             <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="taskAdminPager.search" autofocus />
-            <p ng-show="filteredTaskDefs.length < allTaskDefs.length && filteredTaskDefs.length != 0">Showing {{filteredTaskDefs.length}} of {{unit.task_definitions.length}} tasks.</p>
+            <p ng-show="filteredTaskDefs.length < allTaskDefs.length && filteredTaskDefs.length != 0">Showing {{filteredTaskDefs.length}} of {{unit.taskDefinitions.length}} tasks.</p>
           </form>
         </div>
         <div class="panel-body tasks-overview">
-          <div class="callout callout-info" ng-hide="unit.task_definitions.length > 0">
+          <div class="callout callout-info" ng-hide="unit.taskDefinitions.length > 0">
             This unit has no tasks
           </div>
           <div style="overflow: auto; position: relative;">
-           <table ng-show="unit.task_definitions.length > 0" class="table table-condensed table-hover table-pointer" style="min-width: 720px;">
+           <table ng-show="unit.taskDefinitions.length > 0" class="table table-condensed table-hover table-pointer" style="min-width: 720px;">
             <thead>
               <tr>
                 <th>
@@ -28,38 +28,38 @@
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='target_grade'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Grade <i ng-show="taskAdminPager.sortOrder=='target_grade'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='targetGrade'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Grade <i ng-show="taskAdminPager.sortOrder=='targetGrade'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='start_date'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Start Date <i ng-show="taskAdminPager.sortOrder=='start_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='startDate'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Start Date <i ng-show="taskAdminPager.sortOrder=='startDate'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='target_date'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Due Date <i ng-show="taskAdminPager.sortOrder=='target_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='targetDate'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Due Date <i ng-show="taskAdminPager.sortOrder=='targetDate'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='due_date'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Deadline <i ng-show="taskAdminPager.sortOrder=='due_date'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='dueDate'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Deadline <i ng-show="taskAdminPager.sortOrder=='dueDate'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th ng-show="unit.hasGroupwork()">
-                  <a ng-click="taskAdminPager.sortOrder='group_set_id'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Group Set <i ng-show="taskAdminPager.sortOrder=='group_set_id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='groupSet.id'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Group Set <i ng-show="taskAdminPager.sortOrder=='groupSet.id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='tutorial_stream'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorial_stream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='tutorialStream'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    Stream <i ng-show="taskAdminPager.sortOrder=='tutorialStream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th ng-show="unit.hasStreams()">
-                  <a ng-click="taskAdminPager.sortOrder='upload_requirements.length'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    <i class="fa fa-upload" tooltip="The number of files the student needs to submit."></i> <i ng-show="taskAdminPager.sortOrder=='upload_requirements.length'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='uploadRequirements.length'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    <i class="fa fa-upload" tooltip="The number of files the student needs to submit."></i> <i ng-show="taskAdminPager.sortOrder=='uploadRequirements.length'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
@@ -68,8 +68,8 @@
                   </a>
                 </th>
                 <th>
-                  <a ng-click="taskAdminPager.sortOrder='restrict_status_updates'; taskAdminPager.reverse=!taskAdminPager.reverse">
-                    <i class="fa fa-lock" tooltip="Are status updated locked to staff only?"></i> <i ng-show="taskAdminPager.sortOrder=='restrict_status_updates'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
+                  <a ng-click="taskAdminPager.sortOrder='restrictStatusUpdates'; taskAdminPager.reverse=!taskAdminPager.reverse">
+                    <i class="fa fa-lock" tooltip="Are status updated locked to staff only?"></i> <i ng-show="taskAdminPager.sortOrder=='restrictStatusUpdates'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
                 <th>
@@ -78,17 +78,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="taskDef in filteredTaskDefs = (allTaskDefs = ( unit.task_definitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(unit, taskDef)" ng-class="{'info': taskAdminData.selectedTask == taskDef}">
+              <tr ng-repeat="taskDef in filteredTaskDefs = (allTaskDefs = ( unit.taskDefinitions ) | filter:taskAdminPager.search) | orderBy:taskAdminPager.sortOrder:taskAdminPager.reverse | startFrom:(taskAdminPager.currentPage - 1) * taskAdminPager.pageSize | limitTo: taskAdminPager.pageSize" ng-click="editTask(unit, taskDef)" ng-class="{'info': taskAdminData.selectedTask == taskDef}">
                 <td><strong>{{taskDef.abbreviation}}</strong> - {{taskDef.name}}</td>
-                <td>{{grades[taskDef.target_grade]}}</td>
-                <td>{{taskDef.start_date | date : 'EEE d MMM'}}</td>
-                <td>{{taskDef.target_date | date : 'EEE d MMM'}}</td>
-                <td><span ng-show="taskDef.due_date">{{taskDef.due_date | date : 'EEE d MMM' }}</span><span ng-hide="taskDef.due_date">None</span></td>
-                <td ng-show="unit.hasGroupwork()">{{groupSetName(taskDef.group_set_id)}}</td>
-                <td ng-show="unit.hasStreams()">{{taskDef.tutorial_stream}}</td>
-                <td>{{taskDef.upload_requirements.length}}</td>
+                <td>{{grades[taskDef.targetGrade]}}</td>
+                <td>{{taskDef.startDate | date : 'EEE d MMM'}}</td>
+                <td>{{taskDef.targetDate | date : 'EEE d MMM'}}</td>
+                <td><span ng-show="taskDef.dueDate">{{taskDef.dueDate | date : 'EEE d MMM' }}</span><span ng-hide="taskDef.dueDate">None</span></td>
+                <td ng-show="unit.hasGroupwork()">{{taskDef.groupSet.name}}</td>
+                <td ng-show="unit.hasStreams()">{{taskDef.tutorialStream.abbreviation}}</td>
+                <td>{{taskDef.uploadRequirements.length}}</td>
                 <td><i ng-show="taskDef.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="taskDef.hasPlagiarismCheck()" class="fa fa-times"></i></td>
-                <td><i ng-show="taskDef.restrict_status_updates" class="fa fa-check"></i><i ng-hide="taskDef.restrict_status_updates" class="fa fa-times"></i></td>
+                <td><i ng-show="taskDef.restrictStatusUpdates" class="fa fa-check"></i><i ng-hide="taskDef.restrictStatusUpdates" class="fa fa-times"></i></td>
                 <td>
                   <button class="btn btn-danger" ng-click="deleteTask(taskDef)">
                     <i class="fa fa-trash-o"></i>
@@ -116,7 +116,7 @@
           <div class="panel panel-default">
               <div class="panel-heading">
                   <h4 class="panel-title">Batch Upload Task Definitions</h4>
-                  <p>Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade, restrict_status_updates, upload_requirements, target_week, target_day, due_week, due_day, is graded, and max quality points.</p><p>Note: Upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type". Target and due weeks should be the number of weeks from the unit start, and the day should be a short text (eg "Tue").</p>
+                  <p>Batch upload task definitions with a CSV containing: name, abbreviation, description, weighting, target_grade, restrictStatusUpdates, upload_requirements, target_week, target_day, due_week, due_day, is graded, and max quality points.</p><p>Note: Upload_requirements should be an escaped-JSON-formatted string an array of objects containing a "key",  "name" and "type". Target and due weeks should be the number of weeks from the unit start, and the day should be a short text (eg "Tue").</p>
               </div>
               <div class="panel-body">
                   <file-uploader

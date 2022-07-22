@@ -6,26 +6,26 @@
         Modify Teaching Periods registered with {{externalName.value}}
       </div>
       <form role="search" class="pull-right form-horizontal">
-        <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods.loadedPeriods | filter:$viewValue | limitTo:8" />
+        <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods | filter:$viewValue | limitTo:8" />
       </form>
     </div>
     <div class="panel-body">
-      <div class="callout callout-info" ng-hide="teachingPeriods.loadedPeriods.length > 0">No teaching periods have been registered with {{externalName.value}} yet</div>
-        <table ng-show="teachingPeriods.loadedPeriods.length > 0" class="table table-hover table-pointer">
+      <div class="callout callout-info" ng-hide="teachingPeriods.length > 0">No teaching periods have been registered with {{externalName.value}} yet</div>
+        <table ng-show="teachingPeriods.length > 0" class="table table-hover table-pointer">
           <thead>
             <tr>
               <th><a ng-click="sortOrder='teachingperiod.name()'; reverse=!reverse">Name <i ng-show="sortOrder=='period'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='active_until'; reverse=!reverse">Active Until <i ng-show="sortOrder=='active_until'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='startDate'; reverse=!reverse">Start Date <i ng-show="sortOrder=='startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='endDate'; reverse=!reverse">End Date <i ng-show="sortOrder=='endDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='activeUntil'; reverse=!reverse">Active Until <i ng-show="sortOrder=='activeUntil'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods.loadedPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
+            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
               <td>{{teachingperiod.name()}}</td>
-              <td>{{teachingperiod.start_date | date: 'EEE d MMM'}}</td>
-              <td>{{teachingperiod.end_date | date: 'EEE d MMM'}}</td>
-              <td>{{teachingperiod.active_until | date: 'EEE d MMM'}}</td>
+              <td>{{teachingperiod.startDate | date: 'EEE d MMM'}}</td>
+              <td>{{teachingperiod.endDate | date: 'EEE d MMM'}}</td>
+              <td>{{teachingperiod.activeUntil | date: 'EEE d MMM'}}</td>
             </tr>
           </tbody>
         </table>

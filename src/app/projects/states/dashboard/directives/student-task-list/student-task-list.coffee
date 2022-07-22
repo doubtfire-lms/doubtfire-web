@@ -55,7 +55,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.student-task-list
       # Compare by definition
       task.definition.id == $scope.taskData?.selectedTask?.definition.id
     $scope.nearEnd = () ->
-      lateDate = new Date($scope.project.unit().end_date) # Get end date as date
+      lateDate = new Date($scope.project.unit.endDate) # Get end date as date
       lateDate.setDate(lateDate.getDate() - 21) # subtract 21 days
       new Date() > lateDate
 

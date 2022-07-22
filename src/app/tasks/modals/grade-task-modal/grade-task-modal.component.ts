@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { gradeService } from 'src/app/ajs-upgraded-providers';
+import { Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'df-grade-task-modal',
@@ -8,7 +9,7 @@ import { gradeService } from 'src/app/ajs-upgraded-providers';
   styleUrls: ['./grade-task-modal.component.scss'],
 })
 export class GradeTaskModalComponent implements OnInit {
-  task: any;
+  task: Task;
   gradeValues: [number];
   grades: [string];
 
@@ -28,8 +29,8 @@ export class GradeTaskModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.task = this.dialogData.task;
-    this.rating = this.task.quality_pts || 0;
-    this.totalRating = this.task.definition.max_quality_pts || 5;
+    this.rating = this.task.qualityPts || 0;
+    this.totalRating = this.task.definition.maxQualityPts || 5;
     this.gradeValues = this.gradeService.allGradeValues;
     this.grades = this.gradeService.grades;
     this.updateRatingLabel();
@@ -49,8 +50,8 @@ export class GradeTaskModalComponent implements OnInit {
 
   isValid() {
     return (
-      (this.task.definition.is_graded && this.selectedGrade) ||
-      (this.task.definition.max_quality_pts > 0 && this.rating)
+      (this.task.definition.isGraded && this.selectedGrade) ||
+      (this.task.definition.maxQualityPts > 0 && this.rating)
     );
   }
 

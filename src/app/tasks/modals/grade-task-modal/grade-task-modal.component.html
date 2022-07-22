@@ -4,7 +4,7 @@
     <!-- For Grade Tasks -->
     <div
       class="grade-task-item"
-      *ngIf="task.definition.is_graded"
+      *ngIf="task.definition.isGraded"
     >
       <p>
         Please provide a grade for task
@@ -31,7 +31,7 @@
     <!-- For Quality Points Tasks -->
     <div
       class="grade-task-item"
-      *ngIf="task.definition.max_quality_pts > 0"
+      *ngIf="task.definition.maxQualityPts > 0"
     >
       <p>
         Please provide a quality rating for task

@@ -1,10 +1,10 @@
 <div class="task-ilo-alignment-viewer">
   <div class="clearfix" ng-if="alignments.length > 0">
     <ul class="list-group alignment-list">
-      <li ng-click="toggleExpanded(align)" ng-class="{expanded: align.expanded}" ng-repeat="align in alignments | orderBy: 'ilo_number'" class="list-group-item col-sm-12">
+      <li ng-click="toggleExpanded(align)" ng-class="{expanded: align.expanded}" ng-repeat="align in alignments | orderBy: 'iloNumber'" class="list-group-item col-sm-12">
         <header class="clearfix">
           <div class="col-sm-6 pull-left header-item">
-            {{ilo = summaryOnly ? align : unit.outcome(align.learning_outcome_id); ''}}
+            {{ilo = summaryOnly ? align : unit.outcome(align.learningOutcome.id); ''}}
             <h3 class="list-group-item-heading outcome-heading col-sm-12" style="padding: 0;">
               <span class="col-sm-3 label label-info pull-left">{{ilo.abbreviation}}</span>
               <span class="col-sm-9 pull-left">{{ilo.name}}</span>
@@ -56,9 +56,8 @@
             <h5>Related Tasks</h5>
             <div class="related-outcome-tasks">
               <ul class="list-group">
-                <li class="list-group-item" ng-repeat="align in unit.task_outcome_alignments | outcomeFilter: ilo.id | orderBy: 'seq'">
+                <li class="list-group-item" ng-repeat="align in unit.taskOutcomeAlignments | outcomeFilter: ilo.id | orderBy: 'seq'">
                   <div class="clearfix">
-                    {{taskDef = unit.taskDef(align.task_definition_id); ''}}
                     <task-ilo-alignment-rater
                       class="pull-right"
                       readonly="true"
@@ -67,8 +66,8 @@
                       ng-model="align">
                     </task-ilo-alignment-rater>
                     <div class="task-def-alignment-item">
-                      <label class="label label-info task-def-label pull-left">{{taskDef.abbreviation}}</label>
-                      <span class="col-sm-6">{{taskDef.name}}</span>
+                      <label class="label label-info task-def-label pull-left">{{align.taskDefinition.abbreviation}}</label>
+                      <span class="col-sm-6">{{align.taskDefinition.name}}</span>
                     </div>
                   </div>
                 </li>

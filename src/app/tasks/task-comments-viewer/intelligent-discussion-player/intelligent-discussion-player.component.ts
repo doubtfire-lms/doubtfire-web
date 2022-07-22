@@ -6,8 +6,7 @@ import * as moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
-import { DiscussionComment } from 'src/app/api/models/task-comment/discussion-comment';
-
+import { Task, DiscussionComment } from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
@@ -16,7 +15,7 @@ import { DiscussionComment } from 'src/app/api/models/task-comment/discussion-co
 })
 export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
-  @Input() task: any;
+  @Input() task: Task;
   @ViewChild('player') audioPlayer: AudioPlayerComponent;
   loading: boolean = false;
   audioProgress: number = 0;
@@ -32,15 +31,15 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   get isNotStudent() {
-    return this.task.project().unit().my_role !== 'Student';
+    return this.task.unit.currentUserIsStaff;
   }
 
   setPromptTrack(track: string, promptNumber?: number) {
     let url: string = '';
     if (track === 'prompt') {
-      url = this.discussionService.getDiscussionPromptUrl(this.task, this.discussion.id, promptNumber);
+      url = this.discussion.generateDiscussionPromptUrl(promptNumber);
     } else {
-      url = this.discussionService.getDiscussionResponseUrl(this.task, this.discussion.id);
+      url = this.discussion.responseUrl;
     }
 
     this.audioPlayer.setSrc(url);
@@ -91,7 +90,11 @@ export class IntelligentDiscussionDialog implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
     private discussionService: IntelligentDiscussionPlayerService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: {
+      dc: DiscussionComment;
+      task: Task;
+      audioRef: HTMLAudioElement;
+    }
   ) {}
 
   ngOnInit() {}
@@ -151,9 +154,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   setPrompt() {
-    this.data.audioRef.src = this.discussionService.getDiscussionPromptUrl(
-      this.data.task,
-      this.data.dc.id,
+    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(
       this.activePromptId
     );
     this.guide.text = 'Listening to prompt';

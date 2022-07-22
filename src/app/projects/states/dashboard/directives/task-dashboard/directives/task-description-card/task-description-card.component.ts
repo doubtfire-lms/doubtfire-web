@@ -1,6 +1,6 @@
 import { Component, Input, Inject } from '@angular/core';
-import { Moment } from 'moment';
-import { gradeService, Task } from 'src/app/ajs-upgraded-providers';
+import { gradeService } from 'src/app/ajs-upgraded-providers';
+import { Task, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Component({
@@ -9,15 +9,14 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
   styleUrls: ['task-description-card.component.scss'],
 })
 export class TaskDescriptionCardComponent {
-  @Input() task: any;
-  @Input() taskDef: any;
-  @Input() unit: any;
+  @Input() task: Task;
+  @Input() taskDef: TaskDefinition;
+  @Input() unit: Unit;
 
   public grades: { names: any; acronyms: any };
 
   constructor(
     @Inject(gradeService) private GradeService: any,
-    @Inject(Task) private taskAPI: any,
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
   ) {
     this.grades = {
@@ -28,26 +27,26 @@ export class TaskDescriptionCardComponent {
 
   public downloadTaskSheet() {
     this.fileDownloader.downloadFile(
-      this.taskAPI.getTaskPDFUrl(this.unit, this.taskDef),
+      this.task.definition.getTaskPDFUrl(true),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskSheet.pdf`
     );
   }
 
   public downloadResources() {
     this.fileDownloader.downloadFile(
-      this.taskAPI.getTaskResourcesUrl(this.unit, this.taskDef),
+      this.task.definition.getTaskResourcesUrl(true),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`
     );
   }
 
-  public dueDate(): Moment {
+  public dueDate(): Date {
     if (this.task) return this.task.localDueDate();
-    else if (this.taskDef) return this.taskDef.target_date;
+    else if (this.taskDef) return this.taskDef.targetDate;
     else return undefined;
   }
 
-  public startDate(): Moment {
-    return this.taskDef?.start_date;
+  public startDate(): Date {
+    return this.taskDef?.startDate;
   }
 
   public shouldShowDeadline(): boolean {

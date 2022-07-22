@@ -7,7 +7,7 @@ angular.module('doubtfire.groups.student-group-manager', [])
   restrict: 'E'
   templateUrl: 'groups/student-group-manager/student-group-manager.tpl.html'
   replace: true
-  controller: ($scope, Group, alertService, GroupMember, projectService) ->
+  controller: ($scope, Group, alertService, GroupMember) ->
     $scope.selectedGroupSet = _.first($scope.unit.group_sets)
     $scope.selectedGroup = null
 
@@ -35,10 +35,11 @@ angular.module('doubtfire.groups.student-group-manager', [])
           unit_id: $scope.unit.id,
           group_set_id:$scope.selectedGroupSet.id,
           group_id: group.id
-          project_id: $scope.project.project_id
+          project_id: $scope.project.id
         },
         (response) ->
-          projectService.updateGroups($scope.project) #change groups
+          # projectService.updateGroups($scope.project) #change groups
+          console.log("check group update...")
           alertService.add("success", "Joined group", 2000)
           $scope.refreshGroupMembers()
         (error) ->

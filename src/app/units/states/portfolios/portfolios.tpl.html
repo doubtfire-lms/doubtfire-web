@@ -71,7 +71,7 @@
             type="search"
             ng-model="search"
             autocomplete="off"
-            typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8"
+            typeahead="text for text in unit.studentFilterTypeAheadData | filter:$viewValue | limitTo:8"
             typeahead-wait-ms="200"
             autofocus
           />
@@ -114,8 +114,8 @@
               </a>
             </th>
             <th>
-              <a ng-click="sortOrder='target_grade'; reverse=!reverse">
-                Target <i ng-show="sortOrder=='target_grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              <a ng-click="sortOrder='targetGrade'; reverse=!reverse">
+                Target <i ng-show="sortOrder=='targetGrade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th>
@@ -130,8 +130,8 @@
               </a>
             </th>
             <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
-              <a ng-click="sortOrder='has_portfolio'; reverse=!reverse">
-                Portfolio? <i ng-show="sortOrder=='has_portfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+              <a ng-click="sortOrder='hasPortfolio'; reverse=!reverse">
+                Portfolio? <i ng-show="sortOrder=='hasPortfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th class="grade">
@@ -144,7 +144,7 @@
         <tbody>
           <tr
             class="task-progress-row"
-            ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPortfolio:portfolioFilter | studentsWithSubmittedGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+            ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPortfolio:portfolioFilter | studentsWithSubmittedGrade:filterOptions.selectedGrade) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
             ng-class="{'info': selectedStudent == student}"
             ng-click="selectStudent(student)"
           >
@@ -153,15 +153,15 @@
             <td>{{student.tutorNames()}}</td>
             <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
-              <grade-icon [index]="student.target_grade"></grade-icon>
+              <grade-icon [index]="student.targetGrade"></grade-icon>
             </td>
             <td class="flags-data">
-              <grade-icon [index]="student.submitted_grade"></grade-icon>
+              <grade-icon [index]="student.submittedGrade"></grade-icon>
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
                 <bar
-                  ng-repeat="bar in student.task_stats | filter:barLargerZero track by $index"
+                  ng-repeat="bar in student.taskStats | filter:barLargerZero track by $index"
                   value="bar.value"
                   type="{{statusClass(bar.key)}}"
                 >
@@ -169,7 +169,7 @@
                 </bar>
               </progress>
             </td>
-            <td ng-show="portfolioFilter == 'allStudents'">{{student.has_portfolio ? "Yes" : "No"}}</td>
+            <td ng-show="portfolioFilter == 'allStudents'">{{student.hasPortfolio ? "Yes" : "No"}}</td>
             <td>{{student.grade}}</td>
           </tr>
         </tbody>

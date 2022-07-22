@@ -11,14 +11,14 @@
       <table ng-show="teachingPeriod.breaks.length > 0" class="table table-hover table-pointer">
         <thead>
           <tr>
-            <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='startDate'; reverse=!reverse">Start Date <i ng-show="sortOrder=='startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             <th><a ng-click="sortOrder='duration'; reverse=!reverse">Duration <i ng-show="sortOrder=='duration'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="break in teachingPeriod.breaks | orderBy:sortOrder:reverse">
-            <td>{{break.start_date | date: 'EEE d MMM'}}</td>
-            <td>{{break.number_of_weeks}} week</td>
+            <td>{{break.startDate | date: 'EEE d MMM'}}</td>
+            <td>{{break.numberOfWeeks}} week</td>
           </tr>
         </tbody>
       </table>

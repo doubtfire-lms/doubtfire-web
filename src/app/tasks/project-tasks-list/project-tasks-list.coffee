@@ -15,16 +15,15 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     onSelect: "="
     inMenu: '@'
 
-  controller: ($scope, $modal, taskService, groupService, analyticsService, gradeService) ->
+  controller: ($scope, $modal, newTaskService, groupService, analyticsService, gradeService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"
 
     # functions from task service
-    $scope.statusClass = taskService.statusClass
-    $scope.statusText = taskService.statusText
-    $scope.taskDefinition = taskService.taskDefinitionFn($scope.unit)
+    $scope.statusClass = newTaskService.statusClass
+    $scope.statusText = newTaskService.statusText
 
     $scope.taskDisabled = (task) ->
-      $scope.taskDefinition(task).target_grade > $scope.project.target_grade
+      task.definition.targetGrade > $scope.project.targetGrade
 
     $scope.groupSetName = (id) ->
       groupService.groupSetName(id, $scope.unit)
@@ -39,12 +38,12 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
           result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
         else
           result += " (?)"
-      
-      if task.definition.max_quality_pts > 0
-        if task.quality_pts?
-          result += " (" + task.quality_pts + "/" + task.definition.max_quality_pts + ")"
+
+      if task.definition.maxQualityPts > 0
+        if task.qualityPts?
+          result += " (" + task.qualityPts + "/" + task.definition.maxQualityPts + ")"
         else
-          result += " (?/" + task.definition.max_quality_pts + ")"
-      
+          result += " (?/" + task.definition.maxQualityPts + ")"
+
       result
 )

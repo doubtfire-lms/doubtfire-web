@@ -7,21 +7,21 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
   templateUrl: 'projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.tpl.html'
   scope:
     task: '='
-  controller: ($scope, listenerService, TaskFeedback, taskService, UploadSubmissionModal, fileDownloaderService) ->
+  controller: ($scope, listenerService, newTaskService, UploadSubmissionModal, fileDownloaderService, alertService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Evaluate changes to submission data
     reapplySubmissionData = ->
-      $scope.task.getSubmissionDetails(->
-        $scope.canReuploadEvidence = $scope.task.canReuploadEvidence()
-        $scope.canRegeneratePdf = _.includes(taskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.has_pdf
+      $scope.task.getSubmissionDetails().subscribe(->
+        $scope.canReuploadEvidence = $scope.task.inSubmittedState()
+        $scope.canRegeneratePdf = _.includes(newTaskService.pdfRegeneratableStatuses, $scope.task.status) && $scope.task.hasPdf
         $scope.submission = {
-          isProcessing: $scope.task.processing_pdf
-          isUploaded: $scope.task.has_pdf
+          isProcessing: $scope.task.processingPdf
+          isUploaded: $scope.task.hasPdf
         }
         $scope.urls = {
-          pdf: TaskFeedback.getTaskUrl($scope.task, true)
-          files: TaskFeedback.getTaskFilesUrl($scope.task)
+          pdf: $scope.task.submissionUrl(true)
+          files: $scope.task.submittedFilesUrl()
         }
       )
     # Required changes when task changes
@@ -31,9 +31,21 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
     )
     # Functions under action
     $scope.uploadAlternateFiles = ->
-      taskService.presentTaskSubmissionModal($scope.task, $scope.task.status, true)
+      $scope.task.presentTaskSubmissionModal($scope.task.status, true)
     $scope.regeneratePdf = ->
-      $scope.task.recreateSubmissionPdf()
+      $scope.task.recreateSubmissionPdf().subscribe(
+        {
+          next: (response) ->
+            if response.result == "false"
+              alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 6000)
+            else
+              task.processingPdf = true
+              alertService.add("success", "Task PDF will be recreated.", 2000)
+
+          error: (response) ->
+            alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 6000)
+        }
+      )
 
     $scope.downloadSubmission = () ->
       fileDownloaderService.downloadFile($scope.urls.pdf, "#{$scope.task.definition.abbreviation}.pdf")

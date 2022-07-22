@@ -2,7 +2,7 @@
   <div class="modal-header">
     <h3>Submit
       <strong>{{task.definition.abbreviation}}</strong> as
-      <select 
+      <select
         class="form-control input-lg submission-type"
         ng-if="!uploader.isUploading"
         ng-change="onSelectNewSubmissionType(submissionType)"
@@ -15,7 +15,7 @@
     </h3>
   </div><!--/modal-header-->
   <div class="modal-body">
-    <div 
+    <div
       class="state state-group"
       ng-class="{'state-hidden-left': isHidden('group').left,
                  'state-hidden-right': isHidden('group').right}">
@@ -25,8 +25,8 @@
             Team Contribution
           </h4>
           <p>
-            Please rate each team member's effort on working on {{task.definition.name}} 
-            by clicking on a <i class="fa fa-child"></i> icon that represents their 
+            Please rate each team member's effort on working on {{task.definition.name}}
+            by clicking on a <i class="fa fa-child"></i> icon that represents their
             assigned effort.
           </p>
           <p class="text-muted">
@@ -35,10 +35,10 @@
           </p>
         </div>
         <!--/card-heading-->
-        <group-member-contribution-assigner 
+        <group-member-contribution-assigner
           task="task"
           class="card-body"
-          project="task.project()"
+          project="task.project"
           team="team">
         </group-member-contribution-assigner><!--/group-member-contribution-->
       </div><!--/card-group-->
@@ -60,7 +60,7 @@
           </span>
         </div>
         <div class="card-body">
-          <file-uploader 
+          <file-uploader
             files="uploader.files"
             url="uploader.url"
             payload="uploader.payload"
@@ -78,8 +78,8 @@
       </div>
     </div>
     <!--/state-files-->
-    <div 
-      class="state state-alignment" 
+    <div
+      class="state state-alignment"
       ng-class="{'state-hidden-left': isHidden('alignment').left,
                  'state-hidden-right': isHidden('alignment').right}">
       <div class="card card-default">
@@ -97,7 +97,7 @@
         </div>
         <!--/card-heading-->
         <div class="list-group">
-          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'ilo_number'">
+          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'iloNumber'">
             <div class="col-sm-12 col-md-7 pointer" ng-click="ilo.collapsed = !ilo.collapsed">
               <h4>
                 <strong>{{ilo.abbreviation}}</strong>
@@ -120,7 +120,7 @@
             <div class="col-sm-12 col-md-5">
               <task-ilo-alignment-rater
                 readonly="false"
-                unit="task.unit()"
+                unit="task.unit"
                 show-zero-rating="true"
                 ng-model="alignments[ilo.id]">
               </task-ilo-alignment-rater>
@@ -136,8 +136,8 @@
         </div><!--/comments-for-alignment-->
       </div><!--/card-alignment-->
     </div><!--/state-alignment-->
-    <div 
-      class="state state-comments" 
+    <div
+      class="state state-comments"
       ng-class="{'state-hidden-left': isHidden('comments').left,
                  'state-hidden-right': isHidden('comments').right}">
       <div class="card card-default">

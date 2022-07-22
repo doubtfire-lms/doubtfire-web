@@ -19,13 +19,13 @@
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">First Name</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Name" ng-model="user.first_name" />
+          <input type="input" class="form-control" placeholder="Name" ng-model="user.firstName" />
         </div>
       </div>
       <div class="form-group" ng-required="isNew">
         <label class="col-sm-3 control-label">Last Name</label>
         <div class="col-sm-7">
-          <input type="input" class="form-control" placeholder="Surname" ng-model="user.last_name" />
+          <input type="input" class="form-control" placeholder="Surname" ng-model="user.lastName" />
         </div>
       </div>
       <div class="form-group" ng-required="isNew">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <hr />
-      <div class="form-group" ng-show="user.system_role == 'Student'">
+      <div class="form-group" ng-show="user.systemRole == 'Student'">
         <label class="col-sm-3 control-label">Student ID</label>
         <div class="col-sm-7">
           <input type="input" class="form-control" placeholder="1744070" ng-model="user.student_id" />
@@ -75,7 +75,7 @@
               ng-disabled="user.id == currentUser.id"
               name="sysRole"
               if-role="Admin"
-              ng-model="user.system_role"
+              ng-model="user.systemRole"
               value="Admin"
             />Administrator
           </label>
@@ -85,7 +85,7 @@
               ng-disabled="user.id == currentUser.id"
               name="sysRole"
               if-role="Admin Convenor"
-              ng-model="user.system_role"
+              ng-model="user.systemRole"
               value="Convenor"
             />Convenor
           </label>
@@ -95,7 +95,7 @@
               ng-disabled="user.id == currentUser.id"
               name="sysRole"
               if-role="Admin Convenor"
-              ng-model="user.system_role"
+              ng-model="user.systemRole"
               value="Tutor"
             />Tutor
           </label>
@@ -105,7 +105,7 @@
               ng-disabled="user.id == currentUser.id"
               name="sysRole"
               if-role="Admin Convenor"
-              ng-model="user.system_role"
+              ng-model="user.systemRole"
               value="Student"
             />Student
           </label>
@@ -120,10 +120,10 @@
           <label class="col-sm-3 control-label">Allow Analytics</label>
           <div class="col-sm-7">
             <div class="btn-group">
-              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="true">
+              <label class="btn btn-default" ng-model="user.optInToResearch" btn-radio="true">
                 <i class="fa fa-check"></i>
               </label>
-              <label class="btn btn-default" ng-model="user.opt_in_to_research" btn-radio="false">
+              <label class="btn btn-default" ng-model="user.optInToResearch" btn-radio="false">
                 <i class="fa fa-close"></i>
               </label>
             </div>

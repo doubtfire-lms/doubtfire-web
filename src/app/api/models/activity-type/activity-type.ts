@@ -1,30 +1,13 @@
-import { Entity } from '../entity';
-
-const KEYS =
-  [
-    'id',
-    'name',
-    'abbreviation',
-  ];
+import { Entity, EntityMapping } from 'ngx-entity-service';
 
 export class ActivityType extends Entity {
   id: number;
   name: string;
   abbreviation: string;
 
-  toJson(): any {
+  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
-      activity_type: super.toJsonWithKeys(KEYS)
+      activity_type: super.toJson(mappingData, ignoreKeys)
     };
-  }
-
-  public updateFromJson(data: any): void {
-    this.setFromJson(data, KEYS);
-  }
-  public get key(): string {
-    return this.id.toString();
-  }
-  public keyForJson(json: any): string {
-    return json.id;
   }
 }

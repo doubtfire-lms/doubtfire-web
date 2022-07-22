@@ -1,0 +1,399 @@
+import { HttpClient } from '@angular/common/http';
+import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
+import { Observable, tap } from 'rxjs';
+import { alertService } from 'src/app/ajs-upgraded-providers';
+import { AppInjector } from 'src/app/app-injector';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { ProjectService } from '../services/project.service';
+import { TaskDefinitionService } from '../services/task-definition.service';
+import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
+import { LearningOutcome } from './learning-outcome';
+
+export class Unit extends Entity {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+
+  active: boolean;
+
+  myRole: string; //TODO: add more type details?
+  unitRole: UnitRole; // mapped unit role during admin edits
+  mainConvenor: UnitRole;
+
+  teachingPeriod: TeachingPeriod;
+  startDate: Date; //TODO: or string
+  endDate: Date; //TODO: or string
+
+  assessmentEnabled: boolean;
+  overseerImageId: number = null; // image needs to be lazy loadaed
+
+  autoApplyExtensionBeforeDeadline: boolean;
+  sendNotifications: boolean;
+  enableSyncEnrolments: boolean;
+  enableSyncTimetable: boolean;
+
+  draftTaskDefinition: TaskDefinition;
+
+  allowStudentExtensionRequests: boolean;
+  extensionWeeksOnResubmitRequest: number;
+  allowStudentChangeTutorial: boolean;
+
+  public readonly learningOutcomesCache: EntityCache<LearningOutcome> = new EntityCache<LearningOutcome>();
+  public readonly tutorialStreamsCache: EntityCache<TutorialStream> = new EntityCache<TutorialStream>();
+  public readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
+  // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
+  public readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
+  public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> = new EntityCache<TaskOutcomeAlignment>();
+
+  readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
+
+  public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
+  public readonly groupsCache: EntityCache<Group> = new EntityCache<Group>();
+
+  groupMemberships: Array<GroupMembership>;
+
+  readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
+
+  analytics: {} = {};
+
+  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+    return {
+      unit: super.toJson(mappingData, ignoreKeys),
+    }
+  }
+
+  public get staff(): UnitRole[] {
+    return this.staffCache.currentValues;
+  }
+
+  public get staffUsers(): User[] {
+    return this.staffCache.currentValues.map( (ur) => ur.user);
+  }
+
+  public findStudent(id: number): Project {
+    return this.students.find( (s) => s.id === id);
+  }
+
+  public studentEnrolled(id: number): boolean {
+    return this.findStudent(id)?.enrolled;
+  }
+
+  public get currentUserIsStaff(): boolean {
+    return this.myRole !== "Student";
+  }
+
+  public get currentUserIsConvenor(): boolean {
+    return this.myRole === "Convenor" || this.myRole === "Admin";
+  }
+
+  public get taskDefinitions(): TaskDefinition[] {
+    return this.taskDefinitionCache.currentValues;
+  }
+
+  public taskDefinitionsForGrade(grade: number): TaskDefinition[] {
+    return this.taskDefinitions.filter((td) => td.targetGrade <= grade);
+  }
+
+  public deleteTaskDefinition(taskDef: TaskDefinition) {
+    const taskDefinitionService = AppInjector.get(TaskDefinitionService);
+    const alerts: any = AppInjector.get(alertService);
+
+    taskDefinitionService.delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef}).subscribe({
+      next: (response) => {alerts.add("success", "Task Deleted", 2000)},
+      error: (message) => alerts.add("danger", message, 6000)
+    });
+  }
+
+  public taskCount(): number {
+    return this.taskDefinitionCache.size;
+  }
+
+  public get tutorialStreams(): TutorialStream[] {
+    return this.tutorialStreamsCache.currentValues;
+  }
+
+  public get tutorials(): Tutorial[] {
+    return this.tutorialsCache.currentValues;
+  }
+
+  public get ilos(): LearningOutcome[] {
+    return this.learningOutcomesCache.currentValues;
+  }
+
+  public get taskDefinitionCount(): number {
+    return this.taskDefinitionCache.size;
+  }
+
+  /**
+   * Get a stream from the unit by abbreviation
+   * @param abbr the abbreviation of the stream
+   * @returns the stream object or null
+   */
+  public tutorialStreamForAbbr(abbr: string): TutorialStream {
+    if (abbr) {
+      return this.tutorialStreams.find(ts => ts.abbreviation === abbr);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Calculate how much time has elapsed in the teaching period, based on the start and
+   * end date of the unit relative to the current date.
+   *
+   * @returns the percentage of the teaching period that has elapsed
+   */
+  public get teachingPeriodProgress() {
+    const today = new Date();
+
+    //use Math.abs to avoid sign
+    if (today <= this.startDate) return 0;
+    if (today >= this.endDate) return 100;
+
+    const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
+    const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
+    return Math.round((startToNow / totalDuration) * 100);
+  }
+
+  public rolloverTo(body: any): Observable<Unit>  {
+    const unitService = AppInjector.get(UnitService);
+
+    return unitService.create(
+      {
+        id: this.id
+      },
+      {
+        endpointFormat: unitService.rolloverEndpoint,
+        body: body
+      }
+    );
+  }
+
+  public get students(): Array<Project> {
+    return this.studentCache.currentValues;
+  }
+
+  public get activeStudents(): Array<Project> {
+    return this.studentCache.currentValues.filter( p => p.enrolled );
+  }
+
+  public tutorialsForUserName(userName: string): Array<Tutorial> {
+    return this.tutorials.filter(tutorial => tutorial.tutorName === userName);
+  }
+
+  public incorporateTasks(tasks: Task[]) : void {
+    tasks.forEach( (t) => {
+      const project = this.findStudent(t.project.id);
+      if (project) {
+        project.incorporateTask(t);
+      }
+    });
+  }
+
+  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+    // Make sure the task definition is a task definition object from the unit
+    const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
+
+    console.log("update fillWithUnStartedTasks - groups");
+
+    // Now fill for the students in the unit
+    return this.students.map( (p) => {
+      // See if we already have the task
+      var t = tasks.find(t => t.project.id === p.id && t.definition.id === td.id);
+      if (!t) {
+        // No task in array, find task in project
+        t = p.tasks.find( t => t.definition.id == td.id );
+      }
+
+      //TODO: Map groups
+      // If a group task but group data not loaded, go fetch it
+      // if (t.isGroupTask() && !t.group) {
+      //   projectService.updateGroups(t.project, null, true);
+      // }
+      return t;
+    });
+  }
+
+  public refresh(): void {
+    const alerts: any = AppInjector.get(alertService);
+    AppInjector.get(UnitService).fetch(this.id).subscribe({
+      next: (unit) => {},
+      error: (message) => alerts.add("danger", message, 6000)
+    });
+  }
+
+  public setupTasksForStudent(project: Project) {
+    // create not started tasks...
+    this.taskDefinitions.forEach(taskDefinition => {
+      if (!project.findTaskForDefinition(taskDefinition.id)) {
+        const task = new Task(project);
+        task.definition = taskDefinition;
+        // add to cache using task definition abbreviation as key
+        project.taskCache.set(taskDefinition.abbreviation.toString(), task);
+      }
+    });
+  }
+
+  public tutorialFromId(tutorialId: number): Tutorial {
+    return this.tutorialsCache.get(tutorialId);
+  }
+
+  public hasGroupwork(): boolean {
+    return this.groupSetsCache.size > 0;
+  }
+
+  public refreshGroups(): void {
+    // return unless unit.groups?.length > 0
+    // # Query the groups within the unit.
+    // Unit.groups.query( {id: unit.id} ,
+    //   (success) ->
+    //     # Save the result as the unit's groups
+    //     unit.groups = success
+    //   (failure) ->
+    //     alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
+    // )
+
+    console.log("implement refresh groups");
+  }
+
+  public findGroupSet(id: number): GroupSet {
+    return this.groupSetsCache.get(id);
+  }
+
+  public taskDef(taskDefId: number): TaskDefinition {
+    return this.taskDefinitionCache.get(taskDefId);
+  }
+
+  public get taskOutcomeAlignments(): TaskOutcomeAlignment[] {
+    return this.taskOutcomeAlignmentsCache.currentValues;
+  }
+
+  public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
+    return this.taskOutcomeAlignments.filter( (alignment: TaskOutcomeAlignment) => {
+      alignment.taskDefinition.id === td.id;
+    }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
+      return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+    });
+  }
+
+  public get taskAlignmentCSVUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/learning_alignments/csv.json`;
+  }
+
+  public taskStatusFactor(td: TaskDefinition): number {
+    return 1;
+  }
+
+  public getOutcomeBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
+  }
+
+  public hasStreams() : boolean {
+    return this.tutorialStreamsCache.size > 0;
+  }
+
+  public nextStream(activityTypeAbbreviation: string): Observable<TutorialStream> {
+    const tutorialStreamService = AppInjector.get(TutorialStreamService);
+
+    return tutorialStreamService.create(
+      {unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined},
+      {cache: this.tutorialStreamsCache});
+  }
+
+  public deleteStream(stream: TutorialStream): Observable<boolean> {
+    const tutorialStreamService = AppInjector.get(TutorialStreamService);
+
+    return tutorialStreamService.delete<boolean>({unit_id: this.id, abbreviation: stream.abbreviation}, {cache: this.tutorialStreamsCache}).pipe(
+      tap( (response: boolean) => {
+        if(response) {
+          const tutorials = this.tutorialsCache.currentValues;
+          tutorials.forEach((t) => {
+            if (t.tutorialStream === stream) {
+              this.tutorialsCache.delete(t);
+            }
+          });
+        }
+      })
+    );
+  }
+
+  public refreshStudents(includeWithdrawnStudents: boolean = false) {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    projectService.loadStudents(this, includeWithdrawnStudents, true);
+  }
+
+  public findProjectForUsername(username: string): Project {
+    return this.students.find( (s) => s.student.username === username);
+  }
+
+  public get groups(): Group[] {
+    return this.groupsCache.currentValues;
+  }
+
+  public get groupSets(): GroupSet[] {
+    return this.groupSetsCache.currentValues;
+  }
+
+  public findGroupById(id: number): Group {
+    return this.groups.find(grp => grp.id === id);
+  }
+
+  public overseerEnabled(): boolean {
+    return this.assessmentEnabled && this.overseerImageId !== null;
+  }
+
+  public get studentFilterTypeAheadData(): string[] {
+    const result: string[] = [];
+
+    this.tutorials.forEach( tute => {
+      result.push(tute.abbreviation);
+      if(!result.includes(tute.tutorName)) {
+        result.push(tute.tutorName);
+      }
+    });
+
+    this.students.forEach(project => {
+      result.push(project.student.name);
+      result.push(project.student.username);
+    });
+
+    return result;
+  }
+
+  public outcome(id: number): LearningOutcome {
+    return this.learningOutcomesCache.get(id);
+  }
+
+  public get gradesUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades`;
+  }
+
+  public get portfoliosUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.id}/portfolio`;
+  }
+
+  public get taskUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/task_definitions/task_pdfs`;
+  }
+
+  public get allResourcesDownloadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/all_resources`;
+  }
+
+  public get enrolStudentsCSVUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}`;
+  }
+
+  public get withdrawStudentsCSVUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/withdraw`;
+  }
+
+  public getTaskMarkingUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/assess.json?unit_id=${this.id}`;
+  }
+
+  public getTaskDefinitionBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/task_definitions?unit_id=${this.id}`;
+  }
+}

@@ -46,29 +46,19 @@ import {
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { TokenInterceptor } from './common/services/http-authentication.interceptor';
+import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
-  unitProvider,
-  currentUserProvider,
-  authProvider,
-  taskServiceProvider,
+  visualisationsProvider,
   analyticsServiceProvider,
-  unitServiceProvider,
   dateServiceProvider,
-  taskProvider,
-  projectServiceProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
   CsvResultModalProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
-  userProvider,
-  currentUser,
-  TaskCommentProvider,
   gradeServiceProvider,
   commentsModalProvider,
-  taskDefinitionProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
   userSettingsModalProvider,
@@ -76,6 +66,10 @@ import {
   aboutDoubtfireModalProvider,
   calendarModalProvider,
   userNotificationSettingsModalProvider,
+  uploadSubmissionModal,
+  gradeTaskModalProvider,
+  uploadSubmissionModalProvider,
+  ConfirmationModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -141,13 +135,22 @@ import { CheckForUpdateService } from './sessions/service-worker-updater/check-f
 import {
   ActivityTypeService,
   CampusService,
+  AuthenticationService,
+  GroupSetService,
   OverseerImageService,
   OverseerAssessmentService,
   TaskCommentService,
+  TeachingPeriodService,
+  TeachingPeriodBreakService,
   TutorialService,
   TutorialStreamService,
+  UnitService,
+  TaskService,
+  ProjectService,
+  UnitRoleService,
   UserService,
   WebcalService,
+  LearningOutcomeService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -166,6 +169,13 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
 import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
+import { UIRouter } from '@uirouter/angular';
+import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TaskDefinitionService } from './api/services/task-definition.service';
+import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
+import { GroupService } from './api/services/group.service';
+import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 
 @NgModule({
   // Components we declare
@@ -225,6 +235,7 @@ import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-t
     SplashScreenComponent,
     GradeIconComponent,
     GradeTaskModalComponent,
+    ObjectSelectComponent,
   ],
   // Module Imports
   imports: [
@@ -284,9 +295,20 @@ import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-t
   // Services we provide
   providers: [
     CampusService,
+    AuthenticationService,
+    GroupSetService,
+    GroupService,
+    UnitService,
+    ProjectService,
+    UnitRoleService,
+    LearningOutcomeService,
+    TaskDefinitionService,
+    TeachingPeriodService,
+    TeachingPeriodBreakService,
     TutorialService,
     TutorialStreamService,
     UserService,
+    TaskService,
     WebcalService,
     ActivityTypeService,
     OverseerImageService,
@@ -294,40 +316,41 @@ import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-t
     EmojiService,
     FileDownloaderService,
     CheckForUpdateService,
-    userProvider,
+    TaskOutcomeAlignmentService,
+    visualisationsProvider,
     groupServiceProvider,
-    unitProvider,
     commentsModalProvider,
-    taskDefinitionProvider,
     userSettingsModalProvider,
     rootScopeProvider,
     userNotificationSettingsModalProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    authProvider,
-    currentUserProvider,
-    taskServiceProvider,
     gradeServiceProvider,
+    uploadSubmissionModalProvider,
+    gradeTaskModalProvider,
     analyticsServiceProvider,
-    unitServiceProvider,
     dateServiceProvider,
-    taskProvider,
-    projectServiceProvider,
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
-    TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
+    ConfirmationModalProvider,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HttpAuthenticationInterceptor,
       multi: true,
-      deps: [currentUser],
+      deps: [UserService],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+      deps: [AuthenticationService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -335,7 +358,7 @@ import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-t
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-    IsActiveUnitRole,
+    IsActiveUnitRole
   ],
 })
 // There is no longer any requirement for an EntryComponents section

@@ -40,7 +40,7 @@ angular.module('doubtfire.groups.group-member-list', [])
     $scope.removeMember = (member) ->
       $scope.selectedGroup.removeMember(member,
         () ->
-          if member.project_id == $scope.project?.project_id
+          if member.project_id == $scope.project?.id
             _.remove $scope.project.groups, $scope.selectedGroup
             $scope.selectedGroup = null
       )

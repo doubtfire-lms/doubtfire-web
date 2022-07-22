@@ -21,7 +21,7 @@ angular.module('doubtfire.admin.modals.create-break-modal', [])
     startOpened: false
   }
 
-  $scope.break = { start_date: null, number_of_weeks: null, teaching_period_id: $scope.teachingperiod.id }
+  $scope.break = { startDate: null, numberOfWeeks: null, teachingPeriod: $scope.teachingperiod }
 
   # Datepicker opener
   $scope.open = ($event, pickerData) ->
@@ -37,18 +37,13 @@ angular.module('doubtfire.admin.modals.create-break-modal', [])
   }
 
   $scope.addBreak = ->
-    if $scope.break.start_date && $scope.break.start_date.getMonth
-      $scope.break.start_date = "#{$scope.break.start_date.getFullYear()}-#{$scope.break.start_date.getMonth() + 1}-#{$scope.break.start_date.getDate()}"
-
-    Break.create(
-      $scope.break
-      (response) ->
+    $scope.teachingperiod.addBreak($scope.break.startDate, $scope.break.numberOfWeeks).subscribe({
+      next: (response) ->
         alertService.add("success", "Break added.", 2000)
         $modalInstance.close()
-        $scope.teachingperiod.breaks.push(response)
-        analyticsService.event 'Teaching Period Admin', 'Added New Break'
-      (response) ->
-        alertService.add 'danger', "Error adding break - #{response.data.error}"
-    )
+      error: (response) ->
+        alertService.add 'danger', "Error adding break - #{response}"
+    })
+
 )
 

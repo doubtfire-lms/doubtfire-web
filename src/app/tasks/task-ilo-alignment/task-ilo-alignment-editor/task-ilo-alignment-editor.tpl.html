@@ -67,10 +67,10 @@
                   tooltip-append-to-body="true"
                   class="button-wrapper">
                   <button
-                    class="btn btn-sm btn-{{task.include_in_portfolio ? 'success' : 'default'}} col-sm-6 text-center"
+                    class="btn btn-sm btn-{{task.includeInPortfolio ? 'success' : 'default'}} col-sm-6 text-center"
                     ng-click="includeTaskInPorfolio(task)"
                     ng-if="!disableInclude(task)">
-                    <i class="fa fa-{{task.include_in_portfolio ? 'check' : 'times'}}"></i>
+                    <i class="fa fa-{{task.includeInPortfolio ? 'check' : 'times'}}"></i>
                   </button>
                   <button
                     class="btn btn-sm btn-warning col-sm-6 text-center"
@@ -107,7 +107,7 @@
       <div class="panel-body">
         <file-uploader
           files="taskAlignmentCSV"
-          url="taskAlignmentCSVUploadUrl()"
+          url="source.taskAlignmentCSVUploadUrl"
           is-uploading="isTaskAlignmentCSVUploading"
           on-success="onTaskAlignmentCSVSuccess"
           on-complete="onTaskAlignmentCSVComplete"></file-uploader>
