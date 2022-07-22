@@ -1,11 +1,12 @@
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { Inject, Injectable, OnInit } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { UIRouter, UIRouterGlobals } from '@uirouter/angular';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
 import { AppInjector } from 'src/app/app-injector';
+import { map } from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
@@ -119,12 +120,10 @@ export class AuthenticationService {
           auth_token: string;
           username: string;
           remember: boolean;
-        },
-    success: () => void,
-    error: () => void
-  ): void {
-    this.httpClient.post(this.AUTH_URL, userCredentials).subscribe({
-      next: (response) => {
+        }
+  ) {
+    return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
+      map((response: any) => {
         // Extract relevant data from response and construct user object to store in cache.
         const user: User = this.userService.cache.getOrCreate(
           response['user']['id'],
@@ -137,15 +136,14 @@ export class AuthenticationService {
         if (this.tryChangeUser(user, userCredentials.remember)) {
           const globalStateService = AppInjector.get(GlobalStateService);
           globalStateService.loadGlobals();
-          success();
         } else {
-          error();
+          return new Error('Failed to change user');
         }
 
         // Update token in one hour
         setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
-      },
-    });
+      })
+    );
   }
 
   public signOut(): void {
