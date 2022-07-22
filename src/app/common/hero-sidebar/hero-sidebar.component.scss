@@ -3,6 +3,11 @@
 }
 
 .left-banner {
+  h1 {
+    font-family: 'Grotesk';
+    font-size: 32px;
+  }
+
   flex-shrink: 0;
   min-width: 450px;
   max-width: 520px;
