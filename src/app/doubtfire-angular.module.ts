@@ -173,6 +173,7 @@ import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignme
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 
 @NgModule({
   // Components we declare
@@ -232,6 +233,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     SplashScreenComponent,
     ObjectSelectComponent,
     WelcomeComponent,
+    HeroSidebarComponent,
   ],
   // Module Imports
   imports: [
