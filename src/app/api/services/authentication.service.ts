@@ -2,11 +2,11 @@ import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { UIRouter, UIRouterGlobals } from '@uirouter/angular';
+import { StateService, UIRouter, UIRouterGlobals } from '@uirouter/angular';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { AppInjector } from 'src/app/app-injector';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,11 +14,12 @@ export class AuthenticationService {
     private httpClient: HttpClient,
     private userService: UserService,
     @Inject(alertService) private alertService: any,
-    doubtfireConstants: DoubtfireConstants,
+    private state: StateService,
+    private doubtfireConstants: DoubtfireConstants,
     private router: UIRouter,
     private uiRouterGlobals: UIRouterGlobals
   ) {
-    this.AUTH_URL = `${doubtfireConstants.API_URL}/auth`;
+    this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
   }
 
   public checkUserCookie(): void {
@@ -121,7 +122,7 @@ export class AuthenticationService {
           username: string;
           remember: boolean;
         }
-  ) {
+  ): Observable<any> {
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
       map((response: any) => {
         // Extract relevant data from response and construct user object to store in cache.
@@ -134,8 +135,7 @@ export class AuthenticationService {
         user.authenticationToken = response['auth_token'];
 
         if (this.tryChangeUser(user, userCredentials.remember)) {
-          const globalStateService = AppInjector.get(GlobalStateService);
-          globalStateService.loadGlobals();
+          AppInjector.get(GlobalStateService).loadGlobals();
         } else {
           return new Error('Failed to change user');
         }
@@ -149,6 +149,16 @@ export class AuthenticationService {
   public signOut(): void {
     const doSignOut = () => {
       this.tryChangeUser(this.userService.anonymousUser, false);
+      const globalStateService = AppInjector.get(GlobalStateService);
+      globalStateService.hideHeader();
+      globalStateService.setView(ViewType.OTHER);
+      globalStateService.clearUnitsAndProjects();
+
+      // if string is not null
+      if (this.doubtfireConstants.SignoutURL) {
+        window.location.assign(this.doubtfireConstants.SignoutURL);
+      }
+      this.state.go('sign_in');
     };
 
     if (this.userService.currentUser.authenticationToken) {
