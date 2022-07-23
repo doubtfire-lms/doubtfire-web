@@ -80,8 +80,8 @@ const WelcomeState: NgHybridStateDeclaration = {
  * Define the Sign In state.
  */
 const SignInState: NgHybridStateDeclaration = {
-  name: 'sign_in_2',
-  url: '/sign_in_2?dest&params&authToken&username',
+  name: 'sign_in',
+  url: '/sign_in?dest&params&authToken&username',
   views: {
     main: {
       component: SignInComponent,
