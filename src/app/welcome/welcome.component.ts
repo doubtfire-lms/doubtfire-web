@@ -25,6 +25,10 @@ export class WelcomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.userService.isAnonymousUser()) {
+      this.state.go('sign_in');
+    }
+
     this.user.optInToResearch = false;
     this.user.receiveFeedbackNotifications = true;
     this.user.receivePortfolioNotifications = true;
