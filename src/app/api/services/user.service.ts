@@ -57,6 +57,10 @@ export class UserService extends CachedEntityService<User> {
     return result;
   }
 
+  public isAnonymousUser(): boolean {
+    return this.currentUser.id === this.anonymousUser.id;
+  }
+
   private _currentUser: User;
   public get currentUser(): User {
     return this._currentUser;
