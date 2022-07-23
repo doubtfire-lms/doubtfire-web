@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { UserService } from 'src/app/api/services/user.service';
 import { StateService } from '@uirouter/core';
+import { AuthenticationService } from '../api/services/authentication.service';
 
 @Component({
   selector: 'f-welcome',
@@ -9,7 +10,12 @@ import { StateService } from '@uirouter/core';
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent implements OnInit {
-  constructor(private constants: DoubtfireConstants, private userService: UserService, private state: StateService) {}
+  constructor(
+    private constants: DoubtfireConstants,
+    private userService: UserService,
+    private state: StateService,
+    private authService: AuthenticationService
+  ) {}
 
   public externalName = this.constants.ExternalName;
   public user = this.userService.currentUser;
@@ -26,7 +32,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   public signOut(): void {
-    this.state.go('sign_out');
+    this.authService.signOut();
   }
 
   public submit(): void {
@@ -35,7 +41,7 @@ export class WelcomeComponent implements OnInit {
 
     this.userService.update(this.user).subscribe({
       next: (response) => {
-        this.user = response;
+        this.userService.save(response);
         this.state.go('home');
       },
       error: (error) => console.log(error),
