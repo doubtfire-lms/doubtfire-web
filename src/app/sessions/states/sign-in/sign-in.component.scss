@@ -1,23 +1,15 @@
-.form-field {
-  margin: 5px;
-}
+@import '../../../../styles/common/hero-sidebar-layout.scss';
 
-section {
-  padding: 8px;
-}
+.sign-in-form {
+  section {
+    padding: 8px;
+  }
+  .form-field {
+    margin: 5px;
+  }
 
-/* checkbox */
-::ng-deep .mat-checkbox-label {
-  font-weight: normal;
-}
-
-.welcome {
-  background: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  align-items: stretch;
-  z-index: 100;
+  /* checkbox */
+  ::ng-deep .mat-checkbox-label {
+    font-weight: normal;
+  }
 }
