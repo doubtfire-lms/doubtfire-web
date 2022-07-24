@@ -175,6 +175,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
+import { EditProfileComponent } from './common/edit-profile/edit-profile.component';
 
 @NgModule({
   // Components we declare
@@ -236,6 +237,7 @@ import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
     WelcomeComponent,
     HeroSidebarComponent,
     SignInComponent,
+    EditProfileComponent,
   ],
   // Module Imports
   imports: [
