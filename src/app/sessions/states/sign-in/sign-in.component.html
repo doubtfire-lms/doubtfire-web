@@ -1,35 +1,37 @@
 <div class="welcome" fxFlex>
-  <div fxLayout="row" fxLayoutAlign="start center" fxFlexFill fxFlex>
-    <f-hero-sidebar></f-hero-sidebar>
-
-    <!-- the main content -->
-    <div fxFlex>
-      <div fxLayoutAlign="center center" fxFill>
-        <form fxLayout="column">
-          <div class="wordmark" fxLayout="row" fxLayoutAlign="start center" fxHide.gt-sm fxFlexAlign="start">
-            <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" style="padding-right: 6px" />
-            <p style="color: black">{{ externalName.value }}</p>
-          </div>
-          <h1 style="margin-bottom: 30px; color: black" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
-
-          <mat-form-field appearance="outline" fxFlexFill>
-            <mat-label>Username</mat-label>
-            <input matInput name="username" required [(ngModel)]="formData.username" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" fxFlexFill>
-            <mat-label>Password</mat-label>
-            <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
-          </mat-form-field>
-          <button
-            mat-flat-button
-            color="primary"
-            (click)="sign_in({ username: formData.username, password: formData.password })"
-          >
-            Sign In
-          </button>
-        </form>
+  <!-- angular layout two columns -->
+  <f-hero-sidebar fxFlexAlign="start"></f-hero-sidebar>
+  <div class="container" fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+    <form
+      #form="ngForm"
+      (ngSubmit)="sign_in({ username: formData.username, password: formData.password })"
+      fxLayout="column"
+      fxLayoutAlign="center start"
+    >
+      <div class="wordmark" fxLayout="row" fxLayoutAlign="start center" fxHide.gt-sm fxFlexAlign="start">
+        <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" style="padding-right: 6px" />
+        <p style="color: black">{{ externalName.value }}</p>
       </div>
-    </div>
+      <h1 style="margin-bottom: 30px; color: black" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+
+      <mat-form-field appearance="outline" fxFlex fxFlexFill>
+        <mat-label>Username</mat-label>
+        <input matInput name="username" required [(ngModel)]="formData.username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex fxFlexFill>
+        <mat-label>Password</mat-label>
+        <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
+      </mat-form-field>
+      <button
+        fxFlex
+        fxFlexFill
+        mat-flat-button
+        color="primary"
+        (click)="sign_in({ username: formData.username, password: formData.password })"
+      >
+        Sign In
+      </button>
+    </form>
   </div>
 </div>
