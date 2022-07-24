@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators';
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { setAppInjector } from './app-injector';
+import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -176,6 +176,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './common/edit-profile/edit-profile.component';
+import { TransitionHooksService } from './sessions/transition-hooks.service';
 
 @NgModule({
   // Components we declare
@@ -392,5 +393,6 @@ export class DoubtfireAngularModule implements DoBootstrap {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
       strictDi: false,
     });
+    AppInjector.get(TransitionHooksService);
   }
 }
