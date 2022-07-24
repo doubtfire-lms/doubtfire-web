@@ -1,12 +1,23 @@
 .form-field {
-    margin: 5px;
-  }
+  margin: 5px;
+}
 
-  section {
-    padding: 8px;
-  }
+section {
+  padding: 8px;
+}
 
-  /* checkbox */
-  ::ng-deep .mat-checkbox-label {
-    font-weight: normal;
-  }
+/* checkbox */
+::ng-deep .mat-checkbox-label {
+  font-weight: normal;
+}
+
+.welcome {
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: stretch;
+  z-index: 100;
+}

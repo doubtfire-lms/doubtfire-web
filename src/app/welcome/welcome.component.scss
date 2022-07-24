@@ -1,17 +1,28 @@
 :host {
   height: 100vh;
-  margin-left: -15px;
+}
+
+.content {
+  width: 100%;
+}
+
+.content.large {
+  overflow: auto;
+}
+
+.welcome-form-host {
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  display: flex;
+  padding: 0 20px;
 }
 
 h1 {
   font-family: 'Grotesk';
   font-size: 32px;
-}
-
-.container {
-  overflow-y: auto;
-  margin-top: auto;
-  margin-bottom: auto;
 }
 
 .wordmark {
@@ -24,6 +35,12 @@ h1 {
   }
 }
 
+.container {
+  max-width: 416px;
+  width: 100%;
+  margin: auto;
+}
+
 .welcome {
-  background: #fff;
+  width: 100%;
 }

@@ -3,25 +3,14 @@
 }
 
 .left-banner {
-  h1 {
-    font-family: 'Grotesk';
-    font-size: 32px;
-  }
-
   flex-shrink: 0;
-  min-width: 450px;
-  max-width: 520px;
+  width: 480px;
   background: #1153fc;
   height: 100%;
 
-  .pattern {
-    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
-    mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
-    transition: 4s linear all;
-    background-color: #e5e5f7;
-    opacity: 1;
-    background-image: radial-gradient(#444cf7 1.25px, #e5e5f7 1.25px);
-    background-size: 25px 25px;
+  h1 {
+    font-family: 'Grotesk';
+    font-size: 32px;
   }
 
   .header {
@@ -42,5 +31,15 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+  }
+
+  .pattern {
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
+    mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
+    transition: 4s linear all;
+    background-color: #e5e5f7;
+    opacity: 1;
+    background-image: radial-gradient(#444cf7 1.25px, #e5e5f7 1.25px);
+    background-size: 25px 25px;
   }
 }
