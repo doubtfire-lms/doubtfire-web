@@ -3,6 +3,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { UserService } from 'src/app/api/services/user.service';
 import { StateService } from '@uirouter/core';
 import { AuthenticationService } from '../api/services/authentication.service';
+import { GlobalStateService } from '../projects/states/index/global-state.service';
 
 @Component({
   selector: 'f-welcome',
@@ -14,7 +15,8 @@ export class WelcomeComponent implements OnInit {
     private constants: DoubtfireConstants,
     private userService: UserService,
     private state: StateService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private globalState: GlobalStateService
   ) {}
 
   public externalName = this.constants.ExternalName;
@@ -25,6 +27,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.globalState.hideHeader();
     if (this.userService.isAnonymousUser()) {
       this.state.go('sign_in');
     }
