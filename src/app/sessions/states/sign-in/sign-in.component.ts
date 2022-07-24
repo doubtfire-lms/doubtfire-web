@@ -81,7 +81,6 @@ export class SignInComponent implements OnInit {
 
     if (this.authService.isAuthenticated()) {
       this.state.go('home');
-      this.globalState.showHeader();
     } else {
       // this.sign_in = () =>
       //   this.sign_in({

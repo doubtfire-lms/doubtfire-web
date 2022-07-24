@@ -52,7 +52,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
-    this.globalState.showHeader();
 
     this.testForNewUserWizard();
 
