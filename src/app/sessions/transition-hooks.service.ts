@@ -14,7 +14,9 @@ export class TransitionHooksService {
     private globalState: GlobalStateService
   ) {
     this.transitions.onBefore({}, (transition) => {
-      switch (transition.to().name) {
+      const toState = transition.to().name;
+
+      switch (toState) {
         case 'sign_in':
           this.globalState.hideHeader();
           break;
@@ -34,7 +36,7 @@ export class TransitionHooksService {
       if (
         !this.userService.isAnonymousUser() &&
         !userService.currentUser.hasRunFirstTimeSetup &&
-        transition.to().name !== 'welcome'
+        toState !== 'welcome'
       ) {
         return transition.router.stateService.target('welcome');
       }
