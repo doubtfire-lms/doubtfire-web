@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators';
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { setAppInjector } from './app-injector';
+import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -168,12 +168,15 @@ import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdo
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
-import { UIRouter } from '@uirouter/angular';
-import { GlobalStateService } from './projects/states/index/global-state.service';
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
+import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
+import { EditProfileComponent } from './common/edit-profile/edit-profile.component';
+import { TransitionHooksService } from './sessions/transition-hooks.service';
 
 @NgModule({
   // Components we declare
@@ -232,6 +235,10 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
     TaskDropdownComponent,
     SplashScreenComponent,
     ObjectSelectComponent,
+    WelcomeComponent,
+    HeroSidebarComponent,
+    SignInComponent,
+    EditProfileComponent,
   ],
   // Module Imports
   imports: [
@@ -354,7 +361,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
-    IsActiveUnitRole
+    IsActiveUnitRole,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
@@ -382,9 +389,10 @@ export class DoubtfireAngularModule implements DoBootstrap {
     );
   }
 
-  ngDoBootstrap() {
+  ngDoBootstrap(): void {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
       strictDi: false,
     });
+    AppInjector.get(TransitionHooksService);
   }
 }

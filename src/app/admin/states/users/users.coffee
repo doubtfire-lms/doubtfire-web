@@ -3,7 +3,7 @@ angular.module('doubtfire.admin.states.users', [])
 #
 # Administration panel for all doubtfire users
 #
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   usersAdminViewStateData =
     url: "/admin/users"
     views:
@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.states.users', [])
     data:
       pageTitle: "_Users Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  headerServiceProvider.state "admin/users", usersAdminViewStateData
+  $stateProvider.state "admin/users", usersAdminViewStateData
 )
 
 .controller("AdministerUsersCtrl", ($scope, $modal, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService, GlobalStateService, newUserService) ->

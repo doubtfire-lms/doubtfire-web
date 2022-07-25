@@ -1,6 +1,6 @@
 angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
 
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   homeStateData =
     url: "/view-all-projects"
     views:
@@ -10,7 +10,7 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
     data:
       pageTitle: "_All-Projects_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerServiceProvider.state 'view-all-projects', homeStateData
+  $stateProvider.state 'view-all-projects', homeStateData
 )
 
 .controller("AllProjectsList", ($scope, $state, $timeout, DoubtfireConstants, newProjectService, analyticsService, dateService, GlobalStateService, newUserService) ->

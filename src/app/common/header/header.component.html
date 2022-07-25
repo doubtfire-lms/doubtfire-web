@@ -11,11 +11,7 @@
   </a>
   <div style="color: rgb(216, 216, 216)">/</div>
 
-  <unit-dropdown
-    [unit]="currentUnit"
-    [unitRoles]="filteredUnitRoles"
-    [projects]="projects">
-  </unit-dropdown>
+  <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects"> </unit-dropdown>
 
   <task-dropdown
     [currentUnit]="currentUnit"
@@ -57,6 +53,6 @@
     <button mat-menu-item (click)="openNotificationSettings()">Notifications</button>
     <button mat-menu-item (click)="openCalendar()">Calendar</button>
     <button mat-menu-item (click)="openAboutModal()">About</button>
-    <button mat-menu-item uiSref="sign_out">Sign Out</button>
+    <button mat-menu-item (click)="signOut()">Sign Out</button>
   </mat-menu>
 </mat-toolbar>

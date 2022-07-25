@@ -42,9 +42,6 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/welcome/welcome.js';
-import 'build/src/app/welcome/states/welcome/welcome.js';
-import 'build/src/app/welcome/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
@@ -182,7 +179,6 @@ import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
-import 'build/src/app/common/header/header.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
@@ -192,15 +188,11 @@ import 'build/src/app/common/services/media-service.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/grade-service.js';
 import 'build/src/app/common/services/alert-service.js';
-import 'build/src/app/common/services/header-service.js';
 import 'build/src/app/common/services/date-service.js';
 import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/sessions/states/states.js';
-import 'build/src/app/sessions/states/sign-in/sign-in.js';
-import 'build/src/app/sessions/states/sign-out/sign-out.js';
 import 'build/src/app/api/models/group-member.js';
 import 'build/src/app/api/models/user-role.js';
 import 'build/src/app/api/models/group-set.js';
@@ -257,7 +249,16 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { LearningOutcomeService, TaskCommentService, TaskOutcomeAlignmentService, TaskService, TeachingPeriodService, UnitRoleService, UnitService, UserService } from './api/models/doubtfire-model';
+import {
+  LearningOutcomeService,
+  TaskCommentService,
+  TaskOutcomeAlignmentService,
+  TaskService,
+  TeachingPeriodService,
+  UnitRoleService,
+  UnitService,
+  UserService,
+} from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -266,6 +267,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
@@ -281,7 +283,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.units',
   'doubtfire.tasks',
   'doubtfire.projects',
-  'doubtfire.welcome',
   'doubtfire.groups',
   'doubtfire.visualisations',
 ]);
@@ -313,20 +314,15 @@ DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(Ch
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
+DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
 );
-DoubtfireAngularJSModule.directive(
-  'objectSelect',
-  downgradeComponent({ component: ObjectSelectComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'appHeader',
-  downgradeComponent({ component: HeaderComponent })
-);
+DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
+DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
@@ -369,12 +365,15 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor',
-  downgradeComponent({ component: TaskAssessorComponent }));
-DoubtfireAngularJSModule.directive('taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent }));
-DoubtfireAngularJSModule.directive('taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+);
 
 // Global configuration
 DoubtfireAngularJSModule.directive(

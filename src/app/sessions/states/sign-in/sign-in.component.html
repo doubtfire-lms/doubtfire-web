@@ -1,0 +1,32 @@
+<section class="welcome" fxFlex fxLayout="row">
+  <f-hero-sidebar fxHide.lt-md fxFlexAlign="start"></f-hero-sidebar>
+  <section class="content" fxFlex.gt-sm [ngClass.gt-sm]="'large'" fxLayout.gt-sm="column">
+    <div class="container">
+      <div class="subcontainer">
+        <div class="wordmark" fxLayout="row" fxLayoutAlign="start center" fxHide.gt-sm fxFlexAlign="start">
+          <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" />
+          <p>{{ externalName.value }}</p>
+        </div>
+        <h1 class="welcome-heading" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+        <form
+          #form="ngForm"
+          (ngSubmit)="sign_in({ username: formData.username, password: formData.password })"
+          fxLayout="column"
+          fxLayoutAlign="center start"
+          class="sign-in-form"
+        >
+          <mat-form-field appearance="outline" fxFlex fxFlexFill>
+            <mat-label>Username</mat-label>
+            <input matInput name="username" required [(ngModel)]="formData.username" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex fxFlexFill>
+            <mat-label>Password</mat-label>
+            <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
+          </mat-form-field>
+          <button fxFlex fxFlexFill mat-flat-button color="primary" type="form">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</section>

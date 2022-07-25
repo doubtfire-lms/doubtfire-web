@@ -1,0 +1,46 @@
+:host {
+  height: 100%;
+  margin-left: -15px;
+}
+
+.left-banner {
+  flex-shrink: 0;
+  width: 480px;
+  background: #1153fc;
+  height: 100%;
+
+  h1 {
+    font-family: 'Grotesk';
+    font-size: 32px;
+  }
+
+  .header {
+    padding: 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    margin: 20px;
+  }
+
+  .wordmark {
+    p {
+      margin: 0;
+      padding: 0;
+      font-family: 'Grotesk';
+      font-size: 1.5em;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+
+  .pattern {
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
+    mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
+    transition: 4s linear all;
+    background-color: #e5e5f7;
+    opacity: 1;
+    background-image: radial-gradient(#444cf7 1.25px, #e5e5f7 1.25px);
+    background-size: 25px 25px;
+  }
+}
