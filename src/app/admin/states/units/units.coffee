@@ -6,7 +6,7 @@ angular.module('doubtfire.admin.states.units', [])
 #
 # Users with an Administrator system role can create new units.
 #
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   unitsAdminViewStateData =
     url: "/admin/units"
     views:
@@ -16,7 +16,7 @@ angular.module('doubtfire.admin.states.units', [])
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  headerServiceProvider.state "admin/units", unitsAdminViewStateData
+  $stateProvider.state "admin/units", unitsAdminViewStateData
 )
 .controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, CreateUnitModal, alertService, GlobalStateService, newUnitService) ->
   GlobalStateService.setView("OTHER")
