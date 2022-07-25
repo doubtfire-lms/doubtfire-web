@@ -179,7 +179,6 @@ import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
-import 'build/src/app/common/header/header.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
@@ -189,7 +188,6 @@ import 'build/src/app/common/services/media-service.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/grade-service.js';
 import 'build/src/app/common/services/alert-service.js';
-import 'build/src/app/common/services/header-service.js';
 import 'build/src/app/common/services/date-service.js';
 import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
@@ -317,7 +315,6 @@ DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(Task
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
-
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
