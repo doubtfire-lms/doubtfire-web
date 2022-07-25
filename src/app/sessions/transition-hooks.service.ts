@@ -30,6 +30,14 @@ export class TransitionHooksService {
         default:
           break;
       }
+
+      if (
+        !this.userService.isAnonymousUser() &&
+        !userService.currentUser.hasRunFirstTimeSetup &&
+        transition.to().name !== 'welcome'
+      ) {
+        return transition.router.stateService.target('welcome');
+      }
     });
   }
 }
