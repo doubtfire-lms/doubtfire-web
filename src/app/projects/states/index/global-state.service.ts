@@ -113,6 +113,7 @@ export class GlobalStateService implements OnDestroy {
 
   public signOut(): void {
     this.isLoadingSubject.next(true);
+    this.userService.cache.clear();
     this.clearUnitsAndProjects();
     this.authenticationService.signOut();
     this.router.stateService.go('sign_in');
