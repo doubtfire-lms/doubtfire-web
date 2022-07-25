@@ -1,6 +1,6 @@
 angular.module('doubtfire.units.states.all.directives.all-units-list', [])
 
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   allUnitsStateData =
     url: "/view-all-units"
     views:
@@ -10,7 +10,7 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
     data:
       pageTitle: "_All-Units_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
-  headerServiceProvider.state 'view-all-units', allUnitsStateData
+  $stateProvider.state 'view-all-units', allUnitsStateData
 )
 
 .controller("AllUnitsList", ($scope, $state, $timeout, DoubtfireConstants, dateService, GlobalStateService, newUserService, newUnitService) ->

@@ -3,8 +3,8 @@ angular.module('doubtfire.units.states.index', [])
 #
 # Root state for units
 #
-.config((headerServiceProvider) ->
-  headerServiceProvider.state 'units/index', {
+.config(() ->
+  stateData =
     url: "/units/:unitId"
     abstract: true
     views:
@@ -14,12 +14,12 @@ angular.module('doubtfire.units.states.index', [])
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  }
 )
 
 .controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, GlobalStateService, newUserService, alertService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
+  console.log ('going home in index.coffee for units')
   return $state.go('home') unless unitId
 
   GlobalStateService.onLoad () ->
@@ -30,6 +30,7 @@ angular.module('doubtfire.units.states.index', [])
       $scope.unitRole = newUserService.adminRoleFor(unitId, newUserService.currentUser)
 
     # Go home if no unit role was found
+    console.log ('going home in index.coffee for units2')
     return $state.go('home') unless $scope.unitRole?
 
     GlobalStateService.setView("UNIT", $scope.unitRole)
