@@ -41,11 +41,10 @@ export class EditProfileComponent implements OnInit {
 
   public submit(): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
+    this.user.hasRunFirstTimeSetup = true;
 
     this.userService.update(this.user).subscribe({
-      next: (response) => {
-        this.user.hasRunFirstTimeSetup = true;
-        this.userService.save(response);
+      next: (_) => {
         this.state.go('home');
       },
       error: (error) => console.log(error),
