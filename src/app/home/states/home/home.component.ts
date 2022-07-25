@@ -53,8 +53,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
 
-    this.testForNewUserWizard();
-
     this.loadingUnitRoles = true;
     this.loadingProjects = true;
 
@@ -115,20 +113,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     const q = Math.abs(today.valueOf() - start.valueOf());
     const d = Math.abs(end.valueOf() - start.valueOf());
     return Math.round((q / d) * 100);
-  }
-
-  testForNewUserWizard(): boolean {
-    const firstTimeUser = this.currentUser.hasRunFirstTimeSetup === false;
-    let userHasNotOptedIn = this.currentUser.optInToResearch === null;
-
-    const showNewUserWizard = firstTimeUser || userHasNotOptedIn;
-    userHasNotOptedIn = userHasNotOptedIn && !firstTimeUser;
-
-    if (showNewUserWizard) {
-      this.globalState.hideHeader();
-      this.router.stateService.go('welcome');
-    }
-
-    return showNewUserWizard;
   }
 }
