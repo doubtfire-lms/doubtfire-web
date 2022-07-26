@@ -10,8 +10,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   #
   UploadSubmissionModal.show = (task, reuploadEvidence, isTestSubmission = false) ->
     # Refuse to open modal if group task and not in a group
-    if !isTestSubmission && task.isGroupTask() && !task.studentInAGroup()
-      alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
+    if !isTestSubmission && task.isGroupTask() && !task.group
+      alertService.add('danger', "This is a group assignment. Join a #{task.definition.groupSet.name} group set to submit this task.", 8000)
       return null
 
     if isTestSubmission
@@ -158,7 +158,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       shouldDisableByState = {
         # Disable group if group members not allocated anything
         group: ->
-          _.chain($scope.team.members).map('confRating').compact().value().length == 0
+          _.chain($scope.team.memberContributions).map('confRating').compact().value().length == 0
         # Disable alignment if no alignments made (need at least 1) and
         # if description is blank
         alignment: ->
@@ -206,14 +206,14 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     ), 251)
 
   # Team for group state (populated by assignment rater)
-  $scope.team = { members: [] }
+  $scope.team = { memberContributions: [] }
 
   # Maps team data to payload data
   mapTeamToPayload = ->
-    total = groupService.groupContributionSum($scope.team.members)
-    _.map($scope.team.members,
+    total = groupService.groupContributionSum($scope.team.memberContributions)
+    _.map($scope.team.memberContributions,
       (member) -> {
-        project_id: member.project_id,
+        project_id: member.project.id,
         pct: (100 * member.rating / total).toFixed(0),
         pts: member.rating
       }

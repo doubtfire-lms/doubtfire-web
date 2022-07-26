@@ -138,6 +138,38 @@ export class UnitService extends CachedEntityService<Unit> {
       },
       // 'tutorialEnrolments', - map to tutorial enrolments
       {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, jsonKey: string, unit: Unit) => {
+          data[jsonKey].forEach( (alignment) => {
+            unit.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              this.taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: unit
+              }
+            );
+          });
+        }
+      },
+      {
+        keys: 'groupSets',
+        toEntityOp: (data, key, unit) => {
+          data[key].forEach((groupSetJson: object) => {
+            unit.groupSetsCache.add(this.groupSetService.buildInstance(groupSetJson, {constructorParams: unit}));
+          });
+        }
+      },
+      {
+        keys: 'groups',
+        toEntityOp: (data, key, unit) => {
+          data[key].forEach((groupJson: object) => {
+            const group = this.groupService.buildInstance(groupJson, {constructorParams: unit});
+            group.groupSet.groupsCache.add(group);
+          });
+        }
+      },
+      {
         keys: 'taskDefinitions',
         toEntityOp: (data, key, unit) => {
           var seq: number = 0;
@@ -156,37 +188,6 @@ export class UnitService extends CachedEntityService<Unit> {
           return unit.draftTaskDefinition?.id;
         }
       },
-      {
-        keys: 'taskOutcomeAlignments',
-        toEntityOp: (data: object, jsonKey: string, unit: Unit) => {
-          data[jsonKey].forEach( (alignment) => {
-            unit.taskOutcomeAlignmentsCache.getOrCreate(
-              alignment['id'],
-              this.taskOutcomeAlignmentService,
-              alignment,
-              {
-                constructorParams: unit
-              }
-            );
-          });
-        }
-      },
-      {
-        keys: 'groupSets',
-        toEntityOp: (data, key, unit) => {
-          data['group_sets'].forEach((groupSetJson: object) => {
-            unit.groupSetsCache.add(this.groupSetService.buildInstance(groupSetJson));
-          });
-        }
-      },
-      {
-        keys: 'groups',
-        toEntityOp: (data, key, unit) => {
-          data['groups'].forEach((groupJson: object) => {
-            unit.groupsCache.add(this.groupService.buildInstance(groupJson, {constructorParams: unit}));
-          });
-        }
-      }
       // 'groupMemberships', - map to group memberships
     );
 

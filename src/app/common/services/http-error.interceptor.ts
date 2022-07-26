@@ -40,6 +40,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           if (error.error instanceof ErrorEvent) {
             // client-side error
             errorMessage = error.error.message;
+          } else if (error.error instanceof ProgressEvent) {
+            errorMessage = error.statusText;
           } else {
             // server-side error
             errorMessage = error.error.error;

@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, gradeService, alertService, newTaskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService, newTaskDefinitionService) ->
+  controller: ($scope, $rootScope, gradeService, alertService, newTaskService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService, newTaskDefinitionService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -123,5 +123,5 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
       if response.success.length > 0
         $scope.unit.refresh()
 
-    $scope.groupSetName = (id) -> groupService.groupSetName(id, $scope.unit)
+    $scope.groupSetName = (id) -> $scope.unit.groupSetsCache.get(id)?.name || "Individual Work"
 )

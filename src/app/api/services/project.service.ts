@@ -105,7 +105,6 @@ export class ProjectService extends CachedEntityService<Project> {
           entity.orderScale = Math.round((values['order_scale'] || 0) * 100);
         }
       },
-      // 'groups',
       'grade',
       'gradeRationale',
       {
@@ -157,6 +156,16 @@ export class ProjectService extends CachedEntityService<Project> {
               project.tutorialEnrolmentsCache.add(tutorial);
             }
           });
+        }
+      },
+      {
+        keys: 'groups',
+        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
+          data[key].each
+
+        },
+        toJsonFn: (entity: Project, key: string) => {
+          return entity.unit?.id;
         }
       },
       {

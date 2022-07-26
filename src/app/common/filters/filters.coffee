@@ -62,7 +62,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsWithSubmittedGrade', ->
   (input, grade) ->
     if input && grade > -1
-      _.filter  input, (student) -> (student?) && student.submitted_grade == grade
+      _.filter  input, (student) -> (student?) && student.submittedGrade == grade
     else
       input
 )
@@ -70,7 +70,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('taskWithPlagiarism', ->
   (input) ->
     if input
-      _.filter input, (task) -> (task?) && task.pct_similar > 0
+      _.filter input, (task) -> (task?) && task.pctSimilar > 0
     else
       input
 )
@@ -78,10 +78,10 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsForGroup', ->
   (input, gs, group, members) ->
     if input
-      if gs.keep_groups_in_same_class
-        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial)) && (not _.find(members, (mbr) -> student.project_id == mbr.project_id ))
+      if gs.keepGroupsInSameClass
+        _.filter input, (student) -> (student?) && (student.isEnrolledIn(group.tutorial)) && (not _.find(members, (mbr) -> student.id == mbr.id ))
       else
-        _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.project_id == mbr.project_id )
+        _.filter input, (student) -> (student?) && not _.find(members, (mbr) -> student.id == mbr.id )
     else
       input
 )
@@ -148,7 +148,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('tasksOfTaskDefinition', ->
   (tasks, taskDefinition) ->
     return tasks unless (taskDefinition? && tasks?)
-    tasks = _.filter tasks, { task_definition_id: taskDefinition.id }
+    tasks = _.filter tasks, (task) -> task.definition.id == taskDefinition.id
 )
 
 .filter('tasksWithStatuses', ->
@@ -194,7 +194,7 @@ angular.module("doubtfire.common.filters", [])
   (input, unitRole, kind) ->
     return unless input? && unitRole? && kind?
     if kind == 'mine'
-      return _.filter(input, (group) -> group.tutorial().tutor.id == unitRole.user.id)
+      return _.filter(input, (group) -> group.tutorial.tutor.id == unitRole.user.id)
     return input
 )
 
@@ -204,7 +204,7 @@ angular.module("doubtfire.common.filters", [])
     return input unless input? && groupSet? && project?
     grp = project.groupForGroupSet(groupSet)
     return [grp] if grp
-    return input unless groupSet.keep_groups_in_same_class
+    return input unless groupSet.keepGroupsInSameClass
     _.filter(input, (group) -> project.isEnrolledIn(group.tutorial))
 )
 

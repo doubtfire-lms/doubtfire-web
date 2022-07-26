@@ -84,7 +84,7 @@
                 <td>{{taskDef.startDate | date : 'EEE d MMM'}}</td>
                 <td>{{taskDef.targetDate | date : 'EEE d MMM'}}</td>
                 <td><span ng-show="taskDef.dueDate">{{taskDef.dueDate | date : 'EEE d MMM' }}</span><span ng-hide="taskDef.dueDate">None</span></td>
-                <td ng-show="unit.hasGroupwork()">{{taskDef.groupSet.name}}</td>
+                <td ng-show="unit.hasGroupwork()">{{taskDef.groupSet.name || "individual"}}</td>
                 <td ng-show="unit.hasStreams()">{{taskDef.tutorialStream.abbreviation}}</td>
                 <td>{{taskDef.uploadRequirements.length}}</td>
                 <td><i ng-show="taskDef.hasPlagiarismCheck()" class="fa fa-check"></i><i ng-hide="taskDef.hasPlagiarismCheck()" class="fa fa-times"></i></td>

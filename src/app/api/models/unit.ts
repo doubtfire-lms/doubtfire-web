@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { GroupService } from '../services/group.service';
 import { ProjectService } from '../services/project.service';
 import { TaskDefinitionService } from '../services/task-definition.service';
 import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
@@ -49,7 +50,6 @@ export class Unit extends Entity {
   readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
   public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
-  public readonly groupsCache: EntityCache<Group> = new EntityCache<Group>();
 
   groupMemberships: Array<GroupMembership>;
 
@@ -170,15 +170,15 @@ export class Unit extends Entity {
     );
   }
 
-  public get students(): Array<Project> {
+  public get students(): Project[] {
     return this.studentCache.currentValues;
   }
 
-  public get activeStudents(): Array<Project> {
+  public get activeStudents(): Project[] {
     return this.studentCache.currentValues.filter( p => p.enrolled );
   }
 
-  public tutorialsForUserName(userName: string): Array<Tutorial> {
+  public tutorialsForUserName(userName: string): Tutorial[] {
     return this.tutorials.filter(tutorial => tutorial.tutorName === userName);
   }
 
@@ -257,6 +257,18 @@ export class Unit extends Entity {
     console.log("implement refresh groups");
   }
 
+  public getGroups(groupSet: GroupSet): Observable<Group[]> {
+    const groupService: GroupService = AppInjector.get(GroupService);
+
+    return groupService.query( {
+      unitId: this.id,
+      groupSetId: groupSet.id
+    }, {
+      cache: groupSet.groupsCache,
+      constructorParams: this
+    });
+  }
+
   public findGroupSet(id: number): GroupSet {
     return this.groupSetsCache.get(id);
   }
@@ -327,20 +339,19 @@ export class Unit extends Entity {
     return this.students.find( (s) => s.student.username === username);
   }
 
-  public get groups(): Group[] {
-    return this.groupsCache.currentValues;
-  }
-
   public get groupSets(): GroupSet[] {
     return this.groupSetsCache.currentValues;
   }
 
-  public findGroupById(id: number): Group {
-    return this.groups.find(grp => grp.id === id);
-  }
-
   public overseerEnabled(): boolean {
     return this.assessmentEnabled && this.overseerImageId !== null;
+  }
+
+  private addStudentTypeAheadData(students: Project[], appendTo: string[]): void {
+    students.forEach(project => {
+      appendTo.push(project.student.name);
+      appendTo.push(project.student.username);
+    });
   }
 
   public get studentFilterTypeAheadData(): string[] {
@@ -353,10 +364,23 @@ export class Unit extends Entity {
       }
     });
 
-    this.students.forEach(project => {
-      result.push(project.student.name);
-      result.push(project.student.username);
-    });
+    this.addStudentTypeAheadData(this.students, result);
+
+    return result;
+  }
+
+  public studentsForGroupTypeAhead(group: Group): Project[] {
+    const gs = group.groupSet;
+    const members = group.projectsCache;
+    let result: Project[];
+
+    if (gs.keepGroupsInSameClass) {
+      result = this.activeStudents.filter(
+        (student) => (student.isEnrolledIn(group.tutorial)) && (! members.has(student.id)));
+    } else {
+      result = this.activeStudents.filter(
+        (student) => ! members.has(student.id));
+    }
 
     return result;
   }
