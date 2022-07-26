@@ -3,8 +3,8 @@ angular.module('doubtfire.projects.states.index', [])
 #
 # Root state for projects
 #
-.config((headerServiceProvider) ->
-  headerServiceProvider.state 'projects/index', {
+.config(($stateProvider) ->
+  $stateProvider.state 'projects/index', {
     url: "/projects/:projectId"
     abstract: true
     views:

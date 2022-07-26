@@ -1,0 +1,86 @@
+<form #form="ngForm" (ngSubmit)="submit()" fxLayout="column" fxLayoutAlign="center start">
+  <div class="main-container" style="width: 100%" fxLayout="row" fxLayoutAlign="center start">
+    <div class="main" style="width: 100%" fxLayout="column" fxLayoutAlign="start center">
+      <div fxLayout="row" fxFlexFill>
+        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
+          <mat-label>First Name</mat-label>
+          <input matInput [(ngModel)]="user.firstName" name="first" required />
+        </mat-form-field>
+
+        <div fxFlex="3"></div>
+
+        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
+          <mat-label>Second Name</mat-label>
+          <input matInput [(ngModel)]="user.lastName" name="last" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxFlexFill>
+        <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
+          <mat-label>Pronouns</mat-label>
+          <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
+            <mat-option value="">Do not show</mat-option>
+            <mat-option value="He/Him">He/Him</mat-option>
+            <mat-option value="She/Her">She/Her</mat-option>
+            <mat-option value="They/Them">They/Them</mat-option>
+            <mat-option value="__customPronouns">Custom</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div fxFlex="3"></div>
+        <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
+          <mat-label>Preferred Name</mat-label>
+          <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field fxFlexFill appearance="outline" [hidden]="!customPronouns">
+        <mat-label>Custom Pronouns</mat-label>
+        <input
+          matInput
+          maxlength="25"
+          name="custom_pronouns"
+          type="text"
+          [(ngModel)]="user.pronouns"
+          [required]="customPronouns"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlexFill *ngIf="user.systemRole === 'Student'">
+        <mat-label>Student ID</mat-label>
+        <input matInput [(ngModel)]="user.studentId" name="student_id" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlexFill>
+        <mat-label>Email</mat-label>
+        <input type="email" matInput [(ngModel)]="user.email" name="email" required />
+      </mat-form-field>
+
+      <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
+        <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
+          >Receive notifications for new messages</mat-checkbox
+        >
+        <div fxFlex></div>
+        <mat-checkbox color="primary" [(ngModel)]="user.receivePortfolioNotifications" name="portfolio_n"
+          >Receive notifications when your portfolio is ready</mat-checkbox
+        >
+        <div fxFlex></div>
+        <mat-checkbox fxFlex color="primary" [(ngModel)]="user.receiveTaskNotifications" name="task_n"
+          >Receive notifications when new tasks are available</mat-checkbox
+        >
+      </section>
+      <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
+        <mat-checkbox color="primary" [(ngModel)]="user.optInToResearch" name="optin"
+          >Send anonymous research statistics</mat-checkbox
+        >
+      </section>
+
+      <div fxLayout="row" fxFlexFill style="padding-top: 12px">
+        <button fxFlexAlign="start" type="button" mat-stroked-button (click)="signOut()">Sign Out</button>
+        <div fxFlex></div>
+        <button [disabled]="form.invalid" fxFlexAlign="end" type="submit" mat-flat-button color="primary">
+          Confirm Account
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

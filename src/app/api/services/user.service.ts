@@ -8,15 +8,13 @@ import { AuthenticationService } from './authentication.service';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class UserService extends CachedEntityService<User> implements OnInit {
+export class UserService extends CachedEntityService<User> {
   protected readonly endpointFormat = 'users/:id:';
-  private readonly tutorEndpointFormat = "/users/tutors";
+  private readonly tutorEndpointFormat = '/users/tutors';
 
   public readonly csvURL: string;
 
-  constructor(
-    httpClient: HttpClient
-  ) {
+  constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
     this.csvURL = API_URL + 'csv/users';
@@ -35,15 +33,12 @@ export class UserService extends CachedEntityService<User> implements OnInit {
       'receivePortfolioNotifications',
       'receiveFeedbackNotifications',
       'hasRunFirstTimeSetup',
+      'pronouns'
     );
 
     this._currentUser = this.anonymousUser;
 
     this.mapping.mapAllKeysToJsonExcept('id');
-  }
-
-  ngOnInit(): void {
-    AppInjector.get(AuthenticationService).checkUserCookie();
   }
 
   public createInstanceFrom(json: any, other?: any): User {
@@ -62,6 +57,10 @@ export class UserService extends CachedEntityService<User> implements OnInit {
     return result;
   }
 
+  public isAnonymousUser(): boolean {
+    return this.currentUser.id === this.anonymousUser.id;
+  }
+
   private _currentUser: User;
   public get currentUser(): User {
     return this._currentUser;
@@ -72,22 +71,21 @@ export class UserService extends CachedEntityService<User> implements OnInit {
   }
 
   // Specific to the User entity
-  public save(user: User) {
+  public save(user: User): void {
     if (user === this.currentUser) {
       AppInjector.get(AuthenticationService).saveCurrentUser();
-    }
-    else {
-      console.log("implement save other users...?");
+    } else {
+      console.log('implement save other users...?');
     }
   }
 
   public getTutors(): Observable<User[]> {
-    return this.query(undefined, { endpointFormat: this.tutorEndpointFormat});
+    return this.query(undefined, { endpointFormat: this.tutorEndpointFormat });
   }
 
   public adminRoleFor(unitId: number, user: User): UnitRole {
     const result = new UnitRole();
-    result.role = "Admin";
+    result.role = 'Admin';
     result.user = user;
 
     const unitService = AppInjector.get(UnitService);
@@ -95,5 +93,4 @@ export class UserService extends CachedEntityService<User> implements OnInit {
 
     return result;
   }
-
 }

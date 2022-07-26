@@ -1,0 +1,17 @@
+:host {
+  height: auto;
+  overflow-y: auto;
+}
+
+.form-field {
+  margin: 5px;
+}
+
+section {
+  padding: 8px;
+}
+
+/* checkbox */
+::ng-deep .mat-checkbox-label {
+  font-weight: normal;
+}
