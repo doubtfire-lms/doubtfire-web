@@ -237,7 +237,6 @@ import 'build/src/app/api/api.js';
 import 'build/src/app/api/resource-plus.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/unauthorised/unauthorised.js';
-import 'build/src/app/errors/states/not-found/not-found.js';
 import 'build/src/app/errors/states/timeout/timeout.js';
 import 'build/src/app/errors/states/states.js';
 import 'build/src/common/utilService/utilService.js';
@@ -289,6 +288,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { NotFoundComponent } from './errors/states/not-found/not-found.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -328,10 +328,7 @@ DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
 );
-DoubtfireAngularJSModule.directive(
-  'appHeader',
-  downgradeComponent({ component: HeaderComponent })
-);
+DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
@@ -374,12 +371,15 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor',
-  downgradeComponent({ component: TaskAssessorComponent }));
-DoubtfireAngularJSModule.directive('taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent }));
-DoubtfireAngularJSModule.directive('taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+);
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
@@ -395,6 +395,8 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+
+DoubtfireAngularJSModule.directive('notFound', downgradeComponent({ component: NotFoundComponent }));
 
 // Global configuration
 

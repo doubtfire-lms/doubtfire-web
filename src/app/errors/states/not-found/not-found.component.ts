@@ -1,10 +1,10 @@
 import { Component, Input, Inject } from '@angular/core';
 
 @Component({
-  selector: 'task-description-card',
-  templateUrl: 'task-description-card.component.html',
-  styleUrls: ['task-description-card.component.scss'],
+  selector: 'not-found',
+  templateUrl: 'not-found.component.html',
+  // styleUrls: ['not-found.component.scss'], // Original dont have scss
 })
-export class TaskDescriptionCardComponent {
+export class NotFoundComponent {
   constructor() {}
 }
