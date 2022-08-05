@@ -1,3 +1,37 @@
 .confirmation-modal .modal-body {
   font-size: 1.5em;
 }
+
+.card-container {
+  margin-bottom: 16px;
+}
+
+.icon-size {
+  width: 25px;
+  height: auto;
+}
+
+.heading-container {
+  display: flex;
+  align-items: center;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+}
+
+.label {
+  margin-top: 4px;
+}
+
+.label-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message-container {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}

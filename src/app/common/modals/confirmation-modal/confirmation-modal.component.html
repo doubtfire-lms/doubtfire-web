@@ -1,18 +1,30 @@
-<div class="confirmation-modal">
-  <div class="modal-header clearfix">
-    <h3 class="modal-title">
-      <i class="fa fa-question-circle fa-2x pull-left"></i>
-      <div class="title-definition">{{ title }}</div>
-      <small class="message-definition">Please confirm that you want to perform this action.</small>
-    </h3>
+<div>
+  <div class="card-container">
+    <mat-card-header>
+      <div class="heading-container">
+        <div class="icon-container">
+          <i class="fa fa-question-circle fa-4x pull-left"></i>
+        </div>
+        <div class="title-container">
+          <mat-card-title>{{ title }}</mat-card-title>
+          <mat-card-subtitle>Please confirm that you want to perform this action</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
   </div>
-  <div class="modal-body">
-    {{ message }}
+  <mat-divider></mat-divider>
+  <div class="message-container">
+    <mat-card-content>
+      <div>
+        {{ message }}
+      </div>
+    </mat-card-content>
   </div>
-  <div class="modal-footer clearfix">
-    <div class="btn-group">
+  <mat-divider></mat-divider>
+  <div class="label">
+    <mat-card-actions class="label-container">
       <label class="btn btn-success" (click)="confirmAction()"> <i class="fa fa-check"></i> Confirm </label>
       <label class="btn btn-danger" (click)="cancelAction()"> <i class="fa fa-times"></i> Cancel </label>
-    </div>
+    </mat-card-actions>
   </div>
 </div>
