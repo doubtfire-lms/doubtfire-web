@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { plagiarismReportModal } from 'src/app/ajs-upgraded-providers';
 
 import { TaskPlagiarismCardComponent } from './task-plagiarism-card.component';

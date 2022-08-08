@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { gradeService } from 'src/app/ajs-upgraded-providers';
 import { Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'df-grade-task-modal',
+  selector: 'grade-task-modal',
   templateUrl: './grade-task-modal.component.html',
   styleUrls: ['./grade-task-modal.component.scss'],
 })
@@ -36,11 +36,11 @@ export class GradeTaskModalComponent implements OnInit {
     this.updateRatingLabel();
   }
 
-  dismiss() {
+  dismiss(): void {
     this.dialogRef.close();
   }
 
-  close() {
+  close(): void {
     // Pass values back to service
     this.dialogRef.close({
       qualityPts: this.rating,
@@ -55,18 +55,18 @@ export class GradeTaskModalComponent implements OnInit {
     );
   }
 
-  updateRating(value: number) {
+  updateRating(value: number): void {
     if (value >= 0 && value <= this.totalRating) {
       this.rating = value;
       this.updateRatingLabel();
     }
   }
 
-  updateRatingLabel() {
+  updateRatingLabel(): void {
     this.ratingLabel = `${this.rating} / ${this.totalRating}`;
   }
 
-  updateGrade(grade: number) {
+  updateGrade(grade: number): void {
     if (this.gradeValues.includes(Number(grade))) {
       this.selectedGrade = grade;
     }
