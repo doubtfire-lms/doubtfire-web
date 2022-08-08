@@ -96,7 +96,7 @@ angular.module('doubtfire.units.states.students', [])
         _.each $scope.unit.tutorialStreams, (ts) ->
           row[ts.abbreviation] = project.tutorialForStream(ts)?.abbreviation || ''
       else
-        row['tutorial'] = project.tutorials()[0]?.abbreviation || ''
+        row['tutorial'] = project.tutorials[0]?.abbreviation || ''
       result.push row
     )
     result

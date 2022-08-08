@@ -30,55 +30,55 @@ angular.module("doubtfire.common.services.group-service", [  ])
   groupService.mapFuncsToGroup = (group, unit, groupSet) ->
     group = unit.mapGroupToUnit(group)
     group.groupSet = -> groupSet
-    group.addMember = (member, onSuccess, onFailure) ->
-      groupService.addMemberToGroup(group, member, onSuccess, onFailure)
+    # group.addMember = (member, onSuccess, onFailure) ->
+    #   groupService.addMemberToGroup(group, member, onSuccess, onFailure)
     group.removeMember = (member, onSuccess, onFailure) ->
       groupService.removeMemberFromGroup(group, member, onSuccess, onFailure)
-    group.getMembers = (onSuccess, onFailure) ->
-      groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
-    group.hasSpace = () ->
-      return true if !groupSet.capacity?
-      return group.student_count < groupSet.capacity + group.capacity_adjustment
+    # group.getMembers = (onSuccess, onFailure) ->
+    #   groupService.getGroupMembersForGroup(group, onSuccess, onFailure)
+    # group.hasSpace = () ->
+    #   return true if !groupSet.capacity?
+    #   return group.student_count < groupSet.capacity + group.capacityAdjustment
     group
 
   # Queries a unit's groupset for the given ID, returning the groups for that group
-  groupService.getGroups = (unit, groupSetId, onSuccess, onFailure) ->
-    throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
-    groupSet = unit.findGroupSet(groupSetId)
-    # return onSuccess?(groupSet.groups) if groupSet?.groups?
-    Group.query({ unit_id: unit.id, group_set_id: groupSetId },
-      (success) ->
-        groupSet.groups = _.map(success, (group) ->
-          groupService.mapFuncsToGroup(group, unit, groupSet)
-        )
-        onSuccess?(groupSet.groups)
-      (failure) ->
-        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
-        onFailure?(failure)
-    )
+  # groupService.getGroups = (unit, groupSetId, onSuccess, onFailure) ->
+  #   throw Error "No group set ID specified to unit.getGroups" unless groupSetId?
+  #   groupSet = unit.findGroupSet(groupSetId)
+  #   # return onSuccess?(groupSet.groups) if groupSet?.groups?
+  #   Group.query({ unit_id: unit.id, group_set_id: groupSetId },
+  #     (success) ->
+  #       groupSet.groups = _.map(success, (group) ->
+  #         groupService.mapFuncsToGroup(group, unit, groupSet)
+  #       )
+  #       onSuccess?(groupSet.groups)
+  #     (failure) ->
+  #       alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
+  #       onFailure?(failure)
+  #   )
 
   # Adds an new group to the given groupset & unit
-  groupService.addGroup = (unit, groupSet, name, tutorialId, onSuccess) ->
-    unless unit? || groupSet?
-      throw Error "Cannot create new group without unit, groupset or tutorialID"
-    Group.create(
-      {
-        unit_id: unit.id,
-        group_set_id: groupSet.id
-        group: {
-          name: name
-          tutorial_id: tutorialId
-        }
-      }
-      (success) ->
-        newGroup = groupService.mapFuncsToGroup(success, unit, groupSet)
-        groupSet.groups.push(newGroup)
-        alertService.add("success", "#{newGroup.name} was created!", 3000)
-        onSuccess?(newGroup)
-      (failure) ->
-        alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
-        onFailure?(failure)
-    )
+  # groupService.addGroup = (unit, groupSet, name, tutorialId, onSuccess) ->
+  #   unless unit? || groupSet?
+  #     throw Error "Cannot create new group without unit, groupset or tutorialID"
+  #   Group.create(
+  #     {
+  #       unit_id: unit.id,
+  #       group_set_id: groupSet.id
+  #       group: {
+  #         name: name
+  #         tutorial_id: tutorialId
+  #       }
+  #     }
+  #     (success) ->
+  #       newGroup = groupService.mapFuncsToGroup(success, unit, groupSet)
+  #       groupSet.groups.push(newGroup)
+  #       alertService.add("success", "#{newGroup.name} was created!", 3000)
+  #       onSuccess?(newGroup)
+  #     (failure) ->
+  #       alertService.add("danger", failure.data?.error || "Unknown Error", 6000)
+  #       onFailure?(failure)
+  #   )
 
   # Updates the given group
   groupService.updateGroup = (group, onSuccess, onFailure) ->
@@ -90,7 +90,7 @@ angular.module("doubtfire.common.services.group-service", [  ])
         group: {
           name: group.name,
           tutorial_id: group.tutorial_id,
-          capacity_adjustment: group.capacity_adjustment,
+          capacityAdjustment: group.capacityAdjustment,
           locked: group.locked,
         }
       }

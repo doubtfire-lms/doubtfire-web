@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-staff-editor/unit-staff-editor.tpl.html'
-  controller: ($scope, $rootScope, alertService, groupService, newUnitService, newUnitRoleService) ->
+  controller: ($scope, $rootScope, alertService, newUnitService, newUnitRoleService) ->
     temp = []
     users = []
 
@@ -55,6 +55,6 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
       })
 
     $scope.groupSetName = (id) ->
-      groupService.groupSetName(id, $scope.unit)
+      $scope.unit.groupSetsCache.get(id)?.name || "Individual Work"
 
 )

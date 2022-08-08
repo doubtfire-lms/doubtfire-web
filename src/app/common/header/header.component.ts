@@ -9,7 +9,7 @@ import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/c
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
-import { Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
+import { AuthenticationService, Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-header',
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUnitRole: UnitRole = null;
 
   currentView: ViewType;
-  showHeader: boolean = true;
+  showHeader = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -42,9 +42,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
     private globalState: GlobalStateService,
-    private userService: UserService
-  ) {
-  }
+    private userService: UserService,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (shouldShow) => {
           this.showHeader = shouldShow;
         },
-        error: (err) => { },
+        error: (err) => {},
       })
     );
 
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .transform(this.unitRoles)
             .filter((role) => this.isUniqueRole(role));
         },
-        error: (err) => { },
+        error: (err) => {},
       })
     );
 
@@ -76,7 +76,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (projects == null) return;
           this.projects = projects;
         },
-        error: (err) => { },
+        error: (err) => {},
       })
     );
 
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.currentProject = null;
           }
         },
-        error: (err) => { },
+        error: (err) => {},
       })
     );
   }
@@ -104,13 +104,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-
   isUniqueRole = (unit) => {
     let units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
     return units.length == 1 || unit.role == 'Tutor';
   };
 
-  updateSelectedProject(project: Project) {
+  updateSelectedProject(project: Project): void {
     this.currentProject = project;
     this.currentUnit = project.unit;
     if (this.currentUnitRole?.unit.id !== this.currentUnit.id) {
@@ -118,30 +117,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateSelectedUnitRole(unitRole: UnitRole) {
+  updateSelectedUnitRole(unitRole: UnitRole): void {
     this.currentProject = null;
     this.currentUnitRole = unitRole;
     this.currentUnit = unitRole.unit;
   }
 
-  openUserSettings() {
+  openUserSettings(): void {
     this.UserSettingsModal.show(this.currentUser);
   }
 
-  openNotificationSettings() {
+  openNotificationSettings(): void {
     this.UserNotificationSettingsModal.show(this.currentUser);
   }
 
-  update() {
+  update(): void {
     this.checkForUpdateService.checkForUpdate();
   }
 
-  openAboutModal() {
+  openAboutModal(): void {
     this.AboutDoubtfireModal.show();
   }
 
-  openCalendar() {
+  openCalendar(): void {
     this.CalendarModal.show();
+  }
+
+  signOut(): void {
+    this.authService.signOut();
   }
 
   get currentUser(): User {

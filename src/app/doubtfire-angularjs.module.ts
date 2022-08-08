@@ -42,9 +42,6 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/welcome/welcome.js';
-import 'build/src/app/welcome/states/welcome/welcome.js';
-import 'build/src/app/welcome/states/states.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
@@ -126,7 +123,6 @@ import 'build/src/app/groups/group-member-contribution-assigner/group-member-con
 import 'build/src/app/groups/group-member-list/group-member-list.js';
 import 'build/src/app/groups/group-set-selector/group-set-selector.js';
 import 'build/src/app/groups/tutor-group-manager/tutor-group-manager.js';
-import 'build/src/app/groups/student-group-manager/student-group-manager.js';
 import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.js';
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
@@ -180,7 +176,6 @@ import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
-import 'build/src/app/common/header/header.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
@@ -190,18 +185,13 @@ import 'build/src/app/common/services/media-service.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/grade-service.js';
 import 'build/src/app/common/services/alert-service.js';
-import 'build/src/app/common/services/header-service.js';
 import 'build/src/app/common/services/date-service.js';
 import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/sessions/states/states.js';
-import 'build/src/app/sessions/states/sign-in/sign-in.js';
-import 'build/src/app/sessions/states/sign-out/sign-out.js';
 import 'build/src/app/api/models/group-member.js';
 import 'build/src/app/api/models/user-role.js';
-import 'build/src/app/api/models/group-set.js';
 import 'build/src/app/api/models/task-completion-csv.js';
 import 'build/src/app/api/models/models.js';
 import 'build/src/app/api/models/task-similarity.js';
@@ -255,7 +245,17 @@ import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-pa
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
 import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
-import { LearningOutcomeService, TaskCommentService, TaskOutcomeAlignmentService, TaskService, TeachingPeriodService, UnitRoleService, UnitService, UserService } from './api/models/doubtfire-model';
+import {
+  GroupSetService,
+  LearningOutcomeService,
+  TaskCommentService,
+  TaskOutcomeAlignmentService,
+  TaskService,
+  TeachingPeriodService,
+  UnitRoleService,
+  UnitService,
+  UserService,
+} from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
@@ -264,12 +264,14 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
 import { GradeTaskModalService } from './tasks/modals/grade-task-modal/grade-task-modal.service';
 import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { GroupService } from './api/services/group.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -281,7 +283,6 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.units',
   'doubtfire.tasks',
   'doubtfire.projects',
-  'doubtfire.welcome',
   'doubtfire.groups',
   'doubtfire.visualisations',
 ]);
@@ -304,6 +305,8 @@ DoubtfireAngularJSModule.factory('newTaskService', downgradeInjectable(TaskServi
 DoubtfireAngularJSModule.factory('newTaskDefinitionService', downgradeInjectable(TaskDefinitionService));
 DoubtfireAngularJSModule.factory('newTeachingPeriodService', downgradeInjectable(TeachingPeriodService));
 DoubtfireAngularJSModule.factory('newProjectService', downgradeInjectable(ProjectService));
+DoubtfireAngularJSModule.factory('newGroupService', downgradeInjectable(GroupService));
+DoubtfireAngularJSModule.factory('newGroupSetService', downgradeInjectable(GroupSetService));
 DoubtfireAngularJSModule.factory('newTaskOutcomeAlignmentService', downgradeInjectable(TaskOutcomeAlignmentService));
 DoubtfireAngularJSModule.factory('webcalService', downgradeInjectable(WebcalService));
 DoubtfireAngularJSModule.factory('newLearningOutcomeService', downgradeInjectable(LearningOutcomeService));
@@ -314,20 +317,15 @@ DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(Task
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('GradeTaskModal', downgradeInjectable(GradeTaskModalService));
+DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
 );
-DoubtfireAngularJSModule.directive(
-  'objectSelect',
-  downgradeComponent({ component: ObjectSelectComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'appHeader',
-  downgradeComponent({ component: HeaderComponent })
-);
+DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
+DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })

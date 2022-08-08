@@ -34,7 +34,7 @@
           "warn",
           {
             "type": "attribute",
-            "prefix": "df",
+            "prefix": "f",
             "style": "camelCase"
           }
         ],
@@ -42,7 +42,7 @@
           "warn",
           {
             "type": "element",
-            "prefix": "df",
+            "prefix": "f",
             "style": "kebab-case"
           }
         ],

@@ -3,7 +3,17 @@ import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject, skip, take } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { CampusService, Project, ProjectService, TeachingPeriodService, Unit, UnitRole, UnitRoleService, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
+import {
+  CampusService,
+  Project,
+  ProjectService,
+  TeachingPeriodService,
+  Unit,
+  UnitRole,
+  UnitRoleService,
+  UnitService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 
 export class DoubtfireViewState {
@@ -31,10 +41,11 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> = new BehaviorSubject<{
-    viewType: ViewType;
-    entity: Project | Unit | UnitRole;
-  } | null>(null);
+  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> =
+    new BehaviorSubject<{
+      viewType: ViewType;
+      entity: Project | Unit | UnitRole;
+    } | null>(null);
 
   /**
    * The unit roles loaded from the server
@@ -100,8 +111,9 @@ export class GlobalStateService implements OnDestroy {
     }, 800);
   }
 
-  public signOut() {
+  public signOut(): void {
     this.isLoadingSubject.next(true);
+    this.userService.cache.clear();
     this.clearUnitsAndProjects();
     this.authenticationService.signOut();
     this.router.stateService.go('sign_in');
@@ -113,17 +125,17 @@ export class GlobalStateService implements OnDestroy {
     this.currentViewAndEntitySubject.complete();
   }
 
-  public loadGlobals() {
-    const loadingObserver = new Observable(subscriber => {
+  public loadGlobals(): void {
+    const loadingObserver = new Observable((subscriber) => {
       // Loading campuses
       this.campusService.query().subscribe({
         next: (reponse) => {
           subscriber.next(true);
         },
         error: (response) => {
-          this.alerts.add("danger", "Unable to access service. Failed loading campuses.", 6000);
+          this.alerts.add('danger', 'Unable to access service. Failed loading campuses.', 6000);
           console.log(response);
-        }
+        },
       });
 
       // Loading teaching periods
@@ -132,58 +144,53 @@ export class GlobalStateService implements OnDestroy {
           subscriber.next(true);
         },
         error: (response) => {
-          this.alerts.add("danger", "Unable to access service. Failed loading teaching periods.", 6000);
+          this.alerts.add('danger', 'Unable to access service. Failed loading teaching periods.', 6000);
           console.log(response);
-        }
+        },
       });
     });
 
     loadingObserver.pipe(skip(1), take(1)).subscribe({
       next: () => {
         this.loadUnitsAndProjects();
-      }
-    })
+      },
+    });
   }
 
   /**
    * Query the API for the units taught and studied by the current user.
    */
   private loadUnitsAndProjects() {
-    this.unitRoleService.query().subscribe(
-      {
-        next: (unitRoles: UnitRole[]) => {
-          // unit roles are now in the cache
+    this.unitRoleService.query().subscribe({
+      next: (unitRoles: UnitRole[]) => {
+        // unit roles are now in the cache
 
-          this.projectService.query(undefined, {params: {include_inactive: false}}).subscribe(
-            {
-              next: (projects: Project[]) => {
-                // projects updated in cache
+        this.projectService.query(undefined, { params: { include_inactive: false } }).subscribe({
+          next: (projects: Project[]) => {
+            // projects updated in cache
 
-                setTimeout(() => {
-                  this.isLoadingSubject.next(false);
-                }, 800);
-              }
-          });
-        }
-      }
-    );
+            setTimeout(() => {
+              this.isLoadingSubject.next(false);
+            }, 800);
+          },
+        });
+      },
+    });
   }
 
-  public onLoad(run: () => void) {
-    const subscription = this.isLoadingSubject.subscribe(
-      (loading: boolean) => {
-        if (!loading) {
-          run();
-          setTimeout(() => subscription.unsubscribe());
-        }
+  public onLoad(run: () => void): void {
+    const subscription = this.isLoadingSubject.subscribe((loading: boolean) => {
+      if (!loading) {
+        run();
+        setTimeout(() => subscription.unsubscribe());
       }
-    )
+    });
   }
 
   /**
    * Clear all of the project and unit role data on sign out
    */
-  public clearUnitsAndProjects() {
+  public clearUnitsAndProjects(): void {
     this.loadedUnits.clear();
     this.loadedUnitRoles.clear();
     this.userService.cache.clear();
@@ -193,21 +200,21 @@ export class GlobalStateService implements OnDestroy {
   /**
    * Switch to a new view, and its associated entity object
    */
-  public setView(kind: ViewType, entity?: any) {
+  public setView(kind: ViewType, entity?: any): void {
     this.currentViewAndEntitySubject.next({ viewType: kind, entity: entity });
   }
 
   /**
    * Show the header
    */
-  public showHeader() {
+  public showHeader(): void {
     this.showHideHeader.next(true);
   }
 
   /**
    * Show the header
    */
-  public hideHeader() {
+  public hideHeader(): void {
     this.showHideHeader.next(false);
   }
 }

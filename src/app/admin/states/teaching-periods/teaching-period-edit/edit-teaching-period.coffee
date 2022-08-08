@@ -1,6 +1,6 @@
 angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teaching-periods.states.edit.directives'])
 
-.config(($stateProvider, headerServiceProvider) ->
+.config(($stateProvider) ->
   teachingPeriodsAdminViewStateData =
     url: '/admin/teaching-periods/:teachingPeriodId'
     views:
@@ -10,7 +10,7 @@ angular.module('doubtfire.admin.states.teachingperiods.edit', ['doubtfire.teachi
     data:
       pageTitle: "_Teaching-Period Administration_"
       roleWhitelist: ['Admin']
-  headerServiceProvider.state "admin/teachingperiods/edit", teachingPeriodsAdminViewStateData
+  $stateProvider.state "admin/teachingperiods/edit", teachingPeriodsAdminViewStateData
 )
 
 .controller("EditTeachingPeriodStateCtrl", ($scope, $state, newTeachingPeriodService, alertService, analyticsService, GlobalStateService) ->

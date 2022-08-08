@@ -1,4 +1,4 @@
-import { Injectable, Injector, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import API_URL from 'src/app/config/constants/apiURL';

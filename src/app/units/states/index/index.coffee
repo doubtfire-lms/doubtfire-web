@@ -3,8 +3,8 @@ angular.module('doubtfire.units.states.index', [])
 #
 # Root state for units
 #
-.config((headerServiceProvider) ->
-  headerServiceProvider.state 'units/index', {
+.config(($stateProvider) ->
+  $stateProvider.state 'units/index', {
     url: "/units/:unitId"
     abstract: true
     views:

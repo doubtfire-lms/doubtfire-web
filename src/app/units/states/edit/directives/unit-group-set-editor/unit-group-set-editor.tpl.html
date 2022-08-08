@@ -34,14 +34,14 @@
             Click the pencil icon to modify these details.
           </p>
         </div><!--/extended-help-->
-        <div ng-hide="unit.group_sets.length > 0" class="callout callout-primary">
+        <div ng-hide="unit.groupSets.length > 0" class="callout callout-primary">
           <h4> No Group Sets Created </h4>
           <p>
             This unit has no group sets. Click the create group set button below to create one.
           </p>
         </div><!--/no-group-sets-created-->
       </div><!--/panel-body-->
-      <table ng-show="unit.group_sets.length > 0" class="table table-hover table-pointer group-sets">
+      <table ng-show="unit.groupSets.length > 0" class="table table-hover table-pointer group-sets">
         <thead>
           <tr>
             <th>
@@ -63,7 +63,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="gs in unit.group_sets" ng-class="{info: gs == selectedGroupSet}">
+          <tr ng-repeat="gs in unit.groupSets" ng-class="{info: gs == selectedGroupSet}">
             <td ng-click="selectGroupSet(gs)" class="col-sm-3">
               <span editable-text="gs.name" e-name="name" e-form="gsRowform" e-required>
                 {{ gs.name || 'No Name Set' }}
@@ -75,22 +75,22 @@
               </span>
             </td>
             <td ng-click="selectGroupSet(gs)">
-              <span editable-select="gs.allow_students_to_create_groups" e-name="allow_students_to_create_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
-                {{ ( (gs && gs.allow_students_to_create_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+              <span editable-select="gs.allowStudentsToCreateGroups" e-name="allowStudentsToCreateGroups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                {{ ( (gs && gs.allowStudentsToCreateGroups) ? 'Staff and Students' : 'Staff Only' ) }}
               </span>
             </td>
             <td ng-click="selectGroupSet(gs)">
-              <span editable-select="gs.allow_students_to_manage_groups" e-name="allow_students_to_manage_groups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
-                {{ ( (gs && gs.allow_students_to_manage_groups) ? 'Staff and Students' : 'Staff Only' ) }}
+              <span editable-select="gs.allowStudentsToManageGroups" e-name="allowStudentsToManageGroups" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in studentStaffOptions">
+                {{ ( (gs && gs.allowStudentsToManageGroups) ? 'Staff and Students' : 'Staff Only' ) }}
               </span>
             </td>
             <td ng-click="selectGroupSet(gs)">
-              <span editable-select="gs.keep_groups_in_same_class" e-name="keep_groups_in_same_class" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
-                {{ ( (gs && gs.keep_groups_in_same_class) ? 'Same Tutorial' : 'Any Tutorial' ) }}
+              <span editable-select="gs.keepGroupsInSameClass" e-name="keepGroupsInSameClass" e-form="gsRowform" e-ng-options="opt.value as opt.text for opt in tutorialOptions">
+                {{ ( (gs && gs.keepGroupsInSameClass) ? 'Same Tutorial' : 'Any Tutorial' ) }}
               </span>
             </td>
             <td>
-              <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs.id)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
+              <form editable-form name="gsRowform" onbeforesave="saveGroupSet($data, gs)" ng-show="gsRowform.$visible" class="form-buttons form-inline" shown="inserted == gs">
                 <button type="submit" ng-disabled="gsRowform.$waiting" class="btn btn-default btn-sm">
                   <i class="fa fa-floppy-o"></i> Save
                 </button>
@@ -128,14 +128,14 @@
   </div><!--/group-sets-->
   <div class="clearfix">
     <group-set-manager
-      ng-show="selectedGroupSet && unit.group_sets.length > 0"
+      ng-show="selectedGroupSet && unit.groupSets.length > 0"
       unit="unit"
       selected-group-set="selectedGroupSet"
       show-group-set-selector="false"
       unit-role="unitRole"
       class="col-sm-12"></group-set-manager>
   </div>
-  <div class="file-io col-sm-12" ng-if="selectedGroupSet && unit.group_sets.length > 0">
+  <div class="file-io col-sm-12" ng-if="selectedGroupSet && unit.groupSets.length > 0">
     <hr>
     <div class="panel-row">
       <div class="panel panel-default">
