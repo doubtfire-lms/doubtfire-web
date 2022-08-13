@@ -1,4 +1,4 @@
-![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
+![Doubtfire Logo](src/assets/icons/android-chrome-192x192.png)
 
 # Doubtfire Web [![CI](https://img.shields.io/github/workflow/status/doubtfire-lms/doubtfire-web/Node.js%20CI?label=CI&logo=GitHub)](https://github.com/doubtfire-lms/doubtfire-web/actions/workflows/nodejs-ci.yml)
 
@@ -13,8 +13,11 @@ A modern, lightweight learning management system.
 ## Migration Progress
 
 SUMMARY:
+
 41 / 209 components migrated
+
 MIGRATED:
+
 - [x] ./src/app/admin/institution-settings/activity-type-list/activity-type-list.component.ts
 - [x] ./src/app/admin/institution-settings/campuses/campus-list/campus-list.component.ts
 - [x] ./src/app/admin/institution-settings/institution-settings.component.ts
