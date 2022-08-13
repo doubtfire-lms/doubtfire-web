@@ -1,29 +1,25 @@
-<div class="progress-modal">
-  <div class="modal-header clearfix">
-    <h3 class="modal-title">
-      <div class="spinner__container">
-        <div class="spin">
-          <i class="fa fa-2x fa-spinner fa-pulse"></i>
-        </div>
-        <div class="message__container">
-          <div class="title-defintion">{{ title }}</div>
-          <small class="message-definition">{{ message }}</small>
-        </div>
-      </div>
-    </h3>
-  </div>
-  <div class="modal-body">
-    <div class="large-notice-block">
-      <i class="fa fa-3x fa-spinner fa-pulse"></i>
-      <p>Processing...</p>
+<div>
+  <mat-card-header class="header-container">
+    <div>
+      <i class="fa fa-4x fa-spinner fa-pulse"></i>
     </div>
-  </div>
-  <div class="modal-footer clearfix">
-    <p class="help-block col-sm-6 col-sm-offset-3 text-center">
-      You can close this modal and you will be alerted when processing has finished
-    </p>
-    <button class="btn btn-primary pull-right" (click)="close()">
+    <div class="title-container">
+      <mat-card-title>{{ title }}</mat-card-title>
+      <mat-card-subtitle>{{ message }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-container">
+    <div class="info-container">
+      <i class="fa fa-3x fa-spinner fa-pulse"></i>
+      <p class="processing-text">Processing...</p>
+    </div>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="actions-container">
+    <p class="close-text">You can close this modal and you will be alerted when processing has finished</p>
+    <button class="btn btn-primary close-button" (click)="close()">
       <i class="fa fa-check"></i>
     </button>
-  </div>
+  </mat-card-actions>
 </div>

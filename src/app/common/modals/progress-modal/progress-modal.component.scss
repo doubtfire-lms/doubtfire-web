@@ -5,3 +5,53 @@
 .message__container {
   margin-left: 16px;
 }
+
+.header-container {
+  display: flex;
+  align-items: center;
+}
+
+.title-container {
+  margin-left: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.processing-text {
+  margin-top: 8px;
+  font-size: 20px;
+}
+
+.actions-container {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-text {
+  width: 70%;
+  display: flex;
+  text-align: center;
+}
+
+.close-button {
+  width: 10%;
+}
