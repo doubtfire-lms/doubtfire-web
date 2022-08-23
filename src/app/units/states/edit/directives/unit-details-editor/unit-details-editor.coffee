@@ -14,6 +14,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.calOptions = {
       startOpened: false
       endOpened: false
+      portfolioAutoGenerationOpened: false
     }
 
     # Get docker images available for automated task assessment for the unit.
@@ -34,9 +35,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       if pickerData == 'start'
         $scope.calOptions.startOpened = ! $scope.calOptions.startOpened
         $scope.calOptions.endOpened = false
-      else
+        $scope.calOptions.portfolioAutoGenerationOpened = false
+      else if pickerData == 'end'
         $scope.calOptions.startOpened = false
         $scope.calOptions.endOpened = ! $scope.calOptions.endOpened
+        $scope.calOptions.portfolioAutoGenerationOpened = false
+      else if pickerData == 'autogen'
+        $scope.calOptions.startOpened = false
+        $scope.calOptions.endOpened = false
+        $scope.calOptions.portfolioAutoGenerationOpened = ! $scope.calOptions.portfolioAutoGenerationOpened
 
     $scope.dateOptions = {
       formatYear: 'yy',
@@ -50,6 +57,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
       if $scope.unit.end_date && $scope.unit.end_date.getMonth
         $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
+      if $scope.unit.portfolio_auto_generation_date && $scope.unit.portfolio_auto_generation_date.getMonth
+        $scope.unit.portfolio_auto_generation_date = "#{$scope.unit.portfolio_auto_generation_date.getFullYear()}-#{$scope.unit.portfolio_auto_generation_date.getMonth() + 1}-#{$scope.unit.portfolio_auto_generation_date.getDate()}"
 
       saveData = {
         name: $scope.unit.name
@@ -61,6 +70,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         enable_sync_timetable: $scope.unit.enable_sync_timetable
         enable_sync_enrolments: $scope.unit.enable_sync_enrolments
         draft_task_definition_id: $scope.unit.draft_task_definition_id
+        portfolio_auto_generation_date: $scope.unit.portfolio_auto_generation_date
         allow_student_extension_requests: $scope.unit.allow_student_extension_requests
         extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
         allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
