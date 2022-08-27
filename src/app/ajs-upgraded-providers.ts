@@ -30,6 +30,13 @@ export const calendarModal = new InjectionToken('CalendarModal');
 export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
+export const CampusService = new InjectionToken('campusService');
+
+export const campusServiceProvider = {
+  provide: CampusService,
+  useFactory: (i: any) => i.get('campusService'),
+  deps: ['$injector'],
+};
 
 // Define a provider for the above injection token...
 // It will get the service from AngularJS via the factory
