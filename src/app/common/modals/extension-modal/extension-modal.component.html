@@ -10,7 +10,7 @@
   </mat-form-field>
 
   <p>Requesting extension to: {{newDueDate}} </p>
-  <mat-slider id="requestWeekSlider" thumbLabel [min]="minWeeksCanExtend" [max]="maxWeeksCanExtend" step="1"
+  <mat-slider id="requestdaySlider" thumbLabel [min]="0" [max]="31" step="1"
     [(ngModel)]="weeksRequested">
   </mat-slider>
 </div>
@@ -18,6 +18,6 @@
 <div mat-dialog-actions style="float: right">
   <button mat-dialog-close style="margin-right: 10px;" mat-stroked-button color="primary" mat-button
     [disabled]="weeksRequested === 0 || reason.length < 15" (click)="submitApplication()">Request {{weeksRequested}}
-    {{weeksRequested === 1 ? 'week' : 'weeks'}}</button>
+    {{weeksRequested === 1 ? 'day' : 'days'}}</button>
   <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
 </div>
