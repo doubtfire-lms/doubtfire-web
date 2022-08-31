@@ -1,0 +1,34 @@
+<div class="modal-complete">
+  <mat-card-header class="modal-heading-container">
+    <mat-card-title class="modal-heading">Enrol Student</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div class="modal-content-container">
+      <div class="modal-container">
+        <div>
+          <p>Student</p>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Student ID</mat-label>
+          <input matInput type="text" [(ngModel)]="student_id" />
+        </mat-form-field>
+      </div>
+      <div class="modal-container">
+        <div>
+          <p>Campus</p>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Select Campus</mat-label>
+          <mat-select [(ngModel)]="campus_id">
+            <mat-option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="card-actions">
+    <input type="button" (click)="enrolStudent(student_id, campus_id)" class="btn btn-primary" value="Save" />
+  </mat-card-actions>
+</div>

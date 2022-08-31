@@ -128,7 +128,6 @@ import 'build/src/app/groups/group-member-list/group-member-list.js';
 import 'build/src/app/groups/group-set-selector/group-set-selector.js';
 import 'build/src/app/groups/tutor-group-manager/tutor-group-manager.js';
 import 'build/src/app/groups/student-group-manager/student-group-manager.js';
-import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.js';
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
@@ -289,6 +288,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -322,16 +322,14 @@ DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(Ch
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
+DoubtfireAngularJSModule.factory('UnitStudentEnrolmentModal', downgradeInjectable(UnitStudentEnrolmentModalService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({ component: TaskCommentComposerComponent })
 );
-DoubtfireAngularJSModule.directive(
-  'appHeader',
-  downgradeComponent({ component: HeaderComponent })
-);
+DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
@@ -374,12 +372,15 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor',
-  downgradeComponent({ component: TaskAssessorComponent }));
-DoubtfireAngularJSModule.directive('taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent }));
-DoubtfireAngularJSModule.directive('taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive(
+  'taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+);
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
