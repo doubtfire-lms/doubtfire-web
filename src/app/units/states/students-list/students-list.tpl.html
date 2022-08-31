@@ -121,9 +121,9 @@
             <progress class="task-progress" animate="true">
               <bar
                 ng-repeat="bar in student.task_stats"
-                value="bar.value"
+                value="(bar.key === 'fail') && (bar.value !== bar.value) ? 0 : bar.value"
                 type="{{statusClass(bar.key)}}">
-                <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+                <span ng-hide="bar.value < 10">{{bar.value !== bar.value ? 'No Interaction' : (bar.value + '%')}}</span>
               </bar>
             </progress>
           </td><!--/progress-column-->
