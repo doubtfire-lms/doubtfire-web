@@ -77,6 +77,7 @@ import {
   calendarModalProvider,
   userNotificationSettingsModalProvider,
   campusServiceProvider,
+  projectProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -336,6 +337,7 @@ import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
     campusServiceProvider,
+    projectProvider,
   ],
 })
 // There is no longer any requirement for an EntryComponents section

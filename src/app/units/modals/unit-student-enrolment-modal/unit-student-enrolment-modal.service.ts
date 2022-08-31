@@ -8,12 +8,11 @@ import { UnitStudentEnrolmentModalComponent } from './unit-student-enrolment-mod
 export class UnitStudentEnrolmentModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(unit: any, project: any) {
+  public show(unit: any) {
     let dialogRef: MatDialogRef<UnitStudentEnrolmentModalComponent, any>;
     dialogRef = this.dialog.open(UnitStudentEnrolmentModalComponent, {
       data: {
         unit,
-        project,
       },
     });
   }

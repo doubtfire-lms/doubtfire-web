@@ -1,6 +1,6 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { alertService, CampusService } from 'src/app/ajs-upgraded-providers';
+import { alertService, CampusService, Project } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'unit-student-enrolment-modal',
@@ -13,13 +13,13 @@ export class UnitStudentEnrolmentModalComponent {
   projects: any;
   student_id: string;
   campus_id: any;
-  this;
 
   constructor(
     public dialogRef: MatDialogRef<UnitStudentEnrolmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Inject(alertService) public alert: any,
-    @Inject(CampusService) public campusService: any
+    @Inject(CampusService) public campusService: any,
+    @Inject(Project) private project: any
   ) {}
 
   ngOnInit() {
@@ -38,12 +38,13 @@ export class UnitStudentEnrolmentModalComponent {
       this.alert.add('danger', 'Campus missing. Please indicate student campus', 5000);
       return;
     }
-
-    return this.unit.$create(
+    this.project.create(
       { unit_id: this.unit.id, student_num: student_id, campus_id: campus_id },
-      (project: { project_id }) => {
+      (project) => {
         if (!this.unit.studentEnrolled(project.project_id)) {
+          this.unit.addStudent(project);
           this.alert.add('success', 'Student enrolled', 2000);
+          this.dialogRef.close();
         } else {
           this.alert.add('danger', 'Student is already enrolled', 2000);
         }

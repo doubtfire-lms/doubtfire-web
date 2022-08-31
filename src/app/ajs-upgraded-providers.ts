@@ -31,6 +31,13 @@ export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
 export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
 export const CampusService = new InjectionToken('campusService');
+export const Project = new InjectionToken('Project');
+
+export const projectProvider = {
+  provide: Project,
+  useFactory: (i: any) => i.get('Project'),
+  deps: ['$injector'],
+};
 
 export const campusServiceProvider = {
   provide: CampusService,
