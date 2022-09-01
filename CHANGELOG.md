@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.15](https://github.com/macite/doubtfire-deploy/compare/v6.0.14...v6.0.15) (2022-09-01)
+
+
+### Features
+
+* format code using ESLint and Prettier ([4d74d3b](https://github.com/macite/doubtfire-deploy/commit/4d74d3b73598cafbb6c6db4a60919b803cf3d2da))
+* portfolio automation ([b785d44](https://github.com/macite/doubtfire-deploy/commit/b785d44e65dd911fefcb344403925baa87af4e06))
+
+
+### Bug Fixes
+
+* address minor eslint issues ([9861d96](https://github.com/macite/doubtfire-deploy/commit/9861d96ccfa8ab82e931bfbaf89e76972fccbdde))
+* escape dashes in unicode regex ([e541078](https://github.com/macite/doubtfire-deploy/commit/e541078b2eac62b7a4fa133b47807258a71958e1))
+* include angular relevant lint rules ([31e7aba](https://github.com/macite/doubtfire-deploy/commit/31e7aba78dba6ffefccca38f9d9335cfc547f7cd))
+* report all lint issues as warning ([a2334f2](https://github.com/macite/doubtfire-deploy/commit/a2334f2c5d3a4244e9505a0a759f7a5e7141bb5a))
+* update the student list progress bar behavior ([778717b](https://github.com/macite/doubtfire-deploy/commit/778717b3acae8abe4980c45de8ef40ed1ac54203))
+
 ### [6.0.14](https://github.com/macite/doubtfire-deploy/compare/v6.0.13...v6.0.14) (2022-06-03)
 
 ### [6.0.13](https://github.com/macite/doubtfire-deploy/compare/v6.0.12...v6.0.13) (2022-06-03)
