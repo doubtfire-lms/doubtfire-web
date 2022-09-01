@@ -5,15 +5,15 @@ import { UnitIloEditModalComponent } from './unit-ilo-edit-modal.component';
 @Injectable({
   providedIn: 'root',
 })
-export class UnitStudentEnrolmentModalService {
+export class UnitIloEditModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(ilo: any, unit: any) {
+  public show(unit: any, ilo: any) {
     let dialogRef: MatDialogRef<UnitIloEditModalComponent, any>;
     dialogRef = this.dialog.open(UnitIloEditModalComponent, {
       data: {
-        ilo,
         unit,
+        ilo,
       },
     });
   }

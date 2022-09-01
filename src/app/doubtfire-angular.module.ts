@@ -76,6 +76,7 @@ import {
   aboutDoubtfireModalProvider,
   calendarModalProvider,
   userNotificationSettingsModalProvider,
+  intendedLearningOutcomeProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -164,6 +165,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { UnitIloEditModalComponent } from './units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.component';
 
 @NgModule({
   // Components we declare
@@ -221,6 +223,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    UnitIloEditModalComponent,
   ],
   // Module Imports
   imports: [
@@ -332,6 +335,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    intendedLearningOutcomeProvider,
   ],
 })
 // There is no longer any requirement for an EntryComponents section

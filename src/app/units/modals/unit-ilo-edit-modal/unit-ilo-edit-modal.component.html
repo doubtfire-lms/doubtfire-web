@@ -1,42 +1,40 @@
-<div class="unit-ilo-edit-modal">
-  <form class="form-horizontal" ng-submit="saveILO()" role="form">
-    <div class="modal-header">
-      <h3>{{ 'isNew' ? 'Create Learning Outcome' : 'Edit Learning Outcome: ' + 'ilo.ilo_number' }}</h3>
-    </div>
-    <div class="modal-body">
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Name</label>
-        <div class="col-sm-7">
-          <input type="text" class="form-control" ng-model="ilo.name" placeholder="Outcome Name" />
-        </div>
+<div class="modal-complete">
+  <mat-card-header>
+    <mat-card-title>{{
+      isNew ? 'Create Learning Outcome' : 'Edit Learning Outcome: ' + ilo.ilo_number
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div class="modal-content-container">
+      <div class="modal-container">
+        <mat-form-field appearance="outline" class="input-form">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" [(ngModel)]="ilo.name" />
+        </mat-form-field>
       </div>
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Abbreviation</label>
-        <div class="col-sm-7">
-          <input type="text" class="form-control" ng-model="ilo.abbreviation" placeholder="ABBR" />
-        </div>
+      <div class="modal-container">
+        <mat-form-field appearance="outline" class="input-form">
+          <mat-label>Abbreviation</mat-label>
+          <input matInput type="text" [(ngModel)]="ilo.abbreviation" />
+        </mat-form-field>
       </div>
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Description HELLO</label>
-        <div class="col-sm-7">
-          <!-- <markdown-editor height="200" placeholder="Enter markdown description..." ng-model="ilo.description"></markdown-editor> -->
-          <div
-            contenteditable
-            ng-model="ilo.description"
-            placeholder="Enter markdown description..."
-            style="border-style: solid; border-width: thin; height: 200px"
-          ></div>
-        </div>
+      <div class="modal-container">
+        <mat-form-field appearance="outline" class="input-form">
+          <mat-label>Description</mat-label>
+          <textarea matInput type="text" [(ngModel)]="ilo.description"></textarea>
+        </mat-form-field>
       </div>
     </div>
-    <div class="modal-footer text-right">
-      <input
-        type="submit"
-        class="btn btn-primary"
-        ng-disabled="ilo.name == null || ilo.abbreviation == null ||
-      ilo.description == null"
-        value="{{ 'isNew' ? 'Create' : 'Update' }}"
-      />
-    </div>
-  </form>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="card-actions">
+    <input
+      type="submit"
+      class="btn btn-primary"
+      value="{{ isNew ? 'Create' : 'Update' }}"
+      [disabled]="ilo.name === null || ilo.abbreviation === null || ilo.description === null"
+      (click)="saveILO()"
+    />
+  </mat-card-actions>
 </div>
