@@ -50,11 +50,11 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
           $scope.team.memberContributions = _.map(members, (member) ->
             result = {
               project: member,
-              rating: initialStars,
-              confRating: initialStars,
+              rating: $scope.initialStars,
+              confRating: $scope.initialStars,
               percent: 0
             }
-            result.percent = memberPercentage(result, initialStars)
+            result.percent = memberPercentage(result, $scope.initialStars)
             result
           )
           # Need the '+' to convert to number

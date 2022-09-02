@@ -285,7 +285,7 @@ export class Project extends Entity {
     } else {
       const groupSet = task.definition.groupSet;
 
-      this.groups.find( group => group.groupSet.id === task.definition.groupSet.id ) ||
+      return this.groups.find( group => group.groupSet.id === task.definition.groupSet.id ) ||
         groupSet.groups.find(group => group.projects.includes(this));
     }
   }

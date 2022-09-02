@@ -44,7 +44,7 @@ angular.module('doubtfire.groups.group-member-list', [])
     listeners.push $scope.$watch "selectedGroup.id", (newGroupId) ->
       return unless newGroupId?
       startLoading()
-      $scope.canRemoveMembers = $scope.unitRole || ($scope.selectedGroup.groupSet().allowStudentsToManageGroups && !$scope.selectedGroup.locked)
+      $scope.canRemoveMembers = $scope.unitRole || ($scope.selectedGroup.groupSet.allowStudentsToManageGroups && !$scope.selectedGroup.locked)
 
       $scope.selectedGroup.getMembers().subscribe({
         next: (members) ->

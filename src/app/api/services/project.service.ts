@@ -1,5 +1,5 @@
 import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import { CampusService, Project, Unit, UnitService, UserService, Task, TaskStatus } from 'src/app/api/models/doubtfire-model';
+import { CampusService, Project, Unit, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { TaskService } from './task.service';
 import { MappingProcess } from 'ngx-entity-service/lib/mapping-process';
 import { TaskOutcomeAlignmentService } from './task-outcome-alignment.service';
+import { GroupService } from './group.service';
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -20,7 +21,8 @@ export class ProjectService extends CachedEntityService<Project> {
     private campusService: CampusService,
     private userService: UserService,
     private taskService: TaskService,
-    private taskOutcomeAlignmentService: TaskOutcomeAlignmentService
+    private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
+    private groupService: GroupService
   ) {
     super(httpClient, API_URL);
 
@@ -112,7 +114,9 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitData = data['unit'];
-          return unitService.cache.getOrCreate(unitData.id, unitService, unitData);
+          const result = unitService.cache.getOrCreate(unitData.id, unitService, unitData);
+          result.studentCache.add(entity);
+          return result;
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
@@ -127,6 +131,7 @@ export class ProjectService extends CachedEntityService<Project> {
           process.entity.unit = unitService.cache.getOrCreate(unitId, unitService, { id: unitId });
           return unitService.get(unitId).subscribe(unit => {
             process.entity.unit = unit;
+            unit.studentCache.add(process.entity);
             process.continue();
           });
         }
@@ -160,9 +165,13 @@ export class ProjectService extends CachedEntityService<Project> {
       },
       {
         keys: 'groups',
-        toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
-          data[key].each
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          data[key].forEach((group) => {
+            const theGroup = project.unit.groupSetsCache.get(group.group_set_id).groupsCache.getOrCreate(group.id, this.groupService, group, {constructorParams: project.unit});
 
+            project.groupCache.add(theGroup);
+            theGroup.projectsCache.add(project);
+          })
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;

@@ -68,7 +68,7 @@ export class Group extends Entity {
     return `units/${this.unit.id}/group_sets/${this.groupSet.id}/groups/${this.id}/members/${member ? member.id : ''}`;
   }
 
-  public addMember(member: Project) {
+  public addMember(member: Project, onSuccess?: () => void) {
     const alerts: any = AppInjector.get(alertService);
     if (! member) {
       alerts.add('danger', "The student you are trying to add to the group could not be found.", 6000)
@@ -83,14 +83,17 @@ export class Group extends Entity {
         if (grp) {
           // Remove current member from old group
           grp.projectsCache.delete(member);
+          grp.studentCount--;
           member.groupCache.delete(grp);
         }
         // Add group to member
         member.groupCache.add(this);
+        this.studentCount++;
 
         // Has members so add this member
         this.projectsCache.add(member);
         alerts.add("success", `${member.student.name} was added to '${this.name}'`, 3000);
+        if ( onSuccess ) onSuccess();
       },
       error: (message) => alerts.add("danger", message || "Unknown Error", 6000)
     })
@@ -109,6 +112,7 @@ export class Group extends Entity {
         // Get old group..
         this.projectsCache.delete(member);
         member.groupCache.delete(this);
+        this.studentCount--;
         alerts.add("success", `${member.student.name} was removed from '${this.name}'`, 3000);
       },
       error: (message) => alerts.add("danger", message || "Unknown Error", 6000)
@@ -121,11 +125,12 @@ export class Group extends Entity {
     return projectService.query({},{
       endpointFormat: this.memberUri(),
       cache: this.unit.studentCache,
+      sourceCache: this.unit.studentCache,
       constructorParams: this.unit,
       onQueryCacheReturn: 'previousQuery'
     }).pipe(
       tap(
-        (projects) => {
+        (projects: Project[]) => {
           projects.forEach( p => this.projectsCache.add(p));
         }
       )
