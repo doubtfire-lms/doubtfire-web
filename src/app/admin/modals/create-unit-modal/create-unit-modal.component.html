@@ -1,34 +1,38 @@
-<div class="create-unit-modal">
-  <form class="form-horizontal" ng-submit="saveUnit()" role="form">
-    <div class="modal-header">
-      <h3>Create Unit</h3>
-    </div>
-    <div class="modal-body">
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Name</label>
-        <div class="col-sm-7">
-          <input
-            type="text"
-            class="form-control"
-            ng-model="unit.name"
-            placeholder="Introduction to  externalName.value "
-          />
+<div class="modal-complete">
+  <mat-card-header class="modal-heading-container">
+    <mat-card-title class="modal-heading">Create Unit</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div class="modal-content-container">
+      <div class="modal-container">
+        <div>
+          <p>Name</p>
         </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" [(ngModel)]="unit.name" />
+        </mat-form-field>
       </div>
-      <div class="form-group" required>
-        <label class="col-sm-3 control-label">Code</label>
-        <div class="col-sm-7">
-          <input type="text" class="form-control" ng-model="unit.code" placeholder="COS123456" />
+      <div class="modal-container">
+        <div>
+          <p>Code</p>
         </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Code</mat-label>
+          <input matInput type="text" [(ngModel)]="unit.code" />
+        </mat-form-field>
       </div>
     </div>
-    <div class="modal-footer text-right">
-      <input
-        type="submit"
-        class="btn btn-primary"
-        value="Create"
-        ng-disabled="unit.name == null || unit.code == null"
-      />
-    </div>
-  </form>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="card-actions">
+    <input
+      type="button"
+      class="btn btn-primary"
+      value="Save"
+      (click)="saveUnit()"
+      [disabled]="unit.name === null || unit.code === null"
+    />
+  </mat-card-actions>
 </div>
