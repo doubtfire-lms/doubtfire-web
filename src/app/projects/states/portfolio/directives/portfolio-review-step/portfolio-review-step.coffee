@@ -13,11 +13,11 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     $scope.externalName = DoubtfireConstants.ExternalName
 
     # Watch when portfolio value is changed to reassess
-    $scope.$watch 'project.portfolio_available', ->
+    $scope.$watch 'project.portfolioAvailable', ->
       $scope.hasLSR = $scope.projectHasLearningSummaryReport()
       $scope.hasTasksSelected = $scope.selectedTasks().length > 0
       $scope.portfolioIsCompiling = $scope.project.compilePortfolio
-      $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolio_available
+      $scope.canCompilePortfolio = (not $scope.portfolioIsCompiling) and $scope.hasTasksSelected and $scope.hasLSR and not $scope.project.portfolioAvailable
 
     #
     # Compile portfolio
@@ -37,7 +37,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
         $scope.portfolioSubmission.delete {
           id: $scope.project.id
         }, (response) ->
-          $scope.project.portfolio_available = false
+          $scope.project.portfolioAvailable = false
           $scope.project.portfolioStatus = 0
           alertService.add('info', "Portfolio has been deleted!", 5000)
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)

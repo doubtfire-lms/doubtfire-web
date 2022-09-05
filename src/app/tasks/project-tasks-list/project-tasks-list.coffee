@@ -33,7 +33,7 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     $scope.taskText = (task) ->
       result = task.definition.abbreviation
 
-      if task.definition.is_graded
+      if task.definition.isGraded
         if task.grade?
           result += " (" + gradeService.gradeAcronyms[task.grade] + ")"
         else

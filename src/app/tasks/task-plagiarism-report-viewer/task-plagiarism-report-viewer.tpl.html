@@ -4,7 +4,7 @@
       <i class="fa fa-eye fa-2x"></i>
       <p>{{externalName.value}} has detected no similarities for this work</p>
     </div><!--/no-detections-->
-    <div ng-if="task.similar_to_count > 0 && similarityData">
+    <div ng-if="task.similarToCount > 0 && similarityData">
       <div ng-class="{ 'col-md-6': canViewOther }" class="col-sm-12">
         <task-plagiarism-file-viewer task="task" match="similarityData.student" match-idx="match" other="false" assessing-unit-role="assessingUnitRole"></task-plagiarism-file-viewer>
       </div>
@@ -18,10 +18,10 @@
       </div>
     </div>
   </div>
-  <div ng-show="task.similar_to_count > 1">
+  <div ng-show="task.similarToCount > 1">
     <pagination
-      ng-show="task.similar_to_count > 1"
-      total-items="task.similar_to_count"
+      ng-show="task.similarToCount > 1"
+      total-items="task.similarToCount"
       ng-model="match"
       items-per-page="1"
       max-size="5"

@@ -40,7 +40,7 @@
                 <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
                 <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
                 <th><a href="" ng-click="sortOrder='targetGrade'; reverse=!reverse">Grade</a></th>
-                <!-- <th><a href="" ng-click="sortOrder='similar_to_count'; reverse=!reverse">Tasks Similar</a></th> -->
+                <!-- <th><a href="" ng-click="sortOrder='similarToCount'; reverse=!reverse">Tasks Similar</a></th> -->
                 <th><a href="" ng-click="sortOrder='maxPctCopy'; reverse=!reverse">Max Pct Similar</a></th>
                 <th><a href="" ng-click="sortOrder='shortTutorialDescription()'; reverse=!reverse">Tutorial</a></th>
               </tr>
@@ -50,7 +50,7 @@
                 <td>{{student.student_id}}</td>
                 <td>{{student.name}}</td>
                 <td>{{grades[student.targetGrade]}}</td>
-                <!-- <td>{{student.similar_to_count}}</td> -->
+                <!-- <td>{{student.similarToCount}}</td> -->
                 <td>{{student.maxPctCopy}}%</td>
                 <td><span>{{student.shortTutorialDescription()}}</span></td>
               </tr>
