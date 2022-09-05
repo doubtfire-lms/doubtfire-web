@@ -45,7 +45,6 @@ import 'build/src/app/visualisations/achievement-box-plot.js';
 import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
-import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
@@ -175,7 +174,6 @@ import 'build/src/app/common/modals/comments-modal/comments-modal.js';
 import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
 import 'build/src/app/common/modals/progress-modal/progress-modal.js';
 import 'build/src/app/common/modals/modals.js';
-import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/services/listener-service.js';
@@ -267,6 +265,8 @@ import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
 import { TransitionHooksService } from './sessions/transition-hooks.service';
+import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
+import { GradeTaskModalService } from './tasks/modals/grade-task-modal/grade-task-modal.service';
 import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
@@ -316,6 +316,7 @@ DoubtfireAngularJSModule.factory('checkForUpdateService', downgradeInjectable(Ch
 DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(TaskAssessmentModalService));
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
+DoubtfireAngularJSModule.factory('GradeTaskModal', downgradeInjectable(GradeTaskModalService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 
 // directive -> component
@@ -367,15 +368,17 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
-DoubtfireAngularJSModule.directive(
-  'taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent })
-);
-DoubtfireAngularJSModule.directive(
-  'taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent })
-);
+DoubtfireAngularJSModule.directive('taskAssessor',
+  downgradeComponent({ component: TaskAssessorComponent }));
+DoubtfireAngularJSModule.directive('taskAssessmentComment',
+  downgradeComponent({ component: TaskAssessmentCommentComponent }));
+DoubtfireAngularJSModule.directive('taskSubmissionHistory',
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }));
+
+  DoubtfireAngularJSModule.directive(
+    'gradeIcon',
+    downgradeComponent({ component: GradeIconComponent })
+  );
 
 // Global configuration
 DoubtfireAngularJSModule.directive(

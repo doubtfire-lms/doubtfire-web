@@ -33,10 +33,7 @@
             ng-model="project.submitted_grade"
             btn-radio="{{$index}}"
           >
-            <grade-icon
-              grade="grade"
-              class="text-{{project.submitted_grade == grades.indexOf(grade) ? 'success' : 'muted'}}"
-            ></grade-icon>
+            <grade-icon [grade]="grade"></grade-icon>
           </label>
         </div>
         <p class="help-block">

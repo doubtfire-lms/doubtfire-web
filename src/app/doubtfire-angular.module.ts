@@ -167,6 +167,8 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
+import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
@@ -234,6 +236,8 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    GradeIconComponent,
+    GradeTaskModalComponent,
     ObjectSelectComponent,
     WelcomeComponent,
     HeroSidebarComponent,

@@ -1,0 +1,69 @@
+$primary-blue: #3939ff;
+
+::ng-deep {
+  .mat-accent .mat-slider-thumb-label-text {
+    color: white;
+  }
+
+  .mat-accent .mat-slider-track-fill {
+    background-color: $primary-blue;
+  }
+
+  .mat-accent .mat-slider-thumb {
+    background-color: $primary-blue;
+  }
+
+  .mat-accent .mat-slider-thumb-label {
+    background-color: $primary-blue;
+  }
+
+  .mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb {
+    background-color: $primary-blue;
+  }
+
+  .mat-slider-min-value.mat-slider-thumb-label-showing.cdk-focused .mat-slider-thumb-label {
+    background-color: $primary-blue;
+  }
+
+  mat-dialog-container.mat-dialog-container {
+    padding: 0;
+  }
+}
+
+.grade-task-modal {
+  width: 450px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.slider {
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.task-label {
+  background-color: #3939ff;
+  color: white;
+  padding: 0 0.75rem;
+  border-radius: 0.75rem;
+  margin-left: 0.5rem;
+  font-size: small;
+}
+
+.label-rating {
+  display: flex;
+  justify-content: end;
+}
+
+.grade-toggle-group {
+  display: flex;
+  justify-content: center;
+}
+
+.grade-toggle {
+  padding: 0.5rem 0;
+}
+
+.grade-task-item + .grade-task-item {
+  padding-top: 2rem;
+}
