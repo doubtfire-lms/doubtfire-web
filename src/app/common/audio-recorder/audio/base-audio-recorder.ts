@@ -20,7 +20,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
 
   constructor(private mediaRecorderService: any) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isSending = false;
     if (this.canRecord) {
       this.init();
@@ -95,22 +95,30 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   // Which can be overridden
   protected visualise(): void {
     const draw = () => {
-      const WIDTH = this.canvas.width;
-      const HEIGHT = this.canvas.height;
+      let WIDTH = this.canvas.clientWidth;
+      let HEIGHT = this.canvas.clientHeight;
+
+      this.canvas.width = 1;
+      this.canvas.height = 1;
+
+      this.canvas.width = WIDTH = this.canvas.clientWidth;
+      this.canvas.height = HEIGHT = this.canvas.clientHeight;
       requestAnimationFrame(draw);
       analyser.getByteTimeDomainData(dataArray);
       analyser.getByteFrequencyData(dataArray);
 
-      this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-      let i = 0;
-      const bar_width = 1;
-      while (i < WIDTH) {
-        const bar_x = i * 10;
+      this.canvasCtx.clearRect(0, 0, 300, HEIGHT);
+
+      const bar_width = 2;
+      const bar_gap = 2;
+
+      for (let i = 0; i < WIDTH; i++) {
+        const bar_x = i * (bar_width + bar_gap);
         const bar_y = HEIGHT / 2;
-        const bar_height = -(dataArray[i] / 4) + 1;
+        const bar_height = -(dataArray[i] / 8) + 1;
+        this.canvasCtx.fillStyle = '#8f8f8f';
         this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
         this.canvasCtx.fillRect(bar_x, bar_y - bar_height, bar_width, bar_height);
-        i++;
       }
     };
 
