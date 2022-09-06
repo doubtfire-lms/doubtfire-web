@@ -42,12 +42,12 @@
   role="form"
 >
   <div fxLayout="row" fxLayoutAlign="space-around end" class="composer-container">
-    <div class="composer-action-group" [@shrinkgrow]="($expandInput | async)">
+    <div class="composer-action-group" [@shrinkgrow]="$expandInput | async">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         <button
           [hidden]="($expandInput | async) === false"
-          (click)="$expandInput.next(true)"
+          (click)="$expandInput.next(false); recording = false"
           matTooltip="Expand action buttons"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -88,7 +88,7 @@
         </button>
 
         <button
-          [hidden]="($expandInput | async)"
+          [hidden]="$expandInput | async"
           matTooltip="Attach a file"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -115,8 +115,8 @@
           mat-icon-button
           class="btn-no-outline"
           type="button"
-          [popover]="audioDiscussionTemplate"
           aria-label="audio recording popover button"
+          (click)="recordingMode()"
         >
           <mat-icon>mic</mat-icon>
         </button>
@@ -129,13 +129,15 @@
         [class.active]="($expandInput | async) === false"
         #commentInput
         id="textField"
-        [attr.contenteditable]="contentEditableValue()"
+        [attr.contenteditable]="contentEditableValue() && !recording"
         (keydown.enter)="send($event)"
         (keydown)="keyTyped()"
         placeholder="Aa"
         name="commentComposer"
-      ></div>
-      <div id="innerButtons">
+      >
+        <audio-comment-recorder *ngIf="recording" [task]="task"></audio-comment-recorder>
+      </div>
+      <div id="innerButtons" [hidden]="recording">
         <mat-icon
           matTooltip="Choose an emoji"
           matTooltipShowDelay="400"
@@ -149,8 +151,3 @@
     </div>
   </div>
 </form>
-
-<!-- The HTML which will be injected -->
-<ng-template #audioDiscussionTemplate>
-  <audio-comment-recorder [task]="task"></audio-comment-recorder>
-</ng-template>
