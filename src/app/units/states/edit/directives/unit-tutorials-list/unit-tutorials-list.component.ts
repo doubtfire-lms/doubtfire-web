@@ -10,7 +10,7 @@ import {
   User,
   TutorialStream,
   TutorialStreamService,
-  Unit
+  Unit,
 } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 import { FormControl, Validators } from '@angular/forms';
@@ -48,18 +48,21 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     @Inject(confirmationModal) private confirmationModal: any,
     @Inject(alertService) private alerts: any
   ) {
-    super({
-      meetingDay: new FormControl('', [Validators.required]),
-      meetingTime: new FormControl(null, [Validators.required]),
-      meetingLocation: new FormControl('', [Validators.required]),
-      abbreviation: new FormControl('', [Validators.required]),
-      campus: new FormControl(null, []),
-      capacity: new FormControl('', [Validators.required]),
-      tutor: new FormControl(null, [Validators.required]),
-    }, "Tutorial");
+    super(
+      {
+        meetingDay: new FormControl('', [Validators.required]),
+        meetingTime: new FormControl(null, [Validators.required]),
+        meetingLocation: new FormControl('', [Validators.required]),
+        abbreviation: new FormControl('', [Validators.required]),
+        campus: new FormControl(null, []),
+        capacity: new FormControl('', [Validators.required]),
+        tutor: new FormControl(null, [Validators.required]),
+      },
+      'Tutorial'
+    );
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (this.stream) {
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
@@ -72,9 +75,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     this.dataSource = new MatTableDataSource();
     this.filterTutorials();
 
-    this.unit.tutorialsCache.values.subscribe(
-      (_t) => this.filterTutorials()
-    );
+    this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials());
   }
 
   private filterTutorials(): void {
@@ -84,9 +85,10 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     this.dataSource.data = this.tutorials;
   }
 
-  public saveStream() {
-    this.tutorialStreamService.update( {abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, { entity: this.stream} ).subscribe(
-      {
+  public saveStream(): void {
+    this.tutorialStreamService
+      .update({ abbreviation: this.origStreamAbbr, unit_id: this.unit.id }, { entity: this.stream })
+      .subscribe({
         next: (stream: TutorialStream) => {
           this.stream = stream;
           this.origStreamAbbr = stream.abbreviation;
@@ -96,9 +98,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
         },
         error: (error: any) => {
           this.alerts.add('danger', 'Something went wrong - ' + JSON.stringify(error.error), 6000);
-        }
-      }
-    )
+        },
+      });
   }
 
   public setEditStream(value: boolean): void {
@@ -111,7 +112,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   // This method is passed to the submit method on the parent
   // and is only run when an entity is successfully created or updated
-  onSuccess(response: Tutorial, isNew: boolean) {
+  onSuccess(response: Tutorial, isNew: boolean): void {
     if (isNew) {
       this.unit.tutorials.push(response);
       this.pushToTable(response);
@@ -127,8 +128,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   // Handle the removal of a tutorial
-  public deleteTutorial(tutorial: Tutorial) {
-    this.tutorialService.delete(tutorial, this.optionsOnRequest("delete")).subscribe((_result) => {
+  public deleteTutorial(tutorial: Tutorial): void {
+    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe((_result) => {
       this.cancelEdit();
       this.filterTutorials();
       this.renderTable();
@@ -142,7 +143,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   // This method is called when the form is submitted,
   // which then calls the parent's submit.
-  submit() {
+  submit(): void {
     super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
   }
 
@@ -171,24 +172,25 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   // Handle the deletion of a stream
-  deleteStream() {
+  deleteStream(): void {
     const stream: TutorialStream = this.stream;
 
     this.confirmationModal.show(
       `Delete Tutorial Stream ${stream.abbreviation}`,
       'Are you sure you want to delete this tutorial stream? This action is final and will delete all associated tutorials.',
-      () => this.unit.deleteStream(stream).subscribe({
-        next: (response: boolean) => {
-          if(response) {
-            this.alerts.add("success", `Deleted stream. ${stream.abbreviation}`, 8000)
-          } else {
-            this.alerts.add("danger", `Failed to delete stream.`, 8000);
-          }
-        },
-        error: (message) => {
-          this.alerts.add("danger", `Failed to delete stream. ${message}`, 8000);
-        }
-      })
+      () =>
+        this.unit.deleteStream(stream).subscribe({
+          next: (response: boolean) => {
+            if (response) {
+              this.alerts.add('success', `Deleted stream. ${stream.abbreviation}`, 8000);
+            } else {
+              this.alerts.add('danger', `Failed to delete stream.`, 8000);
+            }
+          },
+          error: (message) => {
+            this.alerts.add('danger', `Failed to delete stream. ${message}`, 8000);
+          },
+        })
     );
   }
 
@@ -198,13 +200,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   protected override optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<Tutorial> {
     return {
       constructorParams: this.unit,
-      cache: this.unit.tutorialsCache
+      cache: this.unit.tutorialsCache,
     };
   }
 
   // Sorting function to sort data when sort
   // event is triggered
-  sortTableData(sort: Sort) {
+  sortTableData(sort: Sort): void {
     if (!sort.active || sort.direction === '') {
       return;
     }

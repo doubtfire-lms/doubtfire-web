@@ -9,22 +9,13 @@
       Staff Tasks <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button uiSref="units/tasks/inbox" [uiParams]="{ unitId: currentUnit.id }" mat-menu-item>
-        Task Inbox
-      </button>
+      <button uiSref="units/tasks/inbox" [uiParams]="{ unitId: currentUnit.id }" mat-menu-item>Task Inbox</button>
       <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{ unitId: currentUnit.id }">
         Task Explorer
       </button>
-      <button mat-menu-item uiSref="units/tasks/offline" [uiParams]="{ unitId: currentUnit.id }">
-        Mark Tasks Offline
-      </button>
-      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{ unitId: currentUnit.id }">
-        Task List
-      </button>
+      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{ unitId: currentUnit.id }">Task List</button>
       <mat-divider></mat-divider>
-      <button mat-menu-item uiSref="units/students/list" [uiParams]="{ unitId: currentUnit.id }">
-        Student List
-      </button>
+      <button mat-menu-item uiSref="units/students/list" [uiParams]="{ unitId: currentUnit.id }">Student List</button>
       <button mat-menu-item uiSref="units/students/groups" [uiParams]="{ unitId: currentUnit.id }">
         Student Groups
       </button>
@@ -36,9 +27,7 @@
       </button>
       <span>
         <mat-divider></mat-divider>
-        <button mat-menu-item uiSref="units/analytics" [uiParams]="{ unitId: currentUnit.id }">
-          Unit Analytics
-        </button>
+        <button mat-menu-item uiSref="units/analytics" [uiParams]="{ unitId: currentUnit.id }">Unit Analytics</button>
         <button
           *ngIf="currentUnit.currentUserIsConvenor"
           mat-menu-item
@@ -58,41 +47,21 @@
     </button>
     <mat-menu #menu2="matMenu">
       <ng-container *ngIf="currentProject !== null && currentView === 'PROJECT'">
-        <button
-          uiSref="projects/dashboard"
-          [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }"
-          mat-menu-item
-        >
+        <button uiSref="projects/dashboard" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
           Dashboard
         </button>
         <mat-divider></mat-divider>
-        <button
-          uiSref="projects/outcomes"
-          [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }"
-          mat-menu-item
-        >
+        <button uiSref="projects/outcomes" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
           Learning Outcomes
         </button>
-        <button
-          uiSref="projects/portfolio"
-          [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }"
-          mat-menu-item
-        >
+        <button uiSref="projects/portfolio" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
           Portfolio Creation
         </button>
         <mat-divider></mat-divider>
-        <button
-          uiSref="projects/groups"
-          [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }"
-          mat-menu-item
-        >
+        <button uiSref="projects/groups" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
           Groups List
         </button>
-        <button
-          uiSref="projects/tutorials"
-          [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }"
-          mat-menu-item
-        >
+        <button uiSref="projects/tutorials" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
           Tutorial List
         </button>
       </ng-container>

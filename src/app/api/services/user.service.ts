@@ -1,11 +1,11 @@
 import { UnitRole, UnitService, User } from 'src/app/api/models/doubtfire-model';
-import { CachedEntityService } from 'ngx-entity-service';
+import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
 import { AuthenticationService } from './authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class UserService extends CachedEntityService<User> {
@@ -71,12 +71,14 @@ export class UserService extends CachedEntityService<User> {
   }
 
   // Specific to the User entity
-  public save(user: User): void {
-    if (user === this.currentUser) {
-      AppInjector.get(AuthenticationService).saveCurrentUser();
-    } else {
-      console.log('implement save other users...?');
-    }
+  public override update(pathIds: object | User, options?: RequestOptions<User>): Observable<User> {
+    return super.update(pathIds, options).pipe(
+      tap((user) => {
+        if (user === this.currentUser) {
+          AppInjector.get(AuthenticationService).saveCurrentUser();
+        }
+      })
+    );
   }
 
   public getTutors(): Observable<User[]> {
