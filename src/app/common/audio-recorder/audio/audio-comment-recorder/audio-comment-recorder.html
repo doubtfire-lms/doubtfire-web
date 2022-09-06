@@ -1,22 +1,40 @@
 <div class="audio-recorder">
-  <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
+  <p [hidden]="canRecord">
+    Audio recording <br />
+    only supported in modern versions of Chrome, Firefox and Safari.
+  </p>
   <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
-  <div [hidden]="!canRecord || isSending">
-    <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
-      <mat-icon [hidden]="isRecording" aria-label="Quit cross icon">fiber_manual_record</mat-icon>
-      <mat-icon [hidden]="!isRecording" aria-label="Quit cross icon">stop_rounded</mat-icon>
+  <div fxLayout="row" fxLayoutAlign="start center" [hidden]="!canRecord || isSending">
+    <button
+      style="width: 22px; height: 22px; line-height: 22px"
+      (click)="recordingToggle()"
+      mat-icon-button
+      aria-label="Audio recording button"
+    >
+      <mat-icon style="color: #f03d25">{{isRecording ? 'stop_circle' : 'radio_button_checked' }} </mat-icon>
     </button>
+    <button
+      style="width: 22px; height: 22px; line-height: 22px"
+      (click)="playStop()"
+      mat-icon-button
+      aria-label="Play audio recording"
+      [hidden]="!recordingAvailable"
+    >
+      <mat-icon>play_circle</mat-icon>
+    </button>
+    <audio id="audioPlayer"></audio>
+    <canvas fxFlex class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
 
     <div id="button-wrapper">
-      <button type="button" id='btnSend' (click)="sendRecording()" [disabled]="!recordingAvailable" class="btn-circle">
-        <i class="fa fa-paper-plane"></i>
-      </button>
-      <button type="button" id='btnPlay' [disabled]="!recordingAvailable" (click)="playStop()" class="btn-circle">
-        <i class="fa fa-play"></i>
+      <button
+        style="width: 22px; height: 22px; line-height: 22px; margin-right: 6px"
+        (click)="sendRecording()"
+        mat-icon-button
+        aria-label="Send audio recording"
+        [disabled]="!recordingAvailable"
+      >
+        <mat-icon>send</mat-icon>
       </button>
     </div>
-
-    <audio id='audioPlayer'></audio>
-    <canvas class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
   </div>
 </div>
