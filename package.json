@@ -41,7 +41,7 @@
     "@angular/router": "~13.3.10",
     "@angular/service-worker": "~13.3.10",
     "@angular/upgrade": "~13.3.10",
-    "@ctrl/ngx-emoji-mart": "^6.2.0",
+    "@ctrl/ngx-emoji-mart": "^7.0.0",
     "@uirouter/angular": "^9.1.0",
     "@uirouter/angular-hybrid": "13.0.0",
     "@uirouter/angularjs": "^1.0.30",
