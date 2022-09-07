@@ -13,7 +13,7 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { RequestOptions } from 'ngx-entity-service';
 
 @Component({
@@ -50,13 +50,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   ) {
     super(
       {
-        meetingDay: new FormControl('', [Validators.required]),
-        meetingTime: new FormControl(null, [Validators.required]),
-        meetingLocation: new FormControl('', [Validators.required]),
-        abbreviation: new FormControl('', [Validators.required]),
-        campus: new FormControl(null, []),
-        capacity: new FormControl('', [Validators.required]),
-        tutor: new FormControl(null, [Validators.required]),
+        meetingDay: new UntypedFormControl('', [Validators.required]),
+        meetingTime: new UntypedFormControl(null, [Validators.required]),
+        meetingLocation: new UntypedFormControl('', [Validators.required]),
+        abbreviation: new UntypedFormControl('', [Validators.required]),
+        campus: new UntypedFormControl(null, []),
+        capacity: new UntypedFormControl('', [Validators.required]),
+        tutor: new UntypedFormControl(null, [Validators.required]),
       },
       'Tutorial'
     );

@@ -3,7 +3,7 @@ import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { ActivityType, ActivityTypeService } from 'src/app/api/models/doubtfire-model';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
@@ -24,8 +24,8 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // that maps all of the form controls that this form consists of.
   constructor(private activityTypeService: ActivityTypeService, @Inject(alertService) private alerts: any) {
     super({
-      name: new FormControl('', [Validators.required]),
-      abbreviation: new FormControl('', [Validators.required]),
+      name: new UntypedFormControl('', [Validators.required]),
+      abbreviation: new UntypedFormControl('', [Validators.required]),
     }, "Activity Type");
   }
 

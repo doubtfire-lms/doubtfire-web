@@ -1,5 +1,5 @@
 import { AfterViewInit, Directive } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 import { Entity, RequestOptions } from 'ngx-entity-service';
 import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
@@ -13,7 +13,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
-  formData: FormGroup;
+  formData: UntypedFormGroup;
 
   // selected references a value that is being edited in the form
   // See CampusListComponent for reference to usecase of selected
@@ -48,7 +48,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * @param controls the FormControls that will make up the form.
    */
   constructor(controls: { [key: string]: AbstractControl }, protected entityName: string) {
-    this.formData = new FormGroup(controls);
+    this.formData = new UntypedFormGroup(controls);
     // Iterate over the FormControls passed in and assign the default values
     // For each based on the values that they are constructed with
     for (const key of Object.keys(this.formData.controls)) {
