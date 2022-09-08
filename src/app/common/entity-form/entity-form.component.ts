@@ -1,3 +1,4 @@
+import { OnInit } from '@angular/core';
 import { Directive } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Entity } from 'src/app/api/models/entity';
@@ -9,7 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
-export class EntityFormComponent<T extends Entity>  {
+export class EntityFormComponent<T extends Entity> implements OnInit {
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
@@ -54,6 +55,10 @@ export class EntityFormComponent<T extends Entity>  {
     for (const key of Object.keys(this.formData.controls)) {
       this.defaultFormData[key] = this.formData.get(`${key}`).value;
     }
+  }
+
+  ngOnInit(): void {
+
   }
 
 
@@ -157,7 +162,7 @@ export class EntityFormComponent<T extends Entity>  {
           alertService.add('danger', `${service.entityName} save failed: ${error.error.error? error.error.error: error.statusText}`, 6000);
         }
       }
-        
+
       );
     } else {
       // Once we mark forms as touched, erroneous state will be rendered
