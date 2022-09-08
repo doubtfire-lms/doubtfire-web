@@ -116,7 +116,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
         const bar_x = i * (bar_width + bar_gap);
         const bar_y = HEIGHT / 2;
         const bar_height = -(dataArray[i] / 8) + 1;
-        this.canvasCtx.fillStyle = '#8f8f8f';
+        this.canvasCtx.fillStyle = 'white';
         this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
         this.canvasCtx.fillRect(bar_x, bar_y - bar_height, bar_width, bar_height);
       }

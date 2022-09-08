@@ -3,7 +3,7 @@ audio-comment-recorder .audio-recorder {
 
 .btn-circle-xl {
   user-select: none;
-  background-color: #f03d25;
+  background-color: white;
   border-radius: 72px;
   color: #fff;
   height: 20px;
@@ -29,15 +29,9 @@ audio-comment-recorder .audio-recorder {
   bottom: 15%;
 }
 
-mat-spinner.send-audio-spinner {
-  position: absolute !important;
-  left: 37%;
-  top: 25%;
-}
-
 .mat-progress-spinner circle,
 .mat-spinner circle {
-  stroke: #f03d25;
+  stroke: white;
 }
 
 .btn-circle {
