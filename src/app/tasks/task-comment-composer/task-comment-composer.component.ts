@@ -329,7 +329,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
-  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }
