@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.17](https://github.com/macite/doubtfire-deploy/compare/v6.0.16...v6.0.17) (2022-09-08)
+
+
+### Bug Fixes
+
+* keep audio recorder in DOM when clearing ([977f327](https://github.com/macite/doubtfire-deploy/commit/977f3279e154bc74ba073567eab5324e57d968db))
+
 ### [6.0.16](https://github.com/macite/doubtfire-deploy/compare/v6.0.15...v6.0.16) (2022-09-08)
 
 
