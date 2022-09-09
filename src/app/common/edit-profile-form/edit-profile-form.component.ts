@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StateService } from '@uirouter/core';
+import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { UserService } from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -14,19 +16,24 @@ export class EditProfileFormComponent implements OnInit {
     private constants: DoubtfireConstants,
     private userService: UserService,
     private state: StateService,
-    private authService: AuthenticationService
-  ) { }
+    private authService: AuthenticationService,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User }
+  ) {
+    this.user = data?.user || this.userService.currentUser;
+  }
 
   @Input() mode: 'edit' | 'create';
+  public user: User;
   public externalName = this.constants.ExternalName;
-  public user = this.userService.currentUser;
-  public initialFirstName = this.user.firstName;
+  public initialFirstName: string;
   public formPronouns = { pronouns: '' };
   public get customPronouns(): boolean {
     return this.formPronouns.pronouns === '__customPronouns';
   }
 
   ngOnInit(): void {
+    this.initialFirstName = this.user.firstName;
+
     if (this.userService.isAnonymousUser()) {
       this.state.go('sign_in');
     }
@@ -41,13 +48,18 @@ export class EditProfileFormComponent implements OnInit {
     this.authService.signOut();
   }
 
-  public submit(): void {
+  public submit(goHome: boolean): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;
 
     this.userService.update(this.user).subscribe({
-      next: (_) => {
-        this.state.go('home');
+      next: (updatedUser) => {
+        if (goHome) {
+          this.state.go('home');
+        } else {
+          this.user = updatedUser;
+          this.initialFirstName = this.user.firstName;
+        }
       },
       error: (error) => console.log(error),
     });
