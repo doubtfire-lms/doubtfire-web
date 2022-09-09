@@ -3,6 +3,7 @@ import { InstitutionSettingsComponent } from './admin/institution-settings/insti
 import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
+import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -78,6 +79,23 @@ const SignInState: NgHybridStateDeclaration = {
 };
 
 /**
+ * Define the Edit Profile state.
+ */
+const EditProfileState: NgHybridStateDeclaration = {
+  name: 'edit_profile',
+  url: '/edit_profile',
+  views: {
+    main: {
+      component: EditProfileComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Edit Profile',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+  },
+};
+
+/**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState];
+export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState];
