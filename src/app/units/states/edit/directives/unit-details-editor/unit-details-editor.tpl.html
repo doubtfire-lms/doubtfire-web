@@ -141,6 +141,34 @@
         <!--/end-date-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="portfolioautogenerationdate">Portfolio auto-generation date</label>
+          <div class="col-sm-9">
+            <div class="col-sm-4 input-group">
+              <input
+                datepicker-popup="{{format}}"
+                id="portfolioautogenerationdate"
+                type="text"
+                class="form-control"
+                ng-model="unit.portfolio_auto_generation_date"
+                is-open="calOptions.portfolioAutoGenerationOpened"
+                ng-required="false"
+                close-text="Close"
+              />
+              <span class="input-group-btn">
+                <button
+                  class="btn btn-default"
+                  type="button"
+                  ng-click="open($event,'autogen')"
+                >
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <!--/portfolio-auto-generation-date-->
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Allow student extensions</label>
           <div class="col-sm-9">
             <div class="btn-group">

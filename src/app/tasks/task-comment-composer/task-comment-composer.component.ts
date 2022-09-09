@@ -82,6 +82,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
+  recording = false;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -142,6 +143,11 @@ export class TaskCommentComposerComponent implements DoCheck {
 
     const finalString = nameString + typeString;
     return finalString;
+  }
+
+  recordingMode(): void {
+    this.recording = !this.recording;
+    this.$expandInput.next(true);
   }
 
   send(e: Event) {
@@ -322,7 +328,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
-  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }
