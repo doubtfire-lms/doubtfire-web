@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
@@ -70,9 +69,7 @@ export class TaskCommentComposerComponent implements DoCheck {
     text: '',
     type: 'text',
   };
-  audioPopover: string = 'audioRecorderPopover.html';
 
-  @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
@@ -242,9 +239,6 @@ export class TaskCommentComposerComponent implements DoCheck {
   openDiscussionComposer() {
     const self = this;
 
-    this.popovers.forEach((popover: PopoverDirective) => {
-      popover.hide();
-    });
     let dialogRef: MatDialogRef<DiscussionComposerDialog, any>;
 
     dialogRef = this.dialog.open(DiscussionComposerDialog, {
