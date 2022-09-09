@@ -16,7 +16,7 @@ angular.module('doubtfire.admin.states.users', [])
   $stateProvider.state "admin/users", usersAdminViewStateData
 )
 
-.controller("AdministerUsersCtrl", ($scope, $modal, DoubtfireConstants, alertService, CsvResultModal, UserSettingsModal, fileDownloaderService, GlobalStateService, newUserService) ->
+.controller("AdministerUsersCtrl", ($scope, $modal, DoubtfireConstants, alertService, CsvResultModal, fileDownloaderService, GlobalStateService, newUserService, EditProfileService) ->
   # We are not showing a particlar unit or project
   GlobalStateService.setView("OTHER")
 
@@ -52,7 +52,7 @@ angular.module('doubtfire.admin.states.users', [])
   $scope.showUserModal = (user) ->
     # If we're given a user, show that user, else create a new one
     userToShow = if user? then user else newUserService.createInstanceFrom { }
-    UserSettingsModal.show userToShow
+    EditProfileService.openDialog(userToShow)
 
   $scope.downloadUsersCSV = () ->
     fileDownloaderService.downloadFile(newUserService.csvUrl, "Users.csv")
