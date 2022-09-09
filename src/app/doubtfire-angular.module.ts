@@ -35,7 +35,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
@@ -288,7 +287,6 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
-    PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
