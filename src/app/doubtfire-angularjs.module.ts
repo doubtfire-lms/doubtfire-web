@@ -271,6 +271,7 @@ import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -314,6 +315,7 @@ DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(Task
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
+DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
