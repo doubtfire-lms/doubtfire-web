@@ -1,0 +1,33 @@
+:host {
+  height: auto;
+  overflow-y: auto;
+}
+
+h1 {
+  color: black;
+  margin-top: 0;
+}
+
+a {
+  :hover {
+    text-decoration: none;
+    opacity: 0.6;
+  }
+}
+
+p {
+  color: black;
+}
+
+.form-field {
+  margin: 5px;
+}
+
+section {
+  padding: 8px;
+}
+
+/* checkbox */
+::ng-deep .mat-checkbox-label {
+  font-weight: normal;
+}
