@@ -16,7 +16,6 @@ export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
 export const visualisations = new InjectionToken('Visualisation');
-export const userSettingsModal = new InjectionToken('UserSettingsModal');
 export const rootScope = new InjectionToken('$rootScope');
 export const userNotificationSettingsModal = new InjectionToken('UserNotificationSettingsModal');
 export const calendarModal = new InjectionToken('CalendarModal');
@@ -36,12 +35,6 @@ export const visualisationsProvider = {
 export const calendarModalProvider = {
   provide: calendarModal,
   useFactory: (i: any) => i.get('CalendarModal'),
-  deps: ['$injector'],
-};
-
-export const userSettingsModalProvider = {
-  provide: userSettingsModal,
-  useFactory: (i: any) => i.get('UserSettingsModal'),
   deps: ['$injector'],
 };
 
