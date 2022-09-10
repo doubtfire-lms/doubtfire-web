@@ -1,4 +1,4 @@
-![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
+![Doubtfire Logo](src/assets/icons/android-chrome-192x192.png)
 
 # Doubtfire Web - Angular.js to Angular migration guide
 

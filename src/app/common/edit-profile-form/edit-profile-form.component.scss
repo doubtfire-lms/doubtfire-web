@@ -3,6 +3,22 @@
   overflow-y: auto;
 }
 
+h1 {
+  color: black;
+  margin-top: 0;
+}
+
+a {
+  :hover {
+    text-decoration: none;
+    opacity: 0.6;
+  }
+}
+
+p {
+  color: black;
+}
+
 .form-field {
   margin: 5px;
 }

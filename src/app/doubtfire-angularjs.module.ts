@@ -103,8 +103,6 @@ import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignme
 import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
 import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
 import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
-import 'build/src/app/admin/modals/user-notification-settings-modal/user-notification-settings-modal.js';
-import 'build/src/app/admin/modals/user-settings-modal/user-settings-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
@@ -271,6 +269,7 @@ import { AuthenticationService } from './api/services/authentication.service';
 import { ProjectService } from './api/services/project.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -317,6 +316,7 @@ DoubtfireAngularJSModule.factory('TaskAssessmentModal', downgradeInjectable(Task
 DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmissionService));
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
+DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(

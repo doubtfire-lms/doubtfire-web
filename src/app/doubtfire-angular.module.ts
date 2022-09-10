@@ -35,7 +35,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { setTheme } from 'ngx-bootstrap/utils';
 
 import { AboutDoubtfireModalService } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
@@ -61,11 +60,9 @@ import {
   commentsModalProvider,
   groupServiceProvider,
   plagiarismReportModalProvider,
-  userSettingsModalProvider,
   rootScopeProvider,
   aboutDoubtfireModalProvider,
   calendarModalProvider,
-  userNotificationSettingsModalProvider,
   uploadSubmissionModal,
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
@@ -175,8 +172,9 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
-import { EditProfileComponent } from './common/edit-profile/edit-profile.component';
+import { EditProfileFormComponent } from './common/edit-profile-form/edit-profile-form.component';
 import { TransitionHooksService } from './sessions/transition-hooks.service';
+import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 
 @NgModule({
   // Components we declare
@@ -238,6 +236,7 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
     WelcomeComponent,
     HeroSidebarComponent,
     SignInComponent,
+    EditProfileFormComponent,
     EditProfileComponent,
   ],
   // Module Imports
@@ -288,7 +287,6 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
-    PopoverModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -323,9 +321,7 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
     visualisationsProvider,
     groupServiceProvider,
     commentsModalProvider,
-    userSettingsModalProvider,
     rootScopeProvider,
-    userNotificationSettingsModalProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
     gradeServiceProvider,
