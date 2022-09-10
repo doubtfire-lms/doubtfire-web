@@ -17,7 +17,6 @@ export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmen
 export const commentsModal = new InjectionToken('CommentsModal');
 export const visualisations = new InjectionToken('Visualisation');
 export const rootScope = new InjectionToken('$rootScope');
-export const userNotificationSettingsModal = new InjectionToken('UserNotificationSettingsModal');
 export const calendarModal = new InjectionToken('CalendarModal');
 export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
 export const groupService = new InjectionToken('groupService');
@@ -47,12 +46,6 @@ export const rootScopeProvider = {
 export const aboutDoubtfireModalProvider = {
   provide: aboutDoubtfireModal,
   useFactory: (i: any) => i.get('AboutDoubtfireModal'),
-  deps: ['$injector'],
-};
-
-export const userNotificationSettingsModalProvider = {
-  provide: userNotificationSettingsModal,
-  useFactory: (i: any) => i.get('UserNotificationSettingsModal'),
   deps: ['$injector'],
 };
 

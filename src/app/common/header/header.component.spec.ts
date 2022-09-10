@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { aboutDoubtfireModal, calendarModal, userNotificationSettingsModal } from 'src/app/ajs-upgraded-providers';
 import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
@@ -13,7 +12,6 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let currentUserStub: jasmine.SpyObj<any>;
-  let userNotificationSettingsModalStub: jasmine.SpyObj<any>;
   let calendarModalStub: jasmine.SpyObj<any>;
   let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
   let isActiveUnitRoleStub: Partial<IsActiveUnitRole>;
@@ -44,7 +42,6 @@ describe('HeaderComponent', () => {
       imports: [MatMenuModule],
       providers: [
         { provide: currentUser, useValue: currentUserStub },
-        { provide: userNotificationSettingsModal, useValue: userNotificationSettingsModalStub },
         { provide: calendarModal, useValue: calendarModalStub },
         { provide: aboutDoubtfireModal, useValue: aboutDoubtfireModalStub },
         { provide: IsActiveUnitRole, useValue: isActiveUnitRoleStub },

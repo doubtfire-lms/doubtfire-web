@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { aboutDoubtfireModal, calendarModal, userNotificationSettingsModal } from 'src/app/ajs-upgraded-providers';
+import { aboutDoubtfireModal, calendarModal } from 'src/app/ajs-upgraded-providers';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    @Inject(userNotificationSettingsModal) private UserNotificationSettingsModal,
     @Inject(calendarModal) private CalendarModal,
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
     private isActiveUnitRole: IsActiveUnitRole,
@@ -115,10 +114,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentProject = null;
     this.currentUnitRole = unitRole;
     this.currentUnit = unitRole.unit;
-  }
-
-  openNotificationSettings(): void {
-    this.UserNotificationSettingsModal.show(this.currentUser);
   }
 
   update(): void {
