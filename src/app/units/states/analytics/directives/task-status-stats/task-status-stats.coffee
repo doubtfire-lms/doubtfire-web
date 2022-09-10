@@ -22,7 +22,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
       tutorial: { text: 'Overview of tutorials', abbreviation: "ZZZ", id: -1 }
     $scope.tasksForSelector = [$scope.overviewSelectors.task]
 
-    _.each $scope.unit.task_definitions, (td) ->
+    _.each $scope.unit.taskDefinitions, (td) ->
       $scope.tasksForSelector.push {
         text: td.abbreviation + ' - ' + td.name
         id: td.id
@@ -47,7 +47,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
 
     # Load data if not loaded already
     unless $scope.unit.analytics.taskStatusCountByTutorial?
-      newUnitService.taskStatusCountByTutorial($scope.unit.id).subscribe(
+      newUnitService.taskStatusCountByTutorial($scope.unit).subscribe(
         (response) ->
           $scope.unit.analytics.taskStatusCountByTutorial = response
           $scope.dataModel.selectedType = 'unit'
@@ -109,7 +109,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
       else
         $scope.depth = 1
         $scope.data = $scope.reduceDataToTaskDef()
-        $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
+        $scope.overviewKeys = _.map $scope.unit.taskDefinitions, (td) ->
           {
             title: td.abbreviation
             subtitle: td.name
@@ -170,7 +170,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
           else
             target = $scope.dataModel.selectedTutorial
           $scope.data = $scope.switchToTasksForTutorial()[target.id]
-          $scope.overviewKeys = _.map $scope.unit.task_definitions, (td) ->
+          $scope.overviewKeys = _.map $scope.unit.taskDefinitions, (td) ->
             {
               data: $scope.data[td.id]
               show: _.keys($scope.data[td.id]).length > 0
@@ -214,12 +214,12 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
     $scope.switchToTasksForTutorial = ->
       result = {}
       result[''] = {}
-      _.each $scope.unit.task_definitions, (td) ->
+      _.each $scope.unit.taskDefinitions, (td) ->
         result[''][td.id] = {}
 
       _.each $scope.unit.tutorials, (tutorial) ->
         result[tutorial.id] = {}
-        _.each $scope.unit.task_definitions, (td) ->
+        _.each $scope.unit.taskDefinitions, (td) ->
           result[tutorial.id][td.id] = {}
 
       _.each $scope.unit.analytics.taskStatusCountByTutorial, (taskDef, taskDefId) ->
@@ -237,7 +237,7 @@ angular.module('doubtfire.units.states.analytics.directives.task-status-stats', 
     #
     $scope.switchToTutorialsForTask = ->
       result = {}
-      _.each $scope.unit.task_definitions, (td) ->
+      _.each $scope.unit.taskDefinitions, (td) ->
         result[td.id] = {}
         _.each $scope.unit.tutorials, (tutorial) ->
           result[td.id][tutorial.id] = {}

@@ -237,21 +237,21 @@ export class UnitService extends CachedEntityService<Unit> {
   }
 
   public taskStatusCountByTutorial(unit: Unit): Observable<any> {
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/task_status_pct`;
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_status_pct`;
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<any>(url);
   }
 
   public targetGradeStats(unit: Unit): Observable<any> {
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/student_target_grade`;
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/student_target_grade`;
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<any>(url);
   }
 
   public taskCompletionStats(unit: Unit): Observable<any> {
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/task_completion_stats`;
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_completion_stats`;
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<any>(url);

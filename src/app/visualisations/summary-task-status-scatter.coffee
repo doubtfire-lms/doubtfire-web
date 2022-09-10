@@ -8,8 +8,8 @@ angular.module('doubtfire.visualisations.summary-task-status-scatter', [])
     unit: '='
   controller: ($scope, newTaskService, Visualisation) ->
     yAxisTickFormatFunction = (value) ->
-      if $scope.unit.task_definitions[value]
-        $scope.unit.task_definitions[value].abbreviation
+      if $scope.unit.taskDefinitions[value]
+        $scope.unit.taskDefinitions[value].abbreviation
       else
         ''
 

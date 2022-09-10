@@ -12,7 +12,7 @@
     </div>
   </button><!--/dropdown-button-->
   <ul class="dropdown-menu project-tasks-list">
-    <div ng-repeat="(groupSetId, relatedTaskDefs) in unit.task_definitions | groupBy: 'group_set_id'" class="col-sm-12">
+    <div ng-repeat="(groupSetId, relatedTaskDefs) in unit.taskDefinitions | groupBy: 'groupSetId'" class="col-sm-12">
       <h5 class="group-set-name" ng-hide="hideGroupSetName">
         {{groupSetName(groupSetId)}}
       </h5>
