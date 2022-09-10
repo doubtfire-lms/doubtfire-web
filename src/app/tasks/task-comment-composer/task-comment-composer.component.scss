@@ -13,6 +13,11 @@ $emoji-color: lighten(
     flex: 1 1 auto;
     margin: 8px 8px 8px 0;
     padding: 0 8px 0 12px;
+    min-height: 39px;
+  }
+
+  #textFieldContainer.recording {
+    background-color: #3939FF;
   }
 
   #textField {

@@ -1,13 +1,3 @@
-@use '../../../node_modules/@angular/material' as mat;
-@import '../../../node_modules/@angular/material/theming';
-
-$app-primary: mat.define-palette(mat.$grey-palette);
-$app-accent: mat.define-palette(mat.$light-blue-palette);
-$app-warn: mat.define-palette(mat.$red-palette);
-
-$primary: mat.get-color-from-palette($app-primary);
-$accent: mat.get-color-from-palette($app-accent);
-$warn: mat.get-color-from-palette($app-warn);
 
 @mixin doubtfire-card {
   border-radius: 10px;

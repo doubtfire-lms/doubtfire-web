@@ -123,7 +123,7 @@
                 ng-repeat="bar in project.taskStats"
                 value="bar.value"
                 type="{{statusClass(bar.key)}}">
-                <span ng-hide="bar.value < 10">{{bar.value}}%</span>
+                <span ng-hide="bar.value < 10">{{bar.value !== bar.value ? 'No Interaction' : (bar.value + '%')}}</span>
               </bar>
             </progress>
           </td><!--/progress-column-->

@@ -2,7 +2,7 @@ import { Component, Inject, ViewChild } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
 
@@ -26,10 +26,10 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
   // that maps all of the form controls that this form consists of.
   constructor(private campusService: CampusService, @Inject(alertService) private alerts: any) {
     super({
-      abbreviation: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      mode: new FormControl('', [Validators.required]),
-      active: new FormControl(false),
+      abbreviation: new UntypedFormControl('', [Validators.required]),
+      name: new UntypedFormControl('', [Validators.required]),
+      mode: new UntypedFormControl('', [Validators.required]),
+      active: new UntypedFormControl(false),
     }, "Campus");
   }
 

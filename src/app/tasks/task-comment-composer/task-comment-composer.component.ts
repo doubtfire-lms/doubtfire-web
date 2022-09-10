@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
@@ -70,9 +69,7 @@ export class TaskCommentComposerComponent implements DoCheck {
     text: '',
     type: 'text',
   };
-  audioPopover: string = 'audioRecorderPopover.html';
 
-  @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
@@ -82,6 +79,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
+  recording = false;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -142,6 +140,11 @@ export class TaskCommentComposerComponent implements DoCheck {
 
     const finalString = nameString + typeString;
     return finalString;
+  }
+
+  recordingMode(): void {
+    this.recording = !this.recording;
+    this.$expandInput.next(true);
   }
 
   send(e: Event) {
@@ -235,9 +238,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   openDiscussionComposer() {
     const self = this;
 
-    this.popovers.forEach((popover: PopoverDirective) => {
-      popover.hide();
-    });
+
     let dialogRef: MatDialogRef<DiscussionComposerDialog, any>;
 
     dialogRef = this.dialog.open(DiscussionComposerDialog, {
@@ -322,7 +323,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
-  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }
