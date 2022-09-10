@@ -62,7 +62,15 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'plagiarismReportUrl',
       'plagiarismWarnPct',
       'restrictStatusUpdates',
-      'groupSetId',
+      {
+        keys: ['groupSet','group_set_id'],
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+          return taskDef.unit.groupSetsCache.get(data[key]);
+        },
+        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+          return taskDef.groupSet?.id;
+        }
+      },
       'hasTaskSheet',
       'hasTaskResources',
       'hasTaskAssessmentResources',

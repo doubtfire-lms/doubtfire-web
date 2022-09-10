@@ -283,8 +283,10 @@ export class Project extends Entity {
     if ( ! task.definition.isGroupTask() ) {
       return null;
     } else {
-      this.groups.find( group => group.groupSet.id === task.definition.groupSet.id ) ||
-        this.unit.groups.find(group => group.groupSet.id === task.definition.groupSet.id && group.projects.includes(this));
+      const groupSet = task.definition.groupSet;
+
+      return this.groups.find( group => group.groupSet.id === task.definition.groupSet.id ) ||
+        groupSet.groups.find(group => group.projects.includes(this));
     }
   }
 

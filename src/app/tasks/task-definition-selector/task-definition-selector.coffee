@@ -19,12 +19,12 @@ angular.module('doubtfire.tasks.task-definition-selector',[])
     buttonStyle: '@'
     # Clearable
     showClear: '=?'
-  controller: ($scope, groupService) ->
+  controller: ($scope) ->
     $scope.buttonStyle ?= 'default'
     $scope.groupSetName = (id) ->
-      groupService.groupSetName(id, $scope.unit)
+      $scope.unit.groupSetsCache.get(id)?.name || "Individual Work"
 
-    $scope.hideGroupSetName = $scope.unit.group_sets?.length is 0
+    $scope.hideGroupSetName = $scope.unit.groupSets?.length is 0
 
     $scope.selectedDefinition = null
 

@@ -361,6 +361,6 @@ export class TaskStatus {
   }
 
   public static statusClass(status: TaskStatusEnum | undefined): string {
-    return status?.replace(/_/g, "-");
+    return status?.replace(new RegExp("_", "g"), "-");
   }
 }

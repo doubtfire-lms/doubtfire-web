@@ -66,7 +66,7 @@ export class TaskService extends CachedEntityService<Task> {
       {
         keys: 'otherProjects',
         toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
-          data['other_projects'].foreEach((details) => {
+          data['other_projects'].forEach((details) => {
             const proj = entity.unit.findStudent(details.id)
             if (proj) {
               // Update the other project's task status overview
@@ -163,7 +163,7 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
 
   public statusClass(status: TaskStatusEnum): string {
-    return status.replace("_", "-");
+    return TaskStatus.statusClass(status);
   }
 
   public readonly statusColors: Map<string, string> = TaskStatus.STATUS_COLORS;

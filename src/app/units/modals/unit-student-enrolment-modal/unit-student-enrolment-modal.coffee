@@ -40,6 +40,7 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
           student_num: studentId,
           campus_id: campusId
         }
+        constructorParams: unit
       }).subscribe({
         next: (project) ->
           alertService.add("success", "Student enrolled", 2000)
