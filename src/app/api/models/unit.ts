@@ -3,6 +3,7 @@ import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { GroupService } from '../services/group.service';
 import { ProjectService } from '../services/project.service';
@@ -419,5 +420,13 @@ export class Unit extends Entity {
 
   public getTaskDefinitionBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/task_definitions?unit_id=${this.id}`;
+  }
+
+  public downloadTaskCompletionCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_completion.json`, `${this.name}-task-completion.csv`);
+  }
+
+  public downloadTutorAssessmentCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`, `${this.name}-tutor-assessments.csv`);
   }
 }

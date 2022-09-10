@@ -9,10 +9,10 @@ angular.module('doubtfire.units.states.analytics.directives.unit-stats-download'
   templateUrl: 'units/states/analytics/directives/unit-stats-download/unit-stats-download.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, TaskCompletionCsv, TutorAssessmentCsv) ->
+  controller: ($scope) ->
     $scope.fetchTaskCompletionStats = ->
-      TaskCompletionCsv.downloadFile($scope.unit)
+      $scope.unit.downloadTaskCompletionCsv()
     $scope.fetchTutorAssessmentStats = ->
-      TutorAssessmentCsv.downloadFile($scope.unit)
+      $scope.unit.downloadTutorAssessmentCsv()
 
 )
