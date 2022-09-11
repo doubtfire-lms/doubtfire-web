@@ -68,7 +68,7 @@ export class TaskDefinition extends Entity {
   }
 
   public isGroupTask(): boolean {
-    return this.groupSet !== null;
+    return this.groupSet !== null && this.groupSet !== undefined;
   }
 
   public getTaskPDFUrl(asAttachment: boolean = false): string {

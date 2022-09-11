@@ -196,8 +196,6 @@ export class Unit extends Entity {
     // Make sure the task definition is a task definition object from the unit
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-    console.log("update fillWithUnStartedTasks - groups");
-
     // Now fill for the students in the unit
     return this.students.map( (p) => {
       // See if we already have the task
@@ -207,11 +205,12 @@ export class Unit extends Entity {
         t = p.tasks.find( t => t.definition.id == td.id );
       }
 
-      //TODO: Map groups
-      // If a group task but group data not loaded, go fetch it
-      // if (t.isGroupTask() && !t.group) {
-      //   projectService.updateGroups(t.project, null, true);
-      // }
+      if (!t) {
+        t = new Task(p);
+        t.definition = td;
+        t.status = "not_started";
+      }
+
       return t;
     });
   }
@@ -230,7 +229,7 @@ export class Unit extends Entity {
       if (!project.findTaskForDefinition(taskDefinition.id)) {
         const task = new Task(project);
         task.definition = taskDefinition;
-        // add to cache using task definition abbreviation as key
+        // add to cache using task definition abbreviation as key - as it has no id
         project.taskCache.set(taskDefinition.abbreviation.toString(), task);
       }
     });
@@ -345,7 +344,7 @@ export class Unit extends Entity {
   }
 
   public overseerEnabled(): boolean {
-    return this.assessmentEnabled && this.overseerImageId !== null;
+    return this.assessmentEnabled && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 
   private addStudentTypeAheadData(students: Project[], appendTo: string[]): void {

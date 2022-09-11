@@ -138,21 +138,6 @@ export class UnitService extends CachedEntityService<Unit> {
       },
       // 'tutorialEnrolments', - map to tutorial enrolments
       {
-        keys: 'taskOutcomeAlignments',
-        toEntityOp: (data: object, jsonKey: string, unit: Unit) => {
-          data[jsonKey].forEach( (alignment) => {
-            unit.taskOutcomeAlignmentsCache.getOrCreate(
-              alignment['id'],
-              this.taskOutcomeAlignmentService,
-              alignment,
-              {
-                constructorParams: unit
-              }
-            );
-          });
-        }
-      },
-      {
         keys: 'groupSets',
         toEntityOp: (data, key, unit) => {
           data[key].forEach((groupSetJson: object) => {
@@ -186,6 +171,21 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: (unit: Unit, key: string) => {
           return unit.draftTaskDefinition?.id;
+        }
+      },
+      {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, jsonKey: string, unit: Unit) => {
+          data[jsonKey].forEach( (alignment) => {
+            unit.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              this.taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: unit
+              }
+            );
+          });
         }
       },
       // 'groupMemberships', - map to group memberships

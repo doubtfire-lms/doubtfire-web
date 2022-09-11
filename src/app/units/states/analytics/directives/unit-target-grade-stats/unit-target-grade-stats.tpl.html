@@ -45,7 +45,7 @@
     </div><!--/depth-0-chart-->
     <div ng-if="dataModel.selectedTutorial.id < 0" class="overview-charts">
       <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3 overview-chart" ng-click="switchToTutorial(chart.tutorial)">
-        <target-grade-pie-chart data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
+        <target-grade-pie-chart ng-if="chart.show" data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
         <div class="no-data-to-display" ng-hide="chart.show">
           No data
         </div>

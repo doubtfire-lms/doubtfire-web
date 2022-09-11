@@ -10,6 +10,12 @@ angular.module('doubtfire.units.states.analytics.directives.unit-achievement-sta
   scope:
     unit: "="
   controller: ($scope, newUnitService) ->
+    overviewTutorial = {
+      id: -1
+      abbreviation: 'Overview'
+      tutor_name: 'All Tutorials'
+    }
+
     # Load data if not loaded already
     unless $scope.unit.analytics?.learningProgressClassDetails?
       newUnitService.loadLearningProgressClassDetails($scope.unit).subscribe(
@@ -48,12 +54,6 @@ angular.module('doubtfire.units.states.analytics.directives.unit-achievement-sta
       selectedType: 'unit'
       selectedTutorial: overviewTutorial
       pct: true
-    }
-
-    overviewTutorial = {
-      id: -1
-      abbreviation: 'Overview'
-      tutor_name: 'All Tutorials'
     }
 
     $scope.tutorialsForSelector = [overviewTutorial].concat($scope.unit.tutorials)

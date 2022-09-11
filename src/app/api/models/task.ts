@@ -602,7 +602,7 @@ export class Task extends Entity {
   }
 
   public wasSubmittedOnTime() {
-    return this.submissionDate.getTime() <= this.definition.finalDeadlineDate().getTime();
+    return this.submissionDate && this.submissionDate.getTime() <= this.definition.finalDeadlineDate().getTime();
   }
 
   public maxWeeksCanExtend(): number {
