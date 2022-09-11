@@ -192,7 +192,6 @@ import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
 import 'build/src/app/api/models/group-member.js';
 import 'build/src/app/api/models/user-role.js';
-import 'build/src/app/api/models/task-completion-csv.js';
 import 'build/src/app/api/models/models.js';
 import 'build/src/app/api/models/task-similarity.js';
 import 'build/src/app/api/models/portfolion-submission.js';
