@@ -3,7 +3,7 @@ import { take } from 'rxjs/operators';
 
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
+import { downgradeComponent, UpgradeModule } from '@angular/upgrade/static';
 import { setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -112,6 +112,9 @@ import { UnitTutorialsManagerComponent } from './units/states/edit/directives/un
 import { CommentBubbleActionComponent } from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import { StudentTutorialSelectComponent } from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import { StudentCampusSelectComponent } from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
+
+import { UnitStaffEditor } from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
+
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
@@ -165,6 +168,7 @@ import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdo
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 
+//import { UnitStaffEditor } from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 @NgModule({
   // Components we declare
   declarations: [
@@ -221,6 +225,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    UnitStaffEditor,
   ],
   // Module Imports
   imports: [

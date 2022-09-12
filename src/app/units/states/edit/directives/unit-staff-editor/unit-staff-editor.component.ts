@@ -7,4 +7,5 @@ import { Component, Input, Inject } from '@angular/core';
 
 export class UnitStaffEditor {
     contructor(){}
+    ngOnInit(){}
 }
