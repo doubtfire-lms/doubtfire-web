@@ -76,6 +76,7 @@ import {
   aboutDoubtfireModalProvider,
   calendarModalProvider,
   userNotificationSettingsModalProvider,
+  projectProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -164,6 +165,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { PortfolioGradeSelectStepComponent } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 @NgModule({
   // Components we declare
@@ -221,6 +223,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    PortfolioGradeSelectStepComponent,
   ],
   // Module Imports
   imports: [
@@ -319,6 +322,7 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
+    projectProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
