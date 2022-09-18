@@ -2,7 +2,7 @@
   <div class="modal-header">
     <h3>Submit
       <strong>{{task.definition.abbreviation}}</strong> as
-      <select 
+      <select
         class="form-control input-lg submission-type"
         ng-if="!uploader.isUploading"
         ng-change="onSelectNewSubmissionType(submissionType)"
@@ -15,7 +15,7 @@
     </h3>
   </div><!--/modal-header-->
   <div class="modal-body">
-    <div 
+    <div
       class="state state-group"
       ng-class="{'state-hidden-left': isHidden('group').left,
                  'state-hidden-right': isHidden('group').right}">
@@ -25,8 +25,8 @@
             Team Contribution
           </h4>
           <p>
-            Please rate each team member's effort on working on {{task.definition.name}} 
-            by clicking on a <i class="fa fa-child"></i> icon that represents their 
+            Please rate each team member's effort on working on {{task.definition.name}}
+            by clicking on a <i class="fa fa-child"></i> icon that represents their
             assigned effort.
           </p>
           <p class="text-muted">
@@ -35,7 +35,7 @@
           </p>
         </div>
         <!--/card-heading-->
-        <group-member-contribution-assigner 
+        <group-member-contribution-assigner
           task="task"
           class="card-body"
           project="task.project()"
@@ -60,7 +60,7 @@
           </span>
         </div>
         <div class="card-body">
-          <file-uploader 
+          <file-uploader
             files="uploader.files"
             url="uploader.url"
             payload="uploader.payload"
@@ -78,22 +78,46 @@
       </div>
     </div>
     <!--/state-files-->
-    <div 
-      class="state state-alignment" 
+    <div
+      class="state state-alignment"
       ng-class="{'state-hidden-left': isHidden('alignment').left,
                  'state-hidden-right': isHidden('alignment').right}">
       <div class="card card-default">
-        <div class="card-heading">
-          <h4>
-            Learning Outcome Alignment
-          </h4>
-          <p>
-            Please rate the relevancy of this task to the specific learning outcome.
-            You <strong>must</strong> relate this task to at least one outcome.
-          </p>
-          <p class="text-muted">
-            If you think the task is not related to a specific outcome, click the highest filled circle to remove its relevancy.
-          </p>
+        <div class="card-heading" style="display: flex;">
+          <div>
+            <h4>
+              Learning Outcome Alignment
+            </h4>
+            <p>
+              Please rate the relevancy of this task to the specific learning outcome.
+              You <strong>must</strong> relate this task to at least one outcome.
+            </p>
+            <p class="text-muted">
+              If you think the task is not related to a specific outcome, click the highest filled circle to remove its relevancy.
+            </p>
+          </div>
+          <div style="display: flex;padding-top: 25px;padding-left: 80px;" ng-model="alignmentsGrade">
+            <div>
+              <p>
+                <input type="radio" id="grade_p" name="grade" value="P">
+                <label for="grade_p">P</label>
+              </p>
+              <p>
+                <input type="radio" id="grade_c" name="grade" value="C">
+                <label for="grade_c">C</label>
+              </p>
+            </div>
+            <div>
+              <p>
+                <input type="radio" id="grade_d" name="grade" value="D">
+                <label for="grade_d">D</label>
+              </p>
+              <p>
+                <input type="radio" id="grade_hd" name="grade" value="HD">
+                <label for="grade_hd">HD</label>
+              </p>
+            </div>
+          </div>
         </div>
         <!--/card-heading-->
         <div class="list-group">
@@ -136,8 +160,8 @@
         </div><!--/comments-for-alignment-->
       </div><!--/card-alignment-->
     </div><!--/state-alignment-->
-    <div 
-      class="state state-comments" 
+    <div
+      class="state state-comments"
       ng-class="{'state-hidden-left': isHidden('comments').left,
                  'state-hidden-right': isHidden('comments').right}">
       <div class="card card-default">

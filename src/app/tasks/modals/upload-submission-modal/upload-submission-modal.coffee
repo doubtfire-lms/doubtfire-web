@@ -223,6 +223,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     _.chain($scope.alignments)
     .map((alignment, key) ->
       alignment.rationale = $scope.alignmentsRationale
+      alignment.grade = $scope.alignmentsGrade
       alignment.ilo_id = +key
       alignment
     )
