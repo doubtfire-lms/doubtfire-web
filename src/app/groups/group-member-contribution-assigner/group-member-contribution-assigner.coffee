@@ -13,7 +13,7 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     project: '='
     team: '=' #out parameter
 
-  controller: ($scope, gradeService, groupService, GroupMember) ->
+  controller: ($scope, gradeService) ->
     $scope.selectedGroupSet = $scope.task.definition.groupSet
     $scope.selectedGroup = $scope.project.getGroupForTask($scope.task)
 
@@ -36,7 +36,7 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
       contrib.confRating = contrib.rating
 
     memberPercentage = (contrib, rating) ->
-      (100 * (rating / groupService.groupContributionSum($scope.team.memberContributions, contrib, rating))).toFixed()
+      (100 * (rating / $scope.selectedGroup.contributionSum($scope.team.memberContributions, contrib, rating))).toFixed()
 
     $scope.hoveringOver = (contrib, value) ->
       contrib.overStar = value

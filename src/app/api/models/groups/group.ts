@@ -144,4 +144,17 @@ export class Group extends Entity {
       return this.memberCount < this.groupSet.capacity + this.capacityAdjustment;
     }
   }
+
+  public contributionSum(contrib: {project: Project, rating: number, confRating: number, percent: number}[], member?: Project, value?: number): number {
+    return contrib.reduce<number>(
+      (prevValue: number, current: {project: Project, rating: number, confRating: number, percent: number}) => {
+        if (current.project === member) {
+          return prevValue + value;
+        }
+        else {
+          return prevValue + current.rating
+        }
+      }, 0
+    )
+  }
 }

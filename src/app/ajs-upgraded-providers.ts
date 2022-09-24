@@ -19,7 +19,6 @@ export const visualisations = new InjectionToken('Visualisation');
 export const rootScope = new InjectionToken('$rootScope');
 export const calendarModal = new InjectionToken('CalendarModal');
 export const aboutDoubtfireModal = new InjectionToken('AboutDoubtfireModal');
-export const groupService = new InjectionToken('groupService');
 export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal');
 
 // Define a provider for the above injection token...
@@ -52,12 +51,6 @@ export const aboutDoubtfireModalProvider = {
 export const plagiarismReportModalProvider = {
   provide: plagiarismReportModal,
   useFactory: (i: any) => i.get('PlagiarismReportModal'),
-  deps: ['$injector'],
-};
-
-export const groupServiceProvider = {
-  provide: groupService,
-  useFactory: (i: any) => i.get('groupService'),
   deps: ['$injector'],
 };
 

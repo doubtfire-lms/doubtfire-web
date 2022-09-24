@@ -24,22 +24,23 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
     #
     $scope.toggleCompileProject = ->
       $scope.project.compilePortfolio = not $scope.project.compilePortfolio
-      Project.update { id: $scope.project.id, compile_portfolio: $scope.project.compilePortfolio }, (response) ->
-        $scope.portfolioIsCompiling = true
-        $scope.canCompilePortfolio  = false
-        $scope.project.portfolioStatus = 0.5
 
+      newProjectService.update($scope.project).subscribe(
+        (response) ->
+          $scope.portfolioIsCompiling = true
+          $scope.canCompilePortfolio  = false
+          $scope.project.portfolioStatus = 0.5
+      )
     #
     # PDF Local Funcs
     #
     $scope.deletePortfolio = ->
       doDelete = ->
-        $scope.portfolioSubmission.delete {
-          id: $scope.project.id
-        }, (response) ->
+        $scope.project.deletePortfolio().subscribe(       (response) ->
           $scope.project.portfolioAvailable = false
           $scope.project.portfolioStatus = 0
           alertService.add('info', "Portfolio has been deleted!", 5000)
+        )
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
 
     # Download the pdf

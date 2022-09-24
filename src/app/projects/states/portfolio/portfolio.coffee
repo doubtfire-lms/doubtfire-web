@@ -18,7 +18,7 @@ angular.module('doubtfire.projects.states.portfolio', [
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, PortfolioSubmission, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, analyticsService) ->
   #
   # Active task tab group
   #
@@ -50,21 +50,18 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.setActiveTab (tab for tabKey, tab of $scope.tabs when tab.seq is newSeq)[0]
 
   $scope.projectHasLearningSummaryReport = ->
-    _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
+    _.filter($scope.project.portfolioFiles, { idx: 0 }).length > 0
 
   # Determine whether project is using draft learning summary
-  $scope.projectHasDraftLearningSummaryReport = $scope.project.uses_draft_learning_summary
-
-  # Portfolio submission object
-  $scope.portfolioSubmission = PortfolioSubmission($scope.project)
+  $scope.projectHasDraftLearningSummaryReport = $scope.project.usesDraftLearningSummary
 
   # Called whenever a new file is added to the portfolio
   $scope.addNewFilesToPortfolio = (newFile) ->
-    $scope.project.portfolio_files.push newFile
+    $scope.project.portfolioFiles.push newFile
 
   # Delete file from the portfolio
   $scope.deleteFileFromPortfolio = (file) ->
-    $scope.portfolioSubmission.deleteFile($scope.project, file)
+    $scope.project.deleteFileFromPortfolio(file)
 
   # Update targetGrade value on change
   $scope.$watch 'project.targetGrade', (newValue) ->
@@ -75,7 +72,7 @@ angular.module('doubtfire.projects.states.portfolio', [
 
   # Get only extra files submitted
   $scope.extraFiles = ->
-    _.filter $scope.project.portfolio_files, (f) ->
+    _.filter $scope.project.portfolioFiles, (f) ->
       # when f.idx is 0 it's the LSR
       f.idx isnt 0
 
@@ -88,10 +85,10 @@ angular.module('doubtfire.projects.states.portfolio', [
       # Filter by aligned tasks that are included
       tasks = _.filter $scope.project.tasks, (t) ->
         hasAlignmentsForTask = _.find($scope.project.taskOutcomeAlignments, (ta) -> ta.task.id ==  t.id )?
-        t.include_in_portfolio and hasAlignmentsForTask
+        t.includeInPortfolio and hasAlignmentsForTask
     else
       # Filter by included in portfolio
-      tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
+      tasks = _.filter $scope.project.tasks, (t) -> t.includeInPortfolio
     tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 

@@ -11,7 +11,7 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { groupService, alertService } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
@@ -109,7 +109,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    @Inject(groupService) private groupService,
     @Inject(alertService) private alertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
@@ -244,12 +243,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   //  Task definition options
-  groupSetName(id: number) {
-    if (this.unit.hasGroupwork()) {
-      this.groupService.groupSetName(id, this.unit);
-    }
-  }
-
   taskDefinitionIdChanged() {
     let taskDef;
     const taskDefId = this.filters.taskDefinitionIdSelected;

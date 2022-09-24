@@ -32,7 +32,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, task, reuploadEvidence, groupService, alertService, outcomeService, PrivacyPolicy) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, task, reuploadEvidence, alertService, outcomeService, PrivacyPolicy) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
@@ -210,7 +210,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Maps team data to payload data
   mapTeamToPayload = ->
-    total = groupService.groupContributionSum($scope.team.memberContributions)
+    total = task.group.contributionSum($scope.team.memberContributions)
     _.map($scope.team.memberContributions,
       (member) -> {
         project_id: member.project.id,

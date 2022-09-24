@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
 import { alertService, visualisations } from 'src/app/ajs-upgraded-providers';
@@ -239,6 +240,27 @@ export class Project extends Entity {
 
   public portfolioUrl(asAttachment: boolean = false): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/project/${this.id}/portfolio${asAttachment ? "?as_attachment=true" : ""}`;
+  }
+
+  public deletePortfolio(): Observable<void> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.delete<void>(
+      `/submission/project/${this.id}/portfolio`
+    );
+  }
+
+  public deleteFileFromPortfolio(file: { idx: any; kind: any; name: any; }) {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.delete<void>(
+      `/submission/project/${this.id}/portfolio`,
+      {
+        body: {
+          idx: file.idx,
+          kind: file.kind,
+          name: file.name
+        }
+      }
+    );
   }
 
   public numberTasks(status: string) {

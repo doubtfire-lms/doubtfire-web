@@ -8,9 +8,18 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-add-ext
   restrict: 'E'
   replace: true
   templateUrl: 'projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.tpl.html'
-  controller: ($scope, PortfolioSubmission) ->
+  controller: ($scope) ->
+    otherFileFileUploadData = (type) ->
+      type: {
+        file0: { name: "Other", type: type }
+      },
+      payload: {
+        name: "Other"
+        kind: type
+      }
+
     $scope.uploadType = 'document'
     $scope.$watch 'uploadType', (newType) ->
       return unless newType?
-      $scope.uploadFileData = $scope.portfolioSubmission.otherFileFileUploadData newType
+      $scope.uploadFileData = otherFileFileUploadData newType
 )
