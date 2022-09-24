@@ -7,7 +7,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
   restrict: 'E'
   replace: true
   templateUrl: 'projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.tpl.html'
-  controller: ($scope, alertService, Project, DoubtfireConstants, ConfirmationModal, fileDownloaderService) ->
+  controller: ($scope, alertService, newProjectService, DoubtfireConstants, ConfirmationModal, fileDownloaderService) ->
 
     # Get the confugurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName

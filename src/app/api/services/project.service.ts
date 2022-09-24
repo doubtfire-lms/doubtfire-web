@@ -137,21 +137,6 @@ export class ProjectService extends CachedEntityService<Project> {
         }
       },
       {
-        keys: 'taskOutcomeAlignments',
-        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
-          data[key].forEach(alignment => {
-            project.taskOutcomeAlignmentsCache.getOrCreate(
-              alignment['id'],
-              taskOutcomeAlignmentService,
-              alignment,
-              {
-                constructorParams: project
-              }
-            );
-          });
-        }
-      },
-      {
         keys: 'tutorialEnrolments',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
           const unit: Unit = project.unit;
@@ -186,6 +171,21 @@ export class ProjectService extends CachedEntityService<Project> {
           });
 
           project.unit.setupTasksForStudent(project);
+        }
+      },
+      {
+        keys: 'taskOutcomeAlignments',
+        toEntityOp: (data: object, key: string, project: Project, params?: any) => {
+          data[key].forEach(alignment => {
+            project.taskOutcomeAlignmentsCache.getOrCreate(
+              alignment['id'],
+              taskOutcomeAlignmentService,
+              alignment,
+              {
+                constructorParams: project
+              }
+            );
+          });
         }
       },
     );
