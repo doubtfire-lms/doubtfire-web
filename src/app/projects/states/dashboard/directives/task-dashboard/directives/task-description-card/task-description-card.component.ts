@@ -27,14 +27,14 @@ export class TaskDescriptionCardComponent {
 
   public downloadTaskSheet() {
     this.fileDownloader.downloadFile(
-      this.task.definition.getTaskPDFUrl(true),
+      this.taskDef.getTaskPDFUrl(true),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskSheet.pdf`
     );
   }
 
   public downloadResources() {
     this.fileDownloader.downloadFile(
-      this.task.definition.getTaskResourcesUrl(true),
+      this.taskDef.getTaskResourcesUrl(true),
       `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`
     );
   }

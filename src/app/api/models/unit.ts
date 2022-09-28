@@ -64,6 +64,11 @@ export class Unit extends Entity {
     }
   }
 
+  public matches(text: string): boolean {
+    return this.code.toLowerCase().indexOf(text) >= 0 ||
+      this.name.toLowerCase().indexOf(text) >= 0;
+  }
+
   public get staff(): UnitRole[] {
     return this.staffCache.currentValues;
   }
