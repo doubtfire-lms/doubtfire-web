@@ -25,9 +25,9 @@ RUN npm --global config set user "${USER}"
 COPY --chown="${USER}":root . .
 
 # Setup within container
-RUN npm install
+RUN npm install --force
 
 EXPOSE 9876
 
 # Launch - install on launch so that node_modules are updated in volume
-CMD /bin/bash -c 'npm install; npm start'
+CMD /bin/bash -c 'npm install --force; npm start'
