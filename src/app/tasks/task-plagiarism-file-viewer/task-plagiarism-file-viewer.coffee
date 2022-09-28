@@ -3,7 +3,7 @@ angular.module('doubtfire.tasks.task-plagiarism-file-viewer', [])
 #
 # Views the Similarities detected amongst two or more students
 #
-.directive('taskPlagiarismFileViewer', (TaskSimilarity, alertService) ->
+.directive('taskPlagiarismFileViewer', (alertService) ->
   replace: true
   restrict: 'E'
   templateUrl: 'tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.tpl.html'
@@ -20,11 +20,12 @@ angular.module('doubtfire.tasks.task-plagiarism-file-viewer', [])
       $scope.canDismiss = false
 
     $scope.dismiss_similarity = (value) ->
-      TaskSimilarity.put($scope.task, $scope.matchIdx, $scope.other, value,((data) ->
-        alertService.add("success", "Similarity dismiss status changed.", 4000)
-        $scope.match.dismissed = value
-        ), (response) ->
+      $scope.task.updateSimilarity($scope.matchIdx, $scope.other, value).subscribe(
+        next: (data) ->
+          alertService.add("success", "Similarity dismiss status changed.", 4000)
+          $scope.match.dismissed = value
+        error: (response) ->
           message = response.data || response.statusText
           alertService.add("danger", "Failed to change status. #{message}")
-        )
+      )
 )

@@ -27,10 +27,10 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
 
     $scope.studentFilter = 'allStudents'
 
-    $scope.$watch 'unit.students', (newUnit) ->
-      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutor)
-      if filteredStudents? && filteredStudents.length == 0
-        $scope.studentFilter = 'allStudents'
+    # $scope.$watch 'unit.students', (newUnit) ->
+    #   filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutor)
+    #   if filteredStudents? && filteredStudents.length == 0
+    #     $scope.studentFilter = 'allStudents'
 
     $scope.activeStudent = null
     $scope.activeTask = null

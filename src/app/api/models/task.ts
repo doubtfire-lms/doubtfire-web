@@ -342,6 +342,19 @@ export class Task extends Entity {
     return this.similarToCount - this.similarToDismissedCount > 0;
   }
 
+  public getSimilarityData(match: number): Observable<any> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`);
+  }
+
+  public updateSimilarity(match: number, other: any, dismissed: boolean) : Observable<any> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.put(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`, {
+      dismissed: dismissed,
+      other: other
+    });
+  }
+
   public inFinalState(): boolean {
     return TaskStatus.FINAL_STATUSES.includes(this.status);
   }

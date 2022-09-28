@@ -37,8 +37,8 @@
           <table class="table table-condensed table-hover table-pointer">
             <thead>
               <tr>
-                <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-                <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
+                <th><a href="" ng-click="sortOrder='student.id'; reverse=!reverse">Student ID</a></th>
+                <th><a href="" ng-click="sortOrder='student.name'; reverse=!reverse">Name</a></th>
                 <th><a href="" ng-click="sortOrder='targetGrade'; reverse=!reverse">Grade</a></th>
                 <!-- <th><a href="" ng-click="sortOrder='similarToCount'; reverse=!reverse">Tasks Similar</a></th> -->
                 <th><a href="" ng-click="sortOrder='maxPctCopy'; reverse=!reverse">Max Pct Similar</a></th>
@@ -46,9 +46,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
-                <td>{{student.student_id}}</td>
-                <td>{{student.name}}</td>
+              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPlagiarism) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
+                <td>{{student.student.id}}</td>
+                <td>{{student.student.name}}</td>
                 <td>{{grades[student.targetGrade]}}</td>
                 <!-- <td>{{student.similarToCount}}</td> -->
                 <td>{{student.maxPctCopy}}%</td>
