@@ -158,11 +158,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
 
     opts.cache = task.commentCache;
     opts.body = body;
+    opts.constructorParams = task;
     const self = this;
 
     return this.create(pathId, opts).pipe(
       tap((tc: TaskComment) => {
-        task.comments.push(tc);
         task.refreshCommentData();
         self.commentAdded$.emit(tc);
       })
