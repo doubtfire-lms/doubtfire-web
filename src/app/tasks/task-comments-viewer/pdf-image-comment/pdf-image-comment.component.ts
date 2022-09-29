@@ -17,9 +17,8 @@ export class PdfImageCommentComponent implements OnInit {
 
   constructor(
     @Inject(alertService) private alerts: any,
-    @Inject(FileDownloaderService) private fileDownloaderService: FileDownloaderService,
     @Inject(commentsModal) private commentsModalRef: any,
-    @Inject(Task) private TaskModel: any
+    private fileDownloaderService: FileDownloaderService,
   ) {}
 
   ngOnInit() {

@@ -23,7 +23,6 @@ export class AudioPlayerComponent implements OnDestroy {
   public audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
 
   constructor(
-    @Inject(Task) private TaskModel,
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
     @Inject(alertService) private alerts: any
   ) {
