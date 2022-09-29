@@ -12,8 +12,8 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
 
   constructor(
     @Inject(audioRecorderService) mediaRecorderService: any,
-    @Inject(TaskCommentService) private ts: any,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
+    private ts: TaskCommentService,
   ) {
     super(mediaRecorderService);
   }
