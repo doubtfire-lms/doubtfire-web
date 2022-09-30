@@ -32,7 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { setTheme } from 'ngx-bootstrap/utils';
@@ -288,6 +288,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    PdfViewerModule,
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

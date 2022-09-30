@@ -1,2 +1,17 @@
-<object [data]="pdfBlobUrl | safe" *ngIf="pdfBlobUrl"></object>
-<mat-spinner strokeWidth="2" diameter="100" color="accent" [hidden]="pdfBlobUrl"></mat-spinner>
+<pdf-viewer
+  [src]="pdfBlobUrl"
+  *ngIf="pdfBlobUrl"
+  [render-text]="true"
+  [original-size]="false"
+  (on-progress)="onProgress($event)"
+></pdf-viewer>
+
+<div fxLayout="row" fxFlexFill fxLayoutAlign="center center">
+  <mat-spinner
+    [value]="progressPercentage"
+    strokeWidth="2"
+    diameter="100"
+    color="accent"
+    [hidden]="progressPercentage === 100"
+  ></mat-spinner>
+</div>

@@ -378,7 +378,7 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskCommentsViewerComponent })
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
-DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
+DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component: PdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));

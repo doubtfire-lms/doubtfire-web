@@ -43,9 +43,11 @@
   <!--/panel-header-->
   <div class="panel-body" ng-show="isCurrentView('details')">
     <div class="col-sm-12 col-xl-6">
+      <!-- migrated -->
       <task-plagiarism-card [task]="task"></task-plagiarism-card>
       <task-status-card task="task"></task-status-card>
       <task-due-card task="task"></task-due-card>
+      <!-- migrated -->
       <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>
     </div>
     <!--/task-description-column-->
@@ -58,12 +60,12 @@
   </div>
   <!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
-    <pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></pdf-viewer>
+    <f-pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></f-pdf-viewer>
   </div>
   <!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.hasPdf">
     <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
-    <pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer>
+    <f-pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></f-pdf-viewer>
   </div>
   <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">
