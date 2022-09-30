@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Input, Inject, OnDestroy } from '@angular/core';
+import { Component, Input, Inject, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { FileDownloaderService } from '../file-downloader/file-downloader';
 
@@ -8,10 +8,11 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
 })
-export class PdfViewerComponent implements OnDestroy {
+export class PdfViewerComponent implements OnDestroy, OnChanges {
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public progressPercentage = 0;
+  @Input() pdfUrl: string;
 
   constructor(
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
@@ -24,7 +25,11 @@ export class PdfViewerComponent implements OnDestroy {
     }
   }
 
-  @Input() set pdfUrl(value: string) {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.pdfUrlChanges(changes.pdfUrl.currentValue);
+  }
+
+  pdfUrlChanges(value: string): void {
     if (this._pdfUrl !== value) {
       // Free the memory used by the old PDF blob
       if (this.pdfBlobUrl) {
@@ -34,17 +39,14 @@ export class PdfViewerComponent implements OnDestroy {
 
       // Get the new blob
       this._pdfUrl = value;
-      this.downloadBlob();
+      this.downloadBlob(value);
     }
   }
 
-  get pdfUrl(): string {
-    return this._pdfUrl;
-  }
 
-  private downloadBlob(): void {
+  private downloadBlob(downloadUrl: string): void {
     this.fileDownloader.downloadBlob(
-      this._pdfUrl,
+      downloadUrl,
       (url: string, response: HttpResponse<Blob>) => {
         this.pdfBlobUrl = url;
       },
