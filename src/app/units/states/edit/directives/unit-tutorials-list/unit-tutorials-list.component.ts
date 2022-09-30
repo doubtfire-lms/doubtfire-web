@@ -114,7 +114,6 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   // and is only run when an entity is successfully created or updated
   onSuccess(response: Tutorial, isNew: boolean): void {
     if (isNew) {
-      this.unit.tutorials.push(response);
       this.pushToTable(response);
     }
   }

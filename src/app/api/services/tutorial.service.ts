@@ -72,7 +72,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     return new Tutorial(other as Unit);
   }
 
-  public override keyForJson(json: any): string {
+  public override keyForJson(json: any): string | number {
     if ( json.tutorial_id ) {
       return json.tutorial_id;
     } else {

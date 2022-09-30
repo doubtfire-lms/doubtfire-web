@@ -69,11 +69,11 @@ export class Unit extends Entity {
       this.name.toLowerCase().indexOf(text) >= 0;
   }
 
-  public get staff(): UnitRole[] {
+  public get staff(): readonly UnitRole[] {
     return this.staffCache.currentValues;
   }
 
-  public get staffUsers(): User[] {
+  public get staffUsers(): readonly User[] {
     return this.staffCache.currentValues.map( (ur) => ur.user);
   }
 
@@ -93,7 +93,7 @@ export class Unit extends Entity {
     return this.myRole === "Convenor" || this.myRole === "Admin";
   }
 
-  public get taskDefinitions(): TaskDefinition[] {
+  public get taskDefinitions(): readonly TaskDefinition[] {
     return this.taskDefinitionCache.currentValues;
   }
 
@@ -115,15 +115,15 @@ export class Unit extends Entity {
     return this.taskDefinitionCache.size;
   }
 
-  public get tutorialStreams(): TutorialStream[] {
+  public get tutorialStreams(): readonly TutorialStream[] {
     return this.tutorialStreamsCache.currentValues;
   }
 
-  public get tutorials(): Tutorial[] {
+  public get tutorials(): readonly Tutorial[] {
     return this.tutorialsCache.currentValues;
   }
 
-  public get ilos(): LearningOutcome[] {
+  public get ilos(): readonly LearningOutcome[] {
     return this.learningOutcomesCache.currentValues;
   }
 
@@ -176,11 +176,11 @@ export class Unit extends Entity {
     );
   }
 
-  public get students(): Project[] {
+  public get students(): readonly Project[] {
     return this.studentCache.currentValues;
   }
 
-  public get activeStudents(): Project[] {
+  public get activeStudents(): readonly Project[] {
     return this.studentCache.currentValues.filter( p => p.enrolled );
   }
 
@@ -282,7 +282,7 @@ export class Unit extends Entity {
     return this.taskDefinitionCache.get(taskDefId);
   }
 
-  public get taskOutcomeAlignments(): TaskOutcomeAlignment[] {
+  public get taskOutcomeAlignments(): readonly TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignmentsCache.currentValues;
   }
 
@@ -344,7 +344,7 @@ export class Unit extends Entity {
     return this.students.find( (s) => s.student.username === username);
   }
 
-  public get groupSets(): GroupSet[] {
+  public get groupSets(): readonly GroupSet[] {
     return this.groupSetsCache.currentValues;
   }
 
@@ -352,7 +352,7 @@ export class Unit extends Entity {
     return this.assessmentEnabled && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 
-  private addStudentTypeAheadData(students: Project[], appendTo: string[]): void {
+  private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
     students.forEach(project => {
       appendTo.push(project.student.name);
       appendTo.push(project.student.username);

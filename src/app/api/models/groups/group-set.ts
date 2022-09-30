@@ -29,7 +29,7 @@ export class GroupSet extends Entity {
     };
   }
 
-  public get groups(): Group[] {
+  public get groups(): readonly Group[] {
     return this.groupsCache.currentValues;
   }
 
