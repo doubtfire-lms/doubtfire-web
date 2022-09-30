@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.17](https://github.com/macite/doubtfire-deploy/compare/v6.0.16...v6.0.17) (2022-09-08)
+
+
+### Bug Fixes
+
+* keep audio recorder in DOM when clearing ([977f327](https://github.com/macite/doubtfire-deploy/commit/977f3279e154bc74ba073567eab5324e57d968db))
+
+### [6.0.16](https://github.com/macite/doubtfire-deploy/compare/v6.0.15...v6.0.16) (2022-09-08)
+
+
+### Bug Fixes
+
+* ensure form components implement ngOnInit ([4b0a7ab](https://github.com/macite/doubtfire-deploy/commit/4b0a7ab738af9c7c786475e39c1e1bcf53a546d7))
+* fix canvas rect width/height calc ([7f22531](https://github.com/macite/doubtfire-deploy/commit/7f225318f09cb7d8198fca0981587554a52b0d90))
+* fix emoji regex pattern ([b2206d2](https://github.com/macite/doubtfire-deploy/commit/b2206d23b91f87cb0f303ca49cf81faa214f0910))
+
 ### [6.0.15](https://github.com/macite/doubtfire-deploy/compare/v6.0.14...v6.0.15) (2022-09-01)
 
 

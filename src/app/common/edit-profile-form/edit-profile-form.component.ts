@@ -1,5 +1,6 @@
 import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { StateService } from '@uirouter/core';
 import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
@@ -17,7 +18,8 @@ export class EditProfileFormComponent implements OnInit {
     private userService: UserService,
     private state: StateService,
     private authService: AuthenticationService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User }
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User },
+    private _snackBar: MatSnackBar
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -48,17 +50,25 @@ export class EditProfileFormComponent implements OnInit {
     this.authService.signOut();
   }
 
-  public submit(goHome: boolean): void {
+  public submit(): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;
 
     this.userService.update(this.user).subscribe({
       next: (updatedUser) => {
-        if (goHome) {
+        if (this.mode === 'create') {
           this.state.go('home');
         } else {
           this.user = updatedUser;
           this.initialFirstName = this.user.firstName;
+
+          // TODO: refactor into new alertService
+          // this is a new snackbar alert test
+          this._snackBar.open('Profile saved', 'dismiss', {
+            duration: 1500,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
         }
       },
       error: (error) => console.log(error),

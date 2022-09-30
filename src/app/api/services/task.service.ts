@@ -12,7 +12,7 @@ export class TaskService extends CachedEntityService<Task> {
 
   private readonly taskInboxEndpoint = "/units/:id:/tasks/inbox";
   private readonly taskExplorerEndpoint = "/units/:id:/task_definitions/:task_def_id:/tasks";
-  private readonly refreshTaskEndpoint = "/projects/:projectId:/refresh_tasks/:taskDefinitionId:";
+  private readonly refreshTaskEndpoint = "projects/:projectId:/refresh_tasks/:taskDefinitionId:";
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
