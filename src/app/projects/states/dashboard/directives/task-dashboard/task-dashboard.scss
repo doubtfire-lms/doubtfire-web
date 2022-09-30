@@ -9,6 +9,9 @@ task-dashboard {
       margin-bottom: 15px;
     }
   }
+  .panel-body.has-pdf {
+    // overflow: hidden;
+  }
   @media (min-width: $screen-xs) {
     .panel-footer {
       padding: 0;

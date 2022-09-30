@@ -176,6 +176,7 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 
 @NgModule({
   // Components we declare
@@ -241,6 +242,7 @@ import { TaskStatusCardComponent } from './projects/states/dashboard/directives/
     EditProfileComponent,
     UserBadgeComponent,
     TaskStatusCardComponent,
+    TaskDueCardComponent,
   ],
   // Module Imports
   imports: [
