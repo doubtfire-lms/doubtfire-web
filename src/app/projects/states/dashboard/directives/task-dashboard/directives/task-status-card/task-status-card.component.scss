@@ -1,0 +1,18 @@
+mat-card {
+    mat-form-field {
+        width: 100%;
+    }
+
+    mat-select {
+        padding: 6px;
+    }
+
+    mat-option {
+        height: 50px;
+        /* default is 72px */
+    }
+}
+
+::ng-deep .mat-option {
+    height: 100px;
+}
