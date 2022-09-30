@@ -1,6 +1,7 @@
 <div class="panel panel-pdf panel-default panel-scrollable">
   <div class="panel-heading" ng-show="task">
     <div class="panel-title">
+      <span ng-hide="tutor || showFooter">{{task.definition.name}}</span>
       <span ng-show="tutor || showFooter" style="display: inline-flex"
         >{{task.definition.name}} <user-badge style="margin-left: 10px" [project]="task.project"></user-badge
       ></span>
