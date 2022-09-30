@@ -266,6 +266,7 @@ import { EditProfileDialogService } from './common/modals/edit-profile-dialog/ed
 import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -329,6 +330,7 @@ DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ comp
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
+DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
 DoubtfireAngularJSModule.directive(
   'institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent })
