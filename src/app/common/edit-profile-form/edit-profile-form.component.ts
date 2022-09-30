@@ -48,13 +48,13 @@ export class EditProfileFormComponent implements OnInit {
     this.authService.signOut();
   }
 
-  public submit(goHome: boolean): void {
+  public submit(): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;
 
     this.userService.update(this.user).subscribe({
       next: (updatedUser) => {
-        if (goHome) {
+        if (this.mode === 'create') {
           this.state.go('home');
         } else {
           this.user = updatedUser;
