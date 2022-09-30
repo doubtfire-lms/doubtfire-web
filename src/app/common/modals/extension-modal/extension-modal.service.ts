@@ -8,7 +8,7 @@ import { ExtensionModalComponent } from './extension-modal.component';
 export class ExtensionModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task: any, afterApplication?: any) {
+  public show(task: Task, afterApplication?: any) {
     let dialogRef: MatDialogRef<ExtensionModalComponent, any>;
 
     dialogRef = this.dialog.open(ExtensionModalComponent, {
