@@ -1,0 +1,9 @@
+<mat-chip-list *ngIf="project" #chipList aria-label="user badge" (click)="goToStudent()">
+  <mat-chip fxLayout="row" style="padding-left: -0px">
+    <user-icon size="32" [user]="project.student" style="margin-right: 10px"></user-icon>
+    <span>{{ project.student.name }}</span>
+  </mat-chip>
+  <mat-chip>
+    <span>{{ project.targetGradeAcronym }}</span>
+  </mat-chip>
+</mat-chip-list>
