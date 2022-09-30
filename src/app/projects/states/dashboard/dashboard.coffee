@@ -41,7 +41,7 @@ angular.module('doubtfire.projects.states.dashboard', [
   # Sets selected task from URL parameters
   setSelectedTaskFromUrlParams = (taskAbbr) ->
     $scope.taskData.selectedTask = null unless taskAbbr?
-    $scope.taskData.selectedTask = _.find($scope.project.activeTasks(), (t) ->
+    $scope.taskData.selectedTask = $scope.project.activeTasks().find((t) ->
       t.definition.abbreviation.toLowerCase() == taskAbbr?.toLowerCase()
     )
 

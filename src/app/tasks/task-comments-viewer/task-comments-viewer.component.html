@@ -1,5 +1,12 @@
 <div style="height: 100%" class="comments-panel" appDragDrop (onFileDropped)="uploadFiles($event)" fxLayout="column">
-  <div fxFlex class="comments-body" #commentsBody>
+  <div
+    fxFlex
+    class="comments-body"
+    #commentsBody
+    fxLayout="column"
+    fxLayoutAlign="end"
+    style="place-content: stretch !important"
+  >
     <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
@@ -22,8 +29,10 @@
               'comment-by-other-user': !comment.authorIsMe,
               'new-comment': comment.isNew
             }"
+            [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
+            fxLayoutAlign="start end"
           >
-            <div *ngIf="shouldShowAuthorIcon(comment.commentType)" fxFlex="28px" style="display: flex">
+            <div *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)" fxFlex="34px">
               <user-icon
                 *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
                 [size]="28"
@@ -35,13 +44,22 @@
               </user-icon>
             </div>
 
-            <div fxFlex class="comment-container" [ngSwitch]="comment.commentType">
+            <div
+              class="comment-container"
+              [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
+              fxLayoutAlign="start center"
+              [ngSwitch]="comment.commentType"
+            >
               <div *ngSwitchCase="'status'" class="comment-status">
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
               <div *ngSwitchCase="'assessment'" class="comment-assessment">
-                <app-task-assessment-comment [task]="task" [comment]="comment" *ngIf="overseerEnabled"></app-task-assessment-comment>
+                <app-task-assessment-comment
+                  [task]="task"
+                  [comment]="comment"
+                  *ngIf="overseerEnabled"
+                ></app-task-assessment-comment>
               </div>
 
               <div class="bubble" [ngClass]="commentClasses(comment)">
