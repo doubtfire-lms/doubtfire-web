@@ -81,9 +81,7 @@ import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/pr
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';

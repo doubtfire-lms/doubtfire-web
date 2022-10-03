@@ -179,6 +179,7 @@ import { TaskStatusCardComponent } from './projects/states/dashboard/directives/
 import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 
 @NgModule({
   // Components we declare
@@ -247,6 +248,7 @@ import { TaskAssessmentCardComponent } from './projects/states/dashboard/directi
     TaskDueCardComponent,
     FooterComponent,
     TaskAssessmentCardComponent,
+    TaskSubmissionCardComponent,
   ],
   // Module Imports
   imports: [
