@@ -80,7 +80,6 @@ import 'build/src/app/projects/states/states.js';
 import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
@@ -266,6 +265,8 @@ import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
 import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -321,6 +322,12 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
+DoubtfireAngularJSModule.directive(
+  'fTaskAssessmentCard',
+  downgradeComponent({ component: TaskAssessmentCardComponent })
+);
+
+DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })

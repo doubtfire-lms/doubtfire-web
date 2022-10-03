@@ -177,6 +177,8 @@ import { EditProfileComponent } from './account/edit-profile/edit-profile.compon
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
 import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 
 @NgModule({
   // Components we declare
@@ -243,6 +245,8 @@ import { TaskDueCardComponent } from './projects/states/dashboard/directives/tas
     UserBadgeComponent,
     TaskStatusCardComponent,
     TaskDueCardComponent,
+    FooterComponent,
+    TaskAssessmentCardComponent,
   ],
   // Module Imports
   imports: [
