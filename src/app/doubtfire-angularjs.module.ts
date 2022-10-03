@@ -265,6 +265,7 @@ import { TaskStatusCardComponent } from './projects/states/dashboard/directives/
 import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -321,8 +322,8 @@ DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ componen
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
 DoubtfireAngularJSModule.directive(
-  'fTaskAssessmentCard',
-  downgradeComponent({ component: TaskAssessmentCardComponent })
+  'fTaskSubmissionCard',
+  downgradeComponent({ component: TaskSubmissionCardComponent })
 );
 
 DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
@@ -335,6 +336,10 @@ DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component:
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
 DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
+DoubtfireAngularJSModule.directive(
+  'fTaskAssessmentCard',
+  downgradeComponent({ component: TaskAssessmentCardComponent })
+);
 DoubtfireAngularJSModule.directive(
   'institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent })
