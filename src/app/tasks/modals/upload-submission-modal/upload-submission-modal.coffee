@@ -42,8 +42,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     [ status, newTaskService.statusLabels.get(status) ]
   ).fromPairs().value()
 
-  # [[0,"hey"], [1, "he1"]] -> {0: "hey", 1: "he1"} -> ["hey", "he1"]
-
   if $scope.task.inSubmittedState()
     submissionTypes['reupload_evidence'] = 'New Evidence'
 
