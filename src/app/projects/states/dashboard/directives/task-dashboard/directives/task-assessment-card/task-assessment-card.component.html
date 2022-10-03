@@ -1,0 +1,60 @@
+<mat-card [hidden]="!(task.definition.isGraded || task.definition.maxQualityPts > 0)">
+  <mat-card-title>Assessment Information</mat-card-title>
+  <mat-card-content>
+    <div [hidden]="!task.definition.isGraded"></div>
+    <h5>This task {{ hasBeenGraded(task) ? 'has been' : 'will be' }} assigned a grade</h5>
+
+    <div [hidden]="hasBeenGraded(task)">
+      <p>
+        This task will be graded against a grade standard. Your work will be assessed and assigned a grade according to
+        a Pass, Credit, Distinction or High Distinction standard.
+      </p>
+      <div class="callout callout-primary">
+        <h5>Advice for achieving a {{ task.project.targetGradeWord }}</h5>
+        <p>
+          As you are attempting to achieve a {{ task.project.targetGradeWord }} in this unit, you should attempt to
+          achieve a <strong>{{ task.project.targetGradeWord }}</strong> grade on this task. Ask your tutor to find out
+          more on what they are looking for when they are assessing this work to a specific grade.
+        </p>
+      </div>
+    </div>
+    <div [hidden]="!hasBeenGraded(task)">
+      Your tutor has marked you on this task to a <strong>{{ task.gradeWord }}</strong> standard.
+    </div>
+    <!--/graded-task-is-graded-->
+    <!--/graded-task-->
+    <hr [hidden]="!(task.definition.isGraded && task.definition.maxQualityPts > 0)" />
+    <div [hidden]="!(task.definition.maxQualityPts > 0)">
+      <h5>
+        <span [hidden]="hasBeenGivenStars(task)">
+          This task will be assessed on a scale to {{ task.definition.maxQualityPts }}
+        </span>
+        <span [hidden]="!hasBeenGivenStars(task)"> This task has been assessed for quality </span>
+      </h5>
+      <p [hidden]="hasBeenGivenStars(task)">
+        This task will be graded against a quality scale from
+        <strong>0 to {{ task.definition.maxQualityPts }}</strong
+        >. Your work will assessed and assigned a star rating based on the quality of your submission.
+      </p>
+      <div [hidden]="!hasBeenGivenStars(task)">
+        <mat-slider
+          [max]="task.definition.maxQualityPts"
+          [min]="0"
+          [step]="1"
+          thumbLabel="stars"
+          tickInterval="1"
+          disabled="true"
+          [(ngModel)]="task.qualityPts"
+          aria-labelledby="star rating"
+        >
+        </mat-slider>
+        <p>
+          You have been awarded out
+          <strong>{{ task.qualityPts }} of {{ task.definition.maxQualityPts }}</strong>
+          avaliable points for this task.
+        </p>
+      </div>
+    </div>
+    <!--/quality-star-task-->
+  </mat-card-content>
+</mat-card>
