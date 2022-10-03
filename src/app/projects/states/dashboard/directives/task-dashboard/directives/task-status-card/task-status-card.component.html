@@ -1,10 +1,10 @@
 <mat-card>
-  <mat-form-field appearance="outline" *ngIf="triggers.length > 0">
-    <mat-select [value]="task.status" (selectionChange)="triggerTransition($event.value)">
+  <mat-form-field appearance="outline" *ngIf="triggers?.length > 0">
+    <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
       <mat-select-trigger>
         <span style="display: inline-flex">
-          <status-icon [status]="task.status" style="margin-right: 10px"></status-icon>
-          <h5>{{ task.statusLabel() }}</h5>
+          <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
+          <h5>{{ task?.statusLabel() }}</h5>
         </span>
       </mat-select-trigger>
       <mat-option *ngFor="let trigger of triggers" [value]="trigger.status">
@@ -16,35 +16,35 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-card-title *ngIf="triggers.length < 0">
+  <mat-card-title *ngIf="triggers?.length < 0">
     <span style="display: inline-flex">
-      <status-icon [status]="task.status" style="margin-right: 10px"></status-icon>
-      <h5>{{ task.statusLabel() }}</h5>
+      <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
+      <h5>{{ task?.statusLabel() }}</h5>
     </span>
   </mat-card-title>
 
   <mat-card-content>
-    <p>{{ task.statusHelp().reason }} {{ task.statusHelp().action }}</p>
+    <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
   </mat-card-content>
 
   <mat-card-actions
     *ngIf="
-      task.unit.currentUserIsStaff ||
-      task.canApplyForExtension() ||
-      (task.inSubmittedState() && task.requiresFileUpload())
+      task?.unit.currentUserIsStaff ||
+      task?.canApplyForExtension() ||
+      (task?.inSubmittedState() && task?.requiresFileUpload())
     "
   >
     <button
       mat-stroked-button
       (click)="applyForExtension()"
-      *ngIf="task.unit.currentUserIsStaff || task.canApplyForExtension()"
+      *ngIf="task?.unit.currentUserIsStaff || task?.canApplyForExtension()"
     >
       Request extension
     </button>
 
     <button
       mat-stroked-button
-      *ngIf="task.inSubmittedState() && task.requiresFileUpload()"
+      *ngIf="task?.inSubmittedState() && task?.requiresFileUpload()"
       (click)="updateFilesInSubmission()"
     >
       Upload new files
