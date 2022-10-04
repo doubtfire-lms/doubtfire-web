@@ -1,3 +1,4 @@
+a
 <div class="inbox-panel-full-screen">
   <staff-task-list
     ng-if="taskData"
@@ -8,13 +9,11 @@
     [unit-role]="unitRole"
   >
   </staff-task-list>
-  <task-dashboard
-    style="flex-grow: 3; margin-right: 10px; margin-left: 10px"
-    task="taskData.selectedTask"
-    show-footer="true"
-    show-submission="true"
+  <f-task-dashboard
+    [task]="taskData.selectedTask"
+    [show-submission]="true"
   >
-  </task-dashboard>
+  </f-task-dashboard>
   <task-comments-viewer
     style="min-width: 350px; flex-grow: 1; max-width: 350px; margin-left: 10px;"
     [task]="taskData.selectedTask"

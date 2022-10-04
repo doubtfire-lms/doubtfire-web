@@ -4,6 +4,7 @@ import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -41,6 +42,36 @@ const HomeState: NgHybridStateDeclaration = {
   data: {
     pageTitle: 'Home Page',
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+  },
+};
+
+/**
+ * Define the new home state.
+ */
+const InboxState: NgHybridStateDeclaration = {
+  name: 'inbox',
+  url: '/inbox/{taskKey:any}',
+  parent: 'units/tasks',
+
+  resolve: {
+    taskKey: function ($transition$, $stateParams) {
+      console.log('resolving task key', $stateParams);
+      return $transition$.params().taskKey;
+    },
+  },
+  params: {
+    unitId: 0,
+    taskKey: null,
+  },
+  views: {
+    main: {
+      component: InboxComponent,
+    },
+  },
+  data: {
+    task: 'Task Inbox',
+    pageTitle: '_Home_',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
   },
 };
 
@@ -98,4 +129,11 @@ const EditProfileState: NgHybridStateDeclaration = {
 /**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState];
+export const doubtfireStates = [
+  institutionSettingsState,
+  HomeState,
+  WelcomeState,
+  SignInState,
+  EditProfileState,
+  InboxState,
+];
