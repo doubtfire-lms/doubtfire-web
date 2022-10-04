@@ -67,7 +67,7 @@
       </ng-container>
       <ng-container *ngIf="unitRole && currentView === 'UNIT'">
         <button
-          uiSref="units/tasks/inbox"
+          uiSref="inbox"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
