@@ -34,11 +34,7 @@
       (task?.inSubmittedState() && task?.requiresFileUpload())
     "
   >
-    <button
-      mat-stroked-button
-      (click)="applyForExtension()"
-      *ngIf="task?.unit.currentUserIsStaff || task?.canApplyForExtension()"
-    >
+    <button mat-stroked-button (click)="applyForExtension()" *ngIf="task?.canApplyForExtension()">
       Request extension
     </button>
 
