@@ -1,0 +1,11 @@
+a
+
+<div class="inbox-panel-full-screen">
+  <df-staff-task-list [showSearchOptions]="false" [taskData]="taskData"> </df-staff-task-list>
+  <f-task-dashboard [task]="taskData.selectedTask" [showSubmission]="true"> </f-task-dashboard>
+  <task-comments-viewer
+    style="min-width: 350px; flex-grow: 1; max-width: 350px; margin-left: 10px"
+    [task]="taskData.selectedTask"
+  >
+  </task-comments-viewer>
+</div>
