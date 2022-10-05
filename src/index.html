@@ -5,11 +5,13 @@
     <title ng-bind="externalName.value">Loading...</title>
 
     <!-- Nice favicons for all devices -->
-    <link rel="icon" href="/assets/icons/favicon.ico" sizes="any"><!-- 32×32 -->
-    <link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png"><!-- 180×180 -->
-    <link rel="manifest" href="/manifest.webmanifest">
-    <meta name="theme-color" content="#3939ff"/>
+    <link rel="icon" href="/assets/icons/favicon.ico" sizes="any" />
+    <!-- 32×32 -->
+    <link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png" />
+    <!-- 180×180 -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#3939ff" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
@@ -43,12 +45,10 @@
       })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
       ga('create', 'UA-72959346-1', 'auto');
     </script>
-
-
   </head>
   <body ng-controller="AppCtrl">
     <app-header></app-header>
-    <div class="container-fluid" ui-view="main"></div>
+    <div class="container-fluid" style="background-color: #f5f5f5" ui-view="main"></div>
     <alert-list> </alert-list>
     <noscript>Please enable JavaScript to continue using this application.</noscript>
   </body>
