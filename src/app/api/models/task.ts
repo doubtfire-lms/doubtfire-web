@@ -657,14 +657,6 @@ export class Task extends Entity {
   }
 
   public canApplyForExtension(): boolean {
-    console.log(
-      'canApplyForExtension',
-      this.unit.allowStudentExtensionRequests,
-      this.inStateThatAllowsExtension(),
-      this.isPastDeadline(),
-      this.wasSubmittedOnTime(),
-      this.maxWeeksCanExtend()
-    );
     return (
       this.unit.allowStudentExtensionRequests &&
       this.inStateThatAllowsExtension() &&
