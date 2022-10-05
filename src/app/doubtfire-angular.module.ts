@@ -8,6 +8,7 @@ import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -262,6 +263,7 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
     FormsModule,
     HttpClientModule,
     ClipboardModule,
+    DragDropModule,
     ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
