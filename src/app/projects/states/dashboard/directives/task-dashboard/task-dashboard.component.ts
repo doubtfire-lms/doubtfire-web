@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { UIRouter } from '@uirouter/core';
+import * as _ from 'lodash';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
@@ -21,6 +22,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() showSubmission: boolean;
   currentView: dashboardViews = dashboardViews.submission;
+  taskStatusData: any;
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
@@ -33,22 +35,32 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.updateCurrentView();
+
+    this.taskStatusData = {
+      keys: _.sortBy(this.taskService.markedStatuses, (s) => this.taskService.statusSeq.get(s)),
+      help: this.taskService.helpDescriptions,
+      icons: this.taskService.statusIcons,
+      labels: this.taskService.statusLabels,
+      class: this.taskService.statusClass,
+    };
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.task) {
+    if (changes.task && changes.task.currentValue) {
       this.urls = {
-        taskSheetPdfUrl: this.task.definition.getTaskPDFUrl(),
-        taskSubmissionPdfUrl: this.task.submissionUrl(),
-        taskSubmissionPdfAttachmentUrl: this.task.submissionUrl(true),
-        taskFilesUrl: this.task.submittedFilesUrl(),
+        taskSheetPdfUrl: changes.task.currentValue.definition.getTaskPDFUrl(),
+        taskSubmissionPdfUrl: changes.task.currentValue.submissionUrl(),
+        taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
+        taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
       this.updateCurrentView();
     }
   }
 
+  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
+
   overseerEnabled() {
-    this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
+    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
   }
 
   updateCurrentView() {
