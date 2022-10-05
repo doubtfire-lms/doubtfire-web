@@ -4,7 +4,7 @@ import { Task, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 
 @Component({
-  selector: 'task-description-card',
+  selector: 'f-task-description-card',
   templateUrl: 'task-description-card.component.html',
   styleUrls: ['task-description-card.component.scss'],
 })
