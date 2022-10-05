@@ -4,7 +4,6 @@ import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
-import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -45,35 +44,94 @@ const HomeState: NgHybridStateDeclaration = {
   },
 };
 
+// const unitParentState: NgHybridStateDeclaration = {
+//   name: 'units',
+//   url: '/units/:unit_id',
+//   // template for the parent state
+//   views: {
+//     main: {
+//       component: IndexComponent,
+//     },
+//   },
+//   resolve: {
+//     unit: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       unitService.query({ id: $stateParams.unit_id }).subscribe((unit) => {
+//         console.log($stateParams.unit_id);
+//         console.log(unit);
+//         return unit;
+//       });
+//     },
+//     unitRole: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       globalStateService.unitRolesSubject.subscribe((unitRoles) => {
+//         return unitRoles.find((unitRole) => unitRole.id === $stateParams.unit_id);
+//       });
+//     },
+//   },
+// };
+
 /**
  * Define the new home state.
  */
-const InboxState: NgHybridStateDeclaration = {
-  name: 'inbox',
-  url: '/inbox/{taskKey:any}',
-  parent: 'units/tasks',
+// const InboxState: NgHybridStateDeclaration = {
+//   name: 'inbox',
+//   url: '/units/:unit_id/inbox/:task_key',
 
-  resolve: {
-    taskKey: function ($transition$, $stateParams) {
-      console.log('resolving task key', $stateParams);
-      return $transition$.params().taskKey;
-    },
-  },
-  params: {
-    unitId: 0,
-    taskKey: null,
-  },
-  views: {
-    main: {
-      component: InboxComponent,
-    },
-  },
-  data: {
-    task: 'Task Inbox',
-    pageTitle: '_Home_',
-    roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
-  },
-};
+//   params: {
+//     // unitRole: UnitRole,
+//     // taskKey: null,
+//     // taskData:
+//     // unit,
+//   },
+//   views: {
+//     main: {
+//       component: InboxComponent,
+//     },
+//   },
+//   data: {
+//     task: 'Task Inbox',
+//     pageTitle: '_Home_',
+//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
+//   },
+//   resolve: {
+//     unit$: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       return unitService.get({ id: $stateParams.unit_id });
+//     },
+//     unitRole$: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       const result = globalStateService.loadedUnitRoles.values.pipe(
+//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
+//       );
+//       return result;
+//     },
+//     taskData$: function () {
+//       const taskService = AppInjector.get(TaskService);
+//       const taskData = {
+//         taskKey: null,
+//         source: null,
+//         selectedTask: null,
+//         onSelectedTaskChange: (task) =>{
+//           const taskKey = task?.taskKey()
+//           $scope.taskData.taskKey = taskKey
+//           setTaskKeyAsUrlParams(task);
+//         }
+//       }
+//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
+//       taskData.taskDefMode = false;
+//       return of(taskData);
+//     },
+//   },
+// };
 
 /**
  * Define the welcome state.
@@ -129,11 +187,4 @@ const EditProfileState: NgHybridStateDeclaration = {
 /**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [
-  institutionSettingsState,
-  HomeState,
-  WelcomeState,
-  SignInState,
-  EditProfileState,
-  InboxState,
-];
+export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState];

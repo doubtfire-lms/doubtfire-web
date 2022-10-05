@@ -1,11 +1,24 @@
-a
+<div fxLayout="column" fxFill>
+  <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
+    <div class="staff-task-list inbox-panel">
+      <df-staff-task-list
+        *ngIf="taskData"
+        [showSearchOptions]="showSearchOptions"
+        [filters]="filters"
+        [taskData]="taskData"
+        [unit]="unit"
+        [unitRole]="unitRole"
+      ></df-staff-task-list>
+    </div>
+    <div class="resizer" cdkDragLockAxis="x" cdkDrag></div>
 
-<div class="inbox-panel-full-screen">
-  <df-staff-task-list [showSearchOptions]="false" [taskData]="taskData"> </df-staff-task-list>
-  <f-task-dashboard [task]="taskData.selectedTask" [showSubmission]="true"> </f-task-dashboard>
-  <task-comments-viewer
-    style="min-width: 350px; flex-grow: 1; max-width: 350px; margin-left: 10px"
-    [task]="taskData.selectedTask"
-  >
-  </task-comments-viewer>
+    <div fxFlex class="inbox-panel">
+      <f-task-dashboard [task]="taskData.selectedTask" [showSubmission]="true"> </f-task-dashboard>
+    </div>
+    <div class="resizer" cdkDragLockAxis="x" cdkDrag></div>
+    <div class="task-comment-panel inbox-panel">
+      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+    </div>
+  </div>
+  <f-footer></f-footer>
 </div>

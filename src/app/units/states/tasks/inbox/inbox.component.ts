@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { UIRouter } from '@uirouter/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { StateService, UIRouter } from '@uirouter/core';
+import { Unit } from 'src/app/api/models/unit';
+import { UnitRole } from 'src/app/api/models/unit-role';
 
 @Component({
   selector: 'f-inbox',
@@ -7,12 +9,10 @@ import { UIRouter } from '@uirouter/core';
   styleUrls: ['./inbox.component.scss'],
 })
 export class InboxComponent implements OnInit {
-  taskData;
-  constructor(private router: UIRouter) {
-    console.log('here');
-    console.log(this.router.globals.params);
-    this.taskData = this.router.globals.params.taskKey;
-  }
+  @Input() unit: Unit;
+  @Input() unitRole: UnitRole;
+  @Input() taskData: any;
+  constructor(private router: UIRouter, private state: StateService) {}
 
   ngOnInit(): void {}
 }

@@ -1,0 +1,28 @@
+.staff-task-list {
+    width: 400px;
+    min-width: 400px;
+}
+
+.task-comment-panel {
+    width: 400px;
+    min-width: 400px;
+}
+
+.resizer {
+    width: 15px //css on hover
+}
+
+.resizer:hover {
+    cursor: col-resize;
+}
+
+.resize-boundary {
+    width: 20px;
+    background-color: yellow;
+}
+
+.inbox-panel {
+    border-radius: 10px;
+    background-color: white;
+    padding: 8px;
+}

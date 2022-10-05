@@ -126,6 +126,7 @@ import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism
 import 'build/src/app/units/states/plagiarism/directives/directives.js';
 import 'build/src/app/units/states/plagiarism/plagiarism.js';
 import 'build/src/app/units/states/tasks/inbox/directives/directives.js';
+import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
@@ -265,7 +266,6 @@ import { TaskDueCardComponent } from './projects/states/dashboard/directives/tas
 import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
-import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -336,7 +336,6 @@ DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ comp
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
-DoubtfireAngularJSModule.directive('fTaskDashboard', downgradeComponent({ component: TaskDashboardComponent }));
 DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({ component: InboxComponent }));
 DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
 DoubtfireAngularJSModule.directive(
