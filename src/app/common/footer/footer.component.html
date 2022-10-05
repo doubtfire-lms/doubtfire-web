@@ -1,9 +1,31 @@
-<mat-toolbar style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
+<mat-toolbar class="footer" style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
   <f-user-badge fxFlex fxFlexAlign="start start" [project]="(selectedTask$ | async)?.project"></f-user-badge>
 
-  <span fxFlex fxFlexAlign="center center" style="text-align: center">My App</span>
+  <span fxFlex fxFlexAlign="center center" class="center-buttons" fxLayoutAlign="center center">
+    <button mat-icon-button aria-label="" class="button">
+      <mat-icon>undo</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="" class="button large-button">
+      <mat-icon>construction</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="" class="button large-button">
+      <mat-icon>done</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="" class="button">
+      <mat-icon>question_answer</mat-icon>
+    </button>
+  </span>
 
   <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <button mat-icon-button aria-label="" class="button small-button">
+      <mat-icon class="small-icon">more_vert</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="" class="button small-button">
+      <mat-icon class="small-icon">sim_card_download</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="" class="button small-button">
+      <mat-icon class="small-icon">file_download</mat-icon>
+    </button>
     <f-project-progress-bar [progress]="(selectedTask$ | async)?.project.taskStats"></f-project-progress-bar>
     <mat-chip-list aria-label="Fish selection">
       <mat-chip>{{ (selectedTask$ | async)?.project.targetGradeAcronym }}</mat-chip>
