@@ -538,7 +538,7 @@ export class Task extends Entity {
     }
   }
 
-  private updateTaskStatus(status: TaskStatusEnum) {
+  public updateTaskStatus(status: TaskStatusEnum) {
     const oldStatus = this.status;
     const alerts: any = AppInjector.get(alertService);
 

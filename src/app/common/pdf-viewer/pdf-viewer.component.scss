@@ -4,4 +4,15 @@ pdf-viewer {
   width: 100%;
   height: 100%;
 
+  .ng2-pdf-viewer-container {
+
+    overflow-x: hidden;
+    overflow-y: visible;
+
+  }
+}
+
+.ng2-pdf-viewer-container {
+  overflow-x: hidden;
+  overflow-y: visible;
 }

@@ -57,9 +57,6 @@ export class PdfViewerComponent implements OnDestroy, OnChanges {
   }
 
   onProgress(progressData: { loaded; total }) {
-    console.log(progressData);
     this.progressPercentage = Math.round((progressData.loaded / progressData.total) * 100);
-    console.log(this.progressPercentage);
-    // do anything with progress data. For example progress indicator
   }
 }

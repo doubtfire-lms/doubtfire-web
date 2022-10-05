@@ -1,17 +1,22 @@
 <mat-toolbar class="footer" style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
-  <f-user-badge fxFlex fxFlexAlign="start start" [project]="(selectedTask$ | async)?.project"></f-user-badge>
+  <f-user-badge fxFlex fxFlexAlign="start start" [project]="selectedTask?.project"></f-user-badge>
 
   <span fxFlex fxFlexAlign="center center" class="center-buttons" fxLayoutAlign="center center">
-    <button mat-icon-button aria-label="" class="button">
+    <button mat-icon-button aria-label="" class="button" (click)="selectedTask?.updateTaskStatus('redo')">
       <mat-icon>undo</mat-icon>
     </button>
-    <button mat-icon-button aria-label="" class="button large-button">
+    <button mat-icon-button aria-label="" class="button large-button" (click)="selectedTask?.updateTaskStatus('fix')">
       <mat-icon>construction</mat-icon>
     </button>
-    <button mat-icon-button aria-label="" class="button large-button">
+    <button
+      mat-icon-button
+      aria-label=""
+      class="button large-button"
+      (click)="selectedTask?.updateTaskStatus('complete')"
+    >
       <mat-icon>done</mat-icon>
     </button>
-    <button mat-icon-button aria-label="" class="button">
+    <button mat-icon-button aria-label="" class="button" (click)="selectedTask?.updateTaskStatus('discuss')">
       <mat-icon>question_answer</mat-icon>
     </button>
   </span>
@@ -20,15 +25,15 @@
     <button mat-icon-button aria-label="" class="button small-button">
       <mat-icon class="small-icon">more_vert</mat-icon>
     </button>
-    <button mat-icon-button aria-label="" class="button small-button">
+    <button mat-icon-button aria-label="" class="button small-button" (click)="downloadFiles()">
       <mat-icon class="small-icon">sim_card_download</mat-icon>
     </button>
-    <button mat-icon-button aria-label="" class="button small-button">
+    <button mat-icon-button aria-label="" class="button small-button" (click)="downloadSubmissionPdf()">
       <mat-icon class="small-icon">file_download</mat-icon>
     </button>
-    <f-project-progress-bar [progress]="(selectedTask$ | async)?.project.taskStats"></f-project-progress-bar>
+    <f-project-progress-bar [progress]="selectedTask?.project.taskStats"></f-project-progress-bar>
     <mat-chip-list aria-label="Fish selection">
-      <mat-chip>{{ (selectedTask$ | async)?.project.targetGradeAcronym }}</mat-chip>
+      <mat-chip style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip>
     </mat-chip-list>
   </div>
 </mat-toolbar>
