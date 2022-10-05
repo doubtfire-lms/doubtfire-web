@@ -50,7 +50,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The unit roles loaded from the server
    */
-  private loadedUnitRoles: EntityCache<UnitRole>;
+  public loadedUnitRoles: EntityCache<UnitRole>;
 
   /**
    * The loaded units.
@@ -163,6 +163,7 @@ export class GlobalStateService implements OnDestroy {
   private loadUnitsAndProjects() {
     this.unitRoleService.query().subscribe({
       next: (unitRoles: UnitRole[]) => {
+        console.log(this.loadedUnitRoles);
         // unit roles are now in the cache
 
         this.projectService.query(undefined, { params: { include_inactive: false } }).subscribe({
