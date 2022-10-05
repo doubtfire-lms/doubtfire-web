@@ -1,13 +1,11 @@
-<mat-toolbar>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>My App</span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>favorite</mat-icon>
-  </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <mat-icon>share</mat-icon>
-  </button>
+<mat-toolbar style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
+  <f-user-badge fxFlex fxFlexAlign="start start" [project]="(selectedTask$ | async)?.project"></f-user-badge>
+
+  <span fxFlex fxFlexAlign="center center" style="text-align: center">My App</span>
+
+  <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <mat-chip-list aria-label="Fish selection">
+      <mat-chip>{{ (selectedTask$ | async)?.project.targetGradeAcronym }}</mat-chip>
+    </mat-chip-list>
+  </div>
 </mat-toolbar>
