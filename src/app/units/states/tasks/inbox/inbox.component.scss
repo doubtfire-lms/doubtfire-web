@@ -1,26 +1,21 @@
-.staff-task-list {
-    width: 400px;
-    min-width: 400px;
-}
+.staff-task-list {}
 
 .task-comment-panel {
-    width: 400px;
-    min-width: 400px;
+    // width: 400px;
+    // min-width: 400px;
     padding-left: 12px;
     padding-bottom: 0px;
 }
 
 .resizer {
+    background-color: #f5f5f5;
+    z-index: 200;
     width: 15px //css on hover
 }
 
 .resizer:hover {
     cursor: col-resize;
-}
-
-.resize-boundary {
-    width: 20px;
-    background-color: yellow;
+    background: linear-gradient(#000, #000) no-repeat center/2px 100%;
 }
 
 .inbox-panel {
