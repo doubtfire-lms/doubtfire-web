@@ -13,8 +13,12 @@ export class ProjectProgressBarComponent {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.progress && changes.progress.currentValue) {
-      this.percentProgress = this.progress[4]?.value;
+    if (changes.progress) {
+      if (changes.progress.currentValue) {
+        this.percentProgress = this.progress[4]?.value;
+      } else {
+        this.percentProgress = 0;
+      }
     }
   }
 }
