@@ -24,11 +24,12 @@ body {
   box-sizing: border-box;
 }
 
-// body {
-//   font-family: 'Roboto', Helvetica;
-//   font-size: 1.2em;
-//   line-height: 2;
-// }
+body {
+  font-family: 'Roboto', Helvetica;
+  font-size: 1.2em;
+  line-height: 2;
+  font-weight: normal;
+}
 
 // body>[ui-view="header"]:not(:empty)+[ui-view="main"] {
 //   padding-top: $main-view-top-padding;
