@@ -1,8 +1,6 @@
 .staff-task-list {}
 
 .task-comment-panel {
-    // width: 400px;
-    // min-width: 400px;
     padding-left: 12px;
     padding-bottom: 0px;
 }
@@ -15,11 +13,13 @@
 
 .resizer:hover {
     cursor: col-resize;
-    background: linear-gradient(#000, #000) no-repeat center/2px 100%;
+    background: linear-gradient(white, white) no-repeat center/2px 98%;
 }
 
 .inbox-panel {
     border-radius: 10px;
     background-color: white;
     padding: 8px;
+    min-width: 250px;
+    width: 350px;
 }

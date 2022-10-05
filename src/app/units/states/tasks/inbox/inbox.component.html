@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFill>
   <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
-    <div #inboxpanel class="staff-task-list inbox-panel">
+    <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
       <df-staff-task-list
         *ngIf="taskData"
         [showSearchOptions]="showSearchOptions"
@@ -17,9 +17,9 @@
       class="resizer"
       cdkDragLockAxis="x"
       cdkDrag
-      (cdkDragMoved)="dragging($event, leftResizerEl)"
-      (cdkDragEnded)="stoppedDraggin($event, leftResizerEl)"
-      (cdkDragStarted)="startedDragging($event, leftResizerEl)"
+      (cdkDragMoved)="dragging($event, inboxpanel)"
+      (cdkDragEnded)="stoppedDragging($event, inboxpanel)"
+      (cdkDragStarted)="startedDragging($event, inboxpanel)"
     ></div>
 
     <div fxFlex class="inbox-panel">
@@ -31,11 +31,11 @@
       class="resizer"
       cdkDragLockAxis="x"
       cdkDrag
-      (cdkDragMoved)="dragging($event, rightResizerEl)"
-      (cdkDragEnded)="stoppedDragging($event, rightResizerEl)"
-      (cdkDragStarted)="startedDragging($event, rightResizerEl)"
+      (cdkDragMoved)="dragging($event, commentspanel)"
+      (cdkDragEnded)="stoppedDragging($event, commentspanel)"
+      (cdkDragStarted)="startedDragging($event, commentspanel)"
     ></div>
-    <div class="task-comment-panel inbox-panel">
+    <div #commentspanel class="task-comment-panel inbox-panel">
       <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
     </div>
   </div>
