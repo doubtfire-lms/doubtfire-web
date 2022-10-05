@@ -4,6 +4,7 @@
   <span fxFlex fxFlexAlign="center center" style="text-align: center">My App</span>
 
   <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <f-project-progress-bar [progress]="(selectedTask$ | async)?.project.taskStats"></f-project-progress-bar>
     <mat-chip-list aria-label="Fish selection">
       <mat-chip>{{ (selectedTask$ | async)?.project.targetGradeAcronym }}</mat-chip>
     </mat-chip-list>

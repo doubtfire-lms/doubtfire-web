@@ -18,8 +18,5 @@ export class FooterComponent implements OnInit {
     this.selectedTask$ = this.selectedTaskService.selectedTask$;
 
     // this.selectedTask$.subscribe(this.selectedTaskService.selectedTask$);
-    this.selectedTask$.subscribe((task) => {
-      console.log(task.project.student);
-    });
   }
 }

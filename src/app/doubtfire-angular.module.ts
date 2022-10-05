@@ -183,6 +183,7 @@ import { TaskAssessmentCardComponent } from './projects/states/dashboard/directi
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 
 @NgModule({
   // Components we declare
@@ -254,6 +255,7 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
     TaskSubmissionCardComponent,
     TaskDashboardComponent,
     InboxComponent,
+    ProjectProgressBarComponent,
   ],
   // Module Imports
   imports: [
