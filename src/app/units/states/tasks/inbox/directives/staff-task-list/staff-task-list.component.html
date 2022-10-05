@@ -164,18 +164,12 @@
   </div>
 
   <!--/search-options-->
-  <cdk-virtual-scroll-viewport
-    *ngIf="filteredTasks"
-    class="tasks-viewport scrollable"
-    itemSize="60"
-    minBufferPx="200"
-    maxBufferPx="400"
-  >
+  <cdk-virtual-scroll-viewport *ngIf="filteredTasks" class="tasks-viewport scrollable" itemSize="60">
     <mat-list>
       <mat-list-item
         class="clearfix"
         *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
-        style="padding: 0"
+        style="padding: 0; height: 60px"
       >
         <div
           style="width: 100%"
@@ -199,7 +193,7 @@
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
               </p>
-              <div class="muted" [hidden]="!isSelectedTask(task)">
+              <!-- <div class="muted" [hidden]="!isSelectedTask(task)">
                 <p class="mat-small">
                   {{ task.shortTutorialDescription() }}
                 </p>
@@ -207,7 +201,7 @@
                 <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
                   Assessed {{ task.times_assessed }} time{{ task.times_assessed === 1 ? '' : 's' }}
                 </p>
-              </div>
+              </div> -->
             </div>
             <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
               <mat-chip style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip>

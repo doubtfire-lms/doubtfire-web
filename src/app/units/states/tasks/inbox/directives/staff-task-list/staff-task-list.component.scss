@@ -14,9 +14,6 @@
 }
 
 .task-inbox.full-width {
-  max-width: 350px;
-  min-width: 350px;
-
   .inbox-entry {
     padding-right: 10px;
     padding-left: 10px;
@@ -28,7 +25,6 @@
 $warn-color: #f44336;
 
 .pin-icon.mat-icon {
-  padding-top: 10px;
   color: gray;
 }
 
@@ -160,7 +156,6 @@ user-icon {
 
 .mat-list-item {
   border: none;
-  height: 100%;
 }
 
 :host ::ng-deep .mat-list-item-content {
@@ -177,7 +172,6 @@ user-icon {
 
 .mat-list-item .item-content.selected {
   background-color: var(--background-gray);
-  height: 100px;
 }
 
 :host {
@@ -206,7 +200,7 @@ user-icon {
   top: calc(50% + 40px);
 
   .mat-icon {
-    font-size: 50px;
+    // font-size: 50px;
     color: rgba(0, 0, 0, 0.2);
   }
 }
