@@ -108,11 +108,11 @@
                 <div class="panel-body">
                   <p>
                     <h5>Outcome Description</h5>
-                    <div class="markdown-to-html" ng-bind-html="ilo.description | markdown"></div>
+                    <div class="markdown-to-html" ng-bind-html="ilo.description | markdown | to_trusted"></div>
                   </p>
                   <p ng-show="ilo.staffAlignment.rating > 0">
                     <h5>Rationale</h5>
-                    <div class="markdown-to-html" ng-bind-html="ilo.staffAlignment.rationale | markdown"></div>
+                    <div class="markdown-to-html" ng-bind-html="ilo.staffAlignment.rationale | markdown | to_trusted"></div>
                   </p>
                 </div>
               </div>

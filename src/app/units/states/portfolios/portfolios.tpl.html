@@ -262,7 +262,7 @@
             ng-hide="editingRationale"
           >
             <label class="text-muted" ng-show="project.grade_rationale != null"> Provided Rationale </label>
-            <div ng-bind-html="(project.grade_rationale || 'No rationale provided') | markdown"></div>
+            <div ng-bind-html="(project.grade_rationale || 'No rationale provided') | markdown | to_trusted"></div>
             <div class="small" ng-hide="project.grade_rationale">Click to add one</div>
           </div>
           <div ng-if="editingRationale" class="clearfix">
