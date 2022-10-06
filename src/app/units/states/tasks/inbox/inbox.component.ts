@@ -1,9 +1,10 @@
 import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { StateService, UIRouter } from '@uirouter/core';
 import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from 'rxjs';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
+import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 
 @Component({
   selector: 'f-inbox',
@@ -23,10 +24,13 @@ export class InboxComponent implements OnInit {
   private inboxStartSize$ = new Subject<number>();
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
+  visiblePdfUrl: string;
 
-  constructor(private router: UIRouter, private state: StateService) {}
-
-  @Output() resized = new EventEmitter<number>();
+  constructor(private router: UIRouter, private state: StateService, private selectedTask: SelectedTaskService) {
+    this.selectedTask.currentPdfUrl$.subscribe((url) => {
+      this.visiblePdfUrl = url;
+    });
+  }
 
   ngOnInit(): void {
     this.dragMoveAudited$ = this.dragMove$.pipe(
@@ -61,8 +65,6 @@ export class InboxComponent implements OnInit {
   }
 
   stoppedDragging(event: CdkDragEnd, div: HTMLDivElement) {
-    const w = div.getBoundingClientRect().width;
-    console.log('stopped dragging: ' + w);
-    this.resized.emit(w);
+    window.dispatchEvent(new Event('resize'));
   }
 }
