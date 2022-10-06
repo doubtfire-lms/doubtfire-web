@@ -23,8 +23,6 @@ export class FooterComponent implements OnInit {
     this.selectedTask$.subscribe((task) => {
       this.selectedTask = task;
     });
-
-    // this.selectedTask$.subscribe(this.selectedTaskService.selectedTask$);
   }
 
   downloadFiles() {
@@ -39,5 +37,13 @@ export class FooterComponent implements OnInit {
       this.selectedTask.submissionUrl(true),
       `${this.selectedTask.project.student.lastName}-${this.selectedTask.definition.name}.pdf`
     );
+  }
+
+  viewTaskSheet() {
+    this.selectedTaskService.showTaskSheet();
+  }
+
+  viewSubmission() {
+    this.selectedTaskService.showSubmission();
   }
 }

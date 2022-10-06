@@ -21,6 +21,7 @@ enum dashboardViews {
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() showSubmission: boolean;
+  @Input() pdfUrl: string;
   currentView: dashboardViews = dashboardViews.submission;
   taskStatusData: any;
   constructor(

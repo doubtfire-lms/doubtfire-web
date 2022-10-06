@@ -10,6 +10,7 @@ export class SelectedTaskService {
   constructor(private taskService: TaskService) {}
 
   private task$ = new BehaviorSubject<Task>(null);
+  public currentPdfUrl$ = new BehaviorSubject<string>(null);
 
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
@@ -17,7 +18,15 @@ export class SelectedTaskService {
     } else {
       this.task$.next(task);
     }
-    // this.task$.next(this.taskService.get(id));
+    this.showSubmission();
+  }
+
+  public showTaskSheet() {
+    this.currentPdfUrl$.next(this.task$.value?.definition?.getTaskPDFUrl(false));
+  }
+
+  public showSubmission() {
+    this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
   }
 
   public get selectedTask$(): Subject<Task> {
