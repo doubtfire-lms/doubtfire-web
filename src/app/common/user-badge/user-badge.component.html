@@ -1,12 +1,14 @@
-<a (click)="goToStudent()" fxLayout="row" fxLayoutAlign="start start" *ngIf="project?.student !== null">
-  <user-icon size="40" [user]="project.student" style="margin-right: 8px"></user-icon>
-  <div fxLayout="column" fxLayoutAlign="start start" style="line-height: 0.5em; font-family: 'Grotesk'">
-    <h4 style="margin-bottom: 1px" class="mat-h4">
-      {{ project.student.nickname ? project.student.nickname : project.student.firstName }}
-    </h4>
-    <p class="mat-caption">{{ project.activeTasks()[0].definition.name }}</p>
-  </div>
-</a>
+<div fxLayout="row" fxLayoutAlign="start start" *ngIf="project?.student !== null">
+  <a (click)="goToStudent()" style="display: flex">
+    <user-icon size="40" [user]="project.student" style="margin-right: 8px"></user-icon>
+    <div fxLayout="column" fxLayoutAlign="start start" style="line-height: 0.5em; font-family: 'Grotesk'">
+      <h4 style="margin-bottom: 1px" class="mat-h4">
+        {{ project.student.nickname ? project.student.nickname : project.student.firstName }}
+      </h4>
+      <p class="mat-caption">{{ project.activeTasks()[0].definition.name }}</p>
+    </div>
+  </a>
+</div>
 <!--
 <mat-chip-list *ngIf="project" #chipList aria-label="user badge" (click)="goToStudent()">
   <mat-chip fxLayout="row" style="padding-left: -0px">
