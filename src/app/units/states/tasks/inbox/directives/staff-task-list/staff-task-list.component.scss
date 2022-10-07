@@ -57,7 +57,6 @@ $warn-color: #f44336;
   width: 40px;
   height: 40px;
   background-color: var(--background-gray);
-  align-self: center;
 }
 
 .omnisearch {
@@ -172,6 +171,10 @@ user-icon {
 
 .mat-list-item .item-content.selected {
   background-color: var(--background-gray);
+}
+
+.task-inbox.narrow-width .mat-list-item .item-content.selected {
+  margin-right: 12px;
 }
 
 :host {

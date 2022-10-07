@@ -15,7 +15,6 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
@@ -56,7 +55,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   };
   @Input() showSearchOptions = false;
 
-  isNarrow: boolean;
+  @Input() isNarrow: boolean;
 
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
@@ -111,7 +110,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   constructor(
     private selectedTaskService: SelectedTaskService,
-    private breakpointObserver: BreakpointObserver,
     @Inject(alertService) private alertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
@@ -130,12 +128,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.unit);
-    const layoutChanges = this.breakpointObserver.observe('(max-width: 1000px)');
-
-    layoutChanges.subscribe((state: BreakpointState) => {
-      this.isNarrow = state.matches;
-    });
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
@@ -390,14 +382,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
   }
 
-  // toggleTutorialSort() {
-  // }
-
   togglePin(task) {
-    if (task.pinned) {
-      task.unpin();
-    } else {
-      task.pin();
-    }
+    task.pinned ? task.unpinTask(task) : task.pinTask(task);
   }
 }
