@@ -11,7 +11,7 @@
     width: 15px //css on hover
 }
 
-.resizer:hover {
+.resizer:hover,.resizer.hovering {
     cursor: col-resize;
     background: linear-gradient(white, white) no-repeat center/2px 98%;
 }

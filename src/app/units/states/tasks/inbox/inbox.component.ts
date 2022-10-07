@@ -41,12 +41,19 @@ export class InboxComponent implements OnInit {
         let width: number;
         if (moveEvent.div.id === 'inboxpanel') {
           newWidth = startSize + moveEvent.event.distance.x;
-          width = Math.min(Math.max(newWidth, 250), 500);
+
+          // if width is belo 250, snap to 50px
+          if (newWidth < 250 && newWidth > 100) {
+            width = 250;
+          } else if (newWidth < 150) {
+            width = 50;
+          } else {
+            width = Math.min(newWidth, 500);
+          }
         } else {
           newWidth = startSize - moveEvent.event.distance.x;
           width = Math.min(Math.max(newWidth, 250), 500);
         }
-
         moveEvent.div.style.width = `${width}px`;
         moveEvent.event.source.reset();
       })
@@ -55,6 +62,7 @@ export class InboxComponent implements OnInit {
   }
 
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {
+    event.source.element.nativeElement.classList.add('hovering');
     const w = div.getBoundingClientRect().width;
     this.inboxStartSize$.next(w);
   }
@@ -65,6 +73,7 @@ export class InboxComponent implements OnInit {
   }
 
   stoppedDragging(event: CdkDragEnd, div: HTMLDivElement) {
+    event.source.element.nativeElement.classList.remove('hovering');
     window.dispatchEvent(new Event('resize'));
   }
 }
