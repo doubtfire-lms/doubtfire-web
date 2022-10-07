@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -11,9 +11,9 @@ declare var d3: any;
 })
 export class UserIconComponent implements AfterViewInit {
   @Input() user: User = this.userService.currentUser;
-  @Input() size: number = 100;
+  @Input() size = 100;
 
-  @ViewChild('svg') svg: { nativeElement: any; };
+  @ViewChild('svg') svg: { nativeElement: any };
 
   lineHeight = 12;
 
