@@ -1,4 +1,5 @@
-.staff-task-list {}
+.staff-task-list {
+}
 
 .task-comment-panel {
     padding-left: 12px;
@@ -11,7 +12,8 @@
     width: 15px //css on hover
 }
 
-.resizer:hover,.resizer.hovering {
+.resizer:hover,
+.resizer.hovering {
     cursor: col-resize;
     background: linear-gradient(white, white) no-repeat center/2px 98%;
 }
@@ -20,6 +22,6 @@
     border-radius: 10px;
     background-color: white;
     padding: 8px;
-    min-width: 100px;
+    min-width: 60px;
     width: 350px;
 }

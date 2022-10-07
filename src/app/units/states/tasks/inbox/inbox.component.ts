@@ -24,7 +24,12 @@ export class InboxComponent implements OnInit {
   private inboxStartSize$ = new Subject<number>();
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
+
   visiblePdfUrl: string;
+
+  get narrowTaskInbox(): boolean {
+    return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
+  }
 
   constructor(private router: UIRouter, private state: StateService, private selectedTask: SelectedTaskService) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
@@ -37,6 +42,8 @@ export class InboxComponent implements OnInit {
       withLatestFrom(this.inboxStartSize$),
       auditTime(30),
       tap(([moveEvent, startSize]) => {
+        window.dispatchEvent(new Event('resize'));
+
         let newWidth: number;
         let width: number;
         if (moveEvent.div.id === 'inboxpanel') {
@@ -74,6 +81,5 @@ export class InboxComponent implements OnInit {
 
   stoppedDragging(event: CdkDragEnd, div: HTMLDivElement) {
     event.source.element.nativeElement.classList.remove('hovering');
-    window.dispatchEvent(new Event('resize'));
   }
 }

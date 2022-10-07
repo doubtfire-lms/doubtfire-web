@@ -3,6 +3,7 @@
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
       <df-staff-task-list
         *ngIf="taskData"
+        [isNarrow]="narrowTaskInbox"
         [showSearchOptions]="showSearchOptions"
         [filters]="filters"
         [taskData]="taskData"
