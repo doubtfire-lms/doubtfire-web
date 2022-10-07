@@ -83,8 +83,8 @@ export class UserIconComponent implements AfterViewInit {
       '#5C6BC0',
     ];
 
-    var sum = 0;
-    for (var i = 0; i < username.length; i++) {
+    let sum = 0;
+    for (let i = 0; i < username.length; i++) {
       sum += username.charCodeAt(i);
     }
     return colors[sum % colors.length];
