@@ -43,7 +43,6 @@ export class PdfViewerComponent implements OnDestroy, OnChanges {
     }
   }
 
-
   private downloadBlob(downloadUrl: string): void {
     this.fileDownloader.downloadBlob(
       downloadUrl,
@@ -58,5 +57,9 @@ export class PdfViewerComponent implements OnDestroy, OnChanges {
 
   onProgress(progressData: { loaded; total }) {
     this.progressPercentage = Math.round((progressData.loaded / progressData.total) * 100);
+  }
+
+  onLoaded() {
+    window.dispatchEvent(new Event('resize'));
   }
 }

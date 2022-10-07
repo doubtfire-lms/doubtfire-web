@@ -5,6 +5,7 @@
     [render-text]="true"
     [original-size]="false"
     (on-progress)="onProgress($event)"
+    (after-load-complete)="onLoaded()"
   ></pdf-viewer>
 
   <mat-spinner
