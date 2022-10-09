@@ -6,7 +6,7 @@ angular.module("doubtfire.common.modals.comments-modal", [])
   CommentsModal = {}
   CommentsModal.show = (commentResourceUrl, commentType) ->
     $modal.open
-      templateUrl: 'common/modals/comments-modal/comments-modal.tpl.html'
+      templateUrl: 'http://localhost:59755'
       controller: 'CommentsModalCtrl'
       size: 'lg'
       resolve:
