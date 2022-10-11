@@ -1,6 +1,6 @@
 import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { StateService, UIRouter } from '@uirouter/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from 'rxjs';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
@@ -25,15 +25,21 @@ export class InboxComponent implements OnInit {
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
 
+  public taskSelected = false;
+
   visiblePdfUrl: string;
 
   get narrowTaskInbox(): boolean {
     return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
   }
 
-  constructor(private router: UIRouter, private state: StateService, private selectedTask: SelectedTaskService) {
+  constructor(private selectedTask: SelectedTaskService, public mediaObserver: MediaObserver) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
       this.visiblePdfUrl = url;
+    });
+
+    this.selectedTask.selectedTask$.subscribe((task) => {
+      this.taskSelected = task != null;
     });
   }
 
@@ -66,6 +72,7 @@ export class InboxComponent implements OnInit {
       })
     );
     this.subs$ = merge(this.dragMoveAudited$, of(true));
+    window.dispatchEvent(new Event('resize'));
   }
 
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {

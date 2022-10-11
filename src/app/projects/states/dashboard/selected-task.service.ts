@@ -12,6 +12,12 @@ export class SelectedTaskService {
   private task$ = new BehaviorSubject<Task>(null);
   public currentPdfUrl$ = new BehaviorSubject<string>(null);
 
+  private _showingTask: boolean;
+
+  public get showingTaskSheet() {
+    return this._showingTask;
+  }
+
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
       this.taskService.get(task).subscribe(this.task$);
@@ -23,10 +29,12 @@ export class SelectedTaskService {
 
   public showTaskSheet() {
     this.currentPdfUrl$.next(this.task$.value?.definition?.getTaskPDFUrl(false));
+    this._showingTask = true;
   }
 
   public showSubmission() {
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
+    this._showingTask = false;
   }
 
   public get selectedTask$(): Subject<Task> {
