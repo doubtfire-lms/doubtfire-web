@@ -6,6 +6,7 @@
 h4 {
     font-weight: 400;
     font-family: 'Grotesk';
+    font-size: 14px;
 }
 
 a {
@@ -19,5 +20,6 @@ p {
 }
 
 p {
-    color: (lighten($color: #000000, $amount: 45))
+    color: (lighten($color: #000000, $amount: 45));
+    font-size: 12px;
 }
