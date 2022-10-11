@@ -15,6 +15,7 @@ export class TransitionHooksService {
   ) {
     this.transitions.onBefore({}, (transition) => {
       const toState = transition.to().name;
+      const fromState = transition.from().name;
 
       switch (toState) {
         case 'sign_in':
@@ -31,6 +32,14 @@ export class TransitionHooksService {
           break;
         default:
           break;
+      }
+
+      if (toState.startsWith('units/tasks/inbox')) {
+        this.globalState.showFooter();
+      }
+
+      if (fromState.startsWith('units/tasks/inbox') && !toState.startsWith('units/tasks/inbox')) {
+        this.globalState.showFooter();
       }
 
       if (

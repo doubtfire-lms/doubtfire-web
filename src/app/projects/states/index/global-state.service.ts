@@ -1,4 +1,5 @@
-import { Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject, skip, take } from 'rxjs';
@@ -61,6 +62,7 @@ export class GlobalStateService implements OnDestroy {
    * The loaded projects.
    */
   private currentUserProjects: EntityCache<Project>;
+  footer = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -94,7 +96,8 @@ export class GlobalStateService implements OnDestroy {
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
     @Inject(UIRouter) private router: UIRouter,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
+    private mediaObserver: MediaObserver
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -109,6 +112,31 @@ export class GlobalStateService implements OnDestroy {
         this.router.stateService.go('sign_in');
       }
     }, 800);
+
+    // this is a hack to workaround horrific IOS "feature"
+    // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
+    const resetHeight = () => {
+      setTimeout(() => {
+        const vh = window.innerHeight * 0.01;
+        if (this.footer && this.mediaObserver.isActive('gt-sm')) {
+          document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+        } else {
+          document.body.style.setProperty('--vh', `${vh - 0.2}px`);
+        }
+      }, 0);
+    };
+
+    window.addEventListener('orientationchange', resetHeight);
+    window.addEventListener('resize', resetHeight);
+    resetHeight();
+  }
+
+  public showFooter(): void {
+    this.footer = true;
+  }
+
+  public hideFooter(): void {
+    this.footer = false;
   }
 
   public signOut(): void {
