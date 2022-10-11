@@ -3,7 +3,8 @@
 //
 $main-view-top-padding: 30px;
 $main-view-bottom-padding: $main-view-top-padding;
-$main-view-max-height: calc(100vh - 85px - 85px);
+
+$main-view-max-height: calc((var(--vh, 1vh) * (100)) - 85px);
 
 /* override browser default */
 html,
@@ -15,20 +16,18 @@ body {
 
 /* use viewport-relative units to cover page fully */
 body {
+  height: 100vh;
   height: $main-view-max-height;
   width: 100vw;
+  font-family: 'Roboto', Helvetica;
+  font-size: 1.2em;
+  line-height: 2;
+  font-weight: normal;
 }
 
 /* include border and padding in element width and height */
 * {
   box-sizing: border-box;
-}
-
-body {
-  font-family: 'Roboto', Helvetica;
-  font-size: 1.2em;
-  line-height: 2;
-  font-weight: normal;
 }
 
 // body>[ui-view="header"]:not(:empty)+[ui-view="main"] {
