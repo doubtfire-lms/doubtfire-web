@@ -91,6 +91,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   taskDefSort = 0;
   tutorialSort = 0;
   originalFilteredTasks: any[] = null;
+  allowHover = true;
 
   @HostListener('document:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -128,6 +129,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    // if device is movile always set hover to false
+    // so you can instantly click on an item in the list
+    if (navigator.maxTouchPoints > 1) {
+      this.allowHover = false;
+    }
+
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 

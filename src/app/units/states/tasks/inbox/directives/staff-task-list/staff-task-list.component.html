@@ -183,7 +183,7 @@
             fxLayout="row"
             fxLayoutAlign="start center"
             [ngClass]="{ hover: task.hover }"
-            (mouseover)="task.hover = true"
+            (mouseover)="task.hover = allowHover && true"
             (mouseout)="task.hover = false"
           >
             <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
