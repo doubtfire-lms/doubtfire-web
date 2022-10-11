@@ -6,43 +6,42 @@
     </div>
   </div>
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
-
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>OnTrack Name</th>
       <td mat-cell *matCellDef="let overseerImage">
-        <div *ngIf="!editing(overseerImage) else edit">
-          {{overseerImage.name}}
+        <div *ngIf="!editing(overseerImage); else edit">
+          {{ overseerImage.name }}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="name" placeholder="Name">
+            <input matInput required formControlName="name" placeholder="OnTrack Name" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name">
+          <input matInput required formControlName="name" placeholder="OnTrack Name" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Tag Column -->
     <ng-container [formGroup]="formData" matColumnDef="tag">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Docker Image</th>
       <td mat-cell *matCellDef="let overseerImage">
-        <div *ngIf="!editing(overseerImage) else edit">
-          {{overseerImage.tag}}
+        <div *ngIf="!editing(overseerImage); else edit">
+          {{ overseerImage.tag }}
         </div>
         <ng-template #edit>
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="tag" placeholder="Tag">
+            <input matInput required formControlName="tag" placeholder="Docker Image" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="tag" placeholder="Tag">
+          <input matInput required formControlName="tag" placeholder="Docker Image" />
         </mat-form-field>
       </td>
     </ng-container>
@@ -51,7 +50,7 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let overseerImage">
-        <div class="right" *ngIf="!editing(overseerImage) else edit">
+        <div class="right" *ngIf="!editing(overseerImage); else edit">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -88,7 +87,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
     <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>
