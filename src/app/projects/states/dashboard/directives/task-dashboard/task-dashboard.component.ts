@@ -6,6 +6,7 @@ import { TaskService } from 'src/app/api/services/task.service';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { SelectedTaskService } from '../../selected-task.service';
 
 enum dashboardViews {
   'details',
@@ -22,6 +23,9 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() showSubmission: boolean;
   @Input() pdfUrl: string;
+
+  showingTaskPdf: boolean;
+
   currentView: dashboardViews = dashboardViews.submission;
   taskStatusData: any;
   constructor(
@@ -29,8 +33,11 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private taskService: TaskService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
-    private router: UIRouter
-  ) {}
+    private router: UIRouter,
+    private selectedTask: SelectedTaskService
+  ) {
+    this.showingTaskPdf = this.selectedTask.showingTaskSheet;
+  }
   tutor = this.router.globals.params.tutor;
   urls;
 
