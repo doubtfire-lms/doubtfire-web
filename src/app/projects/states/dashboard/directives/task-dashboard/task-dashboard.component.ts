@@ -24,7 +24,9 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() showSubmission: boolean;
   @Input() pdfUrl: string;
 
-  showingTaskPdf: boolean;
+  get showingTaskPdf() {
+    return this.selectedTask.showingTaskSheet;
+  }
 
   currentView: dashboardViews = dashboardViews.submission;
   taskStatusData: any;
@@ -35,9 +37,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
     private selectedTask: SelectedTaskService
-  ) {
-    this.showingTaskPdf = this.selectedTask.showingTaskSheet;
-  }
+  ) {}
   tutor = this.router.globals.params.tutor;
   urls;
 

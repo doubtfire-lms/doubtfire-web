@@ -1,7 +1,5 @@
-<span *ngIf="task">
-  <span *ngIf="(showingTaskPdf && task.definition.hasTaskSheet) || (!showingTaskPdf && task.hasPdf); else cantshowpdf">
-    <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
-  </span>
+<span *ngIf="(showingTaskPdf && task?.definition?.hasTaskSheet) || (!showingTaskPdf && task?.hasPdf); else cantshowpdf">
+  <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
 </span>
 
 <ng-template #cantshowpdf>
