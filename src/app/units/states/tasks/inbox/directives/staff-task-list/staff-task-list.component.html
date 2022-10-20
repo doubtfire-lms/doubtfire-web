@@ -23,9 +23,9 @@
       </mat-form-field>
       <button
         *ngIf="collapsable"
-        matTooltipShowDelay="400"
         matTooltip="Filter options"
-        matTooltipPosition="above"
+        matTooltipPosition="below"
+        matTooltipShowDelay="400"
         mat-icon-button
         aria-label="Inbox search dropdown"
         (click)="showSearchOptions = !showSearchOptions"
@@ -35,9 +35,10 @@
 
       <button
         *ngIf="!isTaskDefMode"
-        matTooltipShowDelay="400"
         matTooltip="Refresh the task inbox"
-        matTooltipPosition="above"
+        matTooltipPosition="below"
+        matTooltipShowDelay="400"
+        matTooltip
         mat-icon-button
         aria-label="Refresh Inbox"
         (click)="refreshTasks()"
@@ -48,6 +49,9 @@
       <button
         *ngIf="isTaskDefMode"
         mat-icon-button
+        matTooltip="More options"
+        matTooltipPosition="below"
+        matTooltipShowDelay="400"
         [matMenuTriggerFor]="menu"
         aria-label="Menu to download submission files"
       >
