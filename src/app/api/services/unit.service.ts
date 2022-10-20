@@ -101,6 +101,15 @@ export class UnitService extends CachedEntityService<Unit> {
           return entity.endDate.toISOString().slice(0,10);;
         }
       },
+      {
+        keys: 'portfolioAutoGenerationDate',
+        toEntityFn: (data, key, entity, params?) => {
+          return new Date(data[key]);
+        },
+        toJsonFn: (entity, key) => {
+          return entity.portfolioAutoGenerationDate.toISOString().slice(0,10);;
+        }
+      },
       'assessmentEnabled',
       'overseerImageId',
       'autoApplyExtensionBeforeDeadline',
@@ -202,6 +211,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'teachingPeriod',
       'startDate',
       'endDate',
+      'portfolioAutoGenerationDate',
 
       'assessmentEnabled',
       // 'overseerImage', - map to overseer image

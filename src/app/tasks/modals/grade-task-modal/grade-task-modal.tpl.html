@@ -3,7 +3,7 @@
     <h3>Assess Task Quality</h3>
   </div>
   <div class="modal-body text-center">
-    <div ng-if="task.definition.is_graded">
+    <div ng-if="task.definition.isGraded">
       <p>Please provide a grade to change the student's status for task <label class="label label-info">{{task.definition.abbreviation}}</label>.</p>
       <p class="btn-group">
         <label ng-repeat="idx in gradeValues" class="btn btn-default col-sm-15 text-center" ng-model="data.desiredGrade" btn-radio="{{idx}}">
@@ -20,7 +20,7 @@
     <button class="btn btn-default" ng-click="dismiss()">
       <i class="fa fa-times"></i>
     </button>
-    <button class="btn btn-primary" ng-click="close()" ng-disabled="task.is_graded && data.desiredGrade == null">
+    <button class="btn btn-primary" ng-click="close()" ng-disabled="task.isGraded && data.desiredGrade == null">
       <i class="fa fa-check"></i>
     </button>
   </div>

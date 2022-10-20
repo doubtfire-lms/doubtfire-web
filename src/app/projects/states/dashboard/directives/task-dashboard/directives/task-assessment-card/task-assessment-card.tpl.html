@@ -1,9 +1,9 @@
-<div class="card card-default card-sm" ng-show="task.definition.is_graded || task.definition.maxQualityPts > 0">
+<div class="card card-default card-sm" ng-show="task.definition.isGraded || task.definition.maxQualityPts > 0">
   <div class="card-heading">
     <h4>Assessment Information</h4>
   </div>
   <div class="card-body">
-    <div ng-show="task.definition.is_graded">
+    <div ng-show="task.definition.isGraded">
       <h5>This task {{assessmentCards.hasBeenGraded ? 'has been' : 'will be'}} assigned a grade</h5>
       <div ng-hide="hasBeenGraded(task)">
         <p>
@@ -25,7 +25,7 @@
         Your tutor has marked you on this task to a <strong>{{task.gradeWord}}</strong> standard.
       </div><!--/graded-task-is-graded-->
     </div><!--/graded-task-->
-    <hr ng-show="task.definition.is_graded && task.definition.maxQualityPts > 0">
+    <hr ng-show="task.definition.isGraded && task.definition.maxQualityPts > 0">
     <div ng-show="task.definition.maxQualityPts > 0">
       <h5>
         <span ng-hide="hasBeenGivenStars(task)">
