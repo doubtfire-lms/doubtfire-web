@@ -3,7 +3,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
 #
 # Services for handling Outcomes
 #
-.factory("outcomeService", (gradeService, projectService, taskService) ->
+.factory("outcomeService", (gradeService, projectService, taskService, $sce) ->
   outcomeService = {}
 
   outcomeService.unitTaskStatusFactor = ->
@@ -133,7 +133,7 @@ angular.module("doubtfire.common.services.outcome-service", [])
 
     _.each outcomes, (outcome, key) ->
       _.each outcome, (tmp, key1) ->
-        values[key1].push { label: unit.outcome(parseInt(key,10)).abbreviation, value:  tmp }
+        values[key1].push { label: $sce.getTrustedHtml(unit.outcome(parseInt(key,10)).abbreviation), value:  tmp }
 
     _.each values, (vals, idx) ->
       result.push { key: gradeService.grades[idx], values: vals }

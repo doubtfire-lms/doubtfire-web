@@ -277,3 +277,8 @@ angular.module("doubtfire.common.filters", [])
   (unitRoles) ->
     _.filter(unitRoles, (ur) -> ur.active )
 )
+
+.filter('to_trusted', ($sce) ->
+  (text) ->
+    $sce.getTrustedHtml(text)
+)

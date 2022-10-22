@@ -12,7 +12,7 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     classStats: '='
     showLegend: '=?'
 
-  controller: ($scope, gradeService, Visualisation) ->
+  controller: ($scope, gradeService, Visualisation, $sce) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     unless nv.models.iloBullet?
       # Chart design based on the recommendations of Stephen Few. Implementation
@@ -563,8 +563,8 @@ angular.module('doubtfire.visualisations.alignment-bullet-chart', [])
     targetHD = targetD + $scope.targets[$scope.ilo.id][3]
 
     $scope.data = {
-      "title": $scope.ilo.abbreviation,    #Label the bullet chart
-      "subtitle": $scope.ilo.name,   #sub-label for bullet chart
+      "title": $sce.getTrustedHtml($scope.ilo.abbreviation),    #Label the bullet chart
+      "subtitle": $sce.getTrustedHtml($scope.ilo.name),   #sub-label for bullet chart
       "ranges":[targetP,targetC,targetD,targetHD],  #Minimum, mean and maximum values.
       "rangeLabels":['Pass','Credit','Distinction','High Distinction'],  #Minimum, mean and maximum values.
       "measures": {},    #Value representing current measurement (the thick blue line in the example)
