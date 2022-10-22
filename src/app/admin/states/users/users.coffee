@@ -20,7 +20,7 @@ angular.module('doubtfire.admin.states.users', [])
   # We are not showing a particlar unit or project
   GlobalStateService.setView("OTHER")
 
-  $scope.file_data =
+  $scope.fileData =
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
       $scope.users = newUserService.query(undefined)

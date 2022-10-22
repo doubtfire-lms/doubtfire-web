@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';
 import { AppInjector } from 'src/app/app-injector';
 import { formatDate } from '@angular/common';
 
@@ -16,7 +16,7 @@ export class ExtensionModalComponent implements OnInit {
   reason: string = '';
   constructor(
     public dialogRef: MatDialogRef<ExtensionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: {task: Task, afterApplication?: () => void},
     @Inject(alertService) private alerts: any
   ) {}
 
@@ -62,7 +62,6 @@ export class ExtensionModalComponent implements OnInit {
     tcs.requestExtension(this.reason, this.weeksRequested, this.data.task).subscribe({
       next: ((tc: TaskComment) => {
         this.alerts.add('success', 'Extension requested.', 2000);
-        this.data.task.comments.push(tc);
         this.scrollCommentsDown();
         if (typeof this.data.afterApplication === 'function') {
           this.data.afterApplication();

@@ -22,12 +22,13 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
       })
 
     $scope.changeMainConvenor = (staff) ->
+      oldConvenor = $scope.unit.mainConvenor
       $scope.unit.mainConvenor = staff
       newUnitService.update($scope.unit).subscribe({
         next: (response) ->
           alertService.add("success", "Main convenor changed", 2000)
-          $scope.unit.main_convenor_id = staff.id
         error: (response) ->
+          $scope.unit.mainConvenor = oldConvenor
           alertService.add("danger", response, 6000)
       })
 

@@ -21,7 +21,7 @@ export class Group extends Entity {
 
   public readonly unit: Unit;
 
-  public get projects(): Project[] {
+  public get projects(): readonly Project[] {
     return this.projectsCache.currentValues;
   }
 
@@ -60,7 +60,7 @@ export class Group extends Entity {
     }
   }
 
-  public get members(): Project[] {
+  public get members(): readonly Project[] {
     return this.projectsCache.currentValues;
   }
 

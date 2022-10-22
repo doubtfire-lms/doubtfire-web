@@ -74,7 +74,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
     onSuccess: (response) ->
       $scope.uploader.response = response
-      # if $scope.task.isTestSubmission then $scope.task.project_id = response.project_id
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
       $modalInstance.close(task)

@@ -51,7 +51,7 @@ export class Task extends Entity {
     }
   }
 
-  public get comments(): TaskComment[] {
+  public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
   }
 
@@ -287,7 +287,7 @@ export class Task extends Entity {
   }
 
   public refreshCommentData(): void {
-    const comments: TaskComment[] = this.comments;
+    const comments: readonly TaskComment[] = this.comments;
     if (comments.length === 0) return;
 
     comments[0].shouldShowTimestamp = true
@@ -510,7 +510,7 @@ export class Task extends Entity {
         body: {
           trigger: status,
           grade: this.grade,
-          qualityPts: this.qualityPts
+          quality_pts: this.qualityPts
         }
       };
 

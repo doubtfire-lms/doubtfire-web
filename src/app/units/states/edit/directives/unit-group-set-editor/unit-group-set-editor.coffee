@@ -85,5 +85,5 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
     $scope.downloadGroupCSV = ->
       fileDownloaderService.downloadFile($scope.selectedGroupSet.groupCSVUploadUrl(), "#{$scope.unit.code}-group-sets.csv")
     $scope.downloadGroupStudentCSV = ->
-      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupStudentCSVUploadUrl(), "#{unit.code}-#{group_set.name}-students.csv")
+      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupStudentCSVUploadUrl(), "#{unit.code}-#{$scope.selectedGroupSet.name}-students.csv")
 )

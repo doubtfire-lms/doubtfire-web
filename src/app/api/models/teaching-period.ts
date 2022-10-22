@@ -37,11 +37,11 @@ export class TeachingPeriod extends Entity {
     return `${this.period} ${this.year}`;
   }
 
-  public get breaks(): TeachingPeriodBreak[] {
+  public get breaks(): readonly TeachingPeriodBreak[] {
     return this.breaksCache.currentValues;
   }
 
-  public get units(): Unit[] {
+  public get units(): readonly Unit[] {
     return this.unitsCache.currentValues;
   }
 

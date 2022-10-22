@@ -130,7 +130,7 @@ export class TaskService extends CachedEntityService<Task> {
   public refreshExtensionDetails(task: Task): void {
     const pathIds = {
       projectId: task.project.id,
-      taskDefId: task.definition.id
+      taskDefinitionId: task.definition.id
     };
     const options: RequestOptions<Task> = {
       endpointFormat: this.refreshTaskEndpoint,

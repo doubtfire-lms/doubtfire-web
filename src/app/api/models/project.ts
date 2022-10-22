@@ -111,7 +111,7 @@ export class Project extends Entity {
     }
   }
 
-  public get tasks(): Task[] {
+  public get tasks(): readonly Task[] {
     return this.taskCache.currentValues;
   }
 
@@ -120,7 +120,7 @@ export class Project extends Entity {
     return tasksToConsider.filter((t) => t.status === statusKey);
   }
 
-  public get tutorials(): Tutorial[] {
+  public get tutorials(): readonly Tutorial[] {
     return this.tutorialEnrolmentsCache.currentValues;
   }
 
@@ -146,7 +146,7 @@ export class Project extends Entity {
     return this.tutorials.find((tute) => tute.tutorialStream === stream || !tute.tutorialStream);
   }
 
-  public get taskOutcomeAlignments(): TaskOutcomeAlignment[] {
+  public get taskOutcomeAlignments(): readonly TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignmentsCache.currentValues;
   }
 
@@ -313,7 +313,7 @@ export class Project extends Entity {
     });
   }
 
-  public get groups(): Group[] {
+  public get groups(): readonly Group[] {
     return this.groupCache.currentValues;
   }
 

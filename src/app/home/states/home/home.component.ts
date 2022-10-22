@@ -100,18 +100,4 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   showDate = this.DateService.showDate;
-
-  generateUnitProgress(project): number {
-    const start = new Date(project.start_date);
-    const end = new Date(project.end_date);
-    const today = new Date();
-
-    //use Math.abs to avoid sign
-    if (today <= start) return 0;
-    if (today >= end) return 100;
-
-    const q = Math.abs(today.valueOf() - start.valueOf());
-    const d = Math.abs(end.valueOf() - start.valueOf());
-    return Math.round((q / d) * 100);
-  }
 }

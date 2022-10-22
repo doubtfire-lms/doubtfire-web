@@ -55,7 +55,7 @@ export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
 
   // The paginator is inside the table
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.unit.students);
+    this.dataSource = new MatTableDataSource(this.unit.studentCache.currentValuesClone());
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
