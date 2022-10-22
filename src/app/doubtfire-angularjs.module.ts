@@ -264,6 +264,7 @@ import { ObjectSelectComponent } from './common/obect-select/object-select.compo
 import { TaskDefinitionService } from './api/services/task-definition.service';
 import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
+import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -318,6 +319,7 @@ DoubtfireAngularJSModule.directive(
 );
 DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
+DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
