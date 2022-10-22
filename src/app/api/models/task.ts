@@ -510,7 +510,7 @@ export class Task extends Entity {
         body: {
           trigger: status,
           grade: this.grade,
-          qualityPts: this.qualityPts
+          quality_pts: this.qualityPts
         }
       };
 

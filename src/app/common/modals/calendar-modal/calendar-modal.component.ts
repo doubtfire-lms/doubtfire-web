@@ -194,14 +194,14 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Retrieves a list of excluded projects.
    */
   get excludedProjects() {
-    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit_id) !== -1);
+    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) !== -1);
   }
 
   /**
    * Retrieves a list of included projects.
    */
   get includedProjects() {
-    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit_id) === -1);
+    return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) === -1);
   }
 
   /**
@@ -212,7 +212,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService
       .update(
         this.currentWebcalWith({
-          unitExclusions: this.webcal.unitExclusions.filter((p) => p !== project.unit_id),
+          unitExclusions: this.webcal.unitExclusions.filter((p) => p !== project.unit.id),
         })
       )
       .subscribe((webcal) => {
@@ -229,7 +229,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.webcalService
       .update(
         this.currentWebcalWith({
-          unitExclusions: [...this.webcal.unitExclusions, project.unit_id],
+          unitExclusions: [...this.webcal.unitExclusions, project.unit.id],
         })
       )
       .subscribe((webcal) => {

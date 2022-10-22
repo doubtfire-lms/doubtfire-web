@@ -26,6 +26,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  portfolioAutoGenerationDate: Date;
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed

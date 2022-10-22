@@ -147,22 +147,6 @@
                   files="taskFiles"
                   url="taskUploadUrl"
                   on-success="onTaskPDFSuccess"></file-uploader>
-                  <table ng-show="filesUploaded" class="table table-condensed table-hover">
-                    <thead>
-                      <tr>
-                        <th>Filename</th>
-                        <th>Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr ng-repeat="file in filesUploaded.ignored_files">
-                        <td>{{file.name}}</td><td>Ignored</td>
-                      </tr>
-                      <tr ng-repeat="file in filesUploaded.added_files">
-                        <td>{{file.name}}</td><td>Added</td>
-                      </tr>
-                    </tbody>
-                </table>
               </div><!--batch-enrol-->
           </div>
       </div>

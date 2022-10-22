@@ -80,7 +80,6 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.onTaskSheetSuccess = (response) ->
       alertService.add("success", "Task sheet uploaded", 2000)
       $scope.task.hasTaskSheet = true
-      # $scope.filesUploaded = response
 
     # Assign task the stream - this is called
     # From the template as you can't ngModel
