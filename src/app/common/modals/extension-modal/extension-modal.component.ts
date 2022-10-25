@@ -28,12 +28,12 @@ export class ExtensionModalComponent implements OnInit {
   }
 
   get newDueDate() {
-    const calculatedDueDate = this.data.task.localDueDate().add(this.weeksRequested, 'weeks');
+    const calculatedDueDate = this.data.task.localDueDate().add(this.weeksRequested, 'days');
     const taskDeadlineDate = this.data.task.definition.localDeadlineDate();
     if (calculatedDueDate > taskDeadlineDate) {
       return taskDeadlineDate.format('DD of MMMM');
     }
-    return calculatedDueDate.format('DD of MMMM');
+    return calculatedDueDate.format('DD of MMMM'); 
   }
 
   get maxWeeksCanExtend() {
