@@ -27,9 +27,8 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     # get the teaching periods- gets an object with the loaded teaching periods
     newTeachingPeriodService.cache.values.subscribe(
       (periods) ->
-        $scope.teachingPeriods = periods
         $scope.teachingPeriodValues = [{value: undefined, text: "None"}]
-        other = _.map periods, (p) -> {value: p, text: "#{p.year} #{p.period}"}
+        other = periods.filter((tp) -> tp.endDate > Date.now()).map((p) -> {value: p, text: "#{p.year} #{p.period}"})
         _.each other, (d) -> $scope.teachingPeriodValues.push(d)
 
         if (periods.length > 0)
@@ -59,12 +58,10 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     $scope.saveUnit = ->
       if $scope.saveData.toPeriod
         body = {
-          id: $scope.unit.id
           teaching_period_id: $scope.saveData.toPeriod.id
         }
       else
         body = {
-          id: $scope.unit.id
           start_date: $scope.saveData.startDate
           end_date: $scope.saeData.endDate
         }

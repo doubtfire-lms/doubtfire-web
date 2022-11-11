@@ -163,6 +163,8 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
+  public rolloverTo(body: { start_date: Date; end_date: Date}): Observable<Unit>;
+  public rolloverTo(body: { teaching_period_id: Number}): Observable<Unit>;
   public rolloverTo(body: any): Observable<Unit>  {
     const unitService = AppInjector.get(UnitService);
 
