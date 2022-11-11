@@ -107,7 +107,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.portfolioAutoGenerationDate.toISOString().slice(0,10);;
+          return entity.portfolioAutoGenerationDate?.toISOString().slice(0,10);;
         }
       },
       'assessmentEnabled',
