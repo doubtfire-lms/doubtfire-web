@@ -12,7 +12,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
 )
 
 .controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, newTeachingPeriodService) ->
-  $scope.teachingperiod = { }
+  $scope.teachingperiod = newTeachingPeriodService.buildInstance({})
   $scope.isNew = true
 
   $scope.calOptions = {
@@ -50,7 +50,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   }
 
   $scope.saveTeachingPeriod = ->
-    newTeachingPeriodService.create( { teaching_period: $scope.teachingperiod } ).subscribe({
+    newTeachingPeriodService.store( $scope.teachingperiod ).subscribe({
       next: (createdTeachingPeriod) ->
         $modalInstance.close(createdTeachingPeriod)
         alertService.add("success", "Teaching Period created.", 2000)
