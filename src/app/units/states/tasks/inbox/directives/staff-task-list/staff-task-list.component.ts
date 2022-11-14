@@ -389,7 +389,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
   }
 
-  togglePin() {
-    this.taskData.selectedTask.pinned ? this.taskData.selectedTask.unpin() : this.taskData.selectedTask.pin();
+  togglePin(task: Task) {
+    task.pinned ? task.unpin() : task.pin();
   }
 }
