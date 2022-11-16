@@ -1,12 +1,12 @@
 <!-- The search bar template -->
 <ng-template #OmnisearchTemplate let-collapsable="collapsable">
   <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
-    <div fxLayout="row" style="align-items: center">
+    <div fxLayout="row" fxLayoutAlign="(default) center">
       <button mat-icon-button aria-label="Search Icon" disabled>
         <mat-icon>search</mat-icon>
       </button>
 
-      <div style="flex-basis: 100%">
+      <div fxFlex="flex-grow">
         <input
           matInput
           autocomplete="off"
