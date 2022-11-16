@@ -31,6 +31,7 @@ $comment-inner-border-radius: 4px;
 }
 
 .comments-body {
+  padding-left: 10px;
   overflow-y: auto;
   @include scrollable();
 }
@@ -220,6 +221,12 @@ $comment-inner-border-radius: 4px;
         color: rgba(255, 255, 255, 0.8);
       }
     }
+  }
+
+  .comment-user-icon-wrapper {
+    margin-top: 0.2em;
+    padding: 3px 0;
+    width: 28px;
   }
 
   .comment.comment-by-other-user user-icon .user-icon-initials {

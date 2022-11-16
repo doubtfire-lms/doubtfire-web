@@ -28,7 +28,7 @@
 
 <form [hidden]="!this.task" style="display: flex; width: 100%" class="input-group col-sm-12 comment-submitter"
   ng-submit="addComment()" role="form">
-  <div fxLayout="row" fxLayoutAlign="space-around end" class="composer-container">
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="composer-container">
     <div class="composer-action-group" [@shrinkgrow]="$expandInput | async">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
@@ -55,19 +55,19 @@
         <button [hidden]="$expandInput | async" *ngIf="isStaff" matTooltip="Create a Real Talk discussion"
           matTooltipShowDelay="400" mat-icon-button class="btn-no-outline" type="button"
           aria-label="launch real talk took" (click)="openDiscussionComposer()">
-          <mat-icon>mark_chat_read</mat-icon>
+          <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
         </button>
 
         <button [hidden]="$expandInput | async" matTooltip="Attach a file" matTooltipShowDelay="400" mat-icon-button
           class="btn-no-outline" type="button" (click)="openFile()" aria-label="attach a file icon button">
-          <mat-icon>attach_file</mat-icon>
+          <mat-icon class="message-inbox-icon">attach_file</mat-icon>
           <input #uploader type="file" multiple="multiple" accept="audio/*,image/*,.pdf" style="display: none"
             (change)="uploadFiles($event.target.files)" />
         </button>
 
         <button [hidden]="$expandInput | async" matTooltip="Send a recording" matTooltipShowDelay="400" mat-icon-button
           class="btn-no-outline" type="button" aria-label="audio recording button" (click)="recordingMode()">
-          <mat-icon>mic</mat-icon>
+          <mat-icon class="message-inbox-icon">mic</mat-icon>
         </button>
       </div>
     </div>
