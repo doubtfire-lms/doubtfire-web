@@ -4,15 +4,6 @@
     *ngIf="pdfBlobUrl"
     [render-text]="true"
     [original-size]="false"
-    (on-progress)="onProgress($event)"
     (after-load-complete)="onLoaded()"
   ></pdf-viewer>
-
-  <mat-spinner
-    [value]="progressPercentage"
-    strokeWidth="2"
-    diameter="100"
-    color="accent"
-    *ngIf="progressPercentage !== 100"
-  ></mat-spinner>
 </div>
