@@ -20,7 +20,7 @@
           (mouseout)="comment.hover = false"
           class="anchor"
         >
-          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp">
+          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp" [ngClass]="{ own: comment.authorIsMe }">
             {{ comment.author.name }} {{ comment.timeOfMessage | humanizedDate }}
           </p>
           <div
