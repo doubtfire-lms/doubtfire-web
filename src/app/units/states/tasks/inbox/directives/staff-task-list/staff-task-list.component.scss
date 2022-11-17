@@ -24,8 +24,14 @@
 
 $warn-color: #f44336;
 
-.pin-icon.mat-icon {
-  color: gray;
+.pin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .mat-icon {
+    color: gray;
+  }
 }
 
 .task-inbox {
