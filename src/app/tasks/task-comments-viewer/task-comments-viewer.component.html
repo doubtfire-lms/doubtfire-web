@@ -31,7 +31,6 @@
             }"
             [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
             fxLayoutAlign="start start"
-            fxLayoutGap="6px"
           >
             <div *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)" class="comment-user-icon-wrapper">
               <user-icon

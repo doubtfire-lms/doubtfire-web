@@ -37,7 +37,7 @@ $comment-inner-border-radius: 4px;
 }
 
 .comments-scroll-content {
-  padding-right: 10px;
+  padding-right: 4px;
   max-height: 100%;
 }
 
@@ -72,7 +72,9 @@ $comment-inner-border-radius: 4px;
     font-size: 11px;
     text-align: center;
     width: 100%;
+    line-height: 1;
     margin-bottom: 0;
+    margin-top: 8px;
     text-align: left;
     padding-left: 40px;
 
@@ -106,6 +108,7 @@ $comment-inner-border-radius: 4px;
 
   .comment-container {
     flex-grow: 1;
+    padding-left: 4px;
 
     .comment-overflow {
       max-width: 50px;
@@ -233,7 +236,7 @@ $comment-inner-border-radius: 4px;
   .comment-user-icon-wrapper {
     margin-top: 0.2em;
     padding: 3px 0;
-    width: 28px;
+    width: 31px;
   }
 
   .comment.comment-by-other-user user-icon .user-icon-initials {
@@ -302,7 +305,6 @@ $comment-inner-border-radius: 4px;
   .bubble.last-in-series {
     border-radius: $comment-border-radius;
     border-top-right-radius: $comment-inner-border-radius;
-    margin-bottom: 0.4em;
   }
 
   .bubble.first-in-series.last-in-series {
@@ -312,7 +314,6 @@ $comment-inner-border-radius: 4px;
   @mixin base-bubble {
     max-width: 300px;
     margin-left: 5px;
-    margin-right: 5px;
     display: flex;
     color: #fff;
     font-size: 1em;
