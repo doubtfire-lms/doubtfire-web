@@ -60,4 +60,8 @@
   width: 300px;
   max-width: 300px;
   max-height: 200px;
+
+  mat-card-actions {
+    margin-bottom: 0px;
+  }
 }
