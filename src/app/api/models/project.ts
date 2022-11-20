@@ -42,6 +42,8 @@ export class Project extends Entity {
   public grade: number;
   public gradeRationale: string;
 
+  public maxPctCopy: number;
+
   public constructor(unit?: Unit) {
     super();
     this.unit = unit;
