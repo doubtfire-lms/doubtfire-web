@@ -174,6 +174,7 @@ import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileFormComponent } from './common/edit-profile-form/edit-profile-form.component';
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 
 @NgModule({
   // Components we declare
@@ -237,6 +238,7 @@ import { EditProfileComponent } from './account/edit-profile/edit-profile.compon
     SignInComponent,
     EditProfileFormComponent,
     EditProfileComponent,
+    UserBadgeComponent,
   ],
   // Module Imports
   imports: [
