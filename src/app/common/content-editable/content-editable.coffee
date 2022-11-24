@@ -1,7 +1,7 @@
 angular.module('doubtfire.common.content-editable', [])
 # Workaround directive for lack of contenteditable support for divs and spans
 
-.directive 'contenteditable', ->
+.directive 'contenteditable', ($sce) ->
   {
     restrict: 'A'
     require: 'ngModel'
@@ -12,11 +12,10 @@ angular.module('doubtfire.common.content-editable', [])
         return
 
       ngModel.$render = ->
-        element.html ngModel.$viewValue or ''
+        element.html $sce.getTrustedHtml(ngModel.$viewValue or '')
         return
 
       element.bind 'blur keyup change', ->
-        scope.$apply read
+        scope.$evalAsync(read)
         return
-      return
   }

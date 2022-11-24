@@ -283,3 +283,12 @@ angular.module("doubtfire.common.filters", [])
     input[0].toLowerCase() + input.substring(1)
 )
 
+.filter('isActiveUnitRole', ->
+  (unitRoles) ->
+    _.filter(unitRoles, (ur) -> ur.active )
+)
+
+.filter('to_trusted', ($sce) ->
+  (text) ->
+    $sce.getTrustedHtml(text)
+)

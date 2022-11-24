@@ -7,7 +7,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
     project: '='
     unit: '='
 
-  controller: ($scope, Visualisation, outcomeService, gradeService) ->
+  controller: ($scope, Visualisation, outcomeService, gradeService, $sce) ->
     $scope.showLegend = if $scope.showLegend? then $scope.showLegend else true
     unless nv.models.achievementBar?
       nv.models.achievementBar = ->
@@ -657,7 +657,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
         max = iloTargets[3].offset + iloTargets[3].height
 
       achievementData.values.push {
-        label: ilo.name
+        label: $sce.getTrustedHtml(ilo.name)
         value: currentProgress[0][ilo.id] # 0 = staff value
         targets: iloTargets
       }

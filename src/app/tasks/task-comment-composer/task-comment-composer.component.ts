@@ -238,7 +238,6 @@ export class TaskCommentComposerComponent implements DoCheck {
   openDiscussionComposer() {
     const self = this;
 
-
     let dialogRef: MatDialogRef<DiscussionComposerDialog, any>;
 
     dialogRef = this.dialog.open(DiscussionComposerDialog, {

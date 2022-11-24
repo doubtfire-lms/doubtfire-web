@@ -10,7 +10,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     pctHolder: '='
     height: '=?'
     showLegend: '=?'
-  controller: ($scope, $timeout, Visualisation, outcomeService) ->
+  controller: ($scope, $timeout, Visualisation, outcomeService, $sce) ->
     $scope.showLegend = unless $scope.showLegend? then true else $scope.showLegend
     $scope.height     = unless $scope.height?     then 600  else $scope.height
 
@@ -31,7 +31,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
           max = 1
         label = _.find($scope.unit.ilos, { id: +id }).abbreviation
         {
-          label: label,
+          label: $sce.getTrustedHtml(label),
           values: {
             Q1: d.lower / max
             Q2: d.median / max

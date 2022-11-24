@@ -13,7 +13,7 @@
       </span>
     </div>
   </div>
-  <div class="card-body plagiarism-panel" ng-bind-html="match.html" ng-show="match.html">
+  <div class="card-body plagiarism-panel" ng-bind-html="match.html | to_trusted" ng-show="match.html">
   </div>
   <div class="card-body plagiarism-panel text-center strong" ng-hide="match.html">
     <i class="fa fa-low-vision fa-2x"></i>
