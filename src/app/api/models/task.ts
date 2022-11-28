@@ -487,7 +487,7 @@ export class Task extends Entity {
 
   public processTaskStatusChange(expectedStatus: TaskStatusEnum, alerts: any) {
     if (this.inTimeExceeded() && !this.isPastDeadline()) {
-      alerts.add('warning', "Request an extension, or wait for your extension request to be granted, to get feedback on this task.", 6000);
+      alerts.add('warning', "You have submitted after the deadline for feedback. Your task will not be reviewed by a tutor. It is now your responsibility to ensure this task meets the required standard.", 8000);
     }
 
     if (this.status !== expectedStatus) {
