@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.alerts", [])
 
     alertData = {
       type: type
-      msg: $sce.trustAsHtml(msg)
+      msg: $sce.getTrustedHtml(msg)
       close: closeThisAlertFunc
     }
 
