@@ -513,12 +513,17 @@ export class Task extends Entity {
           quality_pts: this.qualityPts
         }
       };
+      const hasId: boolean = this.id > 0;
 
       taskService.update({
         projectId: this.project.id,
         taskDefId: this.definition.id,
       }, options).subscribe({
         next: (response) => {
+          if (!hasId && this.id > 0) {
+            this.project.taskCache.delete(this.definition.abbreviation);
+            this.project.taskCache.add(this);
+          }
           this.processTaskStatusChange(status, alerts);
         },
         error: (error) => {
