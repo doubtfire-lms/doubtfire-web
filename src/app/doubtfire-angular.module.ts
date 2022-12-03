@@ -221,7 +221,7 @@ import { TimeoutComponent } from './errors/states/timeout/timeout.component';
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
-    TimeoutComponent
+    TimeoutComponent,
   ],
   // Module Imports
   imports: [
