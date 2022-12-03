@@ -4,7 +4,7 @@ angular.module('doubtfire.config.routing', [])
 #
 .config(($urlRouterProvider, $httpProvider) ->
   # Catch bad URLs.
-  $urlRouterProvider.otherwise "/not_found"
+  # $urlRouterProvider.otherwise "/not_found"
   $urlRouterProvider.when "", "/"
 
   # Map root/home URL to a default state of our choosing.
