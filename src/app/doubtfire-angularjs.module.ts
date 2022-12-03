@@ -238,7 +238,6 @@ import 'build/src/app/api/resource-plus.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/unauthorised/unauthorised.js';
 import 'build/src/app/errors/states/not-found/not-found.js';
-import 'build/src/app/errors/states/timeout/timeout.js';
 import 'build/src/app/errors/states/states.js';
 import 'build/src/common/utilService/utilService.js';
 import 'build/src/common/i18n/localize.js';
@@ -289,6 +288,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import { TimeoutComponent } from './errors/states/timeout/timeout.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -372,6 +372,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
   downgradeComponent({ component: TaskDescriptionCardComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'timeout',
+  downgradeComponent({ component: TimeoutComponent })
 );
 
 DoubtfireAngularJSModule.directive('taskAssessor',
