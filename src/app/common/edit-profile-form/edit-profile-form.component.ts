@@ -6,6 +6,7 @@ import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { UserService } from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -19,7 +20,8 @@ export class EditProfileFormComponent implements OnInit {
     private state: StateService,
     private authService: AuthenticationService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User },
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    @Inject(alertService) private alertService: any,
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -71,7 +73,7 @@ export class EditProfileFormComponent implements OnInit {
           });
         }
       },
-      error: (error) => console.log(error),
+      error: (error) => this.alertService.add('danger', `${error}`, 6000),
     });
   }
 }
