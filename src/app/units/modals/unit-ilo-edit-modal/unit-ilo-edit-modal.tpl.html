@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="modal-footer text-right">
-      <input type="submit" class="btn btn-primary" ng-disabled="ilo.name == null || ilo.abbreviation == null || ilo.description == null"
+      <input type="submit" class="btn btn-primary" ng-disabled="(ilo.name == null || ilo.abbreviation == null || ilo.description == null) || (ilo.name == '' || ilo.abbreviation == '' || ilo.description == '')"
         value="{{isNew ? 'Create' : 'Update'}}" />
     </div>
   </form>
