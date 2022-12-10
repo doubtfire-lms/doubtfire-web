@@ -5,7 +5,7 @@ import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { UserService } from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AlertService } from '../services/alert.service';
+import { AlertService, AlertType } from '../services/alert.service';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -62,18 +62,11 @@ export class EditProfileFormComponent implements OnInit {
           this.user = updatedUser;
           this.initialFirstName = this.user.firstName;
 
-          // TODO: refactor into new alertService
-          // this is a new snackbar alert test
-          // this.AlertService.open('Profile saved', 'dismiss', {
-          //   duration: 1500,
-          //   horizontalPosition: 'end',
-          //   verticalPosition: 'top',
-          // });
-
-          this.alertService.showAlert('Test');
         }
       },
-      error: (error) => console.log(error),
+      error: (error) => {
+        this.alertService.add(AlertType.SUCCESS, error);
+      },
     });
   }
 }
