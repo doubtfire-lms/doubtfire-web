@@ -19,6 +19,7 @@ export class AlertService {
           duration: duration ? duration : 3000,
           horizontalPosition: 'end',
           verticalPosition: 'top',
+          panelClass: ['alert-info'],
         });
         break;
       case AlertType.SUCCESS:
