@@ -65,7 +65,7 @@ export class EditProfileFormComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.alertService.add(AlertType.SUCCESS, error);
+        this.alertService.add(AlertType.DANGER, error);
       },
     });
   }
