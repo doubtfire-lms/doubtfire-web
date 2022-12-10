@@ -5,7 +5,7 @@ import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { UserService } from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AlertService, AlertType } from '../services/alert.service';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -65,7 +65,7 @@ export class EditProfileFormComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.alertService.add(AlertType.DANGER, error);
+        this.alertService.danger(error);
       },
     });
   }

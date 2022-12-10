@@ -1,51 +1,40 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-export enum AlertType {
-  INFO,
-  SUCCESS,
-  WARNING,
-  DANGER,
-}
+const CSS_TYPE = {
+  INFO: 'alert-info',
+  SUCCESS: 'alert-success',
+  WARNING: 'alert-warning',
+  DANGER: 'alert-danger',
+};
 @Injectable({
   providedIn: 'root',
 })
 export class AlertService {
   constructor(private snackBar: MatSnackBar) {}
-  add(type: AlertType, message: string, duration?: number, action = 'Dismiss') {
-    switch (type) {
-      case AlertType.INFO:
-        this.snackBar.open(message, action, {
-          duration: duration ? duration : 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['alert-info'],
-        });
-        break;
-      case AlertType.SUCCESS:
-        this.snackBar.open(message, action, {
-          duration: duration ? duration : 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['alert-success'],
-        });
-        break;
-      case AlertType.WARNING:
-        this.snackBar.open(message, action, {
-          duration: duration ? duration : 6000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['alert-warning'],
-        });
-        break;
-      case AlertType.DANGER:
-        this.snackBar.open(message, action, {
-          duration: duration ? duration : 8000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['alert-danger'],
-        });
-        break;
-    }
+
+  private _open(type: string, message: string, duration: number, action: string) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
+  }
+
+  info(message: string, duration?: number, action = 'Dismiss') {
+    this._open(CSS_TYPE.INFO, message, duration ? duration : 3000, action);
+  }
+
+  success(message: string, duration?: number, action = 'Dismiss') {
+    this._open(CSS_TYPE.SUCCESS, message, duration ? duration : 5000, action);
+  }
+
+  warning(message: string, duration?: number, action = 'Dismiss') {
+    this._open(CSS_TYPE.WARNING, message, duration ? duration : 6000, action);
+  }
+
+  danger(message: string, duration?: number, action = 'Dismiss') {
+    this._open(CSS_TYPE.DANGER, message, duration ? duration : 8000, action);
   }
 }
