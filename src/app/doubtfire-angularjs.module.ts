@@ -173,7 +173,7 @@ import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/long-press/on-long-press.js';
 import 'build/src/app/common/content-editable/content-editable.js';
-import 'build/src/app/common/alert-list/alert-list.js';
+// import 'build/src/app/common/alert-list/alert-list.js';
 import 'build/src/app/common/modals/confirmation-modal/confirmation-modal.js';
 import 'build/src/app/common/modals/comments-modal/comments-modal.js';
 import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
@@ -289,6 +289,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
+import {AlertListComponent} from './common/alert-list/alert-list.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -395,6 +396,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+DoubtfireAngularJSModule.directive('alertList', downgradeComponent({ component: AlertListComponent }));
 
 // Global configuration
 
