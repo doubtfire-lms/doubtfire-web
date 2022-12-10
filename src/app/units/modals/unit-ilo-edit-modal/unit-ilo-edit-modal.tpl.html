@@ -20,13 +20,22 @@
         <label class="col-sm-3 control-label">Description</label>
         <div class="col-sm-7">
           <!-- <markdown-editor height="200" placeholder="Enter markdown description..." ng-model="ilo.description"></markdown-editor> -->
-          <div contenteditable ng-model="ilo.description" placeholder="Enter markdown description..." style="border-style: solid; border-width: thin; height: 200px"></div>
+          <div
+            contenteditable
+            ng-model="ilo.description"
+            placeholder="Enter markdown description..."
+            style="border-style: solid; border-width: thin; height: 200px"
+          ></div>
         </div>
       </div>
     </div>
     <div class="modal-footer text-right">
-      <input type="submit" class="btn btn-primary" ng-disabled="(ilo.name == null || ilo.abbreviation == null || ilo.description == null) || (ilo.name == '' || ilo.abbreviation == '' || ilo.description == '')"
-        value="{{isNew ? 'Create' : 'Update'}}" />
+      <input
+        type="submit"
+        class="btn btn-primary"
+        ng-disabled="!ilo.name || !ilo.abbreviation || !ilo.description"
+        value="{{isNew ? 'Create' : 'Update'}}"
+      />
     </div>
   </form>
 </div>
