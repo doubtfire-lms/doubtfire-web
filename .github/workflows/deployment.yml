@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Setup meta for development image
         id: docker_meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: lmsdoubtfire/doubtfire-web
           tags: |
@@ -59,7 +59,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Setup meta for web server
         id: docker_meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: lmsdoubtfire/doubtfire-web
           tags: |
