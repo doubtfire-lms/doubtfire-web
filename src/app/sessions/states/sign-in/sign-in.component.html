@@ -24,7 +24,9 @@
             <mat-label>Password</mat-label>
             <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
           </mat-form-field>
-          <button fxFlex fxFlexFill mat-flat-button color="primary" type="form">Sign In</button>
+          <button fxFlex fxFlexFill mat-flat-button color="primary" type="form" [disabled]="form.invalid">
+            Sign In
+          </button>
         </form>
       </div>
     </div>
