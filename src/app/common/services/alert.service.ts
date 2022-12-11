@@ -37,4 +37,9 @@ export class AlertService {
   danger(message: string, duration?: number, action = 'Dismiss') {
     this._open(CSS_TYPE.DANGER, message, duration ? duration : 8000, action);
   }
+
+  // used to close a snackbar
+  clear() {
+    this.snackBar.dismiss();
+  }
 }
