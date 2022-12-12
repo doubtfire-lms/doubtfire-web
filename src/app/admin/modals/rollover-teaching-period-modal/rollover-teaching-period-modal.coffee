@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
   RolloverTeachingPeriodModal
 )
 
-.controller('RolloverTeachingPeriodModal', ($scope, $modalInstance, alertService, analyticsService, newTeachingPeriodService, teachingperiod, DoubtfireConstants) ->
+.controller('RolloverTeachingPeriodModal', ($scope, $modalInstance, alertService, analyticsService, newTeachingPeriodService, teachingperiod) ->
   $scope.teachingperiod = teachingperiod
   newTeachingPeriodService.cache.values.subscribe((tps) -> $scope.teachingPeriods = tps )
 
@@ -22,7 +22,7 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
   $scope.rollover = ->
     newPeriod = newTeachingPeriodService.cache.get(parseInt($scope.rolloverTo, 10))
     $scope.teachingperiod.rollover(newPeriod, false, false).subscribe({
-      next: () -> alertService.success("Rollover complete", DoubtfireConstants.AlertTimeout.SUCCESS)
+      next: () -> alertService.success("Rollover complete", 5000)
       error: (response) -> alertService.danger(response, 8000)
     })
 )
