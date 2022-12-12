@@ -22,8 +22,8 @@ angular.module('doubtfire.admin.modals.rollover-teaching-period-modal', [])
   $scope.rollover = ->
     newPeriod = newTeachingPeriodService.cache.get(parseInt($scope.rolloverTo, 10))
     $scope.teachingperiod.rollover(newPeriod, false, false).subscribe({
-      next: () -> alertService.add('success', "Rollover complete", 2000)
-      error: (response) -> alertService.add('danger', response, 6000)
+      next: () -> alertService.success("Rollover complete")
+      error: (response) -> alertService.danger(response)
     })
 )
 
