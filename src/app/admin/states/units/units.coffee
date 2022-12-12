@@ -33,8 +33,7 @@ angular.module('doubtfire.admin.states.units', [])
 
       error: (failure) ->
         $scope.error = true
-        alertService.add("danger", failure, 6000)
-        console.log(failure)
+        alertService.danger(failure)
     })
 
   $scope.typeAhead = (units) ->
