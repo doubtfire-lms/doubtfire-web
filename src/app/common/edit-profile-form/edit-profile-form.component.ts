@@ -5,7 +5,7 @@ import { User } from 'src/app/api/models/user/user';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { UserService } from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AlertService, DURATION as default_duration } from '../services/alert.service';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -19,7 +19,7 @@ export class EditProfileFormComponent implements OnInit {
     private state: StateService,
     private authService: AuthenticationService,
     private alertService: AlertService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User }
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User },
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -61,10 +61,11 @@ export class EditProfileFormComponent implements OnInit {
         } else {
           this.user = updatedUser;
           this.initialFirstName = this.user.firstName;
+
         }
       },
       error: (error) => {
-        this.alertService.danger(error, default_duration.DANGER);
+        this.alertService.danger(error);
       },
     });
   }

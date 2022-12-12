@@ -53,9 +53,9 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     newTeachingPeriodService.store( $scope.teachingperiod ).subscribe({
       next: (createdTeachingPeriod) ->
         $modalInstance.close(createdTeachingPeriod)
-        alertService.success("Teaching Period created.", 5000)
+        alertService.success("Teaching Period created.")
       error: (response) ->
-        alertService.danger("Error: " + response, 8000)
+        alertService.danger("Error: " + response)
     })
 )
 

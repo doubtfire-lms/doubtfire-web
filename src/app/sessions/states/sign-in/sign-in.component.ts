@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { StateService, Transition } from '@uirouter/core';
-import { AlertService, DURATION as default_duration } from 'src/app/common/services/alert.service';
+import { AlertService } from 'src/app/common/services/alert.service';
 import { AuthenticationService } from 'src/app/api/services/authentication.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
@@ -104,7 +104,7 @@ export class SignInComponent implements OnInit {
         this.signingIn = false;
         this.formData.password = '';
         this.invalidCredentials = true;
-        this.alertService.warning(err, default_duration.WARNING);
+        this.alertService.warning(err);
       },
     });
   }
