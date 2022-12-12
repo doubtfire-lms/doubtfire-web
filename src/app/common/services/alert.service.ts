@@ -18,7 +18,7 @@ export class AlertService {
       duration: duration,
       horizontalPosition: 'end',
       verticalPosition: 'top',
-      panelClass: [type],
+      panelClass: [type, 'allow-new-line'],
     });
   }
 
