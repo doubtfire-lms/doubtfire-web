@@ -387,7 +387,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
-DoubtfireAngularJSModule.directive('alertService', downgradeComponent({ component: AlertService }));
+DoubtfireAngularJSModule.factory('alertService', downgradeInjectable(AlertService));
 
 // Global configuration
 
