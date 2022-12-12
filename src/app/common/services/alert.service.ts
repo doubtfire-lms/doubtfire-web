@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+export const DURATION = {
+  INFO: 3000,
+  SUCCESS: 5000,
+  WARNING: 6000,
+  DANGER: 8000,
+};
 const CSS_CLASS = {
   INFO: 'alert-info',
   SUCCESS: 'alert-success',
