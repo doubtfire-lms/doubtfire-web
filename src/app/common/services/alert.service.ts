@@ -29,19 +29,19 @@ export class AlertService {
   }
 
   info(message: string, duration?: number, action = 'Dismiss') {
-    this._open(CSS_CLASS.INFO, message, duration ? duration : 0, action);
+    this._open(CSS_CLASS.INFO, message, duration ? duration : 3000, action);
   }
 
   success(message: string, duration?: number, action = 'Dismiss') {
-    this._open(CSS_CLASS.SUCCESS, message, duration ? duration : 0, action);
+    this._open(CSS_CLASS.SUCCESS, message, duration ? duration : 5000, action);
   }
 
   warning(message: string, duration?: number, action = 'Dismiss') {
-    this._open(CSS_CLASS.WARNING, message, duration ? duration : 0, action);
+    this._open(CSS_CLASS.WARNING, message, duration ? duration : 6000, action);
   }
 
   danger(message: string, duration?: number, action = 'Dismiss') {
-    this._open(CSS_CLASS.DANGER, message, duration ? duration : 0, action);
+    this._open(CSS_CLASS.DANGER, message, duration ? duration : 8000, action);
   }
 
   // used to close a snackbar

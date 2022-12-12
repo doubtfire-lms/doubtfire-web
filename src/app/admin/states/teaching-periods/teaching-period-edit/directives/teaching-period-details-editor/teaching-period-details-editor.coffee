@@ -46,15 +46,15 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
         newTeachingPeriodService.create($scope.teachingPeriod).subscribe({
           next: (createdTeachingPeriod) ->
             $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
-            alertService.success("Teaching Period created.")
+            alertService.success("Teaching Period created.", 5000)
           error: (response) ->
-            alertService.danger(response.data.error)
+            alertService.danger(response.data.error, 8000)
         })
       else
         newTeachingPeriodService.update( $scope.teachingPeriod ).subscribe({
           next: (updatedTeachingPeriod) ->
-            alertService.success("Teaching Period updated.")
+            alertService.success("Teaching Period updated.", 5000)
           error: (response) ->
-            alertService.danger("Failed to update teaching period. #{response}")
+            alertService.danger("Failed to update teaching period. #{response}", 8000)
         })
 )
