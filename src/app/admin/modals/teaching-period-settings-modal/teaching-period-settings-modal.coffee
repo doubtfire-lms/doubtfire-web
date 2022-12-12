@@ -11,7 +11,7 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
   TeachingPeriodSettingsModal
 )
 
-.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, newTeachingPeriodService) ->
+.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, newTeachingPeriodService, DoubtfireConstants) ->
   $scope.teachingperiod = newTeachingPeriodService.buildInstance({})
   $scope.isNew = true
 
@@ -53,9 +53,9 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     newTeachingPeriodService.store( $scope.teachingperiod ).subscribe({
       next: (createdTeachingPeriod) ->
         $modalInstance.close(createdTeachingPeriod)
-        alertService.success("Teaching Period created.", 5000)
+        alertService.success("Teaching Period created.", DoubtfireConstants.AlertTimeout.SUCCESS)
       error: (response) ->
-        alertService.danger("Error: " + response, 8000)
+        alertService.danger("Error: " + response, DoubtfireConstants.AlertTimeout.DANGER)
     })
 )
 
