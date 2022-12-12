@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { StateService, UIRouter, UIRouterGlobals } from '@uirouter/angular';
-import { AlertService, DURATION as default_duration } from 'src/app/common/services/alert.service';
+import { AlertService } from 'src/app/common/services/alert.service';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { AppInjector } from 'src/app/app-injector';
 import { map, Observable } from 'rxjs';
@@ -15,11 +15,11 @@ export class AuthenticationService {
     private userService: UserService,
     private alertService: AlertService,
     private state: StateService,
-    private doubtfireConstants: DoubtfireConstants,
+    private constants: DoubtfireConstants,
     private router: UIRouter,
     private uiRouterGlobals: UIRouterGlobals
   ) {
-    this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
+    this.AUTH_URL = `${this.constants.API_URL}/auth`;
   }
 
   public checkUserCookie(): void {
@@ -155,8 +155,8 @@ export class AuthenticationService {
       globalStateService.clearUnitsAndProjects();
 
       // if string is not null
-      if (this.doubtfireConstants.SignoutURL) {
-        window.location.assign(this.doubtfireConstants.SignoutURL);
+      if (this.constants.SignoutURL) {
+        window.location.assign(this.constants.SignoutURL);
       }
       this.state.go('sign_in');
     };
@@ -172,7 +172,7 @@ export class AuthenticationService {
 
   public timeoutAuthentication(): void {
     if (this.uiRouterGlobals.current.name !== 'timeout') {
-      this.alertService.danger('Authentication timed out', default_duration.DANGER);
+      this.alertService.danger('Authentication timed out', this.constants.AlertTimeout.DANGER);
       setTimeout(() => this.router.stateService.go('timeout'), 500);
     }
   }

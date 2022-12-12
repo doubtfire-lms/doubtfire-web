@@ -53,11 +53,16 @@ export class DoubtfireConstants {
 
   // publish update to ExternalName when get request finishes.
   private loadExternalName() {
-    this.http
-      .get<SettingsResponseFormat>(this.settingsUrl)
-      .subscribe((result) => {
-        this.ExternalName.next(result.externalName);
-        this.IsOverseerEnabled.next(result.overseer_enabled);
-      });
+    this.http.get<SettingsResponseFormat>(this.settingsUrl).subscribe((result) => {
+      this.ExternalName.next(result.externalName);
+      this.IsOverseerEnabled.next(result.overseer_enabled);
+    });
   }
+
+  public readonly AlertTimeout = {
+    INFO: 3000,
+    SUCCESS: 5000,
+    WARNING: 6000,
+    DANGER: 8000,
+  };
 }
