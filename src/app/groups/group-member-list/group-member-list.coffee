@@ -51,7 +51,7 @@ angular.module('doubtfire.groups.group-member-list', [])
           finishLoading()
         error: (failure) ->
           $timeout((->
-            alertService.add("danger", "Unauthorised to view members in this group", 3000)
+            alertService.danger("Unauthorised to view members in this group")
             $scope.selectedGroup = null
           ), 1000)
       })

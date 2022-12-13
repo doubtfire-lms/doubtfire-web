@@ -99,7 +99,7 @@ angular.module('doubtfire.groups.group-selector', [])
           applyFilters()
         error: (message) ->
           finishLoading()
-          alertService.add("danger", "Unable to get groups #{message}", 6000)
+          alertService.danger("Unable to get groups #{message}")
       })
 
     $scope.selectGroupSet($scope.selectedGroupSet)
@@ -122,7 +122,7 @@ angular.module('doubtfire.groups.group-selector', [])
     # Adds a group to the unit
     $scope.addGroup = (name) ->
       if $scope.unit.tutorials.length == 0
-        alertService.add("danger", "Please ensure there is at least one tutorial before groups are created", 6000)
+        alertService.danger("Please ensure there is at least one tutorial before groups are created")
       # Student context
       if $scope.project
         #TODO: Need to add stream to group set
@@ -151,7 +151,7 @@ angular.module('doubtfire.groups.group-selector', [])
           resetNewGroupForm()
           applyFilters()
           $scope.selectedGroup = group
-        error: (message) -> alertService.add("danger", message, 6000)
+        error: (message) -> alertService.danger(message)
       })
 
     # Join or leave group as project
@@ -161,7 +161,7 @@ angular.module('doubtfire.groups.group-selector', [])
     $scope.joinGroup = (group) ->
       return unless $scope.project?
       partOfGroup = $scope.projectInGroup(group)
-      return alertService.add("danger", "You are already member of this group") if partOfGroup
+      return alertService.danger("You are already member of this group") if partOfGroup
       group.addMember($scope.project,
         () ->
           $scope.selectedGroup = group
@@ -176,20 +176,20 @@ angular.module('doubtfire.groups.group-selector', [])
 
       newGroupService.update(group).subscribe({
         next: () ->
-          alertService.add("success", "Updated group", 2000)
+          alertService.success("Updated group")
           applyFilters()
-        error: (message) -> alertService.add("danger", "Failed to update group. #{message}", 6000)
+        error: (message) -> alertService.danger("Failed to update group. #{message}")
       })
 
     # Remove group function
     $scope.deleteGroup = (group) ->
       newGroupService.delete(group, { cache: $scope.selectedGroupSet.groupsCache }).subscribe({
         next: () ->
-          alertService.add("success", "Deleted group", 2000)
+          alertService.success("Deleted group")
           $scope.selectedGroup = null if group.id == $scope.selectedGroup?.id
           resetNewGroupForm()
           applyFilters()
-        error: () -> alertService.add("danger", "Failed to delete group. #{message}", 6000)
+        error: () -> alertService.danger("Failed to delete group. #{message}")
       })
 
     # Toggle lockable group
@@ -198,7 +198,7 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.unit.updateGroup(group,
         (success) ->
           group.locked = success.locked
-          alertService.add("success", "Group updated", 2000)
+          alertService.success("Group updated")
       )
 
     # Watch selected group set changes
