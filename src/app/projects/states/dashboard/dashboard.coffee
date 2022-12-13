@@ -20,7 +20,7 @@ angular.module('doubtfire.projects.states.dashboard', [
    }
 )
 
-.controller("ProjectsDashboardStateCtrl", ($scope, $rootScope, $urlRouter, $state, $stateParams, UnitRole, unitService, projectService, listenerService) ->
+.controller("ProjectsDashboardStateCtrl", ($scope, $urlRouter, $state, $stateParams, listenerService) ->
   # Cleanup
   listeners = listenerService.listenTo($scope)
 
@@ -41,7 +41,7 @@ angular.module('doubtfire.projects.states.dashboard', [
   # Sets selected task from URL parameters
   setSelectedTaskFromUrlParams = (taskAbbr) ->
     $scope.taskData.selectedTask = null unless taskAbbr?
-    $scope.taskData.selectedTask = _.find($scope.project.activeTasks(), (t) ->
+    $scope.taskData.selectedTask = $scope.project.activeTasks().find((t) ->
       t.definition.abbreviation.toLowerCase() == taskAbbr?.toLowerCase()
     )
 
@@ -49,18 +49,6 @@ angular.module('doubtfire.projects.states.dashboard', [
   unless setSelectedTaskFromUrlParams($stateParams.taskAbbr)?
     setTaskAbbrAsUrlParams(null)
 
-  # Whenever the state is changed, we look at the taskAbbr in the URL params
-  # see if we can set it as an actual taskAbbr object
-  listeners.push $scope.$on '$stateChangeStart', ($event, toState, toParams, fromState, fromParams) ->
-    taskAbbr = setSelectedTaskFromUrlParams(toParams.taskAbbr)?.definition.abbreviation
-    # Use preventDefault to prevent destroying the child state's
-    # scope if they are the same states. Otherwise, if they are
-    # the same, we destroy the state's scope and recreate it again
-    # unnecessarily
-    if fromState == toState && fromParams.projectId == toParams.projectId
-      $event.preventDefault()
-      # Need to call this to change the URL parameter!
-      setTaskAbbrAsUrlParams(taskAbbr)
 
   # Task complete
   listeners.push $scope.$on('TaskSubmissionUploadComplete', ($event) ->

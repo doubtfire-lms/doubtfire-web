@@ -1,10 +1,10 @@
 <div class="panel-body task-submission-viewer">
-  <div class="large-notice-block" ng-show="notSubmitted(task) || task.processing_pdf || loadingDetails(task)">
+  <div class="large-notice-block" ng-show="notSubmitted(task) || task.processingPdf || loadingDetails(task)">
     <div ng-show="notSubmitted(task) && ! loadingDetails(task)">
       <i class="fa fa-upload fa-2x"></i>
       <p>Upload submission before viewing</p>
     </div><!--/no-pdf-->
-    <div ng-show="task.processing_pdf && ! loadingDetails(task)">
+    <div ng-show="task.processingPdf && ! loadingDetails(task)">
         <i class="fa fa-clock-o fa-2x"></i>
         <p>
           Submission is still being processed
@@ -18,12 +18,12 @@
         <p>Fetching Submission Details</p>
     </div><!--/loading details-->
   </div>
-  <div ng-if="task.has_pdf">
+  <div ng-if="task.hasPdf">
     <pdf-viewer-panel
       pdf-url="taskUrl"
       resources-url="taskFilesURL"
       footer-text="{{task.status != 'ready_for_feedback' ? 'Annotated comments are viewable once PDF is downloaded' : 'Comments will be available once your tutor has assessed your submission'}}"
-      ng-hide="notSubmitted(task) || task.processing_pdf">
+      ng-hide="notSubmitted(task) || task.processingPdf">
     </pdf-viewer-panel>
   </div>
 </div>

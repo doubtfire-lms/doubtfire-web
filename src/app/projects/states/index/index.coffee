@@ -3,8 +3,8 @@ angular.module('doubtfire.projects.states.index', [])
 #
 # Root state for projects
 #
-.config((headerServiceProvider) ->
-  headerServiceProvider.state 'projects/index', {
+.config(($stateProvider) ->
+  $stateProvider.state 'projects/index', {
     url: "/projects/:projectId"
     abstract: true
     views:
@@ -17,26 +17,35 @@ angular.module('doubtfire.projects.states.index', [])
   }
 )
 
-.controller("ProjectsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, UnitRole, unitService, projectService, listenerService, GlobalStateService) ->
+.controller("ProjectsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newProjectService, listenerService, GlobalStateService) ->
   # Error - required projectId is missing!
   projectId = +$stateParams.projectId
   return $state.go('home') unless projectId
 
-  # Load in project
-  projectService.getProject(projectId, null,
-    (project) ->
-      # Go home if no project was found
-      return $state.go('home') unless project?
-      # Load unit for project
-      unitService.getUnit(project.unit_id, (unit) ->
-        $scope.unit = unit
-        # Map the project to the unit
-        $scope.project = $scope.unit.mapStudentToUnit(project)
-        # Broadcast change in project
-        GlobalStateService.setView('PROJECT', $scope.project)
-        $rootScope.$broadcast 'ProjectChanged', { context: $scope.project }
-      )
-    (failure) ->
-      $state.go('home')
-  )
+  GlobalStateService.onLoad () ->
+    # Load in project
+    newProjectService.get(projectId, {
+      # Ensure that we cache queries here... so that we get any projects we are in
+      # even when we are also teaching that unit
+      cacheBehaviourOnGet: 'cacheQuery',
+      mappingCompleteCallback: (project)->
+        # Wait for the project mapping to complete - ensuring unit details are loaded
+        $scope.unit = project.unit
+
+    }).subscribe(
+      {
+        next: (project) ->
+          # Broadcast change in project
+          $scope.project = project
+          $scope.unit = project.unit if project.unit.taskDefinitions.length > 0 && project.tasks.length == project.unit.taskDefinitions.length
+
+          GlobalStateService.setView('PROJECT', $scope.project)
+
+          # Go home if no project was found
+          return $state.go('home') unless project?
+
+        error: (failure) ->
+          $state.go('home')
+      }
+    )
 )

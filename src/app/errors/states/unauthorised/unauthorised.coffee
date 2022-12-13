@@ -3,7 +3,7 @@ angular.module("doubtfire.errors.states.unauthorised", [])
 #
 # Define the unauthorised state
 #
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   stateData =
     url: "/unauthorised"
     views:
@@ -13,7 +13,7 @@ angular.module("doubtfire.errors.states.unauthorised", [])
     data:
       pageTitle: "_Unauthorised_"
 
-  headerServiceProvider.state "unauthorised", stateData
+  $stateProvider.state "unauthorised", stateData
 )
 
 .controller("UnauthorisedCtrl", ($scope) ->)

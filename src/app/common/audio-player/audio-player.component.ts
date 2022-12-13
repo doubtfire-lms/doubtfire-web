@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { alertService, Task } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
+import { Project, Task, TaskComment } from 'src/app/api/models/doubtfire-model';
 import { FileDownloaderService } from '../file-downloader/file-downloader';
 
 @Component({
@@ -9,9 +10,9 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
   styleUrls: ['./audio-player.component.scss'],
 })
 export class AudioPlayerComponent implements OnDestroy {
-  @Input() project: {};
-  @Input() task: {};
-  @Input() comment: {};
+  @Input() project: Project;
+  @Input() task: Task;
+  @Input() comment: TaskComment;
   @Input() audioSrc: { src: string };
 
   @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
@@ -22,7 +23,6 @@ export class AudioPlayerComponent implements OnDestroy {
   public audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
 
   constructor(
-    @Inject(Task) private TaskModel,
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
     @Inject(alertService) private alerts: any
   ) {
@@ -76,7 +76,7 @@ export class AudioPlayerComponent implements OnDestroy {
     } else {
       let url: string;
       if (this.project && this.task && this.comment) {
-        url = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, this.comment);
+        url = this.comment.attachmentUrl;
       } else if (this.audioSrc) {
         url = this.audioSrc.src;
       }

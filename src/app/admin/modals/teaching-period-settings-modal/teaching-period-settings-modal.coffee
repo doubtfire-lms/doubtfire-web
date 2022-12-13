@@ -3,19 +3,17 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
 .factory('TeachingPeriodSettingsModal', ($modal) ->
   TeachingPeriodSettingsModal = {}
 
-  TeachingPeriodSettingsModal.show = (teachingPeriod) ->
+  TeachingPeriodSettingsModal.show = () ->
     $modal.open
       templateUrl: 'admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.tpl.html'
       controller: 'TeachingPeriodSettingsModal'
-      resolve:
-        teachingperiod: -> teachingPeriod
 
   TeachingPeriodSettingsModal
 )
 
-.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, currentUser, TeachingPeriod, teachingperiod, auth) ->
-  $scope.teachingperiod = teachingperiod or { }
-  $scope.isNew = teachingperiod?.id is undefined
+.controller('TeachingPeriodSettingsModal', ($scope, $modalInstance, DoubtfireConstants, alertService, analyticsService, newTeachingPeriodService) ->
+  $scope.teachingperiod = newTeachingPeriodService.buildInstance({})
+  $scope.isNew = true
 
   $scope.calOptions = {
     startOpened: false
@@ -25,11 +23,6 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
 
   # Get the external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName
-
-  if $scope.isNew
-    $scope.teachingperiods = TeachingPeriod.query()
-
-  $scope.currentUser = currentUser
 
   $scope.modalState = {}
 
@@ -56,43 +49,13 @@ angular.module('doubtfire.admin.modals.teaching-period-settings-modal', [])
     startingDay: 1
   }
 
-  createNewTeachingPeriod = ->
-    TeachingPeriod.create( { teaching_period: $scope.teachingperiod } ).$promise.then (
-      (createdTeachingPeriod) ->
-        $modalInstance.close(createdTeachingPeriod)
-        if $scope.teachingperiods
-          $scope.teachingperiods.loadedPeriods.push(createdTeachingPeriod)
-          alertService.add("success", "Teaching Period created.", 2000)
-    ),
-    (
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-    )
-
-  updateExistingTeachingPeriod = ->
-    TeachingPeriod.update( { id: $scope.teachingperiod.id, teaching_period: $scope.teachingperiod } ).$promise.then (
-      (updatedTeachingPeriod) ->
-        $modalInstance.close(updatedTeachingPeriod)
-        alertService.add("success", "Teaching Period updated.", 2000)
-    ),
-    (
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-    )
-
   $scope.saveTeachingPeriod = ->
-    if $scope.teachingperiod.start_date && $scope.teachingperiod.start_date.getMonth
-      $scope.teachingperiod.start_date = "#{$scope.teachingperiod.start_date.getFullYear()}-#{$scope.teachingperiod.start_date.getMonth() + 1}-#{$scope.teachingperiod.start_date.getDate()}"
-    if $scope.teachingperiod.end_date && $scope.teachingperiod.end_date.getMonth
-      $scope.teachingperiod.end_date = "#{$scope.teachingperiod.end_date.getFullYear()}-#{$scope.teachingperiod.end_date.getMonth() + 1}-#{$scope.teachingperiod.end_date.getDate()}"
-    if $scope.teachingperiod.active_until && $scope.teachingperiod.active_until.getMonth
-      $scope.teachingperiod.active_until = "#{$scope.teachingperiod.active_until.getFullYear()}-#{$scope.teachingperiod.active_until.getMonth() + 1}-#{$scope.teachingperiod.active_until.getDate()}"
-
-    if $scope.isNew
-      createNewTeachingPeriod()
-    else
-      updateExistingTeachingPeriod()
+    newTeachingPeriodService.store( $scope.teachingperiod ).subscribe({
+      next: (createdTeachingPeriod) ->
+        $modalInstance.close(createdTeachingPeriod)
+        alertService.add("success", "Teaching Period created.", 2000)
+      error: (response) ->
+        alertService.add("danger", "Error: " + response, 6000)
+    })
 )
 

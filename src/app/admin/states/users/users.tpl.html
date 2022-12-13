@@ -42,11 +42,11 @@
               <tr>
                 <th>Avatar</th>
                 <th><a ng-click="sortOrder='id'; reverse=!reverse">User ID</a></th>
-                <th><a ng-click="sortOrder='first_name'; reverse=!reverse">First Name</a></th>
-                <th><a ng-click="sortOrder='last_name'; reverse=!reverse">Last Name</a></th>
+                <th><a ng-click="sortOrder='firstName'; reverse=!reverse">First Name</a></th>
+                <th><a ng-click="sortOrder='lastName'; reverse=!reverse">Last Name</a></th>
                 <th>Username</th>
                 <th>Email</th>
-                <th><a ng-click="sortOrder='system_role'; reverse=!reverse">System Role</a></th>
+                <th><a ng-click="sortOrder='systemRole'; reverse=!reverse">System Role</a></th>
               </tr>
             </thead>
             <tbody>
@@ -59,11 +59,11 @@
                   <user-icon [size]="30" [user]="user"></user-icon>
                 </td>
                 <td>{{user.id}}</td>
-                <td>{{user.first_name}}</td>
-                <td>{{user.last_name}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
                 <td>{{user.username}}</td>
                 <td><a href="mailto:{{user.email}}">{{user.email}}</a></td>
-                <td>{{user.system_role}}</td>
+                <td>{{user.systemRole}}</td>
               </tr>
             </tbody>
           </table>
@@ -91,13 +91,13 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">Batch Import Users</h4>
-        Import users using a CSV containing: email, first_name, last_name, username, nickname, role
+        Import users using a CSV containing: email, firstName, lastName, username, nickname, role
       </div>
       <div class="panel-body">
         <file-uploader
-          url="file_data.batchUserUrl"
-          files="file_data.batchUserFiles"
-          on-success="file_data.onBatchUserSuccess"
+          url="fileData.batchUserUrl"
+          files="fileData.batchUserFiles"
+          on-success="fileData.onBatchUserSuccess"
         ></file-uploader>
       </div>
       <div class="panel-heading">

@@ -1,6 +1,6 @@
 angular.module('doubtfire.units.states.all.directives.all-units-list', [])
 
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   allUnitsStateData =
     url: "/view-all-units"
     views:
@@ -10,11 +10,10 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
     data:
       pageTitle: "_All-Units_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
-  headerServiceProvider.state 'view-all-units', allUnitsStateData
+  $stateProvider.state 'view-all-units', allUnitsStateData
 )
 
-.controller("AllUnitsList", ($scope, $state, $timeout, User, Unit, DoubtfireConstants, currentUser, unitService, analyticsService, dateService, GlobalStateService) ->
-  analyticsService.event 'view-all-units', 'viewed all-units list'
+.controller("AllUnitsList", ($scope, $state, $timeout, DoubtfireConstants, dateService, GlobalStateService, newUserService, newUnitService) ->
   GlobalStateService.setView('OTHER')
 
   $scope.externalName = DoubtfireConstants.ExternalName
@@ -31,27 +30,37 @@ angular.module('doubtfire.units.states.all.directives.all-units-list', [])
   hasRoles = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
-  unitService.getUnitRoles (roles) ->
-    $scope.unitRoles = roles
+
+  GlobalStateService.onLoad () ->
+    $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues
     $scope.showSpinner = false
     $scope.dataLoaded = true
     hasRoles = true
     $timeout.cancel(timeoutPromise)
 
+  $scope.typeAhead = (roles) ->
+    result = []
+    _.each roles, (role) ->
+      result.push(role.unit.code)
+      result.push(role.unit.name)
+    return _.uniq(result)
+
   checkEnrolled = ->
     return if !$scope.unitRoles?
     $scope.notEnrolled = ->
       # Not enrolled if a tutor and no unitRoles
-      ($scope.unitRoles.length is 0 and currentUser.role is 'Tutor')
+      ($scope.unitRoles.length is 0 and newUserService.currentUser.role is 'Tutor')
 
   $scope.$watch 'unitRoles', checkEnrolled
 
-  if currentUser.role isnt 'Student'
-    Unit.query (units) ->
-      $scope.units = units
+  if newUserService.currentUser.role isnt 'Student'
+    newUnitService.query().subscribe(
+      (units) ->
+        $scope.units = units
+    )
 
   $scope.unit = (unitId) ->
     _.find($scope.units, {id: unitId})
 
-  $scope.currentUser = currentUser
+  $scope.currentUser = newUserService.currentUser
 )

@@ -8,25 +8,29 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-staff-editor/unit-staff-editor.tpl.html'
-  controller: ($scope, $rootScope, Unit, UnitRole, alertService, groupService) ->
+  controller: ($scope, $rootScope, alertService, newUnitService, newUnitRoleService) ->
     temp = []
     users = []
 
+    $scope.unit.staffCache.values.subscribe( (staff) -> $scope.unitStaff = staff )
+
     $scope.changeRole = (unitRole, role_id) ->
-      unitRole.role_id = role_id
-      unitRole.unit_id = $scope.unit.id
-      UnitRole.update { id: unitRole.id, unit_role: unitRole },
-        (response) -> alertService.add("success", "Role changed", 2000)
-        (response) ->
-          alertService.add("danger", response.data.error, 6000)
+      unitRole.roleId = role_id
+      newUnitRoleService.update(unitRole).subscribe({
+        next: (response)  -> alertService.add("success", "Role changed", 2000)
+        error: (response) -> alertService.add("danger", response, 6000)
+      })
 
     $scope.changeMainConvenor = (staff) ->
-      Unit.update {id: $scope.unit.id, unit: {main_convenor_id: staff.id}},
-        (response) ->
+      oldConvenor = $scope.unit.mainConvenor
+      $scope.unit.mainConvenor = staff
+      newUnitService.update($scope.unit).subscribe({
+        next: (response) ->
           alertService.add("success", "Main convenor changed", 2000)
-          $scope.unit.main_convenor_id = staff.id
-        (response) ->
-          alertService.add("danger", response.data.error, 6000)
+        error: (response) ->
+          $scope.unit.mainConvenor = oldConvenor
+          alertService.add("danger", response, 6000)
+      })
 
     $scope.addSelectedStaff = ->
       staff = $scope.selectedStaff
@@ -34,27 +38,24 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
       $scope.unit.staff = [] unless $scope.unit.staff
 
       if staff.id?
-        tutorRole = UnitRole.create { unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' },
-          (response) -> $scope.unit.staff.push(tutorRole)
-          (response) ->
-            alertService.add('danger', "Unable to add staff member. #{response.data.error}", 6000)
+        newUnitRoleService.create({ unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }, {cache: $scope.unit.staffCache}).subscribe({
+          next:  (response) -> alertService.add('success', "Staff member added", 2000)
+          error: (response) -> alertService.add('danger', response, 6000)
+        })
       else
         alertService.add('danger', "Unable to add staff member. Ensure they have a tutor or convenor account in User admin first.", 6000)
 
-    $scope.findStaffUser = (id) ->
-      for staff in $scope.staff
-        return staff if staff.id == id
-
     # Used in the typeahead to filter staff already in unit
     $scope.filterStaff = (staff) ->
-      not _.find($scope.unit.staff, (listStaff) -> staff.id == listStaff.user_id)
+      not _.find($scope.unit.staff, (listStaff) -> staff.id == listStaff.user.id)
 
     $scope.removeStaff = (staff) ->
-      $scope.unit.staff = _.without $scope.unit.staff, staff
-      UnitRole.delete { id: staff.id }
-      staffUser = $scope.findStaffUser(staff.user_id)
+      newUnitRoleService.delete(staff, {cache: $scope.unit.staffCache}).subscribe({
+        next:  (response) -> alertService.add('success', "Staff member removed", 2000)
+        error: (response) -> alertService.add('danger', response, 6000)
+      })
 
     $scope.groupSetName = (id) ->
-      groupService.groupSetName(id, $scope.unit)
+      $scope.unit.groupSetsCache.get(id)?.name || "Individual Work"
 
 )

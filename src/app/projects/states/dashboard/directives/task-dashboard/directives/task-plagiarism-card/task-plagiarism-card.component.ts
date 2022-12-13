@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { plagiarismReportModal } from 'src/app/ajs-upgraded-providers';
+import { Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'task-plagiarism-card',
@@ -7,7 +8,7 @@ import { plagiarismReportModal } from 'src/app/ajs-upgraded-providers';
   styleUrls: ['./task-plagiarism-card.component.scss'],
 })
 export class TaskPlagiarismCardComponent implements OnInit {
-  @Input() task: any;
+  @Input() task: Task;
 
   constructor(@Inject(plagiarismReportModal) private plagiarismModal: any) {}
 

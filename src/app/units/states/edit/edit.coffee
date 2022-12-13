@@ -17,17 +17,13 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, Convenor, Tutor, UnitRole, unitService, alertService, analyticsService) ->
-  analyticsService.event 'Edit Unit View', "Started Edit Unit View", 'Unit Tab'
-
-  unitService.getUnit $state.params.unitId, {loadAllStudents: true}, (unit) ->
-    $scope.unit = unit
-    $scope.newUnit = $scope.unit.id == -1
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, GlobalStateService) ->
+  GlobalStateService.onLoad () ->
     $scope.currentStaff = $scope.unit.staff
-    UnitRole.query (roles) ->
-      $scope.unitRoles = _.filter(roles, (role) -> role.unit_id == unit.id)
-      if $scope.unitRoles
-        $scope.assessingUnitRole = $scope.unitRoles[0]
+
+    $scope.assessingUnitRole = GlobalStateService.loadedUnitRoles.currentValues.find((role) -> role.unit == $scope.unit)
+
+    newUserService.getTutors().subscribe( (tutors) -> $scope.staff = tutors )
 
   #
   # Active tab group
@@ -72,18 +68,5 @@ angular.module('doubtfire.units.states.edit', [
     $scope.activeTab = tab            # Switch tabs
     $scope.activeTab.active = true    # Make it active
 
-    # Actions to take when selecting this tab
-    if $scope.assessingUnitRole?
-      analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as #{$scope.assessingUnitRole.role}", "#{tab.title} Tab"
-    else # guess as haven't loaded role yet -- or admin role
-      analyticsService.event "#{if $scope.newUnit then 'Edit' else 'Create'} Unit View", "Switched Tab as Administrator", "#{tab.title} Tab"
-
   $scope.activeTab = $scope.tabs.unitTab
-
-  Tutor.query(
-    (tutors) ->
-      $scope.staff = _.map(tutors, (tutor) ->
-        return { id: tutor.id, full_name: tutor.first_name + ' ' + tutor.last_name }
-      )
-  )
 )

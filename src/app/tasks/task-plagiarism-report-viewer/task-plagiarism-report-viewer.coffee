@@ -12,7 +12,7 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
     task: "="
     assessingUnitRole: "="
 
-  controller: ($scope, $window, TaskSimilarity, DoubtfireConstants) ->
+  controller: ($scope, $window, DoubtfireConstants) ->
     # functions from task service
     $scope.match = 1
     $scope.similarityData = null
@@ -40,12 +40,12 @@ angular.module('doubtfire.tasks.task-plagiarism-report-viewer', [])
       !$scope.task.plagiarismDetected() || $scope.similarityData == null
 
     $scope.fetchSimilarity = ->
-      if $scope.task?.similar_to_count > 0
-        TaskSimilarity.get($scope.task, $scope.match, (data) ->
-          $scope.similarityData = data
+      if $scope.task?.similarToCount > 0
+        $scope.task.getSimilarityData($scope.match).subscribe(
+          (data) -> $scope.similarityData = data
         )
 
-    if $scope.task?.similar_to_count > 0
+    if $scope.task?.similarToCount > 0
       $scope.taskId = $scope.task.id
-      $scope.fetchSimilarity($scope.task, $scope.match - 1)
+      $scope.fetchSimilarity
 )

@@ -3,7 +3,7 @@
 #
 angular.module('doubtfire.config.runtime', [])
 
-.run(($rootScope, $state, $filter, $location, auth, editableOptions, editableThemes) ->
+.run(($rootScope, $state, $filter, $location, authenticationService, editableOptions, editableThemes) ->
   # Angular xeditable
   editableOptions.theme = 'bs3'
   editableThemes.bs3.inputClass = 'input-sm'
@@ -21,7 +21,7 @@ angular.module('doubtfire.config.runtime', [])
     str.join("&")
 
   handleUnauthorisedDest = (toState, toParams) ->
-    if auth.isAuthenticated()
+    if authenticationService.isAuthenticated()
       $state.go "unauthorised"
     else if $state.current.name isnt "sign_in"
       $state.go "sign_in", { dest: toState.name, params: serialize(toParams) }
@@ -35,7 +35,7 @@ angular.module('doubtfire.config.runtime', [])
 
   # Don't let the user see pages not intended for their role
   $rootScope.$on "$stateChangeStart", (evt, toState, toParams) ->
-    unless auth.isAuthorised toState.data.roleWhitelist
+    unless authenticationService.isAuthorised toState.data.roleWhitelist
       evt.preventDefault()
       handleUnauthorisedDest(toState, toParams)
 

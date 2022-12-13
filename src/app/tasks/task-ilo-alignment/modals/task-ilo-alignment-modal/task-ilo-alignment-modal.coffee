@@ -21,7 +21,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
   TaskILOAlignmentModal
 )
 
-.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $modalInstance, LearningAlignments, alertService, projectService, task, ilo, alignment, unit, project, source) ->
+.controller('TaskILOAlignmentModalCtrl', ($scope, $rootScope, $modalInstance, newTaskOutcomeAlignmentService, alertService, task, ilo, alignment, unit, project, source) ->
   $scope.source = source
   $scope.unit = unit
   $scope.task = task
@@ -29,9 +29,12 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
   $scope.alignment = alignment
   $scope.project = project
 
-  if $scope.project
-    updateRequest = (data) ->
-      data.task_id = projectService.taskFromTaskDefId($scope.project, data.task_definition_id).id
+  if !$scope.alignment
+    $scope.alignment = newTaskOutcomeAlignmentService.createInstanceFrom({}, $scope.source)
+    $scope.alignment.learningOutcome = $scope.ilo
+    $scope.alignment.taskDefinition = task.definition
+    $scope.alignment.rating = 0
+    $scope.alignment.description = ""
 
   $scope.editingRationale = false
 
@@ -41,50 +44,41 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
     $scope.editingRationale = !$scope.editingRationale
 
   $scope.removeAlignmentItem = ->
-    data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
-    LearningAlignments.delete(data,
-      (response) ->
-        indexToDelete = $scope.source.task_outcome_alignments.indexOf _.find $scope.source.task_outcome_alignments, { id: $scope.alignment.id }
-        $scope.source.task_outcome_alignments.splice indexToDelete, 1
-        $scope.alignment = undefined
-        $rootScope.$broadcast('UpdateAlignmentChart', data, { remove: true })
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-    )
+    if $scope.project?
+      params = {
+        project_id: $scope.project.id
+      }
+    newTaskOutcomeAlignmentService.delete($scope.alignment, {cache: $scope.alignment.within.taskOutcomeAlignmentsCache, params: params}).subscribe({
+      next: (response) ->
+        alertService.add("success", "Task - Outcome alignment rating removed", 2000)
+        $rootScope.$broadcast('UpdateAlignmentChart')
+        $modalInstance.close $scope.alignment
+      error: (message) -> alertService.add("danger", message, 6000)
+    })
 
   updateAlignment = ->
-    data = _.extend { unit_id: $scope.unit.id }, $scope.alignment
-    LearningAlignments.update(data,
-      (response) ->
+    if $scope.project?
+      params = {
+        project_id: $scope.project.id
+      }
+    newTaskOutcomeAlignmentService.update($scope.alignment, {cache: $scope.alignment.within.taskOutcomeAlignmentsCache, params: params}).subscribe({
+      next: (response) ->
         alertService.add("success", "Task - Outcome alignment rating saved", 2000)
-        $rootScope.$broadcast('UpdateAlignmentChart', response, { updated: true })
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
-    )
+        $rootScope.$broadcast('UpdateAlignmentChart')
+      error: (message) -> alertService.add("danger", message, 6000)
+    })
 
   addAlignment = ->
-    $scope.alignment = data = {
-      unit_id: $scope.unit.id
-      learning_outcome_id: $scope.ilo.id
-      task_definition_id: $scope.task.definition.id
-      rating: $scope.alignment.rating
-      description: null
-    }
-
-    if $scope.project
-      data.project_id = $scope.project.project_id
-      updateRequest data
-
-    LearningAlignments.create data,
-      (response) ->
-        $scope.alignment.id = response.id
-        $scope.source.task_outcome_alignments.push($scope.alignment)
-        $rootScope.$broadcast('UpdateAlignmentChart', response, { created: true })
-      (response) ->
-        if response.data.error?
-          alertService.add("danger", "Error: " + response.data.error, 6000)
+    if $scope.project?
+      params = {
+        project_id: $scope.project.id
+      }
+    newTaskOutcomeAlignmentService.store($scope.alignment, {cache: $scope.source.taskOutcomeAlignmentsCache, constructorParams: $scope.source, params: params}).subscribe({
+      next: (response) ->
+        $scope.alignment = response
+        $rootScope.$broadcast('UpdateAlignmentChart')
+      error: (message) -> alertService.add("danger", message, 6000)
+    })
 
   $scope.updateRating = (alignment) ->
     unless $scope.alignment.id?

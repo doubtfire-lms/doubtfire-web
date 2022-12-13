@@ -13,11 +13,11 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
     project: '='
     team: '=' #out parameter
 
-  controller: ($scope, gradeService, projectService, groupService, GroupMember) ->
-    $scope.selectedGroupSet = $scope.task.definition.group_set
-    $scope.selectedGroup = projectService.getGroupForTask $scope.project, $scope.task
+  controller: ($scope, gradeService) ->
+    $scope.selectedGroupSet = $scope.task.definition.groupSet
+    $scope.selectedGroup = $scope.project.getGroupForTask($scope.task)
 
-    $scope.memberSortOrder = 'student_name'
+    $scope.memberSortOrder = 'project.student.name'
     $scope.numStars = 5
     $scope.initialStars = 3
 
@@ -28,36 +28,42 @@ angular.module('doubtfire.groups.group-member-contribution-assigner', [])
       success: 100
     }
 
-    $scope.checkClearRating = (member) ->
-      if member.confRating == 1 && member.overStar == 1 && member.rating == 0
-        member.rating = member.percent = 0
-      else if member.confRating == 1 && member.overStar == 1 && member.rating == 0
-        member.rating = 1
-      member.confRating = member.rating
+    $scope.checkClearRating = (contrib) ->
+      if contrib.confRating == 1 && contrib.overStar == 1 && contrib.rating == 0
+        contrib.rating = contrib.percent = 0
+      else if contrib.confRating == 1 && contrib.overStar == 1 && contrib.rating == 0
+        contrib.rating = 1
+      contrib.confRating = contrib.rating
 
-    memberPercentage = (member, rating) ->
-      (100 * (rating / groupService.groupContributionSum($scope.team.members, member, rating))).toFixed()
+    memberPercentage = (contrib, rating) ->
+      (100 * (rating / $scope.selectedGroup.contributionSum($scope.team.memberContributions, contrib, rating))).toFixed()
 
-    $scope.hoveringOver = (member, value) ->
-      member.overStar = value
-      member.percent = memberPercentage(member, value)
+    $scope.hoveringOver = (contrib, value) ->
+      contrib.overStar = value
+      contrib.percent = memberPercentage(contrib, value)
 
     $scope.gradeFor = gradeService.gradeFor
 
-    # TODO: (@alexcu) Supply group members
     if $scope.selectedGroup && $scope.selectedGroupSet
-      GroupMember.query { unit_id: $scope.project.unit_id, group_set_id: $scope.selectedGroupSet.id, group_id: $scope.selectedGroup.id }, (members) ->
-        $scope.team.members = _.map(members, (member) ->
-          member.rating = member.confRating = $scope.initialStars
-          member.percent = memberPercentage(member, member.rating)
-          member
-        )
-        # Need the '+' to convert to number
-        $scope.percentages.warning = +(25 / members.length).toFixed()
-        $scope.percentages.info    = +(50 / members.length).toFixed()
-        $scope.percentages.success = +(95 / members.length).toFixed()
+      $scope.selectedGroup.getMembers().subscribe({
+        next: (members) ->
+          $scope.team.memberContributions = _.map(members, (member) ->
+            result = {
+              project: member,
+              rating: $scope.initialStars,
+              confRating: $scope.initialStars,
+              percent: 0
+            }
+            result.percent = memberPercentage(result, $scope.initialStars)
+            result
+          )
+          # Need the '+' to convert to number
+          $scope.percentages.warning = +(25 / members.length).toFixed()
+          $scope.percentages.info    = +(50 / members.length).toFixed()
+          $scope.percentages.success = +(95 / members.length).toFixed()
+      })
     else
-      $scope.team.members = []
+      $scope.team.memberContributions = []
 
     $scope.percentClass = (pct) ->
       return 'label-success'  if pct >= $scope.percentages.success

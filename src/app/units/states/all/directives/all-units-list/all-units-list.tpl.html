@@ -1,5 +1,9 @@
 <div class="container">
-  <div if-role="Tutor Convenor Admin">
+  <div class="large-notice-block" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-2x fa-spinner"></i>
+    <p>Loading unit details...</p>
+  </div>
+  <div if-role="Tutor Convenor Admin" ng-show="dataLoaded">
     <div class="panel panel-primary">
       <div class="panel-heading clearfix">
         <div class="pull-left">
@@ -7,7 +11,7 @@
           All units registered with {{externalName.value}}
         </div>
         <form role="search" class="pull-right form-horizontal">
-          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unitRole.unit_name for unitRole in unitRoles | filter:$viewValue | limitTo:8" />
+          <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in typeAhead(unitRoles) | filter:$viewValue | limitTo:8" />
         </form>
       </div>
       <div class="panel-body">
@@ -15,31 +19,31 @@
         <table ng-show="unitRoles.length > 0" class="table table-hover table-pointer">
           <thead>
             <tr>
-              <th><a ng-click="sortOrder='unit_code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit_code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='unit_name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='unit.code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit.code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='unit.name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit.name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='role'; reverse=!reverse">Unit Role <i ng-show="sortOrder=='role'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
               <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-              <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='unit.startDate'; reverse=!reverse">Start Date <i ng-show="sortOrder=='unit.startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='unit.endDate'; reverse=!reverse">End Date <i ng-show="sortOrder=='unit.endDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+              <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit_id })">
+            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit.id })">
               <td>
                 <label class="label label-info">
-                  {{unitRole.unit_code}}
+                  {{unitRole.unit.code}}
                 </label>
               </td>
-              <td>{{unitRole.unit_name}}</td>
+              <td>{{unitRole.unit.name}}</td>
               <td>{{(unitRole.role | ucfirst) || "N/A"}}</td>
               <td ng-if="unitRole.teachingPeriod()">{{(unitRole.teachingPeriod().name())}}</td>
               <td ng-if="!unitRole.teachingPeriod()">Custom</td>
-              <td>{{unitRole.start_date | date : 'EEE d MMM'}}</td>
-              <td>{{unitRole.end_date | date : 'EEE d MMM'}}</td>
-              <td ng-if="unitRole.teachingPeriod()">
-                <i ng-if="unitRole.teachingPeriod().active() && unitRole.active" class="fa fa-check"></i>
-                <i ng-if="!unitRole.teachingPeriod().active() || !unitRole.active" class="fa fa-times"></i>
+              <td>{{unitRole.unit.startDate | date : 'EEE d MMM'}}</td>
+              <td>{{unitRole.unit.endDate | date : 'EEE d MMM'}}</td>
+              <td ng-if="unitRole.unit.teachingPeriod">
+                <i ng-if="unitRole.unit.teachingPeriod.active && unitRole.unit.active" class="fa fa-check"></i>
+                <i ng-if="!unitRole.unit.teachingPeriod.active || !unitRole.unit.active" class="fa fa-times"></i>
               </td>
               <td ng-if="!unitRole.teachingPeriod()">
                 <i ng-if="unitRole.active" class="fa fa-check"></i>
@@ -53,8 +57,5 @@
         <pagination ng-show="filteredUnitRoles.length > pageSize" total-items="filteredUnitRoles.length" ng-model="currentPage" items-per-page="pageSize" max-size="maxSize" class="pagination-sm pull-left" boundary-links="true" rotate="false"></pagination>
       </div>
     </div>
-  </div>
-  <div class="spinner" ng-hide="dataLoaded">
-    <i class="fa fa-pulse fa-4x fa-spinner" ng-show="showSpinner"></i>
   </div>
 </div>

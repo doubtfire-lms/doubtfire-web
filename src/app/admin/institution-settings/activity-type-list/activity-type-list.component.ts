@@ -3,7 +3,7 @@ import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { ActivityType, ActivityTypeService } from 'src/app/api/models/doubtfire-model';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
@@ -24,12 +24,12 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // that maps all of the form controls that this form consists of.
   constructor(private activityTypeService: ActivityTypeService, @Inject(alertService) private alerts: any) {
     super({
-      name: new FormControl('', [Validators.required]),
-      abbreviation: new FormControl('', [Validators.required]),
-    });
+      name: new UntypedFormControl('', [Validators.required]),
+      abbreviation: new UntypedFormControl('', [Validators.required]),
+    }, "Activity Type");
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Get all the activity types and add them to the table
     this.activityTypeService.query().subscribe((activityTypes) => {
       this.pushToTable(activityTypes);
@@ -47,6 +47,7 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: ActivityType | ActivityType[]) {
+    if (!value) return;
     value instanceof Array ? this.activityTypes.push(...value) : this.activityTypes.push(value);
     this.dataSource.sort = this.sort;
     this.table.renderRows();
@@ -56,6 +57,17 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // which then calls the parent's submit.
   submit() {
     super.submit(this.activityTypeService, this.alerts, this.onSuccess.bind(this));
+  }
+
+  deleteActivity(activity: ActivityType) {
+    this.delete(activity, this.activityTypes, this.activityTypeService).subscribe(
+      {
+        next: () => {
+          this.alerts.add('success', `${activity.name} has been deleted.`, 2000);
+        },
+        error: (response) => {this.alerts.add( 'danger', response.error?.error || "Unable to delete activity type.");}
+      }
+    );
   }
 
   // Sorting function to sort data when sort

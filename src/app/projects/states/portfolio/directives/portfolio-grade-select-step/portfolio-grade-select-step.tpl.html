@@ -30,12 +30,12 @@
             ng-repeat="grade in grades"
             ng-click="chooseGrade($index); status.isopen=false"
             class="btn btn-default col-sm-3"
-            ng-model="project.submitted_grade"
+            ng-model="project.submittedGrade"
             btn-radio="{{$index}}"
           >
             <grade-icon
               grade="grade"
-              class="text-{{project.submitted_grade == grades.indexOf(grade) ? 'success' : 'muted'}}"
+              class="text-{{project.submittedGrade == grades.indexOf(grade) ? 'success' : 'muted'}}"
             ></grade-icon>
           </label>
         </div>

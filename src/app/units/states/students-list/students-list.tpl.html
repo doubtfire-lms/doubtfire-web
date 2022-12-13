@@ -10,7 +10,7 @@
           ng-change="searchTextChanged()"
           typeahead-on-select="searchTextChanged()"
           typeahead="text for text in
-            unitTypeAheadData(unit) |
+            unit.studentFilterTypeAheadData |
             filter:$viewValue |
             limitTo:8"
           typeahead-wait-ms="200"
@@ -41,13 +41,13 @@
         <label>Sort Flags By...</label>
         <div class="input-group">
           <div class="btn-group">
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('target_grade')" btn-radio="'target_grade'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('targetGrade')" btn-radio="'targetGrade'">
               <i class="fa fa-check"></i> Grade
             </button>
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('max_pct_copy')" btn-radio="'max_pct_copy'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('maxPctCopy')" btn-radio="'maxPctCopy'">
               <i class="fa fa-eye"></i> Plagiarism
             </button>
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolio_status')" btn-radio="'portfolio_status'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolioStatus')" btn-radio="'portfolioStatus'">
               <i class="fa fa-book"></i> Portfolio Status
             </button>
           </div>
@@ -57,7 +57,7 @@
         </p>
       </div><!--/flag-sort-button-group-->
     </form><!--/search-options-->
-    <div class="panel-body" ng-show="filteredStudents.length == 0">
+    <div class="panel-body" ng-show="filteredProjects.length == 0">
       <div class="callout callout-primary">
         <h4>No students found</h4>
         <p>
@@ -65,18 +65,18 @@
         </p>
       </div>
     </div><!--/no-students-found-->
-    <table ng-show="filteredStudents.length > 0" class="table table-condensed table-hover table-pointer">
+    <table ng-show="filteredProjects.length > 0" class="table table-condensed table-hover table-pointer">
       <thead>
         <tr>
           <th class="avatar"></th>
-          <th class="student-id">
-            <a ng-click="sortTableBy('student_id')">
-              Student ID <i ng-show="tableSort.order == 'student_id'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+          <th class="username">
+            <a ng-click="sortTableBy('student.username')">
+              Username <i ng-show="tableSort.order == 'student.username'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/id-column-header-->
           <th class="name">
-            <a ng-click="sortTableBy('name')">
-              Name <i ng-show="tableSort.order == 'name'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
+            <a ng-click="sortTableBy('student.name')">
+              Name <i ng-show="tableSort.order == 'student.name'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/name-column-header-->
           <th class="stats">
@@ -88,14 +88,14 @@
             <a ng-click="sortTableBy('flags')">
               Flags
               <i ng-show="
-                tableSort.order == 'max_pct_copy' ||
-                tableSort.order == 'target_grade' ||
-                tableSort.order == 'portfolio_status'"
+                tableSort.order == 'maxPctCopy' ||
+                tableSort.order == 'targetGrade' ||
+                tableSort.order == 'portfolioStatus'"
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/flags-column-header-->
           <th class="campus">
-            <a ng-click="sortTableBy('campus().name')">
+            <a ng-click="sortTableBy('campus.name')">
               Campus <i ng-show="tableSort.order == 'campus'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/campus-column-header-->
@@ -107,44 +107,44 @@
         </tr><!--/column-headers-row-->
       </thead>
       <tbody>
-        <tr class="task-progress-row" ng-repeat="student in filteredStudents">
-          <td class="avatar" ng-click="viewStudent(student)">
-            <user-icon [size]="30" [user]="student"></user-icon>
+        <tr class="task-progress-row" ng-repeat="project in filteredProjects">
+          <td class="avatar" ng-click="viewStudent(project)">
+            <user-icon [size]="30" [user]="project.student"></user-icon>
           </td>
-          <td ng-click="viewStudent(student)">
-            {{student.student_id || "N/A"}}
-          </td><!--/student-id-column-->
-          <td ng-click="viewStudent(student)">
-            {{student.name}}
+          <td ng-click="viewStudent(project)">
+            {{project.student.username || "N/A"}}
+          </td><!--/username-column-->
+          <td ng-click="viewStudent(project)">
+            {{project.student.name}}
           </td><!--/name-column-->
-          <td ng-click="viewStudent(student)" class="task-progress-bar">
+          <td ng-click="viewStudent(project)" class="task-progress-bar">
             <progress class="task-progress" animate="true">
               <bar
-                ng-repeat="bar in student.task_stats"
-                value="(bar.key === 'fail') && (bar.value !== bar.value) ? 0 : bar.value"
+                ng-repeat="bar in project.taskStats"
+                value="bar.value"
                 type="{{statusClass(bar.key)}}">
                 <span ng-hide="bar.value < 10">{{bar.value !== bar.value ? 'No Interaction' : (bar.value + '%')}}</span>
               </bar>
             </progress>
           </td><!--/progress-column-->
-          <td class="text-left" ng-click="viewStudent(student)">
+          <td class="text-left" ng-click="viewStudent(project)">
             <span class="flags">
               <span class="flag">
-                <grade-icon grade="student.target_grade"></grade-icon>
+                <grade-icon grade="project.targetGrade"></grade-icon>
               </span>
-              <span ng-show="student.max_pct_copy > 0" class="flag">
+              <span ng-show="project.maxPctCopy > 0" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>
               </span>
-              <span ng-show="student.has_portfolio" class="flag">
-                <i class="fa fa-book fa-2x" ng-class="{'text-muted': student.compile_portfolio}"></i>
+              <span ng-show="project.hasPortfolio" class="flag">
+                <i class="fa fa-book fa-2x" ng-class="{'text-muted': project.compilePortfolio}"></i>
               </span>
             </span>
           </td><!--/flags-column-->
           <td>
-            <student-campus-select [unit]="unit" [student]="student" [update]="true"></student-campus-select>
+            <student-campus-select [unit]="unit" [student]="project" [update]="true"></student-campus-select>
           </td><!--/campus-column-->
           <td>
-            <student-tutorial-select [unit]="unit" [student]="student"></student-tutorial-select>
+            <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
           </td><!--/tutorial-column-->
         </tr><!--/student-row-->
       </tbody>

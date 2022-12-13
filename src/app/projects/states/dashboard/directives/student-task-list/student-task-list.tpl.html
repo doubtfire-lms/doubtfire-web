@@ -22,14 +22,14 @@
       id="{{task.taskKeyToIdString()}}"
       ng-click="setSelectedTask(task)"
       ng-class="{selected: isSelectedTask(task)}"
-      ng-repeat="task in filteredTasks | orderBy: 'topWeight'"
+      ng-repeat="task in filteredTasks | orderBy: 'topWeight' track by (task.id || task.definition.abbreviation)"
     >
       <div class="task-data">
         <h4 class="list-group-item-heading">{{task.definition.name}}</h4>
         <p class="list-group-item-text">
           <i class="fa fa-users" aria-hidden="true" ng-show="task.isGroupTask()"></i
           ><i class="fa fa-user" aria-hidden="true" ng-hide="task.isGroupTask()"></i> {{task.definition.abbreviation}} -
-          {{gradeNames[task.definition.target_grade]}} Task
+          {{gradeNames[task.definition.targetGrade]}} Task
           <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"
             ><i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}</span
           ><span class="due-time" ng-if="!task.isBeforeStartDate() && !task.inSubmittedState()"
@@ -41,8 +41,8 @@
       <div class="task-badges">
         <status-icon [status]="task.status"></status-icon>
         <div class="task-superscript-badges">
-          <span class="task-superscript-badge new-comments-badge" ng-if="task.num_new_comments > 0">
-            {{task.num_new_comments}}
+          <span class="task-superscript-badge new-comments-badge" ng-if="task.numNewComments > 0">
+            {{task.numNewComments}}
           </span>
           <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.plagiarismDetected()">
             <i class="fa fa-eye"></i>
@@ -51,7 +51,7 @@
         <div class="task-subscript-badges">
           <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()"> {{task.gradeDesc()}} </span>
           <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
-            <sup>{{task.quality_pts}}</sup>&frasl;<sub>{{task.definition.max_quality_pts}}</sub>
+            <sup>{{task.qualityQts}}</sup>&frasl;<sub>{{task.definition.maxQualityPts}}</sub>
           </span>
           <span class="task-subscript-badge soon-badge" ng-if="task.isDueSoon() && !task.inFinalState()">
             <i class="fa fa-clock-o"></i>

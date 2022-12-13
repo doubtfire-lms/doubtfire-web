@@ -97,7 +97,7 @@
                   (selectionChange)="taskDefinitionIdChanged()"
                 >
                   <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
-                  <mat-option *ngFor="let td of unit.task_definitions" [value]="td.id">
+                  <mat-option *ngFor="let td of unit.taskDefinitionCache.values | async" [value]="td.id">
                     {{ td.abbreviation + ' - ' + td.name }}
                   </mat-option>
                 </mat-select>
@@ -123,7 +123,7 @@
                 (selectionChange)="tutorialIdChanged()"
               >
                 <mat-option *ngFor="let t of studentFilter" [value]="t.id">
-                  {{ t.inbox_description }}
+                  {{ t.inboxDescription }}
                 </mat-option>
               </mat-select>
               <mat-hint> Limit tasks to specific students </mat-hint>
@@ -196,9 +196,9 @@
             (mouseover)="task.hover = true"
             (mouseout)="task.hover = false"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project()" [size]="30"> </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
-              <h4 class="mat-h4">{{ task.project().name }}</h4>
+              <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
@@ -207,9 +207,9 @@
                 <p class="mat-small">
                   {{ task.shortTutorialDescription() }}
                 </p>
-                <p class="mat-small">Submitted {{ task.submission_date | humanizedDate }}</p>
-                <p class="mat-small" [hidden]="!(task.times_assessed > 0)">
-                  Assessed {{ task.times_assessed }} time{{ task.times_assessed === 1 ? '' : 's' }}
+                <p class="mat-small">Submitted {{ task.submissionDate | humanizedDate }}</p>
+                <p class="mat-small" [hidden]="!(task.timesAssessed > 0)">
+                  Assessed {{ task.timesAssessed }} time{{ task.timesAssessed === 1 ? '' : 's' }}
                 </p>
               </div>
             </div>
@@ -218,8 +218,8 @@
             </div>
             <status-icon
               [hidden]="isNarrow"
-              matBadge="{{ task.quality_pts }}/{{ task.definition.max_quality_pts }}"
-              [matBadgeHidden]="!task.hasQualityPoints() || !task.quality_pts"
+              matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
+              [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
               matBadgePosition="before"
               [status]="task.status"
             ></status-icon>
@@ -229,8 +229,8 @@
 
                 <div
                   *ngIf="task.pinned"
-                  matBadge="{{ task.num_new_comments }}"
-                  [matBadgeHidden]="task.num_new_comments <= 0 || task.plagiarismDetected()"
+                  matBadge="{{ task.numNewComments }}"
+                  [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
                   matBadgePosition="before"
                   matBadgeSize="small"
                   matBadgeColor="warn"
@@ -239,8 +239,8 @@
                 </div>
 
                 <div *ngIf="!task.pinned">
-                  <div class="new_comments" *ngIf="task.num_new_comments > 0 && !task.plagiarismDetected()">
-                    {{ task.num_new_comments }}
+                  <div class="new_comments" *ngIf="task.numNewComments > 0 && !task.plagiarismDetected()">
+                    {{ task.numNewComments }}
                   </div>
                 </div>
               </button>

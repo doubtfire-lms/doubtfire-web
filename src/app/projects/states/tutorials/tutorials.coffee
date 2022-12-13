@@ -16,9 +16,9 @@ angular.module('doubtfire.projects.states.tutorials', [])
    }
 )
 
-.controller("ProjectsTutorialsStateCtrl", ($scope, $modal, User, Project, alertService, projectService, analyticsService) ->
-  if $scope.unit.tutorial_streams.length > 0
-    $scope.sortOrder = 'tutorial_stream.name'
+.controller("ProjectsTutorialsStateCtrl", ($scope) ->
+  if $scope.unit.tutorialStreamsCache.size > 0
+    $scope.sortOrder = 'tutorialStream.name'
   else
     $scope.sortOrder = 'abbreviation'
 )

@@ -14,7 +14,7 @@ angular.module('doubtfire.visualisations.achievement-box-plot', [])
     $scope.showLegend = unless $scope.showLegend? then true else $scope.showLegend
     $scope.height     = unless $scope.height?     then 600  else $scope.height
 
-    iloValues = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+    iloValues = outcomeService.calculateTargets($scope.unit, $scope.unit, $scope.unit.taskStatusFactor)
     iloMaxes = _.mapValues iloValues, (d, k) -> _.reduce d, ((memo, value) -> memo + value), 0
     rangeMax = _.max _.values(iloMaxes)
 

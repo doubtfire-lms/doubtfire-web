@@ -31,7 +31,6 @@ describe('StaffTaskListComponent', () => {
         ],
         providers: [
           { provide: taskDefinition, useValue: taskDefinitionStub },
-          { provide: Unit, useValue: unitStub },
           { provide: currentUser, useValue: currentUserStub },
           { provide: groupService, useValue: groupServiceStub },
           { provide: alertService, useValue: alertServiceStub },

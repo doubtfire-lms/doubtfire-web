@@ -1,12 +1,16 @@
 <div class="container">
-  <div class="panel panel-primary">
+  <div class="large-notice-block" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-2x fa-spinner"></i>
+    <p>Loading unit details...</p>
+  </div>
+  <div class="panel panel-primary" ng-show="dataLoaded">
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Units</h4>
         Units you study with {{externalName.value}}
       </div>
       <form role="search" class="pull-right form-horizontal">
-        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="project.unit_name for project in projects | filter:$viewValue | limitTo:8" />
+        <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in typeAhead(projects) | filter:$viewValue | limitTo:8" />
       </form>
     </div>
     <div class="panel-body">
@@ -14,31 +18,31 @@
       <table ng-show="filteredProjects.length > 0" class="table table-hover table-pointer">
         <thead>
           <tr>
-            <th><a ng-click="sortOrder='unit_code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit_code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-            <th><a ng-click="sortOrder='unit_name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit_name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit.code'; reverse=!reverse">Unit Code <i ng-show="sortOrder=='unit.code'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit.name'; reverse=!reverse">Name <i ng-show="sortOrder=='unit.name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
             <th><a ng-click="sortOrder='teachingPeriod().name()'; reverse=!reverse">Teaching Period <i ng-show="sortOrder=='teachingPeriod().name()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-            <th><a ng-click="sortOrder='start_date'; reverse=!reverse">Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-            <th><a ng-click="sortOrder='end_date'; reverse=!reverse">End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
-            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='teachingPeriod().active()'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit.startDate'; reverse=!reverse">Start Date <i ng-show="sortOrder=='unit.startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='unit.endDate'; reverse=!reverse">End Date <i ng-show="sortOrder=='unit.endDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
+            <th><a ng-click="sortOrder='active'; reverse=!reverse">Active <i ng-show="sortOrder=='active'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i></a></th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="project in filteredProjects = (projects | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="projects/dashboard({projectId: project.project_id, taskAbbr:''})" >
+          <tr ng-repeat="project in filteredProjects = (projects | projectUnitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="projects/dashboard({projectId: project.id, taskAbbr:''})" >
             <td>
               <label class="label label-info">
-                {{project.unit_code}}
+                {{project.unit.code}}
               </label>
             </td>
-            <td>{{project.unit_name}}</td>
-            <td ng-if="project.teachingPeriod()">{{(project.teachingPeriod().name())}}</td>
-            <td ng-if="!project.teachingPeriod()">Custom</td>
-            <td>{{project.start_date | date : 'EEE d MMM'}}</td>
-            <td>{{project.end_date | date : 'EEE d MMM'}}</td>
-            <td ng-if="project.teachingPeriod()">
-              <i ng-if="project.teachingPeriod().active() && project.active" class="fa fa-check"></i>
-              <i ng-if="!project.teachingPeriod().active() || !project.active" class="fa fa-times"></i>
+            <td>{{project.unit.name}}</td>
+            <td ng-if="project.unit.teachingPeriod">{{(project.unit.teachingPeriod.name())}}</td>
+            <td ng-if="!project.unit.teachingPeriod">Custom</td>
+            <td>{{project.unit.startDate | date : 'EEE d MMM'}}</td>
+            <td>{{project.unit.endDate | date : 'EEE d MMM'}}</td>
+            <td ng-if="project.unit.teachingPeriod">
+              <i ng-if="project.unit.teachingPeriod.active && project.active" class="fa fa-check"></i>
+              <i ng-if="!project.unit.teachingPeriod.active || !project.active" class="fa fa-times"></i>
             </td>
-            <td ng-if="!project.teachingPeriod()">
+            <td ng-if="!project.unit.teachingPeriod">
               <i ng-if="project.active" class="fa fa-check"></i>
               <i ng-if="!project.active" class="fa fa-times"></i>
             </td>

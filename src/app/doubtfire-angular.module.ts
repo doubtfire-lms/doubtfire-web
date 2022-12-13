@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators';
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { setAppInjector } from './app-injector';
+import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -45,36 +45,27 @@ import {
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 import { DoubtfireAngularJSModule } from 'src/app/doubtfire-angularjs.module';
-import { TokenInterceptor } from './common/services/http-authentication.interceptor';
+import { HttpAuthenticationInterceptor } from './common/services/http-authentication.interceptor';
 import {
-  unitProvider,
-  currentUserProvider,
-  authProvider,
-  taskServiceProvider,
+  visualisationsProvider,
   analyticsServiceProvider,
-  unitServiceProvider,
   dateServiceProvider,
-  taskProvider,
-  projectServiceProvider,
   alertServiceProvider,
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
   CsvResultModalProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
-  userProvider,
-  currentUser,
-  TaskCommentProvider,
   gradeServiceProvider,
   commentsModalProvider,
-  taskDefinitionProvider,
-  groupServiceProvider,
   plagiarismReportModalProvider,
-  userSettingsModalProvider,
   rootScopeProvider,
   aboutDoubtfireModalProvider,
   calendarModalProvider,
-  userNotificationSettingsModalProvider,
+  uploadSubmissionModal,
+  gradeTaskModalProvider,
+  uploadSubmissionModalProvider,
+  ConfirmationModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -140,13 +131,22 @@ import { CheckForUpdateService } from './sessions/service-worker-updater/check-f
 import {
   ActivityTypeService,
   CampusService,
+  AuthenticationService,
+  GroupSetService,
   OverseerImageService,
   OverseerAssessmentService,
   TaskCommentService,
+  TeachingPeriodService,
+  TeachingPeriodBreakService,
   TutorialService,
   TutorialStreamService,
+  UnitService,
+  TaskService,
+  ProjectService,
+  UnitRoleService,
   UserService,
   WebcalService,
+  LearningOutcomeService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -163,6 +163,18 @@ import { HeaderComponent } from './common/header/header.component';
 import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdown.component';
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
+import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
+import { TaskDefinitionService } from './api/services/task-definition.service';
+import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
+import { GroupService } from './api/services/group.service';
+import { ObjectSelectComponent } from './common/obect-select/object-select.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
+import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
+import { EditProfileFormComponent } from './common/edit-profile-form/edit-profile-form.component';
+import { TransitionHooksService } from './sessions/transition-hooks.service';
+import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 
 @NgModule({
   // Components we declare
@@ -220,6 +232,13 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    ObjectSelectComponent,
+    WelcomeComponent,
+    HeroSidebarComponent,
+    SignInComponent,
+    EditProfileFormComponent,
+    EditProfileComponent,
+    UserBadgeComponent,
   ],
   // Module Imports
   imports: [
@@ -278,9 +297,20 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
   // Services we provide
   providers: [
     CampusService,
+    AuthenticationService,
+    GroupSetService,
+    GroupService,
+    UnitService,
+    ProjectService,
+    UnitRoleService,
+    LearningOutcomeService,
+    TaskDefinitionService,
+    TeachingPeriodService,
+    TeachingPeriodBreakService,
     TutorialService,
     TutorialStreamService,
     UserService,
+    TaskService,
     WebcalService,
     ActivityTypeService,
     OverseerImageService,
@@ -288,40 +318,38 @@ import { SplashScreenComponent } from './home/splash-screen/splash-screen.compon
     EmojiService,
     FileDownloaderService,
     CheckForUpdateService,
-    userProvider,
-    groupServiceProvider,
-    unitProvider,
+    TaskOutcomeAlignmentService,
+    visualisationsProvider,
     commentsModalProvider,
-    taskDefinitionProvider,
-    userSettingsModalProvider,
     rootScopeProvider,
-    userNotificationSettingsModalProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    authProvider,
-    currentUserProvider,
-    taskServiceProvider,
     gradeServiceProvider,
+    uploadSubmissionModalProvider,
+    gradeTaskModalProvider,
     analyticsServiceProvider,
-    unitServiceProvider,
     dateServiceProvider,
-    taskProvider,
-    projectServiceProvider,
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
-    TaskCommentProvider,
     AudioRecorderProvider,
     AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
     UnitStudentsEditorComponent,
+    ConfirmationModalProvider,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HttpAuthenticationInterceptor,
       multi: true,
-      deps: [currentUser],
+      deps: [UserService],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+      deps: [AuthenticationService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -357,9 +385,10 @@ export class DoubtfireAngularModule implements DoBootstrap {
     );
   }
 
-  ngDoBootstrap() {
+  ngDoBootstrap(): void {
     this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
       strictDi: false,
     });
+    AppInjector.get(TransitionHooksService);
   }
 }

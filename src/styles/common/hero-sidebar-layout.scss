@@ -1,0 +1,60 @@
+:host {
+  height: 100vh;
+}
+
+.welcome-heading {
+  margin-bottom: 30px;
+  color: black;
+  font-size: 24px;
+}
+
+.subcontainer {
+  overflow-y: auto;
+  height: auto;
+  padding-top: 42px;
+
+  p {
+    color: black;
+  }
+
+  img: {
+    padding-right: 6px;
+  }
+}
+
+.content {
+  width: 100%;
+}
+
+.content.large {
+  overflow: auto;
+}
+
+h1 {
+  font-family: 'Grotesk';
+  font-size: 32px;
+}
+
+.wordmark {
+  p {
+    margin: 0;
+    padding: 0;
+    margin-left: 8px;
+    font-family: 'Grotesk';
+    font-size: 2em;
+    color: black;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+f-sign-in .container,
+f-welcome .container {
+  max-width: 416px;
+  width: 100%;
+  margin: auto;
+}
+
+.welcome {
+  width: 100%;
+}

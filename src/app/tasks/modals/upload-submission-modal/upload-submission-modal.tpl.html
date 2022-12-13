@@ -38,7 +38,7 @@
         <group-member-contribution-assigner
           task="task"
           class="card-body"
-          project="task.project()"
+          project="task.project"
           team="team">
         </group-member-contribution-assigner><!--/group-member-contribution-->
       </div><!--/card-group-->
@@ -97,7 +97,7 @@
         </div>
         <!--/card-heading-->
         <div class="list-group">
-          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'ilo_number'">
+          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'iloNumber'">
             <div class="col-sm-12 col-md-7 pointer" ng-click="ilo.collapsed = !ilo.collapsed">
               <h4>
                 <strong>{{ilo.abbreviation}}</strong>
@@ -120,7 +120,7 @@
             <div class="col-sm-12 col-md-5">
               <task-ilo-alignment-rater
                 readonly="false"
-                unit="task.unit()"
+                unit="task.unit"
                 show-zero-rating="true"
                 ng-model="alignments[ilo.id]">
               </task-ilo-alignment-rater>

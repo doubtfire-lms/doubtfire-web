@@ -10,12 +10,14 @@ angular.module('doubtfire.units.states.analytics.directives.task-completion-stat
   templateUrl: 'units/states/analytics/directives/task-completion-stats/task-completion-stats.tpl.html'
   scope:
     unit: "="
-  controller: ($scope, Unit) ->
+  controller: ($scope, newUnitService) ->
     # Load data if not loaded already
     unless $scope.unit.analytics?.taskCompletionStats?
-      Unit.taskCompletionStats.get {id: $scope.unit.id}, (response) ->
-        $scope.unit.analytics.taskCompletionStats = response
-        $scope.data = response.unit
+      newUnitService.taskCompletionStats($scope.unit).subscribe(
+        (response) ->
+          $scope.unit.analytics.taskCompletionStats = response
+          $scope.data = response.unit
+      )
     else
       $scope.data = $scope.unit.analytics.taskCompletionStats.unit
 

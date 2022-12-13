@@ -1,6 +1,6 @@
 angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
 
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   homeStateData =
     url: "/view-all-projects"
     views:
@@ -10,10 +10,10 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
     data:
       pageTitle: "_All-Projects_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin']
-  headerServiceProvider.state 'view-all-projects', homeStateData
+  $stateProvider.state 'view-all-projects', homeStateData
 )
 
-.controller("AllProjectsList", ($scope, $state, $timeout, User, DoubtfireConstants, currentUser, projectService, analyticsService, dateService, GlobalStateService) ->
+.controller("AllProjectsList", ($scope, $state, $timeout, DoubtfireConstants, newProjectService, analyticsService, dateService, GlobalStateService, newUserService) ->
   analyticsService.event 'view-all-projects', 'viewed all-projects list'
   GlobalStateService.setView('OTHER')
 
@@ -31,20 +31,32 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
   hasProjects = false
 
   timeoutPromise = $timeout((-> $scope.showSpinner = true), 2000)
-  projectService.getProjects true, (projects) ->
-    $scope.projects = projects
-    $scope.showSpinner = false
-    $scope.dataLoaded = true
-    hasProjects = true
-    $timeout.cancel(timeoutPromise)
+
+  newProjectService.query(undefined, {params: {include_inactive: true}}).subscribe({
+    next: (projects) ->
+      $scope.projects = projects
+      $scope.showSpinner = false
+      $scope.dataLoaded = true
+      hasProjects = true
+      $timeout.cancel(timeoutPromise)
+    error: (message) ->
+      alertService.add("danger", "Failed to load units you study. #{message}", 6000)
+  })
 
   checkEnrolled = ->
     return if !$scope.projects?
     $scope.notEnrolled = ->
       # Not enrolled if a student and no projects
-      ($scope.projects.length is 0 and currentUser.role is 'Student')
+      ($scope.projects.length is 0 and newUserService.currentUser.role is 'Student')
 
   $scope.$watch 'projects', checkEnrolled
 
-  $scope.currentUser = currentUser
+  $scope.typeAhead = (projects) ->
+    result = []
+    _.each projects, (proj) ->
+      result.push(proj.unit.code)
+      result.push(proj.unit.name)
+    return _.uniq(result)
+
+  $scope.currentUser = newUserService.currentUser
 )

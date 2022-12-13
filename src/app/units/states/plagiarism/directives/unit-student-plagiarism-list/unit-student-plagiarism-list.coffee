@@ -10,13 +10,13 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
   scope:
     unit: '='
     unitRole: '='
-  controller: ($scope, $filter, currentUser, gradeService, projectService) ->
+  controller: ($scope, $filter, gradeService, newProjectService, newUserService, alertService) ->
     $scope.grades = gradeService.grades
 
     $scope.view = "students"
     studentFilter = "allStudents"
 
-    $scope.tutorName = currentUser.profile.name
+    $scope.tutor = newUserService.currentUser
     $scope.search = ""
     $scope.reverse = false
     $scope.currentPage = 1
@@ -27,16 +27,10 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
 
     $scope.studentFilter = 'allStudents'
 
-    $scope.$watch 'unit.students', (newUnit) ->
-      filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutorName)
-      if filteredStudents? && filteredStudents.length == 0
-        $scope.studentFilter = 'allStudents'
-
-      # _.each $scope.unit.students, (student) ->
-      #   if student.max_pct_copy > 0
-      #     projectService.getProject student, $scope.unit, (proj) ->
-      #       tasksWithCpy = _.filter proj.tasks, (t) -> t.pct_similar > 0
-      #       proj.similar_to_count = tasksWithCpy.length
+    # $scope.$watch 'unit.students', (newUnit) ->
+    #   filteredStudents = $filter('showStudents')($scope.unit.students, 'myStudents', $scope.tutor)
+    #   if filteredStudents? && filteredStudents.length == 0
+    #     $scope.studentFilter = 'allStudents'
 
     $scope.activeStudent = null
     $scope.activeTask = null
@@ -46,9 +40,12 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
       $scope.activeStudent = student
       $scope.loadingStudent = true
       if student
-        projectService.getProject student, $scope.unit, (project) ->
-          $scope.activeTask = $filter('taskWithPlagiarism')(student.tasks)[0]
-          $scope.loadingStudent = false
+        newProjectService.loadProject(student, $scope.unit).subscribe({
+          next: (project) ->
+            $scope.activeTask = $filter('taskWithPlagiarism')(student.tasks)[0]
+            $scope.loadingStudent = false
+          error: (message) -> alertService.add("danger", message, 6000)
+        })
 
     $scope.selectTask = (task) ->
       $scope.activeTask = task

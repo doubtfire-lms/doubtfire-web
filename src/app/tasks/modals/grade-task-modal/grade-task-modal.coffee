@@ -20,11 +20,11 @@ angular.module('doubtfire.tasks.modals.grade-task-modal', [])
 )
 .controller('GradeTaskModal', ($scope, $modalInstance, gradeService, task) ->
   $scope.task = task
-  $scope.data = { desiredGrade: task.grade, rating: task.quality_pts || 1, overStar: 0, confRating: 0 }
+  $scope.data = { desiredGrade: task.grade, rating: task.qualityPts || 1, overStar: 0, confRating: 0 }
   $scope.gradeValues = gradeService.allGradeValues
   $scope.grades = gradeService.grades
   $scope.dismiss = $modalInstance.dismiss
-  $scope.numStars = task.definition.max_quality_pts || 5
+  $scope.numStars = task.definition.maxQualityPts || 5
   $scope.close = ->
     $modalInstance.close { qualityPts: $scope.data.rating, selectedGrade: $scope.data.desiredGrade}
 

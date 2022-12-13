@@ -8,7 +8,7 @@
         <label tooltip="Date for the start of break in the teaching period." class="col-sm-3 control-label" for="startdate">Start Date</label>
         <div class="col-sm-9">
           <div class="col-sm-4 input-group">
-            <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="break.start_date" ng-required="true" placeholder="yyyy-mm-dd" close-text="Close" />
+            <input datepicker-popup="yyyy-MM-dd" is-open="calOptions.startOpened" type="text" class="form-control" id="startdate" ng-model="break.startDate" ng-required="true" placeholder="yyyy-mm-dd" close-text="Close" />
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" ng-click="open($event,'start')">
                 <i class="fa fa-calendar"></i>
@@ -20,7 +20,7 @@
       <div class="form-group" required>
         <label class="col-sm-3 control-label">Number of Weeks</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" ng-model="break.number_of_weeks"/>
+          <input type="text" class="form-control" ng-model="break.numberOfWeeks"/>
         </div>
       </div>
     </div>

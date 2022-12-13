@@ -1,9 +1,9 @@
 <ul class="project-tasks-list">
-  <div ng-repeat="(groupSetId, relatedTasks) in project.tasks | groupBy: 'definition.group_set_id'" class="group-set-tasks clearfix">
+  <div ng-repeat="(groupSetId, relatedTasks) in project.tasks | groupBy: 'definition.groupSet.id'" class="group-set-tasks clearfix">
     <h5 class="group-set-name" ng-hide="hideGroupSetName">{{groupSetName(groupSetId)}}</h5>
-    <li class="col-xs-4 col-lg-3" ng-repeat="task in relatedTasks | orderBy: ['definition.target_grade','definition.seq']">
-      <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-click="onSelect(task, 'Task Button List')" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{taskDefinition(task).name}}:</strong><br>{{task.status_txt()}}">
-        <i class="fa fa-eye" ng-show="task.similar_to_count - task.similar_to_dismissed_count > 0"></i> {{taskText(task)}}
+    <li class="col-xs-4 col-lg-3" ng-repeat="task in relatedTasks | orderBy: ['definition.targetGrade','definition.seq']">
+      <button type="button" class="col-xs-12 btn task-status {{statusClass(task.status)}}" ng-click="onSelect(task, 'Task Button List')" tooltip-popup-delay='200' tooltip-placement="bottom" tooltip-html-unsafe="<strong>{{task.definition.name}}:</strong><br>{{task.statusLabel()}}">
+        <i class="fa fa-eye" ng-show="task.similarToCount - task.similarToDismissedCount > 0"></i> {{taskText(task)}}
       </button>
     </li>
   </div>

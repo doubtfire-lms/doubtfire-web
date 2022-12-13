@@ -8,7 +8,7 @@ angular.module('doubtfire.visualisations.alignment-bar-chart', [])
     unit: '='
     source: '='
     taskStatusFactor: '='
-  controller: ($scope, Visualisation, projectService, gradeService, taskService, outcomeService) ->
+  controller: ($scope, Visualisation, gradeService, outcomeService) ->
     xFn = (d) -> d.label
     yFn = (d) -> d.value
 

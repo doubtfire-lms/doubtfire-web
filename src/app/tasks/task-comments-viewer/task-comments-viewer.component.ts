@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { taskService, alertService, Task, commentsModal } from 'src/app/ajs-upgraded-providers';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { EntityCache } from 'ngx-entity-service';
+import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
+import { Task, Project, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
 
@@ -14,7 +15,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   @ViewChild('commentsBody') commentsBody: ElementRef;
 
   lastComment: TaskComment;
-  project: any = {};
+  project: Project;
   loading: boolean = true;
 
   sharedCommentComposerData: TaskCommentComposerData = {
@@ -22,25 +23,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   };
 
   @Input() comment?: TaskComment;
-  @Input() task: {
-    task_definition_id: number;
-    comments: TaskComment[];
-    refreshCommentData: any;
-    commentCache: Map<string, TaskComment>;
-  } = {
-    task_definition_id: null,
-    comments: [],
-    refreshCommentData: null,
-    commentCache: new Map<string, TaskComment>(),
-  }; // TODO: Update to task when migrated
+  @Input() task: Task;
   @Input() refocusOnTaskChange: boolean;
 
   constructor(
     private taskCommentService: TaskCommentService,
     private constants: DoubtfireConstants,
-    @Inject(taskService) private ts: any,
     @Inject(commentsModal) private commentsModalRef: any,
-    @Inject(Task) private TaskModel: any,
     @Inject(alertService) private alerts: any
   ) {
     const self = this;
@@ -56,18 +45,21 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
     // Must have project for task to be mapped
     if (changes.task?.currentValue?.project != null) {
-      this.project = changes.task.currentValue.project();
-      this.taskCommentService.cacheSource = this.task.commentCache;
+      this.project = changes.task.currentValue.project;
       this.taskCommentService
         .query(
           {
-            projectId: this.project.project_id,
-            taskDefinitionId: this.task.task_definition_id,
+            projectId: this.project.id,
+            taskDefinitionId: this.task.definition.id,
           },
-          this.task
+          this.task,
+          {
+            cache: this.task.commentCache,
+            constructorParams: this.task
+          }
         )
         .subscribe((comments) => {
-          this.task.comments = comments;
+          // this.task.comments = comments;
 
           this.task.refreshCommentData();
 
@@ -132,6 +124,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
         this.alerts.add('danger', 'I cannot upload that file - only images, audio, and PDFs.', 4000);
       }
     });
+    console.log("implement - check map comments");
     // this.task.comments = this.ts.mapComments(this.task.comments);
   }
 
@@ -152,7 +145,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   }
 
   openCommentsModal(comment: TaskComment) {
-    const resourceUrl = this.TaskModel.generateCommentsAttachmentUrl(this.project, this.task, comment);
+    const resourceUrl = comment.attachmentUrl;
     this.commentsModalRef.show(resourceUrl, comment.commentType);
   }
 

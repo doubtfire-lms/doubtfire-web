@@ -7,7 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "f",
       "schematics": {
         "@schematics/angular:application": {
           "strict": false
@@ -22,7 +22,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/assets", "src/manifest.webmanifest"],
+            "assets": [
+              "src/assets",
+              "src/manifest.webmanifest"
+            ],
             "styles": [
               "src/theme.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.css",
@@ -120,25 +123,34 @@
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"
             ],
             "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"]
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.component.html"
+            ]
           }
         },
         "eslint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.component.html"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "doubtfire",
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"
@@ -146,9 +158,11 @@
   },
   "cli": {
     "analytics": "d9f70e12-eb87-48a0-a953-29ebd31202d7",
-    "defaultCollection": "@angular-eslint/schematics",
     "cache": {
       "enabled": true
-    }
+    },
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

@@ -7,7 +7,6 @@
     </h4>
     <mat-divider></mat-divider>
     <div>
-      <!-- <p>Response recorded on: {{discussion.time_completed || "undefined"}}</p> -->
       <div *ngIf="discussion.status === 'opened' && isNotStudent">
         Warning: The student has opened the discussion prompts without sending a response.
       </div>

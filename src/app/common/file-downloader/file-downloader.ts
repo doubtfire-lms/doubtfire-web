@@ -13,18 +13,18 @@ export class FileDownloaderService {
     success: (url: string, response: HttpResponse<Blob>) => void,
     failure: (error: any) => void
   ) {
-    this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe(
-      (response) => {
+    this.httpClient.get(url, { responseType: 'blob', observe: 'response' }).subscribe({
+      next: (response) => {
         const binaryData = [];
         binaryData.push(response.body);
         // response.headers.get('content-type')
         const resourceUrl: string = window.URL.createObjectURL(new Blob(binaryData, { type: response.body.type }));
         success(resourceUrl, response);
       },
-      (error) => {
+      error: (error) => {
         if (failure) failure(error);
       }
-    );
+    });
   }
 
   public releaseBlob(url: string): void {

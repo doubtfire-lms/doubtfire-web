@@ -6,7 +6,7 @@ angular.module('doubtfire.admin.states.units', [])
 #
 # Users with an Administrator system role can create new units.
 #
-.config((headerServiceProvider) ->
+.config(($stateProvider) ->
   unitsAdminViewStateData =
     url: "/admin/units"
     views:
@@ -16,29 +16,37 @@ angular.module('doubtfire.admin.states.units', [])
     data:
       pageTitle: "_Unit Administration_"
       roleWhitelist: ['Admin', 'Convenor']
-  headerServiceProvider.state "admin/units", unitsAdminViewStateData
+  $stateProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, Unit, TeachingPeriod, CreateUnitModal, currentUser, unitService, alertService, analyticsService, GlobalStateService) ->
-  analyticsService.event "Unit Admin", "Listed Units to Manage"
-
+.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, CreateUnitModal, alertService, GlobalStateService, newUnitService) ->
   GlobalStateService.setView("OTHER")
+  $scope.dataLoaded = false
 
   # Map unit role
-  unitService.getUnitRoles (unitRoles) ->
-    Unit.query({ include_in_active: true },
-      (success) ->
-        $scope.units = _.map(success, (unit) ->
-          unit.unitRole = _.find(unitRoles, { unit_id: unit.id })
-          if unit.teaching_period_id
-            unit.teachingPeriod = TeachingPeriod.getTeachingPeriod(unit.teaching_period_id)
-          unit
-        )
-      (failure) ->
+  GlobalStateService.onLoad () ->
+    $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues
+
+    newUnitService.query(undefined, {params: { include_in_active: true }}).subscribe({
+      next: (success) ->
+        $scope.units = success
+        $scope.dataLoaded = true
+
+      error: (failure) ->
         $scope.error = true
-    )
+        alertService.add("danger", failure, 6000)
+        console.log(failure)
+    })
+
+  $scope.typeAhead = (units) ->
+    result = []
+    _.each units, (unit) ->
+      result.push(unit.code)
+      result.push(unit.name)
+    return _.uniq(result)
+
 
   # Table sort details
-  $scope.sortOrder = "start_date"
+  $scope.sortOrder = "startDate"
   $scope.reverse = true
 
   # Pagination details

@@ -21,10 +21,11 @@ angular.module('doubtfire.units.states.tasks.definition', [
    }
 )
 
-.controller('TaskDefinitionStateCtrl', ($scope, Unit) ->
-  $scope.taskData.source = Unit.tasksForDefinition
+.controller('TaskDefinitionStateCtrl', ($scope, newTaskService) ->
+  $scope.taskData.source = newTaskService.queryTasksForTaskExplorer.bind(newTaskService)
+  $scope.taskData.taskDefMode = true
   $scope.showSearchOptions = true
   $scope.filters = {
-    taskDefinitionIdSelected: _.first($scope.unit.task_definitions)?.id
+    taskDefinitionIdSelected: _.first($scope.unit.taskDefinitions)?.id
   }
 )

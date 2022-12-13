@@ -1,54 +1,48 @@
-import { Entity } from '../entity';
+import { Entity, EntityMapping } from 'ngx-entity-service';
 
 export type Tutor = User;
 
-const KEYS =
-  [
-    'id',
-    'name',
-    'first_name',
-    'last_name',
-    'opt_in_to_research',
-    'student_id',
-    'email',
-    'username',
-    'nickname',
-    'system_role',
-    'receive_task_notifications',
-    'receive_portfolio_notifications',
-    'receive_feedback_notifications',
-    'has_run_first_time_setup',
-  ];
-
 export class User extends Entity {
   id: number;
-  name: string;
-  first_name: string;
-  last_name: string;
-  opt_in_to_research: boolean;
-  student_id: string;
+  firstName: string;
+  lastName: string;
+  optInToResearch: boolean;
+  studentId: string;
   email: string;
   username: string;
   nickname: string;
-  system_role: string;
-  receive_task_notifications: boolean;
-  receive_portfolio_notifications: boolean;
-  receive_feedback_notifications: boolean;
-  has_run_first_time_setup: boolean;
+  systemRole: 'Admin' | 'Convenor' | 'Tutor' | 'Student';
+  receiveTaskNotifications: boolean;
+  receivePortfolioNotifications: boolean;
+  receiveFeedbackNotifications: boolean;
+  hasRunFirstTimeSetup: boolean;
+  authenticationToken: string;
+  pronouns: string | null;
 
-  toJson(): any {
+  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
-      user: super.toJsonWithKeys(KEYS)
+      user: super.toJson(mappingData, ignoreKeys),
     };
   }
 
-  public updateFromJson(data: any): void {
-    this.setFromJson(data, KEYS);
+  public get role(): string {
+    return this.systemRole;
   }
-  public get key(): string {
-    return this.id.toString();
+
+  public get name(): string {
+    const fn = this.firstName.slice(0, 11);
+    const sn = this.lastName.slice(0, 11);
+    const nn = this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
+    return `${fn} ${sn}${nn}`;
   }
-  public keyForJson(json: any): string {
-    return json.id;
+
+  public matches(text: string): boolean {
+    return (
+      this.studentId?.toLowerCase().indexOf(text) >= 0 ||
+      this.firstName.toLowerCase().indexOf(text) >= 0 ||
+      this.lastName.toLowerCase().indexOf(text) >= 0 ||
+      this.email.toLowerCase().indexOf(text) >= 0 ||
+      this.nickname?.toLowerCase().indexOf(text) >= 0
+    );
   }
 }

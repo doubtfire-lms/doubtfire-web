@@ -8,68 +8,50 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.tpl.html'
   replace: true
-  controller: ($scope, GroupSet, Group, GroupMember, gradeService, alertService, CsvResultModal) ->
+  controller: ($scope, newGroupSetService, gradeService, alertService, CsvResultModal) ->
 
     $scope.addGroupSet = ->
-      gsCount = $scope.unit.group_sets.length
-      name = if gsCount == 0 then "Group Work" else "Group Work Set #{gsCount + 1}"
-      GroupSet.create(
-        { unit_id: $scope.unit.id, group_set: { name: name } }
-        (gs) ->
-          $scope.unit.group_sets.push(gs)
-          alertService.add("success", "Group set created.", 2000)
-        (response) ->
-          alertService.add("danger", "Failed to create group set. #{response.data.error}", 6000)
-      )
+      groupSet = newGroupSetService.createInstanceFrom({}, $scope.unit)
 
-    $scope.saveGroupSet = (data, id) ->
-      GroupSet.update(
-        {
-          unit_id: $scope.unit.id,
-          id: id,
-          group_set:
-            {
-              name: data.name
-              allow_students_to_create_groups: data.allow_students_to_create_groups,
-              allow_students_to_manage_groups: data.allow_students_to_manage_groups,
-              keep_groups_in_same_class: data.keep_groups_in_same_class,
-              capacity: data.capacity
-            }
-        }
-        (response) -> alertService.add("success", "Group set updated.", 2000)
-        (response) -> alertService.add("danger", "Failed to update group set. #{response.data.error}", 6000)
-      )
+      gsCount = $scope.unit.groupSets.length
+      groupSet.name = if gsCount == 0 then "Group Work" else "Group Work Set #{gsCount + 1}"
+
+      newGroupSetService.store(groupSet, {cache: $scope.unit.groupSetsCache}).subscribe({
+        next: (gs) ->
+          alertService.add("success", "Group set created.", 2000)
+        error: (message) ->
+          alertService.add("danger", "Failed to create group set. #{message}", 6000)
+      })
+
+    $scope.saveGroupSet = (data, groupSet) ->
+      groupSet.name = data.name
+      groupSet.allowStudentsToCreateGroups = data.allowStudentsToCreateGroups
+      groupSet.allowStudentsToManageGroups = data.allowStudentsToManageGroups
+      groupSet.keepGroupsInSameClass = data.keepGroupsInSameClass
+      groupSet.capacity = data.capacity
+
+      newGroupSetService.update(groupSet).subscribe({
+        next: (response) -> alertService.add("success", "Group set updated.", 2000)
+        error: (message) -> alertService.add("danger", "Failed to update group set. #{message}", 6000)
+      })
 
     $scope.toggleLocked = (gs) ->
-      GroupSet.update(
-        {
-          unit_id: $scope.unit.id
-          id: gs.id
-          group_set:
-            {
-              locked: !gs.locked
-            }
-        }
-
-        (response) ->
+      gs.locked = !gs.locked
+      newGroupSetService.update(gs).subscribe({
+        next: (response) ->
           alertService.add("success", "#{if response.locked then 'Locked' else 'Unlocked'} #{gs.name}", 2000)
-          gs.locked = response.locked
-
-        (response) ->
-          alertService.add("danger", "Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}", 6000)
-      )
+        error: (message) ->
+          alertService.add("danger", "Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}. #{message}", 6000)
+      })
 
     $scope.removeGroupSet = (gs) ->
-      GroupSet.delete(
-        { unit_id: $scope.unit.id, id: gs.id },
-        (response) ->
-          $scope.unit.group_sets = _.filter($scope.unit.group_sets, (gs1) -> gs1.id != gs.id )
-          newGs = $scope.unit.group_sets[$scope.unit.group_sets.indexOf(gs) - 1]
-          $scope.selectGroupSet(newGs) if gs is $scope.selectedGroupSet
+      newGroupSetService.delete(gs, {cache: $scope.unit.groupSetsCache}).subscribe({
+        next: (response) ->
+          if gs is $scope.selectedGroupSet
+            $scope.selectGroupSet($scope.unit.groupSets[0])
           alertService.add("success", "Group set deleted.", 2000)
-        (response) ->
-          alertService.add("danger", "Failed to delete group set. #{response.data.error}", 6000)
-      )
+        error: (message) -> alertService.add("danger", "Failed to delete group set. #{message}", 6000)
+      })
 
     $scope.selectGroupSet = (gs) ->
       $scope.selectedGroupSet = gs
@@ -86,13 +68,13 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
       { value: false, text: "Any Tutorial" }
     ]
 
-    if $scope.unit.group_sets.length > 0
-      $scope.selectGroupSet($scope.unit.group_sets[0])
+    if $scope.unit.groupSets.length > 0
+      $scope.selectGroupSet($scope.unit.groupSets[0])
 
     $scope.csvImportResponse = {}
     $scope.groupCSV = { file: { name: 'Group CSV', type: 'csv'  } }
-    $scope.groupCSVUploadUrl = -> GroupSet.groupCSVUploadUrl($scope.unit, $scope.selectedGroupSet)
-    $scope.groupStudentCSVUploadUrl = -> GroupSet.groupStudentCSVUploadUrl($scope.unit, $scope.selectedGroupSet)
+    $scope.groupCSVUploadUrl = -> $scope.selectedGroupSet.groupCSVUploadUrl()
+    $scope.groupStudentCSVUploadUrl = -> $scope.selectedGroupSet.groupStudentCSVUploadUrl()
     $scope.isGroupCSVUploading = null
     $scope.onGroupCSVSuccess = (response) ->
       CsvResultModal.show 'Group CSV upload results.', response
@@ -100,6 +82,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
     $scope.onGroupCSVComplete = ->
       $scope.isGroupCSVUploading = null
 
-    $scope.downloadGroupCSV = -> GroupSet.downloadCSV($scope.unit, $scope.selectedGroupSet)
-    $scope.downloadGroupStudentCSV = -> GroupSet.downloadStudentCSV($scope.unit, $scope.selectedGroupSet)
+    $scope.downloadGroupCSV = ->
+      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupCSVUploadUrl(), "#{$scope.unit.code}-group-sets.csv")
+    $scope.downloadGroupStudentCSV = ->
+      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupStudentCSVUploadUrl(), "#{unit.code}-#{$scope.selectedGroupSet.name}-students.csv")
 )

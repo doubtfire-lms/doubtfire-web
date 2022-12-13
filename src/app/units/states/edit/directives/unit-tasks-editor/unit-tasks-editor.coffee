@@ -7,7 +7,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.tpl.html'
-  controller: ($scope, $rootScope, Task, Unit, gradeService, alertService, taskService, groupService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService) ->
+  controller: ($scope, $rootScope, gradeService, alertService, newTaskService, CsvResultModal, ConfirmationModal, ProgressModal, fileDownloaderService, newTaskDefinitionService) ->
     $scope.grades = gradeService.grades
 
     # Pagination details
@@ -28,73 +28,79 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
     # Modal Events
     $scope.editTask = (unit, task) ->
       # if task is just a task definition, add a project_id to enable test submission.
-      unless task.project
-        project = {project_id: unit.project_id}
-        task.project = -> project
 
-      unless task.definition
-        task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
+      console.log("unit task editor - fix ability to test overseer exec")
+      # unless task.project
+      #   project = {project_id: unit.project_id}
+      #   task.project = -> project
+
+      # unless task.definition
+      #   task.definition = {id: task.id, abbreviation: task.abbreviation, uploadRequirements: task.uploadRequirements}
 
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = false
 
     guessTaskAbbreviation = ->
       unit = $scope.unit
-      if unit.task_definitions.length == 0
+      if unit.taskDefinitions.length == 0
         "1.1P"
       else
-        last_abbr = unit.task_definitions[unit.task_definitions.length-1].abbreviation
+        lastAbbr = unit.taskDefinitions[unit.taskDefinitions.length-1].abbreviation
         regex = /(.*)(\d+)(\D*)/
-        match = regex.exec last_abbr
+        match = regex.exec lastAbbr
         if match?
           "#{match[1]}#{parseInt(match[2])+1}#{match[3]}"
         else
-          "#{last_abbr}1"
+          "#{lastAbbr}1"
 
     $scope.deleteTask = (task) ->
-      taskService.deleteTask task, $scope.unit, null
+      ConfirmationModal.show "Delete Task #{task.abbreviation}",
+      'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
+      ->
+        $scope.unit.deleteTaskDefinition(task)
+        #TODO: reinstate ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
     $scope.createTask = ->
       abbr = guessTaskAbbreviation()
-      task = {
-        name: "Task #{abbr}",
-        abbreviation: abbr,
-        description: "New Description",
-        start_date: new Date(),
-        target_date: new Date(),
-        upload_requirements: [],
-        plagiarism_checks: []
-        weight: 4
-        target_grade: 0
-        restrict_status_updates: false
-        plagiarism_warn_pct: 80
-        is_graded: false
-        max_quality_pts: 0
-        auto_apply_extension_before_deadline: true
-        send_notifications: true
-        enable_sync_timetable: true
-        enable_sync_enrolments: true
-        tutorial_stream: $scope.unit.tutorial_streams[0]?.abbreviation
-      }
+      task = newTaskDefinitionService.createInstanceFrom({}, $scope.unit)
+      task.name =  "Task #{abbr}"
+      task.abbreviation =  abbr
+      task.description =  "New Description"
+      task.startDate =  new Date()
+      task.targetDate =  new Date()
+      task.uploadRequirements =  []
+      task.plagiarismChecks =  []
+      task.weighting = 4
+      task.targetGrade = 0
+      task.restrictStatusUpdates = false
+      task.plagiarismWarnPct =  80
+      task.isGraded = false
+      task.maxQualityPts = 0
+      task.autoApplyExtensionBeforeDeadline = true
+      task.sendNotifications = true
+      task.enableSyncTimetable =  true
+      task.enableSyncEnrolments =  true
+      task.tutorialStream = $scope.unit.tutorialStreams[0]
+
       $scope.taskAdminData.selectedTask = task
       $scope.taskAdminData.isNew = true
 
     # Watch for deletion
-    $scope.$watch 'unit.task_definitions.length', (newLength, oldLength) ->
+    $scope.$watch 'unit.taskDefinitions.length', (newLength, oldLength) ->
       # Return if equal
       return if newLength == oldLength
 
-      if $scope.unit.task_definitions.length > 0
+      if $scope.unit.taskDefinitions.length > 0
         # Delete
         if newLength < oldLength
-          $scope.editTask($scope.unit, _.first $scope.unit.task_definitions)
+          $scope.editTask($scope.unit, _.first $scope.unit.taskDefinitions)
         else
-          $scope.editTask _.last $scope.unit.task_definitions
+          $scope.editTask($scope.unit, _.last $scope.unit.taskDefinitions)
       else
         $scope.taskAdminData.selectedTask = null
 
     $scope.taskFiles = { file: { name: 'Task PDFs', type: 'zip'  } }
-    $scope.taskUploadUrl = Unit.taskUploadUrl($scope.unit)
+    $scope.taskUploadUrl = $scope.unit.taskUploadUrl
 
     $scope.onTaskPDFSuccess = (response) ->
       CsvResultModal.show "Task File Import Results", response
@@ -104,18 +110,18 @@ angular.module('doubtfire.units.states.edit.directives.unit-tasks-editor', [])
     $scope.batchFiles = { file: { name: 'CSV Data', type: 'csv'  } }
 
     $scope.batchTaskUrl = ->
-      Task.getTaskDefinitionBatchUploadUrl($scope.unit)
+      $scope.unit.getTaskDefinitionBatchUploadUrl()
 
     $scope.downloadAllResource = ->
-      fileDownloaderService.downloadFile(Unit.allResourcesDownloadUrl($scope.unit), "#{$scope.unit.code}-all-resources.zip")
+      fileDownloaderService.downloadFile($scope.unit.allResourcesDownloadUrl, "#{$scope.unit.code}-all-resources.zip")
 
     $scope.downloadTasksCSV = ->
-      fileDownloaderService.downloadFile(Task.getTaskDefinitionBatchUploadUrl($scope.unit), "#{$scope.unit.code}-task-definitions.csv")
+      fileDownloaderService.downloadFile($scope.unit.getTaskDefinitionBatchUploadUrl(), "#{$scope.unit.code}-task-definitions.csv")
 
     $scope.onBatchTaskSuccess = (response) ->
       CsvResultModal.show "Task CSV Upload Results", response
       if response.success.length > 0
         $scope.unit.refresh()
 
-    $scope.groupSetName = (id) -> groupService.groupSetName(id, $scope.unit)
+    $scope.groupSetName = (id) -> $scope.unit.groupSetsCache.get(id)?.name || "Individual Work"
 )

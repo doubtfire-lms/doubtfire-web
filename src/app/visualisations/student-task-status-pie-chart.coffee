@@ -6,15 +6,16 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
   scope:
     project: '='
     updateData: '=?'
-  controller: ($scope, taskService, projectService, Visualisation) ->
-    colors = taskService.statusColors
+  controller: ($scope, newTaskService, Visualisation) ->
+    colors = newTaskService.statusColors
     $scope.data = []
 
     $scope.updateData = ->
       $scope.data.length = 0
-      _.each taskService.statusLabels, (label, key) ->
-        count = projectService.tasksByStatus($scope.project, key).length
-        $scope.data.push { key: label, y: count, status_key: key }
+      newTaskService.statusLabels.forEach( (label, key) ->
+        count = $scope.project.tasksByStatus(key).length
+        $scope.data.push { key: label, y: count, statusKey: key }
+      )
 
       if $scope.api
         $scope.api.update()
@@ -25,14 +26,14 @@ angular.module('doubtfire.visualisations.student-task-status-pie-chart', [])
 
     [$scope.options, $scope.config] = Visualisation 'pieChart', 'Student Task Status Pie Chart', {
       color: (d, i) ->
-        colors[d.status_key]
+        colors.get(d.statusKey)
       x: (d) -> d.key
       y: (d) -> d.y
       showLabels: no
       tooltip:
         valueFormatter: (d) ->
           fixed = d.toFixed()
-          pct   = Math.round((d / $scope.project.target_tasks().length) * 100)
+          pct   = Math.round((d / $scope.project.activeTasks().length) * 100)
           task  = if fixed is "1" then "task" else "tasks"
           "#{fixed} #{task} (#{pct}%)"
         keyFormatter: (d) ->

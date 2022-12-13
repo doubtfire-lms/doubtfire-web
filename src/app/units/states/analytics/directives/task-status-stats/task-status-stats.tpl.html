@@ -36,7 +36,7 @@
       </h4>
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
         <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meetingTime}}</p>
       </h4>
     </div><!--/headers-for-depth-0-->
     <div ng-show="depth == 1">
@@ -50,7 +50,7 @@
     <div ng-show="depth == 2">
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
         <p>Status by Task for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meetingTime}}</p>
       </h4>
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'task'">
         <p>Status by Tutorial for Task <strong>{{dataModel.selectedTask.abbreviation}}</strong></p>

@@ -6,7 +6,7 @@ angular.module('doubtfire.teaching-periods.states.edit.directives.teaching-perio
   templateUrl: 'admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.tpl.html'
   controller: ($scope, $state, alertService, CreateBreakModal) ->
     # Table sort details
-    $scope.sortOrder = "start_date"
+    $scope.sortOrder = "startDate"
     $scope.reverse = true
 
     $scope.addBreak = (teachingPeriod) ->

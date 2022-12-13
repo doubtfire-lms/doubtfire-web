@@ -10,11 +10,11 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
-  controller: ($scope, $state, $rootScope, $stateParams, Project, Unit, UnitRole, alertService, gradeService, taskService, projectService, analyticsService, listenerService) ->
+  controller: ($scope, $state, $rootScope, $stateParams, newProjectService, alertService, gradeService, newTaskService, listenerService) ->
     if $stateParams.projectId?
       $scope.studentProjectId = $stateParams.projectId
     else if $scope.project?
-      $scope.studentProjectId = $scope.project.project_id
+      $scope.studentProjectId = $scope.project.id
 
     $scope.grades = gradeService.grades
     $scope.gradeAcronyms = gradeService.gradeAcronyms
@@ -22,27 +22,26 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
     $scope.currentVisualisation = 'burndown'
 
     $scope.chooseGrade = (idx) ->
-      Project.update { id: $scope.project.project_id, target_grade: idx }, (project) ->
-        $scope.project.target_grade = project.target_grade
-        $scope.project.burndown_chart_data = project.burndown_chart_data
-        $scope.project.updateTaskStats project.stats
-        analyticsService.event "Student Project View - Progress Tab", "Grade Changed", $scope.grades[idx]
-        $rootScope.$broadcast "TargetGradeUpdated"
+      $scope.project.targetGrade = idx
+      newProjectService.update($scope.project).subscribe(
+        (response) ->
+          alertService.add("success", "Target updated")
+      )
+      updateTaskCompletionStats()
 
     $scope.taskCount = ->
-      $scope.unit.task_definitions.length
+      $scope.unit.taskDefinitionCount
 
     $scope.taskStats = {}
 
+    # Update move to task and project...
     updateTaskCompletionStats = ->
-      $scope.taskStats.numberOfTasksCompleted = projectService.tasksByStatus($scope.project, taskService.acronymKey.COM).length
-      $scope.taskStats.numberOfTasksRemaining = projectService.tasksInTargetGrade($scope.project).length - $scope.taskStats.numberOfTasksCompleted
+      $scope.taskStats.numberOfTasksCompleted = $scope.project.tasksByStatus(newTaskService.completeStatus).length
+      $scope.taskStats.numberOfTasksRemaining = $scope.project.activeTasks().length - $scope.taskStats.numberOfTasksCompleted
 
     $scope.$on 'TaskStatusUpdated', ->
       updateTaskCompletionStats()
 
-    $scope.$on 'TargetGradeUpdated', ->
-      updateTaskCompletionStats()
 
     updateTaskCompletionStats()
 )

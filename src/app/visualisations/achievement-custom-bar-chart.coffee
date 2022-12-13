@@ -87,9 +87,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
                 d.values
               )
               backBarSeries.exit().remove()
-              backBarSeries.enter().append('g').attr('transform', (d, i) ->
-                'translate(' + x(getX(d, i)) + x.rangeBand() * .05 + ', ' + y(0) + ')'
-              )
+              backBarSeries.enter().append('g')
               backBarSeries.attr('class', (d, i) ->
                 'nv-backBarSeries nv-backSeries-' + i
               ).classed 'hover', (d) ->
@@ -99,7 +97,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
               backBars.exit().remove()
               backBarsEnter = backBars.enter().append('g')
 
-              backBarsEnter.append('rect').attr('height', 10).attr 'width', x.rangeBand() * .9 / data.length
+              backBarsEnter.append('rect').attr('height', 10).attr 'width', x.rangeBand() * 0.9 / data.length
               backBarsEnter.on('mouseover', (d, i) ->
                 d3.select(this).classed 'hover', true
                 dispatch.elementMouseover
@@ -155,9 +153,8 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
               d.values
             )
             bars.exit().remove()
-            barsEnter = bars.enter().append('g').attr('transform', (d, i, j) ->
-              'translate(' + x(getX(d, i)) + x.rangeBand() * .25 + ', ' + y(0) + ')'
-            ).on('mouseover', (d, i) ->
+            barsEnter = bars.enter().append('g').on('mouseover', (d, i) ->
+              # TODO: (@macite) figure out why j works above, but not here
               d3.select(this).classed 'hover', true
               dispatch.elementMouseover
                 data: d
@@ -529,7 +526,6 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
           tooltip.hidden true
           return
         achievementbar.dispatch.on 'elementMousemove.tooltip', (evt) ->
-          tooltip.position({ top: d3.event.pageY, left: d3.event.pageX })()
           tooltip()
           return
         #============================================================
@@ -640,7 +636,7 @@ angular.module('doubtfire.visualisations.achievement-custom-bar-chart', [])
     #
     # Get the data and options for the chart...
     #
-    targets = outcomeService.calculateTargets($scope.unit, $scope.unit, outcomeService.unitTaskStatusFactor())
+    targets = outcomeService.calculateTargets($scope.unit, $scope.unit, $scope.unit.taskStatusFactor)
     currentProgress = outcomeService.calculateProgress($scope.unit, $scope.project)
 
     achievementData = {

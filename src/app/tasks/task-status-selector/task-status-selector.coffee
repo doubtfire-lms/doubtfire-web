@@ -9,15 +9,18 @@ angular.module('doubtfire.tasks.task-status-selector',[])
     assessingUnitRole: "=assessingUnitRole"
     inMenu: "=inMenu"
     triggerTransition: "=triggerTransition"
-  controller: ($scope, taskService) ->
-    $scope.taskService = taskService
+  controller: ($scope, newTaskService) ->
+    $scope.newTaskService = newTaskService
 
     #
     # Statuses tutors/students may change task to
     #
-    $scope.studentStatuses  = taskService.switchableStates.student
-    $scope.tutorStatuses    = taskService.switchableStates.tutor
+    $scope.studentStatuses  = newTaskService.switchableStates.student
+    $scope.tutorStatuses    = newTaskService.switchableStates.tutor
     $scope.taskEngagementConfig =
-      studentTriggers: $scope.studentStatuses.map taskService.statusData
-      tutorTriggers:   $scope.tutorStatuses.map taskService.statusData
+      studentTriggers: $scope.studentStatuses.map newTaskService.statusData
+      tutorTriggers:   $scope.tutorStatuses.map newTaskService.statusData
+
+    $scope.futureStates = () ->
+      _.reject $scope.studentStatuses.map(newTaskService.statusData), (s) -> s.status in newTaskService.rejectFutureStates.get($scope.task.status)
 )

@@ -1,6 +1,6 @@
 <mat-form-field floatLabel="never" class="data-entry">
   <mat-label>Tutorial</mat-label>
-  <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorial_enrolments">
+  <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorials">
     <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student).length > 0" label="No stream">
       <mat-option
         *ngFor="let tutorial of tutorialsForStreamAndStudent(student)"
@@ -10,7 +10,7 @@
         {{ tutorial.abbreviation }}
       </mat-option>
     </mat-optgroup>
-    <div *ngFor="let stream of unit.tutorial_streams">
+    <div *ngFor="let stream of unit.tutorialStreams">
       <mat-optgroup *ngIf="tutorialsForStreamAndStudent(student, stream).length > 0" [label]="stream.name">
         <mat-option
           *ngFor="let tutorial of tutorialsForStreamAndStudent(student, stream)"

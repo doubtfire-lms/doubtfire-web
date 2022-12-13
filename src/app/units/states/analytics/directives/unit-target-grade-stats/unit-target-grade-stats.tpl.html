@@ -23,7 +23,7 @@
       </h4>
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
         <p>Task grade distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meetingTime}}</p>
       </h4>
     </div><!--/headers-for-depth-0-->
     <div ng-show="depth == 1">
@@ -34,7 +34,7 @@
     <div ng-show="depth == 2">
       <h4 class="col-xs-12 text-center" ng-show="dataModel.selectedType == 'tutorial'">
         <p>Target grade distribution for Tutorial <strong>{{dataModel.selectedTutorial.abbreviation}}</strong></p>
-        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meeting_time | date: shortTime}}</p>
+        <p class='small text-muted'>{{dataModel.selectedTutorial.tutorName}} at {{dataModel.selectedTutorial.meetingTime}}</p>
       </h4>
     </div><!--/headers-for-depth-2-->
     <p class="col-sm-12 help-block text-center">
@@ -45,7 +45,7 @@
     </div><!--/depth-0-chart-->
     <div ng-if="dataModel.selectedTutorial.id < 0" class="overview-charts">
       <div ng-repeat="chart in (overviewKeys | orderBy: 'title' )" class="col-xs-6 col-sm-4 col-md-3 overview-chart" ng-click="switchToTutorial(chart.tutorial)">
-        <target-grade-pie-chart data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
+        <target-grade-pie-chart ng-if="chart.show" data="chart.data" show-legend="false" height="200"></target-grade-pie-chart>
         <div class="no-data-to-display" ng-hide="chart.show">
           No data
         </div>

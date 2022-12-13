@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Campus, CampusService, Project, Unit } from 'src/app/api/models/doubtfire-model';
 import { MatSelectChange } from '@angular/material/select';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'student-campus-select',
@@ -8,17 +9,20 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['student-campus-select.component.scss'],
 })
 export class StudentCampusSelectComponent implements OnInit {
-  @Input() unit: any;
-  @Input() student: any;
+  @Input() unit: Unit;
+  @Input() student: Project;
   @Input() update: boolean;
 
   campuses: Campus[];
-  private originalCampusId: number;
+  private originalCampus: Campus;
 
-  constructor(private campusService: CampusService) {}
+  constructor(
+    private campusService: CampusService,
+    @Inject(alertService) private alertService: any
+  ) { }
 
   ngOnChanges() {
-    this.originalCampusId = this.student.campus_id;
+    this.originalCampus = this.student.campus;
   }
 
   ngOnInit() {
@@ -29,7 +33,16 @@ export class StudentCampusSelectComponent implements OnInit {
 
   campusChange(event: MatSelectChange) {
     if (this.update) {
-      this.student.switchToCampus(event.value, this.originalCampusId, () => this.ngOnChanges());
+      this.student.switchToCampus(event.value).subscribe({
+        next: (project: Project) => {
+          this.alertService.add('success', `Campus changed for ${project.student.name}`, 2000);
+          this.originalCampus = project.campus;
+        },
+        error: (message) => {
+          this.student.campus = this.originalCampus;
+          this.alertService.add('danger', message, 6000);
+        }
+      })
     }
   }
 }

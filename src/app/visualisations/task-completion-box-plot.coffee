@@ -62,5 +62,5 @@ angular.module('doubtfire.visualisations.task-completion-box-plot', [])
       tooltip:
         enabled: $scope.showLegend
       maxBoxWidth: 75
-      yDomain: [0, Math.ceil($scope.unit.task_definitions.length/2) * 2] #round to nearest 2
+      yDomain: [0, Math.ceil($scope.unit.taskDefinitions.length/2) * 2] #round to nearest 2
     }, {}

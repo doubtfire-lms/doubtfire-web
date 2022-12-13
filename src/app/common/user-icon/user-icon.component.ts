@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { User } from 'src/app/api/models/doubtfire-model';
-import { currentUser } from 'src/app/ajs-upgraded-providers';
+import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { Md5 } from 'ts-md5/dist/md5';
 
 declare var d3: any;
@@ -11,14 +10,14 @@ declare var d3: any;
   styleUrls: ['./user-icon.component.scss'],
 })
 export class UserIconComponent implements AfterViewInit {
-  @Input() user: User = this.currentUserRef.profile;
+  @Input() user: User = this.userService.currentUser;
   @Input() size: number = 100;
 
-  @ViewChild('svg') svg;
+  @ViewChild('svg') svg: { nativeElement: any; };
 
   lineHeight = 12;
 
-  constructor(@Inject(currentUser) private currentUserRef: any) {}
+  constructor(private userService: UserService) {}
 
   get backgroundUrl(): string {
     const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');

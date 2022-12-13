@@ -12,12 +12,12 @@ import {
   DoCheck,
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { taskService, analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
+import { analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import { EmojiService } from 'src/app/common/services/emoji.service';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { Task, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { TaskCommentsViewerComponent } from '../task-comments-viewer/task-comments-viewer.component';
 import { BehaviorSubject } from 'rxjs';
 
@@ -60,7 +60,7 @@ const ACCEPTED_FILE_TYPES = [
   ],
 })
 export class TaskCommentComposerComponent implements DoCheck {
-  @Input() task: any = {};
+  @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
   public $expandInput = new BehaviorSubject<boolean>(false);
@@ -87,7 +87,6 @@ export class TaskCommentComposerComponent implements DoCheck {
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(taskService) private ts: any,
     @Inject(analyticsService) private analytics: any,
     @Inject(alertService) private alerts: any,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService
@@ -117,7 +116,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   }
 
   get isStaff() {
-    return this.task?.project()?.unit()?.my_role !== 'Student';
+    return this.task?.unit?.currentUserIsStaff;
   }
 
   cancelReply() {
@@ -274,18 +273,18 @@ export class TaskCommentComposerComponent implements DoCheck {
   }
 
   addCommentWithType(comment: string, type: string) {
-    this.ts.addComment(
+    this.taskCommentService.addComment(
       this.task,
       comment,
-      type,
-      (success: any) => {
-        this.comment.text = '';
-        this.analytics.event('Vie Comments', 'Added new comment');
-        this.ts.scrollDown();
-        this.task.comments = this.ts.mapComments(this.task.comments);
-      },
-      (failure: any) => this.alerts.add('danger', failure.data.error, 2000)
-    );
+      type).subscribe({
+        next: (success: TaskComment) => {
+          this.comment.text = '';
+          this.commentsViewer.scrollDown();
+          console.log("implement - check map comments");
+          //this.task.comments = this.ts.mapComments(this.task.comments);
+        },
+        error: (message: string) => this.alerts.add('danger', message, 6000)
+      });
   }
 
   openFile() {

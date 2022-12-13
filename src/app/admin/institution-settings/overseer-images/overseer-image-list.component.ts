@@ -3,7 +3,7 @@ import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { OverseerImage, OverseerImageService } from 'src/app/api/models/doubtfire-model';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
@@ -24,12 +24,12 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   // that maps all of the form controls that this form consists of.
   constructor(private overseerImageService: OverseerImageService, @Inject(alertService) private alerts: any) {
     super({
-      name: new FormControl('', [Validators.required]),
-      tag: new FormControl('', [Validators.required]),
-    });
+      name: new UntypedFormControl('', [Validators.required]),
+      tag: new UntypedFormControl('', [Validators.required]),
+    }, "Overseer Image");
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Get all the activity types and add them to the table
     this.overseerImageService.query().subscribe((response) => {
       this.pushToTable(response);
@@ -47,9 +47,9 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
+    if (!value) return;
     value instanceof Array ? this.overseerImages.push(...value) : this.overseerImages.push(value);
     this.dataSource.sort = this.sort;
-    this.table.renderRows();
   }
 
   // This method is called when the form is submitted,
@@ -63,7 +63,6 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
       this.cancelEdit();
       this.overseerImages.splice(this.overseerImages.indexOf(image), 1);
       this.dataSource.data = this.overseerImages;
-      this.table.renderRows();
     }).bind(this));
   }
 

@@ -1,6 +1,6 @@
 <div class="panel-heading">
   <h4 class="panel-title">
-    Groups in
+    Groups for
     <strong ng-hide="showGroupSetSelector"> {{selectedGroupSet.name}} </strong>
     <group-set-selector
       ng-show="showGroupSetSelector"
@@ -14,7 +14,7 @@
 <!--/panel-heading-->
 <div
   class="panel-body panel-toolbar"
-  ng-show="loaded && canCreateGroups && (unitRole || project.tutorials().length > 0)"
+  ng-show="loaded && canCreateGroups && (unitRole || project.tutorials.length > 0)"
 >
   <div class="clearfix">
     <div class="input-group pull-left col-md-6 staff-filter" ng-if="unitRole">
@@ -57,11 +57,11 @@
     <h4>No Groups To Show</h4>
     <p>
       There are no groups available for <strong>{{selectedGroupSet.name}}</strong>{{staffFilter == 'mine' ||
-      selectedGroupSet.keep_groups_in_same_class ? " in your tutorials." : ""}}{{newGroupName.length > 0 ? " with name " + newGroupName + "." : "."}}
+      selectedGroupSet.keepGroupsInSameClass ? " in your tutorials." : ""}}{{newGroupName.length > 0 ? " with name " + newGroupName + "." : "."}}
     </p>
-    <p ng-show="selectedGroupSet.keep_groups_in_same_class">
+    <p ng-show="selectedGroupSet.keepGroupsInSameClass">
       Please make sure that you are enrolled in the correct tutorial. You can only join a group that is running in your
-      allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to
+      allocated tutorial. Use the <a ui-sref="projects/tutorials({projectId: project.id})">Tutorial List</a> to
       check and update your tutorial enrolment.
     </p>
   </div>
@@ -76,16 +76,16 @@
         </a>
       </th>
       <th class="tutorial">
-        <a ng-click="sortTableBy('tutorial_id')">
+        <a ng-click="sortTableBy('tutorial.abbreviation')">
           Tutorial
-          <i ng-show="tableSort.order == 'tutorial_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          <i ng-show="tableSort.order == 'tutorial.abbreviation'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th class="capacity_adjustment" ng-show="unitRole">
-        <a ng-click="sortTableBy('capacity_adjustment')">
+      <th class="capacityAdjustment" ng-show="unitRole">
+        <a ng-click="sortTableBy('capacityAdjustment')">
           Capacity Adjustment
           <i
-            ng-show="tableSort.order == 'capacity_adjustment'"
+            ng-show="tableSort.order == 'capacityAdjustment'"
             class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"
           ></i>
         </a>
@@ -96,7 +96,7 @@
           <i ng-show="tableSort.order == 'hasSpace()'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
-      <th class="actions" ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
+      <th class="actions" ng-show="(project && selectedGroupSet.allowStudentsToManageGroups) || unitRole">
         Actions
       </th>
     </tr>
@@ -104,7 +104,7 @@
   <!--/header-->
   <tbody>
     <tr
-      ng-class="{info: group == selectedGroup}"
+      ng-class="{info: group.id == selectedGroup.id}"
       ng-repeat="group in shownGroups = (filteredGroups | groupsForStudent:project:selectedGroupSet | groupsWithName:newGroupName)"
     >
       <th ng-click="selectGroup(group)">
@@ -115,29 +115,29 @@
       <!--/group-name-->
       <td ng-click="selectGroup(group)">
         <span
-          editable-select="group.tutorial_id"
-          e-name="tutorial_id"
+          editable-select="group.tutorial"
+          e-name="tutorial"
           e-form="groupRowForm"
-          e-ng-options="t.id as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials | orderBy: 'abbreviation'"
+          e-ng-options="t as (t.abbreviation + ' - ' + t.description) for t in unit.tutorials | orderBy: 'abbreviation'"
         >
-          <span tooltip="{{group.tutorial().description}}" tooltip-popup-delay="200" tooltip-append-to-body="true">
-            {{group.tutorial().abbreviation}}
+          <span tooltip="{{group.tutorial.description}}" tooltip-popup-delay="200" tooltip-append-to-body="true">
+            {{group.tutorial.abbreviation}}
           </span>
         </span>
       </td>
       <!--/group-tutorial-->
       <td ng-show="unitRole" ng-click="selectGroup(group)">
-        <span editable-text="group.capacity_adjustment" e-form="groupRowForm" e-name="capacity_adjustment">
-          {{group.capacity_adjustment}}
+        <span editable-text="group.capacityAdjustment" e-form="groupRowForm" e-name="capacityAdjustment">
+          {{group.capacityAdjustment}}
         </span>
       </td>
-      <!--/capacity_adjustment-->
+      <!--/capacityAdjustment-->
       <td ng-click="selectGroup(group)">
         <span ng-show="group.hasSpace()">Available</span>
         <span ng-hide="group.hasSpace()">Full</span>
       </td>
       <!--/capacity-->
-      <td ng-show="(project && selectedGroupSet.allow_students_to_manage_groups) || unitRole">
+      <td ng-show="(project && selectedGroupSet.allowStudentsToManageGroups) || unitRole">
         <div ng-show="project">
           <span ng-show="group.hasSpace()">
             <button
@@ -157,9 +157,9 @@
           <form
             editable-form
             name="groupRowForm"
-            onbeforesave="updateGroup($data, group.id)"
+            onbeforesave="updateGroup($data, group)"
             ng-show="groupRowForm.$visible"
-            shown="inserted == group"
+            shown="inserted.id == group.id"
           >
             <button type="submit" ng-disabled="groupRowForm.$waiting" class="btn btn-default btn-sm">
               <i class="fa fa-floppy-o"></i> Save
@@ -197,7 +197,7 @@
 </table>
 <div
   class="panel-footer text-center"
-  ng-show="pagination.show || selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole"
+  ng-show="pagination.show || selectedGroupSet.keepGroupsInSameClass && shownGroups.length > 0 && !unitRole"
 >
   <pagination
     ng-show="pagination.show"
@@ -212,9 +212,9 @@
   >
   </pagination>
 
-  <p ng-show="selectedGroupSet.keep_groups_in_same_class && shownGroups.length > 0 && !unitRole">
+  <p ng-show="selectedGroupSet.keepGroupsInSameClass && shownGroups.length > 0 && !unitRole">
     Can't see the group you need to join? Groups shown are limited to those in your allocated tutorials. Use the
-    <a ui-sref="projects/tutorials({projectId: project.project_id})">Tutorial List</a> to check and update your tutorial
+    <a ui-sref="projects/tutorials({projectId: project.id})">Tutorial List</a> to check and update your tutorial
     enrolment if needed.
   </p>
 </div>

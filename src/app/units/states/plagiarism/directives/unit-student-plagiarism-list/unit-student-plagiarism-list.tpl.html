@@ -25,7 +25,7 @@
           </div>
         </div><!--/buttons-->
         <form role="search" class="form-horizontal pull-right">
-          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in unitService.unitTypeAheadData(unit) | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
+          <input id="searchbar" class="input-md form-control" placeholder="Search..." type="search" ng-model="search" autocomplete="off" typeahead="text for text in unit.studentFilterTypeAheadData | filter:$viewValue | limitTo:8" typeahead-wait-ms="200" autofocus />
           <p ng-show="filteredStudents.length < allStudents.length && filteredStudents.length != 0">Showing {{filteredStudents.length}} of {{unit.students.length}} students enrolled.</p>
         </form><!--/search-->
       </div><!--/toolbar-->
@@ -37,21 +37,21 @@
           <table class="table table-condensed table-hover table-pointer">
             <thead>
               <tr>
-                <th><a href="" ng-click="sortOrder='student_id'; reverse=!reverse">Student ID</a></th>
-                <th><a href="" ng-click="sortOrder='name'; reverse=!reverse">Name</a></th>
-                <th><a href="" ng-click="sortOrder='target_grade'; reverse=!reverse">Grade</a></th>
-                <!-- <th><a href="" ng-click="sortOrder='similar_to_count'; reverse=!reverse">Tasks Similar</a></th> -->
-                <th><a href="" ng-click="sortOrder='max_pct_copy'; reverse=!reverse">Max Pct Similar</a></th>
+                <th><a href="" ng-click="sortOrder='student.id'; reverse=!reverse">Student ID</a></th>
+                <th><a href="" ng-click="sortOrder='student.name'; reverse=!reverse">Name</a></th>
+                <th><a href="" ng-click="sortOrder='targetGrade'; reverse=!reverse">Grade</a></th>
+                <!-- <th><a href="" ng-click="sortOrder='similarToCount'; reverse=!reverse">Tasks Similar</a></th> -->
+                <th><a href="" ng-click="sortOrder='maxPctCopy'; reverse=!reverse">Max Pct Similar</a></th>
                 <th><a href="" ng-click="sortOrder='shortTutorialDescription()'; reverse=!reverse">Tutorial</a></th>
               </tr>
             </thead>
             <tbody>
-              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutorName | studentsWithPlagiarism) | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
-                <td>{{student.student_id}}</td>
-                <td>{{student.name}}</td>
-                <td>{{grades[student.target_grade]}}</td>
-                <!-- <td>{{student.similar_to_count}}</td> -->
-                <td>{{student.max_pct_copy}}%</td>
+              <tr class="task-progress-row" ng-repeat="student in filteredStudents = (allStudents = (unit.students | showStudents:studentFilter:tutor | studentsWithPlagiarism) | projectFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ng-class="{'info': activeStudent == student}" class="pointer" ng-click="selectStudent(student)">
+                <td>{{student.student.id}}</td>
+                <td>{{student.student.name}}</td>
+                <td>{{grades[student.targetGrade]}}</td>
+                <!-- <td>{{student.similarToCount}}</td> -->
+                <td>{{student.maxPctCopy}}%</td>
                 <td><span>{{student.shortTutorialDescription()}}</span></td>
               </tr>
             </tbody>
@@ -100,7 +100,7 @@
       </div>
     </div>
     <div class="panel-footer">
-      <span ng-if="activeTask"><a ng-href="{{activeTask.definition.plagiarism_report_url}}" target="new">All plagiarism for {{activeTask.definition.name}}</a></span>
+      <span ng-if="activeTask"><a ng-href="{{activeTask.definition.plagiarismReportUrl}}" target="new">All plagiarism for {{activeTask.definition.name}}</a></span>
     </div>
   </div>
 </div>

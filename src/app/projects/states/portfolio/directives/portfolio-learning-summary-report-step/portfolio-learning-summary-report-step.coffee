@@ -11,6 +11,16 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-learnin
     $scope.forceLSRSubmit = false
     $scope.acceptUploadNewLearningSummary = false
 
+    $scope.learningSummaryReportFileUploadData = {
+      type: {
+        file0: { name: "Learning Summary Report", type: "document" }
+      },
+      payload: {
+        name: "LearningSummaryReport" # DO NOT MODIFY - case senstitive on API
+        kind: "document"
+      }
+    }
+
     $scope.addNewFile = (newFile) ->
       $scope.addNewFilesToPortfolio(newFile)
       $scope.projectHasDraftLearningSummaryReport = false

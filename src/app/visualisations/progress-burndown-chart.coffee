@@ -10,9 +10,11 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
 
     $scope.data = []
 
-    listeners.push $scope.$watch 'project.burndown_chart_data', (newValue) ->
+    $scope.project.refreshBurndownChartData()
+
+    listeners.push $scope.$watch 'project.burndownChartData', (newValue) ->
       return unless newValue?
-      now = +new Date().getTime() / 1000
+      now = +new Date().getTime()
       timeSeries =
         key: "NOW",
         values: [
@@ -29,7 +31,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
       null
 
     xAxisTickFormatDateFormat = (d) ->
-      d3.time.format('%b %d')(new Date(d * 1000))
+      d3.time.format('%b %d')(new Date(d))
 
     yAxisTickFormatPercentFormat = (d) ->
       d3.format(',%')(d)
@@ -48,35 +50,29 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
     # No need to clip x axis
     #
     xAxisClipNegBurndown = (d) ->
-      d[0]
+      d[0] unless !d?
 
     #
     # Clips y to 0 if y < 0
     #
     yAxisClipNegBurndown = (d) ->
-      if d[1] < 0.0 then 0 else d[1]
+      if d?
+        if d[1] < 0.0 then 0 else d[1]
 
     #
     # Graph unit dates as moment.js dates
     #
     dates = {
-      start: moment($scope.unit.start_date)
+      start: $scope.unit.startDate
       # represent the graph as 2 weeks after the unit's end date
-      end:   moment($scope.unit.end_date).add(2, 'weeks')
+      end:   $scope.unit.endDate
     }
-
-    #
-    # Converts a moment date to a Unix Time Stamp in seconds
-    #
-    toUnixTimestamp = (momentDate) ->
-      +momentDate / 1000
 
     #
     # X domain is defined as the unit's start date to the unit's end date add two weeks
     #
     xDomain = [
-      toUnixTimestamp(dates.start),
-      toUnixTimestamp(dates.end)
+      dates.start, dates.end
     ]
 
     [$scope.options, $scope.config] = Visualisation 'lineChart', 'Student Progress Burndown Chart', {
@@ -85,7 +81,7 @@ angular.module('doubtfire.visualisations.progress-burndown-chart', [])
         tooltip:
           contentGenerator: (data) ->
             # Need to generate this so as to not include NOW key
-            date =(new Date(data.value*1000)).toLocaleDateString()
+            date = d3.time.format('%b %d')(new Date(data.value))
             series = data.series
             html = "<table class='col-sm-6'><thead><tr><td colspan='3'><strong class='x-value'>#{date}</strong></td></tr></thead><tbody>"
             html += ("<tr><td class='legend-color-guide'><div style='background-color: #{d.color};'></div></td><td class='key'>#{d.key}</td><td class='value'>#{d3.format(',%')(d.value)}</td></tr><tr>" for d in series when d.key isnt 'NOW').join('')

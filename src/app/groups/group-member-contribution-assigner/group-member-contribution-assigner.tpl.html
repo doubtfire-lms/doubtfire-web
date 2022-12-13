@@ -3,34 +3,34 @@
     <thead>
       <tr>
         <th><a ng-click="memberSortOrder='student_name'; reverse=!reverse">Team Member</a></th>
-        <th><a ng-click="memberSortOrder='target_grade'; reverse=!reverse">Target Grade</a></th>
+        <th><a ng-click="memberSortOrder='targetGrade'; reverse=!reverse">Target Grade</a></th>
         <th class="col-sm-4"><a ng-click="memberSortOrder='rating'; reverse=!reverse">Contribution</a></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
-        <td>{{member.student_name}}</td>
+      <tr ng-repeat="contrib in team.memberContributions | orderBy:memberSortOrder:reverse">
+        <td>{{contrib.project.student.name}}</td>
         <td class="text-left">
-          <grade-icon grade="member.target_grade"></grade-icon>
+          <grade-icon grade="contrib.project.targetGrade"></grade-icon>
         </td>
         <td>
           <rating
             class="group-member-contribution-rating"
-            ng-click="checkClearRating(member)"
-            ng-model="member.rating"
-            on-hover="hoveringOver(member, value)"
-            on-leave="hoveringOver(member, null)"
+            ng-click="checkClearRating(contrib)"
+            ng-model="contrib.rating"
+            on-hover="hoveringOver(contrib, value)"
+            on-leave="hoveringOver(contrib, null)"
             max="numStars"
             state-on="'fa fa-child rating-outline'"
             state-off="'fa fa-child rating-disabled'">
           </rating>
           <span
-            class="label {{percentClass(member.percent)}}"
-            ng-show="member.overStar">
-            <span ng-show="member.percent > 0">
-              {{member.percent}} % effort
+            class="label {{percentClass(contrib.percent)}}"
+            ng-show="contrib.overStar">
+            <span ng-show="contrib.percent > 0">
+              {{contrib.percent}} % effort
             </span>
-            <span ng-hide="member.percent > 0">
+            <span ng-hide="contrib.percent > 0">
               No effort
             </span>
           </span>

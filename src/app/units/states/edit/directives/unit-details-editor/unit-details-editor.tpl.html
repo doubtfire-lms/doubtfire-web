@@ -41,14 +41,9 @@
         <!--/description-date-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="teachingperiod">Teaching Period</label>
+          <label class="col-sm-2 control-label" for="teachingPeriod">Teaching Period</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.teaching_period_id">
-              <option value="">Custom Period</option>
-              <option ng-value="tp.id" value="{{tp.id}}" ng-repeat="tp in teachingPeriods.loadedPeriods">
-                {{tp.period}}-{{tp.year}}
-              </option>
-            </select>
+            <object-select [source]="teachingPeriodValues" [target]="unit.teachingPeriod" (target-change)="teachingPeriodSelected($event)" label="Select Teaching Period"  />
           </div>
         </div>
         <!--/teaching-period-date-->
@@ -56,12 +51,8 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="">Draft Learning Summary</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.draft_task_definition_id">
-              <option value="">None</option>
-              <option ng-value="td.id" value="{{td.id}}" ng-repeat="td in unit.task_definitions">
-                {{td.abbreviation}}-{{td.name}}
-              </option>
-            </select>
+            <object-select [source]="taskDefinitionValues" [target]="unit.draftTaskDefinition" (target-change)="draftTaskDefSelected($event)" label="Select Learning Summary Task"  />
+
             <span class="help-block">
               When a draft learning summary task is selected, this will ensure a students uploaded draft is
               automatically added to the students portfolio.
@@ -82,32 +73,26 @@
                 type="text"
                 class="form-control"
                 id="startdate"
-                ng-model="unit.start_date"
+                ng-model="unit.startDate"
                 ng-required="true"
                 placeholder="yyyy-MM-dd"
                 close-text="Close"
-                ng-if="!unit.teaching_period_id"
+                ng-if="!unit.teachingPeriod"
               />
               <input
-                datepicker-popup="yyyy-MM-dd"
-                is-open="calOptions.startOpened"
                 type="text"
                 class="form-control"
                 id="startdate"
-                ng-model="tp.start_date"
-                ng-required="true"
-                placeholder="yyyy-MM-dd"
-                close-text="Close"
-                ng-disabled="unit.teaching_period_id"
-                ng-repeat="tp in teachingPeriods.loadedPeriods"
-                ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id"
+                value="{{unit.teachingPeriod.startDate | date}}"
+                ng-disabled="true"
+                ng-if="unit.teachingPeriod"
               />
               <span class="input-group-btn">
                 <button
                   class="btn btn-default"
                   type="button"
                   ng-click="open($event,'start')"
-                  ng-disabled="unit.teaching_period_id"
+                  ng-disabled="unit.teachingPeriod"
                 >
                   <i class="fa fa-calendar"></i>
                 </button>
@@ -126,31 +111,26 @@
                 id="enddate"
                 type="text"
                 class="form-control"
-                ng-model="unit.end_date"
+                ng-model="unit.endDate"
                 is-open="calOptions.endOpened"
-                ng-required="true"
+                ng-required="!unit.teachingPeriod"
                 close-text="Close"
-                ng-if="!unit.teaching_period_id"
+                ng-if="!unit.teachingPeriod"
               />
               <input
-                datepicker-popup="{{format}}"
                 id="enddate"
                 type="text"
                 class="form-control"
-                ng-model="tp.end_date"
-                is-open="calOptions.endOpened"
-                ng-required="true"
-                close-text="Close"
-                ng-disabled="unit.teaching_period_id"
-                ng-repeat="tp in teachingPeriods.loadedPeriods"
-                ng-if="unit.teaching_period_id && tp.id == unit.teaching_period_id"
+                ng-value="unit.teachingPeriod.endDate | date"
+                ng-disabled="true"
+                ng-if="unit.teachingPeriod"
               />
               <span class="input-group-btn">
                 <button
                   class="btn btn-default"
                   type="button"
                   ng-click="open($event,'end')"
-                  ng-disabled="unit.teaching_period_id"
+                  ng-disabled="unit.teachingPeriod"
                 >
                   <i class="fa fa-calendar"></i>
                 </button>
@@ -169,7 +149,7 @@
                 id="portfolioautogenerationdate"
                 type="text"
                 class="form-control"
-                ng-model="unit.portfolio_auto_generation_date"
+                ng-model="unit.portfolioAutoGenerationDate"
                 is-open="calOptions.portfolioAutoGenerationOpened"
                 ng-required="false"
                 close-text="Close"
@@ -193,16 +173,16 @@
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.allow_student_extension_requests ? 'success' : 'default'}}"
-                ng-model="unit.allow_student_extension_requests"
+                class="btn btn-{{unit.allowStudentExtensionRequests ? 'success' : 'default'}}"
+                ng-model="unit.allowStudentExtensionRequests"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.allow_student_extension_requests ? 'default' : 'danger'}}"
-                ng-model="unit.allow_student_extension_requests"
+                class="btn btn-{{unit.allowStudentExtensionRequests ? 'default' : 'danger'}}"
+                ng-model="unit.allowStudentExtensionRequests"
                 btn-radio="false"
                 uncheckable
               >
@@ -212,7 +192,7 @@
             <span class="help-block"> When false only staff can request extensions on behalf of students. </span>
           </div>
         </div>
-        <!--/allow_student_extension_requests-->
+        <!--/allowStudentExtensionRequests-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Extension duration on resubmit</label>
@@ -222,7 +202,7 @@
               id="code"
               type="number"
               placeholder="1"
-              ng-model="unit.extension_weeks_on_resubmit_request"
+              ng-model="unit.extensionWeeksOnResubmitRequest"
             />
             <span class="help-block">
               When tutors request resubmission of a task, this setting determines how many weeks the task will be
@@ -230,23 +210,23 @@
             </span>
           </div>
         </div>
-        <!--/extension_weeks_on_resubmit_request-->
+        <!--/extensionWeeksOnResubmitRequest-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Auto apply extensions</label>
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.auto_apply_extension_before_deadline ? 'success' : 'default'}}"
-                ng-model="unit.auto_apply_extension_before_deadline"
+                class="btn btn-{{unit.autoApplyExtensionBeforeDeadline ? 'success' : 'default'}}"
+                ng-model="unit.autoApplyExtensionBeforeDeadline"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.auto_apply_extension_before_deadline ? 'default' : 'danger'}}"
-                ng-model="unit.auto_apply_extension_before_deadline"
+                class="btn btn-{{unit.autoApplyExtensionBeforeDeadline ? 'default' : 'danger'}}"
+                ng-model="unit.autoApplyExtensionBeforeDeadline"
                 btn-radio="false"
                 uncheckable
               >
@@ -266,16 +246,16 @@
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.allow_student_change_tutorial ? 'success' : 'default'}}"
-                ng-model="unit.allow_student_change_tutorial"
+                class="btn btn-{{unit.allowStudentChangeTutorial ? 'success' : 'default'}}"
+                ng-model="unit.allowStudentChangeTutorial"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.allow_student_change_tutorial ? 'default' : 'danger'}}"
-                ng-model="unit.allow_student_change_tutorial"
+                class="btn btn-{{unit.allowStudentChangeTutorial ? 'default' : 'danger'}}"
+                ng-model="unit.allowStudentChangeTutorial"
                 btn-radio="false"
                 uncheckable
               >
@@ -285,23 +265,23 @@
             <span class="help-block"> When false only staff can change student tutorials. </span>
           </div>
         </div>
-        <!--/allow_student_change_tutorial-->
+        <!--/allowStudentChangeTutorial-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Send notification emails</label>
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.send_notifications ? 'success' : 'default'}}"
-                ng-model="unit.send_notifications"
+                class="btn btn-{{unit.sendNotifications ? 'success' : 'default'}}"
+                ng-model="unit.sendNotifications"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.send_notifications ? 'default' : 'danger'}}"
-                ng-model="unit.send_notifications"
+                class="btn btn-{{unit.sendNotifications ? 'default' : 'danger'}}"
+                ng-model="unit.sendNotifications"
                 btn-radio="false"
                 uncheckable
               >
@@ -314,23 +294,23 @@
             </span>
           </div>
         </div>
-        <!--/send_notifications-->
+        <!--/sendNotifications-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Synchronise enrolments</label>
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.enable_sync_enrolments ? 'success' : 'default'}}"
-                ng-model="unit.enable_sync_enrolments"
+                class="btn btn-{{unit.enableSyncEnrolments ? 'success' : 'default'}}"
+                ng-model="unit.enableSyncEnrolments"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.enable_sync_enrolments ? 'default' : 'danger'}}"
-                ng-model="unit.enable_sync_enrolments"
+                class="btn btn-{{unit.enableSyncEnrolments ? 'default' : 'danger'}}"
+                ng-model="unit.enableSyncEnrolments"
                 btn-radio="false"
                 uncheckable
               >
@@ -342,23 +322,23 @@
             </span>
           </div>
         </div>
-        <!--/sync_enrolments-->
+        <!--/syncEnrolments-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Synchronise Timetable</label>
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.enable_sync_timetable ? 'success' : 'default'}}"
-                ng-model="unit.enable_sync_timetable"
+                class="btn btn-{{unit.enableSyncTimetable ? 'success' : 'default'}}"
+                ng-model="unit.enableSyncTimetable"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.enable_sync_timetable ? 'default' : 'danger'}}"
-                ng-model="unit.enable_sync_timetable"
+                class="btn btn-{{unit.enableSyncTimetable ? 'default' : 'danger'}}"
+                ng-model="unit.enableSyncTimetable"
                 btn-radio="false"
                 uncheckable
               >
@@ -370,23 +350,23 @@
             </span>
           </div>
         </div>
-        <!--/sync_timetable-->
+        <!--/syncTimetable-->
 
-        <div class="form-group" ng-if="overseer_enabled.value">
+        <div class="form-group" ng-if="overseerEnabled.value">
           <label class="col-sm-2 control-label">Overseer Assessment</label>
           <div class="col-sm-9">
             <div class="btn-group">
               <label
-                class="btn btn-{{unit.assessment_enabled ? 'success' : 'default'}}"
-                ng-model="unit.assessment_enabled"
+                class="btn btn-{{unit.assessmentEnabled ? 'success' : 'default'}}"
+                ng-model="unit.assessmentEnabled"
                 btn-radio="true"
                 uncheckable
               >
                 <i class="fa fa-check"></i>
               </label>
               <label
-                class="btn btn-{{unit.assessment_enabled ? 'default' : 'danger'}}"
-                ng-model="unit.assessment_enabled"
+                class="btn btn-{{unit.assessmentEnabled ? 'default' : 'danger'}}"
+                ng-model="unit.assessmentEnabled"
                 btn-radio="false"
                 uncheckable
               >
@@ -399,32 +379,15 @@
           </div>
         </div><!--/task-assessment-enabled-->
 
-        <div class="form-group" ng-if="overseer_enabled.value">
+        <div class="form-group" ng-if="overseerEnabled.value">
           <label class="col-sm-2 control-label">Docker Image Name</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.overseer_image_id" ng-options="image.id as image.description for image in dockerImages" />
+            <select class="form-control" ng-model="unit.overseerImage" ng-options="image as image.description for image in dockerImages" />
             <span class="help-block">
               Use this to select the default container used to check tasks with Overseer.
             </span>
           </div>
         </div> <!--/docker-image-name-->
-
-        <!-- An attempt to use angular component as part of angularJS form. Unfortunately, AngularJS form doesn't track changes from it.-->
-        <!-- <div class="form-group">
-          {{unit.docker_image_name_tag}}
-          <label class="col-sm-2 control-label">Docker Image Name</label>
-          <div class="col-sm-9">
-            <docker-image-select
-            (valueChange)="alert()"
-            later-name="docker-image-select"
-            class="form-control"
-            [unit]="unit"
-            ng-model="unit.docker_image_name_tag"
-            ng-model-options="{ updateOn: 'default valueChange' }"
-            required>
-            </docker-image-select>
-          </div>
-        </div> -->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
@@ -462,7 +425,6 @@
           type="submit"
           value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
           class="btn btn-success"
-          ng-disabled="unitForm.$pristine"
         />
       </div>
     </form>

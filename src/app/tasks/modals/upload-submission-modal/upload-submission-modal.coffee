@@ -10,13 +10,13 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   #
   UploadSubmissionModal.show = (task, reuploadEvidence, isTestSubmission = false) ->
     # Refuse to open modal if group task and not in a group
-    if !isTestSubmission && task.isGroupTask() && !task.studentInAGroup()
-      alertService.add('danger', "This is a group assignment. Join a #{task.definition.group_set.name} group set to submit this task.", 8000)
+    if !isTestSubmission && task.isGroupTask() && !task.group
+      alertService.add('danger', "This is a group task. Join a #{task.definition.groupSet.name} group to submit this task.", 8000)
       return null
 
     if isTestSubmission
       task.canReuploadEvidence = -> false
-      # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.upload_requirements}
+      # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.uploadRequirements}
       # task.project = -> project
       task.isTestSubmission = isTestSubmission
 
@@ -32,19 +32,19 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, Task, taskService, task, reuploadEvidence, groupService, projectService, alertService, outcomeService, PrivacyPolicy, TaskSubmission) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, task, reuploadEvidence, alertService, outcomeService, PrivacyPolicy) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
 
   # Set up submission types
-  submissionTypes = _.chain(taskService.submittableStatuses).map((status) ->
-    [ status, taskService.statusLabels[status] ]
+  submissionTypes = _.chain(newTaskService.submittableStatuses).map((status) ->
+    [ status, newTaskService.statusLabels.get(status) ]
   ).fromPairs().value()
 
   # [[0,"hey"], [1, "he1"]] -> {0: "hey", 1: "he1"} -> ["hey", "he1"]
 
-  if $scope.task.canReuploadEvidence()
+  if $scope.task.inSubmittedState()
     submissionTypes['reupload_evidence'] = 'New Evidence'
 
   # Load in submission type
@@ -59,9 +59,9 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Upload files
   $scope.uploader = {
-    # url: Task.generateSubmissionUrl($scope.task.project(), $scope.task)
-    url: if $scope.task.isTestSubmission then Task.generateTestSubmissionUrl($scope.task.unit_id, $scope.task) else Task.generateSubmissionUrl($scope.task.project(), $scope.task)
-    files: _.chain(task.definition.upload_requirements).map((file) ->
+    # url: Task.generateSubmissionUrl($scope.task.project, $scope.task)
+    url: if $scope.task.isTestSubmission then $scope.task.testSubmissionUrl() else $scope.task.submissionUrl()
+    files: _.chain(task.definition.uploadRequirements).map((file) ->
       [file.key, { name: file.name, type: file.type }]
     ).fromPairs().value()
     payload: {}
@@ -74,7 +74,6 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
     onSuccess: (response) ->
       $scope.uploader.response = response
-      if $scope.task.isTestSubmission then $scope.task.project_id = response.project_id
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
       $modalInstance.close(task)
@@ -87,7 +86,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $timeout((->
         unless $scope.task.isTestSubmission
           response = $scope.uploader.response
-          taskService.processTaskStatusChange(task.unit(), task.project(), task, response.status, response)
+          expectedStatus = if ["need_help", "ready_for_feedback"].includes($scope.submissionType) then $scope.submissionType else response.status
+
+          $scope.task.updateFromJson(response, newTaskService.mapping)
+
+          $scope.task.processTaskStatusChange(expectedStatus, alertService)
       ), 1500)
   }
 
@@ -120,7 +123,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       removed = []
       # Remove group and alignment states
       removed.push('group') if !isRFF || !task.isGroupTask()
-      removed.push('alignment') if !isRFF || !task.unit().ilos.length > 0
+      removed.push('alignment') if !isRFF || !task.unit.ilos.length > 0
       removed.push('comments') if isTestSubmission
       removed
     # Initialises the states
@@ -154,7 +157,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       shouldDisableByState = {
         # Disable group if group members not allocated anything
         group: ->
-          _.chain($scope.team.members).map('confRating').compact().value().length == 0
+          _.chain($scope.team.memberContributions).map('confRating').compact().value().length == 0
         # Disable alignment if no alignments made (need at least 1) and
         # if description is blank
         alignment: ->
@@ -202,14 +205,14 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     ), 251)
 
   # Team for group state (populated by assignment rater)
-  $scope.team = { members: [] }
+  $scope.team = { memberContributions: [] }
 
   # Maps team data to payload data
   mapTeamToPayload = ->
-    total = groupService.groupContributionSum($scope.team.members)
-    _.map($scope.team.members,
+    total = task.group.contributionSum($scope.team.memberContributions)
+    _.map($scope.team.memberContributions,
       (member) -> {
-        project_id: member.project_id,
+        project_id: member.project.id,
         pct: (100 * member.rating / total).toFixed(0),
         pts: member.rating
       }
@@ -233,21 +236,21 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   unless $scope.task.isTestSubmission
     # Get initial alignment data...
-    initialAlignments = task.project().task_outcome_alignments.filter( (a) -> a.task_definition_id == task.definition.id )
+    initialAlignments = task.project.taskOutcomeAlignments.filter( (a) -> a.taskDefinition.id == task.definition.id )
     # ILO alignment defaults
     $scope.alignmentsRationale = if initialAlignments.length > 0 then initialAlignments[0].description else ""
     staffAlignments = $scope.task.staffAlignments()
-    $scope.ilos = _.map(task.unit().ilos, (ilo) ->
-      staffAlignment = _.find(staffAlignments, {learning_outcome_id: ilo.id})
+    $scope.ilos = _.map(task.unit.ilos, (ilo) ->
+      staffAlignment = _.find(staffAlignments, (sa) -> sa.learningOutcome.id ==  ilo.id)
       staffAlignment ?= {}
       staffAlignment.rating ?= 0
       staffAlignment.label = outcomeService.alignmentLabels[staffAlignment.rating]
       ilo.staffAlignment = staffAlignment
       ilo
     )
-    $scope.alignments = _.chain(task.unit().ilos)
+    $scope.alignments = _.chain(task.unit.ilos)
       .map((ilo) ->
-        value = initialAlignments.filter((a) -> a.learning_outcome_id == ilo.id)?[0]?.rating
+        value = initialAlignments.filter((a) -> a.learningOutcome.id == ilo.id)?[0]?.rating
         value ?= 0
         [ilo.id, {rating: value }]
       )

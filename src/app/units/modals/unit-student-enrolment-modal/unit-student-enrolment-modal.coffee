@@ -16,30 +16,35 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 
   UnitStudentEnrolmentModal
 )
-.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, Project, unit, alertService, campusService) ->
+.controller('UnitStudentEnrolmentModalCtrl', ($scope, $modalInstance, unit, alertService, campusService, newProjectService) ->
   $scope.unit = unit
   $scope.projects = unit.students
   $scope.campuses = []
-  $scope.data = { campus_id: 1 } # need in object for observing
+  $scope.data = { campusId: 1 } # need in object for observing
 
   campusService.query().subscribe( (campuses) ->
     $scope.campuses = campuses
-    $scope.data.campus_id = campuses[0].id
+    $scope.data.campusId = campuses[0].id
   )
 
-  $scope.enrolStudent = (student_id, campus_id) ->
-    if ! campus_id?
+  $scope.enrolStudent = (studentId, campusId) ->
+    if ! campusId?
       alertService.add('danger', 'Campus missing. Please indicate student campus', 5000)
       return
-    Project.create {unit_id: unit.id, student_num: student_id, campus_id: campus_id },
-      (project) ->
-        if ! unit.studentEnrolled project.project_id
-          unit.addStudent project
+
+    newProjectService.create(
+      {}, {
+        cache: unit.studentCache
+        body: {
+          unit_id: unit.id,
+          student_num: studentId,
+          campus_id: campusId
+        }
+        constructorParams: unit
+      }).subscribe({
+        next: (project) ->
           alertService.add("success", "Student enrolled", 2000)
           $modalInstance.close()
-        else
-          alertService.add("danger", "Student is already enrolled", 2000)
-          $modalInstance.close()
-      (response) ->
-        alertService.add("danger", "Error enrolling student: #{response.data.error}", 6000)
+        error: (message) -> alertService.add("danger", "Error enrolling student: #{message}", 6000)
+      })
 )

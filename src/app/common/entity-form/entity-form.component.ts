@@ -1,20 +1,19 @@
-import { OnInit } from '@angular/core';
-import { Directive } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
-import { Entity } from 'src/app/api/models/entity';
-import { EntityService } from 'src/app/api/models/entity.service';
-import { Observable } from 'rxjs';
+import { AfterViewInit, Directive } from '@angular/core';
+import { UntypedFormGroup, AbstractControl } from '@angular/forms';
+import { Entity, RequestOptions } from 'ngx-entity-service';
+import { EntityService } from 'ngx-entity-service';
+import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
-export class EntityFormComponent<T extends Entity> implements OnInit {
+export abstract class EntityFormComponent<T extends Entity> implements AfterViewInit {
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
-  formData: FormGroup;
+  formData: UntypedFormGroup;
 
   // selected references a value that is being edited in the form
   // See CampusListComponent for reference to usecase of selected
@@ -37,7 +36,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
   // and one Campus (object). When sending a Tutorial to the server, it expects not to recieve those
   // particular entities as objects, but rather their unique ids that denote those instances.
   // Before a Tutorial is sent to the server, a tutorial's tutor needs to be mapped as { tutor_id: x }
-  // and the same with campus as { campus_id: y }.
+  // and the same with campus as { campus.id: y }.
   // See unit-tutorials-list.component
   formDataMapping = {};
 
@@ -48,8 +47,8 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    *
    * @param controls the FormControls that will make up the form.
    */
-  constructor(controls: { [key: string]: AbstractControl }) {
-    this.formData = new FormGroup(controls);
+  constructor(controls: { [key: string]: AbstractControl }, protected entityName: string) {
+    this.formData = new UntypedFormGroup(controls);
     // Iterate over the FormControls passed in and assign the default values
     // For each based on the values that they are constructed with
     for (const key of Object.keys(this.formData.controls)) {
@@ -57,10 +56,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-
-  }
-
+  ngAfterViewInit() {}
 
   /**
    * Cancel edit of current selected value.
@@ -100,6 +96,15 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
     return false;
   }
 
+  private get serverKey(): string {
+    return this.entityName
+      .replace(/( )/, '')
+      .replace(/(.)([A-Z][a-z]+)/, '$1_$2')
+      .replace(/([a-z0-9])([A-Z])/, '$1_$2')
+      .toLowerCase();
+  }
+
+
   /**
    * Submit the form data to the server and create or update an entity
    * based on the form's state. A new entity will be created if there is
@@ -127,21 +132,21 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
         // Copy the changes from the form to the data that will be sent to the server
         // Then send it off
         this.copyChangesFromForm();
-        response = service.update(this.selected);
+        response = service.update(this.selected, this.optionsOnRequest('update'));
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
-        const data = this.formDataToNewObject(service.serverKey); // sent as path id and body
-        response = service.create(data, data, this.otherOnCreate());
+        const data = this.formDataToNewObject(this.serverKey); // sent as path id and body
+        response = service.create(data, this.optionsOnRequest('create'));
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
-        alertService.add('danger', `${service.entityName} was not changed`, 6000);
+        alertService.add('danger', `${this.entityName} was not changed`, 6000);
         return;
       }
 
       // Handle the response
-      response.subscribe({
+      response.subscribe( {
         next: (result: T) => {
-          alertService.add('success', `${service.entityName} saved`, 2000);
+          alertService.add('success', `${this.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
           success(result, this.selected ? false : true);
@@ -159,17 +164,26 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.add('danger', `${service.entityName} save failed: ${error.error.error? error.error.error: error.statusText}`, 6000);
+          alertService.add('danger', `${this.entityName} save failed: ${error}`, 6000);
         }
-      }
-
-      );
+      });
     } else {
       // Once we mark forms as touched, erroneous state will be rendered
       // In the form's template accordingly
       this.formData.markAllAsTouched();
     }
   }
+
+  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<any> {
+    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(tap(
+      (obj) => {
+        this.cancelEdit();
+        entities.splice( entities.indexOf(entity), 1);
+        this.dataSource.data = entities;
+      })
+    );
+  }
+
   /**
    * Get changes denoted by key, in which differences in data between
    * the FormControls and the selected value are returned.
@@ -194,7 +208,7 @@ export class EntityFormComponent<T extends Entity> implements OnInit {
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected otherOnCreate(): any {
+  protected optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
     return undefined;
   }
 

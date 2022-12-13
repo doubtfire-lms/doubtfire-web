@@ -64,7 +64,7 @@ angular.module("doubtfire.common.services.grades", [  ])
   gradeService.gradeColors[-1] = '#808080'
 
   gradeService.gradeFor = (project) ->
-    gradeService.gradeNumbers[project.target_grade]
+    gradeService.gradeNumbers[project.targetGrade]
 
   gradeService
 )

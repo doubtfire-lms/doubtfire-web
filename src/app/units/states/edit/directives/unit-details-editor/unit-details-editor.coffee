@@ -8,8 +8,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, alertService, unitService, TeachingPeriod, TaskSubmission) ->
-    $scope.overseer_enabled = DoubtfireConstants.IsOverseerEnabled
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission) ->
+    $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.calOptions = {
       startOpened: false
@@ -25,7 +25,25 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.externalName = DoubtfireConstants.ExternalName
 
     # get the teaching periods- gets an object with the loaded teaching periods
-    $scope.teachingPeriods = TeachingPeriod.query()
+    newTeachingPeriodService.query().subscribe((periods) ->
+      $scope.teachingPeriods = periods
+      $scope.teachingPeriodValues = [{value: undefined, text: "None"}]
+      other = _.map periods, (p) -> {value: p, text: "#{p.year} #{p.period}"}
+      _.each other, (d) -> $scope.teachingPeriodValues.push(d)
+    )
+
+    $scope.teachingPeriodSelected = ($event) ->
+      $scope.unit.teachingPeriod = $event
+
+    $scope.unit.taskDefinitionCache.values.subscribe(
+      (taskDefs) ->
+        $scope.taskDefinitionValues = [{value: undefined, text: "None"}]
+        other = _.map taskDefs, (td) -> {value: td, text: "#{td.abbreviation}-#{td.name}"}
+        _.each other, (d) -> $scope.taskDefinitionValues.push(d)
+    )
+
+    $scope.draftTaskDefSelected = ($event) ->
+      $scope.unit.draftTaskDefinition = $event
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->
@@ -49,57 +67,15 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
       formatYear: 'yy',
       startingDay: 1
     }
-    $scope.unitTypeAheadData = unitService.unitTypeAheadData
     $scope.studentSearch = ""
 
     $scope.saveUnit = ->
-      if $scope.unit.start_date && $scope.unit.start_date.getMonth
-        $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
-      if $scope.unit.end_date && $scope.unit.end_date.getMonth
-        $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
-      if $scope.unit.portfolio_auto_generation_date && $scope.unit.portfolio_auto_generation_date.getMonth
-        $scope.unit.portfolio_auto_generation_date = "#{$scope.unit.portfolio_auto_generation_date.getFullYear()}-#{$scope.unit.portfolio_auto_generation_date.getMonth() + 1}-#{$scope.unit.portfolio_auto_generation_date.getDate()}"
-
-      saveData = {
-        name: $scope.unit.name
-        code: $scope.unit.code
-        description: $scope.unit.description
-        active: $scope.unit.active
-        auto_apply_extension_before_deadline: $scope.unit.auto_apply_extension_before_deadline
-        send_notifications: $scope.unit.send_notifications
-        enable_sync_timetable: $scope.unit.enable_sync_timetable
-        enable_sync_enrolments: $scope.unit.enable_sync_enrolments
-        draft_task_definition_id: $scope.unit.draft_task_definition_id
-        portfolio_auto_generation_date: $scope.unit.portfolio_auto_generation_date
-        allow_student_extension_requests: $scope.unit.allow_student_extension_requests
-        extension_weeks_on_resubmit_request: $scope.unit.extension_weeks_on_resubmit_request
-        allow_student_change_tutorial: $scope.unit.allow_student_change_tutorial
-        assessment_enabled: $scope.unit.assessment_enabled
-        overseer_image_id: $scope.unit.overseer_image_id
-      }
-
-      if $scope.unit.teaching_period_id
-        saveData.teaching_period_id = $scope.unit.teaching_period_id
-      else
-        saveData.start_date = $scope.unit.start_date
-        saveData.end_date = $scope.unit.end_date
-
-      if $scope.unit.id == -1
-        Unit.create { unit: saveData },
-          (unit) ->
-            $scope.saveSuccess(unit)
-          (response) ->
-            alertService.add("danger", response.data.error, 6000)
-      else
-        Unit.update(
-          {
-            id: $scope.unit.id
-            unit: saveData
-          }, (unit) ->
-            alertService.add("success", "Unit updated.", 2000)
-          (response) ->
-            alertService.add("danger", "Failed to update unit. #{response.data.error}", 6000)
-        )
+      newUnitService.update($scope.unit).subscribe({
+        next: (unit) ->
+          alertService.add("success", "Unit updated.", 2000)
+        error: (response) ->
+          alertService.add("danger", "Failed to update unit. #{response}", 6000)
+    })
 
 )
 

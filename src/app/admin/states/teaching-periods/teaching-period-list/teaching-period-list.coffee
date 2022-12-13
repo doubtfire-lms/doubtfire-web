@@ -3,8 +3,8 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
 #
 # Users with an Administrator system role can create new Teaching Periods.
 #
-.config((headerServiceProvider) ->
-  teachingPeriodsAdminViewStateData =
+.config(($stateProvider) ->
+  stateData = {
     url: "/admin/teaching-periods"
     views:
       main:
@@ -13,17 +13,19 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
     data:
       pageTitle: "_Teaching-Period Administration_"
       roleWhitelist: ['Admin']
-  headerServiceProvider.state "admin/teachingperiods", teachingPeriodsAdminViewStateData
+  }
+  $stateProvider.state "admin/teachingperiods", stateData
 )
-.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, DoubtfireConstants, currentUser, alertService, TeachingPeriod, TeachingPeriodSettingsModal, analyticsService, GlobalStateService) ->
+
+.controller("AdministerTeachingPeriodsState", ($scope, $state, $modal, DoubtfireConstants, alertService, newTeachingPeriodService, TeachingPeriodSettingsModal, analyticsService, GlobalStateService) ->
   analyticsService.event 'Edit Teaching Periods View', "Started Edit Teaching Periods View"
 
   GlobalStateService.setView("OTHER")
 
-  $scope.teachingPeriods = TeachingPeriod.query()
+  newTeachingPeriodService.cache.values.subscribe((tps) -> $scope.teachingPeriods = tps)
 
   # Table sort details
-  $scope.sortOrder = "start_date"
+  $scope.sortOrder = "startDate"
   $scope.reverse = true
 
   # Pagination details
@@ -35,8 +37,7 @@ angular.module('doubtfire.admin.states.teachingperiods', ['doubtfire.admin.state
   $scope.externalName = DoubtfireConstants.ExternalName
 
   # User settings/create modal
-  $scope.showTeachingPeriodModal = (teachingPeriod) ->
+  $scope.showTeachingPeriodModal = () ->
     # If we're given a user, show that user, else create a new one
-    teachingPeriodToShow = if teachingPeriod? then teachingPeriod else { }
-    TeachingPeriodSettingsModal.show teachingPeriodToShow
+    TeachingPeriodSettingsModal.show()
 )

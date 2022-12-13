@@ -21,7 +21,7 @@ angular.module('doubtfire.groups.group-selector', [])
     showGroupSetSelector: '=?'
     # On change of a group
     onSelect: '=?'
-  controller: ($scope, $filter, $timeout, alertService, Group, currentUser, listenerService) ->
+  controller: ($scope, $filter, $timeout, alertService, listenerService, newUserService, newGroupService) ->
     # Cleanup
     listeners = listenerService.listenTo($scope)
 
@@ -83,21 +83,24 @@ angular.module('doubtfire.groups.group-selector', [])
       $scope.newGroupName = ""
 
     # Group set selector
-    $scope.selectedGroupSet ?= _.first($scope.unit.group_sets)
-    $scope.showGroupSetSelector ?= $scope.unit.group_sets.length > 1
+    $scope.selectedGroupSet ?= _.first($scope.unit.groupSets)
+    $scope.showGroupSetSelector ?= $scope.unit.groupSets.length > 1
     $scope.selectGroupSet = (groupSet) ->
       return unless groupSet?
       startLoading()
       $scope.selectGroup(null)
       # Can only create groups if unitRole provided and selectedGroupSet
-      $scope.canCreateGroups = $scope.unitRole? || groupSet?.allow_students_to_create_groups
-      $scope.unit.getGroups(groupSet.id, (groups) ->
-        $scope.selectedGroupSet = groupSet
-        groupSet.groups = groups
-        finishLoading()
-        resetNewGroupForm()
-        applyFilters()
-      , finishLoading)
+      $scope.canCreateGroups = $scope.unitRole? || groupSet?.allowStudentsToCreateGroups
+      $scope.unit.getGroups(groupSet).subscribe({
+        next: (groups) ->
+          $scope.selectedGroupSet = groupSet
+          finishLoading()
+          resetNewGroupForm()
+          applyFilters()
+        error: (message) ->
+          finishLoading()
+          alertService.add("danger", "Unable to get groups #{message}", 6000)
+      })
 
     $scope.selectGroupSet($scope.selectedGroupSet)
 
@@ -123,19 +126,33 @@ angular.module('doubtfire.groups.group-selector', [])
       # Student context
       if $scope.project
         #TODO: Need to add stream to group set
-        tutorialId = $scope.project.tutorials()[0].id || $scope.unit.tutorials[0].id
-      # Convenor or Tutor
+        tutorialId = $scope.project.tutorials[0].id || $scope.unit.tutorials[0].id
       else
-        tutorName = $scope.unitRole?.name || currentUser.profile.name
-        tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutorName == tutorName)?.id
+        # Convenor or Tutor
+        tutorName = $scope.unitRole?.name || newUserService.currentUser.name
+        tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutor.name == tutorName)?.id
         # Default to first tutorial if can't find
         tutorialId ?= _.first($scope.unit.tutorials).id
-      $scope.unit.addGroup($scope.selectedGroupSet, name, tutorialId,
-        (newGroup) ->
+
+      newGroupService.create({
+        unitId: $scope.unit.id,
+        groupSetId: $scope.selectedGroupSet.id,
+      }, {
+        cache: $scope.selectedGroupSet.groupsCache,
+        constructorParams: $scope.unit
+        body: {
+          group: {
+            name: name,
+            tutorial_id: tutorialId
+          }
+        }
+      }).subscribe({
+        next: (group) ->
           resetNewGroupForm()
           applyFilters()
-          $scope.selectedGroup = newGroup
-      )
+          $scope.selectedGroup = group
+        error: (message) -> alertService.add("danger", message, 6000)
+      })
 
     # Join or leave group as project
     $scope.projectInGroup = (group) ->
@@ -152,27 +169,36 @@ angular.module('doubtfire.groups.group-selector', [])
       )
 
     # Update group function
-    $scope.updateGroup = (data, groupId) ->
-      group = _.find($scope.selectedGroupSet.groups, {id: groupId})
-      group = _.extend(group, data)
-      $scope.unit.updateGroup(group, applyFilters)
+    $scope.updateGroup = (data, group) ->
+      group.capacityAdjustment = data.capacityAdjustment
+      group.tutorial = data.tutorial
+      group.name = data.name
+
+      newGroupService.update(group).subscribe({
+        next: () ->
+          alertService.add("success", "Updated group", 2000)
+          applyFilters()
+        error: (message) -> alertService.add("danger", "Failed to update group. #{message}", 6000)
+      })
 
     # Remove group function
     $scope.deleteGroup = (group) ->
-      $scope.unit.deleteGroup(group, $scope.selectedGroupSet,
-        (success) ->
+      newGroupService.delete(group, { cache: $scope.selectedGroupSet.groupsCache }).subscribe({
+        next: () ->
+          alertService.add("success", "Deleted group", 2000)
           $scope.selectedGroup = null if group.id == $scope.selectedGroup?.id
           resetNewGroupForm()
           applyFilters()
-      )
+        error: () -> alertService.add("danger", "Failed to delete group. #{message}", 6000)
+      })
 
     # Toggle lockable group
     $scope.toggleLocked = (group) ->
-      newGroup = _.clone(group)
-      newGroup.locked = !newGroup.locked
-      $scope.unit.updateGroup(newGroup,
+      group.locked = !group.locked
+      $scope.unit.updateGroup(group,
         (success) ->
           group.locked = success.locked
+          alertService.add("success", "Group updated", 2000)
       )
 
     # Watch selected group set changes

@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.alerts", [])
 
     alertData = {
       type: type
-      msg: $sce.trustAsHtml(msg)
+      msg: $sce.getTrustedHtml(msg)
       close: closeThisAlertFunc
     }
 
@@ -36,6 +36,33 @@ angular.module("doubtfire.common.services.alerts", [])
   #
   alertService.closeAlert = (alert) ->
     this.closeAlertIdx($rootScope.alerts.indexOf(alert))
+
+  alertService.reportError = (response) ->
+    message = response.error
+    if !message
+      message = response.data?.error
+    if !message
+      message = response
+    if message.error?
+      message = message.error
+
+    switch(response.status)
+      when 401
+        message = "You are not authorised to perform this action.<br />#{message}"
+      when 403
+        message = "You are not authorised to perform this action.<br />#{message}"
+      when 500
+        message = "An error has occurred. Please try again later.<br />#{message}"
+      when 404
+        message = "The requested resource was not found.<br />#{message}"
+      when 400
+        message = "The request was invalid.<br />#{message}"
+      when 419
+        message = "Your session has expired. Please log in again."
+      else
+        message = "An error has occurred.<br />#{message}"
+
+    alertService.add "danger", message, 6000
 
   #
   # Close an alert at a specified index

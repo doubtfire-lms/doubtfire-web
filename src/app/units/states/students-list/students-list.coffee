@@ -14,16 +14,16 @@ angular.module('doubtfire.units.states.students', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin']
    }
 )
-.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, Project, UnitStudentEnrolmentModal, currentUser, unitService, alertService, taskService, gradeService, analyticsService, projectService) ->
+.controller("UnitStudentsStateCtrl", ($scope, $state, $filter, $timeout, UnitStudentEnrolmentModal, alertService, newTaskService, gradeService, analyticsService, newUserService) ->
   # Filtering
   applyFilters = ->
-    filteredStudents = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName)
+    filteredProjects = $filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor)
     # At this point know the length of all students
-    allStudentsLength = filteredStudents.length
+    allStudentsLength = filteredProjects.length
     # Apply filter for projects and determine to show CSV button
-    filteredStudents = $filter('projectFilter')(filteredStudents, $scope.searchText) if $scope.searchText?.trim().length > 0
+    filteredProjects = $filter('projectFilter')(filteredProjects, $scope.searchText) if $scope.searchText?.trim().length > 0
     # Paginate and sort
-    $scope.filteredStudents = $filter('paginateAndSort')(filteredStudents, $scope.pagination, $scope.tableSort)
+    $scope.filteredProjects = $filter('paginateAndSort')(filteredProjects, $scope.pagination, $scope.tableSort)
 
   # Pagination values
   $scope.pagination =
@@ -46,7 +46,7 @@ angular.module('doubtfire.units.states.students', [])
   }[$scope.unitRole.role]
 
   # Scope for student name
-  $scope.tutorName = currentUser.profile.name
+  $scope.tutor = newUserService.currentUser
 
   # Send initial apply filter
   applyFilters()
@@ -72,18 +72,11 @@ angular.module('doubtfire.units.states.students', [])
   # Changing search text reapplies filter
   $scope.searchTextChanged = applyFilters
 
-  # Expose typeahead data function
-  $scope.unitTypeAheadData = unitService.unitTypeAheadData
-
-  # Switches the student's tutorial
-  $scope.switchToTutorial = (student, tutorial) ->
-    student.switchToTutorial(tutorial)
-
   # CSV header func
   $scope.getCSVHeader = ->
-    result = ['student_code', 'name', 'email', 'portfolio']
-    if $scope.unit.tutorial_streams.length > 0
-      _.each $scope.unit.tutorial_streams, (ts) ->
+    result = ['username', 'name', 'email', 'portfolio']
+    if $scope.unit.tutorialStreamsCache.size > 0
+      _.each $scope.unit.tutorialStreams, (ts) ->
         result.push ts.abbreviation
     else
       result.push 'tutorial'
@@ -91,32 +84,30 @@ angular.module('doubtfire.units.states.students', [])
 
   # CSV data row func
   $scope.getCSVData = ->
-    analyticsService.event 'Teacher View - Students Tab', 'Export CSV data'
-    filteredStudents = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutorName), $scope.searchText)
+    filteredProjects = $filter('filter')($filter('showStudents')($scope.unit.students, $scope.staffFilter, $scope.tutor), $scope.searchText)
     result = []
-    angular.forEach(filteredStudents, (student) ->
+    angular.forEach(filteredProjects, (project) ->
       row = {}
-      row['student_code'] = student.student_id
-      row['name'] = student.name
-      row['email'] = student.student_email
-      row['portfolio'] = student.portfolio_status
-      if $scope.unit.tutorial_streams.length > 0
-        _.each $scope.unit.tutorial_streams, (ts) ->
-          row[ts.abbreviation] = student.tutorialForStream(ts)?.abbreviation || ''
+      row['username'] = project.student.username
+      row['name'] = project.student.name
+      row['email'] = project.student.email
+      row['portfolio'] = project.portfolioStatus
+      if $scope.unit.tutorialStreamsCache.size > 0
+        _.each $scope.unit.tutorialStreams, (ts) ->
+          row[ts.abbreviation] = project.tutorialForStream(ts)?.abbreviation || ''
       else
-        row['tutorial'] = student.tutorials()[0]?.abbreviation || ''
+        row['tutorial'] = project.tutorials[0]?.abbreviation || ''
       result.push row
     )
     result
 
   # Expose the status labels and classes for the bar stats
-  $scope.statusClass = taskService.statusClass
-  $scope.statusText = taskService.statusText
+  $scope.statusClass = newTaskService.statusClass
+  $scope.statusText = newTaskService.statusText
 
   # View a student
   $scope.viewStudent = (student) ->
-    analyticsService.event 'Teacher View - Students Tab', 'Viewed Student'
-    student.viewProject(true)
+    $state.go("projects/dashboard", {projectId: student.id, tutor: true, taskAbbr:''})
 
   # Sets the flag sorting
   $scope.sortTableByFlag = (flag) ->

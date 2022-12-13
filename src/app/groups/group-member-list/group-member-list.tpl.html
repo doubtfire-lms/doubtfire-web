@@ -11,21 +11,21 @@
   <thead>
     <tr>
       <th ng-show="unitRole">
-        <a ng-click="sortTableBy('student_id')">
+        <a ng-click="sortTableBy('student.username')">
           Student ID
-          <i ng-show="tableSort.order == 'student_id'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          <i ng-show="tableSort.order == 'student.username'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th>
-        <a ng-click="sortTableBy('student_name')">
+        <a ng-click="sortTableBy('student.name')">
           Name
-          <i ng-show="tableSort.order == 'student_name'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          <i ng-show="tableSort.order == 'student.name'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th ng-show="unitRole">
-        <a ng-click="sortTableBy('target_grade')">
+        <a ng-click="sortTableBy('targetGrade')">
           Target Grade
-          <i ng-show="tableSort.order == 'target_grade'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
+          <i ng-show="tableSort.order == 'targetGrade'" class="fa fa-caret-{{tableSort.reverse ? 'up' : 'down'}}"></i>
         </a>
       </th>
       <th ng-if="canRemoveMembers">
@@ -35,17 +35,17 @@
   </thead>
   <tbody>
     <tr ng-repeat="member in selectedGroup.members | orderBy:tableSort.order:tableSort.reverse">
-      <td class="student-id" ng-show="unitRole">{{member.student_id || "N/A"}}</td>
-      <td class="student-name">{{member.student_name}}</td>
+      <td class="student-id" ng-show="unitRole">{{member.student.username || "N/A"}}</td>
+      <td class="student-name">{{member.student.name}}</td>
       <td ng-show="unitRole" class="student-grade text-left">
-        <grade-icon grade="member.target_grade"></grade-icon>
+        <grade-icon grade="member.targetGrade"></grade-icon>
       </td>
       <td class="actions" ng-if="canRemoveMembers">
         <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-hide="project">
           <i class="fa fa-minus"></i>
-          <span ng-hide="member.project_id == project.project_id">Kick</span>
+          <span ng-hide="member.id == project.id">Remove</span>
         </button>
-        <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-show="member.project_id == project.project_id">
+        <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-show="member.id == project.id">
           <i class="fa fa-minus"></i>
           <span>Leave</span>
         </button>

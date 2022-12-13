@@ -2,7 +2,7 @@
 </div> -->
 <ng-content></ng-content>
 <button mat-button mat-raised-button color="primary"
-  [disabled]="taskDefinition && !taskDefinition.has_task_assessment_resources"
+  [disabled]="taskDefinition && !taskDefinition.hasTaskAssessmentResources"
   (click)="testSubmission()"
   style="width: 100%; line-height: 36px; padding: 0 16px;"><i class="fa fa-upload"></i> Test Submission</button>
 <button mat-button mat-raised-button color="accent"

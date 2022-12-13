@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Inject, Output, ChangeDetectionStrategy } from '@angular/core';
-import { alertService, taskService } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TaskSubmissionService, TaskAssessmentResult } from 'src/app/common/services/task-submission.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
+import { Task } from 'src/app/api/models/doubtfire-model';
 
 export interface User {
   id: number;
@@ -29,7 +30,7 @@ export interface TaskAssessmentComment {
   styleUrls: ['./task-assessment-comment.component.scss'],
 })
 export class TaskAssessmentCommentComponent implements OnInit {
-  @Input() task: any;
+  @Input() task: Task;
   @Input() comment: TaskAssessmentComment;
 
   constructor(

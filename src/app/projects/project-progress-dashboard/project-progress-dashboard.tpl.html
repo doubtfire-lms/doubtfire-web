@@ -9,7 +9,7 @@
             </div>
           </div>
           <div class="panel-body">
-            <project-tasks-list project="project" on-change="updateBurndownChart" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView"></project-tasks-list>
+            <project-tasks-list project="project" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView"></project-tasks-list>
           </div>
         </div><!--task-lists-->
       </div>
@@ -21,8 +21,8 @@
           </div>
           <div class="panel-body text-center">
             <p class="btn-group">
-              <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.target_grade" btn-radio="{{$index}}">
-                <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.target_grade ? 'primary' : 'muted'}}"></grade-icon>
+              <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.targetGrade" btn-radio="{{$index}}">
+                <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.targetGrade ? 'primary' : 'muted'}}"></grade-icon>
               </label>
             </p>
           </div>
@@ -72,7 +72,7 @@
           tasks and have
           <strong>{{taskStats.numberOfTasksRemaining}}</strong>
           left to complete to achieve a
-          <strong>{{grade.names[project.target_grade]}}</strong>.
+          <strong>{{grade.names[project.targetGrade]}}</strong>.
         </div>
         <div ng-show="currentVisualisation == 'burndown'">
           Aim to keep your

@@ -1,4 +1,6 @@
-import { TaskComment } from './task-comment';
+import { AppInjector } from 'src/app/app-injector';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { Task, TaskComment } from '../doubtfire-model'
 
 /**
  * Create a Discussion Comment, extending the base TaskComment class
@@ -10,18 +12,15 @@ export class DiscussionComment extends TaskComment {
   timeDiscussionStarted: string;
 
   // Do we need this do you think?
-  constructor(initialData: object, task: any) {
-    super(initialData, task); // delay update from json
+  constructor(task: Task) {
+    super(task); // delay update from json
   }
 
-  /**
-   * Update the Discussion Comment with details from the passed in json data
-   */
-  public updateFromJson(data: any): void {
-    super.updateFromJson(data);
-    this.status = data.status;
-    this.numberOfPrompts = data.number_of_prompts;
-    this.timeDiscussionComplete = data.time_discussion_completed;
-    this.timeDiscussionStarted = data.time_discussion_started;
+  public get responseUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}/discussion_comment/response?as_attachment=false`;
+  }
+
+  public generateDiscussionPromptUrl(prompt: number): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.task.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}/discussion_comment/prompt_number/${prompt}?as_attachment=false`;
   }
 }

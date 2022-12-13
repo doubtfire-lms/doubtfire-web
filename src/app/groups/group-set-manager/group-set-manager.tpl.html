@@ -18,8 +18,8 @@
           <a
             editable-text="selectedGroup.name"
             class="strong"
-            ng-show="unitRole || selectedGroupSet.allow_students_to_manage_groups"
-            onbeforesave="updateGroup($data)"
+            ng-show="unitRole || selectedGroupSet.allowStudentsToManageGroups"
+            onaftersave="updateGroup(selectedGroup)"
             >{{selectedGroup.name}}</a
           >
         </h4>
@@ -40,17 +40,16 @@
         typeahead-select-on-exact="true"
         typeahead-on-select="addMember(selectedStudent)"
         typeahead="
-          student as student.name
-          for student in unit.activeStudents() |
-          studentsForGroup:selectedGroupSet:selectedGroup:members |
-          filter:$viewValue |
+          project as project.student.name
+          for project in unit.studentsForGroupTypeAhead(selectedGroup) |
+          projectFilter:$viewValue |
           limitTo:8"
         typeahead-wait-ms="200"
         typeahead-editable="false"
         autocomplete="off"
       />
       <div class="input-group-btn">
-        <button type="submit" ng-disabled="!selectedStudent.project_id" class="btn btn-success">
+        <button type="submit" ng-disabled="!selectedStudent.id" class="btn btn-success">
           <i class="fa fa-plus"></i> Add Member
         </button>
       </div>

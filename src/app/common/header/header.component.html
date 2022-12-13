@@ -9,15 +9,15 @@
       aria-label="Example user verified icon"
     ></mat-icon>
   </a>
-  <div style="color: rgb(216, 216, 216)">/</div>
 
-  <unit-dropdown [unit]="currentUnitOrProject" [unitRoles]="filteredUnitRoles" [projects]="projects"></unit-dropdown>
+  <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects"> </unit-dropdown>
 
   <task-dropdown
-    [currentUnitOrProject]="currentUnitOrProject"
+    [currentUnit]="currentUnit"
+    [currentProject]="currentProject"
     [currentView]="currentView"
     [data]="data"
-    [unitRole]="unitRole"
+    [unitRole]="currentUnitRole"
   ></task-dropdown>
 
   <span fxFlex></span>
@@ -29,29 +29,28 @@
     fxShow.gt-md="true"
     fxShow="true"
     [matMenuTriggerFor]="menu"
-    *ngIf="CurrentUser.role === 'Admin' || CurrentUser.role === 'Convenor'"
+    *ngIf="currentUser.role === 'Admin' || currentUser.role === 'Convenor'"
   >
     <mat-icon>admin_panel_settings</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="CurrentUser.role === 'Admin'">
+    <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="currentUser.role === 'Admin'">
       Manage Teaching Periods
     </button>
-    <button mat-menu-item uiSref="institutionsettings" *ngIf="CurrentUser.role === 'Admin'">
+    <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
       Institution Settings
     </button>
     <button mat-menu-item uiSref="admin/units">Manage Units</button>
-    <button mat-menu-item uiSref="admin/users" *ngIf="CurrentUser.role === 'Admin'">Manage Users</button>
+    <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">Manage Users</button>
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menu2">
     <user-icon [size]="32"></user-icon>
   </button>
   <mat-menu #menu2="matMenu">
-    <button mat-menu-item (click)="openUserSettings()">Profile</button>
-    <button mat-menu-item (click)="openNotificationSettings()">Notifications</button>
+    <button mat-menu-item uiSref="edit_profile">Edit Profile</button>
     <button mat-menu-item (click)="openCalendar()">Calendar</button>
     <button mat-menu-item (click)="openAboutModal()">About</button>
-    <button mat-menu-item uiSref="sign_out">Sign Out</button>
+    <button mat-menu-item (click)="signOut()">Sign Out</button>
   </mat-menu>
 </mat-toolbar>

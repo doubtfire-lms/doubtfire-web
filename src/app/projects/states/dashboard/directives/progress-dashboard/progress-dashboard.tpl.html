@@ -1,7 +1,7 @@
 <div class="panel panel-default panel-scrollable">
   <div class="panel-heading">
     <h4 class="panel-title">
-      Progress Dashboard <span ng-show="tutor">for {{project.student_name}}</span>
+      Progress Dashboard <span ng-show="tutor">for {{project.student.name}}</span>
     </h4>
   </div><!--/panel-heading-->
   <div class="panel-body">
@@ -13,9 +13,9 @@
         <div class="card-body">
           <select
             class="form-control input-lg"
-            ng-model="project.target_grade"
+            ng-model="project.targetGrade"
             ng-options="grade as grades.names[grade] for grade in grades.values"
-            ng-change="updateTargetGrade(project.target_grade)"></select>
+            ng-change="updateTargetGrade(project.targetGrade)"></select>
         </div><!--/target-grade-body-->
       </div><!--/target-grade-card-->
       <div class="card card-default card-lg card-burndown">
@@ -26,7 +26,7 @@
           </div>
         </div><!--/burndown-heading-->
         <div class="card-body">
-          <progress-burndown-chart project="project" unit="project.unit()"></progress-burndown-chart>
+          <progress-burndown-chart project="project" unit="project.unit"></progress-burndown-chart>
         </div><!--/burndown-body-->
         <div class="card-footer">
           Aim to keep your
@@ -57,7 +57,7 @@
           tasks and have
           <strong>{{numberOfTasks.remaining}}</strong>
           left to complete to achieve a
-          <strong>{{grades.names[project.target_grade]}}</strong>.
+          <strong>{{grades.names[project.targetGrade]}}</strong>.
         </div><!--/pie-chart-footer-->
       </div><!--/pie-chart-card-->
     </div><!--/pie-chart-column-->

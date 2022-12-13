@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
+import { TaskComment, Task } from 'src/app/api/models/doubtfire-model';
 import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
 
 @Component({
@@ -10,7 +10,7 @@ import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comm
 })
 export class ExtensionCommentComponent implements OnInit {
   @Input() comment: ExtensionComment;
-  @Input() task: any;
+  @Input() task: Task;
 
   constructor(@Inject(alertService) private alerts: any) {}
 
@@ -37,7 +37,7 @@ export class ExtensionCommentComponent implements OnInit {
   }
 
   get isNotStudent() {
-    return this.task.project().unit().my_role !== 'Student';
+    return this.task.unit.currentUserIsStaff;
   }
 
   denyExtension() {

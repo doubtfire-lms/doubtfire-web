@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/rollover/directives/unit-dates-selector/unit-dates-selector.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, Unit, RolloverUnit, alertService, analyticsService, unitService, TeachingPeriod) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, alertService, newTeachingPeriodService) ->
     $scope.calOptions = {
       startOpened: false
       endOpened: false
@@ -17,8 +17,26 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     # Get the configurable, external name of Doubtfire
     $scope.externalName = DoubtfireConstants.ExternalName
 
+    $scope.saveData = {
+      id: $scope.unit.id,
+      toPeriod: null,
+      startDate: null,
+      endDate: null
+    }
+
     # get the teaching periods- gets an object with the loaded teaching periods
-    $scope.teachingPeriods = TeachingPeriod.query()
+    newTeachingPeriodService.cache.values.subscribe(
+      (periods) ->
+        $scope.teachingPeriodValues = [{value: undefined, text: "None"}]
+        other = periods.filter((tp) -> tp.endDate > Date.now()).map((p) -> {value: p, text: "#{p.year} #{p.period}"})
+        _.each other, (d) -> $scope.teachingPeriodValues.push(d)
+
+        if (periods.length > 0)
+          $scope.saveData.toPeriod = periods[periods.length - 1]
+    )
+
+    $scope.teachingPeriodSelected = ($event) ->
+      $scope.saveData.toPeriod = $event
 
     # Datepicker opener
     $scope.open = ($event, pickerData) ->
@@ -38,34 +56,24 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
     }
 
     $scope.saveUnit = ->
-      #Assign unit roles to null, otherwise it will not update the role in unit list
-      unitService.loadedUnitRoles = null
-
-      if $scope.unit.start_date && $scope.unit.start_date.getMonth
-        $scope.unit.start_date = "#{$scope.unit.start_date.getFullYear()}-#{$scope.unit.start_date.getMonth() + 1}-#{$scope.unit.start_date.getDate()}"
-      if $scope.unit.end_date && $scope.unit.end_date.getMonth
-        $scope.unit.end_date = "#{$scope.unit.end_date.getFullYear()}-#{$scope.unit.end_date.getMonth() + 1}-#{$scope.unit.end_date.getDate()}"
-
-      if $scope.unit.teaching_period_id
-        saveData = {
-          id: $scope.unit.id
-          teaching_period_id: $scope.unit.teaching_period_id
+      if $scope.saveData.toPeriod
+        body = {
+          teaching_period_id: $scope.saveData.toPeriod.id
         }
       else
-        saveData = {
-          id: $scope.unit.id
-          start_date: $scope.unit.start_date
-          end_date: $scope.unit.end_date
+        body = {
+          start_date: $scope.saveData.startDate
+          end_date: $scope.saeData.endDate
         }
-
-      RolloverUnit.create(
-        saveData
-        (response) ->
+      $scope.unit.rolloverTo(body).subscribe({
+        next: (response) ->
           alertService.add("success", "Unit created.", 2000)
-          analyticsService.event 'Unit Admin', 'Saved New Unit'
-          $state.go("admin/units")
-        (response) ->
-          alertService.add 'danger', "Error creating unit - #{response.data.error}"
-      )
+          $state.go("units/admin", {unitId: response.id})
+        error: (response) ->
+          alertService.add 'danger', "Error creating unit - #{response}"
+
+      })
+
+
 
 )

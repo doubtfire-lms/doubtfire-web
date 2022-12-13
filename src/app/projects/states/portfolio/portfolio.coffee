@@ -18,7 +18,7 @@ angular.module('doubtfire.projects.states.portfolio', [
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, taskService, gradeService, PortfolioSubmission, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, analyticsService) ->
   #
   # Active task tab group
   #
@@ -50,24 +50,21 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.setActiveTab (tab for tabKey, tab of $scope.tabs when tab.seq is newSeq)[0]
 
   $scope.projectHasLearningSummaryReport = ->
-    _.filter($scope.project.portfolio_files, { idx: 0 }).length > 0
+    _.filter($scope.project.portfolioFiles, { idx: 0 }).length > 0
 
   # Determine whether project is using draft learning summary
-  $scope.projectHasDraftLearningSummaryReport = $scope.project.uses_draft_learning_summary
-
-  # Portfolio submission object
-  $scope.portfolioSubmission = PortfolioSubmission($scope.project)
+  $scope.projectHasDraftLearningSummaryReport = $scope.project.usesDraftLearningSummary
 
   # Called whenever a new file is added to the portfolio
   $scope.addNewFilesToPortfolio = (newFile) ->
-    $scope.project.portfolio_files.push newFile
+    $scope.project.portfolioFiles.push newFile
 
   # Delete file from the portfolio
   $scope.deleteFileFromPortfolio = (file) ->
-    $scope.portfolioSubmission.deleteFile($scope.project, file)
+    $scope.project.deleteFileFromPortfolio(file)
 
   # Update targetGrade value on change
-  $scope.$watch 'project.target_grade', (newValue) ->
+  $scope.$watch 'project.targetGrade', (newValue) ->
     $scope.targetGrade = gradeService.grades[newValue]
 
   # Get the confugurable, external name of Doubtfire
@@ -75,7 +72,7 @@ angular.module('doubtfire.projects.states.portfolio', [
 
   # Get only extra files submitted
   $scope.extraFiles = ->
-    _.filter $scope.project.portfolio_files, (f) ->
+    _.filter $scope.project.portfolioFiles, (f) ->
       # when f.idx is 0 it's the LSR
       f.idx isnt 0
 
@@ -87,16 +84,16 @@ angular.module('doubtfire.projects.states.portfolio', [
     if $scope.unitHasILOs
       # Filter by aligned tasks that are included
       tasks = _.filter $scope.project.tasks, (t) ->
-        hasAlignmentsForTask = _.find($scope.project.task_outcome_alignments, { task_id: t.id })?
-        t.include_in_portfolio and hasAlignmentsForTask
+        hasAlignmentsForTask = _.find($scope.project.taskOutcomeAlignments, (ta) -> ta.task.id ==  t.id )?
+        t.includeInPortfolio and hasAlignmentsForTask
     else
       # Filter by included in portfolio
-      tasks = _.filter $scope.project.tasks, (t) -> t.include_in_portfolio
-    tasks = _.filter tasks, (t) -> !_.includes(taskService.toBeWorkedOn, t.status)
+      tasks = _.filter $scope.project.tasks, (t) -> t.includeInPortfolio
+    tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 
   # Jump to a step
-  if $scope.project.portfolio_available or $scope.project.compile_portfolio
+  if $scope.project.portfolioAvailable or $scope.project.compilePortfolio
     $scope.setActiveTab $scope.tabs.reviewStep
   else if $scope.projectHasDraftLearningSummaryReport
     $scope.setActiveTab $scope.tabs.summaryStep
@@ -106,9 +103,9 @@ angular.module('doubtfire.projects.states.portfolio', [
     $scope.setActiveTab $scope.tabs.welcomeStep
 
   #
-  # Functions from taskService to get data
+  # Functions from newTaskService to get data
   #
-  $scope.statusText = taskService.statusText
-  $scope.statusData = taskService.statusData
-  $scope.statusClass = taskService.statusClass
+  $scope.statusText = newTaskService.statusText
+  $scope.statusData = newTaskService.statusData
+  $scope.statusClass = newTaskService.statusClass
 )

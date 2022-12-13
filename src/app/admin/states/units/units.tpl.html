@@ -1,5 +1,9 @@
 <div class="container">
-  <div class="panel panel-primary">
+  <div class="large-notice-block" ng-hide="dataLoaded">
+    <i class="fa fa-pulse fa-2x fa-spinner"></i>
+    <p>Loading unit details...</p>
+  </div>
+  <div class="panel panel-primary" ng-show="dataLoaded">
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Units</h4>
@@ -13,7 +17,7 @@
           type="search"
           ng-model="search"
           autocomplete="off"
-          typeahead="unit.name for unit in units | filter:$viewValue | limitTo:8"
+          typeahead="text for text in typeAhead(units) | filter:$viewValue | limitTo:8"
         />
         <p ng-show="filteredUnits.length < students.length && filteredUnits.length != 0">
           Showing {{filteredUnits.length}} of {{users.length}} users.
@@ -53,13 +57,13 @@
                 ></a>
               </th>
               <th>
-                <a ng-click="sortOrder='start_date'; reverse=!reverse"
-                  >Start Date <i ng-show="sortOrder=='start_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i
+                <a ng-click="sortOrder='startDate'; reverse=!reverse"
+                  >Start Date <i ng-show="sortOrder=='startDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i
                 ></a>
               </th>
               <th>
-                <a ng-click="sortOrder='end_date'; reverse=!reverse"
-                  >End Date <i ng-show="sortOrder=='end_date'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i
+                <a ng-click="sortOrder='endDate'; reverse=!reverse"
+                  >End Date <i ng-show="sortOrder=='endDate'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i
                 ></a>
               </th>
               <th>
@@ -78,14 +82,14 @@
                 <label class="label label-info"> {{unit.code}} </label>
               </td>
               <td>{{unit.name}}</td>
-              <td>{{(unit.unitRole.role | ucfirst) || "N/A"}}</td>
+              <td>{{(unit.myRole | ucfirst) || "N/A"}}</td>
               <td ng-if="unit.teachingPeriod">{{unit.teachingPeriod.name()}}</td>
               <td ng-if="!unit.teachingPeriod">Custom</td>
-              <td>{{unit.start_date | date : 'EEE d MMM y'}}</td>
-              <td>{{unit.end_date | date : 'EEE d MMM y'}}</td>
+              <td>{{unit.startDate | date : 'EEE d MMM y'}}</td>
+              <td>{{unit.endDate | date : 'EEE d MMM y'}}</td>
               <td ng-if="unit.teachingPeriod">
-                <i ng-if="unit.teachingPeriod.active() && unit.active" class="fa fa-check"></i>
-                <i ng-if="!unit.teachingPeriod.active() || !unit.active" class="fa fa-times"></i>
+                <i ng-if="unit.teachingPeriod.active && unit.active" class="fa fa-check"></i>
+                <i ng-if="!unit.teachingPeriod.active || !unit.active" class="fa fa-times"></i>
               </td>
               <td ng-if="!unit.teachingPeriod">
                 <i ng-if="unit.active" class="fa fa-check"></i>

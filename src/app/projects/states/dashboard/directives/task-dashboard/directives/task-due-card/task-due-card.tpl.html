@@ -30,9 +30,15 @@
       <div class="card-body" ng-hide="task.inDiscussState()"> <!--Not in submitted state and overdue-->
         <p>
           You should have completed this task by <strong>{{task.localDueDateString()}}</strong>.
-          Try and finish it as soon as possible to avoid falling behind. You will need to
-          request an extension in order to have this task checked and marked as complete by
-          your tutor.
+          Try and finish it as soon as possible to avoid falling behind. As you will submit this
+          task after the deadline for feedback, it will not be reviewed by a tutor and it is now
+          your sole responsibility to ensure that this submission meets the required standard.
+          The task will be assessed as part of the portfolio.
+        </p>
+        <p>
+          Aim to submit future tasks before the deadline to make good use of the opportunity to
+          receive feedback on your work and your tutor will work with you to make sure that your
+          submission meets all the requirements.
         </p>
       </div>
       <div class="card-body" ng-show="task.inDiscussState()"> <!--Not discussed-->

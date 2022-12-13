@@ -80,14 +80,14 @@
                 [removable]="true"
                 (removed)="includeExclusion(project)"
               >
-                {{ project.unit_code }}
+                {{ project.unit.code }}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
               <mat-chip *ngIf="excludedProjects.length > 0" [matMenuTriggerFor]="menu">
                 <mat-icon>add</mat-icon>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item *ngFor="let project of excludedProjects" (click)="removeExclusion(project)">
-                    {{ project.unit_code }}: {{ project.unit_name }}
+                    {{ project.unit.code }}: {{ project.unit.name }}
                   </button>
                 </mat-menu>
               </mat-chip>
@@ -154,7 +154,7 @@
           <br />
 
           <mat-checkbox
-            [checked]="webcal.include_start_dates"
+            [(ngModel)]="webcal.includeStartDates"
             [disabled]="working"
             (change)="toggleIncludeTaskStartDates()"
           >

@@ -1,5 +1,5 @@
 import { Component, Input, Inject, OnInit } from '@angular/core';
-import { taskService } from 'src/app/ajs-upgraded-providers';
+import { TaskStatus, TaskStatusEnum } from 'src/app/api/models/task-status';
 
 @Component({
   selector: 'status-icon',
@@ -7,21 +7,21 @@ import { taskService } from 'src/app/ajs-upgraded-providers';
   styleUrls: ['./status-icon.component.scss'],
 })
 export class StatusIconComponent implements OnInit {
-  @Input() status;
+  @Input() status: TaskStatusEnum = "not_started";
   @Input() showTooltip: boolean;
 
-  statusIcon;
-  statusLabel;
-  statusClass;
+  statusIcon: (status: TaskStatusEnum) => string;
+  statusLabel: (status: TaskStatusEnum) => string;
+  statusClass: (status: TaskStatusEnum) => string;
 
-  constructor(@Inject(taskService) private TaskService: any) {}
+  constructor() {}
 
   ngOnInit(): void {
     if (this.showTooltip == null) {
       this.showTooltip = true;
     }
-    this.statusIcon = (status) => this.TaskService.statusIcons[status];
-    this.statusLabel = (status) => this.TaskService.statusLabels[status];
-    this.statusClass = (status) => this.TaskService.statusClass(status);
+    this.statusIcon = (status: TaskStatusEnum) => TaskStatus.STATUS_ICONS.get(status);
+    this.statusLabel = (status: TaskStatusEnum) => TaskStatus.STATUS_LABELS.get(status);
+    this.statusClass = (status: TaskStatusEnum) => TaskStatus.statusClass(status);
   }
 }

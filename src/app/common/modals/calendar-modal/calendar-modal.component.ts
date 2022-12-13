@@ -2,9 +2,9 @@ import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/co
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
+import { Project, ProjectService, Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { alertService, projectService } from 'src/app/ajs-upgraded-providers';
+import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({
   selector: 'calendar-modal',
@@ -17,7 +17,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   webcal: Webcal | null;
   working: boolean = true;
   copying: boolean = false;
-  projects: any[] = [];
+  projects: Project[] = [];
 
   // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
   // because they are resettable.
@@ -30,9 +30,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private sanitizer: DomSanitizer,
     @Inject(alertService) private alerts: any,
-    @Inject(projectService) private ProjectService: any,
+    private projectService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Retrieve current webcal.
@@ -43,8 +43,8 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     });
 
     // Allow selection of units with active projects.
-    this.ProjectService.getProjects(false, (projects) => {
-      this.projects = projects.filter((p) => p.teachingPeriod()?.active() ?? true);
+    this.projectService.query(undefined, {params: {include_inactive: false}}).subscribe((projects) => {
+      this.projects = projects.filter((p) => p.unit.teachingPeriod?.active ?? true);
     });
   }
 
@@ -66,12 +66,10 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   onWebcalToggle() {
     this.working = true;
+    this.webcal.enabled = !this.webcal.enabled;
+
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          enabled: !this.webcal.enabled,
-        })
-      )
+      .update(this.webcal)
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -86,12 +84,10 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   onCopyWebcalUrl() {
     this.alerts.add('success', 'Web calendar URL copied to the clipboard', 2000);
     this.copying = true;
-    new Promise((resolve) =>
-      setTimeout(() => {
-        this.copying = false;
-        resolve(null);
-      }, 1000)
-    ).then();
+
+    setTimeout(() => {
+      this.copying = false;
+    }, 1000)
   }
 
   /**
@@ -99,12 +95,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   onChangeWebcalUrl() {
     this.working = true;
+    this.webcal.shouldChangeGuid = true;
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          should_change_guid: true,
-        })
-      )
+      .update(this.webcal)
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -128,12 +121,10 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
       // ...and a reminder does exist, make backend request to remove it.
       if (this.webcal.reminder) {
         this.working = true;
+        this.webcal.reminder = null;
+
         this.webcalService
-          .update(
-            this.currentWebcalWith({
-              reminder: null,
-            })
-          )
+          .update(this.webcal)
           .subscribe((webcal) => {
             this.loadWebcal(webcal);
             this.working = false;
@@ -152,15 +143,12 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   onSaveReminderEdits() {
     if (this.newReminderTime > 0) {
       this.working = true;
+      this.webcal.reminder = {
+        time: this.newReminderTime,
+        unit: this.newReminderUnit,
+      };
       this.webcalService
-        .update(
-          this.currentWebcalWith({
-            reminder: {
-              time: this.newReminderTime,
-              unit: this.newReminderUnit,
-            },
-          })
-        )
+        .update(this.webcal)
         .subscribe((webcal) => {
           this.loadWebcal(webcal);
           this.working = false;
@@ -183,11 +171,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   toggleIncludeTaskStartDates() {
     this.working = true;
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          include_start_dates: !this.webcal.include_start_dates,
-        })
-      )
+      .update( this.webcal )
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -197,15 +181,23 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   /**
    * Retrieves a list of excluded projects.
    */
-  get excludedProjects() {
-    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) !== -1);
+  get excludedProjects(): Project[] {
+    if (this.webcal.unitExclusions && this.webcal.unitExclusions.length > 0) {
+      return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) !== -1);
+    } else {
+      return [];
+    }
   }
 
   /**
    * Retrieves a list of included projects.
    */
-  get includedProjects() {
-    return this.projects.filter((p) => this.webcal.unit_exclusions.indexOf(p.unit_id) === -1);
+  get includedProjects(): Project[] {
+    if (this.webcal.unitExclusions && this.webcal.unitExclusions.length > 0) {
+      return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) === -1);
+    } else {
+      return this.projects;
+    }
   }
 
   /**
@@ -213,12 +205,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   removeExclusion(project) {
     this.working = true;
+    this.webcal.unitExclusions = this.webcal.unitExclusions.filter((p) => p !== project.unit.id);
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          unit_exclusions: this.webcal.unit_exclusions.filter((p) => p !== project.unit_id),
-        })
-      )
+      .update(this.webcal)
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -230,12 +219,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   includeExclusion(project) {
     this.working = true;
+    this.webcal.unitExclusions = [...this.webcal.unitExclusions, project.unit.id];
     this.webcalService
-      .update(
-        this.currentWebcalWith({
-          unit_exclusions: [...this.webcal.unit_exclusions, project.unit_id],
-        })
-      )
+      .update(this.webcal)
       .subscribe((webcal) => {
         this.loadWebcal(webcal);
         this.working = false;
@@ -259,10 +245,4 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /**
-   * Returns a new `Webcal` based off `this.webcal`, that includes the attributes of `o`.
-   */
-  private currentWebcalWith(o: Partial<Webcal>): Webcal {
-    return new Webcal({ ...this.webcal.toJson(), ...o });
-  }
 }
