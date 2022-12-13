@@ -33,7 +33,7 @@ angular.module('doubtfire.units.states.rollover', [
     newUnitService.get(unitId).subscribe({
       next: (unit)-> $scope.unit = unit
       error: (err)->
-        alertService.add("danger", "Error loading unit: " + err, 8000)
+        alertService.danger("Error loading unit: " + err)
         setTimeout((()-> $state.go('home')), 5000)
     })
 
