@@ -1,19 +1,4 @@
-<!-- alert-list.tpl.html Angular Js code (old)  -->
-<!-- <div class="alert-top">
-    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">
-      <div class="alert-wrapper">
-  
-        <i class="fa fa-3x"></i>
-  
-        <div class="alert-content">
-          <div ng-bind-html="alert.msg"></div>
-        </div>
-  
-      </div>
-    </alert>
-</div> -->
 
-<!-- Convert to alert-list.component.html Angular code (new) -->
 <div class="alert-top">
   {{alertService.alerts}} Test
     <alert *ngFor="let alert of alertService.alerts" [type]="alert.type" [close]="alert.close()">
