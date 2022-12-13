@@ -5,6 +5,7 @@ import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { AlertService } from '../services/alert.service';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
@@ -104,7 +105,6 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
       .toLowerCase();
   }
 
-
   /**
    * Submit the form data to the server and create or update an entity
    * based on the form's state. A new entity will be created if there is
@@ -114,7 +114,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * @param alertService the alert service used to provide alerts.
    * @param success the function, provided by inheritor, that is executed on success of CRUD methods.
    */
-  submit(service: EntityService<T>, alertService: any, success: OnSuccessMethod<T>) {
+  submit(service: EntityService<T>, alertService: AlertService, success: OnSuccessMethod<T>) {
     // response is what we get back from the server
     // when creating or updating
     let response: Observable<T>;
@@ -139,14 +139,14 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         response = service.create(data, this.optionsOnRequest('create'));
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
-        alertService.add('danger', `${this.entityName} was not changed`, 6000);
+        alertService.danger(`${this.entityName} was not changed`);
         return;
       }
 
       // Handle the response
-      response.subscribe( {
+      response.subscribe({
         next: (result: T) => {
-          alertService.add('success', `${this.entityName} saved`, 2000);
+          alertService.success(`${this.entityName} saved`);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
           success(result, this.selected ? false : true);
@@ -164,8 +164,8 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.add('danger', `${this.entityName} save failed: ${error}`, 6000);
-        }
+          alertService.danger(`${this.entityName} save failed: ${error}`);
+        },
       });
     } else {
       // Once we mark forms as touched, erroneous state will be rendered
@@ -174,11 +174,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<any> {
-    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(tap(
-      (obj) => {
+  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<any> {
+    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(
+      tap((obj) => {
         this.cancelEdit();
-        entities.splice( entities.indexOf(entity), 1);
+        entities.splice(entities.indexOf(entity), 1);
         this.dataSource.data = entities;
       })
     );
