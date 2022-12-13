@@ -27,6 +27,6 @@ angular.module("doubtfire.common.modals.comments-modal", [])
       $scope.rawResourceUrl = url
       $scope.commentResourceUrl = $sce.trustAsResourceUrl(url)
     (error) ->
-      alertService.add('danger', "Error downloading comment: #{error}")
+      alertService.danger("Error downloading comment: #{error}")
   )
 )
