@@ -22,10 +22,10 @@ angular.module('doubtfire.tasks.task-plagiarism-file-viewer', [])
     $scope.dismiss_similarity = (value) ->
       $scope.task.updateSimilarity($scope.matchIdx, $scope.other, value).subscribe(
         next: (data) ->
-          alertService.add("success", "Similarity dismiss status changed.", 4000)
+          alertService.success("Similarity dismiss status changed.")
           $scope.match.dismissed = value
         error: (response) ->
           message = response.data || response.statusText
-          alertService.add("danger", "Failed to change status. #{message}")
+          alertService.danger("Failed to change status. #{message}")
       )
 )
