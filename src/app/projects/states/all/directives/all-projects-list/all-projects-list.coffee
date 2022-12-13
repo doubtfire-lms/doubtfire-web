@@ -40,7 +40,7 @@ angular.module('doubtfire.projects.states.all.directives.all-projects-list', [])
       hasProjects = true
       $timeout.cancel(timeoutPromise)
     error: (message) ->
-      alertService.add("danger", "Failed to load units you study. #{message}", 6000)
+      alertService.danger("Failed to load units you study. #{message}")
   })
 
   checkEnrolled = ->
