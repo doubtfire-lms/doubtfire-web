@@ -44,7 +44,7 @@ angular.module('doubtfire.units.states.plagiarism.directives.unit-student-plagia
           next: (project) ->
             $scope.activeTask = $filter('taskWithPlagiarism')(student.tasks)[0]
             $scope.loadingStudent = false
-          error: (message) -> alertService.add("danger", message, 6000)
+          error: (message) -> alertService.danger(message)
         })
 
     $scope.selectTask = (task) ->
