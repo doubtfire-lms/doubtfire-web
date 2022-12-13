@@ -18,9 +18,9 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
 
       newGroupSetService.store(groupSet, {cache: $scope.unit.groupSetsCache}).subscribe({
         next: (gs) ->
-          alertService.add("success", "Group set created.", 2000)
+          alertService.success("Group set created.")
         error: (message) ->
-          alertService.add("danger", "Failed to create group set. #{message}", 6000)
+          alertService.danger("Failed to create group set. #{message}")
       })
 
     $scope.saveGroupSet = (data, groupSet) ->
@@ -31,17 +31,17 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
       groupSet.capacity = data.capacity
 
       newGroupSetService.update(groupSet).subscribe({
-        next: (response) -> alertService.add("success", "Group set updated.", 2000)
-        error: (message) -> alertService.add("danger", "Failed to update group set. #{message}", 6000)
+        next: (response) -> alertService.success("Group set updated.")
+        error: (message) -> alertService.danger("Failed to update group set. #{message}")
       })
 
     $scope.toggleLocked = (gs) ->
       gs.locked = !gs.locked
       newGroupSetService.update(gs).subscribe({
         next: (response) ->
-          alertService.add("success", "#{if response.locked then 'Locked' else 'Unlocked'} #{gs.name}", 2000)
+          alertService.success("#{if response.locked then 'Locked' else 'Unlocked'} #{gs.name}")
         error: (message) ->
-          alertService.add("danger", "Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}. #{message}", 6000)
+          alertService.danger("Failed to #{if gs.locked then 'unlock' else 'lock'} #{gs.name}. #{message}")
       })
 
     $scope.removeGroupSet = (gs) ->
@@ -49,8 +49,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
         next: (response) ->
           if gs is $scope.selectedGroupSet
             $scope.selectGroupSet($scope.unit.groupSets[0])
-          alertService.add("success", "Group set deleted.", 2000)
-        error: (message) -> alertService.add("danger", "Failed to delete group set. #{message}", 6000)
+          alertService.success("Group set deleted.")
+        error: (message) -> alertService.danger("Failed to delete group set. #{message}")
       })
 
     $scope.selectGroupSet = (gs) ->
