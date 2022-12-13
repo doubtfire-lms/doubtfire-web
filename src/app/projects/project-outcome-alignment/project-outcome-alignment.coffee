@@ -30,7 +30,7 @@ angular.module("doubtfire.projects.project-outcome-alignment", [])
           newUnitService.loadLearningProgressClassStats($scope.unit).subscribe({
             next: (response) -> $scope.classStats = response
             error: (response) ->
-              alertService.add("danger", response, 6000)
+              alertService.danger(response)
               $scope.classStats = {}
           })
       $scope.poaView.activeTab = tab
