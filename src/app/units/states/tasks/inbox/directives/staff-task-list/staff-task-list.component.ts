@@ -1,17 +1,16 @@
+import { AlertService } from 'src/app/common/services/alert.service';
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 
 import {
   Component,
   OnInit,
   Input,
-  Inject,
   OnChanges,
   SimpleChanges,
   HostListener,
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
@@ -37,7 +36,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() project: Project;
 
   @Input() taskData: {
-    source: (unit: Unit, taskDef: TaskDefinition | number ) => Observable<Task[]>;
+    source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
     selectedTask: Task;
     taskKey: string;
     onSelectedTaskChange: (task: Task) => void;
@@ -51,7 +50,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
-    taskDefinitionIdSelected: number | TaskDefinition; };
+    taskDefinitionIdSelected: number | TaskDefinition;
+  };
   @Input() showSearchOptions = false;
 
   isNarrow: boolean;
@@ -109,7 +109,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    @Inject(alertService) private alertService,
+    private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
     private userService: UserService
@@ -140,7 +140,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         tutorials: [],
         taskDefinitionIdSelected: null,
         taskDefinition: null,
-        forceStream: true
+        forceStream: true,
       },
       this.filters
     );
@@ -156,7 +156,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
           inboxDescription: `${t.abbreviation} - ${t.description}`,
           abbreviation: t.abbreviation,
           forceStream: true,
-          tutorial: t
+          tutorial: t,
         };
       }),
     ];
@@ -170,19 +170,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   public get isTaskDefMode(): boolean {
-    return this.taskData.taskDefMode &&
-      this.filters?.taskDefinitionIdSelected &&
-      this.showSearchOptions;
+    return this.taskData.taskDefMode && this.filters?.taskDefinitionIdSelected && this.showSearchOptions;
   }
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/student_pdfs`, `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`);
+    this.fileDownloaderService.downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${
+        taskDef.id
+      }/student_pdfs`,
+      `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`
+    );
   }
 
   downloadSubmissions() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/download_submissions`, `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`);
+    this.fileDownloaderService.downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${
+        taskDef.id
+      }/download_submissions`,
+      `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`
+    );
   }
 
   openDialog() {
@@ -198,7 +206,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     if (this.filters.tutorials) {
-      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials.map(t=> t.id), this.filters.forceStream);
+      filteredTasks = this.tasksInTutorialsPipe.transform(
+        filteredTasks,
+        this.filters.tutorials.map((t) => t.id),
+        this.filters.forceStream
+      );
     }
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
@@ -264,7 +276,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       return;
     }
     const taskDef =
-      this.unit.taskDefinitionCache.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.taskDefinitionCache.currentValues[0];
+      this.unit.taskDefinitionCache.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) ||
+      this.unit.taskDefinitionCache.currentValues[0];
     this.filters.taskDefinitionIdSelected = taskDef.id;
     this.filters.taskDefinition = taskDef;
   }
@@ -297,8 +310,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         }
       },
       error: (message) => {
-        this.alertService.add('danger', message, 6000);
-      }
+        this.alertService.danger(message);
+      },
     });
   }
 
