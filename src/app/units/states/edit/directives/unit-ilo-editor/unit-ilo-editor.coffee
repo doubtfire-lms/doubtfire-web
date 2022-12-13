@@ -33,8 +33,8 @@ angular.module('doubtfire.units.states.edit.directives.unit-ilo-editor',[])
     $scope.deleteILO = (ilo) ->
       newLearningOutcomeService.delete({ id: ilo.id, unitId: $scope.unit.id }, {entity: ilo, cache: $scope.unit.learningOutcomesCache}).subscribe({
         next: (response) ->
-          alertService.add("success", "ILO #{ilo.id} was deleted successfully", 2000)
+          alertService.success("ILO #{ilo.id} was deleted successfully")
         error: (response) ->
-          alertService.add("danger", "Error: " + response, 6000)
+          alertService.danger("Error: " + response)
       })
 )
