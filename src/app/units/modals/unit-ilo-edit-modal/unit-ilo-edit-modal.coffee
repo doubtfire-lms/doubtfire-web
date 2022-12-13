@@ -39,16 +39,16 @@ angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
       }).subscribe({
         next: (response) ->
           $modalInstance.close(response)
-          alertService.add("success", "Intended Learning Outcome Added", 2000)
+          alertService.success("Intended Learning Outcome Added")
         error: (response) ->
-          alertService.add("danger", response, 6000)
+          alertService.danger(response)
       })
     else
       newLearningOutcomeService.update( {unitId: unit.id, id: ilo.id}, {entity: ilo}).subscribe({
         next: (response) ->
           $modalInstance.close(response)
-          alertService.add("success", "Intended Learning Outcome Updated", 2000)
+          alertService.success("Intended Learning Outcome Updated")
         error: (response) ->
-          alertService.add("danger", response, 6000)
+          alertService.danger(response)
       })
 )
