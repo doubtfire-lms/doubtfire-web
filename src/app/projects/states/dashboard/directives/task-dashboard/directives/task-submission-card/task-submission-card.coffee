@@ -37,13 +37,13 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard.di
         {
           next: (response) ->
             if response.result == "false"
-              alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 6000)
+              alertService.danger("Request failed, cannot recreate PDF at this time.")
             else
               task.processingPdf = true
-              alertService.add("success", "Task PDF will be recreated.", 2000)
+              alertService.success("success", "Task PDF will be recreated.")
 
           error: (response) ->
-            alertService.add("danger", "Request failed, cannot recreate PDF at this time.", 6000)
+            alertService.danger("Request failed, cannot recreate PDF at this time.")
         }
       )
 
