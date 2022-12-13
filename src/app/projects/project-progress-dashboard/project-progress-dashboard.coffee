@@ -25,7 +25,7 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       $scope.project.targetGrade = idx
       newProjectService.update($scope.project).subscribe(
         (response) ->
-          alertService.add("success", "Target updated")
+          alertService.success("Target updated")
       )
       updateTaskCompletionStats()
 
