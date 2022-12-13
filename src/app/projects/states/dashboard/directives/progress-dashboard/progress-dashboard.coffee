@@ -36,9 +36,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.progress-dashboar
           $scope.renderTaskStatusPieChart?()
           $scope.onUpdateTargetGrade?()
           analyticsService.event("Student Project View - Progress Dashboard", "Grade Changed", $scope.grades.names[newGrade])
-          alertService.add("success", "Updated target grade successfully", 2000)
+          alertService.success("Updated target grade successfully")
 
         (failure) ->
-          alertService.add("danger", "Failed to update target grade", 4000)
+          alertService.danger("Failed to update target grade")
       )
 )
