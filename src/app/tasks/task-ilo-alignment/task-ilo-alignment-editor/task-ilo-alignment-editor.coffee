@@ -73,8 +73,8 @@ angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-editor',[]
     $scope.includeTaskInPorfolio = (task) ->
       task.includeInPortfolio = !task.includeInPortfolio
       newTaskService.update(task).subscribe({
-        next: (success) -> alertService.add("success", "Task updated")
-        error: (message) -> alertService.add("danger", message)
+        next: (success) -> alertService.success("Task updated")
+        error: (message) -> alertService.danger(message)
       })
 
 
