@@ -50,10 +50,10 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
       }
     newTaskOutcomeAlignmentService.delete($scope.alignment, {cache: $scope.alignment.within.taskOutcomeAlignmentsCache, params: params}).subscribe({
       next: (response) ->
-        alertService.add("success", "Task - Outcome alignment rating removed", 2000)
+        alertService.success("Task - Outcome alignment rating removed")
         $rootScope.$broadcast('UpdateAlignmentChart')
         $modalInstance.close $scope.alignment
-      error: (message) -> alertService.add("danger", message, 6000)
+      error: (message) -> alertService.danger(message)
     })
 
   updateAlignment = ->
@@ -63,9 +63,9 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
       }
     newTaskOutcomeAlignmentService.update($scope.alignment, {cache: $scope.alignment.within.taskOutcomeAlignmentsCache, params: params}).subscribe({
       next: (response) ->
-        alertService.add("success", "Task - Outcome alignment rating saved", 2000)
+        alertService.success("success", "Task - Outcome alignment rating saved")
         $rootScope.$broadcast('UpdateAlignmentChart')
-      error: (message) -> alertService.add("danger", message, 6000)
+      error: (message) -> alertService.danger(message)
     })
 
   addAlignment = ->
@@ -77,7 +77,7 @@ angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-mod
       next: (response) ->
         $scope.alignment = response
         $rootScope.$broadcast('UpdateAlignmentChart')
-      error: (message) -> alertService.add("danger", message, 6000)
+      error: (message) -> alertService.danger(message)
     })
 
   $scope.updateRating = (alignment) ->
