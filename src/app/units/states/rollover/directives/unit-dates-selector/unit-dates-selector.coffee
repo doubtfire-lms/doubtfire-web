@@ -67,10 +67,10 @@ angular.module('doubtfire.units.states.rollover.directives.unit-dates-selector',
         }
       $scope.unit.rolloverTo(body).subscribe({
         next: (response) ->
-          alertService.add("success", "Unit created.", 2000)
+          alertService.success("Unit created.")
           $state.go("units/admin", {unitId: response.id})
         error: (response) ->
-          alertService.add 'danger', "Error creating unit - #{response}"
+          alertService.danger ("Error creating unit - #{response}")
 
       })
 
