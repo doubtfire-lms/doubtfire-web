@@ -78,7 +78,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.taskSheetUploadUrl = -> $scope.task.taskSheetUploadUrl
 
     $scope.onTaskSheetSuccess = (response) ->
-      alertService.add("success", "Task sheet uploaded", 2000)
+      alertService.success("Task sheet uploaded")
       $scope.task.hasTaskSheet = true
 
     # Assign task the stream - this is called
@@ -95,20 +95,20 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
 
     $scope.removeTaskSheet = (task) ->
       task.deleteTaskSheet().subscribe({
-        next: (success) -> alertService.add("success", "Deleted task sheet", 2000)
-        error: (message) ->alertService.add("danger", message, 6000)
+        next: (success) -> alertService.success("Deleted task sheet")
+        error: (message) ->alertService.danger(message)
       })
 
     $scope.removeTaskResources = (task) ->
       task.deleteTaskResources().subscribe({
-        next: (success) -> alertService.add("success", "Deleted task resources", 2000)
-        error: (message) ->alertService.add("danger", message, 6000)
+        next: (success) -> alertService.success("Deleted task resources")
+        error: (message) ->alertService.danger(message)
       })
 
     $scope.removeTaskAssessmentResources = (task) ->
       task.deleteTaskAssessmentResources().subscribe({
-        next: (success) -> alertService.add("success", "Deleted task assessment resources", 2000)
-        error: (message) ->alertService.add("danger", message, 6000)
+        next: (success) -> alertService.success("Deleted task assessment resources")
+        error: (message) ->alertService.danger(message)
       })
 
     #
@@ -118,7 +118,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.taskResourcesUploadUrl = -> $scope.task.taskResourcesUploadUrl
 
     $scope.onTaskResourcesSuccess = (response) ->
-      alertService.add("success", "Task sheet uploaded", 2000)
+      alertService.success("Task sheet uploaded")
       $scope.task.hasTaskResources = true
 
     $scope.resourceUrl = ->
@@ -132,7 +132,7 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
     $scope.taskAssessmentResourcesUploadUrl = -> $scope.task.taskAssessmentResourcesUploadUrl
 
     $scope.onTaskAssessmentResourcesSuccess = (response) ->
-      alertService.add("success", "Task assessment resources uploaded", 2000)
+      alertService.success("Task assessment resources uploaded")
       $scope.task.hasTaskAssessmentResources = true
 
     $scope.downloadTaskAssessmentResources = ->
@@ -200,12 +200,12 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
       if $scope.isNew
         # TODO: add progress modal
         newTaskDefinitionService.create({unitId: $scope.unit.id}, {entity: $scope.task, cache: $scope.unit.taskDefinitionCache, constructorParams: $scope.unit} ).subscribe({
-          next: (response) -> alertService.add("success", "Task Added", 2000)
-          error: (message) -> alertService.add("danger", message, 6000)
+          next: (response) -> alertService.success("Task Added")
+          error: (message) -> alertService.danger(message)
         })
       else
         newTaskDefinitionService.update( {unitId: $scope.unit.id, id: $scope.task.id}, {entity: $scope.task} ).subscribe({
-          next: (response) -> alertService.add("success", "Task Updated", 2000)
-          error: (message) -> alertService.add("danger", message, 6000)
+          next: (response) -> alertService.success("Task Updated")
+          error: (message) -> alertService.danger(message)
         })
 )
