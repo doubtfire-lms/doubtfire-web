@@ -16,11 +16,9 @@ import { alertService } from "src/app/ajs-upgraded-providers";
 @Component({
     selector: "alert-list",
     templateUrl: "./alert-list.component.html",
-    styleUrls: ["./alert-list.component.scss"]
 })
 export class AlertListComponent {
-    constructor(@Inject(alertService) private alertService : any) {
+    constructor(@Inject(alertService) public alertService : any) {
         
     }
-    alerts = this.alertService.alerts;
 }
