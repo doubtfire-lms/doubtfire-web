@@ -29,7 +29,7 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
 
   $scope.enrolStudent = (studentId, campusId) ->
     if ! campusId?
-      alertService.add('danger', 'Campus missing. Please indicate student campus', 5000)
+      alertService.danger("Campus missing. Please indicate student campus")
       return
 
     newProjectService.create(
@@ -43,8 +43,8 @@ angular.module('doubtfire.units.modals.unit-student-enrolment-modal', [])
         constructorParams: unit
       }).subscribe({
         next: (project) ->
-          alertService.add("success", "Student enrolled", 2000)
+          alertService.success("Student enrolled")
           $modalInstance.close()
-        error: (message) -> alertService.add("danger", "Error enrolling student: #{message}", 6000)
+        error: (message) -> alertService.danger("Error enrolling student: #{message}")
       })
 )
