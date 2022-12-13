@@ -40,11 +40,11 @@ angular.module('doubtfire.units.states.index', [])
           next: (students)->
             $scope.unit = unit
           error: (err)->
-            alertService.add("danger", "Error loading students: " + err, 8000)
+            alertService.danger("Error loading students: " + err)
             setTimeout((()-> $state.go('home')), 5000)
         })
       error: (err)->
-        alertService.add("danger", "Error loading unit: " + err, 8000)
+        alertService.danger("Error loading unit: " + err)
         setTimeout((()-> $state.go('home')), 5000)
     })
 )
