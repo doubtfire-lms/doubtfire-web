@@ -39,7 +39,7 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-review-
         $scope.project.deletePortfolio().subscribe(       (response) ->
           $scope.project.portfolioAvailable = false
           $scope.project.portfolioStatus = 0
-          alertService.add('info', "Portfolio has been deleted!", 5000)
+          alertService.info("Portfolio has been deleted!")
         )
       ConfirmationModal.show("Delete Portfolio?", 'Are you sure you want to delete your portfolio? You will need to recreate your porfolio again if you do so.', doDelete)
 
