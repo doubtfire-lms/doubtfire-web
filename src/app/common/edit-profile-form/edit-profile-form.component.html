@@ -7,23 +7,23 @@
           <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
         ></a>
 
-        <div fxLayout="column" fxLayoutAlign="space-around start">
-          <h1>{{ initialFirstName }}</h1>
-          Set up your {{ externalName.value }} profile
+        <div fxLayout="column" fxLayoutAlign="space-around start"> <!-- fixed heading -->
+          <h1>Set up your {{ externalName.value }} profile{{ initialFirstName }}</h1>
+          
         </div>
       </div>
-
+          <!-- max length input changed -->
       <div fxLayout="row" fxFlexFill>
         <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
           <mat-label>First Name</mat-label>
-          <input matInput [(ngModel)]="user.firstName" name="first" required />
+          <input matInput [(ngModel)]="user.firstName" name="first" required maxlength="25" />
         </mat-form-field>
 
         <div fxFlex></div>
-
+          <!-- max length input changed -->
         <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
           <mat-label>Second Name</mat-label>
-          <input matInput [(ngModel)]="user.lastName" name="last" required />
+          <input matInput [(ngModel)]="user.lastName" name="last" required maxlength="25"/>
         </mat-form-field>
       </div>
 
@@ -41,7 +41,7 @@
         <div fxFlex="3"></div>
         <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
           <mat-label>Preferred Name</mat-label>
-          <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
+          <input matInput [(ngModel)]="user.nickname" name="preferred_name" maxlength="25"/>
         </mat-form-field>
       </div>
 
@@ -86,9 +86,11 @@
         </mat-checkbox>
       </section>
 
+
+      <!-- fixed submit button, needs link to api -->
       <div fxLayout="row" fxFlexFill style="padding-top: 12px">
-        <button [hidden]="mode === 'edit'" fxFlexAlign="start" type="button" mat-stroked-button (click)="signOut()">
-          Sign Out
+        <button [hidden]="mode === 'edit'" fxFlexAlign="start" type="button" mat-stroked-button (click)="submit()">
+          Submit
         </button>
         <div fxFlex></div>
         <button
