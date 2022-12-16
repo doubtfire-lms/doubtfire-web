@@ -63,7 +63,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/t
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
-// import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
 import 'build/src/app/config/root-controller/root-controller.js';
@@ -289,7 +288,7 @@ import { TaskAssessmentModalService } from './common/modals/task-assessment-moda
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HeaderComponent } from './common/header/header.component';
 import { GlobalStateService } from './projects/states/index/global-state.service';
-import {AlertListComponent} from './common/alert-list/alert-list.component';
+// import {AlertListComponent} from './common/alert-list/alert-list.component';
 import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -398,7 +397,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
-DoubtfireAngularJSModule.directive('alertList', downgradeComponent({ component: AlertListComponent }));
+// DoubtfireAngularJSModule.directive('alertList', downgradeComponent({ component: AlertListComponent }));
 
 
 // Global configuration
