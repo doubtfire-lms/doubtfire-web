@@ -165,6 +165,7 @@ import { UnitDropdownComponent } from './common/header/unit-dropdown/unit-dropdo
 import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdown.component';
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { AlertListComponent } from './common/alert-list/alert-list.component';
+import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 
 @NgModule({
   // Components we declare
@@ -223,6 +224,7 @@ import { AlertListComponent } from './common/alert-list/alert-list.component';
     TaskDropdownComponent,
     SplashScreenComponent,
     AlertListComponent,
+    // PrivacyPolicy,
   ],
   // Module Imports
   imports: [
@@ -334,6 +336,7 @@ import { AlertListComponent } from './common/alert-list/alert-list.component';
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    PrivacyPolicy,
   ],
 })
 // There is no longer any requirement for an EntryComponents section
@@ -346,7 +349,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
     private title: Title,
     private updater: CheckForUpdateService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
