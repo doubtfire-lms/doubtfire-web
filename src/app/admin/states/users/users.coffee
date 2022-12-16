@@ -33,7 +33,7 @@ angular.module('doubtfire.admin.states.users', [])
         $scope.users = response
       error: (response) ->
         if response.error.error?
-          alertService.add("danger", "Error: " + response.error.error, 6000)
+          alertService.danger("Error: " + response.error.error)
     }
   )
 
