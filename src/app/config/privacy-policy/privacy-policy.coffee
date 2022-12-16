@@ -7,7 +7,8 @@ angular.module("doubtfire.config.privacy-policy", [])
     loaded: false,
   }
 
-  $http.get("#{DoubtfireConstants.API_URL}/settings/privacy").then ((response) ->
+  $http.get("#{DoubtfireConstants.API_URL}/settings/privacy")
+  .then ((response) ->
     privacyPolicy.privacy = response.data.privacy
     privacyPolicy.plagiarism = response.data.plagiarism
     privacyPolicy.loaded = true
