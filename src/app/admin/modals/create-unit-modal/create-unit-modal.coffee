@@ -20,10 +20,10 @@ angular.module('doubtfire.admin.modals.create-unit-modal', [])
   $scope.saveUnit = ->
     newUnitService.create($scope.unit).subscribe(
       next: (response) ->
-        alertService.add("success", "Unit created.", 2000)
+        alertService.success("Unit created.")
         $modalInstance.close()
       error: (response) ->
-        alertService.add 'danger', response, 6000
+        alertService.danger(response)
     )
   # Get the configurable, external name of Doubtfire
   $scope.externalName = DoubtfireConstants.ExternalName
