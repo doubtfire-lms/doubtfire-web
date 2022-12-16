@@ -219,7 +219,10 @@
                     </span>
                   </div>
                 </div> <!--/docker-image-name-->
+              </div>
 
+              <div ng-show="activeTab == taskAdmin.tabsData.stageManager">
+                <stage-manager [task-definition]="task"></stage-manager>
               </div>
 
               <div ng-show="activeTab == taskAdmin.tabsData.rareSettings">

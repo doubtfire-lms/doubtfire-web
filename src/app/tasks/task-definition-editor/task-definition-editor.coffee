@@ -38,29 +38,35 @@ angular.module('doubtfire.tasks.task-definition-editor', [])
           icon: "fa-info"
           seq: 0
           active: false
+        stageManager:
+          title: "Feedback Stages"
+          subtitle: "Define the feedback templates for this task"
+          icon: "fa-list"
+          seq: 1
+          active: false
         rareSettings:
           title: "Other Settings"
           subtitle: "Adjust settings to customise task interaction"
           icon: "fa-adjust"
-          seq: 1
+          seq: 2
           active: false
         fileUpload:
           title: "Submission Details"
           subtitle: "Indicate what files students need to submit for this task"
           icon: "fa-upload"
-          seq: 2
+          seq: 3
           active: false
         taskResources:
           title: "Task Resources"
           subtitle: "Upload the task sheet and other resources for this task"
           icon: "fa-file-o"
-          seq: 3
+          seq: 4
           active: false
         plagiarismChecks:
           title: "Plagiarism Detection"
           subtitle: "Add plagiarism checks for this task"
           icon: "fa-eye"
-          seq: 4
+          seq: 5
           active: false
 
     if $scope.overseerEnabled.value

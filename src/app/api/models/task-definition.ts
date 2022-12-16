@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Entity, EntityMapping } from 'ngx-entity-service';
+import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
+import { Grade, GroupSet, Stage, TutorialStream, Unit, User } from './doubtfire-model';
 
 export class TaskDefinition extends Entity {
 
@@ -32,6 +32,11 @@ export class TaskDefinition extends Entity {
   maxQualityPts: number;
   overseerImageId: number;
   assessmentEnabled: boolean;
+
+  /**
+   * The stages for this task definition.
+   */
+  stages: EntityCache<Stage> = new EntityCache<Stage>();
 
   readonly unit: Unit;
 

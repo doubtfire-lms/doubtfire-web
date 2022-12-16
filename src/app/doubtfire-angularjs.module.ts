@@ -265,6 +265,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { StageManagerComponent } from './tasks/task-definition-editor/stage-manager/stage-manager.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -320,6 +321,7 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
+DoubtfireAngularJSModule.directive('stageManager', downgradeComponent({ component: StageManagerComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })

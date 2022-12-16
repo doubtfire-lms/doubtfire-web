@@ -147,6 +147,7 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
+  StageService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -175,11 +176,15 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { StageManagerComponent } from './tasks/task-definition-editor/stage-manager/stage-manager.component';
+import { StageEditorComponent } from './tasks/task-definition-editor/stage-manager/stage-editor/stage-editor.component';
 
 @NgModule({
   // Components we declare
   declarations: [
     AboutDoubtfireModalContent,
+    StageManagerComponent,
+    StageEditorComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -297,6 +302,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
   // Services we provide
   providers: [
     CampusService,
+    StageService,
     AuthenticationService,
     GroupSetService,
     GroupService,
