@@ -42,6 +42,4 @@ export class AlertService {
   clear() {
     this.snackBar.dismiss();
   }
-
-  // Test
 }
