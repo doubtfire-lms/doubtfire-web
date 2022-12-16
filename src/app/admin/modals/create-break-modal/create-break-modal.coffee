@@ -39,10 +39,10 @@ angular.module('doubtfire.admin.modals.create-break-modal', [])
   $scope.addBreak = ->
     $scope.teachingperiod.addBreak($scope.break.startDate, $scope.break.numberOfWeeks).subscribe({
       next: (response) ->
-        alertService.add("success", "Break added.", 2000)
+        alertService.success("Break added.")
         $modalInstance.close()
       error: (response) ->
-        alertService.add 'danger', "Error adding break - #{response}"
+        alertService.danger("Error adding break - #{response}")
     })
 
 )
