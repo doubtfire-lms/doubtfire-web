@@ -60,7 +60,7 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/t
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
-import 'build/src/app/config/privacy-policy/privacy-policy.js';
+
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
 import 'build/src/app/config/root-controller/root-controller.js';
@@ -265,6 +265,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -311,6 +312,7 @@ DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmi
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
+DoubtfireAngularJSModule.factory('PrivacyPolicy', downgradeInjectable(PrivacyPolicy));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
