@@ -175,6 +175,7 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { AlertListComponent } from './common/alert-list/alert-list.component';
 
 @NgModule({
   // Components we declare
@@ -239,6 +240,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
+    AlertListComponent,
   ],
   // Module Imports
   imports: [
