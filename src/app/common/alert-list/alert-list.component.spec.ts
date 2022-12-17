@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlertListComponent } from './alert-list.component';
 
-describe('NotFoundComponent', () => {
+describe('AlertListComponent', () => {
   let component: AlertListComponent;
   let fixture: ComponentFixture<AlertListComponent>;
 
