@@ -175,6 +175,7 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 
 @NgModule({
   // Components we declare
@@ -358,6 +359,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    PrivacyPolicy
   ],
 })
 // There is no longer any requirement for an EntryComponents section
