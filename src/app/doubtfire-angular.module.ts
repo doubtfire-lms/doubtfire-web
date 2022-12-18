@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -89,7 +90,7 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -147,6 +148,7 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
+  TeachingPeriod,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -175,6 +177,7 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 
 @NgModule({
   // Components we declare
@@ -239,6 +242,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
+    TeachingPeriodListComponent
   ],
   // Module Imports
   imports: [
@@ -288,6 +292,8 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
