@@ -4,6 +4,7 @@ import { TeachingPeriodBreak } from 'src/app/api/models/doubtfire-model';
 import { Injectable } from '@angular/core';
 import API_URL from 'src/app/config/constants/apiURL';
 import { MappingFunctions } from './mapping-fn';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class TeachingPeriodBreakService extends CachedEntityService<TeachingPeriodBreak> {
@@ -27,5 +28,15 @@ export class TeachingPeriodBreakService extends CachedEntityService<TeachingPeri
 
   public override createInstanceFrom(json: any, other?: any): TeachingPeriodBreak {
     return new TeachingPeriodBreak();
+  }
+
+  public createBreak(tpId: number, formData: any): Observable<TeachingPeriodBreak> {
+
+    return this.create(
+      {
+        teaching_period_id: tpId,
+      },
+      {body:{...formData}}
+    );
   }
 }

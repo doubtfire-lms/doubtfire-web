@@ -76,8 +76,8 @@
         <ng-container matColumnDef="options" stickyEnd>
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let teachingPeriod">
-                <button mat-button target="_blank" uiSref="admin/teachingperiods/edit" 
-                [uiParams]="{ teachingPeriodId: teachingPeriod.id }">
+                <button mat-button target="_blank" uiSref="teachingPeriodDetail" 
+                [uiParams]="{ id: teachingPeriod.id }">
                     <i class="fa fa-share"></i>
                 </button>
 

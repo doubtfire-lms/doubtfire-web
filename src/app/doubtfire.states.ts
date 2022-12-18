@@ -5,6 +5,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { EditTeachingPeriodComponent } from './admin/states/teaching-periods/teaching-period-edit/edit-teaching-period.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -45,6 +46,26 @@ const teachingPeriodListState: NgHybridStateDeclaration = {
   data: {
     // Add data used by header
     pageTitle: 'Teaching Period List',
+    roleWhiteList: ['Admin'],
+  },
+};
+
+/**
+ * Define the teaching period deatial state - used to edit teraching period  data.
+ */
+const teachingPeriodDetailState: NgHybridStateDeclaration = {
+  name: 'teachingPeriodDetail', // This is the name of the state to jump to - so ui-sref="institutionsettings" to jump here
+  url: '/admin/teaching-periods/:id', // You get here with this url
+  views: {
+   
+    main: {
+      // Main body links to angular component
+      component: EditTeachingPeriodComponent,
+    },
+  },
+  data: {
+    // Add data used by header
+    pageTitle: 'Teaching Period Detail',
     roleWhiteList: ['Admin'],
   },
 };
@@ -120,4 +141,4 @@ const EditProfileState: NgHybridStateDeclaration = {
 /**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState, teachingPeriodListState];
+export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState, teachingPeriodListState ,teachingPeriodDetailState];

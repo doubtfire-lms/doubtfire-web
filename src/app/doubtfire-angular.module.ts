@@ -67,6 +67,7 @@ import {
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
+  RolloverTeachingPeriodModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -178,6 +179,10 @@ import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { EditTeachingPeriodComponent } from './admin/states/teaching-periods/teaching-period-edit/edit-teaching-period.component';
+import { TeachingPeriodDetailsEditorComponent } from './admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.component';
+import { TeachingPeriodBreaksComponent } from './admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.component';
+import { TeachingPeriodUnitsComponent } from './admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-units/teaching-period-units.component';
 
 @NgModule({
   // Components we declare
@@ -242,7 +247,11 @@ import { TeachingPeriodListComponent } from './admin/states/teaching-periods/tea
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
-    TeachingPeriodListComponent
+    TeachingPeriodListComponent,
+    EditTeachingPeriodComponent,
+    TeachingPeriodDetailsEditorComponent,
+    TeachingPeriodBreaksComponent,
+    TeachingPeriodUnitsComponent
   ],
   // Module Imports
   imports: [
@@ -364,6 +373,7 @@ import { TeachingPeriodListComponent } from './admin/states/teaching-periods/tea
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    RolloverTeachingPeriodModalProvider
   ],
 })
 // There is no longer any requirement for an EntryComponents section

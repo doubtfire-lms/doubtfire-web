@@ -1,0 +1,12 @@
+<div class="container">
+
+    <mat-tab-group *ngIf="dataFetched">
+        <mat-tab label="Teaching Period Details Editor"><teaching-period-details-editor
+                [teachingPeriod]="teachingPeriod"
+                (teachingPeriodUpdatedEvent)="teachingPeriodUpdated($event)"></teaching-period-details-editor></mat-tab>
+<mat-tab label="Teaching Period Breaks"><teaching-period-breaks [teachingPeriod]="teachingPeriod"
+                (teachingPeriodUpdatedEvent)="teachingPeriodUpdated($event)"></teaching-period-breaks></mat-tab>
+<mat-tab label="Rollover Teaching Period"> <teaching-period-units
+                [teachingPeriod]="teachingPeriod"></teaching-period-units> </mat-tab> 
+    </mat-tab-group>
+</div>

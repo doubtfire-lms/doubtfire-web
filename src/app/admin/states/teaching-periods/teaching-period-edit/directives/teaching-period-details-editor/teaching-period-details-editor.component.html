@@ -1,0 +1,39 @@
+<div class="campus-list-container col-sm-6 col-md-4">
+    <div class="header">
+        <div>
+            <h3>Update Teaching Period</h3>
+            <p>Update overview details of the teaching period below.</p>
+        </div>
+    </div>
+    <ng-container [formGroup]="formData">
+        <mat-form-field class="data-entry">
+            <input class="data-entry" matInput required formControlName="period" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field class="data-entry">
+            <input matInput required formControlName="year" placeholder="Year">
+        </mat-form-field>
+        <mat-form-field class="data-entry">
+            <input matInput required [matDatepicker]="start_date_picker" formControlName="startDate"
+                placeholder="Start Date" (click)="start_date_picker.open()" />
+            <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
+            <mat-datepicker #start_date_picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="data-entry">
+            <input matInput required [matDatepicker]="end_date_picker" formControlName="endDate" placeholder="End Date"
+                (click)="end_date_picker.open()" />
+            <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
+            <mat-datepicker #end_date_picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="data-entry">
+            <input matInput required [matDatepicker]="active_until_picker" formControlName="activeUntil"
+                placeholder="Active Until" (click)="active_until_picker.open()" />
+            <mat-datepicker-toggle matSuffix [for]="active_until_picker"></mat-datepicker-toggle>
+            <mat-datepicker #active_until_picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="submit()">
+
+            <span>Save</span>
+        </button>
+
+    </ng-container>
+</div>
