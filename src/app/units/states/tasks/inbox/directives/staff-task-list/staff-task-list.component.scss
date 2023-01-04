@@ -28,7 +28,6 @@
 $warn-color: #f44336;
 
 .pin-icon.mat-icon {
-  padding-top: 10px;
   color: gray;
 }
 
@@ -208,5 +207,6 @@ user-icon {
   .mat-icon {
     font-size: 50px;
     color: rgba(0, 0, 0, 0.2);
+    align-self: center;
   }
 }
