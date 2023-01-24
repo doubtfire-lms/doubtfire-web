@@ -20,8 +20,8 @@
           (mouseout)="comment.hover = false"
           class="anchor"
         >
-          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp">
-            {{ comment.author.name }} {{ comment.timeOfMessage | humanizedDate }}
+          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp" [ngClass]="{ own: comment.authorIsMe }">
+            {{ comment.author.firstName }} {{ comment.author.lastName }} {{ comment.timeOfMessage | humanizedDate }}
           </p>
           <div
             class="comment"
@@ -32,7 +32,7 @@
             [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
             fxLayoutAlign="start end"
           >
-            <div *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)" fxFlex="34px">
+            <div *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)" class="comment-user-icon-wrapper">
               <user-icon
                 *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
                 [size]="28"
@@ -110,7 +110,7 @@
             <user-icon
               matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{ comment.recipient.name }}"
               matTooltipPosition="above"
-              [size]="22"
+              [size]="18"
               [user]="comment.recipient"
             >
             </user-icon>

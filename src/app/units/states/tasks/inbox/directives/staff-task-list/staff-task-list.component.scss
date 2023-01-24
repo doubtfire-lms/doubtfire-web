@@ -24,8 +24,14 @@
 
 $warn-color: #f44336;
 
-.pin-icon.mat-icon {
-  color: gray;
+.pin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .mat-icon {
+    color: gray;
+  }
 }
 
 .task-inbox {
@@ -63,15 +69,8 @@ $warn-color: #f44336;
   border-radius: 1em;
   background-color: var(--background-gray);
   font-size: 15px;
-  min-height: 36px;
-  max-height: 220px;
-  padding-right: 16px;
+  padding-right: 10px;
   text-align: left;
-
-  mat-form-field {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-  }
 
   &.expanded {
     height: 100%;

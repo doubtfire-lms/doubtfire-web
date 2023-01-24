@@ -46,6 +46,11 @@
     width: 100%;
     overflow: hidden;
   }
+
+  ::ng-deep .mat-button-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+  }
 }
 
 .admin-card {
@@ -60,4 +65,8 @@
   width: 300px;
   max-width: 300px;
   max-height: 200px;
+
+  mat-card-actions {
+    margin-bottom: 0px;
+  }
 }

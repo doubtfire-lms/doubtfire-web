@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -9,13 +9,20 @@ declare var d3: any;
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss'],
 })
-export class UserIconComponent implements AfterViewInit {
+export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() user: User = this.userService.currentUser;
   @Input() size = 100;
 
   @ViewChild('svg') svg: { nativeElement: any };
 
   lineHeight = 12;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.user) {
+      this.drawUserIcon();
+      this.user = changes.user.currentValue;
+    }
+  }
 
   constructor(private userService: UserService) {}
 
@@ -99,7 +106,8 @@ export class UserIconComponent implements AfterViewInit {
     return context.measureText(text).width;
   }
 
-  ngAfterViewInit(): void {
+  drawUserIcon(): void {
+    // TODO: Consider caching SVG on a per-user basis
     const lines = this.generateLines();
 
     let textRadius = 0;
@@ -158,5 +166,9 @@ export class UserIconComponent implements AfterViewInit {
       .attr('x', 0)
       .attr('y', 0)
       .attr('clip-path', `url(#image-clip-${id})`);
+  }
+
+  ngAfterViewInit(): void {
+    this.drawUserIcon();
   }
 }
