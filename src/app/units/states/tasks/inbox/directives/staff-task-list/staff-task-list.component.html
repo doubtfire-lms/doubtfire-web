@@ -179,8 +179,8 @@
             fxLayout="row"
             fxLayoutAlign="start center"
             [ngClass]="{ hover: task.hover }"
-            (mouseover)="task.hover = allowHover && true"
-            (mouseout)="task.hover = false"
+            (mouseover)="task.hover = allowHover"
+            (mouseout)="task.hover = task.optionsOpened"
           >
             <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
@@ -236,13 +236,18 @@
                 mat-icon-button
                 aria-label="task overflow"
                 [matMenuTriggerFor]="overflowMenu"
+                (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
+                (menuClosed)="task.hover = false; task.optionsOpened = false"
+                matTooltip="Submission options"
+                matTooltipPosition="right"
+                matTooltipShowDelay="400"
               >
                 <mat-icon>more_horiz</mat-icon>
               </button>
               <mat-menu #overflowMenu="matMenu" yPosition="below">
                 <button [disabled] mat-menu-item (click)="togglePin(task)">
                   <mat-icon> {{ task.pinned ? 'remove_circle' : 'add_alert' }} </mat-icon>
-                  <span>{{ task.pinned ? 'unpin from inbox' : 'pin to inbox' }} </span>
+                  <span>{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }} </span>
                 </button>
               </mat-menu>
             </div>
