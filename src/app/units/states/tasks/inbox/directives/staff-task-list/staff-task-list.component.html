@@ -182,7 +182,14 @@
             (mouseover)="task.hover = allowHover"
             (mouseout)="task.hover = task.optionsOpened"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"
+              matBadge="{{ task.numNewComments }}"
+              [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
+              matBadgePosition="before"
+              matBadgeSize="small"
+              matBadgeColor="warn"
+            >
+            </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
@@ -213,22 +220,8 @@
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
 
-                <div
-                  *ngIf="task.pinned"
-                  matBadge="{{ task.numNewComments }}"
-                  [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
-                  matBadgePosition="before"
-                  matBadgeSize="small"
-                  matBadgeColor="warn"
-                  class="pin-container"
-                >
+                <div *ngIf="task.pinned" class="pin-container">
                   <mat-icon>push_pin</mat-icon>
-                </div>
-
-                <div *ngIf="!task.pinned">
-                  <div class="new_comments" *ngIf="task.numNewComments > 0 && !task.plagiarismDetected()">
-                    {{ task.numNewComments }}
-                  </div>
                 </div>
               </button>
               <button
