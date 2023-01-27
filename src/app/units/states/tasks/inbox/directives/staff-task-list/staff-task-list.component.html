@@ -179,10 +179,17 @@
             fxLayout="row"
             fxLayoutAlign="start center"
             [ngClass]="{ hover: task.hover }"
-            (mouseover)="task.hover = allowHover && true"
-            (mouseout)="task.hover = false"
+            (mouseover)="task.hover = allowHover"
+            (mouseout)="task.hover = task.optionsOpened"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"
+              matBadge="{{ task.numNewComments }}"
+              [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
+              matBadgePosition="before"
+              matBadgeSize="small"
+              matBadgeColor="warn"
+            >
+            </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
@@ -213,22 +220,8 @@
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
 
-                <div
-                  *ngIf="task.pinned"
-                  matBadge="{{ task.numNewComments }}"
-                  [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
-                  matBadgePosition="before"
-                  matBadgeSize="small"
-                  matBadgeColor="warn"
-                  class="pin-container"
-                >
+                <div *ngIf="task.pinned" class="pin-container">
                   <mat-icon>push_pin</mat-icon>
-                </div>
-
-                <div *ngIf="!task.pinned">
-                  <div class="new_comments" *ngIf="task.numNewComments > 0 && !task.plagiarismDetected()">
-                    {{ task.numNewComments }}
-                  </div>
                 </div>
               </button>
               <button
@@ -236,13 +229,18 @@
                 mat-icon-button
                 aria-label="task overflow"
                 [matMenuTriggerFor]="overflowMenu"
+                (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
+                (menuClosed)="task.hover = false; task.optionsOpened = false"
+                matTooltip="Submission options"
+                matTooltipPosition="right"
+                matTooltipShowDelay="400"
               >
                 <mat-icon>more_horiz</mat-icon>
               </button>
               <mat-menu #overflowMenu="matMenu" yPosition="below">
                 <button [disabled] mat-menu-item (click)="togglePin(task)">
                   <mat-icon> {{ task.pinned ? 'remove_circle' : 'add_alert' }} </mat-icon>
-                  <span>{{ task.pinned ? 'unpin from inbox' : 'pin to inbox' }} </span>
+                  <span>{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }} </span>
                 </button>
               </mat-menu>
             </div>
