@@ -182,14 +182,11 @@
             (mouseover)="task.hover = allowHover"
             (mouseout)="task.hover = task.optionsOpened"
           >
-            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"
-              matBadge="{{ task.numNewComments }}"
-              [matBadgeHidden]="task.numNewComments <= 0 || task.plagiarismDetected()"
-              matBadgePosition="before"
-              matBadgeSize="small"
-              matBadgeColor="warn"
-            >
-            </user-icon>
+            <span
+              class="notification"
+              [ngClass]="{ active: task.numNewComments <= 0 || task.plagiarismDetected() }"
+            ></span>
+            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
