@@ -43,7 +43,7 @@
   <ng-container *ngIf="currentActivity">
     <span style="color: rgb(216, 216, 216)">/</span>
     <button mat-button [matMenuTriggerFor]="menu2" #menuState="matMenuTrigger">
-      {{ currentActivity }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      {{ menuText }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu2="matMenu">
       <ng-container *ngIf="currentProject !== null && currentView === 'PROJECT'">

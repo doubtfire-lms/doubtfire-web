@@ -26,6 +26,19 @@
 </div>
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
+  <button *ngIf="media.isActive('xs')" uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
+    <mat-icon
+      uiSref="home"
+      style="margin-right: 20px"
+      svgIcon="formatif-logo"
+      class="formatif-icon"
+      aria-hidden="false"
+      aria-label="Home Icon"
+    ></mat-icon>
+    <div class="unitName">Home</div>
+    <span fxFlex></span>
+  </button>
+
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <div *ngFor="let unitRole of unitRoles">
     <button
