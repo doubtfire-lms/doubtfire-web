@@ -1,19 +1,16 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UIRouter } from '@uirouter/core';
 import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
 import { ViewType } from 'src/app/projects/states/index/global-state.service';
-import { MediaObserver } from '@angular/flex-layout';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'task-dropdown',
   templateUrl: './task-dropdown.component.html',
   styleUrls: ['./task-dropdown.component.scss'],
 })
-export class TaskDropdownComponent implements OnDestroy, OnInit {
+export class TaskDropdownComponent {
   currentActivity: string;
   menuText: string;
-  private mediaSubscription: Subscription;
   @Input() data: { isTutor: boolean };
   @Input() currentUnit: Unit;
   @Input() currentProject: Project;
@@ -29,7 +26,7 @@ export class TaskDropdownComponent implements OnDestroy, OnInit {
     'Student List': 'Students',
     'Student Plagiarism': 'Plagiarism',
     'Student Portfolios': 'Portfolios',
-    'Task Explorer': 'Explorer',
+    'Task Explorer': 'Task Explorer',
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
@@ -37,28 +34,12 @@ export class TaskDropdownComponent implements OnDestroy, OnInit {
     'Unit Analytics': 'Analytics',
   };
 
-  ngOnInit(): void {
-    this.mediaSubscription = this.media.asObservable().subscribe((change) => {
-      if (change.some((item) => item.mqAlias === 'xs')) {
-        this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
-      } else {
-        this.menuText = this.currentActivity;
-      }
-    });
-  }
-
   taskDropdownData: { title: string; target: string; visible: any }[];
-  constructor(private router: UIRouter, private media: MediaObserver) {
+  constructor(private router: UIRouter) {
     this.router.transitionService.onSuccess({ to: '**' }, (trans) => {
       this.currentActivity = trans.to().data.task;
-      this.menuText =
-        media.isActive('xs') && this.currentActivity in this.taskToShortName
-          ? this.taskToShortName[this.currentActivity]
-          : this.currentActivity;
+      this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
     });
   }
 
-  ngOnDestroy(): void {
-    this.mediaSubscription.unsubscribe();
-  }
 }
