@@ -1,72 +1,56 @@
-<mat-toolbar *ngIf="showHeader">
-  <mat-toolbar-row fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.xs="space-between center">
-    <a uiSref="home">
-      <mat-icon
-        uiSref="home"
-        style="margin-right: 20px; margin-left: 20px"
-        svgIcon="formatif-logo"
-        class="formatif-icon"
-        aria-hidden="false"
-        aria-label="Example user verified icon"
-      ></mat-icon>
-    </a>
+<mat-toolbar *ngIf="showHeader" fxLayout="row" fxLayoutAlign="start center" style="min-height: 85px">
+  <a uiSref="home">
+    <mat-icon
+      uiSref="home"
+      style="margin-right: 20px; margin-left: 20px"
+      svgIcon="formatif-logo"
+      class="formatif-icon"
+      aria-hidden="false"
+      aria-label="Example user verified icon"
+    ></mat-icon>
+  </a>
 
-    <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects"> </unit-dropdown>
+  <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects"> </unit-dropdown>
 
-    <task-dropdown
-      fxHide.xs="TRUE"
-      [currentUnit]="currentUnit"
-      [currentProject]="currentProject"
-      [currentView]="currentView"
-      [data]="data"
-      [unitRole]="currentUnitRole"
-    ></task-dropdown>
+  <task-dropdown
+    [currentUnit]="currentUnit"
+    [currentProject]="currentProject"
+    [currentView]="currentView"
+    [data]="data"
+    [unitRole]="currentUnitRole"
+  ></task-dropdown>
 
-    <span fxFlex fxHide.xs="TRUE"></span>
+  <span fxFlex></span>
 
-    <button
-      #menuState="matMenuTrigger"
-      mat-button
-      fxShow.lt-sm="false"
-      fxShow.gt-md="true"
-      fxShow="true"
-      [matMenuTriggerFor]="menu"
-      *ngIf="currentUser.role === 'Admin' || currentUser.role === 'Convenor'"
-    >
-      <mat-icon>admin_panel_settings</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="currentUser.role === 'Admin'">
-        Manage Teaching Periods
-      </button>
-      <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
-        Institution Settings
-      </button>
-      <button mat-menu-item uiSref="admin/units">Manage Units</button>
-      <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">Manage Users</button>
-    </mat-menu>
-
-    <button mat-button [matMenuTriggerFor]="menu2">
-      <user-icon [size]="32"></user-icon>
-    </button>
-    <mat-menu #menu2="matMenu">
-      <button mat-menu-item uiSref="edit_profile">Edit Profile</button>
-      <button mat-menu-item (click)="openCalendar()">Calendar</button>
-      <button mat-menu-item (click)="openAboutModal()">About</button>
-      <button mat-menu-item (click)="signOut()">Sign Out</button>
-    </mat-menu>
-  </mat-toolbar-row>
-  <mat-toolbar-row
-    style="height: max-content; margin-bottom: 4px"
-    fxHide.gt-xs="TRUE"
-    fxLayoutAlign="space-around center"
+  <button
+    #menuState="matMenuTrigger"
+    mat-button
+    fxShow.lt-sm="false"
+    fxShow.gt-md="true"
+    fxShow="true"
+    [matMenuTriggerFor]="menu"
+    *ngIf="currentUser.role === 'Admin' || currentUser.role === 'Convenor'"
   >
-    <task-dropdown
-      [currentUnit]="currentUnit"
-      [currentProject]="currentProject"
-      [currentView]="currentView"
-      [data]="data"
-      [unitRole]="currentUnitRole"
-    ></task-dropdown>
-  </mat-toolbar-row>
+    <mat-icon>admin_panel_settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="currentUser.role === 'Admin'">
+      Manage Teaching Periods
+    </button>
+    <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
+      Institution Settings
+    </button>
+    <button mat-menu-item uiSref="admin/units">Manage Units</button>
+    <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">Manage Users</button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="menu2">
+    <user-icon [size]="32"></user-icon>
+  </button>
+  <mat-menu #menu2="matMenu">
+    <button mat-menu-item uiSref="edit_profile">Edit Profile</button>
+    <button mat-menu-item (click)="openCalendar()">Calendar</button>
+    <button mat-menu-item (click)="openAboutModal()">About</button>
+    <button mat-menu-item (click)="signOut()">Sign Out</button>
+  </mat-menu>
 </mat-toolbar>
