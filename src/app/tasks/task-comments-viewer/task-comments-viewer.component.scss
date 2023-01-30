@@ -84,6 +84,13 @@ $comment-inner-border-radius: 4px;
     }
   }
 
+  mat-icon#noView {
+    height: 80px;
+    width: 80px;
+    font-size: 80px;
+    color: #c5c5c5;
+  }
+
   .comments-body {
     overflow-y: scroll;
     overflow-x: hidden;

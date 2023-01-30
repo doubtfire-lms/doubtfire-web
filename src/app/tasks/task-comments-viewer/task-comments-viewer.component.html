@@ -11,6 +11,10 @@
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
 
+    <div *ngIf="!task || task.comments.length === 0" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+      <mat-icon id="noView">forum</mat-icon>
+    </div>
+
     <div *ngIf="task" class="comments-scroll-content" [hidden]="loading">
       <span>
         <div
@@ -32,7 +36,10 @@
             [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
             fxLayoutAlign="start end"
           >
-            <div *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)" class="comment-user-icon-wrapper">
+            <div
+              *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)"
+              class="comment-user-icon-wrapper"
+            >
               <user-icon
                 *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
                 [size]="28"
