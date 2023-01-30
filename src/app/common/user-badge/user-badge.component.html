@@ -1,11 +1,18 @@
-<div fxLayout="row" fxLayoutAlign="start start" *ngIf="selectedTask?.project?.student !== null">
+<div fxLayout="row" fxLayoutAlign="start start">
   <a (click)="goToStudent()" style="display: flex">
-    <user-icon size="40" [user]="selectedTask.project.student" style="margin-right: 8px"></user-icon>
+    <user-icon
+      size="40"
+      [unselected]="unselected"
+      [user]="selectedTask?.project.student"
+      style="margin-right: 8px"
+    ></user-icon>
     <div fxLayout="column" fxLayoutAlign="center start" style="line-height: 0.5em; font-family: 'Grotesk'">
+      <div id="placeholder1" [hidden]="!unselected"></div>
+      <div id="placeholder2" [hidden]="!unselected"></div>
       <h4 style="margin-bottom: 1px" class="mat-h4">
-        {{ selectedTask.project.student.firstName }} {{ selectedTask.project.student.lastName }}
+        {{ selectedTask?.project.student.firstName }} {{ selectedTask?.project.student.lastName }}
       </h4>
-      <p class="mat-caption">{{ selectedTask.definition.name }}</p>
+      <p class="mat-caption">{{ selectedTask?.definition.name }}</p>
     </div>
   </a>
 </div>

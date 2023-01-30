@@ -19,6 +19,25 @@ p {
     line-height: 1.2em;
 }
 
+#placeholder1 {
+    margin-left: -4px;
+    line-height: 1.2em;
+    width: 200px;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-bottom: 3px;
+}
+
+#placeholder2 {
+    margin-left: -4px;
+    line-height: 1.2em;
+    width: 200px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+}
+
 p {
     color: (lighten($color: #000000, $amount: 45));
     font-size: 12px;

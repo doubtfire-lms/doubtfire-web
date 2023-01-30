@@ -10,17 +10,26 @@ declare var d3: any;
   styleUrls: ['./user-icon.component.scss'],
 })
 export class UserIconComponent implements AfterViewInit, OnChanges {
-  @Input() user: User = this.userService.currentUser;
+  @Input() user: User;
+  @Input() unselected: boolean;
   @Input() size = 100;
 
   @ViewChild('svg') svg: { nativeElement: any };
 
   lineHeight = 12;
+  usingCurrentUser: boolean;
+
+  ngAfterViewInit(): void {
+    if (this.user == null) {
+      this.usingCurrentUser = true;
+      this.user = this.userService.currentUser;
+    }
+    this.drawUserIcon();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.user) {
+    if (changes.user || changes.unselected) {
       this.drawUserIcon();
-      this.user = changes.user.currentValue;
     }
   }
 
@@ -91,8 +100,8 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     ];
 
     let sum = 0;
-    for (let i = 0; i < username.length; i++) {
-      sum += username.charCodeAt(i);
+    for (let i = 0; i < username?.length; i++) {
+      sum += username?.charCodeAt(i);
     }
     return colors[sum % colors.length];
   }
@@ -108,6 +117,21 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   drawUserIcon(): void {
     // TODO: Consider caching SVG on a per-user basis
+    // clear svg
+    d3.select(this.svg?.nativeElement).selectAll('*').remove();
+    // if this.unselected is undefined or true
+    if (!this.unselected == null || this.unselected) {
+      console.log('unselecting for user', this.user);
+      if (this.svg?.nativeElement) {
+        // hide div from DOM (but don't remove it)
+        this.svg.nativeElement.style.display = 'none';
+      }
+    } else {
+      if (this.svg?.nativeElement) {
+        // add div to DOM
+        this.svg.nativeElement.style.display = 'block';
+      }
+    }
     const lines = this.generateLines();
 
     let textRadius = 0;
@@ -144,7 +168,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
       .attr('cx', this.size / 2)
       .attr('cy', this.size / 2)
       .attr('r', this.radius)
-      .attr('fill', this.generateUniqueBackgroundColor(this.user.name));
+      .attr('fill', this.generateUniqueBackgroundColor(this.user?.name));
 
     svg
       .append('text')
@@ -166,9 +190,5 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
       .attr('x', 0)
       .attr('y', 0)
       .attr('clip-path', `url(#image-clip-${id})`);
-  }
-
-  ngAfterViewInit(): void {
-    this.drawUserIcon();
   }
 }

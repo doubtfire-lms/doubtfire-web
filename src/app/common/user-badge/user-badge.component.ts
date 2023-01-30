@@ -11,6 +11,14 @@ export class UserBadgeComponent {
   constructor(private router: UIRouter) {}
   @Input() selectedTask: Task;
 
+  get unselected(): boolean {
+    return this.selectedTask == null;
+  }
+
+  get noUser(): boolean {
+    return this.selectedTask == null;
+  }
+
   goToStudent(): void {
     this.router.stateService.go('projects/dashboard', {
       projectId: this.selectedTask.project.id,
