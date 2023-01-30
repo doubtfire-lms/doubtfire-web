@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="start start">
-  <a (click)="goToStudent()" style="display: flex">
+  <a (click)="!unselected ? goToStudent() : null" style="display: flex">
     <user-icon
       size="40"
       [unselected]="unselected"
