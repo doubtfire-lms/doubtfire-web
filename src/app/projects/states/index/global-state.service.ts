@@ -162,7 +162,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading campuses.', 6000);
-          console.log(response);
         },
       });
 
@@ -173,7 +172,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading teaching periods.', 6000);
-          console.log(response);
         },
       });
     });
@@ -191,7 +189,6 @@ export class GlobalStateService implements OnDestroy {
   private loadUnitsAndProjects() {
     this.unitRoleService.query().subscribe({
       next: (unitRoles: UnitRole[]) => {
-        console.log(this.loadedUnitRoles);
         // unit roles are now in the cache
 
         this.projectService.query(undefined, { params: { include_inactive: false } }).subscribe({

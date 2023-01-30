@@ -118,7 +118,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     }
 
     const svg = d3
-      .select(this.svg.nativeElement)
+      .select(this.svg?.nativeElement)
       .style('font', '8px sans-serif')
       .attr('width', this.size)
       .attr('shape-rendering', 'geometricPrecision')

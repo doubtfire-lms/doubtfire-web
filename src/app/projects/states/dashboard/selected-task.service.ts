@@ -33,6 +33,7 @@ export class SelectedTaskService {
   }
 
   public showSubmission() {
+    if (!this.task$.value) return;
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
     this._showingTask = false;
   }
