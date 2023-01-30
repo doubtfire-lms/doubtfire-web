@@ -62,22 +62,18 @@
     </button>
     <mat-menu #aboveMenu="matMenu" yPosition="above">
       <button mat-menu-item (click)="viewTaskSheet()">
-        View task sheet
+        <mat-icon aria-hidden="false" aria-label="View Task Sheet" fontIcon="description"></mat-icon>View task sheet
       </button>
-      <button mat-menu-item (click)="viewSubmission()">View student submission</button>
+      <button mat-menu-item (click)="viewSubmission()">
+        <mat-icon aria-hidden="false" aria-label="View student submission" fontIcon="contact_page"></mat-icon>View
+        student submission
+      </button>
       <mat-divider></mat-divider>
-      <button
-        mat-menu-item
-        (click)="selectedTask?.updateTaskStatus('time_exceeded')"
-      >
-        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="running_with_errors"></mat-icon>
+      <button mat-menu-item (click)="selectedTask?.updateTaskStatus('time_exceeded')">
+        <mat-icon aria-hidden="false" aria-label="Switch to Time Exceeded" fontIcon="running_with_errors"></mat-icon>
         Mark as time exceeded
       </button>
-      <button
-        mat-menu-item
-        (click)="selectedTask?.updateTaskStatus('fail')"
-        [disabled]="selectedTask === undefined"
-      >
+      <button mat-menu-item (click)="selectedTask?.updateTaskStatus('fail')" [disabled]="selectedTask === undefined">
         <mat-icon aria-hidden="false" aria-label="Fail icon" fontIcon="cancel"></mat-icon>
         Mark as fail
       </button>
