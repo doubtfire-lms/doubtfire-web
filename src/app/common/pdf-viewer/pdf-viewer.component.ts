@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Input, Inject, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, Inject, OnDestroy, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { FileDownloaderService } from '../file-downloader/file-downloader';
 
@@ -13,6 +14,9 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   public pdfBlobUrl: string;
   public progressPercentage = 0;
   @Input() pdfUrl: string;
+  @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
+  pdfSearchString: string;
+  zoomValue = 1;
 
   constructor(
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
@@ -40,6 +44,28 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
       // Get the new blob
       this._pdfUrl = value;
       this.downloadBlob(value);
+    }
+  }
+
+  searchPdf(stringToSearch: string): void {
+    this.pdfComponent.eventBus.dispatch('find', {
+      query: stringToSearch,
+      type: 'again',
+      caseSensitive: false,
+      findPrevious: undefined,
+      highlightAll: true,
+      phraseSearch: true,
+    });
+  }
+
+  zoomIn() {
+    if (this.zoomValue < 2.5) {
+      this.zoomValue += 0.1;
+    }
+  }
+  zoomOut() {
+    if (this.zoomValue > 0.5) {
+      this.zoomValue -= 0.1;
     }
   }
 
