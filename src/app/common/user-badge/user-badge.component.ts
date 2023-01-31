@@ -26,4 +26,12 @@ export class UserBadgeComponent {
       taskAbbr: '',
     });
   }
+
+  goToStudentTask(): void {
+    this.router.stateService.go('projects/dashboard', {
+      projectId: this.selectedTask.project.id,
+      taskAbbr: this.selectedTask.definition.abbreviation,
+      tutor: true,
+    });
+  }
 }
