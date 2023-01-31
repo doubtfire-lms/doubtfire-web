@@ -8,7 +8,7 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
 })
-export class PdfViewerComponent implements OnDestroy, OnChanges {
+export class fPdfViewerComponent implements OnDestroy, OnChanges {
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public progressPercentage = 0;

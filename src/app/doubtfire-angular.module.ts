@@ -117,7 +117,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
-import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { SafePipe } from './common/pipes/safe.pipe';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
@@ -223,7 +223,7 @@ import { ProjectProgressBarComponent } from './common/project-progress-bar/proje
     HumanizedDatePipe,
     IsActiveUnitRole,
     DragDropDirective,
-    PdfViewerComponent,
+    fPdfViewerComponent,
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
