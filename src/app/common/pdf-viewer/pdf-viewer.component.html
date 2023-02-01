@@ -1,5 +1,5 @@
 <div id="pdfContainer">
-  <div id="pdfActions">
+  <div id="pdfActions" [hidden]="!loaded">
     <form #loginForm="ngForm" (ngSubmit)="searchPdf(pdfSearchString)">
       <mat-form-field floatLabel="never" appearance="outline" class="pdf-form-field" ngSubmit>
         <mat-icon matPrefix>search</mat-icon>
@@ -21,5 +21,6 @@
     [render-text]="true"
     [original-size]="false"
     (after-load-complete)="onLoaded()"
+    (page-rendered)="loaded = true"
   ></pdf-viewer>
 </div>

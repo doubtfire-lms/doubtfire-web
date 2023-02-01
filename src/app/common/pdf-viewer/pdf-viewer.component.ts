@@ -17,6 +17,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
   zoomValue = 1;
+  loaded = false;
 
   constructor(
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
@@ -43,6 +44,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
 
       // Get the new blob
       this._pdfUrl = value;
+      this.loaded = false;
       this.downloadBlob(value);
     }
   }
@@ -86,6 +88,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   }
 
   onLoaded() {
+    this.loaded = true;
     window.dispatchEvent(new Event('resize'));
   }
 }
