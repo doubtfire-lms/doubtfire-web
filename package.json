@@ -104,7 +104,7 @@
     "@types/jasmine": "~3.9.1",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.115",
-    "@types/node": "^16.0",
+    "@types/node": "^18.13",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "autoprefixer": "^6.3.3",
