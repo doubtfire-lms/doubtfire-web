@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/macite/doubtfire-deploy/compare/v6.0.18...v7.0.0) (2023-02-23)
+
+
+### Features
+
+* add migrated welcome wizard ([dd37e83](https://github.com/macite/doubtfire-deploy/commit/dd37e8351f2042ee37161f0d6349e2b7efa42d7e))
+* add new user settings dialog ([cdeb7c6](https://github.com/macite/doubtfire-deploy/commit/cdeb7c624330054fb5ed1594288eaad7c8c2d87f))
+* add pronouns to user model and wizard ([11c7a03](https://github.com/macite/doubtfire-deploy/commit/11c7a03b79c2347dc87933ac5041ff7166ee2fc3))
+* add user badge component ([9fc9e62](https://github.com/macite/doubtfire-deploy/commit/9fc9e62a0093b99dfdc4329ec6b7ccedf5cd1118))
+* improve messaging around late submissions ([31db767](https://github.com/macite/doubtfire-deploy/commit/31db767ceeabe3e62b3b44b050589ebb0334b993))
+* make user setting form support other users ([2bdf5ba](https://github.com/macite/doubtfire-deploy/commit/2bdf5ba6f17b0a227588c0e0adffe17612cc8f89))
+* new snackbar alert in edit profile save ([cbc157a](https://github.com/macite/doubtfire-deploy/commit/cbc157a41521fe7de952eef9d904e65a68861713))
+* use new user badge component ([0c12efb](https://github.com/macite/doubtfire-deploy/commit/0c12efb3a08bcbcf6f4829b002d32f807a005d7f))
+
+
+### Bug Fixes
+
+* add button type to edit profile form button ([abfd5e7](https://github.com/macite/doubtfire-deploy/commit/abfd5e7ac114db5175d3c7a1023de0c7885f464f))
+* add task to comments when created by user ([3f78e48](https://github.com/macite/doubtfire-deploy/commit/3f78e48b42b5d0851b30482cba4ee9e582fd6d2f))
+* add tooltip delay to tutor inbox ([d1b34b4](https://github.com/macite/doubtfire-deploy/commit/d1b34b41e01a0863b5056523af5ab40e4912c5f8))
+* cache udpated user when updated ([b9fae7f](https://github.com/macite/doubtfire-deploy/commit/b9fae7f76ef0f0280c41681295ec86cecc216f79))
+* clear user cache when sign out ([4dfe5e1](https://github.com/macite/doubtfire-deploy/commit/4dfe5e10b6f14fc9ab41f70da4d63847f55b77c6))
+* downgrade transition hook service ([53e2867](https://github.com/macite/doubtfire-deploy/commit/53e28676f1c187f2216941ac57022f522cc31d4b))
+* ensure alert service sanitises message ([87ebe3a](https://github.com/macite/doubtfire-deploy/commit/87ebe3a65357226a1109022269dc0576ea51ee9a))
+* ensure edit profile goes home on welcome ([ffa356f](https://github.com/macite/doubtfire-deploy/commit/ffa356f2605c443cdf84fb9e6ec00c3c99dd2904))
+* ensure status class works with undefined data ([95190a8](https://github.com/macite/doubtfire-deploy/commit/95190a8c18f077d9d2b7eb6ea622227e46c167cd))
+* ensure title shows for students ([36e16db](https://github.com/macite/doubtfire-deploy/commit/36e16dba3f8bd2d9bde849cb4ed9d43abb2920cf))
+* fix emoji picker ([2d4b37d](https://github.com/macite/doubtfire-deploy/commit/2d4b37d756dcfb5c9a9e52b8079cf03ae21e1bce))
+* fix package file ([7ee7f2f](https://github.com/macite/doubtfire-deploy/commit/7ee7f2f804547702c250c8254f2a290012fe30d5))
+* go to sign in if anon user in welcome ([f8ab160](https://github.com/macite/doubtfire-deploy/commit/f8ab160bffc3e23770b3720e1a8887349b2fed86))
+* go to sign in if anonymous user is at home ([7de1eaf](https://github.com/macite/doubtfire-deploy/commit/7de1eaf2cee6151b6b8b2bbb9546b7e350ccd9ca))
+* hide the header when going to welcome state ([6b46fcd](https://github.com/macite/doubtfire-deploy/commit/6b46fcd6028100187c13a1c487c6c551cd368ff4))
+* improve filter of all project list ([c3adf99](https://github.com/macite/doubtfire-deploy/commit/c3adf993d278291406a662472765f9b4fecc58b0))
+* missing directive ([d6d1ed9](https://github.com/macite/doubtfire-deploy/commit/d6d1ed98b9d4e75fa194406710019723ed1cf65e))
+* only save hasRunFiirstTime if valid save ([3895018](https://github.com/macite/doubtfire-deploy/commit/38950180fb34ee8ee11b16bbc79316b80ee151de))
+* only save user once on edit profile ([b5ee9c8](https://github.com/macite/doubtfire-deploy/commit/b5ee9c8a0aee2915300a3df4ce57df180074caca))
+* only set container css to sign in and welcome ([a4ceca7](https://github.com/macite/doubtfire-deploy/commit/a4ceca70ac3f5d7e3aeb6f250244f3531d84fae0))
+* project refresh tasks url data ([4027dc1](https://github.com/macite/doubtfire-deploy/commit/4027dc15081f520ceb30c67e650059408d3b86d0))
+* reinstate group submission functionality ([63702a6](https://github.com/macite/doubtfire-deploy/commit/63702a6a59feeae2bdb59f0ad902ce2a12ec0154))
+* reinstate portfolio assessment view ([9282a93](https://github.com/macite/doubtfire-deploy/commit/9282a938ffc9f4e622407d98d9deee79479ca757))
+* reinstate stateRegistry in coffee files ([481d072](https://github.com/macite/doubtfire-deploy/commit/481d07299ffbb10918f7f42c4e71d0e95a7b2867))
+* remove extra / in api call for task service ([c328590](https://github.com/macite/doubtfire-deploy/commit/c3285904fef53985e79cda109b526e919af178ae))
+* remove uneccessary '>' ([565cc10](https://github.com/macite/doubtfire-deploy/commit/565cc10988f9c0b1da4f6721db7e51d5cf197250))
+* sanitise data going to d3 ([11a24b4](https://github.com/macite/doubtfire-deploy/commit/11a24b45a2fb717bffd164388b220fe803df7e41))
+* send the custom pronounds only if they exist ([71e2f58](https://github.com/macite/doubtfire-deploy/commit/71e2f5882c0cae02ce87a6b1748f6882eb53cad2))
+* task pdf and resource download for tasks view ([6b36f4e](https://github.com/macite/doubtfire-deploy/commit/6b36f4e51e41199a17502b42a250c0af759fdf9f))
+* use const in home.component ([e16aeec](https://github.com/macite/doubtfire-deploy/commit/e16aeecf6d29e9fc36f69ab4bf77bc62c294cbe5))
+* xss issue with html bind ([07c6b1f](https://github.com/macite/doubtfire-deploy/commit/07c6b1f8a10401dfb9c6a07ce7590eb388a5dd9b))
+
 ### [6.0.18](https://github.com/macite/doubtfire-deploy/compare/v6.0.17...v6.0.18) (2022-09-29)
 
 ### [6.0.17](https://github.com/macite/doubtfire-deploy/compare/v6.0.16...v6.0.17) (2022-09-08)
