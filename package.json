@@ -17,7 +17,7 @@
     "serve:angular14": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --host 0.0.0.0",
     "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular14",
     "watch:angular1": "grunt delta",
-    "deploy:build2api": "ng build --deleteOutputPath=true --optimization=true --configuration production --output-path dist",
+    "deploy:build2api": "ng build --delete-output-path=true --optimization=true --configuration production --output-path dist",
     "deploy": "run-s -l build:angular1 deploy:build2api",
     "prepare": "husky install",
     "test": "ng test",
