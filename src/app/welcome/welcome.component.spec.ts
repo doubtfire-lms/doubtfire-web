@@ -1,20 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { WelcomeComponent } from './welcome.component';
 
-import { WelcomeWizardComponent } from './welcome-wizard.component';
-
-describe('WelcomeWizardComponent', () => {
-  let component: WelcomeWizardComponent;
-  let fixture: ComponentFixture<WelcomeWizardComponent>;
+describe('WelcomeComponent', () => {
+  let component: WelcomeComponent;
+  let fixture: ComponentFixture<WelcomeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WelcomeWizardComponent ]
-    })
-    .compileComponents();
+      declarations: [WelcomeComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WelcomeWizardComponent);
+    fixture = TestBed.createComponent(WelcomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
