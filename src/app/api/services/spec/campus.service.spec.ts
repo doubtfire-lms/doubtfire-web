@@ -1,11 +1,10 @@
-import { TestBed, getTestBed, tick, fakeAsync } from '@angular/core/testing';
+import { TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Campus } from 'src/app/api/models/doubtfire-model';
-import { HttpRequest } from '@angular/common/http/http';
 import { CampusService } from '../campus.service';
+import { HttpRequest } from '@angular/common/http';
 
 describe('CampusService', () => {
-  let injector: TestBed;
   let campusService: CampusService;
   let httpMock: HttpTestingController;
 
@@ -15,7 +14,6 @@ describe('CampusService', () => {
       providers: [CampusService],
     });
 
-    injector = getTestBed();
     campusService = TestBed.inject(CampusService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -26,11 +24,11 @@ describe('CampusService', () => {
 
   it('should return expected campuses (HttpClient called once)', fakeAsync(() => {
     const c = new Campus();
-    c.updateFromJson({
-      name: 'Melbourne',
-      mode: 'automatic',
-      abbreviation: 'melb',
-    });
+
+    c.name = 'Melbourne';
+    c.mode = 'automatic';
+    c.abbreviation = 'melb';
+
     const expectedCampuses: Campus[] = [c];
 
     campusService.query().subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
@@ -40,8 +38,10 @@ describe('CampusService', () => {
       expect(request.method).toBe('GET');
       return true;
     });
+
     c.id = 1;
     req.flush(c);
+
     tick();
   }));
 });
