@@ -10,20 +10,23 @@
         <h1 class="welcome-heading" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
         <form
           #form="ngForm"
-          (ngSubmit)="sign_in({ username: formData.username, password: formData.password })"
+          (ngSubmit)="signIn({ username: formData.username, password: formData.password })"
           fxLayout="column"
           fxLayoutAlign="center start"
           class="sign-in-form"
         >
-          <mat-form-field appearance="outline" fxFlex fxFlexFill>
+          <mat-form-field appearance="outline" fxFlex fxFlexFill *ngIf="showCredentials">
             <mat-label>Username</mat-label>
             <input matInput name="username" required [(ngModel)]="formData.username" />
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex fxFlexFill>
+          <mat-form-field appearance="outline" fxFlex fxFlexFill *ngIf="showCredentials">
             <mat-label>Password</mat-label>
             <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
           </mat-form-field>
+          <mat-checkbox *ngIf="!showCredentials" matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
+            >Automatically login</mat-checkbox
+          >
           <button fxFlex fxFlexFill mat-flat-button color="primary" type="form">Sign In</button>
         </form>
       </div>
