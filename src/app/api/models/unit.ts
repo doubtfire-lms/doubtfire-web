@@ -62,12 +62,11 @@ export class Unit extends Entity {
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
       unit: super.toJson(mappingData, ignoreKeys),
-    }
+    };
   }
 
   public matches(text: string): boolean {
-    return this.code.toLowerCase().indexOf(text) >= 0 ||
-      this.name.toLowerCase().indexOf(text) >= 0;
+    return this.code.toLowerCase().indexOf(text) >= 0 || this.name.toLowerCase().indexOf(text) >= 0;
   }
 
   public get staff(): readonly UnitRole[] {
@@ -310,7 +309,7 @@ export class Unit extends Entity {
   }
 
   public hasStreams() : boolean {
-    return this.tutorialStreamsCache.size > 0;
+    return this.tutorialStreamsCache.size > 1;
   }
 
   public nextStream(activityTypeAbbreviation: string): Observable<TutorialStream> {

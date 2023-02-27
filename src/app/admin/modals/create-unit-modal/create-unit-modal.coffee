@@ -18,7 +18,7 @@ angular.module('doubtfire.admin.modals.create-unit-modal', [])
   $scope.units = units
   $scope.unit = { code: null, name: null }
   $scope.saveUnit = ->
-    newUnitService.create($scope.unit).subscribe(
+    newUnitService.create( {unit: $scope.unit} ).subscribe(
       next: (response) ->
         alertService.add("success", "Unit created.", 2000)
         $modalInstance.close()

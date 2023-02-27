@@ -80,7 +80,7 @@ export class UnitService extends CachedEntityService<Unit> {
           } else { return undefined; }
         },
         toJsonFn: (entity: Unit, key: string) => {
-          return entity.teachingPeriod?.id;
+          return entity.teachingPeriod ? entity.teachingPeriod.id : null;
         }
       },
       {
@@ -89,7 +89,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.startDate.toISOString().slice(0,10);
+          return entity.startDate.toISOString().slice(0, 10);
         }
       },
       {
@@ -98,7 +98,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.endDate.toISOString().slice(0,10);;
+          return entity.endDate.toISOString().slice(0, 10);
         }
       },
       {
@@ -107,7 +107,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.portfolioAutoGenerationDate?.toISOString().slice(0,10);;
+          return entity.portfolioAutoGenerationDate?.toISOString().slice(0, 10);
         }
       },
       'assessmentEnabled',
@@ -267,4 +267,3 @@ export class UnitService extends CachedEntityService<Unit> {
     return httpClient.get<any>(url);
   }
 }
-
