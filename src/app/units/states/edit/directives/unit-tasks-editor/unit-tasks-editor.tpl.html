@@ -52,12 +52,12 @@
                     Group Set <i ng-show="taskAdminPager.sortOrder=='groupSet.id'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
-                <th>
+                <th ng-show="unit.hasStreams()">
                   <a ng-click="taskAdminPager.sortOrder='tutorialStream'; taskAdminPager.reverse=!taskAdminPager.reverse">
                     Stream <i ng-show="taskAdminPager.sortOrder=='tutorialStream'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
                 </th>
-                <th ng-show="unit.hasStreams()">
+                <th>
                   <a ng-click="taskAdminPager.sortOrder='uploadRequirements.length'; taskAdminPager.reverse=!taskAdminPager.reverse">
                     <i class="fa fa-upload" tooltip="The number of files the student needs to submit."></i> <i ng-show="taskAdminPager.sortOrder=='uploadRequirements.length'" class="fa fa-caret-{{taskAdminPager.reverse ? 'down' : 'up'}}"></i>
                   </a>
