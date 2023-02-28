@@ -67,9 +67,9 @@
         <input type="email" matInput [(ngModel)]="user.email" name="email" required />
       </mat-form-field>
 
-      <mat-form-field fxFlexFill appearance="outline">
+      <mat-form-field *ngIf="canSeeSystemRole" fxFlexFill appearance="outline">
         <mat-label>System Role</mat-label>
-        <mat-select [(ngModel)]="user.systemRole" name="systemRole">
+        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
           <mat-option value="Admin">Administrator</mat-option>
           <mat-option value="Convenor">Convenor</mat-option>
           <mat-option value="Tutor">Tutor</mat-option>

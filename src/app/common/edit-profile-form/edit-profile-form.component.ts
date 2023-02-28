@@ -34,7 +34,7 @@ export class EditProfileFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.data.mode) {
+    if (this.data?.mode) {
       this.mode = this.data.mode;
     }
 
@@ -50,6 +50,14 @@ export class EditProfileFormComponent implements OnInit {
 
   public signOut(): void {
     this.authService.signOut();
+  }
+
+  public get canEditSystemRole(): boolean {
+    return !(this.user.id === this.userService.currentUser.id);
+  }
+
+  public get canSeeSystemRole(): boolean {
+    return this.user.systemRole === 'Admin' || this.user.systemRole === 'Convenor';
   }
 
   public submit(): void {
