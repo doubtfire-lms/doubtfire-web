@@ -18,7 +18,7 @@ export class EditProfileFormComponent implements OnInit {
     private userService: UserService,
     private state: StateService,
     private authService: AuthenticationService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User },
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User; mode: 'edit' | 'create' },
     private _snackBar: MatSnackBar
   ) {
     this.user = data?.user || this.userService.currentUser;
@@ -34,7 +34,9 @@ export class EditProfileFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initialFirstName = this.user.firstName;
+    if (this.data.mode) {
+      this.mode = this.data.mode;
+    }
 
     if (this.userService.isAnonymousUser()) {
       this.state.go('sign_in');
