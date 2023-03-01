@@ -27,8 +27,8 @@
         </mat-form-field>
       </div>
 
-      <!-- <div fxLayout="row" fxFlexFill>
-        <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
+      <div fxLayout="row" fxFlexFill>
+        <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
             <mat-option value="">Do not show</mat-option>
@@ -38,12 +38,12 @@
             <mat-option value="__customPronouns">Custom</mat-option>
           </mat-select>
         </mat-form-field>
-        <div fxFlex="3"></div>
-        <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
+        <div fxFlex="3"></div> -->
+        <mat-form-field fxFlexFill appearance="outline">
           <mat-label>Preferred Name</mat-label>
           <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
         </mat-form-field>
-      </div> -->
+      </div>
 
       <mat-form-field fxFlexFill appearance="outline" [hidden]="!customPronouns">
         <mat-label>Custom Pronouns</mat-label>
