@@ -19,7 +19,6 @@ export class TaskDropdownComponent {
 
   taskToShortName: { [key: string]: string } = {
     'Learning Outcomes': 'Outcomes',
-    'Mark Tasks Offline': 'Offline',
     'Portfolio Creation': 'Portfolio',
     'Staff Tasks': 'Staff Tasks',
     'Student Groups': 'Groups',

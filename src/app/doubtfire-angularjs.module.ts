@@ -134,7 +134,6 @@ import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-t
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
-import 'build/src/app/units/states/tasks/offline/offline.js';
 import 'build/src/app/units/states/portfolios/portfolios.js';
 import 'build/src/app/units/states/all/directives/all-units-list/all-units-list.js';
 import 'build/src/app/units/states/all/directives/directives.js';
