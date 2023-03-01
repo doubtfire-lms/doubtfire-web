@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     @Inject(dateService) private DateService: any,
     @Inject(UIRouter) private router: UIRouter
   ) {
-    this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
+    // this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
     // projects and units are loaded as part of global state service at login
   }
 
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
-    this.renderer.setStyle(document.body, 'background-color', '#fff');
+    // this.renderer.setStyle(document.body, 'background-color', '#fff');
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
