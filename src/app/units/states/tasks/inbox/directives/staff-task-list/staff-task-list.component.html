@@ -70,7 +70,6 @@
         </button>
       </mat-menu>
     </div>
-
     <mat-accordion>
       <mat-expansion-panel
         class="search-settings-panel mat-elevation-z0"
@@ -88,7 +87,7 @@
                   name="taskDefID"
                   (selectionChange)="taskDefinitionIdChanged()"
                 >
-                  <mat-option value="" [hidden]="isTaskDefMode">All Task Definitions</mat-option>
+                  <mat-option value="" [hidden]="taskData.taskDefMode">All Task Definitions</mat-option>
                   <mat-option *ngFor="let td of unit.taskDefinitionCache.values | async" [value]="td.id">
                     {{ td.abbreviation + ' - ' + td.name }}
                   </mat-option>
