@@ -36,10 +36,8 @@ export class TransitionHooksService {
 
       if (toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition')) {
         this.globalState.showFooter();
-      }
-
-      if (fromState.startsWith('units/tasks/inbox') && !toState.startsWith('units/tasks/inbox')) {
-        this.globalState.showFooter();
+      } else {
+        this.globalState.hideFooter();
       }
 
       if (

@@ -115,28 +115,31 @@ export class GlobalStateService implements OnDestroy {
 
     // this is a hack to workaround horrific IOS "feature"
     // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
-    const resetHeight = () => {
-      setTimeout(() => {
-        const vh = window.innerHeight * 0.01;
-        if (this.footer && this.mediaObserver.isActive('gt-sm')) {
-          document.body.style.setProperty('--vh', `${vh - 0.85}px`);
-        } else {
-          document.body.style.setProperty('--vh', `${vh - 0.2}px`);
-        }
-      }, 0);
-    };
 
-    window.addEventListener('orientationchange', resetHeight);
-    window.addEventListener('resize', resetHeight);
-    resetHeight();
+    window.addEventListener('orientationchange', this.resetHeight);
+    window.addEventListener('resize', this.resetHeight);
+    this.resetHeight();
+  }
+
+  private resetHeight() {
+    setTimeout(() => {
+      const vh = window.innerHeight * 0.01;
+      if (this.footer && this.mediaObserver.isActive('gt-sm')) {
+        document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+      } else {
+        document.body.style.setProperty('--vh', `${vh - 0.2}px`);
+      }
+    }, 0);
   }
 
   public showFooter(): void {
     this.footer = true;
+    this.resetHeight();
   }
 
   public hideFooter(): void {
     this.footer = false;
+    this.resetHeight();
   }
 
   public signOut(): void {
