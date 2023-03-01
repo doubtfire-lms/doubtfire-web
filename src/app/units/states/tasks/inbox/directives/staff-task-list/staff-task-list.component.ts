@@ -296,9 +296,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
   // Callback to refresh data from the task source
   private refreshData() {
-    // if in task def mode, and filters is null
-
-
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
     this.taskData.source(this.unit, this.filters?.taskDefinitionIdSelected).subscribe({
