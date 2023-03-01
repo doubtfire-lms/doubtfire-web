@@ -53,7 +53,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     tutorialIdSelected: any;
     taskDefinitionIdSelected: number | TaskDefinition;
   };
-  @Input() showSearchOptions = false;
+  @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
@@ -115,14 +115,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      (!changes.unit.isFirstChange &&
-        changes.unit.currentValue.id &&
-        changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
-      this.tasks == null
+      ((!changes.unit?.isFirstChange &&
+      changes.unit.currentValue.id &&
+      changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
+      this.tasks == null) &&
+      this.isTaskDefMode &&
+      this.filters
     ) {
       this.refreshData();
     }
@@ -172,17 +174,18 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
+
+    this.refreshData();
   }
 
   public get isTaskDefMode(): boolean {
-    return this.taskData.taskDefMode && this.filters?.taskDefinitionIdSelected && this.showSearchOptions;
+    return this.taskData.taskDefMode;
   }
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${
-        taskDef.id
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id
       }/student_pdfs`,
       `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`
     );
@@ -191,8 +194,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   downloadSubmissions() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${
-        taskDef.id
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id
       }/download_submissions`,
       `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`
     );
@@ -201,7 +203,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => { });
   }
 
   refreshTasks(): void {
@@ -339,8 +341,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const funcName = taskEl.scrollIntoViewIfNeeded
       ? 'scrollIntoViewIfNeeded'
       : taskEl.scrollIntoView
-      ? 'scrollIntoView'
-      : '';
+        ? 'scrollIntoView'
+        : '';
     if (!funcName) {
       return;
     }
