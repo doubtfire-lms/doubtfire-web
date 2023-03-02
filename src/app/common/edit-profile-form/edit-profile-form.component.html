@@ -28,7 +28,7 @@
       </div>
 
       <div fxLayout="row" fxFlexFill>
-        <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
+        <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
             <mat-option value="">Do not show</mat-option>
@@ -38,8 +38,8 @@
             <mat-option value="__customPronouns">Custom</mat-option>
           </mat-select>
         </mat-form-field>
-        <div fxFlex="3"></div>
-        <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
+        <div fxFlex="3"></div> -->
+        <mat-form-field fxFlexFill appearance="outline">
           <mat-label>Preferred Name</mat-label>
           <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
         </mat-form-field>
@@ -65,6 +65,16 @@
       <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Email</mat-label>
         <input type="email" matInput [(ngModel)]="user.email" name="email" required />
+      </mat-form-field>
+
+      <mat-form-field *ngIf="canSeeSystemRole" fxFlexFill appearance="outline">
+        <mat-label>System Role</mat-label>
+        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
+          <mat-option value="Admin">Administrator</mat-option>
+          <mat-option value="Convenor">Convenor</mat-option>
+          <mat-option value="Tutor">Tutor</mat-option>
+          <mat-option value="Student">Student</mat-option>
+        </mat-select>
       </mat-form-field>
 
       <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
