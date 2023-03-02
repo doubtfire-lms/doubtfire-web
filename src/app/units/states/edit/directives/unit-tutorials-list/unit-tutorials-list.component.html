@@ -71,7 +71,7 @@
             <mat-select [compareWith]="compareSelection" formControlName="campus">
               <mat-option [value]="null">Not Specified</mat-option>
               <mat-option *ngFor="let campus of campuses" [value]="campus">
-                {{campus.name }}
+                {{ campus.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>

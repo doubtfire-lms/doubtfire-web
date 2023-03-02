@@ -32,7 +32,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
           this.campusService.get(data['campus_id']).subscribe(campus => {entity.campus = campus;});
         },
         toJsonFn: (entity: Tutorial, key: string) => {
-          return entity.campus?.id;
+          return entity.campus ? entity.campus.id : null;
         }
       },
       'capacity',
@@ -53,7 +53,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
         toJsonFn: (entity: Tutorial, key: string) => {
-          return entity.tutorialStream?.abbreviation;
+          return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
         }
       },
 

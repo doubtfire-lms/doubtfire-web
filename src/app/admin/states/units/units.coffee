@@ -26,6 +26,11 @@ angular.module('doubtfire.admin.states.units', [])
   GlobalStateService.onLoad () ->
     $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues
 
+    GlobalStateService.loadedUnits.values.subscribe(
+      (units) ->
+        $scope.units = units
+    )
+
     newUnitService.query(undefined, {params: { include_in_active: true }}).subscribe({
       next: (success) ->
         $scope.units = success
