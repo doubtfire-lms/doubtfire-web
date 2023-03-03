@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="unit in filteredUnits = (teachingPeriod.units | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/admin({unitId: unit.id})" >
+          <tr ng-repeat="unit in filteredUnits = (teachingPeriod.units | unitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/admin({unitId: unit.id})" >
             <td>
               <label class="label label-info">
                 {{unit.code}}

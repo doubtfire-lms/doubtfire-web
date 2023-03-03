@@ -29,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit.id })">
+            <tr ng-repeat="unitRole in filteredUnitRoles = (unitRoles | unitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="units/tasks/inbox({ unitId: unitRole.unit.id })">
               <td>
                 <label class="label label-info">
                   {{unitRole.unit.code}}

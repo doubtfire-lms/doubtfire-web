@@ -52,7 +52,7 @@
             <tbody>
               <tr
                 class="pointer"
-                ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+                ng-repeat="user in filteredUsers = (users | unitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
                 ng-click="showUserModal(user)"
               >
                 <td>

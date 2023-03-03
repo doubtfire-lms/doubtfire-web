@@ -75,7 +75,7 @@
           </thead>
           <tbody>
             <tr
-              ng-repeat="unit in filteredUnits = (units | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+              ng-repeat="unit in filteredUnits = (units | unitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
               ui-sref="units/admin({unitId: unit.id})"
             >
               <td>
