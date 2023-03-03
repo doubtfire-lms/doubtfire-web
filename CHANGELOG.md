@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/macite/doubtfire-deploy/compare/v7.0.0...v7.0.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* add preffered name back to profile editor ([521273d](https://github.com/macite/doubtfire-deploy/commit/521273dd9d284c5b752d14744a16e2245c369a3e))
+* ensure auth update can occur ([abb43d8](https://github.com/macite/doubtfire-deploy/commit/abb43d8d7b216f31e5fff4370a35a78561b608b8))
+* ensure edit user modal has edit mode ([0ffc5c7](https://github.com/macite/doubtfire-deploy/commit/0ffc5c7554e7a36c5dd9868ae4014168ea73915d))
+* ensure only correct users can edit systemRole ([84f9320](https://github.com/macite/doubtfire-deploy/commit/84f93202d1edb0ee05dcf7493143b43bd74b33ab))
+* ensure that groups can be added when a tutorial has no tutor ([ee8bc3c](https://github.com/macite/doubtfire-deploy/commit/ee8bc3ca07c5cbd8dcab70d7133285d0da66b3ff))
+* ensure user icon refreshes ([1aff57a](https://github.com/macite/doubtfire-deploy/commit/1aff57aa997d48973842d9e4ae08fa3c87c88852))
+
 ## [7.0.0](https://github.com/macite/doubtfire-deploy/compare/v6.0.18...v7.0.0) (2023-02-23)
 
 
