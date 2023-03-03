@@ -1,9 +1,12 @@
 import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
+import { UIRouter } from '@uirouter/angular';
 import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from 'rxjs';
+import { Task } from 'src/app/api/models/task';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 
 @Component({
@@ -14,7 +17,7 @@ import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-
 export class InboxComponent implements OnInit {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() taskData: any;
+  @Input() taskData: { selectedTask: Task; any };
 
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
@@ -33,7 +36,12 @@ export class InboxComponent implements OnInit {
     return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
   }
 
-  constructor(private selectedTask: SelectedTaskService, public mediaObserver: MediaObserver) {
+  constructor(
+    private selectedTask: SelectedTaskService,
+    public mediaObserver: MediaObserver,
+    public fileDownloader: FileDownloaderService,
+    private router: UIRouter
+  ) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
       this.visiblePdfUrl = url;
     });
@@ -88,5 +96,17 @@ export class InboxComponent implements OnInit {
 
   stoppedDragging(event: CdkDragEnd, div: HTMLDivElement) {
     event.source.element.nativeElement.classList.remove('hovering');
+  }
+
+  goToStudent(): void {
+    this.router.stateService.go('projects/dashboard', {
+      projectId: this.taskData.selectedTask.project.id,
+      tutor: true,
+      taskAbbr: '',
+    });
+  }
+
+  openPdfInNewTab(): void {
+    this.fileDownloader.downloadFile(this.visiblePdfUrl, `this.taskData.selectedTask.definition.abbreviation`);
   }
 }
