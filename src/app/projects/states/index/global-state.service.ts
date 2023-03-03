@@ -62,7 +62,7 @@ export class GlobalStateService implements OnDestroy {
    * The loaded projects.
    */
   private currentUserProjects: EntityCache<Project>;
-  footer = false;
+  private footer = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -116,8 +116,8 @@ export class GlobalStateService implements OnDestroy {
     // this is a hack to workaround horrific IOS "feature"
     // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
 
-    window.addEventListener('orientationchange', this.resetHeight);
-    window.addEventListener('resize', this.resetHeight);
+    window.addEventListener('orientationchange', this.resetHeight.bind(this));
+    window.addEventListener('resize', this.resetHeight.bind(this));
     this.resetHeight();
   }
 
@@ -130,6 +130,28 @@ export class GlobalStateService implements OnDestroy {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
       }
     }, 0);
+  }
+
+  public get isInboxState(): boolean {
+    return this.footer;
+  }
+
+  public setInboxState() {
+    console.log('isInboxState');
+    this.footer = true;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+
+  public goHome() {
+    this.showHeader();
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+  public setNotInboxState() {
+    console.log('notInboxState');
+    this.footer = false;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#fff');
   }
 
   public showFooter(): void {

@@ -1,6 +1,14 @@
 .mat-toolbar {
   height: 72px;
-  background-color: #F5F5F5;
+  background-color: white;
+  box-shadow: 3px 4px 5px #0000000d;
+  margin-bottom: 20px;
+
+  &.inbox {
+    background-color: #F5F5F5;
+    box-shadow: none;
+    margin-bottom: 0px // nice drop shadow on bottom of toolbar
+  }
 
   font-family: 'Grotesk';
 
