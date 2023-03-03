@@ -6,7 +6,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import { GithubProfile } from './github-profile';
 
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { AboutDialogData } from './about-dialog-data';
 import { Sort } from '@angular/material/sort';
 

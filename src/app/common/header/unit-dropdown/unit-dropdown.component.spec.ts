@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { dateService } from 'src/app/ajs-upgraded-providers';
 
 import { UnitDropdownComponent } from './unit-dropdown.component';

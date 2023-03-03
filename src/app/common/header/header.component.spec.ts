@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';

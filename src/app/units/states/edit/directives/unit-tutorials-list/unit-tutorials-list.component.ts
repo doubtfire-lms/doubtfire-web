@@ -1,7 +1,7 @@
 import { Component, Input, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { alertService, confirmationModal } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import {
   Tutorial,
   TutorialService,
