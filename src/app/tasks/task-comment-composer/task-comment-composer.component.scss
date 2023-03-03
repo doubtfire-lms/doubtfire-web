@@ -4,6 +4,7 @@ $emoji-color: lighten(
 );
 
 .composer-container {
+  padding-bottom: 0;
   display: flex;
   flex-grow: 1;
   #textFieldContainer {
@@ -185,20 +186,21 @@ form {
 }
 
 .composer-action-group {
-  margin-left: -10px;
   margin-right: 6px;
-  margin-bottom: 16px;
 }
 
 button.btn-no-outline {
-  transform: scale(0.8);
-  width: 24px !important;
-  height: 24px !important;
-  line-height: 24px !important;
   margin-left: 4px;
   margin-right: 4px;
-  padding: 0;
   color: $emoji-color;
+  line-height: 1;
+}
+
+.message-inbox-icon {
+  line-height: 1;
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 #commentComposerFoter {

@@ -9,32 +9,43 @@
       Staff Tasks <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button uiSref="units/tasks/inbox" [uiParams]="{ unitId: currentUnit.id }" mat-menu-item>Task Inbox</button>
-      <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{ unitId: currentUnit.id }">
-        Task Explorer
+      <button uiSref="units/tasks/inbox" [uiParams]="{ unitId: currentUnit.id }" mat-menu-item>
+        <mat-icon aria-hidden="false" aria-label="Inbox icon" fontIcon="inbox"></mat-icon> Inbox
       </button>
-      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{ unitId: currentUnit.id }">Task List</button>
+      <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{ unitId: currentUnit.id }">
+        <mat-icon aria-hidden="false" aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
+      </button>
+      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{ unitId: currentUnit.id }">
+        <mat-icon aria-hidden="false" aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
+      </button>
       <mat-divider></mat-divider>
-      <button mat-menu-item uiSref="units/students/list" [uiParams]="{ unitId: currentUnit.id }">Student List</button>
+      <button mat-menu-item uiSref="units/students/list" [uiParams]="{ unitId: currentUnit.id }">
+        <mat-icon aria-hidden="false" aria-label="Students list" fontIcon="group"></mat-icon> Students
+      </button>
       <button mat-menu-item uiSref="units/students/groups" [uiParams]="{ unitId: currentUnit.id }">
-        Student Groups
+        <mat-icon aria-hidden="false" aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
       </button>
       <button mat-menu-item uiSref="units/students/plagiarism" [uiParams]="{ unitId: currentUnit.id }">
-        Student Plagiarism
+        <mat-icon aria-hidden="false" aria-label="Student similarity icon" fontIcon="crisis_alert"></mat-icon>
+        Similarities
       </button>
       <button mat-menu-item uiSref="units/students/portfolios" [uiParams]="{ unitId: currentUnit.id }">
-        Student Portfolios
+        <mat-icon aria-hidden="false" aria-label="Student portfolios icon" fontIcon="collections_bookmark"></mat-icon>
+        Portfolios
       </button>
       <span>
         <mat-divider></mat-divider>
-        <button mat-menu-item uiSref="units/analytics" [uiParams]="{ unitId: currentUnit.id }">Unit Analytics</button>
+        <button mat-menu-item uiSref="units/analytics" [uiParams]="{ unitId: currentUnit.id }">
+          <mat-icon aria-hidden="false" aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
+        </button>
         <button
           *ngIf="currentUnit.currentUserIsConvenor"
           mat-menu-item
           uiSref="units/admin"
           [uiParams]="{ unitId: currentUnit.id }"
         >
-          Unit Administration
+          <mat-icon aria-hidden="false" aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
+          Administration
         </button>
       </span>
     </mat-menu>
@@ -43,36 +54,40 @@
   <ng-container *ngIf="currentActivity">
     <span style="color: rgb(216, 216, 216)">/</span>
     <button mat-button [matMenuTriggerFor]="menu2" #menuState="matMenuTrigger">
-      {{ currentActivity }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      {{ menuText }} <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </button>
     <mat-menu #menu2="matMenu">
       <ng-container *ngIf="currentProject !== null && currentView === 'PROJECT'">
         <button uiSref="projects/dashboard" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
-          Dashboard
+          <mat-icon aria-hidden="false" aria-label="Dashboard icon" fontIcon="dashboard"></mat-icon> Dashboard
         </button>
         <mat-divider></mat-divider>
         <button uiSref="projects/outcomes" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
-          Learning Outcomes
+          <mat-icon aria-hidden="false" aria-label="learning outcomes icon" fontIcon="flag"></mat-icon> Learning
+          Outcomes
         </button>
         <button uiSref="projects/portfolio" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
+          <mat-icon aria-hidden="false" aria-label="Portfolio creation icon" fontIcon="auto_stories"></mat-icon>
           Portfolio Creation
         </button>
         <mat-divider></mat-divider>
         <button uiSref="projects/groups" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
-          Groups List
+          <mat-icon aria-hidden="false" aria-label="Groups list icon" fontIcon="groups"></mat-icon> Groups List
         </button>
         <button uiSref="projects/tutorials" [uiParams]="{ projectId: currentProject.id, taskAbbr: '' }" mat-menu-item>
-          Tutorial List
+          <mat-icon aria-hidden="false" aria-label="Tutorial List icon" fontIcon="meeting_room"></mat-icon> Tutorial
+          List
         </button>
       </ng-container>
       <ng-container *ngIf="unitRole && currentView === 'UNIT'">
+        <!-- <p class="task-dropdown-heading">Tasks</p> -->
         <button
           uiSref="units/tasks/inbox"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Task Inbox
+          <mat-icon aria-hidden="false" aria-label="Inbox icon" fontIcon="inbox"></mat-icon> Inbox
         </button>
         <button
           uiSref="units/tasks/definition"
@@ -80,32 +95,25 @@
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Task Explorer
+          <mat-icon aria-hidden="false" aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
         </button>
-        <!-- <button
-          uiSref="units/tasks/offline"
-          [uiParams]="{ unitId: unitRole.unit.id }"
-          mat-menu-item
-          *ngIf="unitRole.role !== 'Admin'"
-        >
-          Mark Tasks Offline
-        </button> -->
         <button
           uiSref="units/tasks/viewer"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Task List
+          <mat-icon aria-hidden="false" aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
         <mat-divider *ngIf="unitRole.role !== 'Admin'"></mat-divider>
+        <!-- <p class="task-dropdown-heading">Students</p> -->
         <button
           uiSref="units/students/list"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Student List
+          <mat-icon aria-hidden="false" aria-label="Students list" fontIcon="group"></mat-icon> Students
         </button>
         <button
           uiSref="units/students/groups"
@@ -113,7 +121,7 @@
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Student Groups
+          <mat-icon aria-hidden="false" aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
         </button>
         <button
           uiSref="units/students/plagiarism"
@@ -121,7 +129,8 @@
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Student Plagiarism
+          <mat-icon aria-hidden="false" aria-label="Student similarity icon" fontIcon="crisis_alert"></mat-icon>
+          Similarities
         </button>
         <button
           uiSref="units/students/portfolios"
@@ -129,17 +138,19 @@
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Student Portfolios
+          <mat-icon aria-hidden="false" aria-label="Student portfolios icon" fontIcon="collections_bookmark"></mat-icon>
+          Portfolios
         </button>
 
         <mat-divider *ngIf="unitRole.role !== 'Admin'"></mat-divider>
+        <!-- <p class="task-dropdown-heading">Unit</p> -->
         <button
           uiSref="units/analytics"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item
           *ngIf="unitRole.role !== 'Admin'"
         >
-          Unit Analytics
+          <mat-icon aria-hidden="false" aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
         <button
           uiSref="units/admin"
@@ -147,7 +158,8 @@
           *ngIf="unitRole.role === 'Convenor' || unitRole.role === 'Admin'"
           mat-menu-item
         >
-          Unit Administration
+          <mat-icon aria-hidden="false" aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
+          Administration
         </button>
       </ng-container>
     </mat-menu>

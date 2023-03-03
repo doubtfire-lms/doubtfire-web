@@ -1,0 +1,49 @@
+<span *ngIf="(showingTaskPdf && task?.definition?.hasTaskSheet) || (!showingTaskPdf && task?.hasPdf); else cantshowpdf">
+  <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
+</span>
+
+<ng-template #cantshowpdf>
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>subtitles_off</mat-icon>
+  </div>
+</ng-template>
+<!-- <span [hidden]="tutor">{{ task.definition.name }}</span> -->
+<!-- <span [hidden]="!tutor" style="display: inline-flex" -->
+<!-- >{{ task.definition.name }} <f-user-badge style="margin-left: 10px" [project]="task.project"></f-user-badge -->
+<!-- ></span> -->
+
+<!-- <div -->
+<!-- class="dropdown pull-right" -->
+<!-- dropdown -->
+<!-- [hidden]="!(task.hasPdf || task.definition.hasTaskSheet || overseerEnabledObs.value)" -->
+<!-- > -->
+<!-- <button class="btn btn-default dropdown-toggle" dropdown-toggle> -->
+<!-- <i class="fa fa-search"></i> -->
+<!-- <span class="caret"></span> -->
+<!-- </button> -->
+<!-- <ul class="dropdown-menu">
+          <li>
+            <a (click)="setSelectedDashboardView(0)">View Task Details</a>
+          </li>
+          <li [hidden]="!task.hasPdf">
+            <a (click)="setSelectedDashboardView(1)">View Submission</a>
+          </li>
+          <li [hidden]="!task.definition.hasTaskSheet">
+            <a (click)="setSelectedDashboardView(2)">View Task Sheet</a>
+          </li>
+          <li class="divider" [hidden]="!task.hasPdf"></li>
+          <li [hidden]="!task.hasPdf">
+            <a (click)="downloadSubmission()">Download Submission PDF</a>
+          </li>
+          <li [hidden]="!task.hasPdf">
+            <a (click)="downloadSubmittedFiles()">Download Submitted Files</a>
+          </li>
+          <li *ngIf="overseerEnabled()">
+            <a (click)="showSubmissionHistoryModal()">View Submission History</a>
+          </li>
+        </ul> -->
+<!-- </div> -->
+<!--/download-dropdown-->
+<!-- </div> -->
+<!-- </div> -->
+<!--/panel-header-->

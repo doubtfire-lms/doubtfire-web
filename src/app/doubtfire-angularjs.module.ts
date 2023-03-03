@@ -80,12 +80,8 @@ import 'build/src/app/projects/states/states.js';
 import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
@@ -138,7 +134,6 @@ import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-t
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
-import 'build/src/app/units/states/tasks/offline/offline.js';
 import 'build/src/app/units/states/portfolios/portfolios.js';
 import 'build/src/app/units/states/all/directives/all-units-list/all-units-list.js';
 import 'build/src/app/units/states/all/directives/directives.js';
@@ -233,7 +228,7 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
 import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
-import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
@@ -265,6 +260,12 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
+import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -321,12 +322,25 @@ DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ componen
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
 DoubtfireAngularJSModule.directive(
+  'fTaskSubmissionCard',
+  downgradeComponent({ component: TaskSubmissionCardComponent })
+);
+
+DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
+DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
 );
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
+DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
+DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({ component: InboxComponent }));
+DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
+DoubtfireAngularJSModule.directive(
+  'fTaskAssessmentCard',
+  downgradeComponent({ component: TaskAssessmentCardComponent })
+);
 DoubtfireAngularJSModule.directive(
   'institutionSettings',
   downgradeComponent({ component: InstitutionSettingsComponent })
@@ -378,7 +392,7 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskCommentsViewerComponent })
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
-DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
+DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component: fPdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));

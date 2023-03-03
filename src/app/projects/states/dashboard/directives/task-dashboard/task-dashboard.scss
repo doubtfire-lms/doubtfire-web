@@ -1,7 +1,15 @@
 task-dashboard {
+  .task-detail-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 12px;
+  }
+
   .panel-body.no-pdf {
     @include flex-center;
     font-size: 2rem;
+
     i {
       font-size: 8rem;
       width: 100%;
@@ -9,32 +17,39 @@ task-dashboard {
       margin-bottom: 15px;
     }
   }
+
   @media (min-width: $screen-xs) {
     .panel-footer {
       padding: 0;
       height: 55px;
       border-radius: $border-radius-base;
+
       .btn-group {
         display: flex;
         height: 100%;
       }
+
       .btn-previous-task,
       .btn-next-task {
         flex: 1;
       }
+
       .btn-status {
         flex: 2;
       }
+
       .btn {
         @include flex-center;
         font-size: 1.6em;
         border-radius: 0;
         border-top-style: none;
         border-bottom-style: none;
+
         &:first-child {
           border-left-style: none;
           border-bottom-left-radius: $border-radius-base;
         }
+
         &:last-child {
           border-right-style: none;
           border-bottom-right-radius: $border-radius-base;

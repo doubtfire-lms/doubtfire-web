@@ -123,20 +123,20 @@ $mat-typography-primary-config: mat.define-typography-config(
   $input: mat.define-typography-level(inherit, 1.125, 400, $font-family-accent),
 );
 
-$my-primary: mat.define-palette($md-formatif, 500);
-$my-accent: mat.define-palette($md-formatif-accent, 500);
-$my-warn: mat.define-palette($md-formatif-warn, 500);
+$primary: mat.define-palette($md-formatif);
+$accent: mat.define-palette($md-formatif-accent);
+$warn: mat.define-palette($md-formatif-warn);
 
-$my-theme: mat.define-light-theme(
+$theme: mat.define-light-theme(
   (
     color: (
-      primary: $my-primary,
-      accent: $my-accent,
-      warn: $my-warn,
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
     ),
     typography: $mat-typography-primary-config,
   )
 );
 
-@include mat.all-component-themes($my-theme);
-@include mat.core($mat-typography-primary-config);
+
+@include mat.all-component-themes($theme);

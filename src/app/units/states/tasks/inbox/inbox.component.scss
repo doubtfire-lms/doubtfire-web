@@ -1,0 +1,42 @@
+.staff-task-list {}
+
+.task-comment-panel {
+    padding-left: 12px;
+    padding-bottom: 0px;
+
+    &.mobile {
+        padding-left: 0px;
+        padding-bottom: 0px;
+        margin-bottom: 10px;
+    }
+}
+
+.resizer {
+    background-color: #f5f5f5;
+    z-index: 200;
+    width: 10px //css on hover
+}
+
+.resizer:hover,
+.resizer.hovering {
+    cursor: col-resize;
+    background: linear-gradient(white, white) no-repeat center/2px 98%;
+}
+
+.inbox-panel {
+    border-radius: 10px;
+    background-color: white;
+    padding: 8px;
+    min-width: 60px;
+    width: 350px;
+
+    &.mobile {
+        max-width: 100%;
+        width: 100%;
+        padding: 0px;
+    }
+}
+
+.task-comment-panel.inbox-panel {
+    padding: 0px 0px 0px 5px !important;
+}

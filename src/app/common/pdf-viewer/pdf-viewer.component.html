@@ -1,2 +1,26 @@
-<object [data]="pdfBlobUrl | safe" *ngIf="pdfBlobUrl"></object>
-<mat-spinner strokeWidth="2" diameter="100" color="accent" [hidden]="pdfBlobUrl"></mat-spinner>
+<div id="pdfContainer">
+  <div id="pdfActions" [hidden]="!loaded">
+    <form #loginForm="ngForm" (ngSubmit)="searchPdf(pdfSearchString)">
+      <mat-form-field floatLabel="never" appearance="outline" class="pdf-form-field" ngSubmit>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="text" placeholder="Search PDF" [(ngModel)]="pdfSearchString" name="pdfSearchString" />
+
+        <button matSuffix mat-icon-button type="button" (click)="zoomOut()" aria-label="Zoom in PDF button">
+          <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button matSuffix mat-icon-button type="button" (click)="zoomIn()" aria-label="Zoom in PDF button">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+  <pdf-viewer
+    [zoom]="zoomValue"
+    [src]="pdfBlobUrl"
+    *ngIf="pdfBlobUrl"
+    [render-text]="true"
+    [original-size]="false"
+    (after-load-complete)="onLoaded()"
+    (page-rendered)="loaded = true"
+  ></pdf-viewer>
+</div>

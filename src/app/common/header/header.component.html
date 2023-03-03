@@ -1,5 +1,11 @@
-<mat-toolbar *ngIf="showHeader" fxLayout="row" fxLayoutAlign="start center">
-  <a uiSref="home">
+<mat-toolbar
+  [ngClass]="{ inbox: globalState.isInboxState }"
+  *ngIf="showHeader"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  style="min-height: 85px"
+>
+  <a uiSref="home" *ngIf="!media.isActive('xs')">
     <mat-icon
       uiSref="home"
       style="margin-right: 20px; margin-left: 20px"

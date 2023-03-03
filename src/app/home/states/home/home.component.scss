@@ -3,7 +3,7 @@
 
   .spinner {
     position: fixed;
-    background: #f0f2f5;
+    // background: #f0f2f5;
     top: 0;
     bottom: 0;
     left: 0;
@@ -22,6 +22,10 @@
 
 .removeStyle {
   text-decoration: none;
+}
+
+.mat-card-header {
+  
 }
 
 .base-card {
@@ -46,6 +50,11 @@
     width: 100%;
     overflow: hidden;
   }
+
+  ::ng-deep .mat-button-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+  }
 }
 
 .admin-card {
@@ -60,4 +69,8 @@
   width: 300px;
   max-width: 300px;
   max-height: 200px;
+
+  mat-card-actions {
+    margin-bottom: 0px;
+  }
 }

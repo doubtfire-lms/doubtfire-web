@@ -26,6 +26,20 @@
 </div>
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
+  <button *ngIf="media.isActive('xs')" uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
+    <mat-icon
+      uiSref="home"
+      style="margin-right: 20px"
+      svgIcon="formatif-logo"
+      class="formatif-icon"
+      aria-hidden="false"
+      aria-label="Home Icon"
+    ></mat-icon>
+    <div class="unitName">Home</div>
+    <span fxFlex></span>
+  </button>
+  <mat-divider *ngIf="media.isActive('xs')"></mat-divider>
+
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <div *ngFor="let unitRole of unitRoles">
     <button
@@ -36,7 +50,7 @@
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div class='unitName'>{{ unitRole.unit.name }}</div>
+      <div class="unitName">{{ unitRole.unit.name }}</div>
       <span fxFlex></span>
       <mat-chip-list style="float: right" aria-label="Unit selection" style="margin-left: 10px">
         <mat-chip selected color="primary">{{ unitRole.unit.code }}</mat-chip>
@@ -55,7 +69,7 @@
       fxLayoutAlign="start center"
       mat-menu-item
     >
-      <div class='unitName'>{{ project.unit.name }}</div>
+      <div class="unitName">{{ project.unit.name }}</div>
       <span fxFlex></span>
       <mat-chip-list aria-label="Unit selection" style="margin-left: 10px">
         <mat-chip selected color="primary">{{ project.unit.code }}</mat-chip>

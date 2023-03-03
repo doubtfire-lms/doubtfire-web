@@ -8,6 +8,7 @@ import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,7 +33,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { setTheme } from 'ngx-bootstrap/utils';
@@ -116,7 +117,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
-import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { SafePipe } from './common/pipes/safe.pipe';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
@@ -175,6 +176,14 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
+import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
+import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 
 @NgModule({
   // Components we declare
@@ -214,7 +223,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     HumanizedDatePipe,
     IsActiveUnitRole,
     DragDropDirective,
-    PdfViewerComponent,
+    fPdfViewerComponent,
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
@@ -239,6 +248,14 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
+    TaskStatusCardComponent,
+    TaskDueCardComponent,
+    FooterComponent,
+    TaskAssessmentCardComponent,
+    TaskSubmissionCardComponent,
+    TaskDashboardComponent,
+    InboxComponent,
+    ProjectProgressBarComponent,
   ],
   // Module Imports
   imports: [
@@ -248,6 +265,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     FormsModule,
     HttpClientModule,
     ClipboardModule,
+    DragDropModule,
     ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
@@ -288,6 +306,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    PdfViewerModule,
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

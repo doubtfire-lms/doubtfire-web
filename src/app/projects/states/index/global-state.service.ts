@@ -1,4 +1,5 @@
-import { Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject, skip, take } from 'rxjs';
@@ -50,7 +51,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The unit roles loaded from the server
    */
-  private loadedUnitRoles: EntityCache<UnitRole>;
+  public loadedUnitRoles: EntityCache<UnitRole>;
 
   /**
    * The loaded units.
@@ -61,6 +62,7 @@ export class GlobalStateService implements OnDestroy {
    * The loaded projects.
    */
   private currentUserProjects: EntityCache<Project>;
+  private footer = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -94,7 +96,8 @@ export class GlobalStateService implements OnDestroy {
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
     @Inject(UIRouter) private router: UIRouter,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
+    private mediaObserver: MediaObserver
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -109,6 +112,56 @@ export class GlobalStateService implements OnDestroy {
         this.router.stateService.go('sign_in');
       }
     }, 800);
+
+    // this is a hack to workaround horrific IOS "feature"
+    // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
+
+    window.addEventListener('orientationchange', this.resetHeight.bind(this));
+    window.addEventListener('resize', this.resetHeight.bind(this));
+    this.resetHeight();
+  }
+
+  private resetHeight() {
+    setTimeout(() => {
+      const vh = window.innerHeight * 0.01;
+      if (this.footer && this.mediaObserver.isActive('gt-sm')) {
+        document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+      } else {
+        document.body.style.setProperty('--vh', `${vh - 0.2}px`);
+      }
+    }, 0);
+  }
+
+  public get isInboxState(): boolean {
+    return this.footer;
+  }
+
+  public setInboxState() {
+    console.log('isInboxState');
+    this.footer = true;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+
+  public goHome() {
+    this.showHeader();
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+  public setNotInboxState() {
+    console.log('notInboxState');
+    this.footer = false;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#fff');
+  }
+
+  public showFooter(): void {
+    this.footer = true;
+    this.resetHeight();
+  }
+
+  public hideFooter(): void {
+    this.footer = false;
+    this.resetHeight();
   }
 
   public signOut(): void {
@@ -134,7 +187,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading campuses.', 6000);
-          console.log(response);
         },
       });
 
@@ -145,7 +197,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading teaching periods.', 6000);
-          console.log(response);
         },
       });
     });

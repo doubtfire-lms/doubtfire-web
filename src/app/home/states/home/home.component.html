@@ -64,7 +64,7 @@
                 mat-mini-fab
                 aria-label="view all units"
               >
-                <mat-icon style="color: white">history</mat-icon>
+                <mat-icon fxLayoutAlign="center center" style="color: white; padding-right: 1px">history</mat-icon>
               </button>
             </a>
           </div>
@@ -134,9 +134,9 @@
                 style="width: 100%"
                 uiSref="admin/teachingperiods"
               >
-                <mat-icon style="color: black; margin-right: 6px">date_range</mat-icon>Teaching Periods</a
-              ></mat-list-item
-            >
+                <mat-icon style="color: black; margin-right: 6px">date_range</mat-icon>Teaching Periods
+              </a>
+            </mat-list-item>
             <mat-list-item [hidden]="!ifAdmin" role="listitem">
               <a
                 fxLayout="row"
@@ -146,9 +146,12 @@
                 style="width: 100%"
                 uiSref="institutionsettings"
               >
-                <mat-icon style="color: black; margin-right: 6px">business</mat-icon>Institution Settings</a
-              ></mat-list-item
-            >
+                <div fxLayout="row" fxLayoutAlign="center center">
+                  <mat-icon style="color: black; margin-right: 6px">business</mat-icon>
+                </div>
+                Institution Settings
+              </a>
+            </mat-list-item>
             <mat-list-item role="listitem">
               <a
                 fxLayout="row"
@@ -158,9 +161,12 @@
                 style="width: 100%"
                 uiSref="admin/units"
               >
-                <mat-icon style="color: black; margin-right: 6px">school</mat-icon>Units</a
-              ></mat-list-item
-            >
+                <div fxLayout="row" fxLayoutAlign="center center">
+                  <mat-icon style="color: black; margin-right: 6px">school</mat-icon>
+                  Units
+                </div>
+              </a>
+            </mat-list-item>
             <mat-list-item role="listitem">
               <a
                 fxLayout="row"
@@ -170,9 +176,12 @@
                 style="width: 100%"
                 uiSref="admin/users"
               >
-                <mat-icon style="color: black; margin-right: 6px">people</mat-icon>Users</a
-              ></mat-list-item
-            >
+                <div fxLayout="row" fxLayoutAlign="center center">
+                  <mat-icon style="color: black; margin-right: 6px">people</mat-icon>
+                </div>
+                Users
+              </a>
+            </mat-list-item>
           </mat-list>
         </mat-card>
       </div>

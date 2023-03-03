@@ -15,6 +15,13 @@ export class TransitionHooksService {
   ) {
     this.transitions.onBefore({}, (transition) => {
       const toState = transition.to().name;
+      const fromState = transition.from().name;
+
+      if (this.isInboxState(toState)) {
+        this.globalState.setInboxState();
+      } else {
+        this.globalState.setNotInboxState();
+      }
 
       switch (toState) {
         case 'sign_in':
@@ -27,7 +34,7 @@ export class TransitionHooksService {
           this.globalState.hideHeader();
           break;
         case 'home':
-          this.globalState.showHeader();
+          this.globalState.goHome();
           break;
         default:
           break;
@@ -41,5 +48,10 @@ export class TransitionHooksService {
         return transition.router.stateService.target('welcome');
       }
     });
+  }
+
+  // function to return true if navigating to inbox or task definition
+  private isInboxState(toState: string): boolean {
+    return toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition');
   }
 }

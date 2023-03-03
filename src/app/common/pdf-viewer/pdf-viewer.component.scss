@@ -1,5 +1,55 @@
-object {
+@import '../../../styles/mixins/scrollable.scss';
+
+#pdfContainer {
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+  min-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+}
+
+
+#pdfActions {
+  margin-left: auto;
+
+  ::ng-deep .mat-form-field-outline-start {
+    border-radius: 28px 0 0 28px !important;
+    min-width: 28px !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 28px 28px 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+  }
+}
+
+pdf-viewer {
   width: 100%;
   height: 100%;
-  position: absolute;
+
+  .ng2-pdf-viewer-container {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+}
+
+.ng2-pdf-viewer-container {
+  overflow-x: hidden;
+  overflow-y: visible;
 }

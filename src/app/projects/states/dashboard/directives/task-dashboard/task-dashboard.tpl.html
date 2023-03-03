@@ -2,9 +2,7 @@
   <div class="panel-heading" ng-show="task">
     <div class="panel-title">
       <span ng-hide="tutor || showFooter">{{task.definition.name}}</span>
-      <span ng-show="tutor || showFooter" style="display: inline-flex"
-        >{{task.definition.name}} <user-badge style="margin-left: 10px" [project]="task.project"></user-badge
-      ></span>
+      <span ng-show="tutor || showFooter" style="display: inline-flex">{{task.definition.name}} </span>
 
       <div
         class="dropdown pull-right"
@@ -41,29 +39,30 @@
     </div>
   </div>
   <!--/panel-header-->
-  <div class="panel-body" ng-show="isCurrentView('details')">
-    <div class="col-sm-12 col-xl-6">
-      <task-plagiarism-card [task]="task"></task-plagiarism-card>
-      <task-status-card task="task"></task-status-card>
-      <task-due-card task="task"></task-due-card>
-      <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>
-    </div>
+  <div class="panel-body task-detail-cards" ng-show="isCurrentView('details')">
+    <!-- <div class="col-sm-12 col-xl-6"> -->
+    <!-- migrated -->
+    <task-plagiarism-card [task]="task"></task-plagiarism-card>
+    <f-task-status-card [task]="task"></f-task-status-card>
+    <f-task-due-card [task]="task"></f-task-due-card>
+    <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>
+    <!-- </div> -->
     <!--/task-description-column-->
-    <div class="col-sm-12 col-xl-6">
-      <task-assessment-card task="task"></task-assessment-card>
-      <task-submission-card task="task"></task-submission-card>
-      <task-outcomes-card task-def="task.definition" unit="task.unit"></task-outcomes-card>
-    </div>
+    <!-- <div class="col-sm-12 col-xl-6"> -->
+    <f-task-assessment-card [task]="task"></f-task-assessment-card>
+    <f-task-submission-card [task]="task"></f-task-submission-card>
+    <task-outcomes-card task-def="task.definition" unit="task.unit"></task-outcomes-card>
+    <!-- </div> -->
     <!--/task-description-column-->
   </div>
   <!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
-    <pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></pdf-viewer>
+    <f-pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></f-pdf-viewer>
   </div>
   <!--/panel-body-->
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.hasPdf">
     <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
-    <pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer>
+    <f-pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></f-pdf-viewer>
   </div>
   <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">

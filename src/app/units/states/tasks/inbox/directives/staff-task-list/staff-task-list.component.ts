@@ -15,7 +15,6 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TasksOfTaskDefinitionPipe } from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import { TasksInTutorialsPipe } from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from 'src/app/common/filters/tasks-for-inbox-search.pipe';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
@@ -24,6 +23,7 @@ import { Observable } from 'rxjs';
 import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -37,7 +37,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   @Input() project: Project;
 
   @Input() taskData: {
-    source: (unit: Unit, taskDef: TaskDefinition | number ) => Observable<Task[]>;
+    source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
     selectedTask: Task;
     taskKey: string;
     onSelectedTaskChange: (task: Task) => void;
@@ -51,10 +51,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
-    taskDefinitionIdSelected: number | TaskDefinition; };
-  @Input() showSearchOptions = false;
+    taskDefinitionIdSelected: number | TaskDefinition;
+  };
+  @Input() showSearchOptions = true;
 
-  isNarrow: boolean;
+  @Input() isNarrow: boolean;
 
   userHasTutorials: boolean;
   filteredTasks: any[] = null;
@@ -90,6 +91,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   taskDefSort = 0;
   tutorialSort = 0;
   originalFilteredTasks: any[] = null;
+  allowHover = true;
 
   @HostListener('document:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -108,28 +110,33 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   }
 
   constructor(
-    private breakpointObserver: BreakpointObserver,
+    private selectedTaskService: SelectedTaskService,
     @Inject(alertService) private alertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      (changes.unit.currentValue.id && changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
-      this.tasks == null
+      ((!changes.unit?.isFirstChange &&
+      changes.unit.currentValue.id &&
+      changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
+      this.tasks == null) &&
+      this.isTaskDefMode &&
+      this.filters
     ) {
       this.refreshData();
     }
   }
 
   ngOnInit(): void {
-    const layoutChanges = this.breakpointObserver.observe('(max-width: 1000px)');
+    // if device is movile always set hover to false
+    // so you can instantly click on an item in the list
+    if (navigator.maxTouchPoints > 1) {
+      this.allowHover = false;
+    }
 
-    layoutChanges.subscribe((state: BreakpointState) => {
-      this.isNarrow = state.matches;
-    });
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
@@ -140,7 +147,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
         tutorials: [],
         taskDefinitionIdSelected: null,
         taskDefinition: null,
-        forceStream: true
+        forceStream: true,
       },
       this.filters
     );
@@ -156,7 +163,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
           inboxDescription: `${t.abbreviation} - ${t.description}`,
           abbreviation: t.abbreviation,
           forceStream: true,
-          tutorial: t
+          tutorial: t,
         };
       }),
     ];
@@ -167,28 +174,36 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
 
     // Initially not watching the task key
     this.watchingTaskKey = false;
+
+    this.refreshData();
   }
 
   public get isTaskDefMode(): boolean {
-    return this.taskData.taskDefMode &&
-      this.filters?.taskDefinitionIdSelected &&
-      this.showSearchOptions;
+    return this.taskData.taskDefMode;
   }
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/student_pdfs`, `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`);
+    this.fileDownloaderService.downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id
+      }/student_pdfs`,
+      `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`
+    );
   }
 
   downloadSubmissions() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id}/download_submissions`, `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`);
+    this.fileDownloaderService.downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${this.unit.id}/task_definitions/${taskDef.id
+      }/download_submissions`,
+      `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`
+    );
   }
 
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => { });
   }
 
   refreshTasks(): void {
@@ -198,7 +213,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
     if (this.filters.tutorials) {
-      filteredTasks = this.tasksInTutorialsPipe.transform(filteredTasks, this.filters.tutorials.map(t=> t.id), this.filters.forceStream);
+      filteredTasks = this.tasksInTutorialsPipe.transform(
+        filteredTasks,
+        this.filters.tutorials.map((t) => t.id),
+        this.filters.forceStream
+      );
     }
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
@@ -264,7 +283,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       return;
     }
     const taskDef =
-      this.unit.taskDefinitionCache.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) || this.unit.taskDefinitionCache.currentValues[0];
+      this.unit.taskDefinitionCache.currentValues.find((x) => x.abbreviation === taskKey?.taskDefAbbr) ||
+      this.unit.taskDefinitionCache.currentValues[0];
     this.filters.taskDefinitionIdSelected = taskDef.id;
     this.filters.taskDefinition = taskDef;
   }
@@ -298,11 +318,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       },
       error: (message) => {
         this.alertService.add('danger', message, 6000);
-      }
+      },
     });
   }
 
   setSelectedTask(task: Task) {
+    this.selectedTaskService.setSelectedTask(task);
     this.taskData.selectedTask = task;
     if (this.taskData.onSelectedTaskChange) {
       this.taskData.onSelectedTaskChange(task);
@@ -320,8 +341,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     const funcName = taskEl.scrollIntoViewIfNeeded
       ? 'scrollIntoViewIfNeeded'
       : taskEl.scrollIntoView
-      ? 'scrollIntoView'
-      : '';
+        ? 'scrollIntoView'
+        : '';
     if (!funcName) {
       return;
     }
@@ -370,14 +391,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
     }
   }
 
-  // toggleTutorialSort() {
-  // }
-
-  togglePin(task) {
-    if (task.pinned) {
-      task.unpin();
-    } else {
-      task.pin();
-    }
+  togglePin(task: Task) {
+    task.pinned ? task.unpin() : task.pin();
   }
 }

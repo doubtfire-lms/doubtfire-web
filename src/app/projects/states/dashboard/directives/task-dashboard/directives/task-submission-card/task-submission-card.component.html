@@ -1,0 +1,52 @@
+<mat-card [hidden]="!(submission.isUploaded || submission.isProcessing)">
+  <mat-card-title>Submission <span [hidden]="!submission.isProcessing">Processing</span></mat-card-title>
+  <mat-card-content>
+    <p [hidden]="!submission.isProcessing">
+      Your submission is being processed and will be avaliable to view soon. You will also be able to download your most
+      recently submitted files.
+    </p>
+    <p [hidden]="!submission.isUploaded">
+      You can choose to download your <em [hidden]="!submission.isProcessing">previous</em>
+      submission or the files you uploaded below.
+    </p>
+    <p [hidden]="!submission.isUploaded">
+      You uploaded this submission <strong>{{ task.submissionDate | humanizedDate }}</strong
+      >.
+    </p>
+    <p [hidden]="!canRegeneratePdf">
+      If you feel there has been an error in your submission, you can request Doubtfire to regenerate your submission
+      under the "Actions" dropdown menu.
+    </p>
+    <p [hidden]="!canReuploadEvidence">
+      If you would like to submit alternate evidence for use in your portfolio, you can upload alternate files under the
+      "Actions" dropdown menu.
+    </p></mat-card-content
+  >
+  <mat-card-actions [hidden]="!(submission.isUploaded || canReuploadEvidence || canRegeneratePdf)">
+    <button mat-stroked-button [hidden]="!submission.isUploaded" (click)="downloadSubmission()">
+      Download submission
+    </button>
+    <button
+      mat-icon-button
+      aria-label="More download options"
+      [matMenuTriggerFor]="menu"
+      [hidden]="!submission.isUploaded"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <div fxFlex></div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="downloadSubmissionFiles()">Download original files</button>
+    </mat-menu>
+
+    <button mat-stroked-button [matMenuTriggerFor]="menu2">
+      Actions <mat-icon aria-hidden="false" aria-label="dropdown icon" fontIcon="arrow_drop_down"></mat-icon>
+    </button>
+    <mat-menu #menu2="matMenu">
+      <button [hidden]="!canReuploadEvidence" mat-menu-item (click)="uploadAlternateFiles()">
+        Upload alternate files
+      </button>
+      <button [hidden]="!canRegeneratePdf" mat-menu-item (click)="regeneratePdf()">Regenerate PDFs</button>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>

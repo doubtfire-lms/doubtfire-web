@@ -44,6 +44,95 @@ const HomeState: NgHybridStateDeclaration = {
   },
 };
 
+// const unitParentState: NgHybridStateDeclaration = {
+//   name: 'units',
+//   url: '/units/:unit_id',
+//   // template for the parent state
+//   views: {
+//     main: {
+//       component: IndexComponent,
+//     },
+//   },
+//   resolve: {
+//     unit: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       unitService.query({ id: $stateParams.unit_id }).subscribe((unit) => {
+//         console.log($stateParams.unit_id);
+//         console.log(unit);
+//         return unit;
+//       });
+//     },
+//     unitRole: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       globalStateService.unitRolesSubject.subscribe((unitRoles) => {
+//         return unitRoles.find((unitRole) => unitRole.id === $stateParams.unit_id);
+//       });
+//     },
+//   },
+// };
+
+/**
+ * Define the new home state.
+ */
+// const InboxState: NgHybridStateDeclaration = {
+//   name: 'inbox',
+//   url: '/units/:unit_id/inbox/:task_key',
+
+//   params: {
+//     // unitRole: UnitRole,
+//     // taskKey: null,
+//     // taskData:
+//     // unit,
+//   },
+//   views: {
+//     main: {
+//       component: InboxComponent,
+//     },
+//   },
+//   data: {
+//     task: 'Task Inbox',
+//     pageTitle: '_Home_',
+//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
+//   },
+//   resolve: {
+//     unit$: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       return unitService.get({ id: $stateParams.unit_id });
+//     },
+//     unitRole$: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       const result = globalStateService.loadedUnitRoles.values.pipe(
+//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
+//       );
+//       return result;
+//     },
+//     taskData$: function () {
+//       const taskService = AppInjector.get(TaskService);
+//       const taskData = {
+//         taskKey: null,
+//         source: null,
+//         selectedTask: null,
+//         onSelectedTaskChange: (task) =>{
+//           const taskKey = task?.taskKey()
+//           $scope.taskData.taskKey = taskKey
+//           setTaskKeyAsUrlParams(task);
+//         }
+//       }
+//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
+//       taskData.taskDefMode = false;
+//       return of(taskData);
+//     },
+//   },
+// };
+
 /**
  * Define the welcome state.
  */

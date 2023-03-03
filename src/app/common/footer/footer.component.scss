@@ -1,0 +1,36 @@
+.footer {
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .center-buttons {
+    text-align: center;
+
+    .button {
+      margin: 0 6px;
+      transform: scale(0.8);
+      border-radius: 100%;
+    }
+
+    .large-button {
+      transform: scale(1.15);
+      background-color: white;
+    }
+  }
+
+  .small-icon {
+    transform: scale(0.8);
+    margin: 0 -2px;
+  }
+
+  .mat-icon-button {
+    margin: 0 -6px;
+  }
+
+  f-project-progress-bar {
+    width: 15vw;
+    margin-left: 20px;
+    margin-right: 25px;
+  }
+
+}

@@ -1,0 +1,94 @@
+<div
+  *ngIf="
+    (!task?.inFinalState() || (task?.inTimeExceeded() && !task?.isPastDeadline())) && !task?.inAwaitingFeedbackState()
+  "
+>
+  <!--Only show this if it matters... not in final or waiting for tutor input-->
+  <mat-card *ngIf="task?.isDueSoon() && !task?.pastDueDate()">
+    <!--Due soon-->
+
+    <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
+
+    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+      <!--Due and not in discuss-->
+      <p>
+        This task's due date is <strong>{{ task?.localDueDateString() }}</strong
+        >. You should aim to complete this task before then to keep your progress on track.
+      </p>
+    </mat-card-subtitle>
+    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+      <!--Due but in discuss-->
+      <p>
+        This task's due date is <strong>{{ task?.localDueDateString() }}</strong
+        >. Make sure to discuss this task with your tutor as soon as possible.
+      </p>
+      <p class="mat-caption">
+        Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work
+        with you.
+      </p>
+    </mat-card-subtitle>
+  </mat-card>
+  <!--/is due soon-->
+  <mat-card *ngIf="task?.betweenDueDateAndDeadlineDate()">
+    <mat-card-title>Past Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
+
+    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+      <!--Not in submitted state and overdue-->
+      <p>
+        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
+        >. Try and finish it as soon as possible to avoid falling behind. You will need to request an extension in order
+        to have this task checked and marked as complete by your tutor.
+      </p>
+    </mat-card-subtitle>
+    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+      <!--Not discussed-->
+      <p>
+        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
+        >. Make sure to discuss this task with your tutor as soon as possible. If this task remains on this state for an
+        extended period, it will be marked as Time Exceeded.
+      </p>
+      <p class="mat-caption">
+        Tasks are only considered <strong>completed</strong> once your tutor has <strong>discussed</strong> your work
+        with you.
+      </p>
+    </mat-card-subtitle>
+  </mat-card>
+
+  <!--/between due date and deadline-->
+  <mat-card *ngIf="task?.isPastDeadline()">
+    <mat-card-title>Passed Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
+    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+      <!--Past deadline and not submitted-->
+      <p>
+        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
+        >. This task is now past the deadline and will be marked as <em>Time Exceeded</em> when submitted. You should
+        consult with the unit assessment details to determine the impact of failing to complete this task within the
+        allocated time.
+      </p>
+    </mat-card-subtitle>
+    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+      <!--Past deadline but in discuss or awaiting feedback-->
+      <p>
+        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
+        >. Make sure to discuss this task with your tutor as soon as possible.
+      </p>
+      <p class="mat-caption">
+        Tasks are only considered <strong>Completed</strong> once it demonstrates the required standard, and it is
+        <strong>discussed</strong> with your tutor.
+      </p>
+    </mat-card-subtitle>
+  </mat-card>
+</div>
+<!--/past deadline-->
+
+<mat-card [hidden]="!task?.inAwaitingFeedbackState()">
+  <mat-card-title>Wait for Tutor Feedback</mat-card-title>
+  <mat-card-subtitle>
+    <p>
+      You have submitted this task and should now wait for feedback from your tutor.
+      <span [hidden]="!task?.isPastDeadline()"
+        >Do not re-upload new files at this time as the status will be changed to <strong>Time Exceeded</strong>.</span
+      >
+    </p>
+  </mat-card-subtitle>
+</mat-card>
