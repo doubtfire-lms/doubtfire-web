@@ -31,6 +31,11 @@ export class AuthenticationService {
       // Ensure current user is in cache
       this.userService.cache.add(user);
       this.userService.currentUser = user;
+
+      const resetTime = new Date(Number.parseInt(localStorage.getItem(this.DOUBTFIRE_LOGIN_TIME)) + 60 * 60 * 1000);
+      const waitTime = resetTime.valueOf() - new Date().valueOf();
+
+      setTimeout(() => this.updateAuth(), waitTime);
     }
   }
 
@@ -63,7 +68,7 @@ export class AuthenticationService {
     }
 
     const remember: boolean = localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true';
-    localStorage.set(this.DOUBTFIRE_LOGIN_TIME, new Date().getTime());
+    localStorage.setItem(this.DOUBTFIRE_LOGIN_TIME, JSON.stringify(new Date().getTime()));
 
     this.httpClient
       .put(this.AUTH_URL, {
@@ -146,7 +151,7 @@ export class AuthenticationService {
     );
   }
 
-  public signOut(): void {
+  public signOut(ssoSignOut = true): void {
     const doSignOut = () => {
       this.tryChangeUser(this.userService.anonymousUser, false);
       const globalStateService = AppInjector.get(GlobalStateService);
@@ -155,10 +160,11 @@ export class AuthenticationService {
       globalStateService.clearUnitsAndProjects();
 
       // if string is not null
-      if (this.doubtfireConstants.SignoutURL) {
+      if (ssoSignOut && this.doubtfireConstants.SignoutURL) {
         window.location.assign(this.doubtfireConstants.SignoutURL);
+      } else {
+        this.state.go('sign_in');
       }
-      this.state.go('sign_in');
     };
 
     if (this.userService.currentUser.authenticationToken) {
