@@ -22,6 +22,4 @@ export class UnitDropdownComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-
-  showDate = this.DateService.showDate;
 }
