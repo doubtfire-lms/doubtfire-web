@@ -16,8 +16,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
     if isTestSubmission
       task.canReuploadEvidence = -> false
-     # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.uploadRequirements}
-     # task.project = -> project
+      # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.uploadRequirements}
+      # task.project = -> project
       task.isTestSubmission = isTestSubmission
 
     $modal.open
