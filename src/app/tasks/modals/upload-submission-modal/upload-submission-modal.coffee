@@ -16,8 +16,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
     if isTestSubmission
       task.canReuploadEvidence = -> false
-      # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.uploadRequirements}
-      # task.project = -> project
+     # task.definition = {id: task.id, abbreviation: task.abbreviation, upload_requirements: task.uploadRequirements}
+     # task.project = -> project
       task.isTestSubmission = isTestSubmission
 
     $modal.open
@@ -74,6 +74,10 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
     onSuccess: (response) ->
       $scope.uploader.response = response
+      if $scope.task.isTestSubmission then $scope.task.addProjectToTask(response.project_id).subscribe({
+        next: (response) ->
+          $scope.task.project = response
+      })
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
       $modalInstance.close(task)

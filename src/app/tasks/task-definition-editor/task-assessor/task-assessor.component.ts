@@ -38,18 +38,13 @@ export class TaskAssessorComponent implements OnChanges {
   }
 
   testSubmission() {
-    console.log("implement test submission");
-    // this.taskDefinition.unit.id = this.unit.id;
-    // var task = this.currentUserTask
-    // if ( ! task ) {
-    //   task = {
-    //     definition: this.taskDefinition
-    //   }
-    // }
-    // task.id = this.taskDefinition.id;
-    // task.unit_id = this.unit.id,
 
-    // this.ts.presentTaskSubmissionModal(task, this.taskDefinition.status, false, true, this.unit);
+    this.currentUserTask = new Task();
+
+    this.currentUserTask.definition = this.taskDefinition;
+    this.currentUserTask.status = 'ready_for_feedback';
+    this.currentUserTask.id = this.taskDefinition.id;
+    this.currentUserTask.presentTaskSubmissionModal(this.currentUserTask.status, false, true);
   }
 
   testSubmissionHistory() {
