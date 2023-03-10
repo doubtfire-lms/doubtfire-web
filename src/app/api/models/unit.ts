@@ -65,6 +65,10 @@ export class Unit extends Entity {
     };
   }
 
+  public get isActive(): boolean {
+    return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
+  }
+
   public matches(text: string): boolean {
     return this.code.toLowerCase().indexOf(text) >= 0 || this.name.toLowerCase().indexOf(text) >= 0;
   }

@@ -78,7 +78,7 @@
           <div [hidden]="loadingProjects" fxLayout="row wrap" fxLayoutAlign="start center">
             <div *ngFor="let project of projects">
               <a
-                *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod?.active"
+                *ngIf="project.unit.isActive"
                 uiSref="projects/dashboard"
                 [uiParams]="{ projectId: project.id, taskAbbr: '' }"
                 class="removeStyle"
