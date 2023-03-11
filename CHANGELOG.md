@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.2](https://github.com/macite/doubtfire-deploy/compare/v7.0.1...v7.0.2) (2023-03-11)
+
+
+### Bug Fixes
+
+* download groups and members ([b978796](https://github.com/macite/doubtfire-deploy/commit/b97879659667c7c0908512fabeffe4f550e793cb))
+* download users ([a9e978f](https://github.com/macite/doubtfire-deploy/commit/a9e978ff52f50b5f06d117f27af73e70ba9ea42b))
+* ensure filters limit their search where needed ([f51b0a4](https://github.com/macite/doubtfire-deploy/commit/f51b0a48eee64c98209e2570a32f1e163eca2466))
+* ensure name is included in project filter ([d5fc94a](https://github.com/macite/doubtfire-deploy/commit/d5fc94a6d2a540789edd56f751800c0fe14f3d60))
+* ensure only active units show in project home ([c27a6b5](https://github.com/macite/doubtfire-deploy/commit/c27a6b525106aaade9e658b6e69cb414aa240d6c))
+* pagination on student admin page ([1549c46](https://github.com/macite/doubtfire-deploy/commit/1549c46dc9e27f36bac3817dd19b67f0f8911f2d))
+
 ### [7.0.1](https://github.com/macite/doubtfire-deploy/compare/v7.0.0...v7.0.1) (2023-03-03)
 
 
