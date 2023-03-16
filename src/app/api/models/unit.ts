@@ -290,7 +290,7 @@ export class Unit extends Entity {
 
   public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignments.filter( (alignment: TaskOutcomeAlignment) => {
-      alignment.taskDefinition.id === td.id;
+      return alignment.taskDefinition.id === td.id;
     }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
       return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
     });
