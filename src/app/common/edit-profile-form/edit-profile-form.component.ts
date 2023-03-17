@@ -57,7 +57,9 @@ export class EditProfileFormComponent implements OnInit {
   }
 
   public get canSeeSystemRole(): boolean {
-    return this.user.systemRole === 'Admin' || this.user.systemRole === 'Convenor';
+    return (
+      this.userService.currentUser.systemRole === 'Admin' || this.userService.currentUser.systemRole === 'Convenor'
+    );
   }
 
   public submit(): void {
