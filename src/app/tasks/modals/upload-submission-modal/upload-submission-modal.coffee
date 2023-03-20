@@ -32,7 +32,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, task, reuploadEvidence, alertService, outcomeService, PrivacyPolicy) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, newProjectService, task, reuploadEvidence, alertService, outcomeService, PrivacyPolicy) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
@@ -74,6 +74,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
     onSuccess: (response) ->
       $scope.uploader.response = response
+      if $scope.task.isTestSubmission
+        newProjectService.loadProject(response.project_id, $scope.task.unit).subscribe({
+          next: (response) ->
+            $scope.task.project = response
+        })
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
       $modalInstance.close(task)
