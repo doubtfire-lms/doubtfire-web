@@ -39,11 +39,11 @@ export class TaskAssessorComponent implements OnChanges {
 
   testSubmission() {
 
-    this.currentUserTask = new Task();
+    this.currentUserTask = new Task(this.unit);
 
     this.currentUserTask.definition = this.taskDefinition;
     this.currentUserTask.status = 'ready_for_feedback';
-    this.currentUserTask.id = this.taskDefinition.id;
+    this.currentUserTask.id = this.taskDefinition.id; // set a default id...
     this.currentUserTask.presentTaskSubmissionModal(this.currentUserTask.status, false, true);
   }
 

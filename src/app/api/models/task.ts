@@ -439,13 +439,6 @@ export class Task extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.definition.unit.id}/task_definitions/${this.definition.id}/test_overseer_assessment`;
   }
 
-  public addProjectToTask(projectId: number): Observable<object> {
-    const httpClient: HttpClient = AppInjector.get(HttpClient);
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${projectId}`;
-
-    return httpClient.get(url);
-  }
-
   public submittedFilesUrl(asAttachment: boolean = false): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.definition.id}/submission_files${asAttachment ? "?as_attachment=true" : ""}`;
   }
