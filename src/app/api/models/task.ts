@@ -436,7 +436,7 @@ export class Task extends Entity {
   }
 
   public testSubmissionUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.definition.unit.id}/task_definitions/${this.definition.id}/test_overseer_assessment`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.definition.id}/test_overseer_assessment`;
   }
 
   public submittedFilesUrl(asAttachment: boolean = false): string {
