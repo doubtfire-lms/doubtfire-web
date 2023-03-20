@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.3](https://github.com/macite/doubtfire-deploy/compare/v7.0.2...v7.0.3) (2023-03-20)
+
+
+### Features
+
+* pull overseer docker image ([c6eba36](https://github.com/macite/doubtfire-deploy/commit/c6eba369859aef212004d18d639f11c92ad54dc4))
+
+
+### Bug Fixes
+
+* added addtional return to staffaligntmentsfortasksdefintions method in unit modal ([76a9614](https://github.com/macite/doubtfire-deploy/commit/76a96147bac1f8ffefb1cb4c1745f16ffcd894d2))
+* connected test submission for overseer ([6b66899](https://github.com/macite/doubtfire-deploy/commit/6b66899a5b5e1baa27a229faac9f5eb265bb2aa1))
+* ensure services work when removing relation ([611b6a7](https://github.com/macite/doubtfire-deploy/commit/611b6a7e02b5ed8b5e954a3596b5f341a72bbb96))
+
 ### [7.0.2](https://github.com/macite/doubtfire-deploy/compare/v7.0.1...v7.0.2) (2023-03-11)
 
 
