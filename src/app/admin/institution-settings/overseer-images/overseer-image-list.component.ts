@@ -16,9 +16,10 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   // Set up the table
-  columns: string[] = ['name', 'tag', 'options'];
+  columns: string[] = ['name', 'tag', 'pull', 'last-pulled', 'status', 'options'];
   overseerImages: OverseerImage[] = new Array<OverseerImage>();
   dataSource = new MatTableDataSource(this.overseerImages);
+  loading = false;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -30,8 +31,8 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   }
 
   ngAfterViewInit() {
-    // Get all the activity types and add them to the table
-    this.overseerImageService.query().subscribe((response) => {
+    // Get all the overseer images and add them to the table
+    this.overseerImageService.fetchAll().subscribe((response) => {
       this.pushToTable(response);
     });
   }
@@ -56,6 +57,15 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   // which then calls the parent's submit.
   submit() {
     super.submit(this.overseerImageService, this.alerts, this.onSuccess.bind(this));
+  }
+
+  // This method is called when pull button is clicked to pull overseer image.
+  pullOverseerImage(image: OverseerImage) {
+    this.loading = true;
+    image.pulledImageStatus = "loading";
+    this.overseerImageService.pullDockerImage(image).subscribe((response) => {
+      this.loading = false;
+    })
   }
 
   deleteOverseerImage(image: OverseerImage) {

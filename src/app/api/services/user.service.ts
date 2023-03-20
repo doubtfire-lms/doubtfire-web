@@ -17,7 +17,7 @@ export class UserService extends CachedEntityService<User> {
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
-    this.csvURL = API_URL + 'csv/users';
+    this.csvURL = API_URL + '/csv/users';
 
     this.mapping.addKeys(
       'id',

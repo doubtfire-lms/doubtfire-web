@@ -6,7 +6,7 @@
         Modify Teaching Periods registered with {{externalName.value}}
       </div>
       <form role="search" class="pull-right form-horizontal">
-        <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search.$" typeahead="teachingperiod.period for teachingperiod in teachingPeriods | filter:$viewValue | limitTo:8" />
+        <input id="searchbar" class="input-md form-control" placeholder="Search for teaching periods..." type="search" ng-model="search" typeahead="teachingperiod.period for teachingperiod in teachingPeriods | filter:$viewValue | limitTo:8" />
       </form>
     </div>
     <div class="panel-body">
@@ -21,7 +21,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
+            <tr ng-repeat="teachingperiod in filteredTeachingPeriods = (teachingPeriods | teachingPeriodFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize" ui-sref="admin/teachingperiods/edit({teachingPeriodId: teachingperiod.id})" >
               <td>{{teachingperiod.name()}}</td>
               <td>{{teachingperiod.startDate | date: 'EEE d MMM'}}</td>
               <td>{{teachingperiod.endDate | date: 'EEE d MMM'}}</td>
