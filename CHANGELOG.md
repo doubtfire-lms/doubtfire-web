@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.4](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.4) (2023-03-21)
+
+
+### Features
+
+* add csv code file submissions ([920ba5a](https://github.com/macite/doubtfire-deploy/commit/920ba5a0674467b51e742b00428977a4775a867b))
+
+
+### Bug Fixes
+
+* ensure that system role access depends on current user ([e903151](https://github.com/macite/doubtfire-deploy/commit/e903151c6b2a6705a9ed4327aa9a983829eb4126))
+
 ### [7.0.3](https://github.com/macite/doubtfire-deploy/compare/v7.0.2...v7.0.3) (2023-03-20)
 
 
