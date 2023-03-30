@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV USER=node
@@ -17,9 +17,6 @@ USER "${USER}"
 RUN mkdir -p "${NPM_CONFIG_PREFIX}/lib"
 
 WORKDIR /doubtfire-web
-
-# Install global packages
-RUN npm --global config set user "${USER}"
 
 # Copy in resources
 COPY --chown="${USER}":root . .
