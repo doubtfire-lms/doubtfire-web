@@ -1,7 +1,4 @@
-angular.module('doubtfire.config.local-storage', [])
-#
-# Local Storage Configuration test
-#
+angular.module('', [])
 
 .config((localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('doubtfire')
