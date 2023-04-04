@@ -18,7 +18,6 @@ export class TaskComment extends Entity {
   author: User;
   recipient: User;
   createdAt: Date;
-  timeOfMessage: string;
   recipientReadTime: string;
   commentType: string = "text";
   isNew: boolean;
