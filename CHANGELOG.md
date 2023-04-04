@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.6](https://github.com/macite/doubtfire-deploy/compare/v7.0.5...v7.0.6) (2023-04-04)
+
+
+### Bug Fixes
+
+* ensure message times are shown ([d67a49b](https://github.com/macite/doubtfire-deploy/commit/d67a49b3cb70b58f45f17cc2c8c7642d9dc6b6e0))
+
 ### [7.0.5](https://github.com/macite/doubtfire-deploy/compare/v7.0.4...v7.0.5) (2023-03-21)
 
 
