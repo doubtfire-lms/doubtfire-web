@@ -32,7 +32,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
-
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
 
 import { setTheme } from 'ngx-bootstrap/utils';
@@ -168,6 +167,7 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
+import { ScormComponent } from './scorm/scorm-wrapper.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
@@ -233,6 +233,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     TaskDropdownComponent,
     SplashScreenComponent,
     ObjectSelectComponent,
+    ScormComponent,
     WelcomeComponent,
     HeroSidebarComponent,
     SignInComponent,
