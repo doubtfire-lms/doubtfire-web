@@ -4,7 +4,7 @@ import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
-import { ScormComponent } from './scorm/scorm-wrapper.component';
+import { NumbasComponent } from './NumbasComponent/numbas.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -94,16 +94,16 @@ const EditProfileState: NgHybridStateDeclaration = {
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
   },
 };
-const ScormWrapperState: NgHybridStateDeclaration = {
-  name: 'scorm_wrapper',
-  url: '/scorm-wrapper',
+const NumbastestState: NgHybridStateDeclaration = {
+  name: 'numbas_test',
+  url: '/numbas_test',
   views: {
     main: {
-      component: ScormComponent,
+      component: NumbasComponent,
     },
   },
   data: {
-    pageTitle: 'Scorm Wrapper',
+    pageTitle: 'Numbas Test',
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
   },
 };
@@ -111,4 +111,4 @@ const ScormWrapperState: NgHybridStateDeclaration = {
  * Export the list of states we have created in angular
  */
 
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState, ScormWrapperState];
+export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState, NumbastestState];

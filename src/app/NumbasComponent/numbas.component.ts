@@ -6,7 +6,7 @@ import JSZip from 'jszip';
 declare const SCORM: any;
 
 @Component({
-  selector: 'app-numbas-component',
+  selector: 'f-numbas-component',
   templateUrl: './numbas-component.component.html',
   styleUrls: ['./numbas-component.component.scss'],
 })
@@ -55,7 +55,7 @@ export class NumbasComponent implements OnInit, OnDestroy {
 
   private loadNumbasTest() {
     // Load Numbas test from ZIP file
-    fetch('path/to/numbas-test.zip')
+    fetch('numbas-test.zip')
       .then((response) => response.arrayBuffer())
       .then((zipBuffer) => {
         return JSZip.loadAsync(zipBuffer);

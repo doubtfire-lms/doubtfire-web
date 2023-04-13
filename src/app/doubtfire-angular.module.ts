@@ -175,7 +175,7 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
-import { NumbasExamComponent } from './NumbasExamComponent/numbas-exam.component';
+import { NumbasComponent } from './NumbasComponent/numbas.component';
 import { CompletedTestService } from './api/services/completed-test.service';
 import { NumbasExamService } from './api/services/numbas-exam.service';
 
@@ -243,7 +243,7 @@ import { NumbasExamService } from './api/services/numbas-exam.service';
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
-    NumbasExamComponent,
+    NumbasComponent,
   ],
   // Module Imports
   imports: [
