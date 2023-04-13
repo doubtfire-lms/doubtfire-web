@@ -132,7 +132,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     originalComment?: TaskComment,
     prompts?: Blob[]
   ): Observable<TaskComment> {
-    const pathId: {} = {
+    const pathId = {
       projectId: task.project.id,
       taskDefinitionId: task.definition.id,
     };
@@ -159,12 +159,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     opts.cache = task.commentCache;
     opts.body = body;
     opts.constructorParams = task;
-    const self = this;
 
     return this.create(pathId, opts).pipe(
       tap((tc: TaskComment) => {
         task.refreshCommentData();
-        self.commentAdded$.emit(tc);
+        this.commentAdded$.emit(tc);
       })
     );
   }

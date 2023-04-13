@@ -33,16 +33,16 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
   sendRecording(): void {
     this.isSending = true;
     if (this.blob && this.blob.size > 0) {
-      this.ts.addComment(this.task, this.blob, 'audio').subscribe(
-        (comment: TaskComment) => {
+      this.ts.addComment(this.task, this.blob, 'audio').subscribe({
+        next: (comment: TaskComment) => {
           this.isSending = false;
           this.scrollCommentsDown();
         },
-        (failure: { data: { error: any } }) => {
+        error: (failure: { data: { error: any } }) => {
           this.alerts.add('danger', `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`);
           this.isSending = false;
         }
-      );
+      });
 
       this.blob = {} as Blob;
       this.recordingAvailable = false;
