@@ -140,6 +140,24 @@ angular.module("doubtfire.common.filters", [])
       input
 )
 
+.filter('unitFilter', ->
+  (input, text) ->
+    if _.isString(text) && text.length > 0 && input
+      matchText = text.toLowerCase()
+      _.filter input, (unit) -> (unit?) && unit.matches(matchText)
+    else
+      input
+)
+
+.filter('teachingPeriodFilter', ->
+  (input, text) ->
+    if _.isString(text) && text.length > 0 && input
+      matchText = text.toLowerCase()
+      _.filter  input, (tp) -> (tp?) && tp.period.toLowerCase().indexOf(matchText) >= 0
+    else
+      input
+)
+
 
 .filter('taskForPortfolio', (newTaskService) ->
   (input, apply) ->

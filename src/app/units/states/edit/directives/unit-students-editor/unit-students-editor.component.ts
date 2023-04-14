@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
 })
-export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
+export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatTable, { static: false }) table: MatTable<Project>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -28,16 +28,7 @@ export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  columns: string[] = [
-    'username',
-    'firstName',
-    'lastName',
-    'email',
-    'campus',
-    'tutorial',
-    'enrolled',
-    'goto',
-  ];
+  columns: string[] = ['username', 'firstName', 'lastName', 'email', 'campus', 'tutorial', 'enrolled', 'goto'];
   dataSource: MatTableDataSource<Project>;
 
   // Calls the parent's constructor, passing in an object
@@ -54,29 +45,28 @@ export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
   ) {}
 
   // The paginator is inside the table
-  ngOnInit() {
+  ngAfterViewInit() {
     this.dataSource = new MatTableDataSource(this.unit.studentCache.currentValuesClone());
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
 
-    this.subscriptions.push(this.unit.studentCache.values.subscribe(
-      (students) => {
+    this.subscriptions.push(
+      this.unit.studentCache.values.subscribe((students) => {
         this.dataSource.data = students;
-      }
-    ));
+      })
+    );
 
-    this.subscriptions.push(this.projectService.loadStudents(this.unit, true).subscribe(
-      (projects) => {
+    this.subscriptions.push(
+      this.projectService.loadStudents(this.unit, true).subscribe(() => {
         // projects included in unit...
-        console.log("loaded withdrawn students")
-      }
-    ));
-
+        console.log('loaded withdrawn students');
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach( (s) => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   applyFilter(event: Event) {
@@ -115,7 +105,7 @@ export class UnitStudentsEditorComponent implements OnInit, OnDestroy {
   }
 
   public gotoStudent(student: Project) {
-    this.router.stateService.go("projects/dashboard", {projectId: student.id, tutor: true, taskAbbr:''})
+    this.router.stateService.go('projects/dashboard', { projectId: student.id, tutor: true, taskAbbr: '' });
   }
 
   enrolStudent() {

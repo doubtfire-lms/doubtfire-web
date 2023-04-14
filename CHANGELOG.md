@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.4](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.4) (2023-03-21)
+
+
+### Features
+
+* add csv code file submissions ([920ba5a](https://github.com/macite/doubtfire-deploy/commit/920ba5a0674467b51e742b00428977a4775a867b))
+
+
+### Bug Fixes
+
+* ensure that system role access depends on current user ([e903151](https://github.com/macite/doubtfire-deploy/commit/e903151c6b2a6705a9ed4327aa9a983829eb4126))
+
+### [7.0.3](https://github.com/macite/doubtfire-deploy/compare/v7.0.2...v7.0.3) (2023-03-20)
+
+
+### Features
+
+* pull overseer docker image ([c6eba36](https://github.com/macite/doubtfire-deploy/commit/c6eba369859aef212004d18d639f11c92ad54dc4))
+
+
+### Bug Fixes
+
+* added addtional return to staffaligntmentsfortasksdefintions method in unit modal ([76a9614](https://github.com/macite/doubtfire-deploy/commit/76a96147bac1f8ffefb1cb4c1745f16ffcd894d2))
+* connected test submission for overseer ([6b66899](https://github.com/macite/doubtfire-deploy/commit/6b66899a5b5e1baa27a229faac9f5eb265bb2aa1))
+* ensure services work when removing relation ([611b6a7](https://github.com/macite/doubtfire-deploy/commit/611b6a7e02b5ed8b5e954a3596b5f341a72bbb96))
+
+### [7.0.2](https://github.com/macite/doubtfire-deploy/compare/v7.0.1...v7.0.2) (2023-03-11)
+
+
+### Bug Fixes
+
+* download groups and members ([b978796](https://github.com/macite/doubtfire-deploy/commit/b97879659667c7c0908512fabeffe4f550e793cb))
+* download users ([a9e978f](https://github.com/macite/doubtfire-deploy/commit/a9e978ff52f50b5f06d117f27af73e70ba9ea42b))
+* ensure filters limit their search where needed ([f51b0a4](https://github.com/macite/doubtfire-deploy/commit/f51b0a48eee64c98209e2570a32f1e163eca2466))
+* ensure name is included in project filter ([d5fc94a](https://github.com/macite/doubtfire-deploy/commit/d5fc94a6d2a540789edd56f751800c0fe14f3d60))
+* ensure only active units show in project home ([c27a6b5](https://github.com/macite/doubtfire-deploy/commit/c27a6b525106aaade9e658b6e69cb414aa240d6c))
+* pagination on student admin page ([1549c46](https://github.com/macite/doubtfire-deploy/commit/1549c46dc9e27f36bac3817dd19b67f0f8911f2d))
+
 ### [7.0.1](https://github.com/macite/doubtfire-deploy/compare/v7.0.0...v7.0.1) (2023-03-03)
 
 

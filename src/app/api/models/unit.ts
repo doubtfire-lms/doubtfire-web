@@ -65,6 +65,10 @@ export class Unit extends Entity {
     };
   }
 
+  public get isActive(): boolean {
+    return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
+  }
+
   public matches(text: string): boolean {
     return this.code.toLowerCase().indexOf(text) >= 0 || this.name.toLowerCase().indexOf(text) >= 0;
   }
@@ -290,7 +294,7 @@ export class Unit extends Entity {
 
   public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignments.filter( (alignment: TaskOutcomeAlignment) => {
-      alignment.taskDefinition.id === td.id;
+      return alignment.taskDefinition.id === td.id;
     }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
       return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
     });
