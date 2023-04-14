@@ -7,6 +7,11 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// Lottie animation module
+import { LottieModule, LottieCacheModule } from 'ngx-lottie';
+import player from 'lottie-web';
+
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -185,6 +190,12 @@ import { TaskDashboardComponent } from './projects/states/dashboard/directives/t
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 
+// Note we need a separate function as it's required
+// by the AOT compiler.
+export function playerFactory() {
+  return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
+}
+
 @NgModule({
   // Components we declare
   declarations: [
@@ -307,6 +318,8 @@ import { ProjectProgressBarComponent } from './common/project-progress-bar/proje
     PickerModule,
     EmojiModule,
     PdfViewerModule,
+    LottieModule.forRoot({ player: playerFactory }),
+    LottieCacheModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -379,6 +392,7 @@ import { ProjectProgressBarComponent } from './common/project-progress-bar/proje
     IsActiveUnitRole,
   ],
 })
+
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
 export class DoubtfireAngularModule implements DoBootstrap {
