@@ -1,42 +1,38 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ScormService } from 'pipwerks-scorm-api-wrapper';
 import { NumbasTestsService } from 'src/app/api/services/numbas-tests.service';
 import JSZip from 'jszip';
-
-declare const SCORM: any;
+import { ScormService } from 'src/app/api/services/scorm-service';
 
 @Component({
   selector: 'f-numbas-component',
-  templateUrl: './numbas-component.component.html',
-  styleUrls: ['./numbas-component.component.scss'],
+  templateUrl: './numbas.component.html',
+  styleUrls: ['./numbas.component.scss'],
 })
 export class NumbasComponent implements OnInit, OnDestroy {
   test: any;
-  scorm: ScormService;
   score: string;
 
-  constructor(private numbasTestsService: NumbasTestsService) {}
+  constructor(private numbasTestsService: NumbasTestsService, private scormService: ScormService) {}
 
   ngOnInit() {
-    this.scorm = new ScormService();
-    const result = this.scorm.initialize();
+    const result = this.scormService.init();
     if (result) {
       this.loadNumbasTest();
     }
   }
 
   ngOnDestroy() {
-    this.scorm.quit();
+    this.scormService.quit();
   }
 
   updateScore() {
     let newScore: number;
     this.score = newScore.toString();
-    this.scorm.set('cmi.core.score.raw', this.score);
+    this.scormService.set('cmi.core.score.raw', this.score);
   }
 
   getScore(): string {
-    return this.scorm.get('cmi.core.score.raw');
+    return this.scormService.get('cmi.core.score.raw');
   }
 
   saveCompletedTest() {
@@ -64,15 +60,11 @@ export class NumbasComponent implements OnInit, OnDestroy {
         return zip.file('index.html').async('text');
       })
       .then((html) => {
-        // Initialize SCORM API
-        SCORM.API.LMSInitialize('');
         // Load Numbas test
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
         iframe.contentDocument.write(html);
-        // Finish SCORM API
-        SCORM.API.LMSFinish('');
       })
       .catch((error) => {
         console.error('Error loading Numbas test:', error);

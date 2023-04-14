@@ -167,7 +167,6 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
-import { ScormComponent } from './scorm/scorm-wrapper.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HeroSidebarComponent } from './common/hero-sidebar/hero-sidebar.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
@@ -178,6 +177,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
 import { NumbasComponent } from './NumbasComponent/numbas.component';
 import { CompletedTestService } from './api/services/completed-test.service';
 import { NumbasExamService } from './api/services/numbas-exam.service';
+import { ScormService } from './api/services/scorm-service';
 
 @NgModule({
   // Components we declare
@@ -236,7 +236,6 @@ import { NumbasExamService } from './api/services/numbas-exam.service';
     TaskDropdownComponent,
     SplashScreenComponent,
     ObjectSelectComponent,
-    ScormComponent,
     WelcomeComponent,
     HeroSidebarComponent,
     SignInComponent,
@@ -301,6 +300,7 @@ import { NumbasExamService } from './api/services/numbas-exam.service';
   ],
   // Services we provide
   providers: [
+    ScormService,
     CampusService,
     AuthenticationService,
     GroupSetService,
