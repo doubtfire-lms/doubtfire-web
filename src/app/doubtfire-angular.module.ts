@@ -178,6 +178,8 @@ import { NumbasComponent } from './NumbasComponent/numbas.component';
 import { CompletedTestService } from './api/services/completed-test.service';
 import { NumbasExamService } from './api/services/numbas-exam.service';
 import { ScormService } from './api/services/scorm-service';
+import { ScormAPIImplementation } from './api/services/scorm-api-implementation';
+import { WINDOW } from './api/services/window-token';
 
 @NgModule({
   // Components we declare
@@ -301,6 +303,7 @@ import { ScormService } from './api/services/scorm-service';
   // Services we provide
   providers: [
     ScormService,
+    ScormAPIImplementation,
     CampusService,
     AuthenticationService,
     GroupSetService,
@@ -357,6 +360,10 @@ import { ScormService } from './api/services/scorm-service';
       useClass: HttpErrorInterceptor,
       multi: true,
       deps: [AuthenticationService],
+    },
+    {
+      provide: WINDOW,
+      useValue: window,
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,

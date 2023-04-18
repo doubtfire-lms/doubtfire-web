@@ -14,9 +14,16 @@
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
     "allowUnusedLabels": false,
-    "target": "es2020",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2020", "dom"],
+    "target": "ES2022",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "useDefineForClassFields": false,
     "allowSyntheticDefaultImports": true,
+
   }
 }

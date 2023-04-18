@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ScormService } from 'pipwerks-scorm-api-wrapper';
 import { NumbasComponent } from './numbas.component';
+import { ScormService } from 'src/app/api/services/scorm-service';
 
 describe('NumbasComponent', () => {
   let component: NumbasComponent;
