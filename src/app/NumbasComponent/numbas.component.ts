@@ -21,13 +21,7 @@ export class NumbasComponent implements OnInit, OnDestroy {
   constructor(private numbasTestsService: NumbasTestsService, private scormService: ScormService) {}
 
   ngOnInit() {
-    // initialize SCORM API and load the Numbas test
-    const initialized = this.scormService.init(); // returns true if initialization was successful
-    if (initialized) {
-      this.loadNumbasTest();
-    } else {
-      console.error('Failed to initialize SCORM API');
-    }
+    this.loadNumbasTest();
   }
 
   ngOnDestroy() {
@@ -72,7 +66,7 @@ export class NumbasComponent implements OnInit, OnDestroy {
 
   private loadNumbasTest() {
     // load the Numbas test into the iframe
-    fetch('numbas-test.zip')
+    fetch('assets/numbas-test.zip')
       .then((response) => response.arrayBuffer())
       .then((zipBuffer) => {
         return JSZip.loadAsync(zipBuffer);
@@ -101,13 +95,25 @@ export class NumbasComponent implements OnInit, OnDestroy {
         fileContents.forEach(([relativePath, content]) => {
           const elementType = this.getElementType(relativePath);
           if (elementType) {
+            const filePathParts = relativePath.split('/');
+            let parentElement = doc.head;
+            for (let i = 0; i < filePathParts.length - 1; i++) {
+              const dirName = filePathParts[i];
+              let dirElement = parentElement.querySelector(`[data-dir="${dirName}"]`) as HTMLElement;
+              if (!dirElement) {
+                dirElement = doc.createElement('div');
+                dirElement.setAttribute('data-dir', dirName);
+                parentElement.appendChild(dirElement);
+              }
+              parentElement = dirElement;
+            }
             const element = doc.createElement(elementType);
             element.setAttribute('src', `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
-            doc.head.appendChild(element);
+            parentElement.appendChild(element);
           }
         });
         const win = iframe.contentWindow as any;
-        const api = new ScormAPIImplementation(win);
+        const api = this.scormService.getScormAPI();
         win.API = api;
         win.API_1484_11 = api;
       })
@@ -115,6 +121,7 @@ export class NumbasComponent implements OnInit, OnDestroy {
         console.error('Error loading Numbas test:', error);
       });
   }
+
   private getElementType(path: string): string | null {
     const ext = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
     switch (ext) {

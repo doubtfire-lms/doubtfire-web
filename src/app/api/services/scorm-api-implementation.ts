@@ -7,11 +7,20 @@ import { WINDOW } from './window-token';
   providedIn: 'root',
 })
 export class ScormAPIImplementation implements ScormAPI {
-  constructor(@Inject(WINDOW) private win: Window) {
-    //debugging
-    console.log('ScormAPIImplementation initialized', this.win);
-  }
+  private win: Window;
+  private api: ScormAPI | null;
 
+  constructor(@Inject(WINDOW) win: Window) {
+    this.win = win;
+
+    this.api = this.win.ScormAPI;
+
+    if (!this.api) {
+      console.error('ScormAPIImplementation: Failed to find SCORM API');
+    } else {
+      console.log('ScormAPIImplementation initialized', this.win);
+    }
+  }
 
   // implementation of LMSInitialize method
   LMSInitialize(parameter?: string): string {
