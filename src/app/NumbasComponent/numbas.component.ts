@@ -64,6 +64,127 @@ export class NumbasComponent implements OnInit, OnDestroy {
     );
   }
 
+  // private loadNumbasTest() {
+  //   // load the Numbas test into the iframe
+  //   fetch('assets/numbas-test.zip')
+  //     .then((response) => response.arrayBuffer())
+  //     .then((zipBuffer) => {
+  //       return JSZip.loadAsync(zipBuffer);
+  //     })
+  //     .then((zip) => {
+  //       // extract the files from the zip archive
+  //       const promises: Promise<[string, string]>[] = [];
+  //       zip.forEach((relativePath, zipEntry) => {
+  //         if (!zipEntry.dir) {
+  //           promises.push(
+  //             zipEntry.async('text').then((content) => {
+  //               return [relativePath, content];
+  //             })
+  //           );
+  //         }
+  //       });
+  //       return Promise.all(promises);
+  //     })
+  //     .then((fileContents) => {
+  //       const iframe = document.getElementById('numbas-iframe') as HTMLIFrameElement;
+  //       const doc = iframe.contentDocument;
+  //       const baseURI = new URL('index.html', iframe.src).href;
+  //       const baseTag = doc.createElement('base');
+  //       baseTag.href = baseURI;
+  //       doc.head.appendChild(baseTag);
+  //       fileContents.forEach(([relativePath, content]) => {
+  //         const elementType = this.getElementType(relativePath);
+  //         if (elementType) {
+  //           const filePathParts = relativePath.split('/');
+  //           let parentElement = doc.head;
+  //           for (let i = 0; i < filePathParts.length - 1; i++) {
+  //             const dirName = filePathParts[i];
+  //             let dirElement = parentElement.querySelector(`[data-dir="${dirName}"]`) as HTMLElement;
+  //             if (!dirElement) {
+  //               dirElement = doc.createElement('div');
+  //               dirElement.setAttribute('data-dir', dirName);
+  //               parentElement.appendChild(dirElement);
+  //             }
+  //             parentElement = dirElement;
+  //           }
+  //           const element = doc.createElement(elementType);
+  //           element.setAttribute('src', `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
+  //           parentElement.appendChild(element);
+  //         }
+  //       });
+  //       const win = iframe.contentWindow as any;
+  //       const api = this.scormService.getScormAPI();
+  //       win.API = api;
+  //       win.API_1484_11 = api;
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error loading Numbas test:', error);
+  //     });
+  // }
+  // private loadNumbasTest() {
+  //   // load the Numbas test into the iframe
+  //   fetch('assets/numbas-test.zip')
+  //     .then((response) => response.arrayBuffer())
+  //     .then((zipBuffer) => {
+  //       return JSZip.loadAsync(zipBuffer);
+  //     })
+  //     .then((zip) => {
+  //       // extract the files from the zip archive
+  //       const promises: Promise<[string, string]>[] = [];
+  //       zip.forEach((relativePath, zipEntry) => {
+  //         if (!zipEntry.dir) {
+  //           promises.push(
+  //             zipEntry.async('text').then((content) => {
+  //               return [relativePath, content];
+  //             })
+  //           );
+  //         }
+  //       });
+  //       return Promise.all(promises);
+  //     })
+  //     .then((fileContents) => {
+  //       const iframe = document.getElementById('numbas-iframe') as HTMLIFrameElement;
+  //       const doc = iframe.contentDocument;
+  //       const baseURI = new URL('index.html', iframe.src).href;
+  //       const baseTag = doc.createElement('base');
+  //       baseTag.href = baseURI;
+  //       doc.head.appendChild(baseTag);
+
+  //       // Open and close the iframe document
+  //       doc.open();
+  //       doc.close();
+
+  //       fileContents.forEach(([relativePath, content]) => {
+  //         const elementType = this.getElementType(relativePath);
+  //         if (elementType) {
+  //           const element = doc.createElement(elementType);
+  //           switch (elementType) {
+  //             case 'iframe':
+  //             case 'img':
+  //             case 'video':
+  //             case 'audio':
+  //               element.setAttribute('src', `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
+  //               break;
+  //             case 'style':
+  //               (element as HTMLStyleElement).textContent = content;
+  //               break;
+  //             case 'script':
+  //               (element as HTMLScriptElement).text = content;
+  //               break;
+  //           }
+  //           doc.body.appendChild(element);
+  //         }
+  //       });
+
+  //       const win = iframe.contentWindow as any;
+  //       const api = this.scormService.getScormAPI();
+  //       win.API = api;
+  //       win.API_1484_11 = api;
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error loading Numbas test:', error);
+  //     });
+  // }
   private loadNumbasTest() {
     // load the Numbas test into the iframe
     fetch('assets/numbas-test.zip')
@@ -86,32 +207,37 @@ export class NumbasComponent implements OnInit, OnDestroy {
         return Promise.all(promises);
       })
       .then((fileContents) => {
+        console.log('File contents:', fileContents);
         const iframe = document.getElementById('numbas-iframe') as HTMLIFrameElement;
-        const doc = iframe.contentDocument;
+        const doc = new DOMParser().parseFromString('<!DOCTYPE html><html><head></head><body></body></html>', 'text/html');
         const baseURI = new URL('index.html', iframe.src).href;
         const baseTag = doc.createElement('base');
         baseTag.href = baseURI;
         doc.head.appendChild(baseTag);
+  
         fileContents.forEach(([relativePath, content]) => {
           const elementType = this.getElementType(relativePath);
           if (elementType) {
-            const filePathParts = relativePath.split('/');
-            let parentElement = doc.head;
-            for (let i = 0; i < filePathParts.length - 1; i++) {
-              const dirName = filePathParts[i];
-              let dirElement = parentElement.querySelector(`[data-dir="${dirName}"]`) as HTMLElement;
-              if (!dirElement) {
-                dirElement = doc.createElement('div');
-                dirElement.setAttribute('data-dir', dirName);
-                parentElement.appendChild(dirElement);
-              }
-              parentElement = dirElement;
-            }
             const element = doc.createElement(elementType);
-            element.setAttribute('src', `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
-            parentElement.appendChild(element);
+            switch (elementType) {
+              case 'iframe':
+              case 'img':
+              case 'video':
+              case 'audio':
+                element.setAttribute('srcdoc', content);
+                break;
+              case 'style':
+                (element as HTMLStyleElement).textContent = content;
+                break;
+              case 'script':
+                (element as HTMLScriptElement).textContent = content;
+                break;
+            }
+            doc.body.appendChild(element);
           }
         });
+  
+        iframe.srcdoc = new XMLSerializer().serializeToString(doc);
         const win = iframe.contentWindow as any;
         const api = this.scormService.getScormAPI();
         win.API = api;
@@ -121,6 +247,8 @@ export class NumbasComponent implements OnInit, OnDestroy {
         console.error('Error loading Numbas test:', error);
       });
   }
+  
+  
 
   private getElementType(path: string): string | null {
     const ext = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
