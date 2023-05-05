@@ -97,7 +97,7 @@ import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatLegacyOptionModule as MatOptionModule } from '@angular/material/legacy-core';
 import { doubtfireStates } from './doubtfire.states';
-import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatTableModule } from '@angular/material/table';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ActivityTypeListComponent } from './admin/institution-settings/activity-type-list/activity-type-list.component';
@@ -189,6 +189,7 @@ import { TaskSubmissionCardComponent } from './projects/states/dashboard/directi
 import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
+import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -267,6 +268,7 @@ export function playerFactory() {
     TaskDashboardComponent,
     InboxComponent,
     ProjectProgressBarComponent,
+    TeachingPeriodListComponent,
   ],
   // Module Imports
   imports: [
