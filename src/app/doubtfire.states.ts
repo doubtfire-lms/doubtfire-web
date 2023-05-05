@@ -4,6 +4,7 @@ import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -184,7 +185,28 @@ const EditProfileState: NgHybridStateDeclaration = {
   },
 };
 
+const TeachingPeriodsState: NgHybridStateDeclaration = {
+  name: 'teaching_periods',
+  url: '/admin/teachingperiods',
+  views: {
+    main: {
+      component: TeachingPeriodListComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Teaching Periods',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState];
+export const doubtfireStates = [
+  institutionSettingsState,
+  TeachingPeriodsState,
+  HomeState,
+  WelcomeState,
+  SignInState,
+  EditProfileState,
+];
