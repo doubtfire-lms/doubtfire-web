@@ -192,13 +192,10 @@ import { TaskSubmissionCardComponent } from './projects/states/dashboard/directi
 import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
-<<<<<<< HEAD
 import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import { CreateNewUnitModalContent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
-=======
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 
->>>>>>> 7fe3268e (refactor: add new teaching periods migration)
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -276,12 +273,9 @@ export function playerFactory() {
     TaskDashboardComponent,
     InboxComponent,
     ProjectProgressBarComponent,
-<<<<<<< HEAD
     CreateNewUnitModal,
     CreateNewUnitModalContent,
-=======
     TeachingPeriodListComponent,
->>>>>>> 7fe3268e (refactor: add new teaching periods migration)
   ],
   // Module Imports
   imports: [
