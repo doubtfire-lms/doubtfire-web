@@ -40,6 +40,9 @@ import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule as MatDialogModuleNew } from '@angular/material/dialog';
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
@@ -189,7 +192,8 @@ import { TaskSubmissionCardComponent } from './projects/states/dashboard/directi
 import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
-
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
+import { CreateNewUnitModalContent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -267,6 +271,8 @@ export function playerFactory() {
     TaskDashboardComponent,
     InboxComponent,
     ProjectProgressBarComponent,
+    CreateNewUnitModal,
+    CreateNewUnitModalContent,
   ],
   // Module Imports
   imports: [
@@ -325,6 +331,9 @@ export function playerFactory() {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModuleNew,
   ],
   // Services we provide
   providers: [
@@ -390,6 +399,7 @@ export function playerFactory() {
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    CreateNewUnitModal,
   ],
 })
 

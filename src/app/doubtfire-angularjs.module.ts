@@ -266,6 +266,7 @@ import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -312,6 +313,7 @@ DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmi
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
+DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -400,6 +402,7 @@ DoubtfireAngularJSModule.directive(
   'taskPlagiarismCard',
   downgradeComponent({ component: TaskPlagiarismCardComponent })
 );
+DoubtfireAngularJSModule.directive('createNewUnitModal', downgradeComponent({ component: CreateNewUnitModal }));
 
 // Global configuration
 
