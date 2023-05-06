@@ -33,7 +33,7 @@ export class TeachingPeriod extends Entity {
     };
   }
 
-  public name(): string {
+  public get name(): string {
     return `${this.period} ${this.year}`;
   }
 
