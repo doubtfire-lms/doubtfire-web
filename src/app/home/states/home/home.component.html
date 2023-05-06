@@ -36,12 +36,12 @@
                     <mat-divider></mat-divider>
                   </mat-card-content>
                   <mat-card-actions>
-                    <mat-chip-set aria-label="Unit labels">
-                      <mat-chip-option class="f-chip" disabled>{{
-                        unitRole.teachingPeriod?.name() || showDate(unitRole.unit.startDate)
-                      }}</mat-chip-option>
-                      <mat-chip-option class="f-chip" disabled>{{ unitRole.role }}</mat-chip-option>
-                    </mat-chip-set>
+                    <f-chip>
+                      {{ unitRole.teachingPeriod?.name() || showDate(unitRole.unit.startDate) }}
+                    </f-chip>
+                    <f-chip>
+                      {{ unitRole.role }}
+                    </f-chip>
                   </mat-card-actions>
                   <mat-card-footer
                     matTooltip="{{ unitRole.unit.teachingPeriodProgress }}% through the teaching period."
@@ -97,11 +97,9 @@
                     <mat-divider></mat-divider>
                   </mat-card-content>
                   <mat-card-actions>
-                    <mat-chip-set aria-label="Unit labels">
-                      <mat-chip-option class="f-chip" disabled>{{
-                        project.unit.teachingPeriod?.name() || showDate(project.unit.startDate)
-                      }}</mat-chip-option>
-                    </mat-chip-set>
+                    <f-chip>
+                      {{ project.unit.teachingPeriod?.name() || showDate(project.unit.startDate) }}
+                    </f-chip>
                   </mat-card-actions>
                   <mat-card-footer matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period.">
                     <ng-container *ngFor="let _ of [].constructor(5)">

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="width: 100%;">
   <tabset class="tabset-icon">
     <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
       <tab-heading>{{tab.title}}</tab-heading>

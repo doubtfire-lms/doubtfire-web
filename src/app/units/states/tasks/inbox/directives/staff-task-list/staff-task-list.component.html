@@ -1,14 +1,14 @@
 <!-- The search bar template -->
 <ng-template #OmnisearchTemplate let-collapsable="collapsable">
   <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
-    <div fxLayout="row" fxLayoutAlign="(default) center">
-      <button mat-icon-button aria-label="Search Icon" disabled>
-        <mat-icon>search</mat-icon>
+    <div class="flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+        <mat-icon class="flex items-center" disabled>search</mat-icon>
       </button>
 
-      <div fxFlex="flex-grow">
+      <div class="grow">
         <input
-          matInput
+          class="search"
           autocomplete="off"
           spellcheck="false"
           type="text"
@@ -18,6 +18,7 @@
         />
       </div>
       <button
+        class="flex-none flex items-center"
         *ngIf="collapsable"
         matTooltip="Filter options"
         matTooltipPosition="below"
@@ -30,6 +31,7 @@
       </button>
 
       <button
+        class="flex-none flex items-center"
         *ngIf="!isTaskDefMode"
         matTooltip="Refresh the task inbox"
         matTooltipPosition="below"
@@ -43,6 +45,7 @@
       </button>
 
       <button
+        class="flex items-center"
         *ngIf="isTaskDefMode"
         mat-icon-button
         matTooltip="More options"
@@ -96,7 +99,6 @@
                     {{ td.abbreviation + ' - ' + td.name }}
                   </mat-option>
                 </mat-select>
-                <mat-hint> Display specific task definitions. </mat-hint>
               </mat-form-field>
               <button
                 [disabled]="filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === ''"
@@ -121,7 +123,6 @@
                   {{ t.inboxDescription }}
                 </mat-option>
               </mat-select>
-              <mat-hint> Limit tasks to specific students </mat-hint>
             </mat-form-field>
             <button disabled mat-icon-button aria-label="Sort by tutorial icon" (click)="toggleTutorialSort()">
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
@@ -191,11 +192,11 @@
             ></span>
             <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
-              <h4 class="mat-h4">{{ task.project.student.name }}</h4>
-              <p class="mat-small truncate">
+              <h4 class="student-name">{{ task.project.student.name }}</h4>
+              <div class="task-details truncate">
                 {{ task.definition.abbreviation }} -
                 {{ task.definition.name }}
-              </p>
+              </div>
               <!-- <div class="muted" [hidden]="!isSelectedTask(task)">
                 <p class="mat-small">
                   {{ task.shortTutorialDescription() }}

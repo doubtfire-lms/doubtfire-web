@@ -1,25 +1,18 @@
 <div fxLayout="row" fxLayoutAlign="start center">
-  <mat-chip-set
-    matTooltip="{{ unit.name }}"
+  <div
     *ngIf="unit"
-    style="float: right"
-    aria-label="Unit selection"
-    style="margin-left: 10px; margin-right: 10px"
+    class="bg-formatif-blue text-white rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 flex items-center"
+    style="font-size: 14px"
+    matTooltip="{{ unit.name }}"
+    [matMenuTriggerFor]="menu"
+    #menuState="matMenuTrigger"
   >
-    <mat-chip-option
-      disabled
-      class="f-chip"
-      style="cursor: pointer"
-      [matMenuTriggerFor]="menu"
-      #menuState="matMenuTrigger"
-      color="primary"
-    >
-      {{ unit?.code }}
-      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-    </mat-chip-option>
-  </mat-chip-set>
+    <span class="text-md">{{ unit?.code }}</span>
+    <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+  </div>
+
   <ng-container *ngIf="!unit">
-    <button mat-button extended [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
+    <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
       <span fxLayout="row" fxLayoutAlign="start center">
         <span>Select Unit</span>
         <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
@@ -56,9 +49,9 @@
         <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
         <div class="grow"></div>
         <div class="flex-none">
-          <mat-chip-set style="float: right" aria-label="Unit selection" style="margin-left: 10px">
-            <mat-chip-option disabled class="f-chip">{{ unitRole.unit.code }}</mat-chip-option>
-          </mat-chip-set>
+          <f-chip>
+            {{ unitRole.unit.code }}
+          </f-chip>
         </div>
       </div>
     </div>
@@ -77,9 +70,9 @@
     >
       <div class="unitName">{{ project.unit.name }}</div>
       <span fxFlex style="flex-grow: 1"></span>
-      <mat-chip-set aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip-option disabled class="f-chip">{{ project.unit.code }}</mat-chip-option>
-      </mat-chip-set>
+      <f-chip>
+        {{ project.unit.code }}
+      </f-chip>
     </button>
   </ng-container>
 </mat-menu>

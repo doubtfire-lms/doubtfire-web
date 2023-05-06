@@ -1,10 +1,10 @@
 <mat-toolbar
   [ngClass]="{ inbox: globalState.isInboxState }"
   *ngIf="showHeader"
-  class="flex items-center justify-items-start"
+  class="flex items-center justify-start"
   style="min-height: 85px"
 >
-  <a uiSref="home" *ngIf="!media.isActive('xs')">
+  <a uiSref="home" *ngIf="!media.isActive('xs')" class="pt-4">
     <mat-icon
       uiSref="home"
       style="margin-right: 20px; margin-left: 20px"
@@ -15,7 +15,8 @@
     ></mat-icon>
   </a>
 
-  <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects"> </unit-dropdown>
+  <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects" class="mr-2">
+  </unit-dropdown>
 
   <task-dropdown
     [currentUnit]="currentUnit"

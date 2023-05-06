@@ -18,7 +18,7 @@ $emoji-color: lighten(
   }
 
   #textFieldContainer.recording {
-    background-color: #3939FF;
+    background-color: #3939ff;
   }
 
   #textField {
@@ -190,10 +190,11 @@ form {
 }
 
 button.btn-no-outline {
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-left: -12px;
+  margin-right: -12px;
   color: $emoji-color;
   line-height: 1;
+  transform: scale(0.8);
 }
 
 .message-inbox-icon {

@@ -25,7 +25,7 @@
             <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
           </mat-form-field>
           <mat-checkbox *ngIf="!showCredentials" matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-            >Automatically login</mat-checkbox
+            >Login via Institution</mat-checkbox
           >
           <button fxFlex fxFlexFill mat-flat-button color="primary" type="form">Sign In</button>
         </form>

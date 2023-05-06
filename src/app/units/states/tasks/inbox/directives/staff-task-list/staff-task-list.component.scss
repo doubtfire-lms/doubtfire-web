@@ -37,7 +37,7 @@ $warn-color: #f44336;
   align-items: center;
 
   .mat-icon {
-    color: #BCC0C4;
+    color: #bcc0c4;
   }
 }
 
@@ -82,13 +82,23 @@ $warn-color: #f44336;
   &.expanded {
     height: 100%;
   }
+
+  .search {
+    background-color: transparent;
+    outline: none;
+  }
+
+  .mdc-icon-button {
+    display: flex;
+  }
 }
 
 .truncate {
   min-width: 0;
 
-  h4,
+  h5,
   p {
+    margin-top: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -145,14 +155,16 @@ user-icon {
 }
 
 .task-list-data {
-  margin-top: -8px;
-
-  h4 {
-    margin-bottom: -5px;
+  margin-top: 0px;
+  .student-name {
+    font-size: 15px;
+    margin-bottom: -2px;
+    margin-top: 8px;
   }
 
-  p {
-    margin-bottom: -5px;
+  .task-details {
+    margin-bottom: 0px;
+    font-size: 12px;
   }
 }
 
@@ -166,15 +178,7 @@ user-icon {
   border: none;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-:host ::ng-deep .mat-list-item-content {
-  padding: 0 !important;
-}
-
-
 .mat-mdc-list-item .notification {
-
   &.active {
     background-color: transparent;
   }

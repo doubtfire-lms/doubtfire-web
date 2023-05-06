@@ -6,43 +6,42 @@
     </div>
   </div>
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
-
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType) else edit">
-          {{activityType.name}}
+        <div *ngIf="!editing(activityType); else edit">
+          {{ activityType.name }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="name" placeholder="Name">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="name" placeholder="Name" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="name" placeholder="Name" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Abbreviation Column -->
     <ng-container [formGroup]="formData" matColumnDef="abbreviation">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType) else edit">
-          {{activityType.abbreviation}}
+        <div *ngIf="!editing(activityType); else edit">
+          {{ activityType.abbreviation }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
         </mat-form-field>
       </td>
     </ng-container>
@@ -51,7 +50,7 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let activityType">
-        <div class="right" *ngIf="!editing(activityType) else edit">
+        <div class="right" *ngIf="!editing(activityType); else edit">
           <button mat-icon-button (click)="flagEdit(activityType)" aria-label="edit activity type">
             <mat-icon>edit</mat-icon>
           </button>
@@ -82,7 +81,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
     <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>
