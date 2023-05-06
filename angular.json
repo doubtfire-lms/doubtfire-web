@@ -28,6 +28,7 @@
             ],
             "styles": [
               "src/theme.scss",
+              "src/styles.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./build/assets/doubtfire.css",

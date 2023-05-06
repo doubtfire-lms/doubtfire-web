@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="start center">
-  <mat-chip-listbox
+  <mat-chip-set
     matTooltip="{{ unit.name }}"
     *ngIf="unit"
     style="float: right"
@@ -7,20 +7,23 @@
     style="margin-left: 10px; margin-right: 10px"
   >
     <mat-chip-option
+      disabled
+      class="f-chip"
       style="cursor: pointer"
       [matMenuTriggerFor]="menu"
       #menuState="matMenuTrigger"
-      selected="true"
       color="primary"
     >
       {{ unit?.code }}
       <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </mat-chip-option>
-  </mat-chip-listbox>
+  </mat-chip-set>
   <ng-container *ngIf="!unit">
-    <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-      Select Unit
-      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+    <button mat-button extended [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
+      <span fxLayout="row" fxLayoutAlign="start center">
+        <span>Select Unit</span>
+        <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      </span>
     </button>
   </ng-container>
 </div>
@@ -40,27 +43,30 @@
   </button>
   <mat-divider *ngIf="media.isActive('xs')"></mat-divider>
 
-  <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
-  <div *ngFor="let unitRole of unitRoles">
-    <button
+  <p mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</p>
+  <ng-container *ngFor="let unitRole of unitRoles">
+    <div
       *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
       uiSref="units/tasks/inbox"
       [uiParams]="{ unitId: unitRole.unit.id }"
-      fxLayout="row"
-      fxLayoutAlign="start center"
       mat-menu-item
+      class="w-full"
     >
-      <div class="unitName">{{ unitRole.unit.name }}</div>
-      <span fxFlex></span>
-      <mat-chip-listbox style="float: right" aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip-option selected color="primary">{{ unitRole.unit.code }}</mat-chip-option>
-      </mat-chip-listbox>
-    </button>
-  </div>
+      <div class="flex items-center w-full">
+        <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
+        <div class="grow"></div>
+        <div class="flex-none">
+          <mat-chip-set style="float: right" aria-label="Unit selection" style="margin-left: 10px">
+            <mat-chip-option disabled class="f-chip">{{ unitRole.unit.code }}</mat-chip-option>
+          </mat-chip-set>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 
   <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
   <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
-  <div *ngFor="let project of projects">
+  <ng-container *ngFor="let project of projects">
     <button
       *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod.active"
       uiSref="projects/dashboard"
@@ -70,10 +76,10 @@
       mat-menu-item
     >
       <div class="unitName">{{ project.unit.name }}</div>
-      <span fxFlex></span>
-      <mat-chip-listbox aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip-option selected color="primary">{{ project.unit.code }}</mat-chip-option>
-      </mat-chip-listbox>
+      <span fxFlex style="flex-grow: 1"></span>
+      <mat-chip-set aria-label="Unit selection" style="margin-left: 10px">
+        <mat-chip-option disabled class="f-chip">{{ project.unit.code }}</mat-chip-option>
+      </mat-chip-set>
     </button>
-  </div>
+  </ng-container>
 </mat-menu>

@@ -1,8 +1,7 @@
 <mat-toolbar
   [ngClass]="{ inbox: globalState.isInboxState }"
   *ngIf="showHeader"
-  fxLayout="row"
-  fxLayoutAlign="start center"
+  class="flex items-center justify-items-start"
   style="min-height: 85px"
 >
   <a uiSref="home" *ngIf="!media.isActive('xs')">
@@ -26,11 +25,11 @@
     [unitRole]="currentUnitRole"
   ></task-dropdown>
 
-  <span fxFlex></span>
+  <span class="grow"></span>
 
   <button
     #menuState="matMenuTrigger"
-    mat-button
+    mat-icon-button
     fxShow.lt-sm="false"
     fxShow.gt-md="true"
     fxShow="true"

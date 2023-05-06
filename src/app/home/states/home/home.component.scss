@@ -1,3 +1,5 @@
+@import '../../../../theme.scss';
+
 #home {
   padding-top: 10px;
 
@@ -38,18 +40,22 @@
   -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
   mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
 
-  h4 {
-    max-height: 20px;
+  .f-card-title {
+    font-size: 18px;
+    max-height: 30px;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
+    font-family: 'Roboto';
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  ::ng-deep .mat-button-wrapper {
-    display: flex !important;
-    justify-content: center !important;
+
+  mat-chip-option.f-chip {
+    background-color: $primary-color;
+    color: white;
+    opacity: 1;
+    border-style: none;
+    --mdc-chip-disabled-label-text-color: white;
   }
 }
 
