@@ -1,4 +1,4 @@
-<mat-card [hidden]="!(submission.isUploaded || submission.isProcessing)">
+<mat-card appearance="outlined" [hidden]="!(submission.isUploaded || submission.isProcessing)">
   <mat-card-title>Submission <span [hidden]="!submission.isProcessing">Processing</span></mat-card-title>
   <mat-card-content>
     <p [hidden]="!submission.isProcessing">

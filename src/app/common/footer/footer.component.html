@@ -105,8 +105,8 @@
       [matTooltipDisabled]="selectedTask === undefined"
       [progress]="selectedTask?.project.taskStats"
     ></f-project-progress-bar>
-    <mat-chip-list aria-label="Target Grade Symbol">
-      <mat-chip style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip>
-    </mat-chip-list>
+    <mat-chip-listbox aria-label="Target Grade Symbol">
+      <mat-chip-option style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip-option>
+    </mat-chip-listbox>
   </div>
 </mat-toolbar>

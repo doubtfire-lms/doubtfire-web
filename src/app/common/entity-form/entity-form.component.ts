@@ -4,7 +4,7 @@ import { Entity, RequestOptions } from 'ngx-entity-service';
 import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 

@@ -1,12 +1,12 @@
 <div fxLayout="row" fxLayoutAlign="start center">
-  <mat-chip-list
+  <mat-chip-listbox
     matTooltip="{{ unit.name }}"
     *ngIf="unit"
     style="float: right"
     aria-label="Unit selection"
     style="margin-left: 10px; margin-right: 10px"
   >
-    <mat-chip
+    <mat-chip-option
       style="cursor: pointer"
       [matMenuTriggerFor]="menu"
       #menuState="matMenuTrigger"
@@ -15,8 +15,8 @@
     >
       {{ unit?.code }}
       <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
   <ng-container *ngIf="!unit">
     <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
       Select Unit
@@ -52,9 +52,9 @@
     >
       <div class="unitName">{{ unitRole.unit.name }}</div>
       <span fxFlex></span>
-      <mat-chip-list style="float: right" aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip selected color="primary">{{ unitRole.unit.code }}</mat-chip>
-      </mat-chip-list>
+      <mat-chip-listbox style="float: right" aria-label="Unit selection" style="margin-left: 10px">
+        <mat-chip-option selected color="primary">{{ unitRole.unit.code }}</mat-chip-option>
+      </mat-chip-listbox>
     </button>
   </div>
 
@@ -71,9 +71,9 @@
     >
       <div class="unitName">{{ project.unit.name }}</div>
       <span fxFlex></span>
-      <mat-chip-list aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip selected color="primary">{{ project.unit.code }}</mat-chip>
-      </mat-chip-list>
+      <mat-chip-listbox aria-label="Unit selection" style="margin-left: 10px">
+        <mat-chip-option selected color="primary">{{ project.unit.code }}</mat-chip-option>
+      </mat-chip-listbox>
     </button>
   </div>
 </mat-menu>

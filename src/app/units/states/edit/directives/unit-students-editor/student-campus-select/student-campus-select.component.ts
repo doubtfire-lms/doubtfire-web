@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { Campus, CampusService, Project, Unit } from 'src/app/api/models/doubtfire-model';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 
 @Component({

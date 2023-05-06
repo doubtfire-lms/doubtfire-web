@@ -1,7 +1,7 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { Campus, CampusService } from 'src/app/api/models/doubtfire-model';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';

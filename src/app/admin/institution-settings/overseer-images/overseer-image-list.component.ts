@@ -1,5 +1,5 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { OverseerImage, OverseerImageService } from 'src/app/api/models/doubtfire-model';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';

@@ -16,11 +16,13 @@ mat-divider {
   float: right;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .mat-button-toggle-group {
   border-radius: 12px;
 }
 
-.mat-progress-bar {
+.mat-mdc-progress-bar {
   width: 100%;
   margin-bottom: 1em;
 }
@@ -33,7 +35,7 @@ microphone-tester .btn-circle-xl {
   position: inherit;
 }
 
-:host .mat-dialog-container {
+:host .mat-mdc-dialog-container {
   max-width: 800px !important;
 }
 

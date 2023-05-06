@@ -207,7 +207,7 @@
               </div> -->
             </div>
             <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
-              <mat-chip style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip>
+              <mat-chip-option style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip-option>
             </div>
             <status-icon
               [hidden]="isNarrow"

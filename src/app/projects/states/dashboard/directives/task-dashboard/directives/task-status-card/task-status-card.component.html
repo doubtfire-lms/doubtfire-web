@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card appearance="outlined">
   <mat-form-field appearance="outline" *ngIf="triggers?.length > 0">
     <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
       <mat-select-trigger>

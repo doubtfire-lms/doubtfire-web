@@ -1,5 +1,5 @@
-<mat-chip-list aria-label="Task Status Icon">
-  <mat-chip
+<mat-chip-listbox aria-label="Task Status Icon">
+  <mat-chip-option
     tabindex="-1"
     disableRipple
     [ngClass]="statusClass(status)"
@@ -7,5 +7,5 @@
     matTooltipPosition="above"
     [matTooltipDisabled]="!showTooltip"
     ><i class="fa {{ statusIcon(status) }}"></i>
-  </mat-chip>
-</mat-chip-list>
+  </mat-chip-option>
+</mat-chip-listbox>

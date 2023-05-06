@@ -4,7 +4,7 @@
   "
 >
   <!--Only show this if it matters... not in final or waiting for tutor input-->
-  <mat-card *ngIf="task?.isDueSoon() && !task?.pastDueDate()">
+  <mat-card appearance="outlined" *ngIf="task?.isDueSoon() && !task?.pastDueDate()">
     <!--Due soon-->
 
     <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
@@ -29,7 +29,7 @@
     </mat-card-subtitle>
   </mat-card>
   <!--/is due soon-->
-  <mat-card *ngIf="task?.betweenDueDateAndDeadlineDate()">
+  <mat-card appearance="outlined" *ngIf="task?.betweenDueDateAndDeadlineDate()">
     <mat-card-title>Past Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
 
     <mat-card-subtitle [hidden]="task?.inDiscussState()">
@@ -55,7 +55,7 @@
   </mat-card>
 
   <!--/between due date and deadline-->
-  <mat-card *ngIf="task?.isPastDeadline()">
+  <mat-card appearance="outlined" *ngIf="task?.isPastDeadline()">
     <mat-card-title>Passed Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
     <mat-card-subtitle [hidden]="task?.inDiscussState()">
       <!--Past deadline and not submitted-->
@@ -81,7 +81,7 @@
 </div>
 <!--/past deadline-->
 
-<mat-card [hidden]="!task?.inAwaitingFeedbackState()">
+<mat-card appearance="outlined" [hidden]="!task?.inAwaitingFeedbackState()">
   <mat-card-title>Wait for Tutor Feedback</mat-card-title>
   <mat-card-subtitle>
     <p>

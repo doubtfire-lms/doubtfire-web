@@ -11,7 +11,7 @@
 
   <p>Requesting extension to: {{newDueDate}} </p>
   <mat-slider id="requestWeekSlider" thumbLabel [min]="minWeeksCanExtend" [max]="maxWeeksCanExtend" step="1"
-    [(ngModel)]="weeksRequested">
+    [(ngModel)]="weeksRequested"><input matSliderThumb /><input matSliderThumb />
   </mat-slider>
 </div>
 

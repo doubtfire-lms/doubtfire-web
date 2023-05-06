@@ -65,7 +65,7 @@
         </div>
         <!--/webcal-url-->
 
-        <mat-card class="webcal-options-card">
+        <mat-card appearance="outlined" class="webcal-options-card">
           <h3 style="margin-bottom: 0">Options</h3>
 
           <div fxLayout="row" fxLayoutAlign="start center" class="webcal-options-inclusions">
@@ -73,8 +73,8 @@
           </div>
 
           <div class="webcal-options-inclusions-chips">
-            <mat-chip-list>
-              <mat-chip
+            <mat-chip-listbox>
+              <mat-chip-option
                 *ngFor="let project of includedProjects"
                 [selectable]="true"
                 [removable]="true"
@@ -82,16 +82,16 @@
               >
                 {{ project.unit.code }}
                 <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
-              <mat-chip *ngIf="excludedProjects.length > 0" [matMenuTriggerFor]="menu">
+              </mat-chip-option>
+              <mat-chip-option *ngIf="excludedProjects.length > 0" [matMenuTriggerFor]="menu">
                 <mat-icon>add</mat-icon>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item *ngFor="let project of excludedProjects" (click)="removeExclusion(project)">
                     {{ project.unit.code }}: {{ project.unit.name }}
                   </button>
                 </mat-menu>
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-option>
+            </mat-chip-listbox>
           </div>
           <!--/unit-inclusions-options-->
 

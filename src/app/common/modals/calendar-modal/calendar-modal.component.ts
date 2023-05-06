@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { MatLegacySlideToggle as MatSlideToggle } from '@angular/material/legacy-slide-toggle';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Project, ProjectService, Webcal, WebcalService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';

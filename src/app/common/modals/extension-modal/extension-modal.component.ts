@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { ExtensionComment } from 'src/app/api/models/task-comment/extension-comment';
 import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';

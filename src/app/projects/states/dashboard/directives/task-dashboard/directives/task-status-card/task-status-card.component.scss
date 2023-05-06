@@ -1,18 +1,25 @@
+
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card {
     mat-form-field {
         width: 100%;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
     mat-select {
         padding: 6px;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
     mat-option {
         height: 50px;
         /* default is 72px */
     }
 }
 
-::ng-deep .mat-option {
+::ng-deep .mat-mdc-option {
     height: 100px;
 }

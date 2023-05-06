@@ -10,7 +10,7 @@
   color: task-status-color($status, fore);
 }
 
-.mat-chip.mat-standard-chip {
+.mat-mdc-chip.mat-mdc-standard-chip {
   text-align: center;
   i {
     display: inline-block;

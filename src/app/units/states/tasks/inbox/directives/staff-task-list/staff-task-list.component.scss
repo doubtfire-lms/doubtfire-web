@@ -162,16 +162,18 @@ user-icon {
   margin-right: -10px;
 }
 
-.mat-list-item {
+.mat-mdc-list-item {
   border: none;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
 :host ::ng-deep .mat-list-item-content {
   padding: 0 !important;
 }
 
 
-.mat-list-item .notification {
+.mat-mdc-list-item .notification {
 
   &.active {
     background-color: transparent;
@@ -185,20 +187,20 @@ user-icon {
   display: inline-block;
 }
 
-.mat-list-item .item-content {
+.mat-mdc-list-item .item-content {
   height: 60px;
   border-radius: 20px;
 }
 
-.mat-list-item .item-content:hover {
+.mat-mdc-list-item .item-content:hover {
   cursor: pointer;
 }
 
-.mat-list-item .item-content.selected {
+.mat-mdc-list-item .item-content.selected {
   background-color: var(--background-gray);
 }
 
-.task-inbox.narrow-width .mat-list-item .item-content.selected {
+.task-inbox.narrow-width .mat-mdc-list-item .item-content.selected {
   margin-right: 12px;
 }
 
