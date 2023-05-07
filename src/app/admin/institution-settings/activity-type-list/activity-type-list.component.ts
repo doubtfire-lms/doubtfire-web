@@ -23,10 +23,13 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(private activityTypeService: ActivityTypeService, @Inject(alertService) private alerts: any) {
-    super({
-      name: new UntypedFormControl('', [Validators.required]),
-      abbreviation: new UntypedFormControl('', [Validators.required]),
-    }, "Activity Type");
+    super(
+      {
+        name: new UntypedFormControl('', [Validators.required]),
+        abbreviation: new UntypedFormControl('', [Validators.required]),
+      },
+      'Activity Type'
+    );
   }
 
   ngAfterViewInit() {
@@ -60,14 +63,14 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   }
 
   deleteActivity(activity: ActivityType) {
-    this.delete(activity, this.activityTypes, this.activityTypeService).subscribe(
-      {
-        next: () => {
-          this.alerts.add('success', `${activity.name} has been deleted.`, 2000);
-        },
-        error: (response) => {this.alerts.add( 'danger', response.error?.error || "Unable to delete activity type.");}
-      }
-    );
+    this.delete(activity, this.activityTypes, this.activityTypeService).subscribe({
+      next: () => {
+        this.alerts.add('success', `${activity.name} has been deleted.`, 2000);
+      },
+      error: (response) => {
+        this.alerts.add('danger', response.error?.error || 'Unable to delete activity type.');
+      },
+    });
   }
 
   // Sorting function to sort data when sort
