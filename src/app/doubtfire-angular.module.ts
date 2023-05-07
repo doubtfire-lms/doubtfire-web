@@ -96,6 +96,7 @@ import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -171,6 +172,8 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { NewTeachingPeriodDialogComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { MatNativeDateModule } from '@angular/material/core';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
@@ -271,6 +274,7 @@ export function playerFactory() {
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
     FChipComponent,
+    NewTeachingPeriodDialogComponent,
   ],
   // Module Imports
   imports: [
@@ -293,6 +297,7 @@ export function playerFactory() {
     MatStepperModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatNativeDateModule,
     MatButtonToggleModule,
     MatTooltipModule,
     MatSlideToggleModule,
@@ -307,6 +312,7 @@ export function playerFactory() {
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatDatepickerModule,
     MatExpansionModule,
     MatCardModule,
     MatGridListModule,

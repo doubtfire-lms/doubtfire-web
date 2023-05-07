@@ -1,22 +1,10 @@
 <div>
-  <h3>Teaching periods</h3>
-  <table
-    mat-table
-    [dataSource]="teachingPeriodsAsMatTableDataSource$ | async"
-    class="mat-elevation-z8 teaching-periods-table"
-    matSort
-  >
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- id: number;
-          period: string;
-          year: string;
-          startDate: Date;
-          endDate: Date;
-          activeUntil: string;
-          active: boolean; -->
-
+  <div class="flex items-center mt-10 mb-10">
+    <h3 class="mat-headline-3 mt-0 mb-0">Teaching periods</h3>
+    <span class="grow"></span>
+    <button mat-flat-button color="primary" (click)="addTeachingPeriod()">Add new teaching period</button>
+  </div>
+  <table mat-table [dataSource]="dataSource" class="rounded-md mat-elevation-z3 teaching-periods-table" matSort>
     <ng-container matColumnDef="active">
       <th mat-header-cell *matHeaderCellDef>Active</th>
       <td mat-cell *matCellDef="let element">
@@ -30,12 +18,12 @@
     </ng-container>
 
     <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef>Start Date</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
       <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef>End date</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>End date</th>
       <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
     </ng-container>
 
@@ -44,44 +32,6 @@
       <td mat-cell *matCellDef="let element">{{ element.activeUntil | date }}</td>
     </ng-container>
 
-    <!-- <ng-container matColumnDef="actions" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let activityType">
-        <div class="right" *ngIf="!editing(activityType); else edit">
-          <button mat-icon-button (click)="flagEdit(activityType)" aria-label="edit teaching period">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </div>
-        <ng-template #edit>
-          <div class="edit-actions right">
-            <span>
-              <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
-                <mat-icon>cancel</mat-icon>
-              </button>
-              <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
-                <mat-icon>save</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteActivity(activityType)" aria-label="delete activity type">
-                <mat-icon color="primary">delete</mat-icon>
-              </button>
-            </span>
-          </div>
-        </ng-template>
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-        <div class="edit-actions right">
-          <button mat-icon-button (click)="submit()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </td>
-    </ng-container> -->
-
-    <!-- Symbol Column -->
-    <!-- <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef>Symbol</th>
-    <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
-  </ng-container> -->
     <td mat-footer-cell *matFooterCellDef>
       <div class="edit-actions right">
         <button mat-icon-button (click)="submit()">
@@ -93,5 +43,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row (click)="selectTeachingPeriod(row)" *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[1, 2, 25, 100]" aria-label="Select page of teaching periods"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of teaching periods"></mat-paginator>
 </div>

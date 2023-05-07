@@ -1,0 +1,76 @@
+<div style="min-width: 600px; min-height: 600px" class="pr-12 pl-12 pt-12 pb-12">
+  <mat-tab-group>
+    <mat-tab label="Edit Teaching Period"> <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template></mat-tab>
+    <mat-tab label="Edit Breaks"> <ng-template [ngTemplateOutlet]="EditBreaks"></ng-template> </mat-tab>
+    <mat-tab label="Rollover"> <ng-template [ngTemplateOutlet]="Rollover"></ng-template> </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #EditTeachingPeriod>
+  <form class="teaching-period-form flex flex-col ml-6 mr-6 pt-12 overflow-hidden">
+    <mat-form-field appearance="outline">
+      <mat-label>Teaching Period Name</mat-label>
+      <input type="text" matInput [(ngModel)]="newTeachingPeriod.period" name="name" required />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Teaching Period Year</mat-label>
+      <input type="number" matInput [(ngModel)]="newTeachingPeriod.year" name="year" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Start and end date</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input
+          matStartDate
+          placeholder="Start date"
+          [(ngModel)]="newTeachingPeriod.startDate"
+          name="startDate"
+          required
+        />
+        <input matEndDate placeholder="End date" [(ngModel)]="newTeachingPeriod.endDate" name="endDate" required />
+      </mat-date-range-input>
+
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Active Until</mat-label>
+      <input matInput type="date" [(ngModel)]="newTeachingPeriod.activeUntil" name="activeUntil" required />
+    </mat-form-field>
+    <div class="flex justify-end">
+      <button mat-stroked-button color="accent" class="" mat-dialog-close>Cancel</button>
+      <button mat-flat-button color="primary" class="ml-4" (click)="submitTeachingPeriod()">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #EditBreaks>
+  <h4>Teaching Breaks for {{ newTeachingPeriod.name }}</h4>
+  <mat-list>
+    <mat-list-item *ngFor="let break of newTeachingPeriod.breaks">
+      <span matListItemTitle>{{ break.startDate | date }}</span>
+      <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+    </mat-list-item>
+  </mat-list>
+
+  <form class="ml-6 mr-6 pt-12 overflow-hidden">
+    <div class="flex flex-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Break Start Date</mat-label>
+        <input type="date" matInput [(ngModel)]="break.startDate" name="breakStartDate" required />
+      </mat-form-field>
+      <span class="grow"></span>
+      <mat-form-field appearance="outline" class="justify-self-end">
+        <mat-label>Number of weeks</mat-label>
+        <input type="number" matInput [(ngModel)]="break.numberOfWeeks" name="breakNumWeeks" required />
+      </mat-form-field>
+    </div>
+    <div class="flex justify-end">
+      <button mat-stroked-button color="warn" class="" mat-dialog-close>Cancel</button>
+
+      <button mat-flat-button color="primary" class="ml-4 justify-self-start" (click)="addTeachingBreak()">Add</button>
+    </div>
+  </form>
+</ng-template>
+<ng-template #Rollover></ng-template>
