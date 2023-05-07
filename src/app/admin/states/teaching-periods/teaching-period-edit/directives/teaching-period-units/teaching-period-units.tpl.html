@@ -3,14 +3,14 @@
     <div class="panel-heading clearfix">
       <div class="pull-left">
         <h4 class="panel-title">Units</h4>
-        Units registered with {{teachingPeriod.name()}}
+        Units registered with {{teachingPeriod.name}}
       </div>
       <form role="search" class="pull-right form-horizontal">
         <input id="searchbar" class="input-md form-control" placeholder="Search for units..." type="search" ng-model="search" autocomplete="off" typeahead="unit.name for unit in teachingPeriod.units | filter:$viewValue | limitTo:8" />
       </form>
     </div>
     <div class="panel-body">
-      <div class="callout callout-info" ng-hide="teachingPeriod.units.length > 0">No units have been registered with {{teachingPeriod.name()}} yet</div>
+      <div class="callout callout-info" ng-hide="teachingPeriod.units.length > 0">No units have been registered with {{teachingPeriod.name}} yet</div>
       <table ng-show="teachingPeriod.units.length > 0" class="table table-hover table-pointer">
         <thead>
           <tr>
@@ -28,7 +28,7 @@
               </label>
             </td>
             <td>{{unit.name}}</td>
-            <td>{{teachingPeriod.name()}}</td>
+            <td>{{teachingPeriod.name}}</td>
             <td>
               <i ng-if="teachingPeriod.active && unit.active" class="fa fa-check"></i>
               <i ng-if="!teachingPeriod.active || !unit.active" class="fa fa-times"></i>

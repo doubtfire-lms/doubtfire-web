@@ -49,9 +49,9 @@
                 ></a>
               </th>
               <th>
-                <a ng-click="sortOrder='teachingPeriod.name()'; reverse=!reverse"
+                <a ng-click="sortOrder='teachingPeriod.name'; reverse=!reverse"
                   >Teaching Period<i
-                    ng-show="sortOrder=='teachingPeriod.name()'"
+                    ng-show="sortOrder=='teachingPeriod.name'"
                     class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
                   ></i
                 ></a>
@@ -83,7 +83,7 @@
               </td>
               <td>{{unit.name}}</td>
               <td>{{(unit.myRole | ucfirst) || "N/A"}}</td>
-              <td ng-if="unit.teachingPeriod">{{unit.teachingPeriod.name()}}</td>
+              <td ng-if="unit.teachingPeriod">{{unit.teachingPeriod.name}}</td>
               <td ng-if="!unit.teachingPeriod">Custom</td>
               <td>{{unit.startDate | date : 'EEE d MMM y'}}</td>
               <td>{{unit.endDate | date : 'EEE d MMM y'}}</td>
