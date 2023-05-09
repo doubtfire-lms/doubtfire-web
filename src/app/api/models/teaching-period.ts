@@ -54,6 +54,16 @@ export class TeachingPeriod extends Entity {
     return breakService.create({ teaching_period_id: this.id }, { cache: this.breaksCache, entity: breakEntity });
   }
 
+  /**
+   * Removes a teaching period break.
+   * @param teachingBreakID the ID of the teaching period break to remove
+   * @returns an observable that emits the teaching period with the removed break, and indicates if any errors occured
+   */
+  public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
+    const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
+    return breakService.delete({ teaching_period_id: this.id, id: teachingBreakID }, { cache: this.breaksCache });
+  }
+
   public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean): Observable<boolean> {
     const teachingPeriodService: TeachingPeriodService = AppInjector.get(TeachingPeriodService);
 
