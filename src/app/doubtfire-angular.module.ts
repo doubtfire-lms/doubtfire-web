@@ -95,7 +95,7 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
@@ -374,6 +374,7 @@ export function playerFactory() {
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
     AudioRecorderProvider,
