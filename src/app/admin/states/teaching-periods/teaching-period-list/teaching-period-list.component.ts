@@ -24,11 +24,11 @@ export class TeachingPeriodListComponent implements OnInit {
   constructor(private teachingPeriodsService: TeachingPeriodService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.refresh();
-  }
+    // update the Teaching Periods
+    this.teachingPeriodsService.query().subscribe((_) => {});
 
-  refresh() {
-    this.teachingPeriodsService.query().subscribe((teachingPeriods) => {
+    // Bind to the Teaching Periods
+    this.teachingPeriodsService.cache.values.subscribe((teachingPeriods) => {
       this.dataSource.data = teachingPeriods;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -37,20 +37,13 @@ export class TeachingPeriodListComponent implements OnInit {
 
   addTeachingPeriod() {
     this.dialog.open(NewTeachingPeriodDialogComponent, {
-      data: {
-        refresh: this.refresh.bind(this),
-      },
+      data: {},
     });
   }
 
-  selectTeachingPeriod(teachingPeriod: TeachingPeriod) {
-    let data: any = { refresh: this.refresh.bind(this) };
-
-    this.teachingPeriodsService.get(teachingPeriod.id).subscribe((teachingPeriod) => {
-      data.teachingPeriod = teachingPeriod;
-      data.teachingPeriod.startDate = new Date(teachingPeriod.startDate);
-      data.teachingPeriod.endDate = new Date(teachingPeriod.endDate);
-      this.dialog.open(NewTeachingPeriodDialogComponent, { data });
+  selectTeachingPeriod(selectedTeachingPeriod: TeachingPeriod) {
+    this.teachingPeriodsService.get(selectedTeachingPeriod.id).subscribe((teachingPeriod) => {
+      this.dialog.open(NewTeachingPeriodDialogComponent, { data: { teachingPeriod: teachingPeriod } });
     });
   }
 }
@@ -66,37 +59,37 @@ export class NewTeachingPeriodDialogComponent {
     public teachingPeriodService: TeachingPeriodService,
     public teachingPeriodBreakService: TeachingPeriodBreakService,
     private _snackBar: MatSnackBar
-  ) {
-    console.log(this.newTeachingPeriod.breaks);
-    this.newTeachingPeriod.breaks.map((teachingPeriodBreak) => {
-      console.log(teachingPeriodBreak);
-      teachingPeriodBreak.startDate = teachingPeriodBreak.originalJson.startDate;
-      teachingPeriodBreak.numberOfWeeks = teachingPeriodBreak.originalJson.numberOfWeeks;
-      return teachingPeriodBreak;
-    });
-  }
-  public newTeachingPeriod = this.teachingPeriodService.buildInstance(this.data.teachingPeriod || {});
+  ) {}
+  public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
 
-  public break = this.teachingPeriodBreakService.buildInstance({});
+  public tempBreak = new TeachingPeriodBreak();
 
   addTeachingBreak() {
-    this.newTeachingPeriod.addBreak(new Date(this.break.startDate), this.break.numberOfWeeks).subscribe({
+    this.newOrSelectedTeachingPeriod.addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks).subscribe({
       next: (teachingPeriodBreak) => {
         console.log(teachingPeriodBreak);
       },
     });
   }
 
+  deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
+    teachingPeriod.removeBreak(teachingBreak.id).subscribe({
+      next: (teachingPeriodBreak) => {
+        console.log(teachingPeriodBreak);
+      },
+      error: (response) => {},
+    });
+  }
+
   submitTeachingPeriod() {
-    this.teachingPeriodService.store(this.newTeachingPeriod).subscribe({
+    // todo: use alert service
+    this.teachingPeriodService.store(this.newOrSelectedTeachingPeriod).subscribe({
       next: (teachingPeriod) => {
-        this.dialogRef.close();
         this._snackBar.open(`${teachingPeriod.name} saved`, 'dismiss', {
           duration: 2000,
           horizontalPosition: 'end',
           verticalPosition: 'top',
         });
-        this.data.refresh();
       },
       error: (response) => {
         this._snackBar.open(response, 'dismiss', {
