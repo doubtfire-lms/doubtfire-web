@@ -36,7 +36,7 @@
   </button>
   <mat-divider *ngIf="media.isActive('xs')"></mat-divider>
 
-  <p mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</p>
+  <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <ng-container *ngFor="let unitRole of unitRoles">
     <div
       *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"

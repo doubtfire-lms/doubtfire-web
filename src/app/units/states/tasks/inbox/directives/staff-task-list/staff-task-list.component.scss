@@ -94,18 +94,6 @@ $warn-color: #f44336;
   }
 }
 
-.truncate {
-  min-width: 0;
-
-  h5,
-  p {
-    margin-top: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
 .warn-icon {
   color: darken($warn-color, 10%);
 }

@@ -96,7 +96,7 @@
                 >
                   <mat-option value="" [hidden]="taskData.taskDefMode">All Task Definitions</mat-option>
                   <mat-option *ngFor="let td of unit.taskDefinitionCache.values | async" [value]="td.id">
-                    {{ td.abbreviation + ' - ' + td.name }}
+                    <span class="truncate">{{ td.abbreviation + ' - ' + td.name }}</span>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -120,7 +120,7 @@
                 (selectionChange)="tutorialIdChanged()"
               >
                 <mat-option *ngFor="let t of studentFilter" [value]="t.id">
-                  {{ t.inboxDescription }}
+                  <span class="truncate">{{ t.inboxDescription }}</span>
                 </mat-option>
               </mat-select>
             </mat-form-field>
