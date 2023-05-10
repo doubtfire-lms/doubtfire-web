@@ -14,7 +14,7 @@
     <div class="replying-wrap">
       Replying to:
       <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
-      <button id="cancelReplyButton" (click)="cancelReply()" mat-button mat-icon-button aria-label="Close reply">
+      <button id="cancelReplyButton" (click)="cancelReply()" mat-icon-button aria-label="Close reply">
         <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
       </button>
     </div>
@@ -46,7 +46,7 @@
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         <button
-          [hidden]="($expandInput | async) === false"
+          *ngIf="$expandInput | async"
           (click)="$expandInput.next(false); recording = false"
           matTooltip="Expand action buttons"
           matTooltipShowDelay="400"

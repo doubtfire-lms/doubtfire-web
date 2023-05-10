@@ -37,7 +37,7 @@
                   </mat-card-content>
                   <mat-card-actions>
                     <f-chip>
-                      {{ unitRole.teachingPeriod?.name() || showDate(unitRole.unit.startDate) }}
+                      {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
                     </f-chip>
                     <f-chip>
                       {{ unitRole.role }}
@@ -98,7 +98,7 @@
                   </mat-card-content>
                   <mat-card-actions>
                     <f-chip>
-                      {{ project.unit.teachingPeriod?.name() || showDate(project.unit.startDate) }}
+                      {{ project.unit.teachingPeriod?.name || showDate(project.unit.startDate) }}
                     </f-chip>
                   </mat-card-actions>
                   <mat-card-footer matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period.">

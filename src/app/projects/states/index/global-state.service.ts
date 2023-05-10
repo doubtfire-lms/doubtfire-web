@@ -137,7 +137,6 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public setInboxState() {
-    console.log('isInboxState');
     this.footer = true;
     // set background color to white
     document.body.style.setProperty('background-color', '#f5f5f5');
@@ -148,7 +147,6 @@ export class GlobalStateService implements OnDestroy {
     document.body.style.setProperty('background-color', '#f5f5f5');
   }
   public setNotInboxState() {
-    console.log('notInboxState');
     this.footer = false;
     // set background color to white
     document.body.style.setProperty('background-color', '#fff');
