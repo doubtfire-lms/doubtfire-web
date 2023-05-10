@@ -15,7 +15,7 @@ import { TeachingPeriodService } from 'src/app/api/services/teaching-period.serv
   styleUrls: ['./teaching-period-list.component.scss'],
 })
 export class TeachingPeriodListComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) sort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public dataSource = new MatTableDataSource<TeachingPeriod>();

@@ -104,7 +104,7 @@ $md-formatif-warn: (
 );
 
 $font-family-primary: "'Grotesk'";
-$font-family-accent: "'open-sans', 'Roboto'";
+$font-family-accent: "Inter, 'open-sans', 'Roboto'";
 
 $mat-typography-primary-config: mat.define-typography-config(
   $headline-1: mat.define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
@@ -142,8 +142,5 @@ $accent-palette: map.get($color-config, 'accent');
 $warn-palette: map.get($color-config, 'warn');
 $is-dark-theme: map.get($color-config, 'is-dark');
 
+@include mat.all-component-typographies($theme);
 @include mat.all-component-themes($theme);
-
-::ng-deep .mdc-notched-outline__notch {
-  border: none;
-}
