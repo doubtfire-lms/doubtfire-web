@@ -27,6 +27,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   ngOnDestroy(): void {
     if (this.pdfBlobUrl) {
       this.fileDownloader.releaseBlob(this.pdfBlobUrl);
+      this.pdfBlobUrl = null;
     }
   }
 
