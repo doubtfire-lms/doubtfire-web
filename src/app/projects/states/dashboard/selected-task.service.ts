@@ -3,6 +3,13 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
 
+export enum DashboardViews {
+  details,
+  submission,
+  task,
+  similarity,
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,10 +19,18 @@ export class SelectedTaskService {
   private task$ = new BehaviorSubject<Task>(null);
   public currentPdfUrl$ = new BehaviorSubject<string>(null);
 
-  private _showingTask: boolean;
+  private currentView: DashboardViews = DashboardViews.submission;
 
-  public get showingTaskSheet() {
-    return this._showingTask;
+  public showingTaskSheet(task?: Task) {
+    return this.currentView == DashboardViews.task && task?.definition?.hasTaskSheet;
+  }
+
+  public get showingSimilarity() {
+    return this.currentView == DashboardViews.similarity;
+  }
+
+  public showingSubmission(task?: Task) {
+    return this.currentView == DashboardViews.submission && task?.hasPdf;
   }
 
   public setSelectedTask(task: number | Task) {
@@ -29,13 +44,17 @@ export class SelectedTaskService {
 
   public showTaskSheet() {
     this.currentPdfUrl$.next(this.task$.value?.definition?.getTaskPDFUrl(false));
-    this._showingTask = true;
+    this.currentView = DashboardViews.task;
+  }
+
+  public showSimilarity() {
+    this.currentView = DashboardViews.similarity;
   }
 
   public showSubmission() {
     if (!this.task$.value) return;
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
-    this._showingTask = false;
+    this.currentView = DashboardViews.submission;
   }
 
   public get selectedTask$(): Subject<Task> {
