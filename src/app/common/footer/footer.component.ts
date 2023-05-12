@@ -46,4 +46,8 @@ export class FooterComponent implements OnInit {
   viewSubmission() {
     this.selectedTaskService.showSubmission();
   }
+
+  viewSimilarity() {
+    this.selectedTaskService.showSimilarity();
+  }
 }

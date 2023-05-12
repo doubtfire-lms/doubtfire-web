@@ -21,6 +21,7 @@
         "@angular-eslint/no-empty-lifecycle-method": "warn",
         "@angular-eslint/component-class-suffix": "warn",
         "@angular-eslint/no-output-on-prefix": "warn",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@angular-eslint/directive-selector": [
           "warn",
           {
@@ -39,7 +40,6 @@
         ],
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-function": "warn",
-        "@typescript-eslint/no-inferrable-types": "warn",
         "@typescript-eslint/no-this-alias": "warn",
         "no-dupe-class-members": "warn",
         "no-prototype-builtins": "warn",

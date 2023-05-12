@@ -23,7 +23,6 @@ export class TaskDropdownComponent {
     'Staff Tasks': 'Staff Tasks',
     'Student Groups': 'Groups',
     'Student List': 'Students',
-    'Student Plagiarism': 'Plagiarism',
     'Student Portfolios': 'Portfolios',
     'Task Explorer': 'Task Explorer',
     'Task Inbox': 'Inbox',

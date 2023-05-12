@@ -154,6 +154,7 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
+  TaskSimilarityService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -194,6 +195,7 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import { FChipComponent } from './common/f-chip/f-chip.component';
+import { TaskSimilarityViewComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -243,6 +245,7 @@ export function playerFactory() {
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
+    TaskSimilarityViewComponent,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
@@ -353,6 +356,7 @@ export function playerFactory() {
     TutorialStreamService,
     UserService,
     TaskService,
+    TaskSimilarityService,
     WebcalService,
     ActivityTypeService,
     OverseerImageService,
