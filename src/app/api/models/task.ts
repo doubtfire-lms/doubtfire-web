@@ -13,6 +13,8 @@ import {
   TaskService,
   Group,
   TaskCommentService,
+  TaskSimilarity,
+  TaskSimilarityService,
 } from './doubtfire-model';
 import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
@@ -34,8 +36,7 @@ export class Task extends Entity {
   qualityPts: number;
   includeInPortfolio: boolean = true;
   pctSimilar: number = 0;
-  similarToCount: number = 0;
-  similarToDismissedCount: number = 0;
+  similarityFlag: boolean = false;
   numNewComments: number = 0;
   hasExtensions: boolean;
 
@@ -50,6 +51,8 @@ export class Task extends Entity {
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
+
+  public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
 
   private _unit: Unit;
 
@@ -70,7 +73,8 @@ export class Task extends Entity {
     AppInjector.get(TaskCommentService)
       .addComment(this, textString, 'text')
       .subscribe({
-        next: (tc) => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+        next: (_) => {},
         error: (error) => {
           console.log(error);
         },
@@ -224,7 +228,7 @@ export class Task extends Entity {
       return '';
     }
 
-    for (let data of times) {
+    for (const data of times) {
       // exactDiff is floating point
       const exactDiff = timeDiff / data.value;
       const diff = Math.floor(exactDiff);
@@ -356,20 +360,12 @@ export class Task extends Entity {
   }
 
   public plagiarismDetected(): boolean {
-    return this.similarToCount - this.similarToDismissedCount > 0;
+    return this.similarityFlag;
   }
 
   public getSimilarityData(match: number): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`);
-  }
-
-  public updateSimilarity(match: number, other: any, dismissed: boolean): Observable<any> {
-    const httpClient = AppInjector.get(HttpClient);
-    return httpClient.put(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`, {
-      dismissed: dismissed,
-      other: other,
-    });
   }
 
   public inFinalState(): boolean {
@@ -689,5 +685,19 @@ export class Task extends Entity {
     } else {
       return minWeeks;
     }
+  }
+
+  /**
+   * Fetch the task similarities for this task.
+   */
+  public fetchSimilarities(): Observable<TaskSimilarity[]> {
+    const taskSimilarityService: TaskSimilarityService = AppInjector.get(TaskSimilarityService);
+    return taskSimilarityService.query(
+      { taskId: this.id },
+      {
+        cache: this.similarityCache,
+        constructorParams: this,
+      }
+    );
   }
 }

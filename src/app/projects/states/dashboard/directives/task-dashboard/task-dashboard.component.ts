@@ -8,11 +8,6 @@ import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessmen
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { SelectedTaskService } from '../../selected-task.service';
 
-enum dashboardViews {
-  'details',
-  'submission',
-  'task',
-}
 
 @Component({
   selector: 'f-task-dashboard',
@@ -21,15 +16,18 @@ enum dashboardViews {
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Input() showSubmission: boolean;
   @Input() pdfUrl: string;
 
-  get showingTaskPdf() {
-    return this.selectedTask.showingTaskSheet;
-  }
+  public taskStatusData: any;
+  public tutor = this.router.globals.params.tutor;
+  public urls: {
+    taskSubmissionPdfAttachmentUrl: string;
+    taskFilesUrl: string;
+    taskSheetPdfUrl?: string;
+    taskSubmissionPdfUrl?: string;
+  };
+  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
 
-  currentView: dashboardViews = dashboardViews.submission;
-  taskStatusData: any;
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
@@ -38,8 +36,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private router: UIRouter,
     private selectedTask: SelectedTaskService
   ) {}
-  tutor = this.router.globals.params.tutor;
-  urls;
 
   ngOnInit(): void {
     this.updateCurrentView();
@@ -65,26 +61,20 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     }
   }
 
-  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
+  get showingPdf() {
+    return this.selectedTask.showingTaskSheet(this.task) || this.selectedTask.showingSubmission(this.task);
+  }
 
   overseerEnabled() {
     return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
   }
 
   updateCurrentView() {
-    if (this.showSubmission) {
-      this.currentView = dashboardViews.submission;
-    } else {
-      this.currentView = dashboardViews.details;
-    }
-  }
-
-  setSelectedDashboardView(view: dashboardViews) {
-    this.currentView = view;
-  }
-
-  isCurrentView(view: dashboardViews) {
-    return this.currentView === view;
+    // if (this.showSubmission) {
+    //   this.currentView = DashboardViews.submission;
+    // } else {
+    //   this.currentView = DashboardViews.details;
+    // }
   }
 
   showSubmissionHistoryModal() {

@@ -1,0 +1,25 @@
+<div>
+  <p>Ensure student_0 task 1.1P in COS1001 is flagged in inbox.</p>
+  <h1>Similarities</h1>
+  <ul>
+    <li *ngFor="let similarity of task?.similarityCache.values | async">
+      <div>
+        <h2>{{ similarity.type }} - {{ similarity.id }} - {{ similarity.pct }}%</h2>
+        <p>Show files/parts if flagged, otherwise click to load...</p>
+        <ul>
+          <li *ngFor="let part of similarity.parts">
+            <div>
+              <h3>{{ part.description }}</h3>
+              <p>{{ part.idx }} {{ part.format }} {{ part.pct }}%</p>
+              <p>
+                We need a "blob viewer" here -- parent of a html view / image view / pdf viewer -- handle resource
+                downloading and freeing blob on destroy. The url for this blob is {{ similarity.fileUrl(part.idx) }}.
+                The blob viewer can then also go into the comment viewer for images.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>
