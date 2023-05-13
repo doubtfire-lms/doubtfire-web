@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
@@ -16,12 +16,40 @@ export class FooterComponent implements OnInit {
   selectedTask$: Observable<Task>;
   selectedTask: Task;
 
+  @ViewChild('similaritiesButton', { static: false, read: ElementRef }) similaritiesButton: ElementRef;
+  @ViewChild('warningText', { static: false, read: ElementRef }) warningText: ElementRef;
+  public leftOffset: number;
+  public topOffset: number;
+  public warningTextLeftOffset: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    // After window resizes, calc the location of the elements again
+    this.findSimilaritiesButton();
+  }
+
+  findSimilaritiesButton() {
+    if (!this.selectedTask?.similaritiesDetected) return;
+
+    const w = this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
+    this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;
+    this.topOffset = this.similaritiesButton?.nativeElement.offsetTop - 14;
+
+    const totalPaddingOffset = 64;
+    this.warningTextLeftOffset =
+      this.leftOffset - (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
+  }
+
   ngOnInit(): void {
     // watch for changes to the selected task
     this.selectedTask$ = this.selectedTaskService.selectedTask$;
 
     this.selectedTask$.subscribe((task) => {
       this.selectedTask = task;
+      // We need to timeout to give the DOM a chance to place the elements
+      setTimeout(() => {
+        this.findSimilaritiesButton();
+      }, 0);
     });
   }
 

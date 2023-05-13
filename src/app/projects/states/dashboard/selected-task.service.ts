@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
+import { GlobalStateService } from '../index/global-state.service';
 
 export enum DashboardViews {
   submission,
@@ -13,18 +14,12 @@ export enum DashboardViews {
   providedIn: 'root',
 })
 export class SelectedTaskService {
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private globalState: GlobalStateService) {}
 
   private task$ = new BehaviorSubject<Task>(null);
   public currentPdfUrl$ = new BehaviorSubject<string>(null);
 
-  // private currentView: DashboardViews = DashboardViews.submission;
-
   public currentView$ = new BehaviorSubject<DashboardViews>(DashboardViews.submission);
-
-  // public showingTaskSheet(task?: Task) {
-  //   return this.currentView$.getValue() == DashboardViews.task && task?.definition?.hasTaskSheet;
-  // }
 
   public get hasTaskSheet(): boolean {
     return this.task$.value?.definition?.hasTaskSheet;
@@ -34,19 +29,17 @@ export class SelectedTaskService {
     return this.task$.value?.hasPdf;
   }
 
-  // public get showingSimilarity() {
-  //   return this.currentView == DashboardViews.similarity;
-  // }
-
-  // public showingSubmission(task?: Task) {
-  //   return this.currentView == DashboardViews.submission && task?.hasPdf;
-  // }
-
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
       this.taskService.get(task).subscribe(this.task$);
     } else {
       this.task$.next(task);
+
+      if (task?.similaritiesDetected) {
+        this.globalState.showFooterAlert();
+      } else {
+        this.globalState.hideFooterAlert();
+      }
     }
     this.showSubmission();
   }

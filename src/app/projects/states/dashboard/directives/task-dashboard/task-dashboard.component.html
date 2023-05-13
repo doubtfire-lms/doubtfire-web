@@ -1,25 +1,27 @@
-<ng-container [ngSwitch]="currentView">
-  <ng-template [ngSwitchCase]="DashboardViews.task">
-    <ng-container *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"></ng-container>
+<div class="w-full h-full">
+  <ng-container [ngSwitch]="currentView">
+    <ng-template [ngSwitchCase]="DashboardViews.task">
+      <ng-container *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"></ng-container>
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="DashboardViews.submission">
+      <ng-container *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"></ng-container>
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="DashboardViews.similarity">
+      <f-task-similarity-view [task]="task"></f-task-similarity-view>
+    </ng-template>
+  </ng-container>
+
+  <!-- The PDF Viewer -->
+  <ng-template #pdfViewer>
+    <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
   </ng-template>
 
-  <ng-template [ngSwitchCase]="DashboardViews.submission">
-    <ng-container *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"></ng-container>
+  <!-- Render if no PDF URL is available for the current view -->
+  <ng-template #noPdfUrl>
+    <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+      <mat-icon>subtitles_off</mat-icon>
+    </div>
   </ng-template>
-
-  <ng-template [ngSwitchCase]="DashboardViews.similarity">
-    <f-task-similarity-view [task]="task"></f-task-similarity-view>
-  </ng-template>
-</ng-container>
-
-<!-- The PDF Viewer -->
-<ng-template #pdfViewer>
-  <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
-</ng-template>
-
-<!-- Render if no PDF URL is available for the current view -->
-<ng-template #noPdfUrl>
-  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-    <mat-icon>subtitles_off</mat-icon>
-  </div>
-</ng-template>
+</div>

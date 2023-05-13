@@ -62,7 +62,9 @@ export class GlobalStateService implements OnDestroy {
    * The loaded projects.
    */
   private currentUserProjects: EntityCache<Project>;
-  private footer = false;
+
+  private footerState: 'noFooter' | 'footer' | 'footerAlert' = 'noFooter';
+  // private footer = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -124,8 +126,11 @@ export class GlobalStateService implements OnDestroy {
   private resetHeight() {
     setTimeout(() => {
       const vh = window.innerHeight * 0.01;
-      if (this.footer && this.mediaObserver.isActive('gt-sm')) {
+      if (this.footerState === 'footer' && this.mediaObserver.isActive('gt-sm')) {
         document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+      } else if (this.footerState === 'footerAlert' && this.mediaObserver.isActive('gt-sm')) {
+        console.log('Setting footer alert height');
+        document.body.style.setProperty('--vh', `${vh - 0.85 - 0.2}px`);
       } else {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
       }
@@ -133,11 +138,11 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public get isInboxState(): boolean {
-    return this.footer;
+    return this.footerState === 'footerAlert' || this.footerState === 'footer';
   }
 
   public setInboxState() {
-    this.footer = true;
+    this.footerState = 'footer';
     // set background color to white
     document.body.style.setProperty('background-color', '#f5f5f5');
   }
@@ -147,18 +152,29 @@ export class GlobalStateService implements OnDestroy {
     document.body.style.setProperty('background-color', '#f5f5f5');
   }
   public setNotInboxState() {
-    this.footer = false;
+    this.footerState = 'noFooter';
     // set background color to white
     document.body.style.setProperty('background-color', '#fff');
   }
 
   public showFooter(): void {
-    this.footer = true;
+    this.footerState = 'footer';
     this.resetHeight();
   }
 
   public hideFooter(): void {
-    this.footer = false;
+    this.footerState = 'noFooter';
+    this.resetHeight();
+  }
+
+  public showFooterAlert(): void {
+    // if (this.footerState === 'noFooter') return;
+    this.footerState = 'footerAlert';
+    this.resetHeight();
+  }
+
+  public hideFooterAlert(): void {
+    this.footerState = 'footer';
     this.resetHeight();
   }
 
