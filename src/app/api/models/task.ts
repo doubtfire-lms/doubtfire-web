@@ -359,7 +359,7 @@ export class Task extends Entity {
     return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.#]/g, '-');
   }
 
-  public plagiarismDetected(): boolean {
+  public get similaritiesDetected(): boolean {
     return this.similarityFlag;
   }
 

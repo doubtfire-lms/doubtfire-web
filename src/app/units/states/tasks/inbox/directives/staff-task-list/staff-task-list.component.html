@@ -172,10 +172,13 @@
         style="padding: 0; height: 60px"
       >
         <div
-          style="width: 100%"
+          class="w-full"
           id="{{ task.taskKeyToIdString() }}"
           *ngIf="task"
-          [ngClass]="{ selected: isSelectedTask(task), 'item-content': task.statusClass() }"
+          [ngClass]="{
+            selected: isSelectedTask(task),
+            'item-content': task.statusClass()
+          }"
         >
           <div
             (click)="setSelectedTask(task)"
@@ -188,7 +191,10 @@
           >
             <span
               class="notification"
-              [ngClass]="{ active: task.numNewComments <= 0 || task.plagiarismDetected() }"
+              [ngClass]="{
+                active: task.numNewComments > 0 || task.similaritiesDetected,
+                similarities: task.similaritiesDetected
+              }"
             ></span>
             <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
@@ -219,7 +225,7 @@
             ></status-icon>
             <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
-                <mat-icon class="warn-icon" *ngIf="task.plagiarismDetected()">remove_red_eye</mat-icon>
+                <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
                 <div *ngIf="task.pinned" class="pin-container">
                   <mat-icon>push_pin</mat-icon>

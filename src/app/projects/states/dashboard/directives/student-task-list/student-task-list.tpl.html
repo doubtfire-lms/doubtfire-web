@@ -44,7 +44,7 @@
           <span class="task-superscript-badge new-comments-badge" ng-if="task.numNewComments > 0">
             {{task.numNewComments}}
           </span>
-          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.plagiarismDetected()">
+          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.similaritiesDetected">
             <i class="fa fa-eye"></i>
           </span>
         </div>

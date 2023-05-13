@@ -94,10 +94,6 @@ $warn-color: #f44336;
   }
 }
 
-.warn-icon {
-  color: darken($warn-color, 10%);
-}
-
 .new_comments {
   font-size: 10px;
   font-weight: 700;
@@ -168,16 +164,22 @@ user-icon {
 }
 
 .mat-mdc-list-item .notification {
-  &.active {
-    background-color: transparent;
-  }
-
   height: 8px;
   width: 8px;
   margin-right: 8px;
-  background-color: mat.get-color-from-palette($my-palette, 500);
+
   border-radius: 50%;
   display: inline-block;
+
+  background-color: transparent;
+
+  &.active {
+    background-color: mat.get-color-from-palette($my-palette, 500);
+  }
+
+  &.active.similarities {
+    background-color: #f44336;
+  }
 }
 
 .mat-mdc-list-item .item-content {
