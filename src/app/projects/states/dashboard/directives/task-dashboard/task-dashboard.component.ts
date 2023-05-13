@@ -7,7 +7,7 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { SelectedTaskService } from '../../selected-task.service';
-
+import { DashboardViews } from '../../selected-task.service';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -18,6 +18,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
 
+  public DashboardViews = DashboardViews;
+
   public taskStatusData: any;
   public tutor = this.router.globals.params.tutor;
   public urls: {
@@ -27,6 +29,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     taskSubmissionPdfUrl?: string;
   };
   public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
+  public currentView: DashboardViews;
 
   constructor(
     private doubtfire: DoubtfireConstants,
@@ -34,11 +37,13 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
-    private selectedTask: SelectedTaskService
+    public selectedTaskService: SelectedTaskService
   ) {}
 
   ngOnInit(): void {
-    this.updateCurrentView();
+    this.selectedTaskService.currentView$.subscribe((view) => {
+      this.currentView = view;
+    });
 
     this.taskStatusData = {
       keys: _.sortBy(this.taskService.markedStatuses, (s) => this.taskService.statusSeq.get(s)),
@@ -57,24 +62,11 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
-      this.updateCurrentView();
     }
-  }
-
-  get showingPdf() {
-    return this.selectedTask.showingTaskSheet(this.task) || this.selectedTask.showingSubmission(this.task);
   }
 
   overseerEnabled() {
     return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
-  }
-
-  updateCurrentView() {
-    // if (this.showSubmission) {
-    //   this.currentView = DashboardViews.submission;
-    // } else {
-    //   this.currentView = DashboardViews.details;
-    // }
   }
 
   showSubmissionHistoryModal() {

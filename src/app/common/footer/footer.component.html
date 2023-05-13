@@ -61,15 +61,15 @@
       <mat-icon class="small-icon">more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu" yPosition="above">
-      <button mat-menu-item (click)="viewTaskSheet()">
+      <button mat-menu-item (click)="viewTaskSheet()" [disabled]="!selectedTaskService.hasTaskSheet">
         <mat-icon aria-hidden="false" aria-label="View Task Sheet" fontIcon="description"></mat-icon>View task sheet
       </button>
-      <button mat-menu-item (click)="viewSubmission()">
+      <button mat-menu-item (click)="viewSubmission()" [disabled]="!selectedTaskService.hasSubmissionPdf">
         <mat-icon aria-hidden="false" aria-label="View student submission" fontIcon="contact_page"></mat-icon>View
         student submission
       </button>
       <button mat-menu-item (click)="viewSimilarity()">
-        <mat-icon aria-hidden="false" aria-label="View Similarity" fontIcon="home"></mat-icon>View similarities
+        <mat-icon aria-hidden="false" aria-label="View Similarity" fontIcon="crisis_alert"></mat-icon>View similarities
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item (click)="selectedTask?.updateTaskStatus('time_exceeded')">

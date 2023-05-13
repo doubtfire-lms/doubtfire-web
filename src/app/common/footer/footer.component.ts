@@ -11,7 +11,7 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  constructor(private selectedTaskService: SelectedTaskService, private fileDownloader: FileDownloaderService) {}
+  constructor(public selectedTaskService: SelectedTaskService, private fileDownloader: FileDownloaderService) {}
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
