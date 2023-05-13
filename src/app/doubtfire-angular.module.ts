@@ -194,6 +194,7 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import { FChipComponent } from './common/f-chip/f-chip.component';
+import { TriplePanelLayoutComponent } from './common/layouts/triple-panel-layout/triple-panel-layout.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -275,6 +276,7 @@ export function playerFactory() {
     TeachingPeriodListComponent,
     FChipComponent,
     NewTeachingPeriodDialogComponent,
+    TriplePanelLayoutComponent,
   ],
   // Module Imports
   imports: [

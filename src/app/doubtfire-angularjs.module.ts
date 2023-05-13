@@ -266,6 +266,7 @@ import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { TriplePanelLayoutComponent } from './common/layouts/triple-panel-layout/triple-panel-layout.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -327,6 +328,7 @@ DoubtfireAngularJSModule.directive(
 );
 
 DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
+DoubtfireAngularJSModule.directive('fTriplePanelLayout', downgradeComponent({ component: TriplePanelLayoutComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })

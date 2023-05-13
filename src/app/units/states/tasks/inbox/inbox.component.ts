@@ -63,7 +63,7 @@ export class InboxComponent implements OnInit {
         if (moveEvent.div.id === 'inboxpanel') {
           newWidth = startSize + moveEvent.event.distance.x;
 
-          // if width is belo 250, snap to 50px
+          // if width is below 250, snap to 50px
           if (newWidth < 250 && newWidth > 100) {
             width = 250;
           } else if (newWidth < 150) {
