@@ -12,7 +12,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
-    "suppressImplicitAnyIndexErrors": true,
     "allowUnusedLabels": false,
     "target": "ES2022",
     "typeRoots": [
