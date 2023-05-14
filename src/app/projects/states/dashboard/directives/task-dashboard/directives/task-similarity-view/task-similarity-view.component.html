@@ -1,25 +1,29 @@
-<div>
-  <p>Ensure student_0 task 1.1P in COS1001 is flagged in inbox.</p>
-  <h1>Similarities</h1>
-  <ul>
-    <li *ngFor="let similarity of task?.similarityCache.values | async">
-      <div>
-        <h2>{{ similarity.type }} - {{ similarity.id }} - {{ similarity.pct }}%</h2>
-        <p>Show files/parts if flagged, otherwise click to load...</p>
-        <ul>
-          <li *ngFor="let part of similarity.parts">
-            <div>
-              <h3>{{ part.description }}</h3>
-              <p>{{ part.idx }} {{ part.format }} {{ part.pct }}%</p>
-              <p>
-                We need a "blob viewer" here -- parent of a html view / image view / pdf viewer -- handle resource
-                downloading and freeing blob on destroy. The url for this blob is {{ similarity.fileUrl(part.idx) }}.
-                The blob viewer can then also go into the comment viewer for images.
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </li>
-  </ul>
+<div class="p-4">
+  <div class="flex items-center">
+    <mat-icon class="mr-2">crisis_alert</mat-icon>
+    <h1 class="mat-headline m-0">Similarities</h1>
+    <span class="grow"></span>
+    <div class="example-action-buttons">
+      <button mat-button (click)="accordion.openAll()">Expand All</button>
+      <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+    </div>
+  </div>
+
+  <mat-accordion multi>
+    <ng-container *ngFor="let similarity of task?.similarityCache.values | async">
+      <h1 class="mat-headline"></h1>
+      <mat-expansion-panel
+        *ngFor="let part of similarity.parts"
+        hideToggle
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ similarity.friendlyTypeName }} </mat-panel-title>
+          <mat-panel-description> {{ part.description }} </mat-panel-description>
+        </mat-expansion-panel-header>
+        <f-file-viewer [fileType]="part.format" [src]="similarity.fileUrl(part.idx)"></f-file-viewer>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
 </div>

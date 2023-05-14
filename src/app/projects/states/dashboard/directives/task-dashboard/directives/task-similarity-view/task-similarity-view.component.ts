@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
 import { Task } from 'src/app/api/models/task';
 
 @Component({
@@ -8,6 +9,8 @@ import { Task } from 'src/app/api/models/task';
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  panelOpenState = false;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {

@@ -4,8 +4,8 @@ import { Task } from './doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 export class TaskSimilarityPart {
-  idx: number;
-  format: string;
+  idx: number; //TODO (jake): @macite should this be id?
+  format: string; //TODO (jake): @macite can this be an enum?
   description: string;
 }
 
@@ -15,9 +15,9 @@ export class TaskSimilarityPart {
  */
 export class TaskSimilarity extends Entity {
   id: number;
-  type: string;
+  type: string; //TODO (jake): @macite can this be an enum?
   flagged: boolean;
-  pct: number;
+  pct: number; //TODO (jake): @macite what is this actually? Highest % of a containing part?
   parts: TaskSimilarityPart[];
   task: Task;
 
@@ -35,5 +35,14 @@ export class TaskSimilarity extends Entity {
   public fileUrl(idx: number): string {
     const constants = AppInjector.get(DoubtfireConstants);
     return `${constants.API_URL}/tasks/${this.task.id}/similarities/${this.id}/contents/${idx}`;
+  }
+
+  public get friendlyTypeName(): string {
+    switch (this.type) {
+      case 'MossTaskSimilarity':
+        return 'MOSS';
+      case 'TurnItInTaskSimilarity':
+        return 'turnitin';
+    }
   }
 }

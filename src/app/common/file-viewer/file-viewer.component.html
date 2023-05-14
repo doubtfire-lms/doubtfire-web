@@ -1,0 +1,7 @@
+<div *ngIf="fileType === 'pdf'">
+  <pdf-viewer [src]="src" [render-text]="true" style="display: block"></pdf-viewer>
+</div>
+
+<div *ngIf="fileType === 'html'">
+  <iframe [src]="src | safe" width="100%" height="100%"></iframe>
+</div>

@@ -196,6 +196,7 @@ import { ProjectProgressBarComponent } from './common/project-progress-bar/proje
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import { FChipComponent } from './common/f-chip/f-chip.component';
 import { TaskSimilarityViewComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
+import { FileViewerComponent } from './common/file-viewer/file-viewer.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -278,6 +279,7 @@ export function playerFactory() {
     TeachingPeriodListComponent,
     FChipComponent,
     NewTeachingPeriodDialogComponent,
+    FileViewerComponent,
   ],
   // Module Imports
   imports: [

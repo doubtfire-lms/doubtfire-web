@@ -1,4 +1,4 @@
-<div class="w-full h-full">
+<div class="w-full h-full overflow-auto">
   <ng-container [ngSwitch]="currentView">
     <ng-template [ngSwitchCase]="DashboardViews.task">
       <ng-container *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"></ng-container>
