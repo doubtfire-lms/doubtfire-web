@@ -22,7 +22,7 @@ describe('HeaderComponent', () => {
     const showHideHeader = new Subject<boolean>();
     const unitRolesSubject = new BehaviorSubject<any>(null);
     const projectsSubject = new BehaviorSubject<any>(null);
-    const currentViewAndEntitySubject = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
+    const currentViewAndEntitySubject$ = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
       null
     );
 
@@ -34,7 +34,7 @@ describe('HeaderComponent', () => {
       showHideHeader: showHideHeader,
       unitRolesSubject: unitRolesSubject,
       projectsSubject: projectsSubject,
-      currentViewAndEntitySubject: currentViewAndEntitySubject,
+      currentViewAndEntitySubject$: currentViewAndEntitySubject$,
     };
 
     TestBed.configureTestingModule({

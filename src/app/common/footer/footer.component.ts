@@ -35,7 +35,7 @@ export class FooterComponent implements OnInit {
     this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;
     this.topOffset = this.similaritiesButton?.nativeElement.offsetTop - 14;
 
-    const totalPaddingOffset = 64;
+    const totalPaddingOffset = 30;
     this.warningTextLeftOffset =
       this.leftOffset - (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
@@ -49,7 +49,7 @@ export class FooterComponent implements OnInit {
       // We need to timeout to give the DOM a chance to place the elements
       setTimeout(() => {
         this.findSimilaritiesButton();
-      }, 0);
+      }, 10);
     });
   }
 

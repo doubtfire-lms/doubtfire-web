@@ -77,7 +77,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // get the current active unit or project
     this.subscriptions.push(
-      this.globalState.currentViewAndEntitySubject.subscribe({
+      this.globalState.currentViewAndEntitySubject$.subscribe({
         next: (currentViewAndEntity) => {
           this.currentView = currentViewAndEntity?.viewType;
 

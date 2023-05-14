@@ -42,7 +42,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> =
+  public currentViewAndEntitySubject$: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> =
     new BehaviorSubject<{
       viewType: ViewType;
       entity: Project | Unit | UnitRole;
@@ -63,8 +63,8 @@ export class GlobalStateService implements OnDestroy {
    */
   private currentUserProjects: EntityCache<Project>;
 
-  private footerState: 'noFooter' | 'footer' | 'footerAlert' = 'noFooter';
-  // private footer = false;
+  private _showFooter = false;
+  private _showFooterWarning = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -126,23 +126,25 @@ export class GlobalStateService implements OnDestroy {
   private resetHeight() {
     setTimeout(() => {
       const vh = window.innerHeight * 0.01;
-      if (this.footerState === 'footer' && this.mediaObserver.isActive('gt-sm')) {
-        document.body.style.setProperty('--vh', `${vh - 0.85}px`);
-      } else if (this.footerState === 'footerAlert' && this.mediaObserver.isActive('gt-sm')) {
-        console.log('Setting footer alert height');
-        document.body.style.setProperty('--vh', `${vh - 0.85 - 0.2}px`);
-      } else {
+
+      if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
+      } else {
+        if (this._showFooter && !this._showFooterWarning) {
+          document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+        } else {
+          document.body.style.setProperty('--vh', `${vh - 0.85 - 0.2}px`);
+        }
       }
     }, 0);
   }
 
   public get isInboxState(): boolean {
-    return this.footerState === 'footerAlert' || this.footerState === 'footer';
+    return this._showFooter;
   }
 
   public setInboxState() {
-    this.footerState = 'footer';
+    this._showFooter = true;
     // set background color to white
     document.body.style.setProperty('background-color', '#f5f5f5');
   }
@@ -151,30 +153,35 @@ export class GlobalStateService implements OnDestroy {
     this.showHeader();
     document.body.style.setProperty('background-color', '#f5f5f5');
   }
+
   public setNotInboxState() {
-    this.footerState = 'noFooter';
+    this._showFooter = false;
     // set background color to white
     document.body.style.setProperty('background-color', '#fff');
   }
 
   public showFooter(): void {
-    this.footerState = 'footer';
+    this._showFooter = true;
     this.resetHeight();
   }
 
   public hideFooter(): void {
-    this.footerState = 'noFooter';
+    this._showFooter = false;
     this.resetHeight();
   }
 
-  public showFooterAlert(): void {
-    // if (this.footerState === 'noFooter') return;
-    this.footerState = 'footerAlert';
+  // called when we need to set the footer to be a bit taller
+  // to account for the alert div
+  public showFooterWarning(): void {
+    if (!this._showFooter) return;
+    this._showFooterWarning = true;
     this.resetHeight();
   }
 
-  public hideFooterAlert(): void {
-    this.footerState = 'footer';
+  // called when we need to set the footer to be normal sized
+  public hideFooterWarning(): void {
+    if (!this._showFooter) return;
+    this._showFooterWarning = false;
     this.resetHeight();
   }
 
@@ -189,7 +196,7 @@ export class GlobalStateService implements OnDestroy {
   public ngOnDestroy(): void {
     this.isLoadingSubject.complete();
     this.showHideHeader.complete();
-    this.currentViewAndEntitySubject.complete();
+    this.currentViewAndEntitySubject$.complete();
   }
 
   public loadGlobals(): void {
@@ -266,7 +273,7 @@ export class GlobalStateService implements OnDestroy {
    * Switch to a new view, and its associated entity object
    */
   public setView(kind: ViewType, entity?: any): void {
-    this.currentViewAndEntitySubject.next({ viewType: kind, entity: entity });
+    this.currentViewAndEntitySubject$.next({ viewType: kind, entity: entity });
   }
 
   /**

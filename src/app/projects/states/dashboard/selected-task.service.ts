@@ -36,9 +36,9 @@ export class SelectedTaskService {
       this.task$.next(task);
 
       if (task?.similaritiesDetected) {
-        this.globalState.showFooterAlert();
+        this.globalState.showFooterWarning();
       } else {
-        this.globalState.hideFooterAlert();
+        this.globalState.hideFooterWarning();
       }
     }
     this.showSubmission();
