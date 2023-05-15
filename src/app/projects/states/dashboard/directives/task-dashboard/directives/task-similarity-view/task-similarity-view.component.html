@@ -4,7 +4,6 @@
     <h1 class="mat-headline m-0">Similarities</h1>
     <span class="grow"></span>
     <div class="example-action-buttons">
-      <button mat-button (click)="accordion.openAll()">Expand All</button>
       <button mat-button (click)="accordion.closeAll()">Collapse All</button>
     </div>
   </div>
@@ -13,15 +12,29 @@
     <ng-container *ngFor="let similarity of task?.similarityCache.values | async">
       <h1 class="mat-headline"></h1>
       <mat-expansion-panel
-        *ngFor="let part of similarity.parts"
+        *ngFor="let part of similarity.parts; let i = index"
         hideToggle
         (opened)="panelOpenState = true"
         (closed)="panelOpenState = false"
       >
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ similarity.friendlyTypeName }} </mat-panel-title>
+        <mat-expansion-panel-header [ngClass]="{ flagged: similarity.flagged }">
+          <mat-panel-title>
+            {{ similarity.friendlyTypeName }}
+          </mat-panel-title>
           <mat-panel-description> {{ part.description }} </mat-panel-description>
+          <button
+            *ngIf="i === 0"
+            [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
+            mat-icon-button
+            aria-label="Flag similarities"
+            (click)="toggleFlag($event, similarity)"
+          >
+            <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{
+              similarity.flagged ? 'flag_circle' : 'check_circle'
+            }}</mat-icon>
+          </button>
         </mat-expansion-panel-header>
+
         <f-file-viewer [fileType]="part.format" [src]="similarity.fileUrl(part.idx)"></f-file-viewer>
       </mat-expansion-panel>
     </ng-container>

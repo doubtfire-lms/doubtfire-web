@@ -41,7 +41,7 @@ export class TaskSimilarity extends Entity {
     switch (this.type) {
       case 'MossTaskSimilarity':
         return 'MOSS';
-      case 'TurnItInTaskSimilarity':
+      case 'TiiTaskSimilarity':
         return 'turnitin';
     }
   }
