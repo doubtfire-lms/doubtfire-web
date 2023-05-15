@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { Task } from 'src/app/api/models/task';
+import { TaskSimilarity } from 'src/app/api/models/task-similarity';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -19,5 +20,10 @@ export class TaskSimilarityViewComponent implements OnChanges {
         console.log('similarities fetched');
       });
     }
+  }
+
+  toggleFlag(e: Event, similarity: TaskSimilarity) {
+    e.stopPropagation();
+    similarity.flagged = !similarity.flagged;
   }
 }
