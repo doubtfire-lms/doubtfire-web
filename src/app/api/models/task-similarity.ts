@@ -3,9 +3,23 @@ import { AppInjector } from 'src/app/app-injector';
 import { Task } from './doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
+export enum TaskSimilarityType {
+  Moss = 'MossTaskSimilarity',
+  TurnItIn = 'TiiTaskSimilarity',
+}
+
+/**
+ * Represents teh format for a part of a similarity report for a task.
+ * This is html for moss, and pdf for turn it in.
+ */
+export enum TaskSimilarityPartFormat {
+  Html = 'html',
+  Pdf = 'pdf',
+}
+
 export class TaskSimilarityPart {
-  idx: number; //TODO (jake): @macite should this be id?
-  format: string; //TODO (jake): @macite can this be an enum?
+  idx: number;
+  format: TaskSimilarityPartFormat;
   description: string;
 }
 
@@ -15,9 +29,9 @@ export class TaskSimilarityPart {
  */
 export class TaskSimilarity extends Entity {
   id: number;
-  type: string; //TODO (jake): @macite can this be an enum?
+  type: TaskSimilarityType;
   flagged: boolean;
-  pct: number; //TODO (jake): @macite what is this actually? Highest % of a containing part?
+  pct: number;
   parts: TaskSimilarityPart[];
   task: Task;
 
@@ -39,10 +53,10 @@ export class TaskSimilarity extends Entity {
 
   public get friendlyTypeName(): string {
     switch (this.type) {
-      case 'MossTaskSimilarity':
+      case TaskSimilarityType.Moss:
         return 'MOSS';
-      case 'TurnItInTaskSimilarity':
-        return 'turnitin';
+      case TaskSimilarityType.TurnItIn:
+        return 'TurnItIn';
     }
   }
 }
