@@ -2,6 +2,7 @@ import { Component, Inject, Input, OnChanges, OnDestroy, SimpleChanges } from '@
 import { FileDownloaderService } from '../file-downloader/file-downloader';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { HttpResponse } from '@angular/common/http';
+import { PDFProgressData } from 'ng2-pdf-viewer';
 
 /**
  * The file viewer downloads a file from a URL and displays it's contents.
@@ -30,12 +31,18 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
   /**
    * The url of the blob downloaded - so we can render it.
    */
-  private blobUrl: string;
+  protected blobUrl: string;
 
   /**
    * Used to indicate the PDF has been loaded.
    */
   public loaded = false;
+
+  protected pdfLoadingProgressPercentage = 0;
+
+  protected onProgress(progress: PDFProgressData) {
+    this.pdfLoadingProgressPercentage = Math.round(progress.loaded / progress.total);
+  }
 
   /**
    * Create the file viewer
@@ -107,5 +114,4 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
   }
-
 }

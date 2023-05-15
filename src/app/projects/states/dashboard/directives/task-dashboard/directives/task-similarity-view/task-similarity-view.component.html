@@ -14,8 +14,8 @@
       <mat-expansion-panel
         *ngFor="let part of similarity.parts; let i = index"
         hideToggle
-        (opened)="panelOpenState = true"
-        (closed)="panelOpenState = false"
+        (opened)="part.panelOpenState = true"
+        (closed)="part.panelOpenState = false"
       >
         <mat-expansion-panel-header [ngClass]="{ flagged: similarity.flagged }">
           <mat-panel-title>
@@ -35,7 +35,7 @@
           </button>
         </mat-expansion-panel-header>
         <f-file-viewer
-          *ngIf="panelOpenState"
+          *ngIf="part.panelOpenState"
           [fileType]="part.format"
           [src]="similarity.fileUrl(part.idx)"
         ></f-file-viewer>
