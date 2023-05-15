@@ -12,7 +12,6 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
 export class fPdfViewerComponent implements OnDestroy, OnChanges {
   private _pdfUrl: string;
   public pdfBlobUrl: string;
-  public progressPercentage = 0;
   @Input() pdfUrl: string;
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
@@ -82,10 +81,6 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
         this.alerts.add('danger', `Error downloading PDF. ${error}`, 6000);
       }
     );
-  }
-
-  onProgress(progressData: { loaded; total }) {
-    this.progressPercentage = Math.round((progressData.loaded / progressData.total) * 100);
   }
 
   onLoaded() {

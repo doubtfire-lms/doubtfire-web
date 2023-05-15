@@ -1,7 +1,14 @@
 <div *ngIf="fileType === 'pdf'">
-  <pdf-viewer [src]="src" [render-text]="true" style="display: block"></pdf-viewer>
+  <pdf-viewer
+    style="display: block"
+    [src]="blobUrl"
+    *ngIf="blobUrl"
+    [render-text]="true"
+    (after-load-complete)="onLoaded()"
+    (page-rendered)="loaded = true"
+  ></pdf-viewer>
 </div>
 
 <div *ngIf="fileType === 'html'">
-  <iframe [src]="src | safe" width="100%" height="100%"></iframe>
+  <iframe [src]="blobUrl | safe" width="100%" height="100%"></iframe>
 </div>
