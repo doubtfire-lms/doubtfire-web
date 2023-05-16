@@ -363,9 +363,17 @@ export class Task extends Entity {
     return this.similarityFlag;
   }
 
-  public getSimilarityData(match: number): Observable<any> {
+  public getSimilarityData(match: number): Observable<unknown> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`);
+  }
+
+  public updateSimilarity(match: number, other: unknown, dismissed: boolean): Observable<unknown> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.put(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`, {
+      dismissed: dismissed,
+      other: other,
+    });
   }
 
   public inFinalState(): boolean {
@@ -506,9 +514,11 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (response) => {},
+      (_response) => {
+        return;
+      },
       // Grade was not selected (modal was dismissed)
-      (dismissed) => {
+      (_dismissed) => {
         if (!isTestSubmission) {
           this.status = oldStatus;
         }
@@ -523,7 +533,7 @@ export class Task extends Entity {
       alerts.add(
         'warning',
         'You have submitted after the deadline for feedback. Your task will not be reviewed by a tutor. It is now your responsibility to ensure this task meets the required standard.',
-        6000
+        8000
       );
     }
 
@@ -560,7 +570,7 @@ export class Task extends Entity {
           options
         )
         .subscribe({
-          next: (response) => {
+          next: (_response) => {
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);
@@ -648,7 +658,7 @@ export class Task extends Entity {
     const http = AppInjector.get(HttpClient);
 
     http.delete(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
-      next: (data) => {
+      next: (_data) => {
         this.pinned = false;
       },
       error: (message) => {

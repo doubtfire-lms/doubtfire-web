@@ -40,6 +40,7 @@
         ],
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/no-this-alias": "warn",
         "no-dupe-class-members": "warn",
         "no-prototype-builtins": "warn",

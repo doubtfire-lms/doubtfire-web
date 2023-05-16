@@ -207,7 +207,7 @@
                 <p class="mat-small">
                   {{ task.shortTutorialDescription() }}
                 </p>
-                <p class="mat-small">Submitted {{ task.submissionDate | humanizedDate }}</p>
+                <p class="mat-small" [hidden]="!task.inSubmittedState()">Submitted {{ task.submissionDate | humanizedDate }}</p>
                 <p class="mat-small" [hidden]="!(task.timesAssessed > 0)">
                   Assessed {{ task.timesAssessed }} time{{ task.timesAssessed === 1 ? '' : 's' }}
                 </p>
