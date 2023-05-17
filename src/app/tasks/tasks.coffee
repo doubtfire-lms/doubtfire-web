@@ -5,5 +5,4 @@ angular.module('doubtfire.tasks', [
   'doubtfire.tasks.task-definition-editor'
   'doubtfire.tasks.task-definition-selector'
   'doubtfire.tasks.task-status-selector'
-  'doubtfire.tasks.task-submission-viewer'
 ])
