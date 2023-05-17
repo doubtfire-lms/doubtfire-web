@@ -1,6 +1,6 @@
 import { UnitRole, UnitService, User } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { AppInjector } from 'src/app/app-injector';
@@ -33,7 +33,8 @@ export class UserService extends CachedEntityService<User> {
       'receivePortfolioNotifications',
       'receiveFeedbackNotifications',
       'hasRunFirstTimeSetup',
-      'pronouns'
+      'pronouns',
+      'acceptedTiiEula'
     );
 
     this._currentUser = this.anonymousUser;
@@ -41,7 +42,8 @@ export class UserService extends CachedEntityService<User> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: any, other?: any): User {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  public createInstanceFrom(json: object, other?: any): User {
     return new User();
   }
 
