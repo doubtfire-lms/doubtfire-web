@@ -181,10 +181,6 @@ import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/api/models/models.js';
-import 'build/src/app/api/models/task-similarity.js';
-import 'build/src/app/api/api.js';
-import 'build/src/app/api/resource-plus.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/unauthorised/unauthorised.js';
 import 'build/src/app/errors/states/not-found/not-found.js';
@@ -266,7 +262,6 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
-  'doubtfire.api',
   'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
