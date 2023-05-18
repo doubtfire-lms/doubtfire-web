@@ -1,0 +1,24 @@
+button {
+  padding: 10px; // Set the padding of the button
+  border: none; // Remove the border of the button
+  border-radius: 5px; // Apply a border radius of 5px to create rounded corners
+  color: #fff; // Set the text color to white
+  background-color: #007bff; // Set the background color to a blue shade
+  transition: background-color 0.2s ease; // Apply a smooth transition effect to the background color
+
+  &:hover {
+    background-color: #0062cc; // Change the background color when the button is hovered over
+  }
+
+  &:active {
+    background-color: #005cbf; // Change the background color when the button is active (being clicked)
+  }
+
+  &[onLongPress] {
+    background-color: #dc3545; // Change the background color when the button has the onLongPress attribute applied
+
+    &:active {
+      background-color: #c82333; // Change the background color when the button is active (being clicked) and has the onLongPress attribute applied
+    }
+  }
+}
