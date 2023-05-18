@@ -197,6 +197,13 @@ import { TeachingPeriodListComponent } from './admin/states/teaching-periods/tea
 import { FChipComponent } from './common/f-chip/f-chip.component';
 import { TaskSimilarityViewComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import { FileViewerComponent } from './common/file-viewer/file-viewer.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { TaskDefinitionGeneralComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
+import { TaskDefinitionWhoComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
+import { TaskDefinitionDatesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-dates/task-definition-dates.component';
+import { TaskDefinitionUploadComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
+import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
+import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -229,6 +236,13 @@ export function playerFactory() {
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
+    TaskDefinitionEditorComponent,
+    TaskDefinitionGeneralComponent,
+    TaskDefinitionWhoComponent,
+    TaskDefinitionDatesComponent,
+    TaskDefinitionUploadComponent,
+    TaskDefinitionOptionsComponent,
+    TaskDefinitionResourcesComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,

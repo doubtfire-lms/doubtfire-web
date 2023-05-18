@@ -5,8 +5,9 @@ import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
 
-export class TaskDefinition extends Entity {
+export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
 
+export class TaskDefinition extends Entity {
   id: number;
   seq: number;
   abbreviation: string;
@@ -17,9 +18,9 @@ export class TaskDefinition extends Entity {
   targetDate: Date;
   dueDate: Date;
   startDate: Date;
-  uploadRequirements: {key: string, name: string, type: string}[];
-  tutorialStream: TutorialStream;
-  plagiarismChecks: {key: string, type: string, pattern: string}[];
+  uploadRequirements: UploadRequirement[];
+  tutorialStream: TutorialStream = null;
+  plagiarismChecks: { key: string; type: string; pattern: string }[] = [];
   plagiarismReportUrl: string;
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;
@@ -73,12 +74,16 @@ export class TaskDefinition extends Entity {
 
   public getTaskPDFUrl(asAttachment: boolean = false): string {
     const constants = AppInjector.get(DoubtfireConstants);
-    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_pdf.json${ asAttachment ? "?as_attachment=true" : ""}`;
+    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_pdf.json${
+      asAttachment ? '?as_attachment=true' : ''
+    }`;
   }
 
   public getTaskResourcesUrl(asAttachment: boolean = false) {
     const constants = AppInjector.get(DoubtfireConstants);
-    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources.json${ asAttachment ? "?as_attachment=true" : ""}`;
+    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources.json${
+      asAttachment ? '?as_attachment=true' : ''
+    }`;
   }
 
   public get targetGradeText(): string {
@@ -86,38 +91,47 @@ export class TaskDefinition extends Entity {
   }
 
   public hasPlagiarismCheck(): boolean {
-    return this.plagiarismChecks.length > 0;
+    return this.plagiarismChecks?.length > 0;
   }
 
   public get taskSheetUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_sheet`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_sheet`;
   }
 
   public get taskResourcesUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_resources`;
   }
 
   public get taskAssessmentResourcesUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_assessment_resources`;
   }
 
   public getTaskAssessmentResourcesUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources.json`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_assessment_resources.json`;
   }
 
   public deleteTaskSheet(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap( () => this.hasTaskSheet = false ));
+    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap(() => (this.hasTaskSheet = false)));
   }
 
   public deleteTaskResources(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskResourcesUploadUrl).pipe(tap( () => this.hasTaskResources = false ));
+    return httpClient.delete(this.taskResourcesUploadUrl).pipe(tap(() => (this.hasTaskResources = false)));
   }
 
   public deleteTaskAssessmentResources(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskAssessmentResourcesUploadUrl).pipe(tap( () => this.hasTaskAssessmentResources = false ));
+    return httpClient
+      .delete(this.taskAssessmentResourcesUploadUrl)
+      .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
   }
-
 }

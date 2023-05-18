@@ -1,0 +1,25 @@
+<mat-form-field>
+  <mat-label>Grade</mat-label>
+  <mat-select [(value)]="taskDefinition.targetGrade">
+    <mat-option *ngFor="let grade of grades" [value]="grade.value">{{ grade.viewValue }}</mat-option>
+  </mat-select>
+  <mat-hint>Grade where the task appears</mat-hint>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Abbreviation</mat-label>
+  <input matInput [(ngModel)]="taskDefinition.abbreviation" required />
+  <mat-hint>Week, sequence, and grade. eg 1.1P</mat-hint>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Task name</mat-label>
+  <input matInput [(ngModel)]="taskDefinition.name" required />
+  <mat-hint>Unique name for the task.</mat-hint>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Weight</mat-label>
+  <input matInput type="number" [(ngModel)]="taskDefinition.weighting" required />
+  <mat-hint>Effort relative to other tasks.</mat-hint>
+</mat-form-field>

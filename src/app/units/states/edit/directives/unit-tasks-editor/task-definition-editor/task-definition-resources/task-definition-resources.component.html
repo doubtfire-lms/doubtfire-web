@@ -1,0 +1,14 @@
+<span>
+  UPLOADER to {{ taskDefinition.taskSheetUploadUrl }}
+  <div *ngIf="taskDefinition.hasTaskSheet">
+    <button mat-button (click)="downloadTaskSheet()">Download</button>
+    <button mat-button color="warn" (click)="removeTaskSheet()">Delete</button>
+  </div>
+</span>
+<span>
+  UPLOADER to {{ taskDefinition.taskResourcesUploadUrl }}
+  <div *ngIf="taskDefinition.hasTaskResources">
+    <button mat-button (click)="downloadTaskResources()">Download</button>
+    <button mat-button color="warn" (click)="removeTaskResources()">Delete</button>
+  </div>
+</span>

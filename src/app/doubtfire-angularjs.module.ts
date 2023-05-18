@@ -42,7 +42,6 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
@@ -259,6 +258,7 @@ import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -349,6 +349,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'unitStudentsEditor',
   downgradeComponent({ component: UnitStudentsEditorComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'fTaskDefinitionEditor',
+  downgradeComponent({ component: TaskDefinitionEditorComponent })
 );
 DoubtfireAngularJSModule.directive(
   'studentTutorialSelect',

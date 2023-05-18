@@ -1,0 +1,25 @@
+<mat-form-field *ngIf="unit.hasGroupwork()">
+  <mat-label>Group</mat-label>
+  <mat-select required [(value)]="taskDefinition.groupSet">
+    <mat-option *ngFor="let gs of unit.groupSets" [value]="gs">{{ gs.name }}</mat-option>
+    <mat-option value="null">None - Individual Submission</mat-option>
+  </mat-select>
+  <mat-hint>Is this an individual or group task?</mat-hint>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Tutorial Stream</mat-label>
+  <mat-select required [(value)]="taskDefinition.tutorialStream">
+    <mat-option *ngFor="let stream of unit.tutorialStreams" [value]="stream">{{ stream.name }}</mat-option>
+  </mat-select>
+  <mat-hint>Which tutor will see the task</mat-hint>
+</mat-form-field>
+
+<span>
+  <strong>Related tutorials</strong>
+  <ul>
+    <li *ngFor="let tutorial of taskDefinition.tutorialStream?.tutorialsIn(unit)">
+      {{ tutorial.abbreviation }} {{ tutorial.tutor.name }}
+    </li>
+  </ul>
+</span>

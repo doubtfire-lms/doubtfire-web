@@ -5,13 +5,19 @@ import { Project } from 'src/app/api/models/project';
   providedIn: 'root',
 })
 export class GradeService {
-  constructor() {}
-
   gradeValues = [-1, 0, 1, 2, 3];
 
   allGradeValues = this.gradeValues;
 
-  grades = ['Fale', 'Pass', 'Credit', 'Distinction', 'High Distinction'];
+  grades = ['Fail', 'Pass', 'Credit', 'Distinction', 'High Distinction'];
+
+  gradeViewData = [
+    { value: -1, viewValue: 'Fail' },
+    { value: 0, viewValue: 'Pass' },
+    { value: 1, viewValue: 'Credit' },
+    { value: 2, viewValue: 'Distinction' },
+    { value: 3, viewValue: 'High Distinction' },
+  ];
 
   public gradeNumbers = {
     F: -1,
