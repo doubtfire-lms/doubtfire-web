@@ -205,6 +205,7 @@ import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/u
 import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import { TaskDefinitionSimilarityComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-similarity/task-definition-similarity.component';
 import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -246,6 +247,7 @@ export function playerFactory() {
     TaskDefinitionResourcesComponent,
     TaskDefinitionSimilarityComponent,
     TaskDefinitionOverseerComponent,
+    UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,

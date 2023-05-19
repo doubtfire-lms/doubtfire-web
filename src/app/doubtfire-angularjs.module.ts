@@ -138,12 +138,6 @@ import 'build/src/app/units/states/rollover/directives/directives.js';
 import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
-import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
-import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
-import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
-import 'build/src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.js';
-import 'build/src/app/units/states/analytics/directives/directives.js';
-import 'build/src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/long-press/on-long-press.js';
@@ -248,6 +242,7 @@ import { TaskAssessmentCardComponent } from './projects/states/dashboard/directi
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -312,6 +307,7 @@ DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
 );
+DoubtfireAngularJSModule.directive('fUnitAnalytics', downgradeComponent({ component: UnitAnalyticsComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
