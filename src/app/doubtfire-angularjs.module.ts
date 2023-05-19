@@ -92,8 +92,6 @@ import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/states/tutorials/tutorials.js';
 import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignment.js';
-import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
-import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
