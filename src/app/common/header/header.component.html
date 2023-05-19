@@ -40,9 +40,6 @@
     <mat-icon>admin_panel_settings</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item uiSref="admin/teachingperiods" *ngIf="currentUser.role === 'Admin'">
-      Manage Teaching Periods
-    </button>
     <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
       Institution Settings
     </button>
