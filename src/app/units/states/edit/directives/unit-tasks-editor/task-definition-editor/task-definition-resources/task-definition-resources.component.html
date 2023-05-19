@@ -1,5 +1,5 @@
 <span>
-  UPLOADER to {{ taskDefinition.taskSheetUploadUrl }}
+  <div appDragDrop (fileDropped)="uploadTaskSheet($event)"><mat-icon>upload</mat-icon> Task Sheet</div>
   <div *ngIf="taskDefinition.hasTaskSheet">
     <button mat-button (click)="downloadTaskSheet()">Download</button>
     <button mat-button color="warn" (click)="removeTaskSheet()">Delete</button>

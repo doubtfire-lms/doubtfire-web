@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { MappingFunctions } from './mapping-fn';
+import { AppInjector } from 'src/app/app-injector';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -113,5 +115,11 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
 
   public override createInstanceFrom(json: object, other?: any): TaskDefinition {
     return new TaskDefinition(other as Unit);
+  }
+
+  public uploadTaskSheet(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskSheetUploadUrl, formData);
   }
 }
