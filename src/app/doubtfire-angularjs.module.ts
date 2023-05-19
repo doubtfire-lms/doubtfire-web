@@ -56,7 +56,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
-import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
@@ -238,7 +237,6 @@ import {
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
@@ -372,7 +370,6 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
 DoubtfireAngularJSModule.directive(
   'taskAssessmentComment',
   downgradeComponent({ component: TaskAssessmentCommentComponent })

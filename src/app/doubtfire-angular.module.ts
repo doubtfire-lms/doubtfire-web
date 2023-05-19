@@ -160,7 +160,6 @@ import { FileDownloaderService } from './common/file-downloader/file-downloader'
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
@@ -271,7 +270,6 @@ export function playerFactory() {
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
-    TaskAssessorComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
