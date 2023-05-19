@@ -7,6 +7,8 @@ import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
 
 export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
 
+export type SimilarityCheck = { key: string; type: string; pattern: string };
+
 export class TaskDefinition extends Entity {
   id: number;
   seq: number;
@@ -20,7 +22,7 @@ export class TaskDefinition extends Entity {
   startDate: Date;
   uploadRequirements: UploadRequirement[];
   tutorialStream: TutorialStream = null;
-  plagiarismChecks: { key: string; type: string; pattern: string }[] = [];
+  plagiarismChecks: SimilarityCheck[] = [];
   plagiarismReportUrl: string;
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;

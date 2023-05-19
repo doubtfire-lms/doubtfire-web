@@ -59,7 +59,31 @@
     <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
   </mat-expansion-panel>
 
-  <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)" hideToggle>
+  <mat-expansion-panel [expanded]="step === 7" (opened)="setStep(7)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Code Similarity </mat-panel-title>
+      <mat-panel-description>
+        Enable MOSS similarity checks
+        <mat-icon>manage_search</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-similarity [taskDefinition]="taskDefinition"></f-task-definition-similarity>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 8" (opened)="setStep(8)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Automated Assessment </mat-panel-title>
+      <mat-panel-description>
+        Configure Overseer for automated assessment
+        <mat-icon>smart_toy</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 9" (opened)="setStep(9)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title> Options </mat-panel-title>
       <mat-panel-description>
@@ -71,3 +95,5 @@
     <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
   </mat-expansion-panel>
 </mat-accordion>
+
+<button mat-button mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>

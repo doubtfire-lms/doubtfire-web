@@ -107,9 +107,9 @@
           </button>
         </div>
       </div><!--/tasks-overview-->
-      {{taskAdminData.selectedTask.abbreviation}}
       <f-task-definition-editor ng-if="taskAdminData.selectedTask"
         [task-definition]="taskAdminData.selectedTask"
+        [unit]="unit"
         [is-new]="taskAdminData.isNew"></f-task-definition-editor>
     </div>
     <div class="col-md-3">

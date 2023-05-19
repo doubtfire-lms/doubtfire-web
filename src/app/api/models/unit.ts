@@ -384,7 +384,7 @@ export class Unit extends Entity {
   }
 
   public overseerEnabled(): boolean {
-    return this.assessmentEnabled && this.overseerImageId !== null && this.overseerImageId !== undefined;
+    return this.assessmentEnabled && AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value; // && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 
   private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
