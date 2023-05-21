@@ -1,0 +1,19 @@
+<div class="panel panel-pdf panel-default">
+  <ng-container *ngIf="!taskDef">
+    <div class="panel-heading">
+      <div class="panel-title">No Task Selected</div>
+    </div>
+    <div class="panel-body no-pdf">
+      <i class="fa fa-question-circle"></i>
+      <span> This task has no task sheet </span>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="taskDef">
+    <div class="panel-heading">
+      <div class="panel-title">{{ taskDef.name }}</div>
+    </div>
+    <div class="panel-body has-pdf">
+      <f-pdf-viewer [pdf-url]="urls.taskPdfUrl"></f-pdf-viewer>
+    </div>
+  </ng-container>
+</div>
