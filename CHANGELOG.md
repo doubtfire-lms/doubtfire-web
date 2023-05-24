@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.9](https://github.com/macite/doubtfire-deploy/compare/v7.0.7...v7.0.9) (2023-05-24)
+
+
+### Bug Fixes
+
+* delete for project portfolio ([1f2d603](https://github.com/macite/doubtfire-deploy/commit/1f2d603ed582198931f0454f6fe73d3592f3d516))
+* portfolio task list performance ([6ecef85](https://github.com/macite/doubtfire-deploy/commit/6ecef85471542bd308d0041e098bd58a7e216455))
+
 ### [7.0.8](https://github.com/macite/doubtfire-deploy/compare/v7.0.6...v7.0.8) (2023-05-24)
 
 
