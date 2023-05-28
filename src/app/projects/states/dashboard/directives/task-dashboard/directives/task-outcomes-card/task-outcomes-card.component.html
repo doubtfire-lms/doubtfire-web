@@ -1,0 +1,39 @@
+<mat-card class="outcomes-card" *ngIf="alignments.length > 0">
+    <div class="outcomes-card-head">
+      <div class="outcomes-card-head-title">Intended Learning Outcomes</div>
+      <div class="text-muted">
+        Teaching staff believe that completing this task will help you achieve
+        the outcomes listed below.
+      </div>
+    </div>
+    <div class="outcomes-card-list">
+      <button
+        class="clearfix list-group-item"
+        *ngFor="let alignment of alignments"
+        (click)="alignment.collapsed = !alignment.collapsed">
+        <heading>
+          <div class="list-group-head">
+            <h4>
+              <mat-icon aria-hidden="false" aria-label="navigate_next">navigate_next</mat-icon>
+              <div class="list-group-abbreviation">{{alignment.learningOutcome.abbreviation}}</div>
+              <div class="list-group-name">{{alignment.learningOutcome.name}}</div>
+            </h4>
+          </div>
+          <task-ilo-alignment-star [alignment]="alignment"></task-ilo-alignment-star>
+        </heading>
+        <div class="list-group-content" *ngIf="alignment.collapsed">
+          <ul>
+            <li>
+              <div class="list-group-content-desc">Outcome Description</div>
+              <div class="markdown-to-html" [innerHTML]="alignment.learningOutcome.description | marked"></div>
+            </li>
+            <li>
+              <div class="list-group-content-desc">Rationale</div>
+              <div class="markdown-to-html" [innerHTML]="alignment.description | marked"></div>
+            </li>
+          </ul>
+        </div>
+      </button>
+    </div>
+  </mat-card>
+  
