@@ -1,0 +1,11 @@
+<div class="task-ilo-alignment-star">
+  <div *ngFor="let star of starList" class="alignment-star">
+    <span *ngIf="star">
+      <mat-icon aria-hidden="false" aria-label="star">star</mat-icon>
+    </span>
+    <span *ngIf="!star">
+      <mat-icon aria-hidden="false" aria-label="star border">star_border</mat-icon>
+    </span>
+  </div>
+</div>
+  
