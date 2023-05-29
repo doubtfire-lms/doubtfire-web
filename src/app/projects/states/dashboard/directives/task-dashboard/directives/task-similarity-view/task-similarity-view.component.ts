@@ -4,6 +4,7 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Task } from 'src/app/api/models/task';
 import { TaskSimilarity } from 'src/app/api/models/task-similarity';
 import { TaskSimilarityService } from 'src/app/api/services/task-similarity.service';
+import { AlertService } from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -15,7 +16,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   panelOpenState = false;
 
-  constructor(private taskSimilarityService: TaskSimilarityService, @Inject(alertService) private alerts: any) { }
+  constructor(private taskSimilarityService: TaskSimilarityService, private alertsService: AlertService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
@@ -32,7 +33,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     this.taskSimilarityService
       .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
       .subscribe((_) => {
-        this.alerts.add('success', 'Updated', 1500);
+        this.alertsService.success('Updated', 120000);
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
           .map((s) => {
             return s.flagged;
