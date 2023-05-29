@@ -1,0 +1,8 @@
+.task-definition-editor .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-definition-editor .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}

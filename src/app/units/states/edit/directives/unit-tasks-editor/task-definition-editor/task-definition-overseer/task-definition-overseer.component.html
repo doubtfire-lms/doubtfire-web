@@ -1,0 +1,41 @@
+<mat-form-field floatPlaceholder="always" class="mat-form-field--no-underline">
+  <!-- <mat-label>Disable student interaction after feedback</mat-label> -->
+  <input matInput placeholder="Hidden" style="display: none" />
+  <mat-checkbox matInput required [(ngModel)]="taskDefinition.assessmentEnabled" [disabled]="!overseerEnabled"
+    >Automation Enabled</mat-checkbox
+  >
+  <mat-hint>Utilise Overseer for automated feedback</mat-hint>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Docker Image</mat-label>
+  <mat-select [(value)]="taskDefinition.overseerImageId" [disabled]="!overseerEnabled">
+    <mat-option *ngFor="let image of images | async" [value]="image.id">{{ image.description }}</mat-option>
+  </mat-select>
+  <mat-hint>Docker image for Overseer</mat-hint>
+</mat-form-field>
+
+<span *ngIf="taskDefinition?.id"> UPLOADER to {{ taskDefinition.taskAssessmentResourcesUploadUrl }} </span>
+
+<span>
+  <button
+    mat-button
+    mat-raised-button
+    color="primary"
+    [disabled]="!taskDefinition.id || !taskDefinition.hasTaskAssessmentResources"
+    (click)="testSubmission()"
+    style="width: 100%; line-height: 36px; padding: 0 16px"
+  >
+    <mat-icon>upload_file</mat-icon> Test Submission
+  </button>
+  <button
+    mat-button
+    mat-raised-button
+    color="accent"
+    [disabled]="!currentUserTask"
+    (click)="testSubmissionHistory()"
+    style="width: 100%; line-height: 36px; padding: 0 16px"
+  >
+    <mat-icon>preview</mat-icon> Test Submission History
+  </button>
+</span>

@@ -1,0 +1,99 @@
+<mat-accordion class="task-definition-editor">
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Name and Grade </mat-panel-title>
+      <mat-panel-description>
+        Provide naming and grade details for this task
+        <mat-icon>star</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Who? </mat-panel-title>
+      <mat-panel-description>
+        Who submits and who reviews the task
+        <mat-icon>school</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Dates </mat-panel-title>
+      <mat-panel-description>
+        Indicate when things are due
+        <mat-icon>date_range</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Upload Requirements </mat-panel-title>
+      <mat-panel-description>
+        Indicate what students need to upload
+        <mat-icon>upload-file</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 6" (opened)="setStep(6)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Task Instructions and Resources </mat-panel-title>
+      <mat-panel-description>
+        Upload task instructions and resources
+        <mat-icon>description</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 7" (opened)="setStep(7)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Code Similarity </mat-panel-title>
+      <mat-panel-description>
+        Enable MOSS similarity checks
+        <mat-icon>manage_search</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-similarity [taskDefinition]="taskDefinition"></f-task-definition-similarity>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 8" (opened)="setStep(8)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Automated Assessment </mat-panel-title>
+      <mat-panel-description>
+        Configure Overseer for automated assessment
+        <mat-icon>smart_toy</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 9" (opened)="setStep(9)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Options </mat-panel-title>
+      <mat-panel-description>
+        Configure optional components
+        <mat-icon>settings</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<button mat-button mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>

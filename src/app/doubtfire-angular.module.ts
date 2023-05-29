@@ -161,7 +161,6 @@ import { FileDownloaderService } from './common/file-downloader/file-downloader'
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
@@ -198,6 +197,16 @@ import { TeachingPeriodListComponent } from './admin/states/teaching-periods/tea
 import { FChipComponent } from './common/f-chip/f-chip.component';
 import { TaskSimilarityViewComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import { FileViewerComponent } from './common/file-viewer/file-viewer.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { TaskDefinitionGeneralComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
+import { TaskDefinitionWhoComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
+import { TaskDefinitionDatesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-dates/task-definition-dates.component';
+import { TaskDefinitionUploadComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
+import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
+import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
+import { TaskDefinitionSimilarityComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-similarity/task-definition-similarity.component';
+import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -230,6 +239,16 @@ export function playerFactory() {
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
     UnitStudentsEditorComponent,
+    TaskDefinitionEditorComponent,
+    TaskDefinitionGeneralComponent,
+    TaskDefinitionWhoComponent,
+    TaskDefinitionDatesComponent,
+    TaskDefinitionUploadComponent,
+    TaskDefinitionOptionsComponent,
+    TaskDefinitionResourcesComponent,
+    TaskDefinitionSimilarityComponent,
+    TaskDefinitionOverseerComponent,
+    UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,
@@ -254,7 +273,6 @@ export function playerFactory() {
     TasksForInboxSearchPipe,
     StatusIconComponent,
     TaskPlagiarismCardComponent,
-    TaskAssessorComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,

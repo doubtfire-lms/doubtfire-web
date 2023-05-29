@@ -1,0 +1,43 @@
+<p><button mat-button (click)="addUpReq()">Add</button></p>
+
+<mat-card *ngFor="let upreq of taskDefinition.uploadRequirements" class="upload-card">
+  <mat-card-content>
+    <mat-form-field>
+      <mat-label>Filename</mat-label>
+      <input matInput [(ngModel)]="upreq.name" required />
+      <mat-hint>File to be uploaded</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field floatPlaceholder="always" class="mat-form-field--no-underline">
+      <!-- <mat-label>Disable student interaction after feedback</mat-label> -->
+      <input matInput placeholder="Hidden" style="display: none" />
+      <mat-button-toggle-group
+        name="uploadReq{{ upreq.name }}"
+        aria-label="Upload requirement"
+        [(ngModel)]="upreq.type"
+      >
+        <mat-button-toggle value="code">Code</mat-button-toggle>
+        <mat-button-toggle value="document">Document</mat-button-toggle>
+        <mat-button-toggle value="image">Image</mat-button-toggle>
+      </mat-button-toggle-group>
+      <!-- <mat-hint>The kind of file required</mat-hint> -->
+    </mat-form-field>
+
+    <mat-form-field floatPlaceholder="always" class="mat-form-field--no-underline" *ngIf="upreq.type === 'document'">
+      <!-- <mat-label>Disable student interaction after feedback</mat-label> -->
+      <input matInput placeholder="Hidden" style="display: none" />
+      <mat-checkbox matInput required [(ngModel)]="upreq.tiiCheck">Check with TurnItIn</mat-checkbox>
+      <!-- <mat-hint>Check with TurnItIn</mat-hint> -->
+    </mat-form-field>
+
+    <mat-form-field *ngIf="upreq.type === 'document'">
+      <mat-label>TurnItIn flag percent</mat-label>
+      <input matInput [(value)]="upreq.tiiCheck" type="number" />
+      <!-- <mat-hint>Check with TurnItIn</mat-hint> -->
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button color="warn" (click)="removeUpReq(upreq)"><mat-icon>delete</mat-icon></button>
+  </mat-card-actions>
+</mat-card>

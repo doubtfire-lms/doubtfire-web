@@ -42,7 +42,6 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
@@ -57,7 +56,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
-import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
@@ -94,20 +92,11 @@ import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/states/tutorials/tutorials.js';
 import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignment.js';
-import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
-import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
-import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
 import 'build/src/app/admin/states/units/units.js';
 import 'build/src/app/admin/states/users/users.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-units/teaching-period-units.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/directives.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/edit-teaching-period.js';
 import 'build/src/app/admin/admin.js';
 import 'build/src/app/groups/group-selector/group-selector.js';
 import 'build/src/app/groups/group-set-manager/group-set-manager.js';
@@ -149,12 +138,6 @@ import 'build/src/app/units/states/rollover/directives/directives.js';
 import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
-import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
-import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
-import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
-import 'build/src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.js';
-import 'build/src/app/units/states/analytics/directives/directives.js';
-import 'build/src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/long-press/on-long-press.js';
@@ -181,10 +164,6 @@ import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/api/models/models.js';
-import 'build/src/app/api/models/task-similarity.js';
-import 'build/src/app/api/api.js';
-import 'build/src/app/api/resource-plus.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/unauthorised/unauthorised.js';
 import 'build/src/app/errors/states/not-found/not-found.js';
@@ -243,7 +222,6 @@ import {
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
@@ -263,10 +241,11 @@ import { FooterComponent } from './common/footer/footer.component';
 import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
-  'doubtfire.api',
   'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
@@ -328,6 +307,7 @@ DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
   downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
 );
+DoubtfireAngularJSModule.directive('fUnitAnalytics', downgradeComponent({ component: UnitAnalyticsComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
@@ -356,6 +336,10 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: UnitStudentsEditorComponent })
 );
 DoubtfireAngularJSModule.directive(
+  'fTaskDefinitionEditor',
+  downgradeComponent({ component: TaskDefinitionEditorComponent })
+);
+DoubtfireAngularJSModule.directive(
   'studentTutorialSelect',
   downgradeComponent({ component: StudentTutorialSelectComponent })
 );
@@ -373,7 +357,6 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({ component: TaskDescriptionCardComponent })
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
 DoubtfireAngularJSModule.directive(
   'taskAssessmentComment',
   downgradeComponent({ component: TaskAssessmentCommentComponent })

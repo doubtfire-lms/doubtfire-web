@@ -1,9 +1,9 @@
 <div class="container">
-  <tabset class="tabset-icon">
+  <!-- <tabset class="tabset-icon">
     <tab ng-repeat="tab in tabs | toArray | orderBy: 'seq'" active="tab.active" ng-click="setActiveTab(tab)">
       <tab-heading>{{tab.title}}</tab-heading>
     </tab>
-  </tabset><!--/tabs-->
+  </tabset>
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">
@@ -18,5 +18,6 @@
     <unit-target-grade-stats unit="unit" ng-if="activeTab === tabs.targetGradeStats"></unit-target-grade-stats>
     <task-completion-stats unit="unit" ng-if="activeTab === tabs.taskCompletionStats"></task-completion-stats>
     <unit-achievement-stats unit="unit" ng-if="activeTab === tabs.achievementStats"></unit-achievement-stats>
-  </div><!--/tab-contents-panel-->
+  </div> -->
+  <f-unit-analytics [unit]="unit"></f-unit-analytics>
 </div>

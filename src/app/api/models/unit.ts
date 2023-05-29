@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
@@ -8,7 +7,22 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { GroupService } from '../services/group.service';
 import { ProjectService } from '../services/project.service';
 import { TaskDefinitionService } from '../services/task-definition.service';
-import { OverseerImage, User, UnitRole, Task, TeachingPeriod, TaskDefinition, TutorialStream, Tutorial, TutorialEnrolment, GroupSet, Group, TaskOutcomeAlignment, GroupMembership, UnitService, Project, TutorialStreamService} from './doubtfire-model';
+import {
+  User,
+  UnitRole,
+  Task,
+  TeachingPeriod,
+  TaskDefinition,
+  TutorialStream,
+  Tutorial,
+  GroupSet,
+  Group,
+  TaskOutcomeAlignment,
+  GroupMembership,
+  UnitService,
+  Project,
+  TutorialStreamService,
+} from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 
 export class Unit extends Entity {
@@ -47,7 +61,8 @@ export class Unit extends Entity {
   public readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
   public readonly taskDefinitionCache: EntityCache<TaskDefinition> = new EntityCache<TaskDefinition>();
-  public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> = new EntityCache<TaskOutcomeAlignment>();
+  public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
+    new EntityCache<TaskOutcomeAlignment>();
 
   readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
@@ -78,11 +93,11 @@ export class Unit extends Entity {
   }
 
   public get staffUsers(): readonly User[] {
-    return this.staffCache.currentValues.map( (ur) => ur.user);
+    return this.staffCache.currentValues.map((ur) => ur.user);
   }
 
   public findStudent(id: number): Project {
-    return this.students.find( (s) => s.id === id);
+    return this.students.find((s) => s.id === id);
   }
 
   public studentEnrolled(id: number): boolean {
@@ -90,11 +105,11 @@ export class Unit extends Entity {
   }
 
   public get currentUserIsStaff(): boolean {
-    return this.myRole !== "Student";
+    return this.myRole !== 'Student';
   }
 
   public get currentUserIsConvenor(): boolean {
-    return this.myRole === "Convenor" || this.myRole === "Admin";
+    return this.myRole === 'Convenor' || this.myRole === 'Admin';
   }
 
   public get taskDefinitions(): readonly TaskDefinition[] {
@@ -109,10 +124,14 @@ export class Unit extends Entity {
     const taskDefinitionService = AppInjector.get(TaskDefinitionService);
     const alerts: any = AppInjector.get(alertService);
 
-    taskDefinitionService.delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef}).subscribe({
-      next: (response) => {alerts.add("success", "Task Deleted", 2000)},
-      error: (message) => alerts.add("danger", message, 6000)
-    });
+    taskDefinitionService
+      .delete({ unitId: this.id, id: taskDef.id }, { cache: this.taskDefinitionCache, entity: taskDef })
+      .subscribe({
+        next: (response) => {
+          alerts.add('success', 'Task Deleted', 2000);
+        },
+        error: (message) => alerts.add('danger', message, 6000),
+      });
   }
 
   public taskCount(): number {
@@ -142,7 +161,7 @@ export class Unit extends Entity {
    */
   public tutorialStreamForAbbr(abbr: string): TutorialStream {
     if (abbr) {
-      return this.tutorialStreams.find(ts => ts.abbreviation === abbr);
+      return this.tutorialStreams.find((ts) => ts.abbreviation === abbr);
     } else {
       return null;
     }
@@ -166,18 +185,18 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: { start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: { teaching_period_id: Number}): Observable<Unit>;
-  public rolloverTo(body: any): Observable<Unit>  {
+  public rolloverTo(body: { start_date: Date; end_date: Date }): Observable<Unit>;
+  public rolloverTo(body: { teaching_period_id: number }): Observable<Unit>;
+  public rolloverTo(body: any): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 
     return unitService.create(
       {
-        id: this.id
+        id: this.id,
       },
       {
         endpointFormat: unitService.rolloverEndpoint,
-        body: body
+        body: body,
       }
     );
   }
@@ -187,15 +206,15 @@ export class Unit extends Entity {
   }
 
   public get activeStudents(): readonly Project[] {
-    return this.studentCache.currentValues.filter( p => p.enrolled );
+    return this.studentCache.currentValues.filter((p) => p.enrolled);
   }
 
   public tutorialsForUserName(userName: string): Tutorial[] {
-    return this.tutorials.filter(tutorial => tutorial.tutorName === userName);
+    return this.tutorials.filter((tutorial) => tutorial.tutorName === userName);
   }
 
-  public incorporateTasks(tasks: Task[]) : void {
-    tasks.forEach( (t) => {
+  public incorporateTasks(tasks: Task[]): void {
+    tasks.forEach((t) => {
       const project = this.findStudent(t.project.id);
       if (project) {
         project.incorporateTask(t);
@@ -208,18 +227,18 @@ export class Unit extends Entity {
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
     // Now fill for the students in the unit
-    return this.students.map( (p) => {
+    return this.students.map((p) => {
       // See if we already have the task
-      var t = tasks.find(t => t.project.id === p.id && t.definition.id === td.id);
+      let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
       if (!t) {
         // No task in array, find task in project
-        t = p.tasks.find( t => t.definition.id == td.id );
+        t = p.tasks.find((t) => t.definition.id == td.id);
       }
 
       if (!t) {
         t = new Task(p);
         t.definition = td;
-        t.status = "not_started";
+        t.status = 'not_started';
       }
 
       return t;
@@ -228,15 +247,17 @@ export class Unit extends Entity {
 
   public refresh(): void {
     const alerts: any = AppInjector.get(alertService);
-    AppInjector.get(UnitService).fetch(this.id).subscribe({
-      next: (unit) => {},
-      error: (message) => alerts.add("danger", message, 6000)
-    });
+    AppInjector.get(UnitService)
+      .fetch(this.id)
+      .subscribe({
+        next: (unit) => {},
+        error: (message) => alerts.add('danger', message, 6000),
+      });
   }
 
   public setupTasksForStudent(project: Project) {
     // create not started tasks...
-    this.taskDefinitions.forEach(taskDefinition => {
+    this.taskDefinitions.forEach((taskDefinition) => {
       if (!project.findTaskForDefinition(taskDefinition.id)) {
         const task = new Task(project);
         task.definition = taskDefinition;
@@ -265,19 +286,22 @@ export class Unit extends Entity {
     //     alertService.add("danger", "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
     // )
 
-    console.log("implement refresh groups");
+    console.log('implement refresh groups');
   }
 
   public getGroups(groupSet: GroupSet): Observable<Group[]> {
     const groupService: GroupService = AppInjector.get(GroupService);
 
-    return groupService.query( {
-      unitId: this.id,
-      groupSetId: groupSet.id
-    }, {
-      cache: groupSet.groupsCache,
-      constructorParams: this
-    });
+    return groupService.query(
+      {
+        unitId: this.id,
+        groupSetId: groupSet.id,
+      },
+      {
+        cache: groupSet.groupsCache,
+        constructorParams: this,
+      }
+    );
   }
 
   public findGroupSet(id: number): GroupSet {
@@ -293,11 +317,13 @@ export class Unit extends Entity {
   }
 
   public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
-    return this.taskOutcomeAlignments.filter( (alignment: TaskOutcomeAlignment) => {
-      return alignment.taskDefinition.id === td.id;
-    }).sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
-      return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
-    });
+    return this.taskOutcomeAlignments
+      .filter((alignment: TaskOutcomeAlignment) => {
+        return alignment.taskDefinition.id === td.id;
+      })
+      .sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
+        return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+      });
   }
 
   public get taskAlignmentCSVUploadUrl(): string {
@@ -312,7 +338,7 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
   }
 
-  public hasStreams() : boolean {
+  public hasStreams(): boolean {
     return this.tutorialStreamsCache.size > 1;
   }
 
@@ -320,25 +346,28 @@ export class Unit extends Entity {
     const tutorialStreamService = AppInjector.get(TutorialStreamService);
 
     return tutorialStreamService.create(
-      {unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined},
-      {cache: this.tutorialStreamsCache});
+      { unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined },
+      { cache: this.tutorialStreamsCache }
+    );
   }
 
   public deleteStream(stream: TutorialStream): Observable<boolean> {
     const tutorialStreamService = AppInjector.get(TutorialStreamService);
 
-    return tutorialStreamService.delete<boolean>({unit_id: this.id, abbreviation: stream.abbreviation}, {cache: this.tutorialStreamsCache}).pipe(
-      tap( (response: boolean) => {
-        if(response) {
-          const tutorials = this.tutorialsCache.currentValues;
-          tutorials.forEach((t) => {
-            if (t.tutorialStream === stream) {
-              this.tutorialsCache.delete(t);
-            }
-          });
-        }
-      })
-    );
+    return tutorialStreamService
+      .delete<boolean>({ unit_id: this.id, abbreviation: stream.abbreviation }, { cache: this.tutorialStreamsCache })
+      .pipe(
+        tap((response: boolean) => {
+          if (response) {
+            const tutorials = this.tutorialsCache.currentValues;
+            tutorials.forEach((t) => {
+              if (t.tutorialStream === stream) {
+                this.tutorialsCache.delete(t);
+              }
+            });
+          }
+        })
+      );
   }
 
   public refreshStudents(includeWithdrawnStudents: boolean = false) {
@@ -347,7 +376,7 @@ export class Unit extends Entity {
   }
 
   public findProjectForUsername(username: string): Project {
-    return this.students.find( (s) => s.student.username === username);
+    return this.students.find((s) => s.student.username === username);
   }
 
   public get groupSets(): readonly GroupSet[] {
@@ -355,11 +384,11 @@ export class Unit extends Entity {
   }
 
   public overseerEnabled(): boolean {
-    return this.assessmentEnabled && this.overseerImageId !== null && this.overseerImageId !== undefined;
+    return this.assessmentEnabled && AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value; // && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 
   private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
-    students.forEach(project => {
+    students.forEach((project) => {
       appendTo.push(project.student.name);
       appendTo.push(project.student.username);
     });
@@ -368,9 +397,9 @@ export class Unit extends Entity {
   public get studentFilterTypeAheadData(): string[] {
     const result: string[] = [];
 
-    this.tutorials.forEach( tute => {
+    this.tutorials.forEach((tute) => {
       result.push(tute.abbreviation);
-      if(!result.includes(tute.tutorName)) {
+      if (!result.includes(tute.tutorName)) {
         result.push(tute.tutorName);
       }
     });
@@ -387,10 +416,10 @@ export class Unit extends Entity {
 
     if (gs.keepGroupsInSameClass) {
       result = this.activeStudents.filter(
-        (student) => (student.isEnrolledIn(group.tutorial)) && (! members.has(student.id)));
+        (student) => student.isEnrolledIn(group.tutorial) && !members.has(student.id)
+      );
     } else {
-      result = this.activeStudents.filter(
-        (student) => ! members.has(student.id));
+      result = this.activeStudents.filter((student) => !members.has(student.id));
     }
 
     return result;
@@ -433,10 +462,16 @@ export class Unit extends Entity {
   }
 
   public downloadTaskCompletionCsv(): void {
-    AppInjector.get(FileDownloaderService).downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_completion.json`, `${this.name}-task-completion.csv`);
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_completion.json`,
+      `${this.name}-task-completion.csv`
+    );
   }
 
   public downloadTutorAssessmentCsv(): void {
-    AppInjector.get(FileDownloaderService).downloadFile(`${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`, `${this.name}-tutor-assessments.csv`);
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`,
+      `${this.name}-tutor-assessments.csv`
+    );
   }
 }
