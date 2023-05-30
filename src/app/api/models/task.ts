@@ -62,6 +62,20 @@ export class Task extends Entity {
     }
   }
 
+  /**
+   * Provide the project id to allow mapping in service.
+   */
+  public get projectId(): number {
+    return this.project.id;
+  }
+
+  /**
+   * Provide the task definition id to allow mapping in service.
+  */
+  public get taskDefId(): number {
+    return this.definition.id;
+  }
+
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
   }
