@@ -246,6 +246,11 @@ angular.module("doubtfire.common.filters", [])
     )
 )
 
+.filter('tasksForGroupset', ->
+  (input, groupSet) ->
+    return input unless input?
+    return input.filter (task) -> (task.definition.groupSet == groupSet) || (!task.definition.groupSet? && !groupSet?)
+)
 
 .filter('paginateAndSort', ($filter) ->
   (input, pagination, tableSort) ->

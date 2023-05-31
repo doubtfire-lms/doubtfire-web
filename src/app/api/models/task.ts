@@ -65,6 +65,20 @@ export class Task extends Entity {
     }
   }
 
+  /**
+   * Provide the project id to allow mapping in service.
+   */
+  public get projectId(): number {
+    return this.project.id;
+  }
+
+  /**
+   * Provide the task definition id to allow mapping in service.
+  */
+  public get taskDefId(): number {
+    return this.definition.id;
+  }
+
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
   }
@@ -73,8 +87,7 @@ export class Task extends Entity {
     AppInjector.get(TaskCommentService)
       .addComment(this, textString, 'text')
       .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-        next: (_) => {},
+        next: (tc) => {},
         error: (error) => {
           console.log(error);
         },
@@ -368,7 +381,7 @@ export class Task extends Entity {
     return httpClient.get(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`);
   }
 
-  public updateSimilarity(match: number, other: unknown, dismissed: boolean): Observable<unknown> {
+  public updateSimilarity(match: number, other: any, dismissed: boolean): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.put(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`, {
       dismissed: dismissed,
@@ -514,9 +527,7 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (_response) => {
-        return;
-      },
+      (response) => {},
       // Grade was not selected (modal was dismissed)
       (_dismissed) => {
         if (!isTestSubmission) {
@@ -570,7 +581,7 @@ export class Task extends Entity {
           options
         )
         .subscribe({
-          next: (_response) => {
+          next: (response) => {
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);

@@ -269,7 +269,7 @@ export class Project extends Entity {
 
   public deletePortfolio(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete<void>(`/submission/project/${this.id}/portfolio`);
+    return httpClient.delete<void>(this.portfolioUrl(false));
   }
 
   public deleteFileFromPortfolio(file: { idx: any; kind: any; name: any }) {
