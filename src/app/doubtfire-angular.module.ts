@@ -40,6 +40,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { AlertComponent } from 'src/app/common/services/alert.service';
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
@@ -298,6 +299,7 @@ export function playerFactory() {
     FChipComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
+    AlertComponent,
   ],
   // Module Imports
   imports: [

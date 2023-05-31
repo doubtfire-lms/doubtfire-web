@@ -1,8 +1,8 @@
-import { Component, Inject, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { FileDownloaderService } from '../file-downloader/file-downloader';
-import { alertService } from 'src/app/ajs-upgraded-providers';
 import { HttpResponse } from '@angular/common/http';
 import { PDFProgressData } from 'ng2-pdf-viewer';
+import { AlertService } from '../services/alert.service';
 
 /**
  * The file viewer downloads a file from a URL and displays it's contents.
@@ -50,7 +50,7 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
    * @param fileDownloader is used to download the resources from the api
    * @param alerts is used to render alerts
    */
-  constructor(private fileDownloader: FileDownloaderService, @Inject(alertService) private alerts: any) {}
+  constructor(private fileDownloader: FileDownloaderService, private alertService: AlertService) {}
 
   /**
    * When destroyed, the component must free its resources.
@@ -102,7 +102,7 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
         this.blobUrl = url;
       },
       (error: any) => {
-        this.alerts.add('danger', `Error downloading resource. ${error}`, 6000);
+        this.alertService.error(`Error downloading resource. ${error}`);
       }
     );
   }

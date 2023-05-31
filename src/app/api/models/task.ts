@@ -20,7 +20,8 @@ import { Grade } from './grade';
 import { LOCALE_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { alertService, gradeTaskModal, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
+import { gradeTaskModal, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
+import { AlertService } from 'src/app/common/services/alert.service';
 import { MappingFunctions } from '../services/mapping-fn';
 
 export class Task extends Entity {
@@ -533,31 +534,30 @@ export class Task extends Entity {
         if (!isTestSubmission) {
           this.status = oldStatus;
         }
-        const alerts: any = AppInjector.get(alertService);
+        const alerts: any = AppInjector.get(AlertService);
         alerts.add('info', 'Submission cancelled. Status was reverted.', 6000);
       }
     );
   }
 
-  public processTaskStatusChange(expectedStatus: TaskStatusEnum, alerts: any) {
+  public processTaskStatusChange(expectedStatus: TaskStatusEnum, alerts: AlertService) {
     if (this.inTimeExceeded() && !this.isPastDeadline()) {
-      alerts.add(
-        'warning',
+      alerts.message(
         'You have submitted after the deadline for feedback. Your task will not be reviewed by a tutor. It is now your responsibility to ensure this task meets the required standard.',
         8000
       );
     }
 
     if (this.status !== expectedStatus) {
-      alerts.add('info', `Status changed to ${this.statusLabel()}.`, 4000);
+      alerts.message(`Status changed to ${this.statusLabel()}.`, 4000);
     } else {
-      alerts.add('success', 'Status saved.', 2000);
+      alerts.success(`Status changed to ${this.statusLabel()}.`);
     }
   }
 
   public updateTaskStatus(status: TaskStatusEnum) {
     const oldStatus = this.status;
-    const alerts: any = AppInjector.get(alertService);
+    const alerts: AlertService = AppInjector.get(AlertService);
 
     const updateFunc = () => {
       const taskService: TaskService = AppInjector.get(TaskService);
@@ -590,7 +590,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             this.status = oldStatus;
-            alerts.add('danger', error, 6000);
+            alerts.error(error, 6000);
           },
         });
     }; // end update function
@@ -613,7 +613,7 @@ export class Task extends Entity {
           // Grade was not selected (modal was dismissed)
           () => {
             this.status = oldStatus;
-            alerts.add('info', 'Status reverted, as no grade was specified', 6000);
+            alerts.message('Status reverted, as no grade was specified', 6000);
           }
         );
       }
@@ -660,7 +660,7 @@ export class Task extends Entity {
         this.pinned = true;
       },
       error: (message) => {
-        (AppInjector.get(alertService) as any).add('danger', message, 6000);
+        (AppInjector.get(AlertService) as AlertService).error(message, 6000);
       },
     });
   }
@@ -673,7 +673,7 @@ export class Task extends Entity {
         this.pinned = false;
       },
       error: (message) => {
-        (AppInjector.get(alertService) as any).add('danger', message, 6000);
+        (AppInjector.get(AlertService) as AlertService).error(message, 6000);
       },
     });
   }
