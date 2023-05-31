@@ -62,6 +62,20 @@ export class Task extends Entity {
     }
   }
 
+  /**
+   * Provide the project id to allow mapping in service.
+   */
+  public get projectId(): number {
+    return this.project.id;
+  }
+
+  /**
+   * Provide the task definition id to allow mapping in service.
+  */
+  public get taskDefId(): number {
+    return this.definition.id;
+  }
+
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
   }
@@ -224,7 +238,7 @@ export class Task extends Entity {
       return '';
     }
 
-    for (let data of times) {
+    for (const data of times) {
       // exactDiff is floating point
       const exactDiff = timeDiff / data.value;
       const diff = Math.floor(exactDiff);
@@ -359,7 +373,7 @@ export class Task extends Entity {
     return this.similarToCount - this.similarToDismissedCount > 0;
   }
 
-  public getSimilarityData(match: number): Observable<any> {
+  public getSimilarityData(match: number): Observable<unknown> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`);
   }
@@ -512,7 +526,7 @@ export class Task extends Entity {
       // Grade was selected (modal closed with result)
       (response) => {},
       // Grade was not selected (modal was dismissed)
-      (dismissed) => {
+      (_dismissed) => {
         if (!isTestSubmission) {
           this.status = oldStatus;
         }
@@ -527,7 +541,7 @@ export class Task extends Entity {
       alerts.add(
         'warning',
         'You have submitted after the deadline for feedback. Your task will not be reviewed by a tutor. It is now your responsibility to ensure this task meets the required standard.',
-        6000
+        8000
       );
     }
 
@@ -652,7 +666,7 @@ export class Task extends Entity {
     const http = AppInjector.get(HttpClient);
 
     http.delete(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
-      next: (data) => {
+      next: (_data) => {
         this.pinned = false;
       },
       error: (message) => {

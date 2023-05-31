@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.10](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.10) (2023-05-30)
+
+
+### Bug Fixes
+
+* tasks inclusion in portfolio creation ([f86a8c5](https://github.com/macite/doubtfire-deploy/commit/f86a8c5571059bb1d2606d90cb3902bfb6f30b4b))
+
+### [7.0.9](https://github.com/macite/doubtfire-deploy/compare/v7.0.7...v7.0.9) (2023-05-24)
+
+
+### Bug Fixes
+
+* delete for project portfolio ([1f2d603](https://github.com/macite/doubtfire-deploy/commit/1f2d603ed582198931f0454f6fe73d3592f3d516))
+* portfolio task list performance ([6ecef85](https://github.com/macite/doubtfire-deploy/commit/6ecef85471542bd308d0041e098bd58a7e216455))
+
+### [7.0.8](https://github.com/macite/doubtfire-deploy/compare/v7.0.6...v7.0.8) (2023-05-24)
+
+
+### Bug Fixes
+
+* delete for project portfolio ([1f2d603](https://github.com/macite/doubtfire-deploy/commit/1f2d603ed582198931f0454f6fe73d3592f3d516))
+* ensure portfolio files can be deleted ([3ec331a](https://github.com/macite/doubtfire-deploy/commit/3ec331a980759a11cebba9b8bbc033bed9d1a696))
+
+### [7.0.7](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.7) (2023-05-16)
+
+
+### Features
+
+* add csv code file submissions ([920ba5a](https://github.com/macite/doubtfire-deploy/commit/920ba5a0674467b51e742b00428977a4775a867b))
+
+
+### Bug Fixes
+
+* ensure message times are shown ([d67a49b](https://github.com/macite/doubtfire-deploy/commit/d67a49b3cb70b58f45f17cc2c8c7642d9dc6b6e0))
+* ensure portfolio files can be deleted ([3ec331a](https://github.com/macite/doubtfire-deploy/commit/3ec331a980759a11cebba9b8bbc033bed9d1a696))
+* ensure that system role access depends on current user ([e903151](https://github.com/macite/doubtfire-deploy/commit/e903151c6b2a6705a9ed4327aa9a983829eb4126))
+* hide submitted date for tasks not submitted ([f74fb55](https://github.com/macite/doubtfire-deploy/commit/f74fb55659e67c527da84116978673ca2b285145))
+
+### [7.0.6](https://github.com/macite/doubtfire-deploy/compare/v7.0.5...v7.0.6) (2023-04-04)
+
+
+### Bug Fixes
+
+* ensure message times are shown ([d67a49b](https://github.com/macite/doubtfire-deploy/commit/d67a49b3cb70b58f45f17cc2c8c7642d9dc6b6e0))
+
+### [7.0.5](https://github.com/macite/doubtfire-deploy/compare/v7.0.4...v7.0.5) (2023-03-21)
+
+
+### Bug Fixes
+
+* hide submitted date for tasks not submitted ([f74fb55](https://github.com/macite/doubtfire-deploy/commit/f74fb55659e67c527da84116978673ca2b285145))
+
 ### [7.0.4](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.4) (2023-03-21)
 
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { alertService, visualisations } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -269,18 +269,24 @@ export class Project extends Entity {
 
   public deletePortfolio(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete<void>(`/submission/project/${this.id}/portfolio`);
+    return httpClient.delete<void>(this.portfolioUrl(false));
   }
 
   public deleteFileFromPortfolio(file: { idx: any; kind: any; name: any }) {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete<void>(`/submission/project/${this.id}/portfolio`, {
-      body: {
-        idx: file.idx,
-        kind: file.kind,
-        name: file.name,
-      },
-    });
+    return httpClient
+      .delete<void>(`${AppInjector.get(DoubtfireConstants).API_URL}/submission/project/${this.id}/portfolio`, {
+        body: {
+          idx: file.idx,
+          kind: file.kind,
+          name: file.name,
+        },
+      })
+      .pipe(
+        tap(() => {
+          this.portfolioFiles = this.portfolioFiles.filter((value) => value != file);
+        })
+      );
   }
 
   public numberTasks(status: string) {

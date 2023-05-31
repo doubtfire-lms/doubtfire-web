@@ -25,7 +25,7 @@
           class="anchor"
         >
           <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp" [ngClass]="{ own: comment.authorIsMe }">
-            {{ comment.author.firstName }} {{ comment.author.lastName }} {{ comment.timeOfMessage | humanizedDate }}
+            {{ comment.author.firstName }} {{ comment.author.lastName }} {{ comment.createdAt | humanizedDate }}
           </p>
           <div
             class="comment"
