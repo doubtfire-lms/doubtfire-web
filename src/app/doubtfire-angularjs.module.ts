@@ -140,7 +140,6 @@ import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
-import 'build/src/app/common/long-press/on-long-press.js';
 import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/alert-list/alert-list.js';
 import 'build/src/app/common/modals/confirmation-modal/confirmation-modal.js';
@@ -220,7 +219,7 @@ import {
   UnitService,
   UserService,
 } from './api/models/doubtfire-model';
-import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';

@@ -114,7 +114,6 @@ TODO:
 - [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/grade-icon/grade-icon.coffee
 - [ ] ./src/app/common/header/header.coffee
-- [ ] ./src/app/common/long-press/on-long-press.coffee
 - [ ] ./src/app/common/modals/comments-modal/comments-modal.coffee
 - [ ] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
 - [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
