@@ -21,6 +21,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'description',
       'weighting',
       'targetGrade',
+      'mossLanguage',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
@@ -121,5 +122,17 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     const formData = new FormData();
     formData.append('file', file);
     return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskSheetUploadUrl, formData);
+  }
+
+  public uploadTaskResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskResourcesUploadUrl, formData);
+  }
+
+  public uploadOverseerResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskAssessmentResourcesUploadUrl, formData);
   }
 }

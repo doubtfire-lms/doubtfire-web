@@ -61,4 +61,18 @@ export class TaskDefinitionResourcesComponent {
       this.alerts.add('danger', 'Please drop a PDF to upload for this task', 6000);
     }
   }
+
+  public uploadTaskResources(files: FileList) {
+    const validFiles = Array.from(files as ArrayLike<File>).filter((f) => f.type === 'application/zip');
+    if (validFiles.length > 0) {
+      const file = validFiles[0];
+      this.taskDefinitionService.uploadTaskResources(this.taskDefinition, file).subscribe({
+        next: () => this.alerts.add('success', 'Uploaded task sheet', 2000),
+        error: (message) => this.alerts.add('danger', message, 6000),
+      });
+    } else {
+      this.alerts.add('danger', 'Please drop a PDF to upload for this task', 6000);
+    }
+  }
+
 }

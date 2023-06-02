@@ -1,14 +1,16 @@
-<span>
-  <div appDragDrop (fileDropped)="uploadTaskSheet($event)"><mat-icon>upload</mat-icon> Task Sheet</div>
-  <div *ngIf="taskDefinition.hasTaskSheet">
-    <button mat-button (click)="downloadTaskSheet()">Download</button>
-    <button mat-button color="warn" (click)="removeTaskSheet()">Delete</button>
+<div class="flex flex-row gap-4">
+  <div class="basis-1/2 flex flex-col">
+    <div class="flex-grow" appDragDrop (fileDropped)="uploadTaskSheet($event)" style="background-color: red;"><mat-icon>upload</mat-icon> Task Sheet</div>
+    <div *ngIf="taskDefinition.hasTaskSheet">
+      <button mat-flat-button (click)="downloadTaskSheet()" class="flex-grow">Download Task Sheet</button>
+      <button mat-flat-button color="warn" (click)="removeTaskSheet()" class="flex-grow">Delete</button>
+    </div>
   </div>
-</span>
-<span>
-  UPLOADER to {{ taskDefinition.taskResourcesUploadUrl }}
-  <div *ngIf="taskDefinition.hasTaskResources">
-    <button mat-button (click)="downloadTaskResources()">Download</button>
-    <button mat-button color="warn" (click)="removeTaskResources()">Delete</button>
+  <div class="basis-1/2 flex flex-col">
+    <div class="flex-grow" appDragDrop (fileDropped)="uploadTaskResources($event)" style="background-color: red;"><mat-icon>upload</mat-icon> Task Resources</div>
+    <div *ngIf="taskDefinition.hasTaskResources">
+      <button class="flex-grow" mat-flat-button (click)="downloadTaskResources()">Download Task Zip</button>
+      <button class="flex-grow" mat-flat-button color="warn" (click)="removeTaskResources()">Delete</button>
+    </div>
   </div>
-</span>
+</div>

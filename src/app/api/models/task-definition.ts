@@ -3,7 +3,7 @@ import { Entity, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
+import { Grade, GroupSet, TutorialStream, Unit } from './doubtfire-model';
 
 export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
 
@@ -35,6 +35,7 @@ export class TaskDefinition extends Entity {
   maxQualityPts: number;
   overseerImageId: number;
   assessmentEnabled: boolean;
+  mossLanguage: string = 'moss c';
 
   readonly unit: Unit;
 
@@ -94,6 +95,10 @@ export class TaskDefinition extends Entity {
 
   public hasPlagiarismCheck(): boolean {
     return this.plagiarismChecks?.length > 0;
+  }
+
+  public get needsMoss(): boolean {
+    return this.uploadRequirements.some((upreq) => upreq.type === 'code' && upreq.tiiCheck);
   }
 
   public get taskSheetUploadUrl(): string {

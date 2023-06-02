@@ -1,99 +1,72 @@
-<mat-accordion class="task-definition-editor">
-  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Name and Grade </mat-panel-title>
-      <mat-panel-description>
-        Provide naming and grade details for this task
-        <mat-icon>star</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+<div class="flex flex-col gap-8">
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">star</mat-icon>
+      <h3 class="flex-grow">Name the task and indicate its target grade</h3>
+    </div>
     <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Who? </mat-panel-title>
-      <mat-panel-description>
-        Who submits and who reviews the task
-        <mat-icon>school</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">school</mat-icon>
+      <h3 class="flex-grow">Who assesses and submits this task?</h3>
+    </div>
     <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Dates </mat-panel-title>
-      <mat-panel-description>
-        Indicate when things are due
-        <mat-icon>date_range</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">date_range</mat-icon>
+      <h3 class="flex-grow">Indicate when this task is due</h3>
+    </div>
     <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Upload Requirements </mat-panel-title>
-      <mat-panel-description>
-        Indicate what students need to upload
-        <mat-icon>upload-file</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">upload-file</mat-icon>
+      <h3 class="flex-grow">Specify what students need to upload</h3>
+    </div>
     <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 6" (opened)="setStep(6)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Task Instructions and Resources </mat-panel-title>
-      <mat-panel-description>
-        Upload task instructions and resources
-        <mat-icon>description</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">description</mat-icon>
+      <h3 class="flex-grow">Upload instructions and resources for this task</h3>
+    </div>
     <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 7" (opened)="setStep(7)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Code Similarity </mat-panel-title>
-      <mat-panel-description>
-        Enable MOSS similarity checks
-        <mat-icon>manage_search</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
-    <f-task-definition-similarity [taskDefinition]="taskDefinition"></f-task-definition-similarity>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel [expanded]="step === 8" (opened)="setStep(8)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Automated Assessment </mat-panel-title>
-      <mat-panel-description>
-        Configure Overseer for automated assessment
-        <mat-icon>smart_toy</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">smart_toy</mat-icon>
+      <h3 class="flex-grow">Configure Overseer for automated assessment</h3>
+    </div>
     <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
-  </mat-expansion-panel>
+  </div>
 
-  <mat-expansion-panel [expanded]="step === 9" (opened)="setStep(9)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Options </mat-panel-title>
-      <mat-panel-description>
-        Configure optional components
-        <mat-icon>settings</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-4">
+      <mat-icon class="basis-auto">settings</mat-icon>
+      <h3 class="flex-grow">Configure optional settings</h3>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Options </mat-panel-title>
+        </mat-expansion-panel-header>
+        <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>
 
-    <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
-  </mat-expansion-panel>
-</mat-accordion>
+<mat-toolbar>
+  <mat-toolbar-row class="flex flex-row">
+    <span class="flex-grow"></span>
+    <button mat-button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon>Save</button>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-<button mat-button mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>

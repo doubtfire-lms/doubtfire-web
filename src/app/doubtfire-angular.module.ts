@@ -204,7 +204,6 @@ import { TaskDefinitionDatesComponent } from './units/states/edit/directives/uni
 import { TaskDefinitionUploadComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
 import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
-import { TaskDefinitionSimilarityComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-similarity/task-definition-similarity.component';
 import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 
@@ -246,7 +245,6 @@ export function playerFactory() {
     TaskDefinitionUploadComponent,
     TaskDefinitionOptionsComponent,
     TaskDefinitionResourcesComponent,
-    TaskDefinitionSimilarityComponent,
     TaskDefinitionOverseerComponent,
     UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
@@ -418,7 +416,7 @@ export function playerFactory() {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
-      deps: [AuthenticationService],
+      deps: [AuthenticationService, UserService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,

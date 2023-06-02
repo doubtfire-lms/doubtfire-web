@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TaskDefinition, UploadRequirement } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 
@@ -8,7 +9,10 @@ import { Unit } from 'src/app/api/models/unit';
   styleUrls: ['task-definition-upload.component.scss'],
 })
 export class TaskDefinitionUploadComponent {
-  @Input() taskDefinition: TaskDefinition;
+  @Input() public taskDefinition: TaskDefinition;
+  @ViewChild('upreqTable', { static: true }) table: MatTable<any>;
+
+  public columns: string[] = ['file-name', 'file-type', 'tii-check', 'flag-pct', 'row-actions'];
 
   public get unit(): Unit {
     return this.taskDefinition?.unit;
@@ -23,6 +27,7 @@ export class TaskDefinitionUploadComponent {
       tiiCheck: false,
       tiiPct: 30,
     });
+    this.table.renderRows();
   }
 
   public removeUpReq(upreq: UploadRequirement) {

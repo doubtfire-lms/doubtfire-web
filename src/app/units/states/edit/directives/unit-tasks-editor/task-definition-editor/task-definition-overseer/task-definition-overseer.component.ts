@@ -1,6 +1,5 @@
-import { Component, Inject, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
-import { alertService } from 'src/app/ajs-upgraded-providers';
 import {
   OverseerAssessment,
   OverseerImage,
@@ -11,7 +10,9 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
+import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
+import { AlertService } from 'src/app/common/services/alert.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
 
 @Component({
@@ -25,11 +26,12 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
   public currentUserTask: Task;
 
   constructor(
-    @Inject(alertService) private alerts: any,
+    private alerts: AlertService,
     private overseerImageService: OverseerImageService,
     private modalService: TaskAssessmentModalService,
     private submissions: TaskSubmissionService,
-    private userService: UserService
+    private userService: UserService,
+    private taskDefinitionService: TaskDefinitionService
   ) {}
 
   public get overseerEnabled(): boolean {
@@ -79,8 +81,21 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
       next: (result: OverseerAssessment[]) => {},
       error: (error) => {
-        this.alerts.add('danger', 'Error: ' + error, 6000);
+        this.alerts.error('Error: ' + error, 6000);
       },
     });
+  }
+
+  public uploadOverseerResources(files: FileList) {
+    const validFiles = Array.from(files as ArrayLike<File>).filter((f) => f.type === 'application/zip');
+    if (validFiles.length > 0) {
+      const file = validFiles[0];
+      this.taskDefinitionService.uploadTaskResources(this.taskDefinition, file).subscribe({
+        next: () => this.alerts.success('Uploaded task sheet', 2000),
+        error: (message) => this.alerts.error(message, 6000),
+      });
+    } else {
+      this.alerts.error('Please drop a PDF to upload for this task', 6000);
+    }
   }
 }

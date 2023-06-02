@@ -1,43 +1,78 @@
-<p><button mat-button (click)="addUpReq()">Add</button></p>
+<table #upreqTable mat-table [dataSource]="taskDefinition.uploadRequirements" class="table-fixed">
+  <!-- File name Column -->
+  <ng-container matColumnDef="file-name" sticky>
+    <th mat-header-cell *matHeaderCellDef>Filename</th>
+    <td mat-cell *matCellDef="let upreq">
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="upreq.name" required />
+      </mat-form-field>
+    </td>
+  </ng-container>
 
-<mat-card *ngFor="let upreq of taskDefinition.uploadRequirements" class="upload-card">
-  <mat-card-content>
-    <mat-form-field>
-      <mat-label>Filename</mat-label>
-      <input matInput [(ngModel)]="upreq.name" required />
-      <mat-hint>File to be uploaded</mat-hint>
-    </mat-form-field>
+  <!-- File Type Column -->
+  <ng-container matColumnDef="file-type" sticky>
+    <th mat-header-cell *matHeaderCellDef>Type</th>
+    <td mat-cell *matCellDef="let upreq">
+      <mat-select placeholder="File Type" [(ngModel)]="upreq.type">
+        <mat-option value="code">Code</mat-option>
+        <mat-option value="document">Document</mat-option>
+        <mat-option value="image">Image</mat-option>
+      </mat-select>
+    </td>
+  </ng-container>
 
-    <mat-form-field floatPlaceholder="always" class="mat-form-field--no-underline">
-      <!-- <mat-label>Disable student interaction after feedback</mat-label> -->
-      <input matInput placeholder="Hidden" style="display: none" />
-      <mat-button-toggle-group
-        name="uploadReq{{ upreq.name }}"
-        aria-label="Upload requirement"
-        [(ngModel)]="upreq.type"
-      >
-        <mat-button-toggle value="code">Code</mat-button-toggle>
-        <mat-button-toggle value="document">Document</mat-button-toggle>
-        <mat-button-toggle value="image">Image</mat-button-toggle>
-      </mat-button-toggle-group>
-      <!-- <mat-hint>The kind of file required</mat-hint> -->
-    </mat-form-field>
+  <!-- TurnItIn Check Column -->
+  <ng-container matColumnDef="tii-check" sticky>
+    <th mat-header-cell *matHeaderCellDef>Check Similarity</th>
+    <td mat-cell *matCellDef="let upreq">
+      <mat-checkbox *ngIf="upreq.type === 'document'" [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
+      <mat-checkbox *ngIf="upreq.type === 'code'" [(ngModel)]="upreq.tiiCheck">Moss</mat-checkbox>
+    </td>
+  </ng-container>
 
-    <mat-form-field floatPlaceholder="always" class="mat-form-field--no-underline" *ngIf="upreq.type === 'document'">
-      <!-- <mat-label>Disable student interaction after feedback</mat-label> -->
-      <input matInput placeholder="Hidden" style="display: none" />
-      <mat-checkbox matInput required [(ngModel)]="upreq.tiiCheck">Check with TurnItIn</mat-checkbox>
-      <!-- <mat-hint>Check with TurnItIn</mat-hint> -->
-    </mat-form-field>
+  <!-- Flag Pct -->
+  <ng-container matColumnDef="flag-pct" sticky>
+    <th mat-header-cell *matHeaderCellDef>Flag At</th>
+    <td mat-cell *matCellDef="let upreq">
+      <mat-form-field appearance="outline" style="width: 10em">
+        <input matInput [(ngModel)]="upreq.tiiPct" type="number" />
+      </mat-form-field>
+    </td>
+  </ng-container>
 
-    <mat-form-field *ngIf="upreq.type === 'document'">
-      <mat-label>TurnItIn flag percent</mat-label>
-      <input matInput [(value)]="upreq.tiiCheck" type="number" />
-      <!-- <mat-hint>Check with TurnItIn</mat-hint> -->
-    </mat-form-field>
-  </mat-card-content>
+  <!-- Actions -->
+  <ng-container matColumnDef="row-actions" sticky>
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let upreq">
+      <button mat-icon-button aria-label="delete upload requirement" color="warn" (click)="removeUpReq(upreq)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
 
-  <mat-card-actions align="end">
-    <button mat-button color="warn" (click)="removeUpReq(upreq)"><mat-icon>delete</mat-icon></button>
-  </mat-card-actions>
-</mat-card>
+  <!-- Disclaimer column -->
+  <ng-container matColumnDef="actions">
+    <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <span class="flex flex-grow"></span>
+          <button mat-flat-button color="primary" (click)="addUpReq()"><mat-icon>add</mat-icon> Add</button>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns" class="table-row"></tr>
+  <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
+</table>
+
+<mat-form-field class="flex flex-grow" *ngIf="taskDefinition.needsMoss" appearance="outline">
+  <mat-label>Language used for Moss checks</mat-label>
+  <mat-select [(ngModel)]="taskDefinition.mossLanguage">
+    <mat-option value="moss c">C</mat-option>
+    <mat-option value="moss csharp">C#</mat-option>
+    <mat-option value="moss cc">C++</mat-option>
+    <mat-option value="moss python">Python</mat-option>
+  </mat-select>
+</mat-form-field>

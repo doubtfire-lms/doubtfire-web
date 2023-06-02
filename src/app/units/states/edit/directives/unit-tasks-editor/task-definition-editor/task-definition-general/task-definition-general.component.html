@@ -1,25 +1,23 @@
-<mat-form-field>
-  <mat-label>Grade</mat-label>
-  <mat-select [(value)]="taskDefinition.targetGrade">
-    <mat-option *ngFor="let grade of grades" [value]="grade.value">{{ grade.viewValue }}</mat-option>
-  </mat-select>
-  <mat-hint>Grade where the task appears</mat-hint>
-</mat-form-field>
+<div class="flex flex-row gap-4">
+  <mat-form-field appearance="outline" class="basis-1/3">
+    <mat-label>Grade where task appears</mat-label>
+    <mat-select [(ngModel)]="taskDefinition.targetGrade" required>
+      <mat-option *ngFor="let grade of grades" [value]="grade.value">{{ grade.viewValue }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Abbreviation</mat-label>
-  <input matInput [(ngModel)]="taskDefinition.abbreviation" required />
-  <mat-hint>Week, sequence, and grade. eg 1.1P</mat-hint>
-</mat-form-field>
+  <mat-form-field appearance="outline" class="basis-1/3">
+    <mat-label>Abbreviation - Week, sequence, and grade. eg 1.1P</mat-label>
+    <input matInput [(ngModel)]="taskDefinition.abbreviation" required />
+  </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Task name</mat-label>
+  <mat-form-field appearance="outline" class="flex-grow">
+    <mat-label>Weight - Effort relative to other tasks.</mat-label>
+    <input matInput type="number" [(ngModel)]="taskDefinition.weighting" required />
+  </mat-form-field>
+</div>
+
+<mat-form-field appearance="outline" class="flex flex-grow">
+  <mat-label>Descriptive task name</mat-label>
   <input matInput [(ngModel)]="taskDefinition.name" required />
-  <mat-hint>Unique name for the task.</mat-hint>
-</mat-form-field>
-
-<mat-form-field>
-  <mat-label>Weight</mat-label>
-  <input matInput type="number" [(ngModel)]="taskDefinition.weighting" required />
-  <mat-hint>Effort relative to other tasks.</mat-hint>
 </mat-form-field>
