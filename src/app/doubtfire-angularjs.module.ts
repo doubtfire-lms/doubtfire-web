@@ -242,6 +242,7 @@ import { TaskSubmissionCardComponent } from './projects/states/dashboard/directi
 import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
+import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -337,6 +338,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fTaskDefinitionEditor',
   downgradeComponent({ component: TaskDefinitionEditorComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'fUnitTaskEditor',
+  downgradeComponent({ component: UnitTaskEditorComponent })
 );
 DoubtfireAngularJSModule.directive(
   'studentTutorialSelect',

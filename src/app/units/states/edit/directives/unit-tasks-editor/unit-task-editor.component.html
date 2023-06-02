@@ -1,0 +1,53 @@
+<div class="flex flex-row gap-8">
+  <div class="flex-grow flex flex-col gap-8">
+    <div class="flex-grow flex flex-row">
+      <div>
+        <h3>Task List</h3>
+        <p>Plan the list of tasks for students to complete.</p>
+      </div>
+      <span class="flex-grow"></span>
+      <mat-form-field appearance="outline">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" [(ngModel)]="filter" />
+      </mat-form-field>
+    </div>
+
+    <table class="flex-grow" mat-table [dataSource]="taskDefinitionSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Task Name</th>
+        <td mat-cell *matCellDef="let taskDefinition">
+          {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+        </td>
+      </ng-container>
+
+      <!-- Action footer row -->
+      <ng-container matColumnDef="actions">
+        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
+          <mat-toolbar>
+            <mat-toolbar-row>
+              <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </mat-toolbar-row>
+          </mat-toolbar>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;" (click)="selectTaskDefinition(row)" [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"></tr>
+      <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
+    </table>
+    <f-task-definition-editor *ngIf="selectedTaskDefinition" [taskDefinition]="selectedTaskDefinition" [unit]="unit" [isNew]="false"></f-task-definition-editor>
+  </div>
+  <div class="flex flex-col gap-4">
+    <h3>Batch Upload Tasks</h3>
+    <p>Batch upload task definitions with a CSV. Download to get format.</p>
+    <f-file-drop (filesDropped)="uploadTaskDefinitions($event)" [selectFn]="matchCsvFiles" />
+
+    <h3>Download Tasks</h3>
+    <p>Download all task definitions for this unit.</p>
+    <button mat-flat-button (click)="downloadTaskDefinitions()">Download Tasks CSV</button>
+    <button mat-flat-button (click)="downladTaskDefinitionsZip()">Download Tasks and Resources</button>
+
+    <h3>Batch Upload Task PDFs</h3>
+    <p>Upload all of the task PDFs in a Zip file.</p>
+    <f-file-drop (filesDropped)="uploadTaskPdfs($event)" [selectFn]="matchZipFiles" />
+  </div>
+</div>

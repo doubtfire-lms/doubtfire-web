@@ -62,6 +62,10 @@ export class TaskDefinition extends Entity {
     return this.dueDate;
   }
 
+  public matches(text: string): boolean {
+    return this.abbreviation.toLowerCase().indexOf(text) !== -1 || this.name.toLowerCase().indexOf(text) !== -1;
+  }
+
   /**
    * The final deadline for task submission.
    *
