@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, Input, Inject, OnDestroy, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-pdf-viewer',

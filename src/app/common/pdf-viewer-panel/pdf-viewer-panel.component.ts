@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'pdf-viewer-panel',

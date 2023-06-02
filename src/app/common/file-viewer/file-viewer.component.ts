@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 import { HttpResponse } from '@angular/common/http';
 import { PDFProgressData } from 'ng2-pdf-viewer';
 import { AlertService } from '../services/alert.service';

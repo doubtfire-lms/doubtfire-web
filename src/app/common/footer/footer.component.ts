@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-footer',

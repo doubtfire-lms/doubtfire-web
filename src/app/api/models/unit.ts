@@ -2,7 +2,7 @@ import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { GroupService } from '../services/group.service';
 import { ProjectService } from '../services/project.service';

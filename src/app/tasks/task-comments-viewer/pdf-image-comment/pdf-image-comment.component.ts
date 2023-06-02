@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject, OnDestroy } from '@angular/core';
 import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { Project, TaskComment, Task } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 
 @Component({
   selector: 'pdf-image-comment',

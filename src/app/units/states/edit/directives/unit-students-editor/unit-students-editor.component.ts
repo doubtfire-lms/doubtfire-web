@@ -9,7 +9,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { Project, ProjectService, Unit } from 'src/app/api/models/doubtfire-model';
 import { UIRouter } from '@uirouter/angular';
 import { Subscription } from 'rxjs';

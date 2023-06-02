@@ -6,7 +6,7 @@ import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from '
 import { Task } from 'src/app/api/models/task';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 
 @Component({

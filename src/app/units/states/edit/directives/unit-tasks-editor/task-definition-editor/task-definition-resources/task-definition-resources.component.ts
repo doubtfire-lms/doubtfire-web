@@ -4,7 +4,7 @@ import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-task-definition-resources',
@@ -47,6 +47,10 @@ export class TaskDefinitionResourcesComponent {
       next: () => this.alerts.add('success', 'Deleted task resources', 2000),
       error: (message) => this.alerts.add('danger', message, 6000),
     });
+  }
+
+  public matchPdfFiles(file: File): boolean {
+    return file.type === 'application/pdf';
   }
 
   public uploadTaskSheet(files: FileList) {

@@ -3,7 +3,7 @@ import { UIRouter } from '@uirouter/core';
 import * as _ from 'lodash';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { SelectedTaskService } from '../../selected-task.service';

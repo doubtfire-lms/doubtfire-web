@@ -1,7 +1,7 @@
 import { Component, Input, Inject } from '@angular/core';
 import { gradeService } from 'src/app/ajs-upgraded-providers';
 import { Task, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-task-description-card',

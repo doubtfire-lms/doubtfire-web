@@ -157,7 +157,7 @@ import {
   LearningOutcomeService,
   TaskSimilarityService,
 } from './api/models/doubtfire-model';
-import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 

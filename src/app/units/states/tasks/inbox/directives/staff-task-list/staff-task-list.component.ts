@@ -20,7 +20,7 @@ import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
 import { Tutorial, UserService, Task, Project, TaskDefinition } from 'src/app/api/models/doubtfire-model';
 import { Observable } from 'rxjs';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
