@@ -206,6 +206,7 @@ import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/u
 import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
+import { FileDropComponent } from './common/file-drop/file-drop.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -237,6 +238,7 @@ export function playerFactory() {
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
+    FileDropComponent,
     UnitStudentsEditorComponent,
     TaskDefinitionEditorComponent,
     TaskDefinitionGeneralComponent,

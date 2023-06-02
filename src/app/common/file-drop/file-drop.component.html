@@ -1,0 +1,5 @@
+<div class="flex-grow" appDragDrop (fileDropped)="setFile($event)" style="background-color: pink; height: 100px;">
+  <mat-icon>upload</mat-icon>
+  {{message}}
+  {{file?.name}}
+</div>
