@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.11](https://github.com/macite/doubtfire-deploy/compare/v7.0.10...v7.0.11) (2023-06-02)
+
+
+### Bug Fixes
+
+* grade should not updated on assessment fail ([6e065e6](https://github.com/macite/doubtfire-deploy/commit/6e065e61702be5bde11a05675346dbdea8f1843d))
+
 ### [7.0.10](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.10) (2023-05-30)
 
 

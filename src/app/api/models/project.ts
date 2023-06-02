@@ -245,6 +245,7 @@ export class Project extends Entity {
           alerts.add('success', 'Grade updated.', 2000);
         },
         error: (message) => {
+          this.grade = oldGrade;
           alerts.add('danger', `Grade was not updated: ${message}`, 8000);
         },
       });
