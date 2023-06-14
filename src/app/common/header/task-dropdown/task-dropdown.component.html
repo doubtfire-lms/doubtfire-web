@@ -122,15 +122,6 @@
           <mat-icon aria-hidden="false" aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
         </button>
         <button
-          uiSref="units/students/plagiarism"
-          [uiParams]="{ unitId: unitRole.unit.id }"
-          mat-menu-item
-          *ngIf="unitRole.role !== 'Admin'"
-        >
-          <mat-icon aria-hidden="false" aria-label="Student similarity icon" fontIcon="crisis_alert"></mat-icon>
-          Similarities
-        </button>
-        <button
           uiSref="units/students/portfolios"
           [uiParams]="{ unitId: unitRole.unit.id }"
           mat-menu-item

@@ -133,7 +133,6 @@ import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-defini
 import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
-import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import {
@@ -274,7 +273,6 @@ export function playerFactory() {
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     StatusIconComponent,
-    TaskPlagiarismCardComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,

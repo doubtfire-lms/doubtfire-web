@@ -46,7 +46,6 @@ import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
-import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
 import 'build/src/app/tasks/tasks.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
@@ -109,9 +108,6 @@ import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enr
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
-import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
-import 'build/src/app/units/states/plagiarism/directives/directives.js';
-import 'build/src/app/units/states/plagiarism/plagiarism.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
@@ -207,7 +203,6 @@ import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
-import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -380,10 +375,6 @@ DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component:
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));
-DoubtfireAngularJSModule.directive(
-  'taskPlagiarismCard',
-  downgradeComponent({ component: TaskPlagiarismCardComponent })
-);
 
 // Global configuration
 
