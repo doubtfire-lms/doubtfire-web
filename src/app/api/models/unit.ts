@@ -65,6 +65,10 @@ export class Unit extends Entity {
     };
   }
 
+  public get nameAndPeriod(): string {
+    return `${this.name} (${this.teachingPeriod ? this.teachingPeriod.name() : this.startDate.toLocaleDateString()})`;
+  }
+
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
   }

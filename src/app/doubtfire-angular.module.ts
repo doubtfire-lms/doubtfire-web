@@ -175,11 +175,13 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TeachingPeriodUnitImportDialog, TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.component';
 
 @NgModule({
   // Components we declare
   declarations: [
     AboutDoubtfireModalContent,
+    TeachingPeriodUnitImportDialog,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -307,6 +309,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     TaskDefinitionService,
     TeachingPeriodService,
     TeachingPeriodBreakService,
+    TeachingPeriodUnitImportService,
     TutorialService,
     TutorialStreamService,
     UserService,
