@@ -100,12 +100,19 @@ export class Task extends Entity {
     return this.project.unit;
   }
 
+  /**
+   * Determine if a task matches a given search text.
+   *
+   * @param matchText the text to search for
+   * @returns true if this task should be shown for that match text
+   */
   public matches(matchText: string): boolean {
     return (
       TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
+      (this.similarityFlag && 'similarity'.indexOf(matchText) == 0) ||
       this.project.matches(matchText)
     );
   }
