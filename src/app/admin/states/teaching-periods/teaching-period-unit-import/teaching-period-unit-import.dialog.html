@@ -1,58 +1,54 @@
 <h1 mat-dialog-title>Import Units Into {{ data.teachingPeriod.name() }}</h1>
 <div mat-dialog-content>
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="unitCode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Code </th>
-      <td mat-cell *matCellDef="let unitToRollover">
-        {{ unitToRollover.unitCode }}
+      <th mat-header-cell *matHeaderCellDef> Unit Code </th>
+      <td mat-cell *matCellDef="let unitToImport">
+        {{ unitToImport.unitCode }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="sourceUnit">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Unit </th>
-      <td mat-cell *matCellDef="let unitToRollover">
-        {{ unitToRollover.source?.nameAndPeriod }}
+      <th mat-header-cell *matHeaderCellDef> Source Unit </th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <object-select placeholder="New Unit" [source]="unitToImport.relatedUnits" [(target)]="unitToImport.sourceUnit"></object-select>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="convenor">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Main Convenor </th>
-      <td mat-cell *matCellDef="let unitToRollover">
-        <!-- <mat-form-field class="example-full-width"> -->
-          <!-- <input type="text"
-                 placeholder="Pick one"
-                 aria-label="Main unit chair for {{ unitToRollover.unitCode }}"
-                 matInput
-                 [formControl]="convenorControl"
-                 [matAutocomplete]="autoConvenor"
-                 [(ngModel)]="unitToRollover.convenor">
-          <mat-autocomplete #autoConvenor="matAutocomplete">
-            <mat-option *ngFor="let staff of filteredTeachingStaff(convenorControl.value)" [value]="staff">
-              {{staff.name}}
-            </mat-option>
-          </mat-autocomplete> -->
-        <!-- </mat-form-field> -->
+      <th mat-header-cell *matHeaderCellDef> Main Convenor </th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <object-select placeholder="No Staff Selected" [source]="teachingStaff" [(target)]="unitToImport.convenor"></object-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <span>{{ statusForUnit(unitToImport) }}</span>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <tr mat-cell *matCellDef="let unitToRollover">
-        <button mat-button>Remove</button>
-      </tr>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <button mat-button (click)="removeUnitToAdd(unitToImport)">Remove</button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions class="flex flex-column">
   <div class="flex flex-row">
     <mat-form-field appearance="outline">
       <mat-label>Unit Code(s)</mat-label>
       <input matInput [(ngModel)]="codesToAdd">
     </mat-form-field>
-    <button mat-button (click)="addUnitsByCode()">Add</button>
+    <button mat-button color="secondary" (click)="addUnitsByCode()">Add</button>
+    <span class="flex-grow"></span>
+    <button mat-button color="primary" (click)="doImport()">Import</button>
+    <button mat-button (click)="onCloseClick()">Close</button>
   </div>
-  <button mat-button (click)="onCloseClick()">Close</button>
 </div>

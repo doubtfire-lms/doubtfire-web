@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
+import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
@@ -32,7 +32,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
-    private groupService: GroupService,
+    private groupService: GroupService
   ) {
     super(httpClient, API_URL);
 
@@ -66,6 +66,7 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: ['mainConvenor', 'main_convenor_id'],
         toEntityFn: (data, key, entity) => {
+          entity.mainConvenorUser = AppInjector.get(UserService).cache.get(data[key]);
           return entity.staffCache.get(data[key]);
         },
         toJsonFn: (unit: Unit, key: string) => {

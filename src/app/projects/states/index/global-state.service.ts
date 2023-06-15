@@ -55,7 +55,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The loaded units.
    */
-  private loadedUnits: EntityCache<Unit>;
+  public loadedUnits: EntityCache<Unit>;
 
   /**
    * The loaded projects.
