@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.13](https://github.com/macite/doubtfire-deploy/compare/v7.0.12...v7.0.13) (2023-06-17)
+
+
+### Bug Fixes
+
+* correct location of gtag ([a681622](https://github.com/macite/doubtfire-deploy/commit/a681622bd707acf40612136e2af10e85f3fa4bad))
+* update google analytics ([c0b913a](https://github.com/macite/doubtfire-deploy/commit/c0b913aa3187abbe31e743390bb68c6daba48bf0))
+
 ### [7.0.12](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.12) (2023-06-17)
 
 
