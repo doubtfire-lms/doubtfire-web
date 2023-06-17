@@ -16,6 +16,7 @@ export interface TeachingPeriodUnitImportData {
 
 interface UnitImportData {
   unitCode: string;
+  unitName?: string;
   sourceUnit: Unit;
   convenor: User;
   relatedUnits?: { value: Unit; text: string }[];
@@ -65,7 +66,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
    */
   public codesToAdd: string = '';
 
-  public displayedColumns: string[] = ['unitCode', 'sourceUnit', 'convenor', 'status', 'actions'];
+  public displayedColumns: string[] = ['unitCode', 'sourceUnit', 'unitName', 'convenor', 'status', 'actions'];
 
   constructor(
     public dialogRef: MatDialogRef<TeachingPeriodUnitImportData>,
@@ -108,6 +109,11 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   public onCloseClick(): void {
     this.dialogRef.close();
+  }
+
+  public codeChange(code: string, value: UnitImportData) {
+    value.relatedUnits = this.relatedUnits(code);
+    value.sourceUnit = value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;
   }
 
   public relatedUnits(code: string): { value: Unit; text: string }[] {
@@ -168,10 +174,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     this.table.renderRows();
   }
 
-  private importUnit(idx: number) {
-    // Stop when past last unit to import
-    if (idx >= this.unitsToImport.length) return;
-    const unitToImport = this.unitsToImport[idx];
+  private importExistingUnit(unitToImport: UnitImportData, idx: number) {
     unitToImport.sourceUnit.rolloverTo({ teaching_period_id: this.data.teachingPeriod.id }).subscribe({
       next: (newUnit: Unit) => {
         unitToImport.done = true;
@@ -202,6 +205,48 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         this.importUnit(idx + 1);
       },
     });
+  }
+
+  private createNewUnit(unitToImport: UnitImportData, idx: number) {
+    this.unitService.create({
+      unit: {
+        code: unitToImport.unitCode,
+        name: unitToImport.unitName,
+        main_convenor_user_id: unitToImport.convenor?.id,
+        teaching_period_id: this.data.teachingPeriod.id,
+      }
+    }).subscribe({
+      next: (newUnit: Unit) => {
+        unitToImport.done = true;
+        this.importUnit(idx + 1);
+      },
+      error: (failure) => {
+        unitToImport.done = false;
+        console.log(failure);
+        this.importUnit(idx + 1);
+      }
+    });
+  }
+
+  private importUnit(idx: number) {
+    // Stop when past last unit to import
+    if (idx >= this.unitsToImport.length) return;
+    const unitToImport = this.unitsToImport[idx];
+
+    const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;
+
+    if (unitToImport.done !== undefined || this.teachigPeriod.hasUnitWithCode(code)){
+      // Skip units already done
+      this.importUnit(idx + 1);
+    } else {
+      if (unitToImport.sourceUnit) {
+        // Import existing units - if there was a source unit
+        this.importExistingUnit(unitToImport, idx);
+      } else {
+        // Create a new unit
+        this.createNewUnit(unitToImport, idx);
+      }
+    }
   }
 
   public doImport() {

@@ -49,6 +49,10 @@ export class TeachingPeriod extends Entity {
     return unit && this.unitsCache.has(unit?.id);
   }
 
+  public hasUnitWithCode(code: string): boolean {
+    return this.unitsCache.currentValues.some((u) => u.code === code);
+  }
+
   /**
    * Check if a unit with a matching code exists in this teaching period.
    *

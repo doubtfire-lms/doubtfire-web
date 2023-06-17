@@ -4,7 +4,9 @@
     <ng-container matColumnDef="unitCode">
       <th mat-header-cell *matHeaderCellDef> Unit Code </th>
       <td mat-cell *matCellDef="let unitToImport">
-        {{ unitToImport.unitCode }}
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)">
+        </mat-form-field>
       </td>
     </ng-container>
 
@@ -12,6 +14,17 @@
       <th mat-header-cell *matHeaderCellDef> Source Unit </th>
       <td mat-cell *matCellDef="let unitToImport">
         <object-select placeholder="New Unit" [source]="unitToImport.relatedUnits" [(target)]="unitToImport.sourceUnit"></object-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unitName">
+      <th mat-header-cell *matHeaderCellDef> Unit Name </th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <span *ngIf="unitToImport.sourceUnit">{{ unitToImport.sourceUnit.name }}</span>
+        <mat-form-field appearance="outline" *ngIf="!unitToImport.sourceUnit">
+          <mat-label>Unit Name</mat-label>
+          <input matInput [(ngModel)]="unitToImport.unitName">
+        </mat-form-field>
       </td>
     </ng-container>
 

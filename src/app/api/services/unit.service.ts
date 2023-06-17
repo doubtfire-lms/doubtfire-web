@@ -77,7 +77,9 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: ['teachingPeriod', 'teaching_period_id'],
         toEntityFn: (data, key, entity) => {
           if ( data['teaching_period_id'] ) {
-            return this.teachingPeriodService.cache.get(data['teaching_period_id']);
+            const teachingPeriod = this.teachingPeriodService.cache.get(data['teaching_period_id']);
+            teachingPeriod?.unitsCache.add(entity);
+            return teachingPeriod;
           } else { return undefined; }
         },
         toJsonFn: (entity: Unit, key: string) => {
