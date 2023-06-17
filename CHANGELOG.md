@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.12](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.12) (2023-06-17)
+
+
+### Features
+
+* streamline unit import ([4e6827c](https://github.com/macite/doubtfire-deploy/commit/4e6827c1a57dd22ffda38329d7ecc5cf56097c40))
+
+
+### Bug Fixes
+
+* grade should not updated on assessment fail ([6e065e6](https://github.com/macite/doubtfire-deploy/commit/6e065e61702be5bde11a05675346dbdea8f1843d))
+* tasks inclusion in portfolio creation ([f86a8c5](https://github.com/macite/doubtfire-deploy/commit/f86a8c5571059bb1d2606d90cb3902bfb6f30b4b))
+
 ### [7.0.11](https://github.com/macite/doubtfire-deploy/compare/v7.0.10...v7.0.11) (2023-06-02)
 
 
