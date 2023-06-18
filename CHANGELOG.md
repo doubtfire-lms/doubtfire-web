@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.14](https://github.com/macite/doubtfire-deploy/compare/v7.0.13...v7.0.14) (2023-06-18)
+
+
+### Features
+
+* sort staff in unit import ([5399627](https://github.com/macite/doubtfire-deploy/commit/539962715916a1c5a8ca6314095d841305492a8a))
+* unit import staff autocomplete ([b489620](https://github.com/macite/doubtfire-deploy/commit/b489620e8eb2f20379d18fcf27a3ecc951c924a5))
+
 ### [7.0.13](https://github.com/macite/doubtfire-deploy/compare/v7.0.12...v7.0.13) (2023-06-17)
 
 
