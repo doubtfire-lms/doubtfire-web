@@ -88,6 +88,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
       this.loadAllUnits();
       this.teachingStaff = staff
         .filter((s) => ['Convenor', 'Admin'].includes(s.systemRole))
+        .sort((a, b) => a.name.localeCompare(b.name))
         .map((s) => {
           return { value: s, text: s.name };
         });
