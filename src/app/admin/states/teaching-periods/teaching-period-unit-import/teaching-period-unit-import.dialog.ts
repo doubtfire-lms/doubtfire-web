@@ -1,14 +1,10 @@
 import { Component, Inject, Injectable, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { FormControl, FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
 import { Unit, TeachingPeriod, User, UserService, UnitService } from 'src/app/api/models/doubtfire-model';
-import { Observable, filter, map, startWith } from 'rxjs';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import { Observable, map, startWith } from 'rxjs';
 
 export interface TeachingPeriodUnitImportData {
   teachingPeriod: TeachingPeriod;
@@ -21,6 +17,8 @@ interface UnitImportData {
   convenor: User;
   relatedUnits?: { value: Unit; text: string }[];
   done?: boolean;
+  convenorFormControl: FormControl<User>;
+  filteredStaff: Observable<User[]>;
 }
 
 @Injectable()
@@ -57,7 +55,8 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   public dataSource = new MatTableDataSource(this.unitsToImport);
 
-  public teachingStaff: { value: User; text: string }[];
+  public teachingStaff: User[];
+  public filteredOptions: Observable<User[]>;
 
   public allUnits: Unit[];
 
@@ -86,13 +85,21 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     this.userService.getTutors().subscribe((staff) => {
       // Load all units now we have the staff
       this.loadAllUnits();
+
       this.teachingStaff = staff
         .filter((s) => ['Convenor', 'Admin'].includes(s.systemRole))
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((s) => {
-          return { value: s, text: s.name };
-        });
+        .sort((a, b) => a.name.localeCompare(b.name));
     });
+  }
+
+  displayFn(user: User): string {
+    return user && user.name ? user.name : '';
+  }
+
+  private _filter(name: string): User[] {
+    const filterValue = name.toLowerCase();
+
+    return this.teachingStaff.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
   private loadAllUnits() {
@@ -167,12 +174,21 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
       const relatedUnits = this.relatedUnits(code);
       const sourceUnit = relatedUnits.length > 0 ? relatedUnits[0].value : null;
+      const formControl = new FormControl<User>(sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser);
 
       this.unitsToImport.push({
         unitCode: code,
         sourceUnit: sourceUnit,
         convenor: sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser,
         relatedUnits: relatedUnits,
+        convenorFormControl: formControl,
+        filteredStaff: formControl.valueChanges.pipe(
+          startWith(''),
+          map(value => {
+            const name = typeof value === 'string' ? value : value?.name;
+            return name ? this._filter(name as string) : this.teachingStaff;
+          })
+        )
       });
     }
 
