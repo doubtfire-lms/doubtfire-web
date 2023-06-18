@@ -111,6 +111,11 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  public changeSourceUnit(value: UnitImportData, unit: Unit) {
+    value.sourceUnit = unit;
+    value.convenor = unit.mainConvenorUser;
+  }
+
   public codeChange(code: string, value: UnitImportData) {
     value.relatedUnits = this.relatedUnits(code);
     value.sourceUnit = value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;

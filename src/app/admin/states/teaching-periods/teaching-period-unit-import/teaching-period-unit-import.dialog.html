@@ -13,7 +13,7 @@
     <ng-container matColumnDef="sourceUnit">
       <th mat-header-cell *matHeaderCellDef> Source Unit </th>
       <td mat-cell *matCellDef="let unitToImport">
-        <object-select placeholder="New Unit" [source]="unitToImport.relatedUnits" [(target)]="unitToImport.sourceUnit"></object-select>
+        <object-select placeholder="New Unit" [source]="unitToImport.relatedUnits" [target]="unitToImport.sourceUnit" (targetChange)="changeSourceUnit(unitToImport, $event)"></object-select>
       </td>
     </ng-container>
 
