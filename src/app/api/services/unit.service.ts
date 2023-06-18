@@ -66,11 +66,19 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: ['mainConvenor', 'main_convenor_id'],
         toEntityFn: (data, key, entity) => {
-          entity.mainConvenorUser = AppInjector.get(UserService).cache.get(data[key]);
           return entity.staffCache.get(data[key]);
         },
         toJsonFn: (unit: Unit, key: string) => {
           return unit.mainConvenor?.id;
+        }
+      },
+      {
+        keys: ['mainConvenorUser', 'main_convenor_user_id'],
+        toEntityFn: (data, key, entity) => {
+          return AppInjector.get(UserService).cache.get(data[key]);
+        },
+        toJsonFn: (unit: Unit, key: string) => {
+          return unit.mainConvenor?.user.id;
         }
       },
       {
