@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.15](https://github.com/macite/doubtfire-deploy/compare/v7.0.14...v7.0.15) (2023-06-20)
+
+
+### Bug Fixes
+
+* handle null campus in projects ([48ab807](https://github.com/macite/doubtfire-deploy/commit/48ab807b06c794cf3bfd77aacb9bee64a278c78d))
+
 ### [7.0.14](https://github.com/macite/doubtfire-deploy/compare/v7.0.13...v7.0.14) (2023-06-18)
 
 
