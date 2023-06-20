@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.14](https://github.com/macite/doubtfire-deploy/compare/v7.0.13...v7.0.14) (2023-06-18)
+
+
+### Features
+
+* sort staff in unit import ([5399627](https://github.com/macite/doubtfire-deploy/commit/539962715916a1c5a8ca6314095d841305492a8a))
+* unit import staff autocomplete ([b489620](https://github.com/macite/doubtfire-deploy/commit/b489620e8eb2f20379d18fcf27a3ecc951c924a5))
+
+### [7.0.13](https://github.com/macite/doubtfire-deploy/compare/v7.0.12...v7.0.13) (2023-06-17)
+
+
+### Bug Fixes
+
+* correct location of gtag ([a681622](https://github.com/macite/doubtfire-deploy/commit/a681622bd707acf40612136e2af10e85f3fa4bad))
+* update google analytics ([c0b913a](https://github.com/macite/doubtfire-deploy/commit/c0b913aa3187abbe31e743390bb68c6daba48bf0))
+
+### [7.0.12](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.12) (2023-06-17)
+
+
+### Features
+
+* streamline unit import ([4e6827c](https://github.com/macite/doubtfire-deploy/commit/4e6827c1a57dd22ffda38329d7ecc5cf56097c40))
+
+
+### Bug Fixes
+
+* grade should not updated on assessment fail ([6e065e6](https://github.com/macite/doubtfire-deploy/commit/6e065e61702be5bde11a05675346dbdea8f1843d))
+* tasks inclusion in portfolio creation ([f86a8c5](https://github.com/macite/doubtfire-deploy/commit/f86a8c5571059bb1d2606d90cb3902bfb6f30b4b))
+
 ### [7.0.11](https://github.com/macite/doubtfire-deploy/compare/v7.0.10...v7.0.11) (2023-06-02)
 
 
