@@ -71,7 +71,7 @@ export class Project extends Entity {
   public matches(text: string): boolean {
     return (
       this.student.matches(text) ||
-      this.campus.matches(text) ||
+      this.campus?.matches(text) ||
       this.matchesTutorialEnrolments(text) ||
       this.matchesGroup(text)
     );
@@ -245,6 +245,7 @@ export class Project extends Entity {
           alerts.add('success', 'Grade updated.', 2000);
         },
         error: (message) => {
+          this.grade = oldGrade;
           alerts.add('danger', `Grade was not updated: ${message}`, 8000);
         },
       });

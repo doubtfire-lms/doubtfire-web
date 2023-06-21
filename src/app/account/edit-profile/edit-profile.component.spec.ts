@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { EditProfileComponent } from './edit-profile.component';
 
 describe('EditProfileComponent', () => {
@@ -8,9 +7,8 @@ describe('EditProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditProfileComponent ]
-    })
-    .compileComponents();
+      declarations: [EditProfileComponent]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(EditProfileComponent);
     component = fixture.componentInstance;

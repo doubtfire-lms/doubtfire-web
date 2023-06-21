@@ -11,13 +11,12 @@ import { MatLegacySelectChange as MatSelectChange } from '@angular/material/lega
   templateUrl: 'object-select.component.html',
   // styleUrls: ['object-select.component.scss'],
 })
-export class ObjectSelectComponent<T> implements OnInit {
-  @Input() source: {value: T; text: string}[];
+export class ObjectSelectComponent<T> {
+  @Input() source: { value: T; text: string }[];
   @Input() target: T;
   @Input() label: string;
+  @Input() placeholder: string = null;
   @Output() targetChange = new EventEmitter<T>();
-
-  constructor() { }
 
   selectionChange($event: MatSelectChange) {
     this.target = $event.value;
@@ -26,15 +25,5 @@ export class ObjectSelectComponent<T> implements OnInit {
 
   public compareFn(a: T, b: T): boolean {
     return (!a && !b) || a === b;
-  }
-
-  ngOnChanges() {
-    // this.originalCampus = this.student.campus;
-  }
-
-  ngOnInit() {
-    // this.campusService.query().subscribe((campuses) => {
-    //   this.campuses = campuses;
-    // });
   }
 }

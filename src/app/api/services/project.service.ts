@@ -37,7 +37,7 @@ export class ProjectService extends CachedEntityService<Project> {
           }
         },
         toJsonFn: (entity: Project, key: string) => {
-          return entity.campus ? entity.campus.id : -1;
+          return entity.campus ? entity.campus.id : entity.originalJson['camput_id'] ? -1 : null;
         }
       },
       {
