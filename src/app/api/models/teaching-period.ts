@@ -45,6 +45,24 @@ export class TeachingPeriod extends Entity {
     return this.unitsCache.currentValues;
   }
 
+  public hasUnit(unit: Unit): boolean {
+    return unit && this.unitsCache.has(unit?.id);
+  }
+
+  public hasUnitWithCode(code: string): boolean {
+    return this.unitsCache.currentValues.some((u) => u.code === code);
+  }
+
+  /**
+   * Check if a unit with a matching code exists in this teaching period.
+   *
+   * @param unit unit to check against
+   * @returns true if there is a unit with the same code in this teaching period
+   */
+  public hasUnitLike(unit: Unit): boolean {
+    return unit && this.unitsCache.currentValues.some((u) => u.code === unit.code);
+  }
+
   public addBreak(startDate: Date, weeks: number): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;

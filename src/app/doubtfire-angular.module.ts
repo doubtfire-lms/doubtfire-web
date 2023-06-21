@@ -213,11 +213,13 @@ import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tas
 export function playerFactory() {
   return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
 }
+import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 
 @NgModule({
   // Components we declare
   declarations: [
     AboutDoubtfireModalContent,
+    TeachingPeriodUnitImportDialogComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -374,6 +376,7 @@ export function playerFactory() {
     TaskDefinitionService,
     TeachingPeriodService,
     TeachingPeriodBreakService,
+    TeachingPeriodUnitImportService,
     TutorialService,
     TutorialStreamService,
     UserService,

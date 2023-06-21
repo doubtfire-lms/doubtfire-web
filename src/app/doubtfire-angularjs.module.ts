@@ -238,6 +238,7 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
+import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -255,6 +256,7 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
 // Downgrade angular modules that we need...
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
+DoubtfireAngularJSModule.factory('TeachingPeriodUnitImportService', downgradeInjectable(TeachingPeriodUnitImportService));
 DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));

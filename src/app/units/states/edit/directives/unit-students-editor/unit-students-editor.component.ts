@@ -97,7 +97,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
         case 'enrolled':
           return this.sortCompare(a[sort.active], b[sort.active], isAsc);
         case 'campus':
-          return this.sortCompare(a.campus.abbreviation, b.campus.abbreviation, isAsc);
+          return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
         default:
           return 0;
       }

@@ -22,6 +22,7 @@ import {
   UnitService,
   Project,
   TutorialStreamService,
+  UnitRoleService,
 } from './doubtfire-model';
 import { LearningOutcome } from './learning-outcome';
 
@@ -36,6 +37,12 @@ export class Unit extends Entity {
   myRole: string; //TODO: add more type details?
   unitRole: UnitRole; // mapped unit role during admin edits
   mainConvenor: UnitRole;
+
+  /**
+   * The main convenor user for the unit
+   * ONLY UPDATED ON QUERY - when unit role is not available
+   */
+  mainConvenorUser: User;
 
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
@@ -80,12 +87,42 @@ export class Unit extends Entity {
     };
   }
 
+  public get nameAndPeriod(): string {
+    return `${this.name} (${this.teachingPeriod ? this.teachingPeriod.name() : this.startDate.toLocaleDateString()})`;
+  }
+
+  public get codeAndPeriod(): string {
+    return `${this.code} (${this.teachingPeriod ? this.teachingPeriod.name() : this.startDate.toLocaleDateString()})`;
+  }
+
+
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
   }
 
   public matches(text: string): boolean {
     return this.code.toLowerCase().indexOf(text) >= 0 || this.name.toLowerCase().indexOf(text) >= 0;
+  }
+
+  public addStaff(user: User, role: 'Tutor' | 'Convenor' = 'Tutor'): Observable<UnitRole> {
+    const unitRoleService = AppInjector.get(UnitRoleService);
+    return unitRoleService.create(
+      {
+        unit_id: this.id,
+        user_id: user.id,
+        role: role,
+      },
+      {
+        cache: this.staffCache,
+      }
+    );
+  }
+
+  public changeMainConvenor(unitRole: UnitRole): Observable<Unit> {
+    const unitService = AppInjector.get(UnitService);
+    const oldConvenor = this.mainConvenor;
+    this.mainConvenor = unitRole;
+    return unitService.update(this).pipe(tap({ error: () => (this.mainConvenor = oldConvenor) }));
   }
 
   public get staff(): readonly UnitRole[] {
@@ -185,9 +222,9 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: { start_date: Date; end_date: Date }): Observable<Unit>;
-  public rolloverTo(body: { teaching_period_id: number }): Observable<Unit>;
-  public rolloverTo(body: any): Observable<Unit> {
+  public rolloverTo(body: { start_date: Date; end_date: Date}): Observable<Unit>;
+  public rolloverTo(body: { teaching_period_id: number}): Observable<Unit>;
+  public rolloverTo(body: any): Observable<Unit>  {
     const unitService = AppInjector.get(UnitService);
 
     return unitService.create(

@@ -71,7 +71,7 @@ export class Project extends Entity {
   public matches(text: string): boolean {
     return (
       this.student.matches(text) ||
-      this.campus.matches(text) ||
+      this.campus?.matches(text) ||
       this.matchesTutorialEnrolments(text) ||
       this.matchesGroup(text)
     );

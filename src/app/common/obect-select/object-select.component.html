@@ -1,8 +1,16 @@
 <mat-form-field appearance="outline">
-  <mat-label>{{label}}</mat-label>
-  <mat-select [(value)]="target" (selectionChange)="selectionChange($event)" [compareWith]="compareFn">
-    <mat-option *ngFor="let element of source" [value]="element.value" >
-      {{element.text}}
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+  <mat-select
+    [(value)]="target"
+    [placeholder]="placeholder"
+    (selectionChange)="selectionChange($event)"
+    [compareWith]="compareFn"
+  >
+    <mat-option *ngIf="placeholder" [value]="null">
+      {{ placeholder }}
+    </mat-option>
+    <mat-option *ngFor="let element of source" [value]="element.value">
+      {{ element.text }}
     </mat-option>
   </mat-select>
 </mat-form-field>
