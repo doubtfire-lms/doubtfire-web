@@ -88,11 +88,11 @@ export class Unit extends Entity {
   }
 
   public get nameAndPeriod(): string {
-    return `${this.name} (${this.teachingPeriod ? this.teachingPeriod.name() : this.startDate.toLocaleDateString()})`;
+    return `${this.name} (${this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()})`;
   }
 
   public get codeAndPeriod(): string {
-    return `${this.code} (${this.teachingPeriod ? this.teachingPeriod.name() : this.startDate.toLocaleDateString()})`;
+    return `${this.code} (${this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()})`;
   }
 
 
