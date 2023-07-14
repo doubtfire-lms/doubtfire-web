@@ -10,7 +10,6 @@
       style="margin-right: 20px; margin-left: 20px"
       svgIcon="formatif-logo"
       class="formatif-icon"
-      aria-hidden="false"
       aria-label="Formatif logo"
     ></mat-icon>
   </a>
@@ -41,19 +40,38 @@
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
+      <mat-icon matListItemIcon>business</mat-icon>
       Institution Settings
     </button>
-    <button mat-menu-item uiSref="admin/units">Manage Units</button>
-    <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">Manage Users</button>
+    <button mat-menu-item uiSref="admin/units">
+      <mat-icon matListItemIcon>school</mat-icon>
+      Manage Units
+    </button>
+    <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">
+      <mat-icon matListItemIcon>people</mat-icon>
+      Manage Users
+    </button>
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menu2">
     <user-icon [size]="32"></user-icon>
   </button>
   <mat-menu #menu2="matMenu">
-    <button mat-menu-item uiSref="edit_profile">Edit Profile</button>
-    <button mat-menu-item (click)="openCalendar()">Calendar</button>
-    <button mat-menu-item (click)="openAboutModal()">About</button>
-    <button mat-menu-item (click)="signOut()">Sign Out</button>
+    <button mat-menu-item uiSref="edit_profile">
+      <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
+      Edit Profile
+    </button>
+    <button mat-menu-item (click)="openCalendar()">
+      <mat-icon matListItemIcon aria-label="Edit calendar">calendar_month</mat-icon>
+      Calendar
+    </button>
+    <button mat-menu-item (click)="openAboutModal()">
+      <mat-icon matListItemIcon aria-label="About">info</mat-icon>
+      About
+    </button>
+    <button mat-menu-item (click)="signOut()">
+      <mat-icon matListItemIcon aria-label="Sign out">logout</mat-icon>
+      Sign Out
+    </button>
   </mat-menu>
 </mat-toolbar>
