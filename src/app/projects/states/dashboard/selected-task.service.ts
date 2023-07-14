@@ -35,6 +35,8 @@ export class SelectedTaskService {
     } else {
       this.task$.next(task);
 
+      task?.getSubmissionDetails().subscribe();
+
       if (task?.similaritiesDetected) {
         this.globalState.showFooterWarning();
       } else {
