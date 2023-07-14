@@ -41,7 +41,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    // this.currentView = DashboardViews.submission;
     this.selectedTaskService.currentView$.next(DashboardViews.submission);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = view;
