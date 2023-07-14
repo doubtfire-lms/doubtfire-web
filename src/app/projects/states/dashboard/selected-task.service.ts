@@ -29,6 +29,14 @@ export class SelectedTaskService {
     return this.task$.value?.hasPdf;
   }
 
+  public checkFooterHeight() {
+    if (this.task$.getValue()?.similaritiesDetected) {
+      this.globalState.showFooterWarning();
+    } else {
+      this.globalState.hideFooterWarning();
+    }
+  }
+
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
       this.taskService.get(task).subscribe(this.task$);
@@ -36,13 +44,8 @@ export class SelectedTaskService {
       this.task$.next(task);
 
       task?.getSubmissionDetails().subscribe();
-
-      if (task?.similaritiesDetected) {
-        this.globalState.showFooterWarning();
-      } else {
-        this.globalState.hideFooterWarning();
-      }
     }
+    this.checkFooterHeight();
     this.showSubmission();
   }
 

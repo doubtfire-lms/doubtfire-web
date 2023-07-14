@@ -1,10 +1,10 @@
-import { Component, Inject, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Task } from 'src/app/api/models/task';
 import { TaskSimilarity } from 'src/app/api/models/task-similarity';
 import { TaskSimilarityService } from 'src/app/api/services/task-similarity.service';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { SelectedTaskService } from '../../../../selected-task.service';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -16,7 +16,11 @@ export class TaskSimilarityViewComponent implements OnChanges {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   panelOpenState = false;
 
-  constructor(private taskSimilarityService: TaskSimilarityService, private alertsService: AlertService) {}
+  constructor(
+    private taskSimilarityService: TaskSimilarityService,
+    private alertsService: AlertService,
+    private selectedTaskService: SelectedTaskService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
@@ -39,6 +43,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
             return s.flagged;
           })
           .reduce((a, b) => a || b, false);
+        this.selectedTaskService.checkFooterHeight();
       });
   }
 }
