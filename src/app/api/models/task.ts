@@ -36,7 +36,6 @@ export class Task extends Entity {
   grade?: number;
   qualityPts: number;
   includeInPortfolio: boolean = true;
-  pctSimilar: number = 0;
   similarityFlag: boolean = false;
   numNewComments: number = 0;
   hasExtensions: boolean;
