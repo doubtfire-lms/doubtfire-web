@@ -15,6 +15,11 @@ export class FileDropComponent {
    * Have a singe file that can be set
    */
   @Input() file: File;
+
+  @Input() endpoint: string;
+
+  @Input() body: object;
+
   @Output() fileChange = new EventEmitter<File>();
 
   /**
@@ -24,7 +29,13 @@ export class FileDropComponent {
 
   public message: string = 'Drop a file here to upload';
 
-  constructor() { }
+  constructor() {}
+
+  public get isUploadMode() {
+    return this.endpoint;
+  }
+
+  public upload() {}
 
   public setFile(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(this.selectFn);

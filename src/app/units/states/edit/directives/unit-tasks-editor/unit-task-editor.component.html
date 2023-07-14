@@ -11,12 +11,16 @@
       </mat-form-field>
     </div>
 
-    <table class="flex-grow" mat-table [dataSource]="taskDefinitionSource" matSort (matSortChange)="sortData($event)">
+    <table
+      class="flex-grow f-table"
+      mat-table
+      [dataSource]="taskDefinitionSource"
+      matSort
+      (matSortChange)="sortData($event)"
+    >
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Task Name</th>
-        <td mat-cell *matCellDef="let taskDefinition">
-          {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
-        </td>
+        <td mat-cell *matCellDef="let taskDefinition">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</td>
       </ng-container>
 
       <!-- Action footer row -->
@@ -31,15 +35,25 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns;" (click)="selectTaskDefinition(row)" [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: columns"
+        (click)="selectTaskDefinition(row)"
+        [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
+      ></tr>
       <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
     </table>
-    <f-task-definition-editor *ngIf="selectedTaskDefinition" [taskDefinition]="selectedTaskDefinition" [unit]="unit" [isNew]="false"></f-task-definition-editor>
+    <f-task-definition-editor
+      *ngIf="selectedTaskDefinition"
+      [taskDefinition]="selectedTaskDefinition"
+      [unit]="unit"
+      [isNew]="false"
+    ></f-task-definition-editor>
   </div>
   <div class="flex flex-col gap-4">
     <h3>Batch Upload Tasks</h3>
     <p>Batch upload task definitions with a CSV. Download to get format.</p>
-    <f-file-drop (filesDropped)="uploadTaskDefinitions($event)" [selectFn]="matchCsvFiles" />
+    <f-file-drop endpoint="a" [selectFn]="matchCsvFiles" />
 
     <h3>Download Tasks</h3>
     <p>Download all task definitions for this unit.</p>
