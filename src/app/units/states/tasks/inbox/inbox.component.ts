@@ -107,6 +107,8 @@ export class InboxComponent implements OnInit {
   }
 
   openPdfInNewTab(): void {
-    this.fileDownloader.downloadFile(this.visiblePdfUrl, `this.taskData.selectedTask.definition.abbreviation`);
+    if (this.taskData.selectedTask.hasPdf) {
+      this.fileDownloader.downloadFile(this.visiblePdfUrl, `${this.taskData.selectedTask.definition.abbreviation}.pdf`);
+    }
   }
 }

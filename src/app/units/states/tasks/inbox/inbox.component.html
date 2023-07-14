@@ -57,15 +57,21 @@
   </div>
   <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
     <div fxLayout="row" style="margin-bottom: 5px">
-      <button mat-icon-button aria-label="Back to inbox" (click)="taskSelected = false">
+      <button mat-icon-button aria-label="Back to inbox" matTooltip="Back to inbox" (click)="taskSelected = false">
         <mat-icon>arrow_back_ios_new</mat-icon>
       </button>
       <h3 style="margin-top: 16px; margin-bottom: 0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
       <div fxFlex></div>
-      <button mat-icon-button aria-label="Open Submission" (click)="openPdfInNewTab()">
+      <button
+        [disabled]="!this.taskData?.selectedTask?.hasPdf"
+        mat-icon-button
+        aria-label="Open Submission"
+        (click)="openPdfInNewTab()"
+        matTooltip="Open submission"
+      >
         <mat-icon>description</mat-icon>
       </button>
-      <button mat-icon-button aria-label="Go to student" (click)="goToStudent()">
+      <button mat-icon-button aria-label="Go to student" matTooltip="Go to student" (click)="goToStudent()">
         <mat-icon>account_circle</mat-icon>
       </button>
     </div>
