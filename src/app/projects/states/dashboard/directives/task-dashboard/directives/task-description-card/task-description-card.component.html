@@ -28,10 +28,10 @@
   </mat-card-content>
   <mat-card-actions [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)">
     <button mat-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
-      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Task Sheet
+      <mat-icon aria-label="Download icon">cloud_download</mat-icon> Task Sheet
     </button>
     <button mat-button [hidden]="!taskDef?.hasTaskResources" (click)="downloadResources()">
-      <mat-icon aria-hidden="false" aria-label="Download icon">cloud_download</mat-icon> Resources
+      <mat-icon aria-label="Download icon">cloud_download</mat-icon> Resources
     </button>
   </mat-card-actions>
 </mat-card>
