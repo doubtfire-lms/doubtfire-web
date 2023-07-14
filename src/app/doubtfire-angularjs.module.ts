@@ -10,22 +10,22 @@ import { downgradeInjectable, downgradeComponent } from '@angular/upgrade/static
 
 // Here are the old angular node modules, previously loaded via grunt
 //#region
-import 'node_modules/angular-cookies/angular-cookies.js';
-import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
-import 'node_modules/angular-resource/angular-resource.js';
-import 'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js';
-import 'node_modules/angular-nvd3/dist/angular-nvd3.js';
-import 'node_modules/angular-file-upload/angular-file-upload.js';
-import 'node_modules/ng-file-upload/dist/ng-file-upload-all.min.js';
-import 'node_modules/angular-sanitize/angular-sanitize.js';
-import 'node_modules/ng-csv/build/ng-csv.js';
-import 'node_modules/angular-xeditable/dist/js/xeditable.js';
-import 'node_modules/angular-filter/dist/angular-filter.js';
-import 'node_modules/angular-ui-codemirror/src/ui-codemirror.js';
-import 'node_modules/angular-markdown-filter/markdown.js';
-import 'node_modules/angulartics/dist/angulartics.min.js';
-import 'node_modules/angulartics-google-analytics/lib/angulartics-google-analytics.js';
-import 'node_modules/angular-md5/angular-md5.js';
+import 'angular-cookies/angular-cookies.js';
+import 'angular-local-storage/dist/angular-local-storage.js';
+import 'angular-resource/angular-resource.js';
+import 'angular-ui-bootstrap/ui-bootstrap-tpls.js';
+import 'angular-nvd3/dist/angular-nvd3.js';
+import 'angular-file-upload/angular-file-upload.js';
+import 'ng-file-upload/dist/ng-file-upload-all.min.js';
+import 'angular-sanitize/angular-sanitize.js';
+import 'ng-csv/build/ng-csv.js';
+import 'angular-xeditable/dist/js/xeditable.js';
+import 'angular-filter/dist/angular-filter.js';
+import 'angular-ui-codemirror/src/ui-codemirror.js';
+import 'angular-markdown-filter/markdown.js';
+import 'angulartics/dist/angulartics.min.js';
+import 'angulartics-google-analytics/lib/angulartics-google-analytics.js';
+import 'angular-md5/angular-md5.js';
 
 // Ok... here is what we need to convert!
 
