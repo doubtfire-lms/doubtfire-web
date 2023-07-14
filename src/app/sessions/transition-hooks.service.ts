@@ -15,7 +15,7 @@ export class TransitionHooksService {
   ) {
     this.transitions.onBefore({}, (transition) => {
       const toState = transition.to().name;
-      const fromState = transition.from().name;
+      // const fromState = transition.from().name;
 
       if (this.isInboxState(toState)) {
         this.globalState.setInboxState();
@@ -24,6 +24,8 @@ export class TransitionHooksService {
       }
 
       switch (toState) {
+        case 'timeout':
+          return true;
         case 'sign_in':
           this.globalState.hideHeader();
           break;
@@ -40,6 +42,7 @@ export class TransitionHooksService {
           break;
       }
 
+      // force you to welcome (except for timeout)
       if (
         !this.userService.isAnonymousUser() &&
         !userService.currentUser.hasRunFirstTimeSetup &&
