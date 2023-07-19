@@ -5,6 +5,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -199,6 +200,20 @@ const TeachingPeriodsState: NgHybridStateDeclaration = {
   },
 };
 
+const EulaState: NgHybridStateDeclaration = {
+  name: 'eula',
+  url: '/eula',
+  views: {
+    main: {
+      component: AcceptEulaComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Teaching Periods',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
@@ -209,4 +224,5 @@ export const doubtfireStates = [
   WelcomeState,
   SignInState,
   EditProfileState,
+  EulaState,
 ];

@@ -214,6 +214,7 @@ export function playerFactory() {
   return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
 }
 import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 
 @NgModule({
   // Components we declare
@@ -284,6 +285,7 @@ import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportServic
     SplashScreenComponent,
     ObjectSelectComponent,
     WelcomeComponent,
+    AcceptEulaComponent,
     HeroSidebarComponent,
     SignInComponent,
     EditProfileFormComponent,
