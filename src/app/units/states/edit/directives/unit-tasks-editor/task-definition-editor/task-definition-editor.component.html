@@ -10,7 +10,7 @@
   <div class="flex flex-col">
     <div class="flex flex-row gap-4">
       <mat-icon class="basis-auto">school</mat-icon>
-      <h3 class="flex-grow">Who assesses and submits this task?</h3>
+      <h3 class="flex-grow">Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?</h3>
     </div>
     <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
   </div>

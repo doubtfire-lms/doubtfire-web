@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { Grade, GroupSet, TutorialStream, Unit } from './doubtfire-model';
+import { TaskDefinitionService } from '../services/task-definition.service';
 
 export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
 
@@ -48,6 +49,62 @@ export class TaskDefinition extends Entity {
     return {
       task_def: super.toJson(mappingData, ignoreKeys),
     };
+  }
+
+  /**
+   * Save the task definition
+   */
+  public save(): Observable<TaskDefinition> {
+    const svc = AppInjector.get(TaskDefinitionService);
+
+    if (this.isNew) {
+      // TODO: add progress modal
+      return svc.create(
+        {
+          unitId: this.unit.id,
+        },
+        {
+          entity: this,
+          cache: this.unit.taskDefinitionCache,
+          constructorParams: this.unit,
+        }
+      );
+    } else {
+      return svc.update(
+        {
+          unitId: this.unit.id,
+          id: this.id,
+        },
+        { entity: this }
+      );
+    }
+  }
+
+  private originalSaveData: string;
+
+  /**
+   * To check if things have changed, we need to get the initial save data... as it
+   * isn't empty by default. We can then use
+   * this to check if there are changes.
+   *
+   * @param mapping the mapping to get changes
+   */
+  public setOriginalSaveData(mapping: EntityMapping<TaskDefinition>) {
+    if (!this.originalSaveData) {
+      this.originalSaveData = JSON.stringify(this.toJson(mapping));
+    }
+  }
+
+  public hasChanges<T extends Entity>(mapping: EntityMapping<T>): boolean {
+    if (!this.originalSaveData) {
+      return false;
+    }
+
+    return this.originalSaveData != JSON.stringify(this.toJson(mapping));
+  }
+
+  public get isNew(): boolean {
+    return !this.id;
   }
 
   public get unitId(): number {
