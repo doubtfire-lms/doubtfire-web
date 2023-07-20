@@ -71,9 +71,10 @@ export class TransitionHooksService {
       // Redirect to eula if user has not accepted eula
       // they are loged in, hace run first time setup,
       // but not accepted eula
-      if (
+      if ( this.tiiEnabled &&
         !this.userService.isAnonymousUser() &&
         userService.currentUser.hasRunFirstTimeSetup &&
+        userService.currentUser.isStaff &&
         !userService.currentUser.acceptedTiiEula &&
         toState !== 'eula'
       ) {

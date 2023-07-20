@@ -34,6 +34,10 @@ export class User extends Entity {
     return this.systemRole;
   }
 
+  public get isStaff(): boolean {
+    return ['Tutor', 'Convenor', 'Admin'].includes(this.systemRole);
+  }
+
   public get name(): string {
     const fn = this.firstName.slice(0, 11);
     const sn = this.lastName.slice(0, 11);
