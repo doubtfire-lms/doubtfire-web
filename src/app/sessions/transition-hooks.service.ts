@@ -57,9 +57,6 @@ export class TransitionHooksService {
         case 'home':
           this.globalState.goHome();
           break;
-        case 'timeout':
-          // return as this state should always succeed to enable auth fails
-          return;
         default:
           break;
       }
