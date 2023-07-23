@@ -1,19 +1,36 @@
-<!-- <div class="flex items-center hover:cursor-pointer">
-  <input
-    type="file"
-    class="text-md text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-md file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-  />
+<input type="file" class="hidden" (change)="onFileSelected($event)" #fileUpload />
 
-  <button *ngIf="isUploadMode" class="self-end" mat-icon-button (click)="upload()" aria-label="upload file">
-    <mat-icon>upload</mat-icon>
+<div class="flex items-center w-full" appDragDrop (fileDropped)="onFileDragOver($event)">
+  <button
+    mat-flat-button
+    class="h-[52px] rounded-r-none border-r-0 rounded-lg shrink-0"
+    color="primary"
+    (click)="fileUpload.click()"
+  >
+    Choose file
   </button>
-</div> -->
+  <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
+    <div class="flex flex-col w-full">
+      <div class="flex ml-4 h-[48px] items-center">
+        <mat-icon class="mr-2" *ngIf="file?.name">upload_file</mat-icon>
+        <span class="truncate grow max-w-xs mt-[4px]">
+          {{ file?.name || 'No file uploaded yet.' }}
+        </span>
 
-<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-<input
-  class="block w-full text-md text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-  aria-describedby="file_input_help"
-  id="file_input"
-  type="file"
-/>
-<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+        <button
+          *ngIf="isUploadMode"
+          [disabled]="!file?.name"
+          class="ml-auto"
+          mat-icon-button
+          (click)="uploadProgress ? cancelUpload() : upload()"
+        >
+          <mat-icon *ngIf="!uploadProgress">upload</mat-icon>
+          <mat-icon *ngIf="uploadProgress">cancel</mat-icon>
+        </button>
+      </div>
+      <mat-progress-bar *ngIf="uploadProgress" mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
+      <span *ngIf="!uploadProgress" class="h-[4px]"></span>
+    </div>
+  </div>
+</div>
+

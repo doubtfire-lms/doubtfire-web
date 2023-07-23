@@ -53,7 +53,8 @@
   <div class="flex flex-col gap-4">
     <h3>Batch Upload Tasks</h3>
     <p>Batch upload task definitions with a CSV. Download to get format.</p>
-    <f-file-drop endpoint="a" [selectFn]="matchCsvFiles" />
+
+    <f-file-drop [endpoint]="unit.getTaskDefinitionBatchUploadUrl()" [selectFn]="matchCsvFiles" />
 
     <h3>Download Tasks</h3>
     <p>Download all task definitions for this unit.</p>
