@@ -34,6 +34,10 @@ export class User extends Entity {
     return this.systemRole;
   }
 
+  public get isStaff(): boolean {
+    return ['Tutor', 'Convenor', 'Admin'].includes(this.systemRole);
+  }
+
   public get name(): string {
     const fn = this.firstName.slice(0, 11);
     const sn = this.lastName.slice(0, 11);
@@ -54,7 +58,7 @@ export class User extends Entity {
 
   public acceptTiiEula(): Observable<boolean> {
     const httpClient = AppInjector.get(HttpClient);
-    const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/tii_eula/users/${this.id}/accept/task_sheet`;
+    const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/tii_eula/users/${this.id}/accept`;
     return httpClient.put(uri, {}).pipe(map(() => (this.acceptedTiiEula = true)));
   }
 }

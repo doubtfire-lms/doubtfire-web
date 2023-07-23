@@ -4,7 +4,7 @@
     <div class="flex-grow" appDragDrop (fileDropped)="uploadTaskSheet($event)" style="background-color: red;"><mat-icon>upload</mat-icon> Task Sheet</div>
     <div *ngIf="taskDefinition.hasTaskSheet">
       <button mat-flat-button (click)="downloadTaskSheet()" class="flex-grow">Download Task Sheet</button>
-      <button mat-flat-button color="warn" (click)="removeTaskSheet()" class="flex-grow">Delete</button>
+      <button mat-flat-button color="warn" (click)="removeTaskSheet()" class="flex-grow">Delete Task Sheet</button>
     </div>
   </div>
   <div class="basis-1/2 flex flex-col">

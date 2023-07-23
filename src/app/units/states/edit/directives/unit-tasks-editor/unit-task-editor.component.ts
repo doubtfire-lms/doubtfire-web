@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
+import { confirmationModal } from 'src/app/ajs-upgraded-providers';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
@@ -21,23 +22,32 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   @Input() unit: Unit;
 
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public columns: string[] = ['name'];
+  public columns: string[] = ['name', 'grade', 'startDate', 'targetDate', 'deadlineDate', 'taskDefAction'];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
 
-  constructor(private taskDefinitionService: TaskDefinitionService, private alerts: AlertService) {}
+  constructor(
+    private taskDefinitionService: TaskDefinitionService,
+    private alerts: AlertService,
+    @Inject(confirmationModal) private confirmationModal: any
+  ) {}
 
   ngAfterViewInit(): void {
     this.subscriptions.push(
-      this.unit.taskDefinitionCache.values.subscribe(
-        (taskDefinitions) => {
-          this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
-          this.taskDefinitionSource.paginator = this.paginator;
-          this.taskDefinitionSource.sort = this.sort;
-          this.taskDefinitionSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-        }
-      )
+      this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
+        this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
+        this.taskDefinitionSource.paginator = this.paginator;
+        this.taskDefinitionSource.sort = this.sort;
+        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+      })
     );
+  }
+
+  public saveTaskDefinition(taskDefinition: TaskDefinition) {
+    taskDefinition.save().subscribe(() => {
+      this.alerts.success('Task Saved');
+      taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    });
   }
 
   private subscriptions: Subscription[] = [];
@@ -50,6 +60,8 @@ export class UnitTaskEditorComponent implements AfterViewInit {
       this.selectedTaskDefinition = null;
     } else {
       this.selectedTaskDefinition = taskDefinition;
+
+      this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
     }
   }
 
@@ -64,8 +76,18 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.taskDefinitionSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.abbreviation, b.abbreviation, isAsc);
-        default: return 0;
+        case 'name':
+          return this.compare(a.abbreviation, b.abbreviation, isAsc);
+        case 'grade':
+          return this.compare(a.targetGrade, b.targetGrade, isAsc);
+        case 'startDate':
+          return this.compare(a.startDate.getTime(), b.startDate.getTime(), isAsc);
+        case 'targetDate':
+          return this.compare(a.targetDate.getTime(), b.targetDate.getTime(), isAsc);
+        case 'deadlineDate':
+          return this.compare(a.dueDate.getTime(), b.dueDate.getTime(), isAsc);
+        default:
+          return 0;
       }
     });
   }
@@ -92,19 +114,65 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     return file.type === 'application/zip';
   }
 
-  public uploadTaskDefinitions(file: FileList) {
+  public uploadTaskDefinitions(file: FileList) {}
 
+  public uploadTaskPdfs(file: FileList) {}
+
+  public downloadTaskDefinitions() {}
+
+  public downladTaskDefinitionsZip() {}
+
+  private guessTaskAbbreviation() {
+    if (this.unit.taskDefinitions.length == 0) {
+      return '1.1P';
+    } else {
+      const lastAbbr = this.unit.taskDefinitions[this.unit.taskDefinitions.length - 1].abbreviation;
+      const regex = /(.*)(\d+)(\D*)/;
+      const match = regex.exec(lastAbbr);
+      if (match) {
+        return `${match[1]}${parseInt(match[2]) + 1}${match[3]}`;
+      } else {
+        return `${lastAbbr}1`;
+      }
+    }
   }
 
-  public uploadTaskPdfs(file: FileList) {
-
+  public taskDefinitionHasChanges(taskDefinition: TaskDefinition): boolean {
+    return taskDefinition.hasChanges(this.taskDefinitionService.mapping);
   }
 
-  public downloadTaskDefinitions() {
+  public deleteTaskDefinition(taskDefinition: TaskDefinition) {
+    this.confirmationModal.show(
+      `Delete Task ${taskDefinition.abbreviation}`,
+      'Are you sure you want to delete this task? This action is final and will delete student work associated with this task.',
+      () => {
+        this.unit.deleteTaskDefinition(taskDefinition);
+        //TODO: reinstate ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
+
+        this.alerts.success('Task deleted');
+      }
+    );
   }
 
-  public downladTaskDefinitionsZip() {
+  public createTaskDefinition() {
+    const abbr = this.guessTaskAbbreviation();
+    const task = new TaskDefinition(this.unit);
+
+    task.name = `Task ${abbr}`;
+    task.abbreviation = abbr;
+    task.description = 'New Description';
+    task.startDate = new Date();
+    task.targetDate = new Date();
+    task.uploadRequirements = [];
+    task.plagiarismChecks = [];
+    task.weighting = 4;
+    task.targetGrade = 0;
+    task.restrictStatusUpdates = false;
+    task.plagiarismWarnPct = 80;
+    task.isGraded = false;
+    task.maxQualityPts = 0;
+    task.tutorialStream = this.unit.tutorialStreams[0];
+
+    this.selectedTaskDefinition = task;
   }
-
-
 }

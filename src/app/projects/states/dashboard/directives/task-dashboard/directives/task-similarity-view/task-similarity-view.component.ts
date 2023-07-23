@@ -37,7 +37,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     this.taskSimilarityService
       .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
       .subscribe((_) => {
-        this.alertsService.success('Updated', 120000);
+        this.alertsService.success('Similarity flag updated');
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
           .map((s) => {
             return s.flagged;

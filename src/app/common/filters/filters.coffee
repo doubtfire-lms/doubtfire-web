@@ -46,7 +46,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> (student?) && student.maxPctCopy > 0
+      _.filter  input, (student) -> (student?) && student.similarityFlag
     else
       input
 )
@@ -70,7 +70,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('taskWithPlagiarism', ->
   (input) ->
     if input
-      _.filter input, (task) -> (task?) && task.pctSimilar > 0
+      _.filter input, (task) -> (task?) && task.similarityFlag
     else
       input
 )

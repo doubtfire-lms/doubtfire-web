@@ -44,7 +44,7 @@
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('targetGrade')" btn-radio="'targetGrade'">
               <i class="fa fa-check"></i> Grade
             </button>
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('maxPctCopy')" btn-radio="'maxPctCopy'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('similarityFlag')" btn-radio="'similarityFlag'">
               <i class="fa fa-eye"></i> Plagiarism
             </button>
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolioStatus')" btn-radio="'portfolioStatus'">
@@ -88,7 +88,7 @@
             <a ng-click="sortTableBy('flags')">
               Flags
               <i ng-show="
-                tableSort.order == 'maxPctCopy' ||
+                tableSort.order == 'similarityFlag' ||
                 tableSort.order == 'targetGrade' ||
                 tableSort.order == 'portfolioStatus'"
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
@@ -132,7 +132,7 @@
               <span class="flag">
                 <grade-icon grade="project.targetGrade"></grade-icon>
               </span>
-              <span ng-show="project.maxPctCopy > 0" class="flag">
+              <span ng-show="project.similarityFlag" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>
               </span>
               <span ng-show="project.hasPortfolio" class="flag">
