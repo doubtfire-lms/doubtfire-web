@@ -8,12 +8,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-browser-sync');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-coffeelint');
   grunt.loadNpmTasks('grunt-karma');
@@ -338,21 +336,6 @@ module.exports = function (grunt) {
           ]
       }
   },
-
-    /**
-     * Minify the sources!
-     */
-    uglify: {
-      compile: {
-        options: {
-          banner: '<%= meta.banner %>',
-          mangle: false
-        },
-        files: {
-          '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
-        }
-      }
-    },
 
     /**
      * `jshint` defines the rules of our linter as well as which files we
@@ -702,7 +685,6 @@ module.exports = function (grunt) {
     'copy:compile_assets',
     'ngAnnotate',
     'concat',
-    'uglify',
     'index:compile'
   ]);
 
