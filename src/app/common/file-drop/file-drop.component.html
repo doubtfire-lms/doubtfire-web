@@ -6,16 +6,16 @@
     class="h-[52px] rounded-r-none border-r-0 rounded-lg shrink-0"
     color="primary"
     (click)="fileUpload.click()"
+    [disabled]="uploadProgress"
   >
-    Choose file
+    <mat-spinner *ngIf="uploadProgress" [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
+    <span *ngIf="!uploadProgress">Choose file</span>
   </button>
   <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
     <div class="flex flex-col w-full">
       <div class="flex ml-4 h-[48px] items-center">
         <mat-icon class="mr-2" *ngIf="file?.name">upload_file</mat-icon>
-        <span class="truncate grow max-w-xs mt-[4px]">
-          {{ file?.name || 'No file uploaded yet.' }}
-        </span>
+        <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
 
         <button
           *ngIf="isUploadMode"
@@ -33,4 +33,3 @@
     </div>
   </div>
 </div>
-
