@@ -49,10 +49,6 @@ export class TaskDefinitionResourcesComponent {
     });
   }
 
-  public matchPdfFiles(file: File): boolean {
-    return file.type === 'application/pdf';
-  }
-
   public uploadTaskSheet(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter((f) => f.type === 'application/pdf');
     if (validFiles.length > 0) {

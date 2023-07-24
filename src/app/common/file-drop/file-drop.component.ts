@@ -12,26 +12,26 @@ import { AlertService } from '../services/alert.service';
   styleUrls: ['file-drop.component.scss'],
 })
 export class FileDropComponent {
-  @Input() selectFn: (file: File) => boolean = () => true;
-
-  /**
-   * Have a singe file that can be set
-   */
-  file: File;
-
   /** The name of the file(s) you are asking the user to upload */
   @Input() desiredFileName: string;
 
   /** Is this a multi-file uploader? */
-  @Input() multiFile: boolean = false;
+  @Input() multiple: boolean = false;
+
+  /** The file types that are allowed to be uploaded */
+  @Input() accept: string;
 
   /** The URL of the endpoint to POST the file to */
   @Input() endpoint: string;
   @Input() body: object;
   @Output() fileChange = new EventEmitter<File>();
 
-  uploadProgress: number;
-  uploadSub: Subscription;
+  protected uploadProgress: number;
+  protected uploadSub: Subscription;
+  /**
+   * Have a singe file that can be set
+   */
+  protected file: File;
   /**
    * Report all files dropped
    */
@@ -59,6 +59,15 @@ export class FileDropComponent {
   }
 
   public onFileDragOver(files: FileList) {
+    // iterate over FileList
+    const droppedFiles = Array.from(files as ArrayLike<File>);
+    for (const f of droppedFiles) {
+      if (!this.accept.includes(f.type)) {
+        return;
+      }
+    }
+
+    this.filesDropped.emit(droppedFiles);
     this.file = files[0];
   }
 

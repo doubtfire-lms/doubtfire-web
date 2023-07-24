@@ -1,4 +1,11 @@
-<input type="file" class="hidden" (change)="onFileSelected($event)" #fileUpload />
+<input
+  type="file"
+  class="hidden"
+  [accept]="accept"
+  [multiple]="multiple"
+  (change)="onFileSelected($event)"
+  #fileUpload
+/>
 
 <div class="flex items-center w-full" appDragDrop (fileDropped)="onFileDragOver($event)">
   <button

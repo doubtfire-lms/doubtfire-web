@@ -13,7 +13,13 @@
       </div>
     </div>
 
-    <table class="flex-grow f-table" mat-table [dataSource]="taskDefinitionSource" matSort (matSortChange)="sortData($event)">
+    <table
+      class="flex-grow f-table"
+      mat-table
+      [dataSource]="taskDefinitionSource"
+      matSort
+      (matSortChange)="sortData($event)"
+    >
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Task Name</th>
         <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
@@ -29,19 +35,19 @@
       <ng-container matColumnDef="startDate" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
         <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
-          {{ taskDefinition.startDate | date : 'd LLL y' }}
+          {{ taskDefinition.startDate | date: 'd LLL y' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="targetDate" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
         <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
-          {{ taskDefinition.targetDate | date : 'd LLL y' }}
+          {{ taskDefinition.targetDate | date: 'd LLL y' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="deadlineDate" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Deadline</th>
         <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
-          {{ taskDefinition.dueDate | date : 'd LLL y' }}
+          {{ taskDefinition.dueDate | date: 'd LLL y' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="taskDefAction" sticky>
@@ -98,7 +104,11 @@
     <h3>Batch Upload Tasks</h3>
     <p>Batch upload task definitions with a CSV. Download to get format.</p>
 
-    <f-file-drop [endpoint]="unit.getTaskDefinitionBatchUploadUrl()" desiredFileName="taskdefinition.csv" [selectFn]="matchCsvFiles" />
+    <f-file-drop
+      [endpoint]="unit.getTaskDefinitionBatchUploadUrl()"
+      desiredFileName="taskdefinition.csv"
+      accept="text/csv"
+    />
 
     <h3>Download Tasks</h3>
     <p>Download all task definitions for this unit.</p>
@@ -107,6 +117,6 @@
 
     <h3>Batch Upload Task PDFs</h3>
     <p>Upload all of the task PDFs in a Zip file.</p>
-    <f-file-drop (filesDropped)="uploadTaskPdfs($event)" [selectFn]="matchZipFiles" />
+    <f-file-drop (filesDropped)="uploadTaskPdfs($event)" accept="application/zip" />
   </div>
 </div>

@@ -106,14 +106,6 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     }
   }
 
-  public matchCsvFiles(file: File): boolean {
-    return file.type === 'text/csv';
-  }
-
-  public matchZipFiles(file: File): boolean {
-    return file.type === 'application/zip';
-  }
-
   public uploadTaskDefinitions(file: FileList) {}
 
   public uploadTaskPdfs(file: FileList) {}
