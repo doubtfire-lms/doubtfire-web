@@ -1,5 +1,14 @@
 @import '../../../../styles/common/hero-sidebar-layout.scss';
 
+.welcome {
+  display: flex;
+}
+
+.content {
+  flex-grow: 1;
+  padding-top: 100px;
+}
+
 .sign-in-form {
   section {
     padding: 8px;
