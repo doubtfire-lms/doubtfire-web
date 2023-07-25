@@ -474,9 +474,9 @@ export class Task extends Entity {
       );
   }
 
-  public overseerEnabled(): boolean {
+  public get overseerEnabled(): boolean {
     return (
-      this.unit.overseerEnabled() && this.definition.assessmentEnabled && this.definition.hasTaskAssessmentResources
+      this.unit.overseerEnabled && this.definition.assessmentEnabled && this.definition.hasTaskAssessmentResources
     );
   }
 

@@ -39,7 +39,7 @@
     <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
   </div>
 
-  <div class="flex flex-col">
+  <div class="flex flex-col" *ngIf="overseerEnabled">
     <div class="flex flex-row gap-4">
       <mat-icon class="basis-auto">smart_toy</mat-icon>
       <h3 class="flex-grow">Configure Overseer for automated assessment</h3>

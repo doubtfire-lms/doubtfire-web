@@ -15,7 +15,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.overseerEnabled = () ->
-      DoubtfireConstants.IsOverseerEnabled.value && $scope.task?.overseerEnabled()
+      DoubtfireConstants.IsOverseerEnabled.value && $scope.task?.overseerEnabled
 
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor

@@ -420,7 +420,7 @@ export class Unit extends Entity {
     return this.groupSetsCache.currentValues;
   }
 
-  public overseerEnabled(): boolean {
+  public get overseerEnabled(): boolean {
     return this.assessmentEnabled && AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value; // && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 

@@ -35,7 +35,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
   ) {}
 
   public get overseerEnabled(): boolean {
-    return this.unit.overseerEnabled();
+    return this.unit.overseerEnabled;
   }
 
   public get unit(): Unit {
