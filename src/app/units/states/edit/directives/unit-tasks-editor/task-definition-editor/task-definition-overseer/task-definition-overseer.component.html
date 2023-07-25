@@ -3,7 +3,7 @@
     Automation Enabled
   </mat-checkbox>
 
-  <mat-form-field class="flex-grow">
+  <mat-form-field class="flex-grow" appearance="outline">
     <mat-label>Docker Image</mat-label>
     <mat-select [(value)]="taskDefinition.overseerImageId" [disabled]="!overseerEnabled">
       <mat-option *ngFor="let image of images | async" [value]="image.id">{{ image.description }}</mat-option>
@@ -11,9 +11,7 @@
     <mat-hint>Docker image for Overseer</mat-hint>
   </mat-form-field>
 
-  <div class="flex-grow" appDragDrop (fileDropped)="uploadOverseerResources($event)" style="background-color: red">
-    <mat-icon>upload</mat-icon> Overseer Resources
-  </div>
+  <f-file-drop (filesDropped)="uploadOverseerResources($event)" accept="application/pdf" [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'" />
 
   <div class="flex flex-row gap-4">
     <button

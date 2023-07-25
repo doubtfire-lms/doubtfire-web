@@ -127,7 +127,6 @@ import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-deta
 import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
-import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
 import 'build/src/app/units/states/rollover/directives/directives.js';
