@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         'formatif-blue': '#3939ff',
+        'formatif-blue-lighter': '#e7e7ff',
       },
     },
   },

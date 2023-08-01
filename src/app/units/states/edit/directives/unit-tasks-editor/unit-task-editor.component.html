@@ -1,5 +1,5 @@
 <div class="flex flex-row gap-8">
-  <div class="flex-grow flex flex-col gap-8">
+  <div class="flex-grow flex flex-col gap-8 gap-y-0">
     <div class="flex flex-row">
       <div>
         <h3>Task List</h3>
@@ -14,7 +14,7 @@
     </div>
 
     <table
-      class="flex-grow f-table"
+      class="flex-grow f-table selectable"
       mat-table
       [dataSource]="taskDefinitionSource"
       matSort
@@ -75,15 +75,7 @@
 
       <!-- Action footer row -->
       <ng-container matColumnDef="actions">
-        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
-          <mat-toolbar>
-            <mat-toolbar-row>
-              <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-              <span class="flex-grow"></span>
-              <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
-            </mat-toolbar-row>
-          </mat-toolbar>
-        </td>
+        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length"></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -92,8 +84,12 @@
         *matRowDef="let row; columns: columns"
         [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
       ></tr>
-      <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
     </table>
+    <span class="flex items-center">
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <span class="flex-grow"></span>
+      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+    </span>
     <f-task-definition-editor
       *ngIf="selectedTaskDefinition"
       [taskDefinition]="selectedTaskDefinition"
