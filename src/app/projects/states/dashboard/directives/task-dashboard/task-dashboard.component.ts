@@ -66,8 +66,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     }
   }
 
-  overseerEnabled() {
-    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
+  public get overseerEnabled() {
+    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled;
   }
 
   showSubmissionHistoryModal() {

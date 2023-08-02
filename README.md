@@ -232,7 +232,6 @@ TODO:
 - [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/groups/groups.coffee
 - [ ] ./src/app/units/states/index/index.coffee
