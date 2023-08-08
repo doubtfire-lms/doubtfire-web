@@ -1,5 +1,5 @@
 <div class="flex flex-row gap-8">
-  <div class="flex-grow flex flex-col gap-8">
+  <div class="flex-grow flex flex-col gap-8 gap-y-0">
     <div class="flex flex-row">
       <div>
         <h3>Task List</h3>
@@ -14,7 +14,7 @@
     </div>
 
     <table
-      class="flex-grow f-table"
+      class="flex-grow f-table selectable"
       mat-table
       [dataSource]="taskDefinitionSource"
       matSort
@@ -75,23 +75,7 @@
 
       <!-- Action footer row -->
       <ng-container matColumnDef="actions">
-        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
-          <mat-toolbar>
-            <mat-toolbar-row>
-              <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
-              <span class="flex-grow"></span>
-              <label>Definitions CSV</label>
-              <button mat-mini-fab (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
-              <button mat-mini-fab (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
-              <span class="flex-grow"></span>
-              <label>Resources as Zip</label>
-              <button mat-mini-fab (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
-              <button mat-mini-fab (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
-              <span class="flex-grow"></span>
-              <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-            </mat-toolbar-row>
-          </mat-toolbar>
-        </td>
+        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length"></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -100,8 +84,20 @@
         *matRowDef="let row; columns: columns"
         [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
       ></tr>
-      <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
     </table>
+    <span class="flex items-center">
+      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+      <span class="flex-grow"></span>
+      <label>Definitions CSV</label>
+      <button mat-mini-fab (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
+      <button mat-mini-fab (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <label>Resources as Zip</label>
+      <button mat-mini-fab (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
+      <button mat-mini-fab (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </span>
     <f-task-definition-editor
       *ngIf="selectedTaskDefinition"
       [taskDefinition]="selectedTaskDefinition"
