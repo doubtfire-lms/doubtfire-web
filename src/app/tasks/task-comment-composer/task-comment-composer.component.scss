@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 $emoji-color: lighten(
   $color: black,
   $amount: 25,
@@ -18,7 +22,7 @@ $emoji-color: lighten(
   }
 
   #textFieldContainer.recording {
-    background-color: #3939FF;
+    background-color: #3939ff;
   }
 
   #textField {
