@@ -1,7 +1,12 @@
 <div class="flex-row justify-start items-start content-start">
   <div class="icon-and-text">
     <a (click)="!unselected ? goToStudent() : null" class="icon-container">
-      <user-icon size="40" [unselected]="unselected" [user]="selectedTask?.project.student"></user-icon>
+      <user-icon
+        size="40"
+        [unselected]="unselected"
+        [user]="selectedTask?.project.student"
+        style="margin-right: 8px"
+      ></user-icon>
     </a>
     <div class="text-container flex-col justify-center items-start content-start">
       <div style="margin-top: 6px" id="placeholder1" [hidden]="!unselected"></div>
