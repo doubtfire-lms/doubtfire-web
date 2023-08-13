@@ -1,5 +1,5 @@
 <h4>Step 1. Record and add up to 3 prompts.</h4>
-<div [hidden]="!canRecord || isSending" fxLayout="row" fxLayoutAlign="space-around center">
+<div [hidden]="!canRecord || isSending" class="flex-row justify-around items-center content-center">
   <div>
     <button mat-icon-button aria-label="Record icon button" [disabled]="!canAddRecording" id='btnRecordPrompt'
       (click)="recordingToggle()" mat-icon-button aria-label="Record audio prompt">
@@ -11,7 +11,7 @@
   <div class="audio-recorder">
     <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
     <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
-    <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="flex-row justify-center items-center content-center">
       <canvas #discussionPromptComposerCanvas class="discussion-prompt-audio-visualiser"></canvas>
     </div>
     <audio #discussionPromptComposerAudio></audio>
@@ -36,7 +36,7 @@
 </mat-action-list>
 
 <h4>Step 3. Send.</h4>
-<div fxLayout="row" fxLayoutAlign="end center">
+<div class="flex-row justify-end items-center content-center">
   <button mat-raised-button color="primary" type="button" mat-dialog-close
     (click)="sendRecording()" [hidden]="recordings.length === 0">
     Send

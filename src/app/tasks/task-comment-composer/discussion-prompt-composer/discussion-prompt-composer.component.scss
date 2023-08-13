@@ -99,3 +99,17 @@ mat-action-list {
     font-size: 1.2em;
   }
 }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.items-center {
+  align-items: center;
+}
+.content-center {
+  align-content: center;
+}
