@@ -41,11 +41,11 @@
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
-    <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
-      
+    <div class="flex-row justify-around items-center content-center" id="discussionRecorderContainer">
+
       <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder>
       </intelligent-discussion-recorder>
-      <div fxLayout="column" fxLayoutAlign="start end">
+      <div class="flex-col justify-start items-end content-end">
         <p id="discussionCountdown">{{guide.text}}</p>
         <!-- <p>remaining</p> -->
       </div>
@@ -53,7 +53,7 @@
     <mat-divider></mat-divider>
     <button style="margin-bottom: 3em" mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
       discussion</button>
-    <div fxLayout="row" fxLayoutAlign="space-evenly center" [hidden]="!inDiscussion">
+    <div class="flex-row justify-evenly items-center content-center" [hidden]="!inDiscussion">
       <h2 class="mat-headline">Prompt {{activePromptId+1}} of {{numberOfPrompts}}</h2>
       <button style="margin-bottom: 3em;" [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button
         (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }}
