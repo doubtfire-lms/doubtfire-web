@@ -11,10 +11,8 @@
         Warning: The student has opened the discussion prompts without sending a response.
       </div>
       <div
-        fxLayout="column"
-        fxLayoutAlign="space-around center"
         [hidden]="!responseAvailable"
-        class="audio-comment-container"
+        class="audio-comment-container flex-col justify-around items-center content-center"
       >
         <audio-player #player></audio-player>
         <mat-button-toggle-group value="response">

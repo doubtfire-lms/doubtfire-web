@@ -89,3 +89,20 @@ microphone-tester .btn-circle-xl {
     font-weight: bold;
   }
 }
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.content-center {
+  align-content: center;
+}
