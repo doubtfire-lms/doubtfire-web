@@ -1,7 +1,7 @@
 <!-- The search bar template -->
 <ng-template #OmnisearchTemplate let-collapsable="collapsable">
   <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
-    <div fxLayout="row" fxLayoutAlign="(default) center">
+    <div class="flex flex-row" justify-content: flex-start align-items: center>
       <button mat-icon-button aria-label="Search Icon" disabled>
         <mat-icon>search</mat-icon>
       </button>
@@ -83,7 +83,7 @@
       >
         <form class="search-options">
           <div class="task-definition">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="flex flex-row" justify-content: space-between align-items: center>
               <mat-form-field fxFlex>
                 <mat-label>Task</mat-label>
                 <mat-select
@@ -109,7 +109,7 @@
             </div>
           </div>
           <!--/task-definition-->
-          <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="flex flex-row" justify-content: space-between align-items: center>
             <mat-form-field fxFlex>
               <mat-label>Students</mat-label>
               <mat-select
@@ -143,7 +143,7 @@
 </ng-template>
 
 <!-- Actual task-inbox -->
-<div class="task-inbox" [ngClass]="isNarrow ? 'narrow-width' : 'full-width'" div fxLayout="column" fxLayoutAlign="none">
+<div class="task-inbox" [ngClass]="isNarrow ? 'narrow-width' : 'full-width'">
   <div class="openSearchDialog" [hidden]="!isNarrow">
     <button mat-icon-button (click)="openDialog()" aria-label="Seach Button">
       <mat-icon>search</mat-icon>
@@ -179,8 +179,10 @@
           <div
             (click)="setSelectedTask(task)"
             class="inbox-entry"
-            fxLayout="row"
-            fxLayoutAlign="start center"
+            class="flex flex-row"
+            justify-content:flex-start
+            align-items:center
+            align-content:center
             [ngClass]="{ hover: task.hover }"
             (mouseover)="task.hover = allowHover"
             (mouseout)="task.hover = task.optionsOpened"
@@ -189,7 +191,7 @@
               class="notification"
               [ngClass]="{ active: task.numNewComments <= 0 || task.plagiarismDetected() }"
             ></span>
-            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
+            <user-icon justify-content: center [user]="task.project.student" [size]="30"> </user-icon>
             <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
               <h4 class="mat-h4">{{ task.project.student.name }}</h4>
               <p class="mat-small truncate">
