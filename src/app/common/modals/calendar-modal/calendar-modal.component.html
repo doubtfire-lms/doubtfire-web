@@ -1,6 +1,6 @@
 <div class="calendar-modal-component mat-typography">
-  <div fxLayout="row">
-    <div fxFlex="grow">
+  <div class="flex flex-row">
+    <div class="grow flex-grow">
       <h2 mat-dialog-title>Web calendar</h2>
     </div>
     <mat-slide-toggle
@@ -38,11 +38,11 @@
           The web calendar displays due dates of your tasks as calendar events. Use the following URL to subscribe to
           your web calendar from your iCalendar client.
         </p>
-        <div fxLayout="row">
-          <div fxFlex="grow" class="webcal-url-container">
+        <div class="flex flex-row">
+          <div class="grow flex-grow" class="webcal-url-container">
             <a [href]="webcalUrl | safe">{{ webcalUrl }}</a>
           </div>
-          <div fxLayout="row">
+          <div class="flex flex-row">
             <button
               mat-icon-button
               matTooltip="Copy URL"
@@ -68,7 +68,7 @@
         <mat-card class="webcal-options-card">
           <h3 style="margin-bottom: 0">Options</h3>
 
-          <div fxLayout="row" fxLayoutAlign="start center" class="webcal-options-inclusions">
+          <div class="flex flex-row" justify-content: flex-start align-items: center class="webcal-options-inclusions">
             <span style="font-weight: bold; margin-right: 1em">Included units in my calendar:</span>
           </div>
 
