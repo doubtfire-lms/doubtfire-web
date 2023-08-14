@@ -1,5 +1,5 @@
-<div fxLayout="column" fxFill fxHide fxShow.gt-sm>
-  <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
+<div class="flex flex-col" h-full w-full fxHide fxShow.gt-sm>
+  <div class="flex flex-row" justify-content: center fxFill>
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
       <df-staff-task-list
         *ngIf="taskData"
@@ -44,7 +44,7 @@
   <f-footer></f-footer>
 </div>
 
-<div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
+<div #mobile class="flex flex-row" h-full w-full fxShow.lt-md>
   <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
     <df-staff-task-list
       *ngIf="taskData"
@@ -57,7 +57,7 @@
     ></df-staff-task-list>
   </div>
   <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
-    <div fxLayout="row" style="margin-bottom: 5px">
+    <div class="flex flex-row" style="margin-bottom: 5px">
       <button mat-icon-button aria-label="Back to inbox" (click)="taskSelected = false">
         <mat-icon>arrow_back_ios_new</mat-icon>
       </button>
