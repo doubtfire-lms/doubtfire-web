@@ -15,4 +15,8 @@ export class InstitutionSettingsComponent {
   public get overseerEnabled() : boolean {
     return this.constants.IsOverseerEnabled.value;
   }
+
+  public get tiiEnabled() : boolean {
+    return this.constants.IsTiiEnabled.value;
+  }
 }
