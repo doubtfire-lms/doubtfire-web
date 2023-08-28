@@ -110,7 +110,7 @@
     "@types/node": "^18.0",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
-    "autoprefixer": "^6.3.3",
+    "autoprefixer": "^10.4.15",
     "canonical-path": "0.0.2",
     "concurrently": "^3.2.0",
     "eslint": "^8.28.0",
