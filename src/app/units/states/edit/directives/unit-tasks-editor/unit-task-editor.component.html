@@ -86,17 +86,17 @@
       ></tr>
     </table>
     <span class="flex items-center">
-      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <span class="flex-grow"></span>
       <label>Definitions CSV</label>
-      <button mat-mini-fab (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
-      <button mat-mini-fab (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
+      <button mat-icon-button (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
+      <button mat-icon-button (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
       <span class="flex-grow"></span>
       <label>Resources as Zip</label>
-      <button mat-mini-fab (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
-      <button mat-mini-fab (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
+      <button mat-icon-button (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
+      <button mat-icon-button (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
       <span class="flex-grow"></span>
-      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
     </span>
     <f-task-definition-editor
       *ngIf="selectedTaskDefinition"
