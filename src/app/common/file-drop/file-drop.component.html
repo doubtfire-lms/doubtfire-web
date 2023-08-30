@@ -23,9 +23,8 @@
       <div class="flex ml-4 h-[48px] items-center">
         <mat-icon class="mr-2" *ngIf="file?.name">upload_file</mat-icon>
         <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
-
+        {{ uploadProgress }}
         <button
-          *ngIf="isUploadMode"
           [disabled]="!file?.name"
           class="ml-auto"
           mat-icon-button
