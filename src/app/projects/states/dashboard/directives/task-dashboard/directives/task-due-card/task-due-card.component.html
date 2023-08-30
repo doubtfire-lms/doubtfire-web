@@ -9,10 +9,9 @@
     <mat-card-header>
       <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
     </mat-card-header>
-
-    <mat-card-content [hidden]="task?.inDiscussState()">
+    <mat-card-content>
       <!--Due and not in discuss-->
-      <p>
+      <p [hidden]="task?.inDiscussState()">
         This task's due date is <strong>{{ task?.localDueDateString() }}</strong
         >. You should aim to complete this task before then to keep your progress on track.
       </p>
@@ -29,6 +28,7 @@
       </p>
     </mat-card-content>
   </mat-card>
+
   <!--/is due soon-->
   <mat-card appearance="outlined" *ngIf="task?.betweenDueDateAndDeadlineDate()">
     <mat-card-header class="bg-yellow-600 text-white">

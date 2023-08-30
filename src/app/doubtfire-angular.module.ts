@@ -218,6 +218,8 @@ import {
   TeachingPeriodUnitImportService,
 } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
+import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
+import { TiiActionService } from './api/services/tii-action.service';
 
 @NgModule({
   // Components we declare
@@ -303,6 +305,7 @@ import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
     InboxComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
+    TiiActionLogComponent,
     FChipComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
@@ -380,6 +383,7 @@ import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
     LearningOutcomeService,
     TaskDefinitionService,
     TeachingPeriodService,
+    TiiActionService,
     TeachingPeriodBreakService,
     TeachingPeriodUnitImportService,
     TutorialService,

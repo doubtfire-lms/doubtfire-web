@@ -86,9 +86,17 @@
       ></tr>
     </table>
     <span class="flex items-center">
-      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      <span class="flex-grow"></span>
       <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+      <span class="flex-grow"></span>
+      <label>Definitions CSV</label>
+      <button mat-mini-fab (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
+      <button mat-mini-fab (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <label>Resources as Zip</label>
+      <button mat-mini-fab (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
+      <button mat-mini-fab (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </span>
     <f-task-definition-editor
       *ngIf="selectedTaskDefinition"
@@ -96,29 +104,25 @@
       [unit]="unit"
     ></f-task-definition-editor>
   </div>
-  <div class="flex flex-col gap-4">
+  <!-- <div class="flex flex-col gap-4">
     <h3>Batch Upload Tasks</h3>
     <p>Batch upload task definitions with a CSV. Download to get format.</p>
 
     <f-file-drop
       mode="endpoint"
       [endpoint]="unit.getTaskDefinitionBatchUploadUrl()"
-      desiredFileName="taskdefinition.csv"
+      desiredFileName="Task Definition csv"
       accept="text/csv"
+      (uploadSuccess)="onSuccessTaskDefinitionBatchUpload($event)"
     />
 
     <h3>Download Tasks</h3>
     <p>Download all task definitions for this unit.</p>
-    <button mat-flat-button color="accent" (click)="downloadTaskDefinitions()">Download Tasks CSV</button>
-    <button mat-flat-button color="accent" (click)="downladTaskDefinitionsZip()">Download Tasks and Resources</button>
+
+
 
     <h3>Batch Upload Task PDFs</h3>
     <p>Upload all of the task PDFs in a Zip file.</p>
-    <f-file-drop
-      mode="event"
-      (filesDropped)="uploadTaskPdfs($event)"
-      accept="application/zip"
-      desiredFileName="Task PDFs in zip"
-    />
-  </div>
+    <f-file-drop [endpoint]="unit.taskUploadUrl" accept="application/zip" desiredFileName="Task PDFs in zip" (uploadSuccess)="onSuccessTaskZipUpload($event)" />
+  </div> -->
 </div>

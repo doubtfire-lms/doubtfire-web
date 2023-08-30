@@ -1,9 +1,10 @@
+import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { confirmationModal } from 'src/app/ajs-upgraded-providers';
+import { confirmationModal, csvResultModalService, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
@@ -29,6 +30,8 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   constructor(
     private taskDefinitionService: TaskDefinitionService,
     private alerts: AlertService,
+    @Inject(csvResultModalService) private csvResultModalService: any,
+    @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(confirmationModal) private confirmationModal: any
   ) {}
 
@@ -106,14 +109,6 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     }
   }
 
-  public uploadTaskDefinitions(file: FileList) {}
-
-  public uploadTaskPdfs(file: FileList) {}
-
-  public downloadTaskDefinitions() {}
-
-  public downladTaskDefinitionsZip() {}
-
   private guessTaskAbbreviation() {
     if (this.unit.taskDefinitions.length == 0) {
       return '1.1P';
@@ -142,6 +137,38 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         //TODO: reinstate ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
 
         this.alerts.success('Task deleted');
+      }
+    );
+  }
+
+  public uploadTaskDefinitionsCsv() {
+    this.csvUploadModal.show(
+      'Upload Task Definitions as CSV',
+      'Test message',
+      { file: { name: 'Task Definition CSV Data', type: 'csv' } },
+      this.unit.getTaskDefinitionBatchUploadUrl(),
+      (response: any) => {
+        // at least one student?
+        this.csvResultModalService.show('Task Definition Import Results', response);
+        if (response.success.length > 0) {
+          this.unit.refresh();
+        }
+      }
+    );
+  }
+
+  public uploadTaskResourcesZip() {
+    this.csvUploadModal.show(
+      'Upload Task Sheets and Resources as Zip',
+      'Test message',
+      { file: { name: 'Task Sheets and Resources', type: 'zip' } },
+      this.unit.taskUploadUrl,
+      (response: any) => {
+        // at least one student?
+        this.csvResultModalService.show('Task Sheet and Resources Import Results', response);
+        if (response.success.length > 0) {
+          this.unit.refresh();
+        }
       }
     );
   }

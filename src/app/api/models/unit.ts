@@ -478,8 +478,24 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/task_definitions/task_pdfs`;
   }
 
-  public get allResourcesDownloadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/all_resources`;
+  /**
+   * Download all of the task definitions in a csv
+   */
+  public downloadTaskDefinitionsCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      this.getTaskDefinitionBatchUploadUrl(),
+      `${this.name}-all-task-definitions.csv`
+    );
+  }
+
+  /**
+   * Download all of the task resources in a zip.
+   */
+  public downloadAllTaskResourcesZip(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/all_resources`,
+      `${this.name}-all-task-resources.zip`
+    );
   }
 
   public get enrolStudentsCSVUrl(): string {
