@@ -213,7 +213,10 @@ import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tas
 export function playerFactory() {
   return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
 }
-import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import {
+  TeachingPeriodUnitImportDialogComponent,
+  TeachingPeriodUnitImportService,
+} from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 
 @NgModule({
@@ -445,7 +448,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
     private title: Title,
     private updater: CheckForUpdateService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
@@ -456,7 +459,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
 
     this.matIconRegistry.addSvgIcon(
       'formatif-logo',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg'),
     );
   }
 

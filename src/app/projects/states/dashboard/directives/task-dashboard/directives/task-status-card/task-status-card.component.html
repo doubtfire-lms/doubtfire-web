@@ -1,10 +1,10 @@
 <mat-card appearance="outlined">
-  <mat-form-field appearance="outline" *ngIf="triggers?.length > 0">
+  <mat-form-field class="px-4 pt-4" appearance="outline" *ngIf="triggers?.length > 0">
     <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
       <mat-select-trigger>
         <span style="display: inline-flex">
           <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
-          <h5>{{ task?.statusLabel() }}</h5>
+          <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
         </span>
       </mat-select-trigger>
       <mat-option *ngFor="let trigger of triggers" [value]="trigger.status">
@@ -28,6 +28,7 @@
   </mat-card-content>
 
   <mat-card-actions
+    class="space-x-2"
     *ngIf="
       task?.unit.currentUserIsStaff ||
       task?.canApplyForExtension() ||

@@ -13,15 +13,31 @@ import { ExtensionModalService } from 'src/app/common/modals/extension-modal/ext
 })
 export class TaskStatusCardComponent implements OnChanges {
   triggers: any;
-  constructor(private extensions: ExtensionModalService, private taskService: TaskService, private router: UIRouter) {}
+  textCss: string;
+  constructor(
+    private extensions: ExtensionModalService,
+    private taskService: TaskService,
+    private router: UIRouter,
+  ) {}
 
   @Input() task: Task;
+  taskStatusColor: string;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
       this.task = changes.task.currentValue;
       this.reapplyTriggers();
+      this.taskStatusColor = this.taskService.statusColors.get(this.task.statusClass());
+      console.log(this.taskStatusColor);
+
+      this.textCss = `::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
+        background-color: #${this.taskStatusColor} !important;
+      }`;
     }
+  }
+
+  ngAfterViewInit(): void {
+    document.getElementsByTagName('style')[0].append(this.textCss);
   }
 
   reapplyTriggers(): void {

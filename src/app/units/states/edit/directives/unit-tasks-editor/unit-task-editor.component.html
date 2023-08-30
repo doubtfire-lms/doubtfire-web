@@ -101,6 +101,7 @@
     <p>Batch upload task definitions with a CSV. Download to get format.</p>
 
     <f-file-drop
+      mode="endpoint"
       [endpoint]="unit.getTaskDefinitionBatchUploadUrl()"
       desiredFileName="taskdefinition.csv"
       accept="text/csv"
@@ -113,6 +114,11 @@
 
     <h3>Batch Upload Task PDFs</h3>
     <p>Upload all of the task PDFs in a Zip file.</p>
-    <f-file-drop (filesDropped)="uploadTaskPdfs($event)" accept="application/zip" desiredFileName="Task PDFs in zip" />
+    <f-file-drop
+      mode="event"
+      (filesDropped)="uploadTaskPdfs($event)"
+      accept="application/zip"
+      desiredFileName="Task PDFs in zip"
+    />
   </div>
 </div>
