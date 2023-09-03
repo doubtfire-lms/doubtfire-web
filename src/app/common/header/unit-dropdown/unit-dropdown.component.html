@@ -1,79 +1,61 @@
-<div fxLayout="row" fxLayoutAlign="start center">
-  <mat-chip-list
-    matTooltip="{{ unit.name }}"
-    *ngIf="unit"
-    style="float: right"
-    aria-label="Unit selection"
-    style="margin-left: 10px; margin-right: 10px"
-  >
-    <mat-chip
-      style="cursor: pointer"
-      [matMenuTriggerFor]="menu"
-      #menuState="matMenuTrigger"
-      selected="true"
-      color="primary"
-    >
-      {{ unit?.code }}
-      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-    </mat-chip>
-  </mat-chip-list>
-  <ng-container *ngIf="!unit">
+<div class="flex items-center">
+  <ng-container *ngIf="unit; else selectUnitButton">
+    <div class="float-right ml-10 mr-10" matTooltip="{{ unit.name }}">
+      <mat-chip
+        style="cursor: pointer"
+        [matMenuTriggerFor]="menu"
+        #menuState="matMenuTrigger"
+        selected="true"
+        class="mat-primary"
+      >
+        {{ unit?.code }}
+        <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+      </mat-chip>
+    </div>
+  </ng-container>
+  <ng-template #selectUnitButton>
     <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
       Select Unit
-      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
     </button>
-  </ng-container>
+  </ng-template>
 </div>
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
-  <button *ngIf="media.isActive('xs')" uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
-    <mat-icon
-      uiSref="home"
-      style="margin-right: 20px"
-      svgIcon="formatif-logo"
-      class="formatif-icon"
-      aria-hidden="false"
-      aria-label="Home Icon"
-    ></mat-icon>
+  <button *ngIf="media.isActive('xs')" uiSref="home" class="flex items-center" mat-menu-item>
+    <mat-icon uiSref="home" class="mr-20" svgIcon="formatif-logo" aria-hidden="false" aria-label="Home Icon"></mat-icon>
     <div class="unitName">Home</div>
-    <span fxFlex></span>
+    <span class="flex-grow"></span>
   </button>
   <mat-divider *ngIf="media.isActive('xs')"></mat-divider>
 
-  <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
+  <div class="mb-2" mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
   <div *ngFor="let unitRole of unitRoles">
     <button
       *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
       uiSref="units/tasks/inbox"
       [uiParams]="{ unitId: unitRole.unit.id }"
-      fxLayout="row"
-      fxLayoutAlign="start center"
+      class="flex items-center mb-2"
       mat-menu-item
     >
-      <div class="unitName">{{ unitRole.unit.name }}</div>
-      <span fxFlex></span>
-      <mat-chip-list style="float: right" aria-label="Unit selection" style="margin-left: 10px">
-        <mat-chip selected color="primary">{{ unitRole.unit.code }}</mat-chip>
-      </mat-chip-list>
+      <div class="unitCode">{{ unitRole.unit.code }} - {{ unitRole.unit.name }}</div>
     </button>
   </div>
 
-  <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
-  <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
+  <mat-divider class="mb-2" [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
+  <div class="mb-2" mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
   <div *ngFor="let project of projects">
     <button
       *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod.active"
       uiSref="projects/dashboard"
       [uiParams]="{ projectId: project.id, taskAbbr: '' }"
-      fxLayout="row"
-      fxLayoutAlign="start center"
+      class="flex items-center mb-2"
       mat-menu-item
     >
-      <div class="unitName">{{ project.unit.name }}</div>
-      <span fxFlex></span>
-      <mat-chip-list aria-label="Unit selection" style="margin-left: 10px">
+      <div class="unitCode" style="display: flex; justify-content: space-between; align-items: center">
+        <div>{{ project.unit.name }}</div>
         <mat-chip selected color="primary">{{ project.unit.code }}</mat-chip>
-      </mat-chip-list>
+      </div>
     </button>
   </div>
 </mat-menu>
