@@ -1,15 +1,16 @@
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { StateService, UIRouter, UIRouterGlobals } from '@uirouter/angular';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { AppInjector } from 'src/app/app-injector';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap, catchError, switchMap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
-export class AuthenticationService {
+export class AuthenticationService implements OnInit {
   constructor(
     private httpClient: HttpClient,
     private userService: UserService,
@@ -18,8 +19,11 @@ export class AuthenticationService {
     private doubtfireConstants: DoubtfireConstants,
     private router: UIRouter,
     private uiRouterGlobals: UIRouterGlobals
-  ) {
-    this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
+  ) {}
+
+  ngOnInit() {
+    this.checkUserCookie();
+    this.updateAuth();
   }
 
   public checkUserCookie(): void {
@@ -39,7 +43,7 @@ export class AuthenticationService {
     }
   }
 
-  private readonly AUTH_URL: string;
+  private readonly AUTH_URL: string = `${environment.API_URL}/auth`;
   public readonly USERNAME_KEY: string = 'doubtfire_user';
   public readonly REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN: string = 'remember_doubtfire_credentials_token';
   public readonly DOUBTFIRE_LOGIN_TIME: string = 'doubtfire_login_time';
@@ -62,7 +66,7 @@ export class AuthenticationService {
     return this.userService.currentUser.id !== undefined;
   }
 
-  private updateAuth() {
+  private async updateAuth() {
     if (!this.isAuthenticated()) {
       return;
     }
@@ -70,20 +74,29 @@ export class AuthenticationService {
     const remember: boolean = localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true';
     localStorage.setItem(this.DOUBTFIRE_LOGIN_TIME, JSON.stringify(new Date().getTime()));
 
-    this.httpClient
-      .put(this.AUTH_URL, {
-        username: this.userService.currentUser.username,
-        remember: remember,
-      })
-      .subscribe({
-        next: (response) => {
-          this.userService.currentUser.authenticationToken = response['auth_token'];
-          this.saveCurrentUser(remember);
+    try {
+      const response = await this.httpClient
+        .put(this.AUTH_URL, {
+          username: this.userService.currentUser.username,
+          remember: remember,
+        })
+        .pipe(
+          tap((response) => {
+            this.userService.currentUser.authenticationToken = response['auth_token'];
+            this.saveCurrentUser(remember);
+          }),
+          catchError((error) => {
+            // Handle error here
+            throw error;
+          })
+        )
+        .toPromise();
 
-          // Update auth each hour
-          setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
-        },
-      });
+      // Update auth each hour
+      setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
+    } catch (error) {
+      // Handle error here
+    }
   }
 
   private tryChangeUser(user: User, remember?: boolean) {
@@ -103,8 +116,8 @@ export class AuthenticationService {
 
   private readonly validRoles: string[] = ['anon', 'Student', 'Tutor', 'Convenor', 'Admin'];
 
-  private isValidRoleWhitelist(roleWhitelist: string[]) {
-    return roleWhitelist.filter((role: string) => this.validRoles.includes(role)).length !== 0;
+  private isValidRoleWhitelist(roleWhitelist: string[]): boolean {
+    return roleWhitelist.every((role: string) => this.validRoles.includes(role));
   }
 
   public isAuthorised(roleWhitelist: string[], role?: string): boolean {
@@ -128,6 +141,7 @@ export class AuthenticationService {
           remember: boolean;
         }
   ): Observable<any> {
+    const { username, remember } = userCredentials; // Destructuring assignment
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
       map((response: any) => {
         // Extract relevant data from response and construct user object to store in cache.
@@ -139,7 +153,7 @@ export class AuthenticationService {
 
         user.authenticationToken = response['auth_token'];
 
-        if (this.tryChangeUser(user, userCredentials.remember)) {
+        if (this.tryChangeUser(user, remember)) {
           AppInjector.get(GlobalStateService).loadGlobals();
         } else {
           return new Error('Failed to change user');
@@ -178,8 +192,65 @@ export class AuthenticationService {
 
   public timeoutAuthentication(): void {
     if (this.uiRouterGlobals.current.name !== 'timeout') {
-      this.alertService.add('danger', 'Authentication timed out', 6000);
+      this.alertService.add('danger', `Authentication timed out`, 6000); // Template literal
       setTimeout(() => this.router.stateService.go('timeout'), 500);
+    }
+  }
+
+  public async login(username: string, password: string, remember: boolean): Promise<User> {
+    try {
+      const response = await this.httpClient
+        .post(this.AUTH_URL, {
+          username: username,
+          password: password,
+          remember: remember,
+        })
+        .pipe(
+          switchMap((response) => {
+            return this.userService.get(response['user_id']);
+          }),
+          tap((user) => {
+            this.tryChangeUser(user, remember);
+          }),
+          catchError((error) => {
+            // Handle error here
+            throw error;
+          })
+        )
+        .toPromise();
+
+      return response as User;
+    } catch (error) {
+      // Handle error here
+    }
+  }
+
+  public async logout(): Promise<void> {
+    try {
+      const response = await this.httpClient.delete(this.AUTH_URL).toPromise();
+      this.tryChangeUser(new User());
+    } catch (error) {
+      // Handle error here
+    }
+  }
+
+  public async checkRole(roleWhitelist: string[]): Promise<boolean> {
+    if (!this.isValidRoleWhitelist(roleWhitelist)) {
+      throw new Error('Invalid role whitelist');
+    }
+
+    if (!this.isAuthenticated()) {
+      return false;
+    }
+
+    try {
+      const response = await this.httpClient
+        .get(`${this.AUTH_URL}/roles`, { params: { roles: roleWhitelist.join(',') } })
+        .toPromise();
+
+      return response['has_role'];
+    } catch (error) {
+      // Handle error here
     }
   }
 }
