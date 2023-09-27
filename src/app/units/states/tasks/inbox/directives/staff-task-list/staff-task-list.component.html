@@ -1,6 +1,6 @@
 <!-- The search bar template -->
-<ng-template #OmnisearchTemplate let-collapsable="collapsable">
-  <div class="omnisearch" [ngClass]="{ expanded: showSearchOptions }">
+<ng-template #OmnisearchTemplate let-collapsable="collapsable" let-mobile="mobile">
+  <div class="omnisearch rounded-t-2xl md:rounded-2xl" [ngClass]="{ expanded: showSearchOptions, mobile: mobile }">
     <div class="flex items-center">
       <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
         <mat-icon class="flex items-center" disabled>search</mat-icon>
@@ -137,7 +137,7 @@
 
 <!-- Narrow width search dialog template-->
 <ng-template #searchDialog>
-  <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: { collapsable: false }"></ng-container>
+  <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: { collapsable: false, mobile: true }"></ng-container>
   <div mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close]>OK</button>
   </div>
@@ -151,8 +151,8 @@
     </button>
   </div>
 
-  <div [hidden]="isNarrow">
-    <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: { collapsable: true }"></ng-container>
+  <div *ngIf="!isNarrow">
+    <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: { collapsable: true, mobile: false }"></ng-container>
   </div>
 
   <div class="center-task-list" [hidden]="!loading || isNarrow">
@@ -182,9 +182,7 @@
         >
           <div
             (click)="setSelectedTask(task)"
-            class="inbox-entry"
-            fxLayout="row"
-            fxLayoutAlign="start center"
+            class="inbox-entry flex items-center"
             [ngClass]="{ hover: task.hover }"
             (mouseover)="task.hover = allowHover"
             (mouseout)="task.hover = task.optionsOpened"
@@ -222,6 +220,7 @@
               [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
               matBadgePosition="before"
               [status]="task.status"
+              class="ml-3"
             ></status-icon>
             <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
@@ -245,9 +244,9 @@
                 <mat-icon>more_horiz</mat-icon>
               </button>
               <mat-menu #overflowMenu="matMenu" yPosition="below">
-                <button [disabled] mat-menu-item (click)="togglePin(task)">
-                  <mat-icon> {{ task.pinned ? 'remove_circle' : 'add_alert' }} </mat-icon>
-                  <span>{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }} </span>
+                <button mat-menu-item (click)="togglePin(task)" class="flex items-center">
+                  <mat-icon class="mr-0"> {{ task.pinned ? 'remove_circle' : 'add_alert' }} </mat-icon>
+                  <span class="ml-5">{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }} </span>
                 </button>
               </mat-menu>
             </div>
