@@ -1,0 +1,5 @@
+<mat-selection-list #tasks [multiple]="false">
+  <mat-list-option *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)">
+    {{ task.name }}
+  </mat-list-option>
+</mat-selection-list>

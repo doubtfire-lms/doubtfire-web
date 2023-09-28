@@ -220,6 +220,7 @@ import {
 import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
 import { TiiActionService } from './api/services/tii-action.service';
+import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
 
 @NgModule({
   // Components we declare
@@ -310,6 +311,7 @@ import { TiiActionService } from './api/services/tii-action.service';
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     AlertComponent,
+    FUnitTaskListComponent,
   ],
   // Module Imports
   imports: [
