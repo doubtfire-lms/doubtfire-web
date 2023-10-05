@@ -1,0 +1,23 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../../../../../../../styles/mixins/task-list.scss';
+@import '../../../../../../../styles/mixins/scrollable.scss';
+
+.task-inbox.narrow-width {
+  max-width: 60px;
+  width: 60px;
+  min-width: 60px;
+  margin: 0;
+
+  .inbox-entry {
+    padding-right: 0px;
+    width: 45px;
+    height: 100%;
+    padding-left: 5px;
+  }
+}
+
+.tasks-viewport {
+  height: 100%;
+}

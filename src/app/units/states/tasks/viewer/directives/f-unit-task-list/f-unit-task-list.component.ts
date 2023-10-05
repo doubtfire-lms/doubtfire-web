@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Unit } from 'src/app/api/models/unit';
+import { Grade } from 'src/app/api/models/grade';
 
 @Component({
   selector: 'f-unit-task-list',
@@ -10,6 +11,10 @@ export class FUnitTaskListComponent implements OnInit {
   @Input() unit: Unit;
   @Input() unitTasks: Task[];
   @Input() selectedTaskDef: Task;
+
+  @Input() isNarrow: boolean;
+
+  private gradeNames: string[] = Grade.GRADES;
 
   constructor() {}
 

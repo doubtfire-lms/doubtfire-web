@@ -1,5 +1,12 @@
-<mat-selection-list #tasks [multiple]="false">
-  <mat-list-option *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)">
-    {{ task.name }}
-  </mat-list-option>
-</mat-selection-list>
+<cdk-virtual-scroll-viewport class="tasks-viewport scrollable"itemSize="60">
+  <mat-selection-list #tasks [multiple]="false">
+    <mat-list-item *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)">
+
+
+
+      {{ task.name }}
+      <br>
+      {{ task.abbreviation }} - {{ gradeNames[task.targetGrade] }} Task
+    </mat-list-item>
+  </mat-selection-list>
+</cdk-virtual-scroll-viewport>
