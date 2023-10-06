@@ -1,7 +1,7 @@
 
 
 <div class="unit-task-list">
-
+  <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
     <div class="flex items-center">
       <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
@@ -19,24 +19,27 @@
     </div>
   </div>
 
-
+  <!-- Scrollable Unit Task List -->
   <cdk-virtual-scroll-viewport *ngIf="true" class="tasks-viewport scrollable" itemSize="60">
-    <!-- <mat-selection-list #tasks [multiple]="false"> -->
       <mat-selection-list  #tasks [multiple]="false">
-        <mat-list-item class="clearfix"
-         *cdkVirtualFor="let task of unitTasks; templateCacheSize: 0" [value]="task"
-         style="padding: 0; height: 60px"
+        <mat-list-item
+          class="clearfix"
+          *cdkVirtualFor="let task of unitTasks; templateCacheSize: 0" [value]="task"
+          style="padding: 0; height: 60px"
         >
-        <div
-          class="w-full"
-          *ngIf="task"
-          (click)="setSelectedTask(task)">
-        </div>
+          <div
+            class="w-full"
+            *ngIf="task"
 
-          <span matListItemTitle>{{ task.name }}</span>
-          <span class="task-details truncate" matListItemLine>{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</span>
+            (click)="setSelectedTask(task)"
+          >
+            <div class="task-list-data" fxFlex>
+              <h4 class="task-title">{{ task.name }}</h4>
+              <div class="task-details">{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</div>
+            </div>
+          </div>
+
         </mat-list-item>
     </mat-selection-list>
-    <!-- </mat-selection-list> -->
   </cdk-virtual-scroll-viewport>
 </div>

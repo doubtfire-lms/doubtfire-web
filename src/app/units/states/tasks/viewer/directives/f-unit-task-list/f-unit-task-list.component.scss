@@ -21,7 +21,7 @@ $my-palette: mat.define-palette($md-formatif);
 
 .unit-task-list {
   border-radius: 10px;
-  border: solid 1px gray;
+  border: solid 1px rgba(0, 0, 0, 0.1);
   background-color: white;
   padding: 8px;
   min-width: 60px;
@@ -68,7 +68,34 @@ $my-palette: mat.define-palette($md-formatif);
   width: 100%;
 }
 
+.task-list-data {
+  margin-top: 0px;
 
+  .task-title {
+    font-size: 15px;
+    margin-bottom: -2px;
+    margin-top: 8px;
+  }
+
+  .task-details {
+    margin-bottom: 0px;
+    font-size: 12px;
+  }
+}
+
+
+.mat-mdc-list-item .item-content {
+  height: 60px;
+  border-radius: 20px;
+}
+
+.mat-mdc-list-item .item-content.selected {
+  background-color: var(--background-gray);
+}
+
+.task-inbox.narrow-width .mat-mdc-list-item .item-content.selected {
+  margin-right: 12px;
+}
 
 
 .tasks-viewport {
