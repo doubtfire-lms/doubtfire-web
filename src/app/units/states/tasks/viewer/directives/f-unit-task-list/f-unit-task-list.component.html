@@ -1,5 +1,21 @@
-<mat-selection-list #tasks [multiple]="false">
-  <mat-list-option *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)">
-    {{ task.name }}
-  </mat-list-option>
-</mat-selection-list>
+
+<div >
+
+  <mat-form-field floatLabel="never" appearance="outline" class="grow" >
+    <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+      <mat-icon class="flex items-center" disabled>search</mat-icon>
+    </button>
+    <input matInput type="text" placeholder="Search tasks..." />
+  </mat-form-field>
+
+  <mat-selection-list  #tasks [multiple]="false">
+      <mat-list-option style="padding: 0; height: 60px" *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)" >
+        <span matListItemTitle>{{ task.name }}</span>
+        <span class="task-details truncate" matListItemLine>{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</span>
+      </mat-list-option>
+  </mat-selection-list>
+
+
+</div>
+
+
