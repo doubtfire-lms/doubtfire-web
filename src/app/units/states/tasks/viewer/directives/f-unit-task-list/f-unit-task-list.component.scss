@@ -4,6 +4,48 @@
 @import '../../../../../../../styles/mixins/task-list.scss';
 @import '../../../../../../../styles/mixins/scrollable.scss';
 
+
+.unit-task-list {
+  display: block;
+  border-radius: 10px;
+  border: solid 1px gray;
+  background-color: white;
+  padding: 8px;
+  min-width: 60px;
+  width: 350px;
+  height: 100%;
+
+  &.mobile {
+      max-width: 100%;
+      width: 100%;
+      padding: 0px;
+  }
+}
+
+.omnisearch {
+  background-color: var(--background-gray);
+  font-size: 15px;
+  padding-right: 10px;
+  text-align: left;
+
+  &.expanded {
+    height: 100%;
+  }
+
+  &.mobile {
+  }
+
+  .search {
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+  }
+
+  .mdc-icon-button {
+    display: flex;
+  }
+}
+
 .task-inbox.narrow-width {
   max-width: 60px;
   width: 60px;

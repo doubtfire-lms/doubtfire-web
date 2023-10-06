@@ -1,12 +1,24 @@
-<cdk-virtual-scroll-viewport class="tasks-viewport scrollable"itemSize="60">
-  <mat-selection-list #tasks [multiple]="false">
-    <mat-list-item *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)">
+<div class="unit-task-list">
+  <cdk-virtual-scroll-viewport *ngIf="true" class="tasks-viewport scrollable" itemSize="60">
+    <!-- <mat-selection-list #tasks [multiple]="false"> -->
+    <mat-list>
+      <mat-list-item
+        class="clearfix"
+        *cdkVirtualFor="let task of unitTasks; templateCacheSize: 0" [value]="task"
+        style="padding: 0; height: 60px"
 
-
-
-      {{ task.name }}
-      <br>
-      {{ task.abbreviation }} - {{ gradeNames[task.targetGrade] }} Task
-    </mat-list-item>
-  </mat-selection-list>
-</cdk-virtual-scroll-viewport>
+      >
+        <div
+          class="w-full"
+          *ngIf="task"
+          (click)="setSelectedTask(task)"
+        >
+          {{ task.name }}
+          <br>
+          {{ task.abbreviation }} - {{ gradeNames[task.targetGrade] }} Task
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <!-- </mat-selection-list> -->
+  </cdk-virtual-scroll-viewport>
+</div>
