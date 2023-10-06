@@ -7,16 +7,26 @@
 
 $my-palette: mat.define-palette($md-formatif);
 
+:host {
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+  border-right-color: rgba(0, 0, 0, 0.1);
+  border-right-style: solid;
+  border-right-width: 1px;
+}
+
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
 .unit-task-list {
-  display: block;
   border-radius: 10px;
   border: solid 1px gray;
-  background-color:transparent;
+  background-color: white;
   padding: 8px;
   min-width: 60px;
   width: 350px;
   height: 100%;
-
 
   &.mobile {
       max-width: 100%;
@@ -26,19 +36,28 @@ $my-palette: mat.define-palette($md-formatif);
 }
 
 .omnisearch {
-  background-color: transparent;
-  font-size: 10px;
+  background-color: var(--background-gray);
+  font-size: 15px;
   padding-right: 10px;
   text-align: left;
-  border: hidden;
-  outline: none;
 
+  &.expanded {
+    height: 100%;
+  }
 
+  &.mobile {
+  }
+
+  .search {
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+  }
+
+  .mdc-icon-button {
+    display: flex;
+  }
 }
-
-
-
-
 
 .tasks-viewport {
   height: 77%;
