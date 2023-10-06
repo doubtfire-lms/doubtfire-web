@@ -35,6 +35,11 @@ $my-palette: mat.define-palette($md-formatif);
   }
 }
 
+.scrollable {
+  height: 100%;
+  @include scrollable();
+}
+
 .omnisearch {
   background-color: var(--background-gray);
   font-size: 15px;
@@ -58,6 +63,13 @@ $my-palette: mat.define-palette($md-formatif);
     display: flex;
   }
 }
+
+.full-width {
+  width: 100%;
+}
+
+
+
 
 .tasks-viewport {
   height: 77%;
