@@ -1,21 +1,32 @@
 
-<div >
 
-  <mat-form-field floatLabel="never" appearance="outline" class="grow" >
+<div class="unit-task-list">
+
+  <mat-form-field  class="omnisearch rounded-t-2xl md:rounded-2xl " >
     <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
       <mat-icon class="flex items-center" disabled>search</mat-icon>
     </button>
-    <input matInput type="text" placeholder="Search tasks..." />
+    <input class="search" matInput type="text" placeholder="Search tasks..." />
   </mat-form-field>
 
-  <mat-selection-list  #tasks [multiple]="false">
-      <mat-list-option style="padding: 0; height: 60px" *ngFor="let task of unitTasks" [value]="task" (click)="setSelectedTask(task)" >
-        <span matListItemTitle>{{ task.name }}</span>
-        <span class="task-details truncate" matListItemLine>{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</span>
-      </mat-list-option>
-  </mat-selection-list>
 
+  <cdk-virtual-scroll-viewport *ngIf="true" class="tasks-viewport scrollable" itemSize="60">
+    <!-- <mat-selection-list #tasks [multiple]="false"> -->
+      <mat-selection-list  #tasks [multiple]="false">
+        <mat-list-item class="clearfix"
+         *cdkVirtualFor="let task of unitTasks; templateCacheSize: 0" [value]="task"
+         style="padding: 0; height: 60px"
+        >
+        <div
+          class="w-full"
+          *ngIf="task"
+          (click)="setSelectedTask(task)">
+        </div>
 
+          <span matListItemTitle>{{ task.name }}</span>
+          <span class="task-details truncate" matListItemLine>{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</span>
+        </mat-list-item>
+    </mat-selection-list>
+    <!-- </mat-selection-list> -->
+  </cdk-virtual-scroll-viewport>
 </div>
-
-

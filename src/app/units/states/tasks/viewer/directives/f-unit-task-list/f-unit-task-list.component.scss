@@ -1,14 +1,45 @@
-.list-group {
-  height: 503px;
-  overflow-y: auto;
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../../../../../../../theme.scss';
+@import '../../../../../../../styles/mixins/task-list.scss';
+@import '../../../../../../../styles/mixins/scrollable.scss';
+
+$my-palette: mat.define-palette($md-formatif);
+
+.unit-task-list {
+  display: block;
+  border-radius: 10px;
+  border: none ;
+  background-color:transparent;
+  padding: 8px;
+  min-width: 60px;
+  width: 350px;
+  height: 100%;
+
+
+  &.mobile {
+      max-width: 100%;
+      width: 100%;
+      padding: 0px;
+  }
+}
+
+.omnisearch {
+  background-color: transparent;
+  font-size: 10px;
+  padding-right: 10px;
+  text-align: left;
+  border: hidden;
+  outline: none;
+
+
 }
 
 
 
-.unit-task-list-panel {
-  border-radius: 10px;
-  background-color: white;
-  padding: 8px;
-  min-width: 60px;
-  width: 350px;
+
+
+.tasks-viewport {
+  height: 77%;
 }
