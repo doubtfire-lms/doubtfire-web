@@ -10,7 +10,7 @@ $my-palette: mat.define-palette($md-formatif);
 .unit-task-list {
   display: block;
   border-radius: 10px;
-  border: none ;
+  border: solid 1px gray;
   background-color:transparent;
   padding: 8px;
   min-width: 60px;
