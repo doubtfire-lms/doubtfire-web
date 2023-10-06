@@ -1,6 +1,6 @@
 
 
-<div class="unit-task-list">
+<div class="unit-task-list" div fxLayout="column" fxLayoutAlign="none">
   <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
     <div class="flex items-center">
@@ -30,12 +30,20 @@
           <div
             class="w-full"
             *ngIf="task"
-
-            (click)="setSelectedTask(task)"
+            [ngClass]="{
+              selected: isSelectedTask(task),
+              'item-content': true
+            }"
           >
-            <div class="task-list-data" fxFlex>
-              <h4 class="task-title">{{ task.name }}</h4>
-              <div class="task-details">{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</div>
+            <div
+              (click)="setSelectedTask(task)"
+              class="inbox-entry flex items-center"
+              [ngClass]="{ hover: task.hover }"
+            >
+              <div class="task-list-data" fxFlex>
+                <h4 class="task-title">{{ task.name }}</h4>
+                <div class="task-details">{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</div>
+              </div>
             </div>
           </div>
 
