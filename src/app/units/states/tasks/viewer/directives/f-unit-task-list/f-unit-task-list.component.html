@@ -14,6 +14,8 @@
           spellcheck="false"
           type="text"
           placeholder="Search Tasks"
+          [(ngModel)]="taskSearch"
+          (ngModelChange)="applyFilters()"
         />
       </div>
     </div>
@@ -24,7 +26,7 @@
       <mat-selection-list  #tasks [multiple]="false">
         <mat-list-item
           class="clearfix"
-          *cdkVirtualFor="let task of unitTasks; templateCacheSize: 0" [value]="task"
+          *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0" [value]="task"
           style="padding: 0; height: 60px"
         >
           <div
