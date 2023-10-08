@@ -4,6 +4,7 @@ import { Grade } from 'src/app/api/models/grade';
 import { Task, TaskDefinition } from 'src/app/api/models/doubtfire-model';
 import { Observable } from 'rxjs';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
+import { TaskDefinitionNamePipe } from 'src/app/common/filters/task-definition-name.pipe';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-
 })
 export class FUnitTaskListComponent implements OnInit {
   @Input() unit: Unit;
-  @Input() unitTasks: Task[];
+  @Input() unitTasks: TaskDefinition[];
   @Input() task: Task;
   // @Input() selectedTaskDef: Task;
 
@@ -24,6 +25,19 @@ export class FUnitTaskListComponent implements OnInit {
   }
 
 
+  // task filtering
+  //----------------------------------------------------------------------------------------------------
+
+  filteredTasks: TaskDefinition[] = null;
+  taskSearch: string = "";
+  taskDefinitionNamePipe = new TaskDefinitionNamePipe();
+
+  applyFilters() {
+    this.filteredTasks = this.taskDefinitionNamePipe.transform(this.unitTasks, this.taskSearch);
+  }
+
+  //----------------------------------------------------------------------------------------------------
+
   private gradeNames: string[] = Grade.GRADES;
 
   constructor(
@@ -33,6 +47,9 @@ export class FUnitTaskListComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.unit);
     // console.log(this.selectedTaskDef);
+
+    // Apply filters first-time
+    this.applyFilters();
   }
 
   // ngOnChanges()
