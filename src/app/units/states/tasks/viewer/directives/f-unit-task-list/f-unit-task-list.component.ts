@@ -16,7 +16,7 @@ export class FUnitTaskListComponent implements OnInit {
   @Input() unit: Unit;
   @Input() unitTasks: TaskDefinition[];
   @Input() task: Task;
-  // @Input() selectedTaskDef: Task;
+  @Input() selectedTaskDef: TaskDefinition;
 
   @Input() taskData: {
     source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
@@ -54,22 +54,23 @@ export class FUnitTaskListComponent implements OnInit {
 
   // ngOnChanges()
 
-  setSelectedTask(task: Task) {
+  setSelectedTask(task: TaskDefinition) {
     console.log(task);
-    this.selectedTaskService.setSelectedTask(task);
-    this.taskData.selectedTask = task;
-    if (this.taskData.onSelectedTaskChange) {
-      this.taskData.onSelectedTaskChange(task);
-    }
+    // this.selectedTaskService.setSelectedTask(task);
+    // this.taskData.selectedTask = task;
+    // if (this.taskData.onSelectedTaskChange) {
+    //   this.taskData.onSelectedTaskChange(task);
+    // }
+    this.selectedTaskDef = task;
     // if (task) {
     //   this.scrollToTaskInList(task);
     // }
   }
 
-  isSelectedTask(task: Task) {
+  isSelectedTask(task: TaskDefinition) {
     // const sameProject = this.taskData.selectedTask?.project.id == task.project.id;
     // const sameTaskDef = this.taskData.selectedTask?.definition.id == task.definition.id;
-    return false;
+    return this.selectedTaskDef.id == task.id;
     // const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
     // const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
     // return sameProject && sameTaskDef;
