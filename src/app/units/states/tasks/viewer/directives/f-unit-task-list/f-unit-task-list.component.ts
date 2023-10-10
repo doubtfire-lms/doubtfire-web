@@ -73,6 +73,7 @@ export class FUnitTaskListComponent implements OnInit {
     return this.selectedTaskDef.id == task.id;
     // const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
     // const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
+    // console.log("isSelectedTask: " + sameProject && sameTaskDef);
     // return sameProject && sameTaskDef;
   }
 }
