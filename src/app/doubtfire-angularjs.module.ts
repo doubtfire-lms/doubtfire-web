@@ -239,7 +239,7 @@ import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
-
+import { FUnitsComponent } from './admin/states/f-units/f-units.component';
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.sessions',
@@ -366,6 +366,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'taskSubmissionHistory',
   downgradeComponent({ component: TaskSubmissionHistoryComponent })
+);
+DoubtfireAngularJSModule.directive(
+  'fUnits',
+  downgradeComponent({ component: FUnitsComponent })
 );
 
 // Global configuration

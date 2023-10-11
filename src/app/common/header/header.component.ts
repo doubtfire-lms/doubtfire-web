@@ -7,6 +7,7 @@ import { UserService } from 'src/app/api/services/user.service';
 import { AuthenticationService, Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 import { Subscription } from 'rxjs';
 import { MediaObserver } from '@angular/flex-layout';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
