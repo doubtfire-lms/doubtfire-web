@@ -28,8 +28,8 @@ export class FUnitTaskListComponent implements OnInit {
   // task filtering
   //----------------------------------------------------------------------------------------------------
 
-  filteredTasks: TaskDefinition[] = null;
-  taskSearch: string = "";
+  filteredTasks: TaskDefinition[] = null; // list of tasks which match the taskSearch term
+  taskSearch: string = "";  // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
 
   applyFilters() {
@@ -45,34 +45,18 @@ export class FUnitTaskListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.unit);
-    // console.log(this.selectedTaskDef);
+    // console.log(this.unit);
 
     // Apply filters first-time
     this.applyFilters();
   }
 
-  // ngOnChanges()
-
   setSelectedTask(task: TaskDefinition) {
-    console.log(task);
-    // this.selectedTaskService.setSelectedTask(task);
-    // this.taskData.selectedTask = task;
-    // if (this.taskData.onSelectedTaskChange) {
-    //   this.taskData.onSelectedTaskChange(task);
-    // }
+    // console.log(task);
     this.selectedTaskDef = task;
-    // if (task) {
-    //   this.scrollToTaskInList(task);
-    // }
   }
 
   isSelectedTask(task: TaskDefinition) {
-    // const sameProject = this.taskData.selectedTask?.project.id == task.project.id;
-    // const sameTaskDef = this.taskData.selectedTask?.definition.id == task.definition.id;
     return this.selectedTaskDef.id == task.id;
-    // const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
-    // const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
-    // return sameProject && sameTaskDef;
   }
 }
