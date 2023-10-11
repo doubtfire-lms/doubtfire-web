@@ -10,9 +10,6 @@ $my-palette: mat.define-palette($md-formatif);
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
   padding-right: 8px;
-  // border-right-color: rgba(0, 0, 0, 0.1);
-  // border-right-style: solid;
-  // border-right-width: 1px;
 }
 
 ::ng-deep .cdk-virtual-scroll-content-wrapper {
@@ -55,9 +52,6 @@ $my-palette: mat.define-palette($md-formatif);
 
   &.expanded {
     height: 100%;
-  }
-
-  &.mobile {
   }
 
   .search {

@@ -33,11 +33,10 @@
           style="padding: 0; height: 60px"
         >
           <div
-            class="w-full"
+            class="w-full item-content"
             *ngIf="task"
             [ngClass]="{
               selected: isSelectedTask(task),
-              'item-content': true
             }"
           >
             <div
@@ -51,7 +50,6 @@
               </div>
             </div>
           </div>
-
 
         </mat-list-item>
     </mat-selection-list>
