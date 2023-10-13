@@ -221,6 +221,8 @@ import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
 import { TiiActionService } from './api/services/tii-action.service';
 import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
+import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
+import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
 @NgModule({
   // Components we declare
@@ -312,6 +314,8 @@ import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f
     FileViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
+    FTaskDetailsViewComponent,
+    TasksViewerComponent,
   ],
   // Module Imports
   imports: [

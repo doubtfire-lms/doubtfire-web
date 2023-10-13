@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../../../../../../../theme.scss';
+@import '../../../../../../../styles/mixins/task-list.scss';
+@import '../../../../../../../styles/mixins/scrollable.scss';
+
+$my-palette: mat.define-palette($md-formatif);
+
+:host {
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+}
+
+.task-details-view {
+  border-radius: 10px;
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 8px;
+  min-width: 60px;
+  width: 350px;
+  height: 100%;
+
+  &.mobile {
+      max-width: 100%;
+      width: 100%;
+      padding: 0px;
+  }
+}
