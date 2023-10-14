@@ -5,6 +5,44 @@ import { UnitRole } from 'src/app/api/models/unit-role';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { UnitService } from 'src/app/api/services/unit.service';
 
+const ELEMENT_DATA: PeriodicElement[] = [
+  {
+    unit_code: 'COS30243',
+    name: 'Game Programming',
+    unit_role: 'Convenor',
+    teaching_period: 'Custom',
+    start_date: 'Mon 28 Aug 2023',
+    end_date: 'Mon 27 Nov 2023',
+    active: true,
+  },
+  {
+    unit_code: 'COS30046',
+    name: 'Artificial Intelligence for Games',
+    unit_role: 'Convenor',
+    teaching_period: 'Custom',
+    start_date: 'Mon 28 Aug 2023',
+    end_date: 'Mon 27 Nov 2023',
+    active: true,
+  },
+  {
+    unit_code: 'COS20007',
+    name: 'Object Oriented Programming',
+    unit_role: 'Convenor',
+    teaching_period: 'Custom',
+    start_date: 'Mon 28 Aug 2023',
+    end_date: 'Mon 27 Nov 2023',
+    active: true,
+  },
+  {
+    unit_code: 'COS10001',
+    name: 'Introduction to Programming',
+    unit_role: 'Convenor',
+    teaching_period: 'Custom',
+    start_date: 'Mon 28 Aug 2023',
+    end_date: 'Mon 27 Nov 2023',
+    active: true,
+  },
+];
 
 @Component({
   selector: 'f-units',
