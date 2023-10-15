@@ -4,61 +4,10 @@ import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { UnitService } from 'src/app/api/services/unit.service';
-
-
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { UIRouter } from '@uirouter/angular';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-
-export interface PeriodicElement {
-  unit_code: string;
-  name: string;
-  unit_role: string; // we might can use enum here, but let's keep it simple for now
-  teaching_period: string; // we might can use enum here, but let's keep it simple for now
-  start_date: string;
-  end_date: string;
-  active: boolean;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    unit_code: 'COS30243',
-    name: 'Game Programming',
-    unit_role: 'Convenor',
-    teaching_period: 'Custom',
-    start_date: 'Mon 28 Aug 2023',
-    end_date: 'Mon 27 Nov 2023',
-    active: true,
-  },
-  {
-    unit_code: 'COS30046',
-    name: 'Artificial Intelligence for Games',
-    unit_role: 'Convenor',
-    teaching_period: 'Custom',
-    start_date: 'Mon 28 Aug 2023',
-    end_date: 'Mon 27 Nov 2023',
-    active: true,
-  },
-  {
-    unit_code: 'COS20007',
-    name: 'Object Oriented Programming',
-    unit_role: 'Convenor',
-    teaching_period: 'Custom',
-    start_date: 'Mon 28 Aug 2023',
-    end_date: 'Mon 27 Nov 2023',
-    active: true,
-  },
-  {
-    unit_code: 'COS10001',
-    name: 'Introduction to Programming',
-    unit_role: 'Convenor',
-    teaching_period: 'Custom',
-    start_date: 'Mon 28 Aug 2023',
-    end_date: 'Mon 27 Nov 2023',
-    active: true,
-  },
-];
 
 @Component({
   selector: 'f-units',
