@@ -1,3 +1,29 @@
+.unit_table_header {
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  .unit_table_header_content {
+    padding: 1vw;
+    flex-grow: 1;
+    h1 {
+      font-size: 1.2vw;
+    }
+  }
+  .unit_table_header_search {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2vw;
+    flex-grow: 1;
+    input {
+      width: 10vw;
+      padding: 5px;
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+  }
+}
+
 table {
   width: 100%;
   th {
@@ -13,4 +39,24 @@ table {
     color: #fff;
     border-radius: 5px;
   }
+}
+
+.unit_table_footer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  button {
+    font-weight: 900;
+    mat-icon {
+      font-weight: 900;
+    }
+  }
+}
+
+.add_unit_btn {
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
 }
