@@ -5,7 +5,87 @@
       <h1>Unit</h1>
       <h1>Modify units registered with OnTrack</h1>
     </div>
-    <div class="unit_table_header_search"><input type="text" placeholder="Search for units..."></div>
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Unit Code Column -->
+      <ng-container matColumnDef="unit_code">
+        <th mat-header-cell *matHeaderCellDef> Unit Code </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="unit_code_box">{{element.code}}</div>
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Unit Role Column -->
+      <ng-container matColumnDef="unit_role">
+        <th mat-header-cell *matHeaderCellDef> Unit Role </th>
+        <td mat-cell *matCellDef="let element"> {{element.myRole}} </td>
+      </ng-container>
+
+      <!-- Teaching Period Column -->
+      <ng-container matColumnDef="teaching_period">
+        <th mat-header-cell *matHeaderCellDef> Teaching Period </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.teachingPeriod; else customTeachingPeriod">
+            {{element.teachingPeriod.name}}
+          </ng-container>
+
+          <ng-template #customTeachingPeriod>
+            Custom
+          </ng-template>
+        </td>
+      </ng-container>
+
+
+      <!-- Start Date Column -->
+      <ng-container matColumnDef="start_date">
+        <th mat-header-cell *matHeaderCellDef> Start Time </th>
+        <td mat-cell *matCellDef="let element"> {{element.startDate | date : 'EEE d MMM y'}} </td>
+      </ng-container>
+
+      <!-- End Date Column -->
+      <ng-container matColumnDef="end_date">
+        <th mat-header-cell *matHeaderCellDef> End Time </th>
+        <td mat-cell *matCellDef="let element"> {{element.endDate | date : 'EEE d MMM y'}} </td>
+      </ng-container>
+
+      <!-- Active Column -->
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef> Active </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- If element.teachingPeriod exists -->
+          <ng-container *ngIf="element.teachingPeriod; else noTeachingPeriod">
+            <i *ngIf="element.teachingPeriod.active && element.active" class="fa fa-check"></i>
+            <i *ngIf="!element.teachingPeriod.active || !element.active" class="fa fa-times"></i>
+          </ng-container>
+
+          <!-- If element.teachingPeriod does not exist -->
+          <ng-template #noTeachingPeriod>
+            <i *ngIf="element.active" class="fa fa-check"></i>
+            <i *ngIf="!element.active" class="fa fa-times"></i>
+          </ng-template>
+        </td>
+      </ng-container>
+
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToDetails(row)"></tr>
+
+    </table>
+
+    <div class="unit_table_footer">
+      <button mat-raised-button color="primary"><mat-icon aria-hidden="false" aria-label="Example home icon"
+          fontIcon="add"></mat-icon>
+        Create Unit</button>
+    </div>
+
   </div>
   <table mat-table [dataSource]="dataSource">
 
