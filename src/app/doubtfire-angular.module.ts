@@ -155,7 +155,7 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
-  TaskSimilarityService
+  TaskSimilarityService,
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';

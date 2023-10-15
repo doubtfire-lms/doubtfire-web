@@ -53,7 +53,7 @@
       <!-- End Date Column -->
       <ng-container matColumnDef="end_date">
         <th mat-header-cell *matHeaderCellDef> End Time </th>
-        <td mat-cell *matCellDef="let element"> {{element.endDate  | date : 'EEE d MMM y'}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.endDate | date : 'EEE d MMM y'}} </td>
       </ng-container>
 
       <!-- Active Column -->
@@ -78,19 +78,15 @@
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToDetails(row)"></tr>
 
     </table>
 
-    <!-- <div class="unit_table_footer">
+    <div class="unit_table_footer">
       <button mat-raised-button color="primary"><mat-icon aria-hidden="false" aria-label="Example home icon"
           fontIcon="add"></mat-icon>
         Create Unit</button>
-    </div> -->
-
-    <button mat-raised-button color="primary" class="add_unit_btn"><mat-icon aria-hidden="false"
-        aria-label="Example home icon" fontIcon="add"></mat-icon>
-      Create Unit</button>
+    </div>
 
   </div>
 </div>

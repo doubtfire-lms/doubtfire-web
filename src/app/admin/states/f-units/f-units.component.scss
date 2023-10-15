@@ -60,3 +60,17 @@ table {
   bottom: 2%;
   right: 2%;
 }
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.demo-row-is-clicked {
+  font-weight: bold;
+}
