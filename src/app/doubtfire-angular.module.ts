@@ -73,6 +73,7 @@ import {
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
+  CreateUnitModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -154,7 +155,7 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
-  TaskSimilarityService,
+  TaskSimilarityService
 } from './api/models/doubtfire-model';
 import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -442,6 +443,7 @@ import { FUnitsComponent } from './admin/states/f-units/f-units.component';
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    CreateUnitModalProvider,
   ],
 })
 
