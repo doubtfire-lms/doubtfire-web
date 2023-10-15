@@ -1,16 +1,20 @@
-<!-- we don't want that class -->
-<!-- that's a bootstrap class, get rid of it -->
+<!-- Wide Window Display -->
+<div fxLayout="column" fxFill fxHide fxShow.gt-sm>
   <div class="gray-background" fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <!-- <div class="flex w-full"> -->
-      <div class="vertical-panel">
+      <div #tasklistpanel class="vertical-panel">
         <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
       </div>
       <div
+        *ngIf="subs$ | async"
         id="leftResizerEl"
         #leftResizerEl
         class="resizer"
         cdkDragLockAxis="x"
         cdkDrag
+        (cdkDragMoved)="dragging($event, tasklistpanel)"
+        (cdkDragEnded)="stoppedDragging($event, tasklistpanel)"
+        (cdkDragStarted)="startedDragging($event, tasklistpanel)"
       ></div>
       <!--/panel-1-->
       <!-- <task-sheet-view task-def="selectedTaskDef" unit="unit" class="col-xs-12 col-md-6"> </task-sheet-view -->
@@ -18,16 +22,29 @@
         <f-task-dashboard></f-task-dashboard>
       </div>
       <div
+        *ngIf="subs$ | async"
         id="rightResizerEl"
         #rightResizerEl
         class="resizer"
         cdkDragLockAxis="x"
         cdkDrag
+        (cdkDragMoved)="dragging($event, taskdetailspanel)"
+        (cdkDragEnded)="stoppedDragging($event, taskdetailspanel)"
+        (cdkDragStarted)="startedDragging($event, taskdetailspanel)"
       ></div>
       <!--/panel-2-->
       <!-- <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"> </f-task-details-view -->
-      <div class="vertical-panel">
+      <div #taskdetailspanel class="vertical-panel">
         <f-task-details-view></f-task-details-view>
       </div>
       <!-- </div> -->
   </div>
+  <div class="footer-spacer flex-col w-full h-full justify-center p-0"></div>
+</div>
+
+<!-- Narrow Window / Mobile Display -->
+<div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
+  <div class="vertical-panel mobile">
+    <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
+  </div>
+</div>

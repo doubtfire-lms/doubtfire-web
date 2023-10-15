@@ -1,4 +1,4 @@
-<!-- <div class="unit-task-list" div fxLayout="column" fxLayoutAlign="none"> -->
+<div class="task-list" div fxLayout="column" fxLayoutAlign="none">
 
   <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
@@ -41,7 +41,7 @@
           >
             <div
               (click)="setSelectedTask(task)"
-              class="inbox-entry flex items-center"
+              class="task-entry flex items-center"
               [ngClass]="{ hover: task.hover }"
             >
               <div class="task-list-data" fxFlex>
@@ -53,4 +53,4 @@
         </mat-list-item>
     </mat-selection-list>
   </cdk-virtual-scroll-viewport>
-<!-- </div> -->
+</div>
