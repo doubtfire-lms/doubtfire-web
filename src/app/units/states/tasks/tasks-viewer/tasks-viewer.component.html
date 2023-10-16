@@ -1,7 +1,8 @@
 <!-- Wide Window Display -->
 <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
-  <div class="gray-background" fxLayout="row" fxLayoutAlign="center stretch" fxFill>
-    <!-- <div class="flex w-full"> -->
+  <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
+
+      <!-- Panel 1 -->
       <div #tasklistpanel  id="tasklistpanel" class="vertical-panel">
         <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
       </div>
@@ -16,8 +17,8 @@
         (cdkDragEnded)="stoppedDragging($event, tasklistpanel)"
         (cdkDragStarted)="startedDragging($event, tasklistpanel)"
       ></div>
-      <!--/panel-1-->
-      <!-- <task-sheet-view task-def="selectedTaskDef" unit="unit" class="col-xs-12 col-md-6"> </task-sheet-view -->
+
+      <!-- Panel 2 -->
       <div fxFlex class="vertical-panel">
         <f-task-dashboard></f-task-dashboard>
       </div>
@@ -31,14 +32,12 @@
         (cdkDragEnded)="stoppedDragging($event, taskdetailspanel)"
         (cdkDragStarted)="startedDragging($event, taskdetailspanel)"
       ></div>
-      <!--/panel-2-->
-      <!-- <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"> </f-task-details-view -->
+
+      <!-- Panel 3 -->
       <div #taskdetailspanel class="vertical-panel" id="taskdetailspanel">
         <f-task-details-view></f-task-details-view>
       </div>
-      <!-- </div> -->
   </div>
-  <div class="footer-spacer flex-col w-full h-full justify-center p-0"></div>
 </div>
 
 <!-- Narrow Window / Mobile Display -->
