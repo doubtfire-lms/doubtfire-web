@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../../../../../../../theme.scss';
+@import '../../../../../../../styles/mixins/task-list.scss';
+@import '../../../../../../../styles/mixins/scrollable.scss';
+
+$my-palette: mat.define-palette($md-formatif);
+
+:host {
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 15px;
+}

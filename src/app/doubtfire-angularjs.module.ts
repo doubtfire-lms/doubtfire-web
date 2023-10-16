@@ -111,8 +111,8 @@ import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
-import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
-import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';
+// import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
+// import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
@@ -240,6 +240,9 @@ import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tas
 import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
 import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
 import { FUnitsComponent } from './admin/states/f-units/f-units.component';
+import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
+import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
+
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.sessions',
@@ -307,9 +310,11 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive('fUnitAnalytics', downgradeComponent({ component: UnitAnalyticsComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
 DoubtfireAngularJSModule.directive('fUnitTaskList', downgradeComponent({ component: FUnitTaskListComponent }));
+DoubtfireAngularJSModule.directive('fTaskDetailsView', downgradeComponent({ component: FTaskDetailsViewComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
 DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
+DoubtfireAngularJSModule.directive('fTasksViewer', downgradeComponent({ component: TasksViewerComponent }));
 DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({ component: InboxComponent }));
 DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
 DoubtfireAngularJSModule.directive(

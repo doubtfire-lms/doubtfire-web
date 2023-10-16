@@ -10,13 +10,14 @@ $my-palette: mat.define-palette($md-formatif);
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
   padding-right: 8px;
-  // border-right-color: rgba(0, 0, 0, 0.1);
-  // border-right-style: solid;
-  // border-right-width: 1px;
 }
 
 ::ng-deep .cdk-virtual-scroll-content-wrapper {
   width: 100%;
+}
+
+.task-list {
+  height: 100%;
 }
 
 .unit-task-list {
@@ -34,7 +35,7 @@ $my-palette: mat.define-palette($md-formatif);
       padding: 0px;
   }
 
-  .inbox-entry {
+  .task-entry {
     padding-right: 8px;
     padding-left: 6px;
     width: 100%;
@@ -57,9 +58,6 @@ $my-palette: mat.define-palette($md-formatif);
     height: 100%;
   }
 
-  &.mobile {
-  }
-
   .search {
     background-color: transparent;
     border: hidden;
@@ -77,6 +75,7 @@ $my-palette: mat.define-palette($md-formatif);
 
 .task-list-data {
   margin-top: 0px;
+  padding-left: 30px;
 
   .task-title {
     font-size: 15px;

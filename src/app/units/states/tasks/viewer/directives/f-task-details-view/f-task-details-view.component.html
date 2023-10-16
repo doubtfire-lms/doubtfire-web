@@ -1,0 +1,13 @@
+<!-- <div class="mat-card">
+  <div class="mat-card-header">
+    <div class="mat-card-title">
+      Details for {{taskDef?.name}}
+    </div>
+  </div>
+  <div class="mat-card-content">
+    <f-task-description-card [taskDef]="taskDef" [unit]="unit" [task]=""></f-task-description-card>
+  </div>
+</div> -->
+
+<mat-card-title class="title">Details for {{ taskDef?.name }}</mat-card-title>
+<f-task-description-card [taskDef]="taskDef" [unit]="unit" [task]=""></f-task-description-card>

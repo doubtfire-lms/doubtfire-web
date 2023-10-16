@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Unit } from 'src/app/api/models/unit';
 import { Grade } from 'src/app/api/models/grade';
 import { Task, TaskDefinition } from 'src/app/api/models/doubtfire-model';
-import { Observable } from 'rxjs';
-import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
 import { TaskDefinitionNamePipe } from 'src/app/common/filters/task-definition-name.pipe';
-
+import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';import { TasksViewerService } from '../../../tasks-viewer.service';
+;
 
 @Component({
   selector: 'f-unit-task-list',
@@ -13,66 +12,40 @@ import { TaskDefinitionNamePipe } from 'src/app/common/filters/task-definition-n
   styleUrls: ['./f-unit-task-list.component.scss'],
 })
 export class FUnitTaskListComponent implements OnInit {
-  @Input() unit: Unit;
   @Input() unitTasks: TaskDefinition[];
-  @Input() task: Task;
-  @Input() selectedTaskDef: TaskDefinition;
-
-  @Input() taskData: {
-    source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
-    selectedTask: Task,
-    onSelectedTaskChange: (task: Task) => void;
-  }
-
-
-  // task filtering
-  //----------------------------------------------------------------------------------------------------
-
-  filteredTasks: TaskDefinition[] = null;
-  taskSearch: string = "";
+  filteredTasks: any[] = null; // list of tasks which match the taskSearch term
+  taskSearch: string = "";  // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
+  private gradeNames: string[] = Grade.GRADES;
+  selectedTaskDef: TaskDefinition;
+
+  constructor(
+    private taskViewerService: TasksViewerService
+  ) {}
 
   applyFilters() {
     this.filteredTasks = this.taskDefinitionNamePipe.transform(this.unitTasks, this.taskSearch);
   }
 
-  //----------------------------------------------------------------------------------------------------
-
-  private gradeNames: string[] = Grade.GRADES;
-
-  constructor(
-    private selectedTaskService: SelectedTaskService
-  ) {}
-
   ngOnInit(): void {
-    console.log(this.unit);
-    // console.log(this.selectedTaskDef);
-
-    // Apply filters first-time
     this.applyFilters();
+
+    this.taskViewerService.selectedTaskDef.subscribe((taskDef) => {
+      // this.setSelectedTask(taskDef);
+      this.selectedTaskDef = taskDef;
+    });
+    this.taskViewerService.selectedTaskDef.next(this.unitTasks[0]);
   }
 
-  // ngOnChanges()
-
   setSelectedTask(task: TaskDefinition) {
-    console.log(task);
-    // this.selectedTaskService.setSelectedTask(task);
-    // this.taskData.selectedTask = task;
-    // if (this.taskData.onSelectedTaskChange) {
-    //   this.taskData.onSelectedTaskChange(task);
-    // }
-    this.selectedTaskDef = task;
-    // if (task) {
-    //   this.scrollToTaskInList(task);
-    // }
+    // this shouldn't exist anymore
+    console.log("Selected Task: ", this.selectedTaskDef.name);
+    // this.selectedTaskDef = task;
+    this.taskViewerService.setSelectedTaskDef(task);
+    // this.selectedTask.setSelectedTask(task.id);
   }
 
   isSelectedTask(task: TaskDefinition) {
-    // const sameProject = this.taskData.selectedTask?.project.id == task.project.id;
-    // const sameTaskDef = this.taskData.selectedTask?.definition.id == task.definition.id;
     return this.selectedTaskDef.id == task.id;
-    // const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
-    // const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
-    // return sameProject && sameTaskDef;
   }
 }
