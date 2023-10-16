@@ -31,7 +31,7 @@ export class TasksViewerComponent implements OnInit {
 
         let newWidth: number;
         let width: number;
-        if (moveEvent.div.id === 'inboxpanel') {
+        if (moveEvent.div.id === 'tasklistpanel') {
           newWidth = startSize + moveEvent.event.distance.x;
 
           // if width is belo 250, snap to 50px

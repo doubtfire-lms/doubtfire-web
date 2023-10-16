@@ -2,7 +2,7 @@
 <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
   <div class="gray-background" fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <!-- <div class="flex w-full"> -->
-      <div #tasklistpanel class="vertical-panel">
+      <div #tasklistpanel  id="tasklistpanel" class="vertical-panel">
         <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
       </div>
       <div
@@ -34,7 +34,7 @@
       ></div>
       <!--/panel-2-->
       <!-- <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"> </f-task-details-view -->
-      <div #taskdetailspanel class="vertical-panel">
+      <div #taskdetailspanel class="vertical-panel" id="taskdetailspanel">
         <f-task-details-view></f-task-details-view>
       </div>
       <!-- </div> -->
