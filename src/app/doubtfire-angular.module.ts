@@ -73,6 +73,7 @@ import {
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
+  CreateUnitModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -220,7 +221,6 @@ import {
 import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
 import { TiiActionService } from './api/services/tii-action.service';
-import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
 import { FUnitsComponent } from './admin/states/f-units/f-units.component';
 @NgModule({
   // Components we declare
@@ -311,7 +311,6 @@ import { FUnitsComponent } from './admin/states/f-units/f-units.component';
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     AlertComponent,
-    FUnitTaskListComponent,
     FUnitsComponent,
   ],
   // Module Imports
@@ -442,6 +441,7 @@ import { FUnitsComponent } from './admin/states/f-units/f-units.component';
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    CreateUnitModalProvider,
   ],
 })
 
