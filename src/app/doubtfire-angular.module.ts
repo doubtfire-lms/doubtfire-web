@@ -222,6 +222,7 @@ import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.com
 import { TiiActionService } from './api/services/tii-action.service';
 import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
 import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
+import { FTaskSheetViewComponent } from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
 import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
 @NgModule({
@@ -315,6 +316,7 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
+    FTaskSheetViewComponent,
     TasksViewerComponent,
   ],
   // Module Imports

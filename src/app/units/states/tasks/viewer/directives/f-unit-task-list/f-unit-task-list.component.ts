@@ -31,7 +31,6 @@ export class FUnitTaskListComponent implements OnInit {
     this.applyFilters();
 
     this.taskViewerService.selectedTaskDef.subscribe((taskDef) => {
-      // this.setSelectedTask(taskDef);
       this.selectedTaskDef = taskDef;
     });
     this.taskViewerService.selectedTaskDef.next(this.unitTasks[0]);
@@ -40,9 +39,8 @@ export class FUnitTaskListComponent implements OnInit {
   setSelectedTask(task: TaskDefinition) {
     // this shouldn't exist anymore
     console.log("Selected Task: ", this.selectedTaskDef.name);
-    // this.selectedTaskDef = task;
+    console.log("url: ", task.getTaskPDFUrl())
     this.taskViewerService.setSelectedTaskDef(task);
-    // this.selectedTask.setSelectedTask(task.id);
   }
 
   isSelectedTask(task: TaskDefinition) {

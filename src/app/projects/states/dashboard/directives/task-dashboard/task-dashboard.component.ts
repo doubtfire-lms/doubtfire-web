@@ -53,6 +53,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       labels: this.taskService.statusLabels,
       class: this.taskService.statusClass,
     };
+
+    console.log("task dashboard url: ", this.pdfUrl)
   }
 
   ngOnChanges(changes: SimpleChanges) {
