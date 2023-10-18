@@ -5,13 +5,13 @@
         <h1>Unit</h1>
         <h1>Modify units registered with OnTrack</h1>
       </div>
-      <div class="unit_table_header_search"><input type="text" placeholder="Search for units..."></div>
+      <div class="unit_table_header_search"><input type="text" placeholder="Search for units..." matInput (keyup)="applyFilter($event)" /></div>
     </div>
-    <table mat-table [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)">
 
       <!-- Unit Code Column -->
       <ng-container matColumnDef="unit_code">
-        <th mat-header-cell *matHeaderCellDef> Unit Code </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Code </th>
         <td mat-cell *matCellDef="let element">
           <div class="unit_code_box">{{element.code}}</div>
         </td>
@@ -19,19 +19,19 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
 
       <!-- Unit Role Column -->
       <ng-container matColumnDef="unit_role">
-        <th mat-header-cell *matHeaderCellDef> Unit Role </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Role </th>
         <td mat-cell *matCellDef="let element"> {{element.myRole}} </td>
       </ng-container>
 
       <!-- Teaching Period Column -->
       <ng-container matColumnDef="teaching_period">
-        <th mat-header-cell *matHeaderCellDef> Teaching Period </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Teaching Period </th>
         <td mat-cell *matCellDef="let element">
           <ng-container *ngIf="element.teachingPeriod; else customTeachingPeriod">
             {{element.teachingPeriod.name}}
@@ -46,19 +46,19 @@
 
       <!-- Start Date Column -->
       <ng-container matColumnDef="start_date">
-        <th mat-header-cell *matHeaderCellDef> Start Time </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
         <td mat-cell *matCellDef="let element"> {{element.startDate | date : 'EEE d MMM y'}} </td>
       </ng-container>
 
       <!-- End Date Column -->
       <ng-container matColumnDef="end_date">
-        <th mat-header-cell *matHeaderCellDef> End Time </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> End Time </th>
         <td mat-cell *matCellDef="let element"> {{element.endDate | date : 'EEE d MMM y'}} </td>
       </ng-container>
 
       <!-- Active Column -->
       <ng-container matColumnDef="active">
-        <th mat-header-cell *matHeaderCellDef> Active </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Active </th>
         <td mat-cell *matCellDef="let element">
           <!-- If element.teachingPeriod exists -->
           <ng-container *ngIf="element.teachingPeriod; else noTeachingPeriod">
@@ -78,7 +78,8 @@
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToDetails(row)"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" uiSref="units/admin"
+      [uiParams]="{ unitId: row.id }"></tr>
 
     </table>
 
