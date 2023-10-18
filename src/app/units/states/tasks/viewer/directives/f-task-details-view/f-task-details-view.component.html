@@ -1,13 +1,11 @@
-<!-- <div class="mat-card">
-  <div class="mat-card-header">
-    <div class="mat-card-title">
-      Details for {{taskDef?.name}}
-    </div>
-  </div>
-  <div class="mat-card-content">
+
+<div class="w-full h-full overflow-auto">
+  <div [hidden]="!taskDef">
+    <mat-card-title class="title">Details for {{ taskDef?.name }}</mat-card-title>
     <f-task-description-card [taskDef]="taskDef" [unit]="unit" [task]=""></f-task-description-card>
   </div>
-</div> -->
 
-<mat-card-title class="title">Details for {{ taskDef?.name }}</mat-card-title>
-<f-task-description-card [taskDef]="taskDef" [unit]="unit" [task]=""></f-task-description-card>
+  <div [hidden]="taskDef" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>subtitles_off</mat-icon>
+  </div>
+</div>

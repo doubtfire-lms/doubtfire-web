@@ -9,7 +9,7 @@ import { TasksViewerService } from '../../../tasks-viewer.service';
   styleUrls: ['./f-task-details-view.component.scss'],
 })
 export class FTaskDetailsViewComponent implements OnInit {
-  taskDef: TaskDefinition;
+  @Input() taskDef: TaskDefinition;
   @Input() unit: Unit;
 
   constructor(private tasksViewerService: TasksViewerService) {

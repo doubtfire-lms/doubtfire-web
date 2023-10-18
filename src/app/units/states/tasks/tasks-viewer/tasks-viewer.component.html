@@ -36,14 +36,26 @@
 
       <!-- Panel 3 -->
       <div #taskdetailspanel class="vertical-panel" id="taskdetailspanel">
-        <f-task-details-view></f-task-details-view>
+        <f-task-details-view [taskDef]="selectedTaskDef"></f-task-details-view>
       </div>
   </div>
 </div>
 
 <!-- Narrow Window / Mobile Display -->
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
-  <div class="vertical-panel mobile">
+  <div class="vertical-panel mobile" [hidden]="selectedTaskDef">
     <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
+  </div>
+
+  <div [hidden]="!selectedTaskDef" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
+    <div class="flex items-center">
+      <button mat-icon-button aria-label="Back to task list" matTooltip="Back to list" (click)="selectedTaskDef = undefined">
+        <mat-icon>arrow_back_ios_new</mat-icon>
+      </button>
+    </div>
+
+    <div fxFlex class="vertical-panel mobile">
+      <f-task-details-view [taskDef]="selectedTaskDef"></f-task-details-view>
+    </div>
   </div>
 </div>

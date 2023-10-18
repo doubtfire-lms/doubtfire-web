@@ -2,6 +2,7 @@ import { CdkDragEnd, CdkDragStart, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from 'rxjs';
+import { TasksViewerService } from '../tasks-viewer.service';
 
 @Component({
   selector: 'f-tasks-viewer',
@@ -19,9 +20,16 @@ export class TasksViewerComponent implements OnInit {
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
 
+  constructor(
+    private taskViewerService: TasksViewerService
+  ) {}
+
   ngOnInit() {
     console.log(this.taskDefs);
-    this.selectedTaskDef = this.taskDefs[0];
+
+    this.taskViewerService.selectedTaskDef.subscribe((taskDef) => {
+      this.selectedTaskDef = taskDef;
+    });
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.inboxStartSize$),
