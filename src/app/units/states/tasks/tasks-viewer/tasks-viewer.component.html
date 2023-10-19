@@ -43,13 +43,13 @@
 
 <!-- Narrow Window / Mobile Display -->
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
-  <div class="vertical-panel mobile" [hidden]="selectedTaskDef">
+  <div class="vertical-panel mobile" [hidden]="taskSelected">
     <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
   </div>
 
-  <div [hidden]="!selectedTaskDef" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
+  <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Back to task list" matTooltip="Back to list" (click)="selectedTaskDef = undefined">
+      <button mat-icon-button aria-label="Back to task list" matTooltip="Back to list" (click)="taskSelected = false">
         <mat-icon>arrow_back_ios_new</mat-icon>
       </button>
     </div>

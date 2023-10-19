@@ -18,6 +18,7 @@ export class FUnitTaskListComponent implements OnInit {
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
   private gradeNames: string[] = Grade.GRADES;
   selectedTaskDef: TaskDefinition;
+  taskSelected: boolean;
 
   constructor(
     private taskViewerService: TasksViewerService
@@ -34,6 +35,10 @@ export class FUnitTaskListComponent implements OnInit {
       this.selectedTaskDef = taskDef;
     });
     this.taskViewerService.selectedTaskDef.next(this.unitTasks[0]);
+
+    this.taskViewerService.taskSelected.subscribe((taskSelected) => {
+      this.taskSelected = taskSelected;
+    })
   }
 
   setSelectedTask(task: TaskDefinition) {

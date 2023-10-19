@@ -13,6 +13,7 @@ export class TasksViewerComponent implements OnInit {
 
   @Input() taskDefs: TaskDefinition[];
   selectedTaskDef: TaskDefinition;
+  taskSelected: boolean;
 
   subs$: Observable<any>;
 
@@ -30,6 +31,10 @@ export class TasksViewerComponent implements OnInit {
     this.taskViewerService.selectedTaskDef.subscribe((taskDef) => {
       this.selectedTaskDef = taskDef;
     });
+
+    this.taskViewerService.taskSelected.subscribe((taskSelected) => {
+      this.taskSelected = taskSelected;
+    })
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.inboxStartSize$),
