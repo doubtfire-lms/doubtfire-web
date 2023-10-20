@@ -14,9 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './f-units.component.html',
   styleUrls: ['./f-units.component.scss'],
 })
-
 export class FUnitsComponent implements AfterViewInit, OnInit {
-
   @ViewChild(MatTable, { static: false }) table: MatTable<Unit>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -37,17 +35,12 @@ export class FUnitsComponent implements AfterViewInit, OnInit {
   unitRoles: UnitRole[];
   dataload: boolean;
 
-
-
   constructor(
     @Inject(createUnitModal) private createUnitModal: any,
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
-    private router: UIRouter
-
-
+    private router: UIRouter,
   ) {
-
     this.dataload = false;
   }
 
@@ -59,8 +52,6 @@ export class FUnitsComponent implements AfterViewInit, OnInit {
       this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
     }
   }
-
-
 
   ngOnInit() {
     this.globalStateService.setView(ViewType.OTHER);
@@ -130,6 +121,4 @@ export class FUnitsComponent implements AfterViewInit, OnInit {
       }
     });
   }
-
-
 }

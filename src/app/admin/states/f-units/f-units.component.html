@@ -2,10 +2,15 @@
   <div class="mat-elevation-z8">
     <div class="unit_table_header">
       <div class="unit_table_header_content">
-        <h1>Unit</h1>
+        <h1>Units</h1>
         <h1>Modify units registered with OnTrack</h1>
       </div>
-      <div class="unit_table_header_search"><input type="text" placeholder="Search for units..." matInput (keyup)="applyFilter($event)" /></div>
+      <div class="unit_table_header_search">
+        <mat-form-field>
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" />
+        </mat-form-field>
+      </div>
     </div>
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)">
 
@@ -78,14 +83,14 @@
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" uiSref="units/admin"
-      [uiParams]="{ unitId: row.id }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" uiSref="units/admin" [uiParams]="{ unitId: row.id }">
+      </tr>
 
     </table>
 
     <div class="unit_table_footer">
-      <button mat-raised-button color="primary" (click)="createUnit()"><mat-icon aria-hidden="false" aria-label="Example home icon"
-          fontIcon="add"></mat-icon>
+      <button mat-raised-button color="primary" (click)="createUnit()"><mat-icon aria-hidden="false"
+          aria-label="Example home icon" fontIcon="add"></mat-icon>
         Create Unit</button>
     </div>
 
