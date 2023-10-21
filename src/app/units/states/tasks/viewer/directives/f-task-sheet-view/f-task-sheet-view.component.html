@@ -4,6 +4,7 @@
       <ng-container *ngIf="taskDef; then pdfViewer; else noPdfUrl"></ng-container>
     </ng-template>
   </ng-container>
+
   <!-- The PDF Viewer -->
   <ng-template #pdfViewer>
     <f-pdf-viewer [pdfUrl]="taskDef.getTaskPDFUrl()"></f-pdf-viewer>

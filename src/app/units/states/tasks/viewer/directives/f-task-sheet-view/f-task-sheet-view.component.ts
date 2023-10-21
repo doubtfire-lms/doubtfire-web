@@ -15,8 +15,6 @@ export class FTaskSheetViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("tasksheetview pdf: ", this.taskDef.getTaskPDFUrl())
-
     this.taskViewerService.selectedTaskDef.subscribe((taskDef) => {
       this.taskDef = taskDef;
     });

@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TasksViewerService } from '../../../tasks-viewer.service';
@@ -12,14 +12,12 @@ export class FTaskDetailsViewComponent implements OnInit {
   @Input() taskDef: TaskDefinition;
   @Input() unit: Unit;
 
-  constructor(private tasksViewerService: TasksViewerService) {
-    console.log("Task Details View Component says HELLO WORLD!")
-  }
+  constructor(
+    private tasksViewerService: TasksViewerService
+  ) {}
 
   ngOnInit() {
-    console.log("Task Details View Component says HELLO WORLD!")
     this.tasksViewerService.selectedTaskDef.subscribe((taskDef) => {
-      console.log(taskDef);
       this.taskDef = taskDef;
     });
   }

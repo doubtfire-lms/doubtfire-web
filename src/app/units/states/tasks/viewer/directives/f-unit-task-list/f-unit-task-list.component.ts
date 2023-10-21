@@ -1,10 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Unit } from 'src/app/api/models/unit';
+import { Component, Input, OnInit } from '@angular/core';
 import { Grade } from 'src/app/api/models/grade';
-import { Task, TaskDefinition } from 'src/app/api/models/doubtfire-model';
+import { TaskDefinition } from 'src/app/api/models/doubtfire-model';
 import { TaskDefinitionNamePipe } from 'src/app/common/filters/task-definition-name.pipe';
-import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';import { TasksViewerService } from '../../../tasks-viewer.service';
-;
+import { TasksViewerService } from '../../../tasks-viewer.service';
 
 @Component({
   selector: 'f-unit-task-list',
@@ -42,9 +40,6 @@ export class FUnitTaskListComponent implements OnInit {
   }
 
   setSelectedTask(task: TaskDefinition) {
-    // this shouldn't exist anymore
-    console.log("Selected Task: ", this.selectedTaskDef.name);
-    console.log("url: ", task.getTaskPDFUrl())
     this.taskViewerService.setSelectedTaskDef(task);
   }
 
