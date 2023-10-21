@@ -36,7 +36,7 @@
 
       <!-- Panel 3 -->
       <div #taskdetailspanel class="vertical-panel" id="taskdetailspanel">
-        <f-task-details-view [taskDef]="selectedTaskDef"></f-task-details-view>
+        <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
       </div>
   </div>
 </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div fxFlex class="vertical-panel mobile">
-      <f-task-details-view [taskDef]="selectedTaskDef"></f-task-details-view>
+      <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
     </div>
   </div>
 </div>

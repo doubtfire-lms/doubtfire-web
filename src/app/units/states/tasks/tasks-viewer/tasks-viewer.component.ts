@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { auditTime, merge, Observable, of, Subject, tap, withLatestFrom } from 'rxjs';
 import { TasksViewerService } from '../tasks-viewer.service';
+import { Unit } from 'src/app/api/models/unit';
 
 @Component({
   selector: 'f-tasks-viewer',
@@ -12,6 +13,7 @@ import { TasksViewerService } from '../tasks-viewer.service';
 export class TasksViewerComponent implements OnInit {
 
   @Input() taskDefs: TaskDefinition[];
+  @Input() unit: Unit;
   selectedTaskDef: TaskDefinition;
   taskSelected: boolean;
 
