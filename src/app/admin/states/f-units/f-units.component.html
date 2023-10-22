@@ -1,11 +1,12 @@
-<div *ngIf="dataload">
+<div>
   <div class="mat-elevation-z8">
-    <div class="unit_table_header">
-      <div class="unit_table_header_content">
-        <h1>Units</h1>
-        <h1>Modify units registered with OnTrack</h1>
+    <div class="header">
+      <div >
+        <h3>Units</h3>
+        <p>Modify units registered with OnTrack</p>
       </div>
-      <div class="unit_table_header_search">
+      <div class="spacer"></div>
+      <div class="filter">
         <mat-form-field>
           <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" />

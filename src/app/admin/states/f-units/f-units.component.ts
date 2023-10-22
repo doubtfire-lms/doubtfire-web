@@ -55,16 +55,16 @@ export class FUnitsComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.globalStateService.setView(ViewType.OTHER);
+    // console.log(this.globalStateService.loadedUnits.currentValues);
+    // // Listen for units to be loaded
+    // this.globalStateService.onLoad(() => {
+    //   const loadedUnitRoles = this.globalStateService.loadedUnitRoles.currentValues;
+    //   this.unitRoles = [...loadedUnitRoles];
 
-    // Listen for units to be loaded
-    this.globalStateService.onLoad(() => {
-      const loadedUnitRoles = this.globalStateService.loadedUnitRoles.currentValues;
-      this.unitRoles = [...loadedUnitRoles];
-
-      this.globalStateService.loadedUnits.values.subscribe((units) => (this.allUnits = units));
-      this.loadAllUnits();
-      //console.log(this.dataSource);
-    });
+    //   this.globalStateService.loadedUnits.values.subscribe((units) => (this.allUnits = units));
+    //   this.loadAllUnits();
+    //   //console.log(this.dataSource);
+    // });
     this.loadAllUnits();
   }
 
