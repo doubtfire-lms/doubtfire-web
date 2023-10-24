@@ -207,6 +207,7 @@ import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 import { FileDropComponent } from './common/file-drop/file-drop.component';
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
+import { FUsersComponent } from './admin/states/f-users/f-users.component';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -310,6 +311,7 @@ import { TiiActionService } from './api/services/tii-action.service';
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     AlertComponent,
+    FUsersComponent,
   ],
   // Module Imports
   imports: [

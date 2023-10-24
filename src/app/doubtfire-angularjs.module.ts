@@ -238,6 +238,7 @@ import { TaskDefinitionEditorComponent } from './units/states/edit/directives/un
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import { FUsersComponent } from './admin/states/f-users/f-users.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -310,6 +311,7 @@ DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ comp
 DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
 DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({ component: InboxComponent }));
 DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
+DoubtfireAngularJSModule.directive('fUsers', downgradeComponent({ component: FUsersComponent }));
 DoubtfireAngularJSModule.directive(
   'fTaskAssessmentCard',
   downgradeComponent({ component: TaskAssessmentCardComponent })
