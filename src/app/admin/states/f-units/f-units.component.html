@@ -88,12 +88,13 @@
       </tr>
 
     </table>
-
-    <div class="unit_table_footer">
+    <span class="flex items-center">
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <button mat-raised-button color="primary" (click)="createUnit()"><mat-icon aria-hidden="false"
           aria-label="Example home icon" fontIcon="add"></mat-icon>
         Create Unit</button>
-    </div>
+    </span>
+
 
   </div>
 </div>
