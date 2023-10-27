@@ -5,7 +5,7 @@ import { User } from 'src/app/api/models/doubtfire-model';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserService } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
-import { Subscription } from 'rxjs';
+import { EditProfileDialogService } from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
 
 @Component({
   selector: 'f-users',
@@ -18,6 +18,7 @@ export class FUsersComponent {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   displayedColumns: string[] = [
+    'avatar',
     'id',
     'firstName',
     'lastName',
@@ -30,7 +31,8 @@ export class FUsersComponent {
 
   constructor(
     private userService: UserService,
-    private globalStateService: GlobalStateService
+    private globalStateService: GlobalStateService,
+    private editProfileDialogService: EditProfileDialogService,
   ) {
     this.dataload = false;
   }
@@ -58,6 +60,9 @@ export class FUsersComponent {
     })
   }
 
-
+  public showUserModal(user: User) {
+    let userToShow = user ? user : this.userService.createInstanceFrom({});
+    this.editProfileDialogService.openDialog(userToShow);
+  }
 
 }

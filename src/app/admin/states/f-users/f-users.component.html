@@ -6,48 +6,55 @@
     </div>
     <span class="flex-grow"></span>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Filter"/>
+      <input matInput placeholder="Search for users"/>
     </mat-form-field>
   </div>
 
 
 
-  <div class="flex-grow flex flex-col gap-8 gap-y-0">
+  <div class="flex flex-col gap-8 gap-y-0">
     <!-- Table -->
     <table
-      class="flex-grow f-table selectable"
+      class="f-table selectable"
       mat-table
       [dataSource]="dataSource"
       mat-sort
     >
+      <ng-container matColumnDef="avatar">
+        <th mat-header-cell *matHeaderCellDef>Avatar</th>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
+          <user-icon fxFlexAlign="center" [user]="user" [size]="30"></user-icon>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>User ID</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="firstName">
         <th mat-header-cell *matHeaderCellDef>First Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.firstName }}</td>
       </ng-container>
 
       <ng-container matColumnDef="lastName">
         <th mat-header-cell *matHeaderCellDef>Last Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.lastName }}</td>
       </ng-container>
 
       <ng-container matColumnDef="username">
         <th mat-header-cell *matHeaderCellDef>Username</th>
-        <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.username }}</td>
       </ng-container>
 
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.email }}</td>
       </ng-container>
 
       <ng-container matColumnDef="systemRole">
         <th mat-header-cell *matHeaderCellDef>System Role</th>
-        <td mat-cell *matCellDef="let element">{{ element.systemRole }}</td>
+        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.systemRole }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -58,7 +65,7 @@
     <span class="flex items-center">
       <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
       <span class="flex-grow"></span>
-      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add New User</button>
+      <button mat-raised-button color="primary" (click)="showUserModal({})">Add New User</button>
     </span>
 
   </div>
