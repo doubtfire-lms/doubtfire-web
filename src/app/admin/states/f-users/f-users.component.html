@@ -1,50 +1,65 @@
+<div>
+  <div fxLayout="row" class="header-height">
+    <div fxLayout="column">
+      <h3>OnTrack Users</h3>
+      <h3>Users Administration View</h3>
+    </div>
+    <span class="flex-grow"></span>
+    <mat-form-field appearance="outline">
+      <input matInput placeholder="Filter"/>
+    </mat-form-field>
+  </div>
 
-<div class="flex-grow flex flex-col gap-8 gap-y-0">
-  <!-- Table -->
-  <table
-    class="flex-grow f-table selectable"
-    mat-table
-    [dataSource]="dataSource"
-    mat-sort
-  >
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>User ID</th>
-      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-    </ng-container>
 
-    <ng-container matColumnDef="firstName">
-      <th mat-header-cell *matHeaderCellDef>First Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
-    </ng-container>
 
-    <ng-container matColumnDef="lastName">
-      <th mat-header-cell *matHeaderCellDef>Last Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
-    </ng-container>
+  <div class="flex-grow flex flex-col gap-8 gap-y-0">
+    <!-- Table -->
+    <table
+      class="flex-grow f-table selectable"
+      mat-table
+      [dataSource]="dataSource"
+      mat-sort
+    >
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>User ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef>Username</th>
-      <td mat-cell *matCellDef="let element">{{ element.username }}</td>
-    </ng-container>
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>First Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
-      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-    </ng-container>
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Last Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="systemRole">
-      <th mat-header-cell *matHeaderCellDef>System Role</th>
-      <td mat-cell *matCellDef="let element">{{ element.systemRole }}</td>
-    </ng-container>
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef>Username</th>
+        <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
 
-  <!-- Footer -->
-  <span class="flex items-center">
-    <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
-    <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add New User</button>
-  </span>
+      <ng-container matColumnDef="systemRole">
+        <th mat-header-cell *matHeaderCellDef>System Role</th>
+        <td mat-cell *matCellDef="let element">{{ element.systemRole }}</td>
+      </ng-container>
 
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Footer -->
+    <span class="flex items-center">
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
+      <span class="flex-grow"></span>
+      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add New User</button>
+    </span>
+
+  </div>
 </div>

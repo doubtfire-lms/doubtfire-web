@@ -6,20 +6,23 @@
 
 
 <div fxLayout="column">
-  <!-- Heading -->
+  <!-- Heading
   <div fxFill fxLayout="column">
     <div>
       <h3>OnTrack Users</h3>
       <h3>Users Administration View</h3>
     </div>
-  </div>
+  </div> -->
 
   <div class="flex">
     <!-- Users Table -->
-    <f-users></f-users>
+    <div class="w-full">
+      <f-users></f-users>
+    </div>
 
     <!-- Batch Download Panel -->
     <div class="col-sm-3">
+      <div style="height: 80px"></div>
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">Batch Import Users</h4>
@@ -43,6 +46,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
