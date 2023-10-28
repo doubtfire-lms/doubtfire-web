@@ -37,7 +37,6 @@ export class FUsersComponent {
     this.dataload = false;
   }
 
-
   ngOnInit(): void {
     this.globalStateService.setView(ViewType.OTHER);
     this.loadAllUsers();
@@ -64,5 +63,4 @@ export class FUsersComponent {
     let userToShow = user ? user : this.userService.createInstanceFrom({});
     this.editProfileDialogService.openDialog(userToShow);
   }
-
 }
