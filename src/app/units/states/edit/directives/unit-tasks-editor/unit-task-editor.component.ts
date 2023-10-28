@@ -1,4 +1,3 @@
-import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';

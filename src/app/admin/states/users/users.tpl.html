@@ -4,54 +4,41 @@
   <p>Loading...</p>
 </div>
 
+<!-- Body -->
+<div class="flex">
+  <!-- Users Table -->
+  <f-users class="w-full"></f-users>
 
-<div fxLayout="column">
-  <!-- Heading
-  <div fxFill fxLayout="column">
-    <div>
-      <h3>OnTrack Users</h3>
-      <h3>Users Administration View</h3>
-    </div>
-  </div> -->
-
-  <div class="flex">
-    <!-- Users Table -->
-    <div class="w-full">
-      <f-users></f-users>
-    </div>
-
-    <!-- Batch Download Panel -->
-    <div class="col-sm-3">
-      <div style="height: 80px"></div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">Batch Import Users</h4>
-          Import users using a CSV containing: email, firstName, lastName, username, nickname, role
-        </div>
-        <div class="panel-body">
-          <file-uploader
-            url="fileData.batchUserUrl"
-            files="fileData.batchUserFiles"
-            on-success="fileData.onBatchUserSuccess"
-          ></file-uploader>
-        </div>
-        <div class="panel-heading">
-          <h4 class="panel-title">Batch Export Users</h4>
-          Download a CSV of all users registered with {{externalName.value}}.
-        </div>
-        <div class="panel-body text-center">
-          <button ng-click="downloadUsersCSV()" class="btn btn-primary btn-download">
-            <i class="fa fa-download"></i> Download
-          </button>
-        </div>
+  <!-- Batch Download Panel -->
+  <div class="col-sm-3">
+    <div style="height: 80px"></div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Import Users</h4>
+        Import users using a CSV containing: email, firstName, lastName, username, nickname, role
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          url="fileData.batchUserUrl"
+          files="fileData.batchUserFiles"
+          on-success="fileData.onBatchUserSuccess"
+        ></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Export Users</h4>
+        Download a CSV of all users registered with {{externalName.value}}.
+      </div>
+      <div class="panel-body text-center">
+        <button ng-click="downloadUsersCSV()" class="btn btn-primary btn-download">
+          <i class="fa fa-download"></i> Download
+        </button>
       </div>
     </div>
-
   </div>
 </div>
 
-
-<div ng-if="users != null">
+<!-- Old AngularJS Component (left for reference temporarily )-->
+<!-- <div ng-if="users != null">
   <h2>
     {{externalName.value}} Users
     <p class="lead">Users Administration View</p>
@@ -159,5 +146,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 

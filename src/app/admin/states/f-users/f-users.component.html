@@ -1,76 +1,69 @@
-<!-- <div> -->
-  <!-- Header -->
-  <div fxLayout="row" class="header-height">
-    <div fxLayout="column">
-      <h3>OnTrack Users</h3>
-      <h3>Users Administration View</h3>
-    </div>
-    <span class="flex-grow"></span>
-    <mat-form-field appearance="outline">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search for users" [(ngModel)]="filter"/>
-    </mat-form-field>
+<!-- Header -->
+<div fxLayout="row" class="header-height">
+  <div fxLayout="column">
+    <h3>OnTrack Users</h3>
+    <h3>Users Administration View</h3>
   </div>
+  <span class="flex-grow"></span>
+  <mat-form-field appearance="outline">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search for users" [(ngModel)]="filter"/>
+  </mat-form-field>
+</div>
 
-  <!-- Body -->
-  <!-- <div class="flex flex-col gap-8 gap-y-0"> -->
+<!-- Table -->
+<table
+  class="f-table selectable"
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  (matSortChange)="sortData($event)"
+>
+  <ng-container matColumnDef="avatar">
+    <th mat-header-cell *matHeaderCellDef>Avatar</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
+      <user-icon fxFlexAlign="center" [user]="user" [size]="30"></user-icon>
+    </td>
+  </ng-container>
 
-    <!-- Table -->
-    <table
-      class="f-table selectable"
-      mat-table
-      [dataSource]="dataSource"
-      matSort
-      (matSortChange)="sortData($event)"
-    >
-      <ng-container matColumnDef="avatar">
-        <th mat-header-cell *matHeaderCellDef>Avatar</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
-          <user-icon fxFlexAlign="center" [user]="user" [size]="30"></user-icon>
-        </td>
-      </ng-container>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.id }}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.id }}</td>
-      </ng-container>
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.firstName }}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.firstName }}</td>
-      </ng-container>
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.lastName }}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.lastName }}</td>
-      </ng-container>
+  <ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef>Username</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.username }}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="username">
-        <th mat-header-cell *matHeaderCellDef>Username</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.username }}</td>
-      </ng-container>
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
+      <a href="mailto: {{ user.email }}">{{ user.email }}</a>
+    </td>
+  </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
-          <a href="mailto: {{ user.email }}">{{ user.email }}</a>
-        </td>
-      </ng-container>
+  <ng-container matColumnDef="systemRole">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>System Role</th>
+    <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.systemRole }}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="systemRole">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>System Role</th>
-        <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.systemRole }}</td>
-      </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <!-- Footer -->
-    <span class="flex items-center">
-      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
-      <span class="flex-grow"></span>
-      <button mat-raised-button color="primary" (click)="showUserModal({})">Add New User</button>
-    </span>
-
-  <!-- </div> -->
-<!-- </div> -->
+<!-- Footer -->
+<span class="flex items-center">
+  <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
+  <span class="flex-grow"></span>
+  <button mat-raised-button color="primary" (click)="showUserModal({})">Add New User</button>
+</span>
