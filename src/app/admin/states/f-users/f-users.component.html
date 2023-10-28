@@ -19,7 +19,8 @@
       class="f-table selectable"
       mat-table
       [dataSource]="dataSource"
-      mat-sort
+      matSort
+      (matSortChange)="sortData($event)"
     >
       <ng-container matColumnDef="avatar">
         <th mat-header-cell *matHeaderCellDef>Avatar</th>
@@ -29,17 +30,17 @@
       </ng-container>
 
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>User ID</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
         <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef>First Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
         <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.firstName }}</td>
       </ng-container>
 
       <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef>Last Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
         <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.lastName }}</td>
       </ng-container>
 
@@ -56,7 +57,7 @@
       </ng-container>
 
       <ng-container matColumnDef="systemRole">
-        <th mat-header-cell *matHeaderCellDef>System Role</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>System Role</th>
         <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.systemRole }}</td>
       </ng-container>
 

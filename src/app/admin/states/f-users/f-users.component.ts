@@ -1,6 +1,6 @@
 import { Component, Input, Inject, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { User } from 'src/app/api/models/doubtfire-model';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserService } from 'src/app/api/models/doubtfire-model';
@@ -12,7 +12,7 @@ import { EditProfileDialogService } from 'src/app/common/modals/edit-profile-dia
   templateUrl: './f-users.component.html',
   styleUrls: ['./f-users.component.scss'],
 })
-export class FUsersComponent {
+export class FUsersComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: false }) table: MatTable<User>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -44,6 +44,7 @@ export class FUsersComponent {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   private loadAllUsers() {
@@ -62,5 +63,35 @@ export class FUsersComponent {
   public showUserModal(user: User) {
     let userToShow = user ? user : this.userService.createInstanceFrom({});
     this.editProfileDialogService.openDialog(userToShow);
+  }
+
+  public compare(a: number | string, b: number | string, isAsc: Boolean): number {
+    return (a < b ? -1 : 1) * (isAsc? 1 : -1);
+  }
+
+  public sortData(sort: Sort) {
+    const data = this.dataSource.data;
+
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+
+      switch (sort.active) {
+        case 'id':
+          return this.compare(a.id, b.id, isAsc);
+        case 'firstName':
+          return this.compare(a.firstName, b.firstName, isAsc);
+        case 'lastName':
+          return this.compare(a.lastName, b.lastName, isAsc);
+        case 'systemRole':
+          return this.compare(a.systemRole, b.systemRole, isAsc);
+        default:
+          return 0;
+      }
+    })
   }
 }
