@@ -27,6 +27,7 @@ export class FUsersComponent implements AfterViewInit {
     'systemRole',
   ]
   public dataSource: MatTableDataSource<User>;
+  public filter: String;
   dataload: Boolean;
 
   constructor(
@@ -45,6 +46,7 @@ export class FUsersComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
   }
 
   private loadAllUsers() {
@@ -93,5 +95,9 @@ export class FUsersComponent implements AfterViewInit {
           return 0;
       }
     })
+  }
+
+  applyFilter(filterValue: String) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

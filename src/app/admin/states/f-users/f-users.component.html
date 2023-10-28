@@ -7,7 +7,7 @@
     </div>
     <span class="flex-grow"></span>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Search for users"/>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search for users" [(ngModel)]="filter"/>
     </mat-form-field>
   </div>
 
