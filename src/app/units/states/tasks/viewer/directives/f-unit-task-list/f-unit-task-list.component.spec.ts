@@ -8,7 +8,7 @@ describe('FUnitTaskListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FUnitTaskListComponent]
+      declarations: [FUnitTaskListComponent],
     });
     fixture = TestBed.createComponent(FUnitTaskListComponent);
     component = fixture.componentInstance;

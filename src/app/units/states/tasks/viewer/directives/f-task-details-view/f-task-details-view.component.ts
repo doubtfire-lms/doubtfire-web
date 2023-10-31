@@ -12,9 +12,7 @@ export class FTaskDetailsViewComponent implements OnInit {
   @Input() taskDef: TaskDefinition;
   @Input() unit: Unit;
 
-  constructor(
-    private tasksViewerService: TasksViewerService
-  ) {}
+  constructor(private tasksViewerService: TasksViewerService) {}
 
   ngOnInit() {
     this.tasksViewerService.selectedTaskDef.subscribe((taskDef) => {

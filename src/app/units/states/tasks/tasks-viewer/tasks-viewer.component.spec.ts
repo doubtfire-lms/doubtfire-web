@@ -8,7 +8,7 @@ describe('TasksViewerComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TasksViewerComponent]
+      declarations: [TasksViewerComponent],
     });
     fixture = TestBed.createComponent(TasksViewerComponent);
     component = fixture.componentInstance;

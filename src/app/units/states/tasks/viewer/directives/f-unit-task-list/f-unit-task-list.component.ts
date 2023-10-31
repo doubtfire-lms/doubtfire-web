@@ -11,16 +11,14 @@ import { TasksViewerService } from '../../../tasks-viewer.service';
 })
 export class FUnitTaskListComponent implements OnInit {
   @Input() unitTasks: TaskDefinition[];
-  filteredTasks: any[] = null; // list of tasks which match the taskSearch term
-  taskSearch: string = "";  // task search term from user input
+  filteredTasks: TaskDefinition[] = null; // list of tasks which match the taskSearch term
+  taskSearch: string = ''; // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
   private gradeNames: string[] = Grade.GRADES;
   selectedTaskDef: TaskDefinition;
   taskSelected: boolean;
 
-  constructor(
-    private taskViewerService: TasksViewerService
-  ) {}
+  constructor(private taskViewerService: TasksViewerService) {}
 
   applyFilters() {
     this.filteredTasks = this.taskDefinitionNamePipe.transform(this.unitTasks, this.taskSearch);
@@ -36,7 +34,7 @@ export class FUnitTaskListComponent implements OnInit {
 
     this.taskViewerService.taskSelected.subscribe((taskSelected) => {
       this.taskSelected = taskSelected;
-    })
+    });
   }
 
   setSelectedTask(task: TaskDefinition) {

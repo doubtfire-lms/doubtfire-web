@@ -1,5 +1,4 @@
 <div class="task-list" div fxLayout="column" fxLayoutAlign="none">
-
   <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
     <div class="flex items-center">
@@ -22,35 +21,30 @@
 
   <!-- Scrollable Unit Task List -->
   <cdk-virtual-scroll-viewport *ngIf="true" class="tasks-viewport scrollable" itemSize="60">
-      <mat-selection-list  #tasks [multiple]="false">
-        <div class="text-center text-muted" *ngIf="filteredTasks.length == 0">
-          No tasks to display
-        </div>
+    <mat-selection-list #tasks [multiple]="false">
+      <div class="text-center text-muted" *ngIf="filteredTasks.length === 0">No tasks to display</div>
 
-        <mat-list-item
-          class="clearfix"
-          *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0" [value]="task"
-          style="padding: 0; height: 60px"
+      <mat-list-item
+        class="clearfix"
+        *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
+        [value]="task"
+        style="padding: 0; height: 60px"
+      >
+        <div
+          class="w-full item-content"
+          *ngIf="task"
+          [ngClass]="{
+            selected: isSelectedTask(task)
+          }"
         >
-          <div
-            class="w-full item-content"
-            *ngIf="task"
-            [ngClass]="{
-              selected: isSelectedTask(task),
-            }"
-          >
-            <div
-              (click)="setSelectedTask(task)"
-              class="task-entry flex items-center"
-              [ngClass]="{ hover: task.hover }"
-            >
-              <div class="task-list-data" fxFlex>
-                <h4 class="task-title">{{ task.name }}</h4>
-                <div class="task-details">{{task.abbreviation}} - {{gradeNames[task.targetGrade]}} Task</div>
-              </div>
+          <div (click)="setSelectedTask(task)" class="task-entry flex items-center" [ngClass]="{ hover: task.hover }">
+            <div class="task-list-data" fxFlex>
+              <h4 class="task-title">{{ task.name }}</h4>
+              <div class="task-details">{{ task.abbreviation }} - {{ gradeNames[task.targetGrade] }} Task</div>
             </div>
           </div>
-        </mat-list-item>
+        </div>
+      </mat-list-item>
     </mat-selection-list>
   </cdk-virtual-scroll-viewport>
 </div>

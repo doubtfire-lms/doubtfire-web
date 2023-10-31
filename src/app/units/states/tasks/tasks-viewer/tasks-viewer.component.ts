@@ -8,10 +8,9 @@ import { Unit } from 'src/app/api/models/unit';
 @Component({
   selector: 'f-tasks-viewer',
   templateUrl: './tasks-viewer.component.html',
-  styleUrls: ['./tasks-viewer.component.scss']
+  styleUrls: ['./tasks-viewer.component.scss'],
 })
 export class TasksViewerComponent implements OnInit {
-
   @Input() taskDefs: TaskDefinition[];
   @Input() unit: Unit;
   selectedTaskDef: TaskDefinition;
@@ -23,9 +22,7 @@ export class TasksViewerComponent implements OnInit {
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
 
-  constructor(
-    private taskViewerService: TasksViewerService
-  ) {}
+  constructor(private taskViewerService: TasksViewerService) {}
 
   ngOnInit() {
     console.log(this.taskDefs);
@@ -36,7 +33,7 @@ export class TasksViewerComponent implements OnInit {
 
     this.taskViewerService.taskSelected.subscribe((taskSelected) => {
       this.taskSelected = taskSelected;
-    })
+    });
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.inboxStartSize$),
@@ -63,11 +60,10 @@ export class TasksViewerComponent implements OnInit {
         }
         moveEvent.div.style.width = `${width}px`;
         moveEvent.event.source.reset();
-      })
+      }),
     );
     this.subs$ = merge(this.dragMoveAudited$, of(true));
     window.dispatchEvent(new Event('resize'));
-
   }
 
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {
