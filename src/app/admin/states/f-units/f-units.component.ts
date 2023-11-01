@@ -1,9 +1,7 @@
 import { Component, Inject, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { UIRouter } from '@uirouter/core';
 import { createUnitModal } from 'src/app/ajs-upgraded-providers';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
-import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { UnitService } from 'src/app/api/services/unit.service';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -54,11 +52,9 @@ export class FUnitsComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.unitService.cache.values.subscribe((units) => {
         this.dataSource.data = units;
-      })
+      }),
     );
-
   }
-
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
@@ -67,8 +63,6 @@ export class FUnitsComponent implements AfterViewInit, OnDestroy {
   createUnit() {
     this.createUnitModal.show(this.dataSource);
   }
-
-
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

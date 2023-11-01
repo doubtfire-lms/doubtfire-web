@@ -1,73 +1,73 @@
-<div class = "table-padding">
+<div class="table-padding">
   <div class="flex flex-row gap-8">
     <div class="flex-grow flex flex-col gap-8 gap-y-0">
       <div class="flex flex-row">
-        <div >
+        <div>
           <h3>Units</h3>
           <p>Modify units registered with OnTrack</p>
         </div>
         <div class="flex-grow"></div>
-        <div >
+        <div>
           <mat-form-field appearance="outline">
             <mat-label>Search</mat-label>
-            <input matInput (keyup)="applyFilter($event)"  />
+            <input matInput (keyup)="applyFilter($event)" />
           </mat-form-field>
         </div>
       </div>
       <table
-      class="flex-grow f-table selectable"
-      mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)">
-
+        class="flex-grow f-table selectable"
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="sortTableData($event)"
+      >
         <!-- Unit Code Column -->
         <ng-container matColumnDef="unit_code" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Code </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Code</th>
           <td mat-cell *matCellDef="let element">
-            <div class="unit_code_box">{{element.code}}</div>
+            <div class="unit_code_box">{{ element.code }}</div>
           </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="name" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
         </ng-container>
 
         <!-- Unit Role Column -->
         <ng-container matColumnDef="unit_role" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Role </th>
-          <td mat-cell *matCellDef="let element"> {{element.myRole}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Role</th>
+          <td mat-cell *matCellDef="let element">{{ element.myRole }}</td>
         </ng-container>
 
         <!-- Teaching Period Column -->
         <ng-container matColumnDef="teaching_period" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Teaching Period </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Teaching Period</th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element.teachingPeriod; else customTeachingPeriod">
-              {{element.teachingPeriod.name}}
+              {{ element.teachingPeriod.name }}
             </ng-container>
 
-            <ng-template #customTeachingPeriod>
-              Custom
-            </ng-template>
+            <ng-template #customTeachingPeriod> Custom </ng-template>
           </td>
         </ng-container>
 
-
         <!-- Start Date Column -->
         <ng-container matColumnDef="start_date" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.startDate | date : 'EEE d MMM y'}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>
+          <td mat-cell *matCellDef="let element">{{ element.startDate | date: 'EEE d MMM y' }}</td>
         </ng-container>
 
         <!-- End Date Column -->
         <ng-container matColumnDef="end_date" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> End Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.endDate | date : 'EEE d MMM y'}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time</th>
+          <td mat-cell *matCellDef="let element">{{ element.endDate | date: 'EEE d MMM y' }}</td>
         </ng-container>
 
         <!-- Active Column -->
         <ng-container matColumnDef="active" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Active </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
           <td mat-cell *matCellDef="let element">
             <!-- If element.teachingPeriod exists -->
             <ng-container *ngIf="element.teachingPeriod; else noTeachingPeriod">
@@ -83,23 +83,21 @@
           </td>
         </ng-container>
 
-
-
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" uiSref="units/admin" [uiParams]="{ unitId: row.id }">
-        </tr>
-
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          uiSref="units/admin"
+          [uiParams]="{ unitId: row.id }"
+        ></tr>
       </table>
       <span class="flex items-center">
         <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         <span class="flex-grow"></span>
-        <button mat-raised-button color="primary" (click)="createUnit()"><mat-icon aria-hidden="false"
-            aria-label="Example home icon" fontIcon="add"></mat-icon>
-          Create Unit</button>
+        <button mat-raised-button color="primary" (click)="createUnit()">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add"></mat-icon> Create Unit
+        </button>
       </span>
-
-
     </div>
   </div>
 </div>
