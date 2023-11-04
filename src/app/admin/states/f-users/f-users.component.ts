@@ -18,18 +18,10 @@ export class FUsersComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  displayedColumns: string[] = [
-    'avatar',
-    'id',
-    'firstName',
-    'lastName',
-    'username',
-    'email',
-    'systemRole',
-  ]
+  displayedColumns: string[] = ['avatar', 'id', 'firstName', 'lastName', 'username', 'email', 'systemRole'];
   public dataSource: MatTableDataSource<User>;
-  public filter: String;
-  dataload: Boolean;
+  public filter: string;
+  dataload: boolean;
 
   private subscriptions: Subscription[] = [];
 
@@ -50,8 +42,8 @@ export class FUsersComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.userService.cache.values.subscribe((users) => {
         this.dataSource.data = users;
-      })
-    )
+      }),
+    );
   }
 
   ngOnDestroy(): void {
@@ -59,12 +51,12 @@ export class FUsersComponent implements AfterViewInit, OnDestroy {
   }
 
   public showUserModal(user: User) {
-    let userToShow = user ? user : this.userService.createInstanceFrom({});
+    const userToShow = user ? user : this.userService.createInstanceFrom({});
     this.editProfileDialogService.openDialog(userToShow);
   }
 
-  public compare(a: number | string, b: number | string, isAsc: Boolean): number {
-    return (a < b ? -1 : 1) * (isAsc? 1 : -1);
+  public compare(a: number | string, b: number | string, isAsc: boolean): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   public sortData(sort: Sort) {
@@ -90,10 +82,10 @@ export class FUsersComponent implements AfterViewInit, OnDestroy {
         default:
           return 0;
       }
-    })
+    });
   }
 
-  applyFilter(filterValue: String) {
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
