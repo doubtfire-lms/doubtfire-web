@@ -1,18 +1,19 @@
-import { Component, Input, Inject, AfterViewInit, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { User } from 'src/app/api/models/doubtfire-model';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserService } from 'src/app/api/models/doubtfire-model';
-import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
+import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
 import { EditProfileDialogService } from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'f-users',
   templateUrl: './f-users.component.html',
   styleUrls: ['./f-users.component.scss'],
 })
-export class FUsersComponent implements AfterViewInit {
+export class FUsersComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatTable, { static: false }) table: MatTable<User>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -30,6 +31,8 @@ export class FUsersComponent implements AfterViewInit {
   public filter: String;
   dataload: Boolean;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private userService: UserService,
     private globalStateService: GlobalStateService,
@@ -38,33 +41,21 @@ export class FUsersComponent implements AfterViewInit {
     this.dataload = false;
   }
 
-  ngOnInit(): void {
-    console.log("1: " + this.dataSource);
-    this.globalStateService.setView(ViewType.OTHER);
-    this.loadAllUsers();
-  }
-
   ngAfterViewInit(): void {
-    console.log("2: " + this.dataSource);
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+    this.dataSource = new MatTableDataSource(this.userService.cache.currentValuesClone());
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+
+    this.subscriptions.push(
+      this.userService.cache.values.subscribe((users) => {
+        this.dataSource.data = users;
+      })
+    )
   }
 
-  private loadAllUsers() {
-    console.log("3: " + this.dataSource);
-    this.userService.query(undefined, { params: { include_in_active: true } }).subscribe({
-      next: (users: User[]) => {
-        this.dataSource = new MatTableDataSource<User>(users);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-        this.dataload = true;
-      },
-      error: (failure) => {
-        console.log(failure);
-      }
-    })
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   public showUserModal(user: User) {
