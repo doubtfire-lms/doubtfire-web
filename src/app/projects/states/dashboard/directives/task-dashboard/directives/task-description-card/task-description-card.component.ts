@@ -17,7 +17,7 @@ export class TaskDescriptionCardComponent {
 
   constructor(
     @Inject(gradeService) private GradeService: any,
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService
+    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
   ) {
     this.grades = {
       names: GradeService.grades,
@@ -28,14 +28,14 @@ export class TaskDescriptionCardComponent {
   public downloadTaskSheet() {
     this.fileDownloader.downloadFile(
       this.taskDef.getTaskPDFUrl(true),
-      `${this.unit.code}-${this.taskDef.abbreviation}-TaskSheet.pdf`
+      `${this.unit.code}-${this.taskDef.abbreviation}-TaskSheet.pdf`,
     );
   }
 
   public downloadResources() {
     this.fileDownloader.downloadFile(
       this.taskDef.getTaskResourcesUrl(true),
-      `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`
+      `${this.unit.code}-${this.taskDef.abbreviation}-TaskResources.zip`,
     );
   }
 

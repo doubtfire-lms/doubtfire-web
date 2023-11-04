@@ -1,6 +1,6 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>Task Details</mat-card-title>
+    <mat-card-title>{{ taskDef?.name }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
