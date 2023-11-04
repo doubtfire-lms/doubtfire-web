@@ -20,13 +20,13 @@
   </div>
 
   <!-- Scrollable Unit Task List -->
-  <cdk-virtual-scroll-viewport *ngIf="true" class="tasks-viewport scrollable" itemSize="60">
+  <div class="tasks-viewport scrollable" itemSize="60">
     <mat-selection-list #tasks [multiple]="false">
       <div class="text-center text-muted" *ngIf="filteredTasks.length === 0">No tasks to display</div>
 
       <mat-list-item
         class="clearfix"
-        *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
+        *ngFor="let task of filteredTasks; templaceCacheSize: 0"
         [value]="task"
         style="padding: 0; height: 60px"
       >
@@ -46,5 +46,5 @@
         </div>
       </mat-list-item>
     </mat-selection-list>
-  </cdk-virtual-scroll-viewport>
+  </div>
 </div>
