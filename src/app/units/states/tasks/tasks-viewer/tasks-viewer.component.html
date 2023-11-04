@@ -5,32 +5,15 @@
     <div #tasklistpanel id="tasklistpanel" class="vertical-panel">
       <f-unit-task-list [unitTasks]="taskDefs"></f-unit-task-list>
     </div>
-    <div
-      *ngIf="subs$ | async"
-      id="leftResizerEl"
-      #leftResizerEl
-      class="resizer"
-      cdkDragLockAxis="x"
-      cdkDrag
-      (cdkDragMoved)="dragging($event, tasklistpanel)"
-      (cdkDragEnded)="stoppedDragging($event, tasklistpanel)"
-      (cdkDragStarted)="startedDragging($event, tasklistpanel)"
-    ></div>
+
+    <div class="vertical-spacer"></div>
 
     <!-- Panel 2 -->
     <div fxFlex class="vertical-panel">
       <f-task-sheet-view [taskDef]="selectedTaskDef"> </f-task-sheet-view>
     </div>
-    <div
-      id="rightResizerEl"
-      #rightResizerEl
-      class="resizer"
-      cdkDragLockAxis="x"
-      cdkDrag
-      (cdkDragMoved)="dragging($event, taskdetailspanel)"
-      (cdkDragEnded)="stoppedDragging($event, taskdetailspanel)"
-      (cdkDragStarted)="startedDragging($event, taskdetailspanel)"
-    ></div>
+
+    <div class="vertical-spacer"></div>
 
     <!-- Panel 3 -->
     <div #taskdetailspanel class="vertical-panel" id="taskdetailspanel">
