@@ -39,21 +39,26 @@ export class FUsersComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log("1: " + this.dataSource);
     this.globalStateService.setView(ViewType.OTHER);
     this.loadAllUsers();
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+    console.log("2: " + this.dataSource);
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
   }
 
   private loadAllUsers() {
+    console.log("3: " + this.dataSource);
     this.userService.query(undefined, { params: { include_in_active: true } }).subscribe({
       next: (users: User[]) => {
         this.dataSource = new MatTableDataSource<User>(users);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
         this.dataload = true;
       },
       error: (failure) => {
