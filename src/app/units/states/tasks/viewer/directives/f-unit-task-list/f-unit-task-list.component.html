@@ -29,6 +29,7 @@
         *ngFor="let task of filteredTasks; templaceCacheSize: 0"
         [value]="task"
         style="padding: 0; height: 60px"
+        [disableRipple]="true"
       >
         <div
           class="w-full item-content"
