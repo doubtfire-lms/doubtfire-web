@@ -14,15 +14,10 @@
   <!-- Table -->
   <table class="f-table selectable" mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
     <ng-container matColumnDef="avatar">
-      <th mat-header-cell *matHeaderCellDef>Avatar</th>
+      <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
         <user-icon fxFlexAlign="center" [user]="user" [size]="30"></user-icon>
       </td>
-    </ng-container>
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
-      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="firstName">
@@ -36,12 +31,12 @@
     </ng-container>
 
     <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef>Username</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
       <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.username }}</td>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
       <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
         <a href="mailto: {{ user.email }}">{{ user.email }}</a>
       </td>

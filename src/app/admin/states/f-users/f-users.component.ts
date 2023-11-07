@@ -18,7 +18,7 @@ export class FUsersComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['avatar', 'id', 'firstName', 'lastName', 'username', 'email', 'systemRole'];
+  displayedColumns: string[] = ['avatar', 'firstName', 'lastName', 'username', 'email', 'systemRole'];
   public dataSource: MatTableDataSource<User>;
   public filter: string;
   dataload: boolean;
