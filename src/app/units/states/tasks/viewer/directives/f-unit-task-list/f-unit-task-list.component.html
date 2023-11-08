@@ -1,0 +1,51 @@
+<div class="task-list" div fxLayout="column" fxLayoutAlign="none">
+  <!-- Search Box -->
+  <div class="omnisearch rounded-t-2xl md:rounded-2xl">
+    <div class="flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+        <mat-icon class="flex items-center" disabled>search</mat-icon>
+      </button>
+      <div class="grow">
+        <input
+          class="search"
+          autocomplete="off"
+          spellcheck="false"
+          type="text"
+          placeholder="Search Tasks"
+          [(ngModel)]="taskSearch"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrollable Unit Task List -->
+  <div class="tasks-viewport scrollable" itemSize="60">
+    <mat-selection-list #tasks [multiple]="false">
+      <div class="text-center text-muted" *ngIf="filteredTasks.length === 0">No tasks to display</div>
+
+      <mat-list-item
+        class="clearfix"
+        *ngFor="let task of filteredTasks;"
+        [value]="task"
+        style="padding: 0; height: 60px"
+        [disableRipple]="true"
+      >
+        <div
+          class="w-full item-content"
+          *ngIf="task"
+          [ngClass]="{
+            selected: isSelectedTask(task)
+          }"
+        >
+          <div (click)="setSelectedTask(task)" class="task-entry flex items-center" [ngClass]="{ hover: task.hover }">
+            <div class="task-list-data" fxFlex>
+              <h4 class="task-title line-clamp-1">{{ task.name }}</h4>
+              <div class="task-details">{{ task.abbreviation }} - {{ gradeNames[task.targetGrade] }} Task</div>
+            </div>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-selection-list>
+  </div>
+</div>
