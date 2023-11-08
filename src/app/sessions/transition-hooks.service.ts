@@ -87,6 +87,7 @@ export class TransitionHooksService {
 
   // function to return true if navigating to inbox or task definition
   private isInboxState(toState: string): boolean {
-    return toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition');
+    // return toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition');
+    return toState.startsWith('units/tasks') || toState.endsWith('tasks/definition');
   }
 }
