@@ -12,7 +12,10 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
 
   public static readonly rolloverEndpointFormat = 'teaching_periods/:id:/rollover';
 
-  constructor(httpClient: HttpClient, private teachingPeriodBreakService: TeachingPeriodBreakService) {
+  constructor(
+    httpClient: HttpClient,
+    private teachingPeriodBreakService: TeachingPeriodBreakService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -54,7 +57,7 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
             entity.unitsCache.add(unit);
           });
         },
-      }
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept('id', 'unit', 'breaks');

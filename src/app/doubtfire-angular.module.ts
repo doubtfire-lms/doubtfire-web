@@ -211,7 +211,7 @@ import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tas
 import { FUsersComponent } from './admin/states/f-users/f-users.component';
 
 import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
-import { CreateNewUnitModalContent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
+import { CreateNewUnitModalContentComponent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -315,7 +315,7 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
     CreateNewUnitModal,
-    CreateNewUnitModalContent,
+    CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
     NewTeachingPeriodDialogComponent,
