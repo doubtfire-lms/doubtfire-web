@@ -9,12 +9,12 @@
       </div>
 
       <ng-template #doStreamEdit>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput [(ngModel)]="stream.name" />
         </mat-form-field>
         <span>-</span>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Abbreviation</mat-label>
           <input matInput [(ngModel)]="stream.abbreviation" />
         </mat-form-field>
@@ -45,13 +45,13 @@
           {{ tutorial.abbreviation }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry" >
             <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
         </mat-form-field>
       </td>
@@ -65,7 +65,7 @@
           {{ tutorial.campus ? tutorial.campus.name : '' }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Campus</mat-label>
             <mat-select [compareWith]="compareSelection" formControlName="campus">
               <mat-option [value]="null">Not Specified</mat-option>
@@ -77,7 +77,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Campus</mat-label>
           <mat-select formControlName="campus">
             <mat-option [value]="null">Not Specified</mat-option>
@@ -97,13 +97,13 @@
           {{ tutorial.meetingLocation }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="meetingLocation" placeholder="Location" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <input matInput required formControlName="meetingLocation" placeholder="Location" />
         </mat-form-field>
       </td>
@@ -117,7 +117,7 @@
           {{ tutorial.meetingDay }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Day</mat-label>
             <mat-select required formControlName="meetingDay">
               <mat-option *ngFor="let day of days" [value]="day">
@@ -128,7 +128,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Day</mat-label>
           <mat-select required formControlName="meetingDay">
             <mat-option *ngFor="let day of days" [value]="day">
@@ -147,7 +147,7 @@
           {{ tutorial.meetingTime }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <input
               matInput
               required
@@ -159,7 +159,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <input matInput required formControlName="meetingTime" placeholder="Time" />
         </mat-form-field>
       </td>
@@ -173,7 +173,7 @@
           {{ tutorial.tutor?.name }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Tutor</mat-label>
             <mat-select required [compareWith]="compareSelection" formControlName="tutor">
               <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
@@ -184,7 +184,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Tutor</mat-label>
           <mat-select required formControlName="tutor">
             <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
@@ -203,13 +203,13 @@
           {{ tutorial.capacity }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="capacity" placeholder="Capacity" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <input matInput required formControlName="capacity" placeholder="Capacity" />
         </mat-form-field>
       </td>

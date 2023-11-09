@@ -11,6 +11,7 @@ export class EditProfileDialogService {
 
   openDialog(user: User): void {
     this.dialog.open(EditProfileFormComponent, {
+      width: '800px',
       data: { user, mode: 'edit' },
     });
   }
