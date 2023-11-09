@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="start center">
+<div class="flex items-center">
   @if (unit) {
   <div
     class="bg-formatif-blue text-white rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 flex items-center"
@@ -13,7 +13,7 @@
   } @if (!unit) {
 
   <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-    <span fxLayout="row" fxLayoutAlign="start center">
+    <span class="flex items-center">
       <span>Select Unit</span>
       <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
     </span>
@@ -24,7 +24,7 @@
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   @if (media.isActive('xs')) {
-  <button uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
+  <button uiSref="home" mat-menu-item>
     <mat-icon
       uiSref="home"
       style="margin-right: 20px"
@@ -33,7 +33,7 @@
       aria-label="Home Icon"
     ></mat-icon>
     <div class="unitName">Home</div>
-    <span fxFlex></span>
+    <span class="flex-grow"></span>
   </button>
   } @if (media.isActive('xs')) {
   <mat-divider></mat-divider>
@@ -59,8 +59,7 @@
   <button
     uiSref="projects/dashboard"
     [uiParams]="{ projectId: project.id, taskAbbr: '' }"
-    fxLayout="row"
-    fxLayoutAlign="start center"
+    class="flex items-center mb-2"
     mat-menu-item
   >
     <div class="unitName">{{ project.unit.name }}</div>
