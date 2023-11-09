@@ -110,9 +110,6 @@ import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
-import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
-// import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
-// import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
@@ -261,7 +258,10 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
 // Downgrade angular modules that we need...
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
-DoubtfireAngularJSModule.factory('TeachingPeriodUnitImportService', downgradeInjectable(TeachingPeriodUnitImportService));
+DoubtfireAngularJSModule.factory(
+  'TeachingPeriodUnitImportService',
+  downgradeInjectable(TeachingPeriodUnitImportService),
+);
 DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
@@ -294,20 +294,20 @@ DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditP
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
-  downgradeComponent({ component: TaskCommentComposerComponent })
+  downgradeComponent({ component: TaskCommentComposerComponent }),
 );
 DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
 DoubtfireAngularJSModule.directive(
   'fTaskSubmissionCard',
-  downgradeComponent({ component: TaskSubmissionCardComponent })
+  downgradeComponent({ component: TaskSubmissionCardComponent }),
 );
 
 DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
 DoubtfireAngularJSModule.directive(
   'intelligentDiscussionPlayer',
-  downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
+  downgradeComponent({ component: IntelligentDiscussionPlayerComponent }),
 );
 DoubtfireAngularJSModule.directive('fUnitAnalytics', downgradeComponent({ component: UnitAnalyticsComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
@@ -323,68 +323,62 @@ DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ componen
 DoubtfireAngularJSModule.directive('fUsers', downgradeComponent({ component: FUsersComponent }));
 DoubtfireAngularJSModule.directive(
   'fTaskAssessmentCard',
-  downgradeComponent({ component: TaskAssessmentCardComponent })
+  downgradeComponent({ component: TaskAssessmentCardComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'institutionSettings',
-  downgradeComponent({ component: InstitutionSettingsComponent })
+  downgradeComponent({ component: InstitutionSettingsComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'commentBubbleAction',
-  downgradeComponent({ component: CommentBubbleActionComponent })
+  downgradeComponent({ component: CommentBubbleActionComponent }),
 );
 DoubtfireAngularJSModule.directive('unitTutorialsList', downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive(
   'unitTutorialsManager',
-  downgradeComponent({ component: UnitTutorialsManagerComponent })
+  downgradeComponent({ component: UnitTutorialsManagerComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'unitStudentsEditor',
-  downgradeComponent({ component: UnitStudentsEditorComponent })
+  downgradeComponent({ component: UnitStudentsEditorComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'fTaskDefinitionEditor',
-  downgradeComponent({ component: TaskDefinitionEditorComponent })
+  downgradeComponent({ component: TaskDefinitionEditorComponent }),
 );
-DoubtfireAngularJSModule.directive(
-  'fUnitTaskEditor',
-  downgradeComponent({ component: UnitTaskEditorComponent })
-);
+DoubtfireAngularJSModule.directive('fUnitTaskEditor', downgradeComponent({ component: UnitTaskEditorComponent }));
 DoubtfireAngularJSModule.directive(
   'studentTutorialSelect',
-  downgradeComponent({ component: StudentTutorialSelectComponent })
+  downgradeComponent({ component: StudentTutorialSelectComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'studentCampusSelect',
-  downgradeComponent({ component: StudentCampusSelectComponent })
+  downgradeComponent({ component: StudentCampusSelectComponent }),
 );
 DoubtfireAngularJSModule.directive('taskListItem', downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive(
   'createPortfolioTaskListItem',
-  downgradeComponent({ component: CreatePortfolioTaskListItemComponent })
+  downgradeComponent({ component: CreatePortfolioTaskListItemComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
-  downgradeComponent({ component: TaskDescriptionCardComponent })
+  downgradeComponent({ component: TaskDescriptionCardComponent }),
 );
 
 DoubtfireAngularJSModule.directive(
   'taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent })
+  downgradeComponent({ component: TaskAssessmentCommentComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }),
 );
-DoubtfireAngularJSModule.directive(
-  'fUnits',
-  downgradeComponent({ component: FUnitsComponent })
-);
+DoubtfireAngularJSModule.directive('fUnits', downgradeComponent({ component: FUnitsComponent }));
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
   'taskCommentsViewer',
-  downgradeComponent({ component: TaskCommentsViewerComponent })
+  downgradeComponent({ component: TaskCommentsViewerComponent }),
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
 DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component: fPdfViewerComponent }));
