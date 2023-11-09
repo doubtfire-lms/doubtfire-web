@@ -25,8 +25,8 @@
       ng-repeat="task in filteredTasks | orderBy: 'topWeight' track by (task.id || task.definition.abbreviation)"
     >
       <div class="task-data">
-        <h4 class="list-group-item-heading">{{task.definition.name}}</h4>
-        <p class="list-group-item-text">
+        <h4 style="margin-bottom: 0" class="list-group-item-heading">{{task.definition.name}}</h4>
+        <p style="margin-bottom: 0" class="list-group-item-text">
           <i class="fa fa-users" aria-hidden="true" ng-show="task.isGroupTask()"></i
           ><i class="fa fa-user" aria-hidden="true" ng-hide="task.isGroupTask()"></i> {{task.definition.abbreviation}} -
           {{gradeNames[task.definition.targetGrade]}} Task
@@ -44,7 +44,7 @@
           <span class="task-superscript-badge new-comments-badge" ng-if="task.numNewComments > 0">
             {{task.numNewComments}}
           </span>
-          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.plagiarismDetected()">
+          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.similaritiesDetected">
             <i class="fa fa-eye"></i>
           </span>
         </div>

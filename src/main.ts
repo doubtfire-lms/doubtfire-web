@@ -1,5 +1,5 @@
 // Make sure that angular is loaded before anything else!
-import 'node_modules/angular/angular.js';
+import 'angular/angular.js';
 
 import { enableProdMode, NgZone, Type } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

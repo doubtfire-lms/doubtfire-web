@@ -91,7 +91,7 @@ export class UnitService extends CachedEntityService<Unit> {
           } else { return undefined; }
         },
         toJsonFn: (entity: Unit, key: string) => {
-          return entity.teachingPeriod ? entity.teachingPeriod.id : -1;
+          return entity.teachingPeriod ? entity.teachingPeriod.id : undefined;
         }
       },
       {

@@ -1,0 +1,43 @@
+<div class="flex flex-row gap-4">
+  <mat-form-field appearance="outline" class="basis-1/2">
+    <mat-label>Start date to suggested completion date</mat-label>
+    <mat-date-range-input
+      [rangePicker]="picker"
+      [comparisonStart]="taskDefinition.targetDate"
+      [comparisonEnd]="taskDefinition.dueDate"
+    >
+      <input matStartDate placeholder="Start date" [(ngModel)]="taskDefinition.startDate" name="startDate" required />
+      <input matEndDate placeholder="Target date" [(ngModel)]="taskDefinition.targetDate" name="targetDate" required />
+    </mat-date-range-input>
+
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="basis-1/2">
+    <mat-label>Suggestion completion date to final feedback </mat-label>
+    <mat-date-range-input
+      [rangePicker]="duePicker"
+      [comparisonStart]="taskDefinition.startDate"
+      [comparisonEnd]="taskDefinition.targetDate"
+    >
+      <input
+        matStartDate
+        placeholder="Target date"
+        [(ngModel)]="taskDefinition.targetDate"
+        name="targetDate"
+        required
+      />
+      <input
+        matEndDate
+        placeholder="Final feedback date"
+        [(ngModel)]="taskDefinition.dueDate"
+        name="dueDate"
+        required
+      />
+    </mat-date-range-input>
+
+    <mat-datepicker-toggle matIconSuffix [for]="duePicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #duePicker></mat-date-range-picker>
+  </mat-form-field>
+</div>

@@ -1,4 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Entity, EntityMapping } from 'ngx-entity-service';
+import { Observable, map } from 'rxjs';
+import { AppInjector } from 'src/app/app-injector';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 export type Tutor = User;
 
@@ -18,6 +22,7 @@ export class User extends Entity {
   hasRunFirstTimeSetup: boolean;
   authenticationToken: string;
   pronouns: string | null;
+  acceptedTiiEula: boolean;
 
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
@@ -27,6 +32,10 @@ export class User extends Entity {
 
   public get role(): string {
     return this.systemRole;
+  }
+
+  public get isStaff(): boolean {
+    return ['Tutor', 'Convenor', 'Admin'].includes(this.systemRole);
   }
 
   public get name(): string {
@@ -45,5 +54,11 @@ export class User extends Entity {
       this.email.toLowerCase().indexOf(text) >= 0 ||
       this.nickname?.toLowerCase().indexOf(text) >= 0
     );
+  }
+
+  public acceptTiiEula(): Observable<boolean> {
+    const httpClient = AppInjector.get(HttpClient);
+    const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/tii_eula/users/${this.id}/accept`;
+    return httpClient.put(uri, {}).pipe(map(() => (this.acceptedTiiEula = true)));
   }
 }

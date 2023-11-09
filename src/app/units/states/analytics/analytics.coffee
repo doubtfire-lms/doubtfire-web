@@ -1,6 +1,4 @@
-angular.module('doubtfire.units.states.analytics', [
-  'doubtfire.units.states.analytics.directives'
-])
+angular.module('doubtfire.units.states.analytics', [])
 #
 # State for unit analytics
 #

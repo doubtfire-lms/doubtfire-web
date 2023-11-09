@@ -2,20 +2,39 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
+import { GlobalStateService } from '../index/global-state.service';
+
+export enum DashboardViews {
+  submission,
+  task,
+  similarity,
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class SelectedTaskService {
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private globalState: GlobalStateService) {}
 
   private task$ = new BehaviorSubject<Task>(null);
   public currentPdfUrl$ = new BehaviorSubject<string>(null);
 
-  private _showingTask: boolean;
+  public currentView$ = new BehaviorSubject<DashboardViews>(DashboardViews.submission);
 
-  public get showingTaskSheet() {
-    return this._showingTask;
+  public get hasTaskSheet(): boolean {
+    return this.task$.value?.definition?.hasTaskSheet;
+  }
+
+  public get hasSubmissionPdf(): boolean {
+    return this.task$.value?.hasPdf;
+  }
+
+  public checkFooterHeight() {
+    if (this.task$.getValue()?.similaritiesDetected) {
+      this.globalState.showFooterWarning();
+    } else {
+      this.globalState.hideFooterWarning();
+    }
   }
 
   public setSelectedTask(task: number | Task) {
@@ -23,19 +42,26 @@ export class SelectedTaskService {
       this.taskService.get(task).subscribe(this.task$);
     } else {
       this.task$.next(task);
+
+      task?.getSubmissionDetails().subscribe();
     }
+    this.checkFooterHeight();
     this.showSubmission();
   }
 
   public showTaskSheet() {
     this.currentPdfUrl$.next(this.task$.value?.definition?.getTaskPDFUrl(false));
-    this._showingTask = true;
+    this.currentView$.next(DashboardViews.task);
+  }
+
+  public showSimilarity() {
+    this.currentView$.next(DashboardViews.similarity);
   }
 
   public showSubmission() {
     if (!this.task$.value) return;
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
-    this._showingTask = false;
+    this.currentView$.next(DashboardViews.submission);
   }
 
   public get selectedTask$(): Subject<Task> {

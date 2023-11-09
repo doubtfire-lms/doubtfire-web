@@ -30,6 +30,8 @@ export * from './grade';
 export * from './task-status';
 export * from './task-comment/discussion-comment';
 export * from '../services/task-outcome-alignment.service';
+export * from './task-similarity';
+export * from './tii-action';
 
 // Users -- are students or staff
 export * from './user/user';
@@ -53,4 +55,4 @@ export * from '../services/teaching-period.service';
 export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
 export * from '../services/group-set.service';
-
+export * from '../services/task-similarity.service';

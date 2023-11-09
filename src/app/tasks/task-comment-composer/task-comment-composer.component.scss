@@ -18,7 +18,7 @@ $emoji-color: lighten(
   }
 
   #textFieldContainer.recording {
-    background-color: #3939FF;
+    background-color: #3939ff;
   }
 
   #textField {
@@ -74,7 +74,7 @@ $emoji-color: lighten(
   z-index: 1060;
   position: absolute;
   right: 26px;
-  bottom: 60px;
+  bottom: 150px;
 }
 
 #emojiSearchResults {
@@ -116,7 +116,7 @@ $emoji-color: lighten(
     line-clamp: 1;
   }
 
-  .mat-icon-button {
+  .mat-mdc-icon-button {
     float: right;
     margin-top: -12px;
   }
@@ -190,10 +190,11 @@ form {
 }
 
 button.btn-no-outline {
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-left: -12px;
+  margin-right: -12px;
   color: $emoji-color;
   line-height: 1;
+  transform: scale(0.8);
 }
 
 .message-inbox-icon {

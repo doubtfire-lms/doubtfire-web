@@ -6,8 +6,17 @@
     <mat-tab label="Activities">
       <activity-type-list></activity-type-list>
     </mat-tab>
-    <mat-tab label="Overseer Images" *ngIf="overseerEnabled">
+    <mat-tab label="Teaching Periods">
+      <f-teaching-period-list></f-teaching-period-list>
+    </mat-tab>
+    @if (overseerEnabled) {
+    <mat-tab label="Overseer Images">
       <overseer-image-list></overseer-image-list>
     </mat-tab>
+    } @if (tiiEnabled) {
+    <mat-tab label="TurnItIn">
+      <f-tii-action-log></f-tii-action-log>
+    </mat-tab>
+    }
   </mat-tab-group>
 </div>

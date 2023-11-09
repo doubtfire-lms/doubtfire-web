@@ -65,7 +65,7 @@ export class ProjectService extends CachedEntityService<Project> {
       'submittedGrade',
       'portfolioFiles',
       'compilePortfolio',
-      'maxPctCopy',
+      'similarityFlag',
       {
         keys: 'hasPortfolio',
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {

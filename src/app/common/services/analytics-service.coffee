@@ -20,7 +20,7 @@ angular.module("doubtfire.common.services.analytics", [])
     # Do not remove this as we'd be breaching the law!
     return unless newUserService.currentUser.optInToResearch
 
-    if value? and typeof value isnt 'Number' and value < 0
+    if value? and typeof value isnt 'number' and value < 0
       throw new Error "Value needs to be a positive number"
     $analytics.eventTrack eventName, {
       category: category

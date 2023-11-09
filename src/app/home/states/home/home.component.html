@@ -3,60 +3,63 @@
   <span fxFlex="10"></span>
   <div id="home" fxFlex>
     <div class="text-center" [hidden]="!notEnrolled">
-      <h1 class="mat-headline">You are not enrolled in {{ externalName.value }}.</h1>
+      <h1>You are not enrolled in {{ externalName.value }}.</h1>
       <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
     </div>
 
     <div class="text-center" *ngIf="!notEnrolled && projects?.length === 0 && unitRoles?.length === 0">
-      <h1 class="mat-headline">You are not enrolled in any {{ externalName.value }} units.</h1>
+      <h1 class="mat-headline-5">You are not enrolled in any {{ externalName.value }} units.</h1>
       <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
     </div>
 
     <div fxLayout="row wrap" [hidden]="notEnrolled">
       <div fxFlex>
         <div style="margin-bottom: 30px" [hidden]="unitRoles?.length === 0">
-          <h1 class="mat-headline">Units you teach</h1>
+          <h1>Units you teach</h1>
           <div [hidden]="!loadingUnitRoles" style="height: 185px">
             <mat-spinner diameter="40" color="accent"></mat-spinner>
           </div>
           <div [hidden]="loadingUnitRoles" fxLayout="row wrap" fxLayoutAlign="start center">
             <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
-              <a
+              <div
                 uiSref="units/tasks/inbox"
                 [uiParams]="{ unitId: unitRole.unit?.id }"
                 class="removeStyle"
                 *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
               >
                 <mat-card class="unit-card">
-                  <h4>{{ unitRole.unit?.name }}</h4>
-                  <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
+                  <mat-card-header>
+                    <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
+                  </mat-card-header>
                   <mat-card-content>
-                    <!-- <p>{{ project.description }} Unit description goes here...</p> leave until description is returned-->
+                    <mat-divider></mat-divider>
                   </mat-card-content>
-                  <mat-divider inset></mat-divider>
                   <mat-card-actions>
-                    <mat-chip-list aria-label="Unit labels">
-                      <mat-chip color="primary" selected>{{
-                        unitRole.teachingPeriod?.name() || showDate(unitRole.unit.startDate)
-                      }}</mat-chip>
-                      <mat-chip color="primary" selected>{{ unitRole.role }}</mat-chip>
-                    </mat-chip-list>
+                    <f-chip>
+                      {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
+                    </f-chip>
+                    <f-chip>
+                      {{ unitRole.role }}
+                    </f-chip>
                   </mat-card-actions>
-                  <mat-card-footer>
-                    <mat-progress-bar
-                      matTooltip="{{ unitRole.unit.teachingPeriodProgress }}% through the teaching period."
-                      mode="determinate"
-                      [value]="unitRole.unit.teachingPeriodProgress"
-                    ></mat-progress-bar>
+                  <mat-card-footer
+                    matTooltip="{{ unitRole.unit.teachingPeriodProgress }}% through the teaching period."
+                  >
+                    <ng-container *ngFor="let _ of [].constructor(5)">
+                      <mat-progress-bar
+                        class="unit-progress-slider"
+                        mode="determinate"
+                        [value]="unitRole.unit.teachingPeriodProgress"
+                      ></mat-progress-bar>
+                    </ng-container>
                   </mat-card-footer>
                 </mat-card>
-              </a>
+              </div>
             </div>
-            <mat-card class="unit-card" [hidden]="(unitRoles | isActiveUnitRole)?.length > 0">
+            <mat-card appearance="outlined" class="unit-card" [hidden]="(unitRoles | isActiveUnitRole)?.length > 0">
               <mat-card-content> <p>You do not teach any active units</p> </mat-card-content></mat-card
             >
-
-            <f-teaching-period-list></f-teaching-period-list>
 
             <a uiSref="view-all-units">
               <button
@@ -72,42 +75,42 @@
           </div>
         </div>
         <div style="margin-bottom: 30px" [hidden]="projects?.length === 0">
-          <h1 class="mat-headline">Enrolled units</h1>
+          <h1>Enrolled units</h1>
           <div [hidden]="!loadingProjects" style="height: 185px">
             <mat-spinner diameter="40" color="accent"></mat-spinner>
           </div>
 
           <div [hidden]="loadingProjects" fxLayout="row wrap" fxLayoutAlign="start center">
             <div *ngFor="let project of projects">
-              <a
+              <div
                 *ngIf="project.unit.isActive"
                 uiSref="projects/dashboard"
                 [uiParams]="{ projectId: project.id, taskAbbr: '' }"
                 class="removeStyle"
               >
                 <mat-card class="unit-card">
-                  <h4>{{ project.unit.name }}</h4>
-                  <mat-card-subtitle>{{ project.unit.code }}</mat-card-subtitle>
+                  <mat-card-header>
+                    <mat-card-title class="f-card-title">{{ project.unit.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ project.unit.code }}</mat-card-subtitle>
+                  </mat-card-header>
                   <mat-card-content>
-                    <!-- <p>{{ project.description }} Unit description goes here...</p> leave until description is returned-->
+                    <mat-divider></mat-divider>
                   </mat-card-content>
-                  <mat-divider inset></mat-divider>
                   <mat-card-actions>
-                    <mat-chip-list aria-label="Unit labels">
-                      <mat-chip color="primary" selected>{{
-                        project.unit.teachingPeriod?.name() || showDate(project.unit.startDate)
-                      }}</mat-chip>
-                    </mat-chip-list>
+                    <f-chip>
+                      {{ project.unit.teachingPeriod?.name || showDate(project.unit.startDate) }}
+                    </f-chip>
                   </mat-card-actions>
-                  <mat-card-footer>
-                    <mat-progress-bar
-                      matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period."
-                      mode="determinate"
-                      [value]="project.unit.teachingPeriodProgress"
-                    ></mat-progress-bar>
+                  <mat-card-footer matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period.">
+                    <ng-container *ngFor="let _ of [].constructor(5)">
+                      <mat-progress-bar
+                        mode="determinate"
+                        [value]="project.unit.teachingPeriodProgress"
+                      ></mat-progress-bar>
+                    </ng-container>
                   </mat-card-footer>
                 </mat-card>
-              </a>
+              </div>
             </div>
             <a uiSref="view-all-projects">
               <button
@@ -124,67 +127,23 @@
         </div>
       </div>
       <div [hidden]="!ifAdmin && !ifConvenor">
-        <h1 class="mat-headline">Administration</h1>
+        <h1>Administration</h1>
         <mat-card class="admin-card">
-          <mat-list role="list">
-            <mat-list-item [hidden]="!ifAdmin" role="listitem">
-              <a
-                fxLayout="row"
-                fxLayoutAlign="start"
-                class="removeStyle"
-                mat-button
-                style="width: 100%"
-                uiSref="admin/teachingperiods"
-              >
-                <mat-icon style="color: black; margin-right: 6px">date_range</mat-icon>Teaching Periods
-              </a>
-            </mat-list-item>
-            <mat-list-item [hidden]="!ifAdmin" role="listitem">
-              <a
-                fxLayout="row"
-                fxLayoutAlign="start"
-                class="removeStyle"
-                mat-button
-                style="width: 100%"
-                uiSref="institutionsettings"
-              >
-                <div fxLayout="row" fxLayoutAlign="center center">
-                  <mat-icon style="color: black; margin-right: 6px">business</mat-icon>
-                </div>
-                Institution Settings
-              </a>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-              <a
-                fxLayout="row"
-                fxLayoutAlign="start"
-                class="removeStyle"
-                mat-button
-                style="width: 100%"
-                uiSref="admin/units"
-              >
-                <div fxLayout="row" fxLayoutAlign="center center">
-                  <mat-icon style="color: black; margin-right: 6px">school</mat-icon>
-                  Units
-                </div>
-              </a>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-              <a
-                fxLayout="row"
-                fxLayoutAlign="start"
-                class="removeStyle"
-                mat-button
-                style="width: 100%"
-                uiSref="admin/users"
-              >
-                <div fxLayout="row" fxLayoutAlign="center center">
-                  <mat-icon style="color: black; margin-right: 6px">people</mat-icon>
-                </div>
-                Users
-              </a>
-            </mat-list-item>
-          </mat-list>
+          <mat-nav-list>
+            <a mat-list-item [hidden]="!ifAdmin" uiSref="institutionsettings">
+              <mat-icon matListItemIcon>business</mat-icon>
+              <div matListItemTitle>Institution Settings</div>
+            </a>
+
+            <a mat-list-item uiSref="admin/units">
+              <mat-icon matListItemIcon>school</mat-icon>
+              <div matListItemTitle>Units</div>
+            </a>
+            <a mat-list-item uiSref="admin/users">
+              <mat-icon matListItemIcon>people</mat-icon>
+              <div matListItemTitle>Users</div>
+            </a>
+          </mat-nav-list>
         </mat-card>
       </div>
     </div>

@@ -44,7 +44,7 @@
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('targetGrade')" btn-radio="'targetGrade'">
               <i class="fa fa-check"></i> Grade
             </button>
-            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('maxPctCopy')" btn-radio="'maxPctCopy'">
+            <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('similarityFlag')" btn-radio="'similarityFlag'">
               <i class="fa fa-eye"></i> Plagiarism
             </button>
             <button class="btn btn-default" ng-model="tableSort.order" ng-click="sortTableBy('portfolioStatus')" btn-radio="'portfolioStatus'">
@@ -88,7 +88,7 @@
             <a ng-click="sortTableBy('flags')">
               Flags
               <i ng-show="
-                tableSort.order == 'maxPctCopy' ||
+                tableSort.order == 'similarityFlag' ||
                 tableSort.order == 'targetGrade' ||
                 tableSort.order == 'portfolioStatus'"
                 class="ng-hide fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
@@ -107,15 +107,15 @@
         </tr><!--/column-headers-row-->
       </thead>
       <tbody>
-        <tr class="task-progress-row" ng-repeat="project in filteredProjects">
-          <td class="avatar" ng-click="viewStudent(project)">
+        <tr class="task-progress-row pl-12" ng-repeat="project in filteredProjects">
+          <td class="avatar pl-8" ng-click="viewStudent(project)">
             <user-icon [size]="30" [user]="project.student"></user-icon>
           </td>
           <td ng-click="viewStudent(project)">
             {{project.student.username || "N/A"}}
           </td><!--/username-column-->
           <td ng-click="viewStudent(project)">
-            {{project.student.name}}
+            <span class="truncate">{{project.student.name}}</span>
           </td><!--/name-column-->
           <td ng-click="viewStudent(project)" class="task-progress-bar">
             <progress class="task-progress" animate="true">
@@ -132,7 +132,7 @@
               <span class="flag">
                 <grade-icon grade="project.targetGrade"></grade-icon>
               </span>
-              <span ng-show="project.maxPctCopy > 0" class="flag">
+              <span ng-show="project.similarityFlag" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>
               </span>
               <span ng-show="project.hasPortfolio" class="flag">
@@ -144,7 +144,7 @@
             <student-campus-select [unit]="unit" [student]="project" [update]="true"></student-campus-select>
           </td><!--/campus-column-->
           <td>
-            <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
+            <student-tutorial-select class="pr-8" [unit]="unit" [student]="project"></student-tutorial-select>
           </td><!--/tutorial-column-->
         </tr><!--/student-row-->
       </tbody>

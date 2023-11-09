@@ -10,13 +10,7 @@
   color: task-status-color($status, fore);
 }
 
-.mat-chip.mat-standard-chip {
-  text-align: center;
-  i {
-    display: inline-block;
-    flex: 1;
-  }
-  width: 50px;
+.status-chip {
   &.ready-for-feedback {
     @include status-icon('ready-for-feedback');
   }

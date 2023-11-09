@@ -29,7 +29,11 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,
       },
-      'activeUntil',
+      {
+        keys: 'activeUntil',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
       'active',
       {
         keys: 'breaks',

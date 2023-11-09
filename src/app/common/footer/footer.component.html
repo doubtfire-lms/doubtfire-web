@@ -1,112 +1,153 @@
-<mat-toolbar class="footer" style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
-  <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+<mat-toolbar class="footer flex-col w-full h-full justify-center p-0">
+  @if (selectedTask?.similaritiesDetected) {
+  <div class="bg-red-500 grow w-full rounded-xl h-8 mb-5 mt-4 text-white text-lg">
+    <div
+      #arrow
+      class="shrink border-t-red-500"
+      [ngStyle]="{ 'left.px': leftOffset, 'top.px': topOffset }"
+      style="position: absolute; border: 10px solid transparent; transform: translateX(-50%)"
+    ></div>
+    <p
+      style="position: relative"
+      #warningText
+      [ngStyle]="{ 'left.px': warningTextLeftOffset }"
+      class="mat-caption inline-block select-none"
+    >
+      Similarities flagged for {{ selectedTask?.project.student.name }}
+    </p>
+  </div>
+  }
 
-  <span fxFlex fxFlexAlign="center center" class="center-buttons" fxLayoutAlign="center center">
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Redo"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button"
-      (click)="selectedTask?.updateTaskStatus('redo')"
-    >
-      <mat-icon>undo</mat-icon>
-    </button>
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Resubmit"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
-      (click)="selectedTask?.updateTaskStatus('fix')"
-    >
-      <mat-icon>construction</mat-icon>
-    </button>
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Complete"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
-      (click)="selectedTask?.updateTaskStatus('complete')"
-    >
-      <mat-icon>done</mat-icon>
-    </button>
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Discuss"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button"
-      (click)="selectedTask?.updateTaskStatus('discuss')"
-    >
-      <mat-icon>question_answer</mat-icon>
-    </button>
-  </span>
+  <div class="flex w-full">
+    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
 
-  <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Submission Options"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button small-button"
-      [matMenuTriggerFor]="aboveMenu"
-    >
-      <mat-icon class="small-icon">more_vert</mat-icon>
-    </button>
-    <mat-menu #aboveMenu="matMenu" yPosition="above">
-      <button mat-menu-item (click)="viewTaskSheet()">
-        <mat-icon aria-hidden="false" aria-label="View Task Sheet" fontIcon="description"></mat-icon>View task sheet
+    <span class="center-buttons flex justify-center">
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Mark as Redo"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button"
+        (click)="selectedTask?.updateTaskStatus('redo')"
+      >
+        <mat-icon>undo</mat-icon>
       </button>
-      <button mat-menu-item (click)="viewSubmission()">
-        <mat-icon aria-hidden="false" aria-label="View student submission" fontIcon="contact_page"></mat-icon>View
-        student submission
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Mark as Resubmit"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button large-button"
+        (click)="selectedTask?.updateTaskStatus('fix')"
+      >
+        <mat-icon>construction</mat-icon>
       </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="selectedTask?.updateTaskStatus('time_exceeded')">
-        <mat-icon aria-hidden="false" aria-label="Switch to Time Exceeded" fontIcon="running_with_errors"></mat-icon>
-        Mark as time exceeded
+      <span class="w-3"></span>
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Mark as Complete"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button large-button"
+        (click)="selectedTask?.updateTaskStatus('complete')"
+      >
+        <mat-icon>done</mat-icon>
       </button>
-      <button mat-menu-item (click)="selectedTask?.updateTaskStatus('fail')" [disabled]="selectedTask === undefined">
-        <mat-icon aria-hidden="false" aria-label="Fail icon" fontIcon="cancel"></mat-icon>
-        Mark as fail
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Mark as Discuss"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button"
+        (click)="selectedTask?.updateTaskStatus('discuss')"
+      >
+        <mat-icon>question_answer</mat-icon>
       </button>
-    </mat-menu>
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Download PDF"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button small-button"
-      (click)="downloadFiles()"
-    >
-      <mat-icon class="small-icon">sim_card_download</mat-icon>
-    </button>
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Download Submission"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button small-button"
-      (click)="downloadSubmissionPdf()"
-    >
-      <mat-icon class="small-icon">file_download</mat-icon>
-    </button>
-    <f-project-progress-bar
-      matTooltip="Progress towards {{ selectedTask?.project.targetGradeWord }}"
-      [matTooltipDisabled]="selectedTask === undefined"
-      [progress]="selectedTask?.project.taskStats"
-    ></f-project-progress-bar>
-    <mat-chip-list aria-label="Target Grade Symbol">
-      <mat-chip style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip>
-    </mat-chip-list>
+    </span>
+
+    <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+      @if (selectedTask?.similaritiesDetected) {
+      <button
+        #similaritiesButton
+        mat-icon-button
+        matTooltip="High confidence of similarities detected for this task"
+        matTooltipPosition="above"
+        aria-label="View detected similarities"
+        class="button small-button"
+        (click)="viewSimilarity()"
+      >
+        <mat-icon class="small-icon">crisis_alert</mat-icon>
+      </button>
+      }
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Submission Options"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button small-button"
+        [matMenuTriggerFor]="aboveMenu"
+      >
+        <mat-icon class="small-icon">more_vert</mat-icon>
+      </button>
+
+      <mat-menu #aboveMenu="matMenu" yPosition="above">
+        <button mat-menu-item (click)="viewTaskSheet()" [disabled]="!selectedTaskService.hasTaskSheet">
+          <mat-icon matListItemIcon aria-label="View Task Sheet">description</mat-icon>
+          View task sheet
+        </button>
+        <button mat-menu-item (click)="viewSubmission()" [disabled]="!selectedTaskService.hasSubmissionPdf">
+          <mat-icon matListItemIcon aria-label="View student submission" fontIcon="contact_page"></mat-icon>View student
+          submission
+        </button>
+        <button mat-menu-item (click)="viewSimilarity()">
+          <mat-icon matListItemIcon aria-label="View Similarities">crisis_alert</mat-icon>
+          View similarities
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('time_exceeded')">
+          <mat-icon matListItemIcon aria-label="Switch to Time Exceeded">running_with_errors</mat-icon>
+          Mark as time exceeded
+        </button>
+        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('fail')" [disabled]="selectedTask === undefined">
+          <mat-icon matListItemIcon aria-label="Fail icon" fontIcon="cancel"></mat-icon>
+          Mark as fail
+        </button>
+      </mat-menu>
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Download submitted files"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button small-button"
+        (click)="downloadFiles()"
+      >
+        <mat-icon class="small-icon">sim_card_download</mat-icon>
+      </button>
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Download Submission"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button small-button"
+        (click)="downloadSubmissionPdf()"
+      >
+        <mat-icon class="small-icon">file_download</mat-icon>
+      </button>
+      <f-project-progress-bar
+        matTooltip="Progress towards {{ selectedTask?.project.targetGradeWord }}"
+        [matTooltipDisabled]="selectedTask === undefined"
+        [progress]="selectedTask?.project.taskStats"
+      ></f-project-progress-bar>
+      <mat-chip-listbox aria-label="Target Grade Symbol" class="pointer-events-none">
+        <mat-chip-option style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip-option>
+      </mat-chip-listbox>
+    </div>
   </div>
 </mat-toolbar>

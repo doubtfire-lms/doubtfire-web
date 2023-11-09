@@ -21,6 +21,7 @@
         "@angular-eslint/no-empty-lifecycle-method": "warn",
         "@angular-eslint/component-class-suffix": "warn",
         "@angular-eslint/no-output-on-prefix": "warn",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@angular-eslint/directive-selector": [
           "warn",
           {

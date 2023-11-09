@@ -1,0 +1,23 @@
+<div class="w-full max-w-full">
+  @if (blobUrl && fileType === 'pdf') { @if (!loaded) {
+  <mat-progress-bar mode="determinate" [value]="pdfLoadingProgressPercentage"></mat-progress-bar>
+  }
+  <pdf-viewer
+    [original-size]="false"
+    [fit-to-page]="true"
+    [autoresize]="true"
+    class="w-full h-full"
+    style="display: block; min-height: 60rem"
+    [src]="blobUrl"
+    [render-text]="true"
+    (after-load-complete)="onLoaded()"
+    (page-rendered)="loaded = true"
+    (on-progress)="onProgress($event)"
+  ></pdf-viewer>
+
+  } @if (fileType === 'html') {
+  <div>
+    <iframe [src]="blobUrl | safe" width="100%" height="100%"></iframe>
+  </div>
+  }
+</div>

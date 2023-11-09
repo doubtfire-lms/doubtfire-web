@@ -30,7 +30,7 @@
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmittedFiles()">Download Submitted Files</a>
           </li>
-          <li ng-if="overseerEnabled()">
+          <li ng-if="overseerEnabled">
             <a ng-click="showSubmissionHistoryModal()">View Submission History</a>
           </li>
         </ul>
@@ -42,7 +42,6 @@
   <div class="panel-body task-detail-cards" ng-show="isCurrentView('details')">
     <!-- <div class="col-sm-12 col-xl-6"> -->
     <!-- migrated -->
-    <task-plagiarism-card [task]="task"></task-plagiarism-card>
     <f-task-status-card [task]="task"></f-task-status-card>
     <f-task-due-card [task]="task"></f-task-due-card>
     <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>
@@ -51,7 +50,7 @@
     <!-- <div class="col-sm-12 col-xl-6"> -->
     <f-task-assessment-card [task]="task"></f-task-assessment-card>
     <f-task-submission-card [task]="task"></f-task-submission-card>
-    <task-outcomes-card task-def="task.definition" unit="task.unit"></task-outcomes-card>
+    <!-- <task-outcomes-card task-def="task.definition" unit="task.unit"></task-outcomes-card> -->
     <!-- </div> -->
     <!--/task-description-column-->
   </div>

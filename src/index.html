@@ -14,6 +14,7 @@
     </script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
     <title ng-bind="externalName.value">Loading...</title>
 
     <!-- Nice favicons for all devices -->
@@ -41,7 +42,7 @@
     <!-- bootstrap for ngx -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
   </head>
-  <body ng-controller="AppCtrl">
+  <body ng-controller="AppCtrl" class="mat-typography">
     <app-header></app-header>
     <div class="container-fluid" ui-view="main"></div>
     <alert-list> </alert-list>

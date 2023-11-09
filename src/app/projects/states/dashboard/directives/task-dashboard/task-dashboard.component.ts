@@ -3,16 +3,11 @@ import { UIRouter } from '@uirouter/core';
 import * as _ from 'lodash';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { SelectedTaskService } from '../../selected-task.service';
-
-enum dashboardViews {
-  'details',
-  'submission',
-  'task',
-}
+import { DashboardViews } from '../../selected-task.service';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -21,28 +16,35 @@ enum dashboardViews {
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Input() showSubmission: boolean;
   @Input() pdfUrl: string;
 
-  get showingTaskPdf() {
-    return this.selectedTask.showingTaskSheet;
-  }
+  public DashboardViews = DashboardViews;
 
-  currentView: dashboardViews = dashboardViews.submission;
-  taskStatusData: any;
+  public taskStatusData: any;
+  public tutor = this.router.globals.params.tutor;
+  public urls: {
+    taskSubmissionPdfAttachmentUrl: string;
+    taskFilesUrl: string;
+    taskSheetPdfUrl?: string;
+    taskSubmissionPdfUrl?: string;
+  };
+  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
+  public currentView: DashboardViews;
+
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
-    private selectedTask: SelectedTaskService
+    public selectedTaskService: SelectedTaskService,
   ) {}
-  tutor = this.router.globals.params.tutor;
-  urls;
 
   ngOnInit(): void {
-    this.updateCurrentView();
+    this.selectedTaskService.currentView$.next(DashboardViews.submission);
+    this.selectedTaskService.currentView$.subscribe((view) => {
+      this.currentView = view;
+    });
 
     this.taskStatusData = {
       keys: _.sortBy(this.taskService.markedStatuses, (s) => this.taskService.statusSeq.get(s)),
@@ -61,30 +63,11 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
-      this.updateCurrentView();
     }
   }
 
-  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
-
-  overseerEnabled() {
-    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled();
-  }
-
-  updateCurrentView() {
-    if (this.showSubmission) {
-      this.currentView = dashboardViews.submission;
-    } else {
-      this.currentView = dashboardViews.details;
-    }
-  }
-
-  setSelectedDashboardView(view: dashboardViews) {
-    this.currentView = view;
-  }
-
-  isCurrentView(view: dashboardViews) {
-    return this.currentView === view;
+  public get overseerEnabled() {
+    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled;
   }
 
   showSubmissionHistoryModal() {

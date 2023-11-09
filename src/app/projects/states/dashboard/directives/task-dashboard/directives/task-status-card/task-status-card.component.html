@@ -1,49 +1,44 @@
-<mat-card>
-  <mat-form-field appearance="outline" *ngIf="triggers?.length > 0">
+<mat-card appearance="outlined">
+  @if (triggers?.length > 0) {
+  <mat-form-field class="px-4 pt-4" appearance="outline">
     <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
       <mat-select-trigger>
         <span style="display: inline-flex">
           <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
-          <h5>{{ task?.statusLabel() }}</h5>
+          <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
         </span>
       </mat-select-trigger>
-      <mat-option *ngFor="let trigger of triggers" [value]="trigger.status">
-        <status-icon [status]="trigger.status" [show-tooltip]="false"></status-icon>
+      @for (trigger of triggers; track trigger) {
+      <mat-option [value]="trigger.status">
+        <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
         <span style="display: inline-flex; margin-left: 10px"
           ><h5>{{ trigger.label }}</h5></span
         >
       </mat-option>
+      }
     </mat-select>
   </mat-form-field>
-
-  <mat-card-title *ngIf="triggers?.length < 0">
+  } @if (triggers?.length < 0) {
+  <mat-card-title>
     <span style="display: inline-flex">
       <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
       <h5>{{ task?.statusLabel() }}</h5>
     </span>
   </mat-card-title>
+  }
 
   <mat-card-content>
     <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
   </mat-card-content>
 
-  <mat-card-actions
-    *ngIf="
-      task?.unit.currentUserIsStaff ||
-      task?.canApplyForExtension() ||
-      (task?.inSubmittedState() && task?.requiresFileUpload())
-    "
-  >
-    <button mat-stroked-button (click)="applyForExtension()" *ngIf="task?.canApplyForExtension()">
-      Request extension
-    </button>
-
-    <button
-      mat-stroked-button
-      *ngIf="task?.inSubmittedState() && task?.requiresFileUpload()"
-      (click)="updateFilesInSubmission()"
-    >
-      Upload new files
-    </button>
+  @if ( task?.unit.currentUserIsStaff || task?.canApplyForExtension() || (task?.inSubmittedState() &&
+  task?.requiresFileUpload()) ) {
+  <mat-card-actions class="space-x-2">
+    @if (task?.canApplyForExtension()) {
+    <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+    } @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
+    <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+    }
   </mat-card-actions>
+  }
 </mat-card>

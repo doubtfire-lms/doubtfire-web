@@ -1,24 +1,42 @@
-<div fxFlexFill fxLayout="row" fxLayoutAlign="start center">
+<div class="flex grow items-center justify-items-start">
   <p [hidden]="canRecord">
     Audio recording <br />
     only supported in modern versions of Chrome, Firefox and Safari.
   </p>
   <mat-spinner class="send-audio-spinner" [diameter]="18" [strokeWidth]="1" [hidden]="!isSending"></mat-spinner>
-  <div fxLayout="row" style="width: 100%" fxLayoutAlign="start center" [hidden]="!canRecord || isSending">
-    <button style="transform: scale(1); margin-left: -10px; margin-right: -15px;" (click)="recordingToggle()"
-      mat-icon-button aria-label="Audio recording button">
-      <mat-icon style="color: white">{{isRecording ? 'stop_circle' : 'radio_button_checked' }} </mat-icon>
+  <div
+    style="display: flex"
+    class="flex grow items-center justify-items-center w-full"
+    [hidden]="!canRecord || isSending"
+  >
+    <button
+      style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+      (click)="recordingToggle()"
+      mat-icon-button
+      aria-label="Audio recording button"
+    >
+      <mat-icon class="text-white">{{isRecording ? 'stop_circle' : 'radio_button_checked' }} </mat-icon>
     </button>
-    <button style="transform: scale(1); margin-left: 0px; margin-right: -15px;" (click)="playStop()" mat-icon-button
-      aria-label="Play audio recording" [hidden]="!recordingAvailable">
+    <button
+      style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+      (click)="playStop()"
+      mat-icon-button
+      aria-label="Play audio recording"
+      [hidden]="!recordingAvailable"
+    >
       <mat-icon style="color: white">play_circle</mat-icon>
     </button>
     <audio id="audioPlayer"></audio>
-    <canvas fxFlex style="width: 100%;" class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
+    <canvas fxFlex style="width: 100%" class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
 
     <div id="button-wrapper">
-      <button style="transform: scale(1); margin-left: -15px; margin-right: 0px;" (click)="sendRecording()"
-        mat-icon-button aria-label="Send audio recording" [disabled]="!recordingAvailable">
+      <button
+        style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+        (click)="sendRecording()"
+        mat-icon-button
+        aria-label="Send audio recording"
+        [disabled]="!recordingAvailable"
+      >
         <mat-icon style="color: white">send</mat-icon>
       </button>
     </div>

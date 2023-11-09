@@ -1,17 +1,7 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
-// ? Importing `Work Sans` font for headings, you can change this if you want
-// @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap");
+@include mat.core();
 
 /* For use in src/lib/core/theming/_palette.scss */
 $md-formatif: (
@@ -81,20 +71,20 @@ $md-formatif-accent: (
 );
 
 $md-formatif-warn: (
-  50: #fff6e7,
-  100: #ffe9c2,
-  200: #ffda99,
-  300: #ffcb70,
-  400: #ffc052,
-  500: #ffb533,
-  600: #ffae2e,
-  700: #ffa527,
-  800: #ff9d20,
-  900: #ff8d14,
+  50: #fde9e9,
+  100: #fac7c7,
+  200: #f7a2a2,
+  300: #f47c7c,
+  400: #f16060,
+  500: #ef4444,
+  600: #ed3e3e,
+  700: #eb3535,
+  800: #e82d2d,
+  900: #e41f1f,
   A100: #ffffff,
-  A200: #fffdfb,
-  A400: #ffe2c8,
-  A700: #FF7B02,
+  A200: #ffe7e7,
+  A400: #ffb4b4,
+  A700: #ff9b9b,
   contrast: (
     50: #000000,
     100: #000000,
@@ -114,24 +104,22 @@ $md-formatif-warn: (
 );
 
 $font-family-primary: "'Grotesk'";
-$font-family-accent: "'open-sans', 'Roboto'";
+$font-family-accent: "Inter, 'open-sans', 'Roboto'";
 
-$mat-typography-primary-config: mat.define-legacy-typography-config(
-  $display-4: mat.define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
-  $display-3: mat.define-typography-level(56px, 56px, 400, $font-family-primary, $letter-spacing: -0.02em),
-  $display-2: mat.define-typography-level(45px, 48px, 400, $font-family-primary, $letter-spacing: -0.005em),
-  $display-1: mat.define-typography-level(34px, 40px, 400, $font-family-primary),
-  $headline: mat.define-typography-level(24px, 32px, 400, $font-family-primary),
-  $title: mat.define-typography-level(20px, 32px, 500, $font-family-primary),
-  $subheading-2: mat.define-typography-level(16px, 28px, 400, $font-family-primary),
-  $subheading-1: mat.define-typography-level(15px, 24px, 400, $font-family-accent),
-  $body-2: mat.define-typography-level(14px, 24px, 500, $font-family-accent),
-  $body-1: mat.define-typography-level(14px, 20px, 400, $font-family-accent),
+$mat-typography-primary-config: mat.define-typography-config(
+  $headline-1: mat.define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
+  $headline-2: mat.define-typography-level(56px, 56px, 400, $font-family-primary, $letter-spacing: -0.02em),
+  $headline-3: mat.define-typography-level(45px, 48px, 400, $font-family-primary, $letter-spacing: -0.005em),
+  $headline-4: mat.define-typography-level(34px, 40px, 400, $font-family-primary),
+  $headline-5: mat.define-typography-level(24px, 32px, 400, $font-family-primary),
+  $headline-6: mat.define-typography-level(20px, 32px, 500, $font-family-primary),
+  $subtitle-1: mat.define-typography-level(16px, 28px, 400, $font-family-primary),
+  $body-1: mat.define-typography-level(15px, 24px, 400, $font-family-accent),
+  $subtitle-2: mat.define-typography-level(14px, 24px, 500, $font-family-accent),
+  $body-2: mat.define-typography-level(14px, 20px, 400, $font-family-accent),
   $caption: mat.define-typography-level(12px, 20px, 400, $font-family-accent),
   $button: mat.define-typography-level(14px, 14px, 500, $font-family-accent),
-  $input: mat.define-typography-level(inherit, 1.125, 400, $font-family-accent),
 );
-
 $primary: mat.define-palette($md-formatif);
 $accent: mat.define-palette($md-formatif-accent);
 $warn: mat.define-palette($md-formatif-warn);
@@ -147,5 +135,12 @@ $theme: mat.define-light-theme(
   )
 );
 
+$color-config: mat.get-color-config($theme);
+$primary-palette: map.get($color-config, 'primary');
+$primary-color: mat.get-color-from-palette($primary-palette, 500);
+$accent-palette: map.get($color-config, 'accent');
+$warn-palette: map.get($color-config, 'warn');
+$is-dark-theme: map.get($color-config, 'is-dark');
 
-@include mat.all-legacy-component-themes($theme);
+@include mat.all-component-typographies($theme);
+@include mat.all-component-themes($theme);

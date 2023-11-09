@@ -1,5 +1,7 @@
-<mat-card [hidden]="!(task.definition.isGraded || task.definition.maxQualityPts > 0)">
-  <mat-card-title>Assessment Information</mat-card-title>
+<mat-card appearance="outlined" [hidden]="!(task.definition.isGraded || task.definition.maxQualityPts > 0)">
+  <mat-card-header>
+    <mat-card-title>Assessment Information</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <div [hidden]="!task.definition.isGraded"></div>
     <h5>This task {{ hasBeenGraded(task) ? 'has been' : 'will be' }} assigned a grade</h5>
@@ -37,16 +39,16 @@
         >. Your work will assessed and assigned a star rating based on the quality of your submission.
       </p>
       <div [hidden]="!hasBeenGivenStars(task)">
+        <!-- TODO: The 'tickInterval' property no longer exists -->
         <mat-slider
           [max]="task.definition.maxQualityPts"
           [min]="0"
           [step]="1"
           thumbLabel="stars"
-          tickInterval="1"
           disabled="true"
           [(ngModel)]="task.qualityPts"
           aria-labelledby="star rating"
-        >
+          ><input matSliderThumb /><input matSliderThumb />
         </mat-slider>
         <p>
           You have been awarded out

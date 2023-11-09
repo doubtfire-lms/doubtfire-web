@@ -14,13 +14,14 @@
       </mat-form-field>
     </form>
   </div>
+  @if (pdfBlobUrl) {
   <pdf-viewer
     [zoom]="zoomValue"
     [src]="pdfBlobUrl"
-    *ngIf="pdfBlobUrl"
     [render-text]="true"
     [original-size]="false"
     (after-load-complete)="onLoaded()"
     (page-rendered)="loaded = true"
   ></pdf-viewer>
+  }
 </div>

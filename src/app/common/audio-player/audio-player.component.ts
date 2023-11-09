@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { Project, Task, TaskComment } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'audio-player',
