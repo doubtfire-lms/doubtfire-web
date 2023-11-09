@@ -18,7 +18,7 @@
         <a target="_blank" [href]="person.html_url">
           <img [src]="person.avatar_url">
           <div class="name">{{person.name}}</div>
-          <div class="handler">@{{person.login}}</div>
+          <div class="handler">&#64;{{person.login}}</div>
         </a>
       </li>
     </ul>
@@ -27,7 +27,7 @@
       <!-- Login Column -->
       <ng-container matColumnDef="contributor">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Contributor </th>
-        <td mat-cell *matCellDef="let element"> <a target="_blank" [href]="element.htmlUrl"><img [src]="element.avatarUrl">@{{element.login}}</a> </td>
+        <td mat-cell *matCellDef="let element"> <a target="_blank" [href]="element.htmlUrl"><img [src]="element.avatarUrl">&#64;{{element.login}}</a> </td>
       </ng-container>
       <!-- Contributions Column -->
       <ng-container matColumnDef="contributions">
