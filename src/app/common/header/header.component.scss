@@ -1,14 +1,20 @@
 .mat-toolbar {
   height: 72px;
   background-color: white;
+  box-shadow: 3px 4px 5px #0000000d;
+  margin-bottom: 20px;
+
+  &.inbox {
+    background-color: #F5F5F5;
+    box-shadow: none;
+    margin-bottom: 0px // nice drop shadow on bottom of toolbar
+  }
 
   font-family: 'Grotesk';
 
   .mat-icon {
-    color: #6f6f6f;
+    color: black;
     transform: scale(1.5);
   }
 
-  box-shadow: inset 0px -1px 0px #f3f3f4;
-  margin-bottom: 20px;
 }

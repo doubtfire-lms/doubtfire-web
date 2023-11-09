@@ -16,19 +16,19 @@
       <div fxLayout="row" fxFlexFill>
         <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
           <mat-label>First Name</mat-label>
-          <input matInput [(ngModel)]="user.firstName" name="first" required />
+          <input matInput class="outline-none" [(ngModel)]="user.firstName" name="first" required />
         </mat-form-field>
 
         <div fxFlex></div>
 
         <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
           <mat-label>Second Name</mat-label>
-          <input matInput [(ngModel)]="user.lastName" name="last" />
+          <input matInput [(ngModel)]="user.lastName" name="last" required />
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxFlexFill>
-        <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
+        <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
             <mat-option value="">Do not show</mat-option>
@@ -38,8 +38,8 @@
             <mat-option value="__customPronouns">Custom</mat-option>
           </mat-select>
         </mat-form-field>
-        <div fxFlex="3"></div>
-        <mat-form-field fxFlexAlign="end" fxFlex appearance="outline">
+        <div fxFlex="3"></div> -->
+        <mat-form-field fxFlexFill appearance="outline">
           <mat-label>Preferred Name</mat-label>
           <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
         </mat-form-field>
@@ -57,15 +57,29 @@
         />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" fxFlexFill *ngIf="user.systemRole === 'Student'">
+      @if (user.systemRole === 'Student') {
+      <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Student ID</mat-label>
         <input matInput [(ngModel)]="user.studentId" name="student_id" required />
       </mat-form-field>
+      }
 
       <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Email</mat-label>
         <input type="email" matInput [(ngModel)]="user.email" name="email" required />
       </mat-form-field>
+
+      @if (canSeeSystemRole) {
+      <mat-form-field fxFlexFill appearance="outline">
+        <mat-label>System Role</mat-label>
+        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
+          <mat-option value="Admin">Administrator</mat-option>
+          <mat-option value="Convenor">Convenor</mat-option>
+          <mat-option value="Tutor">Tutor</mat-option>
+          <mat-option value="Student">Student</mat-option>
+        </mat-select>
+      </mat-form-field>
+      }
 
       <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
         <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
@@ -91,18 +105,12 @@
           Sign Out
         </button>
         <div fxFlex></div>
-        <button
-          *ngIf="mode === 'create'"
-          [disabled]="form.invalid"
-          fxFlexAlign="end"
-          type="submit"
-          mat-flat-button
-          color="primary"
-        >
+        @if (mode === 'create') {
+        <button [disabled]="form.invalid" fxFlexAlign="end" type="submit" mat-flat-button color="primary">
           Confirm Account
         </button>
+        } @if (mode === 'edit') {
         <button
-          *ngIf="mode === 'edit'"
           type="button"
           [disabled]="form.invalid"
           fxFlexAlign="end"
@@ -112,6 +120,7 @@
         >
           Save Profile
         </button>
+        }
       </div>
     </div>
   </div>

@@ -24,7 +24,7 @@ angular.module('doubtfire.admin.states.users', [])
     onBatchUserSuccess: (response) ->
       CsvResultModal.show "User CSV import results", response
       $scope.users = newUserService.query(undefined)
-    batchUserUrl: newUserService.csvUrl
+    batchUserUrl: newUserService.csvURL
     batchUserFiles: { file: { name: 'CSV File', type: 'csv' } }
 
   newUserService.query().subscribe(
@@ -55,5 +55,5 @@ angular.module('doubtfire.admin.states.users', [])
     EditProfileService.openDialog(userToShow)
 
   $scope.downloadUsersCSV = () ->
-    fileDownloaderService.downloadFile(newUserService.csvUrl, "Users.csv")
+    fileDownloaderService.downloadFile(newUserService.csvURL, "Users.csv")
 )

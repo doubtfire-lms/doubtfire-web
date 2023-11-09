@@ -12,8 +12,10 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
 
   public static readonly rolloverEndpointFormat = 'teaching_periods/:id:/rollover';
 
-  constructor(  httpClient: HttpClient,
-                private teachingPeriodBreakService: TeachingPeriodBreakService) {
+  constructor(
+    httpClient: HttpClient,
+    private teachingPeriodBreakService: TeachingPeriodBreakService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -23,39 +25,39 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
       {
         keys: 'startDate',
         toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'endDate',
         toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
-      'activeUntil',
+      {
+        keys: 'activeUntil',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
       'active',
       {
         keys: 'breaks',
         toEntityOp: (data, key, entity) => {
-          data['breaks']?.forEach(breakJson => {
+          data['breaks']?.forEach((breakJson) => {
             const teachingPeriod = entity as TeachingPeriod;
             const breakEntity = this.teachingPeriodBreakService.buildInstance(breakJson);
             teachingPeriod.breaksCache.add(breakEntity);
           });
-        }
+        },
       },
       {
         keys: 'units',
         toEntityOp: (data, key, entity) => {
-          data[key]?.forEach(unitJson => {
+          data[key]?.forEach((unitJson) => {
             const unitService: UnitService = AppInjector.get(UnitService);
-            const unit = unitService.cache.getOrCreate(
-              unitJson['id'],
-              unitService,
-              unitJson
-            );
+            const unit = unitService.cache.getOrCreate(unitJson['id'], unitService, unitJson);
             entity.unitsCache.add(unit);
           });
-        }
-      }
+        },
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept('id', 'unit', 'breaks');

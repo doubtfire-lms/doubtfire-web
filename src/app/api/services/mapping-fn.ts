@@ -16,9 +16,9 @@ export class MappingFunctions {
   public static mapDayToJson<T>(entity: T, key: string): string {
     if (entity[key]) {
       const month = entity[key].getMonth() + 1;
-      return `${entity[key].getFullYear()}-${month < 10 ? '0' : ''}${month}-${entity[key].getDate()}`;
-    }
-    else {
+      const day = entity[key].getDate();
+      return `${entity[key].getFullYear()}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+    } else {
       return undefined;
     }
   }

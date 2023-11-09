@@ -2,6 +2,200 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.15](https://github.com/macite/doubtfire-deploy/compare/v7.0.14...v7.0.15) (2023-06-20)
+
+
+### Bug Fixes
+
+* handle null campus in projects ([48ab807](https://github.com/macite/doubtfire-deploy/commit/48ab807b06c794cf3bfd77aacb9bee64a278c78d))
+
+### [7.0.14](https://github.com/macite/doubtfire-deploy/compare/v7.0.13...v7.0.14) (2023-06-18)
+
+
+### Features
+
+* sort staff in unit import ([5399627](https://github.com/macite/doubtfire-deploy/commit/539962715916a1c5a8ca6314095d841305492a8a))
+* unit import staff autocomplete ([b489620](https://github.com/macite/doubtfire-deploy/commit/b489620e8eb2f20379d18fcf27a3ecc951c924a5))
+
+### [7.0.13](https://github.com/macite/doubtfire-deploy/compare/v7.0.12...v7.0.13) (2023-06-17)
+
+
+### Bug Fixes
+
+* correct location of gtag ([a681622](https://github.com/macite/doubtfire-deploy/commit/a681622bd707acf40612136e2af10e85f3fa4bad))
+* update google analytics ([c0b913a](https://github.com/macite/doubtfire-deploy/commit/c0b913aa3187abbe31e743390bb68c6daba48bf0))
+
+### [7.0.12](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.12) (2023-06-17)
+
+
+### Features
+
+* streamline unit import ([4e6827c](https://github.com/macite/doubtfire-deploy/commit/4e6827c1a57dd22ffda38329d7ecc5cf56097c40))
+
+
+### Bug Fixes
+
+* grade should not updated on assessment fail ([6e065e6](https://github.com/macite/doubtfire-deploy/commit/6e065e61702be5bde11a05675346dbdea8f1843d))
+* tasks inclusion in portfolio creation ([f86a8c5](https://github.com/macite/doubtfire-deploy/commit/f86a8c5571059bb1d2606d90cb3902bfb6f30b4b))
+
+### [7.0.11](https://github.com/macite/doubtfire-deploy/compare/v7.0.10...v7.0.11) (2023-06-02)
+
+
+### Bug Fixes
+
+* grade should not updated on assessment fail ([6e065e6](https://github.com/macite/doubtfire-deploy/commit/6e065e61702be5bde11a05675346dbdea8f1843d))
+
+### [7.0.10](https://github.com/macite/doubtfire-deploy/compare/v7.0.9...v7.0.10) (2023-05-30)
+
+
+### Bug Fixes
+
+* tasks inclusion in portfolio creation ([f86a8c5](https://github.com/macite/doubtfire-deploy/commit/f86a8c5571059bb1d2606d90cb3902bfb6f30b4b))
+
+### [7.0.9](https://github.com/macite/doubtfire-deploy/compare/v7.0.7...v7.0.9) (2023-05-24)
+
+
+### Bug Fixes
+
+* delete for project portfolio ([1f2d603](https://github.com/macite/doubtfire-deploy/commit/1f2d603ed582198931f0454f6fe73d3592f3d516))
+* portfolio task list performance ([6ecef85](https://github.com/macite/doubtfire-deploy/commit/6ecef85471542bd308d0041e098bd58a7e216455))
+
+### [7.0.8](https://github.com/macite/doubtfire-deploy/compare/v7.0.6...v7.0.8) (2023-05-24)
+
+
+### Bug Fixes
+
+* delete for project portfolio ([1f2d603](https://github.com/macite/doubtfire-deploy/commit/1f2d603ed582198931f0454f6fe73d3592f3d516))
+* ensure portfolio files can be deleted ([3ec331a](https://github.com/macite/doubtfire-deploy/commit/3ec331a980759a11cebba9b8bbc033bed9d1a696))
+
+### [7.0.7](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.7) (2023-05-16)
+
+
+### Features
+
+* add csv code file submissions ([920ba5a](https://github.com/macite/doubtfire-deploy/commit/920ba5a0674467b51e742b00428977a4775a867b))
+
+
+### Bug Fixes
+
+* ensure message times are shown ([d67a49b](https://github.com/macite/doubtfire-deploy/commit/d67a49b3cb70b58f45f17cc2c8c7642d9dc6b6e0))
+* ensure portfolio files can be deleted ([3ec331a](https://github.com/macite/doubtfire-deploy/commit/3ec331a980759a11cebba9b8bbc033bed9d1a696))
+* ensure that system role access depends on current user ([e903151](https://github.com/macite/doubtfire-deploy/commit/e903151c6b2a6705a9ed4327aa9a983829eb4126))
+* hide submitted date for tasks not submitted ([f74fb55](https://github.com/macite/doubtfire-deploy/commit/f74fb55659e67c527da84116978673ca2b285145))
+
+### [7.0.6](https://github.com/macite/doubtfire-deploy/compare/v7.0.5...v7.0.6) (2023-04-04)
+
+
+### Bug Fixes
+
+* ensure message times are shown ([d67a49b](https://github.com/macite/doubtfire-deploy/commit/d67a49b3cb70b58f45f17cc2c8c7642d9dc6b6e0))
+
+### [7.0.5](https://github.com/macite/doubtfire-deploy/compare/v7.0.4...v7.0.5) (2023-03-21)
+
+
+### Bug Fixes
+
+* hide submitted date for tasks not submitted ([f74fb55](https://github.com/macite/doubtfire-deploy/commit/f74fb55659e67c527da84116978673ca2b285145))
+
+### [7.0.4](https://github.com/macite/doubtfire-deploy/compare/v7.0.3...v7.0.4) (2023-03-21)
+
+
+### Features
+
+* add csv code file submissions ([920ba5a](https://github.com/macite/doubtfire-deploy/commit/920ba5a0674467b51e742b00428977a4775a867b))
+
+
+### Bug Fixes
+
+* ensure that system role access depends on current user ([e903151](https://github.com/macite/doubtfire-deploy/commit/e903151c6b2a6705a9ed4327aa9a983829eb4126))
+
+### [7.0.3](https://github.com/macite/doubtfire-deploy/compare/v7.0.2...v7.0.3) (2023-03-20)
+
+
+### Features
+
+* pull overseer docker image ([c6eba36](https://github.com/macite/doubtfire-deploy/commit/c6eba369859aef212004d18d639f11c92ad54dc4))
+
+
+### Bug Fixes
+
+* added addtional return to staffaligntmentsfortasksdefintions method in unit modal ([76a9614](https://github.com/macite/doubtfire-deploy/commit/76a96147bac1f8ffefb1cb4c1745f16ffcd894d2))
+* connected test submission for overseer ([6b66899](https://github.com/macite/doubtfire-deploy/commit/6b66899a5b5e1baa27a229faac9f5eb265bb2aa1))
+* ensure services work when removing relation ([611b6a7](https://github.com/macite/doubtfire-deploy/commit/611b6a7e02b5ed8b5e954a3596b5f341a72bbb96))
+
+### [7.0.2](https://github.com/macite/doubtfire-deploy/compare/v7.0.1...v7.0.2) (2023-03-11)
+
+
+### Bug Fixes
+
+* download groups and members ([b978796](https://github.com/macite/doubtfire-deploy/commit/b97879659667c7c0908512fabeffe4f550e793cb))
+* download users ([a9e978f](https://github.com/macite/doubtfire-deploy/commit/a9e978ff52f50b5f06d117f27af73e70ba9ea42b))
+* ensure filters limit their search where needed ([f51b0a4](https://github.com/macite/doubtfire-deploy/commit/f51b0a48eee64c98209e2570a32f1e163eca2466))
+* ensure name is included in project filter ([d5fc94a](https://github.com/macite/doubtfire-deploy/commit/d5fc94a6d2a540789edd56f751800c0fe14f3d60))
+* ensure only active units show in project home ([c27a6b5](https://github.com/macite/doubtfire-deploy/commit/c27a6b525106aaade9e658b6e69cb414aa240d6c))
+* pagination on student admin page ([1549c46](https://github.com/macite/doubtfire-deploy/commit/1549c46dc9e27f36bac3817dd19b67f0f8911f2d))
+
+### [7.0.1](https://github.com/macite/doubtfire-deploy/compare/v7.0.0...v7.0.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* add preffered name back to profile editor ([521273d](https://github.com/macite/doubtfire-deploy/commit/521273dd9d284c5b752d14744a16e2245c369a3e))
+* ensure auth update can occur ([abb43d8](https://github.com/macite/doubtfire-deploy/commit/abb43d8d7b216f31e5fff4370a35a78561b608b8))
+* ensure edit user modal has edit mode ([0ffc5c7](https://github.com/macite/doubtfire-deploy/commit/0ffc5c7554e7a36c5dd9868ae4014168ea73915d))
+* ensure only correct users can edit systemRole ([84f9320](https://github.com/macite/doubtfire-deploy/commit/84f93202d1edb0ee05dcf7493143b43bd74b33ab))
+* ensure that groups can be added when a tutorial has no tutor ([ee8bc3c](https://github.com/macite/doubtfire-deploy/commit/ee8bc3ca07c5cbd8dcab70d7133285d0da66b3ff))
+* ensure user icon refreshes ([1aff57a](https://github.com/macite/doubtfire-deploy/commit/1aff57aa997d48973842d9e4ae08fa3c87c88852))
+
+## [7.0.0](https://github.com/macite/doubtfire-deploy/compare/v6.0.18...v7.0.0) (2023-02-23)
+
+
+### Features
+
+* add migrated welcome wizard ([dd37e83](https://github.com/macite/doubtfire-deploy/commit/dd37e8351f2042ee37161f0d6349e2b7efa42d7e))
+* add new user settings dialog ([cdeb7c6](https://github.com/macite/doubtfire-deploy/commit/cdeb7c624330054fb5ed1594288eaad7c8c2d87f))
+* add pronouns to user model and wizard ([11c7a03](https://github.com/macite/doubtfire-deploy/commit/11c7a03b79c2347dc87933ac5041ff7166ee2fc3))
+* add user badge component ([9fc9e62](https://github.com/macite/doubtfire-deploy/commit/9fc9e62a0093b99dfdc4329ec6b7ccedf5cd1118))
+* improve messaging around late submissions ([31db767](https://github.com/macite/doubtfire-deploy/commit/31db767ceeabe3e62b3b44b050589ebb0334b993))
+* make user setting form support other users ([2bdf5ba](https://github.com/macite/doubtfire-deploy/commit/2bdf5ba6f17b0a227588c0e0adffe17612cc8f89))
+* new snackbar alert in edit profile save ([cbc157a](https://github.com/macite/doubtfire-deploy/commit/cbc157a41521fe7de952eef9d904e65a68861713))
+* use new user badge component ([0c12efb](https://github.com/macite/doubtfire-deploy/commit/0c12efb3a08bcbcf6f4829b002d32f807a005d7f))
+
+
+### Bug Fixes
+
+* add button type to edit profile form button ([abfd5e7](https://github.com/macite/doubtfire-deploy/commit/abfd5e7ac114db5175d3c7a1023de0c7885f464f))
+* add task to comments when created by user ([3f78e48](https://github.com/macite/doubtfire-deploy/commit/3f78e48b42b5d0851b30482cba4ee9e582fd6d2f))
+* add tooltip delay to tutor inbox ([d1b34b4](https://github.com/macite/doubtfire-deploy/commit/d1b34b41e01a0863b5056523af5ab40e4912c5f8))
+* cache udpated user when updated ([b9fae7f](https://github.com/macite/doubtfire-deploy/commit/b9fae7f76ef0f0280c41681295ec86cecc216f79))
+* clear user cache when sign out ([4dfe5e1](https://github.com/macite/doubtfire-deploy/commit/4dfe5e10b6f14fc9ab41f70da4d63847f55b77c6))
+* downgrade transition hook service ([53e2867](https://github.com/macite/doubtfire-deploy/commit/53e28676f1c187f2216941ac57022f522cc31d4b))
+* ensure alert service sanitises message ([87ebe3a](https://github.com/macite/doubtfire-deploy/commit/87ebe3a65357226a1109022269dc0576ea51ee9a))
+* ensure edit profile goes home on welcome ([ffa356f](https://github.com/macite/doubtfire-deploy/commit/ffa356f2605c443cdf84fb9e6ec00c3c99dd2904))
+* ensure status class works with undefined data ([95190a8](https://github.com/macite/doubtfire-deploy/commit/95190a8c18f077d9d2b7eb6ea622227e46c167cd))
+* ensure title shows for students ([36e16db](https://github.com/macite/doubtfire-deploy/commit/36e16dba3f8bd2d9bde849cb4ed9d43abb2920cf))
+* fix emoji picker ([2d4b37d](https://github.com/macite/doubtfire-deploy/commit/2d4b37d756dcfb5c9a9e52b8079cf03ae21e1bce))
+* fix package file ([7ee7f2f](https://github.com/macite/doubtfire-deploy/commit/7ee7f2f804547702c250c8254f2a290012fe30d5))
+* go to sign in if anon user in welcome ([f8ab160](https://github.com/macite/doubtfire-deploy/commit/f8ab160bffc3e23770b3720e1a8887349b2fed86))
+* go to sign in if anonymous user is at home ([7de1eaf](https://github.com/macite/doubtfire-deploy/commit/7de1eaf2cee6151b6b8b2bbb9546b7e350ccd9ca))
+* hide the header when going to welcome state ([6b46fcd](https://github.com/macite/doubtfire-deploy/commit/6b46fcd6028100187c13a1c487c6c551cd368ff4))
+* improve filter of all project list ([c3adf99](https://github.com/macite/doubtfire-deploy/commit/c3adf993d278291406a662472765f9b4fecc58b0))
+* missing directive ([d6d1ed9](https://github.com/macite/doubtfire-deploy/commit/d6d1ed98b9d4e75fa194406710019723ed1cf65e))
+* only save hasRunFiirstTime if valid save ([3895018](https://github.com/macite/doubtfire-deploy/commit/38950180fb34ee8ee11b16bbc79316b80ee151de))
+* only save user once on edit profile ([b5ee9c8](https://github.com/macite/doubtfire-deploy/commit/b5ee9c8a0aee2915300a3df4ce57df180074caca))
+* only set container css to sign in and welcome ([a4ceca7](https://github.com/macite/doubtfire-deploy/commit/a4ceca70ac3f5d7e3aeb6f250244f3531d84fae0))
+* project refresh tasks url data ([4027dc1](https://github.com/macite/doubtfire-deploy/commit/4027dc15081f520ceb30c67e650059408d3b86d0))
+* reinstate group submission functionality ([63702a6](https://github.com/macite/doubtfire-deploy/commit/63702a6a59feeae2bdb59f0ad902ce2a12ec0154))
+* reinstate portfolio assessment view ([9282a93](https://github.com/macite/doubtfire-deploy/commit/9282a938ffc9f4e622407d98d9deee79479ca757))
+* reinstate stateRegistry in coffee files ([481d072](https://github.com/macite/doubtfire-deploy/commit/481d07299ffbb10918f7f42c4e71d0e95a7b2867))
+* remove extra / in api call for task service ([c328590](https://github.com/macite/doubtfire-deploy/commit/c3285904fef53985e79cda109b526e919af178ae))
+* remove uneccessary '>' ([565cc10](https://github.com/macite/doubtfire-deploy/commit/565cc10988f9c0b1da4f6721db7e51d5cf197250))
+* sanitise data going to d3 ([11a24b4](https://github.com/macite/doubtfire-deploy/commit/11a24b45a2fb717bffd164388b220fe803df7e41))
+* send the custom pronounds only if they exist ([71e2f58](https://github.com/macite/doubtfire-deploy/commit/71e2f5882c0cae02ce87a6b1748f6882eb53cad2))
+* task pdf and resource download for tasks view ([6b36f4e](https://github.com/macite/doubtfire-deploy/commit/6b36f4e51e41199a17502b42a250c0af759fdf9f))
+* use const in home.component ([e16aeec](https://github.com/macite/doubtfire-deploy/commit/e16aeecf6d29e9fc36f69ab4bf77bc62c294cbe5))
+* xss issue with html bind ([07c6b1f](https://github.com/macite/doubtfire-deploy/commit/07c6b1f8a10401dfb9c6a07ce7590eb388a5dd9b))
+
 ### [6.0.18](https://github.com/macite/doubtfire-deploy/compare/v6.0.17...v6.0.18) (2022-09-29)
 
 ### [6.0.17](https://github.com/macite/doubtfire-deploy/compare/v6.0.16...v6.0.17) (2022-09-08)

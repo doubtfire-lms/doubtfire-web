@@ -1,9 +1,44 @@
+<!--/loading-->
 <div ng-show="users == null" class="large-notice-block">
   <i class="fa fa-2x fa-spinner fa-pulse"></i>
   <p>Loading...</p>
 </div>
-<!--/loading-->
-<div ng-if="users != null">
+
+<!-- Body -->
+<div class="flex">
+  <!-- Users Table -->
+  <f-users class="w-full"></f-users>
+
+  <!-- Batch Download Panel -->
+  <div class="col-sm-3">
+    <div style="height: 80px"></div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Import Users</h4>
+        Import users using a CSV containing: email, firstName, lastName, username, nickname, role
+      </div>
+      <div class="panel-body">
+        <file-uploader
+          url="fileData.batchUserUrl"
+          files="fileData.batchUserFiles"
+          on-success="fileData.onBatchUserSuccess"
+        ></file-uploader>
+      </div>
+      <div class="panel-heading">
+        <h4 class="panel-title">Batch Export Users</h4>
+        Download a CSV of all users registered with {{externalName.value}}.
+      </div>
+      <div class="panel-body text-center">
+        <button ng-click="downloadUsersCSV()" class="btn btn-primary btn-download">
+          <i class="fa fa-download"></i> Download
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Old AngularJS Component (left for reference temporarily )-->
+<!-- <div ng-if="users != null">
   <h2>
     {{externalName.value}} Users
     <p class="lead">Users Administration View</p>
@@ -52,7 +87,7 @@
             <tbody>
               <tr
                 class="pointer"
-                ng-repeat="user in filteredUsers = (users | filter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
+                ng-repeat="user in filteredUsers = (users | unitFilter:search) | orderBy:sortOrder:reverse | startFrom:(currentPage - 1) * pageSize | limitTo: pageSize"
                 ng-click="showUserModal(user)"
               >
                 <td>
@@ -111,4 +146,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+

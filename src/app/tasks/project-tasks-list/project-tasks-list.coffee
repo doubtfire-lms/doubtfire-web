@@ -18,6 +18,16 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
   controller: ($scope, $modal, newTaskService, analyticsService, gradeService) ->
     analyticsService.event 'Student Project View', "Showed Task Button List"
 
+    $scope.groupTasks = []
+
+    $scope.groupTasks.push.apply $scope.groupTasks, $scope.unit.groupSets.map (gs) ->
+      {
+        groupSet: gs,
+        name: gs.name
+      }
+
+    $scope.groupTasks.push {groupSet: null, name: 'Individual Work'}
+
     # functions from task service
     $scope.statusClass = newTaskService.statusClass
     $scope.statusText = newTaskService.statusText

@@ -54,11 +54,11 @@ mat-action-list {
   left: 65px;
 }
 
-:host .mat-list-icon {
+:host .mat-mdc-list-item-icon {
   color: black;
 }
 
-:host .mat-dialog-container {
+:host .mat-mdc-dialog-container {
   max-width: 800px !important;
 }
 

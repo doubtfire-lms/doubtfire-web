@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { alertService } from 'src/app/ajs-upgraded-providers';
 import { TaskSubmissionService, TaskAssessmentResult } from 'src/app/common/services/task-submission.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
@@ -11,6 +11,7 @@ export interface User {
 }
 
 export interface TaskAssessmentComment {
+  text: string;
   id?: number;
   comment: string;
   has_attachment?: boolean;
@@ -34,10 +35,12 @@ export class TaskAssessmentCommentComponent implements OnInit {
   @Input() comment: TaskAssessmentComment;
 
   constructor(
-    @Inject(alertService) private alerts: any,
+    @Inject(alertService) private alerts,
     @Inject(TaskSubmissionService) private submissions: TaskSubmissionService,
-    private modalService: TaskAssessmentModalService) { }
+    private modalService: TaskAssessmentModalService,
+  ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleError(error: any) {
     this.alerts.add('danger', 'Error: ' + error, 6000);
   }
@@ -55,29 +58,27 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   scroll(el: HTMLElement) {
-    el.scrollIntoView({behavior: 'smooth'});
+    el.scrollIntoView({ behavior: 'smooth' });
   }
 
   update(): void {
-    this.submissions.getLatestTaskAssessment(this.task)
-    .subscribe(
-      result => {
+    this.submissions.getLatestTaskAssessment(this.task).subscribe(
+      (result) => {
         this.comment.assessment_result = {
           assessment_output: result.result,
           is_completed: true,
           is_successful: true,
-          task: this.task
+          task: this.task,
         };
       },
-      error => {
+      (error) => {
         this.comment.assessment_result = {
           assessment_output: error.error,
           is_completed: false,
           is_successful: false,
-          task: this.task
+          task: this.task,
         };
-      }
+      },
     );
   }
 }
-

@@ -3,25 +3,24 @@
     {{ task.definition.name }}
   </h4>
   <p class="list-group-item-text">
-    <i class="fa fa-users" matTooltip="Group Task" aria-hidden="true" *ngIf="task.isGroupTask()"></i>
-    <i class="fa fa-user" matTooltip="Individual Task" aria-hidden="true" *ngIf="!task.isGroupTask()"></i>
-    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
-
-    <span
-      class="due-time"
-      *ngIf="task.isBeforeStartDate() && !task.inSubmittedState()"
-      matTooltip="Start task in {{ task.timeToStart() }}"
-    >
+    @if (task.isGroupTask()) {
+    <i class="fa fa-users" matTooltip="Group Task" aria-hidden="true"></i>
+    } @if (!task.isGroupTask()) {
+    <i class="fa fa-user" matTooltip="Individual Task" aria-hidden="true"></i>
+    }
+    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task @if
+    (task.isBeforeStartDate() && !task.inSubmittedState()) {
+    <span class="due-time" matTooltip="Start task in {{ task.timeToStart() }}">
       <i class="fa fa-hourglass-start"></i> {{ task.timeToStart() }}
     </span>
-
+    } @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
     <span
       class="due-time"
-      *ngIf="!task.isBeforeStartDate() && !task.inSubmittedState()"
       matTooltip="{{ task.isOverdue() ? 'Task Overdue!' : 'Complete task in ' + task.timeToDue() }}"
     >
       <i class="fa fa-hourglass-end"></i> {{ task.timeToDue() }}
     </span>
+    }
   </p>
 </div>
 <!--/task-data-->
@@ -38,7 +37,7 @@
     </span>
     <span
       class="task-superscript-badge plagiarism-detected-badge"
-      [hidden]="!task.plagiarismDetected()"
+      [hidden]="!task.similaritiesDetected"
       matTooltip="Plagiarism detected"
     >
       <i class="fa fa-eye"></i>

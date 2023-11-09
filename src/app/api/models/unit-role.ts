@@ -18,6 +18,16 @@ export class UnitRole extends Entity {
    */
   roleId: number;
 
+  /**
+   * Compare this unit role against a lowercase text string
+   *
+   * @param text the lowercase text to match
+   * @returns true if this role relates to that text
+   */
+  public matches(text: string): boolean {
+    return this.user.matches(text) || this.unit.matches(text);
+  }
+
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
       unit_role: super.toJson(mappingData, ignoreKeys),

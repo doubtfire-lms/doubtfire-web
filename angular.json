@@ -15,12 +15,12 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist",
             "index": "build/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/assets",
@@ -28,6 +28,7 @@
             ],
             "styles": [
               "src/theme.scss",
+              "src/styles.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./build/assets/doubtfire.css",
@@ -47,14 +48,12 @@
               "node_modules/codemirror/lib/codemirror.js",
               "node_modules/codemirror/addon/display/placeholder.js",
               "node_modules/codemirror/mode/markdown/markdown.js",
-              "node_modules/showdown/dist/showdown.js"
+              "node_modules/showdown/dist/showdown.js",
+              "node_modules/canvas-confetti/dist/confetti.browser.js"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "optimization": false
           },
           "configurations": {
             "production": {
@@ -77,38 +76,31 @@
               "optimization": true,
               "outputHashing": "bundles",
               "sourceMap": false,
-              "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "doubtfire:build"
+            "buildTarget": "doubtfire:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "doubtfire:build:production"
+              "buildTarget": "doubtfire:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "doubtfire:build"
+            "buildTarget": "doubtfire:build"
           }
         },
         "test": {
@@ -154,6 +146,12 @@
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"
+    },
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
     }
   },
   "cli": {

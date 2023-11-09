@@ -130,7 +130,7 @@ angular.module('doubtfire.groups.group-selector', [])
       else
         # Convenor or Tutor
         tutorName = $scope.unitRole?.name || newUserService.currentUser.name
-        tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutor.name == tutorName)?.id
+        tutorialId = _.find($scope.unit.tutorials, (tute) -> tute.tutor?.name == tutorName)?.id
         # Default to first tutorial if can't find
         tutorialId ?= _.first($scope.unit.tutorials).id
 

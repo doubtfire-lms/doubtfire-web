@@ -1,0 +1,13 @@
+.mat-mdc-card {
+  .mat-mdc-form-field-infix {
+    padding: 6px;
+  }
+}
+
+::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
+  background: #e7e7ff;
+}
+
+::ng-deep .mat-mdc-option {
+  height: 50px;
+}

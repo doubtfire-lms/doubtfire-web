@@ -7,7 +7,13 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { AppInjector, setAppInjector } from './app-injector';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// Lottie animation module
+import { LottieModule, LottieCacheModule } from 'ngx-lottie';
+import player from 'lottie-web';
+
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,8 +38,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { MatDialogModule as MatDialogModuleNew } from '@angular/material/dialog';
+import { AlertComponent } from 'src/app/common/services/alert.service';
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
@@ -89,7 +97,8 @@ import { ExtensionModalComponent } from './common/modals/extension-modal/extensi
 import { CalendarModalComponent } from './common/modals/calendar-modal/calendar-modal.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { doubtfireStates } from './doubtfire.states';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -116,7 +125,7 @@ import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { AudioPlayerComponent } from './common/audio-player/audio-player.component';
 import { HumanizedDatePipe } from './common/pipes/humanized-date.pipe';
 import { DragDropDirective } from './common/directives/drag-drop.directive';
-import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { SafePipe } from './common/pipes/safe.pipe';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
@@ -125,7 +134,6 @@ import { TasksOfTaskDefinitionPipe } from './common/filters/tasks-of-task-defini
 import { TasksInTutorialsPipe } from './common/filters/tasks-in-tutorials.pipe';
 import { TasksForInboxSearchPipe } from './common/filters/tasks-for-inbox-search.pipe';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
-import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
 import {
@@ -147,12 +155,12 @@ import {
   UserService,
   WebcalService,
   LearningOutcomeService,
+  TaskSimilarityService,
 } from './api/models/doubtfire-model';
-import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { PdfImageCommentComponent } from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import { OverseerImageListComponent } from './admin/institution-settings/overseer-images/overseer-image-list.component';
 
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
@@ -165,6 +173,8 @@ import { TaskDropdownComponent } from './common/header/task-dropdown/task-dropdo
 import { SplashScreenComponent } from './home/splash-screen/splash-screen.component';
 import { HttpErrorInterceptor } from './common/services/http-error.interceptor';
 import { TaskDefinitionService } from './api/services/task-definition.service';
+import { NewTeachingPeriodDialogComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { MatNativeDateModule } from '@angular/material/core';
 import { TaskOutcomeAlignmentService } from './api/services/task-outcome-alignment.service';
 import { GroupService } from './api/services/group.service';
 import { ObjectSelectComponent } from './common/obect-select/object-select.component';
@@ -175,11 +185,56 @@ import { EditProfileFormComponent } from './common/edit-profile-form/edit-profil
 import { TransitionHooksService } from './sessions/transition-hooks.service';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
+import { TaskDashboardComponent } from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
+import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
+import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { FChipComponent } from './common/f-chip/f-chip.component';
+import { TaskSimilarityViewComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
+import { FileViewerComponent } from './common/file-viewer/file-viewer.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { TaskDefinitionGeneralComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
+import { TaskDefinitionWhoComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
+import { TaskDefinitionDatesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-dates/task-definition-dates.component';
+import { TaskDefinitionUploadComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
+import { TaskDefinitionOptionsComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
+import { TaskDefinitionResourcesComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
+import { TaskDefinitionOverseerComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
+import { FileDropComponent } from './common/file-drop/file-drop.component';
+import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
+import { FUsersComponent } from './admin/states/f-users/f-users.component';
+
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
+import { CreateNewUnitModalContentComponent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
+// Note we need a separate function as it's required
+// by the AOT compiler.
+export function playerFactory() {
+  return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
+}
+import {
+  TeachingPeriodUnitImportDialogComponent,
+  TeachingPeriodUnitImportService,
+} from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
+import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
+import { TiiActionService } from './api/services/tii-action.service';
+import { FUnitsComponent } from './admin/states/f-units/f-units.component';
+import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
+import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
+import { FTaskSheetViewComponent } from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
+import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
 @NgModule({
   // Components we declare
   declarations: [
     AboutDoubtfireModalContent,
+    TeachingPeriodUnitImportDialogComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -200,7 +255,18 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
     UnitTutorialsManagerComponent,
+    FileDropComponent,
     UnitStudentsEditorComponent,
+    UnitTaskEditorComponent,
+    TaskDefinitionEditorComponent,
+    TaskDefinitionGeneralComponent,
+    TaskDefinitionWhoComponent,
+    TaskDefinitionDatesComponent,
+    TaskDefinitionUploadComponent,
+    TaskDefinitionOptionsComponent,
+    TaskDefinitionResourcesComponent,
+    TaskDefinitionOverseerComponent,
+    UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,
@@ -214,17 +280,16 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     HumanizedDatePipe,
     IsActiveUnitRole,
     DragDropDirective,
-    PdfViewerComponent,
+    fPdfViewerComponent,
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
+    TaskSimilarityViewComponent,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     StatusIconComponent,
-    TaskPlagiarismCardComponent,
-    TaskAssessorComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
@@ -234,11 +299,34 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     SplashScreenComponent,
     ObjectSelectComponent,
     WelcomeComponent,
+    AcceptEulaComponent,
     HeroSidebarComponent,
     SignInComponent,
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,
+    TaskStatusCardComponent,
+    TaskDueCardComponent,
+    FooterComponent,
+    TaskAssessmentCardComponent,
+    TaskSubmissionCardComponent,
+    TaskDashboardComponent,
+    InboxComponent,
+    ProjectProgressBarComponent,
+    TeachingPeriodListComponent,
+    CreateNewUnitModal,
+    CreateNewUnitModalContentComponent,
+    TiiActionLogComponent,
+    FChipComponent,
+    NewTeachingPeriodDialogComponent,
+    FileViewerComponent,
+    AlertComponent,
+    FUnitTaskListComponent,
+    FTaskDetailsViewComponent,
+    FTaskSheetViewComponent,
+    TasksViewerComponent,
+    FUsersComponent,
+    FUnitsComponent,
   ],
   // Module Imports
   imports: [
@@ -248,6 +336,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     FormsModule,
     HttpClientModule,
     ClipboardModule,
+    DragDropModule,
     ScrollingModule,
     MatToolbarModule,
     MatFormFieldModule,
@@ -260,6 +349,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     MatStepperModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatNativeDateModule,
     MatButtonToggleModule,
     MatTooltipModule,
     MatSlideToggleModule,
@@ -274,6 +364,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     MatIconModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatDatepickerModule,
     MatExpansionModule,
     MatCardModule,
     MatGridListModule,
@@ -288,11 +379,17 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    PdfViewerModule,
+    LottieModule.forRoot({ player: playerFactory }),
+    LottieCacheModule.forRoot(),
     UIRouterUpgradeModule.forRoot({ states: doubtfireStates }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModuleNew,
   ],
   // Services we provide
   providers: [
@@ -306,11 +403,14 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     LearningOutcomeService,
     TaskDefinitionService,
     TeachingPeriodService,
+    TiiActionService,
     TeachingPeriodBreakService,
+    TeachingPeriodUnitImportService,
     TutorialService,
     TutorialStreamService,
     UserService,
     TaskService,
+    TaskSimilarityService,
     WebcalService,
     ActivityTypeService,
     OverseerImageService,
@@ -332,6 +432,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     alertServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
     AudioRecorderProvider,
@@ -349,7 +450,7 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
-      deps: [AuthenticationService],
+      deps: [AuthenticationService, UserService],
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
@@ -358,8 +459,10 @@ import { UserBadgeComponent } from './common/user-badge/user-badge.component';
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    CreateNewUnitModal,
   ],
 })
+
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
 export class DoubtfireAngularModule implements DoBootstrap {
@@ -370,7 +473,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
     private title: Title,
     private updater: CheckForUpdateService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
   ) {
     setAppInjector(injector);
     setTheme('bs3'); // or 'bs4'
@@ -381,7 +484,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
 
     this.matIconRegistry.addSvgIcon(
       'formatif-logo',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg'),
     );
   }
 

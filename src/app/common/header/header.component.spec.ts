@@ -11,9 +11,9 @@ import { HeaderComponent } from './header.component';
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let currentUserStub: jasmine.SpyObj<any>;
-  let calendarModalStub: jasmine.SpyObj<any>;
-  let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
+  // let currentUserStub: jasmine.SpyObj<any>;
+  // let calendarModalStub: jasmine.SpyObj<any>;
+  // let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
   let isActiveUnitRoleStub: Partial<IsActiveUnitRole>;
   let checkForUpdateServiceStub: Partial<CheckForUpdateService>;
   let globalStateServiceStub: Partial<GlobalStateService>;
@@ -22,28 +22,28 @@ describe('HeaderComponent', () => {
     const showHideHeader = new Subject<boolean>();
     const unitRolesSubject = new BehaviorSubject<any>(null);
     const projectsSubject = new BehaviorSubject<any>(null);
-    const currentViewAndEntitySubject = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
+    const currentViewAndEntitySubject$ = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
       null
     );
 
-    currentUserStub = {
-      role: 'tutor',
-    };
+    // currentUserStub = {
+    //   role: 'tutor',
+    // };
 
     globalStateServiceStub = {
       showHideHeader: showHideHeader,
       unitRolesSubject: unitRolesSubject,
       projectsSubject: projectsSubject,
-      currentViewAndEntitySubject: currentViewAndEntitySubject,
+      currentViewAndEntitySubject$: currentViewAndEntitySubject$,
     };
 
     TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       imports: [MatMenuModule],
       providers: [
-        { provide: currentUser, useValue: currentUserStub },
-        { provide: calendarModal, useValue: calendarModalStub },
-        { provide: aboutDoubtfireModal, useValue: aboutDoubtfireModalStub },
+        // { provide: currentUser, useValue: currentUserStub },
+        // { provide: calendarModal, useValue: calendarModalStub },
+        // { provide: aboutDoubtfireModal, useValue: aboutDoubtfireModalStub },
         { provide: IsActiveUnitRole, useValue: isActiveUnitRoleStub },
         { provide: CheckForUpdateService, useValue: checkForUpdateServiceStub },
         { provide: GlobalStateService, useValue: globalStateServiceStub },

@@ -1,0 +1,33 @@
+@if (unit.hasGroupwork()) {
+<mat-form-field appearance="outline" class="flex flex-grow">
+  <mat-label>Is this an individual or group task? Select group that submits</mat-label>
+  <mat-select required [(value)]="taskDefinition.groupSet">
+    @for (gs of unit.groupSets; track gs) {
+  <mat-option [value]="gs">{{ gs.name }}</mat-option>
+}
+    <mat-option value="null">None - Individual Submission</mat-option>
+  </mat-select>
+</mat-form-field>
+}
+
+<div class="flex flex-row gap-10">
+  <mat-form-field appearance="outline" class="basis-1/2">
+    <mat-label>Tutorial Stream - Which tutor provides feedback?</mat-label>
+    <mat-select required [(value)]="taskDefinition.tutorialStream">
+      @for (stream of unit.tutorialStreams; track stream) {
+  <mat-option [value]="stream">{{ stream.name }}</mat-option>
+}
+    </mat-select>
+  </mat-form-field>
+
+  <span class="flex-grow">
+    <strong class="">Related tutorials</strong>
+    <ul>
+      @for (tutorial of taskDefinition.tutorialStream?.tutorialsIn(unit); track tutorial) {
+  <li>
+        {{ tutorial.abbreviation }} {{ tutorial.tutor.name }}
+      </li>
+}
+    </ul>
+  </span>
+</div>

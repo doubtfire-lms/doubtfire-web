@@ -217,7 +217,6 @@
       <div class="panel-heading clearfix">
         <div class="pull-left">
           <h3 class="panel-title">Review Progress of {{selectedStudent.student.name}}</h3>
-          <!--/title-->
           Review the students progress through the unit's tasks.
         </div>
       </div>
@@ -230,7 +229,6 @@
       <div class="panel-heading clearfix">
         <div class="pull-left">
           <h3 class="panel-title">Review Portfolio of {{selectedStudent.student.name}}</h3>
-          <!--/title-->
           View or download portfolio for assessment.
         </div>
       </div>
@@ -238,7 +236,7 @@
         <i class="fa fa-book"></i>
         <p>No Portfolio Submitted</p>
       </div>
-      <pdf-viewer-panel ng-if="project.portfolioAvailable" [pdf-url]="project.portfolioUrl()"> </pdf-viewer-panel>
+      <f-pdf-viewer-panel ng-if="project.portfolioAvailable" [pdf-url]="project.portfolioUrl()"> </pdf-viewer-panel>
     </div>
 
     <div class="panel panel-primary" ng-show="activeTab == tabs.assessPortfolio">
@@ -266,12 +264,6 @@
             <div class="small" ng-hide="project.gradeRationale">Click to add one</div>
           </div>
           <div ng-if="editingRationale" class="clearfix">
-            <!-- <markdown-editor
-              height="200"
-              ng-model="project.gradeRationale"
-              placeholder="Edit rationale..."
-              autofocus="true">
-            </markdown-editor> -->
             <div
               contenteditable
               ng-model="project.gradeRationale"

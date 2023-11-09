@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 import { PdfViewerPanelComponent } from './pdf-viewer-panel.component';
 
 describe('PdfViewerPanelComponent', () => {

@@ -4,6 +4,8 @@ import { HomeComponent } from './home/states/home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
+import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -43,6 +45,95 @@ const HomeState: NgHybridStateDeclaration = {
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
   },
 };
+
+// const unitParentState: NgHybridStateDeclaration = {
+//   name: 'units',
+//   url: '/units/:unit_id',
+//   // template for the parent state
+//   views: {
+//     main: {
+//       component: IndexComponent,
+//     },
+//   },
+//   resolve: {
+//     unit: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       unitService.query({ id: $stateParams.unit_id }).subscribe((unit) => {
+//         console.log($stateParams.unit_id);
+//         console.log(unit);
+//         return unit;
+//       });
+//     },
+//     unitRole: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       globalStateService.unitRolesSubject.subscribe((unitRoles) => {
+//         return unitRoles.find((unitRole) => unitRole.id === $stateParams.unit_id);
+//       });
+//     },
+//   },
+// };
+
+/**
+ * Define the new home state.
+ */
+// const InboxState: NgHybridStateDeclaration = {
+//   name: 'inbox',
+//   url: '/units/:unit_id/inbox/:task_key',
+
+//   params: {
+//     // unitRole: UnitRole,
+//     // taskKey: null,
+//     // taskData:
+//     // unit,
+//   },
+//   views: {
+//     main: {
+//       component: InboxComponent,
+//     },
+//   },
+//   data: {
+//     task: 'Task Inbox',
+//     pageTitle: '_Home_',
+//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
+//   },
+//   resolve: {
+//     unit$: function ($stateParams) {
+//       const unitService = AppInjector.get(UnitService);
+//       const globalState = AppInjector.get(GlobalStateService);
+//       globalState.onLoad(() => {});
+//       console.log($stateParams);
+//       return unitService.get({ id: $stateParams.unit_id });
+//     },
+//     unitRole$: function ($stateParams) {
+//       const globalStateService = AppInjector.get(GlobalStateService);
+
+//       const result = globalStateService.loadedUnitRoles.values.pipe(
+//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
+//       );
+//       return result;
+//     },
+//     taskData$: function () {
+//       const taskService = AppInjector.get(TaskService);
+//       const taskData = {
+//         taskKey: null,
+//         source: null,
+//         selectedTask: null,
+//         onSelectedTaskChange: (task) =>{
+//           const taskKey = task?.taskKey()
+//           $scope.taskData.taskKey = taskKey
+//           setTaskKeyAsUrlParams(task);
+//         }
+//       }
+//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
+//       taskData.taskDefMode = false;
+//       return of(taskData);
+//     },
+//   },
+// };
 
 /**
  * Define the welcome state.
@@ -95,7 +186,43 @@ const EditProfileState: NgHybridStateDeclaration = {
   },
 };
 
+const TeachingPeriodsState: NgHybridStateDeclaration = {
+  name: 'teaching_periods',
+  url: '/admin/teachingperiods',
+  views: {
+    main: {
+      component: TeachingPeriodListComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Teaching Periods',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
+const EulaState: NgHybridStateDeclaration = {
+  name: 'eula',
+  url: '/eula',
+  views: {
+    main: {
+      component: AcceptEulaComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Teaching Periods',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
-export const doubtfireStates = [institutionSettingsState, HomeState, WelcomeState, SignInState, EditProfileState];
+export const doubtfireStates = [
+  institutionSettingsState,
+  TeachingPeriodsState,
+  HomeState,
+  WelcomeState,
+  SignInState,
+  EditProfileState,
+  EulaState,
+];

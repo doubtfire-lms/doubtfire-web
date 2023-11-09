@@ -1,7 +1,7 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
-import { TeachingPeriodBreakService, TeachingPeriodService, Unit, UnitService, User } from './doubtfire-model';
+import { TeachingPeriodBreakService, TeachingPeriodService, Unit } from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
@@ -29,11 +29,11 @@ export class TeachingPeriod extends Entity {
    */
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
-      teaching_period: super.toJson(mappingData, ignoreKeys)
+      teaching_period: super.toJson(mappingData, ignoreKeys),
     };
   }
 
-  public name(): string {
+  public get name(): string {
     return `${this.period} ${this.year}`;
   }
 
@@ -45,16 +45,44 @@ export class TeachingPeriod extends Entity {
     return this.unitsCache.currentValues;
   }
 
-  public addBreak(startDate: Date, weeks: number) : Observable<TeachingPeriodBreak> {
+  public hasUnit(unit: Unit): boolean {
+    return unit && this.unitsCache.has(unit?.id);
+  }
+
+  public hasUnitWithCode(code: string): boolean {
+    return this.unitsCache.currentValues.some((u) => u.code === code);
+  }
+
+  /**
+   * Check if a unit with a matching code exists in this teaching period.
+   *
+   * @param unit unit to check against
+   * @returns true if there is a unit with the same code in this teaching period
+   */
+  public hasUnitLike(unit: Unit): boolean {
+    return unit && this.unitsCache.currentValues.some((u) => u.code === unit.code);
+  }
+
+  public addBreak(startDate: Date, weeks: number): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;
     breakEntity.numberOfWeeks = weeks;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
-    return breakService.create({teaching_period_id: this.id}, {cache: this.breaksCache, entity: breakEntity});
+    return breakService.create({ teaching_period_id: this.id }, { cache: this.breaksCache, entity: breakEntity });
   }
 
-  public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean) : Observable<boolean> {
+  /**
+   * Removes a teaching period break.
+   * @param teachingBreakID the ID of the teaching period break to remove
+   * @returns an observable that emits the teaching period with the removed break, and indicates if any errors occured
+   */
+  public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
+    const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
+    return breakService.delete({ teaching_period_id: this.id, id: teachingBreakID }, { cache: this.breaksCache });
+  }
+
+  public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean): Observable<boolean> {
     const teachingPeriodService: TeachingPeriodService = AppInjector.get(TeachingPeriodService);
 
     return teachingPeriodService.post<boolean>(
@@ -62,13 +90,11 @@ export class TeachingPeriod extends Entity {
         id: this.id,
         new_teaching_period_id: newPeriod.id,
         rollover_inactive: rolloverInactive,
-        search_forward: searchForward
+        search_forward: searchForward,
       },
       {
-        endpointFormat: TeachingPeriodService.rolloverEndpointFormat
+        endpointFormat: TeachingPeriodService.rolloverEndpointFormat,
       }
     );
   }
-
-
 }

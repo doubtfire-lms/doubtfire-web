@@ -1,17 +1,21 @@
 <div>
   <df-unit-tutorials-list [unit]="unit"></df-unit-tutorials-list>
+  @for (stream of unit.tutorialStreams; track stream) {
   <df-unit-tutorials-list
-    *ngFor="let stream of unit.tutorialStreams"
+   
     [unit]="unit"
     [stream]="stream"
   ></df-unit-tutorials-list>
+}
   <button class="new-activity-stream-button" mat-raised-button [matMenuTriggerFor]="activities">
     <mat-icon>add</mat-icon>
     New Tutorial Stream
   </button>
   <mat-menu #activities="matMenu">
-    <button *ngFor="let activityType of activityTypes" mat-menu-item (click)="onClickNewActivity(activityType)">
+    @for (activityType of activityTypes; track activityType) {
+  <button mat-menu-item (click)="onClickNewActivity(activityType)">
       <span>{{ activityType.name }}</span>
     </button>
+}
   </mat-menu>
 </div>

@@ -18,13 +18,18 @@ angular.module('doubtfire.admin.states.units', [])
       roleWhitelist: ['Admin', 'Convenor']
   $stateProvider.state "admin/units", unitsAdminViewStateData
 )
-.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, CreateUnitModal, alertService, GlobalStateService, newUnitService) ->
+.controller("AdministerUnitsState", ($scope, $state, $modal, DoubtfireConstants, CreateUnitModal, alertService, GlobalStateService, newUnitService, CreateNewUnitModal) ->
   GlobalStateService.setView("OTHER")
   $scope.dataLoaded = false
 
   # Map unit role
   GlobalStateService.onLoad () ->
     $scope.unitRoles = GlobalStateService.loadedUnitRoles.currentValues
+
+    GlobalStateService.loadedUnits.values.subscribe(
+      (units) ->
+        $scope.units = units
+    )
 
     newUnitService.query(undefined, {params: { include_in_active: true }}).subscribe({
       next: (success) ->
@@ -59,4 +64,7 @@ angular.module('doubtfire.admin.states.units', [])
 
   $scope.createUnit = ->
     CreateUnitModal.show $scope.units
+  
+  $scope.openCreateModal = ->
+    CreateNewUnitModal.show $scope.units
 )

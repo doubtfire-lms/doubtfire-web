@@ -1,0 +1,88 @@
+<h1 mat-dialog-title>Import Units Into {{ data.teachingPeriod.name }}</h1>
+<div mat-dialog-content>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="unitCode">
+      <th mat-header-cell *matHeaderCellDef>Unit Code</th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceUnit">
+      <th mat-header-cell *matHeaderCellDef>Source Unit</th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <object-select
+          placeholder="New Unit"
+          [source]="unitToImport.relatedUnits"
+          [target]="unitToImport.sourceUnit"
+          (targetChange)="changeSourceUnit(unitToImport, $event)"
+        ></object-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unitName">
+      <th mat-header-cell *matHeaderCellDef>Unit Name</th>
+      <td mat-cell *matCellDef="let unitToImport">
+        @if (unitToImport.sourceUnit) {
+        <span>{{ unitToImport.sourceUnit.name }}</span>
+        } @if (!unitToImport.sourceUnit) {
+        <mat-form-field appearance="outline">
+          <mat-label>Unit Name</mat-label>
+          <input matInput [(ngModel)]="unitToImport.unitName" />
+        </mat-form-field>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="convenor">
+      <th mat-header-cell *matHeaderCellDef>Main Convenor</th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <mat-form-field appearance="outline">
+          <input
+            type="text"
+            matInput
+            [formControl]="unitToImport.convenorFormControl"
+            [matAutocomplete]="auto"
+            [(ngModel)]="unitToImport.convenor"
+          />
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            @for (staff of unitToImport.filteredStaff | async; track staff) {
+            <mat-option [value]="staff"> {{staff.name}} </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <span>{{ statusForUnit(unitToImport) }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let unitToImport">
+        <button mat-button (click)="removeUnitToAdd(unitToImport)">Remove</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+<div mat-dialog-actions class="flex flex-column">
+  <div class="flex flex-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Unit Code(s)</mat-label>
+      <input matInput [(ngModel)]="codesToAdd" />
+    </mat-form-field>
+    <button mat-button color="secondary" (click)="addUnitsByCode()">Add</button>
+    <span class="flex-grow"></span>
+    <button mat-button color="primary" (click)="doImport()">Import</button>
+    <button mat-button (click)="onCloseClick()">Close</button>
+  </div>
+</div>

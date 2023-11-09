@@ -32,10 +32,12 @@ export class ProjectService extends CachedEntityService<Project> {
       {
         keys: ['campus', 'campus_id'],
         toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
-          this.campusService.get(data['campus_id']).subscribe(campus => { entity.campus = campus; });
+          if (data['campus_id']) {
+            return this.campusService.get(data['campus_id']).subscribe(campus => { entity.campus = campus; });
+          }
         },
         toJsonFn: (entity: Project, key: string) => {
-          return entity.campus?.id;
+          return entity.campus ? entity.campus.id : entity.originalJson['camput_id'] ? -1 : null;
         }
       },
       {
@@ -63,7 +65,7 @@ export class ProjectService extends CachedEntityService<Project> {
       'submittedGrade',
       'portfolioFiles',
       'compilePortfolio',
-      'maxPctCopy',
+      'similarityFlag',
       {
         keys: 'hasPortfolio',
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {

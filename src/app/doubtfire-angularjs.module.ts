@@ -10,22 +10,22 @@ import { downgradeInjectable, downgradeComponent } from '@angular/upgrade/static
 
 // Here are the old angular node modules, previously loaded via grunt
 //#region
-import 'node_modules/angular-cookies/angular-cookies.js';
-import 'node_modules/angular-local-storage/dist/angular-local-storage.js';
-import 'node_modules/angular-resource/angular-resource.js';
-import 'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js';
-import 'node_modules/angular-nvd3/dist/angular-nvd3.js';
-import 'node_modules/angular-file-upload/angular-file-upload.js';
-import 'node_modules/ng-file-upload/dist/ng-file-upload-all.min.js';
-import 'node_modules/angular-sanitize/angular-sanitize.js';
-import 'node_modules/ng-csv/build/ng-csv.js';
-import 'node_modules/angular-xeditable/dist/js/xeditable.js';
-import 'node_modules/angular-filter/dist/angular-filter.js';
-import 'node_modules/angular-ui-codemirror/src/ui-codemirror.js';
-import 'node_modules/angular-markdown-filter/markdown.js';
-import 'node_modules/angulartics/dist/angulartics.min.js';
-import 'node_modules/angulartics-google-analytics/lib/angulartics-google-analytics.js';
-import 'node_modules/angular-md5/angular-md5.js';
+import 'angular-cookies/angular-cookies.js';
+import 'angular-local-storage/dist/angular-local-storage.js';
+import 'angular-resource/angular-resource.js';
+import 'angular-ui-bootstrap/ui-bootstrap-tpls.js';
+import 'angular-nvd3/dist/angular-nvd3.js';
+import 'angular-file-upload/angular-file-upload.js';
+import 'ng-file-upload/dist/ng-file-upload-all.min.js';
+import 'angular-sanitize/angular-sanitize.js';
+import 'ng-csv/build/ng-csv.js';
+import 'angular-xeditable/dist/js/xeditable.js';
+import 'angular-filter/dist/angular-filter.js';
+import 'angular-ui-codemirror/src/ui-codemirror.js';
+import 'angular-markdown-filter/markdown.js';
+import 'angulartics/dist/angulartics.min.js';
+import 'angulartics-google-analytics/lib/angulartics-google-analytics.js';
+import 'angular-md5/angular-md5.js';
 
 // Ok... here is what we need to convert!
 
@@ -42,16 +42,12 @@ import 'build/src/app/visualisations/alignment-bullet-chart.js';
 import 'build/src/app/visualisations/achievement-custom-bar-chart.js';
 import 'build/src/app/visualisations/alignment-bar-chart.js';
 import 'build/src/app/visualisations/achievement-box-plot.js';
-import 'build/src/app/tasks/task-submission-viewer/task-submission-viewer.js';
 import 'build/src/app/tasks/task-status-selector/task-status-selector.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
-import 'build/src/app/tasks/modals/plagiarism-report-modal/plagiarism-report-modal.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
 import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/tasks/task-plagiarism-report-viewer/task-plagiarism-report-viewer.js';
-import 'build/src/app/tasks/task-plagiarism-file-viewer/task-plagiarism-file-viewer.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
@@ -59,7 +55,6 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
-import 'build/src/app/tasks/task-definition-editor/task-definition-editor.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
@@ -80,12 +75,8 @@ import 'build/src/app/projects/states/states.js';
 import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
@@ -100,20 +91,11 @@ import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/states/tutorials/tutorials.js';
 import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignment.js';
-import 'build/src/app/admin/modals/teaching-period-settings-modal/teaching-period-settings-modal.js';
-import 'build/src/app/admin/modals/create-break-modal/create-break-modal.js';
-import 'build/src/app/admin/modals/rollover-teaching-period-modal/rollover-teaching-period-modal.js';
 import 'build/src/app/admin/modals/modals.js';
 import 'build/src/app/admin/modals/create-unit-modal/create-unit-modal.js';
 import 'build/src/app/admin/states/states.js';
 import 'build/src/app/admin/states/units/units.js';
 import 'build/src/app/admin/states/users/users.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-breaks/teaching-period-breaks.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-details-editor/teaching-period-details-editor.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/teaching-period-units/teaching-period-units.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/directives/directives.js';
-import 'build/src/app/admin/states/teaching-periods/teaching-period-edit/edit-teaching-period.js';
 import 'build/src/app/admin/admin.js';
 import 'build/src/app/groups/group-selector/group-selector.js';
 import 'build/src/app/groups/group-set-manager/group-set-manager.js';
@@ -126,19 +108,11 @@ import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enr
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
-import 'build/src/app/units/states/plagiarism/directives/unit-student-plagiarism-list/unit-student-plagiarism-list.js';
-import 'build/src/app/units/states/plagiarism/directives/directives.js';
-import 'build/src/app/units/states/plagiarism/plagiarism.js';
-import 'build/src/app/units/states/tasks/inbox/directives/directives.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/tasks.js';
-import 'build/src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.js';
-import 'build/src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.js';
-import 'build/src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.js';
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
-import 'build/src/app/units/states/tasks/offline/offline.js';
 import 'build/src/app/units/states/portfolios/portfolios.js';
 import 'build/src/app/units/states/all/directives/all-units-list/all-units-list.js';
 import 'build/src/app/units/states/all/directives/directives.js';
@@ -150,22 +124,14 @@ import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-deta
 import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
-import 'build/src/app/units/states/edit/directives/unit-tasks-editor/unit-tasks-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
 import 'build/src/app/units/states/rollover/directives/directives.js';
 import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
-import 'build/src/app/units/states/analytics/directives/unit-achievement-stats/unit-achievement-stats.js';
-import 'build/src/app/units/states/analytics/directives/task-status-stats/task-status-stats.js';
-import 'build/src/app/units/states/analytics/directives/unit-stats-download/unit-stats-download.js';
-import 'build/src/app/units/states/analytics/directives/task-completion-stats/task-completion-stats.js';
-import 'build/src/app/units/states/analytics/directives/directives.js';
-import 'build/src/app/units/states/analytics/directives/unit-target-grade-stats/unit-target-grade-stats.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
-import 'build/src/app/common/long-press/on-long-press.js';
 import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/alert-list/alert-list.js';
 import 'build/src/app/common/modals/confirmation-modal/confirmation-modal.js';
@@ -189,10 +155,6 @@ import 'build/src/app/sessions/auth/roles/roles.js';
 import 'build/src/app/sessions/auth/roles/if-role.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
-import 'build/src/app/api/models/models.js';
-import 'build/src/app/api/models/task-similarity.js';
-import 'build/src/app/api/api.js';
-import 'build/src/app/api/resource-plus.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/unauthorised/unauthorised.js';
 import 'build/src/app/errors/states/not-found/not-found.js';
@@ -233,11 +195,10 @@ import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboar
 import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
-import { PdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
+import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
 import { PdfViewerPanelComponent } from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import { StaffTaskListComponent } from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import { StatusIconComponent } from './common/status-icon/status-icon.component';
-import { TaskPlagiarismCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-plagiarism-card/task-plagiarism-card.component';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -249,9 +210,8 @@ import {
   UnitService,
   UserService,
 } from './api/models/doubtfire-model';
-import { FileDownloaderService } from './common/file-downloader/file-downloader';
+import { FileDownloaderService } from './common/file-downloader/file-downloader.service';
 import { CheckForUpdateService } from './sessions/service-worker-updater/check-for-update.service';
-import { TaskAssessorComponent } from './tasks/task-definition-editor/task-assessor/task-assessor.component';
 import { TaskSubmissionService } from './common/services/task-submission.service';
 import { TaskAssessmentModalService } from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
@@ -265,10 +225,26 @@ import { TaskDefinitionService } from './api/services/task-definition.service';
 import { EditProfileDialogService } from './common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import { GroupService } from './api/services/group.service';
 import { UserBadgeComponent } from './common/user-badge/user-badge.component';
+import { TaskStatusCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-status-card/task-status-card.component';
+import { TaskDueCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TaskAssessmentCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import { TaskSubmissionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
+import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
+import { TaskDefinitionEditorComponent } from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
+import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
+import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
+import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
+import { FUsersComponent } from './admin/states/f-users/f-users.component';
+import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
+import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
+import { FTaskSheetViewComponent } from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
+import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
+import { FUnitsComponent } from './admin/states/f-units/f-units.component';
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
-  'doubtfire.api',
   'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
@@ -283,6 +259,10 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
 // Downgrade angular modules that we need...
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
+DoubtfireAngularJSModule.factory(
+  'TeachingPeriodUnitImportService',
+  downgradeInjectable(TeachingPeriodUnitImportService),
+);
 DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(DoubtfireConstants));
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
@@ -311,81 +291,102 @@ DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmi
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
+DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
-  downgradeComponent({ component: TaskCommentComposerComponent })
+  downgradeComponent({ component: TaskCommentComposerComponent }),
 );
 DoubtfireAngularJSModule.directive('objectSelect', downgradeComponent({ component: ObjectSelectComponent }));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({ component: HeaderComponent }));
 DoubtfireAngularJSModule.directive('userBadge', downgradeComponent({ component: UserBadgeComponent }));
 DoubtfireAngularJSModule.directive(
-  'intelligentDiscussionPlayer',
-  downgradeComponent({ component: IntelligentDiscussionPlayerComponent })
+  'fTaskSubmissionCard',
+  downgradeComponent({ component: TaskSubmissionCardComponent }),
 );
+
+DoubtfireAngularJSModule.directive('fFooter', downgradeComponent({ component: FooterComponent }));
+DoubtfireAngularJSModule.directive(
+  'intelligentDiscussionPlayer',
+  downgradeComponent({ component: IntelligentDiscussionPlayerComponent }),
+);
+DoubtfireAngularJSModule.directive('fUnitAnalytics', downgradeComponent({ component: UnitAnalyticsComponent }));
 DoubtfireAngularJSModule.directive('extensionComment', downgradeComponent({ component: ExtensionCommentComponent }));
+DoubtfireAngularJSModule.directive('fUnitTaskList', downgradeComponent({ component: FUnitTaskListComponent }));
+DoubtfireAngularJSModule.directive('fTaskDetailsView', downgradeComponent({ component: FTaskDetailsViewComponent }));
+DoubtfireAngularJSModule.directive('fTaskSheetView', downgradeComponent({ component: FTaskSheetViewComponent }));
 DoubtfireAngularJSModule.directive('campusList', downgradeComponent({ component: CampusListComponent }));
 DoubtfireAngularJSModule.directive('activityTypeList', downgradeComponent({ component: ActivityTypeListComponent }));
+DoubtfireAngularJSModule.directive('fTaskStatusCard', downgradeComponent({ component: TaskStatusCardComponent }));
+DoubtfireAngularJSModule.directive('fTasksViewer', downgradeComponent({ component: TasksViewerComponent }));
+DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({ component: InboxComponent }));
+DoubtfireAngularJSModule.directive('fTaskDueCard', downgradeComponent({ component: TaskDueCardComponent }));
+DoubtfireAngularJSModule.directive('fUsers', downgradeComponent({ component: FUsersComponent }));
+DoubtfireAngularJSModule.directive(
+  'fTaskAssessmentCard',
+  downgradeComponent({ component: TaskAssessmentCardComponent }),
+);
 DoubtfireAngularJSModule.directive(
   'institutionSettings',
-  downgradeComponent({ component: InstitutionSettingsComponent })
+  downgradeComponent({ component: InstitutionSettingsComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'commentBubbleAction',
-  downgradeComponent({ component: CommentBubbleActionComponent })
+  downgradeComponent({ component: CommentBubbleActionComponent }),
 );
 DoubtfireAngularJSModule.directive('unitTutorialsList', downgradeComponent({ component: UnitTutorialsListComponent }));
 DoubtfireAngularJSModule.directive(
   'unitTutorialsManager',
-  downgradeComponent({ component: UnitTutorialsManagerComponent })
+  downgradeComponent({ component: UnitTutorialsManagerComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'unitStudentsEditor',
-  downgradeComponent({ component: UnitStudentsEditorComponent })
+  downgradeComponent({ component: UnitStudentsEditorComponent }),
 );
 DoubtfireAngularJSModule.directive(
+  'fTaskDefinitionEditor',
+  downgradeComponent({ component: TaskDefinitionEditorComponent }),
+);
+DoubtfireAngularJSModule.directive('fUnitTaskEditor', downgradeComponent({ component: UnitTaskEditorComponent }));
+DoubtfireAngularJSModule.directive(
   'studentTutorialSelect',
-  downgradeComponent({ component: StudentTutorialSelectComponent })
+  downgradeComponent({ component: StudentTutorialSelectComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'studentCampusSelect',
-  downgradeComponent({ component: StudentCampusSelectComponent })
+  downgradeComponent({ component: StudentCampusSelectComponent }),
 );
 DoubtfireAngularJSModule.directive('taskListItem', downgradeComponent({ component: TaskListItemComponent }));
 DoubtfireAngularJSModule.directive(
   'createPortfolioTaskListItem',
-  downgradeComponent({ component: CreatePortfolioTaskListItemComponent })
+  downgradeComponent({ component: CreatePortfolioTaskListItemComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'taskDescriptionCard',
-  downgradeComponent({ component: TaskDescriptionCardComponent })
+  downgradeComponent({ component: TaskDescriptionCardComponent }),
 );
 
-DoubtfireAngularJSModule.directive('taskAssessor', downgradeComponent({ component: TaskAssessorComponent }));
 DoubtfireAngularJSModule.directive(
   'taskAssessmentComment',
-  downgradeComponent({ component: TaskAssessmentCommentComponent })
+  downgradeComponent({ component: TaskAssessmentCommentComponent }),
 );
 DoubtfireAngularJSModule.directive(
   'taskSubmissionHistory',
-  downgradeComponent({ component: TaskSubmissionHistoryComponent })
+  downgradeComponent({ component: TaskSubmissionHistoryComponent }),
 );
+DoubtfireAngularJSModule.directive('fUnits', downgradeComponent({ component: FUnitsComponent }));
 
 // Global configuration
 DoubtfireAngularJSModule.directive(
   'taskCommentsViewer',
-  downgradeComponent({ component: TaskCommentsViewerComponent })
+  downgradeComponent({ component: TaskCommentsViewerComponent }),
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
-DoubtfireAngularJSModule.directive('pdfViewer', downgradeComponent({ component: PdfViewerComponent }));
+DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component: fPdfViewerComponent }));
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));
-DoubtfireAngularJSModule.directive(
-  'taskPlagiarismCard',
-  downgradeComponent({ component: TaskPlagiarismCardComponent })
-);
 
 // Global configuration
 
@@ -393,7 +394,7 @@ DoubtfireAngularJSModule.directive(
 const otherwiseConfigBlock = [
   '$urlRouterProvider',
   '$locationProvider',
-  ($urlRouterProvider: any, $locationProvider: any) => {
+  ($urlRouterProvider, $locationProvider) => {
     $locationProvider.hashPrefix('');
     $urlRouterProvider.otherwise('/home');
   },

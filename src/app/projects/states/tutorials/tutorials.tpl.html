@@ -42,7 +42,7 @@
           ng-class="{'info': tutorial == project.tutorial}"
         >
           <td ng-show="unit.tutorialStreamsCache.size > 0">{{tutorial.tutorialStream.name || 'All'}}</td>
-          <td>{{tutorial.campus.name || 'All'}}</td>
+          <td>{{tutorial.campus ? tutorial.campus.name : 'All'}}</td>
           <td>{{tutorial.abbreviation}}</td>
           <td>{{tutorial.meetingDay}}</td>
           <td>{{tutorial.meetingTime | date: 'shortTime'}}</td>

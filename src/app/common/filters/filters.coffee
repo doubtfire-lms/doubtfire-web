@@ -46,7 +46,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('studentsWithPlagiarism', ->
   (input) ->
     if input
-      _.filter  input, (student) -> (student?) && student.maxPctCopy > 0
+      _.filter  input, (student) -> (student?) && student.similarityFlag
     else
       input
 )
@@ -70,7 +70,7 @@ angular.module("doubtfire.common.filters", [])
 .filter('taskWithPlagiarism', ->
   (input) ->
     if input
-      _.filter input, (task) -> (task?) && task.pctSimilar > 0
+      _.filter input, (task) -> (task?) && task.similarityFlag
     else
       input
 )
@@ -136,6 +136,24 @@ angular.module("doubtfire.common.filters", [])
     if _.isString(text) && text.length > 0 && input
       matchText = text.toLowerCase()
       _.filter  input, (project) -> (project?) && project.unit.matches(matchText)
+    else
+      input
+)
+
+.filter('unitFilter', ->
+  (input, text) ->
+    if _.isString(text) && text.length > 0 && input
+      matchText = text.toLowerCase()
+      _.filter input, (unit) -> (unit?) && unit.matches(matchText)
+    else
+      input
+)
+
+.filter('teachingPeriodFilter', ->
+  (input, text) ->
+    if _.isString(text) && text.length > 0 && input
+      matchText = text.toLowerCase()
+      _.filter  input, (tp) -> (tp?) && tp.period.toLowerCase().indexOf(matchText) >= 0
     else
       input
 )
@@ -228,6 +246,11 @@ angular.module("doubtfire.common.filters", [])
     )
 )
 
+.filter('tasksForGroupset', ->
+  (input, groupSet) ->
+    return input unless input?
+    return input.filter (task) -> (task.definition.groupSet == groupSet) || (!task.definition.groupSet? && !groupSet?)
+)
 
 .filter('paginateAndSort', ($filter) ->
   (input, pagination, tableSort) ->

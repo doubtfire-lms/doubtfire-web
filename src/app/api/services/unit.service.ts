@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit } from 'src/app/api/models/doubtfire-model';
+import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
@@ -32,7 +32,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
-    private groupService: GroupService,
+    private groupService: GroupService
   ) {
     super(httpClient, API_URL);
 
@@ -73,14 +73,25 @@ export class UnitService extends CachedEntityService<Unit> {
         }
       },
       {
+        keys: ['mainConvenorUser', 'main_convenor_user_id'],
+        toEntityFn: (data, key, entity) => {
+          return AppInjector.get(UserService).cache.get(data[key]);
+        },
+        toJsonFn: (unit: Unit, key: string) => {
+          return unit.mainConvenor?.user.id;
+        }
+      },
+      {
         keys: ['teachingPeriod', 'teaching_period_id'],
         toEntityFn: (data, key, entity) => {
           if ( data['teaching_period_id'] ) {
-            return this.teachingPeriodService.cache.get(data['teaching_period_id']);
+            const teachingPeriod = this.teachingPeriodService.cache.get(data['teaching_period_id']);
+            teachingPeriod?.unitsCache.add(entity);
+            return teachingPeriod;
           } else { return undefined; }
         },
         toJsonFn: (entity: Unit, key: string) => {
-          return entity.teachingPeriod?.id;
+          return entity.teachingPeriod ? entity.teachingPeriod.id : undefined;
         }
       },
       {
@@ -89,7 +100,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.startDate.toISOString().slice(0,10);
+          return entity.startDate.toISOString().slice(0, 10);
         }
       },
       {
@@ -98,7 +109,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.endDate.toISOString().slice(0,10);;
+          return entity.endDate.toISOString().slice(0, 10);
         }
       },
       {
@@ -107,7 +118,7 @@ export class UnitService extends CachedEntityService<Unit> {
           return new Date(data[key]);
         },
         toJsonFn: (entity, key) => {
-          return entity.portfolioAutoGenerationDate?.toISOString().slice(0,10);;
+          return entity.portfolioAutoGenerationDate?.toISOString().slice(0, 10);
         }
       },
       'assessmentEnabled',
@@ -267,4 +278,3 @@ export class UnitService extends CachedEntityService<Unit> {
     return httpClient.get<any>(url);
   }
 }
-

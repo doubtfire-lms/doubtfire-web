@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild, Input, AfterViewInit } from '@ang
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { timer, Subscription } from 'rxjs';
 import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';

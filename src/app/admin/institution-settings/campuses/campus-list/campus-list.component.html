@@ -1,77 +1,102 @@
 <div class="campus-list-container">
   <div class="header">
-    <div>
-      <h3>Campuses</h3>
+    <div class="mt-10">
+      <h1 class="mb-1">Campuses</h1>
       <p>Add new campuses or modify existing ones</p>
     </div>
   </div>
-  <table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
-
+  <table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let campus">
-        <div *ngIf="!editing(campus) else edit">
-          {{campus.name}}
+        @if (!editing(campus)) {
+        <div>
+          {{ campus.name }}
         </div>
+        } @else {
+
+        <div class="edit-actions right">
+          <span>
+            <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteCampus(campus)" aria-label="delete campus">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+
+        }
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="name" placeholder="Name">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="name" placeholder="Name" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="name" placeholder="Name" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Abbreviation Column -->
     <ng-container [formGroup]="formData" matColumnDef="abbreviation">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
       <td mat-cell *matCellDef="let campus">
-        <div *ngIf="!editing(campus) else edit">
-          {{campus.abbreviation}}
+        @if (!editing(campus)) {
+        <div>
+          {{ campus.abbreviation }}
         </div>
+        } @else { #edit| }
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Mode Column -->
     <ng-container [formGroup]="formData" matColumnDef="mode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Default Sync Mode </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Default Sync Mode</th>
       <td mat-cell *matCellDef="let campus">
-        <div *ngIf="!editing(campus) else edit">
-          {{campus.mode | titlecase}}
+        @if (!editing(campus)) {
+        <div>
+          {{ campus.mode | titlecase }}
         </div>
+        } @else { #edit| }
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Default Sync Mode</mat-label>
             <mat-select required formControlName="mode">
-              <mat-option *ngFor="let mode of syncModes" [value]="mode">
-                {{mode | titlecase }}
+              @for (mode of syncModes; track mode) {
+              <mat-option [value]="mode">
+                {{ mode | titlecase }}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Default Sync Mode</mat-label>
           <mat-select required formControlName="mode">
-            <mat-option *ngFor="let mode of syncModes" [value]="mode">
-              {{mode | titlecase }}
+            @for (mode of syncModes; track mode) {
+            <mat-option [value]="mode">
+              {{ mode | titlecase }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </td>
@@ -79,20 +104,19 @@
 
     <!-- Active Column -->
     <ng-container [formGroup]="formData" matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Active </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
       <td mat-cell *matCellDef="let campus">
-        <div *ngIf="!editing(campus) else edit">
-          <mat-checkbox [checked]="campus.active" disabled>
-          </mat-checkbox>
+        @if (!editing(campus)) {
+        <div>
+          <mat-checkbox [checked]="campus.active" disabled> </mat-checkbox>
         </div>
+        } @else { #edit| }
         <ng-template #edit>
-          <mat-checkbox [checked]="campus.active" formControlName="active">
-          </mat-checkbox>
+          <mat-checkbox [checked]="campus.active" formControlName="active"> </mat-checkbox>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-checkbox formControlName="active">
-        </mat-checkbox>
+        <mat-checkbox formControlName="active"> </mat-checkbox>
       </td>
     </ng-container>
 
@@ -100,16 +124,18 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let campus">
-        <div class="right" *ngIf="!editing(campus) else edit">
+        @if (!editing(campus)) {
+        <div class="right">
           <!-- <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button> -->
           <!-- <mat-menu #menu="matMenu"> -->
-            <button mat-icon-button (click)="flagEdit(campus)" aria-label="edit campus">
-              <mat-icon>edit</mat-icon>
-            </button>
+          <button mat-icon-button (click)="flagEdit(campus)" aria-label="edit campus">
+            <mat-icon>edit</mat-icon>
+          </button>
           <!-- </mat-menu> -->
         </div>
+        } @else { #edit| }
         <ng-template #edit>
           <div class="edit-actions right">
             <span>
@@ -136,7 +162,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
     <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>

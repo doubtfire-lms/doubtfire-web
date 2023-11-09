@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.tpl.html'
   replace: true
-  controller: ($scope, newGroupSetService, gradeService, alertService, CsvResultModal) ->
+  controller: ($scope, newGroupSetService, gradeService, alertService, CsvResultModal, fileDownloaderService) ->
 
     $scope.addGroupSet = ->
       groupSet = newGroupSetService.createInstanceFrom({}, $scope.unit)
@@ -85,5 +85,5 @@ angular.module('doubtfire.units.states.edit.directives.unit-group-set-editor', [
     $scope.downloadGroupCSV = ->
       fileDownloaderService.downloadFile($scope.selectedGroupSet.groupCSVUploadUrl(), "#{$scope.unit.code}-group-sets.csv")
     $scope.downloadGroupStudentCSV = ->
-      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupStudentCSVUploadUrl(), "#{unit.code}-#{$scope.selectedGroupSet.name}-students.csv")
+      fileDownloaderService.downloadFile($scope.selectedGroupSet.groupStudentCSVUploadUrl(), "#{$scope.unit.code}-#{$scope.selectedGroupSet.name}-students.csv")
 )

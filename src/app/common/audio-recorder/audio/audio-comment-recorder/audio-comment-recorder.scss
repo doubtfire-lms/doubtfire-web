@@ -1,19 +1,4 @@
-.btn-circle-xl {
-  user-select: none;
-  background-color: white;
-  border-radius: 72px;
-  color: #fff;
-  height: 20px;
-  width: 20px;
-  transition: width 0.1s, height 0.1s;
-  border: none;
-  outline: none;
 
-  mat-icon {
-    font-size: 16px;
-    vertical-align: middle;
-  }
-}
 
 #audioDiscussionTemplate {
   display: flex;
@@ -26,36 +11,9 @@
   bottom: 15%;
 }
 
-.mat-progress-spinner circle,
-.mat-spinner circle {
+.mat-mdc-progress-spinner circle,
+.mat-mdc-progress-spinner circle {
   stroke: white;
-}
-
-.btn-circle {
-  width: 30px;
-  height: 30px;
-  margin-right: 5px;
-  padding: 6px 0px;
-  background-color: transparent;
-  border-radius: 15px;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.42857;
-  border: 1px solid #bdbdbd;
-  box-shadow: 0.5px 0.5px 1px #bdbdbd;
-}
-
-.btn-circle:disabled {
-  opacity: 0.2;
-  border: none;
-}
-
-.btn-circle:active {
-  box-shadow: 0px 0px 0px #bdbdbd;
-}
-
-.btn-circle:focus {
-  outline: 0;
 }
 
 #button-wrapper {

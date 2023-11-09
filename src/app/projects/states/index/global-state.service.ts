@@ -1,4 +1,5 @@
-import { Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { UIRouter } from '@uirouter/angular';
 import { EntityCache } from 'ngx-entity-service';
 import { BehaviorSubject, Observable, Subject, skip, take } from 'rxjs';
@@ -41,7 +42,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> =
+  public currentViewAndEntitySubject$: BehaviorSubject<{ viewType: ViewType; entity: Project | Unit | UnitRole }> =
     new BehaviorSubject<{
       viewType: ViewType;
       entity: Project | Unit | UnitRole;
@@ -50,17 +51,20 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The unit roles loaded from the server
    */
-  private loadedUnitRoles: EntityCache<UnitRole>;
+  public loadedUnitRoles: EntityCache<UnitRole>;
 
   /**
    * The loaded units.
    */
-  private loadedUnits: EntityCache<Unit>;
+  public loadedUnits: EntityCache<Unit>;
 
   /**
    * The loaded projects.
    */
   private currentUserProjects: EntityCache<Project>;
+
+  private _showFooter = false;
+  private _showFooterWarning = false;
 
   /**
    * A Unit Role for when a tutor is viewing a Project.
@@ -94,7 +98,8 @@ export class GlobalStateService implements OnDestroy {
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
     @Inject(UIRouter) private router: UIRouter,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
+    private mediaObserver: MediaObserver
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -109,6 +114,75 @@ export class GlobalStateService implements OnDestroy {
         this.router.stateService.go('sign_in');
       }
     }, 800);
+
+    // this is a hack to workaround horrific IOS "feature"
+    // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
+
+    window.addEventListener('orientationchange', this.resetHeight.bind(this));
+    window.addEventListener('resize', this.resetHeight.bind(this));
+    this.resetHeight();
+  }
+
+  private resetHeight() {
+    setTimeout(() => {
+      const vh = window.innerHeight * 0.01;
+
+      if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
+        document.body.style.setProperty('--vh', `${vh - 0.2}px`);
+      } else {
+        if (this._showFooter && !this._showFooterWarning) {
+          document.body.style.setProperty('--vh', `${vh - 0.85}px`);
+        } else {
+          document.body.style.setProperty('--vh', `${vh - 0.85 - 0.2}px`);
+        }
+      }
+    }, 0);
+  }
+
+  public get isInboxState(): boolean {
+    return this._showFooter;
+  }
+
+  public setInboxState() {
+    this._showFooter = true;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+
+  public goHome() {
+    this.showHeader();
+    document.body.style.setProperty('background-color', '#f5f5f5');
+  }
+
+  public setNotInboxState() {
+    this._showFooter = false;
+    // set background color to white
+    document.body.style.setProperty('background-color', '#fff');
+  }
+
+  public showFooter(): void {
+    this._showFooter = true;
+    this.resetHeight();
+  }
+
+  public hideFooter(): void {
+    this._showFooter = false;
+    this.resetHeight();
+  }
+
+  // called when we need to set the footer to be a bit taller
+  // to account for the alert div
+  public showFooterWarning(): void {
+    if (!this._showFooter) return;
+    this._showFooterWarning = true;
+    this.resetHeight();
+  }
+
+  // called when we need to set the footer to be normal sized
+  public hideFooterWarning(): void {
+    if (!this._showFooter) return;
+    this._showFooterWarning = false;
+    this.resetHeight();
   }
 
   public signOut(): void {
@@ -122,7 +196,7 @@ export class GlobalStateService implements OnDestroy {
   public ngOnDestroy(): void {
     this.isLoadingSubject.complete();
     this.showHideHeader.complete();
-    this.currentViewAndEntitySubject.complete();
+    this.currentViewAndEntitySubject$.complete();
   }
 
   public loadGlobals(): void {
@@ -134,7 +208,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading campuses.', 6000);
-          console.log(response);
         },
       });
 
@@ -145,7 +218,6 @@ export class GlobalStateService implements OnDestroy {
         },
         error: (response) => {
           this.alerts.add('danger', 'Unable to access service. Failed loading teaching periods.', 6000);
-          console.log(response);
         },
       });
     });
@@ -201,7 +273,7 @@ export class GlobalStateService implements OnDestroy {
    * Switch to a new view, and its associated entity object
    */
   public setView(kind: ViewType, entity?: any): void {
-    this.currentViewAndEntitySubject.next({ viewType: kind, entity: entity });
+    this.currentViewAndEntitySubject$.next({ viewType: kind, entity: entity });
   }
 
   /**

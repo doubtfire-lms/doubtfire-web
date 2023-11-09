@@ -14,7 +14,6 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
   @ViewChild('discussionPromptComposerCanvas', { static: true }) canvasRef: ElementRef;
   @ViewChild('discussionPromptComposerAudio', { static: true }) audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
-  audio: HTMLAudioElement;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean = false;

@@ -1,5 +1,5 @@
 .app-splash-screen {
-  background: #f0f2f5;
+  background: #fff;
   position: fixed;
   top: 0;
   left: 0;
@@ -25,14 +25,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.app-logo {
-  background: url('../../../assets/images/logo.svg');
-  background-repeat: no-repeat;
-  max-width: 15%;
-  background-position: center;
-  background-size: contain;
-  width: 100vw;
-  height: 100vw;
 }

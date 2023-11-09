@@ -2,3 +2,45 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+a h4 {
+    font-weight: 400;
+    // font-family: 'Grotesk';
+    font-size: 14px;
+}
+
+a {
+    color: black
+}
+
+a h4,
+a p {
+    margin: 0;
+    line-height: 1.2em;
+}
+
+a p {
+  color: (lighten($color: #000000, $amount: 15));
+  font-size: 12px;
+}
+
+#placeholder1 {
+    margin-left: -4px;
+    line-height: 1.2em;
+    width: 200px;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-bottom: 3px;
+}
+
+#placeholder2 {
+    margin-left: -4px;
+    line-height: 1.2em;
+    width: 200px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+}
+
+

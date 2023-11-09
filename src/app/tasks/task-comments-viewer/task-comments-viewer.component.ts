@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { EntityCache } from 'ngx-entity-service';
 import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
 import { Task, Project, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -30,7 +29,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     private taskCommentService: TaskCommentService,
     private constants: DoubtfireConstants,
     @Inject(commentsModal) private commentsModalRef: any,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
   ) {
     const self = this;
     this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
@@ -55,8 +54,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
           this.task,
           {
             cache: this.task.commentCache,
-            constructorParams: this.task
-          }
+            constructorParams: this.task,
+          },
         )
         .subscribe((comments) => {
           // this.task.comments = comments;
@@ -124,7 +123,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
         this.alerts.add('danger', 'I cannot upload that file - only images, audio, and PDFs.', 4000);
       }
     });
-    console.log("implement - check map comments");
+    console.log('implement - check map comments');
     // this.task.comments = this.ts.mapComments(this.task.comments);
   }
 
@@ -136,7 +135,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
       (tc: TaskComment) => {},
       (error: any) => {
         this.alerts.add('danger', error || error?.message, 2000);
-      }
+      },
     );
   }
 

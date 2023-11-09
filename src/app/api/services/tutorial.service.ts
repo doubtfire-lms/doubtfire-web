@@ -29,10 +29,12 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       {
         keys: ['campus','campus_id'],
         toEntityOp: (data: object, key: string, entity: Tutorial, params?: any) => {
-          this.campusService.get(data['campus_id']).subscribe(campus => {entity.campus = campus;});
+          this.campusService.get(data['campus_id']).subscribe((campus) => {
+            entity.campus = campus;
+          });
         },
         toJsonFn: (entity: Tutorial, key: string) => {
-          return entity.campus?.id;
+          return entity.campus ? entity.campus.id : -1;
         }
       },
       'capacity',
@@ -53,7 +55,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
         toJsonFn: (entity: Tutorial, key: string) => {
-          return entity.tutorialStream?.abbreviation;
+          return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
         }
       },
 
@@ -73,7 +75,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
   }
 
   public override keyForJson(json: any): string | number {
-    if ( json.tutorial_id ) {
+    if (json.tutorial_id) {
       return json.tutorial_id;
     } else {
       return super.keyForJson(json);
@@ -84,7 +86,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     const pathIds = {
       unitId: project.unit.id,
       tutorialAbbreviation: tutorial.abbreviation,
-      projectId: project.id
+      projectId: project.id,
     };
 
     const options: RequestOptions<Tutorial> = {

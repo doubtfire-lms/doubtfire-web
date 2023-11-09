@@ -3,10 +3,14 @@ import { Entity, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Grade, GroupSet, TutorialStream, Unit, User } from './doubtfire-model';
+import { Grade, GroupSet, TutorialStream, Unit } from './doubtfire-model';
+import { TaskDefinitionService } from '../services/task-definition.service';
+
+export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
+
+export type SimilarityCheck = { key: string; type: string; pattern: string };
 
 export class TaskDefinition extends Entity {
-
   id: number;
   seq: number;
   abbreviation: string;
@@ -17,9 +21,9 @@ export class TaskDefinition extends Entity {
   targetDate: Date;
   dueDate: Date;
   startDate: Date;
-  uploadRequirements: {key: string, name: string, type: string}[];
-  tutorialStream: TutorialStream;
-  plagiarismChecks: {key: string, type: string, pattern: string}[];
+  uploadRequirements: UploadRequirement[];
+  tutorialStream: TutorialStream = null;
+  plagiarismChecks: SimilarityCheck[] = [];
   plagiarismReportUrl: string;
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;
@@ -32,6 +36,7 @@ export class TaskDefinition extends Entity {
   maxQualityPts: number;
   overseerImageId: number;
   assessmentEnabled: boolean;
+  mossLanguage: string = 'moss c';
 
   readonly unit: Unit;
 
@@ -46,6 +51,62 @@ export class TaskDefinition extends Entity {
     };
   }
 
+  /**
+   * Save the task definition
+   */
+  public save(): Observable<TaskDefinition> {
+    const svc = AppInjector.get(TaskDefinitionService);
+
+    if (this.isNew) {
+      // TODO: add progress modal
+      return svc.create(
+        {
+          unitId: this.unit.id,
+        },
+        {
+          entity: this,
+          cache: this.unit.taskDefinitionCache,
+          constructorParams: this.unit,
+        }
+      );
+    } else {
+      return svc.update(
+        {
+          unitId: this.unit.id,
+          id: this.id,
+        },
+        { entity: this }
+      );
+    }
+  }
+
+  private originalSaveData: string;
+
+  /**
+   * To check if things have changed, we need to get the initial save data... as it
+   * isn't empty by default. We can then use
+   * this to check if there are changes.
+   *
+   * @param mapping the mapping to get changes
+   */
+  public setOriginalSaveData(mapping: EntityMapping<TaskDefinition>) {
+    if (!this.originalSaveData) {
+      this.originalSaveData = JSON.stringify(this.toJson(mapping));
+    }
+  }
+
+  public hasChanges<T extends Entity>(mapping: EntityMapping<T>): boolean {
+    if (!this.originalSaveData) {
+      return false;
+    }
+
+    return this.originalSaveData != JSON.stringify(this.toJson(mapping));
+  }
+
+  public get isNew(): boolean {
+    return !this.id;
+  }
+
   public get unitId(): number {
     return this.unit.id;
   }
@@ -56,6 +117,10 @@ export class TaskDefinition extends Entity {
 
   public localDeadlineDate(): Date {
     return this.dueDate;
+  }
+
+  public matches(text: string): boolean {
+    return this.abbreviation.toLowerCase().indexOf(text) !== -1 || this.name.toLowerCase().indexOf(text) !== -1;
   }
 
   /**
@@ -73,12 +138,16 @@ export class TaskDefinition extends Entity {
 
   public getTaskPDFUrl(asAttachment: boolean = false): string {
     const constants = AppInjector.get(DoubtfireConstants);
-    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_pdf.json${ asAttachment ? "?as_attachment=true" : ""}`;
+    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_pdf.json${
+      asAttachment ? '?as_attachment=true' : ''
+    }`;
   }
 
   public getTaskResourcesUrl(asAttachment: boolean = false) {
     const constants = AppInjector.get(DoubtfireConstants);
-    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources.json${ asAttachment ? "?as_attachment=true" : ""}`;
+    return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources.json${
+      asAttachment ? '?as_attachment=true' : ''
+    }`;
   }
 
   public get targetGradeText(): string {
@@ -86,38 +155,51 @@ export class TaskDefinition extends Entity {
   }
 
   public hasPlagiarismCheck(): boolean {
-    return this.plagiarismChecks.length > 0;
+    return this.plagiarismChecks?.length > 0;
+  }
+
+  public get needsMoss(): boolean {
+    return this.uploadRequirements.some((upreq) => upreq.type === 'code' && upreq.tiiCheck);
   }
 
   public get taskSheetUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_sheet`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_sheet`;
   }
 
   public get taskResourcesUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_resources`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_resources`;
   }
 
   public get taskAssessmentResourcesUploadUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_assessment_resources`;
   }
 
   public getTaskAssessmentResourcesUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_assessment_resources.json`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/task_assessment_resources.json`;
   }
 
   public deleteTaskSheet(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap( () => this.hasTaskSheet = false ));
+    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap(() => (this.hasTaskSheet = false)));
   }
 
   public deleteTaskResources(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskResourcesUploadUrl).pipe(tap( () => this.hasTaskResources = false ));
+    return httpClient.delete(this.taskResourcesUploadUrl).pipe(tap(() => (this.hasTaskResources = false)));
   }
 
   public deleteTaskAssessmentResources(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskAssessmentResourcesUploadUrl).pipe(tap( () => this.hasTaskAssessmentResources = false ));
+    return httpClient
+      .delete(this.taskAssessmentResourcesUploadUrl)
+      .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
   }
-
 }

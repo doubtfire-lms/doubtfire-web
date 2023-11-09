@@ -22,13 +22,10 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
       })
 
     $scope.changeMainConvenor = (staff) ->
-      oldConvenor = $scope.unit.mainConvenor
-      $scope.unit.mainConvenor = staff
-      newUnitService.update($scope.unit).subscribe({
+      $scope.unit.changeMainConvenor(staff).subscribe({
         next: (response) ->
           alertService.add("success", "Main convenor changed", 2000)
         error: (response) ->
-          $scope.unit.mainConvenor = oldConvenor
           alertService.add("danger", response, 6000)
       })
 
@@ -38,7 +35,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-staff-editor', [])
       $scope.unit.staff = [] unless $scope.unit.staff
 
       if staff.id?
-        newUnitRoleService.create({ unit_id: $scope.unit.id, user_id: staff.id, role: 'Tutor' }, {cache: $scope.unit.staffCache}).subscribe({
+        $scope.unit.addStaff(staff).subscribe({
           next:  (response) -> alertService.add('success', "Staff member added", 2000)
           error: (response) -> alertService.add('danger', response, 6000)
         })

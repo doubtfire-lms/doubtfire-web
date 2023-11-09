@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-4">
+  <div class="flex-grow flex flex-row gap-4">
+    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.restrictStatusUpdates">
+      Restrict updates
+    </mat-checkbox>
+    <span class="basis-1/2">
+      This task will be locked once it goes into a staff-allocated status. Students will not be able to resubmit, even
+      if placed on the fix status.
+    </span>
+  </div>
+
+  <div class="flex-grow flex flex-row gap-4">
+    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.isGraded">Graded</mat-checkbox>
+    <span class="basis-1/2">
+      Provide a grade along with the complete or discuss status. We recommend avoiding this practice.
+    </span>
+  </div>
+
+  <div class="flex-grow flex flex-row gap-4">
+    <mat-form-field appearance="outline" class="basis-1/2">
+      <mat-label>Maximum Score</mat-label>
+      <input
+        matInput
+        min="0"
+        max="100"
+        type="number"
+        [(value)]="taskDefinition.maxQualityPts"
+        [formControl]="scoreControl"
+      />
+    </mat-form-field>
+    <span class="basis-1/2">Provide a score alongside the task status. We recommend avoiding this practice.</span>
+  </div>
+</div>

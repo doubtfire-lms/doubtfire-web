@@ -6,7 +6,8 @@ import API_URL from 'src/app/config/constants/apiURL';
 
 interface SettingsResponseFormat {
   externalName: string;
-  overseer_enabled: boolean;
+  overseerEnabled: boolean;
+  tiiEnabled: boolean;
 }
 
 interface SignOutUrlResponseFormat {
@@ -31,7 +32,15 @@ export class DoubtfireConstants {
   // initialise exernal name to loading.
   public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
 
+  /**
+   * Whether or not the Overseer feature is enabled.
+   */
   public IsOverseerEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  /**
+   * Whether or not the TurnItIn integration is enabled.
+   */
+  public IsTiiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   private readonly settingsUrl: string = `${this.API_URL}/settings`;
 
@@ -53,11 +62,10 @@ export class DoubtfireConstants {
 
   // publish update to ExternalName when get request finishes.
   private loadExternalName() {
-    this.http
-      .get<SettingsResponseFormat>(this.settingsUrl)
-      .subscribe((result) => {
-        this.ExternalName.next(result.externalName);
-        this.IsOverseerEnabled.next(result.overseer_enabled);
-      });
+    this.http.get<SettingsResponseFormat>(this.settingsUrl).subscribe((result) => {
+      this.ExternalName.next(result.externalName);
+      this.IsOverseerEnabled.next(result.overseerEnabled);
+      this.IsTiiEnabled.next(result.tiiEnabled);
+    });
   }
 }
