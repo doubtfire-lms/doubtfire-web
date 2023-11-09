@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="start center">
+  @if (unit) {
   <div
-    *ngIf="unit"
     class="bg-formatif-blue text-white rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 flex items-center"
     style="font-size: 14px"
     matTooltip="{{ unit.name }}"
@@ -10,19 +10,21 @@
     <span class="text-md">{{ unit?.code }}</span>
     <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
   </div>
+  } @if (!unit) {
 
-  <ng-container *ngIf="!unit">
-    <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-      <span fxLayout="row" fxLayoutAlign="start center">
-        <span>Select Unit</span>
-        <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-      </span>
-    </button>
-  </ng-container>
+  <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
+    <span fxLayout="row" fxLayoutAlign="start center">
+      <span>Select Unit</span>
+      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+    </span>
+  </button>
+
+  }
 </div>
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
-  <button *ngIf="media.isActive('xs')" uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
+  @if (media.isActive('xs')) {
+  <button uiSref="home" fxLayout="row" fxLayoutAlign="start center" mat-menu-item>
     <mat-icon
       uiSref="home"
       style="margin-right: 20px"
@@ -33,43 +35,39 @@
     <div class="unitName">Home</div>
     <span fxFlex></span>
   </button>
-  <mat-divider *ngIf="media.isActive('xs')"></mat-divider>
+  } @if (media.isActive('xs')) {
+  <mat-divider></mat-divider>
+  }
 
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
-  <ng-container *ngFor="let unitRole of unitRoles">
-    <div
-      *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
-      uiSref="units/tasks/inbox"
-      [uiParams]="{ unitId: unitRole.unit.id }"
-      mat-menu-item
-      class="w-full"
-    >
-      <div class="flex items-center w-full">
-        <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
-        <div class="grow"></div>
-        <f-chip>
-          {{ unitRole.unit.code }}
-        </f-chip>
-      </div>
+  @for (unitRole of unitRoles; track unitRole) { @if (!unitRole.unit.teachingPeriod ||
+  unitRole.unit.teachingPeriod?.active) {
+  <div uiSref="units/tasks/inbox" [uiParams]="{ unitId: unitRole.unit.id }" mat-menu-item class="w-full">
+    <div class="flex items-center w-full">
+      <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
+      <div class="grow"></div>
+      <f-chip>
+        {{ unitRole.unit.code }}
+      </f-chip>
     </div>
-  </ng-container>
+  </div>
+  } }
 
   <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
   <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
-  <ng-container *ngFor="let project of projects">
-    <button
-      *ngIf="!project.unit.teachingPeriod || project.unit.teachingPeriod.active"
-      uiSref="projects/dashboard"
-      [uiParams]="{ projectId: project.id, taskAbbr: '' }"
-      fxLayout="row"
-      fxLayoutAlign="start center"
-      mat-menu-item
-    >
-      <div class="unitName">{{ project.unit.name }}</div>
-      <span fxFlex style="flex-grow: 1"></span>
-      <f-chip>
-        {{ project.unit.code }}
-      </f-chip>
-    </button>
-  </ng-container>
+  @for (project of projects; track project) { @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
+  <button
+    uiSref="projects/dashboard"
+    [uiParams]="{ projectId: project.id, taskAbbr: '' }"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    mat-menu-item
+  >
+    <div class="unitName">{{ project.unit.name }}</div>
+    <span fxFlex style="flex-grow: 1"></span>
+    <f-chip>
+      {{ project.unit.code }}
+    </f-chip>
+  </button>
+  } }
 </mat-menu>

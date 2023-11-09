@@ -1,10 +1,9 @@
-<div
-  *ngIf="
-    (!task?.inFinalState() || (task?.inTimeExceeded() && !task?.isPastDeadline())) && !task?.inAwaitingFeedbackState()
-  "
->
+@if ( (!task?.inFinalState() || (task?.inTimeExceeded() && !task?.isPastDeadline())) && !task?.inAwaitingFeedbackState()
+) {
+<div>
   <!--Only show this if it matters... not in final or waiting for tutor input-->
-  <mat-card appearance="outlined" *ngIf="task?.isDueSoon() && !task?.pastDueDate()">
+  @if (task?.isDueSoon() && !task?.isPastDueDate()) {
+  <mat-card appearance="outlined">
     <!--Due soon-->
     <mat-card-header>
       <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
@@ -28,9 +27,11 @@
       </p>
     </mat-card-content>
   </mat-card>
+  }
 
   <!--/is due soon-->
-  <mat-card appearance="outlined" *ngIf="task?.betweenDueDateAndDeadlineDate()">
+  @if (task?.betweenDueDateAndDeadlineDate()) {
+  <mat-card appearance="outlined">
     <mat-card-header class="bg-yellow-600 text-white">
       <mat-card-title class="flex items-center mb-4"
         ><mat-icon>warning</mat-icon>
@@ -59,9 +60,11 @@
       </p>
     </mat-card-content>
   </mat-card>
+  }
 
   <!--/between due date and deadline-->
-  <mat-card appearance="outlined" *ngIf="task?.isPastDeadline()">
+  @if (task?.isPastDeadline()) {
+  <mat-card appearance="outlined">
     <mat-card-header class="bg-red-600 text-white">
       <mat-card-title class="flex items-center mb-4"
         ><mat-icon>error</mat-icon>
@@ -89,7 +92,9 @@
       </p>
     </mat-card-content>
   </mat-card>
+  }
 </div>
+}
 <!--/past deadline-->
 
 <mat-card appearance="outlined" [hidden]="!task?.inAwaitingFeedbackState()">

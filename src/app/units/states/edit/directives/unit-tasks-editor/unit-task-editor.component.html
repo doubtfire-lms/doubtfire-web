@@ -53,15 +53,17 @@
       <ng-container matColumnDef="taskDefAction" sticky>
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let taskDefinition">
-          <button
+          @if (taskDefinitionHasChanges(taskDefinition)) {
+<button
             mat-icon-button
             aria-label="save task definition"
             color="primary"
             (click)="saveTaskDefinition(taskDefinition)"
-            *ngIf="taskDefinitionHasChanges(taskDefinition)"
+           
           >
             <mat-icon>save</mat-icon>
           </button>
+}
           <button
             mat-icon-button
             aria-label="delete task definition"
@@ -98,11 +100,13 @@
       <span class="flex-grow"></span>
       <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
     </span>
-    <f-task-definition-editor
-      *ngIf="selectedTaskDefinition"
+    @if (selectedTaskDefinition) {
+<f-task-definition-editor
+     
       [taskDefinition]="selectedTaskDefinition"
       [unit]="unit"
     ></f-task-definition-editor>
+}
   </div>
   <!-- <div class="flex flex-col gap-4">
     <h3>Batch Upload Tasks</h3>

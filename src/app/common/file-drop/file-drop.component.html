@@ -15,13 +15,18 @@
     (click)="fileUpload.click()"
     [disabled]="uploadProgress"
   >
-    <mat-spinner *ngIf="uploadProgress" [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
-    <span *ngIf="!uploadProgress">Choose file</span>
+    @if (uploadProgress) {
+    <mat-spinner [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
+    } @if (!uploadProgress) {
+    <span>Choose file</span>
+    }
   </button>
   <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
     <div class="flex flex-col w-full">
       <div class="flex ml-4 h-[48px] items-center">
-        <mat-icon class="mr-2" *ngIf="file?.name">upload_file</mat-icon>
+        @if (file?.name) {
+        <mat-icon class="mr-2">upload_file</mat-icon>
+        }
         <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
         {{ uploadProgress }}
         <button
@@ -30,12 +35,18 @@
           mat-icon-button
           (click)="uploadProgress ? cancelUpload() : upload()"
         >
-          <mat-icon *ngIf="!uploadProgress">upload</mat-icon>
-          <mat-icon *ngIf="uploadProgress">cancel</mat-icon>
+          @if (!uploadProgress) {
+          <mat-icon>upload</mat-icon>
+          } @if (uploadProgress) {
+          <mat-icon>cancel</mat-icon>
+          }
         </button>
       </div>
-      <mat-progress-bar *ngIf="uploadProgress" mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
-      <span *ngIf="!uploadProgress" class="h-[4px]"></span>
+      @if (uploadProgress) {
+      <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
+      } @if (!uploadProgress) {
+      <span class="h-[4px]"></span>
+      }
     </div>
   </div>
 </div>

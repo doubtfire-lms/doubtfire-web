@@ -11,10 +11,10 @@ import { TasksViewerService } from '../../../tasks-viewer.service';
 })
 export class FUnitTaskListComponent implements OnInit {
   @Input() unitTasks: TaskDefinition[];
-  filteredTasks: TaskDefinition[] = null; // list of tasks which match the taskSearch term
+  filteredTasks: TaskDefinition[]; // list of tasks which match the taskSearch term
   taskSearch: string = ''; // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
-  private gradeNames: string[] = Grade.GRADES;
+  protected gradeNames: string[] = Grade.GRADES;
   selectedTaskDef: TaskDefinition;
   taskSelected: boolean;
 

@@ -1,10 +1,11 @@
+@if (showHeader) {
 <mat-toolbar
   [ngClass]="{ inbox: globalState.isInboxState }"
-  *ngIf="showHeader"
   class="flex items-center justify-start"
   style="min-height: 85px"
 >
-  <a uiSref="home" *ngIf="!media.isActive('xs')" class="pt-4">
+  @if (!media.isActive('xs')) {
+  <a uiSref="home" class="pt-4">
     <mat-icon
       uiSref="home"
       style="margin-right: 20px; margin-left: 20px"
@@ -13,6 +14,7 @@
       aria-label="Formatif logo"
     ></mat-icon>
   </a>
+  }
 
   <unit-dropdown [unit]="currentUnit" [unitRoles]="filteredUnitRoles" [projects]="projects" class="mr-2">
   </unit-dropdown>
@@ -27,6 +29,7 @@
 
   <span class="grow"></span>
 
+  @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
   <button
     #menuState="matMenuTrigger"
     mat-icon-button
@@ -34,23 +37,27 @@
     fxShow.gt-md="true"
     fxShow="true"
     [matMenuTriggerFor]="menu"
-    *ngIf="currentUser.role === 'Admin' || currentUser.role === 'Convenor'"
   >
     <mat-icon>admin_panel_settings</mat-icon>
   </button>
+  }
   <mat-menu #menu="matMenu">
-    <button mat-menu-item uiSref="institutionsettings" *ngIf="currentUser.role === 'Admin'">
+    @if (currentUser.role === 'Admin') {
+    <button mat-menu-item uiSref="institutionsettings">
       <mat-icon matListItemIcon>business</mat-icon>
       Institution Settings
     </button>
+    }
     <button mat-menu-item uiSref="admin/units">
       <mat-icon matListItemIcon>school</mat-icon>
       Manage Units
     </button>
-    <button mat-menu-item uiSref="admin/users" *ngIf="currentUser.role === 'Admin'">
+    @if (currentUser.role === 'Admin') {
+    <button mat-menu-item uiSref="admin/users">
       <mat-icon matListItemIcon>people</mat-icon>
       Manage Users
     </button>
+    }
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menu2">
@@ -75,3 +82,4 @@
     </button>
   </mat-menu>
 </mat-toolbar>
+}

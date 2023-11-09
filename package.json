@@ -9,13 +9,13 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "run-s -l build:angular1 build:angular16",
+    "build": "run-s -l build:angular1 build:angular17",
     "build:angular1": "grunt build",
-    "build:angular16": "ng build",
+    "build:angular17": "ng build",
     "lint:fix": "ng lint --fix",
     "lint": "ng lint",
-    "serve:angular16": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --host 0.0.0.0",
-    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular16",
+    "serve:angular17": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --host 0.0.0.0",
+    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular17",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --delete-output-path=true --optimization=true --configuration production --output-path dist",
     "deploy": "run-s -l build:angular1 deploy:build2api",

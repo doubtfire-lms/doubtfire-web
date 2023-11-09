@@ -22,11 +22,14 @@ export class InboxComponent implements OnInit {
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
-  subs$: Observable<any>;
+  subs$: Observable<unknown>;
 
   private inboxStartSize$ = new Subject<number>();
   private dragMove$ = new Subject<{ event: CdkDragMove; div: HTMLDivElement }>();
   private dragMoveAudited$;
+
+  protected filters;
+  protected showSearchOptions;
 
   public taskSelected = false;
 
@@ -40,7 +43,7 @@ export class InboxComponent implements OnInit {
     private selectedTask: SelectedTaskService,
     public mediaObserver: MediaObserver,
     public fileDownloader: FileDownloaderService,
-    private router: UIRouter
+    private router: UIRouter,
   ) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
       this.visiblePdfUrl = url;
@@ -77,7 +80,7 @@ export class InboxComponent implements OnInit {
         }
         moveEvent.div.style.width = `${width}px`;
         moveEvent.event.source.reset();
-      })
+      }),
     );
     this.subs$ = merge(this.dragMoveAudited$, of(true));
     window.dispatchEvent(new Event('resize'));
@@ -94,7 +97,8 @@ export class InboxComponent implements OnInit {
     event.source.reset();
   }
 
-  stoppedDragging(event: CdkDragEnd, div: HTMLDivElement) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  stoppedDragging(event: CdkDragEnd, _div: HTMLDivElement) {
     event.source.element.nativeElement.classList.remove('hovering');
   }
 

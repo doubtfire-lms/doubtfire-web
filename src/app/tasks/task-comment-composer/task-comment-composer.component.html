@@ -9,7 +9,8 @@
   (emojiSelect)="addEmoji($event)"
 ></emoji-mart>
 
-<div id="replyContainer" *ngIf="task" [hidden]="originalComment === null">
+@if (task) {
+<div id="replyContainer" [hidden]="originalComment === null">
   <div>
     <div class="replying-wrap">
       Replying to:
@@ -21,9 +22,11 @@
     <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
   </div>
 </div>
+}
 
 <mat-action-list [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)" dense id="emojiSearchResults">
-  <mat-list-item *ngFor="let emoji of emojiSearchResults" (click)="emojiSelected(emoji.native)">
+  @for (emoji of emojiSearchResults; track emoji) {
+  <mat-list-item (click)="emojiSelected(emoji.native)">
     <div fxLayout="row" fxLayoutAlign="start center">
       <ngx-emoji style="align-items: center" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
       <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
@@ -32,6 +35,7 @@
       </div>
     </div>
   </mat-list-item>
+}
 </mat-action-list>
 
 <form
@@ -45,8 +49,9 @@
     <div class="composer-action-group" [@shrinkgrow]="$expandInput | async">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
-        <button
-          *ngIf="$expandInput | async"
+        @if ($expandInput | async) {
+<button
+         
           (click)="$expandInput.next(false); recording = false"
           matTooltip="Expand action buttons"
           matTooltipShowDelay="400"
@@ -58,6 +63,7 @@
         >
           <mat-icon>{{ recording ? 'cancel' : 'chevron_right' }}</mat-icon>
         </button>
+}
 
         <!-- <button
           [hidden]="shrinkGrowToggle"
@@ -73,9 +79,10 @@
           <mat-icon>crisis_alert</mat-icon>
         </button> -->
 
-        <button
+        @if (isStaff) {
+<button
           [hidden]="$expandInput | async"
-          *ngIf="isStaff"
+         
           matTooltip="Create a Real Talk discussion"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -86,6 +93,7 @@
         >
           <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
         </button>
+}
 
         <button
           [hidden]="$expandInput | async"
@@ -136,11 +144,13 @@
         placeholder="Aa"
         name="commentComposer"
       ></div>
-      <audio-comment-recorder
+      @if (recording) {
+<audio-comment-recorder
         style="display: flex; justify-content: center; width: 100%"
-        *ngIf="recording"
+       
         [task]="task"
       ></audio-comment-recorder>
+}
       <div id="innerButtons" [hidden]="recording">
         <mat-icon
           matTooltip="Choose an emoji"

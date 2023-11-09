@@ -10,9 +10,27 @@
     <ng-container [formGroup]="formData" matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType); else edit">
+        @if (!editing(activityType)) {
+        <div>
           {{ activityType.name }}
         </div>
+        } @else {
+
+        <div class="edit-actions right">
+          <span>
+            <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteActivity(activityType)" aria-label="delete activity type">
+              <mat-icon color="primary">delete</mat-icon>
+            </button>
+          </span>
+        </div>
+
+        }
         <ng-template #edit>
           <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="name" placeholder="Name" />
@@ -30,9 +48,11 @@
     <ng-container [formGroup]="formData" matColumnDef="abbreviation">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType); else edit">
+        @if (!editing(activityType)) {
+        <div>
           {{ activityType.abbreviation }}
         </div>
+        } @else { #edit| }
         <ng-template #edit>
           <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
@@ -50,11 +70,13 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let activityType">
-        <div class="right" *ngIf="!editing(activityType); else edit">
+        @if (!editing(activityType)) {
+        <div class="right">
           <button mat-icon-button (click)="flagEdit(activityType)" aria-label="edit activity type">
             <mat-icon>edit</mat-icon>
           </button>
         </div>
+        } @else { #edit| }
         <ng-template #edit>
           <div class="edit-actions right">
             <span>

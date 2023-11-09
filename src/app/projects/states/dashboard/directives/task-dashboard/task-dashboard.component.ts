@@ -37,7 +37,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
-    public selectedTaskService: SelectedTaskService
+    public selectedTaskService: SelectedTaskService,
   ) {}
 
   ngOnInit(): void {
@@ -53,8 +53,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       labels: this.taskService.statusLabels,
       class: this.taskService.statusClass,
     };
-
-    console.log("task dashboard url: ", this.pdfUrl)
   }
 
   ngOnChanges(changes: SimpleChanges) {

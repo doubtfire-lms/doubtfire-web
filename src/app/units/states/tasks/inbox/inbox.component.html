@@ -1,8 +1,8 @@
 <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
   <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
+      @if (taskData) {
       <df-staff-task-list
-        *ngIf="taskData"
         [isNarrow]="narrowTaskInbox"
         [showSearchOptions]="showSearchOptions"
         [filters]="filters"
@@ -10,9 +10,10 @@
         [unit]="unit"
         [unitRole]="unitRole"
       ></df-staff-task-list>
+      }
     </div>
+    @if (subs$ | async) {
     <div
-      *ngIf="subs$ | async"
       id="leftResizerEl"
       #leftResizerEl
       class="resizer"
@@ -22,6 +23,7 @@
       (cdkDragEnded)="stoppedDragging($event, inboxpanel)"
       (cdkDragStarted)="startedDragging($event, inboxpanel)"
     ></div>
+    }
 
     <div fxFlex class="inbox-panel">
       <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
@@ -45,8 +47,8 @@
 
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
   <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
+    @if (taskData) {
     <df-staff-task-list
-      *ngIf="taskData"
       [isNarrow]="false"
       [showSearchOptions]="showSearchOptions"
       [filters]="filters"
@@ -54,6 +56,7 @@
       [unit]="unit"
       [unitRole]="unitRole"
     ></df-staff-task-list>
+    }
   </div>
   <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
     <div class="flex items-center">

@@ -1,4 +1,8 @@
 <a (click)="openCommentsModal()">
-  <img [src]="resourceUrl | safe" width="100%" height="100%" *ngIf="comment.commentType === 'image' && resourceUrl" />
-  <p *ngIf="comment.commentType === 'pdf'"><i class="fa fa-file-pdf-o"></i> view pdf</p>
+  @if (comment.commentType === 'image' && resourceUrl) {
+<img [src]="resourceUrl | safe" width="100%" height="100%" />
+}
+  @if (comment.commentType === 'pdf') {
+<p><i class="fa fa-file-pdf-o"></i> view pdf</p>
+}
 </a>

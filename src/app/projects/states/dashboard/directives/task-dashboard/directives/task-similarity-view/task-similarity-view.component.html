@@ -9,10 +9,12 @@
   </div>
 
   <mat-accordion multi>
-    <ng-container *ngFor="let similarity of task?.similarityCache.values | async">
+    @for (similarity of task?.similarityCache.values | async; track similarity) {
+  
       <h1 class="mat-headline"></h1>
-      <mat-expansion-panel
-        *ngFor="let part of similarity.parts; let i = index"
+      @for (part of similarity.parts; track part; let i = $index) {
+  <mat-expansion-panel
+       
         hideToggle
         (opened)="part.panelOpenState = true"
         (closed)="part.panelOpenState = false"
@@ -22,8 +24,9 @@
             {{ similarity.friendlyTypeName }}
           </mat-panel-title>
           <mat-panel-description> {{ part.description }} </mat-panel-description>
-          <button
-            *ngIf="i === 0"
+          @if (i === 0) {
+<button
+           
             [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
             mat-icon-button
             aria-label="Flag similarities"
@@ -33,13 +36,18 @@
               similarity.flagged ? 'flag_circle' : 'check_circle'
             }}</mat-icon>
           </button>
+}
         </mat-expansion-panel-header>
-        <f-file-viewer
-          *ngIf="part.panelOpenState"
+        @if (part.panelOpenState) {
+<f-file-viewer
+         
           [fileType]="part.format"
           [src]="similarity.fileUrl(part.idx)"
         ></f-file-viewer>
+}
       </mat-expansion-panel>
-    </ng-container>
+}
+    
+}
   </mat-accordion>
 </div>

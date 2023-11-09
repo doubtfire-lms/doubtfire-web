@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { aboutDoubtfireModal, calendarModal } from 'src/app/ajs-upgraded-providers';
 import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
 import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
-import { AuthenticationService, Project, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
+import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 import { Subscription } from 'rxjs';
 import { MediaObserver } from '@angular/flex-layout';
 
@@ -14,7 +15,7 @@ import { MediaObserver } from '@angular/flex-layout';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  task: any;
+  task: Task;
   data: { isTutor: boolean } = {
     isTutor: false,
   };
@@ -36,10 +37,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
     private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
-    private globalState: GlobalStateService,
+    protected globalState: GlobalStateService,
     private userService: UserService,
     private authService: AuthenticationService,
-    private media: MediaObserver
+    protected media: MediaObserver,
   ) {}
 
   ngOnInit(): void {
@@ -48,8 +49,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (shouldShow) => {
           this.showHeader = shouldShow;
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         error: (err) => {},
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -63,7 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .filter((role) => this.isUniqueRole(role));
         },
         error: (err) => {},
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -73,7 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.projects = projects;
         },
         error: (err) => {},
-      })
+      }),
     );
 
     // get the current active unit or project
@@ -91,8 +93,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.currentProject = null;
           }
         },
-        error: (err) => {},
-      })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        error: (_err) => {},
+      }),
     );
   }
 
@@ -101,7 +104,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isUniqueRole = (unit) => {
-    let units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
     return units.length == 1 || unit.role == 'Tutor';
   };
 

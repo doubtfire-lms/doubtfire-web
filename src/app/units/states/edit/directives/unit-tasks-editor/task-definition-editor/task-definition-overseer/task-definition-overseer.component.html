@@ -6,7 +6,9 @@
   <mat-form-field class="flex-grow" appearance="outline">
     <mat-label>Docker Image</mat-label>
     <mat-select [(value)]="taskDefinition.overseerImageId" [disabled]="!overseerEnabled">
-      <mat-option *ngFor="let image of images | async" [value]="image.id">{{ image.description }}</mat-option>
+      @for (image of images | async; track image) {
+  <mat-option [value]="image.id">{{ image.description }}</mat-option>
+}
     </mat-select>
     <mat-hint>Docker image for Overseer</mat-hint>
   </mat-form-field>

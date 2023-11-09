@@ -25,8 +25,12 @@
   <ng-container matColumnDef="tii-check" sticky>
     <th style="width: 20%" mat-header-cell *matHeaderCellDef>Check Similarity</th>
     <td style="width: 20%" mat-cell *matCellDef="let upreq">
-      <mat-checkbox *ngIf="upreq.type === 'document'" [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
-      <mat-checkbox *ngIf="upreq.type === 'code'" [(ngModel)]="upreq.tiiCheck">Moss</mat-checkbox>
+      @if (upreq.type === 'document') {
+<mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
+}
+      @if (upreq.type === 'code') {
+<mat-checkbox [(ngModel)]="upreq.tiiCheck">Moss</mat-checkbox>
+}
     </td>
   </ng-container>
 
@@ -34,10 +38,12 @@
   <ng-container matColumnDef="flag-pct" sticky>
     <th style="width: 20%" mat-header-cell *matHeaderCellDef>Flag At</th>
     <td style="width: 20%" mat-cell *matCellDef="let upreq">
-      <mat-form-field appearance="outline" *ngIf="upreq.type === 'document' && upreq.tiiCheck" style="width: 7em">
+      @if (upreq.type === 'document' && upreq.tiiCheck) {
+<mat-form-field appearance="outline" style="width: 7em">
         <input matInput [(ngModel)]="upreq.tiiPct" type="number" />
         <span matTextSuffix>&nbsp;%</span>
       </mat-form-field>
+}
     </td>
   </ng-container>
 
@@ -68,7 +74,8 @@
   <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
 </table>
 
-<div class="flex-grow flex flex-row gap-4" *ngIf="taskDefinition.needsMoss">
+@if (taskDefinition.needsMoss) {
+<div class="flex-grow flex flex-row gap-4">
   <mat-form-field appearance="outline" class="basis-1/2">
     <mat-label>Language used for Moss checks</mat-label>
     <mat-select [(ngModel)]="taskDefinition.mossLanguage">
@@ -83,3 +90,4 @@
     <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
   </mat-form-field>
 </div>
+}

@@ -28,11 +28,13 @@
 <h4>Step 2. Optionally play back prompts.</h4>
 <mat-action-list id="recordingList">
   <h3 mat-subheader>Discussion Prompts</h3>
-  <button *ngFor="let recording of recordings; let i = index" mat-list-item (click)="playRecording(getUrl(recording))">
+  @for (recording of recordings; track recording; let i = $index) {
+  <button mat-list-item (click)="playRecording(getUrl(recording))">
     <mat-icon mat-list-icon>play_arrow_rounded</mat-icon>
     <h4 mat-line>Prompt {{i + 1}}</h4>
     <p mat-line> Click to play recording </p>
   </button>
+}
 </mat-action-list>
 
 <h4>Step 3. Send.</h4>

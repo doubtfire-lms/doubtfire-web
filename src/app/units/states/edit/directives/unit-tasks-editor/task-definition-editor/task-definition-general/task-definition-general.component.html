@@ -2,7 +2,9 @@
   <mat-form-field appearance="outline" class="basis-1/3">
     <mat-label>Grade where task appears</mat-label>
     <mat-select [(ngModel)]="taskDefinition.targetGrade" required>
-      <mat-option *ngFor="let grade of grades" [value]="grade.value">{{ grade.viewValue }}</mat-option>
+      @for (grade of grades; track grade) {
+  <mat-option [value]="grade.value">{{ grade.viewValue }}</mat-option>
+}
     </mat-select>
   </mat-form-field>
 

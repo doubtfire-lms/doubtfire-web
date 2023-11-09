@@ -17,9 +17,9 @@
           (ngModelChange)="applyFilters()"
         />
       </div>
+      @if (collapsable) {
       <button
         class="flex-none flex items-center"
-        *ngIf="collapsable"
         matTooltip="Filter options"
         matTooltipPosition="below"
         matTooltipShowDelay="400"
@@ -29,10 +29,9 @@
       >
         <mat-icon>{{ showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
       </button>
-
+      } @if (!isTaskDefMode) {
       <button
         class="flex-none flex items-center"
-        *ngIf="!isTaskDefMode"
         matTooltip="Refresh the task inbox"
         matTooltipPosition="below"
         matTooltipShowDelay="400"
@@ -43,10 +42,9 @@
       >
         <mat-icon>refresh</mat-icon>
       </button>
-
+      } @if (isTaskDefMode) {
       <button
         class="flex items-center"
-        *ngIf="isTaskDefMode"
         mat-icon-button
         matTooltip="More options"
         matTooltipPosition="below"
@@ -56,6 +54,7 @@
       >
         <mat-icon>more_vert</mat-icon>
       </button>
+      }
       <mat-menu #menu="matMenu">
         <button
           mat-menu-item
@@ -95,9 +94,11 @@
                   (selectionChange)="taskDefinitionIdChanged()"
                 >
                   <mat-option value="" [hidden]="taskData.taskDefMode">All Task Definitions</mat-option>
-                  <mat-option *ngFor="let td of unit.taskDefinitionCache.values | async" [value]="td.id">
+                  @for (td of unit.taskDefinitionCache.values | async; track td) {
+                  <mat-option [value]="td.id">
                     <span class="truncate">{{ td.abbreviation + ' - ' + td.name }}</span>
                   </mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
               <button
@@ -119,9 +120,11 @@
                 name="tutorial"
                 (selectionChange)="tutorialIdChanged()"
               >
-                <mat-option *ngFor="let t of studentFilter" [value]="t.id">
+                @for (t of studentFilter; track t) {
+                <mat-option [value]="t.id">
                   <span class="truncate">{{ t.inboxDescription }}</span>
                 </mat-option>
+                }
               </mat-select>
             </mat-form-field>
             <button disabled mat-icon-button aria-label="Sort by tutorial icon" (click)="toggleTutorialSort()">
@@ -151,9 +154,11 @@
     </button>
   </div>
 
-  <div *ngIf="!isNarrow">
+  @if (!isNarrow) {
+  <div>
     <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: { collapsable: true, mobile: false }"></ng-container>
   </div>
+  }
 
   <div class="center-task-list" [hidden]="!loading || isNarrow">
     <mat-icon>hourglass_bottom</mat-icon>
@@ -164,17 +169,18 @@
   </div>
 
   <!--/search-options-->
-  <cdk-virtual-scroll-viewport *ngIf="filteredTasks" class="tasks-viewport scrollable" itemSize="60">
+  @if (filteredTasks) {
+  <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
     <mat-list>
       <mat-list-item
         class="clearfix"
         *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
         style="padding: 0; height: 60px"
       >
+        @if (task) {
         <div
           class="w-full"
           id="{{ task.taskKeyToIdString() }}"
-          *ngIf="task"
           [ngClass]="{
             selected: isSelectedTask(task),
             'item-content': task.statusClass()
@@ -211,9 +217,11 @@
                 </p>
               </div> -->
             </div>
-            <div *ngIf="task.hasGrade()" matTooltip="The grade assigned to the submission" matTooltipPosition="above">
+            @if (task.hasGrade()) {
+            <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
               <mat-chip-option style="margin-right: 6px" [hidden]="isNarrow">{{ task.gradeDesc() }} </mat-chip-option>
             </div>
+            }
             <status-icon
               [hidden]="isNarrow"
               matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
@@ -222,13 +230,16 @@
               [status]="task.status"
               class="ml-3"
             ></status-icon>
-            <div class="overflow" [hidden]="isNarrow" *ngIf="!isTaskDefMode">
+            @if (!isTaskDefMode) {
+            <div class="overflow" [hidden]="isNarrow">
               <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
                 <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
-                <div *ngIf="task.pinned" class="pin-container">
+                @if (task.pinned) {
+                <div class="pin-container">
                   <mat-icon>push_pin</mat-icon>
                 </div>
+                }
               </button>
               <button
                 [hidden]="!task.hover"
@@ -250,12 +261,15 @@
                 </button>
               </mat-menu>
             </div>
+            }
           </div>
           <!--/badges-->
         </div>
+        }
       </mat-list-item>
 
       <!--/task-->
     </mat-list>
   </cdk-virtual-scroll-viewport>
+  }
 </div>
