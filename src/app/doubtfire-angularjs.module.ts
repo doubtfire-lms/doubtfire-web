@@ -235,6 +235,7 @@ import { TaskDefinitionEditorComponent } from './units/states/edit/directives/un
 import { UnitAnalyticsComponent } from './units/states/analytics/unit-analytics-route.component';
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import { TeachingPeriodUnitImportService } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import { FUsersComponent } from './admin/states/f-users/f-users.component';
 import { FUnitTaskListComponent } from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
 import { FTaskDetailsViewComponent } from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
@@ -290,6 +291,7 @@ DoubtfireAngularJSModule.factory('TaskSubmission', downgradeInjectable(TaskSubmi
 DoubtfireAngularJSModule.factory('GlobalStateService', downgradeInjectable(GlobalStateService));
 DoubtfireAngularJSModule.factory('TransitionHooksService', downgradeInjectable(TransitionHooksService));
 DoubtfireAngularJSModule.factory('EditProfileService', downgradeInjectable(EditProfileDialogService));
+DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -392,7 +394,7 @@ DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component:
 const otherwiseConfigBlock = [
   '$urlRouterProvider',
   '$locationProvider',
-  ($urlRouterProvider: any, $locationProvider: any) => {
+  ($urlRouterProvider, $locationProvider) => {
     $locationProvider.hashPrefix('');
     $urlRouterProvider.otherwise('/home');
   },

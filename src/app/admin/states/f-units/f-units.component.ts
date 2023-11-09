@@ -1,5 +1,4 @@
-import { Component, Inject, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { createUnitModal } from 'src/app/ajs-upgraded-providers';
+import { Component, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { Unit } from 'src/app/api/models/unit';
 import { UnitRole } from 'src/app/api/models/unit-role';
 import { UnitService } from 'src/app/api/services/unit.service';
@@ -7,6 +6,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { CreateNewUnitModal } from '../../modals/create-new-unit-modal/create-new-unit-modal.component';
 
 @Component({
   selector: 'f-units',
@@ -37,7 +37,7 @@ export class FUnitsComponent implements AfterViewInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    @Inject(createUnitModal) private createUnitModal: any,
+    private createUnitDialog: CreateNewUnitModal,
     private unitService: UnitService,
   ) {
     this.dataload = false;
@@ -47,7 +47,7 @@ export class FUnitsComponent implements AfterViewInit, OnDestroy {
     this.dataSource = new MatTableDataSource(this.unitService.cache.currentValuesClone());
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data, filter: string) => data.matches(filter);
 
     this.subscriptions.push(
       this.unitService.cache.values.subscribe((units) => {
@@ -61,7 +61,7 @@ export class FUnitsComponent implements AfterViewInit, OnDestroy {
   }
 
   createUnit() {
-    this.createUnitModal.show(this.dataSource);
+    this.createUnitDialog.show();
   }
 
   applyFilter(event: Event) {

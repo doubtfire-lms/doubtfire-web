@@ -40,6 +40,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { MatDialogModule as MatDialogModuleNew } from '@angular/material/dialog';
 import { AlertComponent } from 'src/app/common/services/alert.service';
 
 import { setTheme } from 'ngx-bootstrap/utils';
@@ -73,7 +74,6 @@ import {
   gradeTaskModalProvider,
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
-  CreateUnitModalProvider,
 } from './ajs-upgraded-providers';
 import {
   TaskCommentComposerComponent,
@@ -210,6 +210,8 @@ import { FileDropComponent } from './common/file-drop/file-drop.component';
 import { UnitTaskEditorComponent } from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import { FUsersComponent } from './admin/states/f-users/f-users.component';
 
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
+import { CreateNewUnitModalContentComponent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -312,6 +314,8 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
     InboxComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
+    CreateNewUnitModal,
+    CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
     NewTeachingPeriodDialogComponent,
@@ -383,6 +387,9 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModuleNew,
   ],
   // Services we provide
   providers: [
@@ -452,7 +459,7 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
-    CreateUnitModalProvider,
+    CreateNewUnitModal,
   ],
 })
 

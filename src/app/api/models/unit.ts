@@ -95,7 +95,6 @@ export class Unit extends Entity {
     return `${this.code} (${this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()})`;
   }
 
-
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
   }
@@ -114,7 +113,7 @@ export class Unit extends Entity {
       },
       {
         cache: this.staffCache,
-      }
+      },
     );
   }
 
@@ -222,9 +221,9 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: { start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: { teaching_period_id: number}): Observable<Unit>;
-  public rolloverTo(body: any): Observable<Unit>  {
+  public rolloverTo(body: { start_date: Date; end_date: Date }): Observable<Unit>;
+  public rolloverTo(body: { teaching_period_id: number }): Observable<Unit>;
+  public rolloverTo(body: any): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 
     return unitService.create(
@@ -234,7 +233,7 @@ export class Unit extends Entity {
       {
         endpointFormat: unitService.rolloverEndpoint,
         body: body,
-      }
+      },
     );
   }
 
@@ -337,7 +336,7 @@ export class Unit extends Entity {
       {
         cache: groupSet.groupsCache,
         constructorParams: this,
-      }
+      },
     );
   }
 
@@ -384,7 +383,7 @@ export class Unit extends Entity {
 
     return tutorialStreamService.create(
       { unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined },
-      { cache: this.tutorialStreamsCache }
+      { cache: this.tutorialStreamsCache },
     );
   }
 
@@ -403,7 +402,7 @@ export class Unit extends Entity {
               }
             });
           }
-        })
+        }),
       );
   }
 
@@ -453,7 +452,7 @@ export class Unit extends Entity {
 
     if (gs.keepGroupsInSameClass) {
       result = this.activeStudents.filter(
-        (student) => student.isEnrolledIn(group.tutorial) && !members.has(student.id)
+        (student) => student.isEnrolledIn(group.tutorial) && !members.has(student.id),
       );
     } else {
       result = this.activeStudents.filter((student) => !members.has(student.id));
@@ -484,7 +483,7 @@ export class Unit extends Entity {
   public downloadTaskDefinitionsCsv(): void {
     AppInjector.get(FileDownloaderService).downloadFile(
       this.getTaskDefinitionBatchUploadUrl(),
-      `${this.name}-all-task-definitions.csv`
+      `${this.name}-all-task-definitions.csv`,
     );
   }
 
@@ -494,7 +493,7 @@ export class Unit extends Entity {
   public downloadAllTaskResourcesZip(): void {
     AppInjector.get(FileDownloaderService).downloadFile(
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/all_resources`,
-      `${this.name}-all-task-resources.zip`
+      `${this.name}-all-task-resources.zip`,
     );
   }
 
@@ -517,14 +516,14 @@ export class Unit extends Entity {
   public downloadTaskCompletionCsv(): void {
     AppInjector.get(FileDownloaderService).downloadFile(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_completion.json`,
-      `${this.name}-task-completion.csv`
+      `${this.name}-task-completion.csv`,
     );
   }
 
   public downloadTutorAssessmentCsv(): void {
     AppInjector.get(FileDownloaderService).downloadFile(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`,
-      `${this.name}-tutor-assessments.csv`
+      `${this.name}-tutor-assessments.csv`,
     );
   }
 }
