@@ -13,15 +13,15 @@
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "allowUnusedLabels": false,
+    "strict": false,
+    "strictPropertyInitialization": false,
     "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2020", "dom"],
     "useDefineForClassFields": false,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }
