@@ -29,7 +29,6 @@ export const visualisationsProvider = {
   deps: ['$injector'],
 };
 
-
 export const calendarModalProvider = {
   provide: calendarModal,
   useFactory: (i: any) => i.get('CalendarModal'),

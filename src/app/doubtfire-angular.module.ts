@@ -40,6 +40,9 @@ import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { UIRouterUpgradeModule } from '@uirouter/angular-hybrid';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule as MatDialogModuleNew } from '@angular/material/dialog';
 
 import { setTheme } from 'ngx-bootstrap/utils';
 
@@ -191,6 +194,8 @@ import { InboxComponent } from './units/states/tasks/inbox/inbox.component';
 import { ProjectProgressBarComponent } from './common/project-progress-bar/project-progress-bar.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 
+import { CreateNewUnitModal } from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
+import { CreateNewUnitModalContent } from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -271,6 +276,8 @@ import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportServic
     InboxComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
+    CreateNewUnitModal,
+    CreateNewUnitModalContent,
   ],
   // Module Imports
   imports: [
@@ -329,6 +336,9 @@ import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportServic
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModuleNew,
   ],
   // Services we provide
   providers: [
@@ -395,6 +405,7 @@ import { TeachingPeriodUnitImportDialogComponent, TeachingPeriodUnitImportServic
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    CreateNewUnitModal,
   ],
 })
 
