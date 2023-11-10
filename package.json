@@ -157,7 +157,7 @@
     "prettier": "^2.7.1",
     "pretty-quick": "^3.0.2",
     "protractor": "~7.0.0",
-    "sass": "^1.48.0",
+    "sass": "^1.69.5",
     "ts-node": "~10.9.0",
     "typescript": "~4.8",
     "underscore": "^1.8.3"
