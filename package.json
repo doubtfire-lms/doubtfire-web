@@ -98,7 +98,7 @@
     "@angular-eslint/schematics": "^15.2.1",
     "@angular-eslint/template-parser": "15.2.1",
     "@angular/compiler-cli": "^15.2.8",
-    "@angular/language-service": "^15.2.8",
+    "@angular/language-service": "^17.0.2",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",
     "@types/angular": "1.5.11",
