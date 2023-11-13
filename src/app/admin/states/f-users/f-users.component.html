@@ -2,12 +2,12 @@
   <!-- Header -->
   <div fxLayout="row" class="header-spacer">
     <div fxLayout="column">
-      <h3>OnTrack Users</h3>
+      <h3>{{ externalName }} Users</h3>
       <h3>Users Administration View</h3>
     </div>
     <span class="flex-grow"></span>
     <mat-form-field appearance="outline">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search for users" [(ngModel)]="filter" />
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="but for users" [(ngModel)]="filter" />
     </mat-form-field>
   </div>
 
@@ -57,4 +57,26 @@
     <span class="flex-grow"></span>
     <button mat-raised-button color="primary" (click)="showUserModal({})">Add New User</button>
   </span>
+
+  <mat-expansion-panel hideToggle class="mt-8">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Bulk users operations </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="flex flex-row">
+      <div class="max-w-2xl">
+        <f-file-drop
+          mode="endpoint"
+          [endpoint]="uploadEndpoint"
+          (uploadSuccess)="onUserUploadSuccess($event)"
+          desiredFileName="users.csv"
+          multiple="false"
+          accept=".csv"
+        ></f-file-drop>
+      </div>
+      <div class="grow"></div>
+      <button mat-flat-button color="primary" (click)="downloadUsers()" aria-label="Download all users csv">
+        Download all users CSV <mat-icon>download</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
 </div>
