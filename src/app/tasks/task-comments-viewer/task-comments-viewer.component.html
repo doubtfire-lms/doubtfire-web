@@ -1,4 +1,10 @@
-<div style="height: 100%" class="comments-panel" appDragDrop (fileDropped)="uploadFiles($event)" fxLayout="column">
+<div
+  style="height: 100%"
+  class="comments-panel"
+  appDragDrop
+  (fileDropped)="uploadFiles($event)"
+  fxLayout="column"
+>
   <div
     fxFlex
     class="comments-body"
@@ -11,7 +17,12 @@
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
 
-    <div *ngIf="!task || task.comments.length === 0" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <div
+      *ngIf="!task || task.comments.length === 0"
+      fxFlexFill
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
       <mat-icon id="noView">forum</mat-icon>
     </div>
 
@@ -24,8 +35,13 @@
           (mouseout)="comment.hover = false"
           class="anchor"
         >
-          <p id="commentTimestamp" *ngIf="comment.shouldShowTimestamp" [ngClass]="{ own: comment.authorIsMe }">
-            {{ comment.author.firstName }} {{ comment.author.lastName }} {{ comment.createdAt | humanizedDate }}
+          <p
+            id="commentTimestamp"
+            *ngIf="comment.shouldShowTimestamp"
+            [ngClass]="{own: comment.authorIsMe}"
+          >
+            {{ comment.author.firstName }} {{ comment.author.lastName }}
+            {{ comment.createdAt | humanizedDate }}
           </p>
           <div
             class="comment"
@@ -44,7 +60,7 @@
                 *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
                 [size]="28"
                 [user]="comment.author"
-                [ngClass]="{ 'hidden-xs hidden-sm': comment.authorIsMe }"
+                [ngClass]="{'hidden-xs hidden-sm': comment.authorIsMe}"
                 matTooltip="{{ comment.author.name }}"
                 matTooltipPosition="left"
               >
@@ -89,19 +105,34 @@
                 </div>
 
                 <div *ngSwitchCase="'audio'" class="comment-audio">
-                  <audio-player [task]="task" [project]="project" [comment]="comment"></audio-player>
+                  <audio-player
+                    [task]="task"
+                    [project]="project"
+                    [comment]="comment"
+                  ></audio-player>
                 </div>
 
                 <div *ngSwitchCase="'discussion'" class="comment-discussion">
-                  <intelligent-discussion-player [task]="task" [discussion]="comment"></intelligent-discussion-player>
+                  <intelligent-discussion-player
+                    [task]="task"
+                    [discussion]="comment"
+                  ></intelligent-discussion-player>
                 </div>
 
                 <div *ngSwitchCase="'image'" class="comment-image">
-                  <pdf-image-comment [comment]="comment" [project]="project" [task]="task"></pdf-image-comment>
+                  <pdf-image-comment
+                    [comment]="comment"
+                    [project]="project"
+                    [task]="task"
+                  ></pdf-image-comment>
                 </div>
 
                 <div *ngSwitchCase="'pdf'" class="comment-pdf">
-                  <pdf-image-comment [comment]="comment" [project]="project" [task]="task"></pdf-image-comment>
+                  <pdf-image-comment
+                    [comment]="comment"
+                    [project]="project"
+                    [task]="task"
+                  ></pdf-image-comment>
                 </div>
               </div>
               <div *ngIf="comment.isBubbleComment" class="comment-overflow">
@@ -115,7 +146,9 @@
           </div>
           <div *ngIf="comment.lastRead && shouldShowReadReceipt()" class="read-receipt">
             <user-icon
-              matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{ comment.recipient.name }}"
+              matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{
+                comment.recipient.name
+              }}"
               matTooltipPosition="above"
               [size]="18"
               [user]="comment.recipient"
@@ -128,6 +161,9 @@
   </div>
   <!--/comment-list-->
   <div class="comments-footer" id="commentComposerFoter">
-    <task-comment-composer [task]="task" [sharedData]="sharedCommentComposerData"></task-comment-composer>
+    <task-comment-composer
+      [task]="task"
+      [sharedData]="sharedCommentComposerData"
+    ></task-comment-composer>
   </div>
 </div>

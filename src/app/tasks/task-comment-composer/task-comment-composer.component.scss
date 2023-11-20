@@ -12,6 +12,9 @@ $emoji-color: lighten(
     border-radius: 18px;
     display: flex;
     flex: 1 1 auto;
+    flex-grow: 0;
+    width: 100%;
+    max-width: 100%;
     margin: 8px 8px 8px 0;
     padding: 0 8px 0 12px;
     min-height: 39px;
@@ -22,12 +25,14 @@ $emoji-color: lighten(
   }
 
   #textField {
+    flex-grow: 0;
     width: 100%;
+    max-width: 100%;
     font-size: 14px;
     max-height: 144px;
     min-height: 18px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     padding: 9px 0;
     vertical-align: middle;
     box-shadow: none;
@@ -37,6 +42,11 @@ $emoji-color: lighten(
     line-height: 1.5em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizelegibility;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-wrap: wrap;
+    user-select: text;
+
   }
 
   #textField[placeholder]:empty::before {
@@ -45,9 +55,6 @@ $emoji-color: lighten(
     content: attr(placeholder);
     color: #555;
     cursor: text;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
   }
 
   #textField.active {

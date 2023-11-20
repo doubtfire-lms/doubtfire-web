@@ -75,7 +75,7 @@
     "jquery": "2.1.4",
     "lodash": "~4.17",
     "lottie-web": "^5",
-    "marked": "^4.0.10",
+    "marked": "^10.0",
     "moment": "^2.29.1",
     "ng-csv": "0.2.3",
     "ng-file-upload": "~5.0.9",
