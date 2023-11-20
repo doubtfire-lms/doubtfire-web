@@ -99,7 +99,7 @@
     "@angular-eslint/schematics": "^17.0.0",
     "@angular-eslint/template-parser": "^17.0.0",
     "@angular/compiler-cli": "^17.0.1",
-    "@angular/language-service": "^17.0.1",
+    "@angular/language-service": "^17.0.3",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^17",
     "@types/angular": "1.5.11",
